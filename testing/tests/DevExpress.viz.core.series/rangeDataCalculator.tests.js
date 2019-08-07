@@ -27,6 +27,21 @@ var createSeries = function(options, renderSettings, widgetType) {
                 interval: 1,
                 ticks: [2, 5, 10, 20, 25]
             };
+        },
+        getOptions() {
+            return {
+                logarithmBase: 10
+            };
+        }
+    };
+    renderSettings.valueAxis = renderSettings.valueAxis || {
+        getViewport: function() { return {}; },
+        getMarginOptions() { return {}; },
+        visualRange: function() { },
+        getOptions() {
+            return {
+                logarithmBase: 10
+            };
         }
     };
     options = $.extend(true, {
@@ -334,6 +349,54 @@ QUnit.test("String.", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, ["6", "3", "7", "1"], "Categories val should be correct");
+});
+
+QUnit.test("Numeric. Logarithmic axis. calculate minLog value", function(assert) {
+    var data = [{ arg: 100, val: 100 }, { arg: 1234, val: 0.1 }, { arg: 10000, val: -0.000135345 }],
+        series = createSeries({ type: "line", argumentAxisType: "logarithmic", valueAxisType: "logarithmic" });
+
+    series.updateData(data);
+    series.createPoints();
+
+    const rangeData = series.getRangeData();
+
+    assert.equal(rangeData.arg.linearThreshold, 2);
+    assert.equal(rangeData.val.linearThreshold, -4);
+
+    assert.equal(rangeData.arg.min, 100);
+    assert.equal(rangeData.arg.max, 10000);
+
+    assert.equal(rangeData.val.min, -0.000135345);
+    assert.equal(rangeData.val.max, 100);
+});
+
+QUnit.test("Numeric. Logarithmic axis. Do not include negative numbers to range data if allowNegatives is false", function(assert) {
+    var data = [{ arg: -100, val: 100 }, { arg: 1234, val: 0.1 }, { arg: 10000, val: -0.000135345 }],
+        series = createSeries({ type: "line", argumentAxisType: "logarithmic", valueAxisType: "logarithmic" });
+
+    const axisOptions = {
+        logarithmBase: 10,
+        allowNegatives: false
+    };
+
+    series.getArgumentAxis().getOptions = series.getValueAxis().getOptions = () => axisOptions;
+    series.updateDataType(series.getOptions());
+
+    series.updateData(data);
+    series.createPoints();
+
+    const rangeData = series.getRangeData();
+
+    assert.equal(rangeData.arg.linearThreshold, 4);
+    assert.equal(rangeData.val.linearThreshold, -1);
+
+    assert.equal(rangeData.arg.min, 1234);
+    assert.equal(rangeData.arg.max, 10000);
+
+    assert.equal(rangeData.val.min, 0.1);
+    assert.equal(rangeData.val.max, 0.1);
+
+    assert.equal(series.getPoints()[0].hasValue(), false);
 });
 
 QUnit.module("Process range data on updating. Simple. With null values");
@@ -2945,6 +3008,16 @@ QUnit.test("Get argument range when discrete data", function(assert) {
 
     assert.ok(rangeData, "Range data should be created");
     assert.deepEqual(rangeData.categories, [0, 1, 2], "range data should have all categories");
+});
+
+QUnit.test("Get argument range when discrete data with repetitive categories - get unique categories", function(assert) {
+    var series = createSeries({ type: "line", argumentAxisType: "discrete" });
+    series.updateData([{ arg: 0, val: 0 }, { arg: 0, val: 0 }, { arg: 2, val: 0 }]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.deepEqual(rangeData.categories, [0, 2], "range data should have all categories");
 });
 
 QUnit.test("Calculate interval in range data when aggregation is enabled", function(assert) {

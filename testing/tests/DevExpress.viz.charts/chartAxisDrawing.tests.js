@@ -1004,6 +1004,91 @@ QUnit.test("check call 'setInitRange'. Rotated", function(assert) {
     assert.equal(valAxis1.setInitRange.callCount, 1);
 });
 
+QUnit.test("Multiple panes - Weighted panes processing", function(assert) {
+    var argAxis_topPane = createAxisStubs(),
+        argAxis_bottomPane = createAxisStubs(),
+        valAxis_bottomPane_right_inner = createAxisStubs(),
+        valAxis_bottomPane_right_outer = createAxisStubs(),
+        valAxis_topPane_left_inner = createAxisStubs(),
+        valAxis_topPane_left_outer = createAxisStubs();
+
+    argAxis_topPane
+        .estimateMargins.returns({ left: 0, top: 9, right: 0, bottom: 6 });
+    argAxis_topPane
+        .getMargins.returns({ left: 0, top: 9, right: 0, bottom: 6 });
+
+    argAxis_bottomPane
+        .estimateMargins.returns({ left: 0, top: 5, right: 0, bottom: 10 });
+    argAxis_bottomPane
+        .getMargins.returns({ left: 0, top: 5, right: 0, bottom: 10 });
+
+    valAxis_bottomPane_right_inner
+        .getMargins.returns({ left: 0, top: 0, right: 5, bottom: 0 });
+    valAxis_bottomPane_right_outer
+        .getMargins.returns({ left: 0, top: 0, right: 6, bottom: 0 });
+
+    valAxis_topPane_left_inner
+        .getMargins.returns({ left: 7, top: 0, right: 0, bottom: 0 });
+    valAxis_topPane_left_outer
+        .getMargins.returns({ left: 8, top: 0, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis_topPane,
+        argAxis_bottomPane,
+        valAxis_bottomPane_right_inner,
+        valAxis_bottomPane_right_outer,
+        valAxis_topPane_left_inner,
+        valAxis_topPane_left_outer]);
+
+    new dxChart(this.container, {
+        panes: [
+            { name: "top", weight: 5 },
+            { name: "bottom", weight: 1 }
+        ],
+        valueAxis: [
+            { name: "valAxis_bottomPane_right_inner", position: "right" },
+            { name: "valAxis_bottomPane_right_outer", position: "right" },
+            { name: "valAxis_topPane_left_inner" },
+            { name: "valAxis_topPane_left_outer" }
+        ],
+        series: [
+            { pane: "bottom", axis: "valAxis_bottomPane_right_inner" },
+            { pane: "bottom", axis: "valAxis_bottomPane_right_outer" },
+            { pane: "top", axis: "valAxis_topPane_left_inner" },
+            { pane: "top", axis: "valAxis_topPane_left_outer" }
+        ],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // argAxis_topPane
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.draw_test_arg, {
+        left: 20,
+        right: 16,
+        top: 10,
+        bottom: 124,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 108,
+        width: 800,
+        height: 600
+    }, "draw argAxis_topPane canvas");
+
+    // argAxis_bottomPane
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.draw_test_arg, {
+        left: 20,
+        right: 16,
+        top: 497,
+        bottom: 10,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 502,
+        originalBottom: 0,
+        width: 800,
+        height: 600
+    }, "draw argAxis_bottomPane canvas");
+});
+
 QUnit.module("Shift axes", environment);
 
 QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is not passed directly to axis shift method", function(assert) {
@@ -1896,7 +1981,7 @@ QUnit.test("Multiple panes. ScrollBar on top. ScrollBar placed in correct pane",
         left: 0,
         right: 0,
         top: 30,
-        bottom: 305,
+        bottom: 300,
         originalLeft: 0,
         originalRight: 0,
         originalTop: 0,
@@ -1908,7 +1993,7 @@ QUnit.test("Multiple panes. ScrollBar on top. ScrollBar placed in correct pane",
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 0,
         right: 0,
-        top: 305,
+        top: 310,
         bottom: 20,
         originalLeft: 0,
         originalRight: 0,
@@ -1956,7 +2041,7 @@ QUnit.test("Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pan
         left: 0,
         right: 0,
         top: 10,
-        bottom: 305,
+        bottom: 320,
         originalLeft: 0,
         originalRight: 0,
         originalTop: 0,
@@ -1968,7 +2053,7 @@ QUnit.test("Multiple panes. ScrollBar on bottom. ScrollBar placed in correct pan
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 0,
         right: 0,
-        top: 305,
+        top: 290,
         bottom: 40,
         originalLeft: 0,
         originalRight: 0,
@@ -2010,7 +2095,7 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in corr
     // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 30,
-        right: 405,
+        right: 395,
         top: 0,
         bottom: 0,
         originalLeft: 0,
@@ -2022,7 +2107,7 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on left. ScrollBar placed in corr
     }, "createTicks valAxis canvas");
 
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
-        left: 405,
+        left: 415,
         right: 10,
         top: 0,
         bottom: 0,
@@ -2066,7 +2151,7 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in cor
     // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 10,
-        right: 405,
+        right: 415,
         top: 0,
         bottom: 0,
         originalLeft: 0,
@@ -2078,7 +2163,7 @@ QUnit.test("Rotated. Multiple panes. ScrollBar on right. ScrollBar placed in cor
     }, "createTicks argAxis canvas");
 
     assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
-        left: 405,
+        left: 395,
         right: 30,
         top: 0,
         bottom: 0,

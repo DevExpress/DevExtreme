@@ -285,10 +285,10 @@ QUnit.module("general", {}, () => {
         assert.ok($textEditor.hasClass("dx-state-focused"), "input is still focused");
     });
 
-    QUnit.test("T220209 - the 'valueFormat' option", (assert) => {
+    QUnit.test("T220209 - the 'displayValueFormatter' option", (assert) => {
         const $textEditor = $("#texteditor").dxTextEditor({
             value: "First",
-            valueFormat(value) {
+            displayValueFormatter(value) {
                 return value + " format";
             }
         });
@@ -297,10 +297,10 @@ QUnit.module("general", {}, () => {
         assert.equal($textEditor.find(".dx-texteditor-input").val(), "First format", "input value is correct");
     });
 
-    QUnit.test("T220209 - the 'valueFormat' option when value is changed using keyboard", (assert) => {
+    QUnit.test("T220209 - the 'displayValueFormatter' option when value is changed using keyboard", (assert) => {
         const $textEditor = $("#texteditor").dxTextEditor({
             value: "First",
-            valueFormat(value) {
+            displayValueFormatter(value) {
                 return value + " format";
             }
         });
@@ -317,15 +317,15 @@ QUnit.module("general", {}, () => {
         assert.equal($textEditor.find(".dx-texteditor-input").val(), "First format2 format", "input value is correct");
     });
 
-    QUnit.test("default valueFormat of null should return an empty string", (assert) => {
+    QUnit.test("default displayValueFormatter of null should return an empty string", (assert) => {
         const textEditor = $("#texteditor").dxTextEditor({}).dxTextEditor("instance");
-        const valueFormat = textEditor.option("valueFormat");
+        const displayValueFormatter = textEditor.option("displayValueFormatter");
 
-        assert.strictEqual(valueFormat(null), "", "null value formatted correctly");
-        assert.strictEqual(valueFormat(0), 0, "0 value formatted correctly");
-        assert.strictEqual(valueFormat(), "", "undefined value formatted correctly");
-        assert.strictEqual(valueFormat(false), "", "false value formatted correctly");
-        assert.strictEqual(valueFormat(""), "", "empty value formatted correctly");
+        assert.strictEqual(displayValueFormatter(null), "", "null value formatted correctly");
+        assert.strictEqual(displayValueFormatter(0), 0, "0 value formatted correctly");
+        assert.strictEqual(displayValueFormatter(), "", "undefined value formatted correctly");
+        assert.strictEqual(displayValueFormatter(false), "", "false value formatted correctly");
+        assert.strictEqual(displayValueFormatter(""), "", "empty value formatted correctly");
     });
 
     QUnit.test("dxTextEditor with height option should have min-height auto style on input", (assert) => {

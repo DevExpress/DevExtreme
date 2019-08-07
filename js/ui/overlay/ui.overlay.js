@@ -30,7 +30,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
     Resizable = require("../resizable"),
-    EmptyTemplate = require("../widget/empty_template"),
+    EmptyTemplate = require("../../core/templates/empty_template").EmptyTemplate,
     Deferred = require("../../core/utils/deferred").Deferred,
     zIndexPool = require("./z_index"),
     swatch = require("../widget/swatch_container");
@@ -52,6 +52,8 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_STACK = [],
 
     DISABLED_STATE_CLASS = "dx-state-disabled",
+
+    PREVENT_SAFARI_SCROLLING_CLASS = "dx-prevent-safari-scrolling",
 
     TAB_KEY = "tab",
 
@@ -151,7 +153,6 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -568,7 +569,7 @@ var Overlay = Widget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["content"] = new EmptyTemplate(this);
+        this._defaultTemplates["content"] = new EmptyTemplate();
     },
 
     _isTopOverlay: function() {
@@ -665,6 +666,7 @@ var Overlay = Widget.inherit({
                     completeShowAnimation.apply(this, arguments);
                     that._showAnimationProcessing = false;
                     that._actions.onShown();
+                    that._toggleSafariScrolling(false);
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);
@@ -714,6 +716,8 @@ var Overlay = Widget.inherit({
             hidingArgs = { cancel: false };
 
         this._actions.onHiding(hidingArgs);
+
+        that._toggleSafariScrolling(true);
 
         if(hidingArgs.cancel) {
             this._isHidingActionCanceled = true;
@@ -954,8 +958,14 @@ var Overlay = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._$content.appendTo(this.$element());
+        this._appendContentToElement();
         this._renderVisibilityAnimate(this.option("visible"));
+    },
+
+    _appendContentToElement: function() {
+        if(!this._$content.parent().is(this.$element())) {
+            this._$content.appendTo(this.$element());
+        }
     },
 
     _renderContent: function() {
@@ -972,6 +982,8 @@ var Overlay = Widget.inherit({
         }
 
         this._contentAlreadyRendered = true;
+        this._appendContentToElement();
+
         this.callBase();
     },
 
@@ -1003,9 +1015,6 @@ var Overlay = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        const $element = this.$element();
-        this._$content.appendTo($element);
-
         const whenContentRendered = new Deferred();
 
         const contentTemplateOption = this.option("contentTemplate"),
@@ -1223,13 +1232,13 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _renderGeometry: function() {
+    _renderGeometry: function(isDimensionChanged) {
         if(this.option("visible") && windowUtils.hasWindow()) {
-            this._renderGeometryImpl();
+            this._renderGeometryImpl(isDimensionChanged);
         }
     },
 
-    _renderGeometryImpl: function() {
+    _renderGeometryImpl: function(isDimensionChanged) {
         this._stopAnimation();
         this._normalizePosition();
         this._renderShading();
@@ -1241,10 +1250,26 @@ var Overlay = Widget.inherit({
     },
 
     _fixWrapperPosition: function() {
-        var $wrapper = this._$wrapper,
-            $container = this._getContainer();
+        this._$wrapper.css("position", this._useFixedPosition() ? "fixed" : "absolute");
+    },
 
-        $wrapper.css("position", this._isWindow($container) && !iOS ? "fixed" : "absolute");
+    _useFixedPosition: function() {
+        var $container = this._getContainer();
+        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined);
+    },
+
+    _toggleSafariScrolling: function(scrollingEnabled) {
+        if(iOS && this._useFixedPosition()) {
+            var body = domAdapter.getBody();
+            if(scrollingEnabled) {
+                $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                window.scrollTo(0, this._bodyScrollTop);
+                this._bodyScrollTop = undefined;
+            } else if(this.option("visible")) {
+                this._bodyScrollTop = window.pageYOffset;
+                $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
+            }
+        }
     },
 
     _renderShading: function() {
@@ -1380,7 +1405,7 @@ var Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        this._renderGeometry();
+        this._renderGeometry(true);
     },
 
     _clean: function() {
@@ -1410,6 +1435,7 @@ var Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
+        this._toggleSafariScrolling(true);
 
         this._actions = null;
 
@@ -1513,22 +1539,26 @@ var Overlay = Widget.inherit({
     * @name dxOverlaymethods.toggle
     * @publicName toggle(showing)
     * @param1 showing:boolean
-    * @return Promise<void>
+    * @return Promise<boolean>
     */
     toggle: function(showing) {
         showing = showing === undefined ? !this.option("visible") : showing;
+        var result = new Deferred();
 
         if(showing === this.option("visible")) {
-            return new Deferred().resolve().promise();
+            return result.resolveWith(this, [showing]).promise();
         }
 
         var animateDeferred = new Deferred();
         this._animateDeferred = animateDeferred;
         this.option("visible", showing);
 
-        return animateDeferred.promise().done((function() {
+        animateDeferred.promise().done((function() {
             delete this._animateDeferred;
+            result.resolveWith(this, [showing]);
         }).bind(this));
+
+        return result.promise();
     },
 
     $content: function() {
@@ -1538,7 +1568,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods.show
     * @publicName show()
-    * @return Promise<void>
+    * @return Promise<boolean>
     */
     show: function() {
         return this.toggle(true);
@@ -1547,7 +1577,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods.hide
     * @publicName hide()
-    * @return Promise<void>
+    * @return Promise<boolean>
     */
     hide: function() {
         return this.toggle(false);

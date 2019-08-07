@@ -137,8 +137,8 @@ QUnit.test("Create two borders, with different attributes", function(assert) {
     assert.equal(chart.panes.length, 2);
     assert.equal(chart._renderer.path.callCount, 2);
 
-    checkSegmentRectCommon(assert, chart, 0, 80, 10, 630, 710, "none", "solid", "blue", 7, 0.1, { top: true, bottom: true, left: true, right: true });
-    checkSegmentRectCommon(assert, chart, 1, 80, 10, 630, 710, "none", "solid", "green", 5, 0.4, { top: true, bottom: true, left: true, right: true });
+    checkSegmentRectCommon(assert, chart, 0, 400, 10, 310, 710, "none", "solid", "blue", 7, 0.1, { top: true, bottom: true, left: true, right: true });
+    checkSegmentRectCommon(assert, chart, 1, 80, 10, 310, 710, "none", "solid", "green", 5, 0.4, { top: true, bottom: true, left: true, right: true });
 });
 
 QUnit.test("Check pass correct borderOptions to axes", function(assert) {
@@ -503,42 +503,42 @@ QUnit.test("Create clipRects. With financial series. Two panes", function(assert
     assert.equal(chart._renderer.clipRect.getCall(1).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(1).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(1).args[2], 780 - 60 - 70);
-    assert.equal(chart._renderer.clipRect.getCall(1).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(1).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.fixed[0], chart._renderer.clipRect.getCall(1).returnValue);
 
     // pane clip rect for first pane
     assert.equal(chart._renderer.clipRect.getCall(2).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(2).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(2).args[2], 780 - 60 - 70);
-    assert.equal(chart._renderer.clipRect.getCall(2).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(2).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.base[0], chart._renderer.clipRect.getCall(2).returnValue);
 
     // financial clip rect for first pane
     assert.equal(chart._renderer.clipRect.getCall(3).args[0], 0);
     assert.equal(chart._renderer.clipRect.getCall(3).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(3).args[2], 800);
-    assert.equal(chart._renderer.clipRect.getCall(3).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(3).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.wide[0], chart._renderer.clipRect.getCall(3).returnValue);
 
     // fixed clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(4).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(4).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(4).args[2], 780 - 60 - 70);
-    assert.equal(chart._renderer.clipRect.getCall(4).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(4).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.fixed[1], chart._renderer.clipRect.getCall(4).returnValue);
 
     // pane clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(5).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(5).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(5).args[2], 780 - 60 - 70);
-    assert.equal(chart._renderer.clipRect.getCall(5).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(5).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.base[1], chart._renderer.clipRect.getCall(5).returnValue);
 
     // financial clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(6).args[0], 0);
     assert.equal(chart._renderer.clipRect.getCall(6).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(6).args[2], 800);
-    assert.equal(chart._renderer.clipRect.getCall(6).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(6).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.wide[1], chart._renderer.clipRect.getCall(6).returnValue);
 
     assert.equal(chart._panesClipRects.fixed.length, 2);
@@ -586,35 +586,35 @@ QUnit.test("Create clipRects. With financial series. For second panes", function
     assert.equal(chart._renderer.clipRect.getCall(1).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(1).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(1).args[2], 780 - 60 - 70);
-    assert.equal(chart._renderer.clipRect.getCall(1).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(1).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.fixed[0], chart._renderer.clipRect.getCall(1).returnValue);
 
     // pane clip rect for first pane
     assert.equal(chart._renderer.clipRect.getCall(2).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(2).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(2).args[2], 780 - 60 - 70);
-    assert.equal(chart._renderer.clipRect.getCall(2).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(2).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.base[0], chart._renderer.clipRect.getCall(2).returnValue);
 
     // fixed clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(3).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(3).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(3).args[2], 780 - 60 - 70);
-    assert.equal(chart._renderer.clipRect.getCall(3).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(3).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.fixed[1], chart._renderer.clipRect.getCall(3).returnValue);
 
     // pane clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(4).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(4).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(4).args[2], 780 - 60 - 70);
-    assert.equal(chart._renderer.clipRect.getCall(4).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(4).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.base[1], chart._renderer.clipRect.getCall(4).returnValue);
 
     // financial clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(5).args[0], 0);
     assert.equal(chart._renderer.clipRect.getCall(5).args[1], 20);
     assert.equal(chart._renderer.clipRect.getCall(5).args[2], 800);
-    assert.equal(chart._renderer.clipRect.getCall(5).args[3], 780 - 20 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(5).args[3], (780 - 20 - 70 - 10) / 2);
     assert.equal(chart._panesClipRects.wide[1], chart._renderer.clipRect.getCall(5).returnValue);
 
     assert.equal(chart._panesClipRects.fixed.length, 2);
@@ -678,42 +678,42 @@ QUnit.test("Create clipRects. With financial series. Two panes. Rotated", functi
     // fixed clip rect for first pane
     assert.equal(chart._renderer.clipRect.getCall(1).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(1).args[1], 20);
-    assert.equal(chart._renderer.clipRect.getCall(1).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(1).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(1).args[3], 780 - 20 - 70);
     assert.equal(chart._panesClipRects.fixed[0], chart._renderer.clipRect.getCall(1).returnValue);
 
     // pane clip rect for first pane
     assert.equal(chart._renderer.clipRect.getCall(2).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(2).args[1], 20);
-    assert.equal(chart._renderer.clipRect.getCall(2).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(2).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(2).args[3], 780 - 20 - 70);
     assert.equal(chart._panesClipRects.base[0], chart._renderer.clipRect.getCall(2).returnValue);
 
     // financial clip rect for first pane
     assert.equal(chart._renderer.clipRect.getCall(3).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(3).args[1], 0);
-    assert.equal(chart._renderer.clipRect.getCall(3).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(3).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(3).args[3], 800);
     assert.equal(chart._panesClipRects.wide[0], chart._renderer.clipRect.getCall(3).returnValue);
 
     // fixed clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(4).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(4).args[1], 20);
-    assert.equal(chart._renderer.clipRect.getCall(4).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(4).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(4).args[3], 780 - 20 - 70);
     assert.equal(chart._panesClipRects.fixed[1], chart._renderer.clipRect.getCall(4).returnValue);
 
     // pane clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(5).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(5).args[1], 20);
-    assert.equal(chart._renderer.clipRect.getCall(5).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(5).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(5).args[3], 780 - 20 - 70);
     assert.equal(chart._panesClipRects.base[1], chart._renderer.clipRect.getCall(5).returnValue);
 
     // financial clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(6).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(6).args[1], 0);
-    assert.equal(chart._renderer.clipRect.getCall(6).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(6).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(6).args[3], 800);
     assert.equal(chart._panesClipRects.wide[1], chart._renderer.clipRect.getCall(6).returnValue);
 
@@ -763,35 +763,35 @@ QUnit.test("Create clipRects. With financial series. For second panes. Rotated",
     // fixed clip rect for first pane
     assert.equal(chart._renderer.clipRect.getCall(1).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(1).args[1], 20);
-    assert.equal(chart._renderer.clipRect.getCall(1).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(1).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(1).args[3], 780 - 20 - 70);
     assert.equal(chart._panesClipRects.fixed[0], chart._renderer.clipRect.getCall(1).returnValue);
 
     // pane clip rect for first pane
     assert.equal(chart._renderer.clipRect.getCall(2).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(2).args[1], 20);
-    assert.equal(chart._renderer.clipRect.getCall(2).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(2).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(2).args[3], 780 - 20 - 70);
     assert.equal(chart._panesClipRects.base[0], chart._renderer.clipRect.getCall(2).returnValue);
 
     // fixed clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(3).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(3).args[1], 20);
-    assert.equal(chart._renderer.clipRect.getCall(3).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(3).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(3).args[3], 780 - 20 - 70);
     assert.equal(chart._panesClipRects.fixed[1], chart._renderer.clipRect.getCall(3).returnValue);
 
     // pane clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(4).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(4).args[1], 20);
-    assert.equal(chart._renderer.clipRect.getCall(4).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(4).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(4).args[3], 780 - 20 - 70);
     assert.equal(chart._panesClipRects.base[1], chart._renderer.clipRect.getCall(4).returnValue);
 
     // financial clip rect for second pane
     assert.equal(chart._renderer.clipRect.getCall(5).args[0], 60);
     assert.equal(chart._renderer.clipRect.getCall(5).args[1], 0);
-    assert.equal(chart._renderer.clipRect.getCall(5).args[2], 780 - 60 - 70);
+    assert.equal(chart._renderer.clipRect.getCall(5).args[2], (780 - 60 - 70 - 10) / 2);
     assert.equal(chart._renderer.clipRect.getCall(5).args[3], 800);
     assert.equal(chart._panesClipRects.wide[1], chart._renderer.clipRect.getCall(5).returnValue);
 

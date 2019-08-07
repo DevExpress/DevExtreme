@@ -1,7 +1,6 @@
 import Widget from "../widget/ui.widget";
 import { getGanttViewCore } from "./gantt_importer";
-
-const GANTT_VIEW_HEADER_HEIGHT = 48;
+import { TaskAreaContainer } from "./ui.gantt.task.area.container";
 
 export class GanttView extends Widget {
     _init() {
@@ -12,44 +11,69 @@ export class GanttView extends Widget {
     }
     _initMarkup() {
         const { GanttView } = getGanttViewCore();
-        this._ganttViewCore = new GanttView(this);
-        this._ganttViewCore.createView();
-        this._ganttViewCore.setViewType(2);
+        this._ganttViewCore = new GanttView(this.$element().get(0), this, {
+            showResources: this.option("showResources"),
+            taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition")),
+            areAlternateRowsEnabled: false
+        });
+        this._ganttViewCore.setViewType(3);
     }
 
-    _getScrollable() {
+    getTaskAreaContainer() {
         return this._ganttViewCore.taskAreaContainer;
     }
-    _selectTask(id) {
+    selectTask(id) {
         if(this.lastSelectedId !== undefined) {
             this._ganttViewCore.unselectTask(parseInt(this.lastSelectedId));
         }
         this._ganttViewCore.selectTask(id);
         this.lastSelectedId = id;
     }
+    updateView() {
+        this._ganttViewCore.updateView();
+    }
+    setWidth(value) {
+        this._ganttViewCore.setWidth(value);
+    }
+
     _update() {
-        this._ganttViewCore.loadOptionsFromTreeList();
+        this._ganttViewCore.loadOptionsFromGanttOwner();
         this._ganttViewCore.resetAndUpdate();
     }
 
-    // IGanttView
-    getGanttSize() {
-        let height = this.option("height") - GANTT_VIEW_HEADER_HEIGHT;
-        return { width: 700, height: height };
+    _getTaskTitlePosition(value) {
+        switch(value) {
+            case 'outside':
+                return 1;
+            case 'none':
+                return 2;
+            default:
+                return 0;
+        }
     }
-    getGanttTickSize() {
-        return { width: 100, height: 34 };
+
+    _optionChanged(args) {
+        switch(args.name) {
+            case "tasks":
+            case "dependencies":
+            case "resources":
+            case "resourceAssignments":
+                this._update();
+                break;
+            case "showResources":
+                this._ganttViewCore.setShowResources(args.value);
+                break;
+            case "taskTitlePosition":
+                this._ganttViewCore.setTaskTitlePosition(this._getTaskTitlePosition(args.value));
+                break;
+            default:
+                super._optionChanged(args);
+        }
     }
-    getGanttContainer() {
-        return this.$element().get(0);
-    }
-    getGanttViewStartDate() {
-        const tasks = this.getGanttTasksData();
-        return tasks.reduce((min, t) => t.start < min ? t.start : min, new Date());
-    }
-    getGanttViewEndDate() {
-        const tasks = this.getGanttTasksData();
-        return tasks.reduce((max, t) => t.end > max ? t.end : max, new Date());
+
+    // IGanttOwner
+    getRowHeight() {
+        return this.option("rowHeight");
     }
     getGanttTasksData() {
         return this.option("tasks");
@@ -66,25 +90,16 @@ export class GanttView extends Widget {
     getGanttWorkTimeRules() {
         return {};
     }
-    getGanttViewSettings() {
-        return {};
+    getExternalTaskAreaContainer(element) {
+        if(!this._taskAreaContainer) {
+            this._taskAreaContainer = new TaskAreaContainer(element, this);
+        }
+        return this._taskAreaContainer;
     }
     changeGanttTaskSelection(id, selected) {
         this._onSelectionChanged({ id: id, selected: selected });
     }
-    onGanttScroll(scrollableElement) {
-        this._onScroll({ scrollableElement: scrollableElement });
-    }
-    areAlternateRowsEnabled() {
-        return true;
-    }
-    areVerticalBordersEnabled() {
-        return true;
-    }
-    areHorizontalBordersEnabled() {
-        return true;
-    }
-    allowSelectTask() {
-        return true;
+    onGanttScroll(scrollTop) {
+        this._onScroll({ scrollTop: scrollTop });
     }
 }

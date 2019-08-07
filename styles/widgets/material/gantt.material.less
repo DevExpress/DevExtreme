@@ -1,7 +1,21 @@
+@gantt_scale_item_height: 28px;
+@gantt_header_item_height: 56px;
+@gantt_task_wrapper_padding_top: 8px;
+@gantt_successor_background_color: white;
+
 .dx-gantt {
     border: 1px solid @base-border-color;
 
     .dx-gantt-splitter {
+        width: 4px;
+        background-color: @datagrid-column-separator-bg;
+    }
+
+    .dx-gantt-splitter-transparent {
+        background-color: transparent;
+    }
+
+    .dx-gantt-splitter-border {
         border-left: 2px solid @base-border-color;
     }
 
@@ -10,7 +24,7 @@
     }
 
     .dx-header-row {
-        height: 45px;
+        height: @gantt_header_item_height;
     }
 
     .dx-gantt-header {
@@ -27,24 +41,24 @@
         }
     }
 
+    .dx-gantt-tac {
+        height: calc(100% - @gantt_header_item_height);
+    }
+
     .dx-gantt-si {
-        height: 23px;
         padding-left: 16px;
         padding-right: 16px;
     }
 
     .dx-gantt-si,
     .dx-gantt-tsa .dx-gantt-vb {
-        height: 23px;
+        height: @gantt_scale_item_height;
+        line-height: @gantt_scale_item_height;
     }
 
     .dx-gantt-tsac,
     .dx-gantt-tsa {
         border-bottom: 1px solid @base-border-color;
-    }
-
-    .dx-gantt-tsac {
-        border-right: 1px solid @base-border-color;
     }
 
     .dx-gantt-hb {
@@ -56,7 +70,7 @@
     }
 
     .dx-gantt-taskWrapper {
-        padding-top: 8px;
+        padding-top: @gantt_task_wrapper_padding_top;
 
         .dx-gantt-task,
         .dx-gantt-titleOut,
@@ -65,12 +79,12 @@
         }
 
         .dx-gantt-task {
-            background-color: @base-accent;
+            background-color: lighten(@base-accent, 10%);
             border-radius: @base-border-radius;
 
             .dx-gantt-tPrg {
                 border-radius: @base-border-radius;
-                background-color: darken(@base-accent, 15%);
+                background-color: darken(@base-accent, 10%);
                 border-top-right-radius: 0;
                 border-bottom-right-radius: 0;
             }
@@ -106,7 +120,7 @@
 
         .dx-gantt-titleIn {
             color: #fff;
-            padding: 0 8px;
+            padding: 0 @gantt_task_wrapper_padding_top;
         }
 
         .dx-gantt-titleOut {
@@ -114,8 +128,33 @@
         }
     }
 
+    .dx-gantt-task-edit-wrapper {
+        padding-top: @gantt_task_wrapper_padding_top;
+
+        .dx-gantt-task-edit-frame {
+            border: 1px solid darken(@base-accent, 10%);
+            border-radius: @base-border-radius;
+        }
+    }
+
+    .dx-gantt-task-edit-wrapper-successor {
+        padding-top: @gantt_task_wrapper_padding_top;
+    }
+
+    .dx-gantt-task-edit-dependency-r,
+    .dx-gantt-task-edit-successor-dependency-r,
+    .dx-gantt-task-edit-dependency-l,
+    .dx-gantt-task-edit-successor-dependency-l {
+        background: @gantt_successor_background_color;
+        border: 1px solid darken(@base-accent, 10%);
+    }
+
+    .dx-gantt-task-edit-dependency-line {
+        background-color: @base-text-color;
+    }
+
     .dx-gantt-sel {
-        background-color: @base-border-color;
+        background-color: @treelist-selection-bg;
     }
 
     .dx-gantt-conn-v {
@@ -128,5 +167,17 @@
 
     .dx-gantt-arrow {
         border: 5px solid @base-text-color;
+    }
+
+    .dx-gantt-altRow,
+    .dx-gantt-collapsable-row {
+        background-color: darken(@base-bg, 5%);
+    }
+
+    &.dx-gantt-dark {
+        .dx-gantt-altRow,
+        .dx-gantt-collapsable-row {
+            background-color: lighten(@base-bg, 5%);
+        }
     }
 }

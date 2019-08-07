@@ -32,27 +32,22 @@ const SpeedDialAction = Widget.inherit({
 
             /**
             * @name dxSpeedDialActionOptions.visible
-            * @hidden
-            * @inheritdoc
             */
-            visible: false,
+            visible: true,
 
             /**
             * @name dxSpeedDialActionOptions.width
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSpeedDialActionOptions.height
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSpeedDialActionOptions.disabled
             * @hidden
-            * @inheritdoc
             */
 
             activeStateEnabled: true,
@@ -95,6 +90,11 @@ const SpeedDialAction = Widget.inherit({
             case "icon":
                 initAction(this);
                 break;
+            case "visible":
+                args.value ?
+                    initAction(this) :
+                    disposeAction(this._options.id);
+                break;
             case "animation":
             case "id":
                 break;
@@ -104,6 +104,8 @@ const SpeedDialAction = Widget.inherit({
     },
 
     _render() {
+        this._toggleVisibility(false);
+
         if(!getSwatchContainer(this.$element())) {
             ready(() => initAction(this));
         } else {

@@ -30,8 +30,8 @@ class AjaxFileProvider extends FileProvider {
         this._provider = null;
     }
 
-    getItems(path, itemType) {
-        return this._doActionAfterDataAcquired(() => this._provider.getItems(path, itemType));
+    getItems(path) {
+        return this._doActionAfterDataAcquired(() => this._provider.getItems(path));
     }
 
     renameItem(item, name) {

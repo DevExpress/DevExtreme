@@ -48,7 +48,7 @@ QUnit.module("default", {
         assert.deepEqual(getOptionValue("selectedItemKeys"), [], "selectedItemKeys");
         assert.strictEqual(getOptionValue("keyExpr"), "text", "keyExpr");
         assert.deepEqual(getOptionValue("items"), [], "items");
-        assert.strictEqual(getOptionValue("itemTemplate"), "item", "itemTemplate");
+        assert.strictEqual(getOptionValue("buttonTemplate"), "content", "buttonTemplate");
         assert.strictEqual(getOptionValue("onSelectionChanged"), null, "onSelectionChanged");
         assert.strictEqual(getOptionValue("stylingMode"), "contained", "stylingMode");
     });
@@ -116,7 +116,7 @@ QUnit.module("default", {
         assert.equal(buttonCollection.option("tabIndex"), 25, "tabIndex option");
         assert.equal(buttonCollection.option("selectedItemKeys"), "item 1", "selectedItemKeys option");
         assert.equal(buttonCollection.option("keyExpr"), "text", "keyExpr option");
-        assert.ok(buttonCollection.option("itemTemplate"), "itemTemplate option");
+        assert.ok(buttonCollection.option("buttonTemplate"), "buttonTemplate option");
         assert.ok(buttonCollection.option("focusStateEnabled"), "focusStateEnabled option");
         assert.notOk(buttonCollection.option("scrollingEnabled"), "scrollingEnabled option");
         assert.equal(buttonCollection.option("noDataText"), "", "noDataText option");
@@ -148,14 +148,14 @@ QUnit.module("default", {
     QUnit.test("use item template", function(assert) {
         const $buttonGroup = $("#widget").dxButtonGroup({
             items: [{ text: "item 1" }, { text: "item 2" }],
-            itemTemplate: (itemData, itemIndex, itemElement) => {
-                itemElement.append($(`<span class="custom-template">${itemData.text + "_" + itemIndex}</span>`));
+            buttonTemplate: (buttonData, buttonContent) => {
+                $(buttonContent).append($(`<span class="custom-template">${buttonData.text}</span>`));
             }
         });
 
         const $templates = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS} .custom-template`);
-        assert.equal($templates.eq(0).text(), "item 1_0", "text of first template");
-        assert.equal($templates.eq(1).text(), "item 2_1", "text of second template");
+        assert.equal($templates.eq(0).text(), "item 1", "text of first template");
+        assert.equal($templates.eq(1).text(), "item 2", "text of second template");
     });
 
     QUnit.test("add css class when the width is defined", function(assert) {
@@ -173,7 +173,7 @@ QUnit.module("default", {
     QUnit.test("add css class to item with a template when the width is defined", function(assert) {
         const $buttonGroup = $("#widget").dxButtonGroup({
             items: [{ text: "item 1" }, { text: "item 2" }],
-            itemTemplate: () => "<div/>",
+            buttonTemplate: () => "<div/>",
             width: 500
         });
 

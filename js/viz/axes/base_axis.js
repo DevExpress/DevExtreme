@@ -21,6 +21,8 @@ import createStrip from "./strip";
 const convertTicksToValues = constants.convertTicksToValues;
 const patchFontOptions = vizUtils.patchFontOptions;
 const getVizRangeObject = vizUtils.getVizRangeObject;
+const getLog = vizUtils.getLogExt;
+const raiseTo = vizUtils.raiseToExt;
 const _math = Math;
 const _abs = _math.abs;
 const _max = _math.max;
@@ -53,11 +55,13 @@ const dateIntervals = {
     week: 604800000
 };
 
-function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIsEmpty, adjustDivisionFactor) {
+function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIsEmpty, adjustDivisionFactor, { allowNegatives, linearThreshold }) {
     return tickGeneratorModule.tickGenerator({
         axisType: options.type,
         dataType: options.dataType,
         logBase: options.logarithmBase,
+        allowNegatives,
+        linearThreshold,
 
         axisDivisionFactor: adjustDivisionFactor(options.axisDivisionFactor || DEFAULT_AXIS_DIVISION_FACTOR),
         minorAxisDivisionFactor: adjustDivisionFactor(options.minorAxisDivisionFactor || DEFAULT_MINOR_AXIS_DIVISION_FACTOR),
@@ -232,7 +236,7 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
     });
 
     return function(tickInterval, skipTickGeneration, min, max, breaks) {
-        return getTickGenerator(tickGeneratorOptions, _noop, skipTickGeneration, viewPort.isEmpty(), v => v)(
+        return getTickGenerator(tickGeneratorOptions, _noop, skipTickGeneration, viewPort.isEmpty(), v => v, viewPort)(
             {
                 min: min,
                 max: max,
@@ -397,14 +401,10 @@ Axis.prototype = {
         return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr, getConstantLineSharpDirection(value, this._getCanvasStartEnd()));
     },
 
-    _drawConstantLineLabelText: function(text, x, y, constantLineLabelOptions, group) {
-        var that = this,
-            options = that._options,
-            labelOptions = options.label;
-
-        return that._renderer.text(text, x, y)
-            .css(patchFontOptions(extend({}, labelOptions.font, constantLineLabelOptions.font)))
-            .attr({ align: "center" })
+    _drawConstantLineLabelText: function(text, x, y, { font, cssClass }, group) {
+        return this._renderer.text(text, x, y)
+            .css(patchFontOptions(extend({}, this._options.label.font, font)))
+            .attr({ align: "center", "class": cssClass })
             .append(group);
     },
 
@@ -899,7 +899,8 @@ Axis.prototype = {
         that._hasLabelFormat = labelOpt.format !== "" && isDefined(labelOpt.format);
         that._textOptions = {
             opacity: labelOpt.opacity,
-            align: "center"
+            align: "center",
+            "class": labelOpt.cssClass
         };
         that._textFontStyles = vizUtils.patchFontOptions(labelOpt.font);
 
@@ -920,9 +921,11 @@ Axis.prototype = {
     calculateInterval: function(value, prevValue) {
         var options = this._options;
 
-        return (!options || (options.type !== constants.logarithmic)) ?
-            _abs(value - prevValue) :
-            vizUtils.getLog(value / prevValue, options.logarithmBase);
+        if(!options || (options.type !== constants.logarithmic)) {
+            return _abs(value - prevValue);
+        }
+        const { allowNegatives, linearThreshold } = new Range(this.getTranslator().getBusinessRange());
+        return _abs(getLog(value, options.logarithmBase, allowNegatives, linearThreshold) - getLog(prevValue, options.logarithmBase, allowNegatives, linearThreshold));
     },
 
     _processCanvas: function(canvas) {
@@ -1042,9 +1045,10 @@ Axis.prototype = {
         const isDiscrete = this._options.type === constants.discrete;
         const isLogarithmic = this._options.type === constants.logarithmic;
 
+        const disabledNegatives = this._options.allowNegatives === false;
         if(isLogarithmic) {
-            range.startValue = range.startValue <= 0 ? null : range.startValue;
-            range.endValue = range.endValue <= 0 ? null : range.endValue;
+            range.startValue = disabledNegatives && range.startValue <= 0 ? null : range.startValue;
+            range.endValue = disabledNegatives && range.endValue <= 0 ? null : range.endValue;
         }
         if(!isDiscrete && isDefined(range.startValue) && isDefined(range.endValue) && range.startValue > range.endValue) {
             let tmp = range.endValue;
@@ -1139,10 +1143,10 @@ Axis.prototype = {
 
     getVisualRangeLength(range) {
         const currentBusinessRange = range || this._translator.getBusinessRange();
-        const { type, logarithmBase } = this._options;
+        const { type } = this._options;
         let length;
         if(type === constants.logarithmic) {
-            length = adjust(vizUtils.getLog(currentBusinessRange.maxVisible / currentBusinessRange.minVisible, logarithmBase));
+            length = adjust(this.calculateInterval(currentBusinessRange.maxVisible, currentBusinessRange.minVisible));
         } else if(type === constants.discrete) {
             const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
             length = categoriesInfo.categories.length;
@@ -1163,7 +1167,8 @@ Axis.prototype = {
         }
 
         if(type === constants.logarithmic) {
-            center = vizUtils.raiseTo(adjust(vizUtils.getLog(currentBusinessRange.maxVisible * currentBusinessRange.minVisible, logarithmBase)) / 2, logarithmBase);
+            const { allowNegatives, linearThreshold, minVisible, maxVisible } = currentBusinessRange;
+            center = raiseTo(adjust(getLog(maxVisible, logarithmBase, allowNegatives, linearThreshold) + getLog(minVisible, logarithmBase, allowNegatives, linearThreshold)) / 2, logarithmBase, allowNegatives, linearThreshold);
         } else if(type === constants.discrete) {
             const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
             const index = Math.ceil(categoriesInfo.categories.length / 2) - 1;
@@ -1191,6 +1196,15 @@ Axis.prototype = {
             base: options.logarithmBase,
             invert: options.inverted
         });
+
+        if(options.type === constants.logarithmic) {
+            that._seriesData.addRange({
+                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
+            });
+            if(!isNaN(options.linearThreshold)) {
+                that._seriesData.linearThreshold = options.linearThreshold;
+            }
+        }
 
         if(!isDiscrete) {
             if(!isDefined(that._seriesData.min) && !isDefined(that._seriesData.max)) {
@@ -1331,7 +1345,7 @@ Axis.prototype = {
             customTicks = options.customTicks,
             customMinorTicks = options.customMinorTicks;
 
-        return getTickGenerator(options, incidentOccurred || that._incidentOccurred, skipTickGeneration, that._translator.getBusinessRange().isEmpty(), that._adjustDivisionFactor.bind(that))(
+        return getTickGenerator(options, incidentOccurred || that._incidentOccurred, skipTickGeneration, that._translator.getBusinessRange().isEmpty(), that._adjustDivisionFactor.bind(that), viewPort)(
             {
                 min: viewPort.minVisible,
                 max: viewPort.maxVisible,
@@ -1375,6 +1389,12 @@ Axis.prototype = {
             minVisible = visualRange && isDefined(visualRange.startValue) ? visualRange.startValue : businessRange.minVisible,
             maxVisible = visualRange && isDefined(visualRange.endValue) ? visualRange.endValue : businessRange.maxVisible,
             ticks = [];
+
+        if(options.type === constants.discrete && options.aggregateByCategory) {
+            return {
+                aggregateByCategory: true
+            };
+        }
 
         let aggregationInterval = options.aggregationInterval;
         let aggregationGroupWidth = options.aggregationGroupWidth;
@@ -2169,6 +2189,7 @@ Axis.prototype = {
             if(!isDefined(that._storedZoomEndParams)) {
                 that._storedZoomEndParams = {
                     startRange: previousRange,
+                    type: this.getOptions().type
                 };
             }
             that._storedZoomEndParams.event = domEvent;
@@ -2190,8 +2211,9 @@ Axis.prototype = {
                 maxVisible: previousRange.endValue,
                 categories: previousRange.categories
             };
-            const shift = adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange));
-            const zoomFactor = +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2");
+            const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
+            const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange)) : NaN;
+            const zoomFactor = typeIsNotChanged ? +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2") : NaN;
             const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
             zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor === 1 ? "pan" : "zoom", zoomFactor);
@@ -2499,6 +2521,7 @@ Axis.prototype = {
         var options = this._options;
         return {
             isHorizontal: this._isHorizontal,
+            shiftZeroValue: !this.isArgumentAxis,
             interval: options.semiDiscreteInterval,
             stick: this._getStick(),
             breaksSize: options.breakStyle ? options.breakStyle.width : 0

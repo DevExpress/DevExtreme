@@ -165,7 +165,7 @@ exports.HeaderFilterView = modules.View.inherit({
             var group = options.dataSource.group;
             if(Array.isArray(group) && group.length > 0) {
                 return group[0].selector;
-            } else if(isFunction(group)) {
+            } else if(isFunction(group) && !options.remoteFiltering) {
                 return group;
             }
         }
@@ -190,7 +190,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 shading: false,
                 showTitle: false,
                 showCloseButton: false,
-                closeOnTargetScroll: true,
+                closeOnTargetScroll: false, // T756320
                 dragEnabled: false,
                 closeOnOutsideClick: true,
                 focusStateEnabled: false,

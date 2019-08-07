@@ -1370,6 +1370,103 @@ QUnit.test("tickInterval can not be less than 1", function(assert) {
     assert.deepEqual(this.axis._tickInterval, 1);
 });
 
+QUnit.module("Logarithmic with negative values. Calculate ticks", environment);
+
+QUnit.test("[-100, 100], linearThreshold 0, screenDelta 450 - tickInterval 1", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10
+    });
+
+    this.axis.setBusinessRange({ min: -100, max: 100, linearThreshold: 0 });
+
+    // act
+    this.axis.createTicks(canvas(450));
+
+    assert.deepEqual(this.axis._tickInterval, 1);
+    assert.deepEqual(this.axis._majorTicks.map(value), [-100, -10, -1, 0, 1, 10, 100]);
+});
+
+QUnit.test("[-100, 100], linearThreshold -2, screenDelta 450 - tickInterval 1", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        endOnTick: false
+    });
+
+    this.axis.setBusinessRange({ min: -100, max: 100, linearThreshold: -2 });
+
+    // act
+    this.axis.createTicks(canvas(450));
+
+    assert.deepEqual(this.axis._tickInterval, 2);
+    assert.deepEqual(this.axis._majorTicks.map(value), [-100, -1, -0.01, 0.01, 1, 100]);
+});
+
+QUnit.test("[-100, 100], linearThreshold 0, screenDelta 450 - tickInterval 1. Calculate minorTicks", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        minorGrid: {
+            visible: true
+        }
+    });
+
+    this.axis.setBusinessRange({ min: -100, max: 100, linearThreshold: 0 });
+
+    // act
+    this.axis.createTicks(canvas(450));
+
+    assert.deepEqual(this.axis._tickInterval, 1);
+    assert.deepEqual(this.axis._minorTicks.map(value), [-80, -60, -40, -20, -8, -6, -4, -2, -0.8, -0.6, -0.4, -0.2, 0.2, 0.4, 0.6, 0.8, 2, 4, 6, 8, 20, 40, 60, 80]);
+});
+
+QUnit.test("[-400, 400], linearThreshold 0, screenDelta 800 - tickInterval 1. Calculate minorTicks", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        endOnTick: false,
+        minorGrid: {
+            visible: true
+        }
+    });
+
+    this.axis.setBusinessRange({ min: -400, max: 400, linearThreshold: 0 });
+
+    // act
+    this.axis.createTicks(canvas(800));
+
+    assert.deepEqual(this.axis._tickInterval, 1);
+    assert.deepEqual(this.axis._majorTicks.map(value), [-100, -10, -1, 0, 1, 10, 100]);
+    assert.deepEqual(this.axis._minorTicks.map(value), [-400, -200, -80, -60, -40, -20, -8, -6, -4, -2, -0.8, -0.6, -0.4, -0.2, 0.2, 0.4, 0.6, 0.8, 2, 4, 6, 8, 20, 40, 60, 80, 200, 400]);
+});
+
+QUnit.test("Adjust first tick by interval", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        endOnTick: false
+    });
+
+    this.axis.setBusinessRange({ min: -1.5e-39, max: 100, linearThreshold: -12 });
+
+    // act
+    this.axis.createTicks(canvas(450));
+
+    assert.deepEqual(this.axis._tickInterval, 2);
+    assert.deepEqual(this.axis._majorTicks.map(value)[0], -1e-40);
+});
+
 QUnit.module("Logarithmic. Misc", environment);
 
 QUnit.test("endOnTick is undefined - calculate ticks inside data bounds", function(assert) {
@@ -1478,7 +1575,7 @@ QUnit.test("min = 0, max = 0", function(assert) {
     // act
     this.axis.createTicks(canvas(300));
 
-    assert.deepEqual(this.axis._majorTicks.map(value), []);
+    assert.deepEqual(this.axis._majorTicks.map(value), [0]);
     assert.deepEqual(this.axis._tickInterval, undefined);
 });
 
@@ -3488,4 +3585,40 @@ QUnit.test("getAggregationInfo with empty range returns nothing", function(asser
     const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
 
     assert.strictEqual(aggregationInfo.ticks.length, 0);
+});
+
+QUnit.test("getAggregationInfo on discrete axis with enabled aggregateByCategory", function(assert) {
+    this.createAxis();
+
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "discrete",
+        aggregationInterval: 2,
+        aggregateByCategory: true
+    });
+
+    this.axis.setBusinessRange({ min: 1, max: 10 });
+    this.axis.createTicks(canvas(1000));
+    // act
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
+
+    assert.deepEqual(aggregationInfo, { aggregateByCategory: true });
+});
+
+QUnit.test("Do not take into account aggregateByCategory if axis is not discrete", function(assert) {
+    this.createAxis();
+
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        aggregationInterval: 2,
+        aggregateByCategory: true
+    });
+
+    this.axis.setBusinessRange({ min: 1, max: 10 });
+    this.axis.createTicks(canvas(1000));
+    // act
+    const aggregationInfo = this.axis.getAggregationInfo(undefined, {});
+
+    assert.equal(aggregationInfo.interval, 2);
 });

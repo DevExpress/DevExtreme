@@ -59,6 +59,7 @@ const moduleConfig = {
 
     afterEach: () => {
         fx.off = false;
+        this.clock.restore();
     }
 };
 

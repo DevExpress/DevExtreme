@@ -8,7 +8,7 @@ var $ = require("../core/renderer"),
     ActionSheetStrategy = require("./toolbar/ui.toolbar.strategy.action_sheet"),
     DropDownMenuStrategy = require("./toolbar/ui.toolbar.strategy.drop_down_menu"),
     ToolbarBase = require("./toolbar/ui.toolbar.base"),
-    ChildDefaultTemplate = require("./widget/child_default_template");
+    ChildDefaultTemplate = require("../core/templates/child_default_template").ChildDefaultTemplate;
 
 var STRATEGIES = {
     actionSheet: ActionSheetStrategy,
@@ -99,56 +99,47 @@ var Toolbar = ToolbarBase.inherit({
             /**
             * @name dxToolbarOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToolbarOptions.onSelectionChanged
             * @action
             * @hidden
-            * @inheritdoc
             */
         });
 
@@ -182,7 +173,7 @@ var Toolbar = ToolbarBase.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["actionSheetItem"] = new ChildDefaultTemplate("item", this);
+        this._defaultTemplates["actionSheetItem"] = new ChildDefaultTemplate("item");
     },
 
     _initMarkup: function() {
@@ -383,14 +374,12 @@ var Toolbar = ToolbarBase.inherit({
     * @name dxToolbarMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxToolbarMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 

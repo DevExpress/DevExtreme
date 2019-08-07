@@ -199,6 +199,7 @@ QUnit.test("Draw(true) -> draw(false) -> show - correct label position (containe
 });
 
 QUnit.test("Draw(true) - draw label", function(assert) {
+    this.options.cssClass = "label_class";
     var label = this.createLabel().draw(true);
 
     assert.ok(label._group);
@@ -211,7 +212,7 @@ QUnit.test("Draw(true) - draw label", function(assert) {
 
     assert.deepEqual(this.renderer.text.lastCall.args, ["", 0, 0], "text args");
 
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.firstCall.args, [{ text: "15", align: "left" }], "text attr");
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.firstCall.args, [{ text: "15", align: "left", "class": "label_class" }], "text attr");
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
     assert.equal(label._point.correctLabelPosition.callCount, 1);
     assert.equal(label._point.correctLabelPosition.lastCall.args[0], label);

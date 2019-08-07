@@ -35,8 +35,9 @@ class WebApiFileProvider extends FileProvider {
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
     }
 
-    getItems(path, itemType) {
-        return this._getItems(path, itemType);
+    getItems(path) {
+        return this._getEntriesByPath(path)
+            .then(result => this._convertDataObjectsToFileItems(result.result, path));
     }
 
     renameItem(item, name) {
@@ -113,11 +114,6 @@ class WebApiFileProvider extends FileProvider {
 
     abortFileUpload(uploadInfo) {
         return this._executeRequest("AbortUpload", { uploadId: uploadInfo.customData.uploadId });
-    }
-
-    _getItems(path, itemType) {
-        return this._getEntriesByPath(path)
-            .then(result => this._convertDataObjectsToFileItems(result.result, path, itemType));
     }
 
     _getItemsIds(items) {

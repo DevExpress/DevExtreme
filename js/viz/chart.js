@@ -271,11 +271,50 @@ function shrinkCanvases(isRotated, canvases, verticalMargins, horizontalMargins)
         return pickMaxValue(getMargin(side, margins1, pane), getMargin(side, margins2, pane));
     }
 
-    for(var pane in canvases) {
-        canvases[pane].top = canvases[pane].originalTop + getMaxMargin("top", verticalMargins, horizontalMargins, pane);
-        canvases[pane].bottom = canvases[pane].originalBottom + getMaxMargin("bottom", verticalMargins, horizontalMargins, pane);
-        canvases[pane].left = canvases[pane].originalLeft + getMaxMargin("left", verticalMargins, horizontalMargins, pane);
-        canvases[pane].right = canvases[pane].originalRight + getMaxMargin("right", verticalMargins, horizontalMargins, pane);
+    const getOriginalField = field => `original${field[0].toUpperCase()}${field.slice(1)}`;
+
+    function shrink(canvases, paneNames, sizeField, startMargin, endMargin, oppositeMargins) {
+        paneNames = paneNames.sort((p1, p2) => canvases[p2][startMargin] - canvases[p1][startMargin]);
+        paneNames.forEach(pane => {
+            const canvas = canvases[pane];
+            oppositeMargins.forEach(margin => {
+                canvas[margin] = canvas[getOriginalField(margin)] + getMaxMargin(margin, verticalMargins, horizontalMargins, pane);
+            });
+        });
+
+        const firstPane = canvases[paneNames[0]];
+
+        const weights = paneNames.map((paneName) => {
+            const canvas = canvases[paneName];
+            const size = canvas[sizeField] - canvas[startMargin] - canvas[endMargin];
+            return size / canvas[sizeField];
+        });
+
+        const weightSum = weights.reduce((sum, weight) => sum += weight);
+        const normalizedWeights = weights.map(w => w / weightSum);
+
+        const emptySpace = paneNames.reduce((space, paneName) => {
+            space -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, paneName) + getMaxMargin(endMargin, verticalMargins, horizontalMargins, paneName);
+            return space;
+        }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - canvases[paneNames[paneNames.length - 1]][getOriginalField(startMargin)]) - vizUtils.PANE_PADDING * (paneNames.length - 1);
+
+        paneNames.reduce((offset, pane, index) => {
+            const canvas = canvases[pane];
+            offset -= getMaxMargin(endMargin, verticalMargins, horizontalMargins, pane);
+            canvas[endMargin] = firstPane[sizeField] - offset;
+            offset -= Math.floor(emptySpace * normalizedWeights[index]);
+            canvas[startMargin] = offset;
+            offset -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, pane) + vizUtils.PANE_PADDING;
+
+            return offset;
+        }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)]);
+    }
+
+    const paneNames = Object.keys(canvases);
+    if(!isRotated) {
+        shrink(canvases, paneNames, "height", "top", "bottom", ["left", "right"]);
+    } else {
+        shrink(canvases, paneNames, "width", "left", "right", ["top", "bottom"]);
     }
 
     return canvases;
@@ -794,6 +833,7 @@ var dxChart = AdvancedChart.inherit({
 
                 overloadedSeries[seriesIndex].pointsCount = seriesPoints.length;
                 overloadedSeries[seriesIndex].total = 0;
+                overloadedSeries[seriesIndex].continuousSeries = 0;
                 points = points.concat(seriesPoints);
             });
 
@@ -802,29 +842,29 @@ var dxChart = AdvancedChart.inherit({
                 (p1, p2) => p1.argument - p2.argument;
             points.sort(sortingCallback);
 
-            for(let i = 0; i < points.length; i++) {
+
+            let isContinuousSeries = false;
+            for(let i = 0; i < points.length - 1; i++) {
                 const curPoint = points[i];
                 const size = curPoint.size;
-                const distance = i + 1 > points.length - i - 1 ? i + 1 : points.length - i;
                 if(_isDefined(curPoint.x) && _isDefined(curPoint.y)) {
-                    for(let j = 1; j < distance; j++) {
-                        const prevPoint = points[i - j];
-                        const nextPoint = points[i + j];
-                        const prev_x = _isDefined(prevPoint) ? prevPoint.x : null;
-                        const prev_y = _isDefined(prevPoint) ? prevPoint.y : null;
-                        const next_x = _isDefined(nextPoint) ? nextPoint.x : null;
-                        const next_y = _isDefined(nextPoint) ? nextPoint.y : null;
+                    for(let j = i + 1; j < points.length; j++) {
+                        const nextPoint = points[j];
+                        let next_x = _isDefined(nextPoint) ? nextPoint.x : null;
+                        let next_y = _isDefined(nextPoint) ? nextPoint.y : null;
 
-                        if((!_isDefined(prev_x) || Math.abs(curPoint.x - prev_x) >= size) && (!_isDefined(next_x) || Math.abs(curPoint.x - next_x) >= size)) {
+                        if(!_isDefined(next_x) || Math.abs(curPoint.x - next_x) >= size) {
+                            isContinuousSeries &= j !== i + 1;
                             break;
                         } else {
-                            if(_isDefined(prev_x) && _isDefined(prev_y) && Math.sqrt(Math.pow(curPoint.x - prev_x, 2) + Math.pow(curPoint.y - prev_y, 2)) < size) {
-                                overloadedSeries[curPoint.seriesIndex][prevPoint.seriesIndex]++;
-                                overloadedSeries[curPoint.seriesIndex].total++;
-                            }
-                            if(_isDefined(next_x) && _isDefined(next_y) && Math.sqrt(Math.pow(curPoint.x - next_x, 2) + Math.pow(curPoint.y - next_y, 2)) < size) {
+                            const distance = _isDefined(next_x) && _isDefined(next_y) && Math.sqrt(Math.pow(curPoint.x - next_x, 2) + Math.pow(curPoint.y - next_y, 2));
+                            if(distance && distance < size) {
                                 overloadedSeries[curPoint.seriesIndex][nextPoint.seriesIndex]++;
                                 overloadedSeries[curPoint.seriesIndex].total++;
+                                if(!isContinuousSeries) {
+                                    overloadedSeries[curPoint.seriesIndex].continuousSeries++;
+                                    isContinuousSeries = true;
+                                }
                             }
                         }
                     }
@@ -834,18 +874,19 @@ var dxChart = AdvancedChart.inherit({
             series.forEach(s => {
                 const seriesIndex = that.series.indexOf(s);
                 s.autoHidePointMarkers = false;
-                if(s.autoHidePointMarkersEnabled() && (argAxisType === "discrete" || overloadedSeries[seriesIndex].pointsCount > argAxis.getTicksValues().majorTicksValues.length)) {
+                const tickCount = argAxis.getTicksValues().majorTicksValues.length;
+                if(s.autoHidePointMarkersEnabled() && (argAxisType === "discrete" || overloadedSeries[seriesIndex].pointsCount > tickCount)) {
                     for(let index in overloadedSeries[seriesIndex]) {
                         const i = parseInt(index);
-                        if(isNaN(i)) {
+                        if(isNaN(i) || overloadedSeries[seriesIndex].total / overloadedSeries[seriesIndex].continuousSeries < 3) {
                             continue;
                         }
                         if(i === seriesIndex) {
-                            if(overloadedSeries[i][i] >= overloadedSeries[i].pointsCount) {
+                            if(overloadedSeries[i][i] * 2 >= overloadedSeries[i].pointsCount) {
                                 s.autoHidePointMarkers = true;
                                 break;
                             }
-                        } else if(overloadedSeries[seriesIndex].total >= overloadedSeries[seriesIndex].pointsCount * 2) {
+                        } else if(overloadedSeries[seriesIndex].total >= overloadedSeries[seriesIndex].pointsCount) {
                             s.autoHidePointMarkers = true;
                             break;
                         }
@@ -1406,7 +1447,15 @@ var dxChart = AdvancedChart.inherit({
                     axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
                 }
                 if(axisPath === "argumentAxis") {
-                    that.getArgumentAxis().visualRange(arg.value);
+                    const pathElements = arg.fullName.split(".");
+                    const destElem = pathElements[pathElements.length - 1];
+                    if(destElem === "endValue" || destElem === "startValue") {
+                        that.getArgumentAxis().visualRange({
+                            [destElem]: arg.value
+                        });
+                    } else {
+                        that.getArgumentAxis().visualRange(arg.value);
+                    }
                     return;
                 }
                 const axis = that._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];

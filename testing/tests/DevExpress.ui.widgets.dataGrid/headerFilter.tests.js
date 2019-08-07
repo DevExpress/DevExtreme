@@ -422,6 +422,8 @@ QUnit.test("Show header filter", function(assert) {
     assert.ok($popupContent.find(".dx-empty-message").length, "no data");
     // T291384
     assert.strictEqual(that.headerFilterView.getPopupContainer().option("position.collision"), "flip fit");
+    // T756320
+    assert.strictEqual(that.headerFilterView.getPopupContainer().option("closeOnTargetScroll"), false, "closeOnTargetScroll should be false");
 });
 
 // T435785
@@ -2608,6 +2610,30 @@ QUnit.test("Header Filter when grid with CustomStore when remoteOperations false
     assert.strictEqual($popupContent.find(".dx-list-item").eq(1).text(), "value13", "item 2 text");
     // T317818
     assert.strictEqual(loadArgs.length, 1, "load count");
+});
+
+// T801018
+QUnit.test("Header filter with search bar if remote filtering and local grouping", function(assert) {
+    // arrange
+    var that = this,
+        testElement = $("#container");
+
+    that.options.headerFilter.allowSearch = true;
+    that.options.remoteOperations = { sorting: true, filtering: true, paging: true };
+
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+
+    // act
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    // assert
+    var $popupContent = that.headerFilterView.getPopupContainer().$content(),
+        list = $popupContent.find(".dx-list").dxList("instance");
+
+    assert.ok(list.option("searchEnabled"), "list with search bar");
+    assert.equal(list.option("searchExpr"), "Test1", "searchExpr is correct");
 });
 
 QUnit.test("Header Filter when grid with CustomStore when remote grouping and remote summary", function(assert) {

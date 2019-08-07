@@ -1,8 +1,31 @@
 .dx-gantt {
     display: flex;
+    position: relative;
 
     .dx-gantt-si {
         text-align: center;
         vertical-align: middle;
+    }
+
+    .dx-treelist {
+        .dx-scrollbar-vertical {
+            display: none;
+        }
+    }
+
+    .dx-gantt-splitter {
+        display: block;
+        cursor: col-resize;
+        position: absolute;
+        z-index: 10000;
+        height: 100%;
+    }
+
+    .dx-gantt-view {
+        width: 100%;
+
+        .dx-scrollable-scrollbar {
+            z-index: 10000;
+        }
     }
 }

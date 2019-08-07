@@ -18,7 +18,7 @@ import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import { DataSource } from "data/data_source/data_source";
-
+import { ColumnWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 fx.off = true;
 
@@ -571,6 +571,48 @@ QUnit.test("Aria accessibility", function(assert) {
     assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
 });
 
+QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
+    // arrange
+    var wrapper = new ColumnWrapper(".dx-treelist"),
+        clock = sinon.useFakeTimers(),
+        treeList = createTreeList({
+            dataSource: [
+                { id: 0, parentId: -1, c0: "c0" },
+                { id: 1, parentId: 0, c0: "c1" }
+            ],
+            columns: [
+                {
+                    type: "buttons",
+                    buttons: ["add", "edit", "delete", "save", "cancel"]
+                },
+                "id"
+            ],
+            editing: {
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: true
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    // act
+    treeList.editRow(0);
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    clock.restore();
+});
+
 // T632028
 QUnit.test("Display context menu", function(assert) {
     // arrange, act
@@ -968,8 +1010,10 @@ QUnit.test("Expand row if repaintChangesOnly is true", function(assert) {
 // T742885
 QUnit.test("Expand node after filtering when it has many children and they are selected", function(assert) {
     // arrange
-    var clock = sinon.useFakeTimers(),
-        treeList = createTreeList({
+    var clock = sinon.useFakeTimers();
+
+    try {
+        var treeList = createTreeList({
             loadingTimeout: 30,
             height: 200,
             dataSource: {
@@ -1012,16 +1056,19 @@ QUnit.test("Expand node after filtering when it has many children and they are s
             }
         });
 
-    clock.tick(500);
+        clock.tick(500);
 
-    // act
-    treeList.collapseRow(1);
-    clock.tick(100);
+        // act
+        treeList.collapseRow(1);
+        clock.tick(100);
 
-    // assert
-    var items = treeList.getVisibleRows();
-    assert.strictEqual(items.length, 1, "row count");
-    assert.notOk(treeList.isRowExpanded(1), "first node is collapsed");
+        // assert
+        var items = treeList.getVisibleRows();
+        assert.strictEqual(items.length, 1, "row count");
+        assert.notOk(treeList.isRowExpanded(1), "first node is collapsed");
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.module("Focused Row", {
@@ -1236,4 +1283,65 @@ QUnit.test("Should not generate exception when selection mode is multiple and fo
 
     // assert
     assert.ok(true, "No exceptions");
+});
+
+QUnit.module("Scroll", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+// T757537
+QUnit.test("TreeList should not hang when scrolling", function(assert) {
+    // arrange
+    var scrollable,
+        contentReadySpy = sinon.spy(),
+        treeList = createTreeList({
+            dataSource: [
+                { id: 1, parentId: 0 },
+                { id: 2, parentId: 0 },
+                { id: 3, parentId: 0 },
+                { id: 4, parentId: 0 },
+                { id: 5, parentId: 0 },
+                { id: 6, parentId: 0 },
+                { id: 7, parentId: 0 },
+                { id: 8, parentId: 0 },
+                { id: 9, parentId: 0 },
+                { id: 10, parentId: 0 },
+                { id: 11, parentId: 0 },
+                { id: 12, parentId: 0 },
+                { id: 13, parentId: 0 },
+                { id: 14, parentId: 0 },
+                { id: 15, parentId: 0 }
+            ],
+            paging: {
+                pageSize: 5
+            },
+            height: 200,
+            columnAutoWidth: true,
+            scrolling: {
+                useNative: false
+            },
+            onContentReady: contentReadySpy
+        }),
+        done = assert.async();
+
+    this.clock.tick(100);
+    this.clock.restore();
+    scrollable = treeList.getScrollable();
+    contentReadySpy.reset();
+
+    // act
+    scrollable.scrollTo({ y: 200 });
+    scrollable.scrollTo({ y: 500 });
+
+    setTimeout(function() {
+        // assert
+        assert.strictEqual(treeList.pageIndex(), 2, "page index");
+        assert.strictEqual(contentReadySpy.callCount, 3, "onContentReady");
+        done();
+    }, 1000);
 });

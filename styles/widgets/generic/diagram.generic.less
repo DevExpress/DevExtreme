@@ -4,6 +4,10 @@
 .dx-diagram {
     border-color: @diagram-border-color;
 
+    .dxdi-control .dxdi-canvas { // stylelint-disable-line selector-class-pattern
+        background-color: darken(@overlay-content-bg, 15%);
+    }
+
     .dx-diagram-toolbar-wrapper:first-child {
         border-bottom: 1px solid @diagram-toolbar-border-color;
     }
@@ -80,6 +84,10 @@
 
     .dx-diagram-toolbar-menu-separator {
         border-top-color: @diagram-toolbar-border-color;
+    }
+
+    .dx-diagram-toolbar-text {
+        padding: @GENERIC_FIELD_VALUE_TOP_PADDING 0 @GENERIC_FIELD_VALUE_BOTTOM_PADDING @GENERIC_FIELD_LABELVALUE_SPACING;
     }
 
     .dx-diagram-select-sm .dx-texteditor {

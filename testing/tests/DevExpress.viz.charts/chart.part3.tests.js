@@ -1203,16 +1203,16 @@ QUnit.test("CommonPaneSetting. Background color. Two panes. second pane has back
     assert.ok(chart.panesBackground);
     assert.equal(chart.panesBackground.length, 2);
     assert.equal(chart.panesBackground[0]._stored_settings.x, 60);
-    assert.equal(chart.panesBackground[0]._stored_settings.y, 20);
+    assert.equal(chart.panesBackground[0]._stored_settings.y, 375);
     assert.equal(chart.panesBackground[0]._stored_settings.width, 690);
-    assert.equal(chart.panesBackground[0]._stored_settings.height, 700);
+    assert.equal(chart.panesBackground[0]._stored_settings.height, 345);
     assert.equal(chart.panesBackground[0].attr.firstCall.args[0].fill, "red");
     assert.equal(chart.panesBackground[0].attr.firstCall.args[0]["stroke-width"], 0);
 
     assert.equal(chart.panesBackground[1]._stored_settings.x, 60);
     assert.equal(chart.panesBackground[1]._stored_settings.y, 20);
     assert.equal(chart.panesBackground[1]._stored_settings.width, 690);
-    assert.equal(chart.panesBackground[1]._stored_settings.height, 700);
+    assert.equal(chart.panesBackground[1]._stored_settings.height, 345);
     assert.equal(chart.panesBackground[1].attr.firstCall.args[0].fill, "green");
     assert.equal(chart.panesBackground[1].attr.firstCall.args[0]["stroke-width"], 0);
 });
@@ -1552,8 +1552,8 @@ QUnit.test("Create two borders, with different attributes", function(assert) {
     assert.equal(chart.panes.length, 2);
     assert.equal(chart._renderer.path.callCount, 2);
 
-    checkSegmentRectCommon(assert, chart, 0, 80, 10, 630, 710, "none", "solid", "green", 5, 0.4, { top: true, bottom: true, left: true, right: true });
-    checkSegmentRectCommon(assert, chart, 1, 80, 10, 630, 710, "none", "solid", "blue", 7, 0.1, { top: true, bottom: true, left: true, right: true });
+    checkSegmentRectCommon(assert, chart, 0, 80, 370, 630, 350, "none", "solid", "green", 5, 0.4, { top: true, bottom: true, left: true, right: true });
+    checkSegmentRectCommon(assert, chart, 1, 80, 10, 630, 350, "none", "solid", "blue", 7, 0.1, { top: true, bottom: true, left: true, right: true });
 });
 
 QUnit.test("Negative Panes border width and height", function(assert) {

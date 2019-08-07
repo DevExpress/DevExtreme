@@ -18,7 +18,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     TextBox = require("../text_box"),
     clickEvent = require("../../events/click"),
-    FunctionTemplate = require("../widget/function_template"),
+    FunctionTemplate = require("../../core/templates/function_template").FunctionTemplate,
     Popup = require("../popup");
 
 var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
@@ -163,7 +163,6 @@ var DropDownEditor = TextBox.inherit({
             * @name dxDropDownEditorOptions.activeStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -200,7 +199,6 @@ var DropDownEditor = TextBox.inherit({
             * @name dxDropDownEditorOptions.buttons
             * @type Array<Enums.DropDownEditorButtonName,dxTextEditorButton>
             * @default undefined
-            * @inheritdoc
             */
             buttons: void 0,
 
@@ -216,43 +214,36 @@ var DropDownEditor = TextBox.inherit({
             /**
             * @name dxDropDownEditorOptions.mask
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskChar
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskRules
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.maskInvalidMessage
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.useMaskedValue
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions.mode
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxDropDownEditorOptions.showMaskMode
              * @hidden
-             * @inheritdoc
              */
         });
     },
@@ -431,7 +422,7 @@ var DropDownEditor = TextBox.inherit({
         this._defaultTemplates['dropDownButton'] = new FunctionTemplate(function(options) {
             var $icon = $("<div>").addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
             $(options.container).append($icon);
-        }, this);
+        });
     },
 
     _renderOpenHandler: function() {

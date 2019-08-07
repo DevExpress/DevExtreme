@@ -16,7 +16,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     Popover = require("./popover"),
     TextBox = require("./text_box"),
-    ChildDefaultTemplate = require("./widget/child_default_template"),
+    ChildDefaultTemplate = require("../core/templates/child_default_template").ChildDefaultTemplate,
     translator = require("../animation/translator");
 
 var LOOKUP_CLASS = "dx-lookup",
@@ -331,7 +331,6 @@ var Lookup = DropDownList.inherit({
 
             /**
              * @name dxLookupOptions.dropDownButtonTemplate
-             * @inheritdoc
              * @hidden
              */
 
@@ -342,7 +341,6 @@ var Lookup = DropDownList.inherit({
 
             /**
              * @name dxLookupOptions.showDropDownButton
-             * @inheritdoc
              * @hidden
              */
             showDropDownButton: false,
@@ -358,7 +356,6 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions.focusStateEnabled
             * @type boolean
             * @default false
-            * @inheritdoc
             */
             focusStateEnabled: false,
 
@@ -386,99 +383,82 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions.acceptCustomValue
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.readOnly
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onFocusIn
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onFocusOut
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onKeyDown
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onKeyPress
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onKeyUp
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onChange
             * @action
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onInput
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onCut
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onCopy
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onPaste
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onEnterKey
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.maxLength
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.spellcheck
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.buttons
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.applyValueMode
             * @type Enums.EditorApplyValueMode
             * @hidden false
-            * @inheritdoc
             */
 
             _scrollToSelectedItemEnabled: false,
@@ -577,7 +557,6 @@ var Lookup = DropDownList.inherit({
                     * @name dxLookupOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -653,8 +632,8 @@ var Lookup = DropDownList.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["group"] = new ChildDefaultTemplate("group", this);
-        this._defaultTemplates["title"] = new ChildDefaultTemplate("title", this);
+        this._defaultTemplates["group"] = new ChildDefaultTemplate("group");
+        this._defaultTemplates["title"] = new ChildDefaultTemplate("title");
     },
 
     _initMarkup: function() {
@@ -1274,7 +1253,6 @@ var Lookup = DropDownList.inherit({
     * @name dxLookupMethods.getButton
     * @publicName getButton(name)
     * @hidden
-    * @inheritdoc
     */
 });
 

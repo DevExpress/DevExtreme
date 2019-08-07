@@ -326,6 +326,10 @@ function isGeneric(themeName) {
     return isTheme("generic", themeName);
 }
 
+function isDark(themeName) {
+    return isTheme("dark", themeName);
+}
+
 function checkThemeDeprecation() {
     if(isIos7()) {
         errors.log("W0010", "The 'ios7' theme", "19.1", "Use the 'generic' theme instead.");
@@ -360,19 +364,24 @@ function isWebFontLoaded(text, fontWeight) {
 }
 
 function waitWebFont(text, fontWeight) {
-    const timeout = 15;
-    const attempts = 135;
-    let i = 0;
+    const interval = 15;
+    const timeout = 2000;
 
     return new Promise(resolve => {
         const check = () => {
-            if(isWebFontLoaded(text, fontWeight) || i++ > attempts) {
-                clearInterval(intervalId);
-                resolve();
+            if(isWebFontLoaded(text, fontWeight)) {
+                clear();
             }
         };
 
-        const intervalId = setInterval(check, timeout);
+        const clear = () => {
+            clearInterval(intervalId);
+            clearTimeout(timeoutId);
+            resolve();
+        };
+
+        const intervalId = setInterval(check, interval);
+        const timeoutId = setTimeout(clear, timeout);
     });
 }
 
@@ -446,6 +455,7 @@ exports.waitForThemeLoad = waitForThemeLoad;
 exports.isMaterial = isMaterial;
 exports.isIos7 = isIos7;
 exports.isGeneric = isGeneric;
+exports.isDark = isDark;
 exports.isWebFontLoaded = isWebFontLoaded;
 exports.waitWebFont = waitWebFont;
 

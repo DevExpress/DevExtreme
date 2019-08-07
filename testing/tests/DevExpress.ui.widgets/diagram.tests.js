@@ -10,10 +10,13 @@ QUnit.testStart(() => {
 });
 
 const TOOLBAR_SELECTOR = ".dx-diagram-toolbar";
-const CONTEXT_MENU_SELECTOR = ".dx-has-context-menu:last";
+const TOOBOX_ACCORDION_SELECTOR = ".dx-diagram-left-panel .dx-accordion";
+const CONTEXT_MENU_SELECTOR = "div:not(.dx-diagram-toolbar-wrapper) > .dx-has-context-menu";
+const PROPERTIES_PANEL_ACCORDION_SELECTOR = ".dx-diagram-right-panel .dx-accordion";
+const PROPERTIES_PANEL_FORM_SELECTOR = ".dx-diagram-right-panel .dx-accordion .dx-form";
 const TOOLBAR_ITEM_ACTIVE_CLASS = "dx-format-active";
 const MAIN_ELEMENT_SELECTOR = ".dxdi-control";
-const SIMPLE_DIAGRAM = '{ "shapes": [{ "key":"107", "type":19, "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }';
+const SIMPLE_DIAGRAM = '{ "shapes": [{ "key":"107", "type":"Ellipsis", "text":"A new ticket", "x":1440, "y":1080, "width":1440, "height":720, "zIndex":0 }] }';
 const DX_MENU_ITEM_SELECTOR = ".dx-menu-item";
 const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
 
@@ -29,9 +32,27 @@ function getToolbarIcon(button) {
 }
 
 QUnit.module("Diagram Toolbar", moduleConfig, () => {
+    test("should not render if toolbar.visible is false", (assert) => {
+        this.instance.option("toolbar.visible", false);
+        let $toolbar = this.$element.find(TOOLBAR_SELECTOR);
+        assert.equal($toolbar.length, 0);
+    });
     test("should fill toolbar with default items", (assert) => {
         let toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
         assert.ok(toolbar.option("dataSource").length > 10);
+    });
+    test("should fill toolbar with custom items", (assert) => {
+        this.instance.option("toolbar.commands", ["export"]);
+        let toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
+        assert.equal(toolbar.option("dataSource").length, 2); // + show properties panel
+
+        this.instance.option("propertiesPanel.visible", false);
+        toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
+        assert.equal(toolbar.option("dataSource").length, 1);
+        this.instance.option("propertiesPanel.visible", true);
+        this.instance.option("propertiesPanel.collapsible", false);
+        toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
+        assert.equal(toolbar.option("dataSource").length, 1);
     });
     test("should enable items on diagram request", (assert) => {
         let undoButton = findToolbarItem(this.$element, "undo").dxButton("instance");
@@ -114,37 +135,226 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         const item = $(document).find(".dx-list-item-content").filter(function() {
             return $(this).text().toLowerCase().indexOf("arial black") >= 0;
         });
-        assert.notEqual(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         item.trigger("dxclick");
-        assert.equal(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test("diagram should be focused after set font bold", (assert) => {
         const boldButton = findToolbarItem(this.$element, "bold");
-        assert.notEqual(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         boldButton.trigger("dxclick");
-        assert.equal(document.activeElement, this.instance._diagramInstance.renderManager.inputElement);
+        assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
+    });
+    test("Auto Layout button should be disabled when there is no selection", (assert) => {
+        const button = findToolbarItem(this.$element, "auto layout").dxButton("instance");
+        assert.ok(button.option("disabled"));
+    });
+    test("Auto Layout button should be disabled in Read Only mode", (assert) => {
+        this.instance.option("contextMenu.commands", ["selectAll"]);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
+        const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
+        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick"); // Select All
+        const button = findToolbarItem(this.$element, "auto layout").dxButton("instance");
+        assert.notOk(button.option("disabled"));
+        this.instance.option("readOnly", true);
+        assert.ok(button.option("disabled"));
     });
 });
+
+QUnit.module("Diagram Toolbox", moduleConfig, () => {
+    test("should not render if toolbox.visible is false", (assert) => {
+        this.instance.option("toolbox.visible", false);
+        let $accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR);
+        assert.equal($accordion.length, 0);
+    });
+    test("should fill toolbox with default items", (assert) => {
+        let accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion("instance");
+        assert.ok(accordion.option("dataSource").length > 1);
+    });
+    test("should fill toolbox with custom items", (assert) => {
+        this.instance.option("toolbox.groups", ["general"]);
+        let accordion = this.$element.find(TOOBOX_ACCORDION_SELECTOR).dxAccordion("instance");
+        assert.equal(accordion.option("dataSource").length, 1);
+    });
+});
+
+QUnit.module("Diagram Properties Panel", moduleConfig, () => {
+    test("should not render if propertiesPanel.visible is false", (assert) => {
+        this.instance.option("propertiesPanel.visible", false);
+        let $accordion = this.$element.find(PROPERTIES_PANEL_ACCORDION_SELECTOR);
+        assert.equal($accordion.length, 0);
+    });
+    test("should fill properties panel with default items", (assert) => {
+        let form = this.$element.find(PROPERTIES_PANEL_FORM_SELECTOR).dxForm("instance");
+        assert.ok(form.option("items").length > 1);
+    });
+    test("should fill toolbox with custom items", (assert) => {
+        this.instance.option("propertiesPanel.groups", [{ commands: ["units"] }]);
+        let form = this.$element.find(PROPERTIES_PANEL_FORM_SELECTOR).dxForm("instance");
+        assert.equal(form.option("items").length, 1);
+    });
+});
+
 QUnit.module("Context Menu", moduleConfig, () => {
+    test("should not render if contextMenu.enabled is false", (assert) => {
+        let $contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR);
+        assert.equal($contextMenu.length, 1);
+        this.instance.option("contextMenu.enabled", false);
+        $contextMenu = this.$element.children(CONTEXT_MENU_SELECTOR);
+        assert.equal($contextMenu.length, 0);
+    });
     test("should load default items", (assert) => {
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         assert.ok(contextMenu.option("items").length > 1);
     });
+    test("should load custom items", (assert) => {
+        this.instance.option("contextMenu.commands", ["copy"]);
+        const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
+        assert.equal(contextMenu.option("items").length, 1);
+    });
     test("should update items on showing", (assert) => {
+        this.instance.option("contextMenu.commands", ["copy", "selectAll"]);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         assert.notOk(contextMenu.option("visible"));
-        assert.notOk(contextMenu.option("items")[0].disabled);
+        assert.ok(contextMenu.option("items")[0].text.indexOf("Copy") > -1);
         $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
         assert.ok(contextMenu.option("visible"));
-        assert.ok(contextMenu.option("items")[0].disabled);
+        assert.ok(contextMenu.option("items")[0].text.indexOf("Select All") > -1);
     });
     test("should execute commands on click", (assert) => {
+        this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
         assert.ok(this.instance._diagramInstance.selection.isEmpty());
-        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(3)).trigger("dxclick");
+        $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick");
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
+    });
+});
+
+QUnit.module("Options", moduleConfig, () => {
+    test("should change readOnly property", (assert) => {
+        assert.notOk(this.instance._diagramInstance.settings.readOnly);
+        this.instance.option("readOnly", true);
+        assert.ok(this.instance._diagramInstance.settings.readOnly);
+        this.instance.option("readOnly", false);
+        assert.notOk(this.instance._diagramInstance.settings.readOnly);
+    });
+    test("should change zoomLevel property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+        this.instance.option("zoomLevel", 1.5);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1.5);
+        this.instance.option("zoomLevel", 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+    });
+    test("should change zoomLevel object property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 7);
+        this.instance.option("zoomLevel", { value: 1.5, items: [ 1, 1.5 ] });
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1.5);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 2);
+        this.instance.option("zoomLevel", 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
+        assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 2);
+    });
+    test("should change autoZoom property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
+        this.instance.option("autoZoom", "fitContent");
+        assert.equal(this.instance._diagramInstance.settings.autoZoom, 1);
+        this.instance.option("autoZoom", "fitWidth");
+        assert.equal(this.instance._diagramInstance.settings.autoZoom, 2);
+        this.instance.option("autoZoom", "disabled");
+        assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
+    });
+    test("should change fullscreen property", (assert) => {
+        assert.notOk(this.instance._diagramInstance.settings.fullscreen);
+        this.instance.option("fullscreen", true);
+        assert.ok(this.instance._diagramInstance.settings.fullscreen);
+        this.instance.option("fullscreen", false);
+        assert.notOk(this.instance._diagramInstance.settings.fullscreen);
+    });
+    test("should change showGrid property", (assert) => {
+        assert.ok(this.instance._diagramInstance.settings.showGrid);
+        this.instance.option("showGrid", false);
+        assert.notOk(this.instance._diagramInstance.settings.showGrid);
+        this.instance.option("showGrid", true);
+        assert.ok(this.instance._diagramInstance.settings.showGrid);
+    });
+    test("should change snapToGrid property", (assert) => {
+        assert.ok(this.instance._diagramInstance.settings.snapToGrid);
+        this.instance.option("snapToGrid", false);
+        assert.notOk(this.instance._diagramInstance.settings.snapToGrid);
+        this.instance.option("snapToGrid", true);
+        assert.ok(this.instance._diagramInstance.settings.snapToGrid);
+    });
+    test("should change gridSize property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+        this.instance.option("gridSize", 0.25);
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 360);
+        this.instance.option("gridSize", 0.125);
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+    });
+    test("should change gridSize object property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+        assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 4);
+        this.instance.option("gridSize", { value: 0.25, items: [0.25, 1] });
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 360);
+        assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 2);
+        this.instance.option("gridSize", 0.125);
+        assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+        assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 2);
+    });
+    test("should change viewUnits property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
+        this.instance.option("viewUnits", "cm");
+        assert.equal(this.instance._diagramInstance.settings.viewUnits, 1);
+        this.instance.option("viewUnits", "in");
+        assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
+    });
+    test("should change units property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.units, 0);
+        this.instance.option("units", "cm");
+        assert.equal(this.instance._diagramInstance.model.units, 1);
+        this.instance.option("units", "in");
+        assert.equal(this.instance._diagramInstance.model.units, 0);
+    });
+    test("should change pageSize property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
+        this.instance.option("pageSize", { width: 3, height: 5 });
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
+    });
+    test("should change pageSize object property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
+        assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 11);
+        this.instance.option("pageSize", { width: 3, height: 5, items: [{ width: 3, height: 5, text: "A10" }] });
+        assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
+        assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
+        assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 1);
+    });
+    test("should change pageOrientation property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
+        this.instance.option("pageOrientation", "landscape");
+        assert.equal(this.instance._diagramInstance.model.pageLandscape, true);
+        this.instance.option("pageOrientation", "portrait");
+        assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
+    });
+    test("should change pageColor property", (assert) => {
+        assert.equal(this.instance._diagramInstance.model.pageColor, "white");
+        this.instance.option("pageColor", "red");
+        assert.equal(this.instance._diagramInstance.model.pageColor, "red");
+        this.instance.option("pageColor", "white");
+        assert.equal(this.instance._diagramInstance.model.pageColor, "white");
+    });
+    test("should change simpleView property", (assert) => {
+        assert.equal(this.instance._diagramInstance.settings.simpleView, false);
+        this.instance.option("simpleView", true);
+        assert.equal(this.instance._diagramInstance.settings.simpleView, true);
+        this.instance.option("simpleView", false);
+        assert.equal(this.instance._diagramInstance.settings.simpleView, false);
     });
 });
 

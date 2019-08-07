@@ -92,6 +92,11 @@ _Range.prototype = {
             that.categories = otherCategories ? unique(categories.concat(otherCategories)) : categories;
         }
 
+        if(that[axisTypeSelector] === "logarithmic") {
+            checkField("allowNegatives");
+            compareAndReplaceByField("linearThreshold", otherLessThan);
+        }
+
         return that;
     },
 

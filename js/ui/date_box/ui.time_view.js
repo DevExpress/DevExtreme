@@ -264,7 +264,7 @@ var TimeView = Editor.inherit({
         return extend({
             showSpinButtons: true,
             disabled: this.option("disabled"),
-            valueFormat: function(value) {
+            displayValueFormatter: function(value) {
                 return (value < 10 ? "0" : "") + value;
             }
         }, {

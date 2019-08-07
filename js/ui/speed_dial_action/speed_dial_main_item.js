@@ -84,6 +84,14 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         this._setClickAction();
     },
 
+    _defaultActionArgs() {
+        const actions = this.option("actions");
+
+        return {
+            component: actions.length === 1 ? actions[0] : this
+        };
+    },
+
     _clickHandler() {
         const actions = this._actionItems;
         actions.forEach(action => {
@@ -138,7 +146,9 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             action._options.animation.show.delay = actionAnimationDelay * i;
             action._options.animation.hide.delay = actionAnimationDelay * (lastActionIndex - i);
 
-            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, action._options));
+            action._options.actionComponent = action;
+
+            this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options, { visible: false })));
         }
     },
 
@@ -171,11 +181,15 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 });
 
 exports.initAction = function(newAction) {
+    if(!newAction._options.visible) return;
+
     // TODO: workaround for Angular/React/Vue
     delete newAction._options.onInitializing;
 
     let isActionExist = false;
     if(!speedDialMainItem) {
+        delete newAction._options.position;
+
         const $fabMainElement = $("<div>")
             .appendTo(getSwatchContainer(newAction.$element()));
 
@@ -185,7 +199,6 @@ exports.initAction = function(newAction) {
                 visible: true
             })
         );
-
     } else {
         const savedActions = speedDialMainItem.option("actions");
 
