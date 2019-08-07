@@ -103,7 +103,15 @@ QUnit.test("basic animation when window was scrolled", function(assert) {
         $element = $("<div>").appendTo("body");
 
     try {
-        $wrapper.css({ height: "150%", width: "150%", position: "absolute", top: "0", left: "0" });
+        $wrapper.css({
+            minHeight: "800px",
+            minWidth: "800px",
+            height: "150%",
+            width: "150%",
+            position: "absolute",
+            top: "0",
+            left: "0"
+        });
         $element.css({ height: 50, width: 50, top: "200px", background: 'blue' });
 
         var initialTopPosition = $element.get(0).getBoundingClientRect().top,

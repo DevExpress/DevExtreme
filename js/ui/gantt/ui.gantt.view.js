@@ -13,30 +13,32 @@ export class GanttView extends Widget {
         const { GanttView } = getGanttViewCore();
         this._ganttViewCore = new GanttView(this.$element().get(0), this, {
             showResources: this.option("showResources"),
-            taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition"))
+            taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition")),
+            areAlternateRowsEnabled: false
         });
         this._ganttViewCore.setViewType(3);
     }
 
-    _getTaskAreaContainer() {
+    getTaskAreaContainer() {
         return this._ganttViewCore.taskAreaContainer;
     }
-    _selectTask(id) {
+    selectTask(id) {
         if(this.lastSelectedId !== undefined) {
             this._ganttViewCore.unselectTask(parseInt(this.lastSelectedId));
         }
         this._ganttViewCore.selectTask(id);
         this.lastSelectedId = id;
     }
+    updateView() {
+        this._ganttViewCore.updateView();
+    }
+    setWidth(value) {
+        this._ganttViewCore.setWidth(value);
+    }
+
     _update() {
         this._ganttViewCore.loadOptionsFromGanttOwner();
         this._ganttViewCore.resetAndUpdate();
-    }
-    _updateView() {
-        this._ganttViewCore.updateView();
-    }
-    _setWidth(value) {
-        this._ganttViewCore.setWidth(value);
     }
 
     _getTaskTitlePosition(value) {
@@ -52,6 +54,12 @@ export class GanttView extends Widget {
 
     _optionChanged(args) {
         switch(args.name) {
+            case "tasks":
+            case "dependencies":
+            case "resources":
+            case "resourceAssignments":
+                this._update();
+                break;
             case "showResources":
                 this._ganttViewCore.setShowResources(args.value);
                 break;
