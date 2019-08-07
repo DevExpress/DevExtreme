@@ -1,50 +1,48 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Guid = require("../../core/guid"),
-    registerComponent = require("../../core/component_registrator"),
-    noop = require("../../core/utils/common").noop,
-    typeUtils = require("../../core/utils/type"),
-    domUtils = require("../../core/utils/dom"),
-    contains = domUtils.contains,
-    getPublicElement = domUtils.getPublicElement,
-    each = require("../../core/utils/iterator").each,
-    inArray = require("../../core/utils/array").inArray,
-    extend = require("../../core/utils/extend").extend,
-    windowUtils = require("../../core/utils/window"),
-    fx = require("../../animation/fx"),
-    positionUtils = require("../../animation/position"),
-    devices = require("../../core/devices"),
-    eventUtils = require("../../events/utils"),
-    Overlay = require("../overlay"),
-    MenuBase = require("./ui.menu_base"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import Guid from "../../core/guid";
+import registerComponent from "../../core/component_registrator";
+import { noop } from "../../core/utils/common";
+import typeUtils from "../../core/utils/type";
+import { contains, getPublicElement } from "../../core/utils/dom";
+import { each } from "../../core/utils/iterator";
+import { inArray } from "../../core/utils/array";
+import { extend } from "../../core/utils/extend";
+import windowUtils from "../../core/utils/window";
+import fx from "../../animation/fx";
+import positionUtils from "../../animation/position";
+import devices from "../../core/devices";
+import eventUtils from "../../events/utils";
+import Overlay from "../overlay";
+import MenuBase from "./ui.menu_base";
+import { Deferred } from "../../core/utils/deferred";
 
-var DX_MENU_CLASS = "dx-menu",
-    DX_MENU_ITEM_CLASS = DX_MENU_CLASS + "-item",
-    DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + "-expanded",
-    DX_MENU_PHONE_CLASS = "dx-menu-phone-overlay",
-    DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + "-items-container",
-    DX_MENU_ITEM_WRAPPER_CLASS = DX_MENU_ITEM_CLASS + "-wrapper",
-    DX_SUBMENU_CLASS = "dx-submenu",
-    DX_CONTEXT_MENU_CLASS = "dx-context-menu",
-    DX_HAS_CONTEXT_MENU_CLASS = "dx-has-context-menu",
-    DX_STATE_DISABLED_CLASS = "dx-state-disabled",
+const DX_MENU_CLASS = "dx-menu";
+const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + "-item";
+const DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + "-expanded";
+const DX_MENU_PHONE_CLASS = "dx-menu-phone-overlay";
+const DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + "-items-container";
+const DX_MENU_ITEM_WRAPPER_CLASS = DX_MENU_ITEM_CLASS + "-wrapper";
+const DX_SUBMENU_CLASS = "dx-submenu";
+const DX_CONTEXT_MENU_CLASS = "dx-context-menu";
+const DX_HAS_CONTEXT_MENU_CLASS = "dx-has-context-menu";
+const DX_STATE_DISABLED_CLASS = "dx-state-disabled";
 
-    FOCUS_UP = "up",
-    FOCUS_DOWN = "down",
-    FOCUS_LEFT = "left",
-    FOCUS_RIGHT = "right",
-    FOCUS_FIRST = "first",
-    FOCUS_LAST = "last",
+const FOCUS_UP = "up";
+const FOCUS_DOWN = "down";
+const FOCUS_LEFT = "left";
+const FOCUS_RIGHT = "right";
+const FOCUS_FIRST = "first";
+const FOCUS_LAST = "last";
 
-    ACTIONS = [
-        "onShowing", "onShown", "onSubmenuCreated",
-        "onHiding", "onHidden", "onPositioning", "onLeftFirstItem",
-        "onLeftLastItem", "onCloseRootSubmenu", "onExpandLastSubmenu"
-    ],
-    LOCAL_SUBMENU_DIRECTIONS = [FOCUS_UP, FOCUS_DOWN, FOCUS_FIRST, FOCUS_LAST],
-    DEFAULT_SHOW_EVENT = "dxcontextmenu";
+const ACTIONS = [
+    "onShowing", "onShown", "onSubmenuCreated",
+    "onHiding", "onHidden", "onPositioning", "onLeftFirstItem",
+    "onLeftLastItem", "onCloseRootSubmenu", "onExpandLastSubmenu"
+];
+const LOCAL_SUBMENU_DIRECTIONS = [FOCUS_UP, FOCUS_DOWN, FOCUS_FIRST, FOCUS_LAST];
+const DEFAULT_SHOW_EVENT = "dxcontextmenu";
 
 var ContextMenu = MenuBase.inherit((function() {
     var getShowEvent = function(that) {
@@ -907,20 +905,12 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _renderVisibility: function(showing) {
-            this._cachedJQEvent = undefined;
-
             return showing ? this._show() : this._hide();
         },
 
         _toggleVisibility: noop,
 
         _show: function(event) {
-            if(typeUtils.isDefined(event)) {
-                this._cachedJQEvent = event;
-            } else {
-                event = this._cachedJQEvent;
-            }
-
             var args = { jQEvent: event },
                 promise = new Deferred().reject().promise();
 
@@ -992,6 +982,20 @@ var ContextMenu = MenuBase.inherit((function() {
             return position;
         },
 
+        _refresh: function() {
+            if(!windowUtils.hasWindow()) {
+                this.callBase();
+            } else {
+                if(this._overlay) {
+                    var lastPosition = this._overlay.option("position");
+                    this.callBase();
+                    this._overlay && this._overlay.option("position", lastPosition);
+                } else {
+                    this.callBase();
+                }
+            }
+        },
+
         _hide: function() {
             var promise;
 
@@ -1002,7 +1006,6 @@ var ContextMenu = MenuBase.inherit((function() {
             }
 
             this.setAria("owns", undefined);
-            this._cachedJQEvent = undefined;
 
             return promise || new Deferred().reject().promise();
         },
