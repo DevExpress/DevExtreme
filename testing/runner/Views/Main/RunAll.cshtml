@@ -72,7 +72,6 @@
             suitesInProgress = [ ],
             urls = @Html.Raw(Json.Serialize(Model.Suites)),
             originalUrls = urls.slice(0),
-            forceCombinedStyles = @Html.Raw(Json.Serialize(Model.ForceCombinedStyles)),
             ieMode = @Html.Raw(Json.Serialize(Model.IEMode)),
             noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
             noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
@@ -185,8 +184,6 @@
                 worker = workerByIndex(i),
                 additionalParams = { };
 
-            if(forceCombinedStyles)
-                additionalParams.combinedStyles = "true";
             if(ieMode !== "edge")
                 additionalParams.ieMode = ieMode;
             if(noTryCatch)

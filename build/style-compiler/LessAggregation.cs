@@ -13,7 +13,6 @@ namespace StyleCompiler
 
         public interface ICssFileInfo
         {
-            string GetFileName();
         }
 
         public class CommonCssFileInfo : ICssFileInfo
@@ -26,22 +25,6 @@ namespace StyleCompiler
                 _distributionName = distributionName;
                 _appendCommonPostfix = appendCommonPostfix;
             }
-
-            public string GetFileName()
-            {
-                var parts = new List<string> { "dx" };
-
-                if (!String.IsNullOrEmpty(_distributionName))
-                    parts.Add(_distributionName);
-
-                if (_appendCommonPostfix)
-                    parts.Add("common");
-
-                parts.Add("css");
-
-                return String.Join(".", parts);
-            }
-
         }
 
         public class ThemeCssFileInfo : ICssFileInfo
@@ -63,30 +46,6 @@ namespace StyleCompiler
             public string ColorSchemeName { get { return _colorSchemeName; } }
             public string SizeSchemeName { get { return _sizeSchemeName; } }
 
-            public string GetFileName()
-            {
-                var parts = new List<string> { "dx" };
-
-                if (!String.IsNullOrEmpty(DistributionName))
-                    parts.Add(DistributionName);
-
-                if (!String.IsNullOrEmpty(_theme.PublicName))
-                    parts.Add(_theme.PublicName);
-
-                parts.Add(_colorSchemeName);
-
-                if (!IsDefaultSize())
-                    parts.Add(_sizeSchemeName);
-
-                parts.Add("css");
-
-                return String.Join(".", parts);
-            }
-
-            bool IsDefaultSize()
-            {
-                return LessRegistry.IsDefaultSizeScheme(_sizeSchemeName);
-            }
         }
 
         public class Item
@@ -124,39 +83,6 @@ namespace StyleCompiler
                 RegexOptions.Singleline
             );
         }
-
-        public static string CompileLessPaths(IEnumerable<string> paths)
-        {
-            var importSheet = new StringBuilder();
-
-            foreach (var path in paths)
-            {
-                var info = new FileInfo(path);
-
-                if (!info.Exists)
-                    throw new Exception("No such file: " + path);
-
-                importSheet.AppendFormat("@import \"{0}\";\n", path);
-            }
-
-            return NodeRunner.CompileLess(importSheet.ToString());
-        }
-
-        public static void CheckLessDuplicates(Item item)
-        {
-            CheckLessDuplicates(
-                from segment in item.Segments
-                from i in segment.LessFiles
-                select i
-            );
-        }
-
-        static void CheckLessDuplicates(IEnumerable<string> paths)
-        {
-            var withoutMixins = paths.Where(i => i != "mixins.less"); // mixins can be legitimately included many times
-            if (withoutMixins.Count() != withoutMixins.Distinct().Count())
-                throw new Exception("Duplicate less files detected");
-        }        
 
         public static Item CreateCommonItem(string distributionName)
         {

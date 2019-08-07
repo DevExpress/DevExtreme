@@ -217,6 +217,12 @@ var staticMethods = {
         * @hidden
         */
         /**
+        * @name viz.map.projection
+        * @namespace DevExpress.viz.map
+        * @module viz/vector_map/projection
+        * @export projection
+        */
+        /**
         * @name viz.map.projectionmethods.get
         * @publicName get(name)
         * @param1 name:Enums.VectorMapProjection|string

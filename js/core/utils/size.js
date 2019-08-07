@@ -143,3 +143,4 @@ exports.addOffsetToMaxHeight = addOffsetToMaxHeight;
 exports.addOffsetToMinHeight = addOffsetToMinHeight;
 exports.getVerticalOffsets = getVerticalOffsets;
 exports.getVisibleHeight = getVisibleHeight;
+exports.parseHeight = parseHeight;
