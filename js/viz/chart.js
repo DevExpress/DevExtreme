@@ -1408,7 +1408,15 @@ var dxChart = AdvancedChart.inherit({
                     axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
                 }
                 if(axisPath === "argumentAxis") {
-                    that.getArgumentAxis().visualRange(arg.value);
+                    const pathElements = arg.fullName.split(".");
+                    const destElem = pathElements[pathElements.length - 1];
+                    if(destElem === "endValue" || destElem === "startValue") {
+                        that.getArgumentAxis().visualRange({
+                            [destElem]: arg.value
+                        });
+                    } else {
+                        that.getArgumentAxis().visualRange(arg.value);
+                    }
                     return;
                 }
                 const axis = that._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];
