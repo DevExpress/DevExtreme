@@ -643,6 +643,42 @@ QUnit.test("Set argument visual range using option", function(assert) {
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 2, endValue: 10 });
 });
 
+// T804296
+QUnit.test("Set argument visual range using option. endValue was set only", function(assert) {
+    var chart = this.createChart({
+        series: [{}],
+        dataSource: [{
+            arg: 1,
+            val: 1
+        }, {
+            arg: 100,
+            val: 1
+        }]
+    });
+
+    chart.option("argumentAxis.visualRange.endValue", 80);
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 80 });
+});
+
+// T804296
+QUnit.test("Set argument visual range using option. startValue was set only", function(assert) {
+    var chart = this.createChart({
+        series: [{}],
+        dataSource: [{
+            arg: 1,
+            val: 1
+        }, {
+            arg: 100,
+            val: 1
+        }]
+    });
+
+    chart.option("argumentAxis.visualRange.startValue", 20);
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 20, endValue: 100 });
+});
+
 QUnit.test("Using the single section of axis options for some panes (check customVisualRange merging)", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
     var visualRangeChanged = sinon.spy();
