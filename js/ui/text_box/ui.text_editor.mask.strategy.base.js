@@ -43,12 +43,13 @@ export default class BaseMaskStrategy {
     }
 
     attachEvents() {
-        var $input = this.editor._input();
+        const $input = this.editorInput();
 
-        for(let eventName of this.getHandleEventNames()) {
+        this.getHandleEventNames().forEach((eventName) => {
             const subscriptionName = addNamespace(eventName.toLowerCase(), MASK_EVENT_NAMESPACE);
+
             EventsEngine.on($input, subscriptionName, this.getEventHandler(eventName));
-        }
+        });
 
         this._attachChangeEventHandlers();
     }
