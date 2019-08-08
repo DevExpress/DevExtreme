@@ -331,29 +331,119 @@ module.exports = {
              * @type Enums.FilterType
              * @default "include"
             */
+
             /**
-             * @name GridBaseColumn.cellTemplate
+             * @name dxDataGridColumn.cellTemplate
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 data:object
+             * @type_function_param2_field2 component:dxDataGrid
+             * @type_function_param2_field3 value:any
+             * @type_function_param2_field4 oldValue:any
+             * @type_function_param2_field5 displayValue:any
+             * @type_function_param2_field6 text:string
+             * @type_function_param2_field7 columnIndex:number
+             * @type_function_param2_field8 rowIndex:number
+             * @type_function_param2_field9 column:dxDataGridColumn
+             * @type_function_param2_field10 row:dxDataGridRowObject
+             * @type_function_param2_field11 rowType:string
+             * @type_function_param2_field12 watch:function
              */
+
             /**
-             * @name GridBaseColumn.headerCellTemplate
+            * @name dxTreeListColumn.cellTemplate
+            * @type template|function
+            * @type_function_param1 cellElement:dxElement
+            * @type_function_param2 cellInfo:object
+            * @type_function_param2_field1 data:object
+            * @type_function_param2_field2 component:dxTreeList
+            * @type_function_param2_field3 value:any
+            * @type_function_param2_field4 oldValue:any
+            * @type_function_param2_field5 displayValue:any
+            * @type_function_param2_field6 text:string
+            * @type_function_param2_field7 columnIndex:number
+            * @type_function_param2_field8 rowIndex:number
+            * @type_function_param2_field9 column:dxTreeListColumn
+            * @type_function_param2_field10 row:dxTreeListRowObject
+            * @type_function_param2_field11 rowType:string
+            * @type_function_param2_field12 watch:function
+            */
+
+            /**
+             * @name dxDataGridColumn.headerCellTemplate
              * @type template|function
              * @type_function_param1 columnHeader:dxElement
              * @type_function_param2 headerInfo:object
+             * @type_function_param2_field1 component:dxDataGrid
+             * @type_function_param2_field2 columnIndex:number
+             * @type_function_param2_field3 column:dxDataGridColumn
              */
+
             /**
-             * @name GridBaseColumn.editCellTemplate
+             * @name dxTreeListColumn.headerCellTemplate
+             * @type template|function
+             * @type_function_param1 columnHeader:dxElement
+             * @type_function_param2 headerInfo:object
+             * @type_function_param2_field1 component:dxTreeList
+             * @type_function_param2_field2 columnIndex:number
+             * @type_function_param2_field3 column:dxTreeListColumn
+             */
+
+            /**
+             * @name dxDataGridColumn.editCellTemplate
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 setValue(newValue, newText):any
+             * @type_function_param2_field2 data:object
+             * @type_function_param2_field3 component:dxDataGrid
+             * @type_function_param2_field4 value:any
+             * @type_function_param2_field5 displayValue:any
+             * @type_function_param2_field6 text:string
+             * @type_function_param2_field7 columnIndex:number
+             * @type_function_param2_field8 rowIndex:number
+             * @type_function_param2_field9 column:dxDataGridColumn
+             * @type_function_param2_field10 row:dxDataGridRowObject
+             * @type_function_param2_field11 rowType:string
+             * @type_function_param2_field12 watch:function
              */
+
+            /**
+             * @name dxTreeListColumn.editCellTemplate
+             * @type template|function
+             * @type_function_param1 cellElement:dxElement
+             * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 setValue(newValue, newText):any
+             * @type_function_param2_field2 data:object
+             * @type_function_param2_field3 component:dxTreeList
+             * @type_function_param2_field4 value:any
+             * @type_function_param2_field5 displayValue:any
+             * @type_function_param2_field6 text:string
+             * @type_function_param2_field7 columnIndex:number
+             * @type_function_param2_field8 rowIndex:number
+             * @type_function_param2_field9 column:dxTreeListColumn
+             * @type_function_param2_field10 row:dxTreeListRowObject
+             * @type_function_param2_field11 rowType:string
+             * @type_function_param2_field12 watch:function
+             */
+
             /**
              * @name dxDataGridColumn.groupCellTemplate
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 component:dxDataGrid
+             * @type_function_param2_field2 value:any
+             * @type_function_param2_field3 text:string
+             * @type_function_param2_field4 displayValue:any
+             * @type_function_param2_field5 columnIndex:number
+             * @type_function_param2_field6 rowIndex:number
+             * @type_function_param2_field7 column:dxDataGridColumn
+             * @type_function_param2_field8 row:dxDataGridRowObject
+             * @type_function_param2_field9 summaryItems:Array<any>
+             * @type_function_param2_field10 groupContinuesMessage:string
+             * @type_function_param2_field11 groupContinuedMessage:string
              */
             /**
              * @name dxDataGridColumn.groupIndex
