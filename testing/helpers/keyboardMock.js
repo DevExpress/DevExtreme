@@ -277,7 +277,7 @@ var focused;
                 var params = { data: data };
 
                 if(inputType !== null) {
-                    params.originalEvent = $.Event("input", { data: data, inputType: inputType || "insertText" });
+                    params.originalEvent = $.Event("beforeinput", { data: data, inputType: inputType || "insertText" });
                 }
 
                 this.triggerEvent("beforeinput", params);
