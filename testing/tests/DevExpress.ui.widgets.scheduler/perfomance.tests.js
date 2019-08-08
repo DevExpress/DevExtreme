@@ -18,6 +18,19 @@ QUnit.testStart(function() {
 const renderLayoutModuleOptions = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.createInstance = (view, dataSource, options) => {
+            this.instance = $("#scheduler").dxScheduler($.extend(options, {
+                views: ["week", "month", "agenda"],
+                currentView: view,
+                dataSource: dataSource,
+                currentDate: new Date(2017, 4, 25),
+                startDayHour: 9,
+                height: 600,
+                width: 1300,
+                editing: true,
+            })).dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
+        };
         fx.off = true;
     },
     afterEach: function() {
