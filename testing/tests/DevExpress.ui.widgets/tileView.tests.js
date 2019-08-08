@@ -147,7 +147,7 @@ QUnit.test("Item collection changing should repaint widget (T686243)", function(
     const tileView = this.element.dxTileView({
         items: prepareItems(items, configs.horizontal)
     }).dxTileView("instance");
-    const getFirstItemElementHeight = () => tileView.$element().find(TILEVIEW_ITEM_SELECTOR).eq(0).height();
+    const getFirstItemElementHeight = () => tileView.$element().find(TILEVIEW_ITEM_SELECTOR).get(0).offsetHeight;
 
     assert.strictEqual(getFirstItemElementHeight(), DEFAULT_ITEMSIZE);
     tileView.option("items[0].heightRatio", 2);

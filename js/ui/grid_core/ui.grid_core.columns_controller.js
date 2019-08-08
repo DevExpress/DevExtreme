@@ -331,29 +331,119 @@ module.exports = {
              * @type Enums.FilterType
              * @default "include"
             */
+
             /**
-             * @name GridBaseColumn.cellTemplate
+             * @name dxDataGridColumn.cellTemplate
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 data:object
+             * @type_function_param2_field2 component:dxDataGrid
+             * @type_function_param2_field3 value:any
+             * @type_function_param2_field4 oldValue:any
+             * @type_function_param2_field5 displayValue:any
+             * @type_function_param2_field6 text:string
+             * @type_function_param2_field7 columnIndex:number
+             * @type_function_param2_field8 rowIndex:number
+             * @type_function_param2_field9 column:dxDataGridColumn
+             * @type_function_param2_field10 row:dxDataGridRowObject
+             * @type_function_param2_field11 rowType:string
+             * @type_function_param2_field12 watch:function
              */
+
             /**
-             * @name GridBaseColumn.headerCellTemplate
+            * @name dxTreeListColumn.cellTemplate
+            * @type template|function
+            * @type_function_param1 cellElement:dxElement
+            * @type_function_param2 cellInfo:object
+            * @type_function_param2_field1 data:object
+            * @type_function_param2_field2 component:dxTreeList
+            * @type_function_param2_field3 value:any
+            * @type_function_param2_field4 oldValue:any
+            * @type_function_param2_field5 displayValue:any
+            * @type_function_param2_field6 text:string
+            * @type_function_param2_field7 columnIndex:number
+            * @type_function_param2_field8 rowIndex:number
+            * @type_function_param2_field9 column:dxTreeListColumn
+            * @type_function_param2_field10 row:dxTreeListRowObject
+            * @type_function_param2_field11 rowType:string
+            * @type_function_param2_field12 watch:function
+            */
+
+            /**
+             * @name dxDataGridColumn.headerCellTemplate
              * @type template|function
              * @type_function_param1 columnHeader:dxElement
              * @type_function_param2 headerInfo:object
+             * @type_function_param2_field1 component:dxDataGrid
+             * @type_function_param2_field2 columnIndex:number
+             * @type_function_param2_field3 column:dxDataGridColumn
              */
+
             /**
-             * @name GridBaseColumn.editCellTemplate
+             * @name dxTreeListColumn.headerCellTemplate
+             * @type template|function
+             * @type_function_param1 columnHeader:dxElement
+             * @type_function_param2 headerInfo:object
+             * @type_function_param2_field1 component:dxTreeList
+             * @type_function_param2_field2 columnIndex:number
+             * @type_function_param2_field3 column:dxTreeListColumn
+             */
+
+            /**
+             * @name dxDataGridColumn.editCellTemplate
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 setValue(newValue, newText):any
+             * @type_function_param2_field2 data:object
+             * @type_function_param2_field3 component:dxDataGrid
+             * @type_function_param2_field4 value:any
+             * @type_function_param2_field5 displayValue:any
+             * @type_function_param2_field6 text:string
+             * @type_function_param2_field7 columnIndex:number
+             * @type_function_param2_field8 rowIndex:number
+             * @type_function_param2_field9 column:dxDataGridColumn
+             * @type_function_param2_field10 row:dxDataGridRowObject
+             * @type_function_param2_field11 rowType:string
+             * @type_function_param2_field12 watch:function
              */
+
+            /**
+             * @name dxTreeListColumn.editCellTemplate
+             * @type template|function
+             * @type_function_param1 cellElement:dxElement
+             * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 setValue(newValue, newText):any
+             * @type_function_param2_field2 data:object
+             * @type_function_param2_field3 component:dxTreeList
+             * @type_function_param2_field4 value:any
+             * @type_function_param2_field5 displayValue:any
+             * @type_function_param2_field6 text:string
+             * @type_function_param2_field7 columnIndex:number
+             * @type_function_param2_field8 rowIndex:number
+             * @type_function_param2_field9 column:dxTreeListColumn
+             * @type_function_param2_field10 row:dxTreeListRowObject
+             * @type_function_param2_field11 rowType:string
+             * @type_function_param2_field12 watch:function
+             */
+
             /**
              * @name dxDataGridColumn.groupCellTemplate
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 component:dxDataGrid
+             * @type_function_param2_field2 value:any
+             * @type_function_param2_field3 text:string
+             * @type_function_param2_field4 displayValue:any
+             * @type_function_param2_field5 columnIndex:number
+             * @type_function_param2_field6 rowIndex:number
+             * @type_function_param2_field7 column:dxDataGridColumn
+             * @type_function_param2_field8 row:dxDataGridRowObject
+             * @type_function_param2_field9 summaryItems:Array<any>
+             * @type_function_param2_field10 groupContinuesMessage:string
+             * @type_function_param2_field11 groupContinuedMessage:string
              */
             /**
              * @name dxDataGridColumn.groupIndex
@@ -1249,9 +1339,14 @@ module.exports = {
                     fullOptionName = options.fullOptionName;
 
                 if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
+                    var oldSkipProcessingColumnsChange = that._skipProcessingColumnsChange;
                     that._skipProcessingColumnsChange = true;
+                    var columnOptions = that.component.option(fullOptionName);
+                    if(isPlainObject(columnOptions)) {
+                        columnOptions[optionName] = value;
+                    }
                     that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
-                    that._skipProcessingColumnsChange = false;
+                    that._skipProcessingColumnsChange = oldSkipProcessingColumnsChange;
                 }
             };
 
@@ -1579,16 +1674,15 @@ module.exports = {
                             break;
                         case "columns":
                             args.handled = true;
-                            if(!this._skipProcessingColumnsChange) {
-                                if(args.name === args.fullName) {
-                                    this._columnsUserState = null;
-                                    this._ignoreColumnOptionNames = null;
-                                    this.init();
-                                } else {
-                                    this._columnOptionChanged(args);
-                                }
+                            if(args.name === args.fullName) {
+                                this._columnsUserState = null;
+                                this._ignoreColumnOptionNames = null;
+                                this.init();
                             } else {
-                                this._updateRequireResize(args);
+                                if(this.option(args.fullName) === undefined || this.option(args.fullName) === args.value) {
+                                    this._columnOptionChanged(args);
+                                    this._updateRequireResize(args);
+                                }
                             }
                             break;
                         case "commonColumnSettings":
@@ -2537,8 +2631,8 @@ module.exports = {
 
                     filter = extend([], filter);
 
-                    columnIndex = filter.columnIndex || columnIndex;
-                    filterValue = filter.filterValue || filterValue;
+                    columnIndex = filter.columnIndex !== undefined ? filter.columnIndex : columnIndex;
+                    filterValue = filter.filterValue !== undefined ? filter.filterValue : filterValue;
 
                     if(isString(filter[0])) {
                         column = that.columnOption(filter[0]);
@@ -2867,7 +2961,8 @@ module.exports = {
                         }
                         if(isFunction(result)) {
                             result = [result, "=", true];
-                        } else if(result) {
+                        }
+                        if(result) {
                             result.columnIndex = this.index;
                             result.filterValue = filterValue;
                         }

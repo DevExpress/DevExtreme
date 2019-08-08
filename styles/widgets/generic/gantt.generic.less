@@ -168,4 +168,16 @@
     .dx-gantt-arrow {
         border: 5px solid @base-text-color;
     }
+
+    .dx-gantt-altRow,
+    .dx-gantt-collapsable-row {
+        background-color: darken(@base-bg, 5%);
+    }
+
+    &.dx-gantt-dark {
+        .dx-gantt-altRow,
+        .dx-gantt-collapsable-row {
+            background-color: lighten(@base-bg, 5%);
+        }
+    }
 }

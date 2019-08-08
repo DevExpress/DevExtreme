@@ -1,19 +1,20 @@
 var $ = require("../../core/renderer"),
     caret = require("./utils.caret"),
-    domUtils = require("../../core/utils/dom"),
+    devices = require("../../core/devices"),
     each = require("../../core/utils/iterator").each,
     eventUtils = require("../../events/utils"),
     eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     focused = require("../widget/selectors").focused,
-    inArray = require("../../core/utils/array").inArray,
     isDefined = require("../../core/utils/type").isDefined,
     messageLocalization = require("../../localization/message"),
     noop = require("../../core/utils/common").noop,
     stringUtils = require("../../core/utils/string"),
     wheelEvent = require("../../events/core/wheel"),
     MaskRules = require("./ui.text_editor.mask.rule"),
-    TextEditorBase = require("./ui.text_editor.base");
+    TextEditorBase = require("./ui.text_editor.base"),
+    DefaultMaskStrategy = require("./ui.text_editor.mask.strategy.default").default,
+    AndroidMaskStrategy = require("./ui.text_editor.mask.strategy.android").default;
 
 var stubCaret = function() {
     return {};
@@ -23,11 +24,8 @@ var EMPTY_CHAR = " ";
 var ESCAPED_CHAR = "\\";
 
 var TEXTEDITOR_MASKED_CLASS = "dx-texteditor-masked";
-var MASK_EVENT_NAMESPACE = "dxMask";
 var FORWARD_DIRECTION = "forward";
 var BACKWARD_DIRECTION = "backward";
-var BLUR_EVENT = "blur beforedeactivate";
-var BACKSPACE_INPUT_TYPE = "deleteContentBackward";
 
 var buildInMaskRules = {
     "0": /[0-9]/,
@@ -114,8 +112,8 @@ var TextEditorMask = TextEditorBase.inherit({
         var that = this;
 
         var keyHandlerMap = {
-            backspace: that._maskBackspaceHandler,
-            del: that._maskDelHandler,
+            backspace: that._maskStrategy.getHandler("backspace"),
+            del: that._maskStrategy.getHandler("del"),
             enter: that._changeHandler
         };
 
@@ -135,9 +133,21 @@ var TextEditorMask = TextEditorBase.inherit({
         return !this.option("mask") ? this.callBase() : this._$hiddenElement;
     },
 
+    _init: function() {
+        this.callBase();
+
+        this._initMaskStrategy();
+    },
+
+    _initMaskStrategy: function() {
+        var device = devices.real();
+        this._maskStrategy = device.android && device.version[0] > 4 ?
+            new AndroidMaskStrategy(this) :
+            new DefaultMaskStrategy(this);
+    },
+
     _initMarkup: function() {
         this._renderHiddenElement();
-
         this.callBase();
     },
 
@@ -190,7 +200,7 @@ var TextEditorMask = TextEditorBase.inherit({
         this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
         this._maskRulesChain = null;
 
-        this._detachMaskEventHandlers();
+        this._maskStrategy.detachEvents();
 
         if(!this.option("mask")) {
             return;
@@ -198,42 +208,11 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this.$element().addClass(TEXTEDITOR_MASKED_CLASS);
 
-        this._attachMaskEventHandlers();
+        this._maskStrategy.attachEvents();
         this._parseMask();
         this._renderMaskedValue();
 
         this._changedValue = this._input().val();
-    },
-
-    _attachMaskEventHandlers: function() {
-        var $input = this._input();
-
-        eventsEngine.on($input, eventUtils.addNamespace("focusin", MASK_EVENT_NAMESPACE), this._maskFocusHandler.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("focusout", MASK_EVENT_NAMESPACE), this._maskBlurHandler.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("keydown", MASK_EVENT_NAMESPACE), this._maskKeyDownHandler.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("keypress", MASK_EVENT_NAMESPACE), this._maskKeyPressHandler.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("input", MASK_EVENT_NAMESPACE), this._maskInputHandler.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("cut", MASK_EVENT_NAMESPACE), this._maskCutHandler.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), this._maskDragHandler.bind(this));
-
-        this._attachChangeEventHandlers();
-    },
-
-    _detachMaskEventHandlers: function() {
-        eventsEngine.off(this._input(), "." + MASK_EVENT_NAMESPACE);
-    },
-
-    _attachChangeEventHandlers: function() {
-        if(inArray("change", this.option("valueChangeEvent").split(" ")) === -1) {
-            return;
-        }
-
-        eventsEngine.on(this._input(), eventUtils.addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE), (function(e) {
-            // NOTE: input is focused on caret changing in IE(T304159)
-            this._suppressCaretChanging(this._changeHandler, [e]);
-            this._changeHandler(e);
-        }).bind(this));
     },
 
     _suppressCaretChanging: function(callback, args) {
@@ -386,164 +365,9 @@ var TextEditorMask = TextEditorBase.inherit({
         this.option("value", this._convertToValue().replace(/\s+$/, ""));
     },
 
-    _maskFocusHandler: function() {
-        this._showMaskPlaceholder();
-        this._direction(FORWARD_DIRECTION);
-
-        if(!this._isValueEmpty() && this.option("isValid")) {
-            this._adjustCaret();
-        } else {
-            var caret = this._maskRulesChain.first();
-            this._caretTimeout = setTimeout(function() {
-                this._caret({ start: caret, end: caret });
-            }.bind(this), 0);
-        }
-    },
-
-    _maskBlurHandler: function(e) {
-        this._changeHandler(e);
-
-        if(this.option("showMaskMode") === "onFocus" && this._isValueEmpty()) {
-            this.option("text", "");
-            this._renderDisplayText("");
-        }
-    },
-
-    _maskKeyDownHandler: function() {
-        this._keyPressHandled = false;
-    },
-
-    _maskKeyPressHandler: function(e) {
-        if(this._keyPressHandled) {
-            return;
-        }
-
-        this._keyPressHandled = true;
-
-        if(this._isControlKeyFired(e)) {
-            return;
-        }
-
-        this._maskKeyHandler(e, function() {
-            this._handleKey(eventUtils.getChar(e));
-            return true;
-        });
-    },
-
-    _maskInputHandler: function(e) {
-        if(this._backspaceInputHandled(e.originalEvent && e.originalEvent.inputType)) {
-            this._handleBackspaceInput(e);
-        }
-
-        if(this._keyPressHandled) {
-            return;
-        }
-
-        this._keyPressHandled = true;
-
-        var inputValue = this._input().val();
-        var caret = this._caret();
-        if(!caret.end) {
-            return;
-        }
-        caret.start = caret.end - 1;
-        var oldValue = inputValue.substring(0, caret.start) + inputValue.substring(caret.end);
-        var char = inputValue[caret.start];
-
-        this._input().val(oldValue);
-
-        // NOTE: WP8 can not to handle setCaret immediately after setting value
-        this._inputHandlerTimer = setTimeout((function() {
-            this._caret({ start: caret.start, end: caret.start });
-
-            this._maskKeyHandler(e, function() {
-                this._handleKey(char);
-                return true;
-            });
-        }).bind(this));
-    },
-
-    _backspaceInputHandled: function(inputType) {
-        return inputType === BACKSPACE_INPUT_TYPE && !this._keyPressHandled;
-    },
-
-    _handleBackspaceInput: function(e) {
-        var caret = this._caret();
-        this._caret({ start: caret.start + 1, end: caret.end + 1 });
-        this._maskBackspaceHandler(e);
-    },
-
     _isControlKeyFired: function(e) {
         return this._isControlKey(eventUtils.normalizeKeyName(e)) || e.ctrlKey // NOTE: FF fires control keys on keypress
                 || e.metaKey; // NOTE: Safari fires keys with ctrl modifier on keypress
-    },
-
-    _maskBackspaceHandler: function(e) {
-
-        var that = this;
-        that._keyPressHandled = true;
-
-        var afterBackspaceHandler = function(needAdjustCaret, callBack) {
-            if(needAdjustCaret) {
-                that._direction(FORWARD_DIRECTION);
-                that._adjustCaret();
-            }
-            var currentCaret = that._caret();
-            clearTimeout(that._backspaceHandlerTimeout);
-            that._backspaceHandlerTimeout = setTimeout(function() {
-                callBack(currentCaret);
-            });
-        };
-
-        that._maskKeyHandler(e, function() {
-            if(that._hasSelection()) {
-                afterBackspaceHandler(true, function(currentCaret) {
-                    that._displayMask(currentCaret);
-                    that._maskRulesChain.reset();
-                });
-                return;
-            }
-
-            if(that._tryMoveCaretBackward()) {
-                afterBackspaceHandler(false, function(currentCaret) {
-                    that._caret(currentCaret);
-                });
-                return;
-            }
-
-            that._handleKey(EMPTY_CHAR, BACKWARD_DIRECTION);
-            afterBackspaceHandler(true, function(currentCaret) {
-                that._displayMask(currentCaret);
-                that._maskRulesChain.reset();
-            });
-        });
-    },
-
-    _maskDelHandler: function(e) {
-        this._keyPressHandled = true;
-        this._maskKeyHandler(e, function() {
-            !this._hasSelection() && this._handleKey(EMPTY_CHAR);
-            return true;
-        });
-    },
-
-    _maskPasteHandler: function(e) {
-        this._keyPressHandled = true;
-        var caret = this._caret();
-
-        this._maskKeyHandler(e, function() {
-            var pastingText = domUtils.clipboardText(e);
-            var restText = this._maskRulesChain.text().substring(caret.end);
-
-            var accepted = this._handleChain({ text: pastingText, start: caret.start, length: pastingText.length });
-            var newCaret = caret.start + accepted;
-
-            this._handleChain({ text: restText, start: newCaret, length: restText.length });
-
-            this._caret({ start: newCaret, end: newCaret });
-
-            return true;
-        });
     },
 
     _handleChain: function(args) {
@@ -560,27 +384,9 @@ var TextEditorMask = TextEditorBase.inherit({
         return args;
     },
 
-    _maskCutHandler: function(e) {
-        var caret = this._caret();
-        var selectedText = this._input().val().substring(caret.start, caret.end);
-
-        this._maskKeyHandler(e, function() {
-            domUtils.clipboardText(e, selectedText);
-            return true;
-        });
-    },
-
-    _maskDragHandler: function() {
-        this._clearDragTimer();
-        this._dragTimer = setTimeout((function() {
-            this.option("value", this._convertToValue(this._input().val()));
-        }).bind(this));
-    },
-
     _convertToValue: function(text) {
         if(this._isMaskedValueMode()) {
-            text = (text || this._textValue || "")
-                .replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
+            text = this._replaceMaskCharWithEmpty(text || this._textValue || "");
         } else {
             text = text || this._value || "";
         }
@@ -588,12 +394,16 @@ var TextEditorMask = TextEditorBase.inherit({
         return text;
     },
 
+    _replaceMaskCharWithEmpty: function(text) {
+        return text.replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
+    },
+
     _maskKeyHandler: function(e, tryHandleKeyCallback) {
         if(this.option("readOnly")) {
             return;
         }
 
-        this._direction(FORWARD_DIRECTION);
+        this.setForwardDirection();
         e.preventDefault();
 
         this._handleSelection();
@@ -602,7 +412,7 @@ var TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        this._direction(FORWARD_DIRECTION);
+        this.setForwardDirection();
         this._adjustCaret();
         this._changedValue = this._input().val();
         this._displayMask();
@@ -628,31 +438,31 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _handleKeyChain: function(chars) {
         var caret = this._caret();
-        var start = this._isForwardDirection() ? caret.start : caret.start - 1;
-        var end = this._isForwardDirection() ? caret.end : caret.end - 1;
+        var start = this.isForwardDirection() ? caret.start : caret.start - 1;
+        var end = this.isForwardDirection() ? caret.end : caret.end - 1;
         var length = start === end ? 1 : end - start;
 
         this._handleChain({ text: chars, start: start, length: length });
     },
 
     _tryMoveCaretBackward: function() {
-        this._direction(BACKWARD_DIRECTION);
+        this.setBackwardDirection();
         var currentCaret = this._caret().start;
         this._adjustCaret();
         return !currentCaret || currentCaret !== this._caret().start;
     },
 
     _adjustCaret: function(char) {
-        var caret = this._maskRulesChain.adjustedCaret(this._caret().start, this._isForwardDirection(), char);
+        var caret = this._maskRulesChain.adjustedCaret(this._caret().start, this.isForwardDirection(), char);
         this._caret({ start: caret, end: caret });
     },
 
     _moveCaret: function() {
         var currentCaret = this._caret().start;
-        var maskRuleIndex = currentCaret + (this._isForwardDirection() ? 0 : -1);
+        var maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
 
         var caret = this._maskRulesChain.isAccepted(maskRuleIndex)
-            ? currentCaret + (this._isForwardDirection() ? 1 : -1)
+            ? currentCaret + (this.isForwardDirection() ? 1 : -1)
             : currentCaret;
 
         this._caret({ start: caret, end: caret });
@@ -684,16 +494,20 @@ var TextEditorMask = TextEditorBase.inherit({
         this._typingDirection = direction;
     },
 
-    _isForwardDirection: function() {
+    setForwardDirection: function() {
+        this._direction(FORWARD_DIRECTION);
+    },
+
+    setBackwardDirection: function() {
+        this._direction(BACKWARD_DIRECTION);
+    },
+
+    isForwardDirection: function() {
         return this._direction() === FORWARD_DIRECTION;
     },
 
-    _clearDragTimer: function() {
-        clearTimeout(this._dragTimer);
-    },
-
     _clean: function() {
-        this._clearDragTimer();
+        this._maskStrategy && this._maskStrategy.clean();
         this.callBase();
     },
 
@@ -707,13 +521,6 @@ var TextEditorMask = TextEditorBase.inherit({
             isValid: isValid,
             validationError: isValid ? null : { editorSpecific: true, message: this.option("maskInvalidMessage") }
         });
-    },
-
-    _dispose: function() {
-        clearTimeout(this._inputHandlerTimer);
-        clearTimeout(this._backspaceHandlerTimeout);
-        clearTimeout(this._caretTimeout);
-        this.callBase();
     },
 
     _updateHiddenElement: function() {

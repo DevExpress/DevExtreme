@@ -195,7 +195,6 @@ var environment = {
             series.getOptions = function() { return { label: { position: position || "outside" } }; };
             series.getVisiblePoints = sinon.stub().returns(this._createStubPoints(labels, series));
             chartMocks.seriesMockData.series.push(series);
-
         },
         createStubLabels: function(bBoxes) {
             var labels = [];
@@ -375,6 +374,85 @@ var environment = {
         } finally {
             devices.real({ platform: originalPlatform });
         }
+    });
+
+    QUnit.test("Get raduis API", function(assert) {
+        function createSeries(visible, points) {
+            const series = new MockSeries({ visible, range: { val: { min: 0, max: 10 } } });
+            series.getVisiblePoints = sinon.stub().returns(points);
+            return series;
+        }
+
+        chartMocks.seriesMockData.series.push(createSeries(true, [{ radiusInner: 100, radiusOuter: 110 }]));
+        chartMocks.seriesMockData.series.push(createSeries(false, [{ radiusInner: 50, radiusOuter: 90 }]));
+        chartMocks.seriesMockData.series.push(createSeries(true, []));
+        chartMocks.seriesMockData.series.push(createSeries(true, [{ radiusInner: 80, radiusOuter: 90 }]));
+        chartMocks.seriesMockData.series.push(createSeries(true, [{ radiusInner: 120, radiusOuter: 150 }]));
+
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}, {}, {}, {}, {}]
+        });
+
+        const radius = chart.getRadius();
+
+        assert.deepEqual(radius, { innerRadius: 80, outerRadius: 150 });
+    });
+
+    QUnit.test("Hole template. No option - no group created", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}]
+        });
+
+        const templateGroup = chart._renderer.root.children.filter(c => {
+            const attrCall = c.stub("attr").getCall(0);
+            return attrCall.class === "dxc-hole-template";
+        })[0];
+
+        assert.equal(templateGroup, undefined);
+    });
+
+    QUnit.test("Hole template. First rendering", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const holeTemplateSpy = sinon.spy();
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}],
+            holeTemplate: holeTemplateSpy
+        });
+
+        const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
+
+        assert.deepEqual(templateGroup.attr.getCall(0).args, [{ class: "dxc-hole-template" }]);
+        assert.strictEqual(holeTemplateSpy.callCount, 1);
+        assert.deepEqual(holeTemplateSpy.getCall(0).args, [chart, templateGroup.element]);
+
+        assert.deepEqual(templateGroup.move.getCall(0).args, [100 - (1 + 20 / 2), 200 - (2 + 10 / 2)]);
+    });
+
+    QUnit.test("Hole template. Second rendering - remove old content", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const holeTemplateSpy = sinon.spy();
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}],
+            holeTemplate: holeTemplateSpy
+        });
+        const groups = chart._renderer.root.children;
+        const templateGroup = groups[groups.length - 1];
+
+        chart.render({ force: true });
+
+        assert.strictEqual(holeTemplateSpy.callCount, 2);
+
+        assert.strictEqual(templateGroup.clear.callCount, 1);
+        assert.ok(templateGroup.clear.getCall(0).calledAfter(holeTemplateSpy.getCall(0)));
+        assert.ok(templateGroup.clear.getCall(0).calledBefore(holeTemplateSpy.getCall(1)));
+
+        assert.ok(templateGroup.append.getCall(1).calledAfter(templateGroup.clear.getCall(0)));
+        assert.ok(templateGroup.append.getCall(1).calledBefore(holeTemplateSpy.getCall(1)));
     });
 
     QUnit.module("Creation series for tracker", {
