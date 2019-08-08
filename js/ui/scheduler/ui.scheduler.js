@@ -3091,13 +3091,13 @@ const Scheduler = Widget.inherit({
         * @param3 currentAppointmentData:Object|undefined
         */
     showAppointmentTooltip: function(appointmentData, target, currentAppointmentData) {
-        if(!appointmentData) {
-            return;
+        if(appointmentData) {
+            this.showAppointmentTooltipCore(target, [{
+                color: this._appointments._tryGetAppointmentColor(target),
+                data: appointmentData,
+                currentData: currentAppointmentData,
+            }], true);
         }
-        this.showAppointmentTooltipCore(target, [{
-            data: appointmentData,
-            currentData: currentAppointmentData,
-        }], true);
     },
 
     showAppointmentTooltipCore: function(target, data, isSingleBehavior) {
