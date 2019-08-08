@@ -1490,6 +1490,31 @@ QUnit.test("Resize columns", function(assert) {
     assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
 });
 
+// T804582
+QUnit.test("Cursor should switch style when it was moved to columns separator if grid has only one row and big header panel", function(assert) {
+    $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        allowColumnResizing: true,
+        columnChooser: {
+            enabled: true
+        },
+        columns: ["field1", "field2"]
+    });
+
+    $("#dataGrid").find(".dx-datagrid-header-panel").css("height", "70px");
+
+    $("#dataGrid").find(".dx-datagrid-columns-separator").trigger($.Event("dxpointermove", {
+        data: {
+            _isResizing: false,
+        },
+        pageY: -9929,
+        pageX: -9500
+    }));
+
+    assert.equal($(".dx-datagrid-columns-separator").css("cursor"), "col-resize");
+});
+
 // T571282
 QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtual' and wordWrapEnabled is true", function(assert) {
     // arrange
