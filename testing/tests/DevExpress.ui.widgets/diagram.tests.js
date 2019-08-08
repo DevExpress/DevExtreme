@@ -248,6 +248,11 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("zoomLevel", 1);
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
     });
+    test("should sync zoomLevel property", (assert) => {
+        assert.equal(this.instance.option("zoomLevel"), 1);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ZoomLevel).execute(1.5);
+        assert.equal(this.instance.option("zoomLevel"), 1.5);
+    });
     test("should change zoomLevel object property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
         assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 7);
@@ -258,6 +263,12 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
         assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 2);
     });
+    test("should sync zoomLevel object property", (assert) => {
+        this.instance.option("zoomLevel", { value: 1.5, items: [ 1, 1.5, 2 ] });
+        assert.equal(this.instance.option("zoomLevel.value"), 1.5);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ZoomLevel).execute(2);
+        assert.equal(this.instance.option("zoomLevel.value"), 2);
+    });
     test("should change autoZoom property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
         this.instance.option("autoZoom", "fitContent");
@@ -267,12 +278,22 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("autoZoom", "disabled");
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
     });
+    test("should sync autoZoom property", (assert) => {
+        assert.equal(this.instance.option("autoZoom"), "disabled");
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SwitchAutoZoom).execute(1);
+        assert.equal(this.instance.option("autoZoom"), "fitContent");
+    });
     test("should change fullscreen property", (assert) => {
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
         this.instance.option("fullscreen", true);
         assert.ok(this.instance._diagramInstance.settings.fullscreen);
         this.instance.option("fullscreen", false);
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
+    });
+    test("should sync fullscreen property", (assert) => {
+        assert.equal(this.instance.option("fullscreen"), false);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Fullscreen).execute(true);
+        assert.equal(this.instance.option("fullscreen"), true);
     });
     test("should change showGrid property", (assert) => {
         assert.ok(this.instance._diagramInstance.settings.showGrid);
@@ -281,6 +302,11 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("showGrid", true);
         assert.ok(this.instance._diagramInstance.settings.showGrid);
     });
+    test("should sync showGrid property", (assert) => {
+        assert.equal(this.instance.option("showGrid"), true);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ShowGrid).execute(false);
+        assert.equal(this.instance.option("showGrid"), false);
+    });
     test("should change snapToGrid property", (assert) => {
         assert.ok(this.instance._diagramInstance.settings.snapToGrid);
         this.instance.option("snapToGrid", false);
@@ -288,12 +314,22 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("snapToGrid", true);
         assert.ok(this.instance._diagramInstance.settings.snapToGrid);
     });
+    test("should sync snapToGrid property", (assert) => {
+        assert.equal(this.instance.option("snapToGrid"), true);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SnapToGrid).execute(false);
+        assert.equal(this.instance.option("snapToGrid"), false);
+    });
     test("should change gridSize property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
         this.instance.option("gridSize", 0.25);
         assert.equal(this.instance._diagramInstance.settings.gridSize, 360);
         this.instance.option("gridSize", 0.125);
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+    });
+    test("should sync gridSize property", (assert) => {
+        assert.equal(this.instance.option("gridSize"), 0.125);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.GridSize).execute(0.25);
+        assert.equal(this.instance.option("gridSize"), 0.25);
     });
     test("should change gridSize object property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
@@ -305,12 +341,23 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
         assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 2);
     });
+    test("should sync gridSize object property", (assert) => {
+        this.instance.option("gridSize", { value: 0.25, items: [0.125, 0.25, 1] });
+        assert.equal(this.instance.option("gridSize.value"), 0.25);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.GridSize).execute(1);
+        assert.equal(this.instance.option("gridSize.value"), 1);
+    });
     test("should change viewUnits property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
         this.instance.option("viewUnits", "cm");
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 1);
         this.instance.option("viewUnits", "in");
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
+    });
+    test("should sync viewUnits property", (assert) => {
+        assert.equal(this.instance.option("viewUnits"), "in");
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ViewUnits).execute(1);
+        assert.equal(this.instance.option("viewUnits"), "cm");
     });
     test("should change units property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.units, 0);
@@ -326,6 +373,14 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
     });
+    test("should sync pageSize property", (assert) => {
+        this.instance.option("pageSize", { width: 3, height: 5 });
+        assert.equal(this.instance.option("pageSize.width"), 3);
+        assert.equal(this.instance.option("pageSize.height"), 5);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageSize).execute({ width: 4, height: 6 });
+        assert.equal(this.instance.option("pageSize.width"), 4);
+        assert.equal(this.instance.option("pageSize.height"), 6);
+    });
     test("should change pageSize object property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
@@ -335,12 +390,25 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
         assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 1);
     });
+    test("should sync pageSize object property", (assert) => {
+        this.instance.option("pageSize", { width: 3, height: 5, items: [{ width: 3, height: 5, text: "A10" }, { width: 4, height: 6, text: "A11" }] });
+        assert.equal(this.instance.option("pageSize.width"), 3);
+        assert.equal(this.instance.option("pageSize.height"), 5);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageSize).execute({ width: 4, height: 6 });
+        assert.equal(this.instance.option("pageSize.width"), 4);
+        assert.equal(this.instance.option("pageSize.height"), 6);
+    });
     test("should change pageOrientation property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
         this.instance.option("pageOrientation", "landscape");
         assert.equal(this.instance._diagramInstance.model.pageLandscape, true);
         this.instance.option("pageOrientation", "portrait");
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
+    });
+    test("should sync pageOrientation property", (assert) => {
+        assert.equal(this.instance.option("pageOrientation"), "portrait");
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageLandscape).execute(1);
+        assert.equal(this.instance.option("pageOrientation"), "landscape");
     });
     test("should change pageColor property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageColor, "white");
@@ -349,12 +417,22 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("pageColor", "white");
         assert.equal(this.instance._diagramInstance.model.pageColor, "white");
     });
+    test("should sync pageColor property", (assert) => {
+        assert.equal(this.instance.option("pageColor"), "white");
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageColor).execute("red");
+        assert.equal(this.instance.option("pageColor"), "red");
+    });
     test("should change simpleView property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.simpleView, false);
         this.instance.option("simpleView", true);
         assert.equal(this.instance._diagramInstance.settings.simpleView, true);
         this.instance.option("simpleView", false);
         assert.equal(this.instance._diagramInstance.settings.simpleView, false);
+    });
+    test("should sync simpleView property", (assert) => {
+        assert.equal(this.instance.option("simpleView"), false);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleSimpleView).execute(true);
+        assert.equal(this.instance.option("simpleView"), true);
     });
 });
 
