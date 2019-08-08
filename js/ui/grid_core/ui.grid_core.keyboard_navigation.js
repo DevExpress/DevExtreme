@@ -38,8 +38,6 @@ var ROWS_VIEW_CLASS = "rowsview",
 
     INTERACTIVE_ELEMENTS_SELECTOR = "input:not([type='hidden']), textarea, a, [tabindex]",
 
-    VIEWS = ["rowsView"],
-
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
     EDIT_MODE_BATCH = "batch",
@@ -257,17 +255,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _initFocusedViews: function() {
         var that = this,
-            clickAction = that.createAction(that._clickHandler);
+            clickAction = that.createAction(that._clickHandler),
+            rowsView = that.getView("rowsView");
 
-        that._focusedViews = [];
-
-        each(VIEWS, function(key, viewName) {
-            var view = that.getView(viewName);
-            if(view && view.isVisible()) {
-                that._focusedViews.push(view);
-            }
-        });
-
+        that._focusedViews = [rowsView];
         each(that._focusedViews, function(index, view) {
             if(view) {
                 view.renderCompleted.add(function(e) {
