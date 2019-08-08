@@ -190,6 +190,9 @@ QUnit.module("Keyboard navigation", {
 
                         return cellIndex;
                     },
+                    getView: function(name) {
+                        return this._views[name];
+                    },
                     renderCompleted: $.Callbacks()
                 };
             };
@@ -270,6 +273,7 @@ QUnit.module("Keyboard navigation", {
 QUnit.testInActiveWindow("Focused views is not initialized when enableKeyboardNavigation is false", function(assert) {
     // arrange
     this.options.useKeyboard = false;
+
     var navigationController = new KeyboardNavigationController(this.component);
 
     // act
@@ -279,32 +283,22 @@ QUnit.testInActiveWindow("Focused views is not initialized when enableKeyboardNa
     assert.ok(!navigationController._focusedViews);
 });
 
-QUnit.testInActiveWindow("Init focused views", function(assert) {
+QUnit.testInActiveWindow("Init keyboardController when rowsView is hidden", function(assert) {
     // arrange
-    var navigationController = new KeyboardNavigationController(this.component);
+    var navigationController = new KeyboardNavigationController(this.component),
+        element;
+
+    this.getView("rowsView").isVisible = () => false;
 
     // act
     navigationController.init();
+    navigationController._focusView();
+    element = navigationController.getFocusedView().element();
+
+    callViewsRenderCompleted(this.component._views);
 
     // assert
-    assert.equal(navigationController._focusedViews.length, 1, "focused views count");
-    assert.equal(navigationController._focusedViews[0].name, "rowsView", "focused views contains rows view");
-});
-
-QUnit.testInActiveWindow("Init focused views when some view has hidden element", function(assert) {
-    // arrange
-    var navigationController = new KeyboardNavigationController(this.component);
-
-    this.getView("columnHeadersView").isVisible = function() {
-        return false;
-    };
-
-    // act
-    navigationController.init();
-
-    // assert
-    assert.equal(navigationController._focusedViews.length, 1, "focused views count");
-    assert.equal(navigationController._focusedViews[0].name, "rowsView", "focused views contains rows view");
+    assert.notOk(element.eventsInfo[eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation")], "No event handler");
 });
 
 QUnit.testInActiveWindow("Element of view is subscribed to events", function(assert) {
@@ -314,12 +308,13 @@ QUnit.testInActiveWindow("Element of view is subscribed to events", function(ass
 
     // act
     navigationController.init();
-    element = navigationController._focusedViews[0].element();
+    navigationController._focusView();
+    element = navigationController.getFocusedView().element();
 
     callViewsRenderCompleted(this.component._views);
 
     // assert
-    assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation")].subscribeToEventCounter, 1, "dxClick");
+    assert.equal(element.eventsInfo[eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation")].subscribeToEventCounter, 1, "Subscribed");
 });
 
 QUnit.testInActiveWindow("Element of view is unsubscribed from events", function(assert) {
@@ -329,12 +324,13 @@ QUnit.testInActiveWindow("Element of view is unsubscribed from events", function
 
     // act
     navigationController.init();
-    element = navigationController._focusedViews[0].element();
+    navigationController._focusView();
+    element = navigationController.getFocusedView().element();
 
     callViewsRenderCompleted(this.component._views);
 
     // assert
-    assert.equal(element.eventsInfo[eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation")].unsubscribeFromEventCounter, 1, "dxClick");
+    assert.equal(element.eventsInfo[eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation")].unsubscribeFromEventCounter, 1, "Unsubscribed");
 });
 
 QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert) {
@@ -364,8 +360,6 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
 
     // assert
     assert.ok(isFocused, "cell is focused");
-    assert.equal(navigationController._focusedViews.viewIndex, 0, "view index");
-    assert.equal(navigationController._focusedView.name, "rowsView", "focused view");
     assert.ok(navigationController._keyDownProcessor, "keyDownProcessor");
 });
 
@@ -396,8 +390,6 @@ QUnit.testInActiveWindow("Cell is focused when clicked on input in cell", functi
     assert.ok($input.is(":focus"), "input is focused");
     assert.equal($cell.attr("tabIndex"), undefined, "cell does not have tabindex");
     assert.ok($cell.hasClass("dx-cell-focus-disabled"), "cell has class dx-cell-focus-disabled");
-    assert.equal(navigationController._focusedViews.viewIndex, 0, "view index");
-    assert.equal(navigationController._focusedView.name, "rowsView", "focused view");
 });
 
 // T579521
@@ -454,7 +446,6 @@ QUnit.testInActiveWindow("Cell is not focused when clicked it in another grid", 
 
     // assert
     assert.ok(!isFocused, "cell is not focused");
-    assert.equal(navigationController._focusedViews.viewIndex, undefined, "view index");
     assert.equal(navigationController._focusedView, null, "no focused view");
 });
 
@@ -558,7 +549,6 @@ QUnit.testInActiveWindow("Input is focused when edit mode is enabled", function(
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
 
-    navigationController._focusedViews.viewIndex = 0;
     navigationController._focusedView = view;
     navigationController._isEditing = true;
     navigationController._isNeedFocus = true;
@@ -595,7 +585,6 @@ QUnit.testInActiveWindow("Only visible input element is focused when edit mode i
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
 
-    navigationController._focusedViews.viewIndex = 0;
     navigationController._focusedView = view;
     navigationController._isEditing = true;
     navigationController._isNeedFocus = true;
@@ -632,7 +621,6 @@ QUnit.testInActiveWindow("Textarea is focused when edit mode is enabled", functi
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
 
-    navigationController._focusedViews.viewIndex = 0;
     navigationController._focusedView = view;
     navigationController._isEditing = true;
     navigationController._isNeedFocus = true;
