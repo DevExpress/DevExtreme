@@ -2,6 +2,7 @@ import $ from "jquery";
 import themes from "ui/themes";
 import dateLocalization from "localization/date";
 import { SchedulerTestWrapper } from './helpers.js';
+import devices from "core/devices";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -1494,24 +1495,26 @@ QUnit.test("Tables should take css class after width calculation(T491453)", func
     }
 });
 
-QUnit.test("ScrollTo of dateTable scrollable shouldn't be called when dateTable scrollable scroll in timeLine view", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2017, 3, 16),
-        dataSource: [],
-        currentView: "timelineWeek",
-        height: 500
+if(devices.real().deviceType === "desktop") {
+    QUnit.test("ScrollTo of dateTable scrollable shouldn't be called when dateTable scrollable scroll in timeLine view", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2017, 3, 16),
+            dataSource: [],
+            currentView: "timelineWeek",
+            height: 500
+        });
+
+        var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
+            dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+            headerScrollToSpy = sinon.spy(headerScrollable, "scrollTo"),
+            dateTableScrollToSpy = sinon.spy(dateTableScrollable, "scrollTo");
+
+        dateTableScrollable.scrollBy(1000);
+
+        assert.ok(headerScrollToSpy.calledOnce, "header scrollTo was called");
+        assert.notOk(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was not called");
     });
-
-    var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
-        dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
-        headerScrollToSpy = sinon.spy(headerScrollable, "scrollTo"),
-        dateTableScrollToSpy = sinon.spy(dateTableScrollable, "scrollTo");
-
-    dateTableScrollable.scrollBy(1000);
-
-    assert.ok(headerScrollToSpy.calledOnce, "header scrollTo was called");
-    assert.notOk(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was not called");
-});
+}
 
 QUnit.test("OnScroll of header scrollable shouldn't be called when dateTable scrollable scroll in timeLine view", function(assert) {
     this.createInstance({

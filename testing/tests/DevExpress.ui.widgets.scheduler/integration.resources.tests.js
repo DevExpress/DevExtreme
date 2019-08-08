@@ -1,11 +1,5 @@
 import $ from "jquery";
-
-QUnit.testStart(function() {
-    $("#qunit-fixture").html(
-        '<div id="scheduler">\
-            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
-            </div>');
-});
+import devices from "core/devices";
 
 import "common.css!";
 import "generic_light.css!";
@@ -16,6 +10,13 @@ import CustomStore from "data/custom_store";
 import Color from "color";
 
 import "ui/scheduler/ui.scheduler";
+
+QUnit.testStart(function() {
+    $("#qunit-fixture").html(
+        '<div id="scheduler">\
+            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+            </div>');
+});
 
 const SCHEDULER_HORIZONTAL_SCROLLBAR = ".dx-scheduler-date-table-scrollable .dx-scrollbar-horizontal",
     SCHEDULER_SCROLLBAR_CONTAINER = ".dx-scheduler-work-space-both-scrollbar";
@@ -431,48 +432,50 @@ QUnit.test("Appointment should have correct color after resources option changin
     assert.equal(new Color($appointments.eq(0).css("backgroundColor")).toHex(), "#ff0000", "Color is OK");
 });
 
-QUnit.module("Integration: Multiple resources", {
-    beforeEach: function() {
-        $("#qunit-fixture").css({ top: 0, left: 0 });
-        this.createInstance = (options) => {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
-        };
-        $("#qunit-fixture").html(
-            `<div style="width: 400px; height: 500px;">
-                <div id="scheduler" style="height: 100%;">
-                    <div data-options="dxTemplate: { name: 'template' }">Task Template</div>
-                </div>
-            </div>`);
-    },
-    afterEach: function() {
-        $("#qunit-fixture").css({ top: "-10000px", left: "-10000px" });
-    }
-}, () => {
-    QUnit.test("Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)", function(assert) {
-        const getData = function(count) {
-            let result = [];
-            for(let i = 0; i < count; i++) {
-                result.push({
-                    facilityId: i,
-                    facilityName: i.toString(),
-                });
-            }
-            return result;
-        };
+if(devices.real().deviceType === "desktop") {
+    QUnit.module("Integration: Multiple resources", {
+        beforeEach: function() {
+            $("#qunit-fixture").css({ top: 0, left: 0 });
+            this.createInstance = (options) => {
+                this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            };
+            $("#qunit-fixture").html(
+                `<div style="width: 400px; height: 500px;">
+                    <div id="scheduler" style="height: 100%;">
+                        <div data-options="dxTemplate: { name: 'template' }">Task Template</div>
+                    </div>
+                </div>`);
+        },
+        afterEach: function() {
+            $("#qunit-fixture").css({ top: "-10000px", left: "-10000px" });
+        }
+    }, () => {
+        QUnit.test("Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)", function(assert) {
+            const getData = function(count) {
+                let result = [];
+                for(let i = 0; i < count; i++) {
+                    result.push({
+                        facilityId: i,
+                        facilityName: i.toString(),
+                    });
+                }
+                return result;
+            };
 
-        this.createInstance({
-            groups: ["facilityId"],
-            crossScrollingEnabled: true,
-            dataSource: [],
-            resources: [{
-                dataSource: getData(10),
-                displayExpr: "facilityName",
-                valueExpr: "facilityId",
-                fieldExpr: "facilityId",
-                allowMultiple: false,
-            }]
+            this.createInstance({
+                groups: ["facilityId"],
+                crossScrollingEnabled: true,
+                dataSource: [],
+                resources: [{
+                    dataSource: getData(10),
+                    displayExpr: "facilityName",
+                    valueExpr: "facilityId",
+                    fieldExpr: "facilityId",
+                    allowMultiple: false,
+                }]
+            });
+            var scrollbar = $(this.instance.$element()).find(SCHEDULER_HORIZONTAL_SCROLLBAR);
+            assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(this.instance.$element()).find(SCHEDULER_SCROLLBAR_CONTAINER).outerHeight(), 1, "Horizontal scrollbar has visible top coordinate");
         });
-        var scrollbar = $(this.instance.$element()).find(SCHEDULER_HORIZONTAL_SCROLLBAR);
-        assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(this.instance.$element()).find(SCHEDULER_SCROLLBAR_CONTAINER).outerHeight(), 1, "Horizontal scrollbar has visible top coordinate");
     });
-});
+}
