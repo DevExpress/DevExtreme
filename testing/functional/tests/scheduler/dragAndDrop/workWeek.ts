@@ -9,94 +9,154 @@ import SchedulerTestHelper from '../../../helpers/scheduler.test.helper';
 const scheduler = new SchedulerTestHelper("#container");
 
 fixture`Rearrange appointments in the Scheduler widget with the drag-and-drop gesture`
-    .page(getContainerFileUrl());
+	.page(getContainerFileUrl());
 
 test('Drag-and-drop appointments in workWeek', async t => {
-    let appointment;
+	let appointment;
 
-    appointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
+	appointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(1, 0))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(1, 0))
 
-        .expect('50px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('10:00 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('50px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('9:30 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('10:00 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(3, 0))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(3, 0))
 
-        .expect('50px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('10:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('11:00 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('50px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('10:30 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('11:00 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
 
-    appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
+	appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(1, 0))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(1, 0))
 
-        .expect('100px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('10:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('100px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('9:30 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('10:30 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(3, 0))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(3, 0))
 
-        .expect('100px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('10:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('11:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('100px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('10:30 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('11:30 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
-    appointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
+	appointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(1, 0))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(1, 0))
 
-        .expect('150px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('11:00 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('150px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('9:30 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('11:00 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(3, 0))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(3, 0))
 
-        .expect('150px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('10:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('12:00 PM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('150px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('10:30 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('12:00 PM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
-    appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
+	appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(1, 0))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(1, 0))
 
-        .expect('100px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('10:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('100px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('9:30 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('10:30 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
-    appointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
+	appointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(0, 0))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(0, 0))
 
-        .expect('50px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:00 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('9:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('50px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('9:00 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('9:30 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
-    appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
+	appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(0, 1))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(0, 1))
 
-        .expect('100px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:00 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('10:00 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('100px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('9:00 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('10:00 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
-    appointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
+	appointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
 
-    await t
-        .dragToElement(appointment, scheduler.getDateTableCell(0, 2))
+	await t
+		.dragToElement(appointment, scheduler.getDateTableCell(0, 2))
 
-        .expect('150px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:00 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('10:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+		.expect('150px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+		.expect('9:00 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+		.expect('10:30 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
 }).before(async () => { await createScheduler('workWeek', dataSource) });

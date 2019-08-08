@@ -19,27 +19,45 @@ test('Drag-and-drop appointments in month', async t => {
     await t
         .dragToElement(appointment, scheduler.getDateTableCell(0, 3))
 
-        .expect('19px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:00 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('9:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+        .expect('19px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+        .expect('9:00 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+        .expect('9:30 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
     appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
 
     await t
         .dragToElement(appointment, scheduler.getDateTableCell(0, 3))
 
-        .expect('19px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:00 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('10:00 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+        .expect('19px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+        .expect('9:00 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+        .expect('10:00 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
     appointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
 
     await t
         .dragToElement(appointment, scheduler.getDateTableCell(0, 3))
 
-        .expect('19px').eql(await scheduler.getAppointmentHeight(appointment))
-        .expect('9:00 AM').eql(await scheduler.getAppointmentStartTime(appointment))
-        .expect('10:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
+        .expect('19px')
+		.eql(await scheduler.getAppointmentHeight(appointment),
+			"Appointment height incorrect")
+        .expect('9:00 AM')
+		.eql(await scheduler.getAppointmentStartTime(appointment),
+			"Appointment startTime incorrect")
+        .expect('10:30 AM')
+		.eql(await scheduler.getAppointmentEndTime(appointment),
+			"Appointment endTime incorrect");
 
 
 }).before(async () => { await createScheduler('month', dataSource) });
