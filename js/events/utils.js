@@ -163,6 +163,9 @@ const needSkipEvent = (e) => {
         return true;
     }
     if(isDxMouseWheelEvent(e)) {
+        if($target.is("textarea") && $target.hasClass("dx-texteditor-input")) {
+            return false;
+        }
         const isContentEditableFocused = target.isContentEditable && $target.closest("div[contenteditable='true']").is(':focus');
         const isInputFocused = $target.is("input[type='number'], textarea, select") && $target.is(':focus');
         return isInputFocused || isContentEditableFocused;
