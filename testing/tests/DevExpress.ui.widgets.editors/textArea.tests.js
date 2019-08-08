@@ -434,7 +434,9 @@ QUnit.module("TextArea in simulated scrollable", () => {
                     this.$scrollable = this._getScrollable();
                     this.$textArea = this._getTextArea();
                     this.$textAreaInput = this.$textArea.find(`.${INPUT_CLASS}`);
-                    this.$textAreaInput.css({ 'white-space': 'nowrap' });
+                    if(!this._isVerticalDirection) {
+                        this.$textAreaInput.css({ 'white-space': 'nowrap' });
+                    }
                     this.maxScrollValue = this._getMaxScrollValue(this._isVerticalDirection ? 'Height' : 'Width');
                 }
 
