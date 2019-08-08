@@ -11,7 +11,6 @@ import scrollEvents from "../ui/scroll_view/ui.events.emitter.gesture.scroll";
 import sizeUtils from "../core/utils/size";
 import TextBox from "./text_box";
 
-
 const TEXTAREA_CLASS = "dx-textarea";
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = "dx-texteditor-input-auto-resize";
@@ -134,10 +133,10 @@ var TextArea = TextBox.inherit({
         this._eventY = 0;
         const $input = this._input();
 
-        let initScrollData = {
+        const initScrollData = {
             validate: (e) => {
                 if(eventUtils.isDxMouseWheelEvent(e) && $(e.target).is(this._input())) {
-                    if(this._allowScroll(-e.delta)) {
+                    if(this._allowScroll(-e.delta, e.shiftKey)) {
                         e._needSkipEvent = true;
                         return true;
                     }
@@ -170,10 +169,12 @@ var TextArea = TextBox.inherit({
         this._eventY = currentEventY;
     },
 
-    _allowScroll: function(delta) {
+    _allowScroll: function(delta, shiftKey) {
         const $input = this._input();
-        const scrollTopPos = $input.scrollTop();
-        const scrollBottomPos = $input.prop("scrollHeight") - $input.prop("clientHeight") - scrollTopPos;
+        const scrollTopPos = shiftKey ? $input.scrollLeft() : $input.scrollTop();
+
+        const prop = shiftKey ? "Width" : "Height";
+        const scrollBottomPos = $input.prop(`scroll${prop}`) - $input.prop(`client${prop}`) - scrollTopPos;
 
         if(scrollTopPos === 0 && scrollBottomPos === 0) {
             return false;
