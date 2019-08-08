@@ -5541,6 +5541,30 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.equal(focusedRowChangedFiresCount, 2, "onFocusedRowChanged fires count");
     });
 
+    // T804439
+    QUnit.testInActiveWindow("onFocusedRowChanging should fire after clicking on boolean column", function(assert) {
+        // arrange
+        var focusedRowChangingFiresCount = 0;
+
+        this.options = {
+            dataSource: [{ id: 1, field: false }],
+            keyExpr: "id",
+            focusedRowEnabled: true,
+            columns: ["field"],
+            onFocusedRowChanging: () => ++focusedRowChangingFiresCount
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        $(".dx-data-row").eq(0).find("td").eq(0).trigger("dxpointerdown").trigger("dxclick");
+
+        // assert
+        assert.equal(focusedRowChangingFiresCount, 1, "onFocusedRowChanging fires count");
+    });
+
     // T684122
     QUnit.testInActiveWindow("Focus should not be restored on dataSource change after click in another grid", function(assert) {
         // arrange
