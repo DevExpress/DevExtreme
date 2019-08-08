@@ -3668,7 +3668,7 @@ QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed
     // assert
     var rows = dataGrid.getRowElement(0);
 
-    assert.equal($(rows[0]).find("td").eq(0).width(), $(rows[1]).find("td").eq(0).width(), "widths are equal");
+    assert.equal(Math.floor($(rows[0]).find("td").eq(0).width()), Math.floor($(rows[1]).find("td").eq(0).width()), "widths are equal");
     assert.notOk($(".dx-command-edit").eq(1).hasClass("dx-hidden-cell"), "cell does not have class dx-hidden-cell");
 });
 
