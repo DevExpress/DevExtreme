@@ -1512,7 +1512,7 @@ QUnit.test("Cursor should switch style when it was moved to columns separator if
         pageX: -9500
     }));
 
-    assert.equal($(".dx-datagrid-columns-separator").css("cursor"), "col-resize");
+    assert.equal($(".dx-datagrid-columns-separator").css("cursor"), "col-resize", "cursor style");
 });
 
 // T571282
