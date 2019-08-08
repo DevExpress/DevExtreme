@@ -1094,8 +1094,8 @@ var Overlay = Widget.inherit({
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {
             validate: function(e) {
-                var target = e.originalEvent.target;
-                return !$(target).closest("." + OVERLAY_CONTENT_CLASS).length;
+                var target = e.originalEvent && e.originalEvent.target;
+                return !(target && $(target).closest("." + OVERLAY_CONTENT_CLASS).length);
             },
             getDirection: function() {
                 return "both";
