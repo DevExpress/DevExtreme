@@ -1,19 +1,19 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    noop = require("../core/utils/common").noop,
-    isDefined = require("../core/utils/type").isDefined,
-    windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
-    registerComponent = require("../core/component_registrator"),
-    extend = require("../core/utils/extend").extend,
-    eventUtils = require("../events/utils"),
-    pointerEvents = require("../events/pointer"),
-    sizeUtils = require("../core/utils/size"),
-    TextBox = require("./text_box");
+import $ from "../core/renderer";
+import eventsEngine from "../events/core/events_engine";
+import { noop } from "../core/utils/common";
+import windowUtils from "../core/utils/window";
+import registerComponent from "../core/component_registrator";
+import { extend } from "../core/utils/extend";
+import { isDefined } from "../core/utils/type";
+import eventUtils from "../events/utils";
+import pointerEvents from "../events/pointer";
+import scrollEvents from "../ui/scroll_view/ui.events.emitter.gesture.scroll";
+import sizeUtils from "../core/utils/size";
+import TextBox from "./text_box";
 
-var TEXTAREA_CLASS = "dx-textarea",
-    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
-    TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = "dx-texteditor-input-auto-resize";
+const TEXTAREA_CLASS = "dx-textarea";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = "dx-texteditor-input-auto-resize";
 
 /**
 * @name dxTextArea
@@ -130,34 +130,63 @@ var TextArea = TextBox.inherit({
     },
 
     _renderScrollHandler: function() {
-        var $input = this._input(),
-            eventY = 0;
+        this._eventY = 0;
+        const $input = this._input();
 
-        eventsEngine.on($input, eventUtils.addNamespace(pointerEvents.down, this.NAME), function(e) {
-            eventY = eventUtils.eventData(e).y;
-        });
+        const initScrollData = {
+            validate: (e) => {
+                if(eventUtils.isDxMouseWheelEvent(e) && $(e.target).is(this._input())) {
+                    if(this._allowScroll(-e.delta, e.shiftKey)) {
+                        e._needSkipEvent = true;
+                        return true;
+                    }
 
-        eventsEngine.on($input, eventUtils.addNamespace(pointerEvents.move, this.NAME), function(e) {
-            var scrollTopPos = $input.scrollTop(),
-                scrollBottomPos = $input.prop("scrollHeight") - $input.prop("clientHeight") - scrollTopPos;
-
-            if(scrollTopPos === 0 && scrollBottomPos === 0) {
-                return;
+                    return false;
+                }
             }
+        };
 
-            var currentEventY = eventUtils.eventData(e).y;
+        eventsEngine.on($input, eventUtils.addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
+        eventsEngine.on($input, eventUtils.addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
+    },
 
-            var isScrollFromTop = scrollTopPos === 0 && eventY >= currentEventY,
-                isScrollFromBottom = scrollBottomPos === 0 && eventY <= currentEventY,
-                isScrollFromMiddle = scrollTopPos > 0 && scrollBottomPos > 0;
+    _pointerDownHandler: function(e) {
+        this._eventY = eventUtils.eventData(e).y;
+    },
 
-            if(isScrollFromTop || isScrollFromBottom || isScrollFromMiddle) {
-                e.isScrollingEvent = true;
-                e.stopPropagation();
-            }
+    _pointerMoveHandler: function(e) {
+        const currentEventY = eventUtils.eventData(e).y;
+        const delta = this._eventY - currentEventY;
 
-            eventY = currentEventY;
-        });
+        if(this._allowScroll(delta)) {
+            e.isScrollingEvent = true;
+            e.stopPropagation();
+        } else {
+            return false;
+        }
+
+        this._eventY = currentEventY;
+    },
+
+    _allowScroll: function(delta, shiftKey) {
+        const $input = this._input();
+        const scrollTopPos = shiftKey ? $input.scrollLeft() : $input.scrollTop();
+
+        const prop = shiftKey ? "Width" : "Height";
+        const scrollBottomPos = $input.prop(`scroll${prop}`) - $input.prop(`client${prop}`) - scrollTopPos;
+
+        if(scrollTopPos === 0 && scrollBottomPos === 0) {
+            return false;
+        }
+
+        const isScrollFromTop = scrollTopPos === 0 && delta >= 0;
+        const isScrollFromBottom = scrollBottomPos === 0 && delta <= 0;
+        const isScrollFromMiddle = scrollTopPos > 0 && scrollBottomPos > 0;
+
+        if(isScrollFromTop || isScrollFromBottom || isScrollFromMiddle) {
+            return true;
+        }
     },
 
     _renderDimensions: function() {
@@ -201,7 +230,7 @@ var TextArea = TextBox.inherit({
         return sizeUtils.getVerticalOffsets(this._$element.get(0), false)
             + sizeUtils.getVerticalOffsets(this._$textEditorContainer.get(0), false)
             + sizeUtils.getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
-            + sizeUtils.getElementBoxParams("height", window.getComputedStyle($input.get(0))).margin;
+            + sizeUtils.getElementBoxParams("height", windowUtils.getWindow().getComputedStyle($input.get(0))).margin;
     },
 
     _updateInputHeight: function() {

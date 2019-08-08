@@ -1,18 +1,25 @@
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
+import nativePointerMock from "../../helpers/nativePointerMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
+import devices from "core/devices";
 
 import "common.css!";
 import "ui/text_area";
+import "ui/scroll_view/ui.scrollable";
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="qunit-fixture">\
-            <div id="textarea"></div>\
-            <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
-            <div id="container">\
-                <div id="withContainer"></div>\
+        '<div id="textarea"></div>\
+        <div id="widget"></div>\
+        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="container">\
+            <div id="withContainer"></div>\
+        </div>\
+        <div id="scrollable">\
+            <div id="content" style="width: 300px; height: 300px;">\
+                <div id="textAreaInScrollable" style="margin: 50px;">\
+                </div>\
             </div>\
         </div>';
 
@@ -24,6 +31,7 @@ const TEXTAREA_CLASS = "dx-textarea";
 const INPUT_CLASS = "dx-texteditor-input";
 const PLACEHOLDER_CLASS = "dx-placeholder";
 
+const SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container";
 
 QUnit.module("rendering");
 
@@ -415,3 +423,116 @@ QUnit.test("widget can not scroll container to the top on change content height 
     keyboardMock($input).type("\n\n");
     assert.strictEqual(container.scrollTop(), 20);
 });
+
+QUnit.module("TextArea in simulated scrollable", () => {
+    if(devices.current().deviceType === "desktop") {
+        ["vertical", "horizontal"].forEach((direction) => {
+            class TextAreaInScrollableTestHelper {
+                constructor(direction) {
+                    this._direction = direction;
+                    this._isVerticalDirection = this._direction === 'vertical';
+                    this.$scrollable = this._getScrollable();
+                    this.$textArea = this._getTextArea();
+                    this.$textAreaInput = this.$textArea.find(`.${INPUT_CLASS}`);
+                    if(!this._isVerticalDirection) {
+                        this.$textAreaInput.css({ 'white-space': 'nowrap' });
+                    }
+                    this.maxScrollValue = this._getMaxScrollValue(this._isVerticalDirection ? 'Height' : 'Width');
+                }
+
+                _getScrollable() {
+                    return $("#scrollable").dxScrollable({
+                        width: 200,
+                        height: 200,
+                        useNative: false,
+                        direction: this._direction,
+                        showScrollbar: "always",
+                    });
+                }
+
+                _getTextArea() {
+                    return $("#textAreaInScrollable").dxTextArea({
+                        width: 100,
+                        height: 100,
+                        text: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\n"
+                    });
+                }
+
+                _getMaxScrollValue(prop) {
+                    return this.$textAreaInput.get(0)[`scroll${prop}`] - this.$textAreaInput.get(0)[`client${prop}`];
+                }
+
+                getScrollableContainer() {
+                    return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+                }
+
+                setPosition($element, scrollPosition) {
+                    this._isVerticalDirection ? $element.scrollTop(scrollPosition) : $element.scrollLeft(scrollPosition);
+                }
+
+                checkAsserts(assert, expectedOffset) {
+                    let $container = this.getScrollableContainer();
+
+                    if(this._isVerticalDirection) {
+                        assert.strictEqual($container.scrollTop(), expectedOffset, "scrollTop()");
+                    } else {
+                        assert.strictEqual($container.scrollLeft(), expectedOffset, "scrollLeft()");
+                    }
+                }
+
+                isShift() {
+                    return !this._isVerticalDirection;
+                }
+            }
+
+            QUnit.test(`mousewheel: textArea (scrollPosition - MIN) - wheel -> up -> down - scrollable direction: ${direction}`, (assert) => {
+                const helper = new TextAreaInScrollableTestHelper(direction);
+                const $container = helper.getScrollableContainer();
+
+                helper.setPosition($container, 100);
+
+                const pointer = nativePointerMock(helper.$textAreaInput);
+
+                pointer.start().wheel(20, helper.isShift());
+                helper.checkAsserts(assert, 80);
+
+                pointer.start().wheel(-20, helper.isShift());
+                helper.checkAsserts(assert, 80);
+            });
+
+            QUnit.test(`mousewheel: textArea (scrollPosition - MAX) - wheel -> down -> up - scrollable direction: ${direction}`, (assert) => {
+                const helper = new TextAreaInScrollableTestHelper(direction);
+                const $container = helper.getScrollableContainer();
+
+                helper.setPosition($container, 50);
+                helper.setPosition(helper.$textAreaInput, helper.maxScrollValue);
+
+                const pointer = nativePointerMock(helper.$textAreaInput);
+
+                pointer.start().wheel(-20, helper.isShift());
+                helper.checkAsserts(assert, 70);
+
+                pointer.start().wheel(20, helper.isShift());
+                helper.checkAsserts(assert, 70);
+            });
+
+            QUnit.test(`mousewheel: textArea (scrollPosition - MIDDLE) - wheel -> down -> up - scrollable direction: ${direction}`, (assert) => {
+                const helper = new TextAreaInScrollableTestHelper(direction);
+                const $container = helper.getScrollableContainer();
+
+                helper.setPosition($container, 100);
+                helper.setPosition(helper.$textAreaInput, helper.maxScrollValue / 2);
+
+                const pointer = nativePointerMock(helper.$textAreaInput);
+
+                pointer.start().wheel(-20, helper.isShift());
+                helper.checkAsserts(assert, 100);
+
+                pointer.start().wheel(20, helper.isShift());
+                helper.checkAsserts(assert, 100);
+            });
+
+        });
+    }
+});
+

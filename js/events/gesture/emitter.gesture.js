@@ -84,7 +84,7 @@ var GestureEmitter = Emitter.inherit({
     },
 
     start: function(e) {
-        if(eventUtils.needSkipEvent(e)) {
+        if(e._needSkipEvent || eventUtils.needSkipEvent(e)) {
             this._cancel(e);
             return;
         }
