@@ -2612,6 +2612,30 @@ QUnit.test("Header Filter when grid with CustomStore when remoteOperations false
     assert.strictEqual(loadArgs.length, 1, "load count");
 });
 
+// T801018
+QUnit.test("Header filter with search bar if remote filtering and local grouping", function(assert) {
+    // arrange
+    var that = this,
+        testElement = $("#container");
+
+    that.options.headerFilter.allowSearch = true;
+    that.options.remoteOperations = { sorting: true, filtering: true, paging: true };
+
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+
+    // act
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    // assert
+    var $popupContent = that.headerFilterView.getPopupContainer().$content(),
+        list = $popupContent.find(".dx-list").dxList("instance");
+
+    assert.ok(list.option("searchEnabled"), "list with search bar");
+    assert.equal(list.option("searchExpr"), "Test1", "searchExpr is correct");
+});
+
 QUnit.test("Header Filter when grid with CustomStore when remote grouping and remote summary", function(assert) {
     // arrange
     var that = this,

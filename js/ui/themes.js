@@ -326,6 +326,10 @@ function isGeneric(themeName) {
     return isTheme("generic", themeName);
 }
 
+function isDark(themeName) {
+    return isTheme("dark", themeName);
+}
+
 function checkThemeDeprecation() {
     if(isIos7()) {
         errors.log("W0010", "The 'ios7' theme", "19.1", "Use the 'generic' theme instead.");
@@ -451,6 +455,7 @@ exports.waitForThemeLoad = waitForThemeLoad;
 exports.isMaterial = isMaterial;
 exports.isIos7 = isIos7;
 exports.isGeneric = isGeneric;
+exports.isDark = isDark;
 exports.isWebFontLoaded = isWebFontLoaded;
 exports.waitWebFont = waitWebFont;
 

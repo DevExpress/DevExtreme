@@ -343,7 +343,7 @@ var dxBarGauge = dxBaseGauge.inherit({
 
         if(!that._resizing) {
             if(!_compareArrays(that._values, that.option(OPTION_VALUES))) {
-                that.option(OPTION_VALUES, that._values);
+                that.option(OPTION_VALUES, that._values.slice());
             }
         }
 
