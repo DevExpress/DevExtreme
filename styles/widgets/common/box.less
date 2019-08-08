@@ -11,28 +11,3 @@
     flex-direction: column;
     max-width: 100%;
 }
-
-.dx-box-flex {
-    .dx-box-item,
-    .dx-box-item-content {
-        & > .dx-scrollable,
-        & > .dx-treeview,
-        & > .dx-treeview > .dx-scrollable {
-            display: flex;
-            flex-grow: 1;
-            flex-direction: column;
-            height: auto;
-
-            & > .dx-scrollable-wrapper {
-                display: flex;
-                flex-grow: 1;
-                flex-direction: column;
-                height: auto;
-
-                & > .dx-scrollable-container {
-                    height: auto;
-                }
-            }
-        }
-    }
-}
