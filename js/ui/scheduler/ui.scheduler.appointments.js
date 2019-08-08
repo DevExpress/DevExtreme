@@ -713,16 +713,20 @@ var SchedulerAppointments = CollectionWidget.inherit({
         return result;
     },
 
+    _tryGetAppointmentColor: function(appointment) {
+        const settings = $(appointment).data(APPOINTMENT_SETTINGS_NAME);
+        if(!settings) {
+            return undefined;
+        }
+        return this._getAppointmentColor(appointment, settings.groupIndex);
+    },
+
     _getAppointmentColor: function($appointment, groupIndex) {
-        var res = new Deferred();
+        const res = new Deferred();
         this.notifyObserver("getAppointmentColor", {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
-            callback: function(d) {
-                d.done(function(color) {
-                    res.resolve(color);
-                });
-            }
+            callback: d => d.done(color => res.resolve(color))
         });
 
         return res.promise();
