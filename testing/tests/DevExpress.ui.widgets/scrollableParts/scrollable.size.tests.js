@@ -175,7 +175,7 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
 () => {
     [false, true].forEach(useNativeScrolling => {
         [PLACEMENT_INSIDE_BOX, PLACEMENT_INSIDE_RESPONSIVE_BOX].forEach(placement => {
-            const TODO_INCORRECT_SIZE_IN_CHROME = (browser.webkit || browser.mozilla) && (placement === PLACEMENT_INSIDE_RESPONSIVE_BOX);
+            const TODO_SKIP_BECAUSE_INCORRECT_SIZE_IN_CHROME = (browser.webkit || browser.mozilla) && (placement === PLACEMENT_INSIDE_RESPONSIVE_BOX);
 
             const testContext = `[useNativeScrolling: ${useNativeScrolling}, placement: ${placement}]`;
             const scrollBarWidth = useNativeScrolling ? nativeVScrollBarWidth : 0;
@@ -263,7 +263,7 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
                 }));
             });
 
-            QUnitTestIfSupported("content overflow_x - 2 scrollable in row, " + testContext, !TODO_INCORRECT_SIZE_IN_CHROME, function(assert) {
+            QUnitTestIfSupported("content overflow_x - 2 scrollable in row, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE_IN_CHROME, function(assert) {
                 if(placement === PLACEMENT_INSIDE_BOX) {
                     appendToBox(this.$container, {
                         width: 150, height: 100,
@@ -329,7 +329,7 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
                 }));
             });
 
-            QUnitTestIfSupported("content overflow_y - 2 scrollable in row, " + testContext, !TODO_INCORRECT_SIZE_IN_CHROME, function(assert) {
+            QUnitTestIfSupported("content overflow_y - 2 scrollable in row, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE_IN_CHROME, function(assert) {
                 if(placement === PLACEMENT_INSIDE_BOX) {
                     appendToBox(this.$container, {
                         width: 200, height: 75,
@@ -362,7 +362,7 @@ QUnit.module("Size of two scrollables inside Box/Responsive", {
                 }));
             });
 
-            QUnitTestIfSupported("content overflow_y - 2 scrollable in col, " + testContext, !TODO_INCORRECT_SIZE_IN_CHROME, function(assert) {
+            QUnitTestIfSupported("content overflow_y - 2 scrollable in col, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE_IN_CHROME, function(assert) {
                 if(placement === PLACEMENT_INSIDE_BOX) {
                     appendToBox(this.$container, {
                         width: 150, height: 100,

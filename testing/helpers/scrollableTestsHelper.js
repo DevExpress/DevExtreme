@@ -37,7 +37,7 @@ export function checkScrollableSizes(assert, $rootContainer, { id, width, height
 }
 
 export function QUnitTestIfSupported(name, isSupported, testCallback) {
-    if(isSupported) {
+    if(isSupported /* TODO: Chrome/FF/Opera paints some ResponsiveBox configs in unexpected way. We will include these configs when improve our code for these browsers. */) {
         QUnit.test.call(null, name, testCallback);
     } else {
         QUnit.skip.call(null, "TODO: " + name, testCallback);
