@@ -44,5 +44,4 @@ test('Drag-and-drop appointments in timelineMonth', async t => {
         .expect('9:00 AM').eql(await scheduler.getAppointmentStartTime(appointment))
         .expect('10:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
 
-
 }).before(async () => { await createScheduler('timelineMonth', dataSource) });

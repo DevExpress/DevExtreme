@@ -47,7 +47,6 @@ test('Drag-and-drop appointments in workWeek', async t => {
         .expect('10:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
         .expect('11:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
 
-
     appointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
 
     await t
@@ -64,7 +63,6 @@ test('Drag-and-drop appointments in workWeek', async t => {
         .expect('10:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
         .expect('12:00 PM').eql(await scheduler.getAppointmentEndTime(appointment));
 
-
     appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
 
     await t
@@ -74,7 +72,6 @@ test('Drag-and-drop appointments in workWeek', async t => {
         .expect('9:30 AM').eql(await scheduler.getAppointmentStartTime(appointment))
         .expect('10:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
 
-
     appointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
 
     await t
@@ -83,7 +80,6 @@ test('Drag-and-drop appointments in workWeek', async t => {
         .expect('50px').eql(await scheduler.getAppointmentHeight(appointment))
         .expect('9:00 AM').eql(await scheduler.getAppointmentStartTime(appointment))
         .expect('9:30 AM').eql(await scheduler.getAppointmentEndTime(appointment));
-
 
     appointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
 
