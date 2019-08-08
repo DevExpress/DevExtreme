@@ -96,3 +96,25 @@ gulp.task('style-compiler-tb-assets', function(callback) {
         callback
     );
 });
+
+gulp.task('style-compiler-tb-assets1', gulp.parallel(() => {
+    const assetsPath = path.join(process.cwd(), 'themebuilder1');
+    return gulp.src('styles/**/*')
+        .pipe(gulp.dest(assetsPath));
+}, () => {
+    const assetsPath = path.join(process.cwd(), 'themebuilder1', 'images');
+    return gulp.src('images/**/*')
+        .pipe(gulp.dest(assetsPath));
+}));
+
+gulp.task('style-compiler-tb-assets2', function(callback) {
+    var assetsPath = path.join(process.cwd(), 'themebuilder2');
+
+    return gulp.src('themebuilder1/bundles/generic/dx.light.less')
+        //.pipe(replace(/\(once\)(.*)/g, '(reference)$1\n@import (inline)$1'))
+        // TODO inline images
+        //.pipe(filter(['styles/bundles/generic/*']))
+        .pipe(less({ paths: [ path.join(process.cwd(), 'themebuilder1') ] }))
+        .pipe(gulp.dest(assetsPath));
+});
+

@@ -165,7 +165,7 @@ class LessTemplateLoader {
             this.lessCompiler.render(less, options).then(output => {
                 resolve({
                     compiledMetadata: compiledMetadata,
-                    css: this._makeInfoHeader() + output.css,
+                    css: this._makeInfoHeader() + output.css, // TODO remove comments from css
                     swatchSelector: this.swatchSelector,
                     version: this.version
                 });
@@ -250,8 +250,11 @@ class LessTemplateLoader {
     }
 
     _loadLess(theme, colorScheme) {
+        // TODO test this by fake readFile for different combinations of theme/colorScheme
         let themeName = (theme ? theme + "-" : "");
-        return this._loadLessByFileName("theme-builder-" + themeName + colorScheme + ".less");
+        colorScheme = colorScheme.replace(/-/g, ".");
+        const path = "bundles/" + theme + "/dx." + (theme === "material" ? theme + "." : "") + colorScheme + ".less";
+        return this._loadLessByFileName(path);
     }
 
     _loadLessByFileName(fileName) {

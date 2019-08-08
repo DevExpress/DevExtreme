@@ -21,6 +21,12 @@ const normalizeCss = (css) => css
 
 const lessCompiler = require("less/lib/less-node");
 
+const lessPath = path.join(__dirname, "..", "data", "less", "bundles");
+const lessPaths = [ "material", "generic", ".." ].map((dir) => require('path').join(lessPath, dir));
+
+lessCompiler.options = lessCompiler.options || {};
+lessCompiler.options["paths"] = lessPaths;
+
 describe("Builder - testing exported function", () => {
     it("Build base theme with swatch", () => {
         const config = {

@@ -56,7 +56,6 @@
     "gulp-concat": "^2.6.0",
     "gulp-eol": "^0.1.2",
     "gulp-file": "^0.4.0",
-    "gulp-filter": "^6.0.0",
     "gulp-footer": "^1.0.5",
     "gulp-header": "^1.7.1",
     "gulp-if": "^2.0.0",
