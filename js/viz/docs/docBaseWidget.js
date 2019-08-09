@@ -672,12 +672,14 @@ var VizRange = {
     * @name VizRange.startValue
     * @type number|date|string
     * @default undefined
+    * @fires BaseWidgetOptions.onOptionChanged
     */
     startValue: undefined,
     /**
     * @name VizRange.endValue
     * @type number|date|string
     * @default undefined
+    * @fires BaseWidgetOptions.onOptionChanged
     */
     endValue: undefined,
     /**
