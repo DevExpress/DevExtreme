@@ -21,30 +21,47 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 
-let styleTasks = ['style-compiler-themes', 'style-compiler-tb-assets'];
-let commonTasks = ['vectormap', 'aspnet', 'vendor', 'ts'];
-let parallelTasks = ['js-bundles-debug', 'js-bundles-prod', 'style-processing', 'common'];
+const QUNIT_CI = Boolean(process.env['DEVEXTREME_QUNIT_CI']);
+const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);
 
-if(process.env['DEVEXTREME_QUNIT_CI']) {
-    console.warn("Using QUnit CI mode for gulp default!");
-    commonTasks = ['vectormap', 'vendor'];
-    styleTasks = ['style-compiler-themes'];
-    parallelTasks = ['js-bundles-debug', 'style-processing', 'common'];
+if(QUNIT_CI) {
+    console.warn("Using QUnit CI mode!");
 }
 
-gulp.task('common', gulp.parallel.apply(gulp, commonTasks));
-gulp.task('style-processing', gulp.parallel.apply(gulp, styleTasks));
+function createStyleCompilerBatch() {
+    const tasks = ['style-compiler-themes'];
+    if(!QUNIT_CI) {
+        tasks.push('style-compiler-tb-assets');
+    }
+    return gulp.series(tasks);
+}
 
-gulp.task('parallel-build',
-    process.env['DEVEXTREME_DOCKER_CI'] ?
-        gulp.parallel.apply(gulp, parallelTasks) :
-        (callback) => multiProcess(parallelTasks, callback, true));
+function createCommonBatch() {
+    const tasks = ['vectormap', 'vendor'];
+    if(!QUNIT_CI) {
+        tasks.push('aspnet', 'ts');
+    }
+    return gulp.parallel(tasks);
+}
 
+function createMainBatch() {
+    const tasks = ['js-bundles-debug'];
+    if(!QUNIT_CI) {
+        tasks.push('js-bundles-prod');
+    }
+    tasks.push('style-compiler-batch', 'common-batch');
+    return DOCKER_CI
+        ? gulp.parallel(tasks)
+        : (callback) => multiProcess(tasks, callback, true);
+}
+
+gulp.task('common-batch', createCommonBatch());
+gulp.task('style-compiler-batch', createStyleCompilerBatch());
 
 gulp.task('default', gulp.series(
     'clean',
     'localization',
-    'parallel-build',
+    createMainBatch(),
     'npm',
     'themebuilder-npm'
 ));
