@@ -1083,6 +1083,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramExportFormat
+ * @enum {'svg'|'png'|'jpg'}
+ */
+
+/**
  * @typedef {string} Enums.GanttTaskTitlePosition
  * @enum {'inside'|'outside'|'none'}
  */

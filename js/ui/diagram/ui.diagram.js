@@ -687,20 +687,41 @@ class Diagram extends Widget {
 
 
     /**
-    * @name dxDiagramMethods.getData
-    * @publicName getData()
+    * @name dxDiagramMethods.export
+    * @publicName export()
     * @return string
     */
-    getData() {
+    export() {
         return this._getDiagramData();
     }
     /**
-    * @name dxDiagramMethods.setData
-    * @publicName setData(data, updateExistingItemsOnly)
+    * @name dxDiagramMethods.exportTo
+    * @publicName exportTo(format, callback)
+    * @param1 format:Enums.DiagramExportFormat
+    * @param2 callback:function
+    */
+    exportTo(format, callback) {
+        var command = this._getDiagramExportToCommand(format);
+        this._executeDiagramCommand(command, callback);
+    }
+    _getDiagramExportToCommand(format) {
+        const { DiagramCommand } = getDiagram();
+        switch(format) {
+            case "png":
+                return DiagramCommand.ExportPng;
+            case "jpg":
+                return DiagramCommand.ExportJpg;
+            default:
+                return DiagramCommand.ExportSvg;
+        }
+    }
+    /**
+    * @name dxDiagramMethods.import
+    * @publicName import(data, updateExistingItemsOnly)
     * @param1 data:string
     * @param2 updateExistingItemsOnly:boolean
     */
-    setData(data, updateExistingItemsOnly) {
+    import(data, updateExistingItemsOnly) {
         this._setDiagramData(data, updateExistingItemsOnly);
         this._raiseDataChangeAction();
     }
@@ -839,7 +860,6 @@ class Diagram extends Widget {
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 data:string
             * @action
             */
             onDataChanged: null,
@@ -1311,14 +1331,10 @@ class Diagram extends Widget {
         this._dataChangeAction = this._createActionByOption("onDataChanged");
     }
     _raiseDataChangeAction() {
-        if(!this.option("onDataChanged")) return;
-
         if(!this._dataChangeAction) {
             this._createDataChangeAction();
         }
-        this._dataChangeAction({
-            data: this.getData()
-        });
+        this._dataChangeAction();
     }
     _raiseEdgeInsertedAction(data, callback) {
         if(this._edgesOption) {
