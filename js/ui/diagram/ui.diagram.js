@@ -421,20 +421,30 @@ class Diagram extends Widget {
                 getEndLineEnding: this._createOptionGetter("edges.toLineEndExpr"),
                 setEndLineEnding: this._createOptionSetter("edges.toLineEndExpr"),
             },
-            layoutType: this._getDataBindingLayoutType()
+            layoutParameters: this._getDataBindingLayoutParameters()
         };
         this._executeDiagramCommand(DiagramCommand.BindDocument, data);
     }
-    _getDataBindingLayoutType() {
-        const { DataLayoutType } = getDiagram();
-        switch(this.option("nodes.autoLayout")) {
-            case "sugiyama":
-                return DataLayoutType.Sugiyama;
-            case "tree":
-                return DataLayoutType.Tree;
-            default:
-                return undefined;
+    _getDataBindingLayoutParameters() {
+        const { DataLayoutType, DataLayoutOrientation } = getDiagram();
+        let layoutParametersOption = this.option("nodes.autoLayout");
+        if(!layoutParametersOption) return undefined;
+        let parameters = (layoutParametersOption) ? {} : undefined;
+        if(layoutParametersOption) {
+            if(!layoutParametersOption.type) {
+                parameters.type = layoutParametersOption;
+            } else if(layoutParametersOption.type === "tree") {
+                parameters.type = DataLayoutType.Tree;
+            } else if(layoutParametersOption.type === "sugiyama") {
+                parameters.type = DataLayoutType.Sugiyama;
+            }
+            if(layoutParametersOption.orientation === "vertical") {
+                parameters.orientation = DataLayoutOrientation.Vertical;
+            } else if(layoutParametersOption.orientation === "horizontal") {
+                parameters.orientation = DataLayoutOrientation.Horizontal;
+            }
         }
+        return parameters;
     }
     _getAutoZoomValue(option) {
         const { AutoZoomMode } = getDiagram();
@@ -955,8 +965,18 @@ class Diagram extends Widget {
                 heightExpr: undefined,
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
-                 * @type Enums.DiagramAutoLayout
+                 * @type Enums.DiagramDataLayoutType|Object
                  * @default "tree"
+                 */
+                /**
+                 * @name dxDiagramOptions.nodes.autoLayout.type
+                 * @type Enums.DiagramDataLayoutType
+                 * @default "tree"
+                 */
+                /**
+                 * @name dxDiagramOptions.nodes.autoLayout.orientation
+                 * @type Enums.DiagramDataLayoutOrientation
+                 * @default "auto"
                  */
                 autoLayout: "tree"
             },

@@ -1033,8 +1033,12 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramAutoLayout
+ * @typedef {string} Enums.DiagramDataLayoutType
  * @enum {'off'|'tree'|'sugiyama'}
+ */
+/**
+ * @typedef {string} Enums.DiagramDataLayoutOrientation
+ * @enum {'auto'|'vertical'|'horizontal'}
  */
 
 /**
