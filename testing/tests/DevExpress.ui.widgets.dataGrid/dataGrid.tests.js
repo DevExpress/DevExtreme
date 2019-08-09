@@ -3757,6 +3757,36 @@ QUnit.test("Focused row should not be visible after scrolling if scrolling mode 
     assert.equal(dataGrid.getScrollable().scrollTop(), 2000, "Scroll position is not changed");
 });
 
+// T804082
+QUnit.test("Row should be focused after click on readonly cell if editor is opened", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{ id: 1, field: "some1" }, { id: 2, field: "some2" }],
+        keyExpr: "id",
+        editing: {
+            enabled: true,
+            mode: "cell",
+            allowUpdating: true
+        },
+        focusedRowEnabled: true,
+        columns: [{
+            dataField: "id",
+            allowEditing: false,
+        }, "field"]
+    }).dxDataGrid("instance");
+
+    // act
+    $(dataGrid.getCellElement(0, 1)).trigger("dxpointerdown");
+    dataGrid.editCell(0, 1);
+    $(dataGrid.getCellElement(1, 0)).trigger("dxpointerdown");
+
+    // assert
+    assert.equal(dataGrid.option("focusedRowIndex"), 1, "focusedRowIndex");
+    assert.equal(dataGrid.option("focusedRowKey"), 2, "focusedRowKey");
+    assert.ok($(dataGrid.getRowElement(1)).hasClass("dx-row-focused"), "Focused row");
+});
+
 QUnit.test("Should navigate to the focused row by focusedRowIndex in virtual scrolling mode if corresponding page is not loaded (T733748)", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({

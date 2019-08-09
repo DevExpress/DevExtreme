@@ -1110,7 +1110,7 @@ module.exports = {
             },
             keyboardNavigation: {
                 _isCellValid: function($cell) {
-                    return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                    return this.callBase.apply(this, arguments) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                 },
 
                 _processNextCellInMasterDetail: function($nextCell) {
