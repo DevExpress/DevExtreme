@@ -160,6 +160,10 @@
                     "xmla",       // XML for Analysis
                     "ldml",       // LOCALE DATA MARKUP LANGUAGE
 
+                    "png",
+                    "jpg",
+                    "svg",
+
                     "API",
                     "accessor",
                     "accessors",
