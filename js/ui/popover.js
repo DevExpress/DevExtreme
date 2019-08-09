@@ -536,15 +536,6 @@ var Popover = Popup.inherit({
         }
     },
 
-    _renderShadingDimensions: function() {
-        if(this.option("shading")) {
-            this._$wrapper.css({
-                width: "100%",
-                height: "100%"
-            });
-        }
-    },
-
     _normalizePosition: function() {
         var position = extend({}, this._transformStringPosition(this.option("position"), POSITION_ALIASES));
 

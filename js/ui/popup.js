@@ -774,17 +774,6 @@ var Popup = Overlay.inherit({
         this.overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, this.overlayContent().outerWidth() === $(window).width());
     },
 
-    _renderShadingDimensions: function() {
-        if(this.option("fullScreen")) {
-            this._wrapper().css({
-                width: "100%",
-                height: "100%"
-            });
-        } else {
-            this.callBase.apply(this, arguments);
-        }
-    },
-
     refreshPosition: function() {
         this._renderPosition();
     },
