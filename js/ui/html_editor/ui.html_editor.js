@@ -1,3 +1,5 @@
+/* global Node */
+
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isDefined, isFunction } from "../../core/utils/type";
@@ -14,6 +16,7 @@ import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
 import ConverterController from "./converterController";
 import getWordMatcher from "./matchers/wordLists";
+import getTextDecorationMatcher from "./matchers/textDecoration";
 import FormDialog from "./ui/formDialog";
 
 const HTML_EDITOR_CLASS = "dx-htmleditor";
@@ -421,7 +424,8 @@ const HtmlEditor = Editor.inherit({
     },
 
     _getModulesConfig: function() {
-        const wordListMatcher = getWordMatcher(this._getRegistrator().getQuill());
+        const quill = this._getRegistrator().getQuill();
+        const wordListMatcher = getWordMatcher(quill);
         let modulesConfig = extend({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
@@ -433,7 +437,8 @@ const HtmlEditor = Editor.inherit({
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
-                    ['p.MsoListParagraphCxSpLast', wordListMatcher]
+                    ['p.MsoListParagraphCxSpLast', wordListMatcher],
+                    [Node.ELEMENT_NODE, getTextDecorationMatcher(quill)]
                 ]
             }
         }, this._getCustomModules());
