@@ -6234,6 +6234,15 @@ declare module DevExpress.viz {
         /** @name VectorMapLegendItem.visible */
         visible?: boolean;
     }
+    /** @name VectorMapProjectionConfig */
+    export interface VectorMapProjectionConfig {
+        /** @name VectorMapProjectionConfig.aspectRatio */
+        aspectRatio?: number;
+        /** @name VectorMapProjectionConfig.from */
+        from?: ((coordinates: Array<number>) => Array<number>);
+        /** @name VectorMapProjectionConfig.to */
+        to?: ((coordinates: Array<number>) => Array<number>);
+    }
     /** @name VizRange */
     export interface VizRange {
         /** @name VizRange.endValue */
@@ -9160,7 +9169,7 @@ declare module DevExpress.viz {
         /** @name dxVectorMap.Options.panningEnabled */
         panningEnabled?: boolean;
         /** @name dxVectorMap.Options.projection */
-        projection?: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | DevExpress.viz.map.VectorMapProjectionConfig | string | any;
+        projection?: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | VectorMapProjectionConfig | string | any;
         /** @name dxVectorMap.Options.tooltip */
         tooltip?: dxVectorMapTooltip;
         /** @name dxVectorMap.Options.touchEnabled */
@@ -9671,19 +9680,6 @@ declare module DevExpress.exporter {
         underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
     }
 }
-declare module DevExpress.viz.map {
-    /** @name VectorMapProjectionConfig */
-    export interface VectorMapProjectionConfig {
-        /** @name VectorMapProjectionConfig.aspectRatio */
-        aspectRatio?: number;
-        /** @name VectorMapProjectionConfig.from */
-        from?: ((coordinates: Array<number>) => Array<number>);
-        /** @name VectorMapProjectionConfig.to */
-        to?: ((coordinates: Array<number>) => Array<number>);
-    }
-    /** @name viz.map.projection(data) */
-    export function projection(data: VectorMapProjectionConfig): any;
-}
 declare module DevExpress.data.utils {
     /** @name Utils.compileGetter(expr) */
     export function compileGetter(expr: string | Array<string>): Function;
@@ -9749,6 +9745,10 @@ declare module DevExpress.utils {
     export function initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;
     /** @name utils.requestAnimationFrame(callback) */
     export function requestAnimationFrame(callback: Function): number;
+}
+declare module DevExpress.viz.map {
+    /** @name viz.map.projection(data) */
+    export function projection(data: VectorMapProjectionConfig): any;
 }
 declare module DevExpress.viz.map.projection {
     /** @name viz.map.projection.add(name, projection) */
