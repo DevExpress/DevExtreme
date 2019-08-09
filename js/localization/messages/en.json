@@ -288,6 +288,7 @@
         "dxHtmlEditor-normalText": "Normal text",
 
         "dxFileManager-newFolderName": "Untitled folder",
+        "dxFileManager-defaultRootFolder": "Files",
         "dxFileManager-errorNoAccess": "Access denied. The operation cannot be completed.",
         "dxFileManager-errorDirectoryExistsFormat": "Directory '{0}' already exists.",
         "dxFileManager-errorFileExistsFormat": "File '{0}' already exists.",

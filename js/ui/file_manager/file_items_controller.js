@@ -342,6 +342,9 @@ export default class FileItemsController {
         if(text) {
             root.name = text;
         }
+        if(text === "") {
+            root.name = text;
+        }
         return root;
     }
 

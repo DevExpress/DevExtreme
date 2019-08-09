@@ -129,4 +129,22 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal($folder11Node.find("span").text(), "Folder 1.1");
     });
 
+    test("change root file name by public API", function(assert) {
+        var treeViewNode = $(document).find(".dx-treeview-node");
+        assert.equal(treeViewNode.length, 4, "Everything right on its' place");
+
+        var target = treeViewNode[0].children[0];
+        assert.ok(target.innerText.indexOf("Files") === 0, "Default is correct");
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("rootFolderText", "TestRFN");
+        this.clock.tick(400);
+
+        treeViewNode = $(document).find(".dx-treeview-node");
+        assert.equal(treeViewNode.length, 4, "Everything right on its' place");
+
+        target = treeViewNode[0].children[0];
+        assert.ok(target.innerText.indexOf("TestRFN") === 0, "Custom is correct");
+    });
+
 });

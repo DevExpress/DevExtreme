@@ -4,6 +4,8 @@ import { extend } from "../../core/utils/extend";
 import typeUtils from "../../core/utils/type";
 import { when, Deferred } from "../../core/utils/deferred";
 
+import messageLocalization from "../../localization/message";
+
 import registerComponent from "../../core/component_registrator";
 import Widget from "../widget/ui.widget";
 import notify from "../notify";
@@ -43,7 +45,7 @@ class FileManager extends Widget {
 
         this._controller = new FileItemsController({
             currentPath: this.option("currentPath"),
-            rootText: "",
+            rootText: this.option("rootFolderText"),
             fileProvider: this.option("fileProvider"),
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
@@ -145,6 +147,7 @@ class FileManager extends Widget {
     _createBreadcrumbs($container) {
         const $breadcrumbs = $("<div>").appendTo($container);
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
+            rootFolderDisplayName: this.option("rootFolderText"),
             path: "",
             onPathChanged: e => this.setCurrentFolderPath(e.newPath),
             onOutsideClick: () => this._clearSelection()
@@ -324,6 +327,13 @@ class FileManager extends Widget {
             currentPath: "",
 
             /**
+            * @name dxFileManagerOptions.rootFolderText
+            * @type string
+            * @default messageLocalization.format("dxFileManager-defaultRootFolder")
+            */
+            rootFolderText: messageLocalization.format("dxFileManager-defaultRootFolder"),
+
+            /**
             * @name dxFileManagerOptions.selectionMode
             * @type Enums.FileManagerSelectionMode
             * @default "multiple"
@@ -450,6 +460,7 @@ class FileManager extends Widget {
             case "itemView":
             case "customizeThumbnail":
             case "customizeDetailColumns":
+            case "rootFolderText":
             case "permissions":
                 this.repaint();
                 break;
