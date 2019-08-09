@@ -11,7 +11,8 @@ var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     dateLocalization = require("localization/date"),
     dragEvents = require("events/drag"),
-    memoryLeaksHelper = require("../../helpers/memoryLeaksHelper.js");
+    memoryLeaksHelper = require("../../helpers/memoryLeaksHelper.js"),
+    devices = require("core/devices");
 
 require("common.css!");
 require("generic_light.css!");
@@ -161,13 +162,15 @@ QUnit.testStart(function() {
         assert.equal(stub.callCount, 0, "Tables were not updated");
     });
 
-    QUnit.test("Workspace should restore scrollTop after restoreScrollTop call", function(assert) {
-        this.instance.$element().scrollTop(30);
-        assert.equal(this.instance.$element().scrollTop(), 30, "scrollTop is right");
+    if(devices.real().deviceType === "desktop") {
+        QUnit.test("Workspace should restore scrollTop after restoreScrollTop call", function(assert) {
+            this.instance.$element().scrollTop(30);
+            assert.equal(this.instance.$element().scrollTop(), 30, "scrollTop is right");
 
-        this.instance.restoreScrollTop();
-        assert.equal(this.instance.$element().scrollTop(), 0, "scrollTop is restored");
-    });
+            this.instance.restoreScrollTop();
+            assert.equal(this.instance.$element().scrollTop(), 0, "scrollTop is restored");
+        });
+    }
 
     QUnit.test("dateUtils.getTimezonesDifference should be called when calculating interval between dates", function(assert) {
         var stub = sinon.stub(dateUtils, "getTimezonesDifference"),

@@ -11,7 +11,9 @@ class DiagramLeftPanel extends DiagramPanel {
     _init() {
         super._init();
 
-        this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered");
+        this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered", {
+            excludeValidators: ["disabled"]
+        });
     }
     _initMarkup() {
         super._initMarkup();

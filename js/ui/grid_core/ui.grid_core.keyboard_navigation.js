@@ -187,8 +187,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 this._focusedView.element().attr("tabindex", 0);
                 this._focusedView.focus();
-            } else if(!isEditingCell && !this._isMasterDetailCell($target)) {
+            } else if(!this._isMasterDetailCell($target)) {
                 this._clickTargetCellHandler(event, $target);
+
+                if(isEditingCell) {
+                    this._updateFocusedCellPosition($target);
+                }
+
             } else {
                 this._updateFocusedCellPosition($target);
             }
@@ -1630,7 +1635,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanging: function(eventArgs, $newFocusedRow) {
         var newRowIndex = this._getRowIndex($newFocusedRow),
             dataController = this.getController("data"),
-            prevFocusedRowIndex = this.getVisibleRowIndex(),
+            prevFocusedRowIndex = this.option("focusedRowIndex"),
             loadingOperationTypes = dataController.loadingOperationTypes(),
             args = {
                 rowElement: $newFocusedRow,

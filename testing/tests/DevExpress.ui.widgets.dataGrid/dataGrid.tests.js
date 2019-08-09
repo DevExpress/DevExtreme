@@ -2131,6 +2131,49 @@ QUnit.test("Change column width via columnOption method (T628065)", function(ass
     assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
+QUnit.test("Change column sortOrder via option method with canceling in onOptionChanged handler", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [],
+        columns: [{ dataField: "column1", sortOrder: "asc" }],
+        onOptionChanged: function(args) {
+            if(args.fullName === "columns[0].sortOrder") {
+                dataGrid.option("columns[0].sortOrder", "asc");
+            }
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.option("columns[0].sortOrder", "desc");
+
+    // assert
+    assert.strictEqual(dataGrid.columnOption(0, "sortOrder"), "asc", "sortOrder internal state");
+    assert.strictEqual(dataGrid.option("columns[0].sortOrder"), "asc", "sortOrder option value");
+});
+
+// T734761
+QUnit.test("Change column sortOrder via columnOption method with canceling in onOptionChanged handler", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [],
+        columns: [{ dataField: "column1", sortOrder: "asc" }],
+        onOptionChanged: function(args) {
+            if(args.fullName === "columns[0].sortOrder") {
+                dataGrid.option("columns[0].sortOrder", "asc");
+            }
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.columnOption(0, "sortOrder", "desc");
+
+    // assert
+    assert.strictEqual(dataGrid.columnOption(0, "sortOrder"), "asc", "sortOrder internal state");
+    assert.strictEqual(dataGrid.option("columns[0].sortOrder"), "asc", "sortOrder option value");
+});
+
 // T688721, T694661
 QUnit.test("column width as string should works correctly", function(assert) {
     // act
@@ -3595,6 +3638,38 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
     assert.equal(focusedRowChangedArgs.length, 1, "focusedRowChanged event is called once");
     assert.ok($(focusedRowChangedArgs[0].rowElement).hasClass("dx-row-focused"), "focusedRowChanged event has correct rowElement");
     assert.equal(focusedRowChangedArgs[0].rowIndex, 149, "focusedRowChanged event has correct rowElement");
+});
+
+// T803784
+QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{ field: "data" }],
+        columns: [{
+            dataField: "field",
+            caption: "fixed",
+            fixed: true
+        }, {
+            dataField: "field",
+            caption: "not fixed"
+        }, {
+            type: "buttons",
+            fixed: false,
+            buttons: ["edit"]
+        }],
+        editing: {
+            mode: "row",
+            allowUpdating: true,
+            useIcons: true
+        }
+    }).dxDataGrid("instance");
+
+    // assert
+    var rows = dataGrid.getRowElement(0);
+
+    assert.equal(Math.floor($(rows[0]).find("td").eq(0).width()), Math.floor($(rows[1]).find("td").eq(0).width()), "widths are equal");
+    assert.notOk($(".dx-command-edit").eq(1).hasClass("dx-hidden-cell"), "cell does not have class dx-hidden-cell");
 });
 
 QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {

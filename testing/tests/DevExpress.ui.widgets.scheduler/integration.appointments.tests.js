@@ -2567,45 +2567,48 @@ QUnit.test("Month appointment inside grouped view should have a right resizable 
     assert.roughEqual(area2.right, $cells.eq(13).offset().left + halfOfCellWidth * 3, 1.001);
 });
 
-QUnit.test("Month appointment inside grouped view should have a right resizable area after horizontal scroll end", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 6, 10),
-        views: ["month"],
-        editing: true,
-        currentView: "month",
-        dataSource: [{
-            text: "a",
-            startDate: new Date(2015, 6, 10, 0),
-            endDate: new Date(2015, 6, 10, 0, 30),
-            ownerId: 1
-        }],
-        groups: ["ownerId"],
-        resources: [
-            {
-                field: "ownerId",
-                dataSource: [
-                    { id: 1, text: "one" },
-                    { id: 2, text: "two" },
-                    { id: 3, text: "three" },
-                    { id: 4, text: "four" }
-                ]
-            }
-        ],
-        width: 800,
-        crossScrollingEnabled: true
+
+if(devices.real().deviceType === "desktop") {
+    QUnit.test("Month appointment inside grouped view should have a right resizable area after horizontal scroll end", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2015, 6, 10),
+            views: ["month"],
+            editing: true,
+            currentView: "month",
+            dataSource: [{
+                text: "a",
+                startDate: new Date(2015, 6, 10, 0),
+                endDate: new Date(2015, 6, 10, 0, 30),
+                ownerId: 1
+            }],
+            groups: ["ownerId"],
+            resources: [
+                {
+                    field: "ownerId",
+                    dataSource: [
+                        { id: 1, text: "one" },
+                        { id: 2, text: "two" },
+                        { id: 3, text: "three" },
+                        { id: 4, text: "four" }
+                    ]
+                }
+            ],
+            width: 800,
+            crossScrollingEnabled: true
+        });
+
+        var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).first(),
+            initialResizableAreaLeft = $appointment.dxResizable("instance").option("area").left,
+            initialResizableAreaRight = $appointment.dxResizable("instance").option("area").right,
+            scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+            scrollOffset = 100;
+
+        scrollable.scrollTo({ left: scrollOffset, top: 0 });
+
+        assert.equal($appointment.dxResizable("instance").option("area").left, initialResizableAreaLeft - scrollOffset);
+        assert.equal($appointment.dxResizable("instance").option("area").right, initialResizableAreaRight - scrollOffset);
     });
-
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).first(),
-        initialResizableAreaLeft = $appointment.dxResizable("instance").option("area").left,
-        initialResizableAreaRight = $appointment.dxResizable("instance").option("area").right,
-        scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
-        scrollOffset = 100;
-
-    scrollable.scrollTo({ left: scrollOffset, top: 0 });
-
-    assert.equal($appointment.dxResizable("instance").option("area").left, initialResizableAreaLeft - scrollOffset);
-    assert.equal($appointment.dxResizable("instance").option("area").right, initialResizableAreaRight - scrollOffset);
-});
+}
 
 QUnit.test("Rival appointments should have correct positions on month view, rtl mode", function(assert) {
     this.createInstance({

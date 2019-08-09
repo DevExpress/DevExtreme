@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const replace = require('gulp-replace');
 const less = require('gulp-less');
+const plumber = require('gulp-plumber');
 const LessAutoPrefix = require('less-plugin-autoprefix');
 
 const context = require('./context.js');
@@ -15,6 +16,7 @@ const cssArtifactsPath = path.join(process.cwd(), 'artifacts', 'css');
 const compileBundle = (src) => {
     return gulp
         .src(src)
+        .pipe(plumber())
         .pipe(less({
             paths: [ path.join(process.cwd(), 'styles') ],
             plugins: [ autoPrefix ],
