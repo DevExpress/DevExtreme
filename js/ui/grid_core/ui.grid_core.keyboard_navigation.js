@@ -251,7 +251,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
-    _initFocusedViews: function() {
+    _initViewHandlers: function() {
         var that = this,
             clickAction = that.createAction(that._clickHandler),
             rowsView = that.getView("rowsView");
@@ -266,10 +266,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 isFocusedViewCorrect = that._focusedView && that._focusedView.name === rowsView.name,
                 needUpdateFocus = false,
                 isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
-                keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
+                clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
 
             eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
-            eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), keyboardActionSelector, clickAction);
+            eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickSelector, clickAction);
 
             that._initKeyDownProcessor(that, $element, that._keyDownHandler);
 
@@ -1406,7 +1406,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             that._canceledCellPosition = null;
 
-            that._initFocusedViews();
+            that._initViewHandlers();
 
             that._documentClickHandler = that.createAction(function(e) {
                 var $target = $(e.event.target),
