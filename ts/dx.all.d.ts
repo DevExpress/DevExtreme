@@ -8189,6 +8189,8 @@ declare module DevExpress.viz {
     export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
         /** @name dxPieChart.Options.adaptiveLayout */
         adaptiveLayout?: dxPieChartAdaptiveLayout;
+        /** @name dxPieChart.Options.centerTemplate */
+        centerTemplate?: DevExpress.core.template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxPieChart.Options.commonSeriesSettings */
         commonSeriesSettings?: any;
         /** @name dxPieChart.Options.diameter */
@@ -8238,6 +8240,8 @@ declare module DevExpress.viz {
     export class dxPieChart extends BaseChart {
         constructor(element: Element, options?: dxPieChartOptions)
         constructor(element: JQuery, options?: dxPieChartOptions)
+        /** @name dxPieChart.getInnerRadius() */
+        getInnerRadius(): number;
     }
     /** @name dxPieChartSeriesTypes */
     export interface dxPieChartSeriesTypes {

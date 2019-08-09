@@ -2065,7 +2065,12 @@ var dxChart = {
 * @module viz/pie_chart
 * @export default
 */
-var dxPieChart = {
+var dxPieChart = {/**
+    * @name dxPieChartMethods.getInnerRadius
+    * @publicName getInnerRadius()
+    * @return number
+    */
+    getInnerRadius: function() { },
     /**
     * @name dxPieChartOptions.seriesTemplate
     * @type object
@@ -2209,7 +2214,16 @@ var dxPieChart = {
     * @type string
     * @default undefined
     */
-    sizeGroup: undefined
+    sizeGroup: undefined,
+    /**
+    * @name dxPieChartOptions.centerTemplate
+    * @type template|function
+    * @default undefined
+    * @type_function_param1 component:dxPieChart
+    * @type_function_param2 element:SVGGElement
+    * @type_function_return string|SVGElement|jQuery
+    */
+    centerTemplate: undefined
 };
 
 /**
