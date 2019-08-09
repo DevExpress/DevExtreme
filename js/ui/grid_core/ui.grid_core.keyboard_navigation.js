@@ -173,9 +173,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $target = $(event.currentTarget),
             data = event.data,
             focusedViewElement = data.view && data.view.element(),
-            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS);
+            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS),
+            canFocusRow = $target && !isDetailRow($target.parent());
 
-        if(this._isEventInCurrentGrid(event) && this._isCellValid($target)) {
+        if(this._isEventInCurrentGrid(event) && this._isCellValid($target) || canFocusRow) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
 
@@ -437,8 +438,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     row = rowItems[visibleRowIndex],
                     isCellEditing = editingController && this._isCellEditMode() && editingController.isEditing(),
                     isRowEditingInCurrentRow = editingController && editingController.isEditRow(visibleRowIndex),
-                    isEditing = isRowEditingInCurrentRow || isCellEditing,
-                    canFocusRow = this.option("focusedRowEnabled") && !isMasterDetailRow;
+                    isEditing = isRowEditingInCurrentRow || isCellEditing;
 
                 if(column.command) {
                     if(this._isLegacyNavigation()) {
@@ -457,7 +457,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     return false;
                 }
 
-                return !isEditing || column.allowEditing || canFocusRow;
+                return !isEditing || column.allowEditing;
             }
         }
     },
