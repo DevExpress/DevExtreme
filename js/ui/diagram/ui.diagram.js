@@ -431,11 +431,10 @@ class Diagram extends Widget {
         if(!layoutParametersOption) return undefined;
         let parameters = (layoutParametersOption) ? {} : undefined;
         if(layoutParametersOption) {
-            if(!layoutParametersOption.type) {
-                parameters.type = layoutParametersOption;
-            } else if(layoutParametersOption.type === "tree") {
+            let layoutType = layoutParametersOption.type || layoutParametersOption;
+            if(layoutType === "tree") {
                 parameters.type = DataLayoutType.Tree;
-            } else if(layoutParametersOption.type === "sugiyama") {
+            } else if(layoutType === "sugiyama") {
                 parameters.type = DataLayoutType.Sugiyama;
             }
             if(layoutParametersOption.orientation === "vertical") {
@@ -971,12 +970,10 @@ class Diagram extends Widget {
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout.type
                  * @type Enums.DiagramDataLayoutType
-                 * @default "tree"
                  */
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout.orientation
                  * @type Enums.DiagramDataLayoutOrientation
-                 * @default "auto"
                  */
                 autoLayout: "tree"
             },
