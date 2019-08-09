@@ -348,7 +348,7 @@ class Diagram extends Widget {
     _bindDiagramData() {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand, ConnectorLineOption, ConnectorLineEnding } = getDiagram();
         const data = {
             nodeDataSource: this._nodes,
             edgeDataSource: this._edges,
@@ -414,12 +414,84 @@ class Diagram extends Widget {
 
                 getText: this._createOptionGetter("edges.textExpr"),
                 setText: this._createOptionSetter("edges.textExpr"),
-                getLineOption: this._createOptionGetter("edges.lineTypeExpr"),
-                setLineOption: this._createOptionSetter("edges.lineTypeExpr"),
-                getStartLineEnding: this._createOptionGetter("edges.fromLineEndExpr"),
-                setStartLineEnding: this._createOptionSetter("edges.fromLineEndExpr"),
-                getEndLineEnding: this._createOptionGetter("edges.toLineEndExpr"),
-                setEndLineEnding: this._createOptionSetter("edges.toLineEndExpr"),
+                getLineOption: function(obj) {
+                    var getter = this._createOptionGetter("edges.lineTypeExpr");
+                    if(!getter) return;
+
+                    var lineType = getter(obj);
+                    switch(lineType) {
+                        case "straight":
+                            return ConnectorLineOption.Straight;
+                        default:
+                            return ConnectorLineOption.Orthogonal;
+                    }
+                }.bind(this),
+                setLineOption: function(obj, value) {
+                    var setter = this._createOptionSetter("edges.lineTypeExpr");
+                    if(!setter) return;
+
+                    switch(value) {
+                        case ConnectorLineOption.Straight:
+                            value = "straight";
+                            break;
+                        case ConnectorLineOption.Orthogonal:
+                            value = "orthogonal";
+                            break;
+                    }
+                    setter(obj, value);
+                }.bind(this),
+                getStartLineEnding: function(obj) {
+                    var getter = this._createOptionGetter("edges.fromLineEndExpr");
+                    if(!getter) return;
+
+                    var lineType = getter(obj);
+                    switch(lineType) {
+                        case "arrow":
+                            return ConnectorLineEnding.Arrow;
+                        default:
+                            return ConnectorLineEnding.None;
+                    }
+                }.bind(this),
+                setStartLineEnding: function(obj, value) {
+                    var setter = this._createOptionSetter("edges.fromLineEndExpr");
+                    if(!setter) return;
+
+                    switch(value) {
+                        case ConnectorLineEnding.Arrow:
+                            value = "arrow";
+                            break;
+                        case ConnectorLineEnding.None:
+                            value = "none";
+                            break;
+                    }
+                    setter(obj, value);
+                }.bind(this),
+                getEndLineEnding: function(obj) {
+                    var getter = this._createOptionGetter("edges.toLineEndExpr");
+                    if(!getter) return;
+
+                    var lineType = getter(obj);
+                    switch(lineType) {
+                        case "none":
+                            return ConnectorLineEnding.None;
+                        default:
+                            return ConnectorLineEnding.Arrow;
+                    }
+                }.bind(this),
+                setEndLineEnding: function(obj, value) {
+                    var setter = this._createOptionSetter("edges.toLineEndExpr");
+                    if(!setter) return;
+
+                    switch(value) {
+                        case ConnectorLineEnding.Arrow:
+                            value = "arrow";
+                            break;
+                        case ConnectorLineEnding.None:
+                            value = "none";
+                            break;
+                    }
+                    setter(obj, value);
+                }.bind(this)
             },
             layoutParameters: this._getDataBindingLayoutParameters()
         };

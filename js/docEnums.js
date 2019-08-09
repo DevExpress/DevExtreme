@@ -1062,6 +1062,16 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramConnectorLineType
+ * @enum {'straight'|'orthogonal'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramConnectorLineEnd
+ * @enum {'none'|'arrow'}
+ */
+
+/**
  * @typedef {string} Enums.DiagramToolboxStyle
  * @enum {'icons'|'texts'}
  */
