@@ -3778,9 +3778,9 @@ QUnit.test("Row should be focused after click on readonly cell if editor is open
     }).dxDataGrid("instance");
 
     // act
-    $(dataGrid.getCellElement(0, 1)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.up);
     dataGrid.editCell(0, 1);
-    $(dataGrid.getCellElement(1, 0)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(1, 0)).trigger(pointerEvents.up);
 
     // assert
     assert.equal(dataGrid.option("focusedRowIndex"), 1, "focusedRowIndex");
