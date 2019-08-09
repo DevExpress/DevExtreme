@@ -397,7 +397,6 @@ var DropDownEditor = TextBox.inherit({
             model: data,
             container: domUtils.getPublicElement($templateWrapper),
             onRendered: () => {
-
                 var $input = this._input();
 
                 if(!$input.length) {
