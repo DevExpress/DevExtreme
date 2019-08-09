@@ -3668,7 +3668,7 @@ QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed
     // assert
     var rows = dataGrid.getRowElement(0);
 
-    assert.equal($(rows[0]).find("td").eq(0).width(), $(rows[1]).find("td").eq(0).width(), "widths are equal");
+    assert.equal(Math.floor($(rows[0]).find("td").eq(0).width()), Math.floor($(rows[1]).find("td").eq(0).width()), "widths are equal");
     assert.notOk($(".dx-command-edit").eq(1).hasClass("dx-hidden-cell"), "cell does not have class dx-hidden-cell");
 });
 
@@ -3755,6 +3755,36 @@ QUnit.test("Focused row should not be visible after scrolling if scrolling mode 
     assert.equal(dataGrid.getVisibleRows()[0].key, 56, "First visible row key");
     assert.equal(dataGrid.getRowIndexByKey(1), -1, "Focused row is not visible");
     assert.equal(dataGrid.getScrollable().scrollTop(), 2000, "Scroll position is not changed");
+});
+
+// T804082
+QUnit.test("Row should be focused after click on readonly cell if editor is opened", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{ id: 1, field: "some1" }, { id: 2, field: "some2" }],
+        keyExpr: "id",
+        editing: {
+            enabled: true,
+            mode: "cell",
+            allowUpdating: true
+        },
+        focusedRowEnabled: true,
+        columns: [{
+            dataField: "id",
+            allowEditing: false,
+        }, "field"]
+    }).dxDataGrid("instance");
+
+    // act
+    $(dataGrid.getCellElement(0, 1)).trigger("dxpointerdown");
+    dataGrid.editCell(0, 1);
+    $(dataGrid.getCellElement(1, 0)).trigger("dxpointerdown");
+
+    // assert
+    assert.equal(dataGrid.option("focusedRowIndex"), 1, "focusedRowIndex");
+    assert.equal(dataGrid.option("focusedRowKey"), 2, "focusedRowKey");
+    assert.ok($(dataGrid.getRowElement(1)).hasClass("dx-row-focused"), "Focused row");
 });
 
 QUnit.test("Should navigate to the focused row by focusedRowIndex in virtual scrolling mode if corresponding page is not loaded (T733748)", function(assert) {
@@ -6132,6 +6162,26 @@ QUnit.test("empty selection should be restored from state storing if selectedRow
     // assert
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [], "selectedRowKeys");
     assert.deepEqual(dataGrid.getSelectedRowsData(), [], "getSelectedRowsData result");
+});
+
+QUnit.test("assign null to selectedRowKeys option unselect selected items", function(assert) {
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{
+            "id": 1,
+        }, {
+            "id": 2,
+        }],
+        keyExpr: "id",
+        selectedRowKeys: [1]
+    });
+
+    // act
+    dataGrid.option("selectedRowKeys", null);
+
+    // assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [], "zero items are selected");
+    assert.deepEqual(dataGrid.option("selectedRowKeys"), [], "empty array in option");
 });
 
 // T268912

@@ -175,7 +175,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             focusedViewElement = data.view && data.view.element(),
             isEditingCell = $target.hasClass(EDITOR_CELL_CLASS);
 
-        if(this._isEventInCurrentGrid(event) && this._isCellValid($target)) {
+        if(this._isEventInCurrentGrid(event) && this._isCellValid($target, true)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
 
@@ -416,7 +416,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
 
-    _isCellValid: function($cell) {
+    _isCellValid: function($cell, isClick) {
         if(isElementDefined($cell)) {
             var rowsView = this.getView("rowsView"),
                 $row = $cell.parent(),
@@ -461,7 +461,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     return false;
                 }
 
-                return !isEditing || column.allowEditing;
+                return !isEditing || column.allowEditing || isClick;
             }
         }
     },
@@ -1635,7 +1635,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanging: function(eventArgs, $newFocusedRow) {
         var newRowIndex = this._getRowIndex($newFocusedRow),
             dataController = this.getController("data"),
-            prevFocusedRowIndex = this.getVisibleRowIndex(),
+            prevFocusedRowIndex = this.option("focusedRowIndex"),
             loadingOperationTypes = dataController.loadingOperationTypes(),
             args = {
                 rowElement: $newFocusedRow,

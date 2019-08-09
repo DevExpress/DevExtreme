@@ -50,6 +50,85 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
         }
     ];
 
+    test("Tooltip marker should be color up in resource color", function(assert) {
+        const views = ["workWeek", "month"];
+
+        const data = [
+            {
+                text: "Book Flights to San Fran for Sales Trip",
+                priorityId: 1,
+                startDate: new Date(2017, 4, 22, 12, 0),
+                endDate: new Date(2017, 4, 22, 13, 0)
+            }, {
+                text: "Install New Router in Dev Room",
+                priorityId: 2,
+                startDate: new Date(2017, 4, 23, 14, 30),
+                endDate: new Date(2017, 4, 23, 15, 30)
+            }, {
+                text: "Website Re-Design Plan",
+                priorityId: 3,
+                startDate: new Date(2017, 4, 24, 9, 30),
+                endDate: new Date(2017, 4, 24, 11, 30)
+            }, {
+                text: "Approve Personal Computer Upgrade Plan",
+                priorityId: 4,
+                startDate: new Date(2017, 4, 25, 10, 0),
+                endDate: new Date(2017, 4, 25, 11, 0)
+            }
+        ];
+
+        const priorities = [
+            {
+                text: "Samantha Bright",
+                id: 1,
+                color: "rgb(114, 123, 210)"
+            }, {
+                text: "John Heart",
+                id: 2,
+                color: "rgb(50, 201, 237)"
+            }, {
+                text: "Todd Hoffman",
+                id: 3,
+                color: "rgb(42, 126, 228)"
+            }, {
+                text: "Sandra Johnson",
+                id: 4,
+                color: "rgb(128, 193, 42)"
+            }
+        ];
+
+        const scheduler = createScheduler({
+            dataSource: data,
+            views: views,
+            currentDate: new Date(2017, 4, 22),
+            startDayHour: 9,
+            endDayHour: 19,
+            width: 500,
+            height: 600,
+            resources: [
+                {
+                    fieldExpr: "priorityId",
+                    allowMultiple: true,
+                    dataSource: priorities,
+                    label: "Priority"
+                }
+            ]
+        });
+
+        scheduler.drawControl();
+
+        views.forEach(view => {
+            scheduler.option("currentView", view);
+
+            scheduler.appointments.getAppointments().each(index => {
+                scheduler.appointments.click(index);
+
+                const marker = scheduler.tooltip.getMarker();
+                assert.equal(marker.css('backgroundColor'), priorities[index].color, `marker color in tooltip should equal color in resource, ${view} view`);
+            });
+        });
+    });
+
     test("After change view type, tooltip should be appear after click on appointment, group mode(T802158)", function(assert) {
         const data = [
             {
