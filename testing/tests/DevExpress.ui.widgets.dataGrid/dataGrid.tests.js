@@ -6134,6 +6134,26 @@ QUnit.test("empty selection should be restored from state storing if selectedRow
     assert.deepEqual(dataGrid.getSelectedRowsData(), [], "getSelectedRowsData result");
 });
 
+QUnit.test("assign null to selectedRowKeys option unselect selected items", function(assert) {
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{
+            "id": 1,
+        }, {
+            "id": 2,
+        }],
+        keyExpr: "id",
+        selectedRowKeys: [1]
+    });
+
+    // act
+    dataGrid.option("selectedRowKeys", null);
+
+    // assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), [], "zero items are selected");
+    assert.deepEqual(dataGrid.option("selectedRowKeys"), [], "empty array in option");
+});
+
 // T268912
 QUnit.test("load from remote rest store when remoteOperations false", function(assert) {
     this.clock.restore();

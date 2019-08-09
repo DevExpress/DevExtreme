@@ -304,8 +304,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     args.handled = true;
                     break;
                 case "selectedRowKeys":
-                    if(Array.isArray(args.value) && !that._selectedItemsInternalChange && (that.component.getDataSource() || !args.value.length)) {
-                        that.selectRows(args.value);
+                    var value = args.value || [];
+                    if(Array.isArray(value) && !that._selectedItemsInternalChange && (that.component.getDataSource() || !value.length)) {
+                        that.selectRows(value);
                     }
                     args.handled = true;
                     break;
