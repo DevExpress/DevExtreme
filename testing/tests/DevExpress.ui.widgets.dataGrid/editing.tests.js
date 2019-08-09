@@ -2,6 +2,7 @@ import $ from "jquery";
 import renderer from "core/renderer";
 import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerEvents from "events/pointer";
 
 QUnit.testStart(function() {
     var markup =
@@ -2625,7 +2626,7 @@ QUnit.testInActiveWindow("Focus overlay should not be shown in batch editing mod
     // act
     var $firstCell = $testElement.find("tbody > tr > td").first();
     $firstCell.focus();
-    $firstCell.trigger("dxpointerdown");
+    $firstCell.trigger(pointerEvents.up);
     that.clock.tick();
 
     // assert

@@ -69,6 +69,7 @@ import fx from "animation/fx";
 import config from "core/config";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
+import pointerEvents from "events/pointer";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
 import { ColumnWrapper, FilterPanelWrapper, PagerWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
@@ -3711,7 +3712,7 @@ QUnit.test("onFocusedCellChanged event should contains correct row object if scr
     scrollable.scrollTo({ y: 600 });
     $(scrollable._container()).trigger("scroll");
     this.clock.tick();
-    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.up);
     this.clock.tick();
 
     // assert
@@ -4773,7 +4774,7 @@ QUnit.test("scroll position should not be changed after partial update via repai
 
 
     // act
-    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.up);
     dataGrid.getScrollable().scrollTo({ y: 200 });
     dataGrid.repaintRows(0);
     this.clock.tick();
@@ -4803,7 +4804,7 @@ QUnit.test("scroll position should not be changed after scrolling to end if scro
 
 
     // act
-    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.up);
     dataGrid.getScrollable().scrollTo({ y: 10000 });
     this.clock.tick();
     // assert
@@ -6561,7 +6562,7 @@ QUnit.test("contentReady should not be raised on row click", function(assert) {
     assert.equal(contentReadyCallCount, 1, "one contentReady on start");
 
     // act
-    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.up);
 
     // assert
     assert.ok(dataGrid);
@@ -6607,7 +6608,7 @@ QUnit.test("contentReady should not be raised on row click if focusedRowEnabled"
     assert.equal(contentReadyCallCount, 1, "one contentReady on start");
 
     // act
-    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.up);
 
     // assert
     assert.ok(dataGrid);
@@ -6660,7 +6661,7 @@ QUnit.test("onFocusedRowChanged event should not fire on init if focusedRowEnabl
     assert.equal(focusedRowChangedCallCount, 0, "focusedRowChangedCallCount");
 
     // act
-    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(0, 0)).trigger(pointerEvents.up);
     // assert
     assert.equal(focusedRowChangedCallCount, 1, "focusedRowChangedCallCount");
 });
@@ -6685,7 +6686,7 @@ QUnit.test("Click by the first row on the next page should focus it without grid
     sinon.spy(dataSource, "load");
 
     // act
-    $(dataGrid.getCellElement(2, 1)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(2, 1)).trigger(pointerEvents.up);
 
     // assert
     assert.equal(dataGrid.option("focusedRowIndex"), 2, "focusedRowIndex");
@@ -11914,7 +11915,7 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
         };
 
     // act
-    $(dataGrid.getCellElement(2, 2)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(2, 2)).trigger(pointerEvents.up);
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
@@ -11983,7 +11984,7 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
         };
 
     // act
-    $(dataGrid.getCellElement(1, 1)).trigger("dxpointerdown");
+    $(dataGrid.getCellElement(1, 1)).trigger(pointerEvents.up);
 
     // assert
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
@@ -12106,7 +12107,7 @@ QUnit.test("Click on detail cell with cellIndex more than number of parent grid 
     $(dataGrid.getCellElement(0, 0)).trigger("dxclick");
     this.clock.tick();
 
-    $($(dataGrid.$element()).find("td").eq(14)).trigger("dxpointerdown"); // check that error is not raised
+    $($(dataGrid.$element()).find("td").eq(14)).trigger(pointerEvents.up); // check that error is not raised
 
     assert.ok(dataGrid.getController("keyboardNavigation")._isCellValid($(dataGrid.$element()).find("td").eq(14)), "detail-grid cell with cellIndex greater than number of parent columns causes no errors");
 });
@@ -14632,7 +14633,7 @@ QUnit.test("DataGrid should not paginate to the already loaded page if it is not
     let visibleRow0 = dataGrid.getController("data").getVisibleRows()[0];
     let $row = $(dataGrid.getRowElement(4));
     let $cell = $row.find("td").eq(0);
-    $cell.trigger("dxpointerdown");
+    $cell.trigger(pointerEvents.up);
 
     // assert
     assert.deepEqual(visibleRow0.key, dataGrid.getController("data").getVisibleRows()[0].key, "Compare first visible row");
@@ -16113,7 +16114,7 @@ QUnit.testInActiveWindow("Focus on edited cell after the edit button in command 
     this.clock.tick();
 
     // act
-    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger("dxpointerdown").click();
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger(pointerEvents.up).click();
     this.clock.tick();
 
     // assert
@@ -16143,7 +16144,8 @@ QUnit.test("The edited cell should be closed on click inside another dataGrid", 
     this.clock.tick(100);
 
     // act
-    $(dataGrid1.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid1.getCellElement(0, 0)).trigger(pointerEvents.down);
+    $(dataGrid1.getCellElement(0, 0)).trigger(pointerEvents.up);
     $(dataGrid1.getCellElement(0, 0)).trigger("dxclick");
     this.clock.tick(100);
 
@@ -16151,7 +16153,8 @@ QUnit.test("The edited cell should be closed on click inside another dataGrid", 
     assert.ok($(dataGrid1.getCellElement(0, 0)).find("input").length > 0, "has input");
 
     // act
-    $(dataGrid2.getCellElement(0, 0)).trigger("dxpointerdown");
+    $(dataGrid2.getCellElement(0, 0)).trigger(pointerEvents.down);
+    $(dataGrid2.getCellElement(0, 0)).trigger(pointerEvents.up);
     $(dataGrid2.getCellElement(0, 0)).trigger("dxclick");
     this.clock.tick(100);
 
