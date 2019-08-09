@@ -58,10 +58,14 @@ const moduleConfig = {
     }
 };
 
+const ShowMoreButtonText = "\u22EE";
+
 const getFileSizeCellValueInDetailsView = ($element, rowIndex) => getCellValueInDetailsView($element, rowIndex, 4);
 
 const getCellValueInDetailsView = ($element, rowIndex, columnIndex) => {
-    return getCellInDetailsView($element, rowIndex, columnIndex).text();
+    return getCellInDetailsView($element, rowIndex, columnIndex)
+        .text()
+        .replace(ShowMoreButtonText, "");
 };
 
 const getCellInDetailsView = ($element, rowIndex, columnIndex) => {
@@ -141,6 +145,37 @@ QUnit.module("Details View", moduleConfig, () => {
         getCellInDetailsView(this.$element, 1, 2).trigger("dxdblclick");
         this.clock.tick(800);
         assert.equal(eventCounter, 1);
+    });
+
+    test("Apply sorting by click on file type column header", function(assert) {
+        const columnHeader = this.$element.find("[id*=dx-col]").first();
+
+        assert.equal(columnHeader.attr("aria-sort"), "none", "sorting default");
+
+        columnHeader.trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(getCellValueInDetailsView(this.$element, 1, 2), "1.txt");
+        assert.equal(getCellValueInDetailsView(this.$element, 2, 2), "2.txt");
+        assert.equal(getCellValueInDetailsView(this.$element, 3, 2), "3.txt");
+        assert.equal(getCellValueInDetailsView(this.$element, 4, 2), "4.txt");
+        assert.equal(getCellValueInDetailsView(this.$element, 5, 2), "Folder 1", "sorted ascending");
+
+        columnHeader.trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(getCellValueInDetailsView(this.$element, 1, 2), "Folder 1");
+        assert.equal(getCellValueInDetailsView(this.$element, 2, 2), "1.txt");
+        assert.equal(getCellValueInDetailsView(this.$element, 3, 2), "2.txt");
+        assert.equal(getCellValueInDetailsView(this.$element, 4, 2), "3.txt");
+        assert.equal(getCellValueInDetailsView(this.$element, 5, 2), "4.txt", "sorted descending");
+
+        var e = $.Event("click");
+        e.ctrlKey = true;
+        columnHeader.trigger(e);
+        this.clock.tick(400);
+
+        assert.equal(columnHeader.attr("aria-sort"), "none", "sorting default");
     });
 
 });
