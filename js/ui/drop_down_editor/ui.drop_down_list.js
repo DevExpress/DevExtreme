@@ -579,6 +579,7 @@ var DropDownList = DropDownEditor.inherit({
 
         this._setAriaTargetForList();
         this._list.option("_listAttributes", { "role": "combobox" });
+        this.setArea("controls", this._listId);
 
         this._renderPreventBlur(this._$list);
     },
