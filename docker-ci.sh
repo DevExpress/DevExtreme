@@ -49,9 +49,6 @@ function run_test {
     npm i
     npm run build
 
-    # See https://github.com/DevExpress/DevExtreme/pull/1251
-    chmod 755 $(find dotnet_packages -type d)
-
     dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
     while ! httping -qc1 $url; do
