@@ -55,15 +55,17 @@ function createMainBatch() {
         : (callback) => multiProcess(tasks, callback, true);
 }
 
+function createDefaultBatch() {
+    const tasks = [ 'clean', 'localization', createMainBatch() ];
+    if(!QUNIT_CI) {
+        tasks.push('npm', 'themebuilder-npm');
+    }
+    return gulp.series(tasks);
+}
+
 gulp.task('common-batch', createCommonBatch());
 gulp.task('style-compiler-batch', createStyleCompilerBatch());
 
-gulp.task('default', gulp.series(
-    'clean',
-    'localization',
-    createMainBatch(),
-    'npm',
-    'themebuilder-npm'
-));
+gulp.task('default', createDefaultBatch());
 
 gulp.task('dev', gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev'));
