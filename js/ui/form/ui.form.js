@@ -9,7 +9,6 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     stringUtils = require("../../core/utils/string"),
-    errors = require("../widget/ui.errors"),
     browser = require("../../core/utils/browser"),
     domUtils = require("../../core/utils/dom"),
     messageLocalization = require("../../localization/message"),
@@ -814,6 +813,7 @@ var Form = Widget.inherit({
     },
 
     _initMarkup: function() {
+        ValidationEngine.addGroup(this._getValidationGroup());
         this._clearCachedInstances();
         this._prepareFormData();
         this.$element().addClass(FORM_CLASS);
@@ -1236,6 +1236,10 @@ var Form = Widget.inherit({
                     domUtils.triggerShownEvent(this.$element());
                 }
                 break;
+            case "validationGroup":
+                ValidationEngine.removeGroup(args.previousValue || this);
+                this._invalidate();
+                break;
             default:
                 this.callBase(args);
         }
@@ -1600,6 +1604,11 @@ var Form = Widget.inherit({
         }
     },
 
+    _dispose: function() {
+        ValidationEngine.removeGroup(this._getValidationGroup());
+        this.callBase();
+    },
+
     /**
      * @name dxFormMethods.resetValues
      * @publicName resetValues()
@@ -1711,11 +1720,7 @@ var Form = Widget.inherit({
      * @return dxValidationGroupResult
      */
     validate: function() {
-        try {
-            return ValidationEngine.validateGroup(this._getValidationGroup());
-        } catch(e) {
-            errors.log("E1036", e.message);
-        }
+        return ValidationEngine.validateGroup(this._getValidationGroup());
     },
 
     getItemID: function(name) {
