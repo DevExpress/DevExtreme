@@ -1,5 +1,4 @@
 import $ from "jquery";
-import browser from "core/utils/browser";
 import { QUnitTestIfSupported, checkScrollableSizes } from '../../../helpers/scrollableTestsHelper.js';
 
 import "ui/tree_view";
@@ -9,20 +8,43 @@ import "ui/responsive_box";
 import "common.css!";
 
 const TREEVIEW_ID = "treeView_id";
-const PLACEMENT_STANDALONE = PLACEMENT_STANDALONE;
-const PLACEMENT_INSIDE_BOX = PLACEMENT_INSIDE_BOX;
-const PLACEMENT_INSIDE_RESPONSIVE_BOX = PLACEMENT_INSIDE_RESPONSIVE_BOX;
-const manyExpandedItems = [{
-    text: "1", expanded: true,
+const PLACEMENT_STANDALONE = "standalone";
+const PLACEMENT_INSIDE_BOX = "insideBox";
+const PLACEMENT_INSIDE_RESPONSIVE_BOX = "insideResponsiveBox";
+
+const fewItems = [{ text: "item 1" }, { text: "item 2" }];
+const itemsOverflowX = [{
+    text: "1111", expanded: true,
     items: [{
-        text: "1_1", expanded: true,
+        text: "1111_1111"
+    }]
+}];
+
+const itemsOverflowY = [{
+    text: "a", expanded: true,
+    items: [{
+        text: "b", expanded: true,
         items: [{
-            text: "1_1_1", expanded: true,
-            items: [{ text: "1_1_1_1" }]
+            text: "c", expanded: true,
+            items: [{
+                text: "d"
+            }]
         }]
     }]
 }];
-const fewItems = [{ text: "item 1" }, { text: "item 2" }];
+
+const itemsOverflowXY = [{
+    text: "1111", expanded: true,
+    items: [{
+        text: "1111_1111", expanded: true,
+        items: [{
+            text: "1111_1111_1111", expanded: true,
+            items: [
+                { text: "1111_1111_1111_" }
+            ]
+        }]
+    }]
+}];
 
 function appendTreeViewTo(appendToElement, id, items, width, height) {
     const $treeView = $(`<div id="${id}" style="background-color: orange"></div>`);
@@ -49,11 +71,12 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
 () => {
     [PLACEMENT_STANDALONE, PLACEMENT_INSIDE_RESPONSIVE_BOX, PLACEMENT_INSIDE_BOX].forEach(placement => {
 
-        const testContext = `, placement: ${placement}`;
+        const testContext = `placement: ${placement}`;
 
         function appendOneTreeViewTo($appendTo, { id, width, height, items }) {
             if(placement === PLACEMENT_INSIDE_RESPONSIVE_BOX) {
                 $appendTo.dxResponsiveBox({
+                    _layoutStrategy: "flex",
                     width,
                     height,
                     dataSource: [{
@@ -65,6 +88,7 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
                 });
             } else if(placement === PLACEMENT_INSIDE_BOX) {
                 $appendTo.dxBox({
+                    _layoutStrategy: "flex",
                     width,
                     height,
                     direction: "row",
@@ -98,7 +122,8 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
                 containerHeight: 100,
                 containerScrollHeight: 100,
                 nestedElementWidth: 150,
-                nestedElementHeight: [50, 100]
+                nestedElementHeight: [50, 100],
+                useNativeScrolling: true
             });
         });
 
@@ -106,20 +131,21 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
             appendOneTreeViewTo(this.$container, {
                 id: TREEVIEW_ID,
                 width: 75,
-                height: 200,
-                items: manyExpandedItems
+                height: 100,
+                items: itemsOverflowX
             });
 
             checkScrollableSizes(assert, this.$container, {
                 id: TREEVIEW_ID,
                 width: 75,
-                height: 200,
+                height: 100,
                 containerWidth: 75,
                 containerScrollWidth: 75,
-                containerHeight: 200,
-                containerScrollHeight: 200,
+                containerHeight: 100,
+                containerScrollHeight: 100,
                 nestedElementWidth: 75,
-                nestedElementHeight: [100, 150]
+                nestedElementHeight: [50, 90],
+                useNativeScrolling: true
             });
         });
 
@@ -128,7 +154,7 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
                 id: TREEVIEW_ID,
                 width: 75,
                 height: 100,
-                items: manyExpandedItems
+                items: itemsOverflowXY
             });
 
             checkScrollableSizes(assert, this.$container, {
@@ -149,7 +175,7 @@ QUnit.module("Size of one TreeView standalone/inside Box/inside ResponsiveBox", 
                 id: TREEVIEW_ID,
                 width: 200,
                 height: 100,
-                items: manyExpandedItems
+                items: itemsOverflowY
             });
 
             checkScrollableSizes(assert, this.$container, {
@@ -178,10 +204,11 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
 },
 () => {
     [PLACEMENT_INSIDE_BOX, PLACEMENT_INSIDE_RESPONSIVE_BOX].forEach(placement => {
-        const TODO_SKIP_BECAUSE_INCORRECT_SIZE_IN_CHROME = (browser.webkit || browser.mozilla) && (placement === PLACEMENT_INSIDE_RESPONSIVE_BOX);
+        const TODO_SKIP_BECAUSE_INCORRECT_SIZE = (placement === PLACEMENT_INSIDE_RESPONSIVE_BOX);
         const testContext = `[placement: ${placement}]`;
 
         function appendTreeViewsToResponsiveBox($responsiveBox, treeViewItems, responsiveBoxConfig) {
+            responsiveBoxConfig._layoutStrategy = "flex";
             responsiveBoxConfig.itemTemplate = function(data, index, element) {
                 appendTreeViewTo(element, TREEVIEW_ID + index, treeViewItems);
             };
@@ -190,6 +217,7 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
         }
 
         function appendTreeViewsToBox($box, treeViewItems, boxConfig) {
+            boxConfig._layoutStrategy = "flex";
             boxConfig.items = [{ ratio: 1 }, { ratio: 1 }];
             boxConfig.itemTemplate = function(data, index, element) {
                 appendTreeViewTo(element, TREEVIEW_ID + index, treeViewItems);
@@ -225,19 +253,20 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
                 containerHeight: 100,
                 containerScrollHeight: 100,
                 nestedElementWidth: 150,
-                nestedElementHeight: [50, 100]
+                nestedElementHeight: [50, 100],
+                useNativeScrolling: true
             }));
         });
 
         QUnit.test("no content overflow - 2 treeView in col, " + testContext, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
                 appendTreeViewsToBox(this.$container, fewItems, {
-                    width: 100, height: 300,
+                    width: 75, height: 200,
                     direction: "col"
                 });
             } else {
                 appendTreeViewsToResponsiveBox(this.$container, fewItems, {
-                    width: 100, height: 300,
+                    width: 75, height: 200,
                     rows: [{ ratio: 1 }, { ratio: 1 }],
                     cols: [{ ratio: 1 }],
                     dataSource: [
@@ -249,26 +278,27 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
 
             [0, 1].forEach(index => checkScrollableSizes(assert, this.$container, {
                 id: TREEVIEW_ID + index,
-                width: 100,
-                height: 150,
-                containerWidth: 100,
-                containerScrollWidth: 100,
-                containerHeight: 150,
-                containerScrollHeight: 150,
-                nestedElementWidth: 100,
-                nestedElementHeight: [50, 100]
+                width: 75,
+                height: 100,
+                containerWidth: 75,
+                containerScrollWidth: 75,
+                containerHeight: 100,
+                containerScrollHeight: 100,
+                nestedElementWidth: 75,
+                nestedElementHeight: [50, 100],
+                useNativeScrolling: true
             }));
         });
 
-        QUnitTestIfSupported("content overflow_x - 2 treeView in row, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE_IN_CHROME, function(assert) {
+        QUnitTestIfSupported("content overflow_x - 2 treeView in row, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
-                appendTreeViewsToBox(this.$container, manyExpandedItems, {
-                    width: 100, height: 200,
+                appendTreeViewsToBox(this.$container, itemsOverflowX, {
+                    width: 150, height: 100,
                     direction: "row"
                 });
             } else {
-                appendTreeViewsToResponsiveBox(this.$container, manyExpandedItems, {
-                    width: 100, height: 200,
+                appendTreeViewsToResponsiveBox(this.$container, itemsOverflowX, {
+                    width: 150, height: 100,
                     rows: [{ ratio: 1 }],
                     cols: [{ ratio: 1 }, { ratio: 1 }],
                     dataSource: [
@@ -280,26 +310,27 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
 
             [0, 1].forEach(index => checkScrollableSizes(assert, this.$container, {
                 id: TREEVIEW_ID + index,
-                width: 50,
-                height: 200,
-                containerWidth: 50,
-                containerScrollWidth: 50,
-                containerHeight: 200,
-                containerScrollHeight: 200,
-                nestedElementWidth: 50,
-                nestedElementHeight: [100, 150]
+                width: 75,
+                height: 100,
+                containerWidth: 75,
+                containerScrollWidth: 75,
+                containerHeight: 100,
+                containerScrollHeight: 100,
+                nestedElementWidth: 75,
+                nestedElementHeight: [50, 100],
+                useNativeScrolling: true
             }));
         });
 
         QUnit.test("content overflow_x - 2 treeView in col, " + testContext, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
-                appendTreeViewsToBox(this.$container, manyExpandedItems, {
-                    width: 50, height: 400,
+                appendTreeViewsToBox(this.$container, itemsOverflowX, {
+                    width: 75, height: 200,
                     direction: "col"
                 });
             } else {
-                appendTreeViewsToResponsiveBox(this.$container, manyExpandedItems, {
-                    width: 50, height: 400,
+                appendTreeViewsToResponsiveBox(this.$container, itemsOverflowX, {
+                    width: 75, height: 200,
                     rows: [{ ratio: 1 }, { ratio: 1 }],
                     cols: [{ ratio: 1 }],
                     dataSource: [
@@ -311,25 +342,26 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
 
             [0, 1].forEach(index => checkScrollableSizes(assert, this.$container, {
                 id: TREEVIEW_ID + index,
-                width: 50,
-                height: 200,
-                containerWidth: 50,
-                containerScrollWidth: 50,
-                containerHeight: 200,
-                containerScrollHeight: 200,
-                nestedElementWidth: 50,
-                nestedElementHeight: [100, 150]
+                width: 75,
+                height: 100,
+                containerWidth: 75,
+                containerScrollWidth: 75,
+                containerHeight: 100,
+                containerScrollHeight: 100,
+                nestedElementWidth: 75,
+                nestedElementHeight: [50, 100],
+                useNativeScrolling: true
             }));
         });
 
-        QUnitTestIfSupported("content overflow_y - 2 treeView in row, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE_IN_CHROME, function(assert) {
+        QUnitTestIfSupported("content overflow_y - 2 treeView in row, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
-                appendTreeViewsToBox(this.$container, manyExpandedItems, {
+                appendTreeViewsToBox(this.$container, itemsOverflowY, {
                     width: 400, height: 75,
                     direction: "row"
                 });
             } else {
-                appendTreeViewsToResponsiveBox(this.$container, manyExpandedItems, {
+                appendTreeViewsToResponsiveBox(this.$container, itemsOverflowY, {
                     width: 400, height: 75,
                     rows: [{ ratio: 1 }],
                     cols: [{ ratio: 1 }, { ratio: 1 }],
@@ -353,14 +385,14 @@ QUnit.module("Size of two TreeViews inside Box/ResponsiveBox", {
             }));
         });
 
-        QUnitTestIfSupported("content overflow_y - 2 treeView in col, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE_IN_CHROME, function(assert) {
+        QUnitTestIfSupported("content overflow_y - 2 treeView in col, " + testContext, !TODO_SKIP_BECAUSE_INCORRECT_SIZE, function(assert) {
             if(placement === PLACEMENT_INSIDE_BOX) {
-                appendTreeViewsToBox(this.$container, manyExpandedItems, {
+                appendTreeViewsToBox(this.$container, itemsOverflowY, {
                     width: 200, height: 150,
                     direction: "col"
                 });
             } else {
-                appendTreeViewsToResponsiveBox(this.$container, manyExpandedItems, {
+                appendTreeViewsToResponsiveBox(this.$container, itemsOverflowY, {
                     width: 200, height: 150,
                     rows: [{ ratio: 1 }, { ratio: 1 }],
                     cols: [{ ratio: 1 }],
