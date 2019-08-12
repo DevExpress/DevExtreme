@@ -1,7 +1,8 @@
 /* eslint-env node */
 /* eslint-disable no-console */
 
-var gulp = require('gulp');
+const gulp = require('gulp');
+const multiProcess = require('gulp-multi-process');
 
 gulp.task('clean', function(callback) {
     require('del').sync('artifacts');
@@ -20,36 +21,49 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 
+const QUNIT_CI = Boolean(process.env['DEVEXTREME_QUNIT_CI']);
+const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);
 
-if(process.env['DEVEXTREME_QUNIT_CI']) {
-    console.warn("Using QUnit CI mode for gulp default!");
-    gulp.task('default', gulp.series(
-        'clean',
-        'localization',
-        gulp.parallel([
-            'js-bundles-debug',
-            'vectormap',
-            'vendor'
-        ]),
-        'style-compiler-themes'
-    ));
-} else {
-    gulp.task('default', gulp.series(
-        'clean',
-        'localization',
-        gulp.parallel([
-            'js-bundles-debug',
-            'js-bundles-prod',
-            'vectormap',
-            'aspnet',
-            'vendor',
-            'ts'
-        ]),
-        'style-compiler-themes',
-        'style-compiler-tb-assets',
-        'npm',
-        'themebuilder-npm'
-    ));
+if(QUNIT_CI) {
+    console.warn("Using QUnit CI mode!");
 }
+
+function createStyleCompilerBatch() {
+    const tasks = ['style-compiler-themes'];
+    if(!QUNIT_CI) {
+        tasks.push('style-compiler-tb-assets');
+    }
+    return gulp.series(tasks);
+}
+
+function createCommonBatch() {
+    const tasks = ['vectormap', 'vendor'];
+    if(!QUNIT_CI) {
+        tasks.push('aspnet', 'ts');
+    }
+    return gulp.parallel(tasks);
+}
+
+function createMainBatch() {
+    const tasks = ['js-bundles-debug'];
+    if(!QUNIT_CI) {
+        tasks.push('js-bundles-prod');
+    }
+    tasks.push('style-compiler-batch', 'common-batch');
+    return DOCKER_CI
+        ? gulp.parallel(tasks)
+        : (callback) => multiProcess(tasks, callback, true);
+}
+
+gulp.task('common-batch', createCommonBatch());
+gulp.task('style-compiler-batch', createStyleCompilerBatch());
+
+gulp.task('default', gulp.series(
+    'clean',
+    'localization',
+    createMainBatch(),
+    'npm',
+    'themebuilder-npm'
+));
 
 gulp.task('dev', gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev'));

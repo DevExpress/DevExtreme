@@ -411,16 +411,16 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance.option("pageOrientation"), "landscape");
     });
     test("should change pageColor property", (assert) => {
-        assert.equal(this.instance._diagramInstance.model.pageColor, "white");
+        assert.equal(this.instance._diagramInstance.model.pageColor, -1); // FFFFFF
         this.instance.option("pageColor", "red");
-        assert.equal(this.instance._diagramInstance.model.pageColor, "red");
+        assert.equal(this.instance._diagramInstance.model.pageColor, -65536); // FF0000
         this.instance.option("pageColor", "white");
-        assert.equal(this.instance._diagramInstance.model.pageColor, "white");
+        assert.equal(this.instance._diagramInstance.model.pageColor, -1); // FFFFFF
     });
     test("should sync pageColor property", (assert) => {
-        assert.equal(this.instance.option("pageColor"), "white");
+        assert.equal(this.instance.option("pageColor"), "#ffffff");
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageColor).execute("red");
-        assert.equal(this.instance.option("pageColor"), "red");
+        assert.equal(this.instance.option("pageColor"), "#ff0000"); // FF0000
     });
     test("should change simpleView property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.simpleView, false);

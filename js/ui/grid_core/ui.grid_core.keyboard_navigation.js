@@ -173,9 +173,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $target = $(event.currentTarget),
             data = event.data,
             focusedViewElement = data.view && data.view.element(),
-            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS);
+            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS),
+            isInteractiveElement = $(event.target).is(INTERACTIVE_ELEMENTS_SELECTOR);
 
-        if(this._isEventInCurrentGrid(event) && this._isCellValid($target, true)) {
+        if(this._isEventInCurrentGrid(event) && this._isCellValid($target, !isInteractiveElement)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
 
@@ -276,8 +277,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
                         keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
 
-                    eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
-                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), keyboardActionSelector, {
+                    eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickAction);
+                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), keyboardActionSelector, {
                         viewIndex: index,
                         view: view
                     }, clickAction);
