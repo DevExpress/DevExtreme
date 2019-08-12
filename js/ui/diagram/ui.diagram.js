@@ -348,7 +348,7 @@ class Diagram extends Widget {
     _bindDiagramData() {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand, ConnectorLineOption, ConnectorLineEnding } = getDiagram();
         const data = {
             nodeDataSource: this._nodes,
             edgeDataSource: this._edges,
@@ -414,27 +414,108 @@ class Diagram extends Widget {
 
                 getText: this._createOptionGetter("edges.textExpr"),
                 setText: this._createOptionSetter("edges.textExpr"),
-                getLineOption: this._createOptionGetter("edges.lineTypeExpr"),
-                setLineOption: this._createOptionSetter("edges.lineTypeExpr"),
-                getStartLineEnding: this._createOptionGetter("edges.fromLineEndExpr"),
-                setStartLineEnding: this._createOptionSetter("edges.fromLineEndExpr"),
-                getEndLineEnding: this._createOptionGetter("edges.toLineEndExpr"),
-                setEndLineEnding: this._createOptionSetter("edges.toLineEndExpr"),
+                getLineOption: function(obj) {
+                    var getter = this._createOptionGetter("edges.lineTypeExpr");
+                    if(!getter) return;
+
+                    var lineType = getter(obj);
+                    switch(lineType) {
+                        case "straight":
+                            return ConnectorLineOption.Straight;
+                        default:
+                            return ConnectorLineOption.Orthogonal;
+                    }
+                }.bind(this),
+                setLineOption: function(obj, value) {
+                    var setter = this._createOptionSetter("edges.lineTypeExpr");
+                    if(!setter) return;
+
+                    switch(value) {
+                        case ConnectorLineOption.Straight:
+                            value = "straight";
+                            break;
+                        case ConnectorLineOption.Orthogonal:
+                            value = "orthogonal";
+                            break;
+                    }
+                    setter(obj, value);
+                }.bind(this),
+                getStartLineEnding: function(obj) {
+                    var getter = this._createOptionGetter("edges.fromLineEndExpr");
+                    if(!getter) return;
+
+                    var lineType = getter(obj);
+                    switch(lineType) {
+                        case "arrow":
+                            return ConnectorLineEnding.Arrow;
+                        default:
+                            return ConnectorLineEnding.None;
+                    }
+                }.bind(this),
+                setStartLineEnding: function(obj, value) {
+                    var setter = this._createOptionSetter("edges.fromLineEndExpr");
+                    if(!setter) return;
+
+                    switch(value) {
+                        case ConnectorLineEnding.Arrow:
+                            value = "arrow";
+                            break;
+                        case ConnectorLineEnding.None:
+                            value = "none";
+                            break;
+                    }
+                    setter(obj, value);
+                }.bind(this),
+                getEndLineEnding: function(obj) {
+                    var getter = this._createOptionGetter("edges.toLineEndExpr");
+                    if(!getter) return;
+
+                    var lineType = getter(obj);
+                    switch(lineType) {
+                        case "none":
+                            return ConnectorLineEnding.None;
+                        default:
+                            return ConnectorLineEnding.Arrow;
+                    }
+                }.bind(this),
+                setEndLineEnding: function(obj, value) {
+                    var setter = this._createOptionSetter("edges.toLineEndExpr");
+                    if(!setter) return;
+
+                    switch(value) {
+                        case ConnectorLineEnding.Arrow:
+                            value = "arrow";
+                            break;
+                        case ConnectorLineEnding.None:
+                            value = "none";
+                            break;
+                    }
+                    setter(obj, value);
+                }.bind(this)
             },
-            layoutType: this._getDataBindingLayoutType()
+            layoutParameters: this._getDataBindingLayoutParameters()
         };
         this._executeDiagramCommand(DiagramCommand.BindDocument, data);
     }
-    _getDataBindingLayoutType() {
-        const { DataLayoutType } = getDiagram();
-        switch(this.option("nodes.autoLayout")) {
-            case "sugiyama":
-                return DataLayoutType.Sugiyama;
-            case "tree":
-                return DataLayoutType.Tree;
-            default:
-                return undefined;
+    _getDataBindingLayoutParameters() {
+        const { DataLayoutType, DataLayoutOrientation } = getDiagram();
+        let layoutParametersOption = this.option("nodes.autoLayout");
+        if(!layoutParametersOption) return undefined;
+        let parameters = (layoutParametersOption) ? {} : undefined;
+        if(layoutParametersOption) {
+            let layoutType = layoutParametersOption.type || layoutParametersOption;
+            if(layoutType === "tree") {
+                parameters.type = DataLayoutType.Tree;
+            } else if(layoutType === "sugiyama") {
+                parameters.type = DataLayoutType.Sugiyama;
+            }
+            if(layoutParametersOption.orientation === "vertical") {
+                parameters.orientation = DataLayoutOrientation.Vertical;
+            } else if(layoutParametersOption.orientation === "horizontal") {
+                parameters.orientation = DataLayoutOrientation.Horizontal;
+            }
         }
+        return parameters;
     }
     _getAutoZoomValue(option) {
         const { AutoZoomMode } = getDiagram();
@@ -975,8 +1056,16 @@ class Diagram extends Widget {
                 heightExpr: undefined,
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
-                 * @type Enums.DiagramAutoLayout
+                 * @type Enums.DiagramDataLayoutType|Object
                  * @default "tree"
+                 */
+                /**
+                 * @name dxDiagramOptions.nodes.autoLayout.type
+                 * @type Enums.DiagramDataLayoutType
+                 */
+                /**
+                 * @name dxDiagramOptions.nodes.autoLayout.orientation
+                 * @type Enums.DiagramDataLayoutOrientation
                  */
                 autoLayout: "tree"
             },
