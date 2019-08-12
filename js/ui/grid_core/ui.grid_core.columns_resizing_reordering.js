@@ -618,7 +618,6 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         var e = args.event,
             that = e.data,
             columnsSeparatorWidth = that._columnsSeparatorView.width(),
-            columnsSeparatorOffset = that._columnsSeparatorView.element().offset(),
             isNextColumnMode = isNextColumnResizingMode(that),
             deltaX = columnsSeparatorWidth / 2,
             parentOffset = that._$parentContainer.offset(),
@@ -646,7 +645,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
                 that._previousParentOffset = parentOffset;
                 that._isReadyResizing = false;
 
-                if(that._targetPoint && that._targetPoint.y <= eventData.y && (columnsSeparatorOffset.top + that._columnsSeparatorView.height()) >= eventData.y) {
+                if(that._targetPoint) {
                     that._columnsSeparatorView.changeCursor("col-resize");
                     that._columnsSeparatorView.moveByX(that._targetPoint.x - deltaX);
                     that._tablePositionController.update(that._targetPoint.y);
