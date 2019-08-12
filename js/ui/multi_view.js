@@ -229,6 +229,13 @@ const MultiView = CollectionWidget.inherit({
         }
     },
 
+    _beforeItemElementInserted: function(change) {
+        this.callBase.apply(this, arguments);
+        if(this._deferredItems) {
+            this._deferredItems.splice(change.index, 0, null);
+        }
+    },
+
     _executeItemRenderAction: function(index, itemData, itemElement) {
         index = (this.option("items") || []).indexOf(itemData);
         this.callBase(index, itemData, itemElement);
