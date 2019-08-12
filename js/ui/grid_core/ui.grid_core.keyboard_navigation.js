@@ -1855,6 +1855,10 @@ module.exports = {
     extenders: {
         views: {
             rowsView: {
+                _rowClick: function(e) {
+                    this.getController("keyboardNavigation").setCellFocusType();
+                    this.callBase.apply(this, arguments);
+                },
                 renderFocusState: function() {
                     var dataController = this._dataController,
                         rowIndex = this.option("focusedRowIndex") || 0,
