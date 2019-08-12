@@ -45,7 +45,7 @@ class FileManager extends Widget {
 
         this._controller = new FileItemsController({
             currentPath: this.option("currentPath"),
-            rootText: this.option("rootFolderText"),
+            rootText: this.option("rootFolderName"),
             fileProvider: this.option("fileProvider"),
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
@@ -147,7 +147,7 @@ class FileManager extends Widget {
     _createBreadcrumbs($container) {
         const $breadcrumbs = $("<div>").appendTo($container);
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
-            rootFolderDisplayName: this.option("rootFolderText"),
+            rootFolderDisplayName: this.option("rootFolderName"),
             path: "",
             onPathChanged: e => this.setCurrentFolderPath(e.newPath),
             onOutsideClick: () => this._clearSelection()
@@ -327,11 +327,11 @@ class FileManager extends Widget {
             currentPath: "",
 
             /**
-            * @name dxFileManagerOptions.rootFolderText
+            * @name dxFileManagerOptions.rootFolderName
             * @type string
-            * @default messageLocalization.format("dxFileManager-defaultRootFolder")
+            * @default messageLocalization.format("dxFileManager-RootFolderName")
             */
-            rootFolderText: messageLocalization.format("dxFileManager-defaultRootFolder"),
+            rootFolderName: messageLocalization.format("dxFileManager-RootFolderName"),
 
             /**
             * @name dxFileManagerOptions.selectionMode
@@ -460,7 +460,7 @@ class FileManager extends Widget {
             case "itemView":
             case "customizeThumbnail":
             case "customizeDetailColumns":
-            case "rootFolderText":
+            case "rootFolderName":
             case "permissions":
                 this.repaint();
                 break;

@@ -130,21 +130,25 @@ QUnit.module("Navigation operations", moduleConfig, () => {
     });
 
     test("change root file name by public API", function(assert) {
-        var treeViewNode = $(document).find(".dx-treeview-node");
+        let treeViewNode = this.wrapper.getFolderNodes();
         assert.equal(treeViewNode.length, 4, "Everything right on its' place");
 
-        var target = treeViewNode[0].children[0];
-        assert.ok(target.innerText.indexOf("Files") === 0, "Default is correct");
+        let breadcrumbs = this.wrapper.getBreadcrumbsPath();
+        let target = this.wrapper.getFolderNodeText(0);
+        assert.equal(breadcrumbs, "Files", "Default breadcrumbs text is correct");
+        assert.equal(target, "Files", "Default is correct");
 
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
-        fileManagerInstance.option("rootFolderText", "TestRFN");
+        fileManagerInstance.option("rootFolderName", "TestRFN");
         this.clock.tick(400);
 
-        treeViewNode = $(document).find(".dx-treeview-node");
+        treeViewNode = this.wrapper.getFolderNodes();
         assert.equal(treeViewNode.length, 4, "Everything right on its' place");
 
-        target = treeViewNode[0].children[0];
-        assert.ok(target.innerText.indexOf("TestRFN") === 0, "Custom is correct");
+        breadcrumbs = this.wrapper.getBreadcrumbsPath();
+        target = this.wrapper.getFolderNodeText(0);
+        assert.equal(breadcrumbs, "TestRFN", "Custom breadcrumbs text is correct");
+        assert.equal(target, "TestRFN", "Custom is correct");
     });
 
 });

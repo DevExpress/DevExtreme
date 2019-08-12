@@ -2004,7 +2004,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.gridSize */
         gridSize?: number | { items?: Array<number>, value?: number };
         /** @name dxDiagram.Options.nodes */
-        nodes?: { autoLayout?: 'off' | 'tree' | 'sugiyama', dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
+        nodes?: { autoLayout?: 'off' | 'tree' | 'sugiyama' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'sugiyama' }, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onDataChanged */
         onDataChanged?: ((e: any) => any);
         /** @name dxDiagram.Options.pageColor */
@@ -2320,8 +2320,8 @@ declare module DevExpress.ui {
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
         permissions?: { copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
-        /** @name dxFileManager.Options.rootFolderText */
-        rootFolderText?: string;
+        /** @name dxFileManager.Options.rootFolderName */
+        rootFolderName?: string;
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
     }
@@ -6236,6 +6236,15 @@ declare module DevExpress.viz {
         /** @name VectorMapLegendItem.visible */
         visible?: boolean;
     }
+    /** @name VectorMapProjectionConfig */
+    export interface VectorMapProjectionConfig {
+        /** @name VectorMapProjectionConfig.aspectRatio */
+        aspectRatio?: number;
+        /** @name VectorMapProjectionConfig.from */
+        from?: ((coordinates: Array<number>) => Array<number>);
+        /** @name VectorMapProjectionConfig.to */
+        to?: ((coordinates: Array<number>) => Array<number>);
+    }
     /** @name VizRange */
     export interface VizRange {
         /** @name VizRange.endValue */
@@ -8191,6 +8200,8 @@ declare module DevExpress.viz {
     export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
         /** @name dxPieChart.Options.adaptiveLayout */
         adaptiveLayout?: dxPieChartAdaptiveLayout;
+        /** @name dxPieChart.Options.centerTemplate */
+        centerTemplate?: DevExpress.core.template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxPieChart.Options.commonSeriesSettings */
         commonSeriesSettings?: any;
         /** @name dxPieChart.Options.diameter */
@@ -8240,6 +8251,8 @@ declare module DevExpress.viz {
     export class dxPieChart extends BaseChart {
         constructor(element: Element, options?: dxPieChartOptions)
         constructor(element: JQuery, options?: dxPieChartOptions)
+        /** @name dxPieChart.getInnerRadius() */
+        getInnerRadius(): number;
     }
     /** @name dxPieChartSeriesTypes */
     export interface dxPieChartSeriesTypes {
@@ -9158,7 +9171,7 @@ declare module DevExpress.viz {
         /** @name dxVectorMap.Options.panningEnabled */
         panningEnabled?: boolean;
         /** @name dxVectorMap.Options.projection */
-        projection?: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | DevExpress.viz.map.VectorMapProjectionConfig | string | any;
+        projection?: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | VectorMapProjectionConfig | string | any;
         /** @name dxVectorMap.Options.tooltip */
         tooltip?: dxVectorMapTooltip;
         /** @name dxVectorMap.Options.touchEnabled */
@@ -9669,19 +9682,6 @@ declare module DevExpress.exporter {
         underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
     }
 }
-declare module DevExpress.viz.map {
-    /** @name VectorMapProjectionConfig */
-    export interface VectorMapProjectionConfig {
-        /** @name VectorMapProjectionConfig.aspectRatio */
-        aspectRatio?: number;
-        /** @name VectorMapProjectionConfig.from */
-        from?: ((coordinates: Array<number>) => Array<number>);
-        /** @name VectorMapProjectionConfig.to */
-        to?: ((coordinates: Array<number>) => Array<number>);
-    }
-    /** @name viz.map.projection(data) */
-    export function projection(data: VectorMapProjectionConfig): any;
-}
 declare module DevExpress.data.utils {
     /** @name Utils.compileGetter(expr) */
     export function compileGetter(expr: string | Array<string>): Function;
@@ -9747,6 +9747,10 @@ declare module DevExpress.utils {
     export function initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;
     /** @name utils.requestAnimationFrame(callback) */
     export function requestAnimationFrame(callback: Function): number;
+}
+declare module DevExpress.viz.map {
+    /** @name viz.map.projection(data) */
+    export function projection(data: VectorMapProjectionConfig): any;
 }
 declare module DevExpress.viz.map.projection {
     /** @name viz.map.projection.add(name, projection) */

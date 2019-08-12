@@ -122,3 +122,25 @@ var legendItem = {
     */
     visible: true
 };
+
+/**
+* @name VectorMapProjectionConfig
+* @type object
+*/
+/**
+* @name VectorMapProjectionConfig.to
+* @type function
+* @type_function_param1 coordinates:Array<number>
+* @return Array<number>
+*/
+/**
+* @name VectorMapProjectionConfig.from
+* @type function
+* @type_function_param1 coordinates:Array<number>
+* @return Array<number>
+*/
+/**
+* @name VectorMapProjectionConfig.aspectRatio
+* @type number
+* @default 1
+*/

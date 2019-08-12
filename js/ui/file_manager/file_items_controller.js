@@ -339,12 +339,7 @@ export default class FileItemsController {
 
     _createRootDirectory(text) {
         let root = new FileManagerRootItem();
-        if(text) {
-            root.name = text;
-        }
-        if(text === "") {
-            root.name = text;
-        }
+        root.name = text || "";
         return root;
     }
 
