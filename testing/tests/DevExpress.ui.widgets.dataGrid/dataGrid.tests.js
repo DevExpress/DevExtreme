@@ -12179,6 +12179,41 @@ QUnit.test("Should update grid after error row rendered (T755293)", function(ass
     assert.equal(eventArray[2], "onContentReady", "onContentReady event fired after closing error row");
 });
 
+// T804060
+QUnit.test("contentReady event should be fired after error during update", function(assert) {
+    // arrange act
+    var eventArray = [],
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            columns: [{ dataField: "id", fixed: true }, { dataField: "name" }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            dataSource: {
+                load: function() {
+                    return [{ id: 1, name: "test" }];
+                },
+                update: function() {
+                    return $.Deferred().reject('Update error');
+                }
+            },
+            onDataErrorOccurred: () => eventArray.push("onDataErrorOccurred"),
+            onContentReady: () => eventArray.push("onContentReady")
+        });
+
+    dataGrid.editCell(0, 1);
+    dataGrid.cellValue(0, 1, "updated");
+
+    eventArray = [];
+
+    // act
+    dataGrid.saveEditData();
+
+    // assert
+    assert.deepEqual(eventArray, ["onDataErrorOccurred", "onContentReady"], "onContentReady fired after onDataErrorOccurred");
+});
+
 // T607490
 QUnit.test("Scrollable should be updated after expand master detail row with nested DataGrid", function(assert) {
     // arrange
