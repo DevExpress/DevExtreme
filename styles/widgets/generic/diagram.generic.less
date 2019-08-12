@@ -7,8 +7,8 @@
     .dxdi-control .dxdi-canvas {
         background-color: darken(@overlay-content-bg, 15%);
 
-        .dxdi-main .shape .image {
-            .spinner {
+        .dxdi-main .dxdi-image {
+            .dxdi-spinner {
                 path {
                     stroke: @diagram-image-icon-accent-color;
                     stroke-opacity: 1;
@@ -20,12 +20,12 @@
                 }
             }
 
-            .user .background {
+            .dxdi-user .dxdi-background {
                 fill: @diagram-image-icon-base-color;
                 opacity: 0.55;
             }
 
-            .warning ellipse {
+            .dxdi-warning ellipse {
                 fill: @base-danger;
             }
         }
@@ -69,7 +69,7 @@
     .dx-diagram-left-panel {
         border-right-color: @diagram-toolbar-border-color;
 
-        .dxdi-toolbox .dxdi-canvas .toolbox-item .shape-text { // stylelint-disable-line selector-class-pattern
+        .dxdi-toolbox .dxdi-canvas .dxdi-shape-text { // stylelint-disable-line selector-class-pattern
             opacity: @diagram-toolbox-shape-text-opacity;
         }
     }
