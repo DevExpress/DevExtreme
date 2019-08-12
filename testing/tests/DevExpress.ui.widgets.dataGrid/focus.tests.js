@@ -452,6 +452,36 @@ QUnit.testInActiveWindow("onSelectionChanged event should fire if focusedRowEnab
     assert.equal(selectionChangedFiresCount, 1, "selectionChangedFiresCount");
 });
 
+QUnit.testInActiveWindow("Tab key press should work correctly on new row if focusedRowEnabled (T803763)", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+    this.options = {
+        keyExpr: "name",
+        editing: {
+            allowAdding: true,
+            mode: 'cell'
+        },
+        focusedRowEnabled: true
+    };
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+    this.addRow();
+    this.clock.tick();
+
+    // act
+    this.triggerKeyDown("tab", false, false, $(this.getCellElement(0, 0)));
+
+    // assert
+    var keyboardController = this.getController("keyboardNavigation");
+    assert.ok(keyboardController.isCellFocusType(), "Cell focus type");
+    assert.equal(keyboardController.getVisibleRowIndex(), 0, "Focused row index");
+    assert.equal(keyboardController.getFocusedColumnIndex(), 1, "Focused column index");
+});
+
 QUnit.testInActiveWindow("Tab key before rows view should focus the first row", function(assert) {
     var that = this,
         rowsView;
