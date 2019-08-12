@@ -346,7 +346,13 @@ var dxChart = {
         * @type string
         * @default undefined
         */
-        name: undefined
+        name: undefined,
+        /**
+        * @name dxChartOptions.panes.height
+        * @type number|string
+        * @default undefined
+        */
+        height: undefined
     }],
     /**
     * @name dxChartOptions.dataPrepareSettings

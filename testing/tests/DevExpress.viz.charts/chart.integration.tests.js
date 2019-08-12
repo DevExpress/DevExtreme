@@ -10,6 +10,7 @@ import dxPolarChart from "viz/polar_chart";
 import baseChartModule from "viz/chart_components/base_chart";
 import { setupSeriesFamily } from "../../helpers/chartMocks.js";
 import pointerMock from "../../helpers/pointerMock.js";
+import vizUtils from "viz/core/utils.js";
 
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -26,7 +27,7 @@ var chartContainerCounter = 1,
     moduleSetup = {
         beforeEach: function() {
             containerName = "chartContainer" + chartContainerCounter;
-            this.$container = $('<div id="" + containerName + "" style="width: 600px;height:400px;"></div>');
+            this.$container = $('<div id="' + containerName + '" style="width: 600px;height:400px;"></div>');
             $("#container").append(this.$container);
             chartContainerCounter++;
             executeAsyncMock.setup();
@@ -59,6 +60,27 @@ function createChartInstance(options, chartContainer) {
 }
 
 QUnit.module("dxChart", moduleSetup);
+
+QUnit.test("Check existing properties in styles", function(assert) {
+    this.$container.addClass("chart");
+
+    var style = $(`<style>
+        #${this.$container.attr('id')}{
+            width: 1000px;
+        }
+        .chart {
+            height: 600px;
+        }
+    </style>`);
+
+    style.appendTo("head");
+
+    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], "height"));
+    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], "width"));
+    assert.notOk(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], "position"));
+
+    style.remove();
+});
 
 QUnit.test("T244164", function(assert) {
     var chart = this.createChart({});

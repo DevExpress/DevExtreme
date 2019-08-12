@@ -625,8 +625,7 @@ var BaseChart = BaseWidget.inherit({
         recreateCanvas = drawOptions.recreateCanvas;
 
         // T207665
-        that.__originalCanvas = that._canvas;
-        that._canvas = extend({}, that._canvas); // NOTE: Instance of the original canvas must be preserved
+        that._preserveOriginalCanvas();
 
         // T207665
         if(recreateCanvas) {
@@ -649,6 +648,11 @@ var BaseChart = BaseWidget.inherit({
         that._renderElements(drawOptions);
 
         that._lastRenderingTime = new Date() - startTime;
+    },
+
+    _preserveOriginalCanvas() {
+        this.__originalCanvas = this._canvas;
+        this._canvas = extend({}, this._canvas); // NOTE: Instance of the original canvas must be preserved
     },
 
     _layoutAxes: noop,

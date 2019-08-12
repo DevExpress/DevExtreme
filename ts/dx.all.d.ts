@@ -6923,6 +6923,8 @@ declare module DevExpress.viz {
     }
     /** @name dxChart.Options.panes */
     export interface dxChartPanes extends dxChartCommonPaneSettings {
+        /** @name dxChart.Options.panes.height */
+        height?: number | string;
         /** @name dxChart.Options.panes.name */
         name?: string;
     }

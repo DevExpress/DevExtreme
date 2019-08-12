@@ -261,7 +261,7 @@ function performActionOnAxes(axes, action, actionArgument1, actionArgument2, act
     });
 }
 
-function shrinkCanvases(isRotated, canvases, verticalMargins, horizontalMargins) {
+function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalMargins) {
     function getMargin(side, margins, pane) {
         var m = (isRotated ? ["left", "right"] : ["top", "bottom"]).indexOf(side) === -1 ? margins : (margins.panes[pane] || {});
         return m[side];
@@ -284,30 +284,26 @@ function shrinkCanvases(isRotated, canvases, verticalMargins, horizontalMargins)
 
         const firstPane = canvases[paneNames[0]];
 
-        const weights = paneNames.map((paneName) => {
-            const canvas = canvases[paneName];
-            const size = canvas[sizeField] - canvas[startMargin] - canvas[endMargin];
-            return size / canvas[sizeField];
-        });
-
-        const weightSum = weights.reduce((sum, weight) => sum += weight);
-        const normalizedWeights = weights.map(w => w / weightSum);
-
-        const emptySpace = paneNames.reduce((space, paneName) => {
+        let emptySpace = paneNames.reduce((space, paneName) => {
             space -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, paneName) + getMaxMargin(endMargin, verticalMargins, horizontalMargins, paneName);
             return space;
         }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - canvases[paneNames[paneNames.length - 1]][getOriginalField(startMargin)]) - vizUtils.PANE_PADDING * (paneNames.length - 1);
 
-        paneNames.reduce((offset, pane, index) => {
+        const totalCustomSpace = Object.keys(sizes).reduce((prev, key) => prev + (sizes[key].unit ? sizes[key].height : 0), 0);
+        emptySpace -= totalCustomSpace;
+
+        paneNames.reduce((offset, pane) => {
             const canvas = canvases[pane];
+            const paneSize = sizes[pane];
+
             offset -= getMaxMargin(endMargin, verticalMargins, horizontalMargins, pane);
             canvas[endMargin] = firstPane[sizeField] - offset;
-            offset -= Math.floor(emptySpace * normalizedWeights[index]);
+            offset -= paneSize.unit ? paneSize.height : Math.floor(emptySpace * paneSize.height);
             canvas[startMargin] = offset;
             offset -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, pane) + vizUtils.PANE_PADDING;
 
             return offset;
-        }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)]);
+        }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - (emptySpace < 0 ? emptySpace : 0));
     }
 
     const paneNames = Object.keys(canvases);
@@ -775,6 +771,10 @@ var dxChart = AdvancedChart.inherit({
         vizUtils.updatePanesCanvases(this.panes, this._canvas, this._isRotated());
     },
 
+    _normalizePanesHeight: function() {
+        vizUtils.normalizePanesHeight(this.panes);
+    },
+
     _renderScaleBreaks: function() {
         this._valueAxes.concat(this._argumentAxes).forEach(function(axis) {
             axis.drawScaleBreaks();
@@ -913,14 +913,21 @@ var dxChart = AdvancedChart.inherit({
             horizontalAxes = rotated ? that._valueAxes : extendedArgAxes,
             allAxes = verticalAxes.concat(horizontalAxes);
 
+        that._normalizePanesHeight();
         that._updatePanesCanvases(drawOptions);
 
         var panesCanvases = that.panes.reduce(function(canvases, pane) {
                 canvases[pane.name] = _extend({}, pane.canvas);
                 return canvases;
             }, {}),
+            paneSizes = that.panes.reduce((sizes, pane) => {
+                sizes[pane.name] = {
+                    height: pane.height,
+                    unit: pane.unit
+                };
+                return sizes;
+            }, {}),
             cleanPanesCanvases = _extend(true, {}, panesCanvases);
-
 
         if(!drawOptions.adjustAxes) {
             drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
@@ -936,15 +943,15 @@ var dxChart = AdvancedChart.inherit({
 
         var vAxesMargins = { panes: {} },
             hAxesMargins = getHorizontalAxesMargins(horizontalAxes, axis => axis.estimateMargins(panesCanvases[axis.pane]));
-        panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
+        panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
         drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
         vAxesMargins = getVerticalAxesMargins(verticalAxes);
-        panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
+        panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
         drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
         hAxesMargins = getHorizontalAxesMargins(horizontalAxes, getAxisMargins);
-        panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
+        panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
         let oldTitlesWidth = calculateTitlesWidth(verticalAxes);
 
@@ -975,7 +982,7 @@ var dxChart = AdvancedChart.inherit({
                     that.panes.forEach(({ name }) => vAxesMargins.panes[name].left += offset);
                 }
 
-                panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
+                panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, vAxesMargins, hAxesMargins);
 
                 performActionOnAxes(allAxes, "updateSize", panesCanvases, false, false);
                 oldTitlesWidth = calculateTitlesWidth(verticalAxes);
@@ -985,17 +992,59 @@ var dxChart = AdvancedChart.inherit({
         return cleanPanesCanvases;
     },
 
-    _shrinkAxes: function(sizeShortage, panesCanvases) {
+    checkForMoreSpaceForPanesCanvas() {
+        const that = this;
+        const rotated = that._isRotated();
+        const needSpaceForAdaptiveLayout = that.layoutManager.needMoreSpaceForPanesCanvas(that._getLayoutTargets(), rotated);
+        const panesAreCustomSized = that.panes.filter(p => p.unit).length === that.panes.length;
+        let needHorizontalSpace = !panesAreCustomSized && needSpaceForAdaptiveLayout ? needSpaceForAdaptiveLayout.width : 0;
+        let needVerticalSpace = !panesAreCustomSized && needSpaceForAdaptiveLayout ? needSpaceForAdaptiveLayout.height : 0;
+
+        if(rotated) {
+            const argAxisRightMargin = that.getArgumentAxis().getMargins().right;
+            const rightPanesIndent = Math.min.apply(Math, that.panes.map(p => p.canvas.right));
+            needHorizontalSpace += that._canvas.right + argAxisRightMargin - rightPanesIndent;
+        } else {
+            const argAxisBottomMargin = that.getArgumentAxis().getMargins().bottom;
+            const bottomPanesIndent = Math.min.apply(Math, that.panes.map(p => p.canvas.bottom));
+            needVerticalSpace += that._canvas.bottom + argAxisBottomMargin - bottomPanesIndent;
+        }
+
+        let needSpace = needHorizontalSpace > 0 || needVerticalSpace > 0 ? { width: needHorizontalSpace, height: needVerticalSpace } : false;
+
+        if(panesAreCustomSized && needVerticalSpace !== 0) {
+            const realSize = that.getSize();
+            const customSize = that.option("size");
+            const container = that._$element[0];
+            const containerHasStyledHeight = !!container.style.height || vizUtils.checkElementHasPropertyFromStyleSheet(container, "height");
+
+            if(!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
+                that._forceResize(realSize.width, realSize.height + needVerticalSpace);
+                needSpace = false;
+            }
+        }
+        return needSpace;
+    },
+
+    _forceResize(width, height) {
+        this._renderer.resize(width, height);
+        this._updateSize();
+        this._setContentSize();
+        this._preserveOriginalCanvas();
+        this._updateCanvasClipRect(this._canvas);
+    },
+
+    _shrinkAxes(sizeShortage, panesCanvases) {
         if(!sizeShortage || !panesCanvases) {
             return;
         }
         this._renderer.stopAllAnimations();
-        var that = this,
-            rotated = that._isRotated(),
-            extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes),
-            verticalAxes = rotated ? extendedArgAxes : that._valueAxes,
-            horizontalAxes = rotated ? that._valueAxes : extendedArgAxes,
-            allAxes = verticalAxes.concat(horizontalAxes);
+        const that = this;
+        const rotated = that._isRotated();
+        const extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes);
+        const verticalAxes = rotated ? extendedArgAxes : that._valueAxes;
+        const horizontalAxes = rotated ? that._valueAxes : extendedArgAxes;
+        const allAxes = verticalAxes.concat(horizontalAxes);
 
         if(sizeShortage.width || sizeShortage.height) {
             checkUsedSpace(sizeShortage, "height", horizontalAxes, getHorizontalAxesMargins);
@@ -1003,14 +1052,20 @@ var dxChart = AdvancedChart.inherit({
 
             performActionOnAxes(allAxes, "updateSize", panesCanvases);
 
-            panesCanvases = shrinkCanvases(rotated, panesCanvases, getVerticalAxesMargins(verticalAxes), getHorizontalAxesMargins(horizontalAxes, getAxisMargins));
+            const paneSizes = that.panes.reduce((sizes, pane) => {
+                sizes[pane.name] = {
+                    height: pane.height,
+                    unit: pane.unit
+                };
+                return sizes;
+            }, {});
+
+            panesCanvases = shrinkCanvases(rotated, panesCanvases, paneSizes, getVerticalAxesMargins(verticalAxes), getHorizontalAxesMargins(horizontalAxes, getAxisMargins));
             performActionOnAxes(allAxes, "updateSize", panesCanvases);
             horizontalAxes.forEach(shiftAxis("top", "bottom"));
             verticalAxes.forEach(shiftAxis("left", "right"));
 
-            that.panes.forEach(function(pane) {
-                _extend(pane.canvas, panesCanvases[pane.name]);
-            });
+            that.panes.forEach(pane => _extend(pane.canvas, panesCanvases[pane.name]));
         }
     },
 
