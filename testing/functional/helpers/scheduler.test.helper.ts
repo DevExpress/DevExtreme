@@ -7,8 +7,29 @@ export default class SchedulerTestHelper {
         this.scheduler = Selector(selector);
     }
 
+    enableNativeScroll() {
+        return (ClientFunction(() => {
+            ($(".dx-scheduler-date-table-scrollable") as any).dxScrollable("instance").option("useNative", true);
+        }))();
+    }
+
+    setOption(name: string, value: string) {
+        return (ClientFunction(() => {
+            const instance = ($("#container") as any)["dxScheduler"]("instance");
+            instance.option(name, value);
+        }, { dependencies: { name, value } }))();
+    }
+
     getAppointment(index = 0) {
         return this.scheduler.find(`.dx-scheduler-appointment`).nth(index);
+    }
+
+    getWorkSpaceScroll() {
+        const scrollElement = this.scheduler.find(".dx-scheduler-date-table-scrollable .dx-scrollable-container");
+        return {
+            left: scrollElement.scrollLeft,
+            top: scrollElement.scrollTop
+        };
     }
 
     getAppointmentByTitle(title, index = 0) {
