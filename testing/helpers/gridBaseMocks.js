@@ -1007,6 +1007,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that._resumeDeprecatedWarnings = commonUtils.noop;
 
+        that._optionsByReference = {};
+
         that.dispose = function() {
             $.each(that._controllers, function() {
                 this.dispose && this.dispose();
