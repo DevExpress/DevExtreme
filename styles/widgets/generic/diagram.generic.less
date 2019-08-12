@@ -3,10 +3,34 @@
 
 .dx-diagram {
     border-color: @diagram-border-color;
-
-    .dxdi-control .dxdi-canvas { // stylelint-disable-line selector-class-pattern
+    // stylelint-disable selector-class-pattern
+    .dxdi-control .dxdi-canvas {
         background-color: darken(@overlay-content-bg, 15%);
+
+        .dxdi-main .dxdi-image {
+            .dxdi-spinner {
+                path {
+                    stroke: @diagram-image-icon-accent-color;
+                    stroke-opacity: 1;
+                }
+
+                ellipse {
+                    stroke: @diagram-image-icon-base-color;
+                    stroke-opacity: 0.55;
+                }
+            }
+
+            .dxdi-user .dxdi-background {
+                fill: @diagram-image-icon-base-color;
+                opacity: 0.55;
+            }
+
+            .dxdi-warning ellipse {
+                fill: @base-danger;
+            }
+        }
     }
+    // stylelint-enable selector-class-pattern
 
     .dx-diagram-toolbar-wrapper:first-child {
         border-bottom: 1px solid @diagram-toolbar-border-color;
@@ -44,6 +68,10 @@
 
     .dx-diagram-left-panel {
         border-right-color: @diagram-toolbar-border-color;
+
+        .dxdi-toolbox .dxdi-canvas .dxdi-shape-text { // stylelint-disable-line selector-class-pattern
+            opacity: @diagram-toolbox-shape-text-opacity;
+        }
     }
 
     .dx-diagram-right-panel {
