@@ -1602,27 +1602,29 @@ QUnit.test("Resize columns", function(assert) {
 
 // T804582
 QUnit.test("Cursor should switch style when it was moved to columns separator if grid has only one row and big header panel", function(assert) {
-    $("#dataGrid").dxDataGrid({
-        loadingTimeout: undefined,
-        dataSource: [{}],
-        allowColumnResizing: true,
-        columnChooser: {
-            enabled: true
-        },
-        columns: ["field1", "field2"]
-    });
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{}],
+            allowColumnResizing: true,
+            columnChooser: {
+                enabled: true
+            },
+            columns: ["field1", "field2"]
+        }),
+        headerPanel = dataGrid.find(".dx-datagrid-header-panel"),
+        columnsSeparator = dataGrid.find(".dx-datagrid-columns-separator");
 
-    $("#dataGrid").find(".dx-datagrid-header-panel").css("height", "70px");
+    headerPanel.outerHeight("70px", true);
 
-    $("#dataGrid").find(".dx-datagrid-columns-separator").trigger($.Event("dxpointermove", {
+    columnsSeparator.trigger($.Event("dxpointermove", {
         data: {
             _isResizing: false,
         },
-        pageY: -9929,
-        pageX: -9500
+        pageY: columnsSeparator.offset().top + headerPanel.outerHeight() + 1,
+        pageX: columnsSeparator.offset().left + dataGrid.width() / 2
     }));
 
-    assert.equal($(".dx-datagrid-columns-separator").css("cursor"), "col-resize", "cursor style");
+    assert.equal(columnsSeparator.css("cursor"), "col-resize", "cursor style");
 });
 
 // T757579
