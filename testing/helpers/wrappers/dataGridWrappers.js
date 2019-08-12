@@ -99,6 +99,10 @@ export class FilterRowWrapper extends WrapperBase {
     getTextEditorInput(index) {
         return this.getElement().find(".dx-texteditor-input").eq(index);
     }
+
+    getMenuElement(index) {
+        return this.getElement().find(".dx-editor-cell").eq(index).find(".dx-menu");
+    }
 }
 
 export class HeaderPanelWrapper extends WrapperBase {

@@ -71,7 +71,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
-import { ColumnWrapper, FilterPanelWrapper, PagerWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import { ColumnWrapper, FilterPanelWrapper, PagerWrapper, FilterRowWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -176,6 +176,39 @@ QUnit.test("Accessibility columns id should not set for columns editors (T710132
 
     // assert
     assert.equal($(".dx-texteditor [id]").length, 0, "editors has no accessibility id");
+});
+
+QUnit.test("DataGrid - Should hide filter row menu after losing it's focus", function(assert) {
+    // arrange
+    var filterRowWrapper = new FilterRowWrapper(".dx-datagrid"),
+        $menu,
+        $root,
+        menuInstance,
+        subMenu;
+
+    createDataGrid({
+        filterRow: { visible: true },
+        dataSource: [{ field1: "1", field2: "2" }]
+    });
+    this.clock.tick();
+
+    // act
+    $menu = filterRowWrapper.getMenuElement(0);
+    $menu.focus();
+
+    menuInstance = $menu.dxMenu("instance");
+    $root = $(menuInstance.itemElements().get(0));
+    menuInstance._showSubmenu($root);
+    subMenu = menuInstance._visibleSubmenu;
+
+    // assert
+    assert.ok(subMenu._isVisible(), "submenu exists");
+
+    // act
+    $menu.trigger("blur");
+
+    // assert
+    assert.notOk(subMenu._isVisible(), "submenu is hidden");
 });
 
 QUnit.test("commonColumnOptions", function(assert) {
