@@ -2,25 +2,28 @@ const gulp = require('gulp');
 const path = require('path');
 const fs = require('fs');
 const replace = require('gulp-replace');
-const less = require('gulp-less');
+const replaceAsync = require('gulp-replace-async');
+const gulpLess = require('gulp-less');
+const lessCompiler = require('less');
 const LessAutoPrefix = require('less-plugin-autoprefix');
 
-const context = require('./context.js');
+// const context = require('./context.js');
 const browsersList = require('../../package.json').browserslist;
 const starLicense = require('./header-pipes').starLicense;
 const autoPrefix = new LessAutoPrefix({ browsers: browsersList });
 
 const cssArtifactsPath = path.join(process.cwd(), 'artifacts', 'css');
+const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
 const compileBundle = (src) => {
     return gulp
         .src(src)
-        .pipe(less({
+        .pipe(gulpLess({
             paths: [ path.join(process.cwd(), 'styles') ],
             plugins: [ autoPrefix ],
             useFileCache: true
         }))
-        .pipe(replace(/\s*\/\*[\S\s]*?\*\//g, ''))
+        .pipe(replace(commentsRegex, ''))
         .pipe(starLicense())
         .pipe(gulp.dest(cssArtifactsPath));
 };
@@ -68,53 +71,46 @@ gulp.task('style-compiler-themes-dev', gulp.parallel(() => {
 }));
 
 
-function runStyleCompiler(command, params, callback) {
-    var spawn = require('child_process').spawn;
-    var process = spawn(
-        'dotnet',
-        ['build/style-compiler/bin/style-compiler.dll', command].concat(params),
-        { stdio: 'inherit' }
-    );
+// function runStyleCompiler(command, params, callback) {
+//     var spawn = require('child_process').spawn;
+//     var process = spawn(
+//         'dotnet',
+//         ['build/style-compiler/bin/style-compiler.dll', command].concat(params),
+//         { stdio: 'inherit' }
+//     );
 
-    process.on('exit', function(code) {
-        if(code === 0) {
-            callback();
-        } else {
-            callback('Style compiler failed');
-        }
-    });
-}
+//     process.on('exit', function(code) {
+//         if(code === 0) {
+//             callback();
+//         } else {
+//             callback('Style compiler failed');
+//         }
+//     });
+// }
 
-gulp.task('style-compiler-tb-assets', function(callback) {
-    var assetsPath = path.join(process.cwd(), 'themebuilder');
+// gulp.task('style-compiler-tb-assets', function(callback) {
+//     var assetsPath = path.join(process.cwd(), 'themebuilder');
 
-    runStyleCompiler(
-        'tb-assets', [
-            '--version=' + context.version.package,
-            '--tb-ui-path=' + assetsPath
-        ],
-        callback
-    );
-});
+//     runStyleCompiler(
+//         'tb-assets', [
+//             '--version=' + context.version.package,
+//             '--tb-ui-path=' + assetsPath
+//         ],
+//         callback
+//     );
+// });
 
-gulp.task('style-compiler-tb-assets1', gulp.parallel(() => {
-    const assetsPath = path.join(process.cwd(), 'themebuilder1');
+gulp.task('style-compiler-tb-assets', () => {
+    const assetsPath = path.join(process.cwd(), 'themebuilder', 'data', 'less');
     return gulp.src('styles/**/*')
-        .pipe(gulp.dest(assetsPath));
-}, () => {
-    const assetsPath = path.join(process.cwd(), 'themebuilder1', 'images');
-    return gulp.src('images/**/*')
-        .pipe(gulp.dest(assetsPath));
-}));
-
-gulp.task('style-compiler-tb-assets2', function(callback) {
-    var assetsPath = path.join(process.cwd(), 'themebuilder2');
-
-    return gulp.src('themebuilder1/bundles/generic/dx.light.less')
-        //.pipe(replace(/\(once\)(.*)/g, '(reference)$1\n@import (inline)$1'))
-        // TODO inline images
-        //.pipe(filter(['styles/bundles/generic/*']))
-        .pipe(less({ paths: [ path.join(process.cwd(), 'themebuilder1') ] }))
+        .pipe(replace(commentsRegex, ''))
+        .pipe(replaceAsync(/data-uri\([^)]+\)/g, (match, callback) => {
+            const validCssString = `selector{property:${match[0]};}`;
+            lessCompiler.render(validCssString, { paths: [ path.join(process.cwd(), 'images') ] })
+                .then(
+                    (output) => callback(null, /url\([^)]+\)/.exec(output.css)[0]),
+                    (error) => console.log(error)
+                );
+        }))
         .pipe(gulp.dest(assetsPath));
 });
-

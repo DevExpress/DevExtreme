@@ -585,37 +585,6 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("load - ignore all imports - paste imported files as is", () => {
-        const app = require('express')();
-        app.get("/emptyImport", (request, response) => response.send(""));
-        const server = app.listen(3000);
-
-        let config = {
-            isBootstrap: false,
-            lessCompiler: lessCompiler,
-            outColorScheme: "additional",
-            makeSwatch: true,
-            reader: () => {
-                // data/less/bundles/generic/dx.light.less
-                return new Promise(resolve => {
-                    let testLess = "@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;@import 'http://localhost:3000/emptyImport';";
-                    resolve(testLess);
-                });
-            }
-        };
-
-        let lessTemplateLoader = new LessTemplateLoader(config);
-        lessTemplateLoader._makeInfoHeader = emptyHeader;
-        return lessTemplateLoader.load(
-            themeName,
-            colorScheme,
-            metadata,
-            []).then(data => {
-            server.close();
-            assert.equal(data.css, "\n");
-        });
-    });
-
     it("load - the result contains passed version", () => {
         const version = "1.0.0";
         const config = {
@@ -638,6 +607,36 @@ describe("LessTemplateLoader", () => {
             []
         ).then(data => {
             assert.equal(data.version, version);
+        });
+    });
+
+    it("_loadLess - the right filename is generate", () => {
+        let actualFileName = "";
+        const version = "1.0.0";
+        const config = {
+            // isBootstrap: false,
+            // lessCompiler: lessCompiler,
+            reader: (fileName) => {
+                // data/less/bundles/generic/dx.light.less
+                actualFileName = fileName;
+                return Promise.resolve();
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config, version);
+
+        const fileNamesForThemes = [
+            { theme: "generic", colorScheme: "light", fileName: "devextreme-themebuilder/data/less/bundles/generic/dx.light.less" },
+            { theme: "generic", colorScheme: "dark", fileName: "devextreme-themebuilder/data/less/bundles/generic/dx.dark.less" },
+            { theme: "generic", colorScheme: "greenmist", fileName: "devextreme-themebuilder/data/less/bundles/generic/dx.greenmist.less" },
+            { theme: "generic", colorScheme: "light-compact", fileName: "devextreme-themebuilder/data/less/bundles/generic/dx.light.compact.less" },
+            { theme: "material", colorScheme: "blue-light", fileName: "devextreme-themebuilder/data/less/bundles/material/dx.material.blue.light.less" },
+            { theme: "material", colorScheme: "blue-light-compact", fileName: "devextreme-themebuilder/data/less/bundles/material/dx.material.blue.light.compact.less" }
+        ];
+
+        fileNamesForThemes.forEach((themeData) => {
+            lessTemplateLoader._loadLess(themeData.theme, themeData.colorScheme);
+            assert.equal(actualFileName, themeData.fileName);
         });
     });
 
