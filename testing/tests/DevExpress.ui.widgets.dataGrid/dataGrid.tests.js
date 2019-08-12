@@ -72,7 +72,7 @@ import pointerMock from "../../helpers/pointerMock.js";
 import pointerEvents from "events/pointer";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
-import { ColumnWrapper, FilterPanelWrapper, PagerWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import { ColumnWrapper, FilterPanelWrapper, PagerWrapper, FilterRowWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -177,6 +177,39 @@ QUnit.test("Accessibility columns id should not set for columns editors (T710132
 
     // assert
     assert.equal($(".dx-texteditor [id]").length, 0, "editors has no accessibility id");
+});
+
+QUnit.test("DataGrid - Should hide filter row menu after losing it's focus", function(assert) {
+    // arrange
+    var filterRowWrapper = new FilterRowWrapper(".dx-datagrid"),
+        $menu,
+        $root,
+        menuInstance,
+        subMenu;
+
+    createDataGrid({
+        filterRow: { visible: true },
+        dataSource: [{ field1: "1", field2: "2" }]
+    });
+    this.clock.tick();
+
+    // act
+    $menu = filterRowWrapper.getMenuElement(0);
+    $menu.focus();
+
+    menuInstance = $menu.dxMenu("instance");
+    $root = $(menuInstance.itemElements().get(0));
+    menuInstance._showSubmenu($root);
+    subMenu = menuInstance._visibleSubmenu;
+
+    // assert
+    assert.ok(subMenu._isVisible(), "submenu exists");
+
+    // act
+    $menu.trigger("blur");
+
+    // assert
+    assert.notOk(subMenu._isVisible(), "submenu is hidden");
 });
 
 QUnit.test("commonColumnOptions", function(assert) {
@@ -12246,6 +12279,41 @@ QUnit.test("Row heights should be synchronized after expand master detail row in
 
     // assert
     assert.equal($nestedRows.eq(0).height(), $nestedRows.eq(1).height(), "nested row heights are synchronized after collapse");
+});
+
+// T804060
+QUnit.test("contentReady event should be fired after error during update", function(assert) {
+    // arrange act
+    var eventArray = [],
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            columns: [{ dataField: "id", fixed: true }, { dataField: "name" }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            dataSource: {
+                load: function() {
+                    return [{ id: 1, name: "test" }];
+                },
+                update: function() {
+                    return $.Deferred().reject('Update error');
+                }
+            },
+            onDataErrorOccurred: () => eventArray.push("onDataErrorOccurred"),
+            onContentReady: () => eventArray.push("onContentReady")
+        });
+
+    dataGrid.editCell(0, 1);
+    dataGrid.cellValue(0, 1, "updated");
+
+    eventArray = [];
+
+    // act
+    dataGrid.saveEditData();
+
+    // assert
+    assert.deepEqual(eventArray, ["onDataErrorOccurred", "onContentReady"], "onContentReady fired after onDataErrorOccurred");
 });
 
 // T607490

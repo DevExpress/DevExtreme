@@ -36,7 +36,7 @@ function createStyleCompilerBatch() {
     return gulp.series(tasks);
 }
 
-function createCommonBatch() {
+function createMiscBatch() {
     const tasks = ['vectormap', 'vendor'];
     if(!QUNIT_CI) {
         tasks.push('aspnet', 'ts');
@@ -49,21 +49,23 @@ function createMainBatch() {
     if(!QUNIT_CI) {
         tasks.push('js-bundles-prod');
     }
-    tasks.push('style-compiler-batch', 'common-batch');
+    tasks.push('style-compiler-batch', 'misc-batch');
     return DOCKER_CI
         ? gulp.parallel(tasks)
         : (callback) => multiProcess(tasks, callback, true);
 }
 
-gulp.task('common-batch', createCommonBatch());
+function createDefaultBatch() {
+    const tasks = [ 'clean', 'localization', createMainBatch() ];
+    if(!QUNIT_CI) {
+        tasks.push('npm', 'themebuilder-npm');
+    }
+    return gulp.series(tasks);
+}
+
+gulp.task('misc-batch', createMiscBatch());
 gulp.task('style-compiler-batch', createStyleCompilerBatch());
 
-gulp.task('default', gulp.series(
-    'clean',
-    'localization',
-    createMainBatch(),
-    'npm',
-    'themebuilder-npm'
-));
+gulp.task('default', createDefaultBatch());
 
 gulp.task('dev', gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev'));
