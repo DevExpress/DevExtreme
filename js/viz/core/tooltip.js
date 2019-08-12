@@ -288,44 +288,27 @@ Tooltip.prototype = {
     },
 
     _getCanvas: function() {
-        var container = this._getContainer(),
-            containerBox = container.getBoundingClientRect(),
-            html = domAdapter.getDocumentElement(),
-            body = domAdapter.getBody(),
-            left = window.pageXOffset || html.scrollLeft || 0,
-            top = window.pageYOffset || html.scrollTop || 0;
+        const container = this._getContainer();
+        const containerBox = container.getBoundingClientRect();
+        const html = domAdapter.getDocumentElement();
+        let left = window.pageXOffset || html.scrollLeft || 0;
+        let top = window.pageYOffset || html.scrollTop || 0;
 
-        var box = {
+        const box = {
             left: left,
             top: top,
             width: html.clientWidth || 0,
             height: html.clientHeight || 0,
             right: 0,
-            bottom: 0,
-
-            /* scrollWidth */
-            fullWidth: mathMax(
-                body.scrollWidth, html.scrollWidth,
-                body.offsetWidth, html.offsetWidth,
-                body.clientWidth, html.clientWidth
-            ) - left,
-            /* scrollHeight */
-            fullHeight: mathMax(
-                body.scrollHeight, html.scrollHeight,
-                body.offsetHeight, html.offsetHeight,
-                body.clientHeight, html.clientHeight
-            ) - top
+            bottom: 0
         };
 
-        if(container !== body) {
+        if(container !== domAdapter.getBody()) {
             left = mathMax(box.left, box.left + containerBox.left);
             top = mathMax(box.top, box.top + containerBox.top);
 
-            box.width = mathMin(box.width + box.left - left, containerBox.width + (containerBox.left > 0 ? 0 : containerBox.left));
-            box.height = mathMin(box.height + box.top - top, containerBox.height + (containerBox.top > 0 ? 0 : containerBox.top));
-
-            box.fullWidth = box.width;
-            box.fullHeight = box.height;
+            box.width = mathMin(containerBox.width, box.width) + left + box.left;
+            box.height = mathMin(containerBox.height, box.height) + top + box.top;
 
             box.left = left;
             box.top = top;

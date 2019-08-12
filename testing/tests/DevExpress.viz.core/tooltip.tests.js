@@ -13,7 +13,7 @@ QUnit.testStart(function() {
         .appendTo($("#qunit-fixture"));
 });
 
-const CANVAS = { left: 0, top: 0, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000, bottom: 0, right: 0 };
+const CANVAS = { left: 0, top: 0, width: 800, height: 600, bottom: 0, right: 0 };
 
 function getInitialOptions() {
     return {
@@ -237,6 +237,24 @@ QUnit.test("Tooltip should be appended in the closest element to root", function
     var $tooltipContainer = $(".test-tooltip").parent().eq(0);
     assert.ok($tooltipContainer.hasClass("tooltip-container"));
     assert.ok(!$tooltipContainer.hasClass("far"));
+});
+
+// T803622
+QUnit.test("Container has offset", function(assert) {
+    $("#qunit-fixture")
+        .append(`<div class="tooltipContainer" style="position: absolute; left: 20px; top:20px; width: 500px; height:100%;"></div>`);
+
+    const tooltip = new Tooltip({ eventTrigger: function() {} });
+
+    this.options.container = ".tooltipContainer";
+    tooltip.update(this.options);
+
+    // act
+    tooltip.show({ description: "some-text" }, { x: 100, y: 200 });
+
+    // assert
+    assert.equal(tooltip._wrapper.get(0).style.left, "10042px", "wrapper is moved to invisible area");
+    assert.equal(tooltip._wrapper.get(0).style.top, "10121px", "wrapper is moved to invisible area");
 });
 
 QUnit.test("Set options. customizeTooltip", function(assert) {
@@ -1672,7 +1690,7 @@ QUnit.module("Movements. Out of visible borders", {
             tooltip._renderer.stub("resize").reset();
         };
 
-        that.canvas = { left: 10, top: 20, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000, right: 0, bottom: 0 };
+        that.canvas = { left: 10, top: 20, width: 800, height: 600, right: 0, bottom: 0 };
         tooltip._getCanvas = function() { return that.canvas; };
     },
     afterEach: function() {
