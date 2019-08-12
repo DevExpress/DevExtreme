@@ -1490,6 +1490,33 @@ QUnit.test("Resize columns", function(assert) {
     assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
 });
 
+// T804582
+QUnit.test("Cursor should switch style when it was moved to columns separator if grid has only one row and big header panel", function(assert) {
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{}],
+            allowColumnResizing: true,
+            columnChooser: {
+                enabled: true
+            },
+            columns: ["field1", "field2"]
+        }),
+        headerPanel = dataGrid.find(".dx-datagrid-header-panel"),
+        columnsSeparator = dataGrid.find(".dx-datagrid-columns-separator");
+
+    headerPanel.outerHeight("70px", true);
+
+    columnsSeparator.trigger($.Event("dxpointermove", {
+        data: {
+            _isResizing: false,
+        },
+        pageY: columnsSeparator.offset().top + headerPanel.outerHeight() + 1,
+        pageX: columnsSeparator.offset().left + dataGrid.width() / 2
+    }));
+
+    assert.equal(columnsSeparator.css("cursor"), "col-resize", "cursor style");
+});
+
 // T571282
 QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtual' and wordWrapEnabled is true", function(assert) {
     // arrange
