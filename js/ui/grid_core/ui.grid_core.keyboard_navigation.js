@@ -268,8 +268,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
                 clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
 
-            eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
-            eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickSelector, clickAction);
+            eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickAction);
+            eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickSelector, clickAction);
 
             that._initKeyDownProcessor(that, $element, that._keyDownHandler);
 
