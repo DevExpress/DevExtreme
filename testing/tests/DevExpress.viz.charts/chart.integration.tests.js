@@ -253,13 +253,13 @@ QUnit.test("Expand/cut chart by panes (chart size not set)", function(assert) {
         onDrawn: chartDrawn
     });
 
-    assert.roughEqual(chart.getSize().height, 639, 5, "Expand default height");
+    assert.roughEqual(chart.getSize().height, 630, 10, "Expand default height");
 
     chart.option("panes[1].height", 200);
-    assert.roughEqual(chart.getSize().height, 589, 5, "Cut chart by pane height");
+    assert.roughEqual(chart.getSize().height, 580, 10, "Cut chart by pane height");
 
     chart.option("size.width", 300);
-    assert.roughEqual(chart.getSize().height, 703, 5, "Expand height by argument axis content");
+    assert.roughEqual(chart.getSize().height, 700, 10, "Expand height by argument axis content");
     assert.equal(chartDrawn.callCount, 3, "Check number of renderings");
 });
 
@@ -307,7 +307,7 @@ QUnit.test("Auto calculate pane height and adaptive layout", function(assert) {
     var firstPaneCanvas = chart.panes[0].canvas;
 
     assert.deepEqual(chart.getSize(), { width: 840, height: 400 });
-    assert.equal(firstPaneCanvas.height - firstPaneCanvas.top - firstPaneCanvas.bottom, 108);
+    assert.roughEqual(firstPaneCanvas.height - firstPaneCanvas.top - firstPaneCanvas.bottom, 108, 5);
     assert.equal(chart._title._titleElement._getElementBBox().height, 0);
     assert.equal(chart._legend._legendGroup.getBBox().height, 0);
     assert.equal(chart._exportMenu._button.getBBox().height, 0);
