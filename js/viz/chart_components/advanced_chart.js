@@ -569,7 +569,7 @@ var AdvancedChart = BaseChart.inherit({
         const that = this;
         const cleanPanesCanvases = drawAxes();
 
-        const needSpace = that.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
+        const needSpace = that.checkForMoreSpaceForPanesCanvas();
 
         if(needSpace) {
             const size = this._layout.backward(this._rect, this._rect, [needSpace.width, needSpace.height]);
@@ -579,6 +579,10 @@ var AdvancedChart = BaseChart.inherit({
 
             drawAxes(needSpace, cleanPanesCanvases);
         }
+    },
+
+    checkForMoreSpaceForPanesCanvas() {
+        return this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
     },
 
     _notify() {

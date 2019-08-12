@@ -207,6 +207,112 @@ QUnit.test("Problem with two axis and range", function(assert) {
     assert.deepEqual(chart._valueAxes[0].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8], "main value axis tick values");
 });
 
+QUnit.test("Expand/cut chart by panes (chart size not set)", function(assert) {
+    this.$container.height("");
+    var chartDrawn = sinon.spy();
+
+    var chart = this.createChart({
+        size: {
+            width: 840
+        },
+        dataSource: [{
+            arg: "1111111111111111",
+            val1: -10,
+            val2: 20
+        }, {
+            arg: "2222222222222222",
+            val1: 5,
+            val2: 3
+        }, {
+            arg: "5555555555555555",
+            val1: 7,
+            val2: 25
+        }, {
+            arg: "8888888888888888",
+            val1: 3,
+            val2: 5
+        }, {
+            arg: "11111111111111111111",
+            val1: 20,
+            val2: -10
+        }],
+        panes: [{ name: "p1", height: 200 }, { name: "p2", height: 250 }],
+        series: [{ valueField: "val1", pane: "p1" }, { valueField: "val2", pane: "p2" }],
+        argumentAxis: {
+            title: "Argument title",
+            label: {
+                overlappingBehavior: "rotate"
+            }
+        },
+        valueAxis: [{ pane: "p1" }, { pane: "p2" }],
+        title: "Simple chart",
+        legend: {
+            verticalAlignment: "bottom",
+            horizontalAlignment: "center"
+        },
+        onDrawn: chartDrawn
+    });
+
+    assert.roughEqual(chart.getSize().height, 639, 5, "Expand default height");
+
+    chart.option("panes[1].height", 200);
+    assert.roughEqual(chart.getSize().height, 589, 5, "Cut chart by pane height");
+
+    chart.option("size.width", 300);
+    assert.roughEqual(chart.getSize().height, 703, 5, "Expand height by argument axis content");
+    assert.equal(chartDrawn.callCount, 3, "Check number of renderings");
+});
+
+QUnit.test("Auto calculate pane height and adaptive layout", function(assert) {
+    var chart = this.createChart({
+        size: {
+            width: 840,
+            height: 400
+        },
+        dataSource: [{
+            arg: 1,
+            val1: -10,
+            val2: 20
+        }, {
+            arg: 2,
+            val1: 5,
+            val2: 3
+        }, {
+            arg: 5,
+            val1: 7,
+            val2: 25
+        }, {
+            arg: 8,
+            val1: 3,
+            val2: 5
+        }, {
+            arg: 11,
+            val1: 20,
+            val2: -10
+        }],
+        argumentAxis: { title: "Argument title" },
+        panes: [{ name: "p1" }, { name: "p2", height: 250 }],
+        series: [{ valueField: "val1", pane: "p1" }, { valueField: "val2", pane: "p2" }],
+        valueAxis: [{ pane: "p1" }, { pane: "p2" }],
+        title: "Simple chart",
+        legend: {
+            verticalAlignment: "bottom",
+            horizontalAlignment: "center"
+        },
+        "export": {
+            enabled: true
+        }
+    });
+
+    var firstPaneCanvas = chart.panes[0].canvas;
+
+    assert.deepEqual(chart.getSize(), { width: 840, height: 400 });
+    assert.equal(firstPaneCanvas.height - firstPaneCanvas.top - firstPaneCanvas.bottom, 108);
+    assert.equal(chart._title._titleElement._getElementBBox().height, 0);
+    assert.equal(chart._legend._legendGroup.getBBox().height, 0);
+    assert.equal(chart._exportMenu._button.getBBox().height, 0);
+});
+
 QUnit.test("Set visualRange via arguments", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
 

@@ -1041,8 +1041,8 @@ QUnit.test("Multiple panes - Weighted panes processing", function(assert) {
 
     new dxChart(this.container, {
         panes: [
-            { name: "top", weight: 5 },
-            { name: "bottom", weight: 1 }
+            { name: "top", height: 0.5 },
+            { name: "bottom", height: 0.1 }
         ],
         valueAxis: [
             { name: "valAxis_bottomPane_right_inner", position: "right" },
@@ -1491,6 +1491,244 @@ QUnit.test("Update panes canvases", function(assert) {
         originalLeft: 0,
         originalRight: 0,
         originalTop: 305,
+        originalBottom: 0,
+        width: 800,
+        height: 600
+    });
+});
+
+QUnit.test("Calculate panes canvases (by percentage)", function(assert) {
+    var argAxis_topPane = createAxisStubs(),
+        argAxis_centerPane = createAxisStubs(),
+        argAxis_bottomPane = createAxisStubs(),
+        valAxis_topPane = createAxisStubs(),
+        valAxis_centerPane = createAxisStubs(),
+        valAxis_bottomPane = createAxisStubs();
+
+    argAxis_topPane
+        .getMargins.returns({ left: 0, top: 9, right: 0, bottom: 6 });
+    argAxis_centerPane
+        .getMargins.returns({ left: 0, top: 5, right: 0, bottom: 5 });
+    argAxis_bottomPane
+        .getMargins.returns({ left: 0, top: 5, right: 0, bottom: 10 });
+    valAxis_topPane
+        .getMargins.returns({ left: 8, top: 0, right: 0, bottom: 0 });
+    valAxis_centerPane
+        .getMargins.returns({ left: 10, top: 0, right: 0, bottom: 0 });
+    valAxis_bottomPane
+        .getMargins.returns({ left: 0, top: 0, right: 6, bottom: 0 });
+
+    this.setupAxes([argAxis_topPane,
+        argAxis_centerPane,
+        argAxis_bottomPane,
+        valAxis_bottomPane,
+        valAxis_centerPane,
+        valAxis_topPane]);
+
+    var chart = new dxChart(this.container, {
+        panes: [
+            { name: "top", height: "30%" },
+            { name: "center", height: 0.4 },
+            { name: "bottom" }
+        ],
+        valueAxis: [
+            { name: "valAxis_bottomPane", position: "right" },
+            { name: "valAxis_centerPane" },
+            { name: "valAxis_topPane" }
+        ],
+        series: [
+            { pane: "bottom", axis: "valAxis_bottomPane" },
+            { pane: "center", axis: "valAxis_centerPane" },
+            { pane: "top", axis: "valAxis_topPane" }
+        ],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    assert.deepEqual(chart.panes[0].canvas, {
+        left: 10,
+        right: 6,
+        top: 9,
+        bottom: 429,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 426,
+        width: 800,
+        height: 600
+    });
+
+    assert.deepEqual(chart.panes[1].canvas, {
+        left: 10,
+        right: 6,
+        top: 192,
+        bottom: 192,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 184,
+        originalBottom: 184,
+        width: 800,
+        height: 600
+    });
+
+    assert.deepEqual(chart.panes[2].canvas, {
+        left: 10,
+        right: 6,
+        top: 428,
+        bottom: 10,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 426,
+        originalBottom: 0,
+        width: 800,
+        height: 600
+    });
+});
+
+QUnit.test("Calculate panes canvases (mixed)", function(assert) {
+    var argAxis_topPane = createAxisStubs(),
+        argAxis_centerPane = createAxisStubs(),
+        argAxis_bottomPane = createAxisStubs(),
+        valAxis_topPane = createAxisStubs(),
+        valAxis_centerPane = createAxisStubs(),
+        valAxis_bottomPane = createAxisStubs();
+
+    argAxis_topPane
+        .getMargins.returns({ left: 0, top: 9, right: 0, bottom: 6 });
+    argAxis_centerPane
+        .getMargins.returns({ left: 0, top: 5, right: 0, bottom: 5 });
+    argAxis_bottomPane
+        .getMargins.returns({ left: 0, top: 5, right: 0, bottom: 10 });
+    valAxis_topPane
+        .getMargins.returns({ left: 8, top: 0, right: 0, bottom: 0 });
+    valAxis_centerPane
+        .getMargins.returns({ left: 10, top: 0, right: 0, bottom: 0 });
+    valAxis_bottomPane
+        .getMargins.returns({ left: 0, top: 0, right: 6, bottom: 0 });
+
+    this.setupAxes([argAxis_topPane,
+        argAxis_centerPane,
+        argAxis_bottomPane,
+        valAxis_bottomPane,
+        valAxis_centerPane,
+        valAxis_topPane]);
+
+    var chart = new dxChart(this.container, {
+        panes: [
+            { name: "top", height: "45%" },
+            { name: "center", height: "220px" },
+            { name: "bottom" }
+        ],
+        valueAxis: [
+            { name: "valAxis_bottomPane", position: "right" },
+            { name: "valAxis_centerPane" },
+            { name: "valAxis_topPane" }
+        ],
+        series: [
+            { pane: "bottom", axis: "valAxis_bottomPane" },
+            { pane: "center", axis: "valAxis_centerPane" },
+            { pane: "top", axis: "valAxis_topPane" }
+        ],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    assert.deepEqual(chart.panes[0].canvas, {
+        left: 10,
+        right: 6,
+        top: 9,
+        bottom: 447,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 438,
+        width: 800,
+        height: 600
+    });
+
+    assert.deepEqual(chart.panes[1].canvas, {
+        left: 10,
+        right: 6,
+        top: 174,
+        bottom: 206,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 172,
+        originalBottom: 208,
+        width: 800,
+        height: 600
+    });
+
+    assert.deepEqual(chart.panes[2].canvas, {
+        left: 10,
+        right: 6,
+        top: 414,
+        bottom: 10,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 402,
+        originalBottom: 0,
+        width: 800,
+        height: 600
+    });
+});
+
+QUnit.test("Calculate panes canvases (pixels). Rotated. ScrollBar on left", function(assert) {
+    var argAxis1 = createAxisStubs(),
+        argAxis2 = createAxisStubs(),
+        valAxis1 = createAxisStubs(),
+        valAxis2 = createAxisStubs(),
+        scrollBar = this.setupScrollBar();
+
+    argAxis1
+        .getMargins.returns({ left: 10, top: 0, right: 0, bottom: 0 });
+    argAxis2
+        .getMargins.returns({ left: 0, top: 0, right: 10, bottom: 0 });
+    valAxis1
+        .getMargins.returns({ left: 0, top: 9, right: 0, bottom: 0 });
+    valAxis2
+        .getMargins.returns({ left: 0, top: 0, right: 0, bottom: 10 });
+
+    scrollBar
+        .getMargins.returns({ left: 15, top: 0, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis1, argAxis2, valAxis1, valAxis2]);
+
+    new dxChart(this.container, {
+        rotated: true,
+        scrollBar: { visible: true, position: "left" },
+        panes: [{ name: "pane1", height: 300 }, { name: "pane2", height: 350 }],
+        valueAxis: [{ name: "axis1" }, { name: "axis2" }],
+        series: [{ axis: "axis1", pane: "pane1" }, { axis: "axis2", pane: "pane2" }],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    // 3. draw horizontal axes
+    assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
+        left: 30,
+        right: 420,
+        top: 0,
+        bottom: 0,
+        originalLeft: 0,
+        originalRight: 450,
+        originalTop: 0,
+        originalBottom: 0,
+        width: 800,
+        height: 600
+    });
+
+    assert.deepEqual(this.axisStub.getCall(2).returnValue.createTicks_test_arg, {
+        left: 390,
+        right: 110,
+        top: 0,
+        bottom: 0,
+        originalLeft: 360,
+        originalRight: 140,
+        originalTop: 0,
         originalBottom: 0,
         width: 800,
         height: 600
@@ -2321,6 +2559,46 @@ QUnit.test("UpdateSize - scrollBar gets canvas", function(assert) {
 
 QUnit.module("Adaptive layout rendering", environment);
 
+QUnit.test("Multiple panes - hide all for horizontal axes", function(assert) {
+    var argAxis_top = createAxisStubs(),
+        argAxis_bottom = createAxisStubs(),
+        valAxis_top = createAxisStubs(),
+        valAxis_bottom = createAxisStubs();
+
+    argAxis_top.getMargins.returns({ left: 0, top: 10, right: 0, bottom: 0 });
+    argAxis_bottom.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
+
+    this.setupAxes([argAxis_top,
+        argAxis_bottom,
+        valAxis_top,
+        valAxis_bottom]);
+
+    new dxChart(this.container, {
+        size: { width: 220, height: 220 },
+        adaptiveLayout: { width: 200, height: 100 },
+        panes: [{ name: "topPane", height: 110 }, { name: "bottomPame" }],
+        valueAxis: [
+            { name: "valAxis_top" },
+            { name: "valAxis_bottom" }
+        ],
+        series: [
+            { axis: "valAxis_top", pane: "topPane" },
+            { axis: "valAxis_bottom", pane: "bottomPane" }
+        ],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    // argAxis_bottom
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 1);
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 1);
+
+    // argAxis_top
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.hideTitle.callCount, 1);
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.hideOuterElements.callCount, 1);
+});
+
 QUnit.test("Multiple axes, vertical axes without titles are fit, horizontal axis without labels is fit - hide title for vertical axes, and all for horizontal", function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
@@ -2390,6 +2668,7 @@ QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis
     argAxis.getMargins.onCall(2).returns({ left: 0, top: 0, right: 0, bottom: 15 });
     argAxis.getMargins.onCall(3).returns({ left: 0, top: 0, right: 0, bottom: 15 });
     argAxis.getMargins.onCall(4).returns({ left: 0, top: 0, right: 0, bottom: 15 });
+    argAxis.getMargins.onCall(5).returns({ left: 0, top: 0, right: 0, bottom: 15 });
     argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 5 });
 
     valAxis_inner.getMargins.onCall(0).returns({ left: 12, top: 0, right: 0, bottom: 0 });
@@ -2397,6 +2676,7 @@ QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis
     valAxis_inner.getMargins.onCall(2).returns({ left: 12, top: 0, right: 0, bottom: 0 });
     valAxis_inner.getMargins.onCall(3).returns({ left: 12, top: 0, right: 0, bottom: 0 });
     valAxis_inner.getMargins.onCall(4).returns({ left: 12, top: 0, right: 0, bottom: 0 });
+    valAxis_inner.getMargins.onCall(5).returns({ left: 12, top: 0, right: 0, bottom: 0 });
     valAxis_inner.getMargins.returns({ left: 11, top: 0, right: 0, bottom: 0 });
 
     valAxis_outer.getMargins.onCall(0).returns({ left: 16, top: 0, right: 0, bottom: 0 });
@@ -2404,6 +2684,7 @@ QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis
     valAxis_outer.getMargins.onCall(2).returns({ left: 16, top: 0, right: 0, bottom: 0 });
     valAxis_outer.getMargins.onCall(3).returns({ left: 16, top: 0, right: 0, bottom: 0 });
     valAxis_outer.getMargins.onCall(4).returns({ left: 16, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.onCall(5).returns({ left: 16, top: 0, right: 0, bottom: 0 });
     valAxis_outer.getMargins.returns({ left: 6, top: 0, right: 0, bottom: 0 });
 
     this.setupAxes([argAxis,
