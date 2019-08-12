@@ -433,17 +433,18 @@ module.exports = {
              * @type template|function
              * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
-             * @type_function_param2_field1 component:dxDataGrid
-             * @type_function_param2_field2 value:any
-             * @type_function_param2_field3 text:string
-             * @type_function_param2_field4 displayValue:any
-             * @type_function_param2_field5 columnIndex:number
-             * @type_function_param2_field6 rowIndex:number
-             * @type_function_param2_field7 column:dxDataGridColumn
-             * @type_function_param2_field8 row:dxDataGridRowObject
-             * @type_function_param2_field9 summaryItems:Array<any>
-             * @type_function_param2_field10 groupContinuesMessage:string
-             * @type_function_param2_field11 groupContinuedMessage:string
+             * @type_function_param2_field1 data:object
+             * @type_function_param2_field2 component:dxDataGrid
+             * @type_function_param2_field3 value:any
+             * @type_function_param2_field4 text:string
+             * @type_function_param2_field5 displayValue:any
+             * @type_function_param2_field6 columnIndex:number
+             * @type_function_param2_field7 rowIndex:number
+             * @type_function_param2_field8 column:dxDataGridColumn
+             * @type_function_param2_field9 row:dxDataGridRowObject
+             * @type_function_param2_field10 summaryItems:Array<any>
+             * @type_function_param2_field11 groupContinuesMessage:string
+             * @type_function_param2_field12 groupContinuedMessage:string
              */
             /**
              * @name dxDataGridColumn.groupIndex
