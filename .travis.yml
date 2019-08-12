@@ -1,5 +1,4 @@
-dist: trusty
-sudo: required
+dist: bionic
 language: generic
 
 services:
@@ -10,6 +9,7 @@ env:
     - TARGET=lint
     - TARGET=ts
     - TARGET=test CONSTEL=misc
+    - TARGET=test CONSTEL=misc JQUERY=true
     - TARGET=test CONSTEL=ui
     - TARGET=test CONSTEL=ui.editors
     - TARGET=test CONSTEL=ui.grid
@@ -21,12 +21,17 @@ env:
     - TARGET=test BROWSER=firefox CONSTEL=ui.grid
     - TARGET=test BROWSER=firefox CONSTEL=ui.scheduler
     - TARGET=test BROWSER=firefox CONSTEL=viz
+    - TARGET=test_functional
     - TARGET=test_themebuilder
 
 cache:
   directories:
     - node_modules
     - dotnet_packages
+
+before_cache:
+  # See https://github.com/DevExpress/DevExtreme/pull/1251
+  - sudo chmod -R +Xr dotnet_packages
 
 script:
 
@@ -39,6 +44,7 @@ script:
     -e TARGET=$TARGET
     -e BROWSER=$BROWSER
     -e CONSTEL=$CONSTEL
+    -e JQUERY=$JQUERY
     -v $TRAVIS_BUILD_DIR:/devextreme
     docker.io/devexpress/devextreme-build:19_1
     ./docker-ci.sh

@@ -7,13 +7,15 @@ import config from "core/config";
 import { isRenderer } from "core/utils/type";
 import browser from "core/utils/browser";
 import { compare as compareVersions } from "core/utils/version";
+import resizeCallbacks from "core/utils/resize_callbacks";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
 import "common.css!";
 import "ui/popup";
 
 const IS_IE11 = (browser.msie && parseInt(browser.version) === 11);
-const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
+const IS_SAFARI = !!browser.safari;
+const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 
 QUnit.testStart(function() {
     var markup =
@@ -82,6 +84,7 @@ var POPUP_CLASS = "dx-popup",
     POPUP_NORMAL_CLASS = "dx-popup-normal",
     POPUP_CONTENT_FLEX_HEIGHT_CLASS = "dx-popup-flex-height",
     POPUP_CONTENT_INHERIT_HEIGHT_CLASS = "dx-popup-inherit-height",
+    PREVENT_SAFARI_SCROLLING_CLASS = "dx-prevent-safari-scrolling",
 
     POPUP_DRAGGABLE_CLASS = "dx-popup-draggable",
 
@@ -549,6 +552,35 @@ QUnit.test("maxHeight should affect popup content height correctly", function(as
     );
 });
 
+QUnit.test("Popup should keep nested scroll position on dimension changed", (assert) => {
+    const SCROLLABLE_CONTAINER_CLASS = "test-scroll";
+
+    $("#popup").dxPopup({
+        visible: true,
+        contentTemplate: function($container) {
+            const $content = $("<div>").height(3000);
+            const $wrapper = $("<div>");
+
+            $wrapper
+                .addClass(SCROLLABLE_CONTAINER_CLASS)
+                .css({
+                    height: "100%",
+                    overflow: "auto"
+                })
+                .append($content)
+                .appendTo($container);
+        }
+    });
+
+    const $scrollableContainer = $(`.${SCROLLABLE_CONTAINER_CLASS}`);
+
+    $scrollableContainer.scrollTop(100);
+    assert.strictEqual($scrollableContainer.scrollTop(), 100, "scroll position changed");
+
+    resizeCallbacks.fire();
+    assert.strictEqual($scrollableContainer.scrollTop(), 100, "scroll position still the same");
+});
+
 
 QUnit.module("options changed callbacks", {
     beforeEach: function() {
@@ -765,6 +797,56 @@ QUnit.test("fullScreen", function(assert) {
     assert.ok($overlayContent.hasClass(POPUP_NORMAL_CLASS), "normal class is added");
 });
 
+QUnit.test("has PREVENT_SAFARI_SCROLLING_CLASS class for fullScreen popup in safari (T714801)", function(assert) {
+    this.instance.option({
+        fullScreen: true,
+        visible: true
+    });
+
+    const $body = $("body");
+    const $wrapper = this.instance.$content().parent().parent();
+
+    assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI);
+    assert.ok(($wrapper.css("position") === "fixed"), "popup wrapper position type is correct");
+
+    this.instance.hide();
+    assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), "class removed from body after popup hiding");
+
+    this.instance.show();
+    this.instance.option("fullScreen", false);
+
+    assert.notOk($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), "class removed from body if fullScreen is changed to 'false' at runtime");
+    assert.strictEqual($wrapper.css("position") === "fixed", !IS_SAFARI, "popup wrapper position type is correct if fullScreen is changed to 'false' at runtime");
+
+    this.instance.option("fullScreen", true);
+
+    assert.strictEqual($body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), IS_SAFARI, "class removed from body if fullScreen is changed to 'true' at runtime");
+    assert.ok(($wrapper.css("position") === "fixed"), "popup wrapper position type is correct if fullScreen is changed to 'true' at runtime");
+    this.instance.hide();
+});
+
+QUnit.test("start scroll position is saved after full screen popup hiding", function(assert) {
+    let $additionalElement;
+
+    try {
+        $additionalElement = $("<div>").height(2000).appendTo("body");
+
+        this.instance.option({
+            fullScreen: true,
+            visible: false
+        });
+
+        window.scrollTo(0, 100);
+        this.instance.show();
+        this.instance.hide();
+
+        assert.strictEqual(window.pageYOffset, 100);
+    } finally {
+        window.scrollTo(0, 0);
+        $additionalElement.remove();
+    }
+});
+
 QUnit.test("PopupContent doesn't disappear while fullScreen option changing", function(assert) {
     this.instance.option({
         fullScreen: false,
@@ -803,27 +885,11 @@ QUnit.test("fullScreen with disabled shading", function(assert) {
         visible: true
     });
 
-    var $overlayContent = this.instance.$content().parent();
+    var $overlayContent = this.instance.$content().parent(),
+        $wrapper = $overlayContent.parent().get(0);
 
-    assert.equal($overlayContent.parent().get(0).style.width, "100%", "wrappers width specified");
-    assert.equal($overlayContent.parent().get(0).style.height, "100%", "wrappers height specified");
-});
-
-QUnit.test("shading should be synchronized with the option when popup goes from fullscreen to normal mode", function(assert) {
-    this.instance.option({
-        fullScreen: true,
-        shading: false,
-        width: 10,
-        height: 10,
-        visible: true
-    });
-
-    this.instance.option("fullScreen", false);
-
-    var $popupWrapper = this.instance.$content().closest("." + POPUP_WRAPPER_CLASS);
-
-    assert.equal($popupWrapper.prop('style').width, "", "wrapper is collapsed by width");
-    assert.equal($popupWrapper.prop('style').height, "", "wrapper is collapsed by height");
+    assert.equal(parseInt(getComputedStyle($wrapper).width), $(window).width(), "wrappers width specified");
+    assert.equal(parseInt(getComputedStyle($wrapper).height), $(window).height(), "wrappers height specified");
 });
 
 QUnit.test("title", function(assert) {
@@ -1354,5 +1420,53 @@ QUnit.test("popup title should be rendered before content", function(assert) {
         contentTemplate: function() {
             contentIsRendered = true;
         }
+    });
+});
+
+[true, false].forEach((isDeferRendering) => {
+    QUnit.test(`content should be append to the element when render the title with deferRendering=${isDeferRendering}`, function(assert) {
+        const $widgetContainer = $("#popupWithTitleTemplate");
+        $widgetContainer.dxPopup({
+            deferRendering: isDeferRendering,
+            visible: isDeferRendering,
+            titleTemplate: function(container) {
+                const hasParentContainer = !!$(container).closest($widgetContainer).length;
+                assert.ok(hasParentContainer);
+            }
+        });
+    });
+});
+
+
+QUnit.module("renderGeometry", () => {
+    QUnit.test("option change", (assert) => {
+        const instance = $("#popup").dxPopup({
+            visible: true
+        }).dxPopup("instance");
+        const options = instance.option();
+        const newOptions = {
+            fullScreen: !options.fullScreen,
+            autoResizeEnabled: !options.autoResizeEnabled,
+            showTitle: !options.showTitle,
+            title: "test",
+            titleTemplate: () => $("<div>").text("title template"),
+            bottomTemplate: () => $("<div>").text("bottom template"),
+            toolbarItems: [{ text: "text" }],
+            useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
+            useFlatToolbarButtons: !options.useFlatToolbarButtons
+        };
+        const renderGeometrySpy = sinon.spy(instance, "_renderGeometry");
+
+        for(const optionName in newOptions) {
+            const initialCallCount = renderGeometrySpy.callCount;
+
+            instance.option(optionName, newOptions[optionName]);
+
+            const isDimensionChanged = !!renderGeometrySpy.lastCall.args[0];
+            assert.ok(initialCallCount < renderGeometrySpy.callCount, "renderGeomentry callCount has increased");
+            assert.notOk(isDimensionChanged);
+        }
+
+        instance.hide();
     });
 });

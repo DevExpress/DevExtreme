@@ -210,7 +210,7 @@ var numberLocalization = dependencyInjector({
     },
 
     getThousandsSeparator: function() {
-        return this.format(1000, "fixedPoint")[1];
+        return this.format(10000, "fixedPoint")[2];
     },
 
     getDecimalSeparator: function() {

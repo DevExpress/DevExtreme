@@ -35,6 +35,8 @@ export class SchedulerTestWrapper {
 
             getMarkers: () => this.tooltip.getItemElements().find('.dx-tooltip-appointment-item-marker-body'),
 
+            getMarker: () => this.tooltip.getMarkers().first(),
+
             getDateText: (index = 0) => this.tooltip.getDateElement(index).text(),
             getTitleText: (index = 0) => this.tooltip.getTitleElement(index).text(),
 
@@ -146,6 +148,10 @@ export class SchedulerTestWrapper {
             getGroupTable: () => $(".dx-scheduler-group-table"),
             getGroupTableHeight: () => this.grouping.getGroupTable().height()
         };
+    }
+
+    option(name, value) {
+        this.instance.option(name, value);
     }
 
     isAdaptivity() {

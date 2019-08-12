@@ -299,6 +299,7 @@ var Form = Widget.inherit({
              * @type_function_param1_field2 dataField:string
              * @type_function_param1_field3 editorOptions:object
              * @type_function_param1_field4 editorType:string
+             * @type_function_param1_field5 name:string
              * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
@@ -980,6 +981,10 @@ var Form = Widget.inherit({
         });
     },
 
+    _tryGetItemsForTemplate: function(item) {
+        return item.items || [];
+    },
+
     _itemTabbedTemplate: function(item, e, $container) {
         var that = this,
             $tabPanel = $("<div>").appendTo($container),
@@ -993,7 +998,7 @@ var Form = Widget.inherit({
                         $container = $(container),
                         alignItemLabels = utils.ensureDefined(itemData.alignItemLabels, true);
 
-                    layoutManager = that._renderLayoutManager(itemData.items, $container, {
+                    layoutManager = that._renderLayoutManager(that._tryGetItemsForTemplate(itemData), $container, {
                         colCount: itemData.colCount,
                         alignItemLabels: alignItemLabels,
                         screenByWidth: this.option("screenByWidth"),
@@ -1053,7 +1058,7 @@ var Form = Widget.inherit({
                 container: domUtils.getPublicElement($groupContent)
             });
         } else {
-            layoutManager = this._renderLayoutManager(item.items, $groupContent, {
+            layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(item), $groupContent, {
                 colCount: item.colCount,
                 colCountByScreen: item.colCountByScreen,
                 alignItemLabels: item.alignItemLabels,

@@ -59,6 +59,7 @@ DevExpress.utils.resizeCallbacks = require("../../core/utils/resize_callbacks");
 DevExpress.utils.console = require("../../core/utils/console");
 DevExpress.utils.string = require("../../core/utils/string");
 DevExpress.utils.support = require("../../core/utils/support");
+DevExpress.utils.ajax = require("../../core/utils/ajax");
 
 DevExpress.viewPort = require("../../core/utils/view_port").value;
 

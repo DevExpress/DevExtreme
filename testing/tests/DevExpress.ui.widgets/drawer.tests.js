@@ -1052,11 +1052,11 @@ QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl
     const $panelContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
 
     assert.equal($panel.position().left, -150, "panel has correct left when minSize and max size are set");
-    assert.equal($panelContent.position().left, 0, "panel has correct left when minSize and max size are set");
+    assert.equal($panelContent.position().left, 500, "panel has correct left when minSize and max size are set");
     drawer.toggle();
 
     assert.equal($panel.position().left, 100, "panel has correct left when minSize and max size are set");
-    assert.equal($panelContent.position().left, 0, "panel has correct left when minSize and max size are set");
+    assert.equal($panelContent.position().left, 500, "panel has correct left when minSize and max size are set");
 
     fx.off = false;
 });
@@ -1081,7 +1081,7 @@ QUnit.test("drawer panel should be repositioned correctly after dimension change
 
     resizeCallbacks.fire();
 
-    assert.equal($panelOverlayContent.css("transform"), "matrix(1, 0, 0, 1, 0, 0)", "panel overlay content position is OK");
+    assert.equal($panelOverlayContent.css("transform"), "matrix(1, 0, 0, 1, 1000, 0)", "panel overlay content position is OK");
 
     fx.off = false;
 });
@@ -1529,13 +1529,7 @@ QUnit.module("Overlap mode", {
                 openedStateMode: "overlap",
                 contentTemplate: 'contentTemplate',
                 width: 800,
-                template: function($content) {
-                    let $div = $("<div/>");
-                    $div.css("height", 200);
-                    $div.css("width", 300);
-
-                    return $div;
-                }
+                template: $content => $("<div/>").css({ height: 200, width: 300 })
             }, options)).dxDrawer("instance");
         };
 
@@ -1552,42 +1546,46 @@ QUnit.module("Overlap mode", {
         assert.ok($(this.instance.content()).hasClass("dx-overlay"), "Panel content is an overlay");
     });
 
-    QUnit.test("drawer panel overlay should have right config depending on position option", assert => {
-        this.createInstance({
-            template: function($content) {
-                let $wrapper = $("<div/>");
-                let $div = $("<div/>");
+    [true, false].forEach((shading) => {
+        [true, false].forEach((isOpened) => {
+            [0, 100, null, undefined].forEach((minSize) => {
+                QUnit.test(`overlay configuration: opened- ${isOpened}, shading- ${shading}, minSize-${minSize}`, assert => {
+                    this.createInstance({
+                        shading: shading,
+                        opened: isOpened,
+                        minSize: minSize,
+                        template: ($content) => {
+                            let $div = $("<div/>").css({ height: 200, width: 300 });
+                            return $("<div/>").append($div);
+                        }
+                    });
+                    let overlay = this.instance.getOverlay();
 
-                $div.css("height", 200);
-                $div.css("width", 300);
+                    assert.equal(overlay.option("shading"), false, "overlay.shading");
+                    assert.ok(overlay.option("container").hasClass("dx-drawer-wrapper"));
 
-                $wrapper.append($div);
-                return $wrapper;
-            }
+                    assert.equal(overlay.option("width"), isOpened ? 300 : minSize || 0);
+
+                    assert.equal(overlay.option("position").my, "top left");
+                    assert.equal(overlay.option("position").at, "top left");
+
+                    this.instance.option("position", "right");
+                    overlay = this.instance.getOverlay();
+                    assert.equal(overlay.option("position").my, "top right");
+                    assert.equal(overlay.option("position").at, "top right");
+
+                    this.instance.option("position", "top");
+                    overlay = this.instance.getOverlay();
+                    assert.equal(overlay.option("position").my, "top");
+                    assert.equal(overlay.option("position").at, "top");
+
+                    this.instance.option("position", "bottom");
+                    overlay = this.instance.getOverlay();
+                    assert.equal(overlay.option("position").my, "bottom");
+                    assert.equal(overlay.option("position").at, "bottom");
+                });
+            });
         });
-        let overlay = this.instance.getOverlay();
-
-        assert.equal(overlay.option("shading"), false, "Overlay has no shading");
-        assert.ok(overlay.option("container").hasClass("dx-drawer-wrapper"));
-        assert.equal(overlay.option("width"), 300);
-
-        assert.equal(overlay.option("position").my, "top left");
-        assert.equal(overlay.option("position").at, "top left");
-
-        this.instance.option("position", "right");
-        overlay = this.instance.getOverlay();
-        assert.equal(overlay.option("position").my, "top right");
-        assert.equal(overlay.option("position").at, "top right");
-
-        this.instance.option("position", "top");
-        overlay = this.instance.getOverlay();
-        assert.equal(overlay.option("position").my, "top");
-        assert.equal(overlay.option("position").at, "top");
-
-        this.instance.option("position", "bottom");
-        overlay = this.instance.getOverlay();
-        assert.equal(overlay.option("position").my, "bottom");
-        assert.equal(overlay.option("position").at, "bottom");
     });
 
     QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, expand", assert => {

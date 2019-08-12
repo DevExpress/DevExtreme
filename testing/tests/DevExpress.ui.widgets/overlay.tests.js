@@ -808,6 +808,19 @@ testModule("position", moduleConfig, () => {
         assert.strictEqual($overlayWrapper.css("position"), devices.real().ios ? "absolute" : "fixed");
     });
 
+    test("wrapper should have 100% width and height when shading is disabled", (assert) => {
+        $("#overlay").dxOverlay({
+            visible: true,
+            shading: false
+        });
+
+        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
+        const wrapperStyle = getComputedStyle($overlayWrapper.get(0));
+
+        assert.strictEqual(parseInt(wrapperStyle.width), $(window).width(), "width is 100%");
+        assert.strictEqual(parseInt(wrapperStyle.height), $(window).height(), "height is 100%");
+    });
+
     test("overlay should be correctly animated with custom 'animation.show.to'", (assert) => {
         const $container = $("<div>").css({
             height: "500px",
@@ -859,17 +872,21 @@ testModule("position", moduleConfig, () => {
 
 
 testModule("shading", moduleConfig, () => {
-    test("shading should be present", (assert) => {
-        const overlay = $("#overlay").dxOverlay({
-            shading: true,
-            visible: true
-        }).dxOverlay("instance");
-        const $wrapper = $(overlay.$content().parent());
+    [true, false].forEach((value) => {
+        test("render shading", (assert) => {
+            const overlay = $("#overlay").dxOverlay({
+                shading: value,
+                visible: true
+            }).dxOverlay("instance");
+            const $wrapper = $(overlay.$content().parent());
 
-        assert.ok($wrapper.hasClass(OVERLAY_SHADER_CLASS));
+            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), value, "shader class is correct");
+            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, value ? "auto" : "none", "shading wrapper have correct pointer-events");
 
-        overlay.option("shading", false);
-        assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
+            overlay.option("shading", !value);
+            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), !value, "shader class is correct");
+            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, !value ? "auto" : "none", "shading wrapper have correct pointer-events");
+        });
     });
 
     test("shading height should change after container resize (B237292)", (assert) => {
@@ -3473,5 +3490,71 @@ testModule("overlay utils", moduleConfig, () => {
         zIndex.remove(9999);
 
         assert.strictEqual(zIndex.create(), index + 1, "the next index has been created");
+    });
+});
+
+testModule("renderGeometry", {
+    beforeEach: () => {
+        fx.off = true;
+        this.overlayInstance = $("#overlay").dxOverlay({ deferRendering: false }).dxOverlay("instance");
+        this.renderGeometrySpy = sinon.spy(this.overlayInstance, "_renderGeometry");
+    },
+    afterEach: () => {
+        zIndex.clearStack();
+        Overlay.baseZIndex(1500);
+        fx.off = false;
+    }
+}, () => {
+    test("visibility change", (assert) => {
+        assert.ok(this.renderGeometrySpy.notCalled, "render geometry isn't called yet");
+
+        this.overlayInstance.show();
+        assert.ok(this.renderGeometrySpy.calledOnce, "render geometry called once");
+
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(0).args[0];
+        assert.notOk(isDimensionChanged);
+    });
+
+    test("dimension change", (assert) => {
+        this.overlayInstance.show();
+        resizeCallbacks.fire();
+
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
+        assert.ok(isDimensionChanged);
+    });
+
+    test("repaint", (assert) => {
+        this.overlayInstance.show();
+        this.overlayInstance.repaint();
+
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
+        assert.notOk(isDimensionChanged);
+    });
+
+    test("option change", (assert) => {
+        const options = this.overlayInstance.option();
+        const newOptions = {
+            dragEnabled: !options.dragEnabled,
+            resizeEnabled: !options.resizeEnabled,
+            width: 500,
+            height: 500,
+            minWidth: 100,
+            maxWidth: 1000,
+            minHeight: 100,
+            maxHeight: 1000,
+            boundaryOffset: { h: 10, v: 10 },
+            position: { of: this.overlayInstance.element() }
+        };
+        this.overlayInstance.show();
+
+        for(const optionName in newOptions) {
+            const initialCallCount = this.renderGeometrySpy.callCount;
+
+            this.overlayInstance.option(optionName, newOptions[optionName]);
+
+            const isDimensionChanged = !!this.renderGeometrySpy.lastCall.args[0];
+            assert.ok(initialCallCount < this.renderGeometrySpy.callCount, "renderGeomentry callCount has increased");
+            assert.notOk(isDimensionChanged);
+        }
     });
 });
