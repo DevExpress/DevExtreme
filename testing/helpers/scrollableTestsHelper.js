@@ -38,7 +38,7 @@ export function checkScrollableSizes(assert, $rootContainer, { id, width, height
     let expectedContainerScrollHeight = containerScrollHeight;
     if(devices.real().ios) {
         if(useNativeScrolling) {
-            expectedContainerScrollHeight = containerScrollHeight + (overflowY ? 2 : 3);
+            expectedContainerScrollHeight = containerScrollHeight + (overflowY ? 2 : 3); // magic numbers for ios: padding-top: 1px; padding-bottom: 1px; min-height: 101%;
         }
     } else if(browser.msie) {
         if(useNativeScrolling && overflowX && !overflowY && configDetails !== "insideResponsiveBox") {
