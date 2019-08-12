@@ -6,12 +6,9 @@ fixture `Tooltip behavior when scrolling`
     .page(getContainerFileUrl());
 
 const scheduler = new SchedulerTestHelper("#container");
-const disableAnimation = ClientFunction(() => (window as any).DevExpress.fx.off = true);
 
 const createScheduler = async (options: any) => {
-    await disableAnimation();
-
-    createWidget("dxScheduler", options);
+    createWidget("dxScheduler", options, true);
 }
 
 const scrollToTime = ClientFunction(() => {
