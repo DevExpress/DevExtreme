@@ -265,6 +265,28 @@ QUnit.module("skip mousewheel event test", () => {
         }
     });
 
+    testInActiveWindow("needSkipEvent returns true for element with contenteditable false", assert => {
+        let $element;
+        try {
+            $element = $(`
+                <div contenteditable="true">
+                    <h contenteditable="false">Test</h>
+                    <div contenteditable="false" class="text">
+                        <b contenteditable="false">Bold</b>
+                    </div>
+                </div>
+            `)
+                .appendTo("#qunit-fixture")
+                .trigger("focus");
+
+            assert.ok(checkSkippedMouseWheelEvent($element, "h"), "event is skipped for the h tag");
+            assert.ok(checkSkippedMouseWheelEvent($element, ".text"), "event is skipped for the element with the 'text' class name");
+            assert.ok(checkSkippedMouseWheelEvent($element, "b"), "event is skipped for the b tag");
+        } catch(e) {
+            $element.remove();
+        }
+    });
+
     testInActiveWindow("needSkipEvent returns false for the contentEditable element when this element is not focused", assert => {
         let $element;
         try {
