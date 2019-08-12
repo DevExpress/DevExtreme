@@ -64,8 +64,14 @@ QUnit.module("dxChart", moduleSetup);
 QUnit.test("Check existing properties in styles", function(assert) {
     this.$container.addClass("chart");
 
-    var css = "#" + this.$container.attr('id') + " { width: 1000px; } .chart { height: 600px; }",
-        style = $("<style> " + css + " </style>");
+    var style = $(`<style>
+        #${this.$container.attr('id')}{
+            width: 1000px;
+        }
+        .chart {
+            height: 600px;
+        }
+    </style>`);
 
     style.appendTo("head");
 
