@@ -106,6 +106,9 @@ var ErrorHandlingController = modules.ViewController.inherit({
                 }
             }
         });
+        if(!$popupContent) {
+            that.component._fireContentReadyAction();
+        }
         return $firstErrorRow;
     },
 
