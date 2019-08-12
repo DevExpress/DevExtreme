@@ -3085,6 +3085,126 @@ QUnit.test("Hide legend and title - free space is enought for axis - hide elemen
     assert.ok(this.legend.freeSpace.called);
 });
 
+QUnit.test("Stretch chart by pane size", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis_outer = createAxisStubs();
+
+    argAxis.getMargins.onCall(0).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.onCall(1).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.onCall(2).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.onCall(3).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.onCall(4).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 11 });
+
+    valAxis_outer.getMargins.onCall(0).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.onCall(1).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.onCall(2).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.onCall(3).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.onCall(4).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.returns({ left: 6, top: 0, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis,
+        valAxis_outer]);
+
+    this.title.stub("layoutOptions").returns({
+        horizontalAlignment: "center",
+        verticalAlignment: "top"
+    });
+
+    this.title.stub("measure").returns([100, 50]);
+
+    this.legend.stub("layoutOptions").returns({
+        horizontalAlignment: "center",
+        verticalAlignment: "top",
+        side: "vertical"
+    });
+
+    this.legend.stub("measure").returns([50, 50]);
+    this.container.height("");
+
+    new dxChart(this.container, {
+        panes: [{ name: "p1", height: 600 }],
+        valueAxis: [
+            { name: "valAxis_outer" }
+        ],
+        series: [
+            { axis: "valAxis_outer", pane: "p1" }
+        ],
+        title: "text",
+        dataSource: [{ arg: 1, val: 10 }]
+    });
+
+    // assert
+    // valAxis_outer
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 0);
+
+    // argAxis
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.hideTitle.callCount, 0);
+
+    assert.notOk(this.title.freeSpace.called);
+    assert.notOk(this.legend.freeSpace.called);
+});
+
+QUnit.test("Hide legend and title by pane size", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis_outer = createAxisStubs();
+
+    argAxis.getMargins.onCall(0).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.onCall(1).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.onCall(2).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.onCall(3).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.onCall(4).returns({ left: 0, top: 0, right: 0, bottom: 60 });
+    argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 11 });
+
+    valAxis_outer.getMargins.onCall(0).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.onCall(1).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.onCall(2).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.onCall(3).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.onCall(4).returns({ left: 60, top: 0, right: 0, bottom: 0 });
+    valAxis_outer.getMargins.returns({ left: 6, top: 0, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis,
+        valAxis_outer]);
+
+    this.title.stub("layoutOptions").returns({
+        horizontalAlignment: "center",
+        verticalAlignment: "top"
+    });
+
+    this.title.stub("measure").returns([100, 50]);
+
+    this.legend.stub("layoutOptions").returns({
+        horizontalAlignment: "center",
+        verticalAlignment: "top",
+        side: "vertical"
+    });
+
+    this.legend.stub("measure").returns([50, 50]);
+
+    new dxChart(this.container, {
+        size: { width: 220, height: 110 },
+        panes: [{ name: "p1", height: 100 }],
+        valueAxis: [
+            { name: "valAxis_outer" }
+        ],
+        series: [
+            { axis: "valAxis_outer", pane: "p1" }
+        ],
+        title: "text",
+        dataSource: [{ arg: 1, val: 10 }]
+    });
+
+    // assert
+    // valAxis_outer
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 0);
+
+    // argAxis
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.hideTitle.callCount, 1);
+
+    assert.ok(this.title.freeSpace.called);
+    assert.ok(this.legend.freeSpace.called);
+});
+
 QUnit.module("Animation", environment);
 
 QUnit.test("Pass animate true flag to the updateSize method", function(assert) {

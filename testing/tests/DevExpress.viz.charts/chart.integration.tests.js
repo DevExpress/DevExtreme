@@ -10,6 +10,7 @@ import dxPolarChart from "viz/polar_chart";
 import baseChartModule from "viz/chart_components/base_chart";
 import { setupSeriesFamily } from "../../helpers/chartMocks.js";
 import pointerMock from "../../helpers/pointerMock.js";
+import vizUtils from "viz/core/utils.js";
 
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -26,7 +27,7 @@ var chartContainerCounter = 1,
     moduleSetup = {
         beforeEach: function() {
             containerName = "chartContainer" + chartContainerCounter;
-            this.$container = $('<div id="" + containerName + "" style="width: 600px;height:400px;"></div>');
+            this.$container = $('<div id="' + containerName + '" style="width: 600px;height:400px;"></div>');
             $("#container").append(this.$container);
             chartContainerCounter++;
             executeAsyncMock.setup();
@@ -59,6 +60,21 @@ function createChartInstance(options, chartContainer) {
 }
 
 QUnit.module("dxChart", moduleSetup);
+
+QUnit.test("Check existing properties in styles", function(assert) {
+    this.$container.addClass("chart");
+
+    var css = "#" + this.$container.attr('id') + " { width: 1000px; } .chart { height: 600px; }",
+        style = $("<style> " + css + " </style>");
+
+    style.appendTo("head");
+
+    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], "height"));
+    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], "width"));
+    assert.notOk(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], "position"));
+
+    style.remove();
+});
 
 QUnit.test("T244164", function(assert) {
     var chart = this.createChart({});
@@ -205,112 +221,6 @@ QUnit.test("Problem with two axis and range", function(assert) {
     chart.option("size", { width: 900 });
 
     assert.deepEqual(chart._valueAxes[0].getTicksValues().majorTicksValues, [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8], "main value axis tick values");
-});
-
-QUnit.test("Expand/cut chart by panes (chart size not set)", function(assert) {
-    this.$container.height("");
-    var chartDrawn = sinon.spy();
-
-    var chart = this.createChart({
-        size: {
-            width: 840
-        },
-        dataSource: [{
-            arg: "1111111111111111",
-            val1: -10,
-            val2: 20
-        }, {
-            arg: "2222222222222222",
-            val1: 5,
-            val2: 3
-        }, {
-            arg: "5555555555555555",
-            val1: 7,
-            val2: 25
-        }, {
-            arg: "8888888888888888",
-            val1: 3,
-            val2: 5
-        }, {
-            arg: "11111111111111111111",
-            val1: 20,
-            val2: -10
-        }],
-        panes: [{ name: "p1", height: 200 }, { name: "p2", height: 250 }],
-        series: [{ valueField: "val1", pane: "p1" }, { valueField: "val2", pane: "p2" }],
-        argumentAxis: {
-            title: "Argument title",
-            label: {
-                overlappingBehavior: "rotate"
-            }
-        },
-        valueAxis: [{ pane: "p1" }, { pane: "p2" }],
-        title: "Simple chart",
-        legend: {
-            verticalAlignment: "bottom",
-            horizontalAlignment: "center"
-        },
-        onDrawn: chartDrawn
-    });
-
-    assert.roughEqual(chart.getSize().height, 630, 10, "Expand default height");
-
-    chart.option("panes[1].height", 200);
-    assert.roughEqual(chart.getSize().height, 580, 10, "Cut chart by pane height");
-
-    chart.option("size.width", 300);
-    assert.roughEqual(chart.getSize().height, 700, 10, "Expand height by argument axis content");
-    assert.equal(chartDrawn.callCount, 3, "Check number of renderings");
-});
-
-QUnit.test("Auto calculate pane height and adaptive layout", function(assert) {
-    var chart = this.createChart({
-        size: {
-            width: 840,
-            height: 400
-        },
-        dataSource: [{
-            arg: 1,
-            val1: -10,
-            val2: 20
-        }, {
-            arg: 2,
-            val1: 5,
-            val2: 3
-        }, {
-            arg: 5,
-            val1: 7,
-            val2: 25
-        }, {
-            arg: 8,
-            val1: 3,
-            val2: 5
-        }, {
-            arg: 11,
-            val1: 20,
-            val2: -10
-        }],
-        argumentAxis: { title: "Argument title" },
-        panes: [{ name: "p1" }, { name: "p2", height: 250 }],
-        series: [{ valueField: "val1", pane: "p1" }, { valueField: "val2", pane: "p2" }],
-        valueAxis: [{ pane: "p1" }, { pane: "p2" }],
-        title: "Simple chart",
-        legend: {
-            verticalAlignment: "bottom",
-            horizontalAlignment: "center"
-        },
-        "export": {
-            enabled: true
-        }
-    });
-
-    var firstPaneCanvas = chart.panes[0].canvas;
-
-    assert.deepEqual(chart.getSize(), { width: 840, height: 400 });
-    assert.roughEqual(firstPaneCanvas.height - firstPaneCanvas.top - firstPaneCanvas.bottom, 108, 5);
-    assert.equal(chart._title._titleElement._getElementBBox().height, 0);
-    assert.equal(chart._legend._legendGroup.getBBox().height, 0);
-    assert.equal(chart._exportMenu._button.getBBox().height, 0);
 });
 
 QUnit.test("Set visualRange via arguments", function(assert) {
