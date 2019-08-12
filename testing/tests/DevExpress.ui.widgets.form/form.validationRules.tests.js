@@ -1,11 +1,15 @@
 import $ from "jquery";
 import { extend } from "core/utils/extend";
+import { logger } from "core/utils/console";
+import ValidationEngine from "ui/validation_engine";
 
 import "ui/form/ui.form";
 
 const INVALID_CLASS = "dx-invalid";
 const VALIDATION_SUMMARY_ITEM_CLASS = "dx-validationsummary-item";
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const VALIDATION_SUMMARY_CLASS = "dx-validationsummary";
+const VALIDATOR_CLASS = "dx-validator";
 
 function toString(val) {
     switch(val) {
@@ -76,29 +80,43 @@ function getID(form, dataField) {
     return "dx_" + form.option("formID") + "_" + dataField;
 }
 
-QUnit.test("Validate via validation rules", assert => {
-    // arrange
+QUnit.test("The validation result is invalid when item has validation rules", assert => {
     const form = $("#form").dxForm({
         formData: {
-            name: "",
-            lastName: "Kyle",
-            firstName: ""
+            name: ""
         },
-        customizeItem(item) {
-            if(item.dataField !== "lastName") {
-                item.validationRules = [{ type: "required" }];
-            }
-        }
+        items: [{
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }]
     }).dxForm("instance");
+    const validationResult = form.validate();
+    const invalidSelector = `.${INVALID_CLASS}`;
 
-    // act
-    form.validate();
-
-    // assert
-    const invalidSelector = "." + INVALID_CLASS;
-    assert.equal(form.$element().find(invalidSelector).length, 2, "invalid editors count");
+    assert.equal(validationResult.isValid, false, "isValid of validation result");
+    assert.equal(validationResult.brokenRules.length, 1, "brokenRules count of validation result");
+    assert.equal(validationResult.validators.length, 1, "validators count of validation result");
+    assert.equal(form.$element().find(invalidSelector).length, 1, "invalid editors count");
     assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+});
+
+QUnit.test("The validation result is valid when item has validation rules", assert => {
+    const form = $("#form").dxForm({
+        formData: {
+            name: "Test"
+        },
+        items: [{
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }]
+    }).dxForm("instance");
+    const validationResult = form.validate();
+    const invalidSelector = `.${INVALID_CLASS}`;
+
+    assert.equal(validationResult.isValid, true, "isValid of validation result");
+    assert.equal(validationResult.brokenRules.length, 0, "brokenRules count of validation result");
+    assert.equal(validationResult.validators.length, 1, "validators count of validation result");
+    assert.equal(form.$element().find(invalidSelector).length, 0, "invalid editors count");
 });
 
 QUnit.test("Validate with template wrapper", assert => {
@@ -325,6 +343,22 @@ QUnit.test("Changing an validationRules options of an any item does not invalida
     assert.strictEqual(renderComponentSpy.callCount, 0, "renderComponentSpy.callCount");
 });
 
+QUnit.test("Validate the form without validation rules for an any simple items", (assert) => {
+    const errorStub = sinon.stub();
+    logger.error = errorStub;
+
+    const form = $("#form").dxForm({
+        items: ["name"]
+    }).dxForm("instance");
+
+    assert.propEqual(form.validate(), {
+        brokenRules: [],
+        isValid: true,
+        validators: []
+    }, "validation result");
+    assert.equal(errorStub.getCalls().length, 0, "errors are not written to the console");
+});
+
 QUnit.testInActiveWindow("Change RangeRule.max", assert => {
     const runChangeRuleRageMaxTest = (options) => {
         [true, false].forEach(useItemOption => {
@@ -446,5 +480,137 @@ QUnit.testInActiveWindow("Change item.isRequired", assert => {
                 isKeepFocusSupported: false,
             });
         });
+    });
+});
+
+QUnit.module("validation group", () => {
+    QUnit.test("Set { items: [name] }, call option(validationGroup, Test)", function(assert) {
+        const form = $("#form").dxForm({
+            items: ["name"]
+        }).dxForm("instance");
+
+        form.option("validationGroup", "Test");
+
+        assert.notOk(ValidationEngine.getGroupConfig(form), "the old validation group of the Form is not contained in the validation engine");
+        assert.ok(ValidationEngine.getGroupConfig("Test"), "the new validation group of the Form is contained in the validation engine");
+    });
+
+    QUnit.test("Set { items: [name], showValidationSummary: true }, call option(validationGroup, Test)", (assert) => {
+        const $formContainer = $("#form").dxForm({
+            showValidationSummary: true,
+            items: ["name"]
+        });
+        const form = $formContainer.dxForm("instance");
+
+        form.option("validationGroup", "Test");
+
+        const $validationSummary = $formContainer.find(`.${VALIDATION_SUMMARY_CLASS}`);
+        const validationSummary = $validationSummary.dxValidationSummary("instance");
+
+        assert.equal($validationSummary.length, 1);
+        assert.equal(validationSummary.option("validationGroup"), "Test", "validation group of the validation summary");
+    });
+
+    QUnit.test("Set { items: [name], validationGroup: Test1 }, call option(validationGroup, Test2)", function(assert) {
+        const form = $("#form").dxForm({
+            items: ["name"],
+            validationGroup: "Test1"
+        }).dxForm("instance");
+
+        form.option("validationGroup", "Test2");
+
+        assert.notOk(ValidationEngine.getGroupConfig("Test1"), "the old validation group of the Form is not contained in the validation engine");
+        assert.ok(ValidationEngine.getGroupConfig("Test2"), "the new validation group of the Form is contained in the validation engine");
+    });
+
+    QUnit.test("Set { items: [name], validationGroup: Test1, showValidationSummary: true }, call option(validationGroup, Test2)", (assert) => {
+        const $formContainer = $("#form").dxForm({
+            showValidationSummary: true,
+            validationGroup: "Test1",
+            items: ["name"]
+        });
+        const form = $formContainer.dxForm("instance");
+
+        form.option("validationGroup", "Test2");
+
+        const $validationSummary = $formContainer.find(`.${VALIDATION_SUMMARY_CLASS}`);
+        const validationSummary = $validationSummary.dxValidationSummary("instance");
+
+        assert.equal($validationSummary.length, 1);
+        assert.equal(validationSummary.option("validationGroup"), "Test2", "validation group of the validation summary");
+    });
+
+    QUnit.test("Set { items: [{dataField: name, isRequired: true}] }, call option(validationGroup, Test)", function(assert) {
+        const $formContainer = $("#form").dxForm({
+            items: [{
+                dataField: "name",
+                isRequired: true
+            }]
+        });
+        const form = $formContainer.dxForm("instance");
+
+        form.option("validationGroup", "Test");
+
+        const $validator = $formContainer.find(`.${VALIDATOR_CLASS}`);
+        const validator = $validator.dxValidator("instance");
+
+        assert.equal($validator.length, 1, "validators count");
+        assert.equal(validator.option("validationGroup"), "Test", "validation group of the validator");
+        assert.notOk(ValidationEngine.getGroupConfig(form), "the old validation group of the Form is not contained in the validation engine");
+        assert.ok(ValidationEngine.getGroupConfig("Test"), "the new validation group of the Form is contained in the validation engine");
+    });
+
+    QUnit.test("Set { items: [{dataField: name, isRequired: true}], showValidationSummary: true }, call option(validationGroup, Test)", (assert) => {
+        const $formContainer = $("#form").dxForm({
+            showValidationSummary: true,
+            items: [{ dataField: "name", isRequired: true }]
+        });
+        const form = $formContainer.dxForm("instance");
+
+        form.option("validationGroup", "Test");
+
+        const $validationSummary = $formContainer.find(`.${VALIDATION_SUMMARY_CLASS}`);
+        const validationSummary = $validationSummary.dxValidationSummary("instance");
+
+        assert.equal($validationSummary.length, 1);
+        assert.equal(validationSummary.option("validationGroup"), "Test", "validation group of the validation summary");
+    });
+
+    QUnit.test("Set { items: [{dataField: name, isRequired: true}], validationGroup: Test1 }, call option(validationGroup, Test2)", function(assert) {
+        const $formContainer = $("#form").dxForm({
+            items: [{
+                dataField: "name",
+                isRequired: true
+            }],
+            validationGroup: "Test1"
+        });
+        const form = $formContainer.dxForm("instance");
+
+        form.option("validationGroup", "Test2");
+
+        const $validator = $formContainer.find(`.${VALIDATOR_CLASS}`);
+        const validator = $validator.dxValidator("instance");
+
+        assert.equal($validator.length, 1, "validators count");
+        assert.equal(validator.option("validationGroup"), "Test2", "validation group of the validator");
+        assert.notOk(ValidationEngine.getGroupConfig("Test1"), "the old validation group of the Form is not contained in the validation engine");
+        assert.ok(ValidationEngine.getGroupConfig("Test2"), "the new validation group of the Form is contained in the validation engine");
+    });
+
+    QUnit.test("Set { items: [{dataField: name, isRequired: true}], validationGroup: Test1, showValidationSummary: true }, call option(validationGroup, Test2)", (assert) => {
+        const $formContainer = $("#form").dxForm({
+            showValidationSummary: true,
+            validationGroup: "Test1",
+            items: [{ dataField: "name", isRequired: true }]
+        });
+        const form = $formContainer.dxForm("instance");
+
+        form.option("validationGroup", "Test2");
+
+        const $validationSummary = $formContainer.find(`.${VALIDATION_SUMMARY_CLASS}`);
+        const validationSummary = $validationSummary.dxValidationSummary("instance");
+
+        assert.equal($validationSummary.length, 1);
+        assert.equal(validationSummary.option("validationGroup"), "Test2", "validation group of the validation summary");
     });
 });

@@ -134,11 +134,6 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1035: "The editor cannot be created because of an internal error: {0}",
 
     /**
-     * @name ErrorsUIWidgets.E1036
-     */
-    E1036: "Validation rules are not defined for any form item",
-
-    /**
      * @name ErrorsUIWidgets.E1037
      */
     E1037: "Invalid structure of grouped data",
