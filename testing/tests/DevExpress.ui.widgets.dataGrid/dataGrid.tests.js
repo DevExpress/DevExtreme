@@ -3885,6 +3885,38 @@ QUnit.test("Should navigate to the focused row by focusedRowIndex in virtual scr
     assert.equal($(rowsView.getRow(0)).find("td").eq(0).text(), "2", "Focused row cell text");
 });
 
+// T804927
+QUnit.test("focusedRowKey should not overwrite dataSource field", function(assert) {
+    // arrange
+    var data = [{ id: { key: 4 }, group: "group #1" }, { id: { key: 5 }, group: "group #1" }],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            focusedRowEnabled: true,
+            dataSource: data,
+            keyExpr: "id",
+            columns: [{
+                dataField: "id.key"
+            }, {
+                dataField: "group",
+                groupIndex: 0
+            }]
+        }).dxDataGrid("instance");
+
+    this.clock.tick();
+
+    // act
+    dataGrid.option("focusedRowIndex", 0);
+    dataGrid.option("focusedRowIndex", 1);
+    dataGrid.option("focusedRowIndex", 2);
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(data[0].id.key, 4, "first row data was not modified");
+    assert.equal(data[1].id.key, 5, "second row data was not modified");
+    assert.equal(dataGrid.option("focusedRowIndex"), 2, "second row is focused");
+    assert.equal(dataGrid.option("focusedRowKey").key, 5, "focused row key");
+});
+
 QUnit.test("DataGrid should not scroll back to the focusedRow after paging if virtual scrolling (T718905, T719205)", function(assert) {
     // arrange
     var isReady,

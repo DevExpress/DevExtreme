@@ -2489,7 +2489,7 @@ QUnit.testInActiveWindow("onFocusedRowChanged event", function(assert) {
     assert.equal(focusedRowChangedCount, 1, "onFocusedRowChanged fires count");
 });
 
-QUnit.testInActiveWindow("onFocusedRowChanged event should fire if 'focusedRowKey' is not undefined", function(assert) {
+QUnit.testInActiveWindow("onFocusedRowChanged event should fire if 'focusedRowKey' is null", function(assert) {
     // arrange, act
     var focusedRowChangedCount = 0;
 
