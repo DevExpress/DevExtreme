@@ -4626,9 +4626,53 @@ QUnit.test("all visible items should be rendered if pageSize is small and virtua
 
     // assert
     var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 12, "visible row count");
+    assert.equal(visibleRows.length, 10, "visible row count");
     assert.equal(visibleRows[0].key, 3, "first visible row key");
-    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 12, "last visible row key");
+});
+
+// T805413
+QUnit.test("DataGrid should not load same page multiple times when scroll position is changed", function(assert) {
+    // arrange, act
+    var dataGrid,
+        scrollable,
+        loadCallCount = 0;
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        remoteOperations: true,
+        dataSource: {
+            load: function(loadOptions) {
+                loadCallCount++;
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve({ data: [{ field: "text1" }, { field: "text2" }], totalCount: 100000 });
+                }, 300);
+
+                return d;
+            }
+        },
+        paging: { pageSize: 2 },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual"
+        },
+        columns: ["id"]
+    }).dxDataGrid("instance");
+
+    this.clock.tick(600);
+
+    scrollable = dataGrid.getScrollable();
+
+    // act
+    for(let position = 0; position < 400; position += 20) {
+        scrollable.scrollTo({ y: position });
+    }
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(loadCallCount, 7);
 });
 
 QUnit.test("virtual columns", function(assert) {
@@ -4717,9 +4761,9 @@ QUnit.test("visible items should be rendered if virtual scrolling and preload ar
 
     // assert
     var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 15, "visible row count");
+    assert.equal(visibleRows.length, 14, "visible row count");
     assert.equal(visibleRows[0].key, 1, "first visible row key");
-    assert.equal(visibleRows[visibleRows.length - 1].key, 15, "last visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
 });
 
 QUnit.test("Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height", function(assert) {

@@ -499,10 +499,10 @@ exports.VirtualScrollController = Class.inherit((function() {
                     newPageIndex = Math.min(newPageIndex, maxPageIndex);
                 }
 
-                if(that.pageIndex() !== newPageIndex || needLoad) {
+                if(that.pageIndex() !== newPageIndex || needLoad || appendMode) {
                     that.pageIndex(newPageIndex);
+                    return that.load();
                 }
-                return that.load();
             }
         },
         viewportItemSize: function(size) {
