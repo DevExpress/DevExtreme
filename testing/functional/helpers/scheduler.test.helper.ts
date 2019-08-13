@@ -28,6 +28,14 @@ export default class SchedulerTestHelper {
         };
     }
 
+    getHeaderSpaceScroll() {
+        const scrollElement = this.scheduler.find(".dx-scheduler-header-scrollable .dx-scrollable-container");
+        return {
+            left: scrollElement.scrollLeft,
+            top: scrollElement.scrollTop
+        };
+    }
+
     getDateTableRow(rowIndex = 0) {
         return this.scheduler.find(`.dx-scheduler-date-table-row`).nth(rowIndex);
     }

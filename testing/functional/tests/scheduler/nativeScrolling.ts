@@ -18,18 +18,34 @@ const scrollToTime = ClientFunction(() => {
 });
 
 test("ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)", async t => {
-    await scheduler.enableNativeScroll();
-    await scrollToTime();
-    await t.expect(scheduler.getWorkSpaceScroll().left).eql(1700, "Container is scrolled in timelineDay");
+    await t.setTestSpeed(0.1); //
 
-    await scheduler.setOption("currentView", "timelineWeek");
+    const views = [{
+        name: "timelineDay",
+        initValue: 0,
+        expectedValue: 1700
+    }, {
+        name: "timelineWeek",
+        initValue: 0,
+        expectedValue: 25700
+    }];
 
-    await scheduler.enableNativeScroll();
-    await scrollToTime();
-    await t.expect(scheduler.getWorkSpaceScroll().left).eql(25700, "Container is scrolled in timelineWeek");
+    for(let i = 0; i < views.length; i++) {
+        const view = views[i];
+        await scheduler.setOption("currentView", view.name);
+        await scheduler.enableNativeScroll();
+
+        await t.expect(scheduler.getWorkSpaceScroll().left).eql(view.initValue, `Work space has init scroll position in ${view.name}`);
+        await t.expect(scheduler.getHeaderSpaceScroll().left).eql(view.initValue, `Header space has init scroll position in ${view.name}`);
+
+        await scrollToTime();
+
+        await t.expect(scheduler.getWorkSpaceScroll().left).eql(view.expectedValue, `Work space is scrolled in ${view.name}`);
+        await t.expect(scheduler.getHeaderSpaceScroll().left).eql(view.expectedValue, `Header space is scrolled in ${view.name}`);
+    }
 }).before(async () => createScheduler({
     dataSource: [],
-    views: ["timelineDay", "day", "timelineWeek", "week", "timelineMonth"],
+    views: ["timelineDay", "timelineWeek"],
     currentView: "timelineDay",
     currentDate: new Date(2019, 5, 1, 9, 40),
     firstDayOfWeek: 0,
