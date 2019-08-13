@@ -134,7 +134,8 @@ describe("generate", () => {
     beforeEach(() => {
         mock("fs", {
             readFileSync: (_) => genericLightLess,
-            writeFileSync: (_, data) => resultMetadata = data
+            writeFileSync: (_, data) => resultMetadata = data,
+            mkdirSync: () => {}
         });
         mock("../modules/themes", [{ themeId: 1, name: "generic", colorScheme: "light", text: "Light", group: "Generic" }]);
         generator = mock.reRequire("../modules/metadata-generator");
