@@ -4626,9 +4626,9 @@ QUnit.test("all visible items should be rendered if pageSize is small and virtua
 
     // assert
     var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 10, "visible row count");
+    assert.equal(visibleRows.length, 12, "visible row count");
     assert.equal(visibleRows[0].key, 3, "first visible row key");
-    assert.equal(visibleRows[visibleRows.length - 1].key, 12, "last visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
 });
 
 // T805413
@@ -4769,9 +4769,9 @@ QUnit.test("visible items should be rendered if virtual scrolling and preload ar
 
     // assert
     var visibleRows = dataGrid.getVisibleRows();
-    assert.equal(visibleRows.length, 14, "visible row count");
+    assert.equal(visibleRows.length, 15, "visible row count");
     assert.equal(visibleRows[0].key, 1, "first visible row key");
-    assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
+    assert.equal(visibleRows[visibleRows.length - 1].key, 15, "last visible row key");
 });
 
 QUnit.test("Freespace row have the correct height when using master-detail with virtual scrolling and container has fixed height", function(assert) {
