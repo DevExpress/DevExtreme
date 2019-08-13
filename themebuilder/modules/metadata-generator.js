@@ -39,8 +39,7 @@ const getMetaItems = (less) => {
 const generate = (version, lessCompiler) => {
     const promises = [];
     const metadata = {};
-    // const resultPath = path.join(__dirname, "..", "data", "metadata", "dx-theme-builder-metadata.js");
-    const resultPath = path.join(__dirname, "..", "data", "metadata", "dx-theme-builder-metadata1.js");
+    const resultPath = path.join(__dirname, "..", "data", "metadata", "dx-theme-builder-metadata.js");
 
     themes.forEach((theme) => {
         const bundlePath = path.join(__dirname, "..", "..", "styles", getBundleName(theme.name, theme.colorScheme));
