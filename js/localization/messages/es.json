@@ -255,7 +255,7 @@
         "dxHtmlEditor-normalText": "Texto normal",
 		
         "dxFileManager-newFolderName": "Sin título",
-        "dxFileManager-RootFolderName": "Archivos",
+        "dxFileManager-rootFolderName": "Archivos",
         "dxFileManager-errorNoAccess": "Acceso denegado. La operación no se puede completar.",
         "dxFileManager-errorDirectoryExistsFormat": "Carpeta {0} ya existe.",
         "dxFileManager-errorFileExistsFormat": "Archivo {0} ya existe.",

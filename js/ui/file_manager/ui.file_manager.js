@@ -329,9 +329,9 @@ class FileManager extends Widget {
             /**
             * @name dxFileManagerOptions.rootFolderName
             * @type string
-            * @default messageLocalization.format("dxFileManager-RootFolderName")
+            * @default messageLocalization.format("dxFileManager-rootFolderName")
             */
-            rootFolderName: messageLocalization.format("dxFileManager-RootFolderName"),
+            rootFolderName: messageLocalization.format("dxFileManager-rootFolderName"),
 
             /**
             * @name dxFileManagerOptions.selectionMode

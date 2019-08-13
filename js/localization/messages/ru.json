@@ -255,7 +255,7 @@
         "dxHtmlEditor-normalText": "Обычный текст",
 
         "dxFileManager-newFolderName": "Без названия",
-        "dxFileManager-RootFolderName": "Файлы",
+        "dxFileManager-rootFolderName": "Файлы",
         "dxFileManager-errorNoAccess": "Доступ запрещён. Операция не может быть завершена.",
         "dxFileManager-errorDirectoryExistsFormat": "Каталог {0} уже существует.",
         "dxFileManager-errorFileExistsFormat": "Файл {0} уже существует.",
