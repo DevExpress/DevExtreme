@@ -901,15 +901,16 @@ QUnit.test("onItemRendered event arguments", function(assert) {
     const onItemRenderedHandler = sinon.spy();
     const items = [
         {
-            key: 1, text: "Item 1", items: [
-                { key: 12, text: "Nested item 1" },
-                { key: 13, text: "Nested item 2" }
+            key: "1", text: "Item 1", items: [
+                { key: "1_1", text: "Nested item 1" },
+                { key: "1_2", text: "Nested item 2" }
             ]
         },
-        { key: 2, text: "Item 2" }
+        { key: "2", text: "Item 2" }
     ];
     const treeView = createInstance({
         items: items,
+        keyExpr: "key",
         showCheckBoxesMode: "none",
         selectByClick: true,
         onItemRendered: onItemRenderedHandler
@@ -921,7 +922,7 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         element: treeView.instance.$element().get(0),
         itemData: items[1],
         itemElement: treeView.getItems().eq(1).get(0),
-        itemIndex: 4,
+        itemIndex: "2",
         node: treeView.instance.getNodes()[1]
     });
 
@@ -930,7 +931,7 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         element: treeView.instance.$element().get(0),
         itemData: items[0],
         itemElement: treeView.getItems().eq(0).get(0),
-        itemIndex: 1,
+        itemIndex: "1",
         node: treeView.instance.getNodes()[0]
     });
 
@@ -944,7 +945,7 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         element: treeView.instance.$element().get(0),
         itemData: items[0].items[1],
         itemElement: treeView.getItems().eq(2).get(0),
-        itemIndex: 3,
+        itemIndex: "1_2",
         node: treeView.instance.getNodes()[0].children[1]
     });
 
@@ -953,7 +954,7 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         element: treeView.instance.$element().get(0),
         itemData: items[0].items[0],
         itemElement: treeView.getItems().eq(1).get(0),
-        itemIndex: 2,
+        itemIndex: "1_1",
         node: treeView.instance.getNodes()[0].children[0]
     });
 });
