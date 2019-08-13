@@ -1341,7 +1341,7 @@ QUnit.test("TreeList should not hang when scrolling", function(assert) {
     setTimeout(function() {
         // assert
         assert.strictEqual(treeList.pageIndex(), 2, "page index");
-        assert.strictEqual(contentReadySpy.callCount, 3, "onContentReady");
+        assert.strictEqual(contentReadySpy.callCount, 2, "onContentReady");
         done();
     }, 1000);
 });
