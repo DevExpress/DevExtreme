@@ -65,6 +65,7 @@ const generate = (version, lessCompiler) => {
     return Promise.all(promises).then(() => {
         metadata["_metadata_version"] = version;
         const meta = "module.exports = " + JSON.stringify(metadata) + ";";
+        fs.mkdirSync(path.dirname(resultPath), { recursive: true });
         fs.writeFileSync(resultPath, meta);
     });
 };
