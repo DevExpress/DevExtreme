@@ -579,7 +579,6 @@ var DropDownList = DropDownEditor.inherit({
 
         this._setAriaTargetForList();
         this._list.option("_listAttributes", { "role": "combobox" });
-        this.setArea("controls", this._listId);
 
         this._renderPreventBlur(this._$list);
     },
@@ -600,7 +599,15 @@ var DropDownList = DropDownEditor.inherit({
 
         this.setAria({
             "activedescendant": opened && this._list.getFocusedItemId(),
-            "owns": opened && this._listId
+            "controls": opened && this._listId
+        });
+
+    },
+
+    _setDefaultAria: function() {
+        this.setAria({
+            "haspopup": "listbox",
+            "autocomplete": "list"
         });
     },
 
