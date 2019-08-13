@@ -186,9 +186,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         if(beginPageIndex < 0) {
             result = that._pageIndex;
         } else if(!that._cache[that._pageIndex - beginPageIndex]) {
-            if(!that._loadingPageIndexes[that._pageIndex]) {
-                result = that._pageIndex;
-            }
+            result = that._pageIndex;
         } else if(beginPageIndex >= 0 && that._viewportSize >= 0) {
             if(beginPageIndex > 0) {
                 needToLoadPageBeforeLast = getEndPageIndex(that) + 1 === dataSource.pageCount() && that._cache.length < getPreloadPageCount(that) + 1;
@@ -478,7 +476,6 @@ exports.VirtualScrollController = Class.inherit((function() {
                 virtualMode = isVirtualMode(that),
                 appendMode = isAppendMode(that),
                 totalItemsCount = that._dataSource.totalItemsCount(),
-                needLoad = that._viewportItemIndex < 0,
                 lastPageSize,
                 maxPageIndex,
                 newPageIndex;
@@ -503,10 +500,8 @@ exports.VirtualScrollController = Class.inherit((function() {
                     newPageIndex = Math.min(newPageIndex, maxPageIndex);
                 }
 
-                if(that.pageIndex() !== newPageIndex || needLoad || appendMode) {
-                    that.pageIndex(newPageIndex);
-                    return that.load();
-                }
+                that.pageIndex(newPageIndex);
+                return that.load();
             }
         },
         viewportItemSize: function(size) {
