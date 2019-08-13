@@ -186,7 +186,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         if(beginPageIndex < 0) {
             result = that._pageIndex;
         } else if(!that._cache[that._pageIndex - beginPageIndex]) {
-            if(that._loadingPageIndex !== that._pageIndex || that._isVirtual) {
+            if(!that._loadingPageIndexes[that._pageIndex]) {
                 result = that._pageIndex;
             }
         } else if(beginPageIndex >= 0 && that._viewportSize >= 0) {
@@ -206,6 +206,10 @@ exports.VirtualScrollController = Class.inherit((function() {
                     result = beginPageIndex + that._cache.length;
                 }
             }
+        }
+
+        if(that._loadingPageIndexes[result]) {
+            result = -1;
         }
 
         return result;
@@ -286,9 +290,9 @@ exports.VirtualScrollController = Class.inherit((function() {
         if(pageIndex === that.pageIndex() || (!dataSource.isLoading() && pageIndex < dataSource.pageCount() || (!dataSource.hasKnownLastPage() && pageIndex === dataSource.pageCount()))) {
             dataSource.pageIndex(pageIndex);
 
-            that._loadingPageIndex = pageIndex;
+            that._loadingPageIndexes[pageIndex] = true;
             return when(dataSource.load()).always(function() {
-                that._loadingPageIndex = -1;
+                that._loadingPageIndexes[pageIndex] = false;
             });
         }
     };
@@ -308,7 +312,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             that._items = [];
             that._cache = [];
             that._isVirtual = isVirtual;
-            that._loadingPageIndex = -1;
+            that._loadingPageIndexes = {};
         },
 
         getItemSizes: function() {
