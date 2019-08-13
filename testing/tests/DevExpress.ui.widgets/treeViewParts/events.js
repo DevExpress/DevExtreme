@@ -899,14 +899,14 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         assert.deepEqual(eventArgs.node, node, "node");
 
         // node arguments
-        assert.deepEqual(eventArgs.node.children, children, "children");
-        assert.strictEqual(eventArgs.node.disabled, disabled, "disabled");
-        assert.strictEqual(eventArgs.node.expanded, expanded, "expanded");
-        assert.deepEqual(eventArgs.node.itemData, nodeItemData, "itemData");
-        assert.strictEqual(eventArgs.node.key, key, "key");
-        assert.deepEqual(eventArgs.node.parent, parent, "parent");
-        assert.strictEqual(eventArgs.node.selected, selected, "selected");
-        assert.strictEqual(eventArgs.node.text, text, "text");
+        assert.deepEqual(eventArgs.node.children, children, "node.children");
+        assert.strictEqual(eventArgs.node.disabled, disabled, "node.disabled");
+        assert.strictEqual(eventArgs.node.expanded, expanded, "node.expanded");
+        assert.deepEqual(eventArgs.node.itemData, nodeItemData, "node.itemData");
+        assert.strictEqual(eventArgs.node.key, key, "node.key");
+        assert.deepEqual(eventArgs.node.parent, parent, "node.parent");
+        assert.strictEqual(eventArgs.node.selected, selected, "node.selected");
+        assert.strictEqual(eventArgs.node.text, text, "node.text");
     };
 
     const onItemRenderedHandler = sinon.spy();
