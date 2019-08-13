@@ -4605,7 +4605,12 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     // arrange, act
     var dataGrid,
         scrollable,
-        skips = [];
+        skips = [],
+        data = [];
+
+    for(let i = 0; i < 10; i++) {
+        data.push({ field: "text" });
+    }
 
     dataGrid = $("#dataGrid").dxDataGrid({
         height: 100,
@@ -4617,18 +4622,18 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
                 var d = $.Deferred();
 
                 setTimeout(function() {
-                    d.resolve({ data: [{ field: "text1" }, { field: "text2" }], totalCount: 100000 });
+                    d.resolve({ data: data, totalCount: 100000 });
                 }, 300);
 
                 return d;
             }
         },
-        paging: { pageSize: 2 },
+        paging: { pageSize: 10 },
         scrolling: {
             mode: "virtual",
             rowRenderingMode: "virtual"
         },
-        columns: ["id"]
+        columns: ["field"]
     }).dxDataGrid("instance");
 
     this.clock.tick(600);
@@ -4636,13 +4641,15 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     scrollable = dataGrid.getScrollable();
 
     // act
-    for(let position = 300; position < 400; position += 20) {
+    for(let position = 500; position < 1200; position += 100) {
         scrollable.scrollTo({ y: position });
+        this.clock.tick(50);
     }
-    this.clock.tick(300);
+
+    this.clock.tick(250);
 
     // assert
-    assert.deepEqual(skips, [0, 2, 8, 10, 12], "all skips");
+    assert.deepEqual(skips, [0, 10, 20, 30, 40], "all skips");
 });
 
 QUnit.test("virtual columns", function(assert) {
