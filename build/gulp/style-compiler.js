@@ -8,7 +8,7 @@ const lessCompiler = require('less');
 const LessAutoPrefix = require('less-plugin-autoprefix');
 
 const generator = require('../../themebuilder/modules/metadata-generator');
-const context = require('./context.js');
+const context = require('./context');
 const browsersList = require('../../package.json').browserslist;
 const starLicense = require('./header-pipes').starLicense;
 const autoPrefix = new LessAutoPrefix({ browsers: browsersList });
