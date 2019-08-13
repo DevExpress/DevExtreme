@@ -129,4 +129,26 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal($folder11Node.find("span").text(), "Folder 1.1");
     });
 
+    test("change root file name by public API", function(assert) {
+        let treeViewNode = this.wrapper.getFolderNodes();
+        assert.equal(treeViewNode.length, 4, "Everything right on its' place");
+
+        let breadcrumbs = this.wrapper.getBreadcrumbsPath();
+        let target = this.wrapper.getFolderNodeText(0);
+        assert.equal(breadcrumbs, "Files", "Default breadcrumbs text is correct");
+        assert.equal(target, "Files", "Default is correct");
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("rootFolderName", "TestRFN");
+        this.clock.tick(400);
+
+        treeViewNode = this.wrapper.getFolderNodes();
+        assert.equal(treeViewNode.length, 4, "Everything right on its' place");
+
+        breadcrumbs = this.wrapper.getBreadcrumbsPath();
+        target = this.wrapper.getFolderNodeText(0);
+        assert.equal(breadcrumbs, "TestRFN", "Custom breadcrumbs text is correct");
+        assert.equal(target, "TestRFN", "Custom is correct");
+    });
+
 });

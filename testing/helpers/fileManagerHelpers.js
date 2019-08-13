@@ -28,6 +28,7 @@ export const Consts = {
     MENU_ITEM_CLASS: "dx-menu-item",
     SELECTION_CLASS: "dx-selection"
 };
+const showMoreButtonText = "\u22EE";
 
 export class FileManagerWrapper {
 
@@ -48,6 +49,11 @@ export class FileManagerWrapper {
 
     getFolderNode(index, inDialog) {
         return this.getFolderNodes(inDialog).eq(index);
+    }
+
+    getFolderNodeText(index, inDialog) {
+        const text = this.getFolderNode(index, inDialog).text() || "";
+        return text.replace(showMoreButtonText, "");
     }
 
     getFolderToggles(inDialog) {

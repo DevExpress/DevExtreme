@@ -2320,6 +2320,8 @@ declare module DevExpress.ui {
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
         permissions?: { copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
+        /** @name dxFileManager.Options.rootFolderName */
+        rootFolderName?: string;
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
     }
