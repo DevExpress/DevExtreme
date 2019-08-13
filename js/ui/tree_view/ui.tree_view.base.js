@@ -959,7 +959,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             itemElement: itemElement,
             itemIndex: key,
             itemData: itemData,
-            node: node
+            node: this._dataAdapter.getPublicNode(node)
         });
     },
 

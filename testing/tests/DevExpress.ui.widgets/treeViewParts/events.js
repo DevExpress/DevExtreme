@@ -8,6 +8,9 @@ import devices from "core/devices";
 import fx from "animation/fx";
 import contextMenuEvent from "events/contextmenu";
 import dblclickEvent from "events/dblclick";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
+
+const createInstance = (options) => new TreeViewTestWrapper(options);
 
 const checkEventArgs = function(assert, e) {
     assert.ok(e.component);
@@ -881,6 +884,117 @@ QUnit.test("Rendered event handler has correct arguments", function(assert) {
     });
 
     assert.ok(treeView);
+});
+
+QUnit.test("onItemRendered event arguments", function(assert) {
+    const checkOnItemRenderedEventArgs = (assert, eventArgs, expectedArgs, expectedNodeArgs) => {
+        const { component, element, itemData, itemElement, itemIndex, node } = expectedArgs;
+        const { children, disabled, expanded, itemData: nodeItemData, key, parent, selected, text } = expectedNodeArgs;
+
+        assert.deepEqual(eventArgs.component, component, "component");
+        assert.strictEqual(eventArgs.element, element, "element");
+        assert.deepEqual(eventArgs.itemData, itemData, "itemData");
+        assert.strictEqual(eventArgs.itemElement, itemElement, "itemElement");
+        assert.strictEqual(eventArgs.itemIndex, itemIndex, "itemIndex");
+        assert.deepEqual(eventArgs.node, node, "node");
+
+        // node arguments
+        assert.deepEqual(eventArgs.node.children, children, "children");
+        assert.strictEqual(eventArgs.node.disabled, disabled, "disabled");
+        assert.strictEqual(eventArgs.node.expanded, expanded, "expanded");
+        assert.deepEqual(eventArgs.node.itemData, nodeItemData, "itemData");
+        assert.strictEqual(eventArgs.node.key, key, "key");
+        assert.deepEqual(eventArgs.node.parent, parent, "parent");
+        assert.strictEqual(eventArgs.node.selected, selected, "selected");
+        assert.strictEqual(eventArgs.node.text, text, "text");
+    };
+
+    const onItemRenderedHandler = sinon.spy();
+    const items = DATA[2];
+    const treeView = createInstance({
+        items: items,
+        showCheckBoxesMode: "none",
+        selectByClick: true,
+        onItemRendered: onItemRenderedHandler
+    });
+
+    assert.strictEqual(onItemRenderedHandler.callCount, 2);
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(0).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element().get(0),
+        itemData: items[1],
+        itemElement: treeView.getItems().eq(1).get(0),
+        itemIndex: 4,
+        node: treeView.instance.getNodes()[1]
+    }, {
+        children: [],
+        disabled: false,
+        expanded: false,
+        itemData: items[1],
+        key: 4,
+        parent: null,
+        selected: false,
+        text: items[1].text
+    });
+
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element().get(0),
+        itemData: items[0],
+        itemElement: treeView.getItems().eq(0).get(0),
+        itemIndex: 1,
+        node: treeView.instance.getNodes()[0]
+    }, {
+        children: treeView.instance.getNodes()[0].children,
+        disabled: false,
+        expanded: false,
+        itemData: items[0],
+        key: 1,
+        parent: null,
+        selected: false,
+        text: items[0].text
+    });
+
+    onItemRenderedHandler.reset();
+    treeView.instance.expandItem("1");
+
+    assert.strictEqual(onItemRenderedHandler.callCount, 2);
+
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(0).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element().get(0),
+        itemData: items[0].items[1],
+        itemElement: treeView.getItems().eq(2).get(0),
+        itemIndex: 3,
+        node: treeView.instance.getNodes()[0].children[1]
+    }, {
+        children: [],
+        disabled: false,
+        expanded: false,
+        itemData: items[0].items[1],
+        key: 3,
+        parent: treeView.instance.getNodes()[0],
+        selected: false,
+        text: items[0].items[1].text
+    });
+
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element().get(0),
+        itemData: items[0].items[0],
+        itemElement: treeView.getItems().eq(1).get(0),
+        itemIndex: 2,
+        node: treeView.instance.getNodes()[0].children[0]
+    }, {
+        children: [],
+        disabled: false,
+        expanded: false,
+        itemData: items[0].items[0],
+        key: 2,
+        parent: treeView.instance.getNodes()[0],
+        selected: false,
+        text: items[0].items[0].text
+    });
 });
 
 QUnit.test("Fire contentReady event if new dataSource is empty", function(assert) {
