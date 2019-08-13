@@ -4605,14 +4605,15 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     // arrange, act
     var dataGrid,
         scrollable,
-        loadCallCount = 0;
+        skips = [];
 
     dataGrid = $("#dataGrid").dxDataGrid({
         height: 100,
         remoteOperations: true,
         dataSource: {
             load: function(loadOptions) {
-                loadCallCount++;
+                skips.push(loadOptions.skip);
+
                 var d = $.Deferred();
 
                 setTimeout(function() {
@@ -4635,13 +4636,13 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     scrollable = dataGrid.getScrollable();
 
     // act
-    for(let position = 0; position < 400; position += 20) {
+    for(let position = 300; position < 400; position += 20) {
         scrollable.scrollTo({ y: position });
     }
     this.clock.tick(300);
 
     // assert
-    assert.equal(loadCallCount, 7);
+    assert.deepEqual(skips, [0, 2, 8, 10, 12], "all skips");
 });
 
 QUnit.test("virtual columns", function(assert) {
