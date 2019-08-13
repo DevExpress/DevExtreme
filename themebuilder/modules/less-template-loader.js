@@ -33,12 +33,7 @@ class LessMetadataPreCompiler {
         this.modifyVars = modifyVars;
     }
 
-    process(less, context) {
-        // remove this when this code will be out of compiler (not as plugin)
-        // if(context && context.fileInfo.filename !== "input") {
-        //     return less;
-        // }
-
+    process(less) {
         less += "#devexpress-metadata-compiler{";
         for(let key in this._metadata) {
             if(Object.prototype.hasOwnProperty.call(this._metadata, key)) {
