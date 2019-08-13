@@ -57,7 +57,7 @@ export class FileManagerCommandManager {
             {
                 name: "refresh",
                 text: "Refresh",
-                icon: "refresh",
+                icon: "dx-filemanager-i dx-filemanager-i-refresh",
                 enabled: true,
                 noFileItemRequired: true
             },
