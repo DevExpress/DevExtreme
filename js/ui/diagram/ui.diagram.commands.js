@@ -3,6 +3,7 @@ import { extend } from "../../core/utils/extend";
 import { fileSaver } from "../../exporter/file_saver";
 import { isFunction } from "../../core/utils/type";
 import { getWindow } from "../../core/utils/window";
+import messageLocalization from "../../localization/message";
 
 const SEPARATOR = { widget: "separator" };
 const CSS_CLASSES = {
@@ -21,25 +22,26 @@ const DiagramCommands = {
                 export: {
                     widget: "dxButton",
                     icon: "export",
-                    text: "Export",
+                    text: messageLocalization.format("dxDiagram-commandExport"),
+                    hint: messageLocalization.format("dxDiagram-commandExport"),
                     items: [
                         {
                             command: DiagramCommand.ExportSvg, // eslint-disable-line spellcheck/spell-checker
-                            text: "Export to SVG",
+                            text: messageLocalization.format("dxDiagram-commandExportToSvg"),
                             getParameter: (widget) => {
                                 return (dataURI) => this._exportTo(widget, dataURI, "SVG", "image/svg+xml");
                             }
                         },
                         {
                             command: DiagramCommand.ExportPng, // eslint-disable-line spellcheck/spell-checker
-                            text: "Export to PNG",
+                            text: messageLocalization.format("dxDiagram-commandExportToPng"),
                             getParameter: (widget) => {
                                 return (dataURI) => this._exportTo(widget, dataURI, "PNG", "image/png");
                             }
                         },
                         {
                             command: DiagramCommand.ExportJpg, // eslint-disable-line spellcheck/spell-checker
-                            text: "Export to JPEG",
+                            text: messageLocalization.format("dxDiagram-commandExportToJpg"),
                             getParameter: (widget) => {
                                 return (dataURI) => this._exportTo(widget, dataURI, "JPEG", "image/jpeg");
                             }
@@ -48,88 +50,90 @@ const DiagramCommands = {
                 },
                 undo: {
                     command: DiagramCommand.Undo,
-                    hint: 'Undo',
+                    hint: messageLocalization.format("dxDiagram-commandUndo"),
+                    text: messageLocalization.format("dxDiagram-commandUndo"),
                     icon: "undo",
-                    text: "Undo",
                 },
                 redo: {
                     command: DiagramCommand.Redo,
-                    hint: "Redo",
+                    hint: messageLocalization.format("dxDiagram-commandRedo"),
+                    text: messageLocalization.format("dxDiagram-commandRedo"),
                     icon: "redo",
-                    text: "Redo",
                 },
                 fontName: {
                     command: DiagramCommand.FontName,
+                    hint: messageLocalization.format("dxDiagram-commandFontName"),
                     widget: "dxSelectBox",
                     items: ["Arial", "Arial Black", "Helvetica", "Times New Roman", "Courier New", "Courier", "Verdana", "Georgia", "Comic Sans MS", "Trebuchet MS"]
                 },
                 fontSize: {
                     command: DiagramCommand.FontSize,
+                    hint: messageLocalization.format("dxDiagram-commandFontSize"),
                     widget: "dxSelectBox",
                     items: ["8pt", "9pt", "10pt", "11pt", "12pt", "14pt", "16pt", "18pt", "20pt", "22pt", "24pt", "26pt", "28pt", "36pt", "48pt", "72pt"],
                     cssClass: CSS_CLASSES.SMALL_SELECT
                 },
                 bold: {
                     command: DiagramCommand.Bold,
-                    hint: "Bold",
-                    text: "Bold",
+                    hint: messageLocalization.format("dxDiagram-commandBold"),
+                    text: messageLocalization.format("dxDiagram-commandBold"),
                     icon: "bold"
                 },
                 italic: {
                     command: DiagramCommand.Italic,
-                    hint: "Italic",
-                    text: "Italic",
+                    hint: messageLocalization.format("dxDiagram-commandItalic"),
+                    text: messageLocalization.format("dxDiagram-commandItalic"),
                     icon: "italic"
                 },
                 underline: {
                     command: DiagramCommand.Underline,
-                    hint: "Underline",
-                    text: "Underline",
+                    hint: messageLocalization.format("dxDiagram-commandUnderline"),
+                    text: messageLocalization.format("dxDiagram-commandUnderline"),
                     icon: "underline"
                 },
                 fontColor: {
                     command: DiagramCommand.FontColor,
-                    text: "Text Color",
+                    text: messageLocalization.format("dxDiagram-commandTextColor"),
                     widget: "dxColorBox",
                     icon: "dx-icon dx-icon-color",
                     cssClass: CSS_CLASSES.BUTTON_COLOR
                 },
                 lineColor: {
                     command: DiagramCommand.StrokeColor,
-                    text: "Line Color",
+                    text: messageLocalization.format("dxDiagram-commandLineColor"),
                     widget: "dxColorBox",
                     icon: "dx-icon dx-icon-background",
                     cssClass: CSS_CLASSES.BUTTON_COLOR
                 },
                 fillColor: {
                     command: DiagramCommand.FillColor,
-                    text: "Fill Color",
+                    text: messageLocalization.format("dxDiagram-commandFillColor"),
                     widget: "dxColorBox",
                     icon: "dx-diagram-i dx-diagram-i-button-fill",
                     cssClass: CSS_CLASSES.BUTTON_COLOR
                 },
                 textAlignLeft: {
                     command: DiagramCommand.TextLeftAlign,
-                    hint: "Align Left",
-                    text: "Align Left",
+                    hint: messageLocalization.format("dxDiagram-commandAlignLeft"),
+                    text: messageLocalization.format("dxDiagram-commandAlignLeft"),
                     icon: "alignleft",
                 },
                 textAlignCenter: {
                     command: DiagramCommand.TextCenterAlign,
-                    hint: "Align Center",
-                    text: "Center",
+                    hint: messageLocalization.format("dxDiagram-commandAlignCenter"),
+                    text: messageLocalization.format("dxDiagram-commandAlignCenter"),
                     icon: "aligncenter"
                 },
                 textAlignRight: {
                     command: DiagramCommand.TextRightAlign,
-                    hint: "Align Right",
-                    text: "Align Right",
+                    hint: messageLocalization.format("dxDiagram-commandAlignRight"),
+                    text: messageLocalization.format("dxDiagram-commandAlignRight"),
                     icon: "alignright"
                 },
                 connectorLineType: {
                     command: DiagramCommand.ConnectorLineOption,
                     widget: "dxSelectBox",
-                    hint: "Connector Line Type",
+                    hint: messageLocalization.format("dxDiagram-commandConnectorLineType"),
                     items: [
                         { value: 0, icon: "dx-diagram-i-connector-straight dx-diagram-i", hint: "Straight" },
                         { value: 1, icon: "dx-diagram-i-connector-orthogonal dx-diagram-i", hint: "Orthogonal" }
@@ -147,7 +151,7 @@ const DiagramCommands = {
                     ],
                     displayExpr: "name",
                     valueExpr: "value",
-                    hint: "Connector Line Start",
+                    hint: messageLocalization.format("dxDiagram-commandConnectorLineStart"),
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
                 connectorLineEnd: {
@@ -159,34 +163,46 @@ const DiagramCommands = {
                     ],
                     displayExpr: "name",
                     valueExpr: "value",
-                    hint: "Connector Line End",
+                    hint: messageLocalization.format("dxDiagram-commandConnectorLineEnd"),
                     cssClass: CSS_CLASSES.BUTTON_SELECT
                 },
                 autoLayout: {
                     widget: "dxButton",
-                    text: "Auto Layout",
+                    text: messageLocalization.format("dxDiagram-commandAutoLayout"),
                     showText: "always",
                     items: [
                         {
-                            text: "Tree",
+                            text: messageLocalization.format("dxDiagram-commandAutoLayoutTree"),
                             items: [
-                                { command: DiagramCommand.AutoLayoutTreeVertical, text: "Vertical" },
-                                { command: DiagramCommand.AutoLayoutTreeHorizontal, text: "Horizontal" }
+                                {
+                                    command: DiagramCommand.AutoLayoutTreeVertical,
+                                    text: messageLocalization.format("dxDiagram-commandAutoLayoutVertical")
+                                },
+                                {
+                                    command: DiagramCommand.AutoLayoutTreeHorizontal,
+                                    text: messageLocalization.format("dxDiagram-commandAutoLayoutHorizontal")
+                                }
                             ]
                         },
                         {
-                            text: "Layered",
+                            text: messageLocalization.format("dxDiagram-commandAutoLayoutLayered"),
                             items: [
-                                { command: DiagramCommand.AutoLayoutLayeredVertical, text: "Vertical" },
-                                { command: DiagramCommand.AutoLayoutLayeredHorizontal, text: "Horizontal" }
+                                {
+                                    command: DiagramCommand.AutoLayoutLayeredVertical,
+                                    text: messageLocalization.format("dxDiagram-commandAutoLayoutVertical")
+                                },
+                                {
+                                    command: DiagramCommand.AutoLayoutLayeredHorizontal,
+                                    text: messageLocalization.format("dxDiagram-commandAutoLayoutHorizontal")
+                                }
                             ]
                         }
                     ]
                 },
                 fullscreen: {
                     command: DiagramCommand.Fullscreen,
-                    hint: "Fullscreen",
-                    text: "Fullscreen",
+                    hint: messageLocalization.format("dxDiagram-commandFullscreen"),
+                    text: messageLocalization.format("dxDiagram-commandFullscreen"),
                     icon: "dx-diagram-i dx-diagram-i-button-fullscreen",
                     cssClass: CSS_CLASSES.BUTTON_COLOR
                 }
@@ -234,54 +250,54 @@ const DiagramCommands = {
             (this.propertyPanelCommands = {
                 units: {
                     command: DiagramCommand.ViewUnits,
-                    text: "Units",
+                    text: messageLocalization.format("dxDiagram-commandUnits"),
                     widget: "dxSelectBox"
                 },
                 pageSize: {
                     command: DiagramCommand.PageSize,
-                    text: "Page Size",
+                    text: messageLocalization.format("dxDiagram-commandPageSize"),
                     widget: "dxSelectBox",
                     getValue: (v) => JSON.parse(v),
                     setValue: (v) => JSON.stringify(v)
                 },
                 pageLandscape: {
                     command: DiagramCommand.PageLandscape,
-                    text: "Page Landscape",
+                    text: messageLocalization.format("dxDiagram-commandPageLandscape"),
                     widget: "dxCheckBox"
                 },
                 pageColor: {
                     command: DiagramCommand.PageColor,
-                    text: "Page Color",
+                    text: messageLocalization.format("dxDiagram-commandPageColor"),
                     widget: "dxColorBox",
                 },
                 showGrid: {
                     command: DiagramCommand.ShowGrid,
-                    text: "Show Grid",
+                    text: messageLocalization.format("dxDiagram-commandShowGrid"),
                     widget: "dxCheckBox",
                 },
                 snapToGrid: {
                     command: DiagramCommand.SnapToGrid,
-                    text: "Snap to Grid",
+                    text: messageLocalization.format("dxDiagram-commandSnapToGrid"),
                     widget: "dxCheckBox"
                 },
                 gridSize: {
                     command: DiagramCommand.GridSize,
-                    text: "Grid Size",
+                    text: messageLocalization.format("dxDiagram-commandGridSize"),
                     widget: "dxSelectBox"
                 },
                 zoomLevel: {
                     command: DiagramCommand.ZoomLevel,
-                    widget: "dxSelectBox",
-                    text: "Zoom Level"
+                    text: messageLocalization.format("dxDiagram-commandZoomLevel"),
+                    widget: "dxSelectBox"
                 },
                 autoZoom: {
                     command: DiagramCommand.ToggleAutoZoom,
-                    text: "Auto Zoom",
+                    text: messageLocalization.format("dxDiagram-commandAutoZoom"),
                     widget: "dxCheckBox"
                 },
                 simpleView: {
                     command: DiagramCommand.ToggleSimpleView,
-                    text: "Simple View",
+                    text: messageLocalization.format("dxDiagram-commandSimpleView"),
                     widget: "dxCheckBox"
                 },
             });
@@ -319,42 +335,42 @@ const DiagramCommands = {
 
                 cut: {
                     command: DiagramCommand.Cut,
-                    text: "Cut"
+                    text: messageLocalization.format("dxDiagram-commandCut")
                 },
                 copy: {
                     command: DiagramCommand.Copy,
-                    text: "Copy"
+                    text: messageLocalization.format("dxDiagram-commandCopy")
                 },
                 paste: {
                     command: DiagramCommand.PasteInPosition,
-                    text: "Paste",
+                    text: messageLocalization.format("dxDiagram-commandPaste"),
                     getParameter: (diagramContextMenu) => {
                         return diagramContextMenu.clickPosition;
                     }
                 },
                 selectAll: {
                     command: DiagramCommand.SelectAll,
-                    text: "Select All",
+                    text: messageLocalization.format("dxDiagram-commandSelectAll")
                 },
                 delete: {
                     command: DiagramCommand.Delete,
-                    text: "Delete",
+                    text: messageLocalization.format("dxDiagram-commandDelete")
                 },
                 bringToFront: {
                     command: DiagramCommand.BringToFront,
-                    text: "Bring to Front",
+                    text: messageLocalization.format("dxDiagram-commandBringToFront")
                 },
                 sendToBack: {
                     command: DiagramCommand.SendToBack,
-                    text: "Send to Back"
+                    text: messageLocalization.format("dxDiagram-commandSendToBack")
                 },
                 lock: {
                     command: DiagramCommand.Lock,
-                    text: "Lock",
+                    text: messageLocalization.format("dxDiagram-commandLock")
                 },
                 unlock: {
                     command: DiagramCommand.Unlock,
-                    text: "Unlock"
+                    text: messageLocalization.format("dxDiagram-commandUnlock")
                 }
             });
     },

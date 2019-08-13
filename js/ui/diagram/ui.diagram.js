@@ -18,6 +18,8 @@ import { getDiagram } from "./diagram_importer";
 import { hasWindow, getWindow } from "../../core/utils/window";
 import eventsEngine from "../../events/core/events_engine";
 import eventUtils from "../../events/utils";
+import messageLocalization from "../../localization/message";
+import numberLocalization from "../../localization/number";
 
 const DIAGRAM_CLASS = "dx-diagram";
 const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
@@ -253,6 +255,9 @@ class Diagram extends Widget {
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
 
+        this._updateUnitItems();
+        this._updateFormatUnitsMethod();
+
         if(this.option("units") !== DIAGRAM_DEFAULT_UNIT) {
             this._updateUnitsState();
         }
@@ -271,7 +276,6 @@ class Diagram extends Widget {
         if(this.option("pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
             this._updatePageColorState();
         }
-
         this._updateViewUnitsState();
         this._updateShowGridState();
         this._updateSnapToGridState();
@@ -734,11 +738,23 @@ class Diagram extends Widget {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.GridSizeItems, gridSizeItems);
     }
+    _updateUnitItems() {
+        const { DiagramUnit } = getDiagram();
+        var items = {};
+        items[DiagramUnit.In] = messageLocalization.format("dxDiagram-unitIn");
+        items[DiagramUnit.Cm] = messageLocalization.format("dxDiagram-unitCm");
+        items[DiagramUnit.Px] = messageLocalization.format("dxDiagram-unitPx");
+        this._diagramInstance.settings.unitItems = items;
+    }
+    _updateFormatUnitsMethod() {
+        this._diagramInstance.settings.formatUnit = function(value) {
+            return numberLocalization.format(value);
+        };
+    }
     _updateViewUnitsState() {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.ViewUnits, this._getDiagramUnitValue(this.option("viewUnits")));
     }
-
     _updateUnitsState() {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.Units, this._getDiagramUnitValue(this.option("units")));
