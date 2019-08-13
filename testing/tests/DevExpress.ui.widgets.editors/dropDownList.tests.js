@@ -1301,7 +1301,7 @@ QUnit.module("aria accessibility", moduleConfig, () => {
         const $dropDownList = $("#dropDownList").dxDropDownList({ opened: true });
         const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const instance = $dropDownList.dxDropDownList("instance");
-        const $list = instance.content().find(`.${LIST_CLASS}`);
+        const $list = $(instance.content()).find(`.${LIST_CLASS}`);
 
         assert.notEqual($input.attr("aria-controls"), undefined, "controls exists");
         assert.equal($input.attr("aria-controls"), $list.attr("id"), "aria-controls points to list's id");
