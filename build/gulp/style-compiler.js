@@ -7,7 +7,8 @@ const gulpLess = require('gulp-less');
 const lessCompiler = require('less');
 const LessAutoPrefix = require('less-plugin-autoprefix');
 
-// const context = require('./context.js');
+const generator = require('../../themebuilder/modules/metadata-generator');
+const context = require('./context.js');
 const browsersList = require('../../package.json').browserslist;
 const starLicense = require('./header-pipes').starLicense;
 const autoPrefix = new LessAutoPrefix({ browsers: browsersList });
@@ -71,36 +72,11 @@ gulp.task('style-compiler-themes-dev', gulp.parallel(() => {
 }));
 
 
-// function runStyleCompiler(command, params, callback) {
-//     var spawn = require('child_process').spawn;
-//     var process = spawn(
-//         'dotnet',
-//         ['build/style-compiler/bin/style-compiler.dll', command].concat(params),
-//         { stdio: 'inherit' }
-//     );
+gulp.task('style-compiler-tb-metadata', () => {
+    return generator.generate(context.version.package, lessCompiler);
+});
 
-//     process.on('exit', function(code) {
-//         if(code === 0) {
-//             callback();
-//         } else {
-//             callback('Style compiler failed');
-//         }
-//     });
-// }
-
-// gulp.task('style-compiler-tb-assets', function(callback) {
-//     var assetsPath = path.join(process.cwd(), 'themebuilder');
-
-//     runStyleCompiler(
-//         'tb-assets', [
-//             '--version=' + context.version.package,
-//             '--tb-ui-path=' + assetsPath
-//         ],
-//         callback
-//     );
-// });
-
-gulp.task('style-compiler-tb-assets', () => {
+gulp.task('style-compiler-tb-assets', gulp.parallel('style-compiler-tb-metadata', () => {
     const assetsPath = path.join(process.cwd(), 'themebuilder', 'data', 'less');
     return gulp.src('styles/**/*')
         .pipe(replace(commentsRegex, ''))
@@ -113,4 +89,4 @@ gulp.task('style-compiler-tb-assets', () => {
                 );
         }))
         .pipe(gulp.dest(assetsPath));
-});
+}));

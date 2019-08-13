@@ -1,6 +1,6 @@
 const assert = require("chai").assert;
 const mock = require("mock-require");
-const lessCompiler = require("less");
+const lessCompiler = require("less/lib/less-node");
 let generator = require("../modules/metadata-generator");
 
 describe("Metadata generator - parseComments", () => {
@@ -129,7 +129,7 @@ describe("generate", () => {
 */
 @base-accent: #000;
 `;
-    const expectedMeta = `module.exports = {"generic_light":[{"Key":"@base-accent","Name":"Base accent","Type":"color"}],"_metadata_version":"0.0.0"};`;
+    const expectedMeta = `module.exports = {"generic_light_metadata":[{"Key":"@base-accent","Name":"Base accent","Type":"color"}],"_metadata_version":"0.0.0"};`;
     let resultMetadata;
     beforeEach(() => {
         mock("fs", {
@@ -145,8 +145,8 @@ describe("generate", () => {
     });
 
     it("generate meta from less", () => {
-        generator.generate("dest.json", "0.0.0", lessCompiler).then(() => {
-            assert.equal(resultMetadata, expectedMeta);
-        });
+        return generator.generate("0.0.0", lessCompiler).then(
+            () => assert.equal(resultMetadata, expectedMeta)
+        );
     });
 });
