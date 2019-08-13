@@ -887,9 +887,8 @@ QUnit.test("Rendered event handler has correct arguments", function(assert) {
 });
 
 QUnit.test("onItemRendered event arguments", function(assert) {
-    const checkOnItemRenderedEventArgs = (assert, eventArgs, expectedArgs, expectedNodeArgs) => {
+    const checkOnItemRenderedEventArgs = (assert, eventArgs, expectedArgs) => {
         const { component, element, itemData, itemElement, itemIndex, node } = expectedArgs;
-        const { children, disabled, expanded, itemData: nodeItemData, key, parent, selected, text } = expectedNodeArgs;
 
         assert.deepEqual(eventArgs.component, component, "component");
         assert.strictEqual(eventArgs.element, element, "element");
@@ -897,20 +896,18 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         assert.strictEqual(eventArgs.itemElement, itemElement, "itemElement");
         assert.strictEqual(eventArgs.itemIndex, itemIndex, "itemIndex");
         assert.deepEqual(eventArgs.node, node, "node");
-
-        // node arguments
-        assert.deepEqual(eventArgs.node.children, children, "node.children");
-        assert.strictEqual(eventArgs.node.disabled, disabled, "node.disabled");
-        assert.strictEqual(eventArgs.node.expanded, expanded, "node.expanded");
-        assert.deepEqual(eventArgs.node.itemData, nodeItemData, "node.itemData");
-        assert.strictEqual(eventArgs.node.key, key, "node.key");
-        assert.deepEqual(eventArgs.node.parent, parent, "node.parent");
-        assert.strictEqual(eventArgs.node.selected, selected, "node.selected");
-        assert.strictEqual(eventArgs.node.text, text, "node.text");
     };
 
     const onItemRenderedHandler = sinon.spy();
-    const items = DATA[2];
+    const items = [
+        {
+            key: 1, text: "Item 1", items: [
+                { key: 12, text: "Nested item 1" },
+                { key: 13, text: "Nested item 2" }
+            ]
+        },
+        { key: 2, text: "Item 2" }
+    ];
     const treeView = createInstance({
         items: items,
         showCheckBoxesMode: "none",
@@ -926,15 +923,6 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         itemElement: treeView.getItems().eq(1).get(0),
         itemIndex: 4,
         node: treeView.instance.getNodes()[1]
-    }, {
-        children: [],
-        disabled: false,
-        expanded: false,
-        itemData: items[1],
-        key: 4,
-        parent: null,
-        selected: false,
-        text: items[1].text
     });
 
     checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
@@ -944,15 +932,6 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         itemElement: treeView.getItems().eq(0).get(0),
         itemIndex: 1,
         node: treeView.instance.getNodes()[0]
-    }, {
-        children: treeView.instance.getNodes()[0].children,
-        disabled: false,
-        expanded: false,
-        itemData: items[0],
-        key: 1,
-        parent: null,
-        selected: false,
-        text: items[0].text
     });
 
     onItemRenderedHandler.reset();
@@ -967,15 +946,6 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         itemElement: treeView.getItems().eq(2).get(0),
         itemIndex: 3,
         node: treeView.instance.getNodes()[0].children[1]
-    }, {
-        children: [],
-        disabled: false,
-        expanded: false,
-        itemData: items[0].items[1],
-        key: 3,
-        parent: treeView.instance.getNodes()[0],
-        selected: false,
-        text: items[0].items[1].text
     });
 
     checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
@@ -985,15 +955,6 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         itemElement: treeView.getItems().eq(1).get(0),
         itemIndex: 2,
         node: treeView.instance.getNodes()[0].children[0]
-    }, {
-        children: [],
-        disabled: false,
-        expanded: false,
-        itemData: items[0].items[0],
-        key: 2,
-        parent: treeView.instance.getNodes()[0],
-        selected: false,
-        text: items[0].items[0].text
     });
 });
 
