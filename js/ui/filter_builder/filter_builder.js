@@ -521,17 +521,19 @@ var FilterBuilder = Widget.inherit({
                 this._invalidate();
                 break;
             case "value":
-                var disableInvalidateForValue = this._disableInvalidateForValue;
-                if(!disableInvalidateForValue) {
-                    this._initModel();
-                    this._invalidate();
+                if(args.value !== args.previousValue) {
+                    var disableInvalidateForValue = this._disableInvalidateForValue;
+                    if(!disableInvalidateForValue) {
+                        this._initModel();
+                        this._invalidate();
+                    }
+                    this._disableInvalidateForValue = false;
+                    this.executeAction("onValueChanged", {
+                        value: args.value,
+                        previousValue: args.previousValue
+                    });
+                    this._disableInvalidateForValue = disableInvalidateForValue;
                 }
-                this._disableInvalidateForValue = false;
-                this.executeAction("onValueChanged", {
-                    value: args.value,
-                    previousValue: args.previousValue
-                });
-                this._disableInvalidateForValue = disableInvalidateForValue;
                 break;
             default:
                 this.callBase(args);
