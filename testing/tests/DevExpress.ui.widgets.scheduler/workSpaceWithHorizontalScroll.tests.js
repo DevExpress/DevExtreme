@@ -54,14 +54,15 @@ QUnit.test("Date table scrollable should have right config", function(assert) {
 });
 
 QUnit.test("Header scrollable should update position if date scrollable position is changed", function(assert) {
-    var $element = this.instance.$element(),
+    const done = assert.async();
+    const $element = this.instance.$element(),
         $cells = $element.find(".dx-scheduler-date-table-cell");
 
     $cells.get(0).style.width = '100px';
 
     this.instance.option("width", 500);
 
-    var headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
+    const headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
         dateTableScrollable = $element.find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
 
     domUtils.triggerHidingEvent($element);
@@ -69,11 +70,15 @@ QUnit.test("Header scrollable should update position if date scrollable position
 
     dateTableScrollable.scrollTo({ left: 100 });
 
-    assert.equal(headerScrollable.scrollLeft(), 100, "Scroll position is OK");
+    setTimeout(() => {
+        assert.equal(headerScrollable.scrollLeft(), 100, "Scroll position is OK");
+        done();
+    });
 });
 
 QUnit.test("Time panel scrollable should update position if date scrollable position is changed", function(assert) {
-    var $element = this.instance.$element(),
+    const done = assert.async();
+    const $element = this.instance.$element(),
         timePanelScrollable = $element.find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance"),
         dateTableScrollable = $element.find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
 
@@ -82,7 +87,10 @@ QUnit.test("Time panel scrollable should update position if date scrollable posi
 
     dateTableScrollable.scrollTo({ top: 100 });
 
-    assert.equal(timePanelScrollable.scrollTop(), 100, "Scroll position is OK");
+    setTimeout(() => {
+        assert.equal(timePanelScrollable.scrollTop(), 100, "Scroll position is OK");
+        done();
+    });
 });
 
 QUnit.test("Date table scrollable should update position if time panel position is changed", function(assert) {

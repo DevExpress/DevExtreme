@@ -16,6 +16,7 @@ exports.FocusController = core.ViewController.inherit((function() {
         init: function() {
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
+            this.component._optionsByReference.focusedRowKey = true;
         },
 
         optionChanged: function(args) {

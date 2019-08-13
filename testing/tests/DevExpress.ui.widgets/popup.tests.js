@@ -885,27 +885,11 @@ QUnit.test("fullScreen with disabled shading", function(assert) {
         visible: true
     });
 
-    var $overlayContent = this.instance.$content().parent();
+    var $overlayContent = this.instance.$content().parent(),
+        $wrapper = $overlayContent.parent().get(0);
 
-    assert.equal($overlayContent.parent().get(0).style.width, "100%", "wrappers width specified");
-    assert.equal($overlayContent.parent().get(0).style.height, "100%", "wrappers height specified");
-});
-
-QUnit.test("shading should be synchronized with the option when popup goes from fullscreen to normal mode", function(assert) {
-    this.instance.option({
-        fullScreen: true,
-        shading: false,
-        width: 10,
-        height: 10,
-        visible: true
-    });
-
-    this.instance.option("fullScreen", false);
-
-    var $popupWrapper = this.instance.$content().closest("." + POPUP_WRAPPER_CLASS);
-
-    assert.equal($popupWrapper.prop('style').width, "", "wrapper is collapsed by width");
-    assert.equal($popupWrapper.prop('style').height, "", "wrapper is collapsed by height");
+    assert.equal(parseInt(getComputedStyle($wrapper).width), $(window).width(), "wrappers width specified");
+    assert.equal(parseInt(getComputedStyle($wrapper).height), $(window).height(), "wrappers height specified");
 });
 
 QUnit.test("title", function(assert) {

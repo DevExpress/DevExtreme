@@ -10,6 +10,7 @@ import dxPolarChart from "viz/polar_chart";
 import baseChartModule from "viz/chart_components/base_chart";
 import { setupSeriesFamily } from "../../helpers/chartMocks.js";
 import pointerMock from "../../helpers/pointerMock.js";
+import vizUtils from "viz/core/utils.js";
 
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -26,7 +27,7 @@ var chartContainerCounter = 1,
     moduleSetup = {
         beforeEach: function() {
             containerName = "chartContainer" + chartContainerCounter;
-            this.$container = $('<div id="" + containerName + "" style="width: 600px;height:400px;"></div>');
+            this.$container = $('<div id="' + containerName + '" style="width: 600px;height:400px;"></div>');
             $("#container").append(this.$container);
             chartContainerCounter++;
             executeAsyncMock.setup();
@@ -59,6 +60,27 @@ function createChartInstance(options, chartContainer) {
 }
 
 QUnit.module("dxChart", moduleSetup);
+
+QUnit.test("Check existing properties in styles", function(assert) {
+    this.$container.addClass("chart");
+
+    var style = $(`<style>
+        #${this.$container.attr('id')}{
+            width: 1000px;
+        }
+        .chart {
+            height: 600px;
+        }
+    </style>`);
+
+    style.appendTo("head");
+
+    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], "height"));
+    assert.ok(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], "width"));
+    assert.notOk(vizUtils.checkElementHasPropertyFromStyleSheet(this.$container[0], "position"));
+
+    style.remove();
+});
 
 QUnit.test("T244164", function(assert) {
     var chart = this.createChart({});
@@ -641,6 +663,42 @@ QUnit.test("Set argument visual range using option", function(assert) {
     chart.option("argumentAxis.visualRange", { startValue: 2, endValue: 10 });
 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 2, endValue: 10 });
+});
+
+// T804296
+QUnit.test("Set argument visual range using option. endValue was set only", function(assert) {
+    var chart = this.createChart({
+        series: [{}],
+        dataSource: [{
+            arg: 1,
+            val: 1
+        }, {
+            arg: 100,
+            val: 1
+        }]
+    });
+
+    chart.option("argumentAxis.visualRange.endValue", 80);
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 80 });
+});
+
+// T804296
+QUnit.test("Set argument visual range using option. startValue was set only", function(assert) {
+    var chart = this.createChart({
+        series: [{}],
+        dataSource: [{
+            arg: 1,
+            val: 1
+        }, {
+            arg: 100,
+            val: 1
+        }]
+    });
+
+    chart.option("argumentAxis.visualRange.startValue", 20);
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 20, endValue: 100 });
 });
 
 QUnit.test("Using the single section of axis options for some panes (check customVisualRange merging)", function(assert) {

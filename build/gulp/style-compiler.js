@@ -4,6 +4,7 @@ const fs = require('fs');
 const replace = require('gulp-replace');
 const replaceAsync = require('gulp-replace-async');
 const gulpLess = require('gulp-less');
+const plumber = require('gulp-plumber');
 const lessCompiler = require('less');
 const LessAutoPrefix = require('less-plugin-autoprefix');
 
@@ -19,6 +20,7 @@ const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 const compileBundle = (src) => {
     return gulp
         .src(src)
+        .pipe(plumber())
         .pipe(gulpLess({
             paths: [ path.join(process.cwd(), 'styles') ],
             plugins: [ autoPrefix ],

@@ -21,12 +21,17 @@ env:
     - TARGET=test BROWSER=firefox CONSTEL=ui.grid
     - TARGET=test BROWSER=firefox CONSTEL=ui.scheduler
     - TARGET=test BROWSER=firefox CONSTEL=viz
+    - TARGET=test_functional
     - TARGET=test_themebuilder
 
 cache:
   directories:
     - node_modules
     - dotnet_packages
+
+before_cache:
+  # See https://github.com/DevExpress/DevExtreme/pull/1251
+  - sudo chmod -R +Xr dotnet_packages
 
 script:
 

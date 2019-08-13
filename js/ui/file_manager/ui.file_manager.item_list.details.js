@@ -56,7 +56,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     _createColumns() {
         let columns = [
             {
-                dataField: "thumbnail",
+                dataField: "isDirectory",
                 caption: "",
                 width: 64,
                 alignment: "center",
