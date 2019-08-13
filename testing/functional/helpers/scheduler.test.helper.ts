@@ -1,10 +1,39 @@
 import { Selector, ClientFunction } from "testcafe";
 
 export default class SchedulerTestHelper {
-    scheduler: Selector;
+    protected scheduler: Selector;
 
     constructor(selector: string) {
         this.scheduler = Selector(selector);
+    }
+
+    enableNativeScroll() {
+        return (ClientFunction(() => {
+            ($(".dx-scheduler-date-table-scrollable") as any).dxScrollable("instance").option("useNative", true);
+        }))();
+    }
+
+    setOption(name: string, value: string) {
+        return (ClientFunction(() => {
+            const instance = ($("#container") as any)["dxScheduler"]("instance");
+            instance.option(name, value);
+        }, { dependencies: { name, value } }))();
+    }
+
+    getWorkSpaceScroll() {
+        const scrollElement = this.scheduler.find(".dx-scheduler-date-table-scrollable .dx-scrollable-container");
+        return {
+            left: scrollElement.scrollLeft,
+            top: scrollElement.scrollTop
+        };
+    }
+
+    getHeaderSpaceScroll() {
+        const scrollElement = this.scheduler.find(".dx-scheduler-header-scrollable .dx-scrollable-container");
+        return {
+            left: scrollElement.scrollLeft,
+            top: scrollElement.scrollTop
+        };
     }
 
     getDateTableRow(rowIndex = 0) {
