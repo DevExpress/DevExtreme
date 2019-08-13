@@ -1,4 +1,5 @@
 const LessPluginAutoPrefix = require("less-plugin-autoprefix");
+const getBundleName = require("./bundle-resolver");
 
 const BOOTSTRAP_SCSS_PATH = "bootstrap/scss/";
 const THEMEBUILDER_LESS_PATH = "devextreme-themebuilder/data/less/";
@@ -249,9 +250,7 @@ class LessTemplateLoader {
     }
 
     _loadLess(theme, colorScheme) {
-        colorScheme = colorScheme.replace(/-/g, ".");
-        const themePart = (theme === "material" ? theme + "." : "");
-        const path = `bundles/${theme}/dx.${themePart}${colorScheme}.less`;
+        const path = getBundleName(theme, colorScheme);
         return this._loadLessByFileName(path);
     }
 
