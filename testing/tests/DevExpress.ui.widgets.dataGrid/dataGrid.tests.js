@@ -205,7 +205,13 @@ QUnit.test("DataGrid - Should hide filter row menu after losing it's focus", fun
     assert.ok(subMenu._isVisible(), "submenu exists");
 
     // act
-    $menu.trigger("blur");
+    if(browser.msie && browser.version <= 11) {
+        var event = document.createEvent('Event');
+        event.initEvent('blur', true, true);
+        $menu[0].dispatchEvent(event);
+    } else {
+        $menu.blur();
+    }
 
     // assert
     assert.notOk(subMenu._isVisible(), "submenu is hidden");
