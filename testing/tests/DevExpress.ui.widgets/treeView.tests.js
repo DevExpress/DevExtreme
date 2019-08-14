@@ -209,5 +209,6 @@ import "./treeViewParts/selection.js";
 import "./treeViewParts/selectAllMode.js";
 import "./treeViewParts/selectAllWithSelectNodesRecursiveFalse.js";
 import "./treeViewParts/selectNodesRecursiveTrue.js";
+import "./treeViewParts/treeview.size.tests.js";
 import "./treeViewParts/usageWithoutKeys.js";
 import "./treeViewParts/virtualMode.js";
