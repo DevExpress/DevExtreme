@@ -2139,7 +2139,7 @@ Axis.prototype = {
 
         const zoomResults = that.handleZooming(visualRange, args[1]);
         if(!zoomResults.isPrevented) {
-            that._visualRange(that, zoomResults.range);
+            that._visualRange(that, zoomResults);
         }
     },
 
@@ -2158,6 +2158,7 @@ Axis.prototype = {
         !preventEvents.start && that._eventTrigger("zoomStart", zoomStartEvent);
         const zoomResults = {
             isPrevented: zoomStartEvent.cancel,
+            skipEventRising: preventEvents.skipEventRising,
             range: visualRange || zoomStartEvent.range
         };
 
