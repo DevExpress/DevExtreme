@@ -296,7 +296,7 @@ var Pager = Widget.inherit({
         if(pagesLength > 1) {
             that._pageClickHandler = that._wrapClickAction(clickPagesIndexAction);
 
-            eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), PAGER_PAGE_CLASS, that._pageClickHandler);
+            eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), "." + PAGER_PAGE_CLASS, that._pageClickHandler);
         }
 
         for(var i = 0; i < pagesLength; i++) {
