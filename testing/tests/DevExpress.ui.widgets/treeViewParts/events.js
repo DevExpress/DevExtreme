@@ -896,6 +896,16 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         assert.strictEqual(eventArgs.itemElement, itemElement, "itemElement");
         assert.strictEqual(eventArgs.itemIndex, itemIndex, "itemIndex");
         assert.deepEqual(eventArgs.node, node, "node");
+
+        // node arguments
+        assert.deepEqual(eventArgs.node.children, node.children, "children");
+        assert.strictEqual(eventArgs.node.disabled, node.disabled, "disabled");
+        assert.strictEqual(eventArgs.node.expanded, node.expanded, "expanded");
+        assert.strictEqual(eventArgs.node.itemData, node.itemData, "itemData");
+        assert.strictEqual(eventArgs.node.key, node.key, "key");
+        assert.deepEqual(eventArgs.node.parent, node.parent, "parent");
+        assert.strictEqual(eventArgs.node.selected, node.selected, "selected");
+        assert.strictEqual(eventArgs.node.text, node.text, "text");
     };
 
     const onItemRenderedHandler = sinon.spy();
@@ -922,7 +932,7 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         element: treeView.instance.$element().get(0),
         itemData: items[1],
         itemElement: treeView.getItems().eq(1).get(0),
-        itemIndex: "2",
+        itemIndex: 1,
         node: treeView.instance.getNodes()[1]
     });
 
@@ -931,7 +941,7 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         element: treeView.instance.$element().get(0),
         itemData: items[0],
         itemElement: treeView.getItems().eq(0).get(0),
-        itemIndex: "1",
+        itemIndex: 0,
         node: treeView.instance.getNodes()[0]
     });
 
@@ -945,7 +955,7 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         element: treeView.instance.$element().get(0),
         itemData: items[0].items[1],
         itemElement: treeView.getItems().eq(2).get(0),
-        itemIndex: "1_2",
+        itemIndex: 3,
         node: treeView.instance.getNodes()[0].children[1]
     });
 
@@ -954,7 +964,7 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         element: treeView.instance.$element().get(0),
         itemData: items[0].items[0],
         itemElement: treeView.getItems().eq(1).get(0),
-        itemIndex: "1_1",
+        itemIndex: 2,
         node: treeView.instance.getNodes()[0].children[0]
     });
 });
