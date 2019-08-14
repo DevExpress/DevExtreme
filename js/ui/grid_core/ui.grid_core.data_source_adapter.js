@@ -227,7 +227,9 @@ module.exports = gridCore.Controller.inherit((function() {
                 cachedPagesData = that._cachedPagesData;
 
             if((options.storeLoadOptions.filter && !options.remoteOperations.filtering) || (options.storeLoadOptions.sort && !options.remoteOperations.sorting)) {
-                options.remoteOperations = {};
+                options.remoteOperations = {
+                    filtering: options.remoteOperations.filtering
+                };
             }
 
             if(isReload) {
