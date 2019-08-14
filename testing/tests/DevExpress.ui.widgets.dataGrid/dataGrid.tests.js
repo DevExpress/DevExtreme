@@ -4668,7 +4668,8 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
         paging: { pageSize: 10 },
         scrolling: {
             mode: "virtual",
-            rowRenderingMode: "virtual"
+            rowRenderingMode: "virtual",
+            useNative: false
         },
         columns: ["field"]
     }).dxDataGrid("instance");
