@@ -3441,6 +3441,17 @@ QUnit.module("datebox w/ time list", {
         assert.equal(value.getHours(), 13, "Correct hours");
         assert.equal(value.getMinutes(), 0, "Correct minutes");
     });
+
+    QUnit.test("items are rendered when value is 'undefined' (T805931)", (assert) => {
+        this.dateBox.option({
+            value: undefined
+        });
+
+        this.dateBox.option("opened", true);
+
+        const $timeListItems = $(".dx-list .dx-list-item");
+        assert.ok($timeListItems.length > 0);
+    });
 });
 
 QUnit.module("keyboard navigation", {

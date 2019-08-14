@@ -3,6 +3,7 @@ var $ = require("../../core/renderer"),
     List = require("../list"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
     noop = require("../../core/utils/common").noop,
+    ensureDefined = require("../../core/utils/common").ensureDefined,
     isDate = require("../../core/utils/type").isDate,
     extend = require("../../core/utils/extend").extend,
     dateUtils = require("./ui.date_utils"),
@@ -198,7 +199,7 @@ var ListStrategy = DateBoxStrategy.inherit({
 
     _getBoundaryDate: function(boundary) {
         var boundaryValue = BOUNDARY_VALUES[boundary],
-            currentValue = new Date(this.dateBox.dateOption("value"));
+            currentValue = new Date(ensureDefined(this.dateBox.dateOption("value"), 0));
 
         return new Date(
             currentValue.getFullYear(),
