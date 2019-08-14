@@ -29,8 +29,6 @@
 
     .dx-gantt-header {
         color: @treelist-columnchooser-item-color;
-        border-bottom: 1px solid @base-border-color;
-        margin-bottom: -1px;
 
         .dx-gantt-tsac,
         .dx-gantt-tsa,
@@ -171,13 +169,6 @@
 
     .dx-gantt-altRow,
     .dx-gantt-collapsable-row {
-        background-color: darken(@base-bg, 5%);
-    }
-
-    &.dx-gantt-dark {
-        .dx-gantt-altRow,
-        .dx-gantt-collapsable-row {
-            background-color: lighten(@base-bg, 5%);
-        }
+        background-color: @gantt-collapsable-row-bg;
     }
 }
