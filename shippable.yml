@@ -19,6 +19,7 @@ env:
     - TARGET=test BROWSER=firefox CONSTEL=ui.grid
     - TARGET=test BROWSER=firefox CONSTEL=ui.scheduler
     - TARGET=test BROWSER=firefox CONSTEL=viz
+    - TARGET=test_functional
     - TARGET=test_themebuilder
 
 build:

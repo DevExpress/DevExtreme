@@ -1,24 +1,26 @@
+import messageLocalization from "../../localization/message";
+
 const DiagramToolbox = {
     groups: {
         general: {
             category: "general",
-            title: 'General'
+            title: messageLocalization.format("dxDiagram-categoryGeneral")
         },
         flowchart: {
             category: "flowchart",
-            title: 'Flowchart'
+            title: messageLocalization.format("dxDiagram-categoryFlowchart")
         },
         orgChart: {
             category: "orgChart",
-            title: 'Org Chart'
+            title: messageLocalization.format("dxDiagram-categoryOrgChart")
         },
         containers: {
             category: "containers",
-            title: 'Containers'
+            title: messageLocalization.format("dxDiagram-categoryContainers")
         },
         custom: {
             category: "custom",
-            title: 'Custom'
+            title: messageLocalization.format("dxDiagram-categoryCustom")
         }
     },
 

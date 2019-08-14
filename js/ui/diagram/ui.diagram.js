@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import Drawer from "../drawer";
+import LoadIndicator from "../load_indicator";
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import typeUtils from '../../core/utils/type';
@@ -10,6 +11,7 @@ import DiagramLeftPanel from "./ui.diagram.leftpanel";
 import DiagramRightPanel from "./ui.diagram.rightpanel";
 import DiagramContextMenu from "./ui.diagram.contextmenu";
 import DiagramToolbox from "./ui.diagram.toolbox";
+import DiagramOptionsUpdateBar from "./ui.diagram.optionsupdate";
 import NodesOption from "./ui.diagram.nodes";
 import EdgesOptions from "./ui.diagram.edges";
 import Tooltip from "../tooltip";
@@ -17,6 +19,8 @@ import { getDiagram } from "./diagram_importer";
 import { hasWindow, getWindow } from "../../core/utils/window";
 import eventsEngine from "../../events/core/events_engine";
 import eventUtils from "../../events/utils";
+import messageLocalization from "../../localization/message";
+import numberLocalization from "../../localization/number";
 
 const DIAGRAM_CLASS = "dx-diagram";
 const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
@@ -24,8 +28,11 @@ const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + "-toolbar-wrapper";
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + "-content-wrapper";
 const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + "-drawer-wrapper";
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + "-content";
+const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + "-loading-indicator";
 
 const DIAGRAM_DEFAULT_UNIT = "in";
+const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
+const DIAGRAM_DEFAULT_AUTOZOOM = "disabled";
 const DIAGRAM_DEFAULT_PAGE_SIZE = { width: 5.827, height: 8.268 };
 const DIAGRAM_DEFAULT_PAGE_ORIENTATION = "portrait";
 const DIAGRAM_DEFAULT_PAGE_COLOR = "white";
@@ -42,6 +49,8 @@ class Diagram extends Widget {
 
         super._init();
         this._initDiagram();
+
+        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
     }
     _initMarkup() {
         super._initMarkup();
@@ -69,7 +78,7 @@ class Diagram extends Widget {
         const $drawer = $("<div>")
             .appendTo($drawerWrapper);
 
-        const $content = $("<div>")
+        this._content = $("<div>")
             .addClass(DIAGRAM_CONTENT_CLASS)
             .appendTo($drawer);
 
@@ -80,19 +89,28 @@ class Diagram extends Widget {
 
         this._contextMenu = undefined;
         if(this.option("contextMenu.enabled")) {
-            this._renderContextMenu($content);
+            this._renderContextMenu(this._content);
         }
 
-        !isServerSide && this._diagramInstance.createDocument($content[0]);
+        !isServerSide && this._diagramInstance.createDocument(this._content[0]);
 
-        this._updateZoomLevelState();
-        this._updateAutoZoomState();
-        this._updateSimpleViewState();
-        this._updateReadOnlyState();
-
+        if(this.option("zoomLevel") !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
+            this._updateZoomLevelState();
+        }
+        if(this.option("autoZoom") !== DIAGRAM_DEFAULT_AUTOZOOM) {
+            this._updateAutoZoomState();
+        }
+        if(this.option("simpleView")) {
+            this._updateSimpleViewState();
+        }
+        if(this.option("readOnly") || this.option("disabled")) {
+            this._updateReadOnlyState();
+        }
         if(this.option("fullscreen")) {
             this._updateFullscreenState();
         }
+
+        this._diagramInstance.barManager.registerBar(this.optionsUpdateBar);
     }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
@@ -225,6 +243,19 @@ class Diagram extends Widget {
         });
     }
 
+    _showLoadingIndicator() {
+        this._loadingIndicator = $("<div>").addClass(DIAGRAM_LOADING_INDICATOR_CLASS);
+        this._createComponent(this._loadingIndicator, LoadIndicator, {});
+        var $parent = this._content || this.$element();
+        $parent.append(this._loadingIndicator);
+    }
+    _hideLoadingIndicator() {
+        if(!this._loadingIndicator) return;
+
+        this._loadingIndicator.remove();
+        this._loadingIndicator = null;
+    }
+
     _initDiagram() {
         const { DiagramControl } = getDiagram();
         this._diagramInstance = new DiagramControl();
@@ -238,6 +269,9 @@ class Diagram extends Widget {
         this._diagramInstance.onToolboxDragStart = this._raiseToolboxDragStart.bind(this);
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
+
+        this._updateUnitItems();
+        this._updateFormatUnitsMethod();
 
         if(this.option("units") !== DIAGRAM_DEFAULT_UNIT) {
             this._updateUnitsState();
@@ -257,7 +291,6 @@ class Diagram extends Widget {
         if(this.option("pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
             this._updatePageColorState();
         }
-
         this._updateViewUnitsState();
         this._updateShowGridState();
         this._updateSnapToGridState();
@@ -334,7 +367,7 @@ class Diagram extends Widget {
     _bindDiagramData() {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;
 
-        const { DiagramCommand } = getDiagram();
+        const { DiagramCommand, ConnectorLineOption, ConnectorLineEnding } = getDiagram();
         const data = {
             nodeDataSource: this._nodes,
             edgeDataSource: this._edges,
@@ -400,27 +433,108 @@ class Diagram extends Widget {
 
                 getText: this._createOptionGetter("edges.textExpr"),
                 setText: this._createOptionSetter("edges.textExpr"),
-                getLineOption: this._createOptionGetter("edges.lineTypeExpr"),
-                setLineOption: this._createOptionSetter("edges.lineTypeExpr"),
-                getStartLineEnding: this._createOptionGetter("edges.fromLineEndExpr"),
-                setStartLineEnding: this._createOptionSetter("edges.fromLineEndExpr"),
-                getEndLineEnding: this._createOptionGetter("edges.toLineEndExpr"),
-                setEndLineEnding: this._createOptionSetter("edges.toLineEndExpr"),
+                getLineOption: function(obj) {
+                    var getter = this._createOptionGetter("edges.lineTypeExpr");
+                    if(!getter) return;
+
+                    var lineType = getter(obj);
+                    switch(lineType) {
+                        case "straight":
+                            return ConnectorLineOption.Straight;
+                        default:
+                            return ConnectorLineOption.Orthogonal;
+                    }
+                }.bind(this),
+                setLineOption: function(obj, value) {
+                    var setter = this._createOptionSetter("edges.lineTypeExpr");
+                    if(!setter) return;
+
+                    switch(value) {
+                        case ConnectorLineOption.Straight:
+                            value = "straight";
+                            break;
+                        case ConnectorLineOption.Orthogonal:
+                            value = "orthogonal";
+                            break;
+                    }
+                    setter(obj, value);
+                }.bind(this),
+                getStartLineEnding: function(obj) {
+                    var getter = this._createOptionGetter("edges.fromLineEndExpr");
+                    if(!getter) return;
+
+                    var lineType = getter(obj);
+                    switch(lineType) {
+                        case "arrow":
+                            return ConnectorLineEnding.Arrow;
+                        default:
+                            return ConnectorLineEnding.None;
+                    }
+                }.bind(this),
+                setStartLineEnding: function(obj, value) {
+                    var setter = this._createOptionSetter("edges.fromLineEndExpr");
+                    if(!setter) return;
+
+                    switch(value) {
+                        case ConnectorLineEnding.Arrow:
+                            value = "arrow";
+                            break;
+                        case ConnectorLineEnding.None:
+                            value = "none";
+                            break;
+                    }
+                    setter(obj, value);
+                }.bind(this),
+                getEndLineEnding: function(obj) {
+                    var getter = this._createOptionGetter("edges.toLineEndExpr");
+                    if(!getter) return;
+
+                    var lineType = getter(obj);
+                    switch(lineType) {
+                        case "none":
+                            return ConnectorLineEnding.None;
+                        default:
+                            return ConnectorLineEnding.Arrow;
+                    }
+                }.bind(this),
+                setEndLineEnding: function(obj, value) {
+                    var setter = this._createOptionSetter("edges.toLineEndExpr");
+                    if(!setter) return;
+
+                    switch(value) {
+                        case ConnectorLineEnding.Arrow:
+                            value = "arrow";
+                            break;
+                        case ConnectorLineEnding.None:
+                            value = "none";
+                            break;
+                    }
+                    setter(obj, value);
+                }.bind(this)
             },
-            layoutType: this._getDataBindingLayoutType()
+            layoutParameters: this._getDataBindingLayoutParameters()
         };
         this._executeDiagramCommand(DiagramCommand.BindDocument, data);
     }
-    _getDataBindingLayoutType() {
-        const { DataLayoutType } = getDiagram();
-        switch(this.option("nodes.autoLayout")) {
-            case "sugiyama":
-                return DataLayoutType.Sugiyama;
-            case "tree":
-                return DataLayoutType.Tree;
-            default:
-                return undefined;
+    _getDataBindingLayoutParameters() {
+        const { DataLayoutType, DataLayoutOrientation } = getDiagram();
+        let layoutParametersOption = this.option("nodes.autoLayout");
+        if(!layoutParametersOption) return undefined;
+        let parameters = (layoutParametersOption) ? {} : undefined;
+        if(layoutParametersOption) {
+            let layoutType = layoutParametersOption.type || layoutParametersOption;
+            if(layoutType === "tree") {
+                parameters.type = DataLayoutType.Tree;
+            } else if(layoutType === "sugiyama") {
+                parameters.type = DataLayoutType.Sugiyama;
+            }
+            if(layoutParametersOption.orientation === "vertical") {
+                parameters.orientation = DataLayoutOrientation.Vertical;
+            } else if(layoutParametersOption.orientation === "horizontal") {
+                parameters.orientation = DataLayoutOrientation.Horizontal;
+            }
         }
+        return parameters;
     }
     _getAutoZoomValue(option) {
         const { AutoZoomMode } = getDiagram();
@@ -639,11 +753,23 @@ class Diagram extends Widget {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.GridSizeItems, gridSizeItems);
     }
+    _updateUnitItems() {
+        const { DiagramUnit } = getDiagram();
+        var items = {};
+        items[DiagramUnit.In] = messageLocalization.format("dxDiagram-unitIn");
+        items[DiagramUnit.Cm] = messageLocalization.format("dxDiagram-unitCm");
+        items[DiagramUnit.Px] = messageLocalization.format("dxDiagram-unitPx");
+        this._diagramInstance.settings.unitItems = items;
+    }
+    _updateFormatUnitsMethod() {
+        this._diagramInstance.settings.formatUnit = function(value) {
+            return numberLocalization.format(value);
+        };
+    }
     _updateViewUnitsState() {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.ViewUnits, this._getDiagramUnitValue(this.option("viewUnits")));
     }
-
     _updateUnitsState() {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.Units, this._getDiagramUnitValue(this.option("units")));
@@ -673,20 +799,41 @@ class Diagram extends Widget {
 
 
     /**
-    * @name dxDiagramMethods.getData
-    * @publicName getData()
+    * @name dxDiagramMethods.export
+    * @publicName export()
     * @return string
     */
-    getData() {
+    export() {
         return this._getDiagramData();
     }
     /**
-    * @name dxDiagramMethods.setData
-    * @publicName setData(data, updateExistingItemsOnly)
+    * @name dxDiagramMethods.exportTo
+    * @publicName exportTo(format, callback)
+    * @param1 format:Enums.DiagramExportFormat
+    * @param2 callback:function
+    */
+    exportTo(format, callback) {
+        var command = this._getDiagramExportToCommand(format);
+        this._executeDiagramCommand(command, callback);
+    }
+    _getDiagramExportToCommand(format) {
+        const { DiagramCommand } = getDiagram();
+        switch(format) {
+            case "png":
+                return DiagramCommand.ExportPng;
+            case "jpg":
+                return DiagramCommand.ExportJpg;
+            default:
+                return DiagramCommand.ExportSvg;
+        }
+    }
+    /**
+    * @name dxDiagramMethods.import
+    * @publicName import(data, updateExistingItemsOnly)
     * @param1 data:string
     * @param2 updateExistingItemsOnly:boolean
     */
-    setData(data, updateExistingItemsOnly) {
+    import(data, updateExistingItemsOnly) {
         this._setDiagramData(data, updateExistingItemsOnly);
         this._raiseDataChangeAction();
     }
@@ -714,7 +861,7 @@ class Diagram extends Widget {
             * @type Array<Number>
             * @default undefined
             */
-            zoomLevel: 1,
+            zoomLevel: DIAGRAM_DEFAULT_ZOOMLEVEL,
             /**
             * @name dxDiagramOptions.simpleView
             * @type Boolean
@@ -724,9 +871,9 @@ class Diagram extends Widget {
             /**
             * @name dxDiagramOptions.autoZoom
             * @type Enums.DiagramAutoZoom
-            * @default false
+            * @default "disabled"
             */
-            autoZoom: false,
+            autoZoom: DIAGRAM_DEFAULT_AUTOZOOM,
             /**
             * @name dxDiagramOptions.fullscreen
             * @type Boolean
@@ -825,7 +972,6 @@ class Diagram extends Widget {
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 data:string
             * @action
             */
             onDataChanged: null,
@@ -941,8 +1087,16 @@ class Diagram extends Widget {
                 heightExpr: undefined,
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
-                 * @type Enums.DiagramAutoLayout
+                 * @type Enums.DiagramDataLayoutType|Object
                  * @default "tree"
+                 */
+                /**
+                 * @name dxDiagramOptions.nodes.autoLayout.type
+                 * @type Enums.DiagramDataLayoutType
+                 */
+                /**
+                 * @name dxDiagramOptions.nodes.autoLayout.orientation
+                 * @type Enums.DiagramDataLayoutOrientation
                  */
                 autoLayout: "tree"
             },
@@ -1297,14 +1451,10 @@ class Diagram extends Widget {
         this._dataChangeAction = this._createActionByOption("onDataChanged");
     }
     _raiseDataChangeAction() {
-        if(!this.option("onDataChanged")) return;
-
         if(!this._dataChangeAction) {
             this._createDataChangeAction();
         }
-        this._dataChangeAction({
-            data: this.getData()
-        });
+        this._dataChangeAction();
     }
     _raiseEdgeInsertedAction(data, callback) {
         if(this._edgesOption) {
@@ -1348,14 +1498,28 @@ class Diagram extends Widget {
     }
 
     _optionChanged(args) {
+        if(this.optionsUpdateBar.isUpdateLocked()) return;
+
+        this.optionsUpdateBar.beginUpdate();
+        try {
+            this._optionChangedCore(args);
+        } finally {
+            this.optionsUpdateBar.endUpdate();
+        }
+    }
+    _optionChangedCore(args) {
         switch(args.name) {
             case "readOnly":
             case "disabled":
                 this._updateReadOnlyState();
                 break;
             case "zoomLevel":
-                this._updateZoomLevelItemsState();
-                this._updateZoomLevelState();
+                if(args.fullName === "zoomLevel" || args.fullName === "zoomLevel.items") {
+                    this._updateZoomLevelItemsState();
+                }
+                if(args.fullName === "zoomLevel" || args.fullName === "zoomLevel.value") {
+                    this._updateZoomLevelState();
+                }
                 break;
             case "autoZoom":
                 this._updateAutoZoomState();
@@ -1373,8 +1537,12 @@ class Diagram extends Widget {
                 this._updateSnapToGridState();
                 break;
             case "gridSize":
-                this._updateGridSizeItemsState();
-                this._updateGridSizeState();
+                if(args.fullName === "gridSize" || args.fullName === "gridSize.items") {
+                    this._updateGridSizeItemsState();
+                }
+                if(args.fullName === "gridSize" || args.fullName === "gridSize.value") {
+                    this._updateGridSizeState();
+                }
                 break;
             case "viewUnits":
                 this._updateViewUnitsState();
@@ -1383,8 +1551,12 @@ class Diagram extends Widget {
                 this._updateUnitsState();
                 break;
             case "pageSize":
-                this._updatePageSizeItemsState();
-                this._updatePageSizeState();
+                if(args.fullName === "pageSize" || args.fullName === "pageSize.items") {
+                    this._updatePageSizeItemsState();
+                }
+                if(args.fullName === "pageSize" || args.fullName === "pageSize.width" || args.fullName === "pageSize.height") {
+                    this._updatePageSizeState();
+                }
                 break;
             case "pageOrientation":
                 this._updatePageOrientationState();
@@ -1392,11 +1564,12 @@ class Diagram extends Widget {
             case "pageColor":
                 this._updatePageColorState();
                 break;
-            case "nodes.autoLayout":
-                this._refreshDataSources();
-                break;
             case "nodes":
-                this._refreshNodesDataSource();
+                if(args.fullName === "nodes.autoLayout") {
+                    this._refreshDataSources();
+                } else {
+                    this._refreshNodesDataSource();
+                }
                 break;
             case "edges":
                 this._refreshEdgesDataSource();
@@ -1405,29 +1578,41 @@ class Diagram extends Widget {
                 this._updateCustomShapes(args.value, args.previousValue);
                 this._invalidate();
                 break;
-            case "contextMenu.commands":
-                this._invalidateContextMenuCommands();
-                break;
-            case "propertiesPanel.groups":
-                this._invalidatePropertiesPanelGroups();
-                break;
-            case "toolbar.commands":
-                this._invalidateToolbarCommands();
-                break;
-            case "toolbox.groups":
-                this._invalidateToolboxGroups();
-                break;
             case "contextMenu":
+                if(args.fullName === "contextMenu.commands") {
+                    this._invalidateContextMenuCommands();
+                } else {
+                    this._invalidate();
+                }
+                break;
             case "propertiesPanel":
+                if(args.name === "propertiesPanel.groups") {
+                    this._invalidatePropertiesPanelGroups();
+                } else {
+                    this._invalidate();
+                }
+                break;
             case "toolbox":
+                if(args.fullName === "toolbox.groups") {
+                    this._invalidateToolboxGroups();
+                } else {
+                    this._invalidate();
+                }
+                break;
             case "toolbar":
-                this._invalidate();
+                if(args.fullName === "toolbar.commands") {
+                    this._invalidateToolbarCommands();
+                } else {
+                    this._invalidate();
+                }
                 break;
             case "onDataChanged":
                 this._createDataChangeAction();
                 break;
             case "export":
-                this._toolbarInstance.option("export", this.option("export"));
+                if(this._toolbarInstance) {
+                    this._toolbarInstance.option("export", args.value);
+                }
                 break;
             default:
                 super._optionChanged(args);

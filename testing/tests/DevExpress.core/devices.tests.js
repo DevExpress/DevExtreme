@@ -13,6 +13,7 @@ var $ = require("jquery"),
 var userAgents = {
     iphone_6: "Mozilla/5.0 (iPhone; CPU OS 6_0_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25",
     ipad_7: "Mozilla/5.0 (iPad; CPU OS 7_0_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25",
+    android_9: "Mozilla/5.0 (Linux; Android 9; Mi A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.143 Mobile Safari/537.36",
     android_4_3_4: "Mozilla/5.0 (Linux; Android 4.3.4; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19",
     android_4_4_0: "Mozilla/5.0 (Linux; Android 4.4.0; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19",
     android_tablet_4_0_3: "Mozilla/5.0 (Linux; Android 4.0.3; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Safari/535.19",
@@ -68,6 +69,12 @@ QUnit.test("android by userAgent", function(assert) {
     assert.equal(device.platform, "android", "platform is android");
     assert.equal(device.version.toString(), "4,0,3", "correct version");
     assert.equal(device.deviceType, "tablet", "deviceType is tablet");
+
+    device = fromUA(userAgents.android_9);
+
+    assert.equal(device.platform, "android", "platform is android");
+    assert.equal(device.version.toString(), "9,0,0", "correct version");
+    assert.equal(device.deviceType, "phone", "deviceType is phone");
 });
 
 QUnit.test("winphone8 by userAgent", function(assert) {

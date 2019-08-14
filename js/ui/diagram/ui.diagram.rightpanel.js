@@ -4,6 +4,7 @@ import Accordion from "../accordion";
 import Form from "../form";
 import DiagramCommands from "./ui.diagram.commands";
 import { extend } from "../../core/utils/extend";
+import messageLocalization from "../../localization/message";
 import DiagramBar from "./diagram_bar";
 import ScrollView from "../scroll_view";
 import { Deferred } from "../../core/utils/deferred";
@@ -30,7 +31,7 @@ class DiagramRightPanel extends DiagramPanel {
     }
     _getAccordionDataSource() {
         return [{
-            title: "Properties",
+            title: messageLocalization.format("dxDiagram-commandProperties"),
             onTemplate: (widget, $element) => widget._renderOptions($element)
         }];
     }

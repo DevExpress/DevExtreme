@@ -19,6 +19,7 @@ class DiagramContextMenu extends Widget {
         super._initMarkup();
 
         this._commands = DiagramCommands.getContextMenuCommands(this.option("commands"));
+        this._commandToIndexMap = {};
         this._commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
 
         const $contextMenu = $("<div>")
@@ -79,7 +80,7 @@ class DiagramContextMenu extends Widget {
     _setItemVisible(key, visible) {
         if(key in this._commandToIndexMap) {
             var command = this._commands[this._commandToIndexMap[key]];
-            command.visible = visible;
+            if(command) command.visible = visible;
         }
     }
     _setEnabled(enabled) {
