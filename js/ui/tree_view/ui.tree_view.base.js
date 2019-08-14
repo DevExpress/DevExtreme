@@ -885,7 +885,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this.setAria("selected", nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
-        this.callBase(nodeIndex, nodeData.item, $node);
+        this.callBase(this._renderedItemsCount + nodeIndex, nodeData.item, $node);
 
         if(nodeData.item.visible !== false) {
             this._renderChildren($node, node);
