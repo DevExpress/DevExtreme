@@ -6,6 +6,13 @@ class ItemsOption extends Component {
         super();
         this._diagramWidget = diagramWidget;
     }
+    _dataSourceLoadingChangedHandler(isLoading) {
+        if(isLoading && !this._dataSource.isLoaded()) {
+            this._diagramWidget._showLoadingIndicator();
+        } else {
+            this._diagramWidget._hideLoadingIndicator();
+        }
+    }
     insert(data, callback) {
         this._dataSource.store().insert(data).done(
             function(data) {

@@ -1,10 +1,55 @@
 import { Selector, ClientFunction } from "testcafe";
 
 export default class SchedulerTestHelper {
-    scheduler: Selector;
+    protected scheduler: Selector;
 
     constructor(selector: string) {
         this.scheduler = Selector(selector);
+    }
+
+    enableNativeScroll() {
+        return (ClientFunction(() => {
+            ($(".dx-scheduler-date-table-scrollable") as any).dxScrollable("instance").option("useNative", true);
+        }))();
+    }
+
+    setOption(name: string, value: string) {
+        return (ClientFunction(() => {
+            const instance = ($("#container") as any)["dxScheduler"]("instance");
+            instance.option(name, value);
+        }, { dependencies: { name, value } }))();
+    }
+
+    getWorkSpaceScroll() {
+        const scrollElement = this.scheduler.find(".dx-scheduler-date-table-scrollable .dx-scrollable-container");
+        return {
+            left: scrollElement.scrollLeft,
+            top: scrollElement.scrollTop
+        };
+    }
+
+    getHeaderSpaceScroll() {
+        const scrollElement = this.scheduler.find(".dx-scheduler-header-scrollable .dx-scrollable-container");
+        return {
+            left: scrollElement.scrollLeft,
+            top: scrollElement.scrollTop
+        };
+    }
+
+    getDateTableRow(rowIndex = 0) {
+        return this.scheduler.find(`.dx-scheduler-date-table-row`).nth(rowIndex);
+    }
+
+    getDateTableCell(rowIndex = 0, cellIndex = 0) {
+        return this.getDateTableRow(rowIndex).find(`.dx-scheduler-date-table-cell`).nth(cellIndex);
+    }
+
+    getHeaderPanelCell(index = 0) {
+        return this.scheduler.find(`.dx-scheduler-header-panel-cell`).nth(index);
+    }
+
+    getHeaderPanelCellByTitle(title, index = 0) {
+        return this.scheduler.find(`.dx-scheduler-header-panel-cell`).withAttribute('title', title).nth(index)
     }
 
     getAppointment(index = 0) {
@@ -15,11 +60,11 @@ export default class SchedulerTestHelper {
         return this.scheduler.find(`.dx-scheduler-appointment`).withAttribute('title', title).nth(index);
     }
 
-    getAppointmentBeginTime(appointment) {
+    getAppointmentStartTime(appointment) {
         return appointment.find('.dx-scheduler-appointment-content-date').nth(0).innerText;
     }
 
-    getAppointmentFinalTime(appointment) {
+    getAppointmentEndTime(appointment) {
         return appointment.find('.dx-scheduler-appointment-content-date').nth(2).innerText;
     }
 
@@ -27,12 +72,8 @@ export default class SchedulerTestHelper {
         return appointment.getStyleProperty('height');
     }
 
-    getDateTableRow(rowIndex = 0) {
-        return this.scheduler.find(`.dx-scheduler-date-table-row`).nth(rowIndex);
-    }
-
-    getDateTableCell(rowIndex = 0, cellIndex = 0) {
-        return this.getDateTableRow(rowIndex).find(`.dx-scheduler-date-table-cell`).nth(cellIndex);
+    getAppointmentWidth(appointment) {
+        return appointment.getStyleProperty('width');
     }
 
     isTooltipVisible() {

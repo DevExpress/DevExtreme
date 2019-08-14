@@ -106,6 +106,10 @@ var ErrorHandlingController = modules.ViewController.inherit({
                 }
             }
         });
+        if(!$popupContent) {
+            let resizingController = that.getController("resizing");
+            resizingController && resizingController.fireContentReadyAction();
+        }
         return $firstErrorRow;
     },
 

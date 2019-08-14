@@ -27,6 +27,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     EDITOR_CELL_CLASS = "dx-editor-cell",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
+    COMMAND_SELECT_CLASS = "dx-command-select",
     COMMAND_CELL_SELECTOR = "[class^=dx-command]",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     DATEBOX_WIDGET_NAME = "dxDateBox",
@@ -172,9 +173,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $target = $(event.currentTarget),
             data = event.data,
             focusedViewElement = data.view && data.view.element(),
-            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS);
+            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS),
+            isInteractiveElement = $(event.target).is(INTERACTIVE_ELEMENTS_SELECTOR);
 
-        if(this._isEventInCurrentGrid(event) && this._isCellValid($target)) {
+        if(this._isEventInCurrentGrid(event) && this._isCellValid($target, !isInteractiveElement)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
 
@@ -186,8 +188,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 this._focusedView.element().attr("tabindex", 0);
                 this._focusedView.focus();
-            } else if(!isEditingCell && !this._isMasterDetailCell($target)) {
+            } else if(!this._isMasterDetailCell($target)) {
                 this._clickTargetCellHandler(event, $target);
+
+                if(isEditingCell) {
+                    this._updateFocusedCellPosition($target);
+                }
+
             } else {
                 this._updateFocusedCellPosition($target);
             }
@@ -270,8 +277,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
                         keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
 
-                    eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
-                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), keyboardActionSelector, {
+                    eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickAction);
+                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), keyboardActionSelector, {
                         viewIndex: index,
                         view: view
                     }, clickAction);
@@ -410,7 +417,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
 
-    _isCellValid: function($cell) {
+    _isCellValid: function($cell, isClick) {
         if(isElementDefined($cell)) {
             var rowsView = this.getView("rowsView"),
                 $row = $cell.parent(),
@@ -455,7 +462,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     return false;
                 }
 
-                return !isEditing || column.allowEditing;
+                return !isEditing || column.allowEditing || isClick;
             }
         }
     },
@@ -832,11 +839,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _spaceKeyHandler: function(eventArgs, isEditing) {
         var rowIndex = this.getVisibleRowIndex(),
             $target = $(eventArgs.originalEvent && eventArgs.originalEvent.target),
-            isFocusedRowElement;
-
+            isFocusedRowElement,
+            isFocusedSelectionCell;
         if(this.option("selection") && this.option("selection").mode !== "none" && !isEditing) {
             isFocusedRowElement = this._getElementType($target) === "row" && this.isRowFocusType() && isDataRow($target);
-            if(isFocusedRowElement) {
+            isFocusedSelectionCell = $target.hasClass(COMMAND_SELECT_CLASS);
+            if(isFocusedSelectionCell && this.option("selection.showCheckBoxesMode") === "onClick") {
                 this._selectionController.startSelectionWithCheckboxes();
             }
             if(isFocusedRowElement || $target.parent().hasClass(DATA_ROW_CLASS) || $target.hasClass(this.addWidgetPrefix(ROWS_VIEW_CLASS))) {
@@ -1628,7 +1636,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanging: function(eventArgs, $newFocusedRow) {
         var newRowIndex = this._getRowIndex($newFocusedRow),
             dataController = this.getController("data"),
-            prevFocusedRowIndex = this.getVisibleRowIndex(),
+            prevFocusedRowIndex = this.option("focusedRowIndex"),
             loadingOperationTypes = dataController.loadingOperationTypes(),
             args = {
                 rowElement: $newFocusedRow,
@@ -1848,6 +1856,10 @@ module.exports = {
     extenders: {
         views: {
             rowsView: {
+                _rowClick: function(e) {
+                    this.getController("keyboardNavigation").setCellFocusType();
+                    this.callBase.apply(this, arguments);
+                },
                 renderFocusState: function() {
                     var dataController = this._dataController,
                         rowIndex = this.option("focusedRowIndex") || 0,

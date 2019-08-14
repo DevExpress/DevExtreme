@@ -369,11 +369,31 @@ var DropDownList = DropDownEditor.inherit({
 
     _createPopup: function() {
         this.callBase();
+        this._updateCustomBoundaryContainer();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
         var $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, "mouseup");
         eventsEngine.on($popupContent, "mouseup", this._saveFocusOnWidget.bind(this));
+    },
+
+    _updateCustomBoundaryContainer: function() {
+        var customContainer = this.option("dropDownOptions.container");
+        var $container = customContainer && $(customContainer);
+
+        if($container && !typeUtils.isWindow($container.get(0))) {
+            var $containerWithParents = [].slice.call($container.parents());
+            $containerWithParents.unshift($container.get(0));
+
+            each($containerWithParents, function(i, parent) {
+                if(parent === $("body").get(0)) {
+                    return false;
+                } else if(window.getComputedStyle(parent).overflowY === "hidden") {
+                    this._$customBoundaryContainer = $(parent);
+                    return false;
+                }
+            }.bind(this));
+        }
     },
 
     _popupWrapperClass: function() {
@@ -579,7 +599,15 @@ var DropDownList = DropDownEditor.inherit({
 
         this.setAria({
             "activedescendant": opened && this._list.getFocusedItemId(),
-            "owns": opened && this._listId
+            "controls": opened && this._listId
+        });
+
+    },
+
+    _setDefaultAria: function() {
+        this.setAria({
+            "haspopup": "listbox",
+            "autocomplete": "list"
         });
     },
 
@@ -848,10 +876,9 @@ var DropDownList = DropDownEditor.inherit({
 
     _getMaxHeight: function() {
         var $element = this.$element(),
-            containerValue = this.option("dropDownOptions.container"),
-            container = containerValue && $(containerValue),
-            offsetTop = $element.offset().top - (container ? $(container).offset().top : 0),
-            containerHeight = $(container || window).outerHeight(),
+            $customBoundaryContainer = this._$customBoundaryContainer,
+            offsetTop = $element.offset().top - ($customBoundaryContainer ? $customBoundaryContainer.offset().top : 0),
+            containerHeight = ($customBoundaryContainer || $(window)).outerHeight(),
             maxHeight = Math.max(offsetTop, containerHeight - offsetTop - $element.outerHeight());
 
         return Math.min(containerHeight * 0.5, maxHeight);

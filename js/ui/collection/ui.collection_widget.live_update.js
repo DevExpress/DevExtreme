@@ -111,6 +111,7 @@ export default CollectionWidget.inherit({
 
     _insertByChange: function(keyInfo, items, change, isPartialRefresh) {
         when(isPartialRefresh || arrayUtils.insert(keyInfo, items, change.data, change.index)).done(() => {
+            this._beforeItemElementInserted(change);
             this._renderItem(isDefined(change.index) ? change.index : items.length, change.data);
             this._correctionIndex++;
         });
@@ -125,6 +126,14 @@ export default CollectionWidget.inherit({
             this.option("selectedItems", []);
         } else {
             this._normalizeSelectedItems();
+        }
+    },
+
+    _beforeItemElementInserted: function(change) {
+        var selectedIndex = this.option("selectedIndex");
+
+        if(change.index <= selectedIndex) {
+            this.option("selectedIndex", selectedIndex + 1);
         }
     },
 

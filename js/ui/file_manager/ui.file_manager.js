@@ -4,6 +4,8 @@ import { extend } from "../../core/utils/extend";
 import typeUtils from "../../core/utils/type";
 import { when, Deferred } from "../../core/utils/deferred";
 
+import messageLocalization from "../../localization/message";
+
 import registerComponent from "../../core/component_registrator";
 import Widget from "../widget/ui.widget";
 import notify from "../notify";
@@ -38,10 +40,12 @@ class FileManager extends Widget {
     _initMarkup() {
         super._initMarkup();
 
+        this._onCurrentDirectoryChangedAction = this._createActionByOption("onCurrentDirectoryChanged");
         this._onSelectedFileOpenedAction = this._createActionByOption("onSelectedFileOpened");
 
         this._controller = new FileItemsController({
-            rootText: "",
+            currentPath: this.option("currentPath"),
+            rootText: this.option("rootFolderName"),
             fileProvider: this.option("fileProvider"),
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
@@ -143,6 +147,7 @@ class FileManager extends Widget {
     _createBreadcrumbs($container) {
         const $breadcrumbs = $("<div>").appendTo($container);
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
+            rootFolderDisplayName: this.option("rootFolderName"),
             path: "",
             onPathChanged: e => this.setCurrentFolderPath(e.newPath),
             onOutsideClick: () => this._clearSelection()
@@ -315,6 +320,20 @@ class FileManager extends Widget {
             fileProvider: null,
 
             /**
+            * @name dxFileManagerOptions.currentPath
+            * @type string
+            * @default ""
+            */
+            currentPath: "",
+
+            /**
+            * @name dxFileManagerOptions.rootFolderName
+            * @type string
+            * @default "Files"
+            */
+            rootFolderName: messageLocalization.format("dxFileManager-rootFolderName"),
+
+            /**
             * @name dxFileManagerOptions.selectionMode
             * @type Enums.FileManagerSelectionMode
             * @default "multiple"
@@ -362,6 +381,16 @@ class FileManager extends Widget {
             * @type_function_return Array<dxDataGridColumn>
             */
             customizeDetailColumns: null,
+
+            /**
+            * @name dxFileManagerOptions.onCurrentDirectoryChanged
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @default null
+            * @action
+            */
+            onCurrentDirectoryChanged: null,
 
             /**
             * @name dxFileManagerOptions.onSelectedFileOpened
@@ -423,13 +452,20 @@ class FileManager extends Widget {
         const name = args.name;
 
         switch(name) {
+            case "currentPath":
+                this._controller.setCurrentPath(this.option("currentPath"));
+                break;
             case "fileProvider":
             case "selectionMode":
             case "itemView":
             case "customizeThumbnail":
             case "customizeDetailColumns":
+            case "rootFolderName":
             case "permissions":
                 this.repaint();
+                break;
+            case "onCurrentDirectoryChanged":
+                this._onCurrentDirectoryChangedAction = this._createActionByOption("onCurrentDirectoryChanged");
                 break;
             case "onSelectedFileOpened":
                 this._onSelectedFileOpenedAction = this._createActionByOption("onSelectedFileOpened");
@@ -441,15 +477,6 @@ class FileManager extends Widget {
 
     executeCommand(commandName) {
         this._commandManager.executeCommand(commandName);
-    }
-
-    setCurrentFolderPath(path) {
-        const folder = this._createFolderItemByPath(path);
-        this.setCurrentFolder(folder);
-    }
-
-    getCurrentFolderPath() {
-        return this.getCurrentFolder() ? this.getCurrentFolder().relativeName : null;
     }
 
     _setCurrentDirectory(directoryInfo) {
@@ -464,6 +491,8 @@ class FileManager extends Widget {
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
         this._breadcrumbs.option("path", this._controller.getCurrentPath());
+        this.option("currentPath", this._controller.getCurrentPath());
+        this._onCurrentDirectoryChangedAction();
     }
 
     getDirectories(parentDirectoryInfo) {

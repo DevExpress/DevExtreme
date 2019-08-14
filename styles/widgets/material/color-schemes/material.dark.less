@@ -422,6 +422,9 @@
 @diagram-default-format-active-bg: darken(@button-default-bg, 10%);
 @diagram-danger-format-active-bg: darken(@button-danger-bg, 10%);
 @diagram-success-format-active-bg: darken(@button-success-bg, 10%);
+@diagram-image-icon-base-color: @base-border-color;
+@diagram-image-icon-accent-color: @base-accent;
+@diagram-toolbox-shape-text-opacity: 0.5;
 
 // Drawer
 
@@ -1521,4 +1524,4 @@
 @filemanager-breadcrumbs-item-focus-color: @base-text-color;
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-text-color;
-@filemanager-file-item-select-bg: @base-accent;
+@filemanager-file-item-select-bg: fade(@base-accent, 7%);

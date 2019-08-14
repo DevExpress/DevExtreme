@@ -47,8 +47,12 @@
         border-left: @TRANSPARENT_BORDER;
     }
 
-    .dx-diagram-right-panel .dx-accordion {
+    .dx-diagram-right-panel .dx-scrollview {
         width: 280px;
+    }
+
+    .dx-diagram-right-panel .dx-accordion {
+        width: 100%;
     }
 
     .dx-diagram-toolbar-separator {
@@ -65,33 +69,6 @@
         }
     }
 
-    .dx-diagram-toolbar {
-        .dx-diagram-select-b,
-        .dx-diagram-color-b {
-            .dx-texteditor {
-                width: auto;
-            }
-
-            .dx-dropdowneditor-field-template-wrapper {
-                display: flex;
-                align-items: center;
-
-                .dx-diagram-i {
-                    display: block;
-                }
-
-                .dx-textbox {
-                    width: 0;
-
-                    .dx-texteditor-input {
-                        width: 0;
-                        padding-left: 0;
-                    }
-                }
-            }
-        }
-    }
-
     &.dx-diagram-fullscreen {
         left: 0;
         top: 0;
@@ -102,8 +79,44 @@
     }
 }
 
+.dx-diagram-toolbar,
+.dx-dropdownmenu-popup {
+    .dx-diagram-select-b,
+    .dx-diagram-color-b {
+        .dx-texteditor {
+            width: auto;
+        }
+
+        .dx-dropdowneditor-field-template-wrapper {
+            display: flex;
+            align-items: center;
+
+            .dx-diagram-i {
+                display: block;
+            }
+
+            .dx-textbox {
+                width: 0;
+
+                .dx-texteditor-input {
+                    width: 0;
+                    padding-left: 0;
+                }
+            }
+        }
+    }
+}
+
 .dx-diagram-i {
     background-repeat: no-repeat;
     background-position: 0 0;
     display: inline-block;
+}
+
+.dx-diagram-loading-indicator {
+    position: absolute;
+    top: calc(50% - 32px);
+    left: calc(50% - 32px);
+    width: 64px;
+    height: 64px;
 }

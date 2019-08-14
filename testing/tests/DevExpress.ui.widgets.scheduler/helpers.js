@@ -1,5 +1,6 @@
 import $ from "jquery";
 import { extend } from "core/utils/extend";
+import "ui/scheduler/ui.scheduler";
 
 export const TOOLBAR_TOP_LOCATION = "top";
 export const TOOLBAR_BOTTOM_LOCATION = "bottom";
@@ -34,6 +35,8 @@ export class SchedulerTestWrapper {
             getDeleteButton: (index = 0) => this.tooltip.getItemElement(index).find('.dx-tooltip-appointment-item-delete-button'),
 
             getMarkers: () => this.tooltip.getItemElements().find('.dx-tooltip-appointment-item-marker-body'),
+
+            getMarker: () => this.tooltip.getMarkers().first(),
 
             getDateText: (index = 0) => this.tooltip.getDateElement(index).text(),
             getTitleText: (index = 0) => this.tooltip.getTitleElement(index).text(),
@@ -125,7 +128,10 @@ export class SchedulerTestWrapper {
 
         this.workSpace = {
             getWorkSpace: () => $(".dx-scheduler-work-space"),
+
             getDateTableScrollable: () => $(".dx-scheduler-date-table-scrollable"),
+            getHeaderScrollable: () => $(".dx-scheduler-header-scrollable"),
+
             getDateTable: () => $(".dx-scheduler-date-table"),
             getDateTableHeight: () => this.workSpace.getDateTable().height(),
             getCells: () => $(".dx-scheduler-date-table-cell"),
@@ -137,6 +143,11 @@ export class SchedulerTestWrapper {
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $(".dx-scheduler-date-time-indicator"),
+
+            getScrollPosition: () => {
+                const element = this.workSpace.getDateTableScrollable().find(".dx-scrollable-container");
+                return { left: element.scrollLeft(), top: element.scrollTop() };
+            }
         };
 
         this.grouping = {

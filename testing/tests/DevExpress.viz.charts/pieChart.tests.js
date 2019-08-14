@@ -195,7 +195,6 @@ var environment = {
             series.getOptions = function() { return { label: { position: position || "outside" } }; };
             series.getVisiblePoints = sinon.stub().returns(this._createStubPoints(labels, series));
             chartMocks.seriesMockData.series.push(series);
-
         },
         createStubLabels: function(bBoxes) {
             var labels = [];
@@ -375,6 +374,77 @@ var environment = {
         } finally {
             devices.real({ platform: originalPlatform });
         }
+    });
+
+    QUnit.test("Get inner raduis API", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        this.layoutManager.applyPieChartSeriesLayout.returns({ radiusInner: 80, radiusOuter: 300, centerX: 100, centerY: 200 });
+
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            type: "donut",
+            series: [{}]
+        });
+
+        const radius = chart.getInnerRadius();
+
+        assert.strictEqual(radius, 80);
+    });
+
+    QUnit.test("Hole template. No option - no group created", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}]
+        });
+
+        const templateGroup = chart._renderer.root.children.filter(c => {
+            const attrCall = c.stub("attr").getCall(0);
+            return attrCall.class === "dxc-hole-template";
+        })[0];
+
+        assert.equal(templateGroup, undefined);
+    });
+
+    QUnit.test("Hole template. First rendering", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const centerTemplateSpy = sinon.spy();
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}],
+            centerTemplate: centerTemplateSpy
+        });
+
+        const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
+
+        assert.deepEqual(templateGroup.attr.getCall(0).args, [{ class: "dxc-hole-template" }]);
+        assert.strictEqual(centerTemplateSpy.callCount, 1);
+        assert.deepEqual(centerTemplateSpy.getCall(0).args, [chart, templateGroup.element]);
+
+        assert.deepEqual(templateGroup.move.getCall(0).args, [100 - (1 + 20 / 2), 200 - (2 + 10 / 2)]);
+    });
+
+    QUnit.test("Hole template. Second rendering - remove old content", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const centerTemplateSpy = sinon.spy();
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}],
+            centerTemplate: centerTemplateSpy
+        });
+        const groups = chart._renderer.root.children;
+        const templateGroup = groups[groups.length - 1];
+
+        chart.render({ force: true });
+
+        assert.strictEqual(centerTemplateSpy.callCount, 2);
+
+        assert.strictEqual(templateGroup.clear.callCount, 1);
+        assert.ok(templateGroup.clear.getCall(0).calledAfter(centerTemplateSpy.getCall(0)));
+        assert.ok(templateGroup.clear.getCall(0).calledBefore(centerTemplateSpy.getCall(1)));
+
+        assert.ok(templateGroup.append.getCall(1).calledAfter(templateGroup.clear.getCall(0)));
+        assert.ok(templateGroup.append.getCall(1).calledBefore(centerTemplateSpy.getCall(1)));
     });
 
     QUnit.module("Creation series for tracker", {
