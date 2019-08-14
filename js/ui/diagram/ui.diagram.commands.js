@@ -94,6 +94,7 @@ const DiagramCommands = {
                 fontColor: {
                     command: DiagramCommand.FontColor,
                     text: messageLocalization.format("dxDiagram-commandTextColor"),
+                    hint: messageLocalization.format("dxDiagram-commandTextColor"),
                     widget: "dxColorBox",
                     icon: "dx-icon dx-icon-color",
                     cssClass: CSS_CLASSES.BUTTON_COLOR
@@ -101,6 +102,7 @@ const DiagramCommands = {
                 lineColor: {
                     command: DiagramCommand.StrokeColor,
                     text: messageLocalization.format("dxDiagram-commandLineColor"),
+                    hint: messageLocalization.format("dxDiagram-commandLineColor"),
                     widget: "dxColorBox",
                     icon: "dx-icon dx-icon-background",
                     cssClass: CSS_CLASSES.BUTTON_COLOR
@@ -108,6 +110,7 @@ const DiagramCommands = {
                 fillColor: {
                     command: DiagramCommand.FillColor,
                     text: messageLocalization.format("dxDiagram-commandFillColor"),
+                    hint: messageLocalization.format("dxDiagram-commandFillColor"),
                     widget: "dxColorBox",
                     icon: "dx-diagram-i dx-diagram-i-button-fill",
                     cssClass: CSS_CLASSES.BUTTON_COLOR
@@ -135,8 +138,16 @@ const DiagramCommands = {
                     widget: "dxSelectBox",
                     hint: messageLocalization.format("dxDiagram-commandConnectorLineType"),
                     items: [
-                        { value: 0, icon: "dx-diagram-i-connector-straight dx-diagram-i", hint: "Straight" },
-                        { value: 1, icon: "dx-diagram-i-connector-orthogonal dx-diagram-i", hint: "Orthogonal" }
+                        {
+                            value: 0,
+                            icon: "dx-diagram-i-connector-straight dx-diagram-i",
+                            hint: messageLocalization.format("dxDiagram-commandConnectorLineStraight")
+                        },
+                        {
+                            value: 1,
+                            icon: "dx-diagram-i-connector-orthogonal dx-diagram-i",
+                            hint: messageLocalization.format("dxDiagram-commandConnectorLineOrthogonal")
+                        }
                     ],
                     displayExpr: "name",
                     valueExpr: "value",
@@ -146,8 +157,16 @@ const DiagramCommands = {
                     command: DiagramCommand.ConnectorStartLineEnding,
                     widget: "dxSelectBox",
                     items: [
-                        { value: 0, icon: "dx-diagram-i-connector-begin-none dx-diagram-i", hint: "None" },
-                        { value: 1, icon: "dx-diagram-i-connector-begin-arrow dx-diagram-i", hint: "Arrow" }
+                        {
+                            value: 0,
+                            icon: "dx-diagram-i-connector-begin-none dx-diagram-i",
+                            hint: messageLocalization.format("dxDiagram-commandConnectorLineNone")
+                        },
+                        {
+                            value: 1,
+                            icon: "dx-diagram-i-connector-begin-arrow dx-diagram-i",
+                            hint: messageLocalization.format("dxDiagram-commandConnectorLineArrow")
+                        }
                     ],
                     displayExpr: "name",
                     valueExpr: "value",
@@ -158,8 +177,16 @@ const DiagramCommands = {
                     command: DiagramCommand.ConnectorEndLineEnding,
                     widget: "dxSelectBox",
                     items: [
-                        { value: 0, icon: "dx-diagram-i-connector-end-none dx-diagram-i", hint: "None" },
-                        { value: 1, icon: "dx-diagram-i-connector-end-arrow dx-diagram-i", hint: "Arrow" }
+                        {
+                            value: 0,
+                            icon: "dx-diagram-i-connector-begin-none dx-diagram-i",
+                            hint: messageLocalization.format("dxDiagram-commandConnectorLineNone")
+                        },
+                        {
+                            value: 1,
+                            icon: "dx-diagram-i-connector-begin-arrow dx-diagram-i",
+                            hint: messageLocalization.format("dxDiagram-commandConnectorLineArrow")
+                        }
                     ],
                     displayExpr: "name",
                     valueExpr: "value",
