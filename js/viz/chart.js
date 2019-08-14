@@ -995,34 +995,41 @@ var dxChart = AdvancedChart.inherit({
     checkForMoreSpaceForPanesCanvas() {
         const that = this;
         const rotated = that._isRotated();
-        const needSpaceForAdaptiveLayout = that.layoutManager.needMoreSpaceForPanesCanvas(that._getLayoutTargets(), rotated);
         const panesAreCustomSized = that.panes.filter(p => p.unit).length === that.panes.length;
-        let needHorizontalSpace = !panesAreCustomSized && needSpaceForAdaptiveLayout ? needSpaceForAdaptiveLayout.width : 0;
-        let needVerticalSpace = !panesAreCustomSized && needSpaceForAdaptiveLayout ? needSpaceForAdaptiveLayout.height : 0;
+        let needSpace = false;
 
-        if(rotated) {
-            const argAxisRightMargin = that.getArgumentAxis().getMargins().right;
-            const rightPanesIndent = Math.min.apply(Math, that.panes.map(p => p.canvas.right));
-            needHorizontalSpace += that._canvas.right + argAxisRightMargin - rightPanesIndent;
-        } else {
-            const argAxisBottomMargin = that.getArgumentAxis().getMargins().bottom;
-            const bottomPanesIndent = Math.min.apply(Math, that.panes.map(p => p.canvas.bottom));
-            needVerticalSpace += that._canvas.bottom + argAxisBottomMargin - bottomPanesIndent;
-        }
+        if(panesAreCustomSized) {
+            let needHorizontalSpace = 0;
+            let needVerticalSpace = 0;
 
-        let needSpace = needHorizontalSpace > 0 || needVerticalSpace > 0 ? { width: needHorizontalSpace, height: needVerticalSpace } : false;
-
-        if(panesAreCustomSized && needVerticalSpace !== 0) {
-            const realSize = that.getSize();
-            const customSize = that.option("size");
-            const container = that._$element[0];
-            const containerHasStyledHeight = !!container.style.height || vizUtils.checkElementHasPropertyFromStyleSheet(container, "height");
-
-            if(!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
-                that._forceResize(realSize.width, realSize.height + needVerticalSpace);
-                needSpace = false;
+            if(rotated) {
+                const argAxisRightMargin = that.getArgumentAxis().getMargins().right;
+                const rightPanesIndent = Math.min.apply(Math, that.panes.map(p => p.canvas.right));
+                needHorizontalSpace = that._canvas.right + argAxisRightMargin - rightPanesIndent;
+            } else {
+                const argAxisBottomMargin = that.getArgumentAxis().getMargins().bottom;
+                const bottomPanesIndent = Math.min.apply(Math, that.panes.map(p => p.canvas.bottom));
+                needVerticalSpace = that._canvas.bottom + argAxisBottomMargin - bottomPanesIndent;
             }
+
+            needSpace = needHorizontalSpace > 0 || needVerticalSpace > 0 ? { width: needHorizontalSpace, height: needVerticalSpace } : false;
+            if(needVerticalSpace !== 0) {
+                const realSize = that.getSize();
+                const customSize = that.option("size");
+                const container = that._$element[0];
+                const containerHasStyledHeight = !!container.style.height || vizUtils.checkElementHasPropertyFromStyleSheet(container, "height");
+
+                if(!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
+                    that._forceResize(realSize.width, realSize.height + needVerticalSpace);
+                    needSpace = false;
+                }
+            }
+        } else {
+            needSpace = that.layoutManager.needMoreSpaceForPanesCanvas(that._getLayoutTargets(), rotated, pane => {
+                return { width: rotated && !!pane.unit, height: !rotated && !!pane.unit };
+            });
         }
+
         return needSpace;
     },
 
