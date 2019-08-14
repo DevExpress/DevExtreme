@@ -31,38 +31,28 @@ export default class SchedulerTestHelper {
         return this.scheduler.find(`.dx-scheduler-appointment`).withAttribute('title', title).nth(index);
     }
 
-    getAppointmentStartTime(appointment) {
-        return appointment.find('.dx-scheduler-appointment-content-date').nth(0).innerText;
+    getAppointmentTime(appointment) {
+        return {
+            startTime: appointment.find('.dx-scheduler-appointment-content-date').nth(0).innerText,
+            endTime: appointment.find('.dx-scheduler-appointment-content-date').nth(2).innerText
+        }
     }
 
-    getAppointmentEndTime(appointment) {
-        return appointment.find('.dx-scheduler-appointment-content-date').nth(2).innerText;
+    getAppointmentResizableHandle(appointment) {
+        return {
+            left: appointment.find('.dx-resizable-handle-left'),
+            right: appointment.find('.dx-resizable-handle-right'),
+            top: appointment.find('.dx-resizable-handle-top'),
+            bottom: appointment.find('.dx-resizable-handle-bottom')
+        }
     }
 
-    getAppointmentResizableHandleTop(appointment) {
-        return appointment.find('.dx-resizable-handle-top');
+    getAppointmentSize(appointment) {
+        return {
+            height: appointment.getStyleProperty('height'),
+            width: appointment.getStyleProperty('width')
+        }
     }
-
-    getAppointmentResizableHandleBottom(appointment) {
-        return appointment.find('.dx-resizable-handle-bottom');
-    }
-
-    getAppointmentResizableHandleLeft(appointment) {
-        return appointment.find('.dx-resizable-handle-left');
-    }
-
-    getAppointmentResizableHandleRight(appointment) {
-        return appointment.find('.dx-resizable-handle-right');
-    }
-
-    getAppointmentHeight(appointment) {
-        return appointment.getStyleProperty('height');
-    }
-
-    getAppointmentWidth(appointment) {
-        return appointment.getStyleProperty('width');
-    }
-
     isTooltipVisible() {
         return Selector(".dx-scheduler-appointment-tooltip-wrapper.dx-overlay-wrapper .dx-list").exists;
     }

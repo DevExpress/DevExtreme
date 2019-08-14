@@ -11,74 +11,76 @@ const scheduler = new SchedulerTestHelper("#container");
 fixture`Resize appointments in the Scheduler widget with drag-and-drop gesture`
 	.page(getContainerFileUrl());
 
-test('Resize appointments in timelineDay', async t => {
-	let appointment;
-	let appointmentHandleLeft;
-	let appointmentHandleRight;
+test('Resize appointments in timelineDay view', async t => {
+	const halfHourCellWidth = 200;
+	const oneHourCellWidth = 2 * halfHourCellWidth;
 
-	appointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
-	appointmentHandleLeft = await scheduler.getAppointmentResizableHandleLeft(appointment);
-	appointmentHandleRight = await scheduler.getAppointmentResizableHandleRight(appointment);
+	const firstAppointmentToRightIncrease = await scheduler.getAppointmentByTitle('Brochure Design Review');
+	const firstAppointmentToRightIncreaseHandle = await scheduler.getAppointmentResizableHandle(firstAppointmentToRightIncrease);
 
 	await t
-		.drag(appointmentHandleRight, 400, 0)
+		.drag(firstAppointmentToRightIncreaseHandle.right, oneHourCellWidth, 0);
 
 	await t
 		.expect('600px')
-		.eql(await scheduler.getAppointmentWidth(appointment),
-			"Appointment width incorrect")
+		.eql(await scheduler.getAppointmentSize(firstAppointmentToRightIncrease).width,
+			"Appointment width is incorrect after resize")
 		.expect('10:00 AM')
-		.eql(await scheduler.getAppointmentStartTime(appointment),
-			"Appointment startTime incorrect")
+		.eql(await scheduler.getAppointmentTime(firstAppointmentToRightIncrease).startTime,
+			"Appointment startTime is incorrect after resize")
 		.expect('11:30 AM')
-		.eql(await scheduler.getAppointmentEndTime(appointment),
-			"Appointment endTime incorrect");
+		.eql(await scheduler.getAppointmentTime(firstAppointmentToRightIncrease).endTime,
+			"Appointment endTime is incorrect after resize");
+
+	const firstAppointmentToLeftIncrease = await scheduler.getAppointmentByTitle('Brochure Design Review');
+	const firstAppointmentToLeftIncreaseHandle = await scheduler.getAppointmentResizableHandle(firstAppointmentToLeftIncrease);
 
 	await t
-		.drag(appointmentHandleLeft, -400, 0)
+		.drag(firstAppointmentToLeftIncreaseHandle.left, -oneHourCellWidth, 0);
 
 	await t
 		.expect('1000px')
-		.eql(await scheduler.getAppointmentWidth(appointment),
-			"Appointment width incorrect")
+		.eql(await scheduler.getAppointmentSize(firstAppointmentToLeftIncrease).width,
+			"Appointment width is incorrect after resize")
 		.expect('9:00 AM')
-		.eql(await scheduler.getAppointmentStartTime(appointment),
-			"Appointment startTime incorrect")
+		.eql(await scheduler.getAppointmentTime(firstAppointmentToLeftIncrease).startTime,
+			"Appointment startTime is incorrect after resize")
 		.expect('11:30 AM')
-		.eql(await scheduler.getAppointmentEndTime(appointment),
-			"Appointment endTime incorrect");
+		.eql(await scheduler.getAppointmentTime(firstAppointmentToLeftIncrease).endTime,
+			"Appointment endTime is incorrect after resize");
+
+	const thirdAppointmentToRightDecrease = await scheduler.getAppointmentByTitle('Brochure Design Review');
+	const thirdAppointmentToRightDecreaseHandle = await scheduler.getAppointmentResizableHandle(thirdAppointmentToRightDecrease);
 
 	await t
-		.drag(appointmentHandleRight, -800, 0)
+		.drag(thirdAppointmentToRightDecreaseHandle.right, -oneHourCellWidth, 0);
+
+	await t
+		.expect('600px')
+		.eql(await scheduler.getAppointmentSize(thirdAppointmentToRightDecrease).width,
+			"Appointment width is incorrect after resize")
+		.expect('9:00 AM')
+		.eql(await scheduler.getAppointmentTime(thirdAppointmentToRightDecrease).startTime,
+			"Appointment startTime is incorrect after resize")
+		.expect('10:30 AM')
+		.eql(await scheduler.getAppointmentTime(thirdAppointmentToRightDecrease).endTime,
+			"Appointment endTime is incorrect after resize");
+
+	const thirdAppointmentToLeftDecrease = await scheduler.getAppointmentByTitle('Brochure Design Review');
+	const thirdAppointmentToLeftDecreaseHandle = await scheduler.getAppointmentResizableHandle(thirdAppointmentToLeftDecrease);
+
+	await t
+		.drag(thirdAppointmentToLeftDecreaseHandle.left, oneHourCellWidth, 0);
 
 	await t
 		.expect('200px')
-		.eql(await scheduler.getAppointmentWidth(appointment),
-			"Appointment width incorrect")
-		.expect('9:00 AM')
-		.eql(await scheduler.getAppointmentStartTime(appointment),
-			"Appointment startTime incorrect")
-		.expect('9:30 AM')
-		.eql(await scheduler.getAppointmentEndTime(appointment),
-			"Appointment endTime incorrect");
-
-	appointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
-	appointmentHandleLeft = await scheduler.getAppointmentResizableHandleLeft(appointment);
-	appointmentHandleRight = await scheduler.getAppointmentResizableHandleRight(appointment);
-
-	await t
-		.drag(appointmentHandleLeft, 800, 0)
-
-	await t
-		.expect('200px')
-		.eql(await scheduler.getAppointmentWidth(appointment),
-			"Appointment width incorrect")
-		.expect('11:00 AM')
-		.eql(await scheduler.getAppointmentStartTime(appointment),
-			"Appointment startTime incorrect")
-		.expect('11:30 AM')
-		.eql(await scheduler.getAppointmentEndTime(appointment),
-			"Appointment endTime incorrect");
-
+		.eql(await scheduler.getAppointmentSize(thirdAppointmentToLeftDecrease).width,
+			"Appointment width is incorrect after resize")
+		.expect('10:00 AM')
+		.eql(await scheduler.getAppointmentTime(thirdAppointmentToLeftDecrease).startTime,
+			"Appointment startTime is incorrect after resize")
+		.expect('10:30 AM')
+		.eql(await scheduler.getAppointmentTime(thirdAppointmentToLeftDecrease).endTime,
+			"Appointment endTime is incorrect after resize");
 
 }).before(async () => { await createScheduler('timelineDay', dataSource) });
