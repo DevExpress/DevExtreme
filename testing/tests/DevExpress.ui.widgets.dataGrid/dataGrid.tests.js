@@ -4637,6 +4637,58 @@ QUnit.test("all visible items should be rendered if pageSize is small and virtua
     assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
 });
 
+// T805413
+QUnit.test("DataGrid should not load same page multiple times when scroll position is changed", function(assert) {
+    // arrange, act
+    var dataGrid,
+        scrollable,
+        skips = [],
+        data = [];
+
+    for(let i = 0; i < 10; i++) {
+        data.push({ field: "text" });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        remoteOperations: true,
+        dataSource: {
+            load: function(loadOptions) {
+                skips.push(loadOptions.skip);
+
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve({ data: data, totalCount: 100000 });
+                }, 300);
+
+                return d;
+            }
+        },
+        paging: { pageSize: 10 },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual"
+        },
+        columns: ["field"]
+    }).dxDataGrid("instance");
+
+    this.clock.tick(600);
+
+    scrollable = dataGrid.getScrollable();
+
+    // act
+    for(let position = 500; position < 1200; position += 100) {
+        scrollable.scrollTo({ y: position });
+        this.clock.tick(50);
+    }
+
+    this.clock.tick(250);
+
+    // assert
+    assert.deepEqual(skips, [0, 10, 20, 30, 40], "all skips");
+});
+
 QUnit.test("virtual columns", function(assert) {
     // arrange, act
     var columns = [];
