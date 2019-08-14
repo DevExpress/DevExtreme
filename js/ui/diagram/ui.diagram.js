@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import Drawer from "../drawer";
+import LoadIndicator from "../load_indicator";
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import typeUtils from '../../core/utils/type';
@@ -27,6 +28,7 @@ const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + "-toolbar-wrapper";
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + "-content-wrapper";
 const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + "-drawer-wrapper";
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + "-content";
+const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + "-loading-indicator";
 
 const DIAGRAM_DEFAULT_UNIT = "in";
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
@@ -76,7 +78,7 @@ class Diagram extends Widget {
         const $drawer = $("<div>")
             .appendTo($drawerWrapper);
 
-        const $content = $("<div>")
+        this._content = $("<div>")
             .addClass(DIAGRAM_CONTENT_CLASS)
             .appendTo($drawer);
 
@@ -87,10 +89,10 @@ class Diagram extends Widget {
 
         this._contextMenu = undefined;
         if(this.option("contextMenu.enabled")) {
-            this._renderContextMenu($content);
+            this._renderContextMenu(this._content);
         }
 
-        !isServerSide && this._diagramInstance.createDocument($content[0]);
+        !isServerSide && this._diagramInstance.createDocument(this._content[0]);
 
         if(this.option("zoomLevel") !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
             this._updateZoomLevelState();
@@ -239,6 +241,19 @@ class Diagram extends Widget {
             onContentReady: ({ component }) => this._diagramInstance.barManager.registerBar(component.bar),
             onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar)
         });
+    }
+
+    _showLoadingIndicator() {
+        this._loadingIndicator = $("<div>").addClass(DIAGRAM_LOADING_INDICATOR_CLASS);
+        this._createComponent(this._loadingIndicator, LoadIndicator, {});
+        var $parent = this._content || this.$element();
+        $parent.append(this._loadingIndicator);
+    }
+    _hideLoadingIndicator() {
+        if(!this._loadingIndicator) return;
+
+        this._loadingIndicator.remove();
+        this._loadingIndicator = null;
     }
 
     _initDiagram() {
