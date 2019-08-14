@@ -74,16 +74,18 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
             .appendTo($contentWrapper);
 
-        const $drawer = $("<div>")
-            .appendTo($drawerWrapper);
-
-        const $content = $("<div>")
-            .addClass(DIAGRAM_CONTENT_CLASS)
-            .appendTo($drawer);
-
-        this._rightPanel = undefined;
+        let $content;
         if(this.option("propertiesPanel.visible")) {
+            const $drawer = $("<div>")
+                .appendTo($drawerWrapper);
+            $content = $("<div>")
+                .addClass(DIAGRAM_CONTENT_CLASS)
+                .appendTo($drawer);
             this._renderRightPanel($drawer);
+        } else {
+            $content = $("<div>")
+                .addClass(DIAGRAM_CONTENT_CLASS)
+                .appendTo($drawerWrapper);
         }
 
         this._contextMenu = undefined;
