@@ -3,7 +3,12 @@ import { extend as _extend } from "../core/utils/extend";
 import { inArray } from "../core/utils/array";
 import { each as _each } from "../core/utils/iterator";
 import registerComponent from "../core/component_registrator";
-import { map as _map, getLog, getCategoriesInfo, updatePanesCanvases, convertVisualRangeObject } from "./core/utils";
+import {
+    map as _map, getLog, getCategoriesInfo,
+    updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
+    normalizePanesHeight,
+    checkElementHasPropertyFromStyleSheet
+} from "./core/utils";
 import { type } from "../core/utils/type";
 import { getPrecision } from "../core/utils/math";
 import { overlapping } from "./chart_components/base_chart";
@@ -286,7 +291,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
         let emptySpace = paneNames.reduce((space, paneName) => {
             space -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, paneName) + getMaxMargin(endMargin, verticalMargins, horizontalMargins, paneName);
             return space;
-        }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - canvases[paneNames[paneNames.length - 1]][getOriginalField(startMargin)]) - vizUtils.PANE_PADDING * (paneNames.length - 1);
+        }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - canvases[paneNames[paneNames.length - 1]][getOriginalField(startMargin)]) - PANE_PADDING * (paneNames.length - 1);
 
         const totalCustomSpace = Object.keys(sizes).reduce((prev, key) => prev + (sizes[key].unit ? sizes[key].height : 0), 0);
         emptySpace -= totalCustomSpace;
@@ -299,7 +304,7 @@ function shrinkCanvases(isRotated, canvases, sizes, verticalMargins, horizontalM
             canvas[endMargin] = firstPane[sizeField] - offset;
             offset -= paneSize.unit ? paneSize.height : Math.floor(emptySpace * paneSize.height);
             canvas[startMargin] = offset;
-            offset -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, pane) + vizUtils.PANE_PADDING;
+            offset -= getMaxMargin(startMargin, verticalMargins, horizontalMargins, pane) + PANE_PADDING;
 
             return offset;
         }, firstPane[sizeField] - firstPane[getOriginalField(endMargin)] - (emptySpace < 0 ? emptySpace : 0));
@@ -771,7 +776,7 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _normalizePanesHeight: function() {
-        vizUtils.normalizePanesHeight(this.panes);
+        normalizePanesHeight(this.panes);
     },
 
     _renderScaleBreaks: function() {
@@ -1016,7 +1021,7 @@ var dxChart = AdvancedChart.inherit({
                 const realSize = that.getSize();
                 const customSize = that.option("size");
                 const container = that._$element[0];
-                const containerHasStyledHeight = !!container.style.height || vizUtils.checkElementHasPropertyFromStyleSheet(container, "height");
+                const containerHasStyledHeight = !!container.style.height || checkElementHasPropertyFromStyleSheet(container, "height");
 
                 if(!rotated && !(customSize && customSize.height) && !containerHasStyledHeight) {
                     that._forceResize(realSize.width, realSize.height + needVerticalSpace);
