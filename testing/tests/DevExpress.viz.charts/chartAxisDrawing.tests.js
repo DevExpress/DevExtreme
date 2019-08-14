@@ -1546,6 +1546,8 @@ QUnit.test("Calculate panes canvases (by percentage)", function(assert) {
     });
 
     // assert
+    assert.equal(argAxis_topPane.getMargins.callCount, 2);
+
     assert.deepEqual(chart.panes[0].canvas, {
         left: 10,
         right: 6,
@@ -1635,6 +1637,8 @@ QUnit.test("Calculate panes canvases (mixed)", function(assert) {
     });
 
     // assert
+    assert.equal(argAxis_topPane.getMargins.callCount, 2);
+
     assert.deepEqual(chart.panes[0].canvas, {
         left: 10,
         right: 6,
@@ -1707,6 +1711,7 @@ QUnit.test("Calculate panes canvases (pixels). Rotated. ScrollBar on left", func
     });
 
     // assert
+    assert.equal(argAxis1.getMargins.callCount, 3);
     // 3. draw horizontal axes
     assert.deepEqual(this.axisStub.getCall(3).returnValue.createTicks_test_arg, {
         left: 30,
@@ -2599,6 +2604,46 @@ QUnit.test("Multiple panes - hide all for horizontal axes", function(assert) {
     assert.deepEqual(this.axisStub.getCall(0).returnValue.hideOuterElements.callCount, 1);
 });
 
+QUnit.test("Multiple panes - not hide all for horizontal axes (pane sized for adaptivity)", function(assert) {
+    var argAxis_top = createAxisStubs(),
+        argAxis_bottom = createAxisStubs(),
+        valAxis_top = createAxisStubs(),
+        valAxis_bottom = createAxisStubs();
+
+    argAxis_top.getMargins.returns({ left: 0, top: 10, right: 0, bottom: 0 });
+    argAxis_bottom.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
+
+    this.setupAxes([argAxis_top,
+        argAxis_bottom,
+        valAxis_top,
+        valAxis_bottom]);
+
+    new dxChart(this.container, {
+        size: { width: 220, height: 220 },
+        adaptiveLayout: { width: 200, height: 90 },
+        panes: [{ name: "topPane", height: 70 }, { name: "bottomPame" }],
+        valueAxis: [
+            { name: "valAxis_top" },
+            { name: "valAxis_bottom" }
+        ],
+        series: [
+            { axis: "valAxis_top", pane: "topPane" },
+            { axis: "valAxis_bottom", pane: "bottomPane" }
+        ],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    // assert
+    // argAxis_bottom
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.hideTitle.callCount, 0);
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.hideOuterElements.callCount, 0);
+
+    // argAxis_top
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.hideTitle.callCount, 0);
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.hideOuterElements.callCount, 0);
+});
+
 QUnit.test("Multiple axes, vertical axes without titles are fit, horizontal axis without labels is fit - hide title for vertical axes, and all for horizontal", function(assert) {
     var argAxis = createAxisStubs(),
         valAxis_inner = createAxisStubs(),
@@ -2668,7 +2713,6 @@ QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis
     argAxis.getMargins.onCall(2).returns({ left: 0, top: 0, right: 0, bottom: 15 });
     argAxis.getMargins.onCall(3).returns({ left: 0, top: 0, right: 0, bottom: 15 });
     argAxis.getMargins.onCall(4).returns({ left: 0, top: 0, right: 0, bottom: 15 });
-    argAxis.getMargins.onCall(5).returns({ left: 0, top: 0, right: 0, bottom: 15 });
     argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 5 });
 
     valAxis_inner.getMargins.onCall(0).returns({ left: 12, top: 0, right: 0, bottom: 0 });
@@ -2676,7 +2720,6 @@ QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis
     valAxis_inner.getMargins.onCall(2).returns({ left: 12, top: 0, right: 0, bottom: 0 });
     valAxis_inner.getMargins.onCall(3).returns({ left: 12, top: 0, right: 0, bottom: 0 });
     valAxis_inner.getMargins.onCall(4).returns({ left: 12, top: 0, right: 0, bottom: 0 });
-    valAxis_inner.getMargins.onCall(5).returns({ left: 12, top: 0, right: 0, bottom: 0 });
     valAxis_inner.getMargins.returns({ left: 11, top: 0, right: 0, bottom: 0 });
 
     valAxis_outer.getMargins.onCall(0).returns({ left: 16, top: 0, right: 0, bottom: 0 });
@@ -2684,7 +2727,6 @@ QUnit.test("Multiple axes, horizontal axes without titles are fit, vertical axis
     valAxis_outer.getMargins.onCall(2).returns({ left: 16, top: 0, right: 0, bottom: 0 });
     valAxis_outer.getMargins.onCall(3).returns({ left: 16, top: 0, right: 0, bottom: 0 });
     valAxis_outer.getMargins.onCall(4).returns({ left: 16, top: 0, right: 0, bottom: 0 });
-    valAxis_outer.getMargins.onCall(5).returns({ left: 16, top: 0, right: 0, bottom: 0 });
     valAxis_outer.getMargins.returns({ left: 6, top: 0, right: 0, bottom: 0 });
 
     this.setupAxes([argAxis,
