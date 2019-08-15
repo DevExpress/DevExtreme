@@ -271,7 +271,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
         if(isMultiSelection) {
             $cell = this._correctCellForGroup($cell);
-            var $targetCells = this._getCellsBetween($cell, this._$prevCell);
+            let orientation = (this.option("type") === "day" && (!this.option("groups").length || (this.option("groupOrientation") === "vertical")))
+                ? "vertical"
+                : "horizontal";
+            var $targetCells = this._getCellsBetween($cell, this._$prevCell, orientation);
             this._focusedCells = $targetCells.toArray();
         } else {
             this._focusedCells = [$cell.get(0)];
@@ -300,9 +303,9 @@ var SchedulerWorkSpace = Widget.inherit({
         return focusedCellGroupIndex !== cellGroupIndex || isDifferentTables ? $focusedCell : $cell;
     },
 
-    _getCellsBetween: function($first, $last) {
+    _getCellsBetween: function($first, $last, direction) {
         var isAllDayTable = this._hasAllDayClass($last),
-            $cells = this._getCells(isAllDayTable),
+            $cells = this._getCells(isAllDayTable, direction),
             firstIndex = $cells.index($first),
             lastIndex = $cells.index($last);
 
@@ -1944,9 +1947,29 @@ var SchedulerWorkSpace = Widget.inherit({
             .eq(indexes.cellIndex);
     },
 
-    _getCells: function(allDay) {
+    _getCells: function(allDay, direction) {
         var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
-        return this.$element().find("." + cellClass);
+        let rowClass = allDay ? ALL_DAY_TABLE_ROW_CLASS : DATE_TABLE_ROW_CLASS;
+        if(direction === "vertical") {
+            let cells = [];
+            const rows = this.$element().find("." + rowClass);
+            for(var j = 0; j < rows.length; j++) {
+                const rowCells = rows.eq(j).find("." + cellClass);
+                for(var i = 0; i < rowCells.length; i++) {
+                    if(j === 0) {
+                        cells[i] = [];
+                    }
+                    cells[i].push(rowCells[i]);
+                }
+            }
+            let result = [];
+            cells.forEach((el) => {
+                result = result.concat(el);
+            });
+            return $(result);
+        } else {
+            return this.$element().find("." + cellClass);
+        }
     },
 
     _setHorizontalGroupHeaderCellsHeight: function() {
