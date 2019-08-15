@@ -66,3 +66,4 @@ module.exports.getParentPath = getParentPath;
 module.exports.getPathParts = getPathParts;
 module.exports.pathCombine = pathCombine;
 module.exports.getDisplayFileSize = getDisplayFileSize;
+module.exports.PATH_SEPARATOR = PATH_SEPARATOR;
