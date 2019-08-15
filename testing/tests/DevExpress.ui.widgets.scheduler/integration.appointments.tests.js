@@ -52,7 +52,6 @@ function skipTestOnMobile(assert) {
     return isMobile;
 }
 
-
 QUnit.module("T712431", () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
     const APPOINTMENT_WIDTH = 941;
@@ -78,6 +77,64 @@ QUnit.module("T712431", () => {
 
         const appointment = scheduler.appointments.getAppointment();
         assert.roughEqual(appointment.outerWidth(), APPOINTMENT_WIDTH, 1);
+    });
+});
+
+const newIntegrationModuleConfig = {
+    beforeEach() {
+        fx.off = true;
+    },
+
+    afterEach() {
+        fx.off = false;
+    }
+};
+
+QUnit.module("crossScrollingEnabled = true", newIntegrationModuleConfig, () => {
+    QUnit.test("Appointments should be rendered on the same line after navigating to the next month(T804721)", assert => {
+        const expectedTop = 26;
+        const views = ["timelineMonth", "timelineWeek"];
+
+        const data = [{
+            text: "Event 1",
+            recurrenceRule: "FREQ=DAILY",
+            startDate: new Date(2019, 1, 1, 14, 0),
+            endDate: new Date(2019, 1, 1, 12, 30),
+        }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: views,
+            currentView: views[0],
+            currentDate: new Date(2019, 2, 1),
+            crossScrollingEnabled: true,
+            height: 600
+        });
+
+        const testTopPosition = (view, navigatorDate) => {
+            scheduler.appointments.getAppointments().each((index, element) => {
+                const currentTop = translator.locate($(element)).top;
+                assert.equal(currentTop, expectedTop, `current appointment top position should be equal ${expectedTop} in ${view} type, ${navigatorDate} date`);
+            });
+        };
+
+        views.forEach(view => {
+            scheduler.option("currentView", view);
+
+            testTopPosition(view, scheduler.navigator.getCaption());
+
+            scheduler.navigator.clickOnNextButton();
+            testTopPosition(view, scheduler.navigator.getCaption());
+
+            scheduler.navigator.clickOnNextButton();
+            testTopPosition(view, scheduler.navigator.getCaption());
+
+            scheduler.navigator.clickOnPrevButton();
+            testTopPosition(view, scheduler.navigator.getCaption());
+
+            scheduler.navigator.clickOnPrevButton();
+            testTopPosition(view, scheduler.navigator.getCaption());
+        });
     });
 });
 

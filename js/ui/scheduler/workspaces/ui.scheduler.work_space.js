@@ -1920,15 +1920,8 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCellPosition: function($cell) {
-        var isRtl = this.option("rtlEnabled"),
-            position = $cell.position();
-
-        if(position) {
-            position.left = Math.round(position.left * 100) / 100;
-            position.top = Math.round(position.top * 100) / 100;
-        }
-
-        if(isRtl) {
+        const position = $cell.position();
+        if(this.option("rtlEnabled")) {
             position.left += $cell.get(0).getBoundingClientRect().width;
         }
         return position;
