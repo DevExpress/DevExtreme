@@ -417,8 +417,8 @@ class Diagram extends Widget {
                 setType: this._createOptionSetter("nodes.typeExpr"),
                 getText: this._createOptionGetter("nodes.textExpr"),
                 setText: this._createOptionSetter("nodes.textExpr"),
-                getImage: this._createOptionGetter("nodes.imageExpr"),
-                setImage: this._createOptionSetter("nodes.imageExpr"),
+                getImage: this._createOptionGetter("nodes.imageUrlExpr"),
+                setImage: this._createOptionSetter("nodes.imageUrlExpr"),
 
                 getLeft: this._createOptionGetter("nodes.leftExpr"),
                 setLeft: this._createOptionSetter("nodes.leftExpr"),
@@ -553,7 +553,7 @@ class Diagram extends Widget {
             let layoutType = layoutParametersOption.type || layoutParametersOption;
             if(layoutType === "tree") {
                 parameters.type = DataLayoutType.Tree;
-            } else if(layoutType === "sugiyama") {
+            } else if(layoutType === "layered") {
                 parameters.type = DataLayoutType.Sugiyama;
             }
             if(layoutParametersOption.orientation === "vertical") {
@@ -1065,12 +1065,12 @@ class Diagram extends Widget {
                 */
                 textExpr: "text",
                 /**
-                * @name dxDiagramOptions.nodes.imageExpr
+                * @name dxDiagramOptions.nodes.imageUrlExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default undefined
                 */
-                imageExpr: undefined,
+                imageUrlExpr: undefined,
                 /**
                 * @name dxDiagramOptions.nodes.parentKeyExpr
                 * @type string|function(data)
