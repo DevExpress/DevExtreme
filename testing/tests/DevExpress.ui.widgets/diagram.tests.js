@@ -24,7 +24,6 @@ const moduleConfig = {
     beforeEach: () => {
         this.$element = $("#diagram").dxDiagram();
         this.instance = this.$element.dxDiagram("instance");
-        this.clock = sinon.useFakeTimers();
     }
 };
 
@@ -33,7 +32,16 @@ function getToolbarIcon(button) {
 }
 
 
-QUnit.module("Diagram DOM Layout", moduleConfig, () => {
+QUnit.module("Diagram DOM Layout", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach();
+    },
+    afterEach: () => {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test("should return correct size of document container in default options", (assert) => {
         assertSizes(assert,
             this.$element.find(".dxdi-control"),
