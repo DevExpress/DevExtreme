@@ -5,7 +5,7 @@ import "ui/diagram";
 import { DiagramCommand } from "devexpress-diagram";
 
 QUnit.testStart(() => {
-    const markup = '<div id="diagram"></div>';
+    const markup = '<style>.dxdi-control { width: 100%; height: 100%; overflow: auto; box-sizing: border-box; position: relative; }</style><div id="diagram"></div>';
     $("#qunit-fixture").html(markup);
 });
 
@@ -30,6 +30,71 @@ const moduleConfig = {
 function getToolbarIcon(button) {
     return button.find(".dx-dropdowneditor-field-template-wrapper").find(".dx-diagram-i, .dx-icon");
 }
+
+
+QUnit.module("Diagram DOM Layout", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach();
+    },
+    afterEach: () => {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
+    test("should return correct size of document container in default options", (assert) => {
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+    test("should return correct size of document container if options panel is hidden", (assert) => {
+        this.instance.option("propertiesPanel.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+    test("should return correct size of document container if toolbox is hidden", (assert) => {
+        this.instance.option("toolbox.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+    test("should return correct size of document container if toolbar is hidden", (assert) => {
+        this.instance.option("toolbar.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+    test("should return correct size of document container if all UI is hidden", (assert) => {
+        this.instance.option("toolbar.visible", false);
+        this.instance.option("toolbox.visible", false);
+        this.instance.option("propertiesPanel.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+
+    function assertSizes(assert, $scrollContainer, $actualContainer, inst) {
+        assert.equal($scrollContainer.width(), $actualContainer.width());
+        assert.equal($scrollContainer.height(), $actualContainer.height());
+        var coreScrollSize = inst._diagramInstance.render.view.scroll.getSize();
+        assert.equal(coreScrollSize.width, $actualContainer.width());
+        assert.equal(coreScrollSize.height, $actualContainer.height());
+    }
+});
 
 QUnit.module("Diagram Toolbar", moduleConfig, () => {
     test("should not render if toolbar.visible is false", (assert) => {
