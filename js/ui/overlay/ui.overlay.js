@@ -751,7 +751,11 @@ var Overlay = Widget.inherit({
 
     _forceFocusLost: function() {
         var activeElement = domAdapter.getActiveElement();
-        activeElement && this._$content.find(activeElement).length && activeElement.blur();
+        var shouldResetActiveElement = !!this._$content.find(activeElement).length;
+
+        if(shouldResetActiveElement) {
+            domUtils.resetActiveElement();
+        }
     },
 
     _animate: function(animation, completeCallback, startCallback) {
