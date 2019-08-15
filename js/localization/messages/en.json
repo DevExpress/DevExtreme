@@ -350,8 +350,14 @@
         "dxDiagram-commandSendToBack": "Send to Back",
         "dxDiagram-commandLock": "Lock",
         "dxDiagram-commandUnlock": "Unlock",
+        "dxDiagram-commandChangeShapeImage": "Change Image...",
         "dxDiagram-unitIn": "in",
         "dxDiagram-unitCm": "cm",
-        "dxDiagram-unitPx": "px"
+        "dxDiagram-unitPx": "px",
+        "dxDiagram-dialogButtonOK": "OK",
+        "dxDiagram-dialogButtonCancel": "Cancel",
+        "dxDiagram-dialogChangeShapeImageTitle": "Change Image",
+        "dxDiagram-dialogChangeShapeImageSelectButton": "Select image",
+        "dxDiagram-dialogChangeShapeImageLabelText": "or drop file here"
     }
 }
