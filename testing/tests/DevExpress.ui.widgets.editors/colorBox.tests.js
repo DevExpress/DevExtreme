@@ -1,12 +1,12 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    Color = require("color"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    fx = require("animation/fx");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import Color from "color";
+import pointerMock from "../../helpers/pointerMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import fx from "animation/fx";
 
-require("common.css!");
-require("ui/color_box");
+import "common.css!";
+import "ui/color_box";
 
 QUnit.testStart(function() {
     var markup =
@@ -337,8 +337,6 @@ QUnit.test("Update colors preview", function(assert) {
 
     this.updateColorInput("hex", "d0ff00");
     colorPicker.applyColor();
-
-    showColorBox.call(this);
 
     var baseColor = $(".dx-colorview-color-preview-color-current").css("backgroundColor");
     var newColor = $(".dx-colorview-color-preview-color-new").css("backgroundColor");
@@ -790,4 +788,22 @@ QUnit.test("Value should not be changed by 'up' key when colorbox was opened and
     keyboard.keyDown("enter");
 
     assert.equal(colorBox.option("value"), "#326b8a");
+});
+
+QUnit.test("value should be reseted after popup closing when 'applyValueMode' is 'useButtons' (T806577)", (assert) => {
+    const colorBox = $("#color-box").dxColorBox({
+            value: "#aabbcc",
+            applyValueMode: "useButtons",
+            opened: true
+        }).dxColorBox("instance"),
+        $input = $(colorBox.$element().find("." + TEXTEDITOR_INPUT_CLASS)),
+        colorView = $(".dx-colorview").dxColorView("instance"),
+        keyboard = keyboardMock($input);
+
+    colorView.option("value", "#ffffff");
+    colorBox.close();
+
+    keyboard.press("enter");
+
+    assert.equal(colorBox.option("value"), "#aabbcc");
 });

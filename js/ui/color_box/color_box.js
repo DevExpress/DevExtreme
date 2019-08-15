@@ -170,6 +170,13 @@ var ColorBox = DropDownEditor.inherit({
         });
     },
 
+    _popupHidingHandler: function() {
+        this.callBase();
+        if(this.option("applyValueMode") === "useButtons") {
+            this._updateColorViewValue(this.option("value"));
+        }
+    },
+
     _popupConfig: function() {
         return extend(this.callBase(), {
             height: "auto",
