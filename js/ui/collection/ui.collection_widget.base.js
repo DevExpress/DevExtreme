@@ -21,7 +21,7 @@ import holdEvent from "../../events/hold";
 import { compileGetter } from "../../core/utils/data";
 import clickEvent from "../../events/click";
 import contextMenuEvent from "../../events/contextmenu";
-import { BindableTemplate } from "../../core/templates/bindable_template";
+import { BindableTemplate } from "../widget/bindable_template";
 
 const COLLECTION_CLASS = "dx-collection";
 const ITEM_CLASS = "dx-item";
