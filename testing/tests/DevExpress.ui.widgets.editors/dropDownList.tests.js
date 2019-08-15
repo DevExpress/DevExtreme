@@ -28,6 +28,8 @@ QUnit.testStart(() => {
 const LIST_ITEM_SELECTOR = ".dx-list-item";
 const STATE_FOCUSED_CLASS = "dx-state-focused";
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const POPUP_CONTENT_CLASS = "dx-popup-content";
+const LIST_CLASS = "dx-list";
 
 const moduleConfig = {
     beforeEach: () => {
@@ -96,7 +98,7 @@ QUnit.module("focus policy", {
     QUnit.test("hover and focus states for list should be initially disabled on mobile devices only", (assert) => {
         this.instance.option("opened", true);
 
-        const list = $(".dx-list").dxList("instance");
+        const list = $(`.${LIST_CLASS}`).dxList("instance");
 
         if(devices.real().deviceType === "desktop") {
             assert.ok(list.option("hoverStateEnabled"), "hover state should be enabled on desktop");
@@ -110,7 +112,7 @@ QUnit.module("focus policy", {
     QUnit.test("changing hover and focus states for list should be enabled on desktop only", (assert) => {
         this.instance.option("opened", true);
 
-        const list = $(".dx-list").dxList("instance");
+        const list = $(`.${LIST_CLASS}`).dxList("instance");
 
         this.instance.option({ hoverStateEnabled: false, focusStateEnabled: false });
 
@@ -177,7 +179,7 @@ QUnit.module("keyboard navigation", {
 
         this.instance.open();
 
-        const $list = $(this.instance.content()).find(".dx-list");
+        const $list = $(this.instance.content()).find(`.${LIST_CLASS}`);
 
         $list.on("mousedown", e => {
             // note: you should not prevent pointerdown because it will prevent click on ios real devices
@@ -196,7 +198,7 @@ QUnit.module("keyboard navigation", {
         });
 
         const $content = $(this.instance.content());
-        const $list = $content.find(".dx-list");
+        const $list = $content.find(`.${LIST_CLASS}`);
 
         assert.notOk($list.attr("tabIndex"), "list have no tabindex");
     });
@@ -219,7 +221,7 @@ QUnit.module("keyboard navigation", {
         });
 
         const $content = $(this.instance.content());
-        const list = $content.find(".dx-list").dxList("instance");
+        const list = $content.find(`.${LIST_CLASS}`).dxList("instance");
         const $listItem = $content.find(LIST_ITEM_SELECTOR).eq(0);
 
         list.option("focusedElement", $listItem);
@@ -708,7 +710,7 @@ QUnit.module("items & dataSource", moduleConfig, () => {
             opened: true
         });
 
-        const list = $(".dx-list").dxList("instance");
+        const list = $(`.${LIST_CLASS}`).dxList("instance");
 
         assert.equal(list.option("keyExpr"), null, "keyExpr is correct");
     });
@@ -721,7 +723,7 @@ QUnit.module("items & dataSource", moduleConfig, () => {
             opened: true
         }).dxDropDownList("instance");
 
-        const list = $(".dx-list").dxList("instance");
+        const list = $(`.${LIST_CLASS}`).dxList("instance");
 
         assert.equal(list.option("keyExpr"), "id", "keyExpr should be passed on init");
 
@@ -947,7 +949,7 @@ QUnit.module("selectedItem", moduleConfig, () => {
 
         this.clock.tick();
 
-        $(".dx-list").dxList("_loadNextPage");
+        $(`.${LIST_CLASS}`).dxList("_loadNextPage");
 
         this.clock.tick();
 
@@ -1101,7 +1103,7 @@ QUnit.module("popup", moduleConfig, () => {
             width: 200
         });
 
-        const listInstance = $(".dx-list").dxList("instance");
+        const listInstance = $(`.${LIST_CLASS}`).dxList("instance");
 
         listInstance.option("pageLoadMode", "scrollBottom");
         listInstance.option("useNativeScrolling", "true");
@@ -1143,7 +1145,7 @@ QUnit.module("popup", moduleConfig, () => {
 
         $dropDownList.dxDropDownList("instance").open();
 
-        const listInstance = $(".dx-list").dxList("instance");
+        const listInstance = $(`.${LIST_CLASS}`).dxList("instance");
 
         listInstance.option("pageLoadMode", "scrollBottom");
         listInstance.option("useNativeScrolling", "true");
@@ -1273,11 +1275,25 @@ QUnit.module("render input addons", moduleConfig, () => {
 
 QUnit.module("aria accessibility", moduleConfig, () => {
     QUnit.test("aria-owns should point to list", assert => {
-        const $input = $("#dropDownList").dxDropDownList({ opened: true }).find("." + TEXTEDITOR_INPUT_CLASS);
-        const $list = $(".dx-list");
+        const $dropDownList = $("#dropDownList").dxDropDownList({ opened: true });
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
 
-        assert.notEqual($input.attr("aria-owns"), undefined, "aria-owns exists");
-        assert.equal($input.attr("aria-owns"), $list.attr("id"), "aria-owns equals list's id");
+        assert.notEqual($dropDownList.attr("aria-owns"), undefined, "aria-owns exists");
+        assert.equal($dropDownList.attr("aria-owns"), $popupContent.attr("id"), "aria-owns equals popup content's id");
+    });
+
+    QUnit.test("aria-controls should be removed when popup is not visible", function(assert) {
+        const $dropDownList = $("#dropDownList").dxDropDownList({ opened: true });
+        const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const instance = $dropDownList.dxDropDownList("instance");
+        const $list = $(instance.content()).find(`.${LIST_CLASS}`);
+
+        assert.notEqual($input.attr("aria-controls"), undefined, "controls exists");
+        assert.equal($input.attr("aria-controls"), $list.attr("id"), "aria-controls points to list's id");
+
+        instance.close();
+
+        assert.strictEqual($input.attr("aria-controls"), undefined, "controls does not exist");
     });
 
     QUnit.test("input's aria-activedescendant attribute should point to the focused item", assert => {
@@ -1287,7 +1303,7 @@ QUnit.module("aria accessibility", moduleConfig, () => {
             focusStateEnabled: true
         });
 
-        const $list = $(".dx-list");
+        const $list = $(`.${LIST_CLASS}`);
         const list = $list.dxList("instance");
         const $input = $dropDownList.find("." + TEXTEDITOR_INPUT_CLASS);
         const $item = $list.find(".dx-list-item:eq(1)");
@@ -1302,7 +1318,7 @@ QUnit.module("aria accessibility", moduleConfig, () => {
         assert.expect(2);
 
         const dropDownList = $("#dropDownList").dxDropDownList({ opened: true }).dxDropDownList("instance");
-        const list = $(".dx-list").dxList("instance");
+        const list = $(`.${LIST_CLASS}`).dxList("instance");
         const $input = $("#dropDownList").find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.deepEqual(list._getAriaTarget(), dropDownList._getAriaTarget());
@@ -1326,7 +1342,7 @@ QUnit.module("dropdownlist with groups", {
             grouped: true
         }).dxDropDownList("instance");
 
-        const list = $(".dx-list").dxList("instance");
+        const list = $(`.${LIST_CLASS}`).dxList("instance");
         assert.strictEqual(list.option("grouped"), true, "grouped option is passed to the list");
         assert.deepEqual(list.option("items"), dropDownList.option("items"), "items is equal");
 
@@ -1345,7 +1361,7 @@ QUnit.module("dropdownlist with groups", {
             groupTemplate: groupTemplate1
         }).dxDropDownList("instance");
 
-        const list = $(".dx-list").dxList("instance");
+        const list = $(`.${LIST_CLASS}`).dxList("instance");
         assert.strictEqual(list.option("groupTemplate"), groupTemplate1, "groupTemplate has been passed on init");
 
         const groupTemplate2 = new Template("<div>Test</div>");
