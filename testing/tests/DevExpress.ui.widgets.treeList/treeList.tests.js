@@ -1393,7 +1393,7 @@ QUnit.test("TreeList should correctly load data when filtering is remote and sor
     loadSpy.reset();
 });
 
-// T806141
+// T806547
 QUnit.test("TreeList should correctly switch dx-row-alt class for fixed column after expand if repaintChangesOnly = true", function(assert) {
     // arrange
     var $row,
