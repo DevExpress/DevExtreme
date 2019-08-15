@@ -253,7 +253,8 @@ class BaseRenderingStrategy {
     _getSortedPositions(positionList) {
         const result = [];
 
-        const round = value => Math.round(value * 100) / 100;
+        // const round = value => Math.round(value * 100) / 100;
+        const round = value => Math.round(value);
         const createSortedItem = (rowIndex, cellIndex, top, left, position, isStart, allDay, tmpIndex) => {
             return {
                 i: rowIndex,
