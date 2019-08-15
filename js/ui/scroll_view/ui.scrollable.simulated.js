@@ -50,7 +50,8 @@ const KEY_CODES = {
     LEFT: "leftArrow",
     UP: "upArrow",
     RIGHT: "rightArrow",
-    DOWN: "downArrow"
+    DOWN: "downArrow",
+    TAB: "tab"
 };
 
 var InertiaAnimator = Animator.inherit({
@@ -716,6 +717,15 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _keyDownHandler: function(e) {
+        clearTimeout(this._updateHandlerTimeout);
+        this._updateHandlerTimeout = setTimeout(() => {
+            if(normalizeKeyName(e) === KEY_CODES.TAB) {
+                this._eachScroller((scroller) => {
+                    scroller._updateHandler();
+                });
+            }
+        });
+
         if(!this._$container.is(domAdapter.getActiveElement())) {
             return;
         }
@@ -819,19 +829,6 @@ var SimulatedStrategy = Class.inherit({
 
     _createActionHandler: function(optionName) {
         let actionHandler = this._createActionByOption(optionName);
-
-        if(optionName === "onScroll") {
-            actionHandler = this._createActionByOption("onScroll", {
-                afterExecute: () => {
-                    clearTimeout(this._updateHandlerTimeout);
-                    this._updateHandlerTimeout = setTimeout(() => {
-                        this._eachScroller((scroller) => {
-                            scroller._update();
-                        });
-                    });
-                }
-            });
-        }
 
         return () => {
             actionHandler(extend(this._createActionArgs(), arguments));

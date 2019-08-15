@@ -275,7 +275,7 @@ QUnit.testInActiveWindow("arrows was not handled when focus on input element", f
             QUnit.assert.deepEqual(scrollLocation, expectedLocation, "scroll location");
         }
 
-        QUnit.testInActiveWindow(`Update vertical scroll location on focus: useNative - ${useNativeMode}`, (assert) => {
+        QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}`, (assert) => {
             if(devices.real().deviceType !== "desktop") {
                 assert.ok(true, "mobile device does not support tabindex on div element");
                 return;
@@ -306,12 +306,15 @@ QUnit.testInActiveWindow("arrows was not handled when focus on input element", f
                     setTimeout(() => {
                         checkScrollLocation($scrollable, scrollbarDirection === "vertical" ? { top: 100, left: 0 } : { top: 0, left: 100 });
                         done();
-                    }, 100);
+                    });
                     resolve();
                 });
 
                 checkScrollLocation($scrollable, { top: 0, left: 0 });
+
+                const keyboard = keyboardMock($contentContainer1);
                 $contentContainer2.focus();
+                keyboard.keyDown("tab");
             });
         });
     });
