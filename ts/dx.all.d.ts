@@ -9313,10 +9313,6 @@ declare module DevExpress {
         option(optionName: string, optionValue: any): void;
         /** @name Component.option(options) */
         option(options: any): void;
-        /** @name Component.resetOption() */
-        resetOption(): void;
-        /** @name Component.resetOption(optionName) */
-        resetOption(optionName: string): void;
     }
     /** @name DOMComponent.Options */
     export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
