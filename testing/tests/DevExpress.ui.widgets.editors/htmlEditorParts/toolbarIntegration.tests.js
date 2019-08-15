@@ -121,7 +121,7 @@ QUnit.module("Toolbar integration", {
 
         instance.setSelection(0, 2);
 
-        $(`.${TOOLBAR_CLASS}`).on("dxclick", toolbarClickStub);
+        $(`.${TOOLBAR_WRAPPER_CLASS}`).on("dxclick", toolbarClickStub);
         $("#htmlEditor")
             .find(`.dx-dropdownmenu-button`)
             .trigger("dxclick");
