@@ -113,6 +113,7 @@ export default CollectionWidget.inherit({
         when(isPartialRefresh || arrayUtils.insert(keyInfo, items, change.data, change.index)).done(() => {
             this._beforeItemElementInserted(change);
             this._renderItem(isDefined(change.index) ? change.index : items.length, change.data);
+            this._afterItemElementInserted();
             this._correctionIndex++;
         });
     },
@@ -136,6 +137,8 @@ export default CollectionWidget.inherit({
             this.option("selectedIndex", selectedIndex + 1);
         }
     },
+
+    _afterItemElementInserted: function() { },
 
     _removeByChange: function(keyInfo, items, change, isPartialRefresh) {
         let index = isPartialRefresh ? change.index : arrayUtils.indexByKey(keyInfo, items, change.key),
