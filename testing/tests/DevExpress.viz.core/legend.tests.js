@@ -1958,8 +1958,8 @@ QUnit.test('Appended to container', function(assert) {
     var createMarker = this.createMarker,
         markersGroup = this.findMarkersGroup();
 
-    $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.append.lastCall.args[0].element, markersGroup.children[i].element, String(i));
+    this.data.forEach((_, i) => {
+        assert.equal(createMarker.getCall(i).returnValue.append.lastCall.args[0].element, markersGroup.children[i].children[0].element, String(i));
     });
 });
 
