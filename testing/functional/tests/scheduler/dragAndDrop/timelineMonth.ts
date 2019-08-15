@@ -12,12 +12,13 @@ fixture`Rearrange appointments in the Scheduler widget with the drag-and-drop ge
     .page(getContainerFileUrl());
 
 test('Drag-and-drop appointments in timelineMonth', async t => {
-    
+
     const firstAppointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
 
     await t
         .dragToElement(firstAppointment, scheduler.getDateTableCell(0, 3))
 
+	await t
         .expect('200px')
 		.eql(await scheduler.getAppointmentSize(firstAppointment).width,
 			"Appointment width incorrect")
@@ -36,6 +37,7 @@ test('Drag-and-drop appointments in timelineMonth', async t => {
     await t
         .dragToElement(secondAppointment, scheduler.getDateTableCell(0, 3))
 
+	await t
         .expect('200px')
 		.eql(await scheduler.getAppointmentSize(secondAppointment).width,
 			"Appointment width incorrect")
@@ -54,6 +56,7 @@ test('Drag-and-drop appointments in timelineMonth', async t => {
     await t
         .dragToElement(thirdAppointment, scheduler.getDateTableCell(0, 3))
 
+	await t
         .expect('200px')
 		.eql(await scheduler.getAppointmentSize(thirdAppointment).width,
 			"Appointment width incorrect")

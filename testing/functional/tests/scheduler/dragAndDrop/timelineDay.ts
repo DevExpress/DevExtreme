@@ -16,11 +16,15 @@ test('Drag-and-drop appointments in timelineDay', async t => {
 	const firstAppointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
 
 	await t
-		.dragToElement(firstAppointment, scheduler.getDateTableCell(1, 0))
+		.dragToElement(firstAppointment, scheduler.getDateTableCell(0, 1))
 
-		.expect('50px')
+	await t
+		.expect('170.594px')
 		.eql(await scheduler.getAppointmentSize(firstAppointment).height,
 			"Appointment height incorrect")
+		.expect('200px')
+		.eql(await scheduler.getAppointmentSize(firstAppointment).width,
+			"Appointment width incorrect")
 		.expect('9:30 AM')
 		.eql(await scheduler.getAppointmentTime(firstAppointment).startTime,
 			"Appointment startTime incorrect")
@@ -31,11 +35,15 @@ test('Drag-and-drop appointments in timelineDay', async t => {
 	const secondAppointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
 
 	await t
-		.dragToElement(secondAppointment, scheduler.getDateTableCell(2, 0))
+		.dragToElement(secondAppointment, scheduler.getDateTableCell(0, 2))
 
-		.expect('100px')
+	await t
+		.expect('170.594px')
 		.eql(await scheduler.getAppointmentSize(secondAppointment).height,
 			"Appointment height incorrect")
+		.expect('400px')
+		.eql(await scheduler.getAppointmentSize(secondAppointment).width,
+			"Appointment width incorrect")
 		.expect('10:00 AM')
 		.eql(await scheduler.getAppointmentTime(secondAppointment).startTime,
 			"Appointment startTime incorrect")
@@ -46,11 +54,15 @@ test('Drag-and-drop appointments in timelineDay', async t => {
 	const thirdAppointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
 
 	await t
-		.dragToElement(thirdAppointment, scheduler.getDateTableCell(4, 0))
+		.dragToElement(thirdAppointment, scheduler.getDateTableCell(0, 4))
 
-		.expect('150px')
+	await t
+		.expect('170.594px')
 		.eql(await scheduler.getAppointmentSize(thirdAppointment).height,
 			"Appointment height incorrect")
+		.expect('600px')
+		.eql(await scheduler.getAppointmentSize(thirdAppointment).width,
+			"Appointment width incorrect")
 		.expect('11:00 AM')
 		.eql(await scheduler.getAppointmentTime(thirdAppointment).startTime,
 			"Appointment startTime incorrect")

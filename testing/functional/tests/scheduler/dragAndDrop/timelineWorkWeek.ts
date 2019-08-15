@@ -18,6 +18,7 @@ test('Drag-and-drop appointments in timelineWorkWeek', async t => {
 	await t
 		.dragToElement(firstAppointment, scheduler.getDateTableCell(0, 1))
 
+	await t
 		.expect('162.594px')
 		.eql(await scheduler.getAppointmentSize(firstAppointment).height,
 			"Appointment height incorrect")
@@ -36,6 +37,7 @@ test('Drag-and-drop appointments in timelineWorkWeek', async t => {
 	await t
 		.dragToElement(secondAppointment, scheduler.getDateTableCell(0, 2))
 
+	await t
 		.expect('162.594px')
 		.eql(await scheduler.getAppointmentSize(secondAppointment).height,
 			"Appointment height incorrect")
@@ -54,6 +56,7 @@ test('Drag-and-drop appointments in timelineWorkWeek', async t => {
 	await t
 		.dragToElement(thirdAppointment, scheduler.getDateTableCell(0, 4))
 
+	await t
 		.expect('162.594px')
 		.eql(await scheduler.getAppointmentSize(thirdAppointment).height,
 			"Appointment height incorrect")
