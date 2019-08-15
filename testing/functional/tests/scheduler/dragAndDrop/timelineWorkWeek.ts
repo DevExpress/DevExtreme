@@ -19,12 +19,12 @@ test('Drag-and-drop appointments in timelineWorkWeek', async t => {
 		.dragToElement(firstAppointment, scheduler.getDateTableCell(0, 1))
 
 	await t
-		.expect('162.594px')
-		.eql(await scheduler.getAppointmentSize(firstAppointment).height,
-			"Appointment height incorrect")
 		.expect('200px')
 		.eql(await scheduler.getAppointmentSize(firstAppointment).width,
 			"Appointment width incorrect")
+		.expect('162.594px')
+		.eql(await scheduler.getAppointmentSize(firstAppointment).height,
+			"Appointment height incorrect")
 		.expect('9:30 AM')
 		.eql(await scheduler.getAppointmentTime(firstAppointment).startTime,
 			"Appointment startTime incorrect")
@@ -38,12 +38,12 @@ test('Drag-and-drop appointments in timelineWorkWeek', async t => {
 		.dragToElement(secondAppointment, scheduler.getDateTableCell(0, 2))
 
 	await t
-		.expect('162.594px')
-		.eql(await scheduler.getAppointmentSize(secondAppointment).height,
-			"Appointment height incorrect")
 		.expect('400px')
 		.eql(await scheduler.getAppointmentSize(secondAppointment).width,
 			"Appointment width incorrect")
+		.expect('162.594px')
+		.eql(await scheduler.getAppointmentSize(secondAppointment).height,
+			"Appointment height incorrect")
 		.expect('10:00 AM')
 		.eql(await scheduler.getAppointmentTime(secondAppointment).startTime,
 			"Appointment startTime incorrect")
@@ -57,12 +57,12 @@ test('Drag-and-drop appointments in timelineWorkWeek', async t => {
 		.dragToElement(thirdAppointment, scheduler.getDateTableCell(0, 4))
 
 	await t
-		.expect('162.594px')
-		.eql(await scheduler.getAppointmentSize(thirdAppointment).height,
-			"Appointment height incorrect")
 		.expect('600px')
 		.eql(await scheduler.getAppointmentSize(thirdAppointment).width,
 			"Appointment width incorrect")
+		.expect('162.594px')
+		.eql(await scheduler.getAppointmentSize(thirdAppointment).height,
+			"Appointment height incorrect")
 		.expect('11:00 AM')
 		.eql(await scheduler.getAppointmentTime(thirdAppointment).startTime,
 			"Appointment startTime incorrect")
