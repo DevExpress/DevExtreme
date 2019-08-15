@@ -14,6 +14,13 @@ function invertFigure(figure) {
     });
 }
 
+function getLegendItemState(itemState) {
+    return {
+        fill: itemState.fill,
+        hatching: itemState.hatching
+    };
+}
+
 var dxFunnel = require("../core/base_widget").inherit({
     _rootClass: "dxf-funnel",
 
@@ -258,13 +265,17 @@ var dxFunnel = require("../core/base_widget").inherit({
 
     _getLegendData() {
         return this._items.map(item => {
-
+            const states = item.states;
             return {
                 id: item.id,
                 visible: true,
                 text: item.argument,
                 item: item,
-                states: item.states
+                states: {
+                    normal: getLegendItemState(states.normal),
+                    hover: getLegendItemState(states.hover),
+                    selection: getLegendItemState(states.selection)
+                }
             };
         });
     },
