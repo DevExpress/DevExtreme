@@ -439,6 +439,23 @@ QUnit.test("'rtlEnabled' option is passed to createComponent", function(assert) 
     assert.ok(secondInstance.option("rtlEnabled"), true);
 });
 
+QUnit.test("'templatesRenderAsynchronously' option is passed to createComponent", function(assert) {
+    var $firstElement = $("#component"),
+        $secondElement = $("#anotherComponent");
+
+    registerComponent("TestComponent", this.TestComponent.inherit({
+        createComponent: function(element, name, config) {
+            return this._createComponent(element, name, config);
+        }
+    })
+    );
+
+    var firstInstance = $firstElement.TestComponent({ templatesRenderAsynchronously: true }).TestComponent("instance"),
+        secondInstance = firstInstance.createComponent($secondElement, "TestComponent", {});
+
+    assert.ok(secondInstance.option("templatesRenderAsynchronously"), true);
+});
+
 QUnit.test("option 'rtl'", function(assert) {
     var $element = $("#component").TestComponent(),
         instance = $element.TestComponent("instance");
