@@ -188,7 +188,7 @@ QUnit.test("Control bar", function(assert) {
 QUnit.test('Legends', function(assert) {
     var spy = sinon.spy(legendModule, "LegendsControl");
 
-    this.createMap({
+    var map = this.createMap({
         legends: {
             option: 'option'
         }
@@ -197,6 +197,7 @@ QUnit.test('Legends', function(assert) {
 
     assert.deepEqual(spy.lastCall.args, [{
         renderer: this.renderer,
+        widget: map,
         container: this.renderer.root,
         layoutControl: this.layoutControl,
         dataExchanger: this.dataExchanger,
