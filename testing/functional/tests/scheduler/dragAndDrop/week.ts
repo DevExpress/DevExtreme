@@ -16,7 +16,7 @@ test('Drag-and-drop appointments in week', async t => {
     const firstAppointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
 
 	await t
-		.dragToElement(firstAppointment, scheduler.getDateTableRow(1))
+		.dragToElement(firstAppointment, scheduler.getDateTableCell(1, 0))
 
 	await t
 		.expect('50px')
@@ -32,7 +32,7 @@ test('Drag-and-drop appointments in week', async t => {
 	const secondAppointment = await scheduler.getAppointmentByTitle('Update NDA Agreement');
 
 	await t
-		.dragToElement(secondAppointment, scheduler.getDateTableRow(2))
+		.dragToElement(secondAppointment, scheduler.getDateTableCell(2, 0))
 
 	await t
 		.expect('100px')
@@ -48,7 +48,7 @@ test('Drag-and-drop appointments in week', async t => {
 	const thirdAppointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
 
 	await t
-		.dragToElement(thirdAppointment, scheduler.getDateTableRow(4))
+		.dragToElement(thirdAppointment, scheduler.getDateTableCell(4, 0))
 
 	await t
 		.expect('150px')
