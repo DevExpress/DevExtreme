@@ -1,4 +1,4 @@
-import { FileProvider, FileManagerRootItem } from "./file_provider/file_provider";
+import { FileProvider, FileManagerItem, FileManagerRootItem } from "./file_provider/file_provider";
 import ArrayFileProvider from "./file_provider/array";
 import AjaxFileProvider from "./file_provider/ajax";
 import OneDriveFileProvider from "./file_provider/onedrive";
@@ -132,7 +132,7 @@ export default class FileItemsController {
         loadItemsDeferred = when(this._fileProvider.getItems(providerDirKey))
             .then(fileItems => {
                 parentDirectoryInfo.items = fileItems.map(fileItem =>
-                    fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this.createFileInfo(fileItem, parentDirectoryInfo)
+                    fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this._createFileInfo(fileItem, parentDirectoryInfo)
                 );
                 parentDirectoryInfo.itemsLoaded = true;
                 return parentDirectoryInfo.items;
@@ -224,6 +224,17 @@ export default class FileItemsController {
         return this._fileProvider.getFileUploadChunkSize();
     }
 
+    getItemInfosForUploaderFiles(files, parentDirectoryInfo) {
+        const result = [];
+        for(let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const item = new FileManagerItem(parentDirectoryInfo.fileItem.relativeName, file.name, false);
+            const itemInfo = this._createFileInfo(item, parentDirectoryInfo);
+            result.push(itemInfo);
+        }
+        return result;
+    }
+
     refresh() {
         if(this._lockRefresh) {
             return this._refreshDeferred;
@@ -312,14 +323,14 @@ export default class FileItemsController {
     }
 
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {
-        return extend(this.createFileInfo(fileItem, parentDirectoryInfo), {
+        return extend(this._createFileInfo(fileItem, parentDirectoryInfo), {
             icon: "folder",
             expanded: fileItem.isRoot,
             items: [ ]
         });
     }
 
-    createFileInfo(fileItem, parentDirectoryInfo) {
+    _createFileInfo(fileItem, parentDirectoryInfo) {
         return {
             fileItem,
             parentDirectory: parentDirectoryInfo,

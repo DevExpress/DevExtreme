@@ -12,7 +12,6 @@ import Widget from "../widget/ui.widget";
 
 import whenSome from "./ui.file_manager.common";
 import { getName } from "./ui.file_manager.utils";
-import { FileManagerItem } from "./file_provider/file_provider";
 import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
 import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_chooser";
 import FileManagerFileUploader from "./ui.file_manager.file_uploader";
@@ -235,7 +234,7 @@ class FileManagerEditingControl extends Widget {
 
     _onUploadSessionStarted({ sessionInfo }) {
         const action = this._editActions.upload;
-        const itemInfos = this._getItemInfosForUploaderFiles(sessionInfo.files, this._uploadDirectoryInfo);
+        const itemInfos = this._controller.getItemInfosForUploaderFiles(sessionInfo.files, this._uploadDirectoryInfo);
 
         const context = new FileManagerActionContext(action, itemInfos, true);
         const operationInfo = this._startActionProcessing(context);
@@ -382,17 +381,6 @@ class FileManagerEditingControl extends Widget {
     _tryUpload(destinationFolder) {
         this._uploadDirectoryInfo = destinationFolder && destinationFolder[0] || this._getCurrentDirectory();
         this._fileUploader.tryUpload();
-    }
-
-    _getItemInfosForUploaderFiles(files, parentDirectoryInfo) {
-        const result = [];
-        for(let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const item = new FileManagerItem(parentDirectoryInfo.fileItem.relativeName, file.name, false);
-            const itemInfo = this._controller.createFileInfo(item, parentDirectoryInfo);
-            result.push(itemInfo);
-        }
-        return result;
     }
 
     _showDialog(dialog, dialogArgument) {
