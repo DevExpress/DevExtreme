@@ -8,6 +8,9 @@ import devices from "core/devices";
 import fx from "animation/fx";
 import contextMenuEvent from "events/contextmenu";
 import dblclickEvent from "events/dblclick";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
+
+const createInstance = (options) => new TreeViewTestWrapper(options);
 
 const checkEventArgs = function(assert, e) {
     assert.ok(e.component);
@@ -881,6 +884,89 @@ QUnit.test("Rendered event handler has correct arguments", function(assert) {
     });
 
     assert.ok(treeView);
+});
+
+QUnit.test("onItemRendered event arguments", function(assert) {
+    const checkOnItemRenderedEventArgs = (assert, eventArgs, expectedArgs) => {
+        const { component, element, itemData, itemElement, itemIndex, node } = expectedArgs;
+
+        assert.deepEqual(eventArgs.component, component, "component");
+        assert.strictEqual(eventArgs.element, element, "element");
+        assert.deepEqual(eventArgs.itemData, itemData, "itemData");
+        assert.strictEqual(eventArgs.itemElement, itemElement, "itemElement");
+        assert.strictEqual(eventArgs.itemIndex, itemIndex, "itemIndex");
+        assert.deepEqual(eventArgs.node, node, "node");
+
+        // node arguments
+        assert.deepEqual(eventArgs.node.children, node.children, "children");
+        assert.strictEqual(eventArgs.node.disabled, node.disabled, "disabled");
+        assert.strictEqual(eventArgs.node.expanded, node.expanded, "expanded");
+        assert.strictEqual(eventArgs.node.itemData, node.itemData, "itemData");
+        assert.strictEqual(eventArgs.node.key, node.key, "key");
+        assert.deepEqual(eventArgs.node.parent, node.parent, "parent");
+        assert.strictEqual(eventArgs.node.selected, node.selected, "selected");
+        assert.strictEqual(eventArgs.node.text, node.text, "text");
+    };
+
+    const onItemRenderedHandler = sinon.spy();
+    const items = [
+        {
+            key: "1", text: "Item 1", items: [
+                { key: "1_1", text: "Nested item 1" },
+                { key: "1_2", text: "Nested item 2" }
+            ]
+        },
+        { key: "2", text: "Item 2" }
+    ];
+    const treeView = createInstance({
+        items: items,
+        keyExpr: "key",
+        showCheckBoxesMode: "none",
+        selectByClick: true,
+        onItemRendered: onItemRenderedHandler
+    });
+
+    assert.strictEqual(onItemRenderedHandler.callCount, 2);
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(0).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element().get(0),
+        itemData: items[1],
+        itemElement: treeView.getItems().eq(1).get(0),
+        itemIndex: 1,
+        node: treeView.instance.getNodes()[1]
+    });
+
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element().get(0),
+        itemData: items[0],
+        itemElement: treeView.getItems().eq(0).get(0),
+        itemIndex: 0,
+        node: treeView.instance.getNodes()[0]
+    });
+
+    onItemRenderedHandler.reset();
+    treeView.instance.expandItem("1");
+
+    assert.strictEqual(onItemRenderedHandler.callCount, 2);
+
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(0).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element().get(0),
+        itemData: items[0].items[1],
+        itemElement: treeView.getItems().eq(2).get(0),
+        itemIndex: 3,
+        node: treeView.instance.getNodes()[0].children[1]
+    });
+
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element().get(0),
+        itemData: items[0].items[0],
+        itemElement: treeView.getItems().eq(1).get(0),
+        itemIndex: 2,
+        node: treeView.instance.getNodes()[0].children[0]
+    });
 });
 
 QUnit.test("Fire contentReady event if new dataSource is empty", function(assert) {
