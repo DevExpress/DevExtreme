@@ -150,6 +150,17 @@ export class SchedulerTestWrapper {
             }
         };
 
+        this.navigator = {
+            getNavigator: () => $(".dx-scheduler-navigator"),
+            getCaption: () => $(".dx-scheduler-navigator").find(".dx-scheduler-navigator-caption").text(),
+            clickOnPrevButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-previous").trigger("dxclick");
+            },
+            clickOnNextButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-next").trigger("dxclick");
+            }
+        },
+
         this.grouping = {
             getGroupHeaders: () => $(".dx-scheduler-group-header"),
             getGroupHeader: (index = 0) => this.grouping.getGroupHeaders().eq(index),
