@@ -6,7 +6,6 @@ fixture `Scheduler: Workspace`
     .page(getContainerFileUrl());
 
 const scheduler = new SchedulerTestHelper("#container");
-const scrollBrowser = ClientFunction(() => window.scrollBy(0,500));
 const disableAnimation = ClientFunction(() => (window as any).DevExpress.fx.off = true);
 
 const createScheduler = async (options = {}) => {
