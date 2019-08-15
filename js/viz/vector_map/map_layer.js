@@ -12,6 +12,7 @@ var noop = require("../../core/utils/common").noop,
     _isFunction = require("../../core/utils/type").isFunction,
     _isDefined = require("../../core/utils/type").isDefined,
     _isArray = Array.isArray,
+    DeferredModule = require("../../core/utils/deferred"),
     vizUtils = require("../core/utils"),
     _parseScalar = vizUtils.parseScalar,
     _patchFontOptions = vizUtils.patchFontOptions,
@@ -37,6 +38,15 @@ var noop = require("../../core/utils/common").noop,
         "single": -1,
         "multiple": NaN
     };
+
+function getMaxBound(arr) {
+    return arr.reduce((a, c) => {
+        return c ? [_min(a[0], c[0]),
+            _min(a[1], c[1]),
+            _max(a[2], c[2]),
+            _max(a[3], c[3])] : a;
+    }, arr[0]);
+}
 
 function getSelection(selectionMode) {
     var selection = _normalizeEnum(selectionMode);
@@ -75,6 +85,10 @@ ArraySource.prototype = {
 
     attributes: function(item) {
         return item.attributes;
+    },
+
+    getBBox: function(index) {
+        return arguments.length === 0 ? undefined : this.raw[index]["bbox"];
     }
 };
 
@@ -99,6 +113,10 @@ GeoJsonSource.prototype = {
 
     attributes: function(item) {
         return item.properties;
+    },
+
+    getBBox: function(index) {
+        return arguments.length === 0 ? this.raw["bbox"] : this.raw.features[index]["bbox"];
     }
 };
 
@@ -828,6 +846,10 @@ function createLayerProxy(layer, name, index) {
 
         getDataSource: function() {
             return layer.getDataSource();
+        },
+
+        getBounds() {
+            return layer.getBounds();
         }
     };
     return proxy;
@@ -858,10 +880,15 @@ var MapLayer = function(params, container, name, index) {
     that._handles = [];
     // The `_data` field may be accessed in the `setOptions` when data is not set
     that._data = new EmptySource();
+    that._dataSourceLoaded = null;
 };
 
 MapLayer.prototype = _extend({
     constructor: MapLayer,
+
+    getDataReadyCallback() {
+        return this._dataSourceLoaded;
+    },
 
     _onProjection: function() {
         var that = this;
@@ -879,6 +906,10 @@ MapLayer.prototype = _extend({
                 that._transform();
             }
         });
+    },
+
+    getData() {
+        return this._data;
     },
 
     _dataSourceLoadErrorHandler: function() {
@@ -926,6 +957,7 @@ MapLayer.prototype = _extend({
     setOptions: function(options) {
         var that = this;
         options = that._options = options || {};
+        that._dataSourceLoaded = new DeferredModule.Deferred();
         if("dataSource" in options && options.dataSource !== that._options_dataSource) {
             that._options_dataSource = options.dataSource;
             that._params.notifyDirty();
@@ -985,15 +1017,28 @@ MapLayer.prototype = _extend({
         context.str.updateGrouping(context);
         that._updateHandles();
         that._params.notifyReady();
+        that._dataSourceLoaded.resolve();
+        that._dataSourceLoaded = null;
     },
 
-    _destroyHandles: function() {
-        var handles = this._handles,
-            i,
-            ii = handles.length;
-        for(i = 0; i < ii; ++i) {
-            handles[i].dispose();
-        }
+    getBounds() {
+        return getMaxBound(this._handles.map(({ proxy }) =>
+            proxy.coordinates().map(coords => {
+                if(!_isArray(coords)) {
+                    return;
+                }
+                const initValue = coords[0];
+
+                return coords.reduce((min, c) => {
+                    return [_min(min[0], c[0]), _min(min[1], c[1]), _max(min[2], c[0]), _max(min[3], c[1])];
+                }, [initValue[0], initValue[1], initValue[0], initValue[1]]);
+            })
+        ).map(getMaxBound));
+    },
+
+    _destroyHandles() {
+        this._handles.forEach(h => h.dispose());
+
         if(this._context.selection) {
             this._context.selection.state = {};
         }
@@ -1073,15 +1118,8 @@ MapLayer.prototype = _extend({
         }
     },
 
-    getProxies: function() {
-        var handles = this._handles,
-            proxies = [],
-            i,
-            ii = proxies.length = handles.length;
-        for(i = 0; i < ii; ++i) {
-            proxies[i] = handles[i].proxy;
-        }
-        return proxies;
+    getProxies() {
+        return this._handles.map(p => p.proxy);
     },
 
     getProxy: function(index) {
@@ -1469,6 +1507,7 @@ function MapLayerCollection(params) {
     that._background = renderer.rect().attr({ "class": "dxm-background" }).data(params.dataKey, { name: "background" }).append(renderer.root);
     that._container = renderer.g().attr({ "class": "dxm-layers", "clip-path": that._clip.id }).append(renderer.root).enableLinks();
     that._subscribeToTracker(params.tracker, renderer, params.eventTrigger);
+    that._dataReady = params.dataReady;
 }
 
 MapLayerCollection.prototype = {
@@ -1518,6 +1557,7 @@ MapLayerCollection.prototype = {
         const optionList = options ? (_isArray(options) ? options : [options]) : [];
         let layerByName = that._layerByName;
         let layers = that._layers;
+        let readyCallbacks = [];
         const needToCreateLayers = optionList.length !== layers.length || layers.some((l, i) => {
             const name = getName(optionList, i);
             return _isDefined(name) && name !== l.proxy.name;
@@ -1538,6 +1578,10 @@ MapLayerCollection.prototype = {
         layers.forEach((l, i) => {
             l.setOptions(optionList[i]);
         });
+        readyCallbacks = layers.map(l => {
+            return l.getDataReadyCallback();
+        });
+        readyCallbacks.length && DeferredModule.when.apply(undefined, readyCallbacks).done(that._dataReady);
     },
 
     _updateClip: function() {
@@ -1572,6 +1616,7 @@ MapLayerCollection.prototype = {
 };
 
 exports.MapLayerCollection = MapLayerCollection;
+exports.getMaxBound = getMaxBound;
 
 ///#DEBUG
 exports._TESTS_MapLayer = MapLayer;

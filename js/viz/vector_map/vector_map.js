@@ -23,6 +23,13 @@ function generateDataKey() {
     return "vectormap-data-" + nextDataKey++;
 }
 
+function mergeBounds(sumBounds, dataBounds) {
+    return dataBounds ? [Math.min(dataBounds[0], dataBounds[2], sumBounds[0]),
+        Math.max(dataBounds[1], dataBounds[3], sumBounds[1]),
+        Math.max(dataBounds[0], dataBounds[2], sumBounds[2]),
+        Math.min(dataBounds[1], dataBounds[3], sumBounds[3])] : sumBounds;
+}
+
 var dxVectorMap = require("../core/base_widget").inherit({
     _eventsMap: {
         "onClick": { name: "click" },
@@ -56,7 +63,22 @@ var dxVectorMap = require("../core/base_widget").inherit({
             dataExchanger: that._dataExchanger,
             tooltip: that._tooltip,
             notifyDirty: that._notifyDirty,
-            notifyReady: that._notifyReady
+            notifyReady: that._notifyReady,
+            dataReady() {
+                if(!that.option("bounds")) {
+                    that._preventProjectionEvents();
+                    let bounds = that._getBoundingBoxFromDataSource();
+
+                    if(!bounds) {
+                        const boundsByData = mapLayerModule.getMaxBound(that.getLayers().map(l => l.getBounds()));
+                        if(boundsByData) {
+                            bounds = [boundsByData[0], boundsByData[3], boundsByData[2], boundsByData[1]];
+                        }
+                    }
+                    that._projection.setBounds(bounds);
+                    that._allowProjectionEvents();
+                }
+            }
         });
     },
 
@@ -89,19 +111,26 @@ var dxVectorMap = require("../core/base_widget").inherit({
     _initElements: function() {
         var that = this,
             dataKey = generateDataKey(),
-            notifyCounter = 0,
-            preventProjectionEvents = true;
+            notifyCounter = 0;
+        var preventProjectionEvents;
 
+        that._preventProjectionEvents = function() {
+            preventProjectionEvents = true;
+        };
+        that._allowProjectionEvents = function() {
+            preventProjectionEvents = false;
+        };
         that._notifyDirty = function() {
             that._resetIsReady();
             ++notifyCounter;
         };
         that._notifyReady = function() {
-            preventProjectionEvents = false;
+            that._allowProjectionEvents();
             if(--notifyCounter === 0) {
                 that._drawn();
             }
         };
+        that._preventProjectionEvents();
         that._dataExchanger = new dataExchangerModule.DataExchanger();
 
         // The `{ eventTrigger: that._eventTrigger }` object cannot be passed to the Projection because later backward option updating is going to be added.
@@ -294,6 +323,29 @@ var dxVectorMap = require("../core/base_widget").inherit({
         this._layerCollection.setOptions(this.option("layers"));
     },
 
+    _getBoundingBoxFromDataSource() {
+        const that = this;
+        const layers = that._layerCollection.items();
+        const infinityBounds = [Infinity, -Infinity, -Infinity, Infinity];
+        const resultBBox = layers && layers.length ? layers.reduce((sumBBox, l) => {
+            const layerData = l.getData();
+            const itemCount = layerData.count();
+            if(itemCount > 0) {
+                const rootBBox = layerData.getBBox();
+                if(rootBBox) {
+                    sumBBox = mergeBounds(sumBBox, rootBBox);
+                } else {
+                    for(let i = 0; i < itemCount; i++) {
+                        sumBBox = mergeBounds(sumBBox, layerData.getBBox(i));
+                    }
+                }
+            }
+            return sumBBox;
+        }, infinityBounds) : undefined;
+
+        return resultBBox === infinityBounds ? undefined : resultBBox;
+    },
+
     _setControlBarOptions: function() {
         this._controlBar.setOptions(this._getOption("controlBar"));
     },
@@ -309,15 +361,8 @@ var dxVectorMap = require("../core/base_widget").inherit({
         });
     },
 
-    getLayers: function() {
-        var layers = this._layerCollection.items(),
-            list = [],
-            i,
-            ii = list.length = layers.length;
-        for(i = 0; i < ii; ++i) {
-            list[i] = layers[i].proxy;
-        }
-        return list;
+    getLayers() {
+        return this._layerCollection.items().map((l) => l.proxy);
     },
 
     getLayerByIndex: function(index) {
