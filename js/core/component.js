@@ -531,12 +531,11 @@ var Component = Class.inherit({
      * @param1 options:object
      */
     option: function(options, value) {
-        var that = this,
-            name = options;
+        var name = options;
 
         if(arguments.length < 2 && typeUtils.type(name) !== "object") {
-            name = optionUtils.normalizeOptionName.bind(that)(name);
-            return optionUtils.getOptionValue.bind(this)(that._options, name);
+            name = optionUtils.normalizeOptionName.bind(this)(name);
+            return optionUtils.getOptionValue.bind(this)(this._options, name);
         }
 
         if(typeof name === "string") {
@@ -544,7 +543,7 @@ var Component = Class.inherit({
             options[name] = value;
         }
 
-        that.beginUpdate();
+        this.beginUpdate();
 
         try {
             var optionName;
@@ -555,7 +554,7 @@ var Component = Class.inherit({
                 optionUtils.setOption.bind(this)(optionName, options[optionName]);
             }
         } finally {
-            that.endUpdate();
+            this.endUpdate();
         }
     },
 

@@ -1,14 +1,15 @@
-var coreDataUtils = require("./data"),
-    typeUtils = require("./type");
+import coreDataUtils from "./data";
+import typeUtils from "./type";
 
-var cachedGetters = {};
-var cachedSetters = {};
+const cachedGetters = {};
+const cachedSetters = {};
+
 const clearOptionsField = (options, name) => {
     delete options[name];
 
-    var previousFieldName = getPreviousName(name),
-        fieldName = getFieldName(name),
-        fieldObject = previousFieldName ? getOptionValue(options, previousFieldName, false) : options;
+    const previousFieldName = getPreviousName(name);
+    const fieldName = getFieldName(name);
+    const fieldObject = previousFieldName ? getOptionValue(options, previousFieldName, false) : options;
 
     if(fieldObject) {
         delete fieldObject[fieldName];
@@ -16,19 +17,19 @@ const clearOptionsField = (options, name) => {
 };
 
 const getPreviousName = (fullName) => {
-    var splitNames = fullName.split('.');
+    const splitNames = fullName.split('.');
     splitNames.pop();
     return splitNames.join('.');
 };
 
 const getFieldName = (fullName) => {
-    var splitNames = fullName.split('.');
+    const splitNames = fullName.split('.');
     return splitNames[splitNames.length - 1];
 };
 
-const setOptionsField = function(options, fullName, value) {
-    var fieldName = "",
-        fieldObject;
+const setOptionsField = (options, fullName, value) => {
+    let fieldName = "";
+    let fieldObject;
 
     do {
         if(fieldName) {
@@ -45,12 +46,12 @@ const setOptionsField = function(options, fullName, value) {
 };
 
 const getOptionValue = (options, name, unwrapObservables) => {
-    var getter = cachedGetters[name];
+    let getter = cachedGetters[name];
     if(!getter) {
         getter = cachedGetters[name] = coreDataUtils.compileGetter(name);
     }
 
-    return getter(options, { functionsAsIs: true, unwrapObservables: unwrapObservables });
+    return getter(options, { functionsAsIs: true, unwrapObservables });
 };
 
 const setOptionValue = function(name, value, merge) {
@@ -58,7 +59,7 @@ const setOptionValue = function(name, value, merge) {
         cachedSetters[name] = coreDataUtils.compileSetter(name);
     }
 
-    var path = name.split(/[.[]/);
+    const path = name.split(/[.[]/);
     merge = typeUtils.isDefined(merge) ? merge : !this._getOptionsByReference()[name];
 
     cachedSetters[name](this._options, value, {
@@ -69,7 +70,7 @@ const setOptionValue = function(name, value, merge) {
 };
 
 const setOption = function(name, value, merge) {
-    var previousValue = getOptionValue.bind(this)(this._options, name, false);
+    const previousValue = getOptionValue.bind(this)(this._options, name, false);
 
     if(this._optionValuesEqual(name, previousValue, value)) {
         return;
@@ -85,7 +86,7 @@ const setOption = function(name, value, merge) {
 
 const prepareOption = function(options, name, value) {
     if(typeUtils.isPlainObject(value)) {
-        for(var valueName in value) {
+        for(const valueName in value) {
             prepareOption.bind(this)(options, name + "." + valueName, value[valueName]);
         }
     }
@@ -95,15 +96,15 @@ const prepareOption = function(options, name, value) {
 
 
 const normalizeOptionName = function(name) {
-    var deprecate;
+    let deprecate;
     if(name) {
         if(!this._cachedDeprecateNames) {
             this._cachedDeprecateNames = [];
-            for(var optionName in this._deprecatedOptions) {
+            for(const optionName in this._deprecatedOptions) {
                 this._cachedDeprecateNames.push(optionName);
             }
         }
-        for(var i = 0; i < this._cachedDeprecateNames.length; i++) {
+        for(let i = 0; i < this._cachedDeprecateNames.length; i++) {
             if(this._cachedDeprecateNames[i] === name) {
                 deprecate = this._deprecatedOptions[name];
                 break;
@@ -111,7 +112,7 @@ const normalizeOptionName = function(name) {
         }
         if(deprecate) {
             this._logWarningIfDeprecated(name);
-            var alias = deprecate.alias;
+            const alias = deprecate.alias;
 
             if(alias) {
                 name = alias;
@@ -124,7 +125,7 @@ const normalizeOptionName = function(name) {
 
 const normalizeOptionValue = function(options, name, value) {
     if(name) {
-        var alias = normalizeOptionName.bind(this)(name);
+        const alias = normalizeOptionName.bind(this)(name);
 
         if(alias && alias !== name) {
             setOptionsField(options, alias, value);
@@ -133,10 +134,12 @@ const normalizeOptionValue = function(options, name, value) {
     }
 };
 
-exports.setOption = setOption;
-exports.getOptionValue = getOptionValue;
-exports.setOptionsField = setOptionsField;
-exports.clearOptionsField = clearOptionsField;
-exports.normalizeOptionName = normalizeOptionName;
-exports.normalizeOptionValue = normalizeOptionValue;
-exports.prepareOption = prepareOption;
+export {
+    setOption,
+    getOptionValue,
+    setOptionsField,
+    clearOptionsField,
+    normalizeOptionName,
+    normalizeOptionValue,
+    prepareOption
+};
