@@ -561,63 +561,13 @@ var Component = Class.inherit({
             return name;
         };
 
-        var getPreviousName = function(fullName) {
-            var splitNames = fullName.split('.');
-            splitNames.pop();
-            return splitNames.join('.');
-        };
-
-        var getFieldName = function(fullName) {
-            var splitNames = fullName.split('.');
-            return splitNames[splitNames.length - 1];
-        };
-
-        var getOptionValue = function(options, name, unwrapObservables) {
-            var getter = cachedGetters[name];
-            if(!getter) {
-                getter = cachedGetters[name] = coreDataUtils.compileGetter(name);
-            }
-
-            return getter(options, { functionsAsIs: true, unwrapObservables: unwrapObservables });
-        };
-
-        var clearOptionsField = function(options, name) {
-            delete options[name];
-
-            var previousFieldName = getPreviousName(name),
-                fieldName = getFieldName(name),
-                fieldObject = previousFieldName ? getOptionValue(options, previousFieldName, false) : options;
-
-            if(fieldObject) {
-                delete fieldObject[fieldName];
-            }
-        };
-
-        var setOptionsField = function(options, fullName, value) {
-            var fieldName = "",
-                fieldObject;
-
-            do {
-                if(fieldName) {
-                    fieldName = "." + fieldName;
-                }
-
-                fieldName = getFieldName(fullName) + fieldName;
-                fullName = getPreviousName(fullName);
-                fieldObject = fullName ? getOptionValue(options, fullName, false) : options;
-
-            } while(!fieldObject);
-
-            fieldObject[fieldName] = value;
-        };
-
         var normalizeOptionValue = function(that, options, name, value) {
             if(name) {
                 var alias = normalizeOptionName(that, name);
 
                 if(alias && alias !== name) {
-                    setOptionsField(options, alias, value);
-                    clearOptionsField(options, name);
+                    that._setOptionsField(options, alias, value);
+                    that._clearOptionsField(options, name);
                 }
             }
         };
@@ -632,42 +582,13 @@ var Component = Class.inherit({
             normalizeOptionValue(that, options, name, value);
         };
 
-        var setOptionValue = function(that, name, value) {
-            if(!cachedSetters[name]) {
-                cachedSetters[name] = coreDataUtils.compileSetter(name);
-            }
-
-            var path = name.split(/[.[]/);
-
-            cachedSetters[name](that._options, value, {
-                functionsAsIs: true,
-                merge: !that._getOptionsByReference()[name],
-                unwrapObservables: path.length > 1 && !!that._getOptionsByReference()[path[0]]
-            });
-        };
-
-        var setOption = function(that, name, value) {
-            var previousValue = getOptionValue(that._options, name, false);
-
-            if(that._optionValuesEqual(name, previousValue, value)) {
-                return;
-            }
-
-            if(that._initialized) {
-                that._optionChanging(name, previousValue, value);
-            }
-
-            setOptionValue(that, name, value);
-            that._notifyOptionChanged(name, value, previousValue);
-        };
-
         return function(options, value) {
             var that = this,
                 name = options;
 
             if(arguments.length < 2 && typeUtils.type(name) !== "object") {
                 name = normalizeOptionName(that, name);
-                return getOptionValue(that._options, name);
+                return this._getOptionValue2(that._options, name);
             }
 
             if(typeof name === "string") {
@@ -683,13 +604,104 @@ var Component = Class.inherit({
                     prepareOption(that, options, optionName, options[optionName]);
                 }
                 for(optionName in options) {
-                    setOption(that, optionName, options[optionName]);
+                    this._setOption(optionName, options[optionName]);
                 }
             } finally {
                 that.endUpdate();
             }
         };
     })(),
+
+    _clearOptionsField: function(options, name) {
+        delete options[name];
+
+        var previousFieldName = this._getPreviousName(name),
+            fieldName = this._getFieldName(name),
+            fieldObject = previousFieldName ? this._getOptionValue2(options, previousFieldName, false) : options;
+
+        if(fieldObject) {
+            delete fieldObject[fieldName];
+        }
+    },
+
+    _getPreviousName: function(fullName) {
+        var splitNames = fullName.split('.');
+        splitNames.pop();
+        return splitNames.join('.');
+    },
+
+    _getFieldName: function(fullName) {
+        var splitNames = fullName.split('.');
+        return splitNames[splitNames.length - 1];
+    },
+
+    _setOptionsField: function(options, fullName, value) {
+        var fieldName = "",
+            fieldObject;
+
+        do {
+            if(fieldName) {
+                fieldName = "." + fieldName;
+            }
+
+            fieldName = this._getFieldName(fullName) + fieldName;
+            fullName = this._getPreviousName(fullName);
+            fieldObject = fullName ? this._getOptionValue2(options, fullName, false) : options;
+
+        } while(!fieldObject);
+
+        fieldObject[fieldName] = value;
+    },
+
+    _getOptionValue2: function(options, name, unwrapObservables) {
+        var getter = cachedGetters[name];
+        if(!getter) {
+            getter = cachedGetters[name] = coreDataUtils.compileGetter(name);
+        }
+
+        return getter(options, { functionsAsIs: true, unwrapObservables: unwrapObservables });
+    },
+
+    _setOptionValue: function(name, value, merge) {
+        if(!cachedSetters[name]) {
+            cachedSetters[name] = coreDataUtils.compileSetter(name);
+        }
+
+        var path = name.split(/[.[]/);
+        merge = typeUtils.isDefined(merge) ? merge : !this._getOptionsByReference()[name];
+
+        cachedSetters[name](this._options, value, {
+            functionsAsIs: true,
+            merge,
+            unwrapObservables: path.length > 1 && !!this._getOptionsByReference()[path[0]]
+        });
+    },
+
+    _setOption: function(name, value, merge) {
+        var previousValue = this._getOptionValue2(this._options, name, false);
+
+        if(this._optionValuesEqual(name, previousValue, value)) {
+            return;
+        }
+
+        if(this._initialized) {
+            this._optionChanging(name, previousValue, value);
+        }
+
+        this._setOptionValue(name, value, merge);
+        this._notifyOptionChanged(name, value, previousValue);
+    },
+
+    resetOption: function(name) {
+        if(!name) {
+            return;
+        }
+        const value = this._getDefaultOptions()[name];
+
+        this.beginUpdate();
+        this._setOption(name, value, false);
+        this.endUpdate();
+    },
 
     _getOptionValue: function(name, context) {
         var value = this.option(name);
