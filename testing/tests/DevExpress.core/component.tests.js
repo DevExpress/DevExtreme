@@ -20,6 +20,15 @@ const TestComponent = Component.inherit({
         });
     },
 
+    _getDefaultOptions() {
+        return {
+            opt4: "default",
+            opt5: {
+                subOpt1: "default"
+            }
+        };
+    },
+
     _setDeprecatedOptions() {
         this.callBase();
 
@@ -1301,6 +1310,40 @@ QUnit.module("defaultOptions", {
         assert.equal(options.a, 2);
         assert.equal(options.b, 2);
         assert.equal(options.c, 3);
+    });
+
+    QUnit.test("reset option", (assert) => {
+        const instance = new TestComponent();
+
+        instance.option({
+            opt4: "someValue",
+            "opt5.subOpt1": "someValue",
+            "opt5.subOpt2": "someValue",
+        });
+
+        assert.equal(instance.option("opt4"), "someValue");
+        assert.equal(instance.option("opt5.subOpt1"), "someValue");
+        assert.equal(instance.option("opt5.subOpt2"), "someValue");
+
+        instance.resetOption('opt4');
+        instance.resetOption('opt5');
+
+        assert.equal(instance.option("opt4"), "default");
+        assert.equal(instance.option("opt5.subOpt1"), "default");
+        assert.equal(instance.option("opt5.subOpt2"), undefined);
+    });
+
+    QUnit.test("reset option with empty option name", (assert) => {
+        const instance = new TestComponent();
+        let error = false;
+
+        try {
+            instance.resetOption('');
+        } catch(e) {
+            error = true;
+        } finally {
+            assert.equal(error, false);
+        }
     });
 });
 

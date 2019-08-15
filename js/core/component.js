@@ -565,7 +565,7 @@ var Component = Class.inherit({
         const value = this._getDefaultOptions()[name];
 
         this.beginUpdate();
-        this._setOption(name, value, false);
+        optionUtils.setOption.bind(this)(name, value, false);
         this.endUpdate();
     },
 
