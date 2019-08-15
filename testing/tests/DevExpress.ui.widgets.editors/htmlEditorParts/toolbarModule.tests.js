@@ -557,6 +557,21 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
                 value: false
             }]);
     });
+
+    test("adaptive menu container", (assert) => {
+        this.options.items = [{ formatName: "strike", locateInMenu: "always" }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`).trigger("dxclick");
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        const isMenuLocatedInToolbar = !!$formatButton.closest(`.${TOOLBAR_CLASS}`).length;
+        const isMenuLocatedInToolbarContainer = !!$formatButton.closest(`.${TOOLBAR_WRAPPER_CLASS}`).length;
+
+        assert.notOk(isMenuLocatedInToolbar, "Adaptive menu isn't located into Toolbar");
+        assert.ok(isMenuLocatedInToolbarContainer, "Adaptive menu is located into Toolbar container");
+    });
 });
 
 QUnit.module("Active formats", simpleModuleConfig, () => {
