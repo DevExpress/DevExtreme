@@ -1041,11 +1041,11 @@ QUnit.module("default", {}, () => {
         assert.ok(!instance.isOptionDeprecated("opt1"), "it is correct for an ordinary option");
     });
 
-    QUnit.test("the _getOptionValue method sets the context for function option (T577942)", (assert) => {
+    QUnit.test("the _computeOptionValue method sets the context for function option (T577942)", (assert) => {
         const instance = new TestComponent();
         const context = { contextField: 1 };
 
-        const value = instance._getOptionValue("funcOption", context);
+        const value = instance._computeOptionValue("funcOption", context);
         assert.deepEqual(value, context, "context is correct");
     });
 });

@@ -1,6 +1,7 @@
 var Config = require("./config"),
     domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
+    optionUtils = require("./utils/option"),
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
@@ -16,9 +17,6 @@ var Config = require("./config"),
     devices = require("./devices"),
     isFunction = typeUtils.isFunction,
     noop = commonUtils.noop;
-
-var cachedGetters = {};
-var cachedSetters = {};
 
 /**
 * @name Component
@@ -532,164 +530,33 @@ var Component = Class.inherit({
      * @publicName option(options)
      * @param1 options:object
      */
-    option: (function() {
-        var normalizeOptionName = function(that, name) {
-            var deprecate;
-            if(name) {
-                if(!that._cachedDeprecateNames) {
-                    that._cachedDeprecateNames = [];
-                    for(var optionName in that._deprecatedOptions) {
-                        that._cachedDeprecateNames.push(optionName);
-                    }
-                }
-                for(var i = 0; i < that._cachedDeprecateNames.length; i++) {
-                    if(that._cachedDeprecateNames[i] === name) {
-                        deprecate = that._deprecatedOptions[name];
-                        break;
-                    }
-                }
-                if(deprecate) {
-                    that._logWarningIfDeprecated(name);
-                    var alias = deprecate.alias;
+    option: function(options, value) {
+        var that = this,
+            name = options;
 
-                    if(alias) {
-                        name = alias;
-                    }
-                }
-            }
-
-            return name;
-        };
-
-        var normalizeOptionValue = function(that, options, name, value) {
-            if(name) {
-                var alias = normalizeOptionName(that, name);
-
-                if(alias && alias !== name) {
-                    that._setOptionsField(options, alias, value);
-                    that._clearOptionsField(options, name);
-                }
-            }
-        };
-
-        var prepareOption = function(that, options, name, value) {
-            if(typeUtils.isPlainObject(value)) {
-                for(var valueName in value) {
-                    prepareOption(that, options, name + "." + valueName, value[valueName]);
-                }
-            }
-
-            normalizeOptionValue(that, options, name, value);
-        };
-
-        return function(options, value) {
-            var that = this,
-                name = options;
-
-            if(arguments.length < 2 && typeUtils.type(name) !== "object") {
-                name = normalizeOptionName(that, name);
-                return this._getOptionValue2(that._options, name);
-            }
-
-            if(typeof name === "string") {
-                options = {};
-                options[name] = value;
-            }
-
-            that.beginUpdate();
-
-            try {
-                var optionName;
-                for(optionName in options) {
-                    prepareOption(that, options, optionName, options[optionName]);
-                }
-                for(optionName in options) {
-                    this._setOption(optionName, options[optionName]);
-                }
-            } finally {
-                that.endUpdate();
-            }
-        };
-    })(),
-
-    _clearOptionsField: function(options, name) {
-        delete options[name];
-
-        var previousFieldName = this._getPreviousName(name),
-            fieldName = this._getFieldName(name),
-            fieldObject = previousFieldName ? this._getOptionValue2(options, previousFieldName, false) : options;
-
-        if(fieldObject) {
-            delete fieldObject[fieldName];
-        }
-    },
-
-    _getPreviousName: function(fullName) {
-        var splitNames = fullName.split('.');
-        splitNames.pop();
-        return splitNames.join('.');
-    },
-
-    _getFieldName: function(fullName) {
-        var splitNames = fullName.split('.');
-        return splitNames[splitNames.length - 1];
-    },
-
-    _setOptionsField: function(options, fullName, value) {
-        var fieldName = "",
-            fieldObject;
-
-        do {
-            if(fieldName) {
-                fieldName = "." + fieldName;
-            }
-
-            fieldName = this._getFieldName(fullName) + fieldName;
-            fullName = this._getPreviousName(fullName);
-            fieldObject = fullName ? this._getOptionValue2(options, fullName, false) : options;
-
-        } while(!fieldObject);
-
-        fieldObject[fieldName] = value;
-    },
-
-    _getOptionValue2: function(options, name, unwrapObservables) {
-        var getter = cachedGetters[name];
-        if(!getter) {
-            getter = cachedGetters[name] = coreDataUtils.compileGetter(name);
+        if(arguments.length < 2 && typeUtils.type(name) !== "object") {
+            name = optionUtils.normalizeOptionName.bind(that)(name);
+            return optionUtils.getOptionValue.bind(this)(that._options, name);
         }
 
-        return getter(options, { functionsAsIs: true, unwrapObservables: unwrapObservables });
-    },
-
-    _setOptionValue: function(name, value, merge) {
-        if(!cachedSetters[name]) {
-            cachedSetters[name] = coreDataUtils.compileSetter(name);
+        if(typeof name === "string") {
+            options = {};
+            options[name] = value;
         }
 
-        var path = name.split(/[.[]/);
-        merge = typeUtils.isDefined(merge) ? merge : !this._getOptionsByReference()[name];
+        that.beginUpdate();
 
-        cachedSetters[name](this._options, value, {
-            functionsAsIs: true,
-            merge,
-            unwrapObservables: path.length > 1 && !!this._getOptionsByReference()[path[0]]
-        });
-    },
-
-    _setOption: function(name, value, merge) {
-        var previousValue = this._getOptionValue2(this._options, name, false);
-
-        if(this._optionValuesEqual(name, previousValue, value)) {
-            return;
+        try {
+            var optionName;
+            for(optionName in options) {
+                optionUtils.prepareOption.bind(this)(options, optionName, options[optionName]);
+            }
+            for(optionName in options) {
+                optionUtils.setOption.bind(this)(optionName, options[optionName]);
+            }
+        } finally {
+            that.endUpdate();
         }
-
-        if(this._initialized) {
-            this._optionChanging(name, previousValue, value);
-        }
-
-        this._setOptionValue(name, value, merge);
-        this._notifyOptionChanged(name, value, previousValue);
     },
 
     resetOption: function(name) {
@@ -703,7 +570,7 @@ var Component = Class.inherit({
         this.endUpdate();
     },
 
-    _getOptionValue: function(name, context) {
+    _computeOptionValue: function(name, context) {
         var value = this.option(name);
 
         if(isFunction(value)) {

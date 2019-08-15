@@ -172,8 +172,8 @@ var DOMComponent = Component.inherit({
     _renderDimensions: function() {
         var $element = this.$element();
         var element = $element.get(0);
-        var width = this._getOptionValue("width", element);
-        var height = this._getOptionValue("height", element);
+        var width = this._computeOptionValue("width", element);
+        var height = this._computeOptionValue("height", element);
 
         if(this._isCssUpdateRequired(element, height, width)) {
             $element.css({
