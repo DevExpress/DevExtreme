@@ -244,9 +244,7 @@ var NumberBoxBase = TextEditor.inherit({
             this._toggleEmptinessEventHandler();
         }
 
-        var value = this.option("value");
-
-        this.setAria("valuenow", value);
+        this.setAria("valuenow", commonUtils.ensureDefined(this.option("value"), ""));
         this.option("text", this._input().val());
         this._updateButtons();
 

@@ -330,6 +330,10 @@ var DropDownEditor = TextBox.inherit({
         this.$element().wrapInner($("<div>").addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER));
         this._$container = this.$element().children().eq(0);
 
+        this._setDefaultAria();
+    },
+
+    _setDefaultAria: function() {
         this.setAria({
             "haspopup": "true",
             "autocomplete": "list"
@@ -495,9 +499,10 @@ var DropDownEditor = TextBox.inherit({
         this._setPopupOption("visible", opened);
 
         this.setAria({
-            "expanded": opened,
-            "owns": (opened || undefined) && this._popupContentId
+            "expanded": opened
         });
+
+        this.setAria("owns", ((opened || undefined) && this._popupContentId), this.$element());
     },
 
     _createPopup: function() {
@@ -526,10 +531,14 @@ var DropDownEditor = TextBox.inherit({
         this._popup.option("onContentReady", this._contentReadyHandler.bind(this));
         this._contentReadyHandler();
 
-        this._popupContentId = "dx-" + new Guid();
-        this.setAria("id", this._popupContentId, this._popup.$content());
+        this._setPopupContentId(this._popup.$content());
 
         this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
+    },
+
+    _setPopupContentId($popupContent) {
+        this._popupContentId = "dx-" + new Guid();
+        this.setAria("id", this._popupContentId, $popupContent);
     },
 
     _contentReadyHandler: commonUtils.noop,

@@ -2040,6 +2040,15 @@ QUnit.module("aria accessibility", {}, () => {
         assert.ok(inputElement.hasAttribute("aria-valuemax"), "required 'aria-valuemax' attribute is defined");
     });
 
+    QUnit.test("aria valuenow is defined for numberBox with null value (T801129)", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            value: null
+        });
+
+        const $input = $element.find(".dx-texteditor-input");
+        assert.strictEqual($input.attr("aria-valuenow"), "", "attribute is defined");
+    });
+
     QUnit.test("aria properties", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             min: 12,

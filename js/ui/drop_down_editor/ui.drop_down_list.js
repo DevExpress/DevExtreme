@@ -592,7 +592,15 @@ var DropDownList = DropDownEditor.inherit({
 
         this.setAria({
             "activedescendant": opened && this._list.getFocusedItemId(),
-            "owns": opened && this._listId
+            "controls": opened && this._listId
+        });
+
+    },
+
+    _setDefaultAria: function() {
+        this.setAria({
+            "haspopup": "listbox",
+            "autocomplete": "list"
         });
     },
 
