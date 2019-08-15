@@ -338,8 +338,6 @@ QUnit.test("Update colors preview", function(assert) {
     this.updateColorInput("hex", "d0ff00");
     colorPicker.applyColor();
 
-    showColorBox.call(this);
-
     var baseColor = $(".dx-colorview-color-preview-color-current").css("backgroundColor");
     var newColor = $(".dx-colorview-color-preview-color-new").css("backgroundColor");
 
@@ -790,4 +788,22 @@ QUnit.test("Value should not be changed by 'up' key when colorbox was opened and
     keyboard.keyDown("enter");
 
     assert.equal(colorBox.option("value"), "#326b8a");
+});
+
+QUnit.test("value should be reseted after popup closing when 'applyValueMode' is 'useButtons' (T806577)", function(assert) {
+    var colorBox = $("#color-box").dxColorBox({
+            value: "#aabbcc",
+            applyValueMode: "useButtons",
+            opened: true
+        }).dxColorBox("instance"),
+        $input = $(colorBox.$element().find("." + TEXTEDITOR_INPUT_CLASS)),
+        colorView = $(".dx-colorview").dxColorView("instance"),
+        keyboard = keyboardMock($input);
+
+    colorView.option("value", "#ffffff");
+    colorBox.close();
+
+    keyboard.press("enter");
+
+    assert.equal(colorBox.option("value"), "#aabbcc");
 });
