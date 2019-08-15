@@ -65,6 +65,7 @@ var dxVectorMap = require("../core/base_widget").inherit({
         that._legendsControl = new legendModule.LegendsControl({
             renderer: that._renderer,
             container: that._root,
+            widget: that,
             layoutControl: that._layoutControl,
             themeManager: that._themeManager,
             dataExchanger: that._dataExchanger,
