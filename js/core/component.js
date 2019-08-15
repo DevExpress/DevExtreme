@@ -557,7 +557,15 @@ var Component = Class.inherit({
             this.endUpdate();
         }
     },
-
+    /**
+     * @name componentmethods.resetOption
+     * @publicName resetOption()
+     */
+    /**
+     * @name componentmethods.resetOption
+     * @publicName resetOption(optionName)
+     * @param1 optionName:string
+     */
     resetOption: function(name) {
         if(!name) {
             return;
