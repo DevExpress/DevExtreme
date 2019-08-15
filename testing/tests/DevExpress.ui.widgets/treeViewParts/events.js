@@ -891,9 +891,9 @@ QUnit.test("onItemRendered event arguments", function(assert) {
         const { component, element, itemData, itemElement, itemIndex, node } = expectedArgs;
 
         assert.deepEqual(eventArgs.component, component, "component");
-        assert.strictEqual(eventArgs.element, element, "element");
+        assert.ok(element.is(eventArgs.element), "element");
         assert.deepEqual(eventArgs.itemData, itemData, "itemData");
-        assert.strictEqual(eventArgs.itemElement, itemElement, "itemElement");
+        assert.ok(itemElement.is(eventArgs.itemElement), "itemElement");
         assert.strictEqual(eventArgs.itemIndex, itemIndex, "itemIndex");
         assert.deepEqual(eventArgs.node, node, "node");
 
@@ -929,18 +929,18 @@ QUnit.test("onItemRendered event arguments", function(assert) {
     assert.strictEqual(onItemRenderedHandler.callCount, 2);
     checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(0).args[0], {
         component: treeView.instance,
-        element: treeView.instance.$element().get(0),
+        element: treeView.instance.$element(),
         itemData: items[1],
-        itemElement: treeView.getItems().eq(1).get(0),
+        itemElement: treeView.getItems().eq(1),
         itemIndex: 1,
         node: treeView.instance.getNodes()[1]
     });
 
     checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
         component: treeView.instance,
-        element: treeView.instance.$element().get(0),
+        element: treeView.instance.$element(),
         itemData: items[0],
-        itemElement: treeView.getItems().eq(0).get(0),
+        itemElement: treeView.getItems().eq(0),
         itemIndex: 0,
         node: treeView.instance.getNodes()[0]
     });
@@ -952,18 +952,18 @@ QUnit.test("onItemRendered event arguments", function(assert) {
 
     checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(0).args[0], {
         component: treeView.instance,
-        element: treeView.instance.$element().get(0),
+        element: treeView.instance.$element(),
         itemData: items[0].items[1],
-        itemElement: treeView.getItems().eq(2).get(0),
+        itemElement: treeView.getItems().eq(2),
         itemIndex: 3,
         node: treeView.instance.getNodes()[0].children[1]
     });
 
     checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
         component: treeView.instance,
-        element: treeView.instance.$element().get(0),
+        element: treeView.instance.$element(),
         itemData: items[0].items[0],
-        itemElement: treeView.getItems().eq(1).get(0),
+        itemElement: treeView.getItems().eq(1),
         itemIndex: 2,
         node: treeView.instance.getNodes()[0].children[0]
     });
