@@ -1,54 +1,51 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    commonUtils = require("../../core/utils/common"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    domAdapter = require("../../core/dom_adapter"),
-    isPlainObject = require("../../core/utils/type").isPlainObject,
-    when = require("../../core/utils/deferred").when,
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    iteratorUtils = require("../../core/utils/iterator"),
-    isFunction = require("../../core/utils/type").isFunction,
-    Action = require("../../core/action"),
-    Guid = require("../../core/guid"),
-    domUtils = require("../../core/utils/dom"),
-    dataUtils = require("../../core/utils/data"),
-    Widget = require("../widget/ui.widget"),
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    DataHelperMixin = require("../../data_helper"),
-    CollectionWidgetItem = require("./item"),
-    selectors = require("../widget/selectors"),
-    messageLocalization = require("../../localization/message"),
-    holdEvent = require("../../events/hold"),
-    compileGetter = require("../../core/utils/data").compileGetter,
-    clickEvent = require("../../events/click"),
-    contextMenuEvent = require("../../events/contextmenu"),
-    BindableTemplate = require("../widget/bindable_template");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import commonUtils from "../../core/utils/common";
+import { getPublicElement, getElementOptions } from "../../core/utils/dom";
+import domAdapter from "../../core/dom_adapter";
+import { isPlainObject, isFunction } from "../../core/utils/type";
+import { when } from "../../core/utils/deferred";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import iteratorUtils from "../../core/utils/iterator";
+import Action from "../../core/action";
+import Guid from "../../core/guid";
+import Widget from "../widget/ui.widget";
+import eventUtils from "../../events/utils";
+import pointerEvents from "../../events/pointer";
+import DataHelperMixin from "../../data_helper";
+import CollectionWidgetItem from "./item";
+import selectors from "../widget/selectors";
+import messageLocalization from "../../localization/message";
+import holdEvent from "../../events/hold";
+import { compileGetter } from "../../core/utils/data";
+import clickEvent from "../../events/click";
+import contextMenuEvent from "../../events/contextmenu";
+import BindableTemplate from "../widget/bindable_template";
 
-var COLLECTION_CLASS = "dx-collection",
-    ITEM_CLASS = "dx-item",
-    CONTENT_CLASS_POSTFIX = "-content",
-    ITEM_CONTENT_PLACEHOLDER_CLASS = "dx-item-content-placeholder",
-    ITEM_DATA_KEY = "dxItemData",
-    ITEM_INDEX_KEY = "dxItemIndex",
-    ITEM_TEMPLATE_ID_PREFIX = "tmpl-",
-    ITEMS_SELECTOR = "[data-options*='dxItem']",
-    SELECTED_ITEM_CLASS = "dx-item-selected",
-    ITEM_RESPONSE_WAIT_CLASS = "dx-item-response-wait",
-    EMPTY_COLLECTION = "dx-empty-collection",
-    TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
+const COLLECTION_CLASS = "dx-collection";
+const ITEM_CLASS = "dx-item";
+const CONTENT_CLASS_POSTFIX = "-content";
+const ITEM_CONTENT_PLACEHOLDER_CLASS = "dx-item-content-placeholder";
+const ITEM_DATA_KEY = "dxItemData";
+const ITEM_INDEX_KEY = "dxItemIndex";
+const ITEM_TEMPLATE_ID_PREFIX = "tmpl-";
+const ITEMS_SELECTOR = "[data-options*='dxItem']";
+const SELECTED_ITEM_CLASS = "dx-item-selected";
+const ITEM_RESPONSE_WAIT_CLASS = "dx-item-response-wait";
+const EMPTY_COLLECTION = "dx-empty-collection";
+const TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 
-    ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w.]+)$/;
+const ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w.]+)$/;
 
-var FOCUS_UP = "up",
-    FOCUS_DOWN = "down",
-    FOCUS_LEFT = "left",
-    FOCUS_RIGHT = "right",
-    FOCUS_PAGE_UP = "pageup",
-    FOCUS_PAGE_DOWN = "pagedown",
-    FOCUS_LAST = "last",
-    FOCUS_FIRST = "first";
+const FOCUS_UP = "up";
+const FOCUS_DOWN = "down";
+const FOCUS_LEFT = "left";
+const FOCUS_RIGHT = "right";
+const FOCUS_PAGE_UP = "pageup";
+const FOCUS_PAGE_DOWN = "pagedown";
+const FOCUS_LAST = "last";
+const FOCUS_FIRST = "first";
 
 /**
 * @name CollectionWidget
@@ -319,7 +316,7 @@ var CollectionWidget = Widget.inherit({
 
         var items = [].slice.call($items).map((item) => {
             var $item = $(item);
-            var result = domUtils.getElementOptions(item).dxItem;
+            var result = getElementOptions(item).dxItem;
             var isTemplateRequired = $item.html().trim() && !result.template;
 
             if(isTemplateRequired) {
@@ -998,7 +995,7 @@ var CollectionWidget = Widget.inherit({
             },
             fieldGetter: function(field) {
                 var expr = that.option(field + "Expr"),
-                    getter = dataUtils.compileGetter(expr);
+                    getter = compileGetter(expr);
 
                 return getter;
             }
