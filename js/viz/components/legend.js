@@ -5,6 +5,7 @@ import { isDefined, isFunction } from "../../core/utils/type";
 import title from "../core/title";
 import { clone } from "../../core/utils/object";
 import { noop } from "../../core/utils/common";
+import { processHatchingAttrs, getFuncIri } from "../core/renderers/renderer";
 
 var _Number = Number,
 
@@ -44,19 +45,33 @@ var _Number = Number,
     parsePosition = _enumParser([OUTSIDE, INSIDE]),
     parseItemsAlignment = _enumParser([LEFT, CENTER, RIGHT]);
 
-function getState(state, color) {
+function getState(state, color, className) {
     if(!state) {
         return;
     }
     var colorFromAction = state.fill;
 
-    return {
+    return extend({}, {
+        class: className,
         fill: colorFromAction === NONE ? color : colorFromAction,
+        opacity: state.opacity,
         hatching: _extend({}, state.hatching, {
             step: DEFAULT_MARKER_HATCHING_STEP,
             width: DEFAULT_MARKER_HATCHING_WIDTH
         })
-    };
+    });
+}
+
+function getAttributes(item, state) {
+    const attrs = processHatchingAttrs(item, state);
+
+    if(attrs.fill && attrs.fill.indexOf("DevExpress") === 0) {
+        attrs.fill = getFuncIri(attrs.fill);
+    }
+
+    attrs.opacity = attrs.opacity >= 0 ? attrs.opacity : 1;
+
+    return attrs;
 }
 
 function parseMargins(options) {
@@ -75,7 +90,7 @@ function parseMargins(options) {
     options.margin = margin;
 }
 
-function getSizeItem(options, markerSize, labelBBox) {
+function getSizeItem(options, markerBBox, labelBBox) {
     var defaultXMargin = 7,
         defaultTopMargin = 4,
         width,
@@ -84,13 +99,13 @@ function getSizeItem(options, markerSize, labelBBox) {
     switch(options.itemTextPosition) {
         case LEFT:
         case RIGHT:
-            width = markerSize + defaultXMargin + labelBBox.width;
-            height = _max(markerSize, labelBBox.height);
+            width = markerBBox.width + defaultXMargin + labelBBox.width;
+            height = _max(markerBBox.height, labelBBox.height);
             break;
         case TOP:
         case BOTTOM:
-            width = _max(markerSize, labelBBox.width);
-            height = markerSize + defaultTopMargin + labelBBox.height;
+            width = _max(markerBBox.width, labelBBox.width);
+            height = markerBBox.height + defaultTopMargin + labelBBox.height;
             break;
     }
 
@@ -111,7 +126,7 @@ function calculateBBoxLabelAndMarker(markerBBox, labelBBox) {
 function applyMarkerState(id, idToIndexMap, items, stateName) {
     var item = idToIndexMap && items[idToIndexMap[id]];
     if(item) {
-        item.marker.smartAttr(item.states[stateName]);
+        item.renderMarker(item.states[stateName]);
     }
 }
 
@@ -347,6 +362,7 @@ var _Legend = exports.Legend = function(settings) {
     that._getCustomizeObject = settings.getFormatObject;
     that._titleGroupClass = settings.titleGroupClass;
     that._allowInsidePosition = settings.allowInsidePosition;
+    that._widget = settings.widget;
 };
 
 var legendPrototype = _Legend.prototype = clone(LayoutElement.prototype);
@@ -411,7 +427,7 @@ extend(legendPrototype, {
         }
 
         // TODO review pass or process states in legend
-        that._markersGroup = that._renderer.g().attr({ "class": that._itemGroupClass }).append(that._insideLegendGroup);
+        that._markersGroup = that._renderer.g().attr({ class: that._itemGroupClass }).append(that._insideLegendGroup);
         that._createItems(items);
 
         that._locateElements(options);
@@ -434,51 +450,81 @@ extend(legendPrototype, {
             options = that._options,
             initMarkerSize = options.markerSize,
             renderer = that._renderer,
-            bBox,
             maxBBoxHeight = 0,
             createMarker = getMarkerCreator(options.markerShape);
 
         that._markersId = {};
 
+        const templateFunction = !options.markerTemplate ? (dataItem, group) => {
+            const attrs = dataItem.markerAttributes;
+            createMarker(renderer, dataItem.size)
+                .attr(attrs)
+                .append({ element: group });
+        } : options.markerTemplate;
+
+        const template = that._widget._getTemplate(templateFunction);
+
+        const markersGroup = that._markersGroup;
+
+        markersGroup.css(patchFontOptions(options.font));
 
         that._items = (items || []).map((dataItem, i) => {
-            var group = that._markersGroup,
-                markerSize = _Number(dataItem.size > 0 ? dataItem.size : initMarkerSize),
-                stateOfDataItem = dataItem.states,
-                normalState = stateOfDataItem.normal,
-                normalStateFill = normalState.fill,
-                marker = createMarker(renderer, markerSize)
-                    .attr({ fill: normalStateFill || options.markerColor || options.defaultColor, opacity: normalState.opacity })
-                    .append(group),
-                label = that._createLabel(dataItem, group),
-                states = {
-                    normal: { fill: normalStateFill },
-                    hovered: getState(stateOfDataItem.hover, normalStateFill),
-                    selected: getState(stateOfDataItem.selection, normalStateFill)
-                },
-                labelBBox = label.getBBox();
+            const markerSize = _Number(dataItem.size > 0 ? dataItem.size : initMarkerSize);
+            dataItem.size = markerSize;
 
-            if(dataItem.id !== undefined) {
-                that._markersId[dataItem.id] = i;
-            }
+            const stateOfDataItem = dataItem.states;
+            const normalState = stateOfDataItem.normal;
+            const normalStateFill = normalState.fill;
 
-            bBox = getSizeItem(options, markerSize, labelBBox);
-            maxBBoxHeight = _max(maxBBoxHeight, bBox.height);
-            that._createHint(dataItem, label, marker);
+            const states = {
+                normal: extend(normalState, { fill: normalStateFill || options.markerColor || options.defaultColor, class: "dxl-normal" }),
+                hover: getState(stateOfDataItem.hover, normalStateFill, "dxl-hovered"),
+                selection: getState(stateOfDataItem.selection, normalStateFill, "dxl-selected")
+            };
+            dataItem.states = states;
 
-            return {
-                label: label,
-                labelBBox: labelBBox,
-                group: group,
-                bBox: bBox,
-                marker: marker,
+            const itemGroup = renderer.g().append(markersGroup);
+
+            const markerGroup = renderer.g().attr({ class: "dxl-marker" }).append(itemGroup);
+
+            const item = {
+                label: that._createLabel(dataItem, itemGroup),
+                marker: markerGroup,
+                renderer,
+                group: itemGroup,
                 markerSize: markerSize,
                 tracker: { id: dataItem.id, argument: dataItem.argument, argumentIndex: dataItem.argumentIndex },
                 states: states,
                 itemTextPosition: options.itemTextPosition,
                 markerOffset: 0,
-                bBoxes: []
+                bBoxes: [],
+                renderMarker(state) {
+                    dataItem.markerAttributes = getAttributes(item, state);
+                    markerGroup.clear();
+                    template.render({ model: dataItem, container: markerGroup.element });
+                }
             };
+
+            item.renderMarker(states.normal);
+
+            that._createHint(dataItem, itemGroup);
+
+            if(dataItem.id !== undefined) {
+                that._markersId[dataItem.id] = i;
+            }
+
+            return item;
+        }).map(item => {
+            const labelBBox = item.label.getBBox();
+            const markerBBox = item.marker.getBBox();
+            item.markerBBox = markerBBox;
+            item.markerSize = Math.max(markerBBox.width, markerBBox.height);
+            const bBox = getSizeItem(options, markerBBox, labelBBox);
+            item.labelBBox = labelBBox;
+            item.bBox = bBox;
+            maxBBoxHeight = _max(maxBBoxHeight, bBox.height);
+
+            return item;
         });
         if(options.equalRowHeight) {
             that._items.forEach(item => item.bBox.height = maxBBoxHeight);
@@ -525,12 +571,12 @@ extend(legendPrototype, {
     },
 
     applySelected: function(id) {
-        applyMarkerState(id, this._markersId, this._items, "selected");
+        applyMarkerState(id, this._markersId, this._items, "selection");
         return this;
     },
 
     applyHover: function(id) {
-        applyMarkerState(id, this._markersId, this._items, "hovered");
+        applyMarkerState(id, this._markersId, this._items, "hover");
         return this;
     },
 
@@ -548,16 +594,15 @@ extend(legendPrototype, {
 
         return this._renderer.text(text, 0, 0)
             .css(patchFontOptions(fontStyle))
-            .attr({ align: align, "class": options.cssClass })
+            .attr({ align: align, class: options.cssClass })
             .append(group);
     },
 
-    _createHint: function(data, label, marker) {
+    _createHint: function(data, group) {
         var labelFormatObject = this._getCustomizeObject(data),
             text = this._options.customizeHint.call(labelFormatObject, labelFormatObject);
         if(_isDefined(text) && text !== "") {
-            label.setTitle(text);
-            marker.setTitle(text);
+            group.setTitle(text);
         }
     },
 
@@ -569,7 +614,7 @@ extend(legendPrototype, {
 
         if(that._options.border.visible || ((isInside || color) && color !== NONE)) {
             that._background = that._renderer.rect(0, 0, 0, 0)
-                .attr({ fill: fill, "class": that._backgroundClass })
+                .attr({ fill: fill, class: that._backgroundClass })
                 .append(that._insideLegendGroup);
         }
     },
@@ -604,14 +649,14 @@ extend(legendPrototype, {
                     itemIndex: i
                 },
                 markerBox = {
-                    width: item.markerSize,
-                    height: item.markerSize,
+                    width: item.markerBBox.width,
+                    height: item.markerBBox.height,
                     element: item.marker,
                     pos: {
                         horizontal: CENTER,
                         vertical: CENTER
                     },
-                    bBox: { width: item.markerSize, height: item.markerSize, x: 0, y: 0 },
+                    bBox: { width: item.markerBBox.width, height: item.markerBBox.height, x: item.markerBBox.x, y: item.markerBBox.y },
                     itemIndex: i
                 },
                 firstItem,
@@ -1009,6 +1054,7 @@ exports.plugin = {
         that._legend = new exports.Legend({
             renderer: that._renderer,
             group: group,
+            widget: this,
             itemGroupClass: this._rootClassPrefix + "-item",
             titleGroupClass: this._rootClassPrefix + "-title",
             textField: "text",

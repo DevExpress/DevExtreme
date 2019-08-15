@@ -1,16 +1,20 @@
 import $ from "jquery";
 import { noop } from "core/utils/common";
+import { extend } from "core/utils/extend";
 import vizMocks from "../../helpers/vizMocks.js";
 import legendModule from "viz/components/legend";
 import module from "viz/core/title";
 
 const Legend = legendModule.Legend;
 
+const defaultMarkerBBox = { x: 0, y: 0, height: 14, width: 14 };
+
 var environment = {
     beforeEach: function() {
         var that = this;
         this.renderer = new vizMocks.Renderer();
         this.bBoxes = [];
+        this.markerBBoxes = [];
 
         this.rootGroup = this.renderer.g();
         this.renderer.g.reset();
@@ -28,7 +32,14 @@ var environment = {
         this.backgroundClass = 'dxc-border';
         this.itemGroupClass = 'dxc-item';
         this.renderer.bBoxTemplate = function() {
-            return that.bBoxes.pop() || { x: 1, y: 3, height: 10, width: 20 };
+            let bBox = null;
+            if(this._stored_settings.class === "dxl-marker") {
+                bBox = that.markerBBoxes.pop() || defaultMarkerBBox;
+            } else {
+                bBox = that.bBoxes.pop();
+            }
+
+            return bBox || { x: 1, y: 3, height: 10, width: 20 };
         };
         this.options._incidentOccurred = sinon.spy();
     },
@@ -50,6 +61,16 @@ var environment = {
                 res[that.colorField] = data.states.normal.fill;
                 res[that.nameField] = data.text;
                 return res;
+            },
+            widget: {
+                _getTemplate: function(f) {
+                    this.template = {
+                        render: function(arg) {
+                            return f(arg.model, arg.container);
+                        }
+                    };
+                    return this.template;
+                }
             },
             itemGroupClass: this.itemGroupClass,
             backgroundClass: this.backgroundClass,
@@ -75,11 +96,13 @@ var environment = {
 
         return { insideLegendGroup: insideLegendGroup, items: items };
     },
+    borderCorrection() {
+        return this.options.border.visible ? 1 : 0;
+    },
     checkItems: function(assert, items) {
         var i = 0,
             titleCorrection = this.options.title.text ? 1 : 0,
             subtitleCorrection = titleCorrection,
-            borderCorrection = this.options.border.visible ? 1 : 0,
             item,
             itemsCount = items.length;
 
@@ -87,7 +110,7 @@ var environment = {
 
         for(; i < items.length; i++) {
             item = items[i];
-            item.marker && this._checkMarker(assert, item.marker, i + borderCorrection);
+            item.marker && this._checkMarker(assert, item.marker, i);
             item.label && this._checkLabel(assert, item.label, i + titleCorrection + subtitleCorrection);
             item.tracker && this.checkTrackers(assert, item.tracker, i);
         }
@@ -126,13 +149,14 @@ var environment = {
             markersGroup = this.findMarkersGroup(),
             titleCorrection = this.options.title.text ? 1 : 0,
             subtitleCorrection = titleCorrection,
-            borderCorrection = this.options.border.visible ? 1 : 0,
-            items = markersGroup.children.slice(0);
+            borderCorrection = this.borderCorrection();
 
-        assert.equal(markersGroup.children.length, itemsCount * 2, "Legend created the correct items count.");
+        assert.equal(markersGroup.children.length, itemsCount, "Legend created the correct items count.");
         for(i = 0; i < itemsCount; i++) {
-            assert.equal(items[i * 2], that.renderer.rect.getCall(i + borderCorrection).returnValue, "first element is marker rect. " + i + " ID");
-            assert.equal(items[i * 2 + 1], that.renderer.text.getCall(i + titleCorrection + subtitleCorrection).returnValue, "second element is text, " + i + " ID");
+            const itemGroup = markersGroup.children[i];
+            const markerGroup = itemGroup.children[0].element;
+            assert.equal(that.renderer.rect.getCall(i + borderCorrection).returnValue.append.lastCall.args[0].element, markerGroup, "first element is marker rect. " + i + " ID");
+            assert.equal(that.renderer.text.getCall(i + titleCorrection + subtitleCorrection).returnValue.append.lastCall.args[0], itemGroup, "second element is text, " + i + " ID");
         }
     },
     _checkCreatingMarkerAndLabel: function(assert, itemsCount) {
@@ -155,16 +179,16 @@ var environment = {
         assert.equal(label.args[2], 0);
     },
     _checkMarker: function(assert, markerAttr, index) {
-        var marker = this.renderer.rect.getCall(index).returnValue,
-            settings = marker._stored_settings;
-
+        const marker = this.renderer.rect.getCall(index + this.borderCorrection()).returnValue;
+        const settings = marker._stored_settings;
+        const markerGroup = this.findMarkersGroup().children[index].children[0];
         $.each(markerAttr, function(key, value) {
             switch(key) {
                 case "translateX":
-                    assert.equal(marker.move.lastCall.args[0], value, key + " marker attr; " + index + " id");
+                    assert.equal(markerGroup.move.lastCall.args[0], value, key + " marker attr; " + index + " id");
                     break;
                 case "translateY":
-                    assert.equal(marker.move.lastCall.args[1], value, key + " marker attr; " + index + " id");
+                    assert.equal(markerGroup.move.lastCall.args[1], value, key + " marker attr; " + index + " id");
                     break;
                 default:
                     assert.equal(settings[key], value, key + " marker attr; " + index + " id");
@@ -282,14 +306,14 @@ QUnit.test('Creates correct types of objects for series', function(assert) {
     elements = this.getRenderedElements();
 
     assert.equal(elements.insideLegendGroup.append.firstCall.args[0], this.rootGroup, 'Series groups were added, trackers was added');
-    assert.equal(this.renderer.g.callCount, 3, "renderer must create 3 groups (insideLegendGroup, titleGroup, markersGroup");
+    assert.equal(this.renderer.g.callCount, 9, "renderer must create 6 groups (insideLegendGroup, titleGroup, markersGroup, dataItems group, marker group)");
     assert.equal(elements.insideLegendGroup.children.length, 1, "insideLegendGroup must contain just markers group");
-    assert.equal(elements.insideLegendGroup.children[0].children.length, this.data.length * 2, "markersGroup must contain all rects and labels");
+    assert.equal(elements.insideLegendGroup.children[0].children.length, this.data.length, "markersGroup must contain all groups with rects and labels");
 
     for(var i = 0; i < this.data.length; i++) {
         marker = this.renderer.rect.getCall(i).returnValue;
         text = this.renderer.text.getCall(i).returnValue;
-        assert.deepEqual(marker.attr.firstCall.args[0], { 'fill': this.data[i].states.normal.fill, opacity: undefined }, 'Rect element not found for series ' + i);
+        assert.deepEqual(marker.attr.firstCall.args[0], { 'fill': this.data[i].states.normal.fill, opacity: 1, class: "dxl-normal" }, 'Rect element not found for series ' + i);
 
         assert.equal(text.typeOfNode, 'text', 'Text element for series ' + i);
         assert.equal(text.stub("setTitle").callCount, 0, 'Text element for series ' + i);
@@ -307,10 +331,11 @@ QUnit.test('Draw with Title', function(assert) {
     this.indexField = 'seriesNumber';
     this.createAndDrawLegend(200, 200);
 
+    const itemGroups = this.findMarkersGroup().children;
+
     for(var i = 0; i < this.data.length; i++) {
         var expectedValue = this.data[i].text + " " + this.data[i].states.normal.fill + " " + this.data[i].id;
-        assert.equal(this.renderer.text.getCall(i).returnValue.setTitle.firstCall.args[0], expectedValue, 'Text element for series ' + i);
-        assert.equal(this.renderer.rect.getCall(i).returnValue.setTitle.firstCall.args[0], expectedValue, 'Hint on marker element for series ' + i);
+        assert.equal(itemGroups[i].setTitle.firstCall.args[0], expectedValue, 'Text element for series ' + i);
     }
 });
 
@@ -345,14 +370,14 @@ QUnit.test('Create legend, hover fill is "none"', function(assert) {
 
     states = $.map(legend._items, function(item) { return item.states; });
 
-    assert.equal(states[0].hovered.fill, "#00FF00");
-    assert.equal(states[0].selected.fill, "black");
+    assert.equal(states[0].hover.fill, "#00FF00");
+    assert.equal(states[0].selection.fill, "black");
 
-    assert.equal(states[1].hovered.fill, "#99FF99");
-    assert.equal(states[1].selected.fill, "black");
+    assert.equal(states[1].hover.fill, "#99FF99");
+    assert.equal(states[1].selection.fill, "black");
 
-    assert.equal(states[2].hovered.fill, "blue");
-    assert.equal(states[2].selected.fill, "black");
+    assert.equal(states[2].hover.fill, "blue");
+    assert.equal(states[2].selection.fill, "black");
 });
 
 QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
@@ -426,14 +451,14 @@ QUnit.test('Create legend, selected fill is "none"', function(assert) {
     assert.ok(legend._insideLegendGroup);
     states = $.map(legend._items, function(item) { return item.states; });
 
-    assert.equal(states[0].hovered.fill, "red");
-    assert.equal(states[0].selected.fill, "#00FF00");
+    assert.equal(states[0].hover.fill, "red");
+    assert.equal(states[0].selection.fill, "#00FF00");
 
-    assert.equal(states[1].hovered.fill, "red");
-    assert.equal(states[1].selected.fill, "#99FF99");
+    assert.equal(states[1].hover.fill, "red");
+    assert.equal(states[1].selection.fill, "#99FF99");
 
-    assert.equal(states[2].hovered.fill, "red");
-    assert.equal(states[2].selected.fill, "blue");
+    assert.equal(states[2].hover.fill, "red");
+    assert.equal(states[2].selection.fill, "blue");
 });
 
 QUnit.test('Update', function(assert) {
@@ -460,10 +485,10 @@ QUnit.test('Update', function(assert) {
 
     states = $.map(legend._items, function(item) { return item.states; });
 
-    assert.equal(states[0].hovered.fill, "green1");
-    assert.deepEqual(states[0].hovered.hatching.direction, "right", "hover hatching");
-    assert.equal(states[0].selected.fill, "blue1");
-    assert.deepEqual(states[0].selected.hatching.direction, 'left');
+    assert.equal(states[0].hover.fill, "green1");
+    assert.deepEqual(states[0].hover.hatching.direction, "right", "hover hatching");
+    assert.equal(states[0].selection.fill, "blue1");
+    assert.deepEqual(states[0].selection.hatching.direction, 'left');
 });
 
 QUnit.test('Draw legend, orientation = "horizontal"', function(assert) {
@@ -864,12 +889,13 @@ QUnit.test("itemsAlignment options. Right", function(assert) {
 
 QUnit.test("Vertical orientation. Transform must be rounded", function(assert) {
     this.data[2].size = 13;
+    this.markerBBoxes = [{ x: 5, y: 3, width: 13, height: 13 }, defaultMarkerBBox, defaultMarkerBBox];
     this.createSimpleLegend().draw(200, 200);
 
     this.checkItems(assert, [
         { id: 0, marker: { translateX: 0, translateY: 0 }, label: { translateX: 20, translateY: -1 } },
         { id: 1, marker: { translateX: 0, translateY: 22 }, label: { translateX: 20, translateY: 21 } },
-        { id: 2, marker: { translateX: 1, translateY: 44 }, label: { translateX: 20, translateY: 43 } }
+        { id: 2, marker: { translateX: 1 - 5, translateY: 44 - 3 }, label: { translateX: 20, translateY: 43 } }
     ]);
 });
 
@@ -1092,7 +1118,7 @@ QUnit.test('Border is not drawn, position = "inside", backgroundColor is not spe
     assert.ok(legend._insideLegendGroup);
 
     assert.equal(legend._legendGroup.children.length, 1, 'inside group created, trackers was added');
-    assert.equal(legend._markersGroup.children.length, legendData.length * 2, 'Series groups were added');
+    assert.equal(legend._markersGroup.children.length, legendData.length, 'Series groups were added');
     assert.equal(legend._insideLegendGroup.children[0].attr.firstCall.args[0].fill, '#ffffff', 'background color is white');
 });
 
@@ -1114,7 +1140,7 @@ QUnit.test('Border is not drawn, backgroundColor is specify', function(assert) {
 
     assert.ok(legend._insideLegendGroup);
     assert.equal(legend._legendGroup.children.length, 1, 'inside group created');
-    assert.equal(legend._markersGroup.children.length, legendData.length * 2, 'Series groups were added');
+    assert.equal(legend._markersGroup.children.length, legendData.length, 'Series groups were added');
     assert.equal(legend._insideLegendGroup.children[0].attr.firstCall.args[0].fill, '#123456', 'background color is specify');
 });
 
@@ -1142,7 +1168,7 @@ QUnit.test('Border is drawn', function(assert) {
     assert.ok(legend._insideLegendGroup);
     assert.equal(legend._legendGroup.children.length, 1, 'inside group created, trackers was added');
     assert.equal(legend._insideLegendGroup.children.length, 2, 'legend group must contain markers group and border group');
-    assert.equal(legend._markersGroup.children.length, legendData.length * 2, 'Series groups were added');
+    assert.equal(legend._markersGroup.children.length, legendData.length, 'Series groups were added');
 
     var borderGroup = legend._insideLegendGroup.children[0];
     assert.equal(borderGroup.attr.firstCall.args[0].fill, 'none');
@@ -1178,7 +1204,7 @@ QUnit.test('Border is drawn, position = "inside"', function(assert) {
     assert.ok(legend._insideLegendGroup);
     assert.equal(legend._legendGroup.children.length, 1, 'inside group created, trackers was added');
     assert.equal(legend._insideLegendGroup.children.length, 2, 'legend group must contain markers group and border group');
-    assert.equal(legend._markersGroup.children.length, legendData.length * 2, 'Series groups were added');
+    assert.equal(legend._markersGroup.children.length, legendData.length, 'Series groups were added');
 
     var borderGroup = legend._insideLegendGroup.children[0];
     assert.equal(borderGroup.attr.firstCall.args[0].fill, '#ffffff');
@@ -1513,9 +1539,9 @@ QUnit.test('Pass color & opacity to markers on create', function(assert) {
     this.createSimpleLegend()
         .draw(200, 200);
 
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], { fill: 'color_0', opacity: 0.1 });
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: 'color_1', opacity: undefined });
-    assert.deepEqual(this.renderer.rect.getCall(2).returnValue.attr.getCall(0).args[0], { fill: 'color_2', opacity: 0.2 });
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], { fill: 'color_0', opacity: 0.1, class: "dxl-normal" });
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: 'color_1', opacity: 1, class: "dxl-normal" });
+    assert.deepEqual(this.renderer.rect.getCall(2).returnValue.attr.getCall(0).args[0], { fill: 'color_2', opacity: 0.2, class: "dxl-normal" });
 });
 
 QUnit.test('Pass color & opacity to markers on update', function(assert) {
@@ -1539,7 +1565,7 @@ QUnit.test('Pass color & opacity to markers on update', function(assert) {
 
     legend.draw();
 
-    assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.getCall(0).args[0], { fill: 'new_color_0', opacity: 0.5 });
+    assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.getCall(0).args[0], { fill: 'new_color_0', opacity: 0.5, class: "dxl-normal" });
 });
 
 QUnit.module("getLayoutOptions", environment);
@@ -1727,9 +1753,11 @@ QUnit.test("Disposing", function(assert) {
 });
 
 QUnit.module('States', $.extend({}, environment, {
-    beforeEach: function(assert) {
+    beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         var states = getDefaultStates();
+
+        this.renderer.stub("lockHatching").returns("DevExpress");
 
         this.data = [{
             text: 'first item',
@@ -1747,37 +1775,65 @@ QUnit.module('States', $.extend({}, environment, {
     }
 }));
 
-QUnit.test('applyHover', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
+QUnit.test("Change state - leads to redraw marker", function(assert) {
+    const markersGroup = this.findMarkersGroup();
+
+    markersGroup.children[0].children[0].stub("clear").reset();
+    this.renderer.rect.reset();
+    this.renderer.text.reset();
+
     this.legend.applyHover(0);
 
-    assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, "blue");
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, { direction: "right", step: 5, width: 2 });
-    assert.equal(this.renderer.rect.getCall(1).returnValue._stored_settings.fill, '#00FF00');
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.equal(markersGroup.children[0].children[0].clear.callCount, 1);
+    assert.equal(markersGroup.children[1].stub("clear").callCount, 0);
+
+    assert.equal(this.renderer.rect.callCount, 1);
+    const marker = this.renderer.rect.lastCall.returnValue;
+    assert.equal(marker.append.lastCall.args[0].element, markersGroup.children[0].children[0].element);
+    assert.deepEqual(marker._stored_settings, {
+        class: "dxl-hovered",
+        fill: "url(#DevExpress)",
+        height: 14,
+        opacity: 1,
+        width: 14,
+        x: 0,
+        y: 0
+    }, "second marker settings are not changed");
+
+    assert.equal(this.renderer.text.callCount, 0);
+});
+
+QUnit.test('applyHover', function(assert) {
+    this.legend.applyHover(0);
+
+    assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.fill, "url(#DevExpress)");
+    assert.deepEqual(this.renderer.lockHatching.lastCall.args[0], "blue");
+    assert.deepEqual(this.renderer.lockHatching.lastCall.args[1], {
+        "direction": "right",
+        "step": 5,
+        "width": 2
+    });
+});
+
+QUnit.test('do not wrap fill to url if not pattern', function(assert) {
+    this.renderer.lockHatching.returns("red");
+    this.legend.applyHover(0);
+
+    assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.fill, "red");
 });
 
 QUnit.test('applySelected', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
     this.legend.applySelected(0);
 
-    assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, "black");
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, { direction: "right", step: 5, width: 2 });
-    assert.equal(this.renderer.rect.getCall(1).returnValue._stored_settings.fill, '#00FF00');
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.fill, "url(#DevExpress)");
+    assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.class, "dxl-selected");
+    assert.equal(this.renderer.lockHatching.lastCall.args[0], "black");
 });
 
 QUnit.test('resetItem', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub("smartAttr").reset();
-    this.renderer.rect.getCall(1).returnValue.stub("smartAttr").reset();
     this.legend.resetItem(0);
 
-    assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, "#00FF00");
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, undefined);
-    assert.equal(this.renderer.rect.getCall(1).returnValue._stored_settings.fill, '#00FF00');
-    assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
+    assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.fill, "#00FF00");
 });
 
 QUnit.test('applyHover from invisible series', function(assert) {
@@ -1820,7 +1876,8 @@ QUnit.test('resetItem from invisible series', function(assert) {
 QUnit.module('legend without data', $.extend({}, environment, {
     beforeEach: function() {
         this.legend = this.createSimpleLegend().draw(200, 200);
-    }
+    },
+    afterEach: noop
 }));
 
 QUnit.test('legend without data. applySelected', function(assert) {
@@ -1902,7 +1959,7 @@ QUnit.test('Appended to container', function(assert) {
         markersGroup = this.findMarkersGroup();
 
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.append.lastCall.args, [markersGroup], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.append.lastCall.args[0].element, markersGroup.children[i].element, String(i));
     });
 });
 
@@ -1911,7 +1968,7 @@ QUnit.test('Colors', function(assert) {
 
     var createMarker = this.createMarker;
     $.each(this.data, function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, class: "dxl-normal" }], String(i));
     });
 });
 
@@ -1924,7 +1981,7 @@ QUnit.test('Common color', function(assert) {
 
     var createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'common-color', opacity: undefined }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'common-color', opacity: 1, class: "dxl-normal" }], String(i));
     });
 });
 
@@ -1937,7 +1994,7 @@ QUnit.test('No state color, no marker color - use default color', function(asser
 
     var createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'default-color', opacity: undefined }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'default-color', opacity: 1, class: "dxl-normal" }], String(i));
     });
 });
 
@@ -1971,7 +2028,7 @@ QUnit.test('Items in inverted order', function(assert) {
 
     var createMarker = this.createMarker;
     $.each(this.data.reverse(), function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, class: "dxl-normal" }], String(i));
     });
 });
 
@@ -1983,7 +2040,7 @@ QUnit.test('Customize order using customizeItems', function(assert) {
 
     var createMarker = this.createMarker;
     $.each(this.data.reverse(), function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, class: "dxl-normal" }], String(i));
     });
 });
 
@@ -1993,7 +2050,7 @@ QUnit.test('Process items return nothing - get original items', function(assert)
 
     var createMarker = this.createMarker;
     $.each(this.data, function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, class: "dxl-normal" }], String(i));
     });
 });
 
@@ -2030,7 +2087,7 @@ QUnit.test('markers centering(partial markers sizes).', function(assert) {
     createMarker = this.createMarker;
 
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: undefined }]);
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: 1, class: "dxl-normal" }]);
         assert.deepEqual(createMarker.getCall(i).args[1], i + 4, "marker size");
     });
 });
@@ -2047,7 +2104,7 @@ QUnit.test('markers centering(partial markers sizes). markerShape = circle', fun
 
     createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: undefined }]);
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: 1, class: "dxl-normal" }]);
         assert.deepEqual(createMarker.getCall(i).args[1], i + 4, "marker size");
     });
 });
@@ -2129,7 +2186,6 @@ var titleEnvironment = $.extend({}, environment, {
         var titleGroup = this.renderer.g.firstCall.returnValue,
             titleText = this.options.title.text ? 1 : 0,
             subtitleText = (this.options.title.subtitle || {}).text && titleText ? 1 : 0,
-            markersGroup = this.findMarkersGroup(),
             insideLegendGroup = this.renderer.g.secondCall.returnValue;
 
         assert.equal(titleGroup.linkOn.lastCall.args[0], insideLegendGroup, "title must be into insideLegendGroup");
@@ -2144,9 +2200,10 @@ var titleEnvironment = $.extend({}, environment, {
             assert.equal(this.renderer.text.getCall(1).returnValue, titleGroup.children[1], "second child in titleGroup must be a subtitle text");
         }
 
-        assert.equal(markersGroup.children[0].move.firstCall.args[0], titleDescription.expectedOffset.x);
+        const marker = this.findMarkersGroup().children[0].children[0];
+        assert.equal(marker.move.firstCall.args[0], titleDescription.expectedOffset.x);
         var sign = this.options.title.verticalAlignment === "bottom" ? -1 : 1;
-        assert.equal(markersGroup.children[0].move.firstCall.args[1], sign * titleDescription.expectedOffset.y);
+        assert.equal(marker.move.firstCall.args[1], sign * titleDescription.expectedOffset.y);
     },
 
     afterEach: function() {
@@ -2481,4 +2538,69 @@ QUnit.test("Shift simple title; horizontalAlignment = 'left' verticalAlignment =
     assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
     assert.deepEqual(this.title.shift.lastCall.args, [0, 2], "title must have moved");
     assert.equal(this.legend._boundingRect.width, 56, "boundingRect must be expanded");
+});
+
+QUnit.module("Template", extend({}, environment, {
+    beforeEach() {
+        environment.beforeEach.call(this);
+
+        this.options.markerTemplate = sinon.spy();
+        this.data = this.createData(1);
+
+        this.data[0].states.hover = { fill: "hover-color", opacity: 0.2 };
+        this.data[0].states.selection = { fill: "selection-color", opacity: 0.2 };
+    }
+}));
+
+QUnit.test("Call template function", function(assert) {
+    this.createAndDrawLegend();
+
+    assert.equal(this.options.markerTemplate.callCount, 1);
+    assert.deepEqual(this.options.markerTemplate.lastCall.args[0], {
+        id: 0,
+        size: 14,
+        markerAttributes: {
+            fill: "color-1",
+            opacity: 1,
+            class: "dxl-normal"
+        },
+        states: {
+            hover: {
+                class: "dxl-hovered",
+                fill: "hover-color",
+                hatching: {
+                    step: 5,
+                    width: 2
+                },
+                opacity: 0.2
+            },
+            selection: {
+                class: "dxl-selected",
+                fill: "selection-color",
+                hatching: {
+                    step: 5,
+                    width: 2
+                },
+                opacity: 0.2
+            },
+            normal: {
+                fill: "color-1",
+                class: "dxl-normal",
+                opacity: 1
+            }
+        },
+        text: "Marker 1",
+        visible: true
+    });
+});
+
+QUnit.test("Call second time when state changed", function(assert) {
+    this.createAndDrawLegend();
+    this.options.markerTemplate.reset();
+
+    this.legend.applyHover(0);
+
+    assert.equal(this.options.markerTemplate.callCount, 1);
+    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].markerAttributes.class, "dxl-hovered");
+    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].markerAttributes.opacity, 0.2);
 });

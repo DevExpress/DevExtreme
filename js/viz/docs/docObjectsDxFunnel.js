@@ -65,21 +65,12 @@ var Item = {
 /**
 * @name FunnelLegendItem
 * @type object
+* @inherits BaseLegendItem
 */
 var legendItem = {
-    /**
-    * @name FunnelLegendItem.text
-    * @type string
-    */
-    text: undefined,
     /**
     * @name FunnelLegendItem.item
     * @type dxFunnelItem
     */
-    item: undefined,
-    /**
-    * @name FunnelLegendItem.visible
-    * @type boolean
-    */
-    visible: true
+    item: undefined
 };
