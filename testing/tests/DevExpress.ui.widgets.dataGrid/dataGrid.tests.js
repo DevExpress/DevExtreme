@@ -3738,6 +3738,31 @@ QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed
     assert.notOk($(".dx-command-edit").eq(1).hasClass("dx-hidden-cell"), "cell does not have class dx-hidden-cell");
 });
 
+// T804439
+QUnit.test("Cell should not be unfocused after click on it while editing with row mode", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ field1: "data1", field2: "data2" }],
+            columns: ["field1", "field2"],
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+            }
+        }).dxDataGrid("instance"),
+        navigationController = dataGrid.getController("keyboardNavigation");
+
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger("dxpointerdown").click();
+    this.clock.tick();
+
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.getCellElement(0, 0)) }) });
+
+    $(dataGrid.getCellElement(0, 1)).trigger("dxpointerdown");
+    this.clock.tick();
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 1)).hasClass("dx-focused"));
+});
+
 QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
     // arrange
     var data = [],
