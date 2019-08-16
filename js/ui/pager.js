@@ -263,6 +263,19 @@ var Pager = Widget.inherit({
         }
     },
 
+    _wrapClickAction: function(action) {
+        return (e) => {
+            if(e.type === "dxpointerup") {
+                this._pointerUpHappened = true;
+            } else if(this._pointerUpHappened) {
+                this._pointerUpHappened = false;
+                return;
+            }
+
+            action({ event: e });
+        };
+    },
+
     _renderPages: function(pages) {
         var that = this,
             $separator,
@@ -281,10 +294,9 @@ var Pager = Widget.inherit({
             page;
 
         if(pagesLength > 1) {
-            that._pageClickHandler = function(e) {
-                clickPagesIndexAction({ event: e });
-            };
-            eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), '.' + PAGER_PAGE_CLASS, that._pageClickHandler);
+            that._pageClickHandler = that._wrapClickAction(clickPagesIndexAction);
+
+            eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), "." + PAGER_PAGE_CLASS, that._pageClickHandler);
         }
 
         for(var i = 0; i < pagesLength; i++) {
@@ -516,18 +528,7 @@ var Pager = Widget.inherit({
         if(that.option("showNavigationButtons") || that.option("lightModeEnabled")) {
             $button = $("<div>").addClass(PAGER_NAVIGATE_BUTTON);
 
-            var pointerUpHappened = false;
-
-            eventsEngine.on($button, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), function(e) {
-                if(e.type === "dxpointerup") {
-                    pointerUpHappened = true;
-                } else if(pointerUpHappened) {
-                    pointerUpHappened = false;
-                    return;
-                }
-
-                clickAction({ event: e });
-            });
+            eventsEngine.on($button, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), that._wrapClickAction(clickAction));
 
             that.setAria({
                 "role": "button",
