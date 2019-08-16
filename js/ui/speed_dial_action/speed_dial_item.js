@@ -11,6 +11,7 @@ import themes from "../themes";
 const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
 const FAB_LABEL_CLASS = "dx-fa-button-label";
+const FAB_LABEL_LOCATION_RIGHT_CLASS = "dx-location-right";
 const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
 const SpeedDialItem = Overlay.inherit({
@@ -50,7 +51,7 @@ const SpeedDialItem = Overlay.inherit({
 
         const labelText = this.option("label");
 
-        if(labelText === "") {
+        if(!labelText || labelText === "") {
             this._$label = null;
             return;
         }
@@ -60,6 +61,15 @@ const SpeedDialItem = Overlay.inherit({
         this._$label = $element
             .html(labelText)
             .appendTo(this.$content());
+
+        this._$label.toggleClass(FAB_LABEL_LOCATION_RIGHT_CLASS, this._isPositionLeft(this.option("parentPosition")));
+    },
+
+
+    _isPositionLeft(position) {
+        const currentLocation = position ? (position.at ? position.at : position) : "";
+
+        return currentLocation.startsWith("left");
     },
 
     _renderButtonIcon($element, icon, iconClass) {

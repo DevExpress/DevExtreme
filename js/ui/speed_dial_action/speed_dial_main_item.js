@@ -8,7 +8,7 @@ import SpeedDialItem from "./speed_dial_item";
 import themes from "../themes";
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
-const FAB_MAIN_CLASS_HAS_TEXT = "dx-fa-button-has-text";
+const FAB_MAIN_CLASS_HAS_TEXT = "dx-fa-button-has-label";
 const FAB_CLOSE_ICON_CLASS = "dx-fa-button-icon-close";
 const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 
@@ -143,7 +143,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             });
 
             const actionOffsetY = this.initialOption("indent") + this.initialOption("childIndent") * i;
-            const actionPositionAtMy = this._$label ? "right" : "center";
+            const actionPositionAtMy = this._$label ? (this._isPositionLeft(this._getPosition()) ? "left" : "right") : "center";
             const actionAnimationDelay = 30;
 
             action._options.position = {
@@ -160,6 +160,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             action._options.animation.hide.delay = actionAnimationDelay * (lastActionIndex - i);
 
             action._options.actionComponent = action;
+            action._options.parentPosition = this._getPosition();
 
             this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options, { visible: false })));
         }
@@ -168,6 +169,11 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     _setPosition() {
         this._normalizePosition();
         this._actions.onPositioned({ position: this._renderPosition() });
+    },
+
+
+    _getPosition() {
+        return this._getDefaultOptions().position;
     },
 
     _optionChanged(args) {
@@ -240,13 +246,13 @@ exports.initAction = function(newAction) {
             speedDialMainItem.option(extend({}, newAction._options, {
                 actions: savedActions,
                 visible: true,
-                position: speedDialMainItem._getDefaultOptions().position,
+                position: speedDialMainItem._getPosition(),
                 label: speedDialMainItem._getDefaultOptions().label
             }));
         } else {
             speedDialMainItem.option({
                 actions: savedActions,
-                position: speedDialMainItem._getDefaultOptions().position,
+                position: speedDialMainItem._getPosition(),
                 label: speedDialMainItem._getDefaultOptions().label
             });
         }
@@ -274,7 +280,7 @@ exports.disposeAction = function(actionId) {
         speedDialMainItem.option(extend({}, savedActions[0]._options, {
             actions: savedActions,
             visible: true,
-            position: speedDialMainItem._getDefaultOptions().position,
+            position: speedDialMainItem._getPosition(),
             label: speedDialMainItem._getDefaultOptions().label
         }));
     } else {
@@ -295,7 +301,7 @@ exports.repaint = function() {
         actions: speedDialMainItem.option("actions"),
         icon: icon,
         closeIcon: speedDialMainItem._getDefaultOptions().closeIcon,
-        position: speedDialMainItem._getDefaultOptions().position,
+        position: speedDialMainItem._getPosition(),
         label: speedDialMainItem._getDefaultOptions().label,
         maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount
     });
