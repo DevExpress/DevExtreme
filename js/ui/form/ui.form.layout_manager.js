@@ -628,7 +628,7 @@ const LayoutManager = Widget.inherit({
         var instance = that._renderEditor({
             $container: $editor,
             dataField: item.dataField,
-            name: name,
+            name: item.name,
             editorType: item.editorType,
             editorOptions: item.editorOptions,
             template: that._getTemplateByFieldItem(item),
