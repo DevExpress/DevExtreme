@@ -112,7 +112,11 @@ function run_test_themebuilder {
 function run_test_functional {
     npm i
     npm run build
-    npm run test-functional -- --browsers chrome:headless
+
+    local args="--browsers chrome:headless";
+    [ "$CONSTEL" ] && args="--browsers chrome:headless --componentFolder $CONSTEL";
+
+    npm run test-functional -- $args
 }
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
