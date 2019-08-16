@@ -64,7 +64,7 @@ QUnit.module("T712431", () => {
     var APPOINTMENT_WIDTH = 941;
 
     var createInstance = function(options) {
-        return $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
+        return $("#scheduler").dxScheduler($.extend(options, { })).dxScheduler("instance");
     };
 
     QUnit.test('Appointment width should be not less 941px with width control 1100px', function(assert) {
@@ -161,14 +161,14 @@ QUnit.test("Appointments should be rendered on the same line after navigating to
         endDate: new Date(2019, 1, 1, 12, 30),
     }];
 
-    this.createInstance({
+    this.instance = $("#scheduler").dxScheduler({
         dataSource: data,
         views: views,
         currentView: views[0],
         currentDate: new Date(2019, 2, 1),
         crossScrollingEnabled: true,
         height: 600
-    });
+    }).dxScheduler("instance");
 
     var testTopPosition = function(view, navigatorDate) {
         helper.getAppointments().each(function(index, element) {
