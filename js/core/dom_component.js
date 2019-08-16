@@ -95,6 +95,7 @@ var DOMComponent = Component.inherit({
     ctor: function(element, options) {
         this._$element = $(element);
         publicComponentUtils.attachInstanceToElement(this._$element, this, this._dispose);
+        this._synchronizableOptionsForCreateComponent = ["rtlEnabled", "disabled", "templatesRenderAsynchronously"];
         this.callBase(options);
     },
 
@@ -276,7 +277,7 @@ var DOMComponent = Component.inherit({
 
         config = config || {};
 
-        var synchronizableOptions = commonUtils.grep(["rtlEnabled", "disabled"], function(value) {
+        var synchronizableOptions = commonUtils.grep(this._synchronizableOptionsForCreateComponent, function(value) {
             return !(value in config);
         });
 
@@ -284,7 +285,8 @@ var DOMComponent = Component.inherit({
         that._extendConfig(config, extend({
             integrationOptions: this.option("integrationOptions"),
             rtlEnabled: this.option("rtlEnabled"),
-            disabled: this.option("disabled")
+            disabled: this.option("disabled"),
+            templatesRenderAsynchronously: this.option("templatesRenderAsynchronously")
         }, nestedComponentOptions(this)));
 
         var instance;

@@ -621,7 +621,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        if(this._initialized && this._isVirtualMode() && this.option("items").length) {
+        const items = this.option("items");
+
+        if(this._initialized && this._isVirtualMode() && items.length) {
             return;
         }
 
@@ -872,13 +874,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         const length = nodes.length - 1;
 
         for(let i = length; i >= 0; i--) {
-            this._renderItem(nodes[i], $nodeContainer);
+            this._renderItem(i, nodes[i], $nodeContainer);
         }
-
+        this._renderedItemsCount += nodes.length;
         this._renderFocusTarget();
     },
 
-    _renderItem: function(node, $nodeContainer) {
+    _renderItem: function(nodeIndex, node, $nodeContainer) {
         const $node = this._createDOMElement($nodeContainer, node);
         const nodeData = node.internalFields;
         const showCheckBox = this._showCheckboxes();
@@ -888,8 +890,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this.setAria("selected", nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
-
-        this.callBase(nodeData.key, nodeData.item, $node);
+        this.callBase(this._renderedItemsCount + nodeIndex, nodeData.item, $node);
 
         if(nodeData.item.visible !== false) {
             this._renderChildren($node, node);
@@ -956,14 +957,14 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _executeItemRenderAction: function(key, itemData, itemElement) {
-        const node = this._dataAdapter.getNodeByKey(key);
+    _executeItemRenderAction: function(itemIndex, itemData, itemElement) {
+        const node = this._getNode(itemElement);
 
         this._getItemRenderAction()({
             itemElement: itemElement,
-            itemIndex: key,
+            itemIndex: itemIndex,
             itemData: itemData,
-            node: node
+            node: this._dataAdapter.getPublicNode(node)
         });
     },
 

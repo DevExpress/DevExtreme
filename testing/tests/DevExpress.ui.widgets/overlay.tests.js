@@ -1769,7 +1769,9 @@ testModule("close on outside click", moduleConfig, () => {
             fx.off = true;
         }
     });
+});
 
+testModule("reset focus", moduleConfig, () => {
     QUnit.testInActiveWindow("inputs inside should loose focus when overlay is hidden with animation disabled", (assert) => {
         const focusOutStub = sinon.stub();
         const $input = $("<input id='alter-box' />")
@@ -1790,8 +1792,33 @@ testModule("close on outside click", moduleConfig, () => {
 
         assert.strictEqual(focusOutStub.called, true, "input lost focus");
     });
-});
 
+    QUnit.testInActiveWindow("there is no errors when overlay try reset active element", (assert) => {
+        const $input = $("<input>");
+        const overlay = $("#overlay")
+            .dxOverlay({
+                animation: false,
+                shading: false,
+                visible: true,
+                contentTemplate: function(contentElement) {
+                    $(contentElement).append($input);
+                }
+            })
+            .dxOverlay("instance");
+        let isOK = true;
+
+        $input.focus();
+        $input[0].blur = null;
+
+        try {
+            overlay.hide();
+        } catch(e) {
+            isOK = false;
+        }
+
+        assert.ok(isOK, "overlay reset active element without error");
+    });
+});
 
 testModule("close on target scroll", moduleConfig, () => {
     test("overlay should be hidden if any of target's parents were scrolled", (assert) => {
@@ -3123,7 +3150,7 @@ testModule("focus policy", {
         assert.notOk(tabbableSpy.withArgs(0, middleElement).called, "middle element hasn't been checked");
     });
 
-    test("tab target inside of wrapper but outside of content should not be outside", (assert) => {
+    QUnit.testInActiveWindow("tab target inside of wrapper but outside of content should not be outside", (assert) => {
         const overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
             visible: true,
             shading: true,
@@ -3196,9 +3223,7 @@ testModule("scrollable interaction", {
             assert.ok(false, "scroll should not be fired");
         });
 
-        pointerMock($shader)
-            .start()
-            .wheel(10);
+        pointerMock($shader).start().wheel(10);
 
         $($shader.parent()).off(".TEST");
     });

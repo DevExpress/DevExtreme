@@ -309,7 +309,7 @@ QUnit.test("onItemRendered should have correct node if key is string", function(
         onItemRendered: itemRenderedHandler
     });
 
-    assert.equal(itemRenderedHandler.getCall(0).args[0].node.id, "1_0", "node is correct");
+    assert.equal(itemRenderedHandler.getCall(0).args[0].node.key, "1_0", "node.key");
 });
 
 QUnit.test("Items change correct on option change", function(assert) {

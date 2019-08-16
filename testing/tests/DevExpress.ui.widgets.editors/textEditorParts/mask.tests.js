@@ -1500,12 +1500,20 @@ QUnit.test("custom function get fullText and current index", function(assert) {
 });
 
 QUnit.test("fullText updated, if pasted text is accepted", function(assert) {
+    // Fix blinking on blur in MS Edge (https://trello.com/c/HyC0Shoz)
+    assert.expect(1);
+    var firstTimeCall = true;
+
     var $textEditor = $("#texteditor").dxTextEditor({
         mask: "xy",
         maskRules: {
             "x": "x",
             "y": function(char, index, fullText) {
-                assert.equal(fullText, "x_", "x is accepted");
+                if(firstTimeCall) {
+                    assert.equal(fullText, "x_", "x is accepted");
+                }
+
+                firstTimeCall = false;
                 return char === "y";
             }
         }
@@ -1641,7 +1649,10 @@ QUnit.test("validation after value changed", function(assert) {
     $input.trigger("change");
 
     textEditor.option("value", "");
-    assert.equal(textEditor.option("isValid"), true, "mask with an empty value should be valid. Required validator should check it");
+    assert.ok(textEditor.option("isValid"), "mask with an empty value should be valid. Required validator should check it");
+
+    textEditor.option("value", "f");
+    assert.notOk(textEditor.option("isValid"), "mask with an invalid value should be invalid");
 });
 
 

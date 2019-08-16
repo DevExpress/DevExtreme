@@ -521,38 +521,47 @@ QUnit.test('Reset operation on columnsChanged event with filterValue optionName 
     assert.ok(filterMenu.find('.dx-icon').eq(0).hasClass('dx-icon-filter-operation-default')); // <>
 });
 
-QUnit.test('update filter text with timeout', function(assert) {
+function updateFilterTextTest(assert, that, eventToTrigger) {
     // arrange
     var testElement = $('#container');
 
-    $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: false, index: 0, dataType: 'number' }]);
-    this.options.filterRow.applyFilter = "auto";
+    $.extend(that.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: false, index: 0, dataType: 'number' }]);
+    that.options.filterRow.applyFilter = "auto";
 
     // act
-    this.columnHeadersView.render(testElement);
+    that.columnHeadersView.render(testElement);
 
-    var filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
+    var filterRowInput = $(that.columnHeadersView.element()).find('.dx-texteditor');
     assert.equal(filterRowInput.length, 1);
 
     filterRowInput.find('.dx-texteditor-input').val(90);
-    filterRowInput.find('.dx-texteditor-input').trigger('keyup');
+    filterRowInput.find('.dx-texteditor-input').trigger(eventToTrigger);
 
     // act
-    this.clock.tick(600);
+    that.clock.tick(600);
 
     // assert
-    assert.strictEqual(this.columnsController.updateOptions.length, 0);
+    assert.strictEqual(that.columnsController.updateOptions.length, 0);
 
     // act
-    this.clock.tick(100);
+    that.clock.tick(100);
 
     // assert
-    assert.strictEqual(this.columnsController.updateOptions.length, 1);
-    assert.deepEqual(this.columnsController.updateOptions[0], {
+    assert.strictEqual(that.columnsController.updateOptions.length, 1);
+    assert.deepEqual(that.columnsController.updateOptions[0], {
         columnIndex: 0,
         optionName: 'filterValue',
         optionValue: 90
     });
+}
+
+QUnit.test('update filter text with timeout and keyup event', function(assert) {
+    updateFilterTextTest(assert, this, "keyup");
+});
+
+// T751914
+QUnit.test('update filter text with timeout and input event', function(assert) {
+    updateFilterTextTest(assert, this, "input");
 });
 
 QUnit.test('update filter text to empty string', function(assert) {

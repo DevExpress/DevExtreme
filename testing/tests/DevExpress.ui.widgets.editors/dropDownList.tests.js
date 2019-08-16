@@ -1240,14 +1240,15 @@ QUnit.module("aria accessibility", moduleConfig, () => {
         assert.equal($input.attr("aria-activedescendant"), $item.attr("id"), "aria-activedescendant and id of the focused item are equals");
     });
 
-    QUnit.test("list's aria-target should point to the widget's input (T247414)", (assert) => {
-        assert.expect(1);
+    QUnit.test("list's aria-target should point to the widget's input (T247414)", assert => {
+        assert.expect(2);
 
         const dropDownList = $("#dropDownList").dxDropDownList({ opened: true }).dxDropDownList("instance");
         const list = $(".dx-list").dxList("instance");
+        const $input = $("#dropDownList").find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        // todo: make getAriaTarget an option
         assert.deepEqual(list._getAriaTarget(), dropDownList._getAriaTarget());
+        assert.strictEqual($input.attr("role"), "combobox", "input.role");
     });
 });
 

@@ -2980,17 +2980,42 @@ QUnit.test("popup title collapse if empty title option (B232073)", function(asse
 });
 
 
-QUnit.module("aria accessibility");
+QUnit.module("aria accessibility", () => {
+    const checkAsserts = (expectedValues) => {
+        let { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
 
-QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
-    $("#widget").dxLookup({
-        opened: true
+        QUnit.assert.strictEqual($target.attr("role"), role, "role");
+        QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
+        QUnit.assert.strictEqual(!!$target.attr("aria-owns"), isOwns, "owns");
+        QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
+    };
+
+    if(devices.real().deviceType === "desktop") {
+        [true, false].forEach((searchEnabled) => {
+            QUnit.test(`aria role for list, searchEnabled: ${searchEnabled}`, () => {
+                let $element = $("#widget").dxLookup({
+                    opened: true,
+                    searchEnabled: searchEnabled
+                });
+                const $field = $element.find(`.${LOOKUP_FIELD_CLASS}`);
+
+                let list = $(`.${LIST_CLASS}`).dxList("instance");
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
+
+                $element.dxLookup("instance").option("searchEnabled", !searchEnabled);
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
+            });
+        });
+    }
+
+    QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
+        $("#widget").dxLookup({ opened: true });
+
+        let list = $(`.${LIST_CLASS}`).dxList("instance");
+        assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
     });
-
-    var list = $("." + LIST_CLASS).dxList("instance");
-
-    // TODO: change it when _getAriaTarget becomes an option
-    assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
 });
 
 

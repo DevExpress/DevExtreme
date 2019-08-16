@@ -1665,8 +1665,8 @@ QUnit.begin(function() {
         assert.ok(translator2DModule.Translator2D.secondCall.args[0]);
         assert.ok(translator2DModule.Translator2D.firstCall.args[1]);
         assert.ok(translator2DModule.Translator2D.secondCall.args[1]);
-        assert.deepEqual(translator2DModule.Translator2D.firstCall.args[2], { isHorizontal: true });
-        assert.deepEqual(translator2DModule.Translator2D.secondCall.args[2], { isHorizontal: false });
+        assert.deepEqual(translator2DModule.Translator2D.firstCall.args[2], { isHorizontal: true, shiftZeroValue: false });
+        assert.deepEqual(translator2DModule.Translator2D.secondCall.args[2], { isHorizontal: false, shiftZeroValue: true }); // T756714, T805150
     });
 
     QUnit.test('Pas stick = false to translator for bar', function(assert) {

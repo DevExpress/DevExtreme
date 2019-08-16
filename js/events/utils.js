@@ -109,6 +109,10 @@ const isMouseEvent = (e) => {
     return isNativeMouseEvent(e) || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "mouse");
 };
 
+const isDxMouseWheelEvent = (e) => {
+    return e && e.type === "dxmousewheel";
+};
+
 const isTouchEvent = (e) => {
     return isNativeTouchEvent(e) || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "touch");
 };
@@ -158,7 +162,10 @@ const needSkipEvent = (e) => {
     if($target.is(".dx-skip-gesture-event *, .dx-skip-gesture-event")) {
         return true;
     }
-    if(e.type === 'dxmousewheel') {
+    if(isDxMouseWheelEvent(e)) {
+        if($target.is("textarea") && $target.hasClass("dx-texteditor-input")) {
+            return false;
+        }
         const isContentEditableFocused = target.isContentEditable && $target.closest("div[contenteditable='true']").is(':focus');
         const isInputFocused = $target.is("input[type='number'], textarea, select") && $target.is(':focus');
         return isInputFocused || isContentEditableFocused;
@@ -242,6 +249,7 @@ module.exports = {
     eventSource: eventSource,
     isPointerEvent: isPointerEvent,
     isMouseEvent: isMouseEvent,
+    isDxMouseWheelEvent: isDxMouseWheelEvent,
     isTouchEvent: isTouchEvent,
     isKeyboardEvent: isKeyboardEvent,
 
