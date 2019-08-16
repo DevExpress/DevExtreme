@@ -8,25 +8,25 @@ import ProgressBar from "../progress_bar";
 import Button from "../button";
 import ScrollView from "../scroll_view/ui.scroll_view";
 
-const FILE_MANAGER_PROGRESS_PANEL_CLASS = "dx-filemanager-progress-panel";
-const FILE_MANAGER_PROGRESS_PANEL_CONTAINER_CLASS = "dx-filemanager-progress-panel-container";
-const FILE_MANAGER_PROGRESS_PANEL_TITLE_CLASS = "dx-filemanager-progress-panel-title";
-const FILE_MANAGER_PROGRESS_PANEL_TITLE_TEXT_CLASS = "dx-filemanager-progress-panel-title-text";
-const FILE_MANAGER_PROGRESS_PANEL_CLOSE_BUTTON_CLASS = "dx-filemanager-progress-panel-close-button";
-const FILE_MANAGER_PROGRESS_PANEL_INFOS_CONTAINER_CLASS = "dx-filemanager-progress-panel-infos-container";
-const FILE_MANAGER_PROGRESS_PANEL_SEPARATOR_CLASS = "dx-filemanager-progress-panel-separator";
-const FILE_MANAGER_PROGRESS_PANEL_INFO_CLASS = "dx-filemanager-progress-panel-info";
-const FILE_MANAGER_PROGRESS_PANEL_COMMON_CLASS = "dx-filemanager-progress-panel-common";
-const FILE_MANAGER_PROGRESS_PANEL_INFO_WITH_DETAILS_CLASS = "dx-filemanager-progress-panel-info-with-details";
-const FILE_MANAGER_PROGRESS_PANEL_DETAILS_CLASS = "dx-filemanager-progress-panel-details";
-const FILE_MANAGER_PROGRESS_BOX_ERROR_CLASS = "dx-filemanager-progress-box-error";
-const FILE_MANAGER_PROGRESS_BOX_CLASS = "dx-filemanager-progress-box";
-const FILE_MANAGER_PROGRESS_BOX_WITHOUT_CLOSE_BUTTON_CLASS = "dx-filemanager-progress-box-without-close-button";
-const FILE_MANAGER_PROGRESS_BOX_IMAGE_CLASS = "dx-filemanager-progress-box-image";
-const FILE_MANAGER_PROGRESS_BOX_WRAPPER_CLASS = "dx-filemanager-progress-box-wrapper";
-const FILE_MANAGER_PROGRESS_BOX_COMMON_CLASS = "dx-filemanager-progress-box-common";
-const FILE_MANAGER_PROGRESS_BOX_PROGRESS_BAR_CLASS = "dx-filemanager-progress-box-progress-bar";
-const FILE_MANAGER_PROGRESS_BOX_CLOSE_BUTTON_CLASS = "dx-filemanager-progress-box-close-button";
+const FILE_MANAGER_PROGRESS_PANEL_CLASS = `dx-filemanager-progress-panel`;
+const FILE_MANAGER_PROGRESS_PANEL_CONTAINER_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-container`;
+const FILE_MANAGER_PROGRESS_PANEL_TITLE_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-title`;
+const FILE_MANAGER_PROGRESS_PANEL_TITLE_TEXT_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-title-text`;
+const FILE_MANAGER_PROGRESS_PANEL_CLOSE_BUTTON_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-close-button`;
+const FILE_MANAGER_PROGRESS_PANEL_INFOS_CONTAINER_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-infos-container`;
+const FILE_MANAGER_PROGRESS_PANEL_SEPARATOR_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-separator`;
+const FILE_MANAGER_PROGRESS_PANEL_INFO_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-info`;
+const FILE_MANAGER_PROGRESS_PANEL_COMMON_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-common`;
+const FILE_MANAGER_PROGRESS_PANEL_INFO_WITH_DETAILS_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-info-with-details`;
+const FILE_MANAGER_PROGRESS_PANEL_DETAILS_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-details`;
+const FILE_MANAGER_PROGRESS_BOX_CLASS = `dx-filemanager-progress-box`;
+const FILE_MANAGER_PROGRESS_BOX_ERROR_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-error`;
+const FILE_MANAGER_PROGRESS_BOX_WITHOUT_CLOSE_BUTTON_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-without-close-button`;
+const FILE_MANAGER_PROGRESS_BOX_IMAGE_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-image`;
+const FILE_MANAGER_PROGRESS_BOX_WRAPPER_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-wrapper`;
+const FILE_MANAGER_PROGRESS_BOX_COMMON_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-common`;
+const FILE_MANAGER_PROGRESS_BOX_PROGRESS_BAR_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-progress-bar`;
+const FILE_MANAGER_PROGRESS_BOX_CLOSE_BUTTON_CLASS = `${FILE_MANAGER_PROGRESS_BOX_CLASS}-close-button`;
 
 class FileManagerProgressPanel extends Widget {
 

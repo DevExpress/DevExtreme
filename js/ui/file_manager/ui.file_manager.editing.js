@@ -212,11 +212,7 @@ class FileManagerEditingControl extends Widget {
             return;
         }
 
-        if(!action.dialog) {
-            return action.action(arg);
-        } else {
-            return this._tryEditAction(action, arg);
-        }
+        return action.dialog ? this._tryEditAction(action, arg) : action.action(arg);
     }
 
     _onCancelUploadSession(info) {
@@ -243,14 +239,10 @@ class FileManagerEditingControl extends Widget {
         operationInfo.uploadSessionId = sessionInfo.sessionId;
         this._uploadOperationInfoMap[sessionInfo.sessionId] = operationInfo;
 
-        whenSome(
-            sessionInfo.deferreds,
-            info => this._completeActionItem(operationInfo, context, info),
-            info => this._handleActionError(operationInfo, context, info)
-        ).then(() => {
-            this._completeAction(operationInfo, context);
-            delete this._uploadOperationInfoMap[sessionInfo.sessionId];
-        });
+        this._processDeferreds(sessionInfo.deferreds, operationInfo, context)
+            .done(() => {
+                delete this._uploadOperationInfoMap[sessionInfo.sessionId];
+            });
     }
 
     _tryEditAction(action, arg) {
@@ -267,19 +259,21 @@ class FileManagerEditingControl extends Widget {
                 operationInfo = this._startActionProcessing(context, dialogResult);
                 return this._processAction(operationInfo, context);
             })
-            .then(result => {
-                return whenSome(
-                    result,
-                    info => this._completeActionItem(operationInfo, context, info),
-                    info => this._handleActionError(operationInfo, context, info)
-                ).then(() => this._completeAction(operationInfo, context));
-            },
-            info => {
-                if(info) {
-                    this._handleActionError(operationInfo, context, info, true);
-                    this._completeAction(operationInfo, context);
-                }
-            });
+            .then(result => this._processDeferreds(result, operationInfo, context),
+                info => {
+                    if(info) {
+                        this._handleActionError(operationInfo, context, info, true);
+                        this._completeAction(operationInfo, context);
+                    }
+                });
+    }
+
+    _processDeferreds(deferreds, operationInfo, context) {
+        return whenSome(
+            deferreds,
+            info => this._completeActionItem(operationInfo, context, info),
+            info => this._handleActionError(operationInfo, context, info)
+        ).then(() => this._completeAction(operationInfo, context));
     }
 
     _addOperationDetailsInProgressPanel(operationInfo, context) {

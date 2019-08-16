@@ -8,12 +8,13 @@ import Drawer from "../drawer/ui.drawer";
 
 import FileManagerProgressPanel from "./ui.file_manager.notification.progress_panel";
 
-const FILE_MANAGER_NOTIFICATION_POPUP_CLASS = "dx-filemanager-notification-popup";
-const FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS = "dx-filemanager-notification-popup-error";
-const FILE_MANAGER_NOTIFICATION_COMMON_CLASS = "dx-filemanager-notification-common";
-const FILE_MANAGER_NOTIFICATION_SEPARATOR_CLASS = "dx-filemanager-notification-separator";
-const FILE_MANAGER_NOTIFICATION_DETAILS_CLASS = "dx-filemanager-notification-details";
-const FILE_MANAGER_NOTIFICATION_COMMON_NO_ITEM_CLASS = "dx-filemanager-notification-common-no-item";
+const FILE_MANAGER_NOTIFICATION_CLASS = "dx-filemanager-notification";
+const FILE_MANAGER_NOTIFICATION_POPUP_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-popup`;
+const FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-popup-error`;
+const FILE_MANAGER_NOTIFICATION_COMMON_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-common`;
+const FILE_MANAGER_NOTIFICATION_SEPARATOR_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-separator`;
+const FILE_MANAGER_NOTIFICATION_DETAILS_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-details`;
+const FILE_MANAGER_NOTIFICATION_COMMON_NO_ITEM_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-common-no-item`;
 
 export default class FileManagerNotificationControl extends Widget {
 
