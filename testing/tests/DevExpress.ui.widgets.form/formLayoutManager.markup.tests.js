@@ -2820,16 +2820,14 @@ QUnit.module("Templates", () => {
             }]
         }).dxLayoutManager("instance");
 
-        const args = templateStub.getCall(0).args;
-        assert.equal(args[0].name, "TestName", "name argument");
-        assert.equal(args[0].dataField, "TestDataField", "dataField argument");
-        assert.equal(args[0].editorType, "dxColorBox", "editorType argument");
-        assert.propEqual(args[0].editorOptions, {
-            inputAttr: {},
-            name: "TestDataField",
-            text: "TestText"
-        }, "editorOptions argument");
-        assert.equal(args[0].component, layoutManager, "component argument");
+        const args = templateStub.firstCall.args[0];
+        assert.strictEqual(args.name, "TestName", "name argument");
+        assert.strictEqual(args.dataField, "TestDataField", "dataField argument");
+        assert.strictEqual(args.editorType, "dxColorBox", "editorType argument");
+        assert.deepEqual(args.editorOptions.inputAttr, {}, "editorOptions.inputAttr argument");
+        assert.strictEqual(args.editorOptions.name, "TestDataField", "editorOptions.name argument");
+        assert.strictEqual(args.editorOptions.text, "TestText", "editorOptions.text argument");
+        assert.equal(args.component, layoutManager, "component argument");
     });
 
     test("Check template bound to data", (assert) => {
