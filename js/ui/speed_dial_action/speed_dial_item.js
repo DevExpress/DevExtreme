@@ -51,7 +51,7 @@ const SpeedDialItem = Overlay.inherit({
 
         const labelText = this.option("label");
 
-        if(!labelText || labelText === "") {
+        if(!labelText) {
             this._$label = null;
             return;
         }
@@ -67,7 +67,10 @@ const SpeedDialItem = Overlay.inherit({
 
 
     _isPositionLeft(position) {
-        const currentLocation = position ? (position.at ? position.at : position) : "";
+        const currentLocation = position ?
+            (position.at ? (position.at.x ? position.at.x : position.at)
+                : position)
+            : "";
 
         return currentLocation.startsWith("left");
     },
