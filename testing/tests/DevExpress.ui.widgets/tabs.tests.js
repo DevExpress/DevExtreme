@@ -3,49 +3,45 @@ import domUtils from "core/utils/dom";
 import holdEvent from "events/hold";
 import pointerMock from "../../helpers/pointerMock.js";
 import { DataSource } from "data/data_source/data_source";
+import { extend } from "core/utils/extend";
 
 import "ui/tabs";
 import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
-    var markup =
-        '<style>\
-            #scrollableTabs .dx-tab {\
-                display: table-cell;\
-                padding: 35px;\
-            }\
-            \
-            .bigtab.dx-tabs-expanded .dx-tab {\
-                width: 1000px;\
-            }\
-        </style>\
-        \
-        <div id="tabs">\
-        \
-        </div>\
-        <div id="widget"></div>\
-        <div id="widthRootStyle" style="width: 300px;"></div>\
-        \
-        <div id="scrollableTabs"></div>';
+    const markup =
+        `<style>
+            #scrollableTabs .dx-tab {
+                display: table-cell;
+                padding: 35px;
+            }
+            
+            .bigtab.dx-tabs-expanded .dx-tab {
+                width: 1000px;
+            }
+        </style>
+        <div id="tabs"></div>
+        <div id="widget"></div>
+        <div id="widthRootStyle" style="width: 300px;"></div>
+        <div id="scrollableTabs"></div>`;
 
     $("#qunit-fixture").html(markup);
 });
 
-var TABS_ITEM_CLASS = "dx-tab",
-    TAB_SELECTED_CLASS = "dx-tab-selected",
-    TABS_SCROLLABLE_CLASS = "dx-tabs-scrollable",
-    TABS_WRAPPER_CLASS = "dx-tabs-wrapper",
-    TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button",
-    TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons",
-    TABS_LEFT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-left",
-    TABS_RIGHT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-right",
-    BUTTON_NEXT_ICON = "chevronnext",
-    BUTTON_PREV_ICON = "chevronprev",
-    TAB_OFFSET = 30;
+const TABS_ITEM_CLASS = "dx-tab";
+const TAB_SELECTED_CLASS = "dx-tab-selected";
+const TABS_SCROLLABLE_CLASS = "dx-tabs-scrollable";
+const TABS_WRAPPER_CLASS = "dx-tabs-wrapper";
+const TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button";
+const TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons";
+const TABS_LEFT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-left";
+const TABS_RIGHT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-right";
+const BUTTON_NEXT_ICON = "chevronnext";
+const BUTTON_PREV_ICON = "chevronprev";
+const TAB_OFFSET = 30;
 
-var toSelector = function(cssClass) {
-    return "." + cssClass;
-};
+const toSelector = cssClass => `.${cssClass}`;
 
 QUnit.module("general");
 
@@ -678,22 +674,22 @@ QUnit.module("Live Update", {
             text: "1",
             content: "1 tab content"
         }];
-        this.createTabs = (dataSourceOptions, repaintChangesOnly) => {
-            var dataSource = new DataSource($.extend({
+        this.createTabs = (dataSourceOptions, tabOptions) => {
+            const dataSource = new DataSource($.extend({
                 paginate: false,
                 pushAggregationTimeout: 0,
                 load: () => this.data,
                 key: "id"
             }, dataSourceOptions));
 
-            return $("#tabs").dxTabs({
-                dataSource: dataSource,
-                repaintChangesOnly: repaintChangesOnly,
-                onContentReady: (e) => {
-                    e.component.option("onItemRendered", this.itemRenderedSpy);
-                    e.component.option("onItemDeleted", this.itemDeletedSpy);
-                }
-            }).dxTabs("instance");
+            return $("#tabs").dxTabs(
+                extend(tabOptions, {
+                    dataSource,
+                    onContentReady: e => {
+                        e.component.option("onItemRendered", this.itemRenderedSpy);
+                        e.component.option("onItemDeleted", this.itemDeletedSpy);
+                    }
+                })).dxTabs("instance");
         };
     }
 }, function() {
@@ -723,7 +719,7 @@ QUnit.module("Live Update", {
 
         assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, "check added item");
-        assert.ok($(this.itemRenderedSpy.firstCall.args[0].itemElement).parent().hasClass("dx-tabs-wrapper"), "check item container");
+        assert.ok($(this.itemRenderedSpy.firstCall.args[0].itemElement).parent().hasClass(TABS_WRAPPER_CLASS), "check item container");
     });
 
     QUnit.test("remove item", function(assert) {
@@ -738,7 +734,7 @@ QUnit.module("Live Update", {
     });
 
     QUnit.test("repaintChangesOnly, update item instance", function(assert) {
-        var dataSource = this.createTabs({}, true).getDataSource();
+        var dataSource = this.createTabs({}, { repaintChangesOnly: true }).getDataSource();
 
         this.data[0] = {
             id: 0,
@@ -752,7 +748,7 @@ QUnit.module("Live Update", {
     });
 
     QUnit.test("repaintChangesOnly, add item", function(assert) {
-        var dataSource = this.createTabs({}, true).getDataSource();
+        var dataSource = this.createTabs({}, { repaintChangesOnly: true }).getDataSource();
 
         this.data.push({
             id: 2,
@@ -763,6 +759,102 @@ QUnit.module("Live Update", {
 
         assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
-        assert.ok($(this.itemRenderedSpy.firstCall.args[0].itemElement).parent().hasClass("dx-tabs-wrapper"), "check item container");
+        assert.ok($(this.itemRenderedSpy.firstCall.args[0].itemElement).parent().hasClass(TABS_WRAPPER_CLASS), "check item container");
+    });
+
+    QUnit.test("Show nav buttons when new item is added", function(assert) {
+        this.data = this.data.map(item => `item ${item.text}`);
+
+        const tabs = this.createTabs({}, {
+            repaintChangesOnly: true,
+            showNavButtons: true,
+            width: 150
+        });
+        const store = tabs.getDataSource().store();
+
+        store.push([{
+            type: "insert",
+            data: {
+                id: 2,
+                text: "2 Inserted",
+                content: "2 tab content"
+            }
+        }]);
+
+        const $element = tabs.$element();
+        assert.equal($element.find(`.${TABS_LEFT_NAV_BUTTON_CLASS}`).length, 1, "left nav button is shown");
+        assert.equal($element.find(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`).length, 1, "right nav button is shown");
+    });
+
+    QUnit.test("Hide nav buttons when item is removed", function(assert) {
+        this.data = this.data.map(item => `item ${item.text}`);
+        this.data.push({
+            id: 2,
+            text: "item 2",
+            content: "2 tab content"
+        });
+
+        const tabs = this.createTabs({}, {
+            repaintChangesOnly: true,
+            showNavButtons: true,
+            width: 150
+        });
+        const store = tabs.getDataSource().store();
+
+        store.push([{
+            type: "remove",
+            key: 2
+        }]);
+
+        const $element = tabs.$element();
+        assert.equal($element.find(`.${TABS_LEFT_NAV_BUTTON_CLASS}`).length, 0, "left nav button is hidden");
+        assert.equal($element.find(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`).length, 0, "right nav button is hidden");
+    });
+
+    QUnit.test("Enable scrolling when new item is added", function(assert) {
+        this.data = this.data.map(item => `item ${item.text}`);
+
+        const tabs = this.createTabs({}, {
+            repaintChangesOnly: true,
+            showNavButtons: false,
+            width: 150
+        });
+        const store = tabs.getDataSource().store();
+
+        store.push([{
+            type: "insert",
+            data: {
+                id: 2,
+                text: "2 Inserted",
+                content: "2 tab content"
+            }
+        }]);
+
+        const $element = tabs.$element();
+        assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, "scrolling is enabled");
+    });
+
+    QUnit.test("Disable scrolling when item is removed", function(assert) {
+        this.data = this.data.map(item => `item ${item.text}`);
+        this.data.push({
+            id: 2,
+            text: "item 2",
+            content: "2 tab content"
+        });
+
+        const tabs = this.createTabs({}, {
+            repaintChangesOnly: true,
+            showNavButtons: false,
+            width: 150
+        });
+        const store = tabs.getDataSource().store();
+
+        store.push([{
+            type: "remove",
+            key: 2
+        }]);
+
+        const $element = tabs.$element();
+        assert.equal($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, "scrolling is disabled");
     });
 });
