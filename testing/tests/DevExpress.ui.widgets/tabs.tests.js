@@ -7,7 +7,6 @@ import { extend } from "core/utils/extend";
 
 import "ui/tabs";
 import "common.css!";
-import "generic_light.css!";
 
 QUnit.testStart(function() {
     const markup =
@@ -768,7 +767,7 @@ QUnit.module("Live Update", {
         const tabs = this.createTabs({}, {
             repaintChangesOnly: true,
             showNavButtons: true,
-            width: 150
+            width: 100
         });
         const store = tabs.getDataSource().store();
 
@@ -797,7 +796,7 @@ QUnit.module("Live Update", {
         const tabs = this.createTabs({}, {
             repaintChangesOnly: true,
             showNavButtons: true,
-            width: 150
+            width: 100
         });
         const store = tabs.getDataSource().store();
 
@@ -817,7 +816,7 @@ QUnit.module("Live Update", {
         const tabs = this.createTabs({}, {
             repaintChangesOnly: true,
             showNavButtons: false,
-            width: 150
+            width: 100
         });
         const store = tabs.getDataSource().store();
 
@@ -845,7 +844,7 @@ QUnit.module("Live Update", {
         const tabs = this.createTabs({}, {
             repaintChangesOnly: true,
             showNavButtons: false,
-            width: 150
+            width: 100
         });
         const store = tabs.getDataSource().store();
 
