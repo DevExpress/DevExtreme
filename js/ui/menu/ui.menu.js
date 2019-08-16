@@ -1,56 +1,56 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    registerComponent = require("../../core/component_registrator"),
-    commonUtils = require("../../core/utils/common"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    getElementMaxHeightByWindow = require("../overlay/utils").getElementMaxHeightByWindow,
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    hoverEvents = require("../../events/hover"),
-    MenuBase = require("../context_menu/ui.menu_base"),
-    Overlay = require("../overlay"),
-    Submenu = require("./ui.submenu"),
-    Button = require("../button"),
-    TreeView = require("../tree_view");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import registerComponent from "../../core/component_registrator";
+import commonUtils from "../../core/utils/common";
+import { getPublicElement } from "../../core/utils/dom";
+import { each } from "../../core/utils/iterator";
+import typeUtils from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { getElementMaxHeightByWindow } from "../overlay/utils";
+import eventUtils from "../../events/utils";
+import pointerEvents from "../../events/pointer";
+import hoverEvents from "../../events/hover";
+import MenuBase from "../context_menu/ui.menu_base";
+import Overlay from "../overlay";
+import Submenu from "./ui.submenu";
+import Button from "../button";
+import TreeView from "../tree_view";
 
-var DX_MENU_CLASS = "dx-menu",
-    DX_MENU_VERTICAL_CLASS = DX_MENU_CLASS + "-vertical",
-    DX_MENU_HORIZONTAL_CLASS = DX_MENU_CLASS + "-horizontal",
-    DX_MENU_ITEM_CLASS = DX_MENU_CLASS + "-item",
-    DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + "-items-container",
-    DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + "-expanded",
-    DX_CONTEXT_MENU_CLASS = "dx-context-menu",
-    DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS = DX_CONTEXT_MENU_CLASS + "-container-border",
-    DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = "dx-context-menu-content-delimiter",
-    DX_SUBMENU_CLASS = "dx-submenu",
+const DX_MENU_CLASS = "dx-menu";
+const DX_MENU_VERTICAL_CLASS = DX_MENU_CLASS + "-vertical";
+const DX_MENU_HORIZONTAL_CLASS = DX_MENU_CLASS + "-horizontal";
+const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + "-item";
+const DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + "-items-container";
+const DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + "-expanded";
+const DX_CONTEXT_MENU_CLASS = "dx-context-menu";
+const DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS = DX_CONTEXT_MENU_CLASS + "-container-border";
+const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = "dx-context-menu-content-delimiter";
+const DX_SUBMENU_CLASS = "dx-submenu";
 
-    DX_STATE_DISABLED_CLASS = "dx-state-disabled",
-    DX_STATE_HOVER_CLASS = "dx-state-hover",
-    DX_STATE_ACTIVE_CLASS = "dx-state-active",
+const DX_STATE_DISABLED_CLASS = "dx-state-disabled";
+const DX_STATE_HOVER_CLASS = "dx-state-hover";
+const DX_STATE_ACTIVE_CLASS = "dx-state-active";
 
-    DX_ADAPTIVE_MODE_CLASS = DX_MENU_CLASS + "-adaptive-mode",
-    DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS = DX_MENU_CLASS + "-hamburger-button",
-    DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS = DX_ADAPTIVE_MODE_CLASS + "-overlay-wrapper",
+const DX_ADAPTIVE_MODE_CLASS = DX_MENU_CLASS + "-adaptive-mode";
+const DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS = DX_MENU_CLASS + "-hamburger-button";
+const DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS = DX_ADAPTIVE_MODE_CLASS + "-overlay-wrapper";
 
 
-    FOCUS_UP = "up",
-    FOCUS_DOWN = "down",
-    FOCUS_LEFT = "left",
-    FOCUS_RIGHT = "right",
+const FOCUS_UP = "up";
+const FOCUS_DOWN = "down";
+const FOCUS_LEFT = "left";
+const FOCUS_RIGHT = "right";
 
-    SHOW_SUBMENU_OPERATION = "showSubmenu",
-    NEXTITEM_OPERATION = "nextItem",
-    PREVITEM_OPERATION = "prevItem",
+const SHOW_SUBMENU_OPERATION = "showSubmenu";
+const NEXTITEM_OPERATION = "nextItem";
+const PREVITEM_OPERATION = "prevItem";
 
-    DEFAULT_DELAY = {
-        "show": 50,
-        "hide": 300
-    },
+const DEFAULT_DELAY = {
+    "show": 50,
+    "hide": 300
+};
 
-    ACTIONS = ["onSubmenuShowing", "onSubmenuShown", "onSubmenuHiding", "onSubmenuHidden", "onItemContextMenu", "onItemClick", "onSelectionChanged"];
+const ACTIONS = ["onSubmenuShowing", "onSubmenuShown", "onSubmenuHiding", "onSubmenuHidden", "onItemContextMenu", "onItemClick", "onSelectionChanged"];
 
 var Menu = MenuBase.inherit({
 
