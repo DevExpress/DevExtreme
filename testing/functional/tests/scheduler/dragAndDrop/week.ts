@@ -23,7 +23,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('9:30 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('10:00 AM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
@@ -36,7 +36,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('10:30 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('11:00 AM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
@@ -51,7 +51,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('9:30 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('10:30 AM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
@@ -64,7 +64,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('10:30 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('11:30 AM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
@@ -79,7 +79,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('9:30 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('11:00 AM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
@@ -92,7 +92,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('10:30 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('12:00 PM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
@@ -107,7 +107,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('9:30 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('10:30 AM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
@@ -122,7 +122,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('9:00 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('9:30 AM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
@@ -137,7 +137,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('9:00 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('10:00 AM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
@@ -152,7 +152,7 @@ test('Drag-and-drop appointments in week', async t => {
 		.eql(await scheduler.getAppointmentElementSize(appointment).height,
 			"Appointment height incorrect")
         .expect('9:00 AM')
-		.eql(await scheduler.getAppointmentElementTime(firstAppointment).startTime,
+		.eql(await scheduler.getAppointmentElementTime(appointment).startTime,
 			"Appointment startTime incorrect")
         .expect('10:30 AM')
 		.eql(await scheduler.getAppointmentElementTime(appointment).endTime,
