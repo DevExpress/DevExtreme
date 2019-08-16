@@ -1,50 +1,50 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    devices = require("../core/devices"),
-    registerComponent = require("../core/component_registrator"),
-    Button = require("./button"),
-    inkRipple = require("./widget/utils.ink_ripple"),
-    eventUtils = require("../events/utils"),
-    extend = require("../core/utils/extend").extend,
-    isPlainObject = require("../core/utils/type").isPlainObject,
-    pointerEvents = require("../events/pointer"),
-    iteratorUtils = require("../core/utils/iterator"),
-    TabsItem = require("./tabs/item"),
-    themes = require("./themes"),
-    holdEvent = require("../events/hold"),
-    Scrollable = require("./scroll_view/ui.scrollable"),
-    CollectionWidget = require("./collection/ui.collection_widget.live_update").default,
-    iconUtils = require("../core/utils/icon"),
-    BindableTemplate = require("./widget/bindable_template");
+import $ from "../core/renderer";
+import eventsEngine from "../events/core/events_engine";
+import devices from "../core/devices";
+import registerComponent from "../core/component_registrator";
+import Button from "./button";
+import inkRipple from "./widget/utils.ink_ripple";
+import { addNamespace } from "../events/utils";
+import { extend } from "../core/utils/extend";
+import { isPlainObject } from "../core/utils/type";
+import pointerEvents from "../events/pointer";
+import { each } from "../core/utils/iterator";
+import TabsItem from "./tabs/item";
+import themes from "./themes";
+import holdEvent from "../events/hold";
+import Scrollable from "./scroll_view/ui.scrollable";
+import { default as CollectionWidget } from "./collection/ui.collection_widget.live_update";
+import { getImageContainer } from "../core/utils/icon";
+import BindableTemplate from "./widget/bindable_template";
 
-var TABS_CLASS = "dx-tabs",
-    TABS_WRAPPER_CLASS = "dx-tabs-wrapper",
-    TABS_EXPANDED_CLASS = "dx-tabs-expanded",
-    TABS_STRETCHED_CLASS = "dx-tabs-stretched",
-    TABS_SCROLLABLE_CLASS = "dx-tabs-scrollable",
-    TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons",
+const TABS_CLASS = "dx-tabs";
+const TABS_WRAPPER_CLASS = "dx-tabs-wrapper";
+const TABS_EXPANDED_CLASS = "dx-tabs-expanded";
+const TABS_STRETCHED_CLASS = "dx-tabs-stretched";
+const TABS_SCROLLABLE_CLASS = "dx-tabs-scrollable";
+const TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons";
 
-    OVERFLOW_HIDDEN_CLASS = "dx-overflow-hidden",
+const OVERFLOW_HIDDEN_CLASS = "dx-overflow-hidden";
 
-    TABS_ITEM_CLASS = "dx-tab",
-    TABS_ITEM_SELECTED_CLASS = "dx-tab-selected",
+const TABS_ITEM_CLASS = "dx-tab";
+const TABS_ITEM_SELECTED_CLASS = "dx-tab-selected";
 
-    TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button",
-    TABS_LEFT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-left",
-    TABS_RIGHT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-right",
+const TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button";
+const TABS_LEFT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-left";
+const TABS_RIGHT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-right";
 
-    TABS_ITEM_TEXT_CLASS = "dx-tab-text",
+const TABS_ITEM_TEXT_CLASS = "dx-tab-text";
 
-    TABS_ITEM_DATA_KEY = "dxTabData",
+const TABS_ITEM_DATA_KEY = "dxTabData";
 
-    BUTTON_NEXT_ICON = "chevronnext",
-    BUTTON_PREV_ICON = "chevronprev",
+const BUTTON_NEXT_ICON = "chevronnext";
+const BUTTON_PREV_ICON = "chevronprev";
 
-    FEEDBACK_HIDE_TIMEOUT = 100,
-    FEEDBACK_DURATION_INTERVAL = 5,
-    FEEDBACK_SCROLL_TIMEOUT = 300,
+const FEEDBACK_HIDE_TIMEOUT = 100;
+const FEEDBACK_DURATION_INTERVAL = 5;
+const FEEDBACK_SCROLL_TIMEOUT = 300;
 
-    TAB_OFFSET = 30;
+const TAB_OFFSET = 30;
 
 
 /**
@@ -54,7 +54,7 @@ var TABS_CLASS = "dx-tabs",
 * @export default
 */
 
-var Tabs = CollectionWidget.inherit({
+const Tabs = CollectionWidget.inherit({
 
     _activeStateUnit: "." + TABS_ITEM_CLASS,
 
@@ -219,7 +219,7 @@ var Tabs = CollectionWidget.inherit({
                 $container.text(String(data));
             }
 
-            var $iconElement = iconUtils.getImageContainer(data.icon);
+            var $iconElement = getImageContainer(data.icon);
 
             $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
             $iconElement && $iconElement.prependTo($container);
@@ -297,7 +297,7 @@ var Tabs = CollectionWidget.inherit({
             elementWidth = this.$element().width(),
             itemsWidth = [];
 
-        iteratorUtils.each($visibleItems, (_, item) => {
+        each($visibleItems, (_, item) => {
             itemsWidth.push($(item).outerWidth(true));
         });
 
@@ -424,9 +424,9 @@ var Tabs = CollectionWidget.inherit({
                 }, FEEDBACK_DURATION_INTERVAL);
             }),
 
-            holdEventName = eventUtils.addNamespace(holdEvent.name, "dxNavButton"),
-            pointerUpEventName = eventUtils.addNamespace(pointerEvents.up, "dxNavButton"),
-            pointerOutEventName = eventUtils.addNamespace(pointerEvents.out, "dxNavButton");
+            holdEventName = addNamespace(holdEvent.name, "dxNavButton"),
+            pointerUpEventName = addNamespace(pointerEvents.up, "dxNavButton"),
+            pointerOutEventName = addNamespace(pointerEvents.out, "dxNavButton");
 
         var navButton = this._createComponent($("<div>").addClass(TABS_NAV_BUTTON_CLASS), Button, {
             focusStateEnabled: false,
@@ -505,6 +505,16 @@ var Tabs = CollectionWidget.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    _afterItemElementInserted() {
+        this.callBase();
+        this._renderScrolling();
+    },
+
+    _afterItemElementDeleted($item, deletedActionArgs) {
+        this.callBase($item, deletedActionArgs);
+        this._renderScrolling();
     }
 
 });
