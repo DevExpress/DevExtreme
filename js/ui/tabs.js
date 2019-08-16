@@ -15,7 +15,7 @@ import holdEvent from "../events/hold";
 import Scrollable from "./scroll_view/ui.scrollable";
 import { default as CollectionWidget } from "./collection/ui.collection_widget.live_update";
 import { getImageContainer } from "../core/utils/icon";
-import BindableTemplate from "./widget/bindable_template";
+import { BindableTemplate } from "../core/templates/bindable_template";
 
 const TABS_CLASS = "dx-tabs";
 const TABS_WRAPPER_CLASS = "dx-tabs-wrapper";
