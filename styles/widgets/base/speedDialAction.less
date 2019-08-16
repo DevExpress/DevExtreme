@@ -19,7 +19,6 @@
                 .dx-fa-button-label {
                     position: static;
                     background: none;
-                    float: right;
                     line-height: @main-action-button-size;
                     color: @button-default-color;
                     box-shadow: none;
@@ -33,9 +32,13 @@
             }
 
             &.dx-fa-button-has-label {
-                .dx-fa-button-icon,
-                .dx-fa-button-icon-close {
-                    padding: (@main-action-button-size - @icon-size) / 2 0 (@main-action-button-size - @icon-size) / 2 12px;
+                .dx-overlay-content {
+                    display: flex;
+
+                    .dx-fa-button-icon,
+                    .dx-fa-button-icon-close {
+                        padding: (@main-action-button-size - @icon-size) / 2 0 (@main-action-button-size - @icon-size) / 2 12px;
+                    }
                 }
             }
         }
