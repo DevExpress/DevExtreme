@@ -320,7 +320,7 @@ class Menu extends MenuBase {
     }
 
     _updateItemsWidthCache() {
-        const $menuItems = this.$element().find("ul").first().children("li").children("." + DX_MENU_ITEM_CLASS);
+        const $menuItems = this.$element().find("ul").first().children("li").children(`.${DX_MENU_ITEM_CLASS}`);
         this._menuItemsWidth = this._getSummaryItemsWidth($menuItems, true);
     }
 
@@ -341,9 +341,9 @@ class Menu extends MenuBase {
     _initActions() {
         this._actions = {};
 
-        each(ACTIONS, (function(index, action) {
+        each(ACTIONS, (index, action) => {
             this._actions[action] = this._createActionByOption(action);
-        }).bind(this));
+        });
     }
 
     _initMarkup() {
@@ -382,8 +382,8 @@ class Menu extends MenuBase {
     }
 
     _toggleAdaptiveMode(state) {
-        const $menuItemsContainer = this.$element().find("." + DX_MENU_HORIZONTAL_CLASS);
-        const $adaptiveElements = this.$element().find("." + DX_ADAPTIVE_MODE_CLASS);
+        const $menuItemsContainer = this.$element().find(`.${DX_MENU_HORIZONTAL_CLASS}`);
+        const $adaptiveElements = this.$element().find(`.${DX_ADAPTIVE_MODE_CLASS}`);
 
         if(state) {
             this._hideVisibleSubmenu();
@@ -421,19 +421,19 @@ class Menu extends MenuBase {
         const position = rtl ? "right" : "left";
 
         return {
-            maxHeight: function() {
+            maxHeight: () => {
                 return getElementMaxHeightByWindow(this.$element());
-            }.bind(this),
+            },
             deferRendering: false,
             shading: false,
             animation: false,
             closeOnTargetScroll: true,
-            onHidden: (function() {
+            onHidden: () => {
                 this._toggleHamburgerActiveState(false);
-            }).bind(this),
+            },
             height: "auto",
             closeOnOutsideClick(e) {
-                return !($(e.target).closest("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).length);
+                return !($(e.target).closest(`.${DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS}`).length);
             },
             position: {
                 collision: "flipfit",
@@ -454,11 +454,11 @@ class Menu extends MenuBase {
         ];
         const actionsToTransfer = ["onItemContextMenu", "onSelectionChanged"];
 
-        each(optionsToTransfer, function(_, option) {
+        each(optionsToTransfer, (_, option) => {
             menuOptions[option] = this.option(option);
         });
 
-        each(actionsToTransfer, function(_, actionName) {
+        each(actionsToTransfer, (_, actionName) => {
             menuOptions[actionName] = (e) => {
                 this._actions[actionName](e);
             };
@@ -610,7 +610,7 @@ class Menu extends MenuBase {
     _moveMainMenuFocus(direction) {
         const $items = this._getAvailableItems();
         const itemCount = $items.length;
-        const $currentItem = $items.filter("." + DX_MENU_ITEM_EXPANDED_CLASS).eq(0);
+        const $currentItem = $items.filter(`.${DX_MENU_ITEM_EXPANDED_CLASS}`).eq(0);
         let itemIndex = $items.index($currentItem);
 
         this._hideSubmenu(this._visibleSubmenu);
@@ -646,7 +646,7 @@ class Menu extends MenuBase {
         each(this._submenus, (index, submenu) => {
             const $submenu = submenu._itemContainer();
             const isOtherItem = !$submenu.is(targetSubmenu && targetSubmenu._itemContainer());
-            const $selectedItem = $submenu.find("." + this._selectedItemClass());
+            const $selectedItem = $submenu.find(`.${this._selectedItemClass()}`);
 
             if((isOtherItem && $selectedItem.length) || cleanAllSubmenus) {
                 $selectedItem.removeClass(this._selectedItemClass());
@@ -662,7 +662,7 @@ class Menu extends MenuBase {
     }
 
     _clearRootSelection() {
-        const $prevSelectedItem = this.$element().find("." + DX_MENU_ITEMS_CONTAINER_CLASS).first().children().children().filter("." + this._selectedItemClass());
+        const $prevSelectedItem = this.$element().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`).first().children().children().filter(`.${this._selectedItemClass()}`);
 
         if($prevSelectedItem.length) {
             let prevSelectedItemData;
@@ -679,7 +679,7 @@ class Menu extends MenuBase {
 
     _attachSubmenuHandlers($rootItem, submenu) {
         const $submenuOverlayContent = submenu.getOverlayContent();
-        const submenus = $submenuOverlayContent.find("." + DX_SUBMENU_CLASS);
+        const submenus = $submenuOverlayContent.find(`.${DX_SUBMENU_CLASS}`);
         const submenuMouseLeaveName = eventUtils.addNamespace(hoverEvents.end, this.NAME + "_submenu");
 
         submenu.option({
@@ -696,7 +696,7 @@ class Menu extends MenuBase {
     }
 
     _submenuOnShowingHandler($rootItem, submenu) {
-        const $border = $rootItem.children("." + DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS);
+        const $border = $rootItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
 
         this._actions.onSubmenuShowing({
             rootItem: getPublicElement($rootItem),
@@ -716,7 +716,7 @@ class Menu extends MenuBase {
     }
 
     _submenuOnHidingHandler($rootItem, submenu, eventArgs) {
-        const $border = $rootItem.children("." + DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS);
+        const $border = $rootItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
         let args = eventArgs;
 
         args.rootItem = getPublicElement($rootItem);
@@ -740,7 +740,7 @@ class Menu extends MenuBase {
     }
 
     _submenuMouseLeaveHandler($rootItem, eventArgs) {
-        const target = $(eventArgs.relatedTarget).parents("." + DX_CONTEXT_MENU_CLASS)[0];
+        const target = $(eventArgs.relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
         const contextMenu = this._getSubmenuByRootElement($rootItem).getOverlayContent()[0];
 
         if(this.option("hideSubmenuOnMouseLeave") && target !== contextMenu) {
@@ -755,7 +755,7 @@ class Menu extends MenuBase {
         }
 
         const isRootItemHovered = $(this._visibleSubmenu.$element().context).hasClass(DX_STATE_HOVER_CLASS);
-        const isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent().find("." + DX_STATE_HOVER_CLASS).length;
+        const isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent().find(`.${DX_STATE_HOVER_CLASS}`).length;
 
         if(!isSubmenuItemHovered && !isRootItemHovered) {
             this._visibleSubmenu.hide();
@@ -768,7 +768,7 @@ class Menu extends MenuBase {
             return false;
         }
 
-        const $submenu = $rootItem.children("." + DX_CONTEXT_MENU_CLASS);
+        const $submenu = $rootItem.children(`.${DX_CONTEXT_MENU_CLASS}`);
 
         return $submenu.length && Submenu.getInstance($submenu);
     }
@@ -857,7 +857,7 @@ class Menu extends MenuBase {
         const $item = this._getItemElementByEventArgs(eventArg);
         const relatedTarget = $(eventArg.relatedTarget);
 
-        this.callBase(eventArg);
+        super._hoverEndHandler(eventArg);
         this._clearTimeouts();
 
         if(this._isItemDisabled($item)) {
@@ -869,7 +869,7 @@ class Menu extends MenuBase {
         }
 
         if(this.option("hideSubmenuOnMouseLeave") && !relatedTarget.hasClass(DX_MENU_ITEMS_CONTAINER_CLASS)) {
-            this._hideSubmenuTimer = setTimeout(function() { this._hideSubmenuAfterTimeout(); }, this._getDelay("hide"));
+            this._hideSubmenuTimer = setTimeout(() => { this._hideSubmenuAfterTimeout(); }, this._getDelay("hide"));
         }
     }
 
@@ -1024,7 +1024,7 @@ class Menu extends MenuBase {
     }
 
     _changeSubmenusOption(name, value) {
-        each(this._submenus, function(index, submenu) {
+        each(this._submenus, (index, submenu) => {
             submenu.option(name, value);
         });
     }
