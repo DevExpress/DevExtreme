@@ -244,50 +244,40 @@ var BaseRenderingStrategy = Class.inherit({
         return width;
     },
 
-    _getSortedPositions: function(arr) {
-        var result = [],
-            // unstable sorting fix
-            __tmpIndex = 0;
+    _getSortedPositions: function(positionList) {
+        var result = [];
 
-        for(var i = 0, arrLength = arr.length; i < arrLength; i++) {
-            for(var j = 0, itemLength = arr[i].length; j < itemLength; j++) {
-                var item = arr[i][j];
+        var round = function(value) { return Math.round(value * 100) / 100; };
+        var createSortedItem = function(rowIndex, cellIndex, top, left, position, isStart, allDay, tmpIndex) {
+            return {
+                i: rowIndex,
+                j: cellIndex,
+                top: round(top),
+                left: round(left),
+                cellPosition: position,
+                isStart: isStart,
+                allDay: allDay,
+                __tmpIndex: tmpIndex
+            };
+        };
 
-                var start = {
-                    i: i,
-                    j: j,
-                    top: item.top,
-                    left: item.left,
-                    cellPosition: item.cellPosition,
-                    isStart: true,
-                    allDay: item.allDay,
-                    __tmpIndex: __tmpIndex
-                };
+        var tmpIndex = 0; // unstable sorting fix
 
-                __tmpIndex++;
+        for(var rowIndex = 0, rowCount = positionList.length; rowIndex < rowCount; rowIndex++) {
+            for(var cellIndex = 0, cellCount = positionList[rowIndex].length; cellIndex < cellCount; cellIndex++) {
+                var { top, left, height, width, cellPosition, allDay } = positionList[rowIndex][cellIndex];
 
-                var end = {
-                    i: i,
-                    j: j,
-                    top: item.top + item.height,
-                    left: item.left + item.width,
-                    cellPosition: item.cellPosition,
-                    isStart: false,
-                    allDay: item.allDay,
-                    __tmpIndex: __tmpIndex
-                };
+                var start = createSortedItem(rowIndex, cellIndex, top, left, cellPosition, true, allDay, tmpIndex);
+                tmpIndex++;
+
+                var end = createSortedItem(rowIndex, cellIndex, top + height, left + width, cellPosition, false, allDay, tmpIndex);
+                tmpIndex++;
 
                 result.push(start, end);
-
-                __tmpIndex++;
             }
         }
 
-        result.sort((function(a, b) {
-            return this._sortCondition(a, b);
-        }).bind(this));
-
-        return result;
+        return result.sort(function(a, b) { return this._sortCondition(a, b); }.bind(this));
     },
 
     _fixUnstableSorting: function(comparisonResult, a, b) {
