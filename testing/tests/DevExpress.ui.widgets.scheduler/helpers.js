@@ -152,6 +152,10 @@ export class SchedulerTestWrapper {
             }
         },
 
+        this.header = {
+            get: () => $(".dx-scheduler-header-panel")
+        },
+
         this.grouping = {
             getGroupHeaders: () => $(".dx-scheduler-group-header"),
             getGroupHeader: (index = 0) => this.grouping.getGroupHeaders().eq(index),
