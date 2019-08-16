@@ -316,7 +316,7 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _selectNextPart(step = 0) {
-        if(!this.option("text") || this._disposed) {
+        if(!this.option("text")) {
             return;
         }
 
