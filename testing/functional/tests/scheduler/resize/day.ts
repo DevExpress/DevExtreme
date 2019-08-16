@@ -6,81 +6,79 @@ import { createScheduler } from './init/widget.setup';
 
 import SchedulerTestHelper from '../../../helpers/scheduler.test.helper';
 
-const scheduler = new SchedulerTestHelper("#container");
 
-fixture`Resize appointments in the Scheduler widget with drag-and-drop gesture`
+fixture`Resize appointments in day view mode with the drag-and-drop gesture`
 	.page(getContainerFileUrl());
 
-test('Resize appointments in day view', async t => {
-	const halfHourCellHeight = 50;
-	const oneHourCellHeight = 2 * halfHourCellHeight;
+const scheduler = new SchedulerTestHelper("#container");
 
-	const firstAppointmentToBottomIncrease = await scheduler.getAppointmentByTitle('Brochure Design Review');
-	const firstAppointmentToBottomIncreaseHandle = await scheduler.getAppointmentResizableHandle(firstAppointmentToBottomIncrease);
+const halfHourCellHeight = 50;
+const oneHourCellHeight = 2 * halfHourCellHeight;
 
-	await t
-		.drag(firstAppointmentToBottomIncreaseHandle.bottom, 0, oneHourCellHeight);
 
-	await t
-		.expect('150px')
-		.eql(await scheduler.getAppointmentSize(firstAppointmentToBottomIncrease).height,
-			"Appointment height is incorrect after resize")
-		.expect('10:00 AM')
-		.eql(await scheduler.getAppointmentTime(firstAppointmentToBottomIncrease).startTime,
-			"Appointment startTime is incorrect after resize")
-		.expect('11:30 AM')
-		.eql(await scheduler.getAppointmentTime(firstAppointmentToBottomIncrease).endTime,
-			"Appointment endTime is incorrect after resize");
+test('Increase an appointment with resizing handle on the bottom', async t => {
+	const resizableAppointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
+	const resizableAppointmentHandle = await scheduler.getAppointmentResizableHandle(resizableAppointment);
 
-	const firstAppointmentToTopIncrease = await scheduler.getAppointmentByTitle('Brochure Design Review');
-	const firstAppointmentToTopIncreaseHandle = await scheduler.getAppointmentResizableHandle(firstAppointmentToTopIncrease);
+	await t.drag(resizableAppointmentHandle.bottom, 0, oneHourCellHeight);
 
-	await t
-		.drag(firstAppointmentToTopIncreaseHandle.top, 0, -oneHourCellHeight);
+	const resizableAppointmentSize = await scheduler.getAppointmentSize(resizableAppointment);
+	const resizableAppointmentTime = await scheduler.getAppointmentTime(resizableAppointment);
 
-	await t
-		.expect('250px')
-		.eql(await scheduler.getAppointmentSize(firstAppointmentToTopIncrease).height,
-			"Appointment height is incorrect after resize")
-		.expect('9:00 AM')
-		.eql(await scheduler.getAppointmentTime(firstAppointmentToTopIncrease).startTime,
-			"Appointment startTime is incorrect after resize")
-		.expect('11:30 AM')
-		.eql(await scheduler.getAppointmentTime(firstAppointmentToTopIncrease).endTime,
-			"Appointment endTime is incorrect after resize");
+	await t.expect('150px').eql(await resizableAppointmentSize.height)
 
-	const thirdAppointmentToBottomDecrease = await scheduler.getAppointmentByTitle('Staff Productivity Report');
-	const thirdAppointmentToBottomDecreaseHandle = await scheduler.getAppointmentResizableHandle(thirdAppointmentToBottomDecrease);
+		   .expect('10:00 AM').eql(await resizableAppointmentTime.startTime)
+		   .expect('11:30 AM').eql(await resizableAppointmentTime.endTime);
 
-	await t
-		.drag(thirdAppointmentToBottomDecreaseHandle.bottom, 0, -oneHourCellHeight);
+}).before(async () => { await createScheduler('day', dataSource) });
 
-	await t
-		.expect('150px')
-		.eql(await scheduler.getAppointmentSize(thirdAppointmentToBottomDecrease).height,
-			"Appointment height is incorrect after resize")
-		.expect('9:00 AM')
-		.eql(await scheduler.getAppointmentTime(thirdAppointmentToBottomDecrease).startTime,
-			"Appointment startTime is incorrect after resize")
-		.expect('10:30 AM')
-		.eql(await scheduler.getAppointmentTime(thirdAppointmentToBottomDecrease).endTime,
-			"Appointment endTime is incorrect after resize");
 
-	const thirdAppointmentToTopDecrease = await scheduler.getAppointmentByTitle('Staff Productivity Report');
-	const thirdAppointmentToTopDecreaseHandle = await scheduler.getAppointmentResizableHandle(thirdAppointmentToTopDecrease);
+test('Increase an appointment with resizing handle on the top', async t => {
+	const resizableAppointment = await scheduler.getAppointmentByTitle('Brochure Design Review');
+	const resizableAppointmentHandle = await scheduler.getAppointmentResizableHandle(resizableAppointment);
 
-	await t
-		.drag(thirdAppointmentToTopDecreaseHandle.top, 0, oneHourCellHeight);
+	await t.drag(resizableAppointmentHandle.top, 0, -oneHourCellHeight);
 
-	await t
-		.expect('50px')
-		.eql(await scheduler.getAppointmentSize(thirdAppointmentToTopDecrease).height,
-			"Appointment height is incorrect after resize")
-		.expect('10:00 AM')
-		.eql(await scheduler.getAppointmentTime(thirdAppointmentToTopDecrease).startTime,
-			"Appointment startTime is incorrect after resize")
-		.expect('10:30 AM')
-		.eql(await scheduler.getAppointmentTime(thirdAppointmentToTopDecrease).endTime,
-			"Appointment endTime is incorrect after resize");
+	const resizableAppointmentSize = await scheduler.getAppointmentSize(resizableAppointment);
+	const resizableAppointmentTime = await scheduler.getAppointmentTime(resizableAppointment);
+
+	await t.expect('150px').eql(await resizableAppointmentSize.height)
+
+		   .expect('9:00 AM').eql(await resizableAppointmentTime.startTime)
+		   .expect('10:30 AM').eql(await resizableAppointmentTime.endTime);
+
+}).before(async () => { await createScheduler('day', dataSource) });
+
+
+test('Decrease an appointment with resizing handle on the bottom', async t => {
+	const resizableAppointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
+	const resizableAppointmentHandle = await scheduler.getAppointmentResizableHandle(resizableAppointment);
+
+	await t.drag(resizableAppointmentHandle.bottom, 0, -oneHourCellHeight);
+
+	const resizableAppointmentSize = await scheduler.getAppointmentSize(resizableAppointment);
+	const resizableAppointmentTime = await scheduler.getAppointmentTime(resizableAppointment);
+
+	await t.expect('150px').eql(await resizableAppointmentSize.height)
+
+		   .expect('9:00 AM').eql(await resizableAppointmentTime.startTime)
+		   .expect('10:30 AM').eql(await resizableAppointmentTime.endTime);
+
+}).before(async () => { await createScheduler('day', dataSource) });
+
+
+test('Decrease an appointment with resizing handle on the top', async t => {
+	const resizableAppointment = await scheduler.getAppointmentByTitle('Staff Productivity Report');
+	const resizableAppointmentHandle = await scheduler.getAppointmentResizableHandle(resizableAppointment);
+
+	await t.drag(resizableAppointmentHandle.top, 0, oneHourCellHeight);
+
+	const resizableAppointmentSize = await scheduler.getAppointmentSize(resizableAppointment);
+	const resizableAppointmentTime = await scheduler.getAppointmentTime(resizableAppointment);
+
+	await t.expect('150px').eql(await resizableAppointmentSize.height)
+
+		   .expect('10:00 AM').eql(await resizableAppointmentTime.startTime)
+		   .expect('11:30 AM').eql(await resizableAppointmentTime.endTime);
 
 }).before(async () => { await createScheduler('day', dataSource) });
