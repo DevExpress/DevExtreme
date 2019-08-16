@@ -7,6 +7,7 @@ import { keysEqual } from "../../data/utils";
 import { when } from "../../core/utils/deferred";
 import { findChanges } from "../../core/utils/array_compare";
 import { insertElement } from "../../core/dom_adapter";
+import { noop } from "../../core/utils/common";
 
 export default CollectionWidget.inherit({
     _getDefaultOptions: function() {
@@ -113,6 +114,7 @@ export default CollectionWidget.inherit({
         when(isPartialRefresh || arrayUtils.insert(keyInfo, items, change.data, change.index)).done(() => {
             this._beforeItemElementInserted(change);
             this._renderItem(isDefined(change.index) ? change.index : items.length, change.data);
+            this._afterItemElementInserted();
             this._correctionIndex++;
         });
     },
@@ -136,6 +138,8 @@ export default CollectionWidget.inherit({
             this.option("selectedIndex", selectedIndex + 1);
         }
     },
+
+    _afterItemElementInserted: noop,
 
     _removeByChange: function(keyInfo, items, change, isPartialRefresh) {
         let index = isPartialRefresh ? change.index : arrayUtils.indexByKey(keyInfo, items, change.key),
