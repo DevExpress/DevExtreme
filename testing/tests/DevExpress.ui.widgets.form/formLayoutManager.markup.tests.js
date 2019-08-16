@@ -2806,6 +2806,30 @@ QUnit.module("Templates", () => {
         assert.equal(textArea.option("value"), layoutManager.option("layoutData.test"), "Widget's value equal to bound datafield");
     });
 
+    test("Check arguments of the template", (assert) => {
+        const templateStub = sinon.stub();
+        const layoutManager = $("#container").dxLayoutManager({
+            items: [{
+                name: "TestName",
+                dataField: "TestDataField",
+                editorType: "dxColorBox",
+                editorOptions: {
+                    text: "TestText"
+                },
+                template: templateStub
+            }]
+        }).dxLayoutManager("instance");
+
+        const args = templateStub.firstCall.args[0];
+        assert.strictEqual(args.name, "TestName", "name argument");
+        assert.strictEqual(args.dataField, "TestDataField", "dataField argument");
+        assert.strictEqual(args.editorType, "dxColorBox", "editorType argument");
+        assert.deepEqual(args.editorOptions.inputAttr, {}, "editorOptions.inputAttr argument");
+        assert.strictEqual(args.editorOptions.name, "TestDataField", "editorOptions.name argument");
+        assert.strictEqual(args.editorOptions.text, "TestText", "editorOptions.text argument");
+        assert.equal(args.component, layoutManager, "component argument");
+    });
+
     test("Check template bound to data", (assert) => {
         // arrange
         let $testContainer = $("#container");

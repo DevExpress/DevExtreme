@@ -590,7 +590,7 @@ QUnit.test("The formData is empty object when formData has 'undefined' value", f
     assert.deepEqual(viewModel.formData(), { });
 });
 
-QUnit.test("The name argument should contains in the template of the simple item", assert => {
+QUnit.test("Check name argument of the simple item template when name is defined", assert => {
     // arrange
     const viewModel = {
         items: [{ name: "TestName", template: "simpleTemplate2" }]
@@ -601,4 +601,43 @@ QUnit.test("The name argument should contains in the template of the simple item
 
     // assert
     assert.strictEqual($("#name").text(), "TestName", "the name argument of template");
+});
+
+QUnit.test("Check name argument of the simple item template when name and dataField are defined", assert => {
+    // arrange
+    const viewModel = {
+        items: [{ name: "TestName", dataField: "TestDataField", template: "simpleTemplate2" }]
+    };
+    const $form = $("#simpleTemplateForm2");
+
+    ko.applyBindings(viewModel, $form.get(0));
+
+    // assert
+    assert.strictEqual($("#name").text(), "TestName", "the name argument of template");
+});
+
+QUnit.test("Check name argument of the simple item template when name is undefined", assert => {
+    // arrange
+    const viewModel = {
+        items: [{ template: "simpleTemplate2" }]
+    };
+    const $form = $("#simpleTemplateForm2");
+
+    ko.applyBindings(viewModel, $form.get(0));
+
+    // assert
+    assert.strictEqual($("#name").text(), "", "the name argument of template");
+});
+
+QUnit.test("Check name argument of the simple item template when name is undefined and dataField is defined", assert => {
+    // arrange
+    const viewModel = {
+        items: [{ dataField: "TestDataField", template: "simpleTemplate2" }]
+    };
+    const $form = $("#simpleTemplateForm2");
+
+    ko.applyBindings(viewModel, $form.get(0));
+
+    // assert
+    assert.strictEqual($("#name").text(), "", "the name argument of template");
 });
