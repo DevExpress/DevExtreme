@@ -387,9 +387,7 @@ var CollectionWidget = Widget.inherit({
         const $focusedElement = $(this.option("focusedElement"));
 
         if($focusedElement.length) {
-            const $availableFocusedElement = this._tryGetAvailableFocusedElement($focusedElement);
-
-            if($availableFocusedElement.length) {
+            if(this._focusedElementIsAvailable($focusedElement)) {
                 return $focusedElement;
             }
         }
@@ -406,8 +404,8 @@ var CollectionWidget = Widget.inherit({
         return activeElements.eq(index);
     },
 
-    _tryGetAvailableFocusedElement($focusedElement) {
-        return $focusedElement;
+    _focusedElementIsAvailable() {
+        return true;
     },
 
     _renderFocusTarget: function() {

@@ -286,8 +286,8 @@ class ContextMenu extends MenuBase {
         return super._getActiveItem();
     }
 
-    _tryGetAvailableFocusedElement($focusedElement) {
-        return this._getAvailableItems().filter((_, item) => $(item).is($focusedElement));
+    _focusedElementIsAvailable($focusedElement) {
+        return this._getAvailableItems().filter((_, item) => $(item).is($focusedElement)).length;
     }
 
     _moveFocus(location) {
