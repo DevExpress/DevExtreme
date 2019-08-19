@@ -25,6 +25,11 @@ const ListEdit = ListBase.inherit({
             const editStrategy = this._editStrategy;
             const focusedElement = this.option("focusedElement");
             const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
+            const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
+
+            if(isLastIndexFocused && this._isDataSourceLoading()) {
+                return;
+            }
 
             if(e.shiftKey && that.option("allowItemReordering")) {
                 const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
