@@ -221,7 +221,7 @@ module("crossScrollingEnabled = true", config, () => {
                 crossScrollingEnabled: true,
             });
 
-            var $appointment = scheduler.appointments.getAppointment(),
+            const $appointment = scheduler.appointments.getAppointment(),
                 dragDistance = 150;
 
 
