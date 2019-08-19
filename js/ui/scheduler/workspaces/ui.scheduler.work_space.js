@@ -271,10 +271,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
         if(isMultiSelection) {
             $cell = this._correctCellForGroup($cell);
-            let orientation = (this.option("type") === "day" && (!this.option("groups").length || (this.option("groupOrientation") === "vertical")))
+            let orientation = this.option("type") === "day" && (!this.option("groups").length || this.option("groupOrientation") === "vertical")
                 ? "vertical"
                 : "horizontal";
-            var $targetCells = this._getCellsBetween($cell, this._$prevCell, orientation);
+            let $targetCells = this._getCellsBetween($cell, this._$prevCell, orientation);
             this._focusedCells = $targetCells.toArray();
         } else {
             this._focusedCells = [$cell.get(0)];
@@ -1947,14 +1947,14 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCells: function(allDay, direction) {
-        var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
+        let cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
         let rowClass = allDay ? ALL_DAY_TABLE_ROW_CLASS : DATE_TABLE_ROW_CLASS;
         if(direction === "vertical") {
-            let cells = [];
+            const cells = [];
             const rows = this.$element().find("." + rowClass);
-            for(var j = 0; j < rows.length; j++) {
+            for(let j = 0; j < rows.length; j++) {
                 const rowCells = rows.eq(j).find("." + cellClass);
-                for(var i = 0; i < rowCells.length; i++) {
+                for(let i = 0; i < rowCells.length; i++) {
                     if(j === 0) {
                         cells[i] = [];
                     }
