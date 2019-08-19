@@ -56,7 +56,7 @@ var captionize = function(name) {
 
     for(i = 0; i < name.length; i++) {
         char = name.charAt(i);
-        isNewWord = (char === char.toUpperCase() && char !== "-" && char !== ")") || (char in DIGIT_CHARS);
+        isNewWord = (char === char.toUpperCase() && char !== "-" && char !== ")" && char !== "/") || (char in DIGIT_CHARS);
         if(char === "_" || char === ".") {
             char = " ";
             isNewWord = true;
