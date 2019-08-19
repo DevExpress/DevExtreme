@@ -258,7 +258,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _defaultOptionsRules() {
-        return this._defaultOptionsRules().concat([
+        return super._defaultOptionsRules().concat([
             {
                 device: () => themes.isAndroid5(),
                 options: {
