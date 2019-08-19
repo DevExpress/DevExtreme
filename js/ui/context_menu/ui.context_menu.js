@@ -481,9 +481,7 @@ class ContextMenu extends MenuBase {
             const delay = this.getShowDelay(this.option("showEvent"));
 
             if(delay) {
-                setTimeout(() => {
-                    this._show(e.event);
-                }, delay);
+                setTimeout(() => this._show(e.event), delay);
             } else {
                 this._show(e.event);
             }
