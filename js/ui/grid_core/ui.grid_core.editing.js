@@ -1007,6 +1007,19 @@ var EditingController = modules.ViewController.inherit((function() {
          * @param2 dataField:string
          */
         editCell: function(rowIndex, columnIndex) {
+            let d = new Deferred(),
+                coreResult;
+
+            when(this._deferred).done(() => {
+                coreResult = this._editCellCore(rowIndex, columnIndex);
+                when(coreResult)
+                    .done(d.resolve)
+                    .fail(d.reject);
+            });
+
+            return coreResult !== undefined ? coreResult : d.promise();
+        },
+        _editCellCore: function(rowIndex, columnIndex) {
             var that = this,
                 columnsController = that._columnsController,
                 dataController = that._dataController,
@@ -1409,6 +1422,13 @@ var EditingController = modules.ViewController.inherit((function() {
          * @return Promise<void>
          */
         saveEditData: function() {
+            let d = new Deferred();
+            when(this._deferred).done(() => {
+                this._saveEditDataInner().done(d.resolve).fail(d.reject);
+            }).fail(d.reject);
+            return d;
+        },
+        _saveEditDataInner: function() {
             var that = this,
                 editData,
                 results = [],
@@ -1616,38 +1636,45 @@ var EditingController = modules.ViewController.inherit((function() {
          */
         closeEditCell: function(isError) {
             var that = this,
-                editMode = getEditMode(that),
-                oldEditRowIndex = that._getVisibleEditRowIndex(),
-                dataController = that._dataController,
                 result = deferredUtils.when();
 
             if(!isRowEditMode(that)) {
                 result = deferredUtils.Deferred();
-                setTimeout(function() {
-                    if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
-                        that.saveEditData().done(function(error) {
-                            if(!that.hasChanges()) {
-                                that.closeEditCell(!!error);
-                            }
-                        });
-                    } else if(oldEditRowIndex >= 0) {
-                        var rowIndices = [oldEditRowIndex];
-
-                        that._editRowIndex = -1;
-                        that._editColumnIndex = -1;
-
-                        that._beforeCloseEditCellInBatchMode(rowIndices);
-                        if(!isError) {
-                            dataController.updateItems({
-                                changeType: "update",
-                                rowIndices: rowIndices
-                            });
-                        }
-                    }
-                    result.resolve();
+                setTimeout(() => {
+                    when(this._deferred).done(() => {
+                        this._closeEditCellCore(isError);
+                        result.resolve();
+                    });
                 });
             }
             return result.promise();
+        },
+
+        _closeEditCellCore(isError) {
+            var that = this,
+                editMode = getEditMode(that),
+                oldEditRowIndex = that._getVisibleEditRowIndex(),
+                dataController = that._dataController;
+            if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
+                that.saveEditData().done(function(error) {
+                    if(!that.hasChanges()) {
+                        that.closeEditCell(!!error);
+                    }
+                });
+            } else if(oldEditRowIndex >= 0) {
+                var rowIndices = [oldEditRowIndex];
+
+                that._editRowIndex = -1;
+                that._editColumnIndex = -1;
+
+                that._beforeCloseEditCellInBatchMode(rowIndices);
+                if(!isError) {
+                    dataController.updateItems({
+                        changeType: "update",
+                        rowIndices: rowIndices
+                    });
+                }
+            }
         },
 
         update: function(changeType) {
@@ -1673,14 +1700,35 @@ var EditingController = modules.ViewController.inherit((function() {
                 oldData = options.data,
                 rowKey = options.key,
                 $cellElement = $(options.cellElement),
-                editMode = getEditMode(that);
+                editMode = getEditMode(that),
+                deferred = new Deferred(),
+                setCellValueResult;
+
+            function createFailureHandler(deferred) {
+                return function(arg) {
+                    var error = arg instanceof Error ? arg : new Error(arg && String(arg) || "Unknown error");
+                    let $popupContent = that.getPopupContent();
+                    that._dataController.dataErrorOccurred.fire(arg, $popupContent);
+                    deferred.reject(error);
+                };
+            }
 
             if(rowKey !== undefined) {
                 if(editMode === EDIT_MODE_BATCH) {
                     that._applyModified($cellElement, options);
                 }
                 options.value = value;
-                options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
+
+                setCellValueResult = when(fromPromise(options.column.setCellValue(newData, value, extend(true, {}, oldData), text)));
+                setCellValueResult.done(function() {
+                    deferred.resolve({
+                        data: newData,
+                        key: rowKey,
+                        oldData: oldData,
+                        type: DATA_EDIT_DATA_UPDATE_TYPE
+                    });
+                }).fail(createFailureHandler(deferred));
+
                 if(text && options.column.displayValueMap) {
                     options.column.displayValueMap[value] = text;
                 }
@@ -1689,12 +1737,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
             }
 
-            return {
-                data: newData,
-                key: rowKey,
-                oldData: oldData,
-                type: DATA_EDIT_DATA_UPDATE_TYPE
-            };
+            that._deferred = setCellValueResult;
+            return deferred;
         },
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
@@ -1706,9 +1750,9 @@ var EditingController = modules.ViewController.inherit((function() {
             }
 
             if(options.column.setCellValue) {
-                var params = this._prepareEditDataParams(options, value, text);
-
-                return this._applyEditDataParams(options, params, forceUpdateRow);
+                this._prepareEditDataParams(options, value, text).done(params => {
+                    this._applyEditDataParams(options, params, forceUpdateRow);
+                });
             }
         },
         _focusPreviousEditingCellIfNeed: function(options) {
