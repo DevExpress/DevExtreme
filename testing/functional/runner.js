@@ -10,9 +10,10 @@ createTestCafe('localhost', 1437, 1438)
 
         var args = getArgs(),
             testName = args.test.trim(),
+            componentFolder = args.componentFolder.trim(),
             runner = testCafe.createRunner()
                 .browsers(args.browsers.split(" "))
-                .src(["./testing/functional/tests/**/*.ts"]);
+                .src([`./testing/functional/tests/${componentFolder}/*.ts`]);
 
         if(testName) {
             runner.filter(name => name === testName);
@@ -33,7 +34,8 @@ function getArgs() {
     return parseArgs(process.argv.slice(1), {
         default: {
             browsers: "chrome",
-            test: ""
+            test: "",
+            componentFolder: "**"
         }
     });
 }
