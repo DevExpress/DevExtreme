@@ -8,6 +8,7 @@ import HierarchicalCollectionWidget from "../hierarchical_collection/ui.hierarch
 import MenuBaseEditStrategy from "./ui.menu_base.edit.strategy";
 import devices from "../../core/devices";
 import MenuItem from "../collection/item";
+import themes from "../themes";
 
 const DX_MENU_CLASS = "dx-menu";
 const DX_MENU_NO_ICONS_CLASS = DX_MENU_CLASS + "-no-icons";
@@ -254,6 +255,17 @@ class MenuBase extends HierarchicalCollectionWidget {
             * @default true
             */
         });
+    }
+
+    _defaultOptionsRules() {
+        return this._defaultOptionsRules().concat([
+            {
+                device: () => themes.isAndroid5(),
+                options: {
+                    useInkRipple: true
+                }
+            }
+        ]);
     }
 
     _itemDataKey() {
