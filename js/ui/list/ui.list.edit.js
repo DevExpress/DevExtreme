@@ -22,31 +22,23 @@ const ListEdit = ListBase.inherit({
         };
 
         const moveFocusedItem = (e, moveUp) => {
-            const moveDown = !moveUp;
             const editStrategy = this._editStrategy;
             const focusedElement = this.option("focusedElement");
             const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
 
             if(e.shiftKey && that.option("allowItemReordering")) {
-                const nextItemIndex = focusedItemIndex + moveUp ? -1 : 1;
+                const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
                 const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
                 this.reorderItem(focusedElement, $nextItem);
                 this.scrollToItem(focusedElement);
                 e.preventDefault();
             } else {
-                const isLastItemFocused = focusedItemIndex === this._getLastItemIndex();
-                const isSelectAllCheckBoxFocused = focusedItemIndex === -1;
                 const editProvider = this._editProvider;
+                const isInternalMoving = editProvider.handleKeyboardEvents(focusedItemIndex, moveUp);
 
-                editProvider.handleKeyboardEvents(focusedItemIndex, moveUp);
-
-                if(moveUp && focusedItemIndex > 0) {
-                    parent.upArrow(e);
-                }
-
-                if(moveDown && !isLastItemFocused && !isSelectAllCheckBoxFocused) {
-                    parent.downArrow(e);
+                if(!isInternalMoving) {
+                    moveUp ? parent.upArrow(e) : parent.downArrow(e);
                 }
             }
         };

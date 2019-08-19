@@ -106,19 +106,21 @@ registerDecorator(
 
             if(hasSelectAllItem && isFocusOutOfList) {
                 list.focusListElement($selectAll);
+
+                return true;
             } else {
-                const isSelectAllFocused = currentFocusedIndex === -1;
+                const isSelectAllItemFocused = currentFocusedIndex === -1;
 
-                if(isSelectAllFocused) {
-                    currentFocusedIndex = moveFocusDown ? 0 : lastItemIndex;
+                if(!isSelectAllItemFocused) {
+                    list.focusListItem(currentFocusedIndex);
                 }
-
-                list.focusListItem(currentFocusedIndex);
             }
+
+            return false;
         },
 
         handleEnterPressing: function() {
-            if(this._$selectAll && this._selectAllCheckBox.$element().hasClass(FOCUSED_STATE_CLASS)) {
+            if(this._$selectAll && this._$selectAll.hasClass(FOCUSED_STATE_CLASS)) {
                 this._selectAllCheckBox.option("value", !this._selectAllCheckBox.option("value"));
                 return true;
             }
