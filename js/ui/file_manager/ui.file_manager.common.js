@@ -21,8 +21,9 @@ const whenSome = function(arg, onSuccess, onError) {
     const deferreds = arg.map((item, index) => {
         return when(item)
             .then(
-                () => {
-                    typeUtils.isFunction(onSuccess) && onSuccess();
+                result => {
+                    typeUtils.isFunction(onSuccess) && onSuccess({ item, index, result });
+                    return result;
                 },
                 error => {
                     if(!error) {

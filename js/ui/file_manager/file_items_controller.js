@@ -1,4 +1,4 @@
-import { FileProvider, FileManagerRootItem } from "./file_provider/file_provider";
+import { FileProvider, FileManagerItem, FileManagerRootItem } from "./file_provider/file_provider";
 import ArrayFileProvider from "./file_provider/array";
 import AjaxFileProvider from "./file_provider/ajax";
 import OneDriveFileProvider from "./file_provider/onedrive";
@@ -147,50 +147,92 @@ export default class FileItemsController {
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        return when(this._fileProvider.createFolder(parentDirectoryInfo.fileItem, name))
-            .done(() => this._resetDirectoryState(parentDirectoryInfo));
+        return this._fileProvider.createFolder(parentDirectoryInfo.fileItem, name);
+    }
+
+    completeCreateDirectory(parentDirectoryInfo) {
+        this._resetDirectoryState(parentDirectoryInfo);
     }
 
     renameItem(fileItemInfo, name) {
-        return when(this._fileProvider.renameItem(fileItemInfo.fileItem, name))
-            .done(() => {
-                this._resetDirectoryState(fileItemInfo.parentDirectory);
-                this.setCurrentDirectory(fileItemInfo.parentDirectory);
-            });
+        return this._fileProvider.renameItem(fileItemInfo.fileItem, name);
+    }
+
+    completeRenameItem(fileItemInfo) {
+        this._resetDirectoryState(fileItemInfo.parentDirectory);
+        this.setCurrentDirectory(fileItemInfo.parentDirectory);
     }
 
     moveItems(itemInfos, destinationDirectory) {
         const items = itemInfos.map(i => i.fileItem);
-        return when(this._fileProvider.moveItems(items, destinationDirectory.fileItem))
-            .done(() => {
-                for(let i = 0; i < itemInfos.length; i++) {
-                    this._resetDirectoryState(itemInfos[i].parentDirectory);
-                }
-                this._resetDirectoryState(destinationDirectory);
-                this.setCurrentDirectory(destinationDirectory);
-            });
+        return this._fileProvider.moveItems(items, destinationDirectory.fileItem);
+    }
+
+    completeMoveItems(itemInfos, destinationDirectory) {
+        for(let i = 0; i < itemInfos.length; i++) {
+            this._resetDirectoryState(itemInfos[i].parentDirectory);
+        }
+        this._resetDirectoryState(destinationDirectory);
+        this.setCurrentDirectory(destinationDirectory);
     }
 
     copyItems(itemInfos, destinationDirectory) {
         const items = itemInfos.map(i => i.fileItem);
-        return when(this._fileProvider.copyItems(items, destinationDirectory.fileItem))
-            .done(() => {
-                this._resetDirectoryState(destinationDirectory);
-                this.setCurrentDirectory(destinationDirectory);
-                destinationDirectory.expanded = true;
-            });
+        return this._fileProvider.copyItems(items, destinationDirectory.fileItem);
+    }
+
+    completeCopyItems(itemInfos, destinationDirectory) {
+        this._resetDirectoryState(destinationDirectory);
+        this.setCurrentDirectory(destinationDirectory);
+        destinationDirectory.expanded = true;
     }
 
     deleteItems(itemInfos) {
         const items = itemInfos.map(i => i.fileItem);
-        return when(this._fileProvider.deleteItems(items))
-            .done(() => {
-                for(let i = 0; i < itemInfos.length; i++) {
-                    const parentDir = itemInfos[i].parentDirectory;
-                    this._resetDirectoryState(parentDir);
-                    this.setCurrentDirectory(parentDir);
-                }
-            });
+        return this._fileProvider.deleteItems(items);
+    }
+
+    completeDeleteItems(itemInfos) {
+        for(let i = 0; i < itemInfos.length; i++) {
+            const parentDir = itemInfos[i].parentDirectory;
+            this._resetDirectoryState(parentDir);
+            this.setCurrentDirectory(parentDir);
+        }
+    }
+
+    initiateFileUpload(state) {
+        return when(this._fileProvider.initiateFileUpload(state));
+    }
+
+    uploadFileChunk(state, chunk) {
+        return when(this._fileProvider.uploadFileChunk(state, chunk));
+    }
+
+    finalizeFileUpload(state) {
+        return when(this._fileProvider.finalizeFileUpload(state));
+    }
+
+    abortFileUpload(state) {
+        return when(this._fileProvider.abortFileUpload(state));
+    }
+
+    completeFilesUpload(itemInfos) {
+        itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory));
+    }
+
+    getFileUploadChunkSize() {
+        return this._fileProvider.getFileUploadChunkSize();
+    }
+
+    getItemInfosForUploaderFiles(files, parentDirectoryInfo) {
+        const result = [];
+        for(let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const item = new FileManagerItem(parentDirectoryInfo.fileItem.relativeName, file.name, false);
+            const itemInfo = this._createFileInfo(item, parentDirectoryInfo);
+            result.push(itemInfo);
+        }
+        return result;
     }
 
     refresh() {
