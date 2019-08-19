@@ -19,7 +19,7 @@ const normalizeCss = (css) => css
     .replace(/\s*\/\*[\s\S]*?\*\//g, "")
     .trim();
 
-const lessCompiler = require("less");
+const lessCompiler = require("less/lib/less-node");
 
 describe("Builder - testing exported function", () => {
     it("Build base theme with swatch", () => {

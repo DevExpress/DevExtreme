@@ -1,6 +1,6 @@
 const assert = require("chai").assert;
 const LessTemplateLoader = require("../modules/less-template-loader");
-const lessCompiler = require("less");
+const lessCompiler = require("less/lib/less-node");
 
 const metadata = [ {
     "Name": "10. Text color",
