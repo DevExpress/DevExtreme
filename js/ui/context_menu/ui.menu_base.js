@@ -3,7 +3,7 @@ import commonUtils from "../../core/utils/common";
 import typeUtils from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
-import inkRipple from "../widget/utils.ink_ripple";
+import { render } from "../widget/utils.ink_ripple";
 import HierarchicalCollectionWidget from "../hierarchical_collection/ui.hierarchical_collection_widget";
 import MenuBaseEditStrategy from "./ui.menu_base.edit.strategy";
 import devices from "../../core/devices";
@@ -375,7 +375,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _renderInkRipple() {
-        this._inkRipple = inkRipple.render();
+        this._inkRipple = render();
     }
 
     _toggleActiveState($element, value, e) {

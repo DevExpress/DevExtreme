@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import domAdapter from "../../core/dom_adapter";
-import { addNamespace, off, on } from "../../events/core/events_engine";
+import eventsEngine from "../../events/core/events_engine";
 import Guid from "../../core/guid";
 import registerComponent from "../../core/component_registrator";
 import { noop } from "../../core/utils/common";
@@ -13,6 +13,7 @@ import { hasWindow } from "../../core/utils/window";
 import fx from "../../animation/fx";
 import { setup } from "../../animation/position";
 import devices from "../../core/devices";
+import { addNamespace } from "../../events/utils";
 import Overlay from "../overlay";
 import MenuBase from "./ui.menu_base";
 import { Deferred } from "../../core/utils/deferred";
@@ -211,9 +212,7 @@ class ContextMenu extends MenuBase {
 
     _defaultOptionsRules() {
         return super._defaultOptionsRules().concat([{
-            device: () => {
-                return !hasWindow();
-            },
+            device: () => !hasWindow(),
             options: {
                 animation: null
             }
@@ -463,9 +462,9 @@ class ContextMenu extends MenuBase {
         const eventName = addNamespace(showEvent, this.NAME);
 
         if(this._showContextMenuEventHandler) {
-            off(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
+            eventsEngine.off(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
         } else {
-            off($(target), eventName);
+            eventsEngine.off($(target), eventName);
         }
     }
 
@@ -490,18 +489,16 @@ class ContextMenu extends MenuBase {
             }
         }, { validatingTargetName: "target" });
 
-        const handler = (e) => {
-            contextMenuAction({ event: e, target: $(e.currentTarget) });
-        };
+        const handler = e => contextMenuAction({ event: e, target: $(e.currentTarget) });
 
         contextMenuAction = this._createAction(contextMenuAction);
 
         if(isRenderer(target) || target.nodeType || isWindow(target)) {
             this._showContextMenuEventHandler = undefined;
-            on(target, eventName, handler);
+            eventsEngine.on(target, eventName, handler);
         } else {
             this._showContextMenuEventHandler = handler;
-            on(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
+            eventsEngine.on(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
         }
     }
 
@@ -920,7 +917,7 @@ class ContextMenu extends MenuBase {
             promise = this._overlay.show();
             event && event.stopPropagation();
 
-            const id = "dx-" + new Guid();
+            const id = `dx-${new Guid()}`;
             this._overlay.$content().attr({ "id": id, role: "menu" });
             this.setAria("owns", id);
         }

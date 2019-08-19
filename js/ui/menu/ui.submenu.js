@@ -1,7 +1,7 @@
 import $ from "../../core/renderer";
 import { noop } from "../../core/utils/common";
 import { getPublicElement } from "../../core/utils/dom";
-import positionUtils from "../../animation/position";
+import { setup } from "../../animation/position";
 import { extend } from "../../core/utils/extend";
 import ContextMenu from "../context_menu";
 
@@ -97,7 +97,7 @@ class Submenu extends ContextMenu {
             return;
         }
 
-        const $submenu = this._itemContainer().children("." + DX_SUBMENU_CLASS).eq(0);
+        const $submenu = this._itemContainer().children(`.${DX_SUBMENU_CLASS}`).eq(0);
         const $rootItem = this.option("position").of;
         const position = {
             of: $submenu
@@ -155,7 +155,7 @@ class Submenu extends ContextMenu {
                 }
             }
         }
-        positionUtils.setup(this.$contentDelimiter, position);
+        setup(this.$contentDelimiter, position);
     }
 
     _getContextMenuPosition() {

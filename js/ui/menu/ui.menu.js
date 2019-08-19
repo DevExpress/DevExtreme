@@ -7,7 +7,7 @@ import { each } from "../../core/utils/iterator";
 import typeUtils from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { getElementMaxHeightByWindow } from "../overlay/utils";
-import eventUtils from "../../events/utils";
+import { addNamespace } from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import hoverEvents from "../../events/hover";
 import MenuBase from "../context_menu/ui.menu_base";
@@ -680,7 +680,7 @@ class Menu extends MenuBase {
     _attachSubmenuHandlers($rootItem, submenu) {
         const $submenuOverlayContent = submenu.getOverlayContent();
         const submenus = $submenuOverlayContent.find(`.${DX_SUBMENU_CLASS}`);
-        const submenuMouseLeaveName = eventUtils.addNamespace(hoverEvents.end, this.NAME + "_submenu");
+        const submenuMouseLeaveName = addNamespace(hoverEvents.end, this.NAME + "_submenu");
 
         submenu.option({
             onShowing: this._submenuOnShowingHandler.bind(this, $rootItem, submenu),
@@ -825,7 +825,7 @@ class Menu extends MenuBase {
     }
 
     _hoverStartHandler(e) {
-        const mouseMoveEventName = eventUtils.addNamespace(pointerEvents.move, this.NAME);
+        const mouseMoveEventName = addNamespace(pointerEvents.move, this.NAME);
         const $item = this._getItemElementByEventArgs(e);
         const node = this._dataAdapter.getNodeByItem(this._getItemData($item));
         const isSelectionActive = typeUtils.isDefined(e.buttons) && e.buttons === 1 || !typeUtils.isDefined(e.buttons) && e.which === 1;
