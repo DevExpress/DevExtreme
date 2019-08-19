@@ -1551,10 +1551,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this.option("focusedElement", getPublicElement($activeItem.closest("." + NODE_CLASS)));
     },
 
-    _tryGetAvailableFocusedElement() {
-        return $(this.option("focusedElement"));
-    },
-
     _setFocusedItem: function($target) {
         if(!$target || !$target.length) {
             return;
