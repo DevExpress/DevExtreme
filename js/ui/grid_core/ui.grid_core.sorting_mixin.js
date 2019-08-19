@@ -1,9 +1,11 @@
 import { isDefined } from "../../core/utils/type";
+import $ from "../../core/renderer";
 
 var SORT_CLASS = "dx-sort",
     SORT_NONE_CLASS = "dx-sort-none",
     SORTUP_CLASS = "dx-sort-up",
     SORTDOWN_CLASS = "dx-sort-down",
+    SORT_INDEX_CLASS = "dx-sort-index",
     HEADERS_ACTION_CLASS = "action";
 
 
@@ -26,6 +28,14 @@ module.exports = {
                 $sortIndicator = that.callBase(options)
                     .toggleClass(SORTUP_CLASS, column.sortOrder === "asc")
                     .toggleClass(SORTDOWN_CLASS, column.sortOrder === "desc");
+
+                let hasSeveralSortIndexes = !!that.getController("columns").columnOption("sortIndex:1");
+                if(hasSeveralSortIndexes && that.option("sorting.showSortIndexes") && column.sortIndex <= 8) {
+                    $("<span>")
+                        .addClass(SORT_INDEX_CLASS)
+                        .text(column.sortIndex + 1)
+                        .appendTo($sortIndicator);
+                }
 
                 options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
             }

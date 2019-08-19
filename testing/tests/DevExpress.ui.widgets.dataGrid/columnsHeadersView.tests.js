@@ -2552,3 +2552,150 @@ QUnit.test("Filter row does not have rowspan attribute when band column is enabl
     var $filterRowFirstColumnElement = $testElement.find(".dx-datagrid-filter-row").first().children().eq(0);
     assert.strictEqual($filterRowFirstColumnElement.attr("rowspan"), undefined);
 });
+
+QUnit.module('Multiple sorting', {
+    beforeEach: function() {
+        var that = this;
+
+        that.clock = sinon.useFakeTimers();
+
+        that.columns = [{
+            dataField: "field1"
+        }, {
+            dataField: "field2",
+            sortIndex: 1,
+            sortOrder: "asc"
+        }, {
+            dataField: "field3",
+            sortIndex: 0,
+            sortOrder: "asc"
+        }],
+        that.$element = function() {
+            return $("#container");
+        };
+        that.options = {
+            showColumnHeaders: true
+        };
+
+        that.setupDataGrid = function() {
+            that.options.columns = that.columns;
+            dataGridMocks.setupDataGridModules(that, ["data", "columns", "columnHeaders", "sorting"], {
+                initViews: true
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Sort index icons should be rendered by default", function(assert) {
+    // arrange
+    var $testElement = $("#container").addClass("dx-widget"),
+        $sortIndicators;
+
+    this.options.sorting = {
+        mode: 'multiple'
+    };
+
+    this.setupDataGrid();
+
+    // act
+    this.columnHeadersView.render($testElement);
+    $sortIndicators = $testElement.find(".dx-column-indicators");
+
+    // assert
+    assert.equal($sortIndicators.eq(0).find(".dx-sort-index").text(), "2", "first sort index");
+    assert.equal($sortIndicators.eq(1).find(".dx-sort-index").text(), "1", "second sort index");
+});
+
+QUnit.test("Sort index icons should be rendered when showSortIndexes is true", function(assert) {
+    // arrange
+    var $testElement = $("#container").addClass("dx-widget"),
+        $sortIndicators;
+
+    this.options.sorting = {
+        showSortIndexes: true,
+        mode: 'multiple'
+    };
+
+    this.setupDataGrid();
+
+    // act
+    this.columnHeadersView.render($testElement);
+    $sortIndicators = $testElement.find(".dx-column-indicators");
+
+    // assert
+    assert.equal($sortIndicators.eq(0).find(".dx-sort-index").text(), "2", "first sort index");
+    assert.equal($sortIndicators.eq(1).find(".dx-sort-index").text(), "1", "second sort index");
+
+    // act
+    this.columnOption(0, "sortOrder", "asc");
+    $sortIndicators = $testElement.find(".dx-column-indicators");
+
+    // assert
+    assert.equal($sortIndicators.eq(0).find(".dx-sort-index").text(), "3", "first sort index");
+    assert.equal($sortIndicators.eq(1).find(".dx-sort-index").text(), "2", "second sort index");
+    assert.equal($sortIndicators.eq(2).find(".dx-sort-index").text(), "1", "third sort index");
+
+    // act
+    this.columnOption(2, "sortOrder", null);
+    $sortIndicators = $testElement.find(".dx-column-indicators");
+
+    // assert
+    assert.equal($sortIndicators.eq(0).find(".dx-sort-index").text(), "2", "first sort index");
+    assert.equal($sortIndicators.eq(1).find(".dx-sort-index").text(), "1", "second sort index");
+});
+
+QUnit.test("Sort index icons should not be rendered when showSortIndexes is false", function(assert) {
+    // arrange
+    var $testElement = $("#container").addClass("dx-widget");
+
+    this.options.sorting = {
+        showSortIndexes: false,
+        mode: 'multiple'
+    };
+
+    this.setupDataGrid();
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    assert.notOk($testElement.find(".dx-sort-index").length, "no sort indexes");
+});
+
+QUnit.test("Sort index icons should not be rendered if column's sort index is more than 8", function(assert) {
+    // arrange
+    var $testElement = $("#container").addClass("dx-widget"),
+        $sortIndexIndicators,
+        columns = [];
+
+    this.options.sorting = {
+        showSortIndexes: true,
+        mode: 'multiple'
+    };
+
+    for(let i = 0; i < 10; i++) {
+        columns.push({
+            dataField: "field" + i,
+            sortIndex: i,
+            sortOrder: "asc"
+        });
+    }
+
+    $.extend(this.columns, columns);
+
+    this.setupDataGrid();
+
+    // act
+    this.columnHeadersView.render($testElement);
+    $sortIndexIndicators = $testElement.find(".dx-sort-index");
+
+    // assert
+    assert.equal($sortIndexIndicators.length, 9, "sort index indicator count");
+    for(let i = 0; i <= 8; i++) {
+        assert.equal($sortIndexIndicators.eq(i).text(), i + 1, `sort index indicator №${i} text`);
+    }
+});

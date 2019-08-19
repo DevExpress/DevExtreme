@@ -22,6 +22,7 @@
     @GRID_COMMAND_ADAPTIVE_COLUMN_WIDTH: 36px;
     @GRID_COLUMN_HEADER_INDICATOR_WIDTH: 14px;
     @GRID_TEXT_CONTENT_MARGIN: 3px;
+    @GRID_SORT_INDEX_WIDTH: 15px;
 
     .dx-@{widgetName}-checkbox-size {
         vertical-align: middle;
@@ -125,11 +126,19 @@
                 visibility: hidden;
             }
 
+            .dx-sort-index {
+                padding-left: 4px;
+                padding-right: 4px;
+                height: 15px;
+                width: @GRID_SORT_INDEX_WIDTH;
+                color: #959595;
+            }
+
             .dx-sort,
             .dx-header-filter {
                 &.dx-sort,
                 &.dx-header-filter {
-                    display: inline-block;
+                    display: inline;
                 }
 
                 &.dx-header-filter:after {
@@ -583,7 +592,7 @@
         }
 
         .dx-sort-indicator.dx-header-filter-indicator {
-            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN));
+            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
         }
 
         .dx-sort-indicator.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
