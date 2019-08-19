@@ -385,10 +385,13 @@ var CollectionWidget = Widget.inherit({
 
     _getActiveItem: function(last) {
         const $focusedElement = $(this.option("focusedElement"));
-        const focusedElementIsAvailable = this._getAvailableItems().filter((index, item) => $(item).is($focusedElement));
 
-        if($focusedElement.length && focusedElementIsAvailable.length) {
-            return $focusedElement;
+        if($focusedElement.length) {
+            const availableFocusedElement = this._tryGetAvailableFocusedElement();
+
+            if(availableFocusedElement.length) {
+                return $focusedElement;
+            }
         }
 
         let index = this.option("focusOnSelectedItem") ? this.option("selectedIndex") : 0;

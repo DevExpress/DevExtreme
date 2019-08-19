@@ -269,9 +269,10 @@ class ContextMenu extends MenuBase {
     }
 
     _getActiveItem() {
-        const $items = this._getAvailableItems();
-        const $focusedItem = $items.filter(`.${DX_STATE_FOCUSED_CLASS}`);
-        const $hoveredItem = $items.filter(`.${DX_STATE_HOVER_CLASS}`);
+        const $availableItems = this._getAvailableItems();
+
+        const $focusedItem = $availableItems.filter(`.${DX_STATE_FOCUSED_CLASS}`);
+        const $hoveredItem = $availableItems.filter(`.${DX_STATE_HOVER_CLASS}`);
         const $hoveredItemContainer = $hoveredItem.closest(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
 
         if($hoveredItemContainer.find(`.${DX_MENU_ITEM_CLASS}`).index($focusedItem) >= 0) {
@@ -283,6 +284,10 @@ class ContextMenu extends MenuBase {
         }
 
         return super._getActiveItem();
+    }
+
+    _tryGetAvailableFocusedElement($focusedElement) {
+        return this._getAvailableItems().filter((_, item) => $(item).is($focusedElement));
     }
 
     _moveFocus(location) {

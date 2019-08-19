@@ -2064,21 +2064,21 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         instance.show();
 
         const $itemsContainer = instance.itemsContainer();
-        const kb = keyboardMock($itemsContainer);
-        const $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        const keyboard = keyboardMock($itemsContainer);
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
-        kb.keyDown("down");
+        keyboard.keyDown("down");
         $($rootItem).trigger("dxclick");
         assert.ok($rootItem.hasClass(DX_STATE_FOCUSED_CLASS), "root item is stay focused after the click");
 
-        const $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
+        const $items = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`);
 
         $($itemsContainer).trigger({ target: $items.eq(2).get(0), type: "dxpointerenter", pointerType: "mouse" });
 
         assert.ok($items.eq(2).hasClass(DX_STATE_HOVER_CLASS), "Item 12 was hovered");
         assert.notOk($items.eq(2).hasClass(DX_STATE_FOCUSED_CLASS), "Item 12 was not focused on hover");
 
-        kb.keyDown("down");
+        keyboard.keyDown("down");
 
         assert.ok($items.eq(3).hasClass(DX_STATE_FOCUSED_CLASS), "Item 13 is focused");
     });
@@ -2131,15 +2131,44 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
 
         assert.ok(instance.itemElements().eq(3).hasClass(DX_STATE_FOCUSED_CLASS), "Item 22 is focused");
     });
+
+    // T806502
+    QUnit.test("Keyboard should be work when submenu shown in second time", (assert) => {
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: "Item 1" }, { text: "Item 2", items: [{ text: "Item 2_1" }, { text: "Item 2_2" }] }],
+            focusStateEnabled: true
+        });
+
+        instance.show();
+
+        let keyboard = keyboardMock(instance.itemsContainer());
+
+        keyboard
+            .keyDown("down")
+            .keyDown("down")
+            .keyDown("right")
+            .keyDown("down");
+
+        let focusedItem = instance.itemsContainer().find(`.${DX_STATE_FOCUSED_CLASS}`);
+
+        assert.strictEqual(focusedItem.is(instance.option("focusedElement")), true, "focusedElement");
+        assert.strictEqual(getFocusedItemText(instance), "Item 2_2", "focusedItem text");
+        assert.strictEqual(getVisibleSubmenuCount(instance), 2, "submenu.count");
+
+        instance.hide();
+        instance.show();
+
+        keyboard = keyboardMock(instance.itemsContainer());
+        keyboard
+            .keyDown("down");
+
+        focusedItem = instance.itemsContainer().find(`.${DX_STATE_FOCUSED_CLASS}`);
+        assert.strictEqual(focusedItem.is(instance.option("focusedElement")), true, "focusedElement");
+        assert.strictEqual(getFocusedItemText(instance), "Item 2", "focusedItem text");
+        assert.strictEqual(getVisibleSubmenuCount(instance), 1, "submenu.count");
+    });
 });
 
 
-function getVisibleSubmenuCount(instance) {
-    return instance.itemsContainer().find("." + DX_SUBMENU_CLASS).filter(function() {
-        return $(this).css("visibility") === "visible";
-    }).length;
-}
-
-function getFocusedItemText(instance) {
-    return $(instance.option("focusedElement")).children("." + DX_MENU_ITEM_CONTENT_CLASS).text();
-}
+const getVisibleSubmenuCount = (instance) => instance.itemsContainer().find(`.${DX_SUBMENU_CLASS}`).filter((_, item) => $(item).css("visibility") === "visible").length;
+const getFocusedItemText = (instance) => $(instance.option("focusedElement")).children(`.${DX_MENU_ITEM_CONTENT_CLASS}`).text();
