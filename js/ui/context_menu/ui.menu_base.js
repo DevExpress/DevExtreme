@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
-import commonUtils from "../../core/utils/common";
-import typeUtils from "../../core/utils/type";
+import { noop, asyncNoop } from "../../core/utils/common";
+import { isPlainObject, isObject, isDefined } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import { render } from "../widget/utils.ink_ripple";
@@ -288,8 +288,8 @@ class MenuBase extends HierarchicalCollectionWidget {
         };
         return extend(super._supportedKeys(), {
             space: selectItem,
-            pageUp: commonUtils.noop,
-            pageDown: commonUtils.noop
+            pageUp: noop,
+            pageDown: noop
         });
     }
 
@@ -307,7 +307,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     _getTextContainer(itemData) {
         const itemText = itemData.text;
         const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
-        const itemContent = typeUtils.isPlainObject(itemData) ? itemText : String(itemData);
+        const itemContent = isPlainObject(itemData) ? itemText : String(itemData);
 
         return itemText && $itemContainer.text(itemContent);
     }
@@ -401,7 +401,7 @@ class MenuBase extends HierarchicalCollectionWidget {
         const defaultValue = "onClick";
         let optionValue = this.option("showSubmenuMode");
 
-        optionValue = typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
+        optionValue = isObject(optionValue) ? optionValue.name : optionValue;
 
         return this._isDesktopDevice() ? optionValue : defaultValue;
     }
@@ -458,11 +458,11 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _getSubmenuDelay(action) {
         const { delay } = this.option("showSubmenuMode");
-        if(!typeUtils.isDefined(delay)) {
+        if(!isDefined(delay)) {
             return DEFAULT_DELAY[action];
         }
 
-        return typeUtils.isObject(delay) ? delay[action] : delay;
+        return isObject(delay) ? delay[action] : delay;
     }
 
     // TODO: try to simplify
@@ -682,7 +682,7 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _syncSelectionOptions() {
-        return commonUtils.asyncNoop();
+        return asyncNoop();
     }
 
     _optionChanged(args) {

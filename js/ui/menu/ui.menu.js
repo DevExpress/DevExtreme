@@ -1,10 +1,10 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import registerComponent from "../../core/component_registrator";
-import commonUtils from "../../core/utils/common";
+import { noop } from "../../core/utils/common";
 import { getPublicElement } from "../../core/utils/dom";
 import { each } from "../../core/utils/iterator";
-import typeUtils from "../../core/utils/type";
+import { isPlainObject, isObject, isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { getElementMaxHeightByWindow } from "../overlay/utils";
 import { addNamespace } from "../../events/utils";
@@ -282,7 +282,7 @@ class Menu extends MenuBase {
     }
 
     _getKeyboardNavigationAction(operation, argument) {
-        let action = commonUtils.noop;
+        let action = noop;
 
         switch(operation) {
             case SHOW_SUBMENU_OPERATION:
@@ -370,7 +370,7 @@ class Menu extends MenuBase {
     }
 
     _toggleTreeView(state) {
-        if(typeUtils.isPlainObject(state)) {
+        if(isPlainObject(state)) {
             state = !this._overlay.option("visible");
         }
         this._overlay.option("visible", state);
@@ -512,10 +512,10 @@ class Menu extends MenuBase {
     _getDelay(delayType) {
         const delay = this.option("showFirstSubmenuMode").delay;
 
-        if(!typeUtils.isDefined(delay)) {
+        if(!isDefined(delay)) {
             return DEFAULT_DELAY[delayType];
         } else {
-            return typeUtils.isObject(delay) ? delay[delayType] : delay;
+            return isObject(delay) ? delay[delayType] : delay;
         }
     }
 
@@ -604,7 +604,7 @@ class Menu extends MenuBase {
 
         const optionValue = this.option("showFirstSubmenuMode");
 
-        return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
+        return isObject(optionValue) ? optionValue.name : optionValue;
     }
 
     _moveMainMenuFocus(direction) {
@@ -828,7 +828,7 @@ class Menu extends MenuBase {
         const mouseMoveEventName = addNamespace(pointerEvents.move, this.NAME);
         const $item = this._getItemElementByEventArgs(e);
         const node = this._dataAdapter.getNodeByItem(this._getItemData($item));
-        const isSelectionActive = typeUtils.isDefined(e.buttons) && e.buttons === 1 || !typeUtils.isDefined(e.buttons) && e.which === 1;
+        const isSelectionActive = isDefined(e.buttons) && e.buttons === 1 || !isDefined(e.buttons) && e.which === 1;
 
         if(this._isItemDisabled($item)) {
             return;
@@ -916,7 +916,7 @@ class Menu extends MenuBase {
 
         const $item = $(e.currentTarget);
 
-        if(!typeUtils.isDefined(this._showSubmenuTimer)) {
+        if(!isDefined(this._showSubmenuTimer)) {
             return;
         }
 
