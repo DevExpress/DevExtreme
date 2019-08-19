@@ -570,20 +570,20 @@ module.exports = {
                     return $row;
                 },
 
-                _rowPrepared: function($row, row) {
-                    if(row.rowType === "data") {
+                _rowPrepared: function($row, rowOptions, row) {
+                    if(rowOptions.rowType === "data") {
                         if(this.option("rowAlternationEnabled")) {
                             var getRowAlt = () => {
                                 return row.dataIndex % 2 === 1;
                             };
                             getRowAlt() && $row.addClass(ROW_ALTERNATION_CLASS);
-                            row.watch && row.watch(getRowAlt, value => {
+                            rowOptions.watch && rowOptions.watch(getRowAlt, value => {
                                 $row.toggleClass(ROW_ALTERNATION_CLASS, value);
                             });
                         }
 
-                        this._setAriaRowIndex(row, $row);
-                        row.watch && row.watch(() => row.rowIndex, () => this._setAriaRowIndex(row, $row));
+                        this._setAriaRowIndex(rowOptions, $row);
+                        rowOptions.watch && rowOptions.watch(() => rowOptions.rowIndex, () => this._setAriaRowIndex(rowOptions, $row));
                     }
 
                     this.callBase.apply(this, arguments);

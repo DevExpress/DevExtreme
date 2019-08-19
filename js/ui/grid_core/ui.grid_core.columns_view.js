@@ -549,7 +549,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         that._addWatchMethod(rowOptions, options.row);
 
-        that._rowPrepared($wrappedRow, rowOptions);
+        that._rowPrepared($wrappedRow, rowOptions, options.row);
     },
 
     _renderCells: function($row, options) {
