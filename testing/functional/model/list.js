@@ -3,16 +3,17 @@ import { Selector } from 'testcafe';
 const CLASSES = {
     focusedState: 'dx-state-focused',
     listItem: 'dx-list-item',
-    selectAllCheckBox: 'dx-list-select-all-checkbox'
+    selectAllItem: 'dx-list-select-all'
 };
 
 export default function ListModel(id) {
     const mainElement = Selector(id);
+    const selectAllItem = mainElement.find(`.${CLASSES.selectAllItem}`);
 
     return {
-        selectAllCheckBox: {
+        selectAllItem: {
             get isFocused() {
-                return mainElement.find(`.${CLASSES.selectAllCheckBox}`).hasClass(CLASSES.focusedState);
+                return selectAllItem.hasClass(CLASSES.focusedState);
             }
         },
 

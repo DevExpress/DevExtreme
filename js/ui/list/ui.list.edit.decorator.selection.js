@@ -98,13 +98,18 @@ registerDecorator(
         handleKeyboardEvents: function(currentFocusedIndex, moveFocusUp) {
             const moveFocusDown = !moveFocusUp;
             const list = this._list;
+            const $selectAll = this._$selectAll;
             const lastItemIndex = list._getLastItemIndex();
-            const isFocusOutOfList = moveFocusUp && currentFocusedIndex === 0 || moveFocusDown && currentFocusedIndex === lastItemIndex;
+            const isFocusOutOfList = moveFocusUp && currentFocusedIndex === 0 ||
+                moveFocusDown && currentFocusedIndex === lastItemIndex;
+            const hasSelectAllItem = !!$selectAll;
 
-            if(this._selectAllCheckBox && isFocusOutOfList) {
-                list.option("focusedElement", this._selectAllCheckBox.$element());
+            if(hasSelectAllItem && isFocusOutOfList) {
+                list.focusListElement($selectAll);
             } else {
-                if(currentFocusedIndex === -1) {
+                const isSelectAllFocused = currentFocusedIndex === -1;
+
+                if(isSelectAllFocused) {
                     currentFocusedIndex = moveFocusDown ? 0 : lastItemIndex;
                 }
 
@@ -124,9 +129,15 @@ registerDecorator(
                 list = this._list,
                 downArrowHandler = list._supportedKeys().downArrow.bind(list);
 
-            this._selectAllCheckBox = list._createComponent($("<div>")
-                .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
-                .appendTo($selectAll), CheckBox, { focusStateEnabled: false });
+            this._selectAllCheckBox = list._createComponent(
+                $("<div>")
+                    .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
+                    .appendTo($selectAll),
+                CheckBox, {
+                    focusStateEnabled: false,
+                    hoverStateEnabled: false
+                }
+            );
 
             this._selectAllCheckBox.registerKeyHandler("downArrow", downArrowHandler);
 

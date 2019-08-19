@@ -375,12 +375,16 @@ const ListEdit = ListBase.inherit({
         this.callBase();
     },
 
+    focusListElement($element) {
+        this.option("focusedElement", $element);
+        this.focus();
+        this.scrollToItem(this.option("focusedElement"));
+    },
+
     focusListItem(index) {
         const $item = this._editStrategy.getItemElement(index);
 
-        this.option("focusedElement", $item);
-        this.focus();
-        this.scrollToItem(this.option("focusedElement"));
+        this.focusListElement($item);
     },
 
     _optionChanged(args) {
