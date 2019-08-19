@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import domAdapter from "../../core/dom_adapter";
-import eventsEngine from "../../events/core/events_engine";
+import { addNamespace, off, on } from "../../events/core/events_engine";
 import Guid from "../../core/guid";
 import registerComponent from "../../core/component_registrator";
 import { noop } from "../../core/utils/common";
@@ -11,9 +11,8 @@ import { inArray } from "../../core/utils/array";
 import { extend } from "../../core/utils/extend";
 import { hasWindow } from "../../core/utils/window";
 import fx from "../../animation/fx";
-import positionUtils from "../../animation/position";
+import { setup } from "../../animation/position";
 import devices from "../../core/devices";
-import eventUtils from "../../events/utils";
 import Overlay from "../overlay";
 import MenuBase from "./ui.menu_base";
 import { Deferred } from "../../core/utils/deferred";
@@ -461,12 +460,12 @@ class ContextMenu extends MenuBase {
             return;
         }
 
-        const eventName = eventUtils.addNamespace(showEvent, this.NAME);
+        const eventName = addNamespace(showEvent, this.NAME);
 
         if(this._showContextMenuEventHandler) {
-            eventsEngine.off(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
+            off(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
         } else {
-            eventsEngine.off($(target), eventName);
+            off($(target), eventName);
         }
     }
 
@@ -478,7 +477,7 @@ class ContextMenu extends MenuBase {
             return;
         }
 
-        const eventName = eventUtils.addNamespace(showEvent, this.NAME);
+        const eventName = addNamespace(showEvent, this.NAME);
         let contextMenuAction = this._createAction((e) => {
             const delay = this.getShowDelay(this.option("showEvent"));
 
@@ -499,10 +498,10 @@ class ContextMenu extends MenuBase {
 
         if(isRenderer(target) || target.nodeType || isWindow(target)) {
             this._showContextMenuEventHandler = undefined;
-            eventsEngine.on(target, eventName, handler);
+            on(target, eventName, handler);
         } else {
             this._showContextMenuEventHandler = handler;
-            eventsEngine.on(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
+            on(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
         }
     }
 
@@ -722,7 +721,7 @@ class ContextMenu extends MenuBase {
                 fx.stop($submenu);
             }
 
-            positionUtils.setup($submenu, submenuPosition);
+            setup($submenu, submenuPosition);
 
             if(animation) {
                 if(isPlainObject(animation.to)) {
