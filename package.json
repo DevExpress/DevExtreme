@@ -79,7 +79,7 @@
     "jsrender": "0.9.90",
     "knockout": "^3.4.2",
     "lazypipe": "^1.0.1",
-    "less": "^3.9.0",
+    "less": "3.9.0",
     "less-plugin-autoprefix": "^2.0.0",
     "lint-staged": "^3.4.0",
     "merge-stream": "^1.0.0",
