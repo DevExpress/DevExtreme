@@ -49,5 +49,6 @@ matrix:
     - { TARGET: test, BROWSER: firefox, CONSTEL: ui.grid }
     - { TARGET: test, BROWSER: firefox, CONSTEL: ui.scheduler }
     - { TARGET: test, BROWSER: firefox, CONSTEL: viz }
-    - { TARGET: test_functional }
+    - { TARGET: test_functional, COMPONENT: dataGrid }
+    - { TARGET: test_functional, COMPONENT: scheduler }
     - { TARGET: test_themebuilder }
