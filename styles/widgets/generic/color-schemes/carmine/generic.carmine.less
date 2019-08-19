@@ -93,10 +93,10 @@
 * @name 90. Hovered state background color
 * @type color
 */
-@base-hover-bg: #faebe8;
+@base-hover-bg: fade(@base-text-color, 5%);
 
 @base-select-color: @base-text-color;
-@base-select-bg: lighten(@base-accent, 21%);
+@base-select-bg: fade(@base-text-color, 12%);
 
 /**
 * @name 100. Focused state text color
