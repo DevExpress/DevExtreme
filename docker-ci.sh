@@ -114,7 +114,7 @@ function run_test_functional {
     npm run build
 
     local args="--browsers chrome:headless";
-    [ "$CONSTEL" ] && args="--browsers chrome:headless --componentFolder $CONSTEL";
+    [ "$COMPONENT" ] && args="$args --componentFolder $COMPONENT";
 
     npm run test-functional -- $args
 }
