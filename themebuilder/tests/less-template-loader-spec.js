@@ -2,7 +2,7 @@ const assert = require("chai").assert;
 const LessTemplateLoader = require("../modules/less-template-loader");
 const themeName = "generic";
 const colorScheme = "light";
-const lessCompiler = require("less/lib/less-node");
+const lessCompiler = require("less");
 
 const metadata = [{
     "Name": "50. Background color",
@@ -383,7 +383,7 @@ describe("LessTemplateLoader", () => {
     });
 
     it("compile less with options", () => {
-        const compilerWithOptions = require("less/lib/less-node");
+        const compilerWithOptions = require("less");
         compilerWithOptions.options = {
             "rootpath": "modified_path/"
         };
