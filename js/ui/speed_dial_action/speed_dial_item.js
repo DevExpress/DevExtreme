@@ -11,7 +11,7 @@ import themes from "../themes";
 const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
 const FAB_LABEL_CLASS = "dx-fa-button-label";
-const FAB_LABEL_LOCATION_RIGHT_CLASS = "dx-location-right";
+const FAB_CONTENT_REVERSE_CLASS = "dx-fa-button-content-reverse";
 const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
 const SpeedDialItem = Overlay.inherit({
@@ -19,7 +19,8 @@ const SpeedDialItem = Overlay.inherit({
         return extend(this.callBase(), {
             shading: false,
             useInkRipple: false,
-            callOverlayRenderShading: false
+            callOverlayRenderShading: false,
+            width: "auto"
         });
     },
 
@@ -47,7 +48,6 @@ const SpeedDialItem = Overlay.inherit({
 
     _renderLabel() {
         !!this._$label && this._$label.remove();
-        this.$content().css("maxWidth", "");
 
         const labelText = this.option("label");
 
@@ -60,9 +60,9 @@ const SpeedDialItem = Overlay.inherit({
 
         this._$label = $element
             .html(labelText)
-            .appendTo(this.$content());
+            .prependTo(this.$content());
 
-        this._$label.toggleClass(FAB_LABEL_LOCATION_RIGHT_CLASS, this._isPositionLeft(this.option("parentPosition")));
+        this.$content().toggleClass(FAB_CONTENT_REVERSE_CLASS, this._isPositionLeft(this.option("parentPosition")));
     },
 
 
@@ -133,6 +133,10 @@ const SpeedDialItem = Overlay.inherit({
         this._inkRipple = inkRipple.render();
     },
 
+    _getInkRippleContainer() {
+        return this._$icon;
+    },
+
     _toggleActiveState($element, value, e) {
         this.callBase.apply(this, arguments);
 
@@ -141,7 +145,7 @@ const SpeedDialItem = Overlay.inherit({
         }
 
         const config = {
-            element: this.$content(),
+            element: this._getInkRippleContainer(),
             event: e
         };
 

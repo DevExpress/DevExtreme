@@ -23,18 +23,17 @@
     .dx-overlay-content {
         .dx-fa-button-label {
             padding: 0 12px;
-            right: @MATERIAL_FA_BUTTON_SIZE + @MATERIAL_FA_BUTTON_LABEL_OFFSET;
-            top: 50%;
-            margin-top: -@MATERIAL_FA_BUTTON_LABEL_HEIGHT / 2;
+            margin-right: @MATERIAL_FA_BUTTON_LABEL_OFFSET;
             line-height: @MATERIAL_FA_BUTTON_LABEL_HEIGHT;
-            white-space: nowrap;
-            border-radius: 4px;
+            height: @MATERIAL_FA_BUTTON_LABEL_HEIGHT;
             box-shadow: @MATERIAL_FA_BUTTON_LABEL_SHADOW;
             font-size: @MATERIAL_BASE_FONT_SIZE - 2;
+        }
 
-            &.dx-location-right {
-                left: @MATERIAL_FA_BUTTON_SIZE + @MATERIAL_FA_BUTTON_LABEL_OFFSET;
-                right: auto;
+        &.dx-fa-button-content-reverse {
+            .dx-fa-button-label {
+                margin-left: @MATERIAL_FA_BUTTON_LABEL_OFFSET;
+                margin-right: auto;
             }
         }
     }

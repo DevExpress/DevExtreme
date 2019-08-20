@@ -72,10 +72,6 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     _renderLabel() {
         this.callBase();
         this.$element().toggleClass(FAB_MAIN_CLASS_HAS_TEXT, !!this._$label);
-        if(this._$label) {
-            const contentMaxWidth = Math.ceil(this._$icon.outerWidth() + this._$label.outerWidth());
-            this.$content().css("maxWidth", contentMaxWidth);
-        }
         this._setPosition();
     },
 
@@ -176,6 +172,10 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         return this._getDefaultOptions().position;
     },
 
+    _getInkRippleContainer() {
+        return this.$content();
+    },
+
     _optionChanged(args) {
         switch(args.name) {
             case "actions":
@@ -195,7 +195,6 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 break;
             case "label":
                 this._renderLabel();
-                this._setPosition();
                 break;
             default:
                 this.callBase(args);

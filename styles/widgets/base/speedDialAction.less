@@ -2,28 +2,42 @@
     .dx-fa-button {
         &.dx-fa-button-main {
             .dx-overlay-content {
-                max-width: @main-action-button-size;
                 max-height: @main-action-button-size;
                 background-color: @button-default-bg;
                 color: @button-default-color;
                 overflow: visible;
                 border-radius: @main-action-button-size / 2;
 
-                .dx-fa-button-states(@button-default-bg, @button-default-color);
+                &.dx-state-hover {
+                    background-color: darken(@button-default-bg, 10%);
+
+                    .dx-fa-button-icon {
+                        background-color: transparent;
+                    }
+                }
+
+                &.dx-state-active {
+                    background-color: darken(@button-default-bg, 15%);
+
+                    .dx-fa-button-icon {
+                        background-color: transparent;
+                    }
+                }
 
                 .dx-fa-button-icon,
                 .dx-fa-button-icon-close {
                     padding: (@main-action-button-size - @icon-size) / 2;
+                    box-shadow: none;
+                    background-color: transparent;
                 }
 
                 .dx-fa-button-label {
                     position: static;
                     background: none;
-                    line-height: @main-action-button-size;
                     color: @button-default-color;
                     box-shadow: none;
                     border-radius: 0;
-                    margin-top: 0;
+                    margin-right: 0;
                 }
 
                 .dx-inkripple {
@@ -34,6 +48,7 @@
             &.dx-fa-button-has-label {
                 .dx-overlay-content {
                     display: flex;
+                    flex-direction: row-reverse;
 
                     .dx-fa-button-icon,
                     .dx-fa-button-icon-close {
@@ -60,40 +75,48 @@
         }
 
         .dx-overlay-content {
-            max-width: @action-button-size;
             max-height: @action-button-size;
-            background-color: @button-normal-bg;
-            color: @button-normal-color;
-            box-shadow: @shadow;
+            background-color: transparent;
+            color: @speed-dial-action-color;
             overflow: visible;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
 
-            .dx-fa-button-states(@button-normal-bg, @button-normal-color);
+            &.dx-fa-button-content-reverse {
+                flex-direction: row-reverse;
+            }
+
+            &.dx-state-hover {
+                .dx-fa-button-icon {
+                    background-color: darken(@speed-dial-action-bg, 10%);
+                }
+            }
+
+            &.dx-state-active {
+                .dx-fa-button-icon {
+                    background-color: darken(@speed-dial-action-bg, 15%);
+                }
+            }
 
             .dx-fa-button-label {
-                background-color: @button-normal-bg;
-                color: @button-normal-color;
-                position: absolute;
-                top: 50%;
+                background-color: @speed-dial-action-bg;
+                color: @speed-dial-action-color;
                 white-space: nowrap;
                 border-radius: 4px;
+            }
+
+            .dx-fa-button-icon {
+                box-shadow: @shadow;
+                background-color: @speed-dial-action-bg;
+                border-radius: 50%;
+                position: relative;
             }
 
             .dx-inkripple {
                 overflow: hidden;
                 border-radius: @action-button-size / 2;
             }
-        }
-    }
-
-    .dx-fa-button-states(@background-color, @color) {
-        &.dx-state-hover {
-            background-color: darken(@background-color, 10%);
-            color: @color;
-        }
-
-        &.dx-state-active {
-            background-color: darken(@background-color, 15%);
-            color: @color;
         }
     }
 }
