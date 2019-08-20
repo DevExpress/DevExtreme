@@ -632,7 +632,6 @@ var DropDownList = DropDownEditor.inherit({
             keyExpr: this._getCollectionKeyExpr(),
             displayExpr: this._displayGetterExpr(),
             groupTemplate: this.option("groupTemplate"),
-            tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
             _keyboardProcessor: this._childKeyboardProcessor,
@@ -640,7 +639,15 @@ var DropDownList = DropDownEditor.inherit({
             focusStateEnabled: this._isDesktopDevice() ? this.option("focusStateEnabled") : false
         };
 
+        if(!this._isListFocusable()) {
+            options.tabIndex = null;
+        }
+
         return options;
+    },
+
+    _isListFocusable() {
+        return this.option("showSelectionControls");
     },
 
     _getDataSource: function() {
