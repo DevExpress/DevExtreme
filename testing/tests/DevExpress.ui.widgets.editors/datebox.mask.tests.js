@@ -649,7 +649,8 @@ if(devices.real().deviceType === "desktop") {
                 }
             });
 
-            this.keyboard.type("1").blur();
+            this.keyboard.type("1");
+            this.$input.trigger("focusout");
             assert.strictEqual(this.$input.val(), "January 31 2019", "value is correct");
         });
     });
