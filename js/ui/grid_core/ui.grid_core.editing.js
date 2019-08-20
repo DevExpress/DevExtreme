@@ -1636,13 +1636,14 @@ var EditingController = modules.ViewController.inherit((function() {
          */
         closeEditCell: function(isError) {
             var that = this,
-                result = deferredUtils.when();
+                result = deferredUtils.when(),
+                oldEditRowIndex = that._getVisibleEditRowIndex();
 
             if(!isRowEditMode(that)) {
                 result = deferredUtils.Deferred();
                 setTimeout(() => {
                     when(this._deferred).done(() => {
-                        this._closeEditCellCore(isError);
+                        this._closeEditCellCore(isError, oldEditRowIndex);
                         result.resolve();
                     });
                 });
@@ -1650,10 +1651,9 @@ var EditingController = modules.ViewController.inherit((function() {
             return result.promise();
         },
 
-        _closeEditCellCore(isError) {
+        _closeEditCellCore(isError, oldEditRowIndex) {
             var that = this,
                 editMode = getEditMode(that),
-                oldEditRowIndex = that._getVisibleEditRowIndex(),
                 dataController = that._dataController;
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
                 that.saveEditData().done(function(error) {
