@@ -2559,28 +2559,26 @@ QUnit.module('Multiple sorting', {
 
         that.clock = sinon.useFakeTimers();
 
-        that.columns = [{
-            dataField: "field1"
-        }, {
-            dataField: "field2",
-            sortIndex: 1,
-            sortOrder: "asc"
-        }, {
-            dataField: "field3",
-            sortIndex: 0,
-            sortOrder: "asc"
-        }],
         that.$element = function() {
             return $("#container");
         };
-        that.options = {
-            showColumnHeaders: true
-        };
 
-        that.setupDataGrid = function() {
-            that.options.columns = that.columns;
+        that.setupDataGrid = function(options) {
+            options.columns = [{
+                dataField: "field1"
+            }, {
+                dataField: "field2",
+                sortIndex: 1,
+                sortOrder: "asc"
+            }, {
+                dataField: "field3",
+                sortIndex: 0,
+                sortOrder: "asc"
+            }];
             dataGridMocks.setupDataGridModules(that, ["data", "columns", "columnHeaders", "sorting"], {
-                initViews: true
+                initViews: true,
+                initDefaultOptions: true,
+                options: options
             });
         };
     },
@@ -2592,72 +2590,78 @@ QUnit.module('Multiple sorting', {
 
 QUnit.test("Sort index icons should be rendered by default", function(assert) {
     // arrange
-    var $testElement = $("#container").addClass("dx-widget"),
-        $sortIndicators;
+    var $testElement = this.$element().addClass("dx-widget"),
+        options = {
+            sorting: {
+                mode: 'multiple'
+            }
+        },
+        $headerCells;
 
-    this.options.sorting = {
-        mode: 'multiple'
-    };
-
-    this.setupDataGrid();
+    this.setupDataGrid(options);
 
     // act
     this.columnHeadersView.render($testElement);
-    $sortIndicators = $testElement.find(".dx-column-indicators");
+    $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.equal($sortIndicators.eq(0).find(".dx-sort-index").text(), "2", "first sort index");
-    assert.equal($sortIndicators.eq(1).find(".dx-sort-index").text(), "1", "second sort index");
+    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "", "first column's sort index");
+    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "2", "second column's sort index");
+    assert.equal($headerCells.eq(2).find(".dx-sort-index").text(), "1", "third column's sort index");
 });
 
 QUnit.test("Sort index icons should be rendered when showSortIndexes is true", function(assert) {
     // arrange
-    var $testElement = $("#container").addClass("dx-widget"),
-        $sortIndicators;
+    var $testElement = this.$element().addClass("dx-widget"),
+        options = {
+            sorting: {
+                showSortIndexes: true,
+                mode: 'multiple'
+            }
+        },
+        $headerCells;
 
-    this.options.sorting = {
-        showSortIndexes: true,
-        mode: 'multiple'
-    };
-
-    this.setupDataGrid();
+    this.setupDataGrid(options);
 
     // act
     this.columnHeadersView.render($testElement);
-    $sortIndicators = $testElement.find(".dx-column-indicators");
+    $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.equal($sortIndicators.eq(0).find(".dx-sort-index").text(), "2", "first sort index");
-    assert.equal($sortIndicators.eq(1).find(".dx-sort-index").text(), "1", "second sort index");
+    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "", "first column's sort index");
+    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "2", "second column's sort index");
+    assert.equal($headerCells.eq(2).find(".dx-sort-index").text(), "1", "third column's sort index");
 
     // act
     this.columnOption(0, "sortOrder", "asc");
-    $sortIndicators = $testElement.find(".dx-column-indicators");
+    $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.equal($sortIndicators.eq(0).find(".dx-sort-index").text(), "3", "first sort index");
-    assert.equal($sortIndicators.eq(1).find(".dx-sort-index").text(), "2", "second sort index");
-    assert.equal($sortIndicators.eq(2).find(".dx-sort-index").text(), "1", "third sort index");
+    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "3", "first column's sort index");
+    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "2", "second column's sort index");
+    assert.equal($headerCells.eq(2).find(".dx-sort-index").text(), "1", "third column's sort index");
 
     // act
     this.columnOption(2, "sortOrder", null);
-    $sortIndicators = $testElement.find(".dx-column-indicators");
+    $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.equal($sortIndicators.eq(0).find(".dx-sort-index").text(), "2", "first sort index");
-    assert.equal($sortIndicators.eq(1).find(".dx-sort-index").text(), "1", "second sort index");
+    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "2", "first column's sort index");
+    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "1", "second column's sort index");
+    assert.equal($headerCells.eq(2).find(".dx-sort-index").text(), "", "third column's sort index");
 });
 
 QUnit.test("Sort index icons should not be rendered when showSortIndexes is false", function(assert) {
     // arrange
-    var $testElement = $("#container").addClass("dx-widget");
+    var $testElement = this.$element().addClass("dx-widget"),
+        options = {
+            sorting: {
+                showSortIndexes: false,
+                mode: 'multiple'
+            }
+        };
 
-    this.options.sorting = {
-        showSortIndexes: false,
-        mode: 'multiple'
-    };
-
-    this.setupDataGrid();
+    this.setupDataGrid(options);
 
     // act
     this.columnHeadersView.render($testElement);
