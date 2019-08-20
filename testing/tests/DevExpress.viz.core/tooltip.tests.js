@@ -6,6 +6,8 @@ import tooltipModule from "viz/core/tooltip";
 const Tooltip = tooltipModule.Tooltip;
 import vizUtils from "viz/core/utils";
 import rendererModule from "viz/core/renderers/renderer";
+import domAdapter from "core/dom_adapter";
+import windowUtils from "core/utils/window";
 
 QUnit.testStart(function() {
     $("<div>")
@@ -255,6 +257,43 @@ QUnit.test("Container has offset", function(assert) {
     // assert
     assert.equal(tooltip._wrapper.get(0).style.left, "10042px", "wrapper is moved to invisible area");
     assert.equal(tooltip._wrapper.get(0).style.top, "10121px", "wrapper is moved to invisible area");
+});
+
+QUnit.test("Body has vertical scroll", function(assert) {
+    const container = $(`<div style="height: 4000px"></div>`).appendTo(domAdapter.getDocument().body);
+
+    try {
+        const tooltip = new Tooltip({ eventTrigger: function() { } });
+        tooltip.update(this.options);
+        // act
+        tooltip.show({ description: "some-text" }, { x: 100, y: 2000 });
+        // assert
+        assert.equal(tooltip._wrapper.get(0).style.left, "62px", "wrapper is moved to invisible area");
+        assert.equal(tooltip._wrapper.get(0).style.top, "1941px", "wrapper is moved to invisible area");
+    } finally {
+        container.remove();
+    }
+});
+
+QUnit.test("Body has horizontal scroll", function(assert) {
+    const container = $(`<div style="width: 4000px; height: 600px;"></div>`).appendTo(domAdapter.getDocument().body);
+    const window = windowUtils.getWindow();
+    const scrollLeft = window.pageXOffset;
+
+    window.pageXOffset = 3000;
+
+    try {
+        const tooltip = new Tooltip({ eventTrigger: function() { } });
+        tooltip.update(this.options);
+        // act
+        tooltip.show({ description: "some-text" }, { x: 3100, y: 100 });
+        // assert
+        assert.equal(tooltip._wrapper.get(0).style.left, "62px", "wrapper is moved to invisible area");
+        assert.equal(tooltip._wrapper.get(0).style.top, "41px", "wrapper is moved to invisible area");
+    } finally {
+        window.pageXOffset = scrollLeft;
+        container.remove();
+    }
 });
 
 QUnit.test("Set options. customizeTooltip", function(assert) {
@@ -1042,8 +1081,9 @@ QUnit.test("Show. W/o params. Html", function(assert) {
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, "textGroupHtml styles");
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393", width: null }]);
 
-    assert.equal(this.tooltip._textHtml.html.callCount, 1, "textHtml html");
-    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, ["some-html"], "textHtml html");
+    assert.equal(this.tooltip._textHtml.html.callCount, 2, "textHtml html");
+    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
+    assert.deepEqual(this.tooltip._textHtml.html.lastCall.args, ["some-html"], "textHtml html");
 
     assert.equal(this.tooltip._text.css.callCount, 0, "text styles");
     assert.equal(this.tooltip._text.attr.callCount, 1, "text attrs");
