@@ -9366,13 +9366,11 @@ declare module DevExpress {
         /** @name Device.phone */
         phone?: boolean;
         /** @name Device.platform */
-        platform?: 'android' | 'ios' | 'win' | 'generic';
+        platform?: 'android' | 'ios' | 'generic';
         /** @name Device.tablet */
         tablet?: boolean;
         /** @name Device.version */
         version?: Array<number>;
-        /** @name Device.win */
-        win?: boolean;
     }
     /** @name DevicesObject */
     export class DevicesObject {
