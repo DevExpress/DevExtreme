@@ -117,6 +117,10 @@
             cursor: pointer;
         }
 
+        .dx-sort-index-indicator + .dx-datagrid-text-content {
+            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
+        }
+
         .dx-column-indicators {
             display: inline-block;
             vertical-align: top;
@@ -589,10 +593,6 @@
             &.dx-text-content-alignment-left.dx-text-content-alignment-right {
                 max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN*2));
             }
-        }
-
-        .dx-sort-indicator.dx-header-filter-indicator {
-            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
         }
 
         .dx-sort-indicator.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {

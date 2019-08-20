@@ -35,6 +35,7 @@ module.exports = {
                         .addClass(SORT_INDEX_CLASS)
                         .text(column.sortIndex + 1)
                         .appendTo($sortIndicator);
+                    $sortIndicator.parent().addClass("dx-sort-index-indicator");
                 }
 
                 options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
