@@ -15,6 +15,8 @@ export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
 
+        this.getTimePanel = () => $(".dx-scheduler-time-panel"),
+
         this.tooltip = {
             getOverlayContentElement: () => {
                 return this.isAdaptivity() ? this.tooltip.getContentElement().find(".dx-overlay-content") : $(".dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content");
