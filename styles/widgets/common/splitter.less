@@ -1,0 +1,30 @@
+.dx-splitter-wrapper {
+    height: 100%;
+    width: 2px;
+    display: inline-flex;
+    position: relative;
+    z-index: 998;
+    right: auto;
+}
+
+.dx-splitter {
+    height: 100%;
+    width: 2px;
+    display: inline-flex;
+    cursor: col-resize;
+    z-index: 999; // Below @OVERLAY_ZINDEX: 1000
+    right: 0;
+}
+
+.dx-splitter.dx-splitter-transparent {
+    z-index: 998;
+    background-color: transparent;
+}
+
+.dx-splitter-border {
+    z-index: 997;
+    height: 100%;
+    width: 2px;
+    display: inline-flex;
+    right: 0;
+}

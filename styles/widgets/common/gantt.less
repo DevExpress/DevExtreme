@@ -7,22 +7,18 @@
         vertical-align: middle;
     }
 
-    .dx-treelist {
-        .dx-scrollbar-vertical {
-            display: none;
-        }
+    .dx-gantt-treelist-wrapper {
+        display: inline-flex;
 
-        .dx-treelist-headers + .dx-treelist-rowsview {
-            border-top: none;
-        }
-    }
+        .dx-treelist {
+            .dx-scrollbar-vertical {
+                display: none;
+            }
 
-    .dx-gantt-splitter {
-        display: block;
-        cursor: col-resize;
-        position: absolute;
-        z-index: 10000;
-        height: 100%;
+            .dx-treelist-headers + .dx-treelist-rowsview {
+                border-top: none;
+            }
+        }
     }
 
     .dx-gantt-view {

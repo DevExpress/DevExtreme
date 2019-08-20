@@ -135,9 +135,12 @@
         overflow: hidden;
 
         .dx-filemanager-dirs-panel {
-            min-width: 250px;
-            max-width: 300px;
             padding: 5px 10px;
+            height: 100%;
+            min-width: 0;
+            max-width: unset;
+            width: 100%;
+            display: inline-flex;
         }
     }
 
@@ -346,6 +349,8 @@
 }
 
 .dx-filemanager-dirs-tree {
+    width: 100%;
+
     .dx-treeview-item-content {
         display: flex;
         align-items: flex-end;

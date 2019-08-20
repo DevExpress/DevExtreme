@@ -5,6 +5,7 @@ import { getWindow } from "../../core/utils/window";
 
 import Widget from "../widget/ui.widget";
 import Drawer from "../drawer/ui.drawer";
+import SplitterControl from "../splitter";
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
@@ -27,13 +28,41 @@ class FileManagerAdaptivityControl extends Widget {
 
         this._drawer = this._createComponent($drawer, Drawer, {
             opened: true,
-            template: this.option("drawerTemplate")
+            template: this._createDrawerTemplate.bind(this)
         });
+    }
+
+    _createDrawerTemplate(container) {
+        this.option("drawerTemplate")(container);
+        const leftElement = container;
+        const rightElement = this.$element().find(".dx-drawer-content");
+        const minAvailablePosX = 100;
+        const splitter = this._createComponent("<div>", SplitterControl, {
+            container: this.$element(),
+            leftElement,
+            rightElement,
+            minAvailablePosX,
+            onSplitterChanged: this._onSplitterChanged.bind(this)
+        });
+        splitter.$element().appendTo(container);
+        this._leftElement = leftElement;
+        this._rightElement = rightElement;
+        this._splitter = splitter;
     }
 
     _render() {
         super._render();
         this._checkAdaptiveState();
+    }
+
+    _onSplitterChanged(elementsWidth) {
+        this._updateWidth(elementsWidth.actionValue);
+    }
+
+    _updateWidth(newDirsPanelWidth) {
+        let newItemsPanelWidth = this._splitter.computeRightPanelWidth(newDirsPanelWidth);
+        this._leftElement.width(newDirsPanelWidth);
+        this._rightElement.width(newItemsPanelWidth);
     }
 
     _dimensionChanged(dimension) {

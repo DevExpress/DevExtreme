@@ -1,10 +1,8 @@
 import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
-import domAdapter from "../../core/dom_adapter";
 import dataCoreUtils from '../../core/utils/data';
 import eventsEngine from "../../events/core/events_engine";
-import pointerEvents from "../../events/pointer";
 import { addNamespace } from "../../events/utils";
 import { GanttView } from "./ui.gantt.view";
 import dxTreeList from "../tree_list";
@@ -13,18 +11,15 @@ import { getWindow, hasWindow } from "../../core/utils/window";
 import DataOption from "./ui.gantt.data.option";
 
 const GANTT_CLASS = "dx-gantt";
-const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
-const GANTT_SPLITTER_TRANSPARENT_CLASS = "dx-gantt-splitter-transparent";
-const GANTT_SPLITTER_BORDER_CLASS = "dx-gantt-splitter-border";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
 const GANTT_COLLAPSABLE_ROW = "dx-gantt-collapsable-row";
+const GANTT_TREE_LIST_WRAPPER = "dx-gantt-treelist-wrapper";
+
+import SplitterControl from "../splitter";
 
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
 
 const GANTT_MODULE_NAMESPACE = "dxGanttResizing";
-const GANTT_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, GANTT_MODULE_NAMESPACE);
-const GANTT_POINTER_MOVE_EVENT_NAME = addNamespace(pointerEvents.move, GANTT_MODULE_NAMESPACE);
-const GANTT_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, GANTT_MODULE_NAMESPACE);
 const GANTT_WINDOW_RESIZE_EVENT_NAME = addNamespace("resize", GANTT_MODULE_NAMESPACE);
 
 class Gantt extends Widget {
@@ -41,24 +36,28 @@ class Gantt extends Widget {
         this.$element().addClass(GANTT_CLASS);
 
         this._$treeListWrapper = $("<div>")
+            .addClass(GANTT_TREE_LIST_WRAPPER)
             .appendTo(this.$element());
         this._$treeList = $("<div>")
             .appendTo(this._$treeListWrapper);
-        this._$splitter = $("<div>")
-            .addClass(GANTT_SPLITTER_CLASS)
-            .addClass(GANTT_SPLITTER_TRANSPARENT_CLASS)
-            .appendTo(this.$element());
-        this._$splitterBorder = $("<div>")
-            .addClass(GANTT_SPLITTER_BORDER_CLASS)
-            .appendTo(this.$element());
         this._$ganttView = $("<div>")
             .addClass(GANTT_VIEW_CLASS)
             .appendTo(this.$element());
+
+        const leftElement = this._$treeListWrapper;
+        const rightElement = this._$ganttView;
+        const splitter = this._createComponent("<div>", SplitterControl, {
+            container: this.$element(),
+            leftElement: leftElement,
+            rightElement: rightElement,
+            onSplitterChanged: this._onSplitterChanged.bind(this)
+        });
+        splitter.$element().appendTo(leftElement);
+        this._splitter = splitter;
     }
 
     _render() {
         this._renderTreeList();
-        this._renderSplitter();
         this._detachEventHandlers();
         this._attachEventHandlers();
     }
@@ -84,22 +83,11 @@ class Gantt extends Widget {
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); }
         });
     }
-    _renderSplitter() {
-        this._$splitter.css("left", this.option("treeListWidth"));
-    }
 
     _detachEventHandlers() {
-        const document = domAdapter.getDocument();
-        eventsEngine.off(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME);
-        eventsEngine.off(document, GANTT_POINTER_MOVE_EVENT_NAME);
-        eventsEngine.off(document, GANTT_POINTER_UP_EVENT_NAME);
         eventsEngine.off(getWindow(), GANTT_WINDOW_RESIZE_EVENT_NAME);
     }
     _attachEventHandlers() {
-        const document = domAdapter.getDocument();
-        eventsEngine.on(this._$splitter, GANTT_POINTER_DOWN_EVENT_NAME, this._startResizingHandler.bind(this));
-        eventsEngine.on(document, GANTT_POINTER_MOVE_EVENT_NAME, this._moveSplitterHandler.bind(this));
-        eventsEngine.on(document, GANTT_POINTER_UP_EVENT_NAME, this._endResizingHandler.bind(this));
         eventsEngine.on(getWindow(), GANTT_WINDOW_RESIZE_EVENT_NAME, this._windowResizeHandler.bind(this));
     }
 
@@ -122,30 +110,12 @@ class Gantt extends Widget {
         });
     }
 
-    _startResizingHandler(e) {
-        e.preventDefault();
-        this._$splitter.removeClass(GANTT_SPLITTER_TRANSPARENT_CLASS);
-        this._isSplitterMove = true;
-        this._splitterLastLeftPos = e.clientX;
-    }
-    _moveSplitterHandler(e) {
-        if(this._isSplitterMove) {
-            let newLeftPos = this._$splitter.position().left - this._splitterLastLeftPos + e.clientX;
-            newLeftPos = Math.max(0, newLeftPos);
-            newLeftPos = Math.min(newLeftPos, this.$element().width());
-            this._splitterLastLeftPos = e.clientX;
-            this._updateWidth(newLeftPos);
-        }
-    }
-    _endResizingHandler() {
-        if(this._isSplitterMove) {
-            this._$splitter.addClass(GANTT_SPLITTER_TRANSPARENT_CLASS);
-            this._isSplitterMove = false;
-            this.option("treeListWidth", this._$splitter.position().left);
-        }
-    }
     _windowResizeHandler() {
         this._updateWidth(this.option("treeListWidth"));
+    }
+
+    _onSplitterChanged(newTreeListWidth) {
+        this.option("treeListWidth", newTreeListWidth.actionValue);
     }
 
     _onTreeListContentReady(e) {
@@ -200,12 +170,10 @@ class Gantt extends Widget {
         if(!hasWindow()) {
             return;
         }
-        const splitterBorderWidth = this._$splitterBorder.outerWidth();
-        treeListWidth = Math.min(treeListWidth, this.$element().width() - splitterBorderWidth);
-        this._$treeListWrapper.width(treeListWidth);
+        let newGanttViewWidth = this._splitter.computeRightPanelWidth(treeListWidth);
         this._$treeList.width(treeListWidth);
-        this._$splitter.css("left", treeListWidth);
-        this._ganttView && this._ganttView.setWidth(this.$element().width() - treeListWidth - splitterBorderWidth);
+        this._$treeListWrapper.width(treeListWidth);
+        this._ganttView && this._ganttView.setWidth(newGanttViewWidth);
     }
 
     _setGanttViewOption(optionName, value) {
