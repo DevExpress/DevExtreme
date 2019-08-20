@@ -114,7 +114,6 @@ Tooltip.prototype = {
                     state.isRendered = true;
                 }
             } else {
-                textHtml.html("");
                 that._text.css({ fill: state.textColor }).attr({ text: state.text, "class": options.cssClass }).append(group.attr({ align: options.textAlignment }));
             }
             this.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor });
@@ -209,6 +208,8 @@ Tooltip.prototype = {
 
         that._wrapper.appendTo(that._getContainer());
 
+        that._textHtml.html("");
+
         this.plaque.clear().draw(extend({}, that._options, {
             canvas: that._getCanvas()
         }, state, {
@@ -291,14 +292,20 @@ Tooltip.prototype = {
         const container = this._getContainer();
         const containerBox = container.getBoundingClientRect();
         const html = domAdapter.getDocumentElement();
+        const document = domAdapter.getDocument();
         let left = window.pageXOffset || html.scrollLeft || 0;
         let top = window.pageYOffset || html.scrollTop || 0;
 
         const box = {
             left: left,
             top: top,
-            width: html.clientWidth || 0,
-            height: html.clientHeight || 0,
+            width: (html.clientWidth + left) || 0,
+            height: mathMax(
+                document.body.scrollHeight, html.scrollHeight,
+                document.body.offsetHeight, html.offsetHeight,
+                document.body.clientHeight, html.clientHeight
+            ) || 0,
+
             right: 0,
             bottom: 0
         };
