@@ -42,7 +42,7 @@ class FileManagerAdaptivityControl extends Widget {
             leftElement,
             rightElement,
             minAvailablePosX,
-            onSplitterChanged: this._onSplitterChanged.bind(this)
+            onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
         splitter.$element().appendTo(container);
         this._leftElement = leftElement;
@@ -55,11 +55,8 @@ class FileManagerAdaptivityControl extends Widget {
         this._checkAdaptiveState();
     }
 
-    _onSplitterChanged(elementsWidth) {
-        this._updateWidth(elementsWidth.actionValue);
-    }
-
-    _updateWidth(newDirsPanelWidth) {
+    _onApplyPanelSize(elementsWidth) {
+        let newDirsPanelWidth = elementsWidth.actionValue;
         let newItemsPanelWidth = this._splitter.computeRightPanelWidth(newDirsPanelWidth);
         this._leftElement.width(newDirsPanelWidth);
         this._rightElement.width(newItemsPanelWidth);

@@ -5,7 +5,6 @@ import eventsEngine from "../events/core/events_engine";
 import pointerEvents from "../events/pointer";
 import { addNamespace } from "../events/utils";
 
-
 const SPLITTER_CLASS = "dx-splitter";
 const SPLITTER_WRAPPER_CLASS = `${SPLITTER_CLASS}-wrapper`;
 const SPLITTER_TRANSPARENT_CLASS = `${SPLITTER_CLASS}-transparent`;
@@ -21,9 +20,7 @@ export default class SplitterControl extends Widget {
         this._container = this.option("container");
         this._leftElement = this.option("leftElement");
         this._rightElement = this.option("rightElement");
-        this._onSplitterChanged = this._createActionByOption("onSplitterChanged");
-        this._minAvailablePosX = 100;
-        this._maxAvailablePosX = this._container.width();
+        this._onApplyPanelSize = this._createActionByOption("onApplyPanelSize");
 
         this.$element()
             .addClass(SPLITTER_WRAPPER_CLASS);
@@ -64,7 +61,6 @@ export default class SplitterControl extends Widget {
         e.preventDefault();
         this._isSplitterActive = true;
         this._cursorLastPos = e.clientX;
-        this._maxAvailablePosX = this._container.width();
         this._$splitter.removeClass(SPLITTER_TRANSPARENT_CLASS);
     }
 
@@ -72,7 +68,7 @@ export default class SplitterControl extends Widget {
         if(!this._isSplitterActive) {
             return;
         }
-        this._onSplitterChanged(this._calculateLeftElementWidth(e));
+        this._onApplyPanelSize(this._computeLeftElementWidth(e));
     }
 
     _onMouseUpHandler() {
@@ -83,13 +79,13 @@ export default class SplitterControl extends Widget {
     }
 
     computeRightPanelWidth(leftPanelWidth) {
-        return this._maxAvailablePosX - leftPanelWidth - this._$splitterBorder.width();
+        return this._container.width() - leftPanelWidth - this._$splitterBorder.width();
     }
 
-    _calculateLeftElementWidth(e) {
+    _computeLeftElementWidth(e) {
         this._cursorLastPos = e.pageX - this._container.offset().left;
-        this._cursorLastPos = Math.max(this._minAvailablePosX, this._cursorLastPos);
-        this._cursorLastPos = Math.min(this._maxAvailablePosX, this._cursorLastPos);
+        this._cursorLastPos = Math.max(100, this._cursorLastPos);
+        this._cursorLastPos = Math.min(this._container.width(), this._cursorLastPos);
         return this._cursorLastPos;
     }
 

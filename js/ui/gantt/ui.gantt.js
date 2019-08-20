@@ -9,13 +9,12 @@ import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
 import { getWindow, hasWindow } from "../../core/utils/window";
 import DataOption from "./ui.gantt.data.option";
+import SplitterControl from "../splitter";
 
 const GANTT_CLASS = "dx-gantt";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
 const GANTT_COLLAPSABLE_ROW = "dx-gantt-collapsable-row";
 const GANTT_TREE_LIST_WRAPPER = "dx-gantt-treelist-wrapper";
-
-import SplitterControl from "../splitter";
 
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
 
@@ -46,14 +45,13 @@ class Gantt extends Widget {
 
         const leftElement = this._$treeListWrapper;
         const rightElement = this._$ganttView;
-        const splitter = this._createComponent("<div>", SplitterControl, {
+        this._splitter = this._createComponent("<div>", SplitterControl, {
             container: this.$element(),
             leftElement: leftElement,
             rightElement: rightElement,
-            onSplitterChanged: this._onSplitterChanged.bind(this)
+            onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
-        splitter.$element().appendTo(leftElement);
-        this._splitter = splitter;
+        this._splitter.$element().appendTo(leftElement);
     }
 
     _render() {
@@ -114,7 +112,7 @@ class Gantt extends Widget {
         this._updateWidth(this.option("treeListWidth"));
     }
 
-    _onSplitterChanged(newTreeListWidth) {
+    _onApplyPanelSize(newTreeListWidth) {
         this.option("treeListWidth", newTreeListWidth.actionValue);
     }
 

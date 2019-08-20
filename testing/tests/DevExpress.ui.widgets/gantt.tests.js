@@ -9,10 +9,10 @@ QUnit.testStart(() => {
 });
 
 const TREELIST_SELECTOR = ".dx-treelist";
+const TREELIST_WRAPPER_SELECTOR = ".dx-gantt-treelist-wrapper";
 const TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper";
 const TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes";
 const TASK_ARROW_SELECTOR = ".dx-gantt-arrow";
-const SPLITTER_SELECTOR = ".dx-gantt-splitter";
 const TASK_TITLE_IN_SELECTOR = ".dx-gantt-titleIn";
 const TASK_TITLE_OUT_SELECTOR = ".dx-gantt-titleOut";
 const TREELIST_EXPANDED = ".dx-treelist-expanded";
@@ -102,13 +102,10 @@ QUnit.module("Options", moduleConfig, () => {
     test("treeListWidth", (assert) => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
-        const treeListElement = this.$element.find(TREELIST_SELECTOR)[0];
-        const splitter = this.$element.find(SPLITTER_SELECTOR)[0];
-        assert.equal(treeListElement.offsetWidth, 300);
-        assert.equal(splitter.style.left, "300px");
+        const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
+        assert.equal(treeListWrapperElement.width(), 300, "500px");
         this.instance.option("treeListWidth", 500);
-        assert.equal(treeListElement.offsetWidth, 500);
-        assert.equal(splitter.style.left, "500px");
+        assert.equal(treeListWrapperElement.width(), 500, "500px");
     });
     test("showResources", (assert) => {
         this.createInstance(allSourcesOptions);
