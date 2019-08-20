@@ -578,6 +578,7 @@ const GroupConfig = Class.inherit({
              */
             complete: null
         };
+        delete this._asyncValidationResults;
         each(this.validators, (_, validator) => {
             const validatorResult = validator.validate();
             result.isValid = result.isValid && validatorResult.isValid;
