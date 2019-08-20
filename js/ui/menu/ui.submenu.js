@@ -1,118 +1,117 @@
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    positionUtils = require("../../animation/position"),
-    extend = require("../../core/utils/extend").extend,
-    ContextMenu = require("../context_menu");
+import $ from "../../core/renderer";
+import { noop } from "../../core/utils/common";
+import { getPublicElement } from "../../core/utils/dom";
+import { setup } from "../../animation/position";
+import { extend } from "../../core/utils/extend";
+import ContextMenu from "../context_menu";
 
-var DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = "dx-context-menu-content-delimiter",
-    DX_SUBMENU_CLASS = "dx-submenu";
+const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = "dx-context-menu-content-delimiter";
+const DX_SUBMENU_CLASS = "dx-submenu";
 
-var Submenu = ContextMenu.inherit({
-
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+class Submenu extends ContextMenu {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             orientation: "horizontal",
             tabIndex: null,
             onHoverStart: noop
         });
-    },
+    }
 
-    _initDataAdapter: function() {
+    _initDataAdapter() {
         this._dataAdapter = this.option("_dataAdapter");
         if(!this._dataAdapter) {
-            this.callBase();
+            super._initDataAdapter();
         }
-    },
+    }
 
-    _renderContentImpl: function() {
+    _renderContentImpl() {
         this._renderContextMenuOverlay();
-        this.callBase();
+        super._renderContentImpl();
 
-        var node = this._dataAdapter.getNodeByKey(this.option("_parentKey"));
+        const node = this._dataAdapter.getNodeByKey(this.option("_parentKey"));
         node && this._renderItems(this._getChildNodes(node));
         this._renderDelimiter();
-    },
+    }
 
-    _renderDelimiter: function() {
+    _renderDelimiter() {
         this.$contentDelimiter = $("<div>")
             .appendTo(this._itemContainer())
             .addClass(DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS);
-    },
+    }
 
-    _getOverlayOptions: function() {
-        return extend(this.callBase(), {
+    _getOverlayOptions() {
+        return extend(super._getOverlayOptions(), {
             onPositioned: this._overlayPositionedActionHandler.bind(this)
         });
-    },
+    }
 
-    _overlayPositionedActionHandler: function(arg) {
+    _overlayPositionedActionHandler(arg) {
         this._showDelimiter(arg);
-    },
+    }
 
-    _hoverEndHandler: function(e) {
-        this.callBase(e);
+    _hoverEndHandler(e) {
+        super._hoverEndHandler(e);
         this._toggleFocusClass(false, e.currentTarget);
-    },
+    }
 
-    _isMenuHorizontal: function() {
+    _isMenuHorizontal() {
         return this.option("orientation") === "horizontal";
-    },
+    }
 
-    _hoverStartHandler: function(e) {
-        var hoverStartAction = this.option("onHoverStart");
+    _hoverStartHandler(e) {
+        const hoverStartAction = this.option("onHoverStart");
         hoverStartAction(e);
 
-        this.callBase(e);
+        super._hoverStartHandler(e);
         this._toggleFocusClass(true, e.currentTarget);
-    },
+    }
 
-    _drawSubmenu: function($rootItem) {
+    _drawSubmenu($rootItem) {
         this._actions.onShowing({
             rootItem: getPublicElement($rootItem),
             submenu: this
         });
-        this.callBase($rootItem);
+        super._drawSubmenu($rootItem);
         this._actions.onShown({
             rootItem: getPublicElement($rootItem),
             submenu: this
         });
-    },
+    }
 
-    _hideSubmenu: function($rootItem) {
+    _hideSubmenu($rootItem) {
         this._actions.onHiding({
             cancel: true,
             rootItem: getPublicElement($rootItem),
             submenu: this
         });
-        this.callBase($rootItem);
+        super._hideSubmenu($rootItem);
         this._actions.onHidden({
             rootItem: getPublicElement($rootItem),
             submenu: this
         });
-    },
+    }
 
     // TODO: try to simplify it
-    _showDelimiter: function(arg) {
+    _showDelimiter(arg) {
         if(!this.$contentDelimiter) {
             return;
         }
 
-        var $submenu = this._itemContainer().children("." + DX_SUBMENU_CLASS).eq(0),
-            $rootItem = this.option("position").of,
-            position = {
-                of: $submenu
-            },
-            containerOffset = arg.position,
-            vLocation = containerOffset.v.location,
-            hLocation = containerOffset.h.location,
-            rootOffset = $rootItem.offset(),
-            offsetLeft = Math.round(rootOffset.left),
-            offsetTop = Math.round(rootOffset.top),
-            rootWidth = $rootItem.width(),
-            rootHeight = $rootItem.height(),
-            submenuWidth = $submenu.width(),
-            submenuHeight = $submenu.height();
+        const $submenu = this._itemContainer().children(`.${DX_SUBMENU_CLASS}`).eq(0);
+        const $rootItem = this.option("position").of;
+        const position = {
+            of: $submenu
+        };
+        const containerOffset = arg.position;
+        const vLocation = containerOffset.v.location;
+        const hLocation = containerOffset.h.location;
+        const rootOffset = $rootItem.offset();
+        const offsetLeft = Math.round(rootOffset.left);
+        const offsetTop = Math.round(rootOffset.top);
+        const rootWidth = $rootItem.width();
+        const rootHeight = $rootItem.height();
+        const submenuWidth = $submenu.width();
+        const submenuHeight = $submenu.height();
 
         this.$contentDelimiter.css("display", "block");
         this.$contentDelimiter.width(this._isMenuHorizontal() ? (rootWidth < submenuWidth ? rootWidth - 2 : submenuWidth) : 2);
@@ -156,20 +155,20 @@ var Submenu = ContextMenu.inherit({
                 }
             }
         }
-        positionUtils.setup(this.$contentDelimiter, position);
-    },
+        setup(this.$contentDelimiter, position);
+    }
 
-    _getContextMenuPosition: function() {
+    _getContextMenuPosition() {
         return this.option("position");
-    },
+    }
 
-    isOverlayVisible: function() {
+    isOverlayVisible() {
         return this._overlay.option("visible");
-    },
+    }
 
-    getOverlayContent: function() {
+    getOverlayContent() {
         return this._overlay.$content();
     }
-});
+}
 
 module.exports = Submenu;
