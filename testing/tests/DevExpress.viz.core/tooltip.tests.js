@@ -277,9 +277,10 @@ QUnit.test("Body has vertical scroll", function(assert) {
 QUnit.test("Body has horizontal scroll", function(assert) {
     const container = $(`<div style="width: 4000px; height: 600px;"></div>`).appendTo(domAdapter.getDocument().body);
     const documentElement = domAdapter.getDocument().documentElement;
-    const scrollLeft = documentElement.pageXOffset;
-
-    documentElement.scrollLeft = 3000;
+    const body = $("body").get(0);
+    const bodyScrollLeft = body.scrollLeft;
+    const documentScrollLeft = documentElement.scrollLeft;
+    body.scrollLeft = documentElement.scrollLeft = 3000;
 
     try {
         const tooltip = new Tooltip({ eventTrigger: function() { } });
@@ -287,10 +288,11 @@ QUnit.test("Body has horizontal scroll", function(assert) {
         // act
         tooltip.show({ description: "some-text" }, { x: 3100, y: 100 });
         // assert
-        assert.equal(tooltip._wrapper.get(0).style.left, "3062px", "wrapper is moved to invisible area");
-        assert.equal(tooltip._wrapper.get(0).style.top, "41px", "wrapper is moved to invisible area");
+        assert.equal(tooltip._wrapper.get(0).style.left, "3062px");
+        assert.equal(tooltip._wrapper.get(0).style.top, "41px");
     } finally {
-        documentElement.scrollLeft = scrollLeft;
+        body.scrollLeft = bodyScrollLeft;
+        documentElement.scrollLeft = documentScrollLeft;
         container.remove();
     }
 });
