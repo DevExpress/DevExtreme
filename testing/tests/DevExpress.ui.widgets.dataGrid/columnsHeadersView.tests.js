@@ -2665,37 +2665,3 @@ QUnit.test("Sort index icons should not be rendered when showSortIndexes is fals
     // assert
     assert.notOk($testElement.find(".dx-sort-index").length, "no sort indexes");
 });
-
-QUnit.test("Sort index icons should not be rendered if column's sort index is more than 8", function(assert) {
-    // arrange
-    var $testElement = $("#container").addClass("dx-widget"),
-        $sortIndexIndicators,
-        columns = [];
-
-    this.options.sorting = {
-        showSortIndexes: true,
-        mode: 'multiple'
-    };
-
-    for(let i = 0; i < 10; i++) {
-        columns.push({
-            dataField: "field" + i,
-            sortIndex: i,
-            sortOrder: "asc"
-        });
-    }
-
-    $.extend(this.columns, columns);
-
-    this.setupDataGrid();
-
-    // act
-    this.columnHeadersView.render($testElement);
-    $sortIndexIndicators = $testElement.find(".dx-sort-index");
-
-    // assert
-    assert.equal($sortIndexIndicators.length, 9, "sort index indicator count");
-    for(let i = 0; i <= 8; i++) {
-        assert.equal($sortIndexIndicators.eq(i).text(), i + 1, `sort index indicator №${i} text`);
-    }
-});

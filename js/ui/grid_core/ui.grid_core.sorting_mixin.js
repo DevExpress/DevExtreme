@@ -30,7 +30,7 @@ module.exports = {
                     .toggleClass(SORTDOWN_CLASS, column.sortOrder === "desc");
 
                 let hasSeveralSortIndexes = !!that.getController("columns").columnOption("sortIndex:1");
-                if(hasSeveralSortIndexes && that.option("sorting.showSortIndexes") && column.sortIndex <= 8) {
+                if(hasSeveralSortIndexes && that.option("sorting.showSortIndexes")) {
                     $("<span>")
                         .addClass(SORT_INDEX_CLASS)
                         .text(column.sortIndex + 1)
