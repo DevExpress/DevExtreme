@@ -2170,5 +2170,12 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
 });
 
 
-const getVisibleSubmenuCount = (instance) => instance.itemsContainer().find(`.${DX_SUBMENU_CLASS}`).filter((_, item) => $(item).css("visibility") === "visible").length;
-const getFocusedItemText = (instance) => $(instance.option("focusedElement")).children(`.${DX_MENU_ITEM_CONTENT_CLASS}`).text();
+function getVisibleSubmenuCount(instance) {
+    return instance.itemsContainer().find(`.${DX_SUBMENU_CLASS}`).filter((_, item) => {
+        return $(item).css("visibility") === "visible";
+    }).length;
+}
+
+function getFocusedItemText(instance) {
+    return $(instance.option("focusedElement")).children(`.${DX_MENU_ITEM_CONTENT_CLASS}`).text();
+}
