@@ -257,7 +257,12 @@ module.exports = {
                                         if(that._isFixedColumns) {
                                             var $rows = $(component.getRowElement(options.rowIndex));
                                             if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
-                                                component.updateDimensions();
+                                                var width = dataGrid.$element().width();
+                                                component.updateDimensions().done(function() {
+                                                    if(dataGrid.option("columnAutoWidth") && component.option("scrolling.useNative") === true && width !== dataGrid.$element().width()) {
+                                                        dataGrid.updateDimensions();
+                                                    }
+                                                });
                                             }
                                         } else {
                                             var scrollable = component.getScrollable();
