@@ -22,7 +22,7 @@ const PLACEHOLDER_CLASS = "dx-placeholder";
 const ACTIVE_STATE_CLASS = "dx-state-active";
 
 QUnit.module("basics", {}, () => {
-    QUnit.test("markup init", assert => {
+    QUnit.test("markup init", (assert) => {
         const element = $("#numberbox").dxNumberBox();
 
         assert.ok(element.hasClass(NUMBERBOX_CLASS));
@@ -32,7 +32,7 @@ QUnit.module("basics", {}, () => {
         assert.equal(element.find("." + CONTAINER_CLASS).length, 1);
     });
 
-    QUnit.test("input should have correct type", assert => {
+    QUnit.test("input should have correct type", (assert) => {
         const $element = $("#numberbox").dxNumberBox();
         const instance = $element.dxNumberBox("instance");
 
@@ -57,7 +57,12 @@ QUnit.module("basics", {}, () => {
         assert.equal($element.find("." + INPUT_CLASS).prop("type"), checkInput("number") ? instance.option("mode") : "text");
     });
 
-    QUnit.test("onContentReady fired after the widget is fully ready", assert => {
+    QUnit.test("input should have inputmode attribute for numeric keyboard on mobile devices", function(assert) {
+        const $element = $("#numberbox").dxNumberBox();
+        assert.equal($element.find("." + INPUT_CLASS).attr("inputmode"), "decimal", "inputmode is correct");
+    });
+
+    QUnit.test("onContentReady fired after the widget is fully ready", (assert) => {
         assert.expect(2);
 
         $("#numberbox").dxNumberBox({
@@ -69,7 +74,7 @@ QUnit.module("basics", {}, () => {
         });
     });
 
-    QUnit.test("init with options", assert => {
+    QUnit.test("init with options", (assert) => {
         assert.expect(2);
 
         const element = $("#numberbox").dxNumberBox({
@@ -83,7 +88,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($input.prop("max"), 100);
     });
 
-    QUnit.test("typing value by keyboard update 'value' option", assert => {
+    QUnit.test("typing value by keyboard update 'value' option", (assert) => {
         assert.expect(2);
 
         const element = $("#numberbox").dxNumberBox({
@@ -105,7 +110,7 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual(instance.option("value"), 100200);
     });
 
-    QUnit.test("validate value on focusout", assert => {
+    QUnit.test("validate value on focusout", (assert) => {
         assert.expect(2);
 
         const element = $("#numberbox").dxNumberBox({
@@ -128,7 +133,7 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual(instance.option("value"), 100, "validate value on focusout");
     });
 
-    QUnit.test("trigger invalid event", assert => {
+    QUnit.test("trigger invalid event", (assert) => {
         assert.expect(2);
 
         const element = $("#numberbox").dxNumberBox({
@@ -151,7 +156,7 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual(instance.option("value"), 100, "validate value on invalid event");
     });
 
-    QUnit.test("validate value on keyup", assert => {
+    QUnit.test("validate value on keyup", (assert) => {
         const element = $("#numberbox").dxNumberBox({
             value: 100,
             valueChangeEvent: "keyup"
@@ -172,7 +177,7 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual(instance.option("value"), expectedResult, "value is correct");
     });
 
-    QUnit.test("Validate value on keyup when 0 typing after a comma", assert => {
+    QUnit.test("Validate value on keyup when 0 typing after a comma", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             value: null,
             valueChangeEvent: "keyup",
@@ -201,7 +206,7 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual(instance.option("value"), expectedValue++, "value is correct");
     });
 
-    QUnit.test("validate 'plus' char typing", assert => {
+    QUnit.test("validate 'plus' char typing", (assert) => {
         const element = $("#numberbox").dxNumberBox({
             value: 1,
             valueChangeEvent: "change"
@@ -229,7 +234,7 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual(instance.option("value"), 1, "value is correct");
     });
 
-    QUnit.test("validate 'minus' char typing", assert => {
+    QUnit.test("validate 'minus' char typing", (assert) => {
         const element = $("#numberbox").dxNumberBox({
             value: 1,
             valueChangeEvent: "change"
@@ -257,7 +262,7 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual(instance.option("value"), -11, "value is correct");
     });
 
-    QUnit.test("jQuery event should be specified on value change when value is not valid", assert => {
+    QUnit.test("jQuery event should be specified on value change when value is not valid", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             value: 1,
             valueChangeEvent: "keyup",
@@ -275,7 +280,7 @@ QUnit.module("basics", {}, () => {
             .keyUp("backspace");
     });
 
-    QUnit.test("regression test. Change value used option", assert => {
+    QUnit.test("regression test. Change value used option", (assert) => {
         assert.expect(1);
 
         const element = $("#numberbox").dxNumberBox({
@@ -289,7 +294,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($input.val(), 200);
     });
 
-    QUnit.test("'text' option should be correct", assert => {
+    QUnit.test("'text' option should be correct", (assert) => {
         assert.expect(2);
 
         const element = $("#numberbox").dxNumberBox({
@@ -304,7 +309,7 @@ QUnit.module("basics", {}, () => {
         assert.equal(instance.option("text"), "200", "Text is OK");
     });
 
-    QUnit.test("placeholder is visible when value is invalid", assert => {
+    QUnit.test("placeholder is visible when value is invalid", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             placeholder: "Placeholder",
             value: ""
@@ -320,7 +325,7 @@ QUnit.module("basics", {}, () => {
         assert.ok($element.find("." + PLACEHOLDER_CLASS).is(":visible"), "placeholder is visible with invalid value");
     });
 
-    QUnit.test("init with option useLargeSpinButtons", assert => {
+    QUnit.test("init with option useLargeSpinButtons", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             showSpinButtons: true,
             useLargeSpinButtons: true
@@ -329,7 +334,7 @@ QUnit.module("basics", {}, () => {
         assert.ok($element.hasClass(SPIN_TOUCH_FRIENDLY_CLASS), "element has touchFriendly class");
     });
 
-    QUnit.testInActiveWindow("input is focused when spin buttons are clicked if useLargeSpinButtons = false", assert => {
+    QUnit.testInActiveWindow("input is focused when spin buttons are clicked if useLargeSpinButtons = false", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             showSpinButtons: true,
             useLargeSpinButtons: false
@@ -345,7 +350,7 @@ QUnit.module("basics", {}, () => {
         assert.ok($input.is(":focus"), "input is focused after click on spin button");
     });
 
-    QUnit.test("spin button should have feedback after click on it", assert => {
+    QUnit.test("spin button should have feedback after click on it", (assert) => {
         const FEEDBACK_SHOW_TIMEOUT = 30;
         this.clock = sinon.useFakeTimers();
 
@@ -366,7 +371,7 @@ QUnit.module("basics", {}, () => {
         }
     });
 
-    QUnit.test("spin button should change value after long click on it", assert => {
+    QUnit.test("spin button should change value after long click on it", (assert) => {
         const FEEDBACK_SHOW_TIMEOUT = 500;
         this.clock = sinon.useFakeTimers();
 
@@ -393,7 +398,7 @@ QUnit.module("basics", {}, () => {
         }
     });
 
-    QUnit.test("hoverStateEnabled option", assert => {
+    QUnit.test("hoverStateEnabled option", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             hoverStateEnabled: true
         });
@@ -405,7 +410,7 @@ QUnit.module("basics", {}, () => {
         assert.ok(!$element.hasClass("dx-state-hover"), "dxNumberBox has not hover class");
     });
 
-    QUnit.test("hoverStateEnabled option for spinButton", assert => {
+    QUnit.test("hoverStateEnabled option for spinButton", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             hoverStateEnabled: true,
             showSpinButtons: true
@@ -420,7 +425,7 @@ QUnit.module("basics", {}, () => {
         assert.ok(!$spinButton.hasClass("dx-state-hover"), "Spin button has not hover class after mouse enter on it");
     });
 
-    QUnit.testInActiveWindow("input value is greeter or less after mousewheel action", assert => {
+    QUnit.testInActiveWindow("input value is greeter or less after mousewheel action", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 100.6
         });
@@ -440,10 +445,10 @@ QUnit.module("basics", {}, () => {
 
         $numberBoxInput.blur();
         mouse.wheel(-20);
-        assert.equal(numberBox.option("value"), 100.6);
+        assert.roughEqual(numberBox.option("value"), 100.6, 1.001);
     });
 
-    QUnit.test("mousewheel action should not work in disabled state", assert => {
+    QUnit.test("mousewheel action should not work in disabled state", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 100.6,
             disabled: true
@@ -474,7 +479,7 @@ QUnit.module("basics", {}, () => {
         assert.notStrictEqual(numberBox.option("value"), 100);
     });
 
-    QUnit.testInActiveWindow("input is not focused when spin buttons are clicked if useLargeSpinButtons = true", assert => {
+    QUnit.testInActiveWindow("input is not focused when spin buttons are clicked if useLargeSpinButtons = true", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             showSpinButtons: true,
             useLargeSpinButtons: true
@@ -498,7 +503,7 @@ QUnit.module("basics", {}, () => {
         assert.ok($input.is(":focus"), "input is still focused");
     });
 
-    QUnit.test("correct order of buttons when widget is rendered", assert => {
+    QUnit.test("correct order of buttons when widget is rendered", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             showSpinButtons: true,
             showClearButton: true
@@ -509,8 +514,7 @@ QUnit.module("basics", {}, () => {
         assert.ok($buttons.eq(1).hasClass("dx-numberbox-spin-container"), "spin buttons are the second");
     });
 
-
-    QUnit.test("correct order of buttons when clear button option is set after rendering", assert => {
+    QUnit.test("correct order of buttons when clear button option is set after rendering", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             showSpinButtons: true
         });
@@ -525,7 +529,7 @@ QUnit.module("basics", {}, () => {
         assert.ok($buttons.eq(1).hasClass("dx-numberbox-spin-container"), "spin buttons are the second");
     });
 
-    QUnit.test("correct order of buttons when spin buttons option is set after rendering", assert => {
+    QUnit.test("correct order of buttons when spin buttons option is set after rendering", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             showClearButton: true
         });
@@ -539,7 +543,7 @@ QUnit.module("basics", {}, () => {
         assert.ok($buttons.eq(1).hasClass("dx-numberbox-spin-container"), "spin buttons are the second");
     });
 
-    QUnit.test("clear button should save valueChangeEvent", assert => {
+    QUnit.test("clear button should save valueChangeEvent", (assert) => {
         const valueChangedHandler = sinon.spy();
 
         const $element = $("#numberbox").dxNumberBox({
@@ -554,7 +558,7 @@ QUnit.module("basics", {}, () => {
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
     });
 
-    QUnit.test("clearButton should clear the text even if the value was not changed", assert => {
+    QUnit.test("clearButton should clear the text even if the value was not changed", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             showClearButton: true,
             value: null
@@ -572,7 +576,7 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual($input.val(), "", "value is still cleared");
     });
 
-    QUnit.test("T220209 - the 'valueFormat' option", assert => {
+    QUnit.test("T220209 - the 'valueFormat' option", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 5,
             valueFormat(value) {
@@ -584,7 +588,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($numberBox.find(".dx-texteditor-input").val(), "05", "input value is correct");
     });
 
-    QUnit.test("T220209 - the 'valueFormat' option when value is changed using keyboard", assert => {
+    QUnit.test("T220209 - the 'valueFormat' option when value is changed using keyboard", (assert) => {
         if(devices.real().platform !== "generic") {
             assert.ok(true, "this test is actual only for desktop ");
             return;
@@ -610,7 +614,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($numberBox.find(".dx-texteditor-input").val(), "50", "input value is correct");
     });
 
-    QUnit.test("T220209 - the 'valueFormat' option when value is changed using spin buttons", assert => {
+    QUnit.test("T220209 - the 'valueFormat' option when value is changed using spin buttons", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 5,
             valueFormat(value) {
@@ -627,7 +631,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($numberBox.find(".dx-texteditor-input").val(), "06", "input value is correct");
     });
 
-    QUnit.test("T351846 - the value should not be changed after the 'change' input event is fired if value is null", assert => {
+    QUnit.test("T351846 - the value should not be changed after the 'change' input event is fired if value is null", (assert) => {
         let valueChangedCount = 0;
 
         const $numberBox = $("#numberbox").dxNumberBox({
@@ -647,7 +651,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($numberBox.dxNumberBox("option", "value"), null, "value is correct");
     });
 
-    QUnit.test("T351846 - the value should be reset to null if input is cleared", assert => {
+    QUnit.test("T351846 - the value should be reset to null if input is cleared", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 0
         });
@@ -663,7 +667,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($numberBox.dxNumberBox("option", "value"), null, "value is correct");
     });
 
-    QUnit.test("the value should be reset to null if reset method called", assert => {
+    QUnit.test("the value should be reset to null if reset method called", (assert) => {
         const numberBox = $("#numberbox").dxNumberBox({
             value: 0
         }).dxNumberBox("instance");
@@ -673,7 +677,7 @@ QUnit.module("basics", {}, () => {
         assert.equal(numberBox.option("value"), null, "value is correct");
     });
 
-    QUnit.test("The value option should not be changed if it is invalid", assert => {
+    QUnit.test("The value option should not be changed if it is invalid", (assert) => {
         const value = "any invalid value";
 
         const $numberBox = $("#numberbox").dxNumberBox({
@@ -688,7 +692,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($input.val(), "", "input value is cleared");
     });
 
-    QUnit.test("The value option should not be reset if it is invalid", assert => {
+    QUnit.test("The value option should not be reset if it is invalid", (assert) => {
         const value = "any invalid value";
 
         const $numberBox = $("#numberbox").dxNumberBox({
@@ -704,7 +708,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($input.val(), "", "input value is cleared");
     });
 
-    QUnit.test("The value option should not be reset if it is invalid", assert => {
+    QUnit.test("The value option should not be reset if it is invalid", (assert) => {
         const value = "any invalid value";
 
         const $numberBox = $("#numberbox").dxNumberBox({
@@ -720,7 +724,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($input.val(), "", "input value is cleared");
     });
 
-    QUnit.test("The widget should be valid if the value option is undefined", assert => {
+    QUnit.test("The widget should be valid if the value option is undefined", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: undefined
         });
@@ -732,7 +736,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($input.val(), "", "input value is correct");
     });
 
-    QUnit.test("The widget should be invalid if isValid option is false on init but value format is correct", assert => {
+    QUnit.test("The widget should be invalid if isValid option is false on init but value format is correct", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 0,
             isValid: false
@@ -743,14 +747,14 @@ QUnit.module("basics", {}, () => {
 });
 
 QUnit.module("submit element", {}, () => {
-    QUnit.test("a hidden input should be rendered", assert => {
+    QUnit.test("a hidden input should be rendered", (assert) => {
         const $element = $("#numberbox").dxNumberBox();
         const $hiddenInput = $element.find("input[type='hidden']");
 
         assert.equal($hiddenInput.length, 1, "a hidden input is created");
     });
 
-    QUnit.test("the hidden input should get correct value on init", assert => {
+    QUnit.test("the hidden input should get correct value on init", (assert) => {
         const expectedValue = 24.8;
 
         const $element = $("#numberbox").dxNumberBox({
@@ -762,7 +766,7 @@ QUnit.module("submit element", {}, () => {
         assert.equal(parseFloat($hiddenInput.val()), expectedValue, "the hidden input has correct value after init");
     });
 
-    QUnit.test("the hidden input gets correct value after widget value is changed", assert => {
+    QUnit.test("the hidden input gets correct value after widget value is changed", (assert) => {
         const expectedValue = 13;
 
         const $element = $("#numberbox").dxNumberBox({
@@ -776,7 +780,7 @@ QUnit.module("submit element", {}, () => {
         assert.equal(parseInt($hiddenInput.val()), expectedValue, "the hidden input value is correct");
     });
 
-    QUnit.test("the hidden input should use the decimal separator specified in DevExpress.config", assert => {
+    QUnit.test("the hidden input should use the decimal separator specified in DevExpress.config", (assert) => {
         const originalConfig = config();
         try {
             config({ serverDecimalSeparator: "|" });
@@ -795,7 +799,7 @@ QUnit.module("submit element", {}, () => {
 });
 
 QUnit.module("the 'name' option", {}, () => {
-    QUnit.test("hidden input should get the 'name' attribute", assert => {
+    QUnit.test("hidden input should get the 'name' attribute", (assert) => {
         const expectedName = "name";
 
         $("#numberbox").dxNumberBox({
@@ -807,7 +811,7 @@ QUnit.module("the 'name' option", {}, () => {
         assert.equal($hiddenInput.attr("name"), expectedName, "hidden input has correct 'name' attribute");
     });
 
-    QUnit.test("editor input should not get the 'name' attribute", assert => {
+    QUnit.test("editor input should not get the 'name' attribute", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             name: "name"
         });
@@ -819,7 +823,7 @@ QUnit.module("the 'name' option", {}, () => {
 });
 
 QUnit.module("input value updating", {}, () => {
-    QUnit.test("value should not be redrawn if it equals previous value", assert => {
+    QUnit.test("value should not be redrawn if it equals previous value", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             value: 0
         });
@@ -835,7 +839,7 @@ QUnit.module("input value updating", {}, () => {
         assert.equal($input.val(), "00");
     });
 
-    QUnit.test("value should not be redrawn if it does not equals previous value", assert => {
+    QUnit.test("value should not be redrawn if it does not equals previous value", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             value: 1
         });
@@ -851,7 +855,7 @@ QUnit.module("input value updating", {}, () => {
         assert.equal($input.val(), "00");
     });
 
-    QUnit.test("value should not be redrawn if it is incomplete and valueChangeEvent is set to keyup", assert => {
+    QUnit.test("value should not be redrawn if it is incomplete and valueChangeEvent is set to keyup", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             value: null,
             valueChangeEvent: "keyup",
@@ -908,7 +912,7 @@ QUnit.module("input value updating", {}, () => {
         $input.focusout();
     });
 
-    QUnit.test("T378082 - value should be null if the incorrect value is entered", assert => {
+    QUnit.test("T378082 - value should be null if the incorrect value is entered", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             value: null,
             mode: "text"
@@ -923,7 +927,7 @@ QUnit.module("input value updating", {}, () => {
         assert.equal($element.dxNumberBox("option", "value"), null, "value is correct");
     });
 
-    QUnit.test("value should be updated when it was incomplete", assert => {
+    QUnit.test("value should be updated when it was incomplete", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             value: null,
             mode: "text"
@@ -950,7 +954,7 @@ QUnit.module("options changed callbacks", {
         this.instance = this.element.dxNumberBox().dxNumberBox("instance");
     }
 }, () => {
-    QUnit.test("min/max", assert => {
+    QUnit.test("min/max", (assert) => {
         assert.expect(2);
 
         this.instance.option("min", 123);
@@ -960,14 +964,14 @@ QUnit.module("options changed callbacks", {
         assert.equal(this.element.find("." + INPUT_CLASS).prop("max"), "321");
     });
 
-    QUnit.test("step", assert => {
+    QUnit.test("step", (assert) => {
         assert.expect(1);
 
         this.instance.option("step", 123);
         assert.equal(this.element.find("." + INPUT_CLASS).prop("step"), "123");
     });
 
-    QUnit.test("min/max: value changes to limited value", assert => {
+    QUnit.test("min/max: value changes to limited value", (assert) => {
         assert.expect(4);
 
         const $input = this.element.find("." + INPUT_CLASS);
@@ -995,7 +999,7 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), 203, "set value more than min with option");
     });
 
-    QUnit.test("min/max: value changes when max wasn't set", assert => {
+    QUnit.test("min/max: value changes when max wasn't set", (assert) => {
         const $input = this.element.find("." + INPUT_CLASS);
 
         this.instance.option("min", 100);
@@ -1008,7 +1012,7 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), 100);
     });
 
-    QUnit.test("min/max: value changes when min wasn't set", assert => {
+    QUnit.test("min/max: value changes when min wasn't set", (assert) => {
         const $input = this.element.find("." + INPUT_CLASS);
 
         this.instance.option("min", undefined);
@@ -1022,7 +1026,7 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), 100);
     });
 
-    QUnit.test("changing min limit should lead to value change in base numberbox", assert => {
+    QUnit.test("changing min limit should lead to value change in base numberbox", (assert) => {
         this.instance.option({
             value: 5,
             min: 1
@@ -1032,7 +1036,7 @@ QUnit.module("options changed callbacks", {
         assert.equal(this.instance.option("value"), 6, "value has been updated");
     });
 
-    QUnit.test("changing max limit should lead to value change in base numberbox", assert => {
+    QUnit.test("changing max limit should lead to value change in base numberbox", (assert) => {
         this.instance.option({
             value: 5,
             max: 6
@@ -1042,7 +1046,7 @@ QUnit.module("options changed callbacks", {
         assert.equal(this.instance.option("value"), 4, "value has been updated");
     });
 
-    QUnit.test("min/max: value changes to limited value with number mode", assert => {
+    QUnit.test("min/max: value changes to limited value with number mode", (assert) => {
         this.instance.option({
             mode: "number",
             valueChangeEvent: "keyup",
@@ -1066,7 +1070,7 @@ QUnit.module("options changed callbacks", {
         assert.equal(this.instance.option("value"), 20, "widget's value was changed to the maximum after changing via input");
     });
 
-    QUnit.test("min/max: value changes if value is negative", assert => {
+    QUnit.test("min/max: value changes if value is negative", (assert) => {
         const $input = this.element.find("." + INPUT_CLASS);
 
         this.instance.option("min", -30);
@@ -1093,7 +1097,7 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), -5, "set value more than min with option");
     });
 
-    QUnit.test("value starts from decimal", assert => {
+    QUnit.test("value starts from decimal", (assert) => {
         assert.expect(1);
 
         const $input = this.element.find("." + INPUT_CLASS);
@@ -1109,7 +1113,7 @@ QUnit.module("options changed callbacks", {
         assert.equal(this.instance.option("value"), 0.1, "value is right");
     });
 
-    QUnit.test("showSpinButtons", assert => {
+    QUnit.test("showSpinButtons", (assert) => {
         assert.expect(5);
 
         assert.ok(!this.element.hasClass(SPIN_CLASS), "on default spin classes aren't applied");
@@ -1126,7 +1130,7 @@ QUnit.module("options changed callbacks", {
         $spinContainer = this.element.find("." + SPIN_CONTAINER_CLASS);
     });
 
-    QUnit.test("spin edit handling", assert => {
+    QUnit.test("spin edit handling", (assert) => {
         assert.expect(3);
 
         this.instance.option("showSpinButtons", true);
@@ -1147,7 +1151,7 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), "-1");
     });
 
-    QUnit.test("interactions with spin buttons do not change value if the readOnly option was set to true", assert => {
+    QUnit.test("interactions with spin buttons do not change value if the readOnly option was set to true", (assert) => {
         this.instance.option("showSpinButtons", true);
         this.instance.option("value", 100);
         this.instance.option("readOnly", true);
@@ -1161,7 +1165,7 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), "100");
     });
 
-    QUnit.test("correct round value with integer step", assert => {
+    QUnit.test("correct round value with integer step", (assert) => {
         this.instance.option("showSpinButtons", true);
         this.instance.option("value", 0.2);
         const $input = this.element.find("." + INPUT_CLASS);
@@ -1186,7 +1190,7 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), "-0.8");
     });
 
-    QUnit.test("correct round value with float step", assert => {
+    QUnit.test("correct round value with float step", (assert) => {
         this.instance.option("showSpinButtons", true);
         this.instance.option("value", 1.4);
         const $input = this.element.find("." + INPUT_CLASS);
@@ -1210,7 +1214,22 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), "-2.22");
     });
 
-    QUnit.test("spin edit min/max", assert => {
+    QUnit.test("keep null value with 0 step", (assert) => {
+        this.instance.option("showSpinButtons", true);
+        this.instance.option("value", null);
+        const $input = this.element.find("." + INPUT_CLASS);
+        const $spinUp = this.element.find("." + SPIN_UP_CLASS);
+        const $spinDown = this.element.find("." + SPIN_DOWN_CLASS);
+        this.instance.option("step", 0);
+
+        $spinUp.trigger("dxpointerdown");
+        assert.equal($input.val(), "");
+
+        $spinDown.trigger("dxpointerdown");
+        assert.equal($input.val(), "");
+    });
+
+    QUnit.test("spin edit min/max", (assert) => {
         assert.expect(2);
 
         this.instance.option({
@@ -1232,7 +1251,7 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), "0", "min value is right");
     });
 
-    QUnit.test("spin edit min/max onValueChanged action", assert => {
+    QUnit.test("spin edit min/max onValueChanged action", (assert) => {
         assert.expect(2);
 
         this.instance.option({
@@ -1263,7 +1282,7 @@ QUnit.module("options changed callbacks", {
         $spinDown.trigger("dxpointerdown");
     });
 
-    QUnit.test("spin edit long click handling", assert => {
+    QUnit.test("spin edit long click handling", (assert) => {
         assert.expect(1);
 
         this.clock = sinon.useFakeTimers();
@@ -1287,7 +1306,7 @@ QUnit.module("options changed callbacks", {
         }
     });
 
-    QUnit.test("spin edit long click handling", assert => {
+    QUnit.test("spin edit long click handling", (assert) => {
         assert.expect(2);
 
         this.clock = sinon.useFakeTimers();
@@ -1309,7 +1328,7 @@ QUnit.module("options changed callbacks", {
         }
     });
 
-    QUnit.test("spin button should not catch dxhold event from parent dom elements", assert => {
+    QUnit.test("spin button should not catch dxhold event from parent dom elements", (assert) => {
         this.instance.option("showSpinButtons", true);
         this.instance.option("value", 100);
 
@@ -1329,7 +1348,7 @@ QUnit.module("options changed callbacks", {
         }
     });
 
-    QUnit.test("spin edit immediately after keyboard input", assert => {
+    QUnit.test("spin edit immediately after keyboard input", (assert) => {
         this.instance.option("showSpinButtons", true);
 
         const $input = this.element.find("." + INPUT_CLASS);
@@ -1349,7 +1368,7 @@ QUnit.module("options changed callbacks", {
         assert.equal($input.val(), 29, "displayed value is correct after spinDown click");
     });
 
-    QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action", assert => {
+    QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action", (assert) => {
         this.instance.option({
             onValueChanged() {
                 assert.ok(true);
@@ -1358,7 +1377,7 @@ QUnit.module("options changed callbacks", {
         this.instance.option("value", true);
     });
 
-    QUnit.test("Placeholder must not be visible after setting value by option", assert => {
+    QUnit.test("Placeholder must not be visible after setting value by option", (assert) => {
         this.instance.option({ placeholder: "1", value: "" });
         assert.ok(this.element.find(".dx-placeholder").is(":visible"), "placeholder is visible");
 
@@ -1366,7 +1385,7 @@ QUnit.module("options changed callbacks", {
         assert.ok(this.element.find(".dx-placeholder").is(":hidden"), "placeholder is hidden");
     });
 
-    QUnit.test("useLargeSpinButtons option changed", assert => {
+    QUnit.test("useLargeSpinButtons option changed", (assert) => {
         this.instance.option({
             showSpinButtons: true,
             useLargeSpinButtons: false
@@ -1378,7 +1397,7 @@ QUnit.module("options changed callbacks", {
         assert.ok(this.element.hasClass(SPIN_TOUCH_FRIENDLY_CLASS), "element has touchFriendly class");
     });
 
-    QUnit.test("onValueChanged option should get jQuery event as a parameter when spin buttons are clicked", assert => {
+    QUnit.test("onValueChanged option should get jQuery event as a parameter when spin buttons are clicked", (assert) => {
         let jQueryEvent;
 
         this.instance.option({
@@ -1398,7 +1417,7 @@ QUnit.module("options changed callbacks", {
         assert.equal(jQueryEvent.target, $spinDown.get(0), "jQuery event is defined when spindown click used");
     });
 
-    QUnit.testInActiveWindow("onValueChanged option should get jQuery event as a parameter when mouse wheel is used", assert => {
+    QUnit.testInActiveWindow("onValueChanged option should get jQuery event as a parameter when mouse wheel is used", (assert) => {
         if(devices.real().platform !== "generic") {
             assert.ok(true, "this test is actual only for desktop ");
             return;
@@ -1426,7 +1445,7 @@ QUnit.module("options changed callbacks", {
         assert.equal(jQueryEvent.delta, -10, "jQuery event is defined when mousewheel down");
     });
 
-    QUnit.test("onValueChanged option should get jQuery event as a parameter when up/down arrows are used", assert => {
+    QUnit.test("onValueChanged option should get jQuery event as a parameter when up/down arrows are used", (assert) => {
         let jQueryEvent;
 
         this.instance.option({
@@ -1453,7 +1472,7 @@ QUnit.module("regressions", {
         this.instance = this.element.dxNumberBox("instance");
     }
 }, () => {
-    QUnit.test("B230398", assert => {
+    QUnit.test("B230398", (assert) => {
         assert.expect(3);
 
         const element = $("#numberbox").dxNumberBox({ value: "", placeholder: "auto" });
@@ -1477,7 +1496,7 @@ QUnit.module("regressions", {
         assert.equal(instance.option("value"), null);
     });
 
-    QUnit.test("B234644 - break value update handler in google chrome at desktop and android", assert => {
+    QUnit.test("B234644 - break value update handler in google chrome at desktop and android", (assert) => {
         if(!/chrome/i.test(navigator.userAgent)) {
             assert.ok(true);
             return;
@@ -1510,7 +1529,7 @@ QUnit.module("regressions", {
         assert.equal(this.instance.option("value") || '', $input.val(), "check that input value equal option value after incorrect value");
     });
 
-    QUnit.test("B233615 dxNumberbox UI value reset after 'type' option changing in Opera", assert => {
+    QUnit.test("B233615 dxNumberbox UI value reset after 'type' option changing in Opera", (assert) => {
         assert.expect(3);
 
         this.instance.option("value", 100);
@@ -1520,7 +1539,7 @@ QUnit.module("regressions", {
         assert.equal(this.element.find("." + INPUT_CLASS).val(), 100, "find and check that value from jQuery is ok too");
     });
 
-    QUnit.test("B235175 - add additional test cases for various numbers", assert => {
+    QUnit.test("B235175 - add additional test cases for various numbers", (assert) => {
         assert.expect(10);
 
         const $input = this.element.find("." + INPUT_CLASS);
@@ -1575,7 +1594,7 @@ QUnit.module("regressions", {
         assert.equal($input.val(), "11", "check input value 1");
     });
 
-    QUnit.test("B235175 - one case for minmax numberbox", assert => {
+    QUnit.test("B235175 - one case for minmax numberbox", (assert) => {
         assert.expect(4);
 
         const $input = this.element.find("." + INPUT_CLASS);
@@ -1600,7 +1619,7 @@ QUnit.module("regressions", {
         assert.equal($input.val(), "50", "check input value 50");
     });
 
-    QUnit.test("numberbox should correctly process 'undefined' value", assert => {
+    QUnit.test("numberbox should correctly process 'undefined' value", (assert) => {
         const instance = this.instance;
 
         instance.option("value", undefined);
@@ -1608,7 +1627,7 @@ QUnit.module("regressions", {
         assert.equal(instance.option("value"), null, "value was reset correctly");
     });
 
-    QUnit.test("B236651 - when we try set zero value that do not change", assert => {
+    QUnit.test("B236651 - when we try set zero value that do not change", (assert) => {
         assert.expect(4);
 
         const $input = this.element.find("." + INPUT_CLASS);
@@ -1634,7 +1653,7 @@ QUnit.module("regressions", {
         assert.equal($input.val(), "0", "check input value 0");
     });
 
-    QUnit.test("Both comma and dot can be used as float separator (Q561267)", assert => {
+    QUnit.test("Both comma and dot can be used as float separator (Q561267)", (assert) => {
         assert.expect(4);
 
         const $input = this.element.find("." + INPUT_CLASS);
@@ -1665,12 +1684,12 @@ QUnit.module("regressions", {
         assert.equal($input.val(), "1.2");
     });
 
-    QUnit.test("Complete dispose dxNumberBox", assert => {
+    QUnit.test("Complete dispose dxNumberBox", (assert) => {
         this.instance._dispose();
         assert.ok(!this.element.children().length);
     });
 
-    QUnit.test("T282446 - widget disabled state change should lead to spin buttons disabled state change", assert => {
+    QUnit.test("T282446 - widget disabled state change should lead to spin buttons disabled state change", (assert) => {
         const $element = $("#widget").dxNumberBox({
             disabled: true,
             showSpinButtons: true
@@ -1686,13 +1705,13 @@ QUnit.module("regressions", {
 });
 
 QUnit.module("widget sizing render", {}, () => {
-    QUnit.test("default", assert => {
+    QUnit.test("default", (assert) => {
         const $element = $("#widget").dxNumberBox();
 
         assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
     });
 
-    QUnit.test("constructor", assert => {
+    QUnit.test("constructor", (assert) => {
         const $element = $("#widget").dxNumberBox({ width: 400 });
         const instance = $element.dxNumberBox("instance");
 
@@ -1700,7 +1719,7 @@ QUnit.module("widget sizing render", {}, () => {
         assert.strictEqual($element.outerWidth(), 400, "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("root with custom width", assert => {
+    QUnit.test("root with custom width", (assert) => {
         const $element = $("#widthRootStyle").dxNumberBox();
         const instance = $element.dxNumberBox("instance");
 
@@ -1708,7 +1727,7 @@ QUnit.module("widget sizing render", {}, () => {
         assert.strictEqual($element.outerWidth(), 300, "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("change width", assert => {
+    QUnit.test("change width", (assert) => {
         const $element = $("#widget").dxNumberBox();
         const instance = $element.dxNumberBox("instance");
         const customWidth = 400;
@@ -1720,7 +1739,7 @@ QUnit.module("widget sizing render", {}, () => {
 });
 
 QUnit.module("keyboard navigation", {}, () => {
-    QUnit.test("control keys test", assert => {
+    QUnit.test("control keys test", (assert) => {
         const element = $("#numberbox").dxNumberBox({
             focusStateEnabled: true,
             value: 100
@@ -1747,7 +1766,7 @@ QUnit.module("keyboard navigation", {}, () => {
         assert.equal(instance.option("value"), 100, "value is correct after upArrow press");
     });
 
-    QUnit.test("it is impossible to change value by keyboard in readonly editor", assert => {
+    QUnit.test("it is impossible to change value by keyboard in readonly editor", (assert) => {
         const element = $("#numberbox").dxNumberBox({
             focusStateEnabled: true,
             readOnly: true,
@@ -1767,7 +1786,7 @@ QUnit.module("keyboard navigation", {}, () => {
         assert.equal(instance.option("value"), 100, "value is correct after downArrow press");
     });
 
-    QUnit.test("keypress with meta key should not be prevented", assert => {
+    QUnit.test("keypress with meta key should not be prevented", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             focusStateEnabled: true
         });
@@ -1783,7 +1802,7 @@ QUnit.module("keyboard navigation", {}, () => {
         assert.equal(isKeyPressPrevented, false, "keypress with meta is not prevented");
     });
 
-    QUnit.test("keypress with ctrl key should not be prevented", assert => {
+    QUnit.test("keypress with ctrl key should not be prevented", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             focusStateEnabled: true
         });
@@ -1799,7 +1818,7 @@ QUnit.module("keyboard navigation", {}, () => {
         assert.equal(isKeyPressPrevented, false, "keypress with meta is not prevented");
     });
 
-    QUnit.test("control keys should not be prevented", assert => {
+    QUnit.test("control keys should not be prevented", (assert) => {
         const controlKeys = ["Tab", "Del", "Delete", "Backspace", "Left", "ArrowLeft", "Right", "ArrowRight", "Home", "End"];
 
         let isKeyPressPrevented = false;
@@ -1821,7 +1840,7 @@ QUnit.module("keyboard navigation", {}, () => {
         });
     });
 
-    QUnit.test("Subtract key is not prevented", assert => {
+    QUnit.test("Subtract key is not prevented", (assert) => {
         const keyPressStub = sinon.stub();
         const $numberBox = $("#numberbox").dxNumberBox({
             focusStateEnabled: true
@@ -1838,7 +1857,7 @@ QUnit.module("keyboard navigation", {}, () => {
 });
 
 QUnit.module("number validation", {}, () => {
-    QUnit.test("decimal is not removed on valueChangeEvent", assert => {
+    QUnit.test("decimal is not removed on valueChangeEvent", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             valueChangeEvent: "keyup"
         });
@@ -1854,7 +1873,7 @@ QUnit.module("number validation", {}, () => {
         assert.equal($input.val(), inputValue, "decimal not removed");
     });
 
-    QUnit.test("T277051 - the 'e' letter entered in the center of text should not be ignored", assert => {
+    QUnit.test("T277051 - the 'e' letter entered in the center of text should not be ignored", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 95
         });
@@ -1873,7 +1892,7 @@ QUnit.module("number validation", {}, () => {
         assert.equal(numberBox.option("value"), 900000, "value is correct");
     });
 
-    QUnit.test("T303827: Delete last number in scientific notation with valueChangeEvent:'keyup'", assert => {
+    QUnit.test("T303827: Delete last number in scientific notation with valueChangeEvent:'keyup'", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             valueChangeEvent: 'keyup'
         });
@@ -1907,7 +1926,7 @@ QUnit.module("number validation", {}, () => {
         assert.equal(numberBox.option("value"), expectedOptionValue, "value vas changed");
     });
 
-    QUnit.test("Value shouldn't be reset after point remove", assert => {
+    QUnit.test("Value shouldn't be reset after point remove", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             valueChangeEvent: "keyup",
             value: 55.3
@@ -1926,7 +1945,7 @@ QUnit.module("number validation", {}, () => {
         assert.equal($input.val(), "55", "value is correct");
     });
 
-    QUnit.test("When is type 'number' set entered characters should be saved", assert => {
+    QUnit.test("When is type 'number' set entered characters should be saved", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             valueChangeEvent: "keyup",
             value: null
@@ -1954,7 +1973,7 @@ QUnit.module("number validation", {}, () => {
         assert.equal(numberBox.option("value"), "0.5", "value is correct");
     });
 
-    QUnit.test("the validation message should be shown if value is invalid", assert => {
+    QUnit.test("the validation message should be shown if value is invalid", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: "abc"
         });
@@ -1964,7 +1983,7 @@ QUnit.module("number validation", {}, () => {
         assert.equal($numberBox.find(".dx-invalid-message .dx-overlay-content").text(), instance.option("invalidValueMessage"), "validation message is rendered");
     });
 
-    QUnit.test("the validation message should be shown if value is invalid after 'enter' key was pressed", assert => {
+    QUnit.test("the validation message should be shown if value is invalid after 'enter' key was pressed", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             valueChangeEvent: "input"
         }).dxValidator({
@@ -1991,7 +2010,7 @@ QUnit.module("number validation", {}, () => {
         assert.equal($numberBox.find(".dx-invalid-message .dx-overlay-content").text(), "Value is not in range", "validation message is not empty");
     });
 
-    QUnit.test("onValueChanged should be fired after 'enter' key was pressed", assert => {
+    QUnit.test("onValueChanged should be fired after 'enter' key was pressed", (assert) => {
         const onValueChangedStub = sinon.stub();
 
         const $numberBox = $("#numberbox").dxNumberBox({
@@ -2010,14 +2029,27 @@ QUnit.module("number validation", {}, () => {
 });
 
 QUnit.module("aria accessibility", {}, () => {
-    QUnit.test("aria role", assert => {
+    QUnit.test("default render", (assert) => {
         const $element = $("#numberbox").dxNumberBox({});
         const $input = $element.find(".dx-texteditor-input");
+        const inputElement = $input.get(0);
 
         assert.equal($input.attr("role"), "spinbutton", "aria role is correct");
+        assert.equal($input.attr("aria-valuenow"), "0", "required 'aria-valuenow' attribute is defined");
+        assert.ok(inputElement.hasAttribute("aria-valuemin"), "required 'aria-valuemin' attribute is defined");
+        assert.ok(inputElement.hasAttribute("aria-valuemax"), "required 'aria-valuemax' attribute is defined");
     });
 
-    QUnit.test("aria properties", assert => {
+    QUnit.test("aria valuenow is defined for numberBox with null value (T801129)", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            value: null
+        });
+
+        const $input = $element.find(".dx-texteditor-input");
+        assert.strictEqual($input.attr("aria-valuenow"), "", "attribute is defined");
+    });
+
+    QUnit.test("aria properties", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             min: 12,
             max: 30,
@@ -2029,5 +2061,42 @@ QUnit.module("aria accessibility", {}, () => {
         assert.equal($input.attr("aria-valuemin"), 12, "aria min is correct");
         assert.equal($input.attr("aria-valuemax"), 30, "aria max is correct");
         assert.equal($input.attr("aria-valuenow"), 25, "aria now is correct");
+    });
+
+    QUnit.test("aria-valuemin and valuemax attributes should be set when min/max option is 0", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            min: 0,
+            max: 0
+        });
+
+        const $input = $element.find(".dx-texteditor-input");
+
+        assert.strictEqual($input.attr("aria-valuemin"), "0", "aria min is correct");
+        assert.strictEqual($input.attr("aria-valuemax"), "0", "aria max is correct");
+    });
+
+    QUnit.test("the dxNumberBox should have value[min/max] when max or min only is specified", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            max: 30,
+            value: 25
+        });
+        const numberBox = $element.dxNumberBox("instance");
+        const $input = $element.find(".dx-texteditor-input").get(0);
+
+        assert.ok($input.hasAttribute("aria-valuemin"), "there is valuemin");
+
+        numberBox.option({
+            min: 4,
+            max: undefined
+        });
+        assert.ok($input.hasAttribute("aria-valuemax"), "there is valuemax");
+        assert.strictEqual($($input).attr("aria-valuemin"), "4", "valuemin is correct");
+
+        numberBox.option({
+            min: undefined,
+            max: undefined
+        });
+        assert.ok($input.hasAttribute("aria-valuemax"), "there is valuemin");
+        assert.ok($input.hasAttribute("aria-valuemax"), "there is valuemax");
     });
 });

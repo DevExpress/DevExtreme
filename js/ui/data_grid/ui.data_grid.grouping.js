@@ -8,7 +8,8 @@ import { isDefined, isString } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import devices from "../../core/devices";
 import { when, Deferred } from "../../core/utils/deferred";
-import { registerKeyboardAction, setTabIndex } from "../shared/accessibility";
+import { registerKeyboardAction } from "../grid_core/ui.grid_core.accessibility";
+import { setTabIndex, restoreFocus } from "../shared/accessibility";
 
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
@@ -87,6 +88,8 @@ var GroupingDataSourceAdapterExtender = (function() {
                         groupInfo.isExpanded = isExpand;
                     }
                 }, false, true);
+
+                that.resetPagesCache();
             }
             return true;
         },
@@ -446,6 +449,8 @@ var GroupingHeaderPanelExtender = (function() {
             each(groupColumns, function(index, groupColumn) {
                 that._createGroupPanelItem($groupPanel, groupColumn);
             });
+
+            restoreFocus(this);
         },
 
         _createGroupPanelItem: function($rootElement, groupColumn) {

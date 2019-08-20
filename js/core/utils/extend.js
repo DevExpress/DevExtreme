@@ -3,7 +3,7 @@ var isPlainObject = require("./type").isPlainObject;
 var extendFromObject = function(target, source, overrideExistingValues) {
     target = target || {};
     for(var prop in source) {
-        if(source.hasOwnProperty(prop)) {
+        if(Object.prototype.hasOwnProperty.call(source, prop)) {
             var value = source[prop];
             if(!(prop in target) || overrideExistingValues) {
                 target[prop] = value;
@@ -37,7 +37,7 @@ var extend = function(target) {
                 sourceValueIsArray = false,
                 clone;
 
-            if(target === sourceValue) {
+            if(key === "__proto__" || target === sourceValue) {
                 continue;
             }
 

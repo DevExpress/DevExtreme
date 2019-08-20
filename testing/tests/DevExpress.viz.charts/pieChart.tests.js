@@ -21,6 +21,9 @@ var $ = require("jquery"),
     insertMockFactory = chartMocks.insertMockFactory,
     restoreMockFactory = chartMocks.restoreMockFactory;
 
+var eventsEngine = require("events/core/events_engine"),
+    devices = require("core/devices");
+
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
 var dataSourceTemplate = [
@@ -358,6 +361,20 @@ var environment = {
 
         assert.ok(tracker.stub("updateSeries").calledOnce, "updateSeries");
         assert.deepEqual(tracker.stub("updateSeries").lastCall.args[0], [], "updateSeries args");
+    });
+
+    QUnit.test("Should not crash on parent scroll (test chain executor)", function(assert) {
+        var originalPlatform = devices.real().platform;
+
+        try {
+            devices.real({ platform: "generic" });
+            createPieChart.call(this, {});
+
+            eventsEngine.trigger($("#qunit-fixture"), "scroll");
+            assert.expect(1);
+        } finally {
+            devices.real({ platform: originalPlatform });
+        }
     });
 
     QUnit.module("Creation series for tracker", {

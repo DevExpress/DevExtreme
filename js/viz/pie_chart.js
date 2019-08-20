@@ -430,16 +430,14 @@ module.exports = dxPieChart;
 
 var pieSizeEqualizer = (function() {
     function equalize(group, allPies) {
-        var pies = allPies.filter(function(p) { return p.getSizeGroup() === group; }),
-            minRadius = Math.min.apply(null, pies.map(function(p) { return p.getSizeGroupLayout().radius; })),
-            minPie = pies.filter(function(p) { return p.getSizeGroupLayout().radius === minRadius; });
+        var pies = allPies.filter(p => p._isVisible() && p.getSizeGroup() === group),
+            minRadius = Math.min.apply(null, pies.map(p => p.getSizeGroupLayout().radius)),
+            minPie = pies.filter(p => p.getSizeGroupLayout().radius === minRadius);
 
-        pies.forEach(function(p) {
-            p.render({
-                force: true,
-                sizeGroupLayout: minPie.length ? minPie[0].getSizeGroupLayout() : {}
-            });
-        });
+        pies.forEach(p => p.render({
+            force: true,
+            sizeGroupLayout: minPie.length ? minPie[0].getSizeGroupLayout() : {}
+        }));
     }
 
     function removeFromList(list, item) {

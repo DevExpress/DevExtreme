@@ -2,7 +2,7 @@
 @icon_size: 16px;
 
 .dx-tabs-ie-hack {
-    a { /* END TODO */ /* TODO: IE hack*/
+    a { /* END TODO */ /* TODO: IE hack */
         position: absolute;
         top: 0;
         left: 0;
@@ -16,8 +16,9 @@
 }
 
 .dx-tabs {
-    /*TODO: remove position, table-layout, display from root element*/
+    /* TODO: remove position, table-layout, display from root element */
     .user-select(none);
+
     display: inline-block;
     width: 100%;
     text-align: center;
@@ -38,7 +39,7 @@
 }
 
 
-.dx-tabs-scrollable  {
+.dx-tabs-scrollable {
     .dx-tabs-wrapper {
         display: block;
         white-space: nowrap;
@@ -94,15 +95,16 @@
     display: table-cell;
     vertical-align: middle;
     cursor: pointer;
-    white-space:nowrap;
+    white-space: nowrap;
 
     .dx-tabs-ie-hack();
+
     .dx-icon {
         width: @icon_size;
         height: @icon_size;
         display: block;
         margin: 0 auto;
-        user-drag: none;
+        -webkit-user-drag: none;
     }
 }
 
@@ -116,14 +118,13 @@
     margin: 0 auto;
     text-align: center;
     max-width: 100%;
-    user-drag: none;
+    -webkit-user-drag: none;
     .dx-overflow;
 }
 
 .dx-tabs-item-badge {
     display: inline-block;
     vertical-align: top;
-
 }
 
 .dx-state-disabled {

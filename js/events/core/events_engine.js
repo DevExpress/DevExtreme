@@ -152,6 +152,7 @@ var getHandlersController = function(element, eventName) {
                         currentTarget = currentTarget.parentNode;
                     }
                 } else {
+                    e.currentTarget = e.delegateTarget || e.target;
                     callHandler(e, extraParameters);
                 }
             };

@@ -59,7 +59,6 @@ var Menu = MenuBase.inherit({
             /**
             * @name dxMenuOptions.items
             * @type Array<dxMenuItem>
-            * @inheritdoc
             */
             /**
             * @name dxMenuOptions.orientation
@@ -168,31 +167,26 @@ var Menu = MenuBase.inherit({
             /**
             * @name dxMenuOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuOptions.onSelectionChange
             * @hidden
             * @action
-            * @inheritdoc
             */
 
             /**
             * @name dxMenuOptions.onItemReordered
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxMenuItem
             * @inherits dxMenuBaseItem
             * @type object
-            * @inheritdoc
             */
             /**
             * @name dxMenuItem.items
             * @type Array<dxMenuItem>
-            * @inheritdoc
             */
         });
     },

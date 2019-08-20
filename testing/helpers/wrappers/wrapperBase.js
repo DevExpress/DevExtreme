@@ -5,6 +5,10 @@ export class WrapperBase {
         this.containerSelector = containerSelector;
     }
 
+    getElement() {
+        throw "getElement() is not implemented";
+    }
+
     getContainer() {
         return $(this.containerSelector);
     }

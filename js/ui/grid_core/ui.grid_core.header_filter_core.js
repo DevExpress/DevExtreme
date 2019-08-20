@@ -79,7 +79,9 @@ exports.HeaderFilterView = modules.View.inherit({
         var fillSelectedItemKeys = function(filterValues, items, isExclude) {
             each(items, function(_, item) {
                 if(item.selected !== undefined && (!!item.selected) ^ isExclude) {
-                    if(!list.option("searchValue") || !item.items || !item.items.length) {
+                    var hasChildrenWithSelection = item.items && item.items.some((item) => item.selected !== undefined);
+
+                    if(!list.option("searchValue") || !hasChildrenWithSelection) {
                         filterValues.push(item.value);
                         return;
                     }
@@ -163,7 +165,7 @@ exports.HeaderFilterView = modules.View.inherit({
             var group = options.dataSource.group;
             if(Array.isArray(group) && group.length > 0) {
                 return group[0].selector;
-            } else if(isFunction(group)) {
+            } else if(isFunction(group) && !options.remoteFiltering) {
                 return group;
             }
         }
@@ -188,7 +190,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 shading: false,
                 showTitle: false,
                 showCloseButton: false,
-                closeOnTargetScroll: true,
+                closeOnTargetScroll: false, // T756320
                 dragEnabled: false,
                 closeOnOutsideClick: true,
                 focusStateEnabled: false,
@@ -383,7 +385,8 @@ exports.headerFilterMixin = {
 
     optionChanged: function(args) {
         if(args.name === "headerFilter") {
-            this._invalidate(true, true);
+            var requireReady = this.name === "columnHeadersView";
+            this._invalidate(requireReady, requireReady);
             args.handled = true;
         } else {
             this.callBase(args);

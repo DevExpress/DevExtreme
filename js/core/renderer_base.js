@@ -215,6 +215,7 @@ initRender.prototype.toggleClass = function(className, value) {
             var elementStyles = window.getComputedStyle(element);
             var sizeAdjustment = sizeUtils.getElementBoxParams(propName, elementStyles);
             var isBorderBox = elementStyles.boxSizing === "border-box";
+            value = Number(value);
 
             if(isOuter) {
                 value -= isBorderBox ? 0 : (sizeAdjustment.border + sizeAdjustment.padding);
@@ -273,6 +274,10 @@ var appendElements = function(element, nextSibling) {
 
 var setCss = function(name, value) {
     if(!this[0] || !this[0].style) return;
+
+    if(value === null || (typeof value === "number" && isNaN(value))) {
+        return;
+    }
 
     name = styleUtils.styleProp(name);
     for(var i = 0; i < this.length; i++) {

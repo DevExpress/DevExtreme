@@ -21,7 +21,7 @@ QUnit.module("Delta converter", {
 
         this.quillInstance.setContents(deltaOps);
 
-        assert.strictEqual(this.deltaConverter.toHtml(), "<strong>test</strong>", "It converts delta operations");
+        assert.strictEqual(this.deltaConverter.toHtml(), "<p><strong>test</strong></p>", "It converts delta operations");
     });
 
     test("it should respect more the one level indent between list items", (assert) => {
@@ -51,6 +51,36 @@ QUnit.module("Delta converter", {
         this.quillInstance.setContents(deltaOps);
 
         assert.strictEqual(this.deltaConverter.toHtml(), expected, "convert list with indent more the one step");
+    });
+
+    test("it should respect list item attributes", (assert) => {
+        const deltaOps = [
+            { insert: "item1" },
+            {
+                attributes: {
+                    align: "center",
+                    list: "bullet"
+                },
+                insert: "\n"
+            },
+            { insert: "item2" },
+            {
+                attributes: {
+                    align: "center",
+                    indent: 1,
+                    list: "bullet"
+                },
+                insert: "\n"
+            }
+        ];
+        const expected = '<ul><li class="ql-align-center">item1<ul><li class="ql-align-center">item2</li></ul></li></ul>';
+
+        this.quillInstance.setContents(deltaOps);
+        assert.strictEqual(this.deltaConverter.toHtml(), expected, "converted markup should contains inner styles");
+    });
+
+    test("it should return an empty string when editor is empty", (assert) => {
+        assert.strictEqual(this.deltaConverter.toHtml(), "", "editor is empty and converter return an empty string");
     });
 });
 

@@ -217,6 +217,33 @@ var checkGroups = function(assert, series) {
         assert.strictEqual(incidentOccurred.lastCall.args[0], "W2002");
     });
 
+    QUnit.test("Creation financial point. Null values, ingoreEmptyPoints false", function(assert) {
+        var series = createSeries({ type: "stock", argumentField: "arg", highValueField: "h", lowValueField: "l", openValueField: "o", closeValueField: "c", reduction: { level: "open" }, label: { visible: false } }),
+            data = [{ arg: 1, h: null, l: null, o: null, c: null }],
+            points;
+        series.updateData(data);
+        series.createPoints();
+        points = series.getPoints();
+
+        assert.equal(points.length, 1, "Series should have one point");
+        assert.equal(this.createPoint.firstCall.args[1].argument, 1, "Argument should be correct");
+        assert.equal(this.createPoint.firstCall.args[1].highValue, null, "High value should be correct");
+        assert.equal(this.createPoint.firstCall.args[1].lowValue, null, "Low value should be correct");
+        assert.equal(this.createPoint.firstCall.args[1].openValue, null, "Open value should be correct");
+        assert.equal(this.createPoint.firstCall.args[1].closeValue, null, "Close value should be correct");
+    });
+
+    QUnit.test("Creation financial point. Null values, ingoreEmptyPoints true", function(assert) {
+        var series = createSeries({ type: "stock", ignoreEmptyPoints: true, argumentField: "arg", highValueField: "h", lowValueField: "l", openValueField: "o", closeValueField: "c", reduction: { level: "open" }, label: { visible: false } }),
+            data = [{ arg: 1, h: null, l: null, o: null, c: null }],
+            points;
+        series.updateData(data);
+        series.createPoints();
+        points = series.getPoints();
+
+        assert.equal(points.length, 0);
+    });
+
     QUnit.module("StockSeries series. Draw", {
         beforeEach: environment.beforeEach,
         afterEach: environment.afterEach,
@@ -526,6 +553,36 @@ var checkGroups = function(assert, series) {
         checkPointData(assert, this.createPoint.getCall(1).args[1], false, 1);
         checkPointData(assert, this.createPoint.getCall(2).args[1], false, 2);
         checkPointData(assert, this.createPoint.getCall(3).args[1], true, 3);
+        checkPointData(assert, this.createPoint.getCall(4).args[1], false, 4);
+    });
+
+    QUnit.test("Check reduction if data source contains empty data items", function(assert) {
+        var series = createSeries({
+            type: seriesType,
+            argumentField: "date",
+            openValueField: "o",
+            highValueField: "h",
+            lowValueField: "l",
+            closeValueField: "c",
+            reduction: { color: "red" }
+        });
+
+        series.updateData([{ date: 1, o: 2, h: 5, l: 0, c: 4 },
+            { date: 2, o: 1, h: 7, l: 1, c: 6 },
+            { date: 2.5, val: 3 },
+            { date: 3, o: 5, h: 5, l: 3, c: 3 },
+            { date: null, o: 5, h: 5, l: 3, c: 3 },
+            { date: 4, o: 4, h: 9, l: 2, c: null },
+            { date: 5, o: 4, h: 9, l: 2, c: 5 }]);
+        series.createPoints();
+
+        assert.equal(series.level, "close", "calc level");
+        assert.equal(this.createPoint.callCount, 5);
+
+        checkPointData(assert, this.createPoint.getCall(0).args[1], false, 0);
+        checkPointData(assert, this.createPoint.getCall(1).args[1], false, 1);
+        checkPointData(assert, this.createPoint.getCall(2).args[1], true, 2);
+        checkPointData(assert, this.createPoint.getCall(3).args[1], false, 3);
         checkPointData(assert, this.createPoint.getCall(4).args[1], false, 4);
     });
 

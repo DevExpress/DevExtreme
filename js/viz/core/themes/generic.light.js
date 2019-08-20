@@ -110,6 +110,7 @@ registerTheme({
         arrowLength: 10,
         paddingLeftRight: 18,
         paddingTopBottom: 15,
+        textAlignment: "center",
         shared: false,
         location: CENTER,
         shadow: {
@@ -144,7 +145,7 @@ registerTheme({
             backgroundColor: WHITE,
             margin: {
                 left: 0,
-                bottom: 14,
+                bottom: 9,
                 right: 0,
                 top: 0
             },
@@ -787,7 +788,8 @@ registerTheme({
                 height: 30
             },
             wordWrap: "normal",
-            textOverflow: "ellipsis"
+            textOverflow: "ellipsis",
+            allowDragging: false
         }
     },
     pie: {
@@ -1742,3 +1744,6 @@ registerTheme({
     }
 });
 
+registerTheme({
+    name: "generic.light.compact"
+}, "generic.light");

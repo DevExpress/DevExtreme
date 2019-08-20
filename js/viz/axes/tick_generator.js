@@ -585,7 +585,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
         if(!options.skipTickGeneration) {
             majorTicks = calculateTicks(data, tickInterval, options.endOnTick, gaps, breaks, businessDelta, screenDelta, options.axisDivisionFactor, options.generateExtraTick);
 
-            breaks = processScaleBreaks(breaks, tickInterval, screenDelta, options.axisDivisionFactor);
+            breaks = processScaleBreaks(breaks, majorTicks, tickInterval);
 
             majorTicks = filterTicks(majorTicks, breaks);
             ticks.breaks = breaks;
@@ -644,14 +644,30 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
     };
 }
 
+function getBaseTick(breakValue, [tick, insideTick], interval, getValue) {
+    if(!isDefined(tick) || mathAbs(getValue(breakValue) - getValue(tick)) / interval > 0.25) {
+        if(isDefined(insideTick)) {
+            tick = insideTick;
+        } else if(!isDefined(tick)) {
+            tick = breakValue;
+        }
+    }
+
+    return tick;
+}
+
 function getScaleBreaksProcessor(convertTickInterval, getValue, addCorrection) {
-    return function(breaks, tickInterval, screenDelta, axisDivisionFactor) {
+    return function(breaks, ticks, tickInterval) {
         const interval = convertTickInterval(tickInterval);
-        const correction = mathFloor(screenDelta / axisDivisionFactor) > breaks.length ? interval / 2 : interval / 100;
+        const correction = interval * 0.5;
 
         return breaks.reduce((result, b) => {
-            const from = addCorrection(b.from, correction);
-            const to = addCorrection(b.to, -correction);
+            let breakTicks = ticks.filter(tick => tick <= b.from);
+            const from = addCorrection(getBaseTick(b.from, [].concat(breakTicks[breakTicks.length - 1], ticks[breakTicks.length]), interval, getValue), correction);
+
+            breakTicks = ticks.filter(tick => tick >= b.to);
+            const to = addCorrection(getBaseTick(b.to, [].concat(breakTicks[0], ticks[ticks.length - breakTicks.length - 1]), interval, getValue), -correction);
+
             if(getValue(to) - getValue(from) < interval && !b.gapSize) {
                 return result;
             }

@@ -5,7 +5,7 @@ import messageLocalization from "../../localization/message";
 import { isDefined } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
-import { registerKeyboardAction } from "../shared/accessibility";
+import { registerKeyboardAction } from "./ui.grid_core.accessibility";
 
 var CELL_CONTENT_CLASS = "text-content",
     HEADERS_CLASS = "headers",
@@ -93,7 +93,7 @@ module.exports = {
 
                     return function($container, options) {
                         var $content = column.command ? $container : createCellContent(that, $container, options),
-                            caption = !isDefined(column.groupIndex) && column.caption;
+                            caption = column.command !== 'expand' && column.caption;
 
                         if(caption) {
                             $content.text(caption);
@@ -220,25 +220,6 @@ module.exports = {
                     }
 
                     that.callBase.apply(that, arguments);
-
-                    if(!that._isLegacyKeyboardNavigation()) {
-                        that._restoreLastFocusedElement();
-                    }
-                },
-
-                _restoreLastFocusedElement: function() {
-                    var $table = this.element(),
-                        $headerCells = $table.find(`tr.${HEADER_ROW_CLASS} > td[tabindex]`);
-
-                    if($headerCells.length > 1) {
-                        let $firstCell = $headerCells.first();
-                        eventsEngine.on($firstCell, "focus", e => {
-                            if(this._lastActionElement && e.currentTarget !== this._lastActionElement) {
-                                $(this._lastActionElement).trigger("focus");
-                                this._lastActionElement = null;
-                            }
-                        });
-                    }
                 },
 
                 _renderRows: function() {

@@ -607,15 +607,15 @@ QUnit.test("allDay changing should switch only type in editors, if startDate is 
 
     assert.equal(startDate.option("type"), "datetime", "type is right");
     assert.equal(endDate.option("type"), "datetime", "type is right");
-    assert.deepEqual(startDate.option("value"), undefined, "value is right");
-    assert.deepEqual(endDate.option("value"), undefined, "value is right");
+    assert.deepEqual(startDate.option("value"), null, "value is right");
+    assert.deepEqual(endDate.option("value"), null, "value is right");
 
     allDayEditor.option("value", true);
 
     assert.equal(startDate.option("type"), "date", "type is right after turning off allDay");
     assert.equal(endDate.option("type"), "date", "type is right after turning off allDay");
-    assert.deepEqual(startDate.option("value"), undefined, "startdate is OK");
-    assert.deepEqual(endDate.option("value"), undefined, "enddate is OK");
+    assert.deepEqual(startDate.option("value"), null, "startdate is OK");
+    assert.deepEqual(endDate.option("value"), null, "enddate is OK");
 });
 
 QUnit.test("There are no exceptions when select date on the appointment popup, startDate > endDate", function(assert) {
@@ -1044,11 +1044,19 @@ QUnit.test("Appointment form will have right dates on multiple openings (T727713
     assert.deepEqual(formData.endDate, appointments[1].endDate, "First opening appointment form has right endDate");
 
     scheduler.instance.hideAppointmentPopup();
+
+    let form = this.instance.getAppointmentDetailsForm();
+    let formDataChangedCount = 0;
+    form.option("onOptionChanged", (args) => {
+        if(args.name === "formData") formDataChangedCount++;
+    });
+
     scheduler.appointments.dblclick(0);
     formData = scheduler.appointmentForm.getFormInstance().option('formData');
 
     assert.deepEqual(formData.startDate, appointments[0].startDate, "Second opening appointment form has right startDate");
     assert.deepEqual(formData.endDate, appointments[0].endDate, "Second opening appointment form has right endDate");
+    assert.equal(formDataChangedCount, 1, 'Form data changed one time');
 });
 
 QUnit.test("The vertical scroll bar is shown when an appointment popup fill to a small window's height", function(assert) {

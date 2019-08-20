@@ -21,9 +21,12 @@ import pointerMock from "../../helpers/pointerMock.js";
 import dragEvents from "events/drag";
 import CustomStore from "data/custom_store";
 import { isRenderer } from "core/utils/type";
+import translator from "animation/translator";
 import config from "core/config";
 
 import "ui/scheduler/ui.scheduler";
+
+import { dateToMilliseconds as toMs } from "core/utils/date";
 
 const DATE_TABLE_CELL_BORDER = 1;
 
@@ -1825,4 +1828,76 @@ QUnit.test("Vertical scrollable should work after switching currentDate if allDa
     var $scroll = this.instance.$element().find(".dx-scrollbar-vertical").eq(1);
 
     assert.notEqual($scroll.css("display"), "none", "ok");
+});
+
+QUnit.test("Current time indicator calculates position correctly with workWeek view (T750252)", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: [
+            { name: "2 Work Weeks", type: "workWeek", intervalCount: 2, startDate: new Date(Date.now() - 5 * toMs("day")) },
+        ],
+        currentView: "workWeek",
+        currentDate: new Date(),
+        height: 580
+    });
+
+
+    let $dateTimeIndicator = this.scheduler.workSpace.getCurrentTimeIndicator()[0];
+    const position = { top: $dateTimeIndicator.style.top, left: $dateTimeIndicator.style.left };
+
+    assert.notEqual(position, { left: 0, top: 0 }, "Current time indicator positioned correctly");
+});
+
+QUnit.test("ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)", function(assert) {
+    const date = new Date(2019, 5, 1, 9, 40);
+
+    this.createInstance({
+        dataSource: [],
+        views: ["timelineDay", "day", "timelineWeek", "week", "timelineMonth"],
+        currentView: "timelineDay",
+        currentDate: date,
+        firstDayOfWeek: 0,
+        startDayHour: 0,
+        endDayHour: 20,
+        cellDuration: 60,
+        groups: ["priority"],
+        height: 580,
+    });
+
+    this.instance.scrollToTime(date.getHours() - 1, 30, date);
+    let scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
+
+    assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineDay");
+
+    this.instance.option("currentView", "timelineWeek");
+
+    this.instance.scrollToTime(date.getHours() - 1, 30, date);
+    scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
+
+    assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineWeek");
+});
+
+QUnit.test("Month view; dates are rendered correctly with grouping by date & empty resources in groups (T759160)", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["month"],
+        currentView: "month",
+        crossScrollingEnabled: true,
+        groupByDate: true,
+        currentDate: new Date(2018, 4, 21),
+        groups: [],
+        resources: [{
+            fieldExpr: "priorityId",
+            allowMultiple: false,
+            dataSource: [],
+            label: "Priority"
+        }],
+        height: 700
+    });
+
+    let hasNaNCellData = this.scheduler.workSpace.getCells().filter((index, cell) => {
+        return isNaN(parseInt(cell.innerText));
+    }).length;
+
+    assert.notOk(hasNaNCellData, "Container has valid data");
 });

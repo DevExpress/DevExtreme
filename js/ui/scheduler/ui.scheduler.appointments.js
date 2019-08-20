@@ -222,10 +222,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        if(appointment.needRepaint === false) {
-            this._processRenderedAppointment(appointment);
-        }
-
         if(this._isRepaintAppointment(appointment)) {
             appointment.needRepaint = false;
             !isRepaintAll && this._clearItem(appointment);
@@ -237,8 +233,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _repaintAppointments: function(appointments) {
         const isRepaintAll = this._isRepaintAll(appointments);
 
-        const allDayFragment = $(domAdapter.createDocumentFragment());
-        const commonFragment = $(domAdapter.createDocumentFragment());
+        const allDayFragment = $(this._getAppointmentContainer(true));
+        const commonFragment = $(this._getAppointmentContainer(false));
 
         if(isRepaintAll) {
             this._getAppointmentContainer(true).html("");
@@ -265,29 +261,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
-    },
-
-    _processRenderedAppointment: function(item) {
-        var resourceForPainting = this.invoke("getResourceForPainting");
-
-        if(!resourceForPainting) {
-            return;
-        }
-
-        var $items = this._findItemElementByItem(item.itemData);
-
-        if(!$items.length) {
-            return;
-        }
-
-        each($items, (function(index, $item) {
-            var deferredColor = this._getAppointmentColor($item, item.settings[index].groupIndex);
-            deferredColor.done(function(color) {
-                if(color) {
-                    $item.css("backgroundColor", color);
-                }
-            });
-        }).bind(this));
     },
 
     _clearItem: function(item) {
@@ -649,7 +622,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var $element = $(e.element),
             itemData = this._getItemData($element),
             startDate = this.invoke("getStartDate", itemData, true),
-            endDate = this.invoke("getEndDate", itemData);
+            endDate = this.invoke("getEndDate", itemData, true);
 
         var dateRange = this._getDateRange(e, startDate, endDate);
 
@@ -740,16 +713,20 @@ var SchedulerAppointments = CollectionWidget.inherit({
         return result;
     },
 
+    _tryGetAppointmentColor: function(appointment) {
+        const settings = $(appointment).data(APPOINTMENT_SETTINGS_NAME);
+        if(!settings) {
+            return undefined;
+        }
+        return this._getAppointmentColor(appointment, settings.groupIndex);
+    },
+
     _getAppointmentColor: function($appointment, groupIndex) {
-        var res = new Deferred();
+        const res = new Deferred();
         this.notifyObserver("getAppointmentColor", {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
-            callback: function(d) {
-                d.done(function(color) {
-                    res.resolve(color);
-                });
-            }
+            callback: d => d.done(color => res.resolve(color))
         });
 
         return res.promise();

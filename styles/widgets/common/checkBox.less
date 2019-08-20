@@ -2,7 +2,7 @@
     display: inline-block;
     cursor: pointer;
     line-height: 0;
-    user-drag: none;
+    -webkit-user-drag: none;
     .user-select(none);
 
     &.dx-state-readonly {
@@ -27,7 +27,8 @@
 }
 
 .dx-checkbox-has-text {
-    .dx-checkbox-icon, .dx-checkbox-text {
+    .dx-checkbox-icon,
+    .dx-checkbox-text {
         vertical-align: middle;
     }
 }
@@ -49,7 +50,8 @@
 }
 
 .dx-state-disabled {
-    &.dx-checkbox, .dx-checkbox {
+    &.dx-checkbox,
+    .dx-checkbox {
         cursor: default;
     }
 }

@@ -1991,7 +1991,7 @@ declare module DevExpress.ui {
     /** @name dxDiagram.Options */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /** @name dxDiagram.Options.customShapes */
-        customShapes?: Array<{ allowHasText?: boolean, defaultHeight?: number, defaultWidth?: number, id?: number, svgUrl?: string, title?: string }>;
+        customShapes?: Array<{ allowHasText?: boolean, connectionPoints?: Array<{ side?: 'north' | 'east' | 'south' | 'west', x?: number, y?: number }>, defaultHeight?: number, defaultText?: string, defaultWidth?: number, id?: number, svgHeight?: number, svgLeft?: number, svgTop?: number, svgUrl?: string, svgWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string }>;
         /** @name dxDiagram.Options.edges */
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */
@@ -2099,7 +2099,7 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.Options.itemTemplate */
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDropDownButton.Options.items */
-        items?: Array<CollectionWidgetItem | any>;
+        items?: Array<dxDropDownButtonItem | any>;
         /** @name dxDropDownButton.Options.keyExpr */
         keyExpr?: string;
         /** @name dxDropDownButton.Options.noDataText */
@@ -2116,6 +2116,8 @@ declare module DevExpress.ui {
         selectedItem?: string | number | any;
         /** @name dxDropDownButton.Options.selectedItemKey */
         selectedItemKey?: string | number;
+        /** @name dxDropDownButton.Options.showArrowIcon */
+        showArrowIcon?: boolean;
         /** @name dxDropDownButton.Options.splitButton */
         splitButton?: boolean;
         /** @name dxDropDownButton.Options.stylingMode */
@@ -2139,6 +2141,9 @@ declare module DevExpress.ui {
         toggle(): Promise<void> & JQueryPromise<void>;
         /** @name dxDropDownButton.toggle(visibility) */
         toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
+    }
+    /** @name dxDropDownButtonItem */
+    export interface dxDropDownButtonItem extends dxListItem {
     }
     /** @name dxDropDownEditor.Options */
     export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
@@ -2429,6 +2434,8 @@ declare module DevExpress.ui {
         format?: format;
         /** @name dxFilterBuilderField.lookup */
         lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => any), valueExpr?: string | Function };
+        /** @name dxFilterBuilderField.name */
+        name?: string;
         /** @name dxFilterBuilderField.trueText */
         trueText?: string;
     }
@@ -2593,7 +2600,7 @@ declare module DevExpress.ui {
         /** @name dxFormSimpleItem.name */
         name?: string;
         /** @name dxFormSimpleItem.template */
-        template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string }, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxFormSimpleItem.validationRules */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
         /** @name dxFormSimpleItem.visible */
@@ -4983,7 +4990,7 @@ declare module DevExpress.ui {
         /** @name ui.dialog.confirm(messageHtml,title) */
         static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
         /** @name ui.dialog.custom(options) */
-        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string }): any;
+        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
     }
     /** @name ui.themes */
     export class themes {
@@ -5289,7 +5296,7 @@ declare module DevExpress.data {
         /** @name Store.byKey(key) */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
         /** @name ODataStore.byKey(key, extraOptions) */
-        byKey(key: any | string | number, extraOptions: { expand?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
+        byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
         /** @name ODataStore.createQuery(loadOptions) */
         createQuery(loadOptions: any): any;
     }
@@ -5827,7 +5834,7 @@ declare module DevExpress.viz {
         /** @name BaseLegend.rowItemSpacing */
         rowItemSpacing?: number;
         /** @name BaseLegend.title */
-        title?: { font?: Font, margin?: { bottom?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, offset?: number, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
+        title?: { font?: Font, horizontalAlignment?: 'center' | 'left' | 'right', margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, offset?: number, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
         /** @name BaseLegend.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseLegend.visible */
@@ -5968,6 +5975,8 @@ declare module DevExpress.viz {
         color?: string;
         /** @name BaseWidget.Options.tooltip.container */
         container?: string | Element | JQuery;
+        /** @name BaseWidget.Options.tooltip.cornerRadius */
+        cornerRadius?: number;
         /** @name BaseWidget.Options.tooltip.enabled */
         enabled?: boolean;
         /** @name BaseWidget.Options.tooltip.font */
@@ -6995,6 +7004,8 @@ declare module DevExpress.viz {
     }
     /** @name dxChartCommonAnnotationConfig */
     export interface dxChartCommonAnnotationConfig {
+        /** @name dxChartCommonAnnotationConfig.allowDragging */
+        allowDragging?: boolean;
         /** @name dxChartCommonAnnotationConfig.argument */
         argument?: number | Date | string;
         /** @name dxChartCommonAnnotationConfig.arrowLength */
@@ -7004,7 +7015,7 @@ declare module DevExpress.viz {
         /** @name dxChartCommonAnnotationConfig.axis */
         axis?: string;
         /** @name dxChartCommonAnnotationConfig.border */
-        border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
+        border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /** @name dxChartCommonAnnotationConfig.color */
         color?: string;
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
@@ -7017,6 +7028,10 @@ declare module DevExpress.viz {
         height?: number;
         /** @name dxChartCommonAnnotationConfig.image */
         image?: string | { height?: number, url?: string, width?: number };
+        /** @name dxChartCommonAnnotationConfig.offsetX */
+        offsetX?: number;
+        /** @name dxChartCommonAnnotationConfig.offsetY */
+        offsetY?: number;
         /** @name dxChartCommonAnnotationConfig.opacity */
         opacity?: number;
         /** @name dxChartCommonAnnotationConfig.paddingLeftRight */
@@ -9444,6 +9459,8 @@ declare module DevExpress {
         static notify(message: string, type?: string, displayTime?: number): void;
         /** @name ui.notify(options,type,displayTime) */
         static notify(options: any, type?: string, displayTime?: number): void;
+        /** @name ui.repaintFloatingActionButton() */
+        static repaintFloatingActionButton(): void;
         /** @name ui.setTemplateEngine(name) */
         static setTemplateEngine(templateEngineName: string): void;
         /** @name ui.setTemplateEngine(options) */

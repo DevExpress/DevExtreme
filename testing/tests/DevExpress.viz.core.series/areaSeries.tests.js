@@ -231,12 +231,14 @@ function setDiscreteType(series) {
             point: { visible: false }
 
         });
+        series._argumentAxis.getAxisPosition = function() { return 0; };
         series.updateData(this.data);
         series.createPoints();
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
             pt.minY = 0;
+            pt.defaultY = 0;
         });
         // act
         series.draw(false);
@@ -248,7 +250,7 @@ function setDiscreteType(series) {
         assert.ok(this.renderer.stub("path").getCall(0).returnValue.sharp.calledOnce);
         assert.ok(this.renderer.stub("path").getCall(0).returnValue.sharp.firstCall.calledAfter(this.renderer.stub("path").getCall(0).returnValue.attr.lastCall));
 
-        checkElementPoints(assert, this.renderer.stub("path").getCall(1).args[0], this.areaPoints, false, "area element");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(1).args[0], this.points.concat([[4, -1], [3, -1], [2, -1], [1, -1]]), false, "area element");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
 
         checkGroups(assert, series);
@@ -1196,6 +1198,8 @@ function setDiscreteType(series) {
             point: { visible: false }
 
         });
+        series._argumentAxis.getAxisPosition = function() { return 3; };
+        series._argumentAxis.getAxisShift = function() { return 1; };
         series.updateData(this.data);
         series.createPoints();
         $.each(series._points, function(i, pt) {
@@ -1211,6 +1215,7 @@ function setDiscreteType(series) {
             pt.x = pt.value;
             pt.y = pt.argument;
             pt.minX = 0;
+            pt.defaultX = 2;
         });
 
         series.draw(false);
@@ -1231,7 +1236,7 @@ function setDiscreteType(series) {
 
         assert.equal(element.stub("append").lastCall.args[0], series._elementsGroup);
         assert.ok(!element.stub("animate").called);
-        checkElementPoints(assert, elementPoints, [[2, 1], [2, 2], [1, 2], [1, 0], [2, 0], [2, 0]], false, "areaElement");
+        checkElementPoints(assert, elementPoints, [[3, 1], [3, 2], [1, 2], [1, 0], [3, 0], [3, 0]], false, "areaElement");
 
         checkGroups(assert, series);
     });

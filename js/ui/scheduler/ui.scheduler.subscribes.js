@@ -41,7 +41,8 @@ const subscribes = {
             allDay = this.appointmentTakesAllDay(appointmentData),
             startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0],
             originalStartDate = options.originalStartDate || startDate,
-            renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
+            renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance(),
+            firstDayOfWeek = this.option("firstDayOfWeek");
 
         let recurrenceOptions = {
             rule: recurrenceRule,
@@ -49,7 +50,8 @@ const subscribes = {
             start: originalStartDate,
             end: endDate,
             min: startViewDate,
-            max: dateRange[1]
+            max: dateRange[1],
+            firstDayOfWeek: firstDayOfWeek
         };
 
         let dates = recurrenceUtils.getDatesByRecurrence(recurrenceOptions),
@@ -78,8 +80,8 @@ const subscribes = {
                 longParts = dateUtils.getDatesOfInterval(dates[i], endDateOfPart, {
                     milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
                 });
-
-                resultDates = resultDates.concat(longParts);
+                const maxDate = new Date(dateRange[1]);
+                resultDates = resultDates.concat(longParts.filter(el => new Date(el) < maxDate));
             }
 
             dates = resultDates;
@@ -322,8 +324,8 @@ const subscribes = {
         return cellWidth;
     },
 
-    getEndDate: function(appointmentData) {
-        return this._getEndDate(appointmentData);
+    getEndDate: function(appointmentData, skipNormalize) {
+        return this._getEndDate(appointmentData, skipNormalize);
     },
 
     getRenderingStrategy: function() {
@@ -436,9 +438,13 @@ const subscribes = {
     updateAppointmentEndDate: function(options) {
         let endDate = new Date(options.endDate),
             endDayHour = this._getCurrentViewOption("endDayHour"),
+            startDayHour = this._getCurrentViewOption("startDayHour"),
             updatedEndDate = endDate;
 
         if(endDate.getHours() >= endDayHour) {
+            updatedEndDate.setHours(endDayHour, 0, 0, 0);
+        } else if(startDayHour > 0 && (endDate.getHours() * 60 + endDate.getMinutes() < (startDayHour * 60))) {
+            updatedEndDate = new Date(updatedEndDate.getTime() - toMs("day"));
             updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
         options.callback(updatedEndDate);
@@ -565,7 +571,9 @@ const subscribes = {
             min: dateRange[0],
             max: dateRange[1],
             resources: resources,
-            allDay: allDay
+            allDay: allDay,
+            firstDayOfWeek: this.option('firstDayOfWeek'),
+            recurrenceException: this._getRecurrenceException.bind(this),
         }, this._subscribes["convertDateByTimezone"].bind(this));
     },
 

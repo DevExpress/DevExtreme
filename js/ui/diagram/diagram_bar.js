@@ -21,6 +21,8 @@ class DiagramBar {
     }
     setEnabled(enabled) { // IBar.setEnabled(enabled: boolean)
     }
+    setItemSubItems(key, items) { // IBar.setItemSubItems(key: DiagramCommand, items: any[])
+    }
     isVisible() { // IBar.isVisible(): boolean
         return true;
     }

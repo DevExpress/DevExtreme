@@ -84,6 +84,14 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         this._setClickAction();
     },
 
+    _defaultActionArgs() {
+        const actions = this.option("actions");
+
+        return {
+            component: actions.length === 1 ? actions[0] : this
+        };
+    },
+
     _clickHandler() {
         const actions = this._actionItems;
         actions.forEach(action => {
@@ -138,8 +146,15 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             action._options.animation.show.delay = actionAnimationDelay * i;
             action._options.animation.hide.delay = actionAnimationDelay * (lastActionIndex - i);
 
+            action._options.actionComponent = action;
+
             this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, action._options));
         }
+    },
+
+    _setPosition() {
+        this._normalizePosition();
+        this._actions.onPositioned({ position: this._renderPosition() });
     },
 
     _optionChanged(args) {
@@ -157,6 +172,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._renderCloseIcon();
                 break;
             case "position":
+                this._setPosition();
                 break;
             default:
                 this.callBase(args);
@@ -207,7 +223,10 @@ exports.initAction = function(newAction) {
                 position: speedDialMainItem._getDefaultOptions().position
             }));
         } else {
-            speedDialMainItem.option({ actions: savedActions });
+            speedDialMainItem.option({
+                actions: savedActions,
+                position: speedDialMainItem._getDefaultOptions().position
+            });
         }
     }
 };
@@ -236,6 +255,24 @@ exports.disposeAction = function(actionId) {
             position: speedDialMainItem._getDefaultOptions().position
         }));
     } else {
-        speedDialMainItem.option({ actions: savedActions });
+        speedDialMainItem.option({
+            actions: savedActions
+        });
     }
+};
+
+exports.repaint = function() {
+    if(!speedDialMainItem) return;
+
+    const icon = speedDialMainItem.option("actions").length === 1 ?
+        speedDialMainItem.option("actions")[0].option("icon") :
+        speedDialMainItem._getDefaultOptions().icon;
+
+    speedDialMainItem.option({
+        actions: speedDialMainItem.option("actions"),
+        icon: icon,
+        closeIcon: speedDialMainItem._getDefaultOptions().closeIcon,
+        position: speedDialMainItem._getDefaultOptions().position,
+        maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount
+    });
 };

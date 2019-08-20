@@ -58,7 +58,7 @@ class ToolbarModule extends BaseModule {
         this._formatHandlers = this._getFormatHandlers();
 
         if(isDefined(options.items)) {
-            this._editorInstance.addCleanCallback(this.clean.bind(this));
+            this._addCallbacks();
             this._renderToolbar();
 
             this.quill.on('editor-change', (eventName) => {
@@ -67,6 +67,11 @@ class ToolbarModule extends BaseModule {
                 this._updateToolbar(isSelectionChanged);
             });
         }
+    }
+
+    _addCallbacks() {
+        this._editorInstance.addCleanCallback(this.clean.bind(this));
+        this._editorInstance.addContentInitializedCallback(this.updateHistoryWidgets.bind(this));
     }
 
     _updateToolbar(isSelectionChanged) {
@@ -97,7 +102,9 @@ class ToolbarModule extends BaseModule {
             this._markActiveFormatWidget(formatName, widget, formats);
         } else {
             this._resetFormatWidget(formatName, widget);
-            formats.hasOwnProperty(formatName) && delete formats[formatName];
+            if(Object.prototype.hasOwnProperty.call(formatName)) {
+                delete formats[formatName];
+            }
         }
 
         this._toggleClearFormatting(isApplied || !isEmptyObject(formats));
@@ -152,32 +159,36 @@ class ToolbarModule extends BaseModule {
 
     _prepareLinkHandler() {
         return () => {
+            this.quill.focus();
+
             const selection = this.quill.getSelection();
-            const formats = this.quill.getFormat();
+            const hasEmbedContent = this._hasEmbedContent(selection);
+            const formats = selection ? this.quill.getFormat() : {};
             const formData = {
                 href: formats.link || "",
-                text: selection ? this.quill.getText(selection) : "",
-                target: formats.hasOwnProperty("target") ? !!formats.target : true
+                text: selection && !hasEmbedContent ? this.quill.getText(selection) : "",
+                target: Object.prototype.hasOwnProperty.call(formats, "target") ? !!formats.target : true
             };
             this._editorInstance.formDialogOption("title", format(DIALOG_LINK_CAPTION));
 
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
-                items: this._linkFormItems
+                items: this._getLinkFormItems(selection)
             });
 
             promise.done((formData) => {
-                if(selection && !formats.link) {
-                    const text = formData.text;
+                if(selection && !hasEmbedContent) {
+                    const text = formData.text || formData.href;
                     const { index, length } = selection;
 
-                    formData.text = "";
+                    formData.text = undefined;
 
                     length && this.quill.deleteText(index, length, SILENT_ACTION);
                     this.quill.insertText(index, text, "link", formData, USER_ACTION);
                     this.quill.setSelection(index + text.length, 0, USER_ACTION);
 
                 } else {
+                    formData.text = !selection && !formData.text ? formData.href : formData.text;
                     this.quill.format("link", formData, USER_ACTION);
                 }
             });
@@ -188,10 +199,18 @@ class ToolbarModule extends BaseModule {
         };
     }
 
-    get _linkFormItems() {
+    _hasEmbedContent(selection) {
+        return !!selection && this.quill.getText(selection).trim().length < selection.length;
+    }
+
+    _getLinkFormItems(selection) {
         return [
             { dataField: "href", label: { text: format(DIALOG_LINK_FIELD_URL) } },
-            { dataField: "text", label: { text: format(DIALOG_LINK_FIELD_TEXT) } },
+            {
+                dataField: "text",
+                label: { text: format(DIALOG_LINK_FIELD_TEXT) },
+                visible: !this._hasEmbedContent(selection)
+            },
             {
                 dataField: "target",
                 editorType: "dxCheckBox",
@@ -207,7 +226,7 @@ class ToolbarModule extends BaseModule {
     _prepareImageHandler() {
         return () => {
             const formData = this.quill.getFormat();
-            const isUpdateDialog = formData.hasOwnProperty("imageSrc");
+            const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, "imageSrc");
             const defaultIndex = this._defaultPasteIndex;
 
             if(isUpdateDialog) {
@@ -284,7 +303,7 @@ class ToolbarModule extends BaseModule {
             .appendTo(container);
         this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
-        eventsEngine.on(this._$toolbar, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
+        eventsEngine.on(this._$toolbarContainer, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
             e.preventDefault();
         });
 
@@ -301,7 +320,7 @@ class ToolbarModule extends BaseModule {
         return {
             dataSource: this._prepareToolbarItems(),
             disabled: this.isInteractionDisabled,
-            menuContainer: this._$toolbar
+            menuContainer: this._$toolbarContainer
         };
     }
 

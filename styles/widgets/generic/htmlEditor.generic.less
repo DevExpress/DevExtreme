@@ -7,12 +7,11 @@
 
     &.dx-invalid {
         border-color: @htmleditor-invalid-faded-border-color;
-        
+
         &.dx-state-focused {
             border-color: @htmleditor-invalid-border-color;
         }
     }
-
 }
 
 .dx-htmleditor-content {
@@ -38,7 +37,7 @@
 
 .dx-htmleditor-toolbar {
     background-color: transparent;
-    
+
     .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
         background-color: @htmleditor-normal-format-active-bg;
 
@@ -57,11 +56,12 @@
 }
 
 .dx-htmleditor-toolbar-format {
-    &.dx-dropdowneditor.dx-editor-filled{
+    &.dx-dropdowneditor.dx-editor-filled {
         background-color: transparent;
     }
 
-    &.dx-color-format, &.dx-background-format {
+    &.dx-color-format,
+    &.dx-background-format {
         .dx-button-content {
             padding-bottom: @GENERIC_BUTTON_ICON_HORIZONTAL_PADDING - 3px;
         }

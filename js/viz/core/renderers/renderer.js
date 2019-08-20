@@ -832,7 +832,6 @@ function cloneAndRemoveAttrs(node) {
 }
 
 function setMaxSize(maxWidth, maxHeight, options = {}) {
-    maxWidth = Number(maxWidth);
     var that = this,
         lines = [],
         textChanged = false,
@@ -959,14 +958,19 @@ function getWordBreakIndex(text, maxWidth) {
     }
 }
 
-function setEllipsis(text, ellipsisMaxWidth) {
+function getEllipsisString(ellipsisMaxWidth, { hideOverflowEllipsis }) {
+    return hideOverflowEllipsis && ellipsisMaxWidth === 0 ? "" : ELLIPSIS;
+}
+
+function setEllipsis(text, ellipsisMaxWidth, options) {
+    let ellipsis = getEllipsisString(ellipsisMaxWidth, options);
     if(text.value.length && text.tspan.parentNode) {
         for(let i = text.value.length - 1; i >= 1; i--) {
             if(text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
-                setNewText(text, i, ELLIPSIS);
+                setNewText(text, i, ellipsis);
                 break;
             } else if(i === 1) {
-                setNewText(text, 0, ELLIPSIS);
+                setNewText(text, 0, ellipsis);
             }
         }
     }
@@ -1017,7 +1021,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
 
     if(text.value.length) {
         if(options.textOverflow === "ellipsis" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
-            setEllipsis(text, ellipsisMaxWidth);
+            setEllipsis(text, ellipsisMaxWidth, options);
         }
 
         if(options.textOverflow === "hide" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
@@ -1042,7 +1046,8 @@ function calculateLineHeight(line, lineHeight) {
     }, 0);
 }
 
-function setMaxHeight(lines, ellipsisMaxWidth, { textOverflow }, maxHeight, lineHeight) {
+function setMaxHeight(lines, ellipsisMaxWidth, options, maxHeight, lineHeight) {
+    const textOverflow = options.textOverflow;
     if(!isFinite(maxHeight)
         || Number(maxHeight) === 0
         || textOverflow === "none"
@@ -1064,9 +1069,9 @@ function setMaxHeight(lines, ellipsisMaxWidth, { textOverflow }, maxHeight, line
                     const text = prevLine.parts[prevLine.parts.length - 1];
                     if(!text.hasEllipsis) {
                         if(ellipsisMaxWidth === 0 || text.endBox < ellipsisMaxWidth) {
-                            setNewText(text, text.value.length, ELLIPSIS);
+                            setNewText(text, text.value.length, getEllipsisString(ellipsisMaxWidth, options));
                         } else {
-                            setEllipsis(text, ellipsisMaxWidth);
+                            setEllipsis(text, ellipsisMaxWidth, options);
                         }
                     }
                 }
@@ -1119,7 +1124,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 
         startBox = endBox;
 
-        if(maxWidth > 0 && endBox > maxWidth) {
+        if(_isDefined(maxWidth) && endBox > maxWidth) {
             const wordWrapLines = wordWrap(text, maxWidth, ellipsisMaxWidth, options);
             if(!wordWrapLines.length) {
                 lines = [];

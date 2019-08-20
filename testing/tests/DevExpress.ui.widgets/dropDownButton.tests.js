@@ -445,6 +445,23 @@ QUnit.module("common use cases", {
         assert.ok($icons.eq(0).hasClass("dx-icon-group"), "first icon is correct");
         assert.ok($icons.eq(1).hasClass("dx-icon-spindown"), "second icon is correct");
     });
+
+    QUnit.test("spindown secondary icon should not be rendered when showArrowIcon is false", (assert) => {
+        this.dropDownButton.option({
+            splitButton: false,
+            showArrowIcon: false
+        });
+
+        let $icons = getActionButton(this.dropDownButton).find(".dx-icon");
+        assert.strictEqual($icons.length, 1, "1 icon is rendered");
+        assert.ok($icons.eq(0).hasClass("dx-icon-group"), "first icon is correct");
+
+        this.dropDownButton.option("showArrowIcon", true);
+        $icons = getActionButton(this.dropDownButton).find(".dx-icon");
+        assert.strictEqual($icons.length, 2, "2 icons are rendered");
+        assert.ok($icons.eq(0).hasClass("dx-icon-group"), "first icon is correct");
+        assert.ok($icons.eq(1).hasClass("dx-icon-spindown"), "second icon is correct");
+    });
 });
 
 QUnit.module("public methods", {
@@ -504,6 +521,26 @@ QUnit.module("public methods", {
 
         dropDownButton.option("opened", false);
         assert.notOk(getPopup(dropDownButton).option("visible"), "popup is closed");
+    });
+
+    QUnit.test("optionChange should be called when popup opens manually", (assert) => {
+        const optionChangedHandler = sinon.spy();
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            onOptionChanged: optionChangedHandler
+        });
+        const $actionButton = getActionButton(dropDownButton);
+
+        eventsEngine.trigger($actionButton, "dxclick");
+        assert.ok(getPopup(dropDownButton).option("visible"), "popup is opened");
+        assert.strictEqual(optionChangedHandler.callCount, 1, "optionChanged was called");
+        assert.strictEqual(optionChangedHandler.getCall(0).args[0].name, "opened", "option name is correct");
+        assert.strictEqual(optionChangedHandler.getCall(0).args[0].value, true, "option value is correct");
+
+        eventsEngine.trigger($actionButton, "dxclick");
+        assert.notOk(getPopup(dropDownButton).option("visible"), "popup is closed");
+        assert.strictEqual(optionChangedHandler.callCount, 2, "optionChanged was called");
+        assert.strictEqual(optionChangedHandler.getCall(1).args[0].name, "opened", "option name is correct");
+        assert.strictEqual(optionChangedHandler.getCall(1).args[0].value, false, "option value is correct");
     });
 });
 

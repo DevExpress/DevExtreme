@@ -1,12 +1,12 @@
 /* global DATA, data2, internals, initTree, makeSlowDataSource */
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    fx = require("animation/fx"),
-    devices = require("core/devices"),
-    keyboardMock = require("../../../helpers/keyboardMock.js"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import fx from "animation/fx";
+import devices from "core/devices";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
@@ -828,5 +828,5 @@ QUnit.testInActiveWindow("First list item should be focused on the 'tab' key pre
 
     assert.ok($treeView.find("." + internals.NODE_CLASS).first().hasClass("dx-state-focused"), "first node is focused");
     assert.ok($treeView.hasClass("dx-state-focused"), "treeview is focused");
-    assert.ok($treeView.children(".dx-scrollable").hasClass("dx-state-focused"), "scrollable is focused");
+    assert.ok($treeView.find(".dx-scrollable-content").hasClass("dx-state-focused"), "scrollable is focused");
 });

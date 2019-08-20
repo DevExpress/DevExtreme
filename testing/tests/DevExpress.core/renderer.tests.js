@@ -218,6 +218,37 @@ QUnit.test("width and height should take into consideration borders and paddings
     assert.equal($element.get(0).style.width, "96px");
 });
 
+QUnit.test("string value should be set correctly", function(assert) {
+    var $element = renderer("<div>");
+    document.getElementById("qunit-fixture").appendChild($element.get(0));
+
+    $element.css("boxSizing", "border-box");
+    $element.css("padding", "3px 4px");
+    $element.css("border", "4px solid");
+
+    $element.height('80');
+    $element.width('80');
+
+    assert.equal($element.get(0).style.height, "94px");
+    assert.equal($element.get(0).style.width, "96px");
+});
+
+QUnit.test("null and NaN values should not be set in .css()", function(assert) {
+    var $element = renderer("<div>");
+    const prop = "height";
+    document.getElementById("qunit-fixture").appendChild($element.get(0));
+
+    $element.css(prop, "100px");
+    assert.equal($element.get(0).style[prop], "100px");
+
+    $element.css(prop, null);
+    assert.equal($element.get(0).style[prop], "100px");
+
+    $element.css(prop, NaN);
+    assert.equal($element.get(0).style[prop], "100px");
+});
+
+
 ["Width", "Height"].forEach(function(propName) {
     var outerPropName = "outer" + propName;
     var innerPropName = "inner" + propName;

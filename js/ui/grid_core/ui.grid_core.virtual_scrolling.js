@@ -177,10 +177,15 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         isLoaded: function() {
             return this._dataSource.isLoaded() && this._isLoaded;
         },
+        resetPagesCache: function(isLiveUpdate) {
+            if(!isLiveUpdate) {
+                this._virtualScrollController.reset();
+            }
+            this.callBase.apply(this, arguments);
+        },
         _changeRowExpandCore: function() {
             var result = this.callBase.apply(this, arguments);
 
-            this._virtualScrollController.reset();
             this.resetPagesCache();
 
             updateLoading(this);
@@ -228,6 +233,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                 } else {
                     dataSource.pageIndex(that.pageIndex());
                     if(dataSource.paginate()) {
+                        options.pageIndex = that.pageIndex();
                         storeLoadOptions.skip = that.pageIndex() * that.pageSize();
                     }
                 }
@@ -914,7 +920,7 @@ module.exports = {
 
                             if(isRefresh || change.changeType === "append" || change.changeType === "prepend") {
                                 change.cancel = true;
-                                isRefresh && rowsScrollController.reset();
+                                isRefresh && rowsScrollController.reset(true);
                                 rowsScrollController.load();
                             } else {
                                 if(change.changeType === "update") {

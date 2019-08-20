@@ -93,17 +93,21 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
     return {
         init: function() {
+            this._dataController = this.getController("data");
+            this._selectionMode = this.option(SELECTION_MODE);
+            this._isSelectionWithCheckboxes = false;
+
+            this._selection = this._createSelection();
+            this._updateSelectColumn();
+            this.createAction("onSelectionChanged", { excludeValidators: ["disabled", "readOnly"] });
+        },
+
+        _getSelectionConfig: function() {
             var that = this,
-                dataController = that.getController("data"),
+                dataController = that._dataController,
                 selectionOptions = that.option("selection") || {};
 
-            that._dataController = dataController;
-
-            that._selectionMode = that.option(SELECTION_MODE);
-
-            that._isSelectionWithCheckboxes = false;
-
-            that._selection = that._createSelection({
+            return {
                 selectedKeys: that.option("selectedRowKeys"),
                 mode: that._selectionMode,
                 deferred: selectionOptions.deferred,
@@ -140,10 +144,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     return dataController.totalCount();
                 },
                 onSelectionChanged: that._updateSelectedItems.bind(this)
-            });
-
-            that._updateSelectColumn();
-            that.createAction("onSelectionChanged", { excludeValidators: ["disabled", "readOnly"] });
+            };
         },
 
         _updateSelectColumn: function() {
@@ -166,7 +167,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             columnsController.columnOption("command:select", "visible", isSelectColumnVisible);
         },
 
-        _createSelection: function(options) {
+        _createSelection: function() {
+            let options = this._getSelectionConfig();
+
             return new Selection(options);
         },
 
@@ -301,8 +304,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     args.handled = true;
                     break;
                 case "selectedRowKeys":
-                    if(Array.isArray(args.value) && !that._selectedItemsInternalChange && that.component.getDataSource()) {
-                        that.selectRows(args.value);
+                    var value = args.value || [];
+                    if(Array.isArray(value) && !that._selectedItemsInternalChange && (that.component.getDataSource() || !value.length)) {
+                        that.selectRows(value);
                     }
                     args.handled = true;
                     break;
@@ -795,6 +799,7 @@ module.exports = {
                     this.getController("editorFactory").createEditor(groupElement, extend({}, options.column, {
                         parentType: "dataRow",
                         dataType: "boolean",
+                        lookup: null,
                         value: options.value,
                         tabIndex: -1,
                         setValue: function(value, e) {

@@ -735,7 +735,9 @@ QUnit.test("Get visual range after setBusinessRange. Discrete", function(assert)
 });
 
 QUnit.test("Trigger zoom events", function(assert) {
-    this.updateOptions();
+    this.updateOptions({
+        type: "continuous"
+    });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -760,7 +762,8 @@ QUnit.test("Trigger zoom events", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
@@ -824,7 +827,7 @@ QUnit.test("Can cancel zooming on zoom end", function(assert) {
 });
 
 QUnit.test("Can prevent zoomStart", function(assert) {
-    this.updateOptions();
+    this.updateOptions({ type: "continuous" });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -841,12 +844,13 @@ QUnit.test("Can prevent zoomStart", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
 QUnit.test("Can prevent zoomEnd", function(assert) {
-    this.updateOptions();
+    this.updateOptions({ type: "continuous" });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -864,7 +868,8 @@ QUnit.test("Can prevent zoomEnd", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
@@ -1596,6 +1601,57 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
     axis.draw(this.canvas);
 
     assert.equal(axis.getTranslator().getBusinessRange().interval, 2 * 1000 * 3600 * 24, "interval");
+});
+
+QUnit.test("T746896. Pass correct range to tick generator after syncroniztion", function(assert) {
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: false
+    });
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({
+        size: 10
+    });
+
+    axis.draw(this.canvas);
+
+    axis.getTranslator().updateBusinessRange({
+        min: 50,
+        max: 250
+    });
+
+    this.tickGeneratorSpy.reset();
+
+    axis.createTicks(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].min, 100);
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].max, 200);
+});
+
+QUnit.test("Pass correct range to tick generator. Discrete axis", function(assert) {
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: true,
+        type: "discrete"
+    });
+
+    axis.setBusinessRange({
+        categories: ["1", "2", "3"]
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({
+        size: 40
+    });
+
+    axis.draw(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].min, undefined);
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].max, undefined);
 });
 
 QUnit.test("margins calculation. Work week calculation: interval > work week", function(assert) {

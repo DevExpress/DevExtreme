@@ -34,6 +34,17 @@ QUnit.module("API", moduleConfig, () => {
         assert.strictEqual(Bold.blotName, "bold", "we get correct blot");
     });
 
+    test("get registered module on init", (assert) => {
+        assert.expect(2);
+        this.options.onInitialized = ({ component }) => {
+            const Bold = component.get("formats/bold");
+
+            assert.ok(Bold, "module is defined");
+            assert.strictEqual(Bold.blotName, "bold", "we get correct blot");
+        };
+        this.createEditor();
+    });
+
     test("get quill instance", (assert) => {
         this.createEditor();
         const quillInstance = this.instance.getQuillInstance();
@@ -94,7 +105,7 @@ QUnit.module("API", moduleConfig, () => {
         this.instance.option("value", "<p><b>Test Test</b></p>");
         this.instance.removeFormat(1, 2);
 
-        assert.strictEqual(this.instance.option("value"), "<strong>T</strong>es<strong>t Test</strong>", "remove format from specific range");
+        assert.strictEqual(this.instance.option("value"), "<p><strong>T</strong>es<strong>t Test</strong></p>", "remove format from specific range");
     });
 
     test("getLength", (assert) => {
@@ -181,6 +192,28 @@ QUnit.module("API", moduleConfig, () => {
         assert.strictEqual(testModule.getEditor(), this.instance);
     });
 
+    test("registerModule on init", (assert) => {
+        class Test {
+            constructor(quillInstance, options) {
+                this._editorInstance = options.editorInstance;
+            }
+
+            getEditor() {
+                return this._editorInstance;
+            }
+        }
+
+        this.options.onInitialized = ({ component }) => {
+            component.register({ "modules/testInit": Test });
+        };
+        this.createEditor();
+
+        const testModule = this.instance.getQuillInstance().getModule("testInit");
+
+        assert.ok(testModule);
+        assert.strictEqual(testModule.getEditor(), this.instance);
+    });
+
     test("'focus' method should call the quill's focus", (assert) => {
         this.createEditor();
         const focusSpy = sinon.spy(this.instance.getQuillInstance(), "focus");
@@ -235,5 +268,92 @@ QUnit.module("API", moduleConfig, () => {
 
         this.createEditor();
         this.instance.register({ "modules/testWithOptions": Test });
+    });
+
+    test("onContentReady should trigger after processing transcluded content", (assert) => {
+        const initialMarkup = "<custom-tag></custom-tag><h1>Hi!</h1><p>Test         </p>";
+        const expectedValue = "<h1>Hi!</h1><p>Test</p>";
+
+        $("#htmlEditor").html(initialMarkup);
+        this.options = {
+            onContentReady: ({ component }) => {
+                assert.strictEqual(component.option("value"), expectedValue, "value is synchronized with the transcluded content");
+            }
+        };
+        this.createEditor();
+
+        this.clock.tick();
+    });
+
+    test("onContentReady event should trigger after editor without transcluded content rendered", (assert) => {
+        this.options.onContentReady = sinon.stub();
+        this.createEditor();
+
+        this.clock.tick();
+        assert.ok(this.options.onContentReady.calledOnce, "onContentReady has been called once");
+    });
+
+    test("empty editor should trigger onContentReady event", (assert) => {
+        this.options = { onContentReady: sinon.stub() };
+        this.createEditor();
+
+        this.clock.tick();
+        assert.ok(this.options.onContentReady.calledOnce, "onContentReady has been called once");
+    });
+
+    test("editor with invalid transcluded content should trigger onContentReady event", (assert) => {
+        $("#htmlEditor").html("<test><custom-tag></custom-tag></test>");
+        this.options = { onContentReady: sinon.stub() };
+        this.createEditor();
+
+        this.clock.tick();
+        assert.ok(this.options.onContentReady.calledOnce, "onContentReady has been called once");
+    });
+});
+
+QUnit.module("Private API", moduleConfig, () => {
+    test("cleanCallback should trigger on refresh", (assert) => {
+        const cleanCallback = sinon.stub();
+
+        this.createEditor();
+        this.instance.addCleanCallback(cleanCallback);
+
+        this.instance.repaint();
+        assert.ok(cleanCallback.calledOnce, "callback is called on refresh");
+
+        this.instance.repaint();
+        assert.ok(cleanCallback.calledOnce, "callbacks has been removed after clean");
+
+        this.instance.addCleanCallback(cleanCallback);
+        this.instance.dispose();
+        assert.ok(cleanCallback.calledTwice, "callback is called on dispose");
+    });
+
+    test("contentInitialized callback should trigger after content was initialized by Quill but before ContentReady event", (assert) => {
+        const contentInitializedCallback = () => {
+            assert.ok(contentReadyHandler.notCalled, "ContentReady event isn't trigger yet");
+        };
+        const contentReadyHandler = sinon.stub();
+
+        this.options.onInitialized = ({ component }) => {
+            component.addContentInitializedCallback(contentInitializedCallback);
+        };
+        this.options.onContentReady = contentReadyHandler;
+        this.createEditor();
+
+        this.instance.repaint();
+    });
+
+    test("contentInitialized callback should been removed on widget repaint", (assert) => {
+        const contentInitializedCallback = sinon.stub();
+
+        this.options.onInitialized = ({ component }) => {
+            component.addContentInitializedCallback(contentInitializedCallback);
+        };
+        this.createEditor();
+
+        assert.ok(contentInitializedCallback.calledOnce, "contentInitialized was called once");
+        this.instance.repaint();
+        assert.ok(contentInitializedCallback.calledOnce, "contentInitialized wasn't called twice");
     });
 });

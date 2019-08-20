@@ -58,7 +58,6 @@ var TileView = CollectionWidget.inherit({
              * @name dxTileViewOptions.items
              * @type Array<string, dxTileViewItem, object>
              * @fires dxTileViewOptions.onOptionChanged
-             * @inheritdoc
              */
 
             /**
@@ -72,7 +71,6 @@ var TileView = CollectionWidget.inherit({
              * @name dxTileViewOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -148,38 +146,32 @@ var TileView = CollectionWidget.inherit({
             /**
             * @name dxTileViewOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTileViewOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTileViewOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTileViewOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxTileViewOptions.keyExpr
              * @hidden
-             * @inheritdoc
              */
 
             /**
             * @name dxTileViewOptions.onSelectionChanged
             * @action
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -195,7 +187,6 @@ var TileView = CollectionWidget.inherit({
                     * @name dxTileViewOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

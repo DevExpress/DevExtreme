@@ -28,7 +28,7 @@
 }
 
 .dx-treeview-with-search > .dx-scrollable {
-    height: calc(100% - 1.2em - round(2*@TEXTEDITOR_INPUT_PADDING + @IOS7_TREEVIEW_SEARCH_EDITOR_MARGIN));
+    height: calc(100% - 1.2em - round(2 * @TEXTEDITOR_INPUT_PADDING + @IOS7_TREEVIEW_SEARCH_EDITOR_MARGIN));
 }
 
 .dx-treeview-border-visible {
@@ -39,7 +39,7 @@
     }
 
     .dx-scrollable-content {
-        >.dx-treeview-node-container {
+        > .dx-treeview-node-container {
             padding: @CONTAINER_PADDING;
         }
     }
@@ -94,6 +94,7 @@
 .dx-treeview-toggle-item-visibility {
     .dx-icon-chevronright;
     .dx-icon-font-centered-sizing(@IOS7_TREEVIEW_ARROW_ICON_SIZE);
+
     width: 21px;
     height: 31px;
     top: 0;

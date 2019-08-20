@@ -197,12 +197,19 @@ var baseFixedColumns = {
             isEmptyCell,
             transparentColumnIndex,
             alignByFixedColumnCellCount,
-            column = options.column;
+            column = options.column,
+            isFixedTableRendering = that._isFixedTableRendering,
+            isGroupCell = options.rowType === "group" && isDefined(column.groupIndex);
 
-        if(!that._isFixedTableRendering && that._isFixedColumns) {
-            isEmptyCell = column.fixed || column.command;
+        // T747718
+        if(isFixedTableRendering && isGroupCell && !column.command) {
+            $cell.css("pointerEvents", "none");
+        }
 
-            if(options.rowType === "group" && isDefined(column.groupIndex)) {
+        if(!isFixedTableRendering && that._isFixedColumns) {
+            isEmptyCell = column.fixed || (column.command && column.fixed !== false);
+
+            if(isGroupCell) {
                 isEmptyCell = false;
                 if(options.row.summaryCells && options.row.summaryCells.length) {
                     columns = that._columnsController.getVisibleColumns();
@@ -326,7 +333,7 @@ var baseFixedColumns = {
         var result = this.callBase.apply(this, arguments);
 
         if(this._fixedTableElement) {
-            result = result.add(this._fixedTableElement);
+            result = $([result.get(0), this._fixedTableElement.get(0)]);
         }
 
         return result;
@@ -373,6 +380,8 @@ var baseFixedColumns = {
 
     setColumnWidths: function(widths) {
         var columns,
+            visibleColumns = this._columnsController.getVisibleColumns(),
+            hasVisibleWidth = widths && widths.length && isDefined(visibleColumns[0].visibleWidth),
             useVisibleColumns = false;
 
         this.callBase.apply(this, arguments);
@@ -381,14 +390,16 @@ var baseFixedColumns = {
             if(this.option("legacyRendering")) {
                 useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
             } else {
-                useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length;
+                let hasAutoWidth = widths && widths.some(function(width) { return width === "auto"; });
+                useVisibleColumns = hasAutoWidth && (!hasVisibleWidth || !this.isScrollbarVisible(true));
             }
+
             if(useVisibleColumns) {
-                columns = this._columnsController.getVisibleColumns();
+                columns = visibleColumns;
             }
             this.callBase(widths, this._fixedTableElement, columns, true);
         }
-        if(widths && widths.length && isDefined(this._columnsController.getVisibleColumns()[0].visibleWidth)) {
+        if(hasVisibleWidth) {
             this.synchronizeRows();
         }
     },
@@ -817,7 +828,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         } else if(e.reachedBottom) {
             scrollableContent = this._findContentElement();
             scrollableContainer = e.component._container();
-            maxScrollTop = scrollableContent.height() + scrollbarWidth - scrollableContainer.height();
+            maxScrollTop = Math.max(scrollableContent.height() + scrollbarWidth - scrollableContainer.height(), 0);
             elasticScrollTop = maxScrollTop - e.scrollOffset.top;
         }
 

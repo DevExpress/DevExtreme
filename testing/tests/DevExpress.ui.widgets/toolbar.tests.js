@@ -3,9 +3,11 @@ import "ui/drop_down_menu";
 
 import $ from "jquery";
 import Toolbar from "ui/toolbar";
+import ToolbarBase from "ui/toolbar/ui.toolbar.base";
 import fx from "animation/fx";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import themes from "ui/themes";
+import eventsEngine from "events/core/events_engine";
 
 import "common.css!";
 import "ui/button";
@@ -311,6 +313,81 @@ QUnit.test("dropdown menu should have correct position", function(assert) {
 });
 
 
+[true, false, undefined, "not declared"].forEach((isToolbarDisabled) => {
+    [true, false, undefined, "not declared"].forEach((isButtonDisabled) => {
+
+        const checkClickHandlers = (assert, itemClickHandler, buttonClickHandler, buttonDisabled, toolbarDisabled) => {
+            assert.strictEqual(itemClickHandler.callCount, toolbarDisabled ? 0 : 1, `onItemClick ${itemClickHandler.callCount}`);
+            assert.strictEqual(buttonClickHandler.callCount, buttonDisabled || toolbarDisabled ? 0 : 1, `onButtonClick ${buttonClickHandler.callCount}`);
+        };
+
+        const checkDisabledState = (assert, $button, $toolbar, expectedButtonDisabled, expectedToolbarDisabled) => {
+            assert.strictEqual($button.dxButton("option", "disabled"), expectedButtonDisabled, "button.disabled");
+            assert.strictEqual($toolbar.dxToolbar("option", "disabled"), expectedToolbarDisabled, "toolbar.disabled");
+        };
+
+        [true, false, undefined].forEach((isToolbarDisabledNew) => {
+            [true, false, undefined].forEach((isButtonDisabledNew) => {
+                [true, false].forEach((changeDisabledOrder) => {
+                    QUnit.test(`new dxToolbar({toolbar.disabled: ${isToolbarDisabled}, button.disabled: ${isButtonDisabled})`, function(assert) {
+                        let itemClickHandler = sinon.spy();
+                        let buttonClickHandler = sinon.spy();
+                        let toolbarOptions = {
+                            onItemClick: itemClickHandler,
+                            items: [{
+                                location: 'before',
+                                widget: 'dxButton',
+                                options: {
+                                    onClick: buttonClickHandler
+                                }
+                            }]
+                        };
+
+                        if(isToolbarDisabled !== "not declared") {
+                            toolbarOptions.disabled = isToolbarDisabled;
+                        }
+                        if(isButtonDisabled !== "not declared") {
+                            toolbarOptions.items[0].options.disabled = isButtonDisabled;
+                        }
+
+                        this.element.dxToolbar(toolbarOptions);
+
+                        let $button = this.element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0);
+                        const expectedToolbarValue = isToolbarDisabled !== "not declared" ? isToolbarDisabled : false;
+                        let expectedButtonValue = isButtonDisabled !== "not declared" ? isButtonDisabled : isToolbarDisabled;
+
+                        if(expectedButtonValue === "not declared") {
+                            expectedButtonValue = false;
+                        }
+
+                        checkDisabledState(assert, $button, this.element, expectedButtonValue, expectedToolbarValue);
+
+                        eventsEngine.trigger($button, 'dxclick');
+                        checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedButtonValue, expectedToolbarValue);
+
+                        itemClickHandler.reset();
+                        buttonClickHandler.reset();
+
+                        if(changeDisabledOrder) {
+                            $button.dxButton("option", "disabled", isButtonDisabledNew);
+                            this.element.dxToolbar("option", "disabled", isToolbarDisabledNew);
+                        } else {
+                            this.element.dxToolbar("option", "disabled", isToolbarDisabledNew);
+                            $button.dxButton("option", "disabled", isButtonDisabledNew);
+                        }
+
+                        checkDisabledState(assert, $button, this.element, isButtonDisabledNew, isToolbarDisabledNew);
+
+                        eventsEngine.trigger($button, 'dxclick');
+                        checkClickHandlers(assert, itemClickHandler, buttonClickHandler, isButtonDisabledNew, isToolbarDisabledNew);
+                    });
+                });
+            });
+        });
+    });
+});
+
+
 QUnit.module("widget sizing render");
 
 QUnit.test("default", function(assert) {
@@ -365,7 +442,7 @@ QUnit.test("text should crop in the label inside the toolbar on toolbar's width 
 
     instance.option("width", 100);
 
-    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1, "width of before element should be changed");
+    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1.001, "width of before element should be changed");
 });
 
 QUnit.test("text should crop in the label inside the toolbar on window's width changing", function(assert) {
@@ -381,7 +458,7 @@ QUnit.test("text should crop in the label inside the toolbar on window's width c
     $element.width(100);
     resizeCallbacks.fire();
 
-    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1, "width of before element should be changed");
+    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1.001, "width of before element should be changed");
 });
 
 QUnit.test("label should positioned correctly inside the toolbar if toolbar-before section is empty", function(assert) {
@@ -1379,4 +1456,78 @@ QUnit.test("items in center section should have correct sizes, width increases",
     assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, "Width of the first item is correct");
     assert.roughEqual($toolbarItems.eq(1).outerWidth(), 58, 1, "Width of the second item is correct");
     assert.roughEqual($toolbarItems.eq(2).outerWidth(), 46, 1, "Width of the third item is correct");
+});
+
+QUnit.module("Waiting fonts for material theme", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Toolbar calls font-waiting function for labels (T736793)", function(assert) {
+    var estimatedData = [
+        { args: [ "text1", "400" ], description: "call for the first label" },
+        { args: [ "text2", "400" ], description: "call for the second label" },
+        { args: [ "text3", "400" ], description: "call for the third label" }
+    ];
+
+    var executionCount = 0,
+        origIsMaterial = themes.isMaterial,
+        done = assert.async(3);
+
+    themes.isMaterial = function() { return true; };
+
+    themes.waitWebFont = function(text, fontWeight) {
+        var data = estimatedData[executionCount];
+        assert.deepEqual([text, fontWeight], data.args, data.description);
+        executionCount++;
+        done();
+    };
+
+    $("#toolbar").dxToolbar({
+        items: [
+            { location: "before", text: "text1" },
+            { location: "before", text: "text2" },
+            { location: "before", text: "text3" }
+        ],
+        width: 250,
+        height: 50
+    });
+
+    this.clock.tick();
+    themes.isMaterial = origIsMaterial;
+});
+
+
+QUnit.test("Toolbar calls _dimensionChanged function in Material theme to recalculate labels (T736793)", function(assert) {
+    var origIsMaterial = themes.isMaterial;
+    themes.isMaterial = function() { return true; };
+
+    var done = assert.async();
+
+    ToolbarBase.prototype._checkWebFontForLabelsLoaded = () => {
+        return new Promise(resolve => { resolve(); });
+    };
+
+    ToolbarBase.prototype._dimensionChanged = () => {
+        assert.expect(0);
+        done();
+    };
+
+    $("#toolbar").dxToolbar({
+        items: [
+            { location: "before", text: "text1" },
+            { location: "before", text: "text2" },
+            { location: "before", text: "text3" }
+        ],
+        width: 250,
+        height: 50
+    });
+
+    this.clock.tick();
+
+    themes.isMaterial = origIsMaterial;
 });

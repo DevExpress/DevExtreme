@@ -219,7 +219,10 @@ module.exports = {
                     },
 
                     _getSearchTextEditor: function() {
-                        var $searchPanel = this.element().find("." + this.addWidgetPrefix(SEARCH_PANEL_CLASS));
+                        var $element = this.element(),
+                            $searchPanel = $element.find("." + this.addWidgetPrefix(SEARCH_PANEL_CLASS)).filter(function() {
+                                return $(this).closest(".dx-datagrid-header-panel").is($element);
+                            });
 
                         if($searchPanel.length) {
                             return $searchPanel.dxTextBox("instance");

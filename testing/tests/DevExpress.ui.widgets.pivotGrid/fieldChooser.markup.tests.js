@@ -1,8 +1,8 @@
-require("common.css!");
-require("generic_light.css!");
-require("ui/pivot_grid/ui.pivot_grid.field_chooser");
+import "common.css!";
+import "generic_light.css!";
+import "ui/pivot_grid/ui.pivot_grid.field_chooser";
 
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.testStart(function() {
     var markup = '<div id="container"></div>';

@@ -29,7 +29,7 @@
     @MATERIAL_TREEVIEW_MIN_ITEM_HEIGHT: 36px;
 
     @MATERIAL_TREEVIEW_LOADINCICATOR_OFFSET_TOP: 8px;
-    @MATERIAL_TREEVIEW_LOADINCICATOR_OFFSET_LEFT: 0px;
+    @MATERIAL_TREEVIEW_LOADINCICATOR_OFFSET_LEFT: 0;
     @MATERIAL_TREEVIEW_LOADINCICATOR_SIZE: 18px;
     @MATERIAL_SELECT_ALL_TEXT_OFFSET: 20px;
 
@@ -84,7 +84,7 @@
     }
 
     .dx-scrollable-content {
-        >.dx-treeview-node-container {
+        > .dx-treeview-node-container {
             padding: @MATERIAL_TREEVIEW_CONTAINER_PADDING;
         }
     }
@@ -158,6 +158,7 @@
 .dx-treeview-toggle-item-visibility {
     .dx-icon-chevronright;
     .dx-icon-font-centered-sizing(@MATERIAL_BASE_ICON_SIZE);
+
     color: @treeview-spin-icon-color;
     width: @MATERIAL_TREEVIEW_TOGGLE_ITEM_WIDTH;
     height: @MATERIAL_TREEVIEW_MIN_ITEM_HEIGHT;

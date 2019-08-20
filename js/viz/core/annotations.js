@@ -12,9 +12,11 @@ import eventsEngine from "../../events/core/events_engine";
 const EVENT_NS = "annotations";
 const DOT_EVENT_NS = "." + EVENT_NS;
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
+const POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, EVENT_NS);
 
 const DRAG_START_EVENT_NAME = dragEvents.start + DOT_EVENT_NS;
 const DRAG_EVENT_NAME = dragEvents.move + DOT_EVENT_NS;
+const DRAG_END_EVENT_NAME = dragEvents.end + DOT_EVENT_NS;
 
 function coreAnnotation(options, draw) {
     return {
@@ -27,12 +29,14 @@ function coreAnnotation(options, draw) {
         axis: options.axis,
         series: options.series,
         options: options,
+        offsetX: options.offsetX,
+        offsetY: options.offsetY,
         draw: function(widget, group) {
             const annotationGroup = widget._renderer.g().append(group);
-            this.plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
+            this.plaque = new Plaque(options, widget, annotationGroup, draw.bind(this), isDefined(options.value) || isDefined(options.argument));
             this.plaque.draw(widget._getAnnotationCoords(this));
 
-            if(options.draggable) {
+            if(options.allowDragging) {
                 annotationGroup
                     .on(DRAG_START_EVENT_NAME, { immediate: true }, e => {
                         this._dragOffsetX = this.plaque.x - e.pageX;
@@ -40,6 +44,9 @@ function coreAnnotation(options, draw) {
                     })
                     .on(DRAG_EVENT_NAME, e => {
                         this.plaque.move(e.pageX + this._dragOffsetX, e.pageY + this._dragOffsetY);
+                    }).on(DRAG_END_EVENT_NAME, e => {
+                        this.offsetX = (this.offsetX || 0) + e.offset.x;
+                        this.offsetY = (this.offsetY || 0) + e.offset.y;
                     });
             }
         },
@@ -63,6 +70,7 @@ function labelAnnotation(options) {
         const text = widget._renderer
             .text(options.text)
             .css(patchFontOptions(options.font))
+            .attr({ "class": options.cssClass })
             .append(group);
 
         if(isDefined(width) || isDefined(height)) {
@@ -125,7 +133,10 @@ const chartPlugin = {
     dispose() {},
     members: {
         _getAnnotationCoords(annotation) {
-            const coords = { };
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY
+            };
             const argCoordName = this._options.rotated ? "y" : "x";
             const valCoordName = this._options.rotated ? "x" : "y";
             const argAxis = this.getArgumentAxis();
@@ -141,7 +152,12 @@ const chartPlugin = {
             }
 
             if(isDefined(argument)) {
-                coords[argCoordName] = argAxis.getTranslator().translate(argument);
+                if(series) {
+                    const center = series.getPointCenterByArg(argument);
+                    center && (coords[argCoordName] = center[argCoordName]);
+                } else {
+                    coords[argCoordName] = argAxis.getTranslator().translate(argument);
+                }
                 !isDefined(pane) && (pane = argAxis.pane);
             }
 
@@ -158,10 +174,8 @@ const chartPlugin = {
                     coords[valCoordName] = argAxis.getAxisPosition();
                 } else if(isDefined(axis) && !isDefined(series)) {
                     coords[valCoordName] = this._argumentAxes.filter(a => a.pane === axis.pane)[0].getAxisPosition();
-                } else if(isDefined(series)) {
-                    if(series.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
-                        coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
-                    }
+                } else if(isDefined(series) && series.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
+                    coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
                 }
             }
 
@@ -172,15 +186,12 @@ const chartPlugin = {
                     if(series.checkSeriesViewportCoord(axis, coords[valCoordName])) {
                         coords[argCoordName] = series.getSeriesPairCoord(coords[valCoordName], false);
                     }
-                    if(!isDefined(coords[argCoordName])) {
-                        coords[argCoordName] = axis.getAxisPosition();
-                    }
                 }
             }
             return coords;
         },
         _annotationsPointerEventHandler(event) {
-            const originalEvent = event.originalEvent;
+            const originalEvent = event.originalEvent || {};
             const touch = (originalEvent.touches && originalEvent.touches[0]) || {};
             const rootOffset = this._renderer.getRootOffset();
             const coords = {
@@ -198,9 +209,14 @@ const chartPlugin = {
             this.hideTooltip();
             this.clearHover();
 
-            annotation.showTooltip(this._annotations.tooltip, coords);
+            if(annotation.options.allowDragging && event.type === pointerEvents.down) {
+                this._annotations._hideToolTipForDrag = true;
+            }
 
-            event.stopPropagation();
+            if(!this._annotations._hideToolTipForDrag) {
+                annotation.showTooltip(this._annotations.tooltip, coords);
+                event.stopPropagation();
+            }
         }
     }
 };
@@ -209,6 +225,7 @@ const corePlugin = {
     init() {
         this._annotations = {
             items: [],
+            _hideToolTipForDrag: false,
             tooltip: new Tooltip({
                 cssClass: `${this._rootClassPrefix}-annotation-tooltip`,
                 eventTrigger: this._eventTrigger,
@@ -236,6 +253,10 @@ const corePlugin = {
         _createHtmlStructure() {
             this._annotationsGroup = this._renderer.g().attr({ "class": `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, "annotations").linkAppend();
             eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
+            eventsEngine.on(getDocument(), POINTER_UP_EVENT_NAME, (event) => {
+                this._annotations._hideToolTipForDrag = false;
+                this._annotationsPointerEventHandler(event);
+            });
             this._annotationsGroup.on(POINTER_ACTION, this._annotationsPointerEventHandler.bind(this));
         },
         _renderExtraElements() {

@@ -10,6 +10,8 @@ import { getDisplayFileSize } from "./ui.file_manager.utils.js";
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
+const FILE_MANAGER_DETAILS_ITEM_NAME_CLASS = "dx-filemanager-details-item-name";
+const FILE_MANAGER_DETAILS_ITEM_NAME_WRAPPER_CLASS = "dx-filemanager-details-item-name-wrapper";
 const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
 const PREDEFINED_COLUMN_NAMES = [ "name", "isDirectory", "size", "thumbnail", "dateModified" ];
 
@@ -158,7 +160,16 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _createNameColumnCell(container, cellInfo) {
         const $button = $("<div>");
-        $(container).append(cellInfo.data.name, $button);
+
+        const $name = $("<span>")
+            .text(cellInfo.data.name)
+            .addClass(FILE_MANAGER_DETAILS_ITEM_NAME_CLASS);
+
+        const $wrapper = $("<div>")
+            .append($name, $button)
+            .addClass(FILE_MANAGER_DETAILS_ITEM_NAME_WRAPPER_CLASS);
+
+        $(container).append($wrapper);
 
         this._createComponent($button, FileManagerFileActionsButton, {
             onClick: e => this._onFileItemActionButtonClick(e)

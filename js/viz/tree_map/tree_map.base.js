@@ -617,7 +617,7 @@ function layoutTextNode(node, params) {
         fitByWidth = true;
         fitByHeight = true;
         text.setMaxSize(effectiveWidth, rect[3] - rect[1] - paddingTopBottom, node.isNode() ? { textOverflow: groupLabelOverflow, wordWrap: "none" } :
-            { textOverflow: tileLabelOverflow, wordWrap: tileLabelWordWrap });
+            { textOverflow: tileLabelOverflow, wordWrap: tileLabelWordWrap, hideOverflowEllipsis: true });
     }
 
     text.attr({

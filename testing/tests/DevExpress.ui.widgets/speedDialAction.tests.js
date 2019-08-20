@@ -50,7 +50,6 @@ QUnit.module("create one action", () => {
     });
 });
 
-
 QUnit.module("maxSpeedDialActionCount option", () => {
     test("check action buttons count", (assert) => {
         const $container = $("#fabs");
@@ -69,7 +68,6 @@ QUnit.module("maxSpeedDialActionCount option", () => {
         assert.equal($("." + FAB_CLASS).length - 1, 5, "five actions is created");
     });
 });
-
 
 QUnit.module("create multiple actions", (hooks) => {
     let firstInstance;
@@ -124,11 +122,21 @@ QUnit.module("create multiple actions", (hooks) => {
     });
 });
 
-
 QUnit.module("modify global action button config", (hooks) => {
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+
     }),
 
     test("check main fab rendering", (assert) => {
@@ -165,6 +173,29 @@ QUnit.module("modify global action button config", (hooks) => {
         const $fabMainContentIcons = $fabMainElement.find(".dx-icon");
         assert.equal($fabMainContent.find(".dx-icon-add").length, 1, "default icon is 'add'");
         assert.equal($fabMainContentIcons.length, 2, "only two icons rendered on the main button");
+    });
+
+    test("check main fab position after change", (assert) => {
+        var firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
+        $("#fab-two").dxSpeedDialAction();
+
+        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+        const fabDimensions = 64;
+
+        assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
+        assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
+
+        config({
+            floatingActionButtonConfig: {
+                position: "left top"
+            }
+        });
+
+        firstSDA.repaint();
+
+        assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
+        assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
     });
 });
 
@@ -209,7 +240,6 @@ QUnit.module("add or remove action buttons", (hooks) => {
         assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), "use dafault position");
     });
 });
-
 
 QUnit.module("check action buttons position", (hooks) => {
     hooks.afterEach(() => {
@@ -274,4 +304,39 @@ QUnit.module("check action buttons position", (hooks) => {
         assert.equal($fabWrapper.eq(1).css("position"), expectedPosition, "second action has the same position with main fab");
     });
 });
+
+
+QUnit.module("check action buttons click args", (hooks) => {
+    hooks.afterEach(() => {
+        $("#fab-one").dxSpeedDialAction("instance").dispose();
+        $("#fab-two").dxSpeedDialAction("instance").dispose();
+    }),
+
+    test("component", (assert) => {
+        const firstSDA = $("#fab-one").dxSpeedDialAction({
+            onClick: function(e) {
+                assert.equal(e.component, firstSDA, "component in args matches with first SDA instance");
+            }
+        }).dxSpeedDialAction("instance");
+
+        const $fabMainElement = $("." + FAB_MAIN_CLASS);
+        let $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        const secondSDA = $("#fab-two").dxSpeedDialAction({
+            icon: "edit",
+            onClick: function(e) {
+                assert.equal(e.component, secondSDA, "component in args matches with second SDA instance");
+            }
+        }).dxSpeedDialAction("instance");
+
+        const $fabElement = $("." + FAB_CLASS);
+        const $fabContent = $fabElement.find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+        $fabContent.eq(2).trigger("dxclick");
+    });
+});
+
 

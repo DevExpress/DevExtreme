@@ -11,6 +11,7 @@
         "Back": "Zurück",
         "OK": "OK",
         "dxCollectionWidget-noDataText": "Keine Daten verfügbar",
+        "dxDropDownEditor-selectLabel": "Auswählen",
         "validation-required": "Pflichtfeld",
         "validation-required-formatted": "{0} ist ein Pflichtfeld",
         "validation-numeric": "Der Wert muss eine Zahl sein",
@@ -252,6 +253,13 @@
         "dxHtmlEditor-dialogImageWidthField": "Breite (px)",
         "dxHtmlEditor-dialogImageHeightField": "Bildhöhe (px)",
         "dxHtmlEditor-heading": "Überschrift",
-        "dxHtmlEditor-normalText": "Normaler Text"
+        "dxHtmlEditor-normalText": "Normaler Text",
+
+        "dxFileManager-newFolderName": "Ohne Titel",
+        "dxFileManager-errorNoAccess": "Zugriff verweigert. Die Operation kann nicht durchgeführt werden.",
+        "dxFileManager-errorDirectoryExistsFormat": "Ordner {0} existiert bereits.",
+        "dxFileManager-errorFileExistsFormat": "Datei {0} existiert bereits.",
+        "dxFileManager-errorFileNotFoundFormat": "Datei {0} wurde nicht gefunden.",
+        "dxFileManager-errorDefault": "Unbekannter Fehler"
     }
 }

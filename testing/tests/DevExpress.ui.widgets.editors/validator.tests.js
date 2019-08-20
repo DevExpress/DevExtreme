@@ -522,6 +522,30 @@ QUnit.test("Validation happens on firing callback, results are shown by our widg
     assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
 });
 
+QUnit.test("validator should validate value passed in the validation request", function(assert) {
+    var that = this,
+        adapter = {
+            getValue: sinon.stub(),
+            validationRequestsCallbacks: $.Callbacks()
+        },
+        validatedHandler = sinon.stub();
+
+    that.fixture.createValidator({
+        adapter: adapter,
+        validationRules: [{
+            type: "required"
+        }],
+        onValidated: validatedHandler
+    });
+
+    adapter.getValue.returns("123");
+    adapter.validationRequestsCallbacks.fire({
+        value: ""
+    });
+
+    assert.strictEqual(validatedHandler.firstCall.args[0].isValid, false, "empty value should be validated");
+});
+
 QUnit.test("Validation happens on firing callback, result are applied through custom validator", function(assert) {
     var that = this,
         adapter = {

@@ -9,10 +9,11 @@
     vertical-align: middle;
     max-width: 100%;
     .user-select(none);
-    user-drag: none;
+
+    -webkit-user-drag: none;
 
     .dx-icon {
-        user-drag: none;
+        -webkit-user-drag: none;
         display: inline-block;
         vertical-align: middle;
     }
@@ -55,7 +56,8 @@
 }
 
 .dx-state-disabled {
-    &.dx-button, .dx-button {
+    &.dx-button,
+    .dx-button {
         .dx-button-disabled;
     }
 }

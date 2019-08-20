@@ -107,7 +107,8 @@ function getLabelOptions(labelOptions, defaultColor) {
         connector: connectorAttr,
         rotationAngle: opt.rotationAngle,
         wordWrap: opt.wordWrap,
-        textOverflow: opt.textOverflow
+        textOverflow: opt.textOverflow,
+        cssClass: opt.cssClass
     };
 }
 
@@ -323,6 +324,8 @@ Series.prototype = {
         that.barOverlapGroup = newOptions.barOverlapGroup;
 
         that._createGroups();
+
+        that._processEmptyValue = newOptions.ignoreEmptyPoints ? x => x === null ? undefined : x : x => x;
     },
 
     _defineDrawingState() {
@@ -411,9 +414,7 @@ Series.prototype = {
         return aggregation && aggregation.enabled;
     },
 
-    autoHidePointMarkersEnabled() {
-        return false;
-    },
+    autoHidePointMarkersEnabled: _noop,
 
     usePointsToDefineAutoHiding: _noop,
 

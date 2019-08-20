@@ -249,7 +249,7 @@ QUnit.test("Add row to child should call addRow method with parentId", function(
     this.editingController.addRow = sinon.spy();
 
     // act
-    $testElement.find(".dx-command-edit .dx-link-add").trigger("dxclick");
+    $testElement.find(".dx-command-edit .dx-link-add").trigger("click");
     this.clock.tick();
 
     // assert
@@ -774,6 +774,7 @@ QUnit.test("Edit cell - The editable cell should be closed after click on expand
 
     // act
     $(this.getCellElement(1, 0)).find(".dx-treelist-collapsed").trigger("dxpointerdown");
+    $(this.getCellElement(1, 0)).find(".dx-treelist-collapsed").trigger("dxclick");
     this.clock.tick();
 
     // assert

@@ -64,7 +64,8 @@ registerTheme({
         color: "#616161",
         font: {
             color: WHITE
-        }
+        },
+        cornerRadius: 4
     },
 
     chart: {
@@ -92,7 +93,8 @@ registerTheme({
                 opacity: 0.08,
                 offsetY: 4,
                 blur: 8
-            }
+            },
+            cornerRadius: 4
         }
     },
 
@@ -467,7 +469,7 @@ var materialAccents = {
 };
 
 for(var accent in materialAccents) {
-    if(materialAccents.hasOwnProperty(accent)) {
+    if(Object.prototype.hasOwnProperty.call(materialAccents, accent)) {
         var color = materialAccents[accent];
         registerMaterialColorScheme(accent, "light", color);
         registerMaterialColorScheme(accent, "dark", color);

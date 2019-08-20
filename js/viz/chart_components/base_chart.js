@@ -443,10 +443,10 @@ var BaseChart = BaseWidget.inherit({
         that._stripsGroup = renderer.g().attr({ "class": "dxc-strips-group" }).linkOn(root, "strips"); // TODO: Must be created in the same place where used (advanced chart)
         that._gridGroup = renderer.g().attr({ "class": "dxc-grids-group" }).linkOn(root, "grids"); // TODO: Must be created in the same place where used (advanced chart)
         that._panesBorderGroup = renderer.g().attr({ "class": "dxc-border" }).linkOn(root, "border"); // TODO: Must be created in the same place where used (chart)
+        that._axesGroup = renderer.g().attr({ "class": "dxc-axes-group" }).linkOn(root, "axes"); // TODO: Must be created in the same place where used (advanced chart)
         that._labelAxesGroup = renderer.g().attr({ "class": "dxc-strips-labels-group" }).linkOn(root, "strips-labels"); // TODO: Must be created in the same place where used (advanced chart)
         that._constantLinesGroup.under = createConstantLinesGroup();
         that._seriesGroup = renderer.g().attr({ "class": "dxc-series-group" }).linkOn(root, "series");
-        that._axesGroup = renderer.g().attr({ "class": "dxc-axes-group" }).linkOn(root, "axes"); // TODO: Must be created in the same place where used (advanced chart)
         that._constantLinesGroup.above = createConstantLinesGroup();
         that._scaleBreaksGroup = renderer.g().attr({ "class": "dxc-scale-breaks" }).linkOn(root, "scale-breaks");
         that._labelsGroup = renderer.g().attr({ "class": "dxc-labels-group" }).linkOn(root, "labels");
@@ -1032,7 +1032,7 @@ var BaseChart = BaseWidget.inherit({
         scrollBar: "SCROLL_BAR"
     },
 
-    _optionChangesOrder: ["ROTATED", "PALETTE", "REFRESH_SERIES_REINIT", "AXES_AND_PANES", "INIT", "REINIT", "DATA_SOURCE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "FORCE_DATA_INIT", "CORRECT_AXIS"],
+    _optionChangesOrder: ["ROTATED", "PALETTE", "REFRESH_SERIES_REINIT", "AXES_AND_PANES", "INIT", "REINIT", "DATA_SOURCE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "FORCE_DATA_INIT", "REFRESH_AXES", "CORRECT_AXIS"],
 
     _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES",
         "FORCE_RENDER", "VISUAL_RANGE", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT", "REFRESH", "FULL_RENDER"],
@@ -1086,6 +1086,18 @@ var BaseChart = BaseWidget.inherit({
 
     _change_REFRESH_SERIES_REINIT: function() {
         this._refreshSeries("INIT");
+    },
+
+    _change_REFRESH_AXES() {
+        const that = this;
+
+        _setCanvasValues(that._canvas);
+        that._reinitAxes();
+
+        that._requestChange([
+            "CORRECT_AXIS",
+            "FULL_RENDER"
+        ]);
     },
 
     _change_SCROLL_BAR: function() {

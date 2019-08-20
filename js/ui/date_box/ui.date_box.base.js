@@ -222,8 +222,9 @@ var DateBox = DropDownEditor.inherit({
              * @type dxCalendarOptions
              * @default {}
              */
-            calendarOptions: {}
+            calendarOptions: {},
 
+            useHiddenSubmitElement: true
         });
     },
 
@@ -383,7 +384,6 @@ var DateBox = DropDownEditor.inherit({
 
     _initMarkup: function() {
         this.$element().addClass(DATEBOX_CLASS);
-        this._renderSubmitElement();
 
         this.callBase();
 
@@ -422,16 +422,6 @@ var DateBox = DropDownEditor.inherit({
         });
 
         $element.addClass(DATEBOX_CLASS + "-" + this._pickerType);
-    },
-
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
-    },
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
     },
 
     _updateSize: function() {
@@ -554,7 +544,18 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _readOnlyPropValue: function() {
-        return this.callBase() && !this._isNativeType() || this._pickerType === PICKER_TYPE.rollers;
+        if(this._pickerType === PICKER_TYPE.rollers) {
+            return true;
+        }
+
+        var platform = devices.real().platform,
+            isCustomValueDisabled = this._isNativeType() && (platform === "ios" || platform === "android");
+
+        if(isCustomValueDisabled) {
+            return this.option("readOnly");
+        }
+
+        return this.callBase();
     },
 
     _isClearButtonVisible: function() {
@@ -562,17 +563,21 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        var value = this.dateOption("value"),
-            dateSerializationFormat = this.option("dateSerializationFormat");
+        var value = this.dateOption("value");
 
         this.option("text", this._getDisplayedText(value));
+        this._strategy.renderValue();
 
+        return this.callBase();
+    },
+
+    _setSubmitValue: function() {
+        var value = this.dateOption("value");
+        var dateSerializationFormat = this.option("dateSerializationFormat");
         var submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option("type")];
         var submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
-        this._$submitElement.val(submitValue);
 
-        this._strategy.renderValue();
-        return this.callBase();
+        this._getSubmitElement().val(submitValue);
     },
 
     _getDisplayedText: function(value) {
@@ -741,7 +746,10 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _applyButtonHandler: function(e) {
-        this.dateValue(this._strategy.getValue(), e.event);
+        var value = this._strategy.getValue();
+        if(this._validateValue(value)) {
+            this.dateValue(value, e.event);
+        }
         this.callBase();
     },
 
@@ -778,7 +786,7 @@ var DateBox = DropDownEditor.inherit({
                 break;
             case "min":
             case "max":
-                this._validateValue(this.dateOption("value"));
+                this._applyInternalValidation(this.dateOption("value"));
                 this._invalidate();
                 break;
             case "dateSerializationFormat":
@@ -814,6 +822,10 @@ var DateBox = DropDownEditor.inherit({
                 this._updateSize();
                 break;
             case "showDropDownButton":
+                this._updateSize();
+                break;
+            case "readOnly":
+                this.callBase.apply(this, arguments);
                 this._updateSize();
                 break;
             case "invalidDateMessage":

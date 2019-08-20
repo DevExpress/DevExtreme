@@ -531,8 +531,10 @@ module.exports = {
 
                     if(options.rowType === "group" && isDefined(column.groupIndex) && !column.showWhenGrouped && !column.command) {
                         template = column.groupCellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultGroupTemplate(column) };
+                    } else if((options.rowType === "data" || column.command) && column.cellTemplate) {
+                        template = column.cellTemplate;
                     } else {
-                        template = column.cellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultTemplate(column) };
+                        template = { allowRenderToDetachedContainer: true, render: that._getDefaultTemplate(column) };
                     }
 
                     return template;
@@ -568,20 +570,20 @@ module.exports = {
                     return $row;
                 },
 
-                _rowPrepared: function($row, row) {
-                    if(row.rowType === "data") {
+                _rowPrepared: function($row, rowOptions, row) {
+                    if(rowOptions.rowType === "data") {
                         if(this.option("rowAlternationEnabled")) {
                             var getRowAlt = () => {
                                 return row.dataIndex % 2 === 1;
                             };
                             getRowAlt() && $row.addClass(ROW_ALTERNATION_CLASS);
-                            row.watch && row.watch(getRowAlt, value => {
+                            rowOptions.watch && rowOptions.watch(getRowAlt, value => {
                                 $row.toggleClass(ROW_ALTERNATION_CLASS, value);
                             });
                         }
 
-                        this._setAriaRowIndex(row, $row);
-                        row.watch && row.watch(() => row.rowIndex, () => this._setAriaRowIndex(row, $row));
+                        this._setAriaRowIndex(rowOptions, $row);
+                        rowOptions.watch && rowOptions.watch(() => rowOptions.rowIndex, () => this._setAriaRowIndex(rowOptions, $row));
                     }
 
                     this.callBase.apply(this, arguments);
@@ -1137,21 +1139,22 @@ module.exports = {
 
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
-                        itemCount = that._dataController.items().length,
+                        dataController = that._dataController,
+                        itemCount = dataController.items().length,
                         contentElement = that._findContentElement(),
                         freeSpaceRowElements = that._getFreeSpaceRowElements($table),
                         freeSpaceRowCount,
                         scrollingMode;
 
-                    if(freeSpaceRowElements && contentElement) {
+                    if(freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
                         var isFreeSpaceRowVisible = false;
 
                         if(itemCount > 0) {
                             if(!that._hasHeight) {
-                                freeSpaceRowCount = that._dataController.pageSize() - itemCount;
+                                freeSpaceRowCount = dataController.pageSize() - itemCount;
                                 scrollingMode = that.option("scrolling.mode");
 
-                                if(freeSpaceRowCount > 0 && that._dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
+                                if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
                                     styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * that._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
@@ -1410,7 +1413,7 @@ module.exports = {
                     return $cells;
                 },
 
-                getTopVisibleItemIndex: function() {
+                getTopVisibleItemIndex: function(isFloor) {
                     var that = this,
                         itemIndex = 0,
                         prevOffsetTop = 0,
@@ -1432,8 +1435,10 @@ module.exports = {
                             if(rowElement.length) {
                                 offsetTop = rowElement.offset().top - contentElementOffsetTop;
                                 if(offsetTop > scrollPosition) {
-                                    if(scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop) && itemIndex) {
-                                        itemIndex--;
+                                    if(itemIndex) {
+                                        if(isFloor || scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop)) {
+                                            itemIndex--;
+                                        }
                                     }
                                     break;
                                 }

@@ -72,9 +72,12 @@ const getThemeAndColorScheme = config => {
     let foundTheme = null;
 
     if(config.baseTheme) {
-        const themeParts = config.baseTheme.split(".");
-        const passedThemeName = themeParts[0];
-        const passedColorScheme = themeParts[1] + (themeParts[2] ? "-" + themeParts[2] : "");
+        const dotIndex = config.baseTheme.indexOf(".");
+        const passedThemeName = config.baseTheme.substr(0, dotIndex);
+        const passedColorScheme = config.baseTheme.substr(dotIndex + 1).replace(/\./g, "-");
+
+        console.log(passedThemeName, passedColorScheme);
+
         foundTheme = themes.find(t => t.name === passedThemeName && t.colorScheme === passedColorScheme);
         if(!foundTheme) {
             console.log(`The base theme with name ${config.baseTheme} does not exist.`);

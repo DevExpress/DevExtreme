@@ -2193,7 +2193,7 @@ QUnit.testStart(function() {
             dataSource: new DataSource({ store: oldData })
         });
 
-        this.instance.updateAppointment(oldData[0], newData);
+        this.instance.updateAppointment($.extend({}, oldData[0]), newData);
         this.clock.tick();
 
         var args = updatingSpy.getCall(0).args[0];
@@ -2393,7 +2393,7 @@ QUnit.testStart(function() {
         var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-right").eq(0)).start();
         pointer.dragStart().drag(cellWidth * 2, 0).dragEnd();
 
-        assert.equal(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, "Width is OK");
+        assert.roughEqual(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, 1, "Width is OK");
     });
 
     QUnit.test("Appointment should have initial size if 'cancel' flag is defined as true during update operation (if appointment takes few days)", function(assert) {
@@ -3253,137 +3253,6 @@ QUnit.testStart(function() {
         $.each(this.instance.getActions(), function(name, action) {
             assert.ok(action(), "'" + name + "' option is changed");
         });
-    });
-
-    QUnit.test("contentReady action should rise even if dataSource isn't set", function(assert) {
-        this.createInstance({
-            onContentReady: function(e) {
-                assert.ok(true, 1, "contentReady is fired");
-            }
-        });
-    });
-
-    QUnit.test("contentReady action should rise at the right time", function(assert) {
-        var done = assert.async();
-        this.clock.restore();
-
-        var dataSource = new DataSource({
-            store: new CustomStore({
-                load: function() {
-                    var d = $.Deferred();
-                    setTimeout(function() {
-                        d.resolve([{
-                            startDate: new Date(2016, 2, 15, 1).toString(),
-                            endDate: new Date(2016, 2, 15, 2).toString()
-                        }]);
-                    }, 100);
-
-                    return d.promise();
-                }
-            })
-        });
-
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            width: 800,
-            dataSource: dataSource,
-            maxAppointmentsPerCell: null,
-            onContentReady: function(e) {
-                var element = e.component,
-                    $element = $(e.component.$element()),
-                    $header = element.getHeader().$element(),
-                    $workSpace = element.getWorkSpace().$element(),
-                    $appointment = $element.find(".dx-scheduler-appointment"),
-                    appointmentPosition = translator.locate($appointment);
-
-                assert.equal($header.length, 1, "Header is rendered");
-                assert.equal($workSpace.length, 1, "Work Space is rendered");
-                assert.equal($appointment.length, 1, "Appointment is rendered");
-                assert.roughEqual(appointmentPosition.top, 100, 2.001, "Appointment top is OK");
-                assert.roughEqual(appointmentPosition.left, 299, 1.001, "Appointment left is OK");
-                done();
-            }
-        });
-    });
-
-    QUnit.test("contentReady action should rise when appointment is added", function(assert) {
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            maxAppointmentsPerCell: null,
-            width: 800,
-            dataSource: []
-        });
-
-        this.instance.option("onContentReady", function(e) {
-            var $element = $(e.component.$element()),
-                $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
-
-            assert.equal($appointment.length, 1, "Appointment is rendered");
-            assert.roughEqual(appointmentPosition.top, 100, 2.001, "Appointment top is OK");
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, "Appointment left is OK");
-        });
-
-        this.instance.addAppointment({
-            startDate: new Date(2016, 2, 15, 1).toString(),
-            endDate: new Date(2016, 2, 15, 2).toString()
-        });
-    });
-
-    QUnit.test("contentReady action should rise when appointment is updated", function(assert) {
-        var appointment = {
-            startDate: new Date(2016, 2, 15, 1).toString(),
-            endDate: new Date(2016, 2, 15, 2).toString()
-        };
-
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            maxAppointmentsPerCell: null,
-            width: 800,
-            dataSource: [appointment]
-        });
-
-        this.instance.option("onContentReady", function(e) {
-            var $element = $(e.component.$element()),
-                $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
-
-            assert.equal($appointment.length, 1, "Appointment is rendered");
-            assert.roughEqual(appointmentPosition.top, 150, 2.001, "Appointment top is OK");
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, "Appointment left is OK");
-        });
-
-        this.instance.updateAppointment(appointment, {
-            startDate: new Date(2016, 2, 15, 1, 30).toString()
-        });
-    });
-
-    QUnit.test("contentReady action should rise when appointment is deleted", function(assert) {
-        var appointment = {
-            startDate: new Date(2016, 2, 15, 1).toString(),
-            endDate: new Date(2016, 2, 15, 2).toString()
-        };
-
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            width: 800,
-            dataSource: [appointment]
-        });
-
-        this.instance.option("onContentReady", function(e) {
-            var $appointment = $(e.component.$element().find(".dx-scheduler-appointment"));
-            assert.equal($appointment.length, 0, "Appointment is not rendered");
-        });
-
-        this.instance.deleteAppointment(appointment);
     });
 
     QUnit.test("Workspace dimension changing should be called before appointment repainting, when scheduler was resized (T739866)", function(assert) {

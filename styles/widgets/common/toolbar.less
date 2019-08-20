@@ -41,7 +41,8 @@
     margin: 0 10px;
 }
 
-.dx-toolbar-before, .dx-toolbar-after {
+.dx-toolbar-before,
+.dx-toolbar-after {
     position: absolute;
 }
 
@@ -59,7 +60,7 @@
 
 .dx-toolbar-label {
     white-space: nowrap;
-    user-drag: none;
+    -webkit-user-drag: none;
 
     .dx-toolbar-item-content > div {
         .dx-overflow();
@@ -80,7 +81,9 @@
     text-align: center;
 }
 // B232272
-.dx-toolbar-center, .dx-toolbar-before, .dx-toolbar-after {
+.dx-toolbar-center,
+.dx-toolbar-before,
+.dx-toolbar-after {
     top: 0;
     display: table;
     height: 100%;

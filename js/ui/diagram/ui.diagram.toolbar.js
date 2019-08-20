@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 
-import Widget from "../widget/ui.widget";
+import DiagramPanel from "./diagram.panel";
 import Toolbar from "../toolbar";
 import ContextMenu from "../context_menu";
 import DiagramCommands from "./ui.diagram.commands";
@@ -11,7 +11,6 @@ import "../color_box";
 import "../check_box";
 
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
-const SIZING_FORMAT_CLASS_PREFIX = "dx-format-";
 const TOOLBAR_CLASS = "dx-diagram-toolbar";
 const WIDGET_COMMANDS = [
     {
@@ -24,7 +23,7 @@ const WIDGET_COMMANDS = [
 const TOOLBAR_SEPARATOR_CLASS = "dx-diagram-toolbar-separator";
 const TOOLBAR_MENU_SEPARATOR_CLASS = "dx-diagram-toolbar-menu-separator";
 
-class DiagramToolbar extends Widget {
+class DiagramToolbar extends DiagramPanel {
     _init() {
         this.bar = new ToolbarDiagramBar(this);
         this._itemHelpers = {};
@@ -71,7 +70,7 @@ class DiagramToolbar extends Widget {
         }
         return {
             widget: item.widget || "dxButton",
-            cssClass: item.sizing && (SIZING_FORMAT_CLASS_PREFIX + item.sizing),
+            cssClass: item.cssClass,
             options: {
                 stylingMode: "text",
                 text: item.text,
@@ -82,27 +81,75 @@ class DiagramToolbar extends Widget {
             }
         };
     }
-    _createItemOptions({ widget, items, valueExpr, displayExpr, showText }) {
+    _createItemOptions({ widget, items, valueExpr, displayExpr, showText, hint, icon }) {
         if(widget === "dxSelectBox") {
-            return {
-                options: {
-                    stylingMode: "filled",
-                    items,
-                    valueExpr,
-                    displayExpr
-                }
-            };
+            return this._createSelectBoxItemOptions(hint, items, valueExpr, displayExpr);
         } else if(widget === "dxColorBox") {
-            return {
-                options: {
-                    stylingMode: "filled"
-                }
-            };
+            return this._createColorBoxItemOptions(hint, icon);
         } else if(!widget || widget === "dxButton") {
             return {
                 showText: showText || "inMenu"
             };
         }
+    }
+    _createSelectBoxItemOptions(hint, items, valueExpr, displayExpr) {
+        let options = this._createSelectBoxBaseItemOptions(hint);
+        options = extend(true, options, {
+            options: {
+                items,
+                valueExpr,
+                displayExpr
+            }
+        });
+        const isSelectButton = items.every(i => i.icon !== undefined);
+        if(isSelectButton) {
+            options = extend(true, options, {
+                options: {
+                    fieldTemplate: (data, container) => {
+                        $("<i>")
+                            .addClass(data && data.icon)
+                            .appendTo(container);
+                        $("<div>").dxTextBox({
+                            readOnly: true,
+                            stylingMode: "outlined"
+                        }).appendTo(container);
+                    },
+                    itemTemplate: (data) => {
+                        return `<i class="${data.icon}"${data.hint && ` title="${data.hint}`}"}></i>`;
+                    }
+                }
+            });
+        }
+        return options;
+    }
+    _createColorBoxItemOptions(hint, icon) {
+        let options = this._createSelectBoxBaseItemOptions(hint);
+        if(icon) {
+            options = extend(true, options, {
+                options: {
+                    openOnFieldClick: true,
+                    fieldTemplate: (data, container) => {
+                        $("<i>")
+                            .addClass(icon)
+                            .css("borderBottomColor", data)
+                            .appendTo(container);
+                        $("<div>").dxTextBox({
+                            readOnly: true,
+                            stylingMode: "outlined"
+                        }).appendTo(container);
+                    }
+                }
+            });
+        }
+        return options;
+    }
+    _createSelectBoxBaseItemOptions(hint) {
+        return {
+            options: {
+                stylingMode: "filled",
+                hint: hint,
+            }
+        };
     }
     _createItemActionOptions(item, handler) {
         switch(item.widget) {
@@ -152,8 +199,10 @@ class DiagramToolbar extends Widget {
                 showEvent: "dxclick",
                 position: { at: "left bottom" },
                 onItemClick: ({ itemData }) => {
-                    const parameter = this._getExecCommandParameter(itemData);
-                    actionHandler.call(this, itemData.command, parameter);
+                    if(itemData.command !== undefined) {
+                        const parameter = this._getExecCommandParameter(itemData);
+                        actionHandler.call(this, itemData.command, parameter);
+                    }
                 },
                 onInitialized: ({ component }) => this._onContextMenuInitialized(component, item),
                 onDisposing: ({ component }) => this._onContextMenuDisposing(component, item)

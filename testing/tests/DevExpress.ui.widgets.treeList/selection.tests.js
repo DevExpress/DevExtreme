@@ -16,6 +16,7 @@ import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
+import ArrayStore from 'data/array_store';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 fx.off = true;
@@ -432,6 +433,68 @@ QUnit.testInActiveWindow("Focused border is not displayed around expandable cell
     // assert
     assert.ok(!$expandableCell.hasClass("dx-focused"));
     clock.restore();
+});
+
+// T742205
+QUnit.test("The load method should not be called on an attempt to select loaded nodes when they are collapsed", function(assert) {
+    // arrange
+    var $testElement = $('#treeList'),
+        store = new ArrayStore([
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) }
+        ]),
+        load = sinon.spy((loadOptions) => {
+            return store.load(loadOptions).promise();
+        });
+
+    this.options.cacheEnabled = true;
+    this.options.expandedRowKeys = [1];
+    this.options.remoteOperations = { filtering: true };
+    this.options.dataSource = {
+        load: load
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // assert
+    assert.strictEqual(this.getVisibleRows().length, 2, "row count");
+
+    this.collapseRow(1);
+
+    // assert
+    assert.strictEqual(this.getVisibleRows().length, 1, "row count");
+
+    // act
+    load.reset();
+    this.selectRows([2]);
+
+    // assert
+    assert.strictEqual(load.callCount, 0, "load isn't called");
+});
+
+// T742205, T751539
+QUnit.test("selection for nested node should works", function(assert) {
+    // arrange
+    var $testElement = $('#treeList');
+
+    this.options.cacheEnabled = true;
+    this.options.expandedRowKeys = [1];
+    this.options.dataSource = [
+        { id: 1, field1: 'test1' },
+        { id: 2, field1: 'test2' },
+        { id: 3, parentId: 1, field1: 'test3' }
+    ];
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // assert
+    this.selectionController.changeItemSelection(1);
+
+    // assert
+    assert.deepEqual(this.getSelectedRowKeys(), [3], "selected row keys");
+    assert.strictEqual(this.getVisibleRows()[1].isSelected, true, "row 1 is selected");
 });
 
 QUnit.module("Recursive selection", {
@@ -1232,4 +1295,39 @@ QUnit.test("Check selectedRowKeys after deselecting nested node", function(asser
 
     // assert
     assert.deepEqual(this.option("selectedRowKeys"), [5], "selected row keys");
+});
+
+QUnit.test("focusedItemIndex should be reset to -1 after change page index (T742193)", function(assert) {
+    // arrange
+    var $testElement = $('#treeList'),
+        array = [
+            { id: 1, field1: 'test1', field2: 1 },
+            { id: 2, field1: 'test2', field2: 2 },
+            { id: 3, field1: 'test3', field2: 3 },
+            { id: 4, field1: 'test4', field2: 4 }
+        ];
+
+    this.options.dataSource = {
+        store: {
+            type: "array",
+            data: array,
+            key: "id"
+        },
+        pageSize: 2,
+        paginate: true
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // act
+    this.selectionController.changeItemSelection(1, { shift: true });
+    // assert
+    assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ id: 2, field1: 'test2', field2: 2 }]);
+    assert.equal(this.selectionController._selection._focusedItemIndex, 1, "_focusedItemIndex corrected");
+
+    // act
+    this.dataController.pageIndex(1);
+    // assert
+    assert.equal(this.selectionController._selection._focusedItemIndex, -1, "_focusedItemIndex corrected");
 });

@@ -30,7 +30,8 @@ var LOOKUP_CLASS = "dx-lookup",
     LOOKUP_POPUP_SEARCH_CLASS = "dx-lookup-popup-search",
     LOOKUP_POPOVER_MODE = "dx-lookup-popover-mode",
     LOOKUP_EMPTY_CLASS = "dx-lookup-empty",
-    LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = "dx-popover-flipped-vertical";
+    LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = "dx-popover-flipped-vertical",
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 var POPUP_OPTION_MAP = {
     "popupWidth": "width",
@@ -330,7 +331,6 @@ var Lookup = DropDownList.inherit({
 
             /**
              * @name dxLookupOptions.dropDownButtonTemplate
-             * @inheritdoc
              * @hidden
              */
 
@@ -341,7 +341,6 @@ var Lookup = DropDownList.inherit({
 
             /**
              * @name dxLookupOptions.showDropDownButton
-             * @inheritdoc
              * @hidden
              */
             showDropDownButton: false,
@@ -357,7 +356,6 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions.focusStateEnabled
             * @type boolean
             * @default false
-            * @inheritdoc
             */
             focusStateEnabled: false,
 
@@ -385,102 +383,86 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions.acceptCustomValue
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.readOnly
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onFocusIn
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onFocusOut
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onKeyDown
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onKeyPress
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onKeyUp
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onChange
             * @action
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onInput
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onCut
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onCopy
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onPaste
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.onEnterKey
             * @hidden
             * @action
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.maxLength
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.spellcheck
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.buttons
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxLookupOptions.applyValueMode
             * @type Enums.EditorApplyValueMode
             * @hidden false
-            * @inheritdoc
             */
 
-            _scrollToSelectedItemEnabled: false
+            _scrollToSelectedItemEnabled: false,
+            useHiddenSubmitElement: true
         });
     },
 
@@ -575,7 +557,6 @@ var Lookup = DropDownList.inherit({
                     * @name dxLookupOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -659,7 +640,6 @@ var Lookup = DropDownList.inherit({
         this.$element()
             .addClass(LOOKUP_CLASS)
             .toggleClass(LOOKUP_POPOVER_MODE, this.option("usePopover"));
-        this._renderSubmitElement();
         this.callBase();
     },
 
@@ -667,21 +647,10 @@ var Lookup = DropDownList.inherit({
         return this.$element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
     },
 
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
-    },
-
     _dataSourceOptions: function() {
         return extend(this.callBase(), {
             paginate: true
         });
-    },
-
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
     },
 
     _fireContentReadyAction: commonUtils.noop, // TODO: why not symmetric to other dropdowns?
@@ -803,8 +772,13 @@ var Lookup = DropDownList.inherit({
         var flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(selectedIndex === -1 || flipped) return;
 
-        var selectedListItem = $(this._list.element()).find("." + LIST_ITEM_SELECTED_CLASS),
-            differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2,
+        var selectedListItem = $(this._list.element()).find("." + LIST_ITEM_SELECTED_CLASS);
+
+        if(selectedListItem.offset().top < 0) {
+            this._scrollToSelectedItem();
+        }
+
+        var differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2,
             popupContentParent = $(this._popup.content()).parent(),
             differenceOfOffsets = selectedListItem.offset().top - popupContentParent.offset().top,
             lookupTop = $(this.element()).offset().top,
@@ -859,6 +833,8 @@ var Lookup = DropDownList.inherit({
             "hiding": this._popupHidingHandler.bind(this),
             "hidden": this._popupHiddenHandler.bind(this)
         });
+
+        this._setPopupContentId(this._popup.$content());
 
         this._popup.option("onContentReady", this._contentReadyHandler.bind(this));
         this._contentReadyHandler();
@@ -1176,19 +1152,11 @@ var Lookup = DropDownList.inherit({
     _renderInputValue: function() {
         return this.callBase().always((function() {
             this._refreshSelected();
-            this._setSubmitValue();
         }).bind(this));
     },
 
-    _setSubmitValue: function() {
-        var value = this.option("value"),
-            submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
-
-        this._$submitElement.val(submitValue);
-    },
-
     _renderPlaceholder: function() {
-        if(this.$element().find("input").length === 0) {
+        if(this.$element().find("." + TEXTEDITOR_INPUT_CLASS).length === 0) {
             return;
         }
 
@@ -1207,6 +1175,10 @@ var Lookup = DropDownList.inherit({
         var value = args.value;
 
         switch(name) {
+            case "dataSource":
+                this.callBase.apply(this, arguments);
+                this._renderField();
+                break;
             case "searchEnabled":
                 this._popup && this._renderSearch();
                 this._attachSearchChildProcessor();
@@ -1283,7 +1255,6 @@ var Lookup = DropDownList.inherit({
     * @name dxLookupMethods.getButton
     * @publicName getButton(name)
     * @hidden
-    * @inheritdoc
     */
 });
 

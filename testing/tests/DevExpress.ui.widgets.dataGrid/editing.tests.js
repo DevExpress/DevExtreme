@@ -92,7 +92,8 @@ QUnit.module('Editing', {
         };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            var event = $.Event("dxclick");
+            var isLink = $targetElement.hasClass("dx-link");
+            var event = $.Event(isLink ? "click" : "dxclick");
             $($targetElement).trigger(event);
             this.clock.tick();
             return event;
@@ -1360,7 +1361,7 @@ QUnit.test('Not remove row with message', function(assert) {
         assert.ok(!this.dataController.refreshed, 'not refreshed data');
 
         // act
-        testElement.find('tbody > tr').first().find('a').trigger('dxclick'); // show confirm
+        testElement.find('tbody > tr').first().find('a').trigger('click'); // show confirm
         this.clock.tick();
 
         // assert
@@ -1595,6 +1596,7 @@ QUnit.test('Close Editing Cell when batch mode on click outside dataGrid', funct
 
     // act
     $(document).trigger('dxpointerdown');
+    $(document).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -1603,6 +1605,52 @@ QUnit.test('Close Editing Cell when batch mode on click outside dataGrid', funct
 
     this.editingController.saveEditData();
 
+    assert.deepEqual(updateArgs, ['test1', { "name": "Test update cell" }]);
+});
+
+// T749034
+QUnit.test('Changed value should be saved on click outside dataGrid on mobile devices when cell editing mode', function(assert) {
+    if(devices.real().deviceType === "desktop") {
+        assert.ok(true, "test is not actual for desktop");
+        return;
+    }
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        updateArgs,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'cell',
+        texts: {
+            editRow: "Edit"
+        }
+    };
+
+    that.dataControllerOptions.store = {
+        key: function() { },
+        update: function(key, values) {
+            updateArgs = [key, values];
+            return $.Deferred().resolve(key, values);
+        }
+    };
+
+    rowsView.render(testElement);
+    testElement.find('td').first().trigger('dxclick'); // Edit
+    this.clock.tick();
+
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
+
+    // act
+    testElement.find('input').first().val('Test update cell');
+    $(document).trigger('dxpointerdown');
+    testElement.find('input').first().trigger('change');
+    $(document).trigger('dxclick');
+    this.clock.tick();
+
+    // assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
     assert.deepEqual(updateArgs, ['test1', { "name": "Test update cell" }]);
 });
 
@@ -1631,6 +1679,7 @@ QUnit.test('Not close Editing Cell in batch mode on click editor popup', functio
     // act
     this.clock.tick();
     $($calendar).trigger('dxpointerdown');
+    $($calendar).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -1640,6 +1689,10 @@ QUnit.test('Not close Editing Cell in batch mode on click editor popup', functio
 
 // T727856
 QUnit.test('Not close Editing Cell in batch mode on down in editing cell and up in another cell', function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "focus is not actual for mobile devices");
+        return;
+    }
     // arrange
     var that = this,
         rowsView = this.rowsView,
@@ -1690,6 +1743,7 @@ QUnit.test('Close Editing Cell when grid in popup', function(assert) {
 
     // act
     $($popupContent).trigger("dxpointerdown");
+    $($popupContent).trigger("dxclick");
     that.clock.tick();
 
     // assert
@@ -1724,6 +1778,7 @@ QUnit.test('Not close Editing Cell in batch mode on click detached element', fun
     // act
     this.clock.tick();
     $($otherMonthDay).trigger('dxpointerdown');
+    $($otherMonthDay).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -1756,6 +1811,7 @@ if(!device.win) {
 
         // act
         $($focusOverlay).trigger('dxpointerdown');
+        $($focusOverlay).trigger('dxclick');
         this.clock.tick();
 
         // assert
@@ -2012,6 +2068,7 @@ QUnit.test('Close Editing Cell when batch mode on click inside freespace row', f
 
     // act
     testElement.find(".dx-freespace-row").first().trigger('dxpointerdown');
+    testElement.find(".dx-freespace-row").first().trigger('dxclick');
 
     this.clock.tick();
     // assert
@@ -2780,7 +2837,8 @@ QUnit.module('Editing with real dataController', {
         };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            $($targetElement).trigger('dxclick');
+            var isLink = $targetElement.hasClass("dx-link");
+            $($targetElement).trigger(isLink ? 'click' : 'dxclick');
             this.clock.tick();
         };
     },
@@ -3907,7 +3965,7 @@ QUnit.testInActiveWindow('Insert Row after scrolling', function(assert) {
         done();
     });
 
-    rowsView.element().dxScrollable('instance').scrollTo(25);
+    rowsView.element().dxScrollable('instance').scrollTo(45);
 });
 
 QUnit.test("Update cell when edit mode batch and set onRowUpdating", function(assert) {
@@ -3983,6 +4041,7 @@ QUnit.test("Update cell when edit mode batch and set onRowUpdating", function(as
     testElement.find("input").first().trigger("change");
 
     $(document).trigger("dxpointerdown"); // Save
+    $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
     // assert
@@ -4015,6 +4074,7 @@ QUnit.test("Update cell when edit mode batch and set onRowUpdating", function(as
     testElement.find("input").first().trigger("change");
 
     $(document).trigger("dxpointerdown"); // Save
+    $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
     // assert
@@ -4306,6 +4366,7 @@ QUnit.test("Update cell when edit mode bath and set onRowUpdated", function(asse
     testElement.find("input").first().trigger("change");
 
     $(document).trigger("dxpointerdown"); // Save
+    $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
     // assert
@@ -4353,6 +4414,7 @@ QUnit.test("Highlight modified boolean editor", function(assert) {
     $($checkbox).trigger("dxclick");
 
     $(document).trigger("dxpointerdown"); // Save
+    $(document).trigger("dxclick"); // Save
     that.clock.tick();
 
     // assert
@@ -4768,6 +4830,40 @@ QUnit.test("Remove row when set onRowRemoved", function(assert) {
     assert.equal(testElement.find('.dx-data-row').length, 6, "count rows");
 });
 
+// T741746
+QUnit.test("deleteRow should not work if adding is started", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowDeleting: true
+    };
+
+    rowsView.render(testElement);
+    that.editingController.init();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row count");
+
+    // act
+    that.addRow();
+    that.deleteRow(2);
+
+    // assert
+    assert.ok(that.editingController.isEditing(), "editing is started");
+    assert.equal(testElement.find('.dx-data-row').length, 8, "row is not removed");
+
+    // act
+    that.cancelEditData();
+    that.deleteRow(2);
+
+    // assert
+    assert.notOk(that.editingController.isEditing(), "no editing");
+    assert.equal(testElement.find('.dx-data-row').length, 6, "row is removed");
+});
+
 // T100624
 QUnit.test('Edit Cell when the width of the columns in percent', function(assert) {
     // arrange
@@ -4827,6 +4923,7 @@ QUnit.test("Close current editor when clicked on not editable cells_B255594", fu
 
     // act
     $(".dx-select-checkbox").closest("td").first().trigger("dxpointerdown");
+    $(".dx-select-checkbox").closest("td").first().trigger("dxclick");
 
     // assert
     assert.ok(isCloseEditCell, "current editor is closed");
@@ -4866,6 +4963,7 @@ QUnit.test('Column currency format after editing', function(assert) {
     testElement.find('td').first().next().find('input').val('123');
     testElement.find('td').first().next().find('input').trigger('change');
     $(document).trigger("dxpointerdown");
+    $(document).trigger("dxclick");
 
     this.clock.tick();
 
@@ -5044,6 +5142,7 @@ QUnit.test('Close editing cell when using "cell" edit mode on click outside data
 
     // act
     $(document).trigger('dxpointerdown');
+    $(document).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -5083,6 +5182,7 @@ QUnit.test('Cell should be closed on click outside dataGrid after changes in sev
 
     // act
     $(document).trigger('dxpointerdown');
+    $(document).trigger('dxclick');
     this.clock.tick();
 
     // assert
@@ -6238,8 +6338,10 @@ QUnit.test("EditorPreparing and EditorPrepared events should have correct parame
     assert.strictEqual(editorPreparingHandler.getCall(0).args[0].command, "select", "The editorPreparing event argument - select column");
     assert.strictEqual(editorPreparedHandler.getCall(0).args[0].command, "select", "The editorPrepared event argument - select column");
     expectedProperties.forEach(function(item) {
-        assert.ok(editorPreparingHandler.getCall(0).args[0].hasOwnProperty(item), "The editorPreparing event argument - The '" + item + "' property existed");
-        assert.ok(editorPreparedHandler.getCall(0).args[0].hasOwnProperty(item), "The editorPrepared event argument - The '" + item + "' property existed");
+        var firstArg = editorPreparingHandler.getCall(0).args[0];
+        var hasFirstArgOwnProperty = Object.prototype.hasOwnProperty.bind(firstArg);
+        assert.ok(hasFirstArgOwnProperty(item), "The editorPreparing event argument - The '" + item + "' property existed");
+        assert.ok(hasFirstArgOwnProperty(item), "The editorPrepared event argument - The '" + item + "' property existed");
     });
 });
 
@@ -7449,6 +7551,53 @@ QUnit.test("The command column caption should be applied", function(assert) {
     assert.strictEqual($commandCellElement.css("textAlign"), "right", "alignment");
 });
 
+// T741679
+QUnit.test("A dependent cascading editor should be updated when a master cell value is changed if showEditorAlways is enabled in batch mode", function(assert) {
+    // arrange
+    var that = this,
+        selectBoxInstance,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true
+    };
+    that.options.dataSource.store = [{ StateID: 1, CityID: 1 }, { StateID: 2, CityID: 2 }];
+    that.options.columns = [{
+        dataField: "StateID",
+        showEditorAlways: true,
+        setCellValue: function(rowData, value) {
+            rowData.StateID = value;
+            rowData.CityID = value;
+        },
+        lookup: {
+            dataSource: [{ id: 1, name: "California" }, { id: 2, name: "Texas" }],
+            displayExpr: "name",
+            valueExpr: "id"
+        }
+    }, {
+        dataField: "CityID",
+        lookup: {
+            dataSource: [{ id: 1, name: "Arcadia" }, { id: 2, name: "Dallas" }],
+            displayExpr: "name",
+            valueExpr: "id"
+        }
+    }];
+    that.dataController.init();
+    that.columnsController.init();
+    rowsView.render($testElement);
+
+    selectBoxInstance = $(rowsView.getCellElement(0, 0)).find(".dx-selectbox").dxSelectBox("instance");
+    selectBoxInstance.option("value", 2);
+
+    // act
+    $(rowsView.getCellElement(1, 0)).trigger("dxclick");
+
+    // assert
+    assert.strictEqual($(rowsView.getCellElement(0, 1)).text(), "Dallas", "text of the second column of the first row");
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
@@ -7812,7 +7961,7 @@ QUnit.test("Changing edit icon in the 'buttons' command column if repaintChanges
 QUnit.test("Custom button click should be prevented", function(assert) {
     // arrange
     var $linkElement,
-        event = $.Event("dxclick");
+        event = $.Event("click");
 
     this.options.columns = [
         {
@@ -9059,6 +9208,45 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
     assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip is restored");
 });
 
+// T741739
+QUnit.testInActiveWindow("Tooltip should be positioned by left side if column dataType and alignment are not defined", function(assert) {
+    // arrange
+    var that = this,
+        tooltipInstance,
+        rowsView = that.rowsView,
+        $testElement = renderer("#container");
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [
+            {
+                dataField: "test",
+                validationRules: [{ type: "required" }]
+            },
+            "lastName",
+            "age"
+        ]
+    });
+    that.editorFactoryController._getFocusedElement = function() {
+        return $testElement.find("input");
+    };
+
+    that.cellValue(0, 0, "");
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    // assert
+    tooltipInstance = $testElement.find("tbody td").eq(0).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    assert.ok($testElement.find("tbody td").eq(0).hasClass("dx-datagrid-invalid"), "failed validation");
+    assert.ok(tooltipInstance.option("visible"), "tooltip is visible");
+    assert.strictEqual(tooltipInstance.option("position").my, "top left", "position.my of the tooltip");
+    assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip");
+});
+
 // T523770
 QUnit.test("Invalid message and revert button should not be overlapped when the drop-down editor is shown for first column", function(assert) {
     // arrange
@@ -9362,7 +9550,7 @@ QUnit.test('Show error row on save inserted Row after scrolling when set validat
         done();
     });
 
-    rowsView.element().dxScrollable('instance').scrollTo(25);
+    rowsView.element().dxScrollable('instance').scrollTo(45);
 });
 
 // T417962
@@ -11034,6 +11222,7 @@ QUnit.testInActiveWindow("SelectBox should be closed on focus another editor if 
         // act
         $cellElements.find(".dx-texteditor-input").last().focus();
         $cellElements.find(".dx-texteditor-input").last().trigger("dxpointerdown");
+        $cellElements.find(".dx-texteditor-input").last().trigger("dxclick");
         this.clock.tick();
 
         // assert
@@ -11324,7 +11513,8 @@ QUnit.module('Editing with real dataController with grouping, masterDetail', {
         // };
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
-            $($targetElement).trigger('dxclick');
+            var isLink = $targetElement.hasClass("dx-link");
+            $($targetElement).trigger(isLink ? 'click' : 'dxclick');
             this.clock.tick();
         };
 
@@ -11540,6 +11730,29 @@ QUnit.test("Editing controller should correct the editing row index after expand
     that.collapseRow(that.dataController.getKeyByRowIndex(0));
     // assert
     assert.equal(that.editingController.getEditRowIndex(), 2, "editing row index was not changed after collapse the above row");
+});
+
+// T752381
+QUnit.test("Close edit form after collapse group row", function(assert) {
+    // arrange
+    var that = this,
+        $testElement = $('#container');
+
+    that.rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "form",
+            allowUpdating: true
+        },
+        columns: [{ dataField: "name", groupIndex: 0 }, "age", "lastName"]
+    });
+
+    // act
+    that.editRow(3);
+    that.collapseRow(["Alex"]);
+
+    // assert
+    assert.strictEqual(that.editingController.getEditRowIndex(), -1, "edit form was closed");
 });
 
 var generateDataSource = function(countItem, countColumn) {
@@ -12390,7 +12603,7 @@ QUnit.test("Edit link call editRow", function(assert) {
     // act
     var $links = testElement.find(".dx-row").eq(rowIndex).find(".dx-link-edit");
     assert.equal($links.length, 1, "edit links count");
-    $($links.eq(0)).trigger("dxclick");
+    $($links.eq(0)).trigger("click");
     this.clock.tick();
 
     // assert
@@ -13882,7 +14095,7 @@ QUnit.test("EditorPreparing event have the correct parameters", function(assert)
 
     // assert
     expectedProperties.forEach(function(item) {
-        assert.ok(spyArgs[0].hasOwnProperty(item), "The '" + item + "' property existed");
+        assert.ok(Object.prototype.hasOwnProperty.call(spyArgs[0], item), "The '" + item + "' property existed");
     });
 });
 
@@ -14184,6 +14397,81 @@ QUnit.test("The data passed to the editCellTemplate callback should be updated a
     // assert
     assert.deepEqual(template.getCall(1).args[1].data, { name: 'Alex', age: 666, lastName: "John", phone: "555555", room: 1 }, "row data");
     assert.strictEqual(template.callCount, 2, "editCellTemplate call count");
+});
+
+QUnit.test("In popup editing mode need to repaint only changed fields with repaintChangesOnly (T753269)", function(assert) {
+    // arrange
+    var that = this,
+        $popupContent,
+        selectBox,
+        orders = [
+            { Id: 1, Name: "Paul Henriot", City: "Reims", Country: "France" },
+            { Id: 2, Name: "Karin Josephs", City: "Münster", Country: "Germany" }
+        ],
+        countries = [{ Country: "France" }, { Country: "Germany" }],
+        cities = [{ City: "Reims" }, { City: "Münster" }],
+        cityFireCount = 0,
+        countryFireCount = 0,
+        getLookupConfig = function(data, columnName) {
+            return {
+                dataSource: {
+                    key: columnName,
+                    load: function() {
+                        var d = $.Deferred();
+                        setTimeout(() => d.resolve(data));
+                        return d.promise();
+                    },
+                    byKey: function(key) {
+                        if(columnName === "City") {
+                            cityFireCount++;
+                        } else if(columnName === "Country") {
+                            countryFireCount++;
+                        }
+                        return data[key];
+                    }
+                },
+                valueExpr: columnName,
+                displayExpr: columnName
+            };
+        };
+
+    that.options.dataSource = orders;
+    that.options.keyExpr = "Id";
+    that.options.repaintChangesOnly = true;
+    that.options.remoteOperations = true;
+    that.options.columns = [
+        "Id", "Name",
+        { dataField: "City", lookup: getLookupConfig(cities, "City") },
+        { dataField: "Country", lookup: getLookupConfig(countries, "Country") }
+    ];
+    that.options.onEditorPrepared = function(e) {
+        if(e.dataField === "City" && e.parentType === "dataRow") {
+            $(e.editorElement).dxSelectBox("instance").on("valueChanged", function(args) {
+                that.cellValue(e.row.rowIndex, "Name", "test");
+            });
+        }
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.clock.tick();
+
+    // act
+    that.editRow(0);
+    that.clock.tick();
+
+    // arrange
+    that.preparePopupHelpers();
+
+    // act
+    $popupContent = $(that.editPopupInstance.content());
+    selectBox = $popupContent.find(".dx-selectbox").dxSelectBox("instance");
+    selectBox.option("value", "Münster");
+
+    // assert
+    assert.equal(countryFireCount, 1, "Not changed field was rendered once");
+    assert.equal(cityFireCount, 2, "Changed field was repaint on update");
 });
 
 QUnit.test("Popup should have scrollbar", function(assert) {

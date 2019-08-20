@@ -67,10 +67,11 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
     },
 
     _updateStructure: function() {
-        var that = this,
-            renderer = that._params.renderer,
-            group = that._group,
-            alignObj = { align: that._options.horizontalAlignment };
+        const that = this;
+        const renderer = that._params.renderer;
+        const group = that._group;
+        const options = that._options;
+        const align = options.horizontalAlignment;
 
         // Looks like the following "laziness" is only to avoid unnecessary DOM content creation -
         // for example when widget is created without "title" option.
@@ -81,11 +82,11 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             group.attr({ "clip-path": that._clipRect.id });
         }
 
-        that._titleElement.attr(alignObj);
-        that._subtitleElement.attr(alignObj);
+        that._titleElement.attr({ align, "class": options.cssClass });
+        that._subtitleElement.attr({ align, "class": options.subtitle.cssClass });
 
         group.linkAppend();
-        hasText(that._options.subtitle.text) ? that._subtitleElement.append(group) : that._subtitleElement.remove();
+        hasText(options.subtitle.text) ? that._subtitleElement.append(group) : that._subtitleElement.remove();
     },
 
     _updateTexts: function() {
@@ -201,8 +202,8 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
         that._updateBoundingRect();
 
-        var bBox = this.getLayoutOptions();
-        this._clipRect.attr({ x: bBox.x, y: bBox.y - this._baseLineCorrection, width: width, height: bBox.height + this._baseLineCorrection });
+        const { x, y, height } = this.getCorrectedLayoutOptions();
+        this._clipRect.attr({ x, y, width, height });
     },
 
     getLayoutOptions: function() {
@@ -243,9 +244,22 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         boundingRect.y = box.y;
     },
 
+    getCorrectedLayoutOptions() {
+        const srcBox = this.getLayoutOptions();
+        const correction = this._baseLineCorrection;
+
+        return extend({}, srcBox, {
+            y: srcBox.y - correction,
+            height: srcBox.height + correction
+        });
+    },
+
     // BaseWidget_layout_implementation
     layoutOptions: function() {
-        return this._boundingRect && {
+        if(!this._hasText) {
+            return null;
+        }
+        return {
             horizontalAlignment: this._boundingRect.horizontalAlignment,
             verticalAlignment: this._boundingRect.verticalAlignment,
             priority: 0

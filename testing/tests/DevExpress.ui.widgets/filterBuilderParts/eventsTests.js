@@ -206,6 +206,31 @@ QUnit.module("Events", function() {
         assert.deepEqual(args.value, ["CompanyName", "=", "DevExpress"], "current value");
     });
 
+    // T732074
+    QUnit.test("Change value in onValueChanged on remove item", function(assert) {
+        // arrange
+        var container = $("#container");
+
+        var filterBuilder = container.dxFilterBuilder({
+            value: ["Zipcode", "=", "666"],
+            fields: fields,
+            onValueChanged: function(e) {
+                if(e.value === null) {
+                    e.component.option("value", ["CompanyName", "=", "DevExpress"]);
+                }
+            }
+        }).dxFilterBuilder("instance");
+
+        // act
+        var $removeButton = $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0);
+        $removeButton.trigger("dxclick");
+
+        // assert
+        assert.deepEqual(filterBuilder.option("value"), ["CompanyName", "=", "DevExpress"], "value");
+        assert.deepEqual(filterBuilder.getFilterExpression(), ["CompanyName", "=", "DevExpress"], "filter expression");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).length, 1, "field item count");
+    });
+
     QUnit.test("Skip the onValueChanged after change operation of an invalid condition to another invalid condition ", function(assert) {
         // arrange
         var spy = sinon.spy(),

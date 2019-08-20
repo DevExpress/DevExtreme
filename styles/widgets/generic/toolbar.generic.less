@@ -75,7 +75,7 @@
     }
 }
 
-.dx-toolbar-item-padding(@padding){
+.dx-toolbar-item-padding(@padding) {
     padding: 0 0 0 @padding;
 
     &:last-child {
@@ -117,7 +117,7 @@
         opacity: 1;
     }
 
-    &.dx-toolbar-compact { 
+    &.dx-toolbar-compact {
         .dx-button {
             min-width: auto;
         }
@@ -143,8 +143,11 @@
 .dx-toolbar-menu-section {
     border-bottom: 1px solid @base-border-color;
 
-    .dx-toolbar-hidden-button .dx-button-content {
-        padding: 0;
+    .dx-toolbar-hidden-button,
+    .dx-toolbar-item-auto-hide {
+        .dx-button-content {
+            padding: 0;
+        }
     }
 
     .dx-button-content {

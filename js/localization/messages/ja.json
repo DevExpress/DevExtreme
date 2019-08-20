@@ -11,6 +11,7 @@
         "Back": "戻る",
         "OK": "OK",
         "dxCollectionWidget-noDataText": "表示するデータがありません。",
+        "dxDropDownEditor-selectLabel": "選択",
         "validation-required": "必須",
         "validation-required-formatted": "{0} は必須です。",
         "validation-numeric": "数値を指定してください。",
@@ -252,6 +253,13 @@
         "dxHtmlEditor-dialogImageWidthField": "幅 (px)",
         "dxHtmlEditor-dialogImageHeightField": "高さ (px)",
         "dxHtmlEditor-heading": "見出し",
-        "dxHtmlEditor-normalText": "標準テキスト"
+        "dxHtmlEditor-normalText": "標準テキスト",
+
+        "dxFileManager-newFolderName": "無題のフォルダ",
+        "dxFileManager-errorNoAccess": "アクセスが拒否されました。操作を完了できません。",
+        "dxFileManager-errorDirectoryExistsFormat": "ディレクトリ {0} は既に存在します。",
+        "dxFileManager-errorFileExistsFormat": "ファイル {0} は既に存在します。",
+        "dxFileManager-errorFileNotFoundFormat": "ファイル {0} が見つかりません。",
+        "dxFileManager-errorDefault": "特定できないエラー"
     }
 }

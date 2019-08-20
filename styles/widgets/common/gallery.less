@@ -2,8 +2,10 @@
     width: 100%;
     height: 100%;
     .user-select(none);
+
     touch-action: pinch-zoom pan-y;
 }
+
 .dx-gallery-wrapper {
     position: relative;
     overflow: hidden;
@@ -67,6 +69,7 @@
     top: 50%;
     cursor: pointer;
     .user-select(none);
+
     background-size: 100% 100%;
 }
 
@@ -139,7 +142,7 @@
     }
 }
 
-.dx-device-ios-6 { /*NOTE: fix blinking on ios (B254535)*/
+.dx-device-ios-6 { /* NOTE: fix blinking on ios (B254535) */
     .dx-gallery,
     .dx-gallery-item,
     .dx-gallery-indicator,

@@ -1031,3 +1031,8 @@
  * @typedef {string} Enums.DiagramAutoLayout
  * @enum {'tree'|'sugiyama'}
  */
+
+/**
+ * @typedef {string} Enums.DiagramConnectionPointSide
+ * @enum {'north'|'east'|'south'|'west'}
+ */

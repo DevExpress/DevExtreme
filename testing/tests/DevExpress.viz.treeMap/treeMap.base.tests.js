@@ -1008,7 +1008,7 @@ QUnit.test("Passing 'wordWrap' and 'overflow' options to texts for tiles", funct
     });
 
     assert.ok(this.renderer.text.lastCall.returnValue.setMaxSize.calledOnce);
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [20, 396, { wordWrap: "wordWrap_1", textOverflow: "overflow_1" }]);
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.setMaxSize.lastCall.args, [20, 396, { hideOverflowEllipsis: true, wordWrap: "wordWrap_1", textOverflow: "overflow_1" }]);
 });
 
 QUnit.test("Passing 'overflow' option to texts for group", function(assert) {

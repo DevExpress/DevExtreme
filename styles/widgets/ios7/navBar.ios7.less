@@ -10,10 +10,11 @@
     border-radius: 0;
 
     .dx-hairlines & {
-        border-top-width: .5px;
+        border-top-width: 0.5px;
     }
 
-    .dx-nav-item, .dx-rtl .dx-nav-item {
+    .dx-nav-item,
+    .dx-rtl .dx-nav-item {
         position: relative;
         padding: 0 4px;
         min-width: 52px;
@@ -22,7 +23,8 @@
         background: transparent;
         border-radius: 0;
 
-        &:first-child, &:last-child {
+        &:first-child,
+        &:last-child {
             border: none;
             border-radius: 0;
         }
@@ -35,6 +37,7 @@
             display: block;
             margin-left: -19px;
             .dx-icon-sizing(30px, 38px);
+
             color: @IOS7_NAVBAR_ICON_COLOR;
 
             .dx-rtl&,
@@ -93,8 +96,10 @@
 }
 
 .dx-state-disabled {
-    &.dx-nav-item, .dx-nav-item {
-        &.dx-tab-selected .dx-tab-text, .dx-tab-text {
+    &.dx-nav-item,
+    .dx-nav-item {
+        &.dx-tab-selected .dx-tab-text,
+        .dx-tab-text {
             color: @IOS7_NAVBAR_DISABLE_TEXT;
         }
     }

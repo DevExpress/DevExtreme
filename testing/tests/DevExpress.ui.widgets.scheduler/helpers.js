@@ -4,6 +4,13 @@ import { extend } from "core/utils/extend";
 export const TOOLBAR_TOP_LOCATION = "top";
 export const TOOLBAR_BOTTOM_LOCATION = "bottom";
 
+const SCHEDULER_ID = "scheduler";
+const TEST_ROOT_ELEMENT_ID = "qunit-fixture";
+
+export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
+
+export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler("instance"));
+
 export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
@@ -27,6 +34,8 @@ export class SchedulerTestWrapper {
             getDeleteButton: (index = 0) => this.tooltip.getItemElement(index).find('.dx-tooltip-appointment-item-delete-button'),
 
             getMarkers: () => this.tooltip.getItemElements().find('.dx-tooltip-appointment-item-marker-body'),
+
+            getMarker: () => this.tooltip.getMarkers().first(),
 
             getDateText: (index = 0) => this.tooltip.getDateElement(index).text(),
             getTitleText: (index = 0) => this.tooltip.getTitleElement(index).text(),
@@ -128,8 +137,24 @@ export class SchedulerTestWrapper {
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
             getCellHeight: () => this.workSpace.getCells().eq(0).outerHeight(),
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
-            getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight()
+            getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
+            getCurrentTimeIndicator: () => $(".dx-scheduler-date-time-indicator"),
         };
+
+        this.navigator = {
+            getNavigator: () => $(".dx-scheduler-navigator"),
+            getCaption: () => $(".dx-scheduler-navigator").find(".dx-scheduler-navigator-caption").text(),
+            clickOnPrevButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-previous").trigger("dxclick");
+            },
+            clickOnNextButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-next").trigger("dxclick");
+            }
+        },
+
+        this.header = {
+            get: () => $(".dx-scheduler-header-panel")
+        },
 
         this.grouping = {
             getGroupHeaders: () => $(".dx-scheduler-group-header"),
@@ -140,7 +165,16 @@ export class SchedulerTestWrapper {
         };
     }
 
+    option(name, value) {
+        this.instance.option(name, value);
+    }
+
     isAdaptivity() {
         return this.instance.option("adaptivityEnabled");
+    }
+
+    drawControl() {
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css("top", 0);
+        $(`#${TEST_ROOT_ELEMENT_ID}`).css("left", 0);
     }
 }

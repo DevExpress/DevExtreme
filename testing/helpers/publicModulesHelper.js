@@ -6,7 +6,7 @@
     } else {
         root.testGlobalExports = factory(root.jQuery);
     }
-}(window, function($, undefined) {
+}(window, function($) {
     return function(namespaces, fields) {
         $.each(namespaces, function(namespaceName, namespace) {
             $.each(fields, function(fieldName, fieldValue) {

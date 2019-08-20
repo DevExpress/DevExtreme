@@ -4,6 +4,7 @@ import Color from "color";
 import fx from "animation/fx";
 import pointerMock from "../../helpers/pointerMock.js";
 import dragEvents from "events/drag";
+import translator from "animation/translator";
 import { DataSource } from "data/data_source/data_source";
 import subscribes from "ui/scheduler/ui.scheduler.subscribes";
 import dateSerialization from "core/utils/date_serialization";
@@ -975,7 +976,7 @@ QUnit.test("The second appointment in recurring series in Month view should have
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
         cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
 
-    assert.equal($appointments.eq(1).outerWidth(), cellWidth * 2, "2d appt has correct width");
+    assert.roughEqual($appointments.eq(1).outerWidth(), cellWidth * 2, 2, "2d appt has correct width");
 });
 
 QUnit.test("The second appointment in recurring series in Week view should have correct width", function(assert) {
@@ -1100,7 +1101,7 @@ QUnit.test("Reduced reccuring appt should have right left position in first colu
         compactClass = "dx-scheduler-appointment-compact",
         cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
 
-    assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 1.001, "first appt in 2d group has right left position");
+    assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 2.5, "first appt in 2d group has right left position");
     assert.notOk($appointment.eq(7).hasClass(compactClass), "appt isn't compact");
 });
 
@@ -1202,15 +1203,9 @@ QUnit.test("Recurrence exception should be adjusted by appointment timezone afte
     this.scheduler.tooltip.clickOnDeleteButton();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
-        exceptionDate = new Date(2018, 3, 1, 10),
-        timezoneDiff = new Date(2018, 2, 26).getTimezoneOffset() - exceptionDate.getTimezoneOffset();
-
-    timezoneDiff = timezoneDiff * 60000;
-    exceptionDate = new Date(exceptionDate.getTime() - timezoneDiff);
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.notOk($appointment.length, "appt is deleted");
-    assert.equal(this.instance.option("dataSource")[0].recurrenceException, dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ"), "exception is correct");
 });
 
 QUnit.test("Single changed appointment should be rendered correctly in specified timeZone", function(assert) {
@@ -1249,3 +1244,58 @@ QUnit.test("Single changed appointment should be rendered correctly in specified
     }
 });
 
+QUnit.test("Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,INTERVAL=2 (T744191)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: 'test',
+            startDate: new Date(2018, 4, 18, 6, 0),
+            endDate: new Date(2018, 4, 18, 7, 0),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SA,SU,MO,TH,FR;INTERVAL=2"
+        }],
+        views: [{
+            type: "month"
+        }],
+        currentView: "month",
+        currentDate: new Date(2018, 4, 21),
+        height: 700,
+        firstDayOfWeek: 3,
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 9, "Appointment has right count of occurences");
+
+    var firstAppointmentCoords = translator.locate($(this.scheduler.appointments.getAppointment(0)));
+
+    assert.equal(firstAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(1)).top, "Second occurence has same top coordinate as first");
+    assert.equal(firstAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(2)).top, "Third occurence has same top coordinate as first");
+    assert.equal(firstAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(3)).top, "Fourth occurence has same top coordinate as first");
+
+    var secondRowAppointmentCoords = translator.locate(this.scheduler.appointments.getAppointment(4));
+
+    assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(5)).top, "Sixth occurence has same top coordinate as fifth");
+    assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(6)).top, "Seventh occurence has same top coordinate as fifth");
+    assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(7)).top, "Eighth occurence has same top coordinate as fifth");
+    assert.equal(secondRowAppointmentCoords.top, translator.locate(this.scheduler.appointments.getAppointment(8)).top, "Ninth occurence has same top coordinate as fifth");
+});
+
+QUnit.test("Prerender filter by recurrence rule determines renderable appointments correctly (T736600)", function(assert) {
+    var data = [
+        {
+            text: "Recurrent app with exc",
+            startDate: new Date(2019, 5, 6, 15, 0),
+            endDate: new Date(2019, 5, 6, 18, 30),
+            recurrenceException: "20190607T150000",
+            recurrenceRule: "FREQ=DAILY"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["day"],
+        currentView: "day",
+        currentDate: new Date(2019, 5, 7),
+        startDayHour: 8,
+        height: 600
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "Appt is filtered on prerender and not rendered");
+});

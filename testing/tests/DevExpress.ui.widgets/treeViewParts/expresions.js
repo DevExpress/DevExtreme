@@ -1,6 +1,6 @@
 /* global DATA, dataID, internals, initTree */
 
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.module("Custom item template via expressions");
 
@@ -34,14 +34,14 @@ QUnit.test("T202554: dxTreeView - The selectedExpr option does not link the chec
         displayExpr: "Name",
         keyExpr: "Id",
         parentIdExpr: "ParentId",
-        selectedExpr: function() { return "isSelected"; },
         dataStructure: "plain",
-        showCheckboxesMode: "normal"
+        showCheckBoxesMode: "normal",
+        selectedExpr: function() { return "isSelected"; }
     }).dxTreeView("instance");
 
     assert.strictEqual(treeView.$element().find(".dx-checkbox").eq(0).dxCheckBox("instance").option("value"), undefined);
     assert.strictEqual(treeView.$element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value"), true);
-    assert.strictEqual(treeView.$element().find(".dx-checkbox").eq(2).dxCheckBox("instance").option("value"), false);
+    assert.strictEqual(treeView.$element().find(".dx-checkbox").eq(2).dxCheckBox("instance").option("value"), undefined);
 });
 
 QUnit.test("Expressions should be reinitialized if *expr option was changed", function(assert) {

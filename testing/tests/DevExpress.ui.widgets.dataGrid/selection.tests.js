@@ -105,8 +105,8 @@ QUnit.test("set selectedRows for single selection. Array parameter with one obje
     assert.ok(!this.dataController.items()[2].focused);
 });
 
-QUnit.test("pass selection options to selection controller", function(assert) {
-    var createSelection = sinon.spy(this.selectionController, "_createSelection");
+QUnit.test("check selection options for selection controller", function(assert) {
+    var selectionOptions;
 
     this.applyOptions({
         selection: {
@@ -118,12 +118,12 @@ QUnit.test("pass selection options to selection controller", function(assert) {
         selectedRowKeys: "rowKeys",
     });
 
-    assert.ok(createSelection.calledOnce);
-    assert.strictEqual(createSelection.lastCall.args[0].maxFilterLengthInRequest, 10);
-    assert.strictEqual(createSelection.lastCall.args[0].mode, "single");
-    assert.strictEqual(createSelection.lastCall.args[0].deferred, false);
-    assert.strictEqual(createSelection.lastCall.args[0].selectionFilter, "filterValue");
-    assert.strictEqual(createSelection.lastCall.args[0].selectedKeys, "rowKeys");
+    selectionOptions = this.selectionController._getSelectionConfig();
+    assert.strictEqual(selectionOptions.maxFilterLengthInRequest, 10);
+    assert.strictEqual(selectionOptions.mode, "single");
+    assert.strictEqual(selectionOptions.deferred, false);
+    assert.strictEqual(selectionOptions.selectionFilter, "filterValue");
+    assert.strictEqual(selectionOptions.selectedKeys, "rowKeys");
 });
 
 QUnit.test("set selectedRows. Array parameter with one object and parameter preserve is true", function(assert) {
@@ -4012,4 +4012,44 @@ QUnit.test("SelectAll items with remote filtering and deferred selection", funct
     items = this.dataController.items();
     assert.ok(items[0].isSelected, "first item is selected");
     assert.ok(items[1].isSelected, "second item is selected");
+});
+
+// T754974
+QUnit.test("The getSelectedRowsData method should return correct selected rows data after filtering and selecting/deselecting rows", function(assert) {
+    // arrange
+    var selectedRowsData = [];
+
+    this.setupDataGrid({
+        loadingTimeout: undefined,
+        dataSource: createDataSource(this.data, { key: "id", pageSize: 2 }),
+        remoteOperations: { filtering: true, sorting: true, paging: true },
+        columns: [
+            { dataField: "id", dataType: "number" },
+            { dataField: "name", dataType: "string" },
+            { dataField: "age", dataType: "number", filterValue: "18", selectedFilterOperation: "<>" }
+        ],
+        selection: { mode: "multiple", deferred: true }
+    });
+
+    this.selectAll();
+    this.getSelectedRowsData().done((selectedData) => {
+        selectedRowsData = selectedData;
+    });
+    this.clock.tick();
+
+    // assert
+    assert.equal(selectedRowsData.length, 5, "selected rows data count");
+
+    // arrange
+    this.deselectRows([1]);
+
+    // act
+    this.selectAll();
+    this.getSelectedRowsData().done((selectedData) => {
+        selectedRowsData = selectedData;
+    });
+    this.clock.tick();
+
+    // assert
+    assert.equal(selectedRowsData.length, 5, "selected rows data count");
 });

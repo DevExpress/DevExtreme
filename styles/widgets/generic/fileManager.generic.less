@@ -1,6 +1,6 @@
 .dx-filemanager {
     border-color: @filemanager-border-color;
-    
+
     .dx-filemanager-toolbar {
         background: @base-bg;
 
@@ -41,7 +41,6 @@
                 }
             }
         }
-
     }
 
     .dx-filemanager-container {
@@ -61,7 +60,7 @@
                 color: @filemanager-breadcrumbs-item-focus-color;
             }
         }
-        
+
         .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
             background: @filemanager-border-color;
         }
@@ -81,7 +80,6 @@
         }
 
         .dx-filemanager-thumbnails-item {
-
             &.dx-filemanager-item-selected {
                 color: @filemanager-file-item-select-color;
                 background: @filemanager-file-item-select-bg;
@@ -99,18 +97,27 @@
 
     .dx-filemanager-files-view {
         background: @base-bg;
-    }
 
+        &.dx-filemanager-details {
+            .dx-filemanager-details-item-thumbnail {
+                font-size: @GENERIC_BASE_ICON_SIZE;
+            }
+        }
+    }
 }
 
 .dx-filemanager-dirs-tree.dx-treeview {
+    .dx-treeview-item-content > i {
+        margin-bottom: @FILEMANAGER_DIRS_TREE_ICON_MARGIN_BOTTOM;
+    }
+
     .dx-state-focused > .dx-treeview-item {
         background: @base-bg;
-        
+
         &.dx-state-hover {
             background: @filemanager-dirs-tree-item-focus-bg;
         }
-        
+
         & * {
             color: @filemanager-dirs-tree-item-focus-color;
         }
@@ -118,7 +125,7 @@
 
     .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item {
         background: @filemanager-dirs-tree-item-focus-bg;
-        
+
         & * {
             color: @filemanager-dirs-tree-item-focus-color;
         }
@@ -129,5 +136,10 @@
     .dx-button {
         min-width: @FILEMANAGER_FILE_ACTIONS_BUTTON_WIDTH;
         height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT;
+
+        .dx-button-content {
+            padding-top: @FILEMANAGER_FILE_ACTIONS_BUTTON_TOP_BOTTOM_PADDING;
+            padding-bottom: @FILEMANAGER_FILE_ACTIONS_BUTTON_TOP_BOTTOM_PADDING;
+        }
     }
 }

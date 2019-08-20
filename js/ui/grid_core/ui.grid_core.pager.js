@@ -66,6 +66,10 @@ var PagerView = modules.View.inherit({
                         dataController.pageSize(pageSize);
                     });
                 },
+                onKeyDown: e => {
+                    let keyboardController = that.getController("keyboardNavigation");
+                    keyboardController && keyboardController.executeAction("onKeyDown", e);
+                },
                 useLegacyKeyboardNavigation: this.option("useLegacyKeyboardNavigation")
             };
 

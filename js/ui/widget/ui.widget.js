@@ -523,7 +523,8 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderHint: function() {
-        domUtils.toggleAttr(this.$element(), "title", this.option("hint"));
+        var hint = this.option("hint");
+        this.$element().attr("title", hint ? hint : null);
     },
 
     _renderContent: function() {
@@ -718,6 +719,8 @@ var Widget = DOMComponent.inherit({
         if(processor) {
             this._keyboardProcessor = processor.reinitialize(this._keyboardHandler, this);
         } else if(this.option("focusStateEnabled")) {
+            this._disposeKeyboardProcessor();
+
             this._keyboardProcessor = new KeyboardProcessor({
                 element: this._keyboardEventBindingTarget(),
                 handler: this._keyboardHandler,
@@ -968,13 +971,13 @@ var Widget = DOMComponent.inherit({
             var attrName = (option.name === "role" || option.name === "id") ? option.name : "aria-" + option.name,
                 attrValue = option.value;
 
-            if(attrValue === null || attrValue === undefined) {
-                attrValue = undefined;
-            } else {
+            if(typeUtils.isDefined(attrValue)) {
                 attrValue = attrValue.toString();
+            } else {
+                attrValue = null;
             }
 
-            domUtils.toggleAttr(option.target, attrName, attrValue);
+            option.target.attr(attrName, attrValue);
         };
 
         if(!typeUtils.isPlainObject(arguments[0])) {

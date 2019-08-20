@@ -50,6 +50,8 @@ import deferredUtils from "../../core/utils/deferred";
 import EmptyTemplate from "../widget/empty_template";
 import BindableTemplate from "../widget/bindable_template";
 import themes from "../themes";
+import browser from "../../core/utils/browser";
+import { touch } from "../../core/utils/support";
 
 const when = deferredUtils.when;
 const Deferred = deferredUtils.Deferred;
@@ -57,12 +59,13 @@ const Deferred = deferredUtils.Deferred;
 const toMs = dateUtils.dateToMilliseconds;
 
 const WIDGET_CLASS = "dx-scheduler";
-const WIDGET_SMALL_CLASS = "dx-scheduler-small";
-const WIDGET_ADAPTIVE_CLASS = "dx-scheduler-adaptive";
-const WIDGET_READONLY_CLASS = "dx-scheduler-readonly";
-const APPOINTMENT_POPUP_CLASS = "dx-scheduler-appointment-popup";
-const RECURRENCE_EDITOR_ITEM_CLASS = "dx-scheduler-recurrence-rule-item";
-const RECURRENCE_EDITOR_OPENED_ITEM_CLASS = "dx-scheduler-recurrence-rule-item-opened";
+const WIDGET_SMALL_CLASS = `${WIDGET_CLASS}-small`;
+const WIDGET_ADAPTIVE_CLASS = `${WIDGET_CLASS}-adaptive`;
+const WIDGET_WIN_NO_TOUCH_CLASS = `${WIDGET_CLASS}-win-no-touch`;
+const WIDGET_READONLY_CLASS = `${WIDGET_CLASS}-readonly`;
+const APPOINTMENT_POPUP_CLASS = `${WIDGET_CLASS}-appointment-popup`;
+const RECURRENCE_EDITOR_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item`;
+const RECURRENCE_EDITOR_OPENED_ITEM_CLASS = `${WIDGET_CLASS}-recurrence-rule-item-opened`;
 const WIDGET_SMALL_WIDTH = 400;
 const APPOINTMENT_POPUP_WIDTH = 610;
 const APPOINTMENT_POPUP_FULLSCREEN_WINDOW_WIDTH = 768;
@@ -920,13 +923,11 @@ const Scheduler = Widget.inherit({
             /**
                 * @name dxSchedulerOptions.activeStateEnabled
                 * @hidden
-                * @inheritdoc
                 */
 
             /**
                 * @name dxSchedulerOptions.hoverStateEnabled
                 * @hidden
-                * @inheritdoc
                 */
             /**
                 * @name dxSchedulerAppointment
@@ -1041,7 +1042,6 @@ const Scheduler = Widget.inherit({
                         * @name dxSchedulerOptions.focusStateEnabled
                         * @type boolean
                         * @default true @for desktop
-                        * @inheritdoc
                         */
                     focusStateEnabled: true
                 }
@@ -1517,9 +1517,8 @@ const Scheduler = Widget.inherit({
         return result.promise();
     },
 
-    _fireContentReadyAction(result) {
+    _fireContentReadyAction: function(result) {
         this.callBase();
-
         result && result.resolve();
     },
 
@@ -1587,7 +1586,10 @@ const Scheduler = Widget.inherit({
         this._proxiedCustomizeStoreLoadOptionsHandler = this._customizeStoreLoadOptionsHandler.bind(this);
         this._customizeStoreLoadOptions();
 
-        this.$element().addClass(WIDGET_CLASS);
+        this.$element()
+            .addClass(WIDGET_CLASS)
+            .toggleClass(WIDGET_WIN_NO_TOUCH_CLASS, !!(browser.msie && touch));
+
         this._initEditing();
 
         this._resourcesManager = new SchedulerResourceManager(this.option("resources"));
@@ -1767,7 +1769,7 @@ const Scheduler = Widget.inherit({
             editing = this._editing;
 
         for(var prop in editing) {
-            if(editing.hasOwnProperty(prop)) {
+            if(Object.prototype.hasOwnProperty.call(editing, prop)) {
                 result = result && !editing[prop];
             }
         }
@@ -1780,6 +1782,7 @@ const Scheduler = Widget.inherit({
     },
 
     _dispose: function() {
+        this._appointmentTooltip && this._appointmentTooltip.dispose();
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
 
@@ -1834,6 +1837,7 @@ const Scheduler = Widget.inherit({
         if(this._isLoaded()) {
             this._initMarkupCore(this._loadedResources);
             this._dataSourceChangedHandler(this._dataSource.items());
+            this._fireContentReadyAction();
         } else {
             this._loadResources().done((function(resources) {
                 this._initMarkupCore(resources);
@@ -2242,8 +2246,8 @@ const Scheduler = Widget.inherit({
         if(this._appointmentForm) {
             var startDateExpr = this._dataAccessors.expr.startDateExpr,
                 endDateExpr = this._dataAccessors.expr.endDateExpr;
-            this._appointmentForm.resetValues();
-            this._appointmentForm.option("formData", formData);
+
+            AppointmentForm.updateFormData(this._appointmentForm, formData);
             this._appointmentForm.option("readOnly", this._editAppointmentData ? !this._editing.allowUpdating : false);
 
             AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
@@ -2674,7 +2678,12 @@ const Scheduler = Widget.inherit({
                 }
 
                 if(!options.skipHoursProcessing) {
-                    updatedStartDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
+                    this.fire(
+                        "convertDateByTimezoneBack",
+                        updatedStartDate,
+                        this.fire("getField", "startDateTimeZone", appointmentData)
+                    );
+
                 }
             }
         }
@@ -2728,7 +2737,7 @@ const Scheduler = Widget.inherit({
     _updateAppointment: function(target, appointment, onUpdatePrevented) {
         var updatingOptions = {
             newData: appointment,
-            oldData: target,
+            oldData: extend({}, target),
             cancel: false
         };
 
@@ -2892,7 +2901,7 @@ const Scheduler = Widget.inherit({
         return startDate;
     },
 
-    _getEndDate: function(appointment) {
+    _getEndDate: function(appointment, skipNormalize) {
         var endDate = this.fire("getField", "endDate", appointment);
 
         if(endDate) {
@@ -2903,7 +2912,7 @@ const Scheduler = Widget.inherit({
 
             endDate = this.fire("convertDateByTimezone", endDate, endDateTimeZone);
 
-            this.fire("updateAppointmentEndDate", {
+            !skipNormalize && this.fire("updateAppointmentEndDate", {
                 endDate: endDate,
                 callback: function(result) {
                     endDate = result;
@@ -3082,13 +3091,13 @@ const Scheduler = Widget.inherit({
         * @param3 currentAppointmentData:Object|undefined
         */
     showAppointmentTooltip: function(appointmentData, target, currentAppointmentData) {
-        if(!appointmentData) {
-            return;
+        if(appointmentData) {
+            this.showAppointmentTooltipCore(target, [{
+                color: this._appointments._tryGetAppointmentColor(target),
+                data: appointmentData,
+                currentData: currentAppointmentData,
+            }], true);
         }
-        this.showAppointmentTooltipCore(target, [{
-            data: appointmentData,
-            currentData: currentAppointmentData,
-        }], true);
     },
 
     showAppointmentTooltipCore: function(target, data, isSingleBehavior) {
@@ -3192,7 +3201,6 @@ const Scheduler = Widget.inherit({
         * @name dxSchedulerMethods.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
         * @hidden
-        * @inheritdoc
         */
 
 }).include(AsyncTemplateMixin, DataHelperMixin);

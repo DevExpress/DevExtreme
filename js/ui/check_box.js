@@ -43,7 +43,6 @@ var CheckBox = Editor.inherit({
              * @name dxCheckBoxOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -51,7 +50,6 @@ var CheckBox = Editor.inherit({
              * @name dxCheckBoxOptions.activeStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             activeStateEnabled: true,
 
@@ -75,7 +73,6 @@ var CheckBox = Editor.inherit({
             * @name dxCheckBoxOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
         });
     },
@@ -91,7 +88,6 @@ var CheckBox = Editor.inherit({
                     * @name dxCheckBoxOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -231,7 +227,7 @@ var CheckBox = Editor.inherit({
         $element.toggleClass(CHECKBOX_CHECKED_CLASS, Boolean(checked));
         $element.toggleClass(CHECKBOX_INDETERMINATE_CLASS, indeterminate);
 
-        this._$submitElement.val(checked);
+        this._getSubmitElement().val(checked);
         this.setAria("checked", indeterminate ? "mixed" : checked || "false");
     },
 

@@ -1,6 +1,6 @@
 .dx-filemanager {
     border-color: @filemanager-border-color;
-    
+
     .dx-filemanager-toolbar {
         background: @base-bg;
 
@@ -41,7 +41,6 @@
                 }
             }
         }
-
     }
 
     .dx-filemanager-container {
@@ -61,7 +60,7 @@
                 color: @filemanager-breadcrumbs-item-focus-color;
             }
         }
-        
+
         .dx-filemanager-breadcrumbs-separator-item .dx-menu-item-content {
             background: @filemanager-border-color;
         }
@@ -81,7 +80,6 @@
         }
 
         .dx-filemanager-thumbnails-item {
-            
             &.dx-filemanager-item-selected {
                 color: @filemanager-file-item-select-color;
                 background: @filemanager-file-item-select-bg;
@@ -99,18 +97,29 @@
 
     .dx-filemanager-files-view {
         background: @base-bg;
+
+        &.dx-filemanager-details {
+            .dx-filemanager-details-item-thumbnail {
+                font-size: @MATERIAL_BASE_ICON_SIZE;
+            }
+        }
     }
 
+    .dx-filemanager-details {
+        .dx-filemanager-details-item-name-wrapper {
+            align-items: center;
+        }
+    }
 }
 
 .dx-filemanager-dirs-tree.dx-treeview {
     .dx-state-focused > .dx-treeview-item {
         background: transparent;
-        
+
         &.dx-state-hover {
             background: @filemanager-dirs-tree-item-focus-bg;
         }
-        
+
         & * {
             color: @filemanager-dirs-tree-item-focus-color;
         }
@@ -118,27 +127,18 @@
 
     .dx-treeview-item-without-checkbox > .dx-treeview-item.dx-filemanager-focused-item {
         background: @filemanager-dirs-tree-item-focus-bg;
-        
+
         & * {
             color: @filemanager-dirs-tree-item-focus-color;
         }
     }
 }
 
-.dx-filemanager {
-    .dx-filemanager-container {
+.dx-filemanager { // stylelint-disable-line no-duplicate-selectors
+    .dx-filemanager-container { // stylelint-disable-line no-duplicate-selectors
         .dx-filemanager-dirs-panel {
             min-width: 300px;
             max-width: 350px;
-        }
-    }
-
-    .dx-row {
-        .dx-filemanager-file-actions-button {
-            .dx-button {
-                margin: -4px 0;
-                height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT - 4;
-            }
         }
     }
 }
@@ -149,8 +149,8 @@
         height: @FILEMANAGER_FILE_ACTIONS_BUTTON_HEIGHT;
 
         .dx-button-content {
-            padding: 2px 6px;
-         }
+            padding: @FILEMANAGER_FILE_ACTIONS_BUTTON_TOP_BOTTOM_PADDING 6px;
+        }
     }
 }
 

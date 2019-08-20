@@ -5,7 +5,7 @@ import translator from "../../../animation/translator";
 import dragEvents from "../../../events/drag";
 import eventsEngine from "../../../events/core/events_engine";
 import FunctionTemplate from "../../widget/function_template";
-import { extendFromObject } from "../../../core/utils/extend";
+import { touch } from "../../../core/utils/support";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
 const ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
@@ -42,6 +42,10 @@ class TooltipSingleAppointmentBehavior extends TooltipBehaviorBase {
     onListItemClick(e) {
         this.scheduler.showAppointmentPopup(e.itemData.data, false, e.itemData.currentData);
     }
+
+    canRaiseClickEvent() {
+        return false;
+    }
 }
 
 class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
@@ -55,42 +59,15 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         }
     }
 
-    onListItemClick(listItemClickArg) {
-        const config = {
-            itemData: listItemClickArg.itemData.data,
-            itemElement: listItemClickArg.itemElement
-        };
-        const showEditAppointmentPopupAction = this.createAppointmentClickAction();
-        showEditAppointmentPopupAction(this.createClickEventArgument(config, listItemClickArg));
-    }
-
-    createAppointmentClickAction() {
-        return this.scheduler._createActionByOption("onAppointmentClick", {
-            afterExecute: e => {
-                const config = e.args[0];
-                config.event.stopPropagation();
-                this.scheduler.fire("showEditAppointmentPopup", { data: config.appointmentData });
-            }
-        });
-    }
-
-    createClickEventArgument(config, listItemClickArg) {
-        const result = extendFromObject(this.scheduler.fire("mapAppointmentFields", config), listItemClickArg, false);
-        return this.trimClickEventArgument(result);
-    }
-
-    trimClickEventArgument(e) {
-        delete e.itemData;
-        delete e.itemIndex;
-        delete e.itemElement;
-        return e;
+    canRaiseClickEvent() {
+        return true;
     }
 
     createFunctionTemplate(template, data, targetData, index) {
         if(this._isEmptyDropDownAppointmentTemplate()) {
             return super.createFunctionTemplate(template, data, targetData, index);
         }
-        return new FunctionTemplate((options) => {
+        return new FunctionTemplate(options => {
             return template.render({
                 model: data,
                 index: index,
@@ -140,7 +117,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
             coordinates: coordinates,
             allDay: allDay,
             isFixedContainer: false,
-            callback: (result) => {
+            callback: result => {
                 if(result) {
                     coordinates = result;
                 }
@@ -195,6 +172,12 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
 }
 
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
+
+    constructor(scheduler) {
+        super(scheduler);
+        this.skipHidingOnScroll = false;
+    }
+
     _showCore(target, dataList, isSingleBehavior) {
         this.behavior = this._createBehavior(isSingleBehavior, target);
         super._showCore(target, dataList, isSingleBehavior);
@@ -242,15 +225,38 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         return this.behavior.getItemListDefaultTemplateName();
     }
 
-    _createTooltip(target, list) {
+    _createListOption(target, dataList) {
+        const result = super._createListOption(target, dataList);
+        // TODO:T724287 this condition is not covered by tests, because touch variable cannot be overridden.
+        // In the future, it is necessary to cover the tests
+        result.showScrollbar = touch ? "always" : "onHover";
+        return result;
+    }
+
+    _createTooltip(target) {
         this.$tooltip = this._createTooltipElement();
 
         return this.scheduler._createComponent(this.$tooltip, Tooltip, {
             target: target,
+            onShowing: this._onTooltipShowing.bind(this),
+            closeOnTargetScroll: () => this.skipHidingOnScroll,
             maxHeight: MAX_TOOLTIP_HEIGHT,
-            rtlEnabled: this.scheduler.option("rtlEnabled"),
-            contentTemplate: () => list.$element()
+            rtlEnabled: this.scheduler.option("rtlEnabled")
         });
+    }
+
+    dispose() {
+        clearTimeout(this.skipHidingOnScrollTimeId);
+    }
+
+    _onTooltipShowing() {
+        clearTimeout(this.skipHidingOnScrollTimeId);
+
+        this.skipHidingOnScroll = true;
+        this.skipHidingOnScrollTimeId = setTimeout(() => {
+            this.skipHidingOnScroll = false;
+            clearTimeout(this.skipHidingOnScrollTimeId);
+        }, 0);
     }
 
     _createTooltipElement() {
@@ -261,8 +267,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         this.behavior.onListItemRendered(e);
     }
 
-    _onListItemClick(e) {
-        super._onListItemClick(e);
-        this.behavior.onListItemClick(e);
+    _canRaiseClickEvent() {
+        return this.behavior.canRaiseClickEvent();
     }
 }

@@ -118,12 +118,30 @@ function createAreaPoints(points) {
 }
 
 var areaSeries = exports.chart["area"] = _extend({}, chartLineSeries, baseAreaMethods, {
-    _prepareSegment: function(points, rotated) {
-        var processedPoints = this._processSinglePointsAreaSegment(points, rotated);
+    _prepareSegment(points, rotated) {
+        const that = this;
+        const processedPoints = that._processSinglePointsAreaSegment(points, rotated);
+        const areaPoints = createAreaPoints(processedPoints);
+        const argAxis = that.getArgumentAxis();
+
+        if(argAxis.getAxisPosition) {
+            const argAxisPosition = argAxis.getAxisPosition();
+            const axisOptions = argAxis.getOptions();
+            const edgeOffset = (!rotated ? -1 : 1) * Math.round(axisOptions.width / 2);
+            if(axisOptions.visible) {
+                areaPoints.forEach((p, i) => {
+                    if(p) {
+                        const index = points.length === 1 ? 0 : (i < points.length ? i : areaPoints.length - 1 - i);
+                        rotated && p.x === points[index].defaultX && p.x === argAxisPosition - argAxis.getAxisShift() && (p.x += edgeOffset);
+                        !rotated && p.y === points[index].defaultY && p.y === argAxisPosition - argAxis.getAxisShift() && (p.y += edgeOffset);
+                    }
+                });
+            }
+        }
 
         return {
             line: processedPoints,
-            area: createAreaPoints(processedPoints),
+            area: areaPoints,
             singlePointSegment: processedPoints !== points
         };
     },
@@ -154,7 +172,7 @@ exports.chart["steparea"] = _extend({}, areaSeries, {
     _prepareSegment: function(points, rotated) {
         var stepLineSeries = lineSeries.chart["stepline"];
         points = areaSeries._processSinglePointsAreaSegment(points, rotated);
-        return areaSeries._prepareSegment.call(this, stepLineSeries._calculateStepLinePoints.call(this, points));
+        return areaSeries._prepareSegment.call(this, stepLineSeries._calculateStepLinePoints.call(this, points), rotated);
     },
 
     getSeriesPairCoord: lineSeries.chart["stepline"].getSeriesPairCoord

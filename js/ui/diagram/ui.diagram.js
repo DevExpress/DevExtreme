@@ -11,10 +11,14 @@ import DiagramRightPanel from "./ui.diagram.rightpanel";
 import DiagramContextMenu from "./ui.diagram.contextmenu";
 import NodesOption from "./ui.diagram.nodes";
 import EdgesOptions from "./ui.diagram.edges";
+import Tooltip from "../tooltip";
 import { getDiagram } from "./diagram_importer";
-import { hasWindow } from "../../core/utils/window";
+import { hasWindow, getWindow } from "../../core/utils/window";
+import eventsEngine from "../../events/core/events_engine";
+import eventUtils from "../../events/utils";
 
 const DIAGRAM_CLASS = "dx-diagram";
+const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
 const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + "-toolbar-wrapper";
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + "-content-wrapper";
 const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + "-drawer-wrapper";
@@ -27,6 +31,14 @@ const DIAGRAM_PARENT_KEY_FIELD = "parentId";
 const DIAGRAM_ITEMS_FIELD = "items";
 const DIAGRAM_FROM_FIELD = "from";
 const DIAGRAM_TO_FIELD = "to";
+
+const DIAGRAM_CONNECTION_POINT_SIDES = ["north", "east", "south", "west"];
+
+const DIAGRAM_NAMESPACE = "dxDiagramEvent";
+const FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("fullscreenchange", DIAGRAM_NAMESPACE);
+const IE_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("msfullscreenchange", DIAGRAM_NAMESPACE);
+const WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("webkitfullscreenchange", DIAGRAM_NAMESPACE);
+const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = eventUtils.addNamespace("mozfullscreenchange", DIAGRAM_NAMESPACE);
 
 class Diagram extends Widget {
     _init() {
@@ -65,13 +77,13 @@ class Diagram extends Widget {
 
         !isServerSide && this._diagramInstance.createDocument($content[0]);
     }
-
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
             onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+            onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option("export")
         });
     }
@@ -84,8 +96,33 @@ class Diagram extends Widget {
         this._leftPanel = this._createComponent($leftPanel, DiagramLeftPanel, {
             dataSources: this._getDataSources(),
             customShapes: this._getCustomShapes(),
-            onShapeCategoryRendered: (e) => !isServerSide && this._diagramInstance.createToolbox(e.$element[0], 40, 8, {}, e.category),
-            onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0])
+            onShapeCategoryRendered: (e) => {
+                if(isServerSide) return;
+
+                var $toolboxContainer = $(e.$element);
+                this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8, { 'data-toggle': 'shape-toolbox-tooltip' }, e.category);
+                this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
+            },
+            onDataToolboxRendered: (e) => !isServerSide && this._diagramInstance.createDataSourceToolbox(e.key, e.$element[0]),
+            onPointerUp: this._onPanelPointerUp.bind(this)
+        });
+    }
+    _createTooltips($container, targets) {
+        targets.each((index, element) => {
+            var $target = $(element);
+            const $tooltip = $("<div>")
+                .html($target.attr("title"))
+                .appendTo($container);
+            this._tooltipInstance = this._createComponent($tooltip, Tooltip, {
+                target: $target,
+                showEvent: "mouseenter",
+                hideEvent: "mouseleave",
+                position: "top",
+                animation: {
+                    show: { type: "fade", from: 0, to: 1, delay: 500 },
+                    hide: { type: "fade", from: 1, to: 0, delay: 100 }
+                }
+            });
         });
     }
     _invalidateLeftPanel() {
@@ -104,7 +141,8 @@ class Diagram extends Widget {
             position: "right",
             template: ($options) => {
                 this._createComponent($options, DiagramRightPanel, {
-                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar)
+                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+                    onPointerUp: this._onPanelPointerUp.bind(this)
                 });
             }
         });
@@ -114,6 +152,10 @@ class Diagram extends Widget {
                 drawer.toggle();
             }
         });
+    }
+
+    _onPanelPointerUp() {
+        this._diagramInstance.captureFocus();
     }
 
     _renderContextMenu($mainElement) {
@@ -138,6 +180,7 @@ class Diagram extends Widget {
         this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
         this._diagramInstance.onToolboxDragStart = this._raiseToolboxDragStart.bind(this);
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
+        this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -347,12 +390,93 @@ class Diagram extends Widget {
                         id: s.id,
                         title: s.title,
                         svgUrl: s.svgUrl,
+                        svgLeft: s.svgLeft,
+                        svgTop: s.svgTop,
+                        svgWidth: s.svgWidth,
+                        svgHeight: s.svgHeight,
                         defaultWidth: s.defaultWidth,
                         defaultHeight: s.defaultHeight,
+                        defaultText: s.defaultText,
                         allowHasText: s.allowHasText,
+                        textLeft: s.textLeft,
+                        textTop: s.textTop,
+                        textWidth: s.textWidth,
+                        textHeight: s.textHeight,
+                        connectionPoints: s.connectionPoints && s.connectionPoints.map(pt => {
+                            return { 'x': pt.x, 'y': pt.y, 'side': DIAGRAM_CONNECTION_POINT_SIDES.indexOf(pt.side) };
+                        })
                     };
                 }
             ));
+        }
+    }
+    _onToggleFullscreen(fullscreen) {
+        this._changeNativeFullscreen(fullscreen);
+        this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullscreen);
+        this._diagramInstance.updateLayout();
+    }
+    _changeNativeFullscreen(setModeOn) {
+        let window = getWindow();
+        if(window.self === window.top || setModeOn === this._inNativeFullscreen()) return;
+
+        if(setModeOn) {
+            this._subscribeFullscreenNativeChanged();
+        } else {
+            this._unsubscribeFullscreenNativeChanged();
+        }
+        this._setNativeFullscreen(setModeOn);
+    }
+    _setNativeFullscreen(on) {
+        let window = getWindow(),
+            document = window.self.document,
+            body = window.self.document.body;
+        if(on) {
+            if(body.requestFullscreen) {
+                body.requestFullscreen();
+            } else if(body.mozRequestFullscreen) {
+                body.mozRequestFullscreen();
+            } else if(body.webkitRequestFullscreen) {
+                body.webkitRequestFullscreen();
+            } else if(body.msRequestFullscreen) {
+                body.msRequestFullscreen();
+            }
+        } else {
+            if(document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if(document.mozCancelFullscreen) {
+                document.mozCancelFullscreen();
+            } else if(document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if(document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    }
+    _inNativeFullscreen() {
+        let document = getWindow().document,
+            fullscreenElement = document.fullscreenElement || document.msFullscreenElement || document.webkitFullscreenElement,
+            isInFullscreen = fullscreenElement === document.body || document.webkitIsFullscreen;
+        return !!isInFullscreen;
+    }
+    _subscribeFullscreenNativeChanged() {
+        let document = getWindow().document,
+            handler = this._onNativeFullscreenChangeHandler.bind(this);
+        eventsEngine.on(document, FULLSCREEN_CHANGE_EVENT_NAME, handler);
+        eventsEngine.on(document, IE_FULLSCREEN_CHANGE_EVENT_NAME, handler);
+        eventsEngine.on(document, WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME, handler);
+        eventsEngine.on(document, MOZ_FULLSCREEN_CHANGE_EVENT_NAME, handler);
+    }
+    _unsubscribeFullscreenNativeChanged() {
+        let document = getWindow().document;
+        eventsEngine.off(document, FULLSCREEN_CHANGE_EVENT_NAME);
+        eventsEngine.off(document, IE_FULLSCREEN_CHANGE_EVENT_NAME);
+        eventsEngine.off(document, WEBKIT_FULLSCREEN_CHANGE_EVENT_NAME);
+        eventsEngine.off(document, MOZ_FULLSCREEN_CHANGE_EVENT_NAME);
+    }
+    _onNativeFullscreenChangeHandler() {
+        if(!this._inNativeFullscreen()) {
+            this._unsubscribeFullscreenNativeChanged();
+            this._setFullscreen(false);
         }
     }
 
@@ -598,6 +722,22 @@ class Diagram extends Widget {
                 * @type String
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.svgLeft
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.svgTop
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.svgWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.svgHeight
+                * @type Number
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.defaultWidth
                 * @type Number
                 */
@@ -606,8 +746,44 @@ class Diagram extends Widget {
                 * @type Number
                 */
                 /**
+                * @name dxDiagramOptions.customShapes.defaultText
+                * @type String
+                */
+                /**
                 * @name dxDiagramOptions.customShapes.allowHasText
                 * @type Boolean
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.textLeft
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.textTop
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.textWidth
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.textHeight
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.connectionPoints
+                * @type Array<Object>
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.connectionPoints.x
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.connectionPoints.y
+                * @type Number
+                */
+                /**
+                * @name dxDiagramOptions.customShapes.connectionPoints.side
+                * @type Enums.DiagramConnectionPointSide
                 */
             ],
             /**

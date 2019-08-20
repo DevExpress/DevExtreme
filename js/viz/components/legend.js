@@ -358,7 +358,7 @@ extend(legendPrototype, {
         return this._options;
     },
 
-    update: function(data, options, themeManagerTitleOptions) {
+    update: function(data, options, themeManagerTitleOptions = {}) {
         const that = this;
         options = that._options = parseOptions(options, that._textField, that._allowInsidePosition) || {};
         that._data = data && options.customizeItems && options.customizeItems(data.slice()) || data;
@@ -376,7 +376,7 @@ extend(legendPrototype, {
         if(that._title) {
             const titleOptions = options.title;
 
-            titleOptions.horizontalAlignment = getTitleHorizontalAlignment(options);
+            themeManagerTitleOptions.horizontalAlignment = getTitleHorizontalAlignment(options);
             that._title.update(themeManagerTitleOptions, titleOptions);
         }
 
@@ -540,13 +540,15 @@ extend(legendPrototype, {
     },
 
     _createLabel: function(data, group) {
-        var labelFormatObject = this._getCustomizeObject(data),
-            align = getAlign(this._options.itemTextPosition),
-            text = this._options.customizeText.call(labelFormatObject, labelFormatObject),
-            fontStyle = _isDefined(data.textOpacity) ? _extend({}, this._options.font, { opacity: data.textOpacity }) : this._options.font;
+        const labelFormatObject = this._getCustomizeObject(data);
+        const options = this._options;
+        const align = getAlign(options.itemTextPosition);
+        const text = options.customizeText.call(labelFormatObject, labelFormatObject);
+        const fontStyle = _isDefined(data.textOpacity) ? _extend({}, options.font, { opacity: data.textOpacity }) : options.font;
+
         return this._renderer.text(text, 0, 0)
             .css(patchFontOptions(fontStyle))
-            .attr({ align: align })
+            .attr({ align: align, "class": options.cssClass })
             .append(group);
     },
 
@@ -654,7 +656,6 @@ extend(legendPrototype, {
     _applyItemPosition: function(lines, layoutOptions) {
         var that = this,
             position = { x: 0, y: 0 },
-            titleX = this._title.getLayoutOptions().x,
             maxLineLength = getMaxLineLength(lines, layoutOptions);
 
         lines.forEach(line => {
@@ -666,7 +667,7 @@ extend(legendPrototype, {
                 var offset = item.offset || layoutOptions.spacing,
                     wrap = new WrapperLayoutElement(item.element, item.bBox),
                     itemBBoxOptions = {
-                        x: position.x + titleX,
+                        x: position.x,
                         y: position.y,
                         width: item.width,
                         height: item.height
@@ -803,12 +804,13 @@ extend(legendPrototype, {
 
     _calculateTotalBox: function() {
         const markerBox = this._markersGroup.getBBox();
-        const titleBox = this._title.getLayoutOptions();
+        const titleBox = this._title.getCorrectedLayoutOptions();
         const box = this._insideLegendGroup.getBBox();
 
         const verticalPadding = this._background ? 2 * this._options.paddingTopBottom : 0;
 
         box.height = markerBox.height + titleBox.height + verticalPadding;
+        titleBox.width > box.width && (box.width = titleBox.width);
 
         return box;
     },
@@ -881,26 +883,24 @@ extend(legendPrototype, {
     _shiftTitle: function(boxWidth) {
         const that = this;
         const title = that._title;
-        const titleBox = title.getLayoutOptions();
+        const titleBox = title.getCorrectedLayoutOptions();
         if(!titleBox || !title.hasText()) {
             return;
         }
 
-        const { horizontalAlignment, paddingLeftRight, itemTextPosition } = that._options;
-        const width = boxWidth - (that._background ? 2 * paddingLeftRight : 0);
+        const width = boxWidth - (that._background ? 2 * that._options.paddingLeftRight : 0);
         const titleOptions = title.getOptions();
         let titleY = titleBox.y + titleOptions.margin.top;
-        let titleX = titleBox.x;
+        let titleX = 0;
 
         if(titleOptions.verticalAlignment === BOTTOM) {
             titleY += that._markersGroup.getBBox().height;
         }
 
-        if(horizontalAlignment === CENTER || itemTextPosition === BOTTOM || itemTextPosition === TOP) {
-            titleX = titleBox.x + (width / 2) - (titleBox.width / 2);
-        } else if(itemTextPosition === LEFT) {
-            const box = that.getLayoutOptions();
-            titleX = 2 * box.x + box.width;
+        if(titleOptions.horizontalAlignment === RIGHT) {
+            titleX = width - titleBox.width;
+        } else if(titleOptions.horizontalAlignment === CENTER) {
+            titleX = (width - titleBox.width) / 2;
         }
         title.shift(titleX, titleY);
     },
@@ -964,7 +964,10 @@ extend(legendPrototype, {
 
     // BaseWidget_layout_implementation
     layoutOptions: function() {
-        var pos = this.getLayoutOptions();
+        if(!this.getOptions().visible) {
+            return null;
+        }
+        const pos = this.getLayoutOptions();
         return {
             horizontalAlignment: this._options.horizontalAlignment,
             verticalAlignment: this._options.verticalAlignment,
