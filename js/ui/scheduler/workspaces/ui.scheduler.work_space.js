@@ -1948,23 +1948,13 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getCells: function(allDay, direction) {
         let cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
-        let rowClass = allDay ? ALL_DAY_TABLE_ROW_CLASS : DATE_TABLE_ROW_CLASS;
         if(direction === "vertical") {
-            const cells = [];
-            const rows = this.$element().find("." + rowClass);
-            for(let j = 0; j < rows.length; j++) {
-                const rowCells = rows.eq(j).find("." + cellClass);
-                for(let i = 0; i < rowCells.length; i++) {
-                    if(j === 0) {
-                        cells[i] = [];
-                    }
-                    cells[i].push(rowCells[i]);
-                }
-            }
             let result = [];
-            cells.forEach((el) => {
-                result = result.concat(el);
-            });
+            for(let i = 1; ; i++) {
+                const cells = this.$element().find(`tr .${cellClass}:nth-child(${i})`);
+                if(!cells.length) break;
+                result = result.concat(cells.toArray());
+            }
             return $(result);
         } else {
             return this.$element().find("." + cellClass);
