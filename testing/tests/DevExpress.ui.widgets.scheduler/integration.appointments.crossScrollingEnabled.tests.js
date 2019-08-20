@@ -136,49 +136,75 @@ module("crossScrollingEnabled = true", config, () => {
         assert.notDeepEqual(appointmentsInstance.option("items"), items, "Appointments are repainted");
     });
 
-    test("Month appointment inside grouped view should have a right resizable area after horizontal scroll end", assert => {
-        const scheduler = createWrapper({
-            currentDate: new Date(2015, 6, 10),
-            views: ["month"],
-            editing: true,
-            currentView: "month",
-            dataSource: [{
-                text: "a",
-                startDate: new Date(2015, 6, 10, 0),
-                endDate: new Date(2015, 6, 10, 0, 30),
-                ownerId: 1
-            }],
-            groups: ["ownerId"],
-            resources: [
-                {
-                    field: "ownerId",
-                    dataSource: [
-                        { id: 1, text: "one" },
-                        { id: 2, text: "two" },
-                        { id: 3, text: "three" },
-                        { id: 4, text: "four" }
-                    ]
-                }
-            ],
-            width: 800,
-            height: 600,
-            crossScrollingEnabled: true
+    if(!isMobile) {
+        test("Month appointment inside grouped view should have a right resizable area after horizontal scroll end", assert => {
+            const scheduler = createWrapper({
+                currentDate: new Date(2015, 6, 10),
+                views: ["month"],
+                editing: true,
+                currentView: "month",
+                dataSource: [{
+                    text: "a",
+                    startDate: new Date(2015, 6, 10, 0),
+                    endDate: new Date(2015, 6, 10, 0, 30),
+                    ownerId: 1
+                }],
+                groups: ["ownerId"],
+                resources: [
+                    {
+                        field: "ownerId",
+                        dataSource: [
+                            { id: 1, text: "one" },
+                            { id: 2, text: "two" },
+                            { id: 3, text: "three" },
+                            { id: 4, text: "four" }
+                        ]
+                    }
+                ],
+                width: 800,
+                height: 600,
+                crossScrollingEnabled: true
+            });
+
+            const scrollOffset = 100;
+            const $appointment = scheduler.appointments.getAppointment();
+            const initialResizableAreaLeft = $appointment.dxResizable("instance").option("area").left,
+                initialResizableAreaRight = $appointment.dxResizable("instance").option("area").right,
+                scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable("instance");
+
+            scrollable.scrollTo({ left: scrollOffset, top: 0 });
+
+            assert.equal($appointment.dxResizable("instance").option("area").left, initialResizableAreaLeft - scrollOffset);
+            assert.equal($appointment.dxResizable("instance").option("area").right, initialResizableAreaRight - scrollOffset);
         });
 
-        const scrollOffset = 100;
-        const $appointment = scheduler.appointments.getAppointment();
-        const initialResizableAreaLeft = $appointment.dxResizable("instance").option("area").left,
-            initialResizableAreaRight = $appointment.dxResizable("instance").option("area").right,
-            scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable("instance");
+        test("Appointment should have correct position while horizontal dragging", assert => {
+            const scheduler = createWrapper({
+                height: 500,
+                editing: true,
+                currentDate: new Date(2015, 1, 9),
+                currentView: "week",
+                dataSource: [{
+                    text: "a",
+                    startDate: new Date(2015, 1, 9, 1),
+                    endDate: new Date(2015, 1, 9, 1, 30)
+                }]
+            });
 
-        scrollable.scrollTo({ left: scrollOffset, top: 0 });
+            const dragDistance = 150;
+            const $appointment = scheduler.appointments.getAppointment();
+            const timePanelWidth = scheduler.getTimePanel().outerWidth(true);
 
-        assert.equal($appointment.dxResizable("instance").option("area").left, initialResizableAreaLeft - scrollOffset);
-        assert.equal($appointment.dxResizable("instance").option("area").right, initialResizableAreaRight - scrollOffset);
-    });
+            const pointer = pointerMock($appointment).start(),
+                startPosition = translator.locate($appointment);
 
-    if(!isMobile) {
-        test("Appointment should have correct position while horizontal dragging(T732885)", assert => {
+            pointer.dragStart().drag(dragDistance, 0);
+
+            assert.roughEqual(startPosition.left, translator.locate($appointment).left - dragDistance + timePanelWidth, 2, "Appointment position is correct");
+            pointer.dragEnd();
+        });
+
+        test("Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)", assert => {
             const scheduler = createWrapper({
                 height: 500,
                 editing: true,
@@ -207,23 +233,32 @@ module("crossScrollingEnabled = true", config, () => {
             pointer.dragEnd();
         });
 
-        test("Appointment should have correct position while horizontal dragging(T732885)", assert => {
+        test("Appointment should have correct position while horizontal dragging in scrolled date table", assert => {
             const scheduler = createWrapper({
                 height: 500,
+                width: 800,
                 editing: true,
                 currentDate: new Date(2015, 1, 9),
                 currentView: "week",
+                groups: ["room"],
+                resources: [
+                    { field: "room", dataSource: [{ id: 1, text: "1" }, { id: 2, text: "2" }, { id: 3, text: "3" }] }
+                ],
                 dataSource: [{
                     text: "a",
                     startDate: new Date(2015, 1, 9, 1),
-                    endDate: new Date(2015, 1, 9, 1, 30)
+                    endDate: new Date(2015, 1, 9, 1, 30),
+                    room: 2
                 }],
-                crossScrollingEnabled: true,
+                crossScrollingEnabled: true
             });
 
-            var $appointment = scheduler.appointments.getAppointment(),
-                dragDistance = 150;
+            const $appointment = scheduler.appointments.getAppointment(),
+                scrollable = scheduler.instance.getWorkSpace().$element().find(".dx-scrollable").dxScrollable("instance"),
+                scrollDistance = 400,
+                dragDistance = 100;
 
+            scrollable.scrollTo({ left: scrollDistance, top: 0 });
 
             const pointer = pointerMock($appointment).start(),
                 startPosition = translator.locate($appointment);
@@ -232,7 +267,7 @@ module("crossScrollingEnabled = true", config, () => {
 
             const currentPosition = translator.locate($appointment);
 
-            assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, "Appointment position is correct");
+            assert.equal(startPosition.left, currentPosition.left + scrollDistance - dragDistance, "Appointment position is correct");
             pointer.dragEnd();
         });
     }
