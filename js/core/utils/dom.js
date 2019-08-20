@@ -12,9 +12,16 @@ var $ = require("../../core/renderer"),
     elementStrategy;
 
 var resetActiveElement = function() {
-    var activeElement = domAdapter.getActiveElement();
-    if(activeElement && activeElement !== domAdapter.getBody() && activeElement.blur) {
-        activeElement.blur();
+    var activeElement = domAdapter.getActiveElement(),
+        body = domAdapter.getBody();
+
+    // todo: remove this hack after msie 11 support stopped
+    if(activeElement && activeElement !== body && activeElement.blur) {
+        try {
+            activeElement.blur();
+        } catch(e) {
+            body.blur();
+        }
     }
 };
 
