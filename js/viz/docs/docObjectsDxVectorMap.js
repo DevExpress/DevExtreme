@@ -122,13 +122,13 @@ var legendItem = {
 * @name VectorMapProjectionConfig.to
 * @type function
 * @type_function_param1 coordinates:Array<number>
-* @return Array<number>
+* @type_function_return Array<number>
 */
 /**
 * @name VectorMapProjectionConfig.from
 * @type function
 * @type_function_param1 coordinates:Array<number>
-* @return Array<number>
+* @type_function_return Array<number>
 */
 /**
 * @name VectorMapProjectionConfig.aspectRatio
