@@ -2172,7 +2172,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         assert.strictEqual(getVisibleSubmenuCount(instance), 1, "submenu.count");
     });
 
-    QUnit.test("FocusedElement should be saved when second submenu was opened", (assert) => {
+    QUnit.test("FocusedElement should be cleaned when context menu was hidden", (assert) => {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: "Item 1" }, { text: "Item 2" }, { text: "Item 3" } ],
             focusStateEnabled: true
