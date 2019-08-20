@@ -2164,7 +2164,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
 
         focusedItem = instance.itemsContainer().find(`.${DX_STATE_FOCUSED_CLASS}`);
         assert.strictEqual(focusedItem.is(instance.option("focusedElement")), true, "focusedElement");
-        assert.strictEqual(getFocusedItemText(instance), "Item 2", "focusedItem text");
+        assert.strictEqual(getFocusedItemText(instance), "Item 1", "focusedItem text");
         assert.strictEqual(getVisibleSubmenuCount(instance), 1, "submenu.count");
     });
 });

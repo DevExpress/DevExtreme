@@ -286,10 +286,6 @@ class ContextMenu extends MenuBase {
         return super._getActiveItem();
     }
 
-    _focusedElementIsAvailable($focusedElement) {
-        return this._getAvailableItems().filter((_, item) => $(item).is($focusedElement)).length;
-    }
-
     _moveFocus(location) {
         const $items = this._getItemsByLocation(location);
         const $oldTarget = this._getActiveItem(true);
@@ -838,6 +834,7 @@ class ContextMenu extends MenuBase {
         this._stopAnimate($submenu);
         animation && this._animate($submenu, animation);
         $submenu.css("visibility", "hidden");
+        this.option("focusedElement", null);
     }
 
     _stopAnimate($container) {
