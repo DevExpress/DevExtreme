@@ -943,12 +943,19 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderView();
         this._attachEvents();
         this._setFocusOnCellByOption(this.option("selectedCellData"));
+
+        this._setFixedContainerPosition();
     },
 
     _render: function() {
         this.callBase();
         this._renderDateTimeIndication();
         this._setIndicationUpdateInterval();
+    },
+
+    _setFixedContainerPosition: function() {
+        var value = $("." + SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS).css("marginLeft");
+        this._$fixedContainer.css("left", value);
     },
 
     _toggleGroupedClass: function() {
