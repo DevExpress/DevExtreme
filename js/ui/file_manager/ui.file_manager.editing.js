@@ -264,6 +264,7 @@ class FileManagerEditingControl extends Widget {
                     if(info) {
                         this._handleActionError(operationInfo, context, info, true);
                         this._completeAction(operationInfo, context);
+                        return new Deferred().resolve().promise();
                     }
                 });
     }
