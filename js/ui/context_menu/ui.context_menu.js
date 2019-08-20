@@ -834,7 +834,6 @@ class ContextMenu extends MenuBase {
         this._stopAnimate($submenu);
         animation && this._animate($submenu, animation);
         $submenu.css("visibility", "hidden");
-        this.option("focusedElement", null);
     }
 
     _stopAnimate($container) {
@@ -985,6 +984,7 @@ class ContextMenu extends MenuBase {
         }
 
         this.setAria("owns", undefined);
+        this.option("focusedElement", null);
 
         return promise || new Deferred().reject().promise();
     }

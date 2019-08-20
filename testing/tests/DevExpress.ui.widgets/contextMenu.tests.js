@@ -1266,12 +1266,16 @@ QUnit.module("Options", moduleConfig, () => {
         const items2 = [{ text: "item 3" }, { text: "item 4" }];
         const instance = new ContextMenu(this.$element, { items: items1, focusStateEnabled: true, visible: true });
 
-        keyboardMock(instance.itemsContainer())
-            .keyDown("down")
-            .keyDown("enter");
+        const keyboard = keyboardMock(instance.itemsContainer());
+        keyboard.keyDown("down");
 
-        assert.equal($(instance.option("focusedElement")).length, 1, "focused element is set");
+        const cachedFocusedElement = instance.option("focusedElement");
+        keyboard.keyDown("enter");
 
+        assert.equal($(instance.option("focusedElement")).length, 0, "focused element is cleaned after hide");
+
+        instance.option("focusedElement", cachedFocusedElement);
+        assert.equal($(instance.option("focusedElement")).length, 1, "syntetic focused element is set");
         instance.option("items", items2);
         assert.notOk(instance.option("focusedElement"), "focused element is cleaned");
     });
@@ -2163,6 +2167,35 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
             .keyDown("down");
 
         focusedItem = instance.itemsContainer().find(`.${DX_STATE_FOCUSED_CLASS}`);
+        assert.strictEqual(focusedItem.is(instance.option("focusedElement")), true, "focusedElement");
+        assert.strictEqual(getFocusedItemText(instance), "Item 1", "focusedItem text");
+        assert.strictEqual(getVisibleSubmenuCount(instance), 1, "submenu.count");
+    });
+
+    QUnit.test("FocusedElement should be saved when second submenu was opened", (assert) => {
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: "Item 1" }, { text: "Item 2" }, { text: "Item 3" } ],
+            focusStateEnabled: true
+        });
+
+        instance.show();
+
+        let keyboard = keyboardMock(instance.itemsContainer());
+
+        keyboard
+            .keyDown("down")
+            .keyDown("down")
+            .keyDown("enter");
+
+        assert.strictEqual($(instance.option("focusedElement")).length, 0, "focusedElement is cleaned");
+
+        instance.show();
+        keyboard = keyboardMock(instance.itemsContainer());
+
+        keyboard
+            .keyDown("down");
+
+        const focusedItem = instance.itemsContainer().find(`.${DX_STATE_FOCUSED_CLASS}`);
         assert.strictEqual(focusedItem.is(instance.option("focusedElement")), true, "focusedElement");
         assert.strictEqual(getFocusedItemText(instance), "Item 1", "focusedItem text");
         assert.strictEqual(getVisibleSubmenuCount(instance), 1, "submenu.count");
