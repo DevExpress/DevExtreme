@@ -1,15 +1,16 @@
-var dataUtils = require("../core/element_data"),
-    Callbacks = require("../core/utils/callbacks"),
-    errors = require("./widget/ui.errors"),
-    DOMComponent = require("../core/dom_component"),
-    extend = require("../core/utils/extend").extend,
-    map = require("../core/utils/iterator").map,
-    ValidationMixin = require("./validation/validation_mixin"),
-    ValidationEngine = require("./validation_engine"),
-    DefaultAdapter = require("./validation/default_adapter"),
-    registerComponent = require("../core/component_registrator");
+import dataUtils from "../core/element_data";
+import Callbacks from "../core/utils/callbacks";
+import errors from "./widget/ui.errors";
+import DOMComponent from "../core/dom_component";
+import { extend } from "../core/utils/extend";
+import { map } from "../core/utils/iterator";
+import ValidationMixin from "./validation/validation_mixin";
+import ValidationEngine from "./validation_engine";
+import DefaultAdapter from "./validation/default_adapter";
+import registerComponent from "../core/component_registrator";
+import typeUtils from "../core/utils/type";
 
-var VALIDATOR_CLASS = "dx-validator";
+const VALIDATOR_CLASS = "dx-validator";
 
 /**
 * @name dxValidator
@@ -18,12 +19,12 @@ var VALIDATOR_CLASS = "dx-validator";
 * @module ui/validator
 * @export default
 */
-var Validator = DOMComponent.inherit({
-    _getDefaultOptions: function() {
+const Validator = DOMComponent.inherit({
+    _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
             * @name dxValidatorOptions.validationRules
-            * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
+            * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
             */
             validationRules: []
             /**
@@ -104,17 +105,16 @@ var Validator = DOMComponent.inherit({
         });
     },
 
-    _init: function() {
+    _init() {
         this.callBase();
         this._initGroupRegistration();
 
         this.focused = Callbacks();
         this._initAdapter();
-
     },
 
-    _initGroupRegistration: function() {
-        var group = this._findGroup();
+    _initGroupRegistration() {
+        const group = this._findGroup();
 
         if(!this._groupWasInit) {
             this.on("disposing", function(args) {
@@ -132,8 +132,7 @@ var Validator = DOMComponent.inherit({
         }
     },
 
-
-    _setOptionsByReference: function() {
+    _setOptionsByReference() {
         this.callBase();
 
         extend(this._optionsByReference, {
@@ -141,17 +140,16 @@ var Validator = DOMComponent.inherit({
         });
     },
 
-    _initAdapter: function() {
-        var that = this,
-            element = that.$element()[0],
-            dxStandardEditor = dataUtils.data(element, "dx-validation-target"),
-            adapter = that.option("adapter");
+    _initAdapter() {
+        const element = this.$element()[0],
+            dxStandardEditor = dataUtils.data(element, "dx-validation-target");
+        let adapter = this.option("adapter");
         if(!adapter) {
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
 
-                adapter.validationRequestsCallbacks.add(function() {
-                    that.validate();
+                adapter.validationRequestsCallbacks.add(() => {
+                    this.validate();
                 });
 
                 this.option("adapter", adapter);
@@ -160,34 +158,34 @@ var Validator = DOMComponent.inherit({
             throw errors.Error("E0120");
         }
 
-        var callbacks = adapter.validationRequestsCallbacks;
+        const callbacks = adapter.validationRequestsCallbacks;
 
         if(callbacks) {
             if(Array.isArray(callbacks)) {
-                callbacks.push(function() {
-                    that.validate();
+                callbacks.push(() => {
+                    this.validate();
                 });
             } else {
                 errors.log("W0014", "validationRequestsCallbacks", "jQuery.Callbacks", "17.2", "Use the array instead");
-                callbacks.add(function() {
-                    that.validate();
+                callbacks.add(() => {
+                    this.validate();
                 });
             }
         }
     },
 
-    _initMarkup: function() {
+    _initMarkup() {
         this.$element().addClass(VALIDATOR_CLASS);
         this.callBase();
     },
 
-    _visibilityChanged: function(visible) {
+    _visibilityChanged(visible) {
         if(visible) {
             this._initGroupRegistration();
         }
     },
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case "validationGroup":
                 this._initGroupRegistration();
@@ -204,18 +202,22 @@ var Validator = DOMComponent.inherit({
         }
     },
 
-    _getValidationRules: function() {
+    _getValidationRules() {
         if(!this._validationRules) {
-            this._validationRules = map(this.option("validationRules"), (function(rule) {
+            this._validationRules = map(this.option("validationRules"), (rule) => {
                 return extend({}, rule, { validator: this });
-            }).bind(this));
+            });
         }
 
         return this._validationRules;
     },
 
-    _resetValidationRules: function() {
+    _resetValidationRules() {
         delete this._validationRules;
+    },
+
+    _resetValidationResult() {
+        this.option("validationResul", null);
     },
 
     /**
@@ -223,27 +225,53 @@ var Validator = DOMComponent.inherit({
     * @publicName validate()
     * @return dxValidatorResult
     */
-    validate: function() {
-        var that = this,
-            adapter = that.option("adapter"),
-            name = that.option("name"),
+    validate() {
+        const adapter = this.option("adapter"),
+            name = this.option("name"),
             bypass = adapter.bypass && adapter.bypass(),
             value = adapter.getValue(),
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
-            rules = this._getValidationRules(),
-            result;
+            rules = this._getValidationRules();
+        let result;
 
         if(bypass) {
             result = { isValid: true };
         } else if(currentError && currentError.editorSpecific) {
             currentError.validator = this;
-            result = { isValid: false, brokenRule: currentError };
+            result = { isValid: false, brokenRule: currentError, brokenRules: [currentError] };
         } else {
             result = ValidationEngine.validate(value, rules, name);
         }
-
-        this._applyValidationResult(result, adapter);
-
+        if(result.complete) {
+            this._applyValidationResult(result, adapter);
+            result.complete = result.complete.then((values) => {
+                if(!this.option("validationResult")) {
+                    return;
+                }
+                values.forEach(function(val, index) {
+                    if(val.isValid === false) {
+                        result.isValid = val.isValid;
+                        result.brokenRules = result.brokenRules || [];
+                        let rule;
+                        if(typeUtils.isDefined(val.message) && typeUtils.isString(val.message) && val.message.length) {
+                            rule = extend({}, result.asyncValidationRules[index]);
+                            rule.message = val.message;
+                        } else {
+                            rule = result.asyncValidationRules[index];
+                        }
+                        result.brokenRules.push(rule);
+                        if(!result.brokenRule) {
+                            result.brokenRule = rule;
+                        }
+                    }
+                });
+                result.status = result.isValid ? "valid" : "invalid";
+                this._applyValidationResult(result, adapter);
+                return result;
+            });
+        } else {
+            this._applyValidationResult(result, adapter);
+        }
         return result;
     },
 
@@ -252,37 +280,38 @@ var Validator = DOMComponent.inherit({
     * @name dxValidatorMethods.reset
     * @publicName reset()
     */
-    reset: function() {
-        var that = this,
-            adapter = that.option("adapter"),
+    reset() {
+        const adapter = this.option("adapter"),
             result = {
                 isValid: true,
                 brokenRule: null
             };
-
+        this._resetValidationResult();
         adapter.reset();
         this._resetValidationRules();
         this._applyValidationResult(result, adapter);
     },
 
-    _applyValidationResult: function(result, adapter) {
-        var validatedAction = this._createActionByOption("onValidated");
+    _applyValidationResult(result, adapter) {
+        const validatedAction = this._createActionByOption("onValidated");
         result.validator = this;
 
         adapter.applyValidationResults && adapter.applyValidationResults(result);
 
         this.option({
-            isValid: result.isValid
+            isValid: result.isValid,
+            validationResult: result
         });
-
-        validatedAction(result);
+        if(result.status !== "pending") {
+            validatedAction(result);
+        }
     },
     /**
     * @name dxValidatorMethods.focus
     * @publicName focus()
     */
-    focus: function() {
-        var adapter = this.option("adapter");
+    focus() {
+        const adapter = this.option("adapter");
         adapter && adapter.focus && adapter.focus();
     }
 }).include(ValidationMixin);

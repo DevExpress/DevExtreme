@@ -1,15 +1,15 @@
-var $ = require("../../core/renderer"),
-    dataUtils = require("../../core/element_data"),
-    Callbacks = require("../../core/utils/callbacks"),
-    commonUtils = require("../../core/utils/common"),
-    windowUtils = require("../../core/utils/window"),
-    getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
-    extend = require("../../core/utils/extend").extend,
-    Widget = require("../widget/ui.widget"),
-    ValidationMixin = require("../validation/validation_mixin"),
-    Overlay = require("../overlay");
+import $ from "../../core/renderer";
+import dataUtils from "../../core/element_data";
+import Callbacks from "../../core/utils/callbacks";
+import commonUtils from "../../core/utils/common";
+import windowUtils from "../../core/utils/window";
+import { getDefaultAlignment } from "../../core/utils/position";
+import { extend } from "../../core/utils/extend";
+import Widget from "../widget/ui.widget";
+import ValidationMixin from "../validation/validation_mixin";
+import Overlay from "../overlay";
 
-var READONLY_STATE_CLASS = "dx-state-readonly",
+const READONLY_STATE_CLASS = "dx-state-readonly",
     INVALID_CLASS = "dx-invalid",
     INVALID_MESSAGE = "dx-invalid-message",
     INVALID_MESSAGE_AUTO = "dx-invalid-message-auto",
@@ -97,6 +97,22 @@ var Editor = Widget.inherit({
             * @default undefined
             */
             validationError: null,
+
+            /**
+            * @name EditorOptions.validationErrors
+            * @type Array<object>
+            * @ref
+            * @default undefined
+            */
+            validationErrors: null,
+
+            /**
+            * @name EditorOptions.validationStatus
+            * @type Array<object>
+            * @ref
+            * @default "valid"
+            */
+            validationStatus: "valid",
 
             /**
              * @name EditorOptions.validationMessageMode
@@ -201,11 +217,14 @@ var Editor = Widget.inherit({
     },
 
     _renderValidationState: function() {
-        var isValid = this.option("isValid"),
-            validationError = this.option("validationError"),
+        const isValid = this.option("isValid") && this.option("validationStatus") !== "invalid",
             validationMessageMode = this.option("validationMessageMode"),
             $element = this.$element();
-
+        let validationErrors = this.option("validationErrors");
+        if(!validationErrors && this.option("validationError")) {
+            validationErrors = [this.option("validationError")];
+        }
+        $element.toggleClass("dx-pending", this.option("validationStatus") === "pending");
         $element.toggleClass(INVALID_CLASS, !isValid);
         this.setAria("invalid", !isValid || undefined);
 
@@ -218,9 +237,18 @@ var Editor = Widget.inherit({
             this._$validationMessage = null;
         }
 
-        if(!isValid && validationError && validationError.message) {
+        let validationErrorMessage = "";
+        if(validationErrors) {
+            validationErrors.forEach(function(err) {
+                if(err.message) {
+                    validationErrorMessage += ((validationErrorMessage ? "<br />" : "") + err.message);
+                }
+            });
+        }
+
+        if(!isValid && validationErrorMessage) {
             this._$validationMessage = $("<div>").addClass(INVALID_MESSAGE)
-                .html(validationError.message)
+                .html(validationErrorMessage)
                 .appendTo($element);
 
             this._validationMessage = this._createComponent(this._$validationMessage, Overlay, extend({
@@ -324,6 +352,8 @@ var Editor = Widget.inherit({
                 break;
             case "isValid":
             case "validationError":
+            case "validationErrors":
+            case "validationStatus":
             case "validationBoundary":
             case "validationMessageMode":
                 this._renderValidationState();

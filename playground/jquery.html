@@ -20,14 +20,145 @@
     <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>-->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
+    <style>
+        .dx-pending.dx-texteditor.dx-editor-filled .dx-texteditor-input-container:after,
+        .dx-pending.dx-texteditor.dx-editor-underlined .dx-texteditor-input-container:after,
+        .dx-pending.dx-texteditor.dx-editor-outlined .dx-texteditor-input-container:after {
+            pointer-events: none;
+            font-weight: bold;
+            background-color: green;
+            color: #fff;
+            content: '!';
+            position: absolute;
+            top: 50%;
+            margin-top: -9px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 18px;
+            font-size: 13px;
+        }
+        .dx-texteditor.dx-pending .dx-texteditor-input-container:after {
+             right: 4px;
+        }
+    </style>
 </head>
 <body>
-    <div id="button"></div>
+    <form id="form" action="your-action">
+        <div id="textBox1"></div>
+        <div id="textBox2"></div>
+        <div id="textBox3"></div>
+        <div id="button"></div>
+    </form>
     <script>
         $(function() {
+            $("#textBox1").dxTextBox({})
+                .dxValidator({
+                    validationRules: [{
+                        type: "required",
+                        message: "textBox1 is required"
+                    },
+                    {
+                        type: "custom",
+                        message: "textBox1 is invalid",
+                        validationCallback: function(params) {
+                            return params.value === "test";
+                        }
+                    },
+                    {
+                        type: "async",
+                        message: "textBox1 is invalid (async)",
+                        validationCallback: function(params) {
+                            return new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve(params.value === "test");
+                                }, 5000);
+                            });
+                        }
+                    }]
+                });
+            $("#textBox2").dxTextBox({})
+                .dxValidator({
+                    validationRules: [{
+                        type: "required",
+                        message: "textBox2 is required"
+                    },
+                    {
+                        type: "custom",
+                        message: "textBox2 is invalid",
+                        validationCallback: function(params) {
+                            return params.value === "test1";
+                        }
+                    },
+                    {
+                        type: "async",
+                        message: "textBox2 is invalid async",
+                        validationCallback: function(params) {
+                            return new Promise((resolve, reject) => {
+                                setTimeout(() => {
+                                    let res = params.value === "test1";
+                                    if (res) {
+                                        reject({
+                                            isValid: false,
+                                            message: "textBox2 value is too simple"
+                                        })
+                                    }
+                                    else {
+                                        resolve(true);
+                                    }
+                                }, 3000);
+                            });
+                        }
+                    }]
+                });
+            $("#textBox3").dxTextBox({})
+                .dxValidator({
+                    validationRules: [{
+                        type: "async",
+                        message: "textBox3 is invalid async1",
+                        validationCallback: function(params) {
+                            return new Promise((resolve) => {
+                                setTimeout(() => {
+                                    resolve(params.value === "test2");
+                                }, 1000);
+                            });
+                        }
+                    },
+                    {
+                        type: "async",
+                        message: "textBox3 is invalid async2",
+                        validationCallback: function(params) {
+                            return new Promise((resolve, reject) => {
+                                setTimeout(() => {
+                                    let res = params.value === "test2";
+                                    if (res) {
+                                        reject({
+                                            isValid: false,
+                                            message: "textBox3 value is too simple"
+                                        })
+                                    }
+                                    else {
+                                        resolve(true);
+                                    }
+                                }, 3000);
+                            });
+                        }
+                    },
+                    {
+                        type: "required",
+                        message: "textBox3 is required"
+                    }]
+                });
             $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
+                text: "Register",
+                type: "success",
+                onClick: function(params) {
+                    let res = params.validationGroup.validate();
+                    res.complete.then(function(value) {
+                        debugger;
+                    });
+                }
             });
         });
     </script>
