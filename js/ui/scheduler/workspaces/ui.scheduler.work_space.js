@@ -952,7 +952,9 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _setFixedContainerPosition: function() {
         var value = $("." + SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS).css("marginLeft");
-        this._$fixedContainer.css("left", value);
+        if(value) {
+            this._$fixedContainer && this._$fixedContainer.css("left", value);
+        }
     },
 
     _toggleGroupedClass: function() {
