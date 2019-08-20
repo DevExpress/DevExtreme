@@ -233,12 +233,12 @@ module.exports = {
                     var $masterDetailRow = $element.closest("." + MASTER_DETAIL_ROW_CLASS);
 
                     if($masterDetailRow.length) {
-                        when(this._updateMasterDataGrid($masterDetailRow)).done(() => {
+                        when(this._updateMasterDataGrid($masterDetailRow, $element)).done(() => {
                             this._updateParentDataGrids($masterDetailRow.parent());
                         });
                     }
                 },
-                _updateMasterDataGrid: function($masterDetailRow) {
+                _updateMasterDataGrid: function($masterDetailRow, $element) {
                     var options = $($masterDetailRow).data("options"),
                         masterDataGrid = $($masterDetailRow).closest("." + this.getWidgetContainerClass()).parent().data("dxDataGrid");
 
@@ -246,7 +246,12 @@ module.exports = {
                         if(masterDataGrid.getView("rowsView").isFixedColumns()) {
                             var $rows = $(masterDataGrid.getRowElement(options.rowIndex));
                             if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
-                                return masterDataGrid.updateDimensions();
+                                var width = $element.width();
+                                return masterDataGrid.updateDimensions().done(() => {
+                                    if(this.option("columnAutoWidth") && masterDataGrid.option("scrolling.useNative") === true && width !== $element.width()) {
+                                        this.updateDimensions();
+                                    }
+                                });
                             }
                         } else {
                             var scrollable = masterDataGrid.getScrollable();
