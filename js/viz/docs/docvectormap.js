@@ -290,6 +290,15 @@ var dxVectorMap = {
         */
         customizeTooltip: undefined,
         /**
+        * @name dxVectorMapOptions.tooltip.contentTemplate
+        * @type template | function(info, element)
+        * @type_function_param1 info:MapLayerElement
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined,
+        /**
         * @name dxVectorMapOptions.tooltip.format
         * @hidden
         */

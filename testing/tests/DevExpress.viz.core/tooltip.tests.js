@@ -546,7 +546,18 @@ QUnit.module("Manipulation", {
 
         this.options = getInitialOptions();
         this.eventTrigger = sinon.spy();
-        this.tooltip = tooltip = new Tooltip({ eventTrigger: this.eventTrigger });
+        this.tooltip = tooltip = new Tooltip({
+            eventTrigger: this.eventTrigger,
+            widget: {
+                _getTemplate(callback) {
+                    return {
+                        render(arg) {
+                            callback(arg.model, arg.container);
+                        }
+                    };
+                }
+            }
+        });
         tooltip.update(this.options);
 
         this.resetTooltipMocks = function() {
@@ -599,7 +610,8 @@ QUnit.test("Show preparations. W/o customize, w/ text", function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: "b" };
 
-    var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 });
+    const formatObject = { valueText: "some-text" };
+    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -608,6 +620,7 @@ QUnit.test("Show preparations. W/o customize, w/ text", function(assert) {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
+        formatObject: formatObject,
         text: "some-text"
     }, "state");
 
@@ -648,7 +661,9 @@ QUnit.test("Show preparations. W/o customize, w/ text from 'description' filed",
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: "b" };
 
-    var result = this.tooltip.show({ description: "some-text" }, { x: 100, y: 200, offset: 300 });
+    const formatObject = { description: "some-text" };
+
+    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -657,7 +672,8 @@ QUnit.test("Show preparations. W/o customize, w/ text from 'description' filed",
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        text: "some-text"
+        text: "some-text",
+        formatObject: formatObject
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
@@ -760,7 +776,8 @@ QUnit.test("Show preparations. W/ customize w/o text, w/ text", function(assert)
         color: "cColor1",
         borderColor: "cColor2",
         textColor: "cColor3",
-        text: "some-text"
+        text: "some-text",
+        formatObject: formatObject
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is not added to dom");
@@ -802,7 +819,8 @@ QUnit.test("Show preparations. W/ customize w/ text, empty text", function(asser
         color: "cColor1",
         borderColor: "cColor2",
         textColor: "cColor3",
-        text: "some-customized-text"
+        text: "some-customized-text",
+        formatObject
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
@@ -830,7 +848,8 @@ QUnit.test("Show preparations. W/ customize w/ text, w/ text", function(assert) 
         color: "cColor1",
         borderColor: "cColor2",
         textColor: "cColor3",
-        text: "some-customized-text"
+        text: "some-customized-text",
+        formatObject
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
@@ -934,7 +953,8 @@ QUnit.test("Show preparations. W/ customize w/ html", function(assert) {
         borderColor: "cColor2",
         textColor: "cColor3",
         isRendered: true,
-        html: "some-customized-html"
+        html: "some-customized-html",
+        formatObject
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
@@ -964,7 +984,8 @@ QUnit.test("Show preparations. W/ customize w/ html/text", function(assert) {
         textColor: "cColor3",
         text: "some-customized-text",
         isRendered: true,
-        html: "some-customized-html"
+        html: "some-customized-html",
+        formatObject
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
@@ -979,7 +1000,8 @@ QUnit.test("Show preparations. Certain container", function(assert) {
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: "b" };
 
-    var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 });
+    const formatObject = { valueText: "some-text" };
+    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", undefined], "event is triggered");
@@ -988,7 +1010,8 @@ QUnit.test("Show preparations. Certain container", function(assert) {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        text: "some-text"
+        text: "some-text",
+        formatObject
     }, "state");
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, "wrapper is added to dom");
@@ -1010,8 +1033,9 @@ QUnit.test("Show. W/o params", function(assert) {
     this.tooltip._textHtml.html = sinon.spy();
     var eventData = { tag: "event-data" };
 
+    const formatObject = { valueText: "some-text" };
     // act
-    var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 }, eventData);
+    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", eventData], "event is triggered");
@@ -1020,7 +1044,8 @@ QUnit.test("Show. W/o params", function(assert) {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        text: "some-text"
+        text: "some-text",
+        formatObject
     }, "state");
 
     const cloud = this.renderer.path.lastCall.returnValue;
@@ -1060,8 +1085,9 @@ QUnit.test("Show. W/o params. Html", function(assert) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
     }
 
+    const formatObject = { valueText: "some-text" };
     // act
-    var result = this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 }, eventData);
+    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", eventData], "event is triggered");
@@ -1071,7 +1097,8 @@ QUnit.test("Show. W/o params. Html", function(assert) {
         borderColor: "#252525",
         textColor: "#939393",
         isRendered: true,
-        html: "some-html"
+        html: "some-html",
+        formatObject
     }, "state");
 
     const cloud = this.renderer.path.lastCall.returnValue;
@@ -1079,7 +1106,7 @@ QUnit.test("Show. W/o params. Html", function(assert) {
     assert.equal(cloud._stored_settings.stroke, "#252525");
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, "textGroupHtml styles");
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393", width: null }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393", width: 3000 }]);
 
     assert.equal(this.tooltip._textHtml.html.callCount, 2, "textHtml html");
     assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
@@ -1094,6 +1121,185 @@ QUnit.test("Show. W/o params. Html", function(assert) {
     } else {
         assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
     }
+});
+
+QUnit.test("Show. W/o params. Template", function(assert) {
+    var eventData = { tag: "event-data" };
+    this.tooltip._getCanvas = function() { return CANVAS; };
+
+    this.options.contentTemplate = sinon.spy(function(_, container) {
+        $(container).text("custom html");
+    });
+
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._textGroupHtml.css = sinon.spy();
+    this.tooltip._textGroupHtml.width = sinon.spy();
+    this.tooltip._textGroupHtml.height = sinon.spy();
+    sinon.spy(this.tooltip._textHtml, "html");
+
+    var textHtmlElement = this.tooltip._textHtml.get(0);
+    if(!this.getComputedStyle) {
+        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
+    }
+
+    const formatObject = { valueText: "some-text" };
+    // act
+    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+
+    assert.strictEqual(result, true);
+    assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", eventData], "event is triggered");
+
+    assert.deepEqual(this.tooltip._state, {
+        color: "#ffffff",
+        borderColor: "#252525",
+        textColor: "#939393",
+        isRendered: true,
+        html: "custom html",
+        text: "some-text",
+        formatObject
+    }, "state");
+
+    const cloud = this.renderer.path.lastCall.returnValue;
+    assert.equal(cloud._stored_settings.fill, "#ffffff");
+    assert.equal(cloud._stored_settings.stroke, "#252525");
+
+    assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, "textGroupHtml styles");
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393", width: 3000 }]);
+
+    assert.equal(this.tooltip._textHtml.html.callCount, 2, "textHtml html");
+    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
+    assert.deepEqual(this.tooltip._textHtml.html(), "custom html", "textHtml html");
+
+    assert.equal(this.tooltip._text.css.callCount, 0, "text styles");
+    assert.equal(this.tooltip._text.stub("attr").callCount, 0, "text attrs");
+
+    if(this.getComputedStyle) {
+        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
+    } else {
+        assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(textHtmlElement.getBoundingClientRect.firstCall));
+    }
+
+    assert.equal(this.options.contentTemplate.callCount, 1);
+    assert.equal(this.options.contentTemplate.lastCall.args[0], formatObject);
+});
+
+QUnit.test("Do not show tooltip if html is not set in contentTemplate", function(assert) {
+    var eventData = { tag: "event-data" };
+    this.tooltip._getCanvas = function() { return CANVAS; };
+
+    this.options.contentTemplate = () => null;
+
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._textGroupHtml.css = sinon.spy();
+    this.tooltip._textGroupHtml.width = sinon.spy();
+    this.tooltip._textGroupHtml.height = sinon.spy();
+    sinon.spy(this.tooltip._textHtml, "html");
+
+    var textHtmlElement = this.tooltip._textHtml.get(0);
+    if(!this.getComputedStyle) {
+        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
+    }
+
+    const formatObject = { valueText: "some-text" };
+    // act
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+
+    assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
+});
+
+QUnit.test("Call template if empty text", function(assert) {
+    var eventData = { tag: "event-data" };
+    this.tooltip._getCanvas = function() { return CANVAS; };
+
+    this.options.contentTemplate = sinon.spy(function(_, container) {
+        $(container).text("custom html");
+    });
+
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._textGroupHtml.css = sinon.spy();
+    this.tooltip._textGroupHtml.width = sinon.spy();
+    this.tooltip._textGroupHtml.height = sinon.spy();
+    sinon.spy(this.tooltip._textHtml, "html");
+
+    var textHtmlElement = this.tooltip._textHtml.get(0);
+    if(!this.getComputedStyle) {
+        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
+    }
+
+    const formatObject = { valueText: "" };
+    // act
+    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+
+    assert.strictEqual(result, true);
+    assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", eventData], "event is triggered");
+
+    assert.equal(this.options.contentTemplate.callCount, 1);
+    assert.equal(this.options.contentTemplate.lastCall.args[0], formatObject);
+});
+
+QUnit.test("Show. W/o params. Do not call template if skipTemplate in formatObject", function(assert) {
+    this.options.customizeTooltip = null;
+    this.options.cssClass = "tooltip_class";
+    this.options.contentTemplate = sinon.spy();
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._textGroupHtml.css = sinon.spy();
+    this.tooltip._textGroupHtml.width = sinon.spy(function() { return 85; });
+    this.tooltip._textGroupHtml.height = sinon.spy(function() { return 43; });
+    this.tooltip._textHtml.html = sinon.spy();
+    var eventData = { tag: "event-data" };
+
+    const formatObject = { valueText: "some-text", skipTemplate: true };
+    // act
+    var result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+
+    assert.strictEqual(result, true);
+    assert.deepEqual(this.eventTrigger.lastCall.args, ["tooltipShown", eventData], "event is triggered");
+
+    assert.deepEqual(this.tooltip._state, {
+        color: "#ffffff",
+        borderColor: "#252525",
+        textColor: "#939393",
+        text: "some-text",
+        formatObject
+    }, "state");
+
+    const cloud = this.renderer.path.lastCall.returnValue;
+    assert.equal(cloud._stored_settings.fill, "#ffffff");
+    assert.equal(cloud._stored_settings.stroke, "#252525");
+
+    assert.equal(this.tooltip._text.css.callCount, 1, "text styles");
+    assert.deepEqual(this.tooltip._text.css.firstCall.args, [{ fill: "#939393" }]);
+
+    assert.equal(this.tooltip._text.attr.callCount, 1, "text attrs");
+    assert.deepEqual(this.tooltip._text.attr.firstCall.args, [{ text: "some-text", "class": "tooltip_class" }]);
+
+    assert.equal(this.tooltip._textGroupHtml.css.callCount, 0, "textGroupHtml styles");
+    assert.equal(this.tooltip._textGroupHtml.width.callCount, 0, "textGroupHtml width");
+
+    assert.equal(this.tooltip._textHtml.html.callCount, 1, "textHtml html");
+    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
+
+    assert.equal(this.options.contentTemplate.callCount, 0);
 });
 
 QUnit.test("Show. W/o params. Html. T298249", function(assert) {
@@ -1116,8 +1322,9 @@ QUnit.test("Show. W/o params. Html. T298249", function(assert) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 123.13, left: 20, bottom: 33.45, top: 20, width: 83.13, height: 23.45 }; });
     }
 
+    const formatObject = { valueText: "some-text" };
     // act
-    this.tooltip.show({ valueText: "some-text" }, { x: 100, y: 200, offset: 300 }, eventData);
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     if(this.getComputedStyle) {
         assert.ok(this.tooltip._wrapper.appendTo.lastCall.calledBefore(this.getComputedStyle.withArgs(textHtmlElement).lastCall));
@@ -1156,15 +1363,17 @@ QUnit.test("Show. W/ params", function(assert) {
 
     this.tooltip.move = sinon.spy(function() { return this; });
 
+    const formatObject = { valueText: "some-text" };
     // act
-    var result = this.tooltip.show({ valueText: "some-text" }, { x: 10, y: 20, offset: 30 });
+    var result = this.tooltip.show(formatObject, { x: 10, y: 20, offset: 30 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.tooltip._state, {
         color: "#ffffff",
         borderColor: "#252525",
         textColor: "#939393",
-        text: "some-text"
+        text: "some-text",
+        formatObject
     }, "state");
 });
 

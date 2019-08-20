@@ -212,10 +212,7 @@ var dxSankey = {
         * @name  dxSankeyOptions.tooltip.customizeNodeTooltip
         * @default undefined
         * @type function(info)
-        * @type_function_param1 info:object
-        * @type_function_param1_field1 title:string
-        * @type_function_param1_field2 weightIn:Number
-        * @type_function_param1_field3 weightOut:Number
+        * @type_function_param1 info:dxSankeyNodeInfoObject
         * @type_function_return object
         */
         customizeNodeTooltip: undefined,
@@ -223,10 +220,7 @@ var dxSankey = {
         * @name  dxSankeyOptions.tooltip.customizeLinkTooltip
         * @default undefined
         * @type function(info)
-        * @type_function_param1 info:object
-        * @type_function_param1_field1 source:string
-        * @type_function_param1_field2 target:string
-        * @type_function_param1_field3 weight:Number
+        * @type_function_param1 info:dxSankeyConnectionInfoObject
         * @type_function_return object
         */
         customizeLinkTooltip: undefined

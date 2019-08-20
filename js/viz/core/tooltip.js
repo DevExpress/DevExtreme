@@ -15,6 +15,7 @@ const mathCeil = Math.ceil;
 const mathMax = Math.max;
 const mathMin = Math.min;
 const window = windowUtils.getWindow();
+const DEFAULT_HTML_GROUP_WIDTH = 3000;
 
 function hideElement($element) {
     $element.css({ left: "-9999px" }).detach();
@@ -40,6 +41,7 @@ function Tooltip(params) {
 
     that._eventTrigger = params.eventTrigger;
     that._widgetRoot = params.widgetRoot;
+    that._widget = params.widget;
 
     that._wrapper = $("<div>")
         .css({ position: "absolute", overflow: "hidden", "pointerEvents": "none" }) // T265557, T447623
@@ -75,6 +77,11 @@ Tooltip.prototype = {
         return (container.length ? container : $("body")).get(0);
     },
 
+    setTemplate(contentTemplate) {
+        const that = this;
+        that._template = contentTemplate ? that._widget._getTemplate(contentTemplate) : null;
+    },
+
     setOptions: function(options) {
         options = options || {};
 
@@ -94,6 +101,34 @@ Tooltip.prototype = {
             this.plaque.clear();
         }
 
+        this.setTemplate(options.contentTemplate);
+
+        const drawTooltip = (tooltip, group) => {
+            const state = tooltip._state;
+            const template = tooltip._template;
+            const useTemplate = template && !state.formatObject.skipTemplate;
+            if(state.html || useTemplate) {
+                if(!state.isRendered) {
+                    if(useTemplate) {
+                        template.render({ model: state.formatObject, container: textHtml });
+                        state.html = textHtml.html();
+                        if(!state.html) {
+                            this.plaque.clear();
+                            return;
+                        }
+                    } else {
+                        that._text.attr({ text: "" });
+                        textHtml.html(state.html);
+                    }
+                    textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH });
+                    state.isRendered = true;
+                }
+            } else {
+                that._text.css({ fill: state.textColor }).attr({ text: state.text, class: options.cssClass }).append(group.attr({ align: options.textAlignment }));
+            }
+            tooltip.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor });
+        };
+
         this.plaque = new Plaque({
             opacity: that._options.opacity,
             color: that._options.color,
@@ -104,20 +139,7 @@ Tooltip.prototype = {
             arrowWidth: 20,
             shadow: that._options.shadow,
             cornerRadius: that._options.cornerRadius
-        }, that, that._renderer.root, (tooltip, group) => {
-            const state = tooltip._state;
-            if(state.html) {
-                if(!state.isRendered) {
-                    that._text.attr({ text: "" });
-                    textGroupHtml.css({ color: state.textColor, width: null });
-                    textHtml.html(state.html);
-                    state.isRendered = true;
-                }
-            } else {
-                that._text.css({ fill: state.textColor }).attr({ text: state.text, "class": options.cssClass }).append(group.attr({ align: options.textAlignment }));
-            }
-            this.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor });
-        }, true, (tooltip, g) => {
+        }, that, that._renderer.root, drawTooltip, true, (tooltip, g) => {
             const state = tooltip._state;
             if(state.html) {
                 let bBox;
@@ -193,12 +215,14 @@ Tooltip.prototype = {
         state.color = customize.color || options.color;
         state.borderColor = customize.borderColor || (options.border || {}).color;
         state.textColor = customize.fontColor || (options.font || {}).color;
-        return !!state.text || !!state.html;
+        return !!state.text || !!state.html || !!this._template;
     },
 
     show: function(formatObject, params, eventData, customizeTooltip) {
         var that = this,
-            state = {};
+            state = {
+                formatObject
+            };
 
         if(!that._prepare(formatObject, state, customizeTooltip)) {
             return false;
@@ -343,7 +367,8 @@ exports.plugin = {
                 cssClass: this._rootClassPrefix + "-tooltip",
                 eventTrigger: this._eventTrigger,
                 pathModified: this.option("pathModified"),
-                widgetRoot: this.element()
+                widgetRoot: this.element(),
+                widget: this
             });
         },
         // The method exists only to be overridden in sparklines.

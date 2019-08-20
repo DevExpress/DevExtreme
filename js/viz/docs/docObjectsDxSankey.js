@@ -99,3 +99,25 @@ var dxSankeyConnectionInfoObject = {
     */
     weight: undefined
 }
+
+/**
+* @name dxSankeyNodeInfoObject
+* @type object
+*/
+var dxSankeyConnectionInfoObject = {
+    /**
+    * @name dxSankeyNodeInfoObject.title
+    * @type string
+    */
+    title: undefined,
+    /**
+    * @name dxSankeyNodeInfoObject.weightIn
+    * @type number
+    */
+    weightIn: undefined,
+    /**
+    * @name dxSankeyNodeInfoObject.weightOut
+    * @type number
+    */
+    weightOut: undefined
+};

@@ -118,3 +118,16 @@ var Node = {
     */
     drillDown: undefined
 };
+
+/**
+* @name dxTreeMapTooltipInfo
+* @type object
+* @inherits BaseTooltipInfo
+*/
+var dxTreeMapTooltipInfo = {
+    /**
+    * @name dxTreeMapTooltipInfo.node
+    * @type dxTreeMapNode
+    */
+    node: undefined
+};

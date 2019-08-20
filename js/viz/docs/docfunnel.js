@@ -463,15 +463,19 @@ var dxFunnel = {
         * @name dxFunnelOptions.tooltip.customizeTooltip
         * @default undefined
         * @type function(info)
-        * @type_function_param1 info:object
-        * @type_function_param1_field1 item:dxFunnelItem
-        * @type_function_param1_field2 value:Number
-        * @type_function_param1_field3 valueText:string
-        * @type_function_param1_field4 percent:Number
-        * @type_function_param1_field5 percentText:string
+        * @type_function_param1 info:FunnelTooltipInfo
         * @type_function_return object
         */
-        customizeTooltip: undefined
+        customizeTooltip: undefined,
+        /**
+        * @name dxFunnelOptions.tooltip.contentTemplate
+        * @type template|function(info, element)
+        * @type_function_param1 info:FunnelTootltipInfo
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined
     },
     /**
     * @name dxFunnelOptions.onItemClick

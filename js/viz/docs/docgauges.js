@@ -290,12 +290,19 @@ var BaseGauge = {
         * @name BaseGaugeOptions.tooltip.customizeTooltip
         * @default undefined
         * @type function(scaleValue)
-        * @type_function_param1 scaleValue:object
-        * @type_function_param1_field1 value:Number
-        * @type_function_param1_field2 valueText:string
+        * @type_function_param1 scaleValue:BaseTooltipInfo
         * @type_function_return object
         */
-        customizeTooltip: undefined
+        customizeTooltip: undefined,
+        /**
+        * @name BaseGaugeOptions.tooltip.contentTemplate
+        * @type template|function(info, element)
+        * @type_function_param1 info:BaseTooltipInfo
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined
     },
     /**
     * @name BaseGaugeOptions.onTooltipShown
@@ -606,13 +613,19 @@ var dxBarGauge = {
         * @name dxBarGaugeOptions.tooltip.customizeTooltip
         * @default undefined
         * @type function(scaleValue)
-        * @type_function_param1 scaleValue:object
-        * @type_function_param1_field1 value:Number
-        * @type_function_param1_field2 valueText:string
-        * @type_function_param1_field3 index:number
+        * @type_function_param1 scaleValue:BarGaugeTooltipInfo
         * @type_function_return object
         */
-        customizeTooltip: undefined
+        customizeTooltip: undefined,
+        /**
+        * @name dxBarGaugeOptions.tooltip.contentTemplate
+        * @type template|function(info, element)
+        * @type_function_param1 info:BarGaugeTooltipInfo
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined
     },
     /**
     * @name dxBarGaugeOptions.geometry
@@ -884,4 +897,17 @@ var legendItem = {
     * @type BarGaugeBarInfo
     */
     item: undefined
+};
+
+/**
+* @name BarGaugeTooltipInfo
+* @type object
+* @inherits BaseTooltipInfo
+*/
+var TooltipInfo = {
+    /**
+    * @name BarGaugeTooltipInfo.index
+    * @type number
+    */
+    index: 0
 };

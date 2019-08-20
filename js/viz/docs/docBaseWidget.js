@@ -1051,3 +1051,20 @@ var legendItem = {
         class: undefined
     }
 };
+
+/**
+* @name BaseTooltipInfo
+* @type object
+*/
+var TooltipInfo = {
+    /**
+    * @name BaseTooltipInfo.value
+    * @type number
+    */
+    value: undefined, 
+    /**
+    * @name BaseTooltipInfo.valueText
+    * @type string
+    */
+    valueText: "text"
+};
