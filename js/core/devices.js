@@ -24,10 +24,8 @@ var KNOWN_UA_TABLE = {
     "androidPhone": "Android Mobile",
     "androidTablet": "Android",
     "win8": "MSAppHost",
-    "win8Phone": "Windows Phone 8.0",
     "msSurface": "Windows ARM Tablet PC",
     "desktop": "desktop",
-    "win10Phone": "Windows Phone 10.0",
     "win10": "MSAppHost/3.0"
 };
 
@@ -49,7 +47,7 @@ var DEFAULT_DEVICE = {
     /**
     * @name Device.platform
     * @type string
-    * @acceptValues 'android'|'ios'|'win'|'generic'
+    * @acceptValues 'android'|'ios'|'generic'
     */
     platform: "generic",
     /**
@@ -78,11 +76,6 @@ var DEFAULT_DEVICE = {
     */
     ios: false,
     /**
-    * @name Device.win
-    * @type boolean
-    */
-    win: false,
-    /**
     * @name Device.generic
     * @type boolean
     */
@@ -99,33 +92,6 @@ var DEFAULT_DEVICE = {
 };
 
 var uaParsers = {
-    win: function(userAgent) {
-        var isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/),
-            isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent),
-            isDesktop = !isPhone && !isTablet && /msapphost/i.test(userAgent);
-
-        if(!(isPhone || isTablet || isDesktop)) {
-            return;
-        }
-
-        var matches = userAgent.match(/windows phone (\d+).(\d+)/i) || userAgent.match(/windows nt (\d+).(\d+)/i),
-            version = [];
-
-        if(matches) {
-            version.push(parseInt(matches[1], 10), parseInt(matches[2], 10));
-        } else {
-            matches = userAgent.match(/msapphost(\/(\d+).(\d+))?/i);
-            matches && version.push(parseInt(matches[2], 10) === 3 ? 10 : 8);
-        }
-
-        return {
-            deviceType: isPhone ? "phone" : isTablet ? "tablet" : "desktop",
-            platform: "win",
-            version: version,
-            grade: "A"
-        };
-    },
-
     ios: function(userAgent) {
         if(!/ip(hone|od|ad)/i.test(userAgent)) {
             return;
@@ -146,7 +112,7 @@ var uaParsers = {
     },
 
     android: function(userAgent) {
-        if(!/android|htc_|silk/i.test(userAgent)) {
+        if(!/android|htc_|silk/i.test(userAgent) || /windows phone/i.test(userAgent)) {
             return;
         }
 
@@ -382,7 +348,6 @@ var Devices = Class.inherit({
                 tablet: result.deviceType === "tablet",
                 android: result.platform === "android",
                 ios: result.platform === "ios",
-                win: result.platform === "win",
                 generic: result.platform === "generic"
             };
 
@@ -443,11 +408,6 @@ viewPort.changeCallback.add(function(viewPort, prevViewport) {
     devices.detachCssClasses(prevViewport);
     devices.attachCssClasses(viewPort);
 });
-
-// TODO: remove with win8 theme
-if(!devices.isForced() && devices.current().platform === "win") {
-    devices.current({ version: [10] });
-}
 
 /**
  * @const devices

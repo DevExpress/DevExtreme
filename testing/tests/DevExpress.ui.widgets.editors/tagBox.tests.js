@@ -3283,11 +3283,6 @@ QUnit.module("popup position and size", moduleSetup, () => {
     });
 
     QUnit.test("popup changes its position when field height changed", assert => {
-        if(devices.real().platform === "win") { // NOTE: win8 popup top position equals tagBox top position
-            assert.expect(0);
-            return;
-        }
-
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["item1", "item2", "item3", "item4", "item5", "item6"],
             showSelectionControls: true,

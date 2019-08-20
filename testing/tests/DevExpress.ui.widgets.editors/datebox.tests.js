@@ -1199,21 +1199,6 @@ QUnit.module("dateView integration", {
         }
     });
 
-    QUnit.test("pickerType should not be 'native' on Win8", (assert) => {
-        support.inputType = () => {
-            return true;
-        };
-
-        const originalDevice = devices.real();
-        devices.real({ platform: "win", win: true });
-
-        const dateBox = $("#dateBox").dxDateBox().dxDateBox("instance");
-        assert.ok(dateBox.option("pickerType") !== "native");
-
-        support.inputType = this.originalInputType;
-        devices.real(originalDevice);
-    });
-
     QUnit.test("B230631 - Can not clear datebox field", (assert) => {
         this.instance.option({
             value: new Date(),

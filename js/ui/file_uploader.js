@@ -381,9 +381,6 @@ var FileUploader = Editor.inherit({
                 device: [
                     {
                         platform: "android"
-                    },
-                    {
-                        platform: "win"
                     }
                 ],
                 options: {

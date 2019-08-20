@@ -196,27 +196,11 @@ QUnit.test("done button is located after cancel button in non-win8 device", func
     instance.option("toolbarItems", [{ shortcut: "cancel" }, { shortcut: "done" }]);
     $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
     assert.equal($popupBottom.text(), "CancelOK", "buttons order is correct");
-});
-
-QUnit.test("done button is located before cancel button in win10", function(assert) {
-    devices.current("win10");
-
-    var $popup = $("#popup").dxPopup({
-            toolbarItems: [{ shortcut: "cancel" }, { shortcut: "done" }],
-            animation: null,
-            visible: true
-        }),
-        instance = $popup.dxPopup("instance"),
-        $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
-
-    assert.equal($popupBottom.text(), "OKCancel", "buttons order is correct");
-
-    instance.option("toolbarItems", [{ shortcut: "done" }, { shortcut: "cancel" }]);
-    $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
-    assert.equal($popupBottom.text(), "OKCancel", "buttons order is correct");
+    devices.current(devices.real());
 });
 
 QUnit.test("buttons should be rendered correctly after toolbar was repainted", function(assert) {
+    devices.current("desktop");
     var $popup = $("#popup").dxPopup({
             visible: true,
             toolbarItems: [
@@ -230,6 +214,7 @@ QUnit.test("buttons should be rendered correctly after toolbar was repainted", f
 
     $popupBottom.dxToolbarBase("repaint");
     assert.equal($popupBottom.text(), "TodayOKCancel", "buttons order is correct");
+    devices.current(devices.real());
 });
 
 QUnit.test("Check that title do not render twice or more, Q553652", function(assert) {
@@ -299,6 +284,7 @@ QUnit.test("buttons rendering when aliases are specified", function(assert) {
 });
 
 QUnit.test("shortcut buttons are placed in specified location", function(assert) {
+    devices.current("desktop");
     $("#popup").dxPopup({
         visible: true,
         toolbarItems: [{ shortcut: "done", location: "after" }]
@@ -307,6 +293,7 @@ QUnit.test("shortcut buttons are placed in specified location", function(assert)
     var $button = $("." + POPUP_BOTTOM_CLASS).find(".dx-toolbar-after").find(".dx-popup-done");
 
     assert.equal($button.length, 1, "done button is at correct location");
+    devices.current(devices.real());
 });
 
 QUnit.test("items should be rendered with toolbarItems.toolbar='top' as default", function(assert) {
@@ -382,6 +369,7 @@ QUnit.test("toolbar must render 'default' type buttons if 'useDefaultToolbarButt
 });
 
 QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarButtons' is set", function(assert) {
+    devices.current("desktop");
     var popupInstance = $("#popup").dxPopup({
         visible: true,
         useFlatToolbarButtons: true,
@@ -400,6 +388,7 @@ QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarBut
 
     assert.ok(toolbarButtons.eq(0).hasClass("dx-button-mode-text"), "shortcut has dx-button-mode-text class");
     assert.ok(toolbarButtons.eq(1).hasClass("dx-button-mode-text"), "button has dx-button-mode-text class");
+    devices.current(devices.real());
 });
 
 
@@ -413,6 +402,7 @@ QUnit.module("dimensions", {
 });
 
 QUnit.test("content must not overlap bottom buttons", function(assert) {
+    devices.current("desktop");
     var $popup = $("#popup").dxPopup({
             toolbarItems: [{ shortcut: "cancel" }, { shortcut: "done" }, { shortcut: "clear" }],
             showCloseButton: true,
@@ -423,6 +413,7 @@ QUnit.test("content must not overlap bottom buttons", function(assert) {
         $popupBottom = $popupContent.parent().find(".dx-popup-bottom");
 
     assert.equal($popupContent.outerHeight() + $popupBottom.outerHeight(true), $popupContent.outerHeight(true), "content doesn't overlap bottom buttons");
+    devices.current(devices.real());
 });
 
 QUnit.test("dimensions should be shrunk correctly with height = auto specified", function(assert) {
@@ -683,6 +674,7 @@ QUnit.test("popup height should support top and bottom toolbars if height = auto
 });
 
 QUnit.test("popup height should support any maxHeight and minHeight option values if height = auto", assert => {
+    devices.current("desktop");
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -711,6 +703,7 @@ QUnit.test("popup height should support any maxHeight and minHeight option value
     $content.empty();
     popup.option("minHeight", "auto");
     assert.strictEqual($popup.height(), $popup.find(toSelector(POPUP_TITLE_CLASS)).innerHeight() + popupContentPadding, "popup minHeight: auto");
+    devices.current(devices.real());
 });
 
 QUnit.test("popup overlay should have correct height strategy classes for all browsers", assert => {

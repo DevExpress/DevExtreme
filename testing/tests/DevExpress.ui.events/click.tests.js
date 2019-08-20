@@ -157,7 +157,7 @@ QUnit.test("click subscription should not add onclick attr for native strategy (
 QUnit.module("hacks", moduleConfig);
 
 QUnit.test("dxpointer events on iOS7 with alert", function(assert) {
-    if(clickEvent.useNativeClick || !support.touchEvents || !(devices.real().tablet || devices.real().phone) || devices.real().platform === "win") {
+    if(clickEvent.useNativeClick || !support.touchEvents || !(devices.real().tablet || devices.real().phone)) {
         assert.expect(0);
         return;
     }

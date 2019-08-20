@@ -16,7 +16,7 @@ import Scrollbar from "./ui.scrollbar";
 import { when, Deferred } from "../../core/utils/deferred";
 
 const realDevice = devices.real;
-const isSluggishPlatform = (realDevice.platform === "win" || realDevice.platform === "android");
+const isSluggishPlatform = realDevice.platform === "android";
 
 const SCROLLABLE_SIMULATED = "dxSimulatedScrollable";
 const SCROLLABLE_STRATEGY = "dxScrollableStrategy";

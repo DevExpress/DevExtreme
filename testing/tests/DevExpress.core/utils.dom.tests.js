@@ -118,36 +118,6 @@ QUnit.test("allowSelection should be detected by realDevice", function(assert) {
     }
 });
 
-QUnit.test("dont prevent touch move on win10 devices", function(assert) {
-    if(!support.touch) {
-        assert.expect(0);
-        return;
-    }
-
-    var $viewPort = $("<div>").addClass("dx-viewport");
-    var originalRealDevice = devices.real();
-
-    $viewPort.appendTo("#qunit-fixture");
-
-    try {
-        var isPointerMoveDefaultPrevented = null;
-        $(document).off(".dxInitMobileViewport");
-
-        devices.real({ platform: "win", version: [10], deviceType: "mobile" });
-
-        initMobileViewport();
-
-        $(document).on("dxpointermove", function(e) {
-            isPointerMoveDefaultPrevented = e.isDefaultPrevented();
-        });
-        var pointerEvent = $.Event("dxpointermove", { pointers: [1, 2], pointerType: "touch" });
-        $("body").trigger(pointerEvent);
-        assert.strictEqual(isPointerMoveDefaultPrevented, false, "default behaviour is not prevented");
-    } finally {
-        devices.real(originalRealDevice);
-    }
-});
-
 
 QUnit.module("Contains");
 

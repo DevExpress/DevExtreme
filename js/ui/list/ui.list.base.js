@@ -474,15 +474,6 @@ var ListBase = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return devices.current().platform === "win" && devices.isSimulator();
-                },
-
-                options: {
-                    bounceEnabled: false
-                }
-            },
-            {
-                device: function() {
                     return themes.isMaterial(themeName);
                 },
                 options: {
