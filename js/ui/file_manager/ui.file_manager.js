@@ -17,6 +17,7 @@ import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerDetailsItemList from "./ui.file_manager.item_list.details";
 import FileManagerThumbnailsItemList from "./ui.file_manager.item_list.thumbnails";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
+import FileManagerNotificationControl from "./ui.file_manager.notification";
 import FileManagerEditingControl from "./ui.file_manager.editing";
 import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
 import FileManagerAdaptivityControl from "./ui.file_manager.adaptivity";
@@ -25,6 +26,7 @@ import { getName, getParentPath } from "./ui.file_manager.utils";
 import { FileManagerItem } from "./file_provider/file_provider";
 
 const FILE_MANAGER_CLASS = "dx-filemanager";
+const FILE_MANAGER_WRAPPER_CLASS = FILE_MANAGER_CLASS + "-wrapper";
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
 const FILE_MANAGER_DIRS_PANEL_CLASS = FILE_MANAGER_CLASS + "-dirs-panel";
 const FILE_MANAGER_INACTIVE_AREA_CLASS = FILE_MANAGER_CLASS + "-inactive-area";
@@ -53,23 +55,45 @@ class FileManager extends Widget {
 
         this.$element().addClass(FILE_MANAGER_CLASS);
 
-        const $toolbar = $("<div>").appendTo(this.$element());
+        this._createNotificationControl();
+
+        this._initCommandManager();
+        this._setItemsViewAreaActive(false);
+    }
+
+    _createNotificationControl() {
+        const $notificationControl = $("<div>")
+            .addClass("dx-filemanager-notification-container")
+            .appendTo(this.$element());
+
+        this._notificationControl = this._createComponent($notificationControl, FileManagerNotificationControl, {
+            progressPanelContainer: this.$element(),
+            contentTemplate: container => this._createWrapper(container),
+            onActionProgress: e => this._onActionProgress(e)
+        });
+        this._editing.option("notificationControl", this._notificationControl);
+    }
+
+    _createWrapper(container) {
+        this._$wrapper = $("<div>")
+            .addClass(FILE_MANAGER_WRAPPER_CLASS)
+            .appendTo(container);
+
+        this._createEditing();
+
+        const $toolbar = $("<div>").appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
             commandManager: this._commandManager,
             itemViewMode: this.option("itemView").mode
         });
 
         this._createAdaptivityControl();
-        this._createEditing();
-
-        this._initCommandManager();
-        this._setItemsViewAreaActive(false);
     }
 
     _createAdaptivityControl() {
         const $container = $("<div>")
             .addClass(FILE_MANAGER_CONTAINER_CLASS)
-            .appendTo(this.$element());
+            .appendTo(this._$wrapper);
 
         this._adaptivityControl = this._createComponent($container, FileManagerAdaptivityControl, {
             drawerTemplate: container => this._createFilesTreeView(container),
@@ -88,11 +112,8 @@ class FileManager extends Widget {
             model: {
                 getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
             },
-            onSuccess: ({ message, updatedOnlyFiles }) => {
-                this._showSuccess(message);
-                this._redrawComponent(updatedOnlyFiles);
-            },
-            onError: ({ message }) => this._showError(message),
+            getItemThumbnail: this._getItemThumbnailInfo.bind(this),
+            onSuccess: ({ updatedOnlyFiles }) => this._redrawComponent(updatedOnlyFiles),
             onCreating: () => this._setItemsViewAreaActive(false)
         });
     }
@@ -155,7 +176,7 @@ class FileManager extends Widget {
     }
 
     _createContextMenu() {
-        const $contextMenu = $("<div>").appendTo(this.$element());
+        const $contextMenu = $("<div>").appendTo(this._$wrapper);
         return this._createComponent($contextMenu, FileManagerContextMenu, {
             commandManager: this._commandManager
         });
@@ -163,8 +184,7 @@ class FileManager extends Widget {
 
     _initCommandManager() {
         const actions = extend(this._editing.getCommandActions(), {
-            refresh: () => this._controller.refresh()
-                .then(() => this._redrawComponent()),
+            refresh: () => this._refreshAndShowProgress(),
             thumbnails: () => this._switchView("thumbnails"),
             details: () => this._switchView("details"),
             clear: () => this._clearSelection(),
@@ -185,6 +205,18 @@ class FileManager extends Widget {
     _onAdaptiveStateChanged({ enabled }) {
         this._commandManager.setCommandEnabled("showDirsPanel", enabled);
         this._updateToolbar();
+    }
+
+    _onActionProgress({ message, status }) {
+        this._toolbar.updateRefreshItem(message, status);
+        this._updateToolbar();
+    }
+
+    _refreshAndShowProgress() {
+        this._notificationControl.tryShowProgressPanel();
+
+        this._controller.refresh()
+            .then(() => this._redrawComponent());
     }
 
     _updateToolbar() {
@@ -237,11 +269,7 @@ class FileManager extends Widget {
         return this._itemsViewAreaActive ? this.getSelectedItems() : [ this._getCurrentDirectory() ];
     }
 
-    _showSuccess(message) {
-        this._showNotification(message, true);
-    }
-
-    _showError(message) {
+    _showError(message) { // TODO use notification control instead of it
         this._showNotification(message, false);
     }
 

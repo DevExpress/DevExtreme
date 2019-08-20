@@ -1,4 +1,4 @@
-import { when } from "../../core/utils/deferred";
+import { when, Deferred } from "../../core/utils/deferred";
 import { noop } from "../../core/utils/common";
 import typeUtils from "../../core/utils/type";
 
@@ -21,8 +21,9 @@ const whenSome = function(arg, onSuccess, onError) {
     const deferreds = arg.map((item, index) => {
         return when(item)
             .then(
-                () => {
-                    typeUtils.isFunction(onSuccess) && onSuccess();
+                result => {
+                    typeUtils.isFunction(onSuccess) && onSuccess({ item, index, result });
+                    return result;
                 },
                 error => {
                     if(!error) {
@@ -30,6 +31,7 @@ const whenSome = function(arg, onSuccess, onError) {
                     }
                     error.index = index;
                     typeUtils.isFunction(onError) && onError(error);
+                    return new Deferred().resolve().promise();
                 });
     });
 

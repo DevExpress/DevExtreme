@@ -16,6 +16,8 @@ export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
 
+        this.getTimePanel = () => $(".dx-scheduler-time-panel"),
+
         this.tooltip = {
             getOverlayContentElement: () => {
                 return this.isAdaptivity() ? this.tooltip.getContentElement().find(".dx-overlay-content") : $(".dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content");
@@ -159,6 +161,10 @@ export class SchedulerTestWrapper {
             clickOnNextButton: () => {
                 this.navigator.getNavigator().find(".dx-scheduler-navigator-next").trigger("dxclick");
             }
+        },
+
+        this.header = {
+            get: () => $(".dx-scheduler-header-panel")
         },
 
         this.grouping = {

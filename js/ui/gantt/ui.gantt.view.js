@@ -108,4 +108,7 @@ export class GanttView extends Widget {
     onGanttScroll(scrollTop) {
         this._onScroll({ scrollTop: scrollTop });
     }
+    getModelChangesListener() {
+        return null;
+    }
 }

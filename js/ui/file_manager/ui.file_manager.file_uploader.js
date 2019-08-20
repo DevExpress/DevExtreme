@@ -1,33 +1,24 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import eventsEngine from "../../events/core/events_engine";
-import { Deferred, when } from "../../core/utils/deferred";
+import { Deferred } from "../../core/utils/deferred";
 
 import Widget from "../widget/ui.widget";
-import Button from "../button";
-import ProgressBar from "../progress_bar";
-import Popup from "../popup";
+import Guid from "../../core/guid";
+
+import whenSome from "./ui.file_manager.common";
 
 const FILE_MANAGER_FILE_UPLOADER_CLASS = "dx-filemanager-fileuploader";
 const FILE_MANAGER_FILE_UPLOADER_FILE_INPUT_CLASS = FILE_MANAGER_FILE_UPLOADER_CLASS + "-fileinput";
-
-const FILE_MANAGER_PROGRESS_PANEL = "dx-filemanager-progresspanel";
-
-const FILE_MANAGER_PROGRESS_BOX = "dx-filemanager-progressbox";
-const FILE_MANAGER_PROGRESS_BOX_TITLE = FILE_MANAGER_PROGRESS_BOX + "-title";
-const FILE_MANAGER_PROGRESS_BOX_PROGRESS_BAR = FILE_MANAGER_PROGRESS_BOX + "-progressbar";
-const FILE_MANAGER_PROGRESS_BOX_CANCEL_BUTTON = FILE_MANAGER_PROGRESS_BOX + "-cancel-button";
 
 class FileManagerFileUploader extends Widget {
 
     _initMarkup() {
         this._initActions();
 
-        this._progressPanel = this._createComponent($("<div>"), FileManagerUploadProgressPanel, {});
+        this._sessionMap = {};
 
-        this.$element()
-            .addClass(FILE_MANAGER_FILE_UPLOADER_CLASS)
-            .append(this._progressPanel.$element());
+        this.$element().addClass(FILE_MANAGER_FILE_UPLOADER_CLASS);
 
         this._renderFileInput();
 
@@ -62,6 +53,7 @@ class FileManagerFileUploader extends Widget {
         eventsEngine.off(this._$fileInput, "click");
 
         const $fileInput = this._$fileInput;
+
         this._uploadFiles(files).always(() => {
             setTimeout(() => {
                 $fileInput.remove();
@@ -76,32 +68,52 @@ class FileManagerFileUploader extends Widget {
             return;
         }
 
-        const progressBoxTitle = `Uploading ${files.length} files`;
-        const progressBox = this._progressPanel.addProgressBox(progressBoxTitle, null);
-
+        const sessionId = new Guid().toString();
         const controllerGetter = this.option("getController");
         const session = new FileManagerUploadSession({
+            id: sessionId,
             controller: controllerGetter(),
-            onProgress: value => progressBox.updateProgress(value * 100),
+            onProgress: e => {
+                e.sessionId = sessionId;
+                this._raiseUploadProgress(e);
+            },
             onError: reason => this._raiseOnErrorOccurred(reason)
         });
 
-        progressBox.option("onCancel", () => session.cancelUpload());
+        this._sessionMap[sessionId] = session;
 
         const deferreds = session.uploadFiles(files);
+        const sessionInfo = { sessionId, deferreds, files };
 
-        return when.apply(null, deferreds).then(function() {
-            this._progressPanel.removeProgressBox(progressBox);
+        this._raiseUploadSessionStarted(sessionInfo);
 
-            const results = [].slice.call(arguments);
-            if(results.some(res => res.success)) {
-                this._onFilesUploaded();
-            }
-        }.bind(this));
+        return whenSome(deferreds).always(() => {
+            setTimeout(() => {
+                delete this._sessionMap[sessionId];
+            });
+        });
+    }
+
+    _getSession(id) {
+        return this._sessionMap[id];
     }
 
     tryUpload() {
         this._$fileInput.click();
+    }
+
+    cancelUpload(sessionId) {
+        const session = this._getSession(sessionId);
+        if(session) {
+            session.cancelUpload();
+        }
+    }
+
+    cancelFileUpload(sessionId, fileIndex) {
+        const session = this._getSession(sessionId);
+        if(session) {
+            session.cancelFileUpload(fileIndex);
+        }
     }
 
     _onFilesUploaded() {
@@ -112,8 +124,18 @@ class FileManagerFileUploader extends Widget {
         this._actions.onErrorOccurred({ info: args });
     }
 
+    _raiseUploadSessionStarted(sessionInfo) {
+        this._actions.onUploadSessionStarted({ sessionInfo });
+    }
+
+    _raiseUploadProgress(args) {
+        this._actions.onUploadProgress(args);
+    }
+
     _initActions() {
         this._actions = {
+            onUploadSessionStarted: this._createActionByOption("onUploadSessionStarted"),
+            onUploadProgress: this._createActionByOption("onUploadProgress"),
             onFilesUploaded: this._createActionByOption("onFilesUploaded"),
             onErrorOccurred: this._createActionByOption("onErrorOccurred")
         };
@@ -122,6 +144,8 @@ class FileManagerFileUploader extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             getController: null,
+            onUploadSessionStarted: null,
+            onUploadProgress: null,
             onFilesUploaded: null,
             onErrorOccurred: null
         });
@@ -136,6 +160,8 @@ class FileManagerFileUploader extends Widget {
                 break;
             case "onFilesUploaded":
             case "onErrorOccurred":
+            case "onUploadSessionStarted":
+            case "onUploadProgress":
                 this._actions[name] = this._createActionByOption(name);
                 break;
             default:
@@ -151,6 +177,7 @@ class FileManagerUploadSession {
         this._onProgressHandler = options.onProgress;
         this._onErrorHandler = options.onError;
         this._canceled = false;
+        this._cancellationState = {};
     }
 
     uploadFiles(files) {
@@ -165,7 +192,7 @@ class FileManagerUploadSession {
 
         const result = [];
         for(let i = 0; i < files.length; i++) {
-            const deferred = this._uploadFile(files[i], progressInfo);
+            const deferred = this._uploadFile(files[i], i, progressInfo);
             result.push(deferred);
         }
 
@@ -176,8 +203,12 @@ class FileManagerUploadSession {
         this._canceled = true;
     }
 
-    _uploadFile(file, progressInfo) {
-        const state = this._createUploadingState(file);
+    cancelFileUpload(fileIndex) {
+        this._cancellationState[fileIndex] = true;
+    }
+
+    _uploadFile(file, fileIndex, progressInfo) {
+        const state = this._createUploadingState(file, fileIndex);
 
         return this._controller.initiateUpload(state)
             .then(() => this._uploadChunks(state, progressInfo))
@@ -186,14 +217,13 @@ class FileManagerUploadSession {
                     if(reason && reason.canceled) {
                         return this._abortUpload(state);
                     } else {
-                        return this._handleError(reason, file);
+                        return new Deferred().reject(reason).promise();
                     }
-                })
-            .catch(reason => this._handleError(reason, file));
+                });
     }
 
     _uploadChunks(state, progressInfo) {
-        if(this._canceled) {
+        if(this._canceled || this._cancellationState[state.fileIndex]) {
             const reason = this._createResultInfo(state.file.name, false, true);
             return new Deferred().reject(reason).promise();
         }
@@ -208,7 +238,7 @@ class FileManagerUploadSession {
                 state.uploadedBytesCount += chunk.size;
                 state.uploadedChunksCount++;
                 progressInfo.uploadedBytesCount += chunk.size;
-                this._raiseOnProgress(progressInfo);
+                this._raiseOnProgress(progressInfo, state);
             })
             .then(() => this._uploadChunks(state, progressInfo));
     }
@@ -246,16 +276,23 @@ class FileManagerUploadSession {
         return result;
     }
 
-    _raiseOnProgress(info) {
-        const value = info.totalBytesCount !== 0 ? info.uploadedBytesCount / info.totalBytesCount : 1;
-        this._onProgressHandler(value);
+    _raiseOnProgress(progressInfo, state) {
+        const commonValue = progressInfo.totalBytesCount !== 0 ? progressInfo.uploadedBytesCount / progressInfo.totalBytesCount : 1;
+        const fileValue = state.file.size !== 0 ? state.uploadedBytesCount / state.file.size : 1;
+        const args = {
+            fileIndex: state.fileIndex,
+            commonValue,
+            fileValue
+        };
+        this._onProgressHandler(args);
     }
 
-    _createUploadingState(file) {
+    _createUploadingState(file, fileIndex) {
         const chunkCount = Math.ceil(file.size / this._controller.chunkSize);
 
         return {
             file,
+            fileIndex,
             uploadedBytesCount: 0,
             uploadedChunksCount: 0,
             totalChunkCount: chunkCount,
@@ -270,136 +307,6 @@ class FileManagerUploadSession {
             canceled: canceled || false,
             error: error || null
         };
-    }
-
-}
-
-class FileManagerUploadProgressPanel extends Widget {
-
-    _init() {
-        this._progressBoxCount = 0;
-        super._init();
-    }
-
-    _initMarkup() {
-        this._popup = this._createComponent(this.$element(), Popup, {
-            width: 200,
-            height: 145,
-            position: "right bottom",
-            showTitle: false,
-            visible: false,
-            shading: false,
-            deferRendering: false,
-            closeOnOutsideClick: false,
-            contentTemplate: this._getPopupContentTemplate.bind(this)
-        });
-
-        super._initMarkup();
-    }
-
-    addProgressBox(title, onCancel) {
-        const progressBox = this._createComponent($("<div>"), FileManagerUploadProgressBox, {
-            title,
-            onCancel
-        });
-        this._$container.append(progressBox.$element());
-
-        if(this._progressBoxCount === 0) {
-            this._popup.show();
-        }
-
-        this._progressBoxCount++;
-
-        return progressBox;
-    }
-
-    removeProgressBox(progressBox) {
-        if(this._progressBoxCount === 1) {
-            this._popup.hide();
-        }
-
-        this._progressBoxCount--;
-
-        progressBox.dispose();
-        progressBox.$element().remove();
-    }
-
-    _getPopupContentTemplate() {
-        this._$container = $("<div>").addClass(FILE_MANAGER_PROGRESS_PANEL);
-        return this._$container;
-    }
-
-}
-
-class FileManagerUploadProgressBox extends Widget {
-
-    _initMarkup() {
-        this._createOnCancelAction();
-
-        const titleText = this.option("title");
-        const $title = $("<span>").text(titleText).addClass(FILE_MANAGER_PROGRESS_BOX_TITLE);
-
-        this._cancelButton = this._createComponent($("<div>"), Button, {
-            text: "Cancel",
-            onClick: this._onCancelButtonClick.bind(this)
-        });
-        this._cancelButton.$element().addClass(FILE_MANAGER_PROGRESS_BOX_CANCEL_BUTTON);
-
-        this._progressBar = this._createComponent($("<div>"), ProgressBar, {
-            min: 0,
-            max: 100,
-            width: "100%",
-            showStatus: false
-        });
-        this._progressBar.$element().addClass(FILE_MANAGER_PROGRESS_BOX_PROGRESS_BAR);
-
-        this.$element().addClass(FILE_MANAGER_PROGRESS_BOX);
-        this.$element().append(
-            $title,
-            this._progressBar.$element(),
-            this._cancelButton.$element()
-        );
-
-        super._initMarkup();
-    }
-
-    updateProgress(value) {
-        this._progressBar.option("value", value);
-    }
-
-    _onCancelButtonClick() {
-        this._cancelButton.option({
-            disabled: true,
-            text: "Canceling..."
-        });
-
-        this._onCancelAction();
-    }
-
-    _createOnCancelAction() {
-        this._onCancelAction = this._createActionByOption("onCancel");
-    }
-
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            title: "",
-            onCancel: null
-        });
-    }
-
-    _optionChanged(args) {
-        const name = args.name;
-
-        switch(name) {
-            case "title":
-                this.repaint();
-                break;
-            case "onCancel":
-                this._createOnCancelAction();
-                break;
-            default:
-                super._optionChanged(args);
-        }
     }
 
 }
