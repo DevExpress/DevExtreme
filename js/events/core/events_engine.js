@@ -12,6 +12,7 @@ var isString = typeUtils.isString;
 var errors = require("../../core/errors");
 var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
+var callOnce = require("../../core/utils/call_once");
 
 var EMPTY_EVENT_NAME = "dxEmptyEventType";
 var NATIVE_EVENTS_TO_SUBSCRIBE = {
@@ -78,6 +79,25 @@ var getHandler = function(method) {
         applyForEach(arguments, method);
     };
 };
+
+var detectPassiveEventHandlersSupport = function() {
+    var isSupported = false;
+
+    try {
+        var options = Object.defineProperty({ }, 'passive', {
+            get: function() {
+                isSupported = true;
+                return true;
+            }
+        });
+
+        window.addEventListener("test", null, options);
+    } catch(e) { }
+
+    return isSupported;
+};
+
+var passiveEventHandlersSupported = callOnce(detectPassiveEventHandlersSupport);
 
 var getHandlersController = function(element, eventName) {
     var elementData = elementDataMap.get(element);
@@ -180,7 +200,7 @@ var getHandlersController = function(element, eventName) {
             if(shouldAddNativeListener) {
                 eventData.nativeHandler = getNativeHandler(eventName);
 
-                if(forcePassiveFalseEventNames.indexOf(eventName) > -1) {
+                if(passiveEventHandlersSupported() && forcePassiveFalseEventNames.indexOf(eventName) > -1) {
                     nativeListenerOptions = {
                         passive: false
                     };
@@ -601,9 +621,11 @@ eventsEngine.subscribeGlobal = function() {
 };
 
 eventsEngine.forcePassiveFalseEventNames = forcePassiveFalseEventNames;
+eventsEngine.passiveEventHandlersSupported = passiveEventHandlersSupported;
 
 ///#DEBUG
 eventsEngine.elementDataMap = elementDataMap;
+eventsEngine.detectPassiveEventHandlersSupport = detectPassiveEventHandlersSupport;
 ///#ENDDEBUG
 
 module.exports = eventsEngine;
