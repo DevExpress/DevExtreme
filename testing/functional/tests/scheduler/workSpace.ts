@@ -21,8 +21,9 @@ const createScheduler = async (options = {}) => {
 
 test("Vertical selection between two workspace cells should focus cells between them (T804954)", async t => {
     await t
+        .resizeWindow(1200, 800)
         .dragToElement(scheduler.getDateTableCell(0, 0),
-            scheduler.getDateTableCell(3, 0))
+            scheduler.getDateTableCell(3, 0)) 
         .expect(scheduler.getDateTableCells().filter('.dx-state-focused').count)
         .eql(4);
 
