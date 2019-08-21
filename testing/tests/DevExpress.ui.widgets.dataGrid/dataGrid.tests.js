@@ -7766,7 +7766,7 @@ QUnit.test("Editor should be rendered for hidden columns while editing in row mo
         .eq(0)
         .trigger("dxclick");
 
-    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger(pointerEvents.up).click();
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger("dxpointerdown").click();
     this.clock.tick();
 
     var $firstRowEditors = $(dataGrid.getRowElement(1)).find(".dx-texteditor");
@@ -7776,7 +7776,7 @@ QUnit.test("Editor should be rendered for hidden columns while editing in row mo
     assert.notOk($firstRowEditors.eq(0).parent().hasClass("dx-adaptive-item-text"), "editor's parent does not have class");
 
     // act
-    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-cancel").trigger(pointerEvents.up).click();
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-cancel").trigger("dxpointerdown").click();
     this.clock.tick();
 
     // assert
