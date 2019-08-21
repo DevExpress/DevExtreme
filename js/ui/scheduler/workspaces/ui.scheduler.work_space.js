@@ -1947,7 +1947,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCells: function(allDay, direction) {
-        let cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
+        const cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
         if(direction === "vertical") {
             let result = [];
             for(let i = 1; ; i++) {
