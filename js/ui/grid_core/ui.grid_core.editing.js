@@ -111,6 +111,13 @@ var EDIT_LINK_CLASS = {
     },
     BUTTON_NAMES = ["edit", "save", "cancel", "delete", "undelete"];
 
+var createFailureHandler = function(deferred) {
+    return function(arg) {
+        var error = arg instanceof Error ? arg : new Error(arg && String(arg) || "Unknown error");
+        deferred.reject(error);
+    };
+};
+
 var getEditMode = function(that) {
     var editMode = that.option("editing.mode");
 
@@ -272,6 +279,11 @@ var EditingController = modules.ViewController.inherit((function() {
             return this._editData
                 .filter(editData => editData.oldData && editData.type === DATA_EDIT_DATA_REMOVE_TYPE)
                 .map(editData => editData.oldData);
+        },
+
+        _fireDataErrorOccurred: function(arg) {
+            let $popupContent = this.getPopupContent();
+            this._dataController.dataErrorOccurred.fire(arg, $popupContent);
         },
 
         _needToCloseEditableCell: function($targetElement) {
@@ -1268,13 +1280,6 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 that.executeAction(actionName, params);
 
-                function createFailureHandler(deferred) {
-                    return function(arg) {
-                        var error = arg instanceof Error ? arg : new Error(arg && String(arg) || "Unknown error");
-                        deferred.reject(error);
-                    };
-                }
-
                 when(fromPromise(params.cancel)).done(function(cancel) {
                     if(cancel) {
                         setTimeout(function() {
@@ -1353,14 +1358,12 @@ var EditingController = modules.ViewController.inherit((function() {
         },
         _processSaveEditDataResult: function(results) {
             var that = this,
-                dataController = that._dataController,
                 i,
                 arg,
                 cancel,
                 editData,
                 editIndex,
                 isError,
-                $popupContent,
                 hasSavedData = false,
                 editMode = getEditMode(that);
 
@@ -1375,8 +1378,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     if(editData) {
                         editData.error = arg;
                     }
-                    $popupContent = that.getPopupContent();
-                    dataController.dataErrorOccurred.fire(arg, $popupContent);
+                    that._fireDataErrorOccurred(arg);
                     if(editMode !== EDIT_MODE_BATCH) {
                         if(editData && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
                             that._removeEditDataItem(editIndex);
@@ -1704,15 +1706,6 @@ var EditingController = modules.ViewController.inherit((function() {
                 deferred = new Deferred(),
                 setCellValueResult;
 
-            function createFailureHandler(deferred) {
-                return function(arg) {
-                    var error = arg instanceof Error ? arg : new Error(arg && String(arg) || "Unknown error");
-                    let $popupContent = that.getPopupContent();
-                    that._dataController.dataErrorOccurred.fire(arg, $popupContent);
-                    deferred.reject(error);
-                };
-            }
-
             if(rowKey !== undefined) {
                 if(editMode === EDIT_MODE_BATCH) {
                     that._applyModified($cellElement, options);
@@ -1727,7 +1720,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         oldData: oldData,
                         type: DATA_EDIT_DATA_UPDATE_TYPE
                     });
-                }).fail(createFailureHandler(deferred));
+                }).fail(createFailureHandler(deferred)).fail((arg) => that._fireDataErrorOccurred(arg));
 
                 if(text && options.column.displayValueMap) {
                     options.column.displayValueMap[value] = text;

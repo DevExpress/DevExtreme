@@ -14595,23 +14595,23 @@ QUnit.test("The editCellTemplate should be called once for the form when adding 
     assert.strictEqual($(this.getEditPopupContent()).find(".myEditor").length, 1, "form has custom editor");
 });
 
-QUnit.module('Promises in editing and event handlers', {
+QUnit.module("Promises in editing and event handlers", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.array = [
-            { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
-            { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2 },
-            { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3 },
-            { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4 },
-            { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5 },
-            { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6 },
-            { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
+            { name: "Alex", age: 15, lastName: "John", phone: "555555", room: 1 },
+            { name: "Dan", age: 16, lastName: "Skip", phone: "553355", room: 2 },
+            { name: "Vadim", age: 17, lastName: "Dog", phone: "225555", room: 3 },
+            { name: "Dmitry", age: 18, lastName: "Cat", phone: "115555", room: 4 },
+            { name: "Sergey", age: 18, lastName: "Larry", phone: "550055", room: 5 },
+            { name: "Kate", age: 20, lastName: "Glock", phone: "501555", room: 6 },
+            { name: "Dan", age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
         ];
-        this.columns = ['name', 'age', 'lastName', 'phone', 'room'];
+        this.columns = ["name", "age", "lastName", "phone", "room"];
         this.options = {
             errorRowEnabled: true,
             editing: {
-                mode: 'cell',
+                mode: "cell",
                 allowUpdating: true
             },
             commonColumnSettings: {
@@ -14619,13 +14619,12 @@ QUnit.module('Promises in editing and event handlers', {
             },
             columns: this.columns,
             dataSource: {
-                asyncLoadEnabled: false,
                 store: this.array
             },
             useKeyboard: true
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'keyboardNavigation', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'search'], {
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "gridView", "keyboardNavigation", "editing", "editorFactory", "selection", "headerPanel", "columnFixing", "validating", "search"], {
             initViews: true
         });
 
@@ -14637,8 +14636,14 @@ QUnit.module('Promises in editing and event handlers', {
         this.click = function($element, selector) {
             var $targetElement = this.find($element, selector);
             var isLink = $targetElement.hasClass("dx-link");
-            $($targetElement).trigger(isLink ? 'click' : 'dxclick');
+            $($targetElement).trigger(isLink ? "click" : "dxclick");
             this.clock.tick();
+        };
+        this.editCell = function(rowIndex, columnIndex, text) {
+            let testElement = $("#container");
+            testElement.find("tbody > tr").eq(rowIndex).find("td").eq(columnIndex).trigger("dxclick"); // Edit
+            testElement.find("input").eq(0).val(text);
+            testElement.find("input").eq(0).trigger("change");
         };
     },
     afterEach: function() {
@@ -14647,11 +14652,11 @@ QUnit.module('Promises in editing and event handlers', {
     }
 });
 
-QUnit.test('Saving on enter key while editing cell with async setCellValue works correctly', function(assert) {
+QUnit.test("Saving on enter key while editing cell with async setCellValue works correctly", function(assert) {
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        testElement = $("#container");
 
     that.options.columns[0] = {
         dataField: "name",
@@ -14668,20 +14673,13 @@ QUnit.test('Saving on enter key while editing cell with async setCellValue works
     rowsView.render(testElement);
     that.columnsController.init();
 
-    var editCell = function(rowIndex, columnIndex, text) {
-        testElement.find('tbody > tr').eq(rowIndex).find('td').eq(columnIndex).trigger('dxclick'); // Edit
-        assert.equal(testElement.find('tbody > tr').eq(rowIndex).find('input').length, 1);
-        testElement.find('input').eq(0).val(text);
-        testElement.find('input').eq(0).trigger('change');
-    };
-
     // act
-    editCell(0, 0, "Test");
+    this.editCell(0, 0, "Test");
 
     this.clock.tick();
 
     let $input = getInputElements(testElement).first();
-    $($input).trigger($.Event('keydown', { key: "Enter" }));
+    $($input).trigger($.Event("keydown", { key: "Enter" }));
     assert.equal(testElement.find("input").length, 1, "Editor in not closed until data is changed");
     this.clock.tick(100);
 
@@ -14690,11 +14688,11 @@ QUnit.test('Saving on enter key while editing cell with async setCellValue works
     assert.equal(this.array[0].age, "Test42", "Second cell changed");
 });
 
-QUnit.test('Closing cell editor with async setCellValue works', function(assert) {
+QUnit.test("Closing cell editor with async setCellValue works", function(assert) {
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        testElement = $("#container");
 
     that.options.columns[0] = {
         dataField: "name",
@@ -14711,15 +14709,8 @@ QUnit.test('Closing cell editor with async setCellValue works', function(assert)
     rowsView.render(testElement);
     that.columnsController.init();
 
-    var editCell = function(rowIndex, columnIndex, text) {
-        testElement.find('tbody > tr').eq(rowIndex).find('td').eq(columnIndex).trigger('dxclick'); // Edit
-        assert.equal(testElement.find('tbody > tr').eq(rowIndex).find('input').length, 1);
-        testElement.find('input').eq(0).val(text);
-        testElement.find('input').eq(0).trigger('change');
-    };
-
     // act
-    editCell(0, 0, "Test");
+    this.editCell(0, 0, "Test");
     this.editingController.closeEditCell();
     assert.equal(testElement.find("input").length, 1, "Editor in not closed until data is changed");
     this.clock.tick(100);
@@ -14729,11 +14720,11 @@ QUnit.test('Closing cell editor with async setCellValue works', function(assert)
     assert.equal(this.array[0].age, "Test42", "Second cell changed");
 });
 
-QUnit.test('Changing editing cell save data when promises are used', function(assert) {
+QUnit.test("Changing editing cell save data when promises are used", function(assert) {
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        testElement = $("#container");
 
     that.options.columns[0] = {
         dataField: "name",
@@ -14750,15 +14741,9 @@ QUnit.test('Changing editing cell save data when promises are used', function(as
     rowsView.render(testElement);
     that.columnsController.init();
 
-    var editCell = function(rowIndex, columnIndex, text) {
-        testElement.find('tbody > tr').eq(rowIndex).find('td').eq(columnIndex).trigger('dxclick'); // Edit
-        testElement.find('input').eq(0).val(text);
-        testElement.find('input').eq(0).trigger('change');
-    };
-
     // act
-    editCell(0, 0, "Test");
-    testElement.find('tbody > tr').eq(1).find('td').eq(3).trigger('dxclick');
+    this.editCell(0, 0, "Test");
+    testElement.find("tbody > tr").eq(1).find("td").eq(3).trigger("dxclick");
     assert.ok($(this.getCellElement(0, 0)).hasClass("dx-editor-cell"), "Cell is still in editing mode");
     assert.equal(testElement.find("input").length, 1, "Editor in not closed until data is changed");
 
