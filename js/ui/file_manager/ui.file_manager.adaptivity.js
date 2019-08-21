@@ -36,12 +36,10 @@ class FileManagerAdaptivityControl extends Widget {
         this.option("drawerTemplate")(container);
         const leftElement = container;
         const rightElement = this.$element().find(".dx-drawer-content");
-        const minAvailablePosX = 100;
         const splitter = this._createComponent("<div>", SplitterControl, {
             container: this.$element(),
             leftElement,
             rightElement,
-            minAvailablePosX,
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
         splitter.$element().appendTo(container);
