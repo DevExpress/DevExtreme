@@ -1,7 +1,7 @@
 var Config = require("./config"),
     domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
-    optionUtils = require("./utils/option"),
+    optionHelper = require("./option_helper").optionHelper,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
@@ -196,6 +196,7 @@ var Component = Class.inherit({
     * @hidden
     */
     ctor: function(options) {
+        this._optionHelper = new optionHelper(this);
         this.NAME = publicComponentUtils.name(this.constructor);
 
         options = options || {};
@@ -228,6 +229,8 @@ var Component = Class.inherit({
             this.endUpdate();
         }
     },
+
+    _optionHelper: {},
 
     _initOptions: function(options) {
         this.option(options);
@@ -534,8 +537,8 @@ var Component = Class.inherit({
         var name = options;
 
         if(arguments.length < 2 && typeUtils.type(name) !== "object") {
-            name = optionUtils.normalizeOptionName.bind(this)(name);
-            return optionUtils.getOptionValue.bind(this)(this._options, name);
+            name = this._optionHelper.normalizeOptionName(name);
+            return this._optionHelper.getOptionValue(this._options, name);
         }
 
         if(typeof name === "string") {
@@ -548,10 +551,11 @@ var Component = Class.inherit({
         try {
             var optionName;
             for(optionName in options) {
-                optionUtils.prepareOption.bind(this)(options, optionName, options[optionName]);
+                this._optionHelper.prepareOption(options, optionName, options[optionName]);
             }
             for(optionName in options) {
-                optionUtils.setOption.bind(this)(optionName, options[optionName]);
+                // opt.setOption.bind(this)(optionName, options[optionName]);
+                this._optionHelper.setOption(optionName, options[optionName]);
             }
         } finally {
             this.endUpdate();
@@ -565,7 +569,7 @@ var Component = Class.inherit({
         const value = this._getDefaultOptions()[name];
 
         this.beginUpdate();
-        optionUtils.setOption.bind(this)(name, value, false);
+        this._optionHelper.setOption(name, value, false);
         this.endUpdate();
     },
 
