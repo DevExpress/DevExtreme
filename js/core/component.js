@@ -573,7 +573,7 @@ var Component = Class.inherit({
         this.endUpdate();
     },
 
-    _computeOptionValue: function(name, context) {
+    _getOptionValue: function(name, context) {
         var value = this.option(name);
 
         if(isFunction(value)) {
