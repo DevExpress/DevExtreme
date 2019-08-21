@@ -384,15 +384,16 @@ var CollectionWidget = Widget.inherit({
     },
 
     _getActiveItem: function(last) {
-        var $focusedElement = $(this.option("focusedElement"));
+        const $focusedElement = $(this.option("focusedElement"));
 
         if($focusedElement.length) {
             return $focusedElement;
         }
 
-        var index = this.option("focusOnSelectedItem") ? this.option("selectedIndex") : 0,
-            activeElements = this._getActiveElement(),
-            lastIndex = activeElements.length - 1;
+        let index = this.option("focusOnSelectedItem") ? this.option("selectedIndex") : 0;
+
+        const activeElements = this._getActiveElement();
+        const lastIndex = activeElements.length - 1;
 
         if(index < 0) {
             index = last ? lastIndex : 0;
