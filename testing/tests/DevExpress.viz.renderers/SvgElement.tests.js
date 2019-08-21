@@ -6228,5 +6228,18 @@ function checkDashStyle(assert, elem, result, style, value) {
 
             assert.equal(text.element.textContent, "");
         });
+
+        QUnit.test("WordWrap normal with title element", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "Text Text Text Text Text Text" }),
+                result;
+
+            text.setTitle("hint");
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxSize(110, undefined, {
+                wordWrap: "normal"
+            });
+            assert.ok(result.textChanged);
+            assert.equal(domAdapter.querySelectorAll(text.element, "title").length, 1);
+        });
     }
 })();

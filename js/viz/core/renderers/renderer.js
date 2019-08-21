@@ -835,6 +835,20 @@ function cloneAndRemoveAttrs(node) {
     return clone || node;
 }
 
+function detachAndStoreTitleElements(element) {
+    const titleElements = domAdapter.querySelectorAll(element, "title");
+
+    for(let i = 0; i < titleElements.length; i++) {
+        element.removeChild(titleElements[i]);
+    }
+
+    return () => {
+        for(let i = 0; i < titleElements.length; i++) {
+            element.appendChild(titleElements[i]);
+        }
+    };
+}
+
 function setMaxSize(maxWidth, maxHeight, options = {}) {
     let that = this,
         lines = [],
@@ -845,6 +859,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
         ellipsisMaxWidth = maxWidth;
 
     restoreText.call(that);
+    const restoreTitleElement = detachAndStoreTitleElements(this.element);
 
     ellipsis = that.renderer.text(ELLIPSIS).attr(that._styles).append(that.renderer.root);
     ellipsisWidth = ellipsis.getBBox().width;
@@ -884,7 +899,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
 
     ellipsis.remove();
     that._hasEllipsis = textChanged;
-
+    restoreTitleElement();
     return { rowCount: lines.length, textChanged, textIsEmpty };
 }
 
