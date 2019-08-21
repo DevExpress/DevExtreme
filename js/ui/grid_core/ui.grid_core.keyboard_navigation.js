@@ -25,6 +25,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     VIRTUAL_ROW_CLASS = "dx-virtual-row",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     EDITOR_CELL_CLASS = "dx-editor-cell",
+    EDIT_ROW_CLASS = "dx-edit-row",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
     COMMAND_SELECT_CLASS = "dx-command-select",
@@ -174,6 +175,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             data = event.data,
             focusedViewElement = data.view && data.view.element(),
             isEditingCell = $target.hasClass(EDITOR_CELL_CLASS),
+            isEditingRow = $target.parent().hasClass(EDIT_ROW_CLASS),
             isInteractiveElement = $(event.target).is(INTERACTIVE_ELEMENTS_SELECTOR);
 
         if(this._isEventInCurrentGrid(event) && this._isCellValid($target, !isInteractiveElement)) {
@@ -188,13 +190,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                 this._focusedView.element().attr("tabindex", 0);
                 this._focusedView.focus();
-            } else if(!this._isMasterDetailCell($target)) {
+            } else if(!isEditingCell && !this._isMasterDetailCell($target)) {
+                this._clickTargetCellHandler(event, $target);
+            } else if(isEditingCell && !isEditingRow) {
                 this._clickTargetCellHandler(event, $target);
 
-                if(isEditingCell) {
-                    this._updateFocusedCellPosition($target);
-                }
-
+                this._updateFocusedCellPosition($target);
             } else {
                 this._updateFocusedCellPosition($target);
             }

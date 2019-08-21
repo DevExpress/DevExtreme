@@ -33,7 +33,17 @@ QUnit.module('Legend', {
             },
             notifyDirty: this.notifyDirty,
             notifyReady: this.notifyReady,
-            themeManager: this.themeManager
+            themeManager: this.themeManager,
+            widget: {
+                _getTemplate: function(f) {
+                    this.template = {
+                        render: function(arg) {
+                            return f(arg.model, arg.container);
+                        }
+                    };
+                    return this.template;
+                }
+            }
         });
         this.updateLayout = this.legend.updateLayout = sinon.spy($.proxy(function() {
             this.legend.draw(50, 50);
@@ -144,9 +154,9 @@ QUnit.test('customizeText format object', function(assert) {
     this.updateData([10, 20, 30], [1, 2, 3, 4]);
 
     assert.strictEqual(spy.callCount, 3, "call count");
-    assert.deepEqual(spy.getCall(0).args, [{ start: 1, end: 2, index: 0, visible: true, "test-field": 10, states: { normal: { fill: undefined } } }], "item 1");
-    assert.deepEqual(spy.getCall(1).args, [{ start: 2, end: 3, index: 1, visible: true, "test-field": 20, states: { normal: { fill: undefined } } }], "item 2");
-    assert.deepEqual(spy.getCall(2).args, [{ start: 3, end: 4, index: 2, visible: true, "test-field": 30, states: { normal: { fill: undefined } } }], "item 3");
+    assert.deepEqual(spy.getCall(0).args, [{ start: 1, end: 2, index: 0, visible: true, "test-field": 10, markerAttributes: { fill: undefined, class: "dxl-normal", opacity: 1 }, states: { normal: { fill: undefined, class: "dxl-normal", opacity: 1 }, selection: undefined, hover: undefined }, size: 14 }], "item 1");
+    assert.deepEqual(spy.getCall(1).args, [{ start: 2, end: 3, index: 1, visible: true, "test-field": 20, markerAttributes: { fill: undefined, class: "dxl-normal", opacity: 1 }, states: { normal: { fill: undefined, class: "dxl-normal", opacity: 1 }, selection: undefined, hover: undefined }, size: 14 }], "item 2");
+    assert.deepEqual(spy.getCall(2).args, [{ start: 3, end: 4, index: 2, visible: true, "test-field": 30, markerAttributes: { fill: undefined, class: "dxl-normal", opacity: 1 }, states: { normal: { fill: undefined, class: "dxl-normal", opacity: 1 }, selection: undefined, hover: undefined }, size: 14 }], "item 3");
 });
 
 QUnit.test('default marker shapes', function(assert) {
@@ -172,7 +182,7 @@ QUnit.test('resize', function(assert) {
 
     this.legend.resize({ width: 300, height: 100 });
 
-    assert.strictEqual(this.renderer.g.callCount, 6, 'redrawn');
+    assert.strictEqual(this.renderer.g.callCount, 18, 'redrawn');
     assert.strictEqual(this.notifyDirty.callCount, 1, "notify dirty");
     assert.strictEqual(this.notifyReady.callCount, 1, "notify ready");
 });

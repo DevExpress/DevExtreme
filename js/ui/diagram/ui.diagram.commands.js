@@ -398,6 +398,10 @@ const DiagramCommands = {
                 unlock: {
                     command: DiagramCommand.Unlock,
                     text: messageLocalization.format("dxDiagram-commandUnlock")
+                },
+                changeShapeImage: {
+                    command: DiagramCommand.ChangeShapeImage,
+                    text: messageLocalization.format("dxDiagram-commandChangeShapeImage")
                 }
             });
     },
@@ -419,7 +423,8 @@ const DiagramCommands = {
             commands["sendToBack"],
             commands["separator"],
             commands["lock"],
-            commands["unlock"]
+            commands["unlock"],
+            commands["changeShapeImage"]
         ];
     },
 

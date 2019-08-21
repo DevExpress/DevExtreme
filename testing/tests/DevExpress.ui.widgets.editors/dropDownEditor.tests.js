@@ -1409,14 +1409,12 @@ QUnit.test("aria-autocomplete property on input", function(assert) {
 
 QUnit.test("aria-owns should be removed when popup is not visible", function(assert) {
     var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({ opened: true }),
-        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`),
         instance = $dropDownEditor.dxDropDownEditor("instance");
 
-    assert.notEqual($input.attr("aria-owns"), undefined, "owns exists");
-    assert.equal($input.attr("aria-owns"), $(".dx-popup-content").attr("id"), "aria-owns points to popup's content id");
+    assert.notEqual($dropDownEditor.attr("aria-owns"), undefined, "owns exists");
+    assert.equal($dropDownEditor.attr("aria-owns"), $(".dx-popup-content").attr("id"), "aria-owns points to popup's content id");
 
     instance.close();
 
-    assert.strictEqual($input.attr("aria-owns"), undefined, "owns does not exist");
+    assert.strictEqual($dropDownEditor.attr("aria-owns"), undefined, "owns does not exist");
 });
-

@@ -16,6 +16,8 @@ export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
 
+        this.getTimePanel = () => $(".dx-scheduler-time-panel"),
+
         this.tooltip = {
             getOverlayContentElement: () => {
                 return this.isAdaptivity() ? this.tooltip.getContentElement().find(".dx-overlay-content") : $(".dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content");
@@ -149,6 +151,21 @@ export class SchedulerTestWrapper {
                 return { left: element.scrollLeft(), top: element.scrollTop() };
             }
         };
+
+        this.navigator = {
+            getNavigator: () => $(".dx-scheduler-navigator"),
+            getCaption: () => $(".dx-scheduler-navigator").find(".dx-scheduler-navigator-caption").text(),
+            clickOnPrevButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-previous").trigger("dxclick");
+            },
+            clickOnNextButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-next").trigger("dxclick");
+            }
+        },
+
+        this.header = {
+            get: () => $(".dx-scheduler-header-panel")
+        },
 
         this.grouping = {
             getGroupHeaders: () => $(".dx-scheduler-group-header"),

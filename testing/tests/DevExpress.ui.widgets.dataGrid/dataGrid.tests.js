@@ -3739,6 +3739,31 @@ QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed
     assert.notOk($(".dx-command-edit").eq(1).hasClass("dx-hidden-cell"), "cell does not have class dx-hidden-cell");
 });
 
+// T804439
+QUnit.test("Cell should not be unfocused after click on it while editing with row mode", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ field1: "data1", field2: "data2" }],
+            columns: ["field1", "field2"],
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+            }
+        }).dxDataGrid("instance"),
+        navigationController = dataGrid.getController("keyboardNavigation");
+
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger(pointerEvents.up).click();
+    this.clock.tick();
+
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.getCellElement(0, 0)) }) });
+
+    $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.up);
+    this.clock.tick();
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 1)).hasClass("dx-focused"));
+});
+
 QUnit.test("onFocusedCellChanged event should contains correct row object if scrolling, rowRenderingMode are virtual", function(assert) {
     // arrange
     var data = [],
@@ -4636,6 +4661,59 @@ QUnit.test("all visible items should be rendered if pageSize is small and virtua
     assert.equal(visibleRows.length, 12, "visible row count");
     assert.equal(visibleRows[0].key, 3, "first visible row key");
     assert.equal(visibleRows[visibleRows.length - 1].key, 14, "last visible row key");
+});
+
+// T805413
+QUnit.test("DataGrid should not load same page multiple times when scroll position is changed", function(assert) {
+    // arrange, act
+    var dataGrid,
+        scrollable,
+        skips = [],
+        data = [];
+
+    for(let i = 0; i < 10; i++) {
+        data.push({ field: "text" });
+    }
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        remoteOperations: true,
+        dataSource: {
+            load: function(loadOptions) {
+                skips.push(loadOptions.skip);
+
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve({ data: data, totalCount: 100000 });
+                }, 300);
+
+                return d;
+            }
+        },
+        paging: { pageSize: 10 },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        columns: ["field"]
+    }).dxDataGrid("instance");
+
+    this.clock.tick(600);
+
+    scrollable = dataGrid.getScrollable();
+
+    // act
+    for(let position = 500; position < 1200; position += 100) {
+        scrollable.scrollTo({ y: position });
+        this.clock.tick(50);
+    }
+
+    this.clock.tick(250);
+
+    // assert
+    assert.deepEqual(skips, [0, 10, 20, 30, 40], "all skips");
 });
 
 QUnit.test("virtual columns", function(assert) {

@@ -808,19 +808,6 @@ testModule("position", moduleConfig, () => {
         assert.strictEqual($overlayWrapper.css("position"), devices.real().ios ? "absolute" : "fixed");
     });
 
-    test("wrapper should have 100% width and height when shading is disabled", (assert) => {
-        $("#overlay").dxOverlay({
-            visible: true,
-            shading: false
-        });
-
-        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
-        const wrapperStyle = getComputedStyle($overlayWrapper.get(0));
-
-        assert.strictEqual(parseInt(wrapperStyle.width), $(window).width(), "width is 100%");
-        assert.strictEqual(parseInt(wrapperStyle.height), $(window).height(), "height is 100%");
-    });
-
     test("overlay should be correctly animated with custom 'animation.show.to'", (assert) => {
         const $container = $("<div>").css({
             height: "500px",
@@ -872,21 +859,17 @@ testModule("position", moduleConfig, () => {
 
 
 testModule("shading", moduleConfig, () => {
-    [true, false].forEach((value) => {
-        test("render shading", (assert) => {
-            const overlay = $("#overlay").dxOverlay({
-                shading: value,
-                visible: true
-            }).dxOverlay("instance");
-            const $wrapper = $(overlay.$content().parent());
+    test("shading should be present", (assert) => {
+        const overlay = $("#overlay").dxOverlay({
+            shading: true,
+            visible: true
+        }).dxOverlay("instance");
+        const $wrapper = $(overlay.$content().parent());
 
-            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), value, "shader class is correct");
-            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, value ? "auto" : "none", "shading wrapper have correct pointer-events");
+        assert.ok($wrapper.hasClass(OVERLAY_SHADER_CLASS));
 
-            overlay.option("shading", !value);
-            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), !value, "shader class is correct");
-            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, !value ? "auto" : "none", "shading wrapper have correct pointer-events");
-        });
+        overlay.option("shading", false);
+        assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
     });
 
     test("shading height should change after container resize (B237292)", (assert) => {
@@ -1786,7 +1769,9 @@ testModule("close on outside click", moduleConfig, () => {
             fx.off = true;
         }
     });
+});
 
+testModule("reset focus", moduleConfig, () => {
     QUnit.testInActiveWindow("inputs inside should loose focus when overlay is hidden with animation disabled", (assert) => {
         const focusOutStub = sinon.stub();
         const $input = $("<input id='alter-box' />")
@@ -1807,8 +1792,33 @@ testModule("close on outside click", moduleConfig, () => {
 
         assert.strictEqual(focusOutStub.called, true, "input lost focus");
     });
-});
 
+    QUnit.testInActiveWindow("there is no errors when overlay try reset active element", (assert) => {
+        const $input = $("<input>");
+        const overlay = $("#overlay")
+            .dxOverlay({
+                animation: false,
+                shading: false,
+                visible: true,
+                contentTemplate: function(contentElement) {
+                    $(contentElement).append($input);
+                }
+            })
+            .dxOverlay("instance");
+        let isOK = true;
+
+        $input.focus();
+        $input[0].blur = null;
+
+        try {
+            overlay.hide();
+        } catch(e) {
+            isOK = false;
+        }
+
+        assert.ok(isOK, "overlay reset active element without error");
+    });
+});
 
 testModule("close on target scroll", moduleConfig, () => {
     test("overlay should be hidden if any of target's parents were scrolled", (assert) => {

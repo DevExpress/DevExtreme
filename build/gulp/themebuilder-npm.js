@@ -18,7 +18,8 @@ const ASSETS = [
 ];
 
 const SCRIPTS = [
-    'themebuilder/modules/*.js'
+    'themebuilder/modules/*.js',
+    '!themebuilder/modules/metadata-generator.js'
 ];
 
 gulp.task('themebuilder-npm', () => {

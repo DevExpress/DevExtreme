@@ -29,6 +29,12 @@ export class GanttView extends Widget {
         this._ganttViewCore.selectTask(id);
         this.lastSelectedId = id;
     }
+    changeTaskExpanded(rowIndex, value) {
+        const model = this._ganttViewCore.viewModel;
+        model.beginUpdate();
+        model.changeTaskExpanded(rowIndex, value);
+        model.endUpdate();
+    }
     updateView() {
         this._ganttViewCore.updateView();
     }
@@ -101,5 +107,8 @@ export class GanttView extends Widget {
     }
     onGanttScroll(scrollTop) {
         this._onScroll({ scrollTop: scrollTop });
+    }
+    getModelChangesListener() {
+        return null;
     }
 }

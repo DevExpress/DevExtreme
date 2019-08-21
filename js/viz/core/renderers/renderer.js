@@ -122,6 +122,8 @@ function getFuncIri(id, pathModified) {
     return id !== null ? "url(" + (pathModified ? window.location.href.split("#")[0] : "") + "#" + id + ")" : id;
 }
 
+module.exports.getFuncIri = getFuncIri;
+
 function extend(target, source) {
     var key;
     for(key in source) {
@@ -158,6 +160,20 @@ var preserveAspectRatioMap = {
     "rightcenter": "xMaxYMid",
     "rightbottom": "xMaxYMax"
 };
+
+function processHatchingAttrs(element, attrs) {
+    if(attrs.hatching && _normalizeEnum(attrs.hatching.direction) !== "none") {
+        attrs = extend({}, attrs);
+        attrs.fill = element._hatching = element.renderer.lockHatching(attrs.fill, attrs.hatching, element._hatching);
+        delete attrs.hatching;
+    } else if(element._hatching) {
+        element.renderer.releaseHatching(element._hatching);
+        element._hatching = null;
+    }
+    return attrs;
+}
+
+module.exports.processHatchingAttrs = processHatchingAttrs;
 
 //
 // Build path segments
@@ -485,7 +501,7 @@ function baseAttr(that, attrs) {
             continue;
         } else if(key === KEY_STROKE_WIDTH) {
             recalculateDashStyle = true;
-        } else if(value && (key === "fill" || key === "clip-path" || key === "filter") && value.indexOf("DevExpress") !== -1) {
+        } else if(value && (key === "fill" || key === "clip-path" || key === "filter") && value.indexOf("DevExpress") === 0) {
             that._addFixIRICallback();
             value = getFuncIri(value, renderer.pathModified);
         } else if(/^(translate(X|Y)|rotate[XY]?|scale(X|Y)|sharp|sharpDirection)$/i.test(key)) {
@@ -1519,16 +1535,7 @@ SvgElement.prototype = {
     },
 
     smartAttr: function(attrs) {
-        var that = this;
-        if(attrs.hatching && _normalizeEnum(attrs.hatching.direction) !== "none") {
-            attrs = extend({}, attrs);
-            attrs.fill = that._hatching = that.renderer.lockHatching(attrs.fill, attrs.hatching, that._hatching);
-            delete attrs.hatching;
-        } else if(that._hatching) {
-            that.renderer.releaseHatching(that._hatching);
-            that._hatching = null;
-        }
-        return that.attr(attrs);
+        return this.attr(processHatchingAttrs(this, attrs));
     },
 
     css: function(styles) {

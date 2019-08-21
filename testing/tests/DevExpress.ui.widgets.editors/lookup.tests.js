@@ -3003,11 +3003,13 @@ QUnit.module("aria accessibility", () => {
 
                 let list = $(`.${LIST_CLASS}`).dxList("instance");
                 checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
-                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
 
                 $element.dxLookup("instance").option("searchEnabled", !searchEnabled);
                 checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
-                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: true, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
             });
         });
     }

@@ -834,6 +834,8 @@ var Lookup = DropDownList.inherit({
             "hidden": this._popupHiddenHandler.bind(this)
         });
 
+        this._setPopupContentId(this._popup.$content());
+
         this._popup.option("onContentReady", this._contentReadyHandler.bind(this));
         this._contentReadyHandler();
     },

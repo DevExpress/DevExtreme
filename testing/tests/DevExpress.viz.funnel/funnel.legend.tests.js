@@ -65,7 +65,20 @@ QUnit.test("Update", function(assert) {
     for(var i = 0; i < items.length; i++) {
         assert.equal(lastCallUpdate[i].text, items[i].data.argument);
         assert.equal(lastCallUpdate[i].item.data.argument, items[i].data.argument);
-        assert.deepEqual(lastCallUpdate[i].states, items[i].states);
+        assert.deepEqual(lastCallUpdate[i].states, {
+            normal: {
+                fill: items[i].states.normal.fill,
+                hatching: undefined
+            },
+            hover: {
+                fill: items[i].states.hover.fill,
+                hatching: items[i].states.hover.hatching
+            },
+            selection: {
+                fill: items[i].states.selection.fill,
+                hatching: items[i].states.selection.hatching
+            }
+        });
         assert.equal(lastCallUpdate[i].id, items[i].id);
         assert.equal(lastCallUpdate[i].visible, true);
     }
