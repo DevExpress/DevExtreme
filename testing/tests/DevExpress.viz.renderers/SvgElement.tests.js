@@ -1,7 +1,12 @@
-var $ = require("jquery"),
-    typeUtils = require("core/utils/type"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    Color = require("color");
+import jQuery from "jquery";
+import typeUtils from "core/utils/type";
+import rendererModule from "viz/core/renderers/renderer";
+import coreRenderer from "core/renderer";
+import eventsEngine from "events/core/events_engine";
+import domAdapter from "core/dom_adapter";
+import Color from "color";
+
+let $ = jQuery;
 
 function isFirefoxOnLinux() {
     const ua = navigator.userAgent;
@@ -536,8 +541,8 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.Element = renderer.SvgElement;
 
             this.jQuery = $;
-            $ = require("core/renderer");
-            this.eventsEngine = require("events/core/events_engine");
+            $ = coreRenderer;
+            this.eventsEngine = eventsEngine;
             this.rendererStub = { fake: "fake", root: { element: document.createElement("div") } };
             this.$emptyStub = sinon.stub($.fn, "empty");
             this.$removeStub = sinon.stub($.fn, "remove", function() { return this; });
