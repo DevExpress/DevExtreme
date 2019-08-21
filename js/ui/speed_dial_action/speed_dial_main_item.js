@@ -172,7 +172,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._renderCloseIcon();
                 break;
             case "position":
-                this._setPosition();
+                this._renderGeometryImpl();
                 break;
             default:
                 this.callBase(args);
