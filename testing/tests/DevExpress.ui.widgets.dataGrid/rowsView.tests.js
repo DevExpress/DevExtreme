@@ -3774,7 +3774,11 @@ QUnit.test("Summary items are not displayed in a group row", function(assert) {
 QUnit.test("Scroll to element by focus", function(assert) {
     // arrange
     var testElement = $("#container"),
-        rowsView = this.createRowsView(this.items, null, null, null, { useKeyboard: true, columnAutoWidth: true }),
+        rowsView = this.createRowsView(this.items, null, null, null, {
+            useKeyboard: true,
+            keyboardNavigation: { enabled: true },
+            columnAutoWidth: true
+        }),
         isScrollTo,
         keyboardNavigationController = this.dataGrid.keyboardNavigationController;
 

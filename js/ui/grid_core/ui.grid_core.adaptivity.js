@@ -90,7 +90,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType),
             text = gridCoreUtils.formatValue(displayValue, column);
 
-        if(column.allowEditing && that.option("useKeyboard")) {
+        if(column.allowEditing && that.getController("keyboardNavigation").isKeyboardEnabled()) {
             $container.attr("tabIndex", that.option("tabIndex"));
             eventsEngine.off($container, "focus", focusAction);
             eventsEngine.on($container, "focus", focusAction);

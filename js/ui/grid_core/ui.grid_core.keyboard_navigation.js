@@ -1383,7 +1383,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     init: function() {
         var that = this;
-        if(that.option("useKeyboard")) {
+
+        if(that.isKeyboardEnabled()) {
             that._dataController = that.getController("data");
             that._selectionController = that.getController("selection");
             that._editingController = that.getController("editing");
@@ -1511,7 +1512,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     setupFocusedView: function() {
-        if(this.option("useKeyboard") && !isDefined(this._focusedView)) {
+        if(this.isKeyboardEnabled() && !isDefined(this._focusedView)) {
             this._focusView();
         }
     },
@@ -1528,6 +1529,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             default:
                 that.callBase(args);
         }
+    },
+
+    isKeyboardEnabled: function() {
+        return this.option("keyboardNavigation.enabled") && this.option("useKeyboard");
     },
 
     dispose: function() {
@@ -1660,6 +1665,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
+            /**
+             * @name GridBaseOptions.useKeyboard
+             * @type boolean
+             * @deprecated GridBaseOptions.keyboardNavigation.enabled
+             * @default true
+             */
             useKeyboard: true,
 
             useLegacyKeyboardNavigation: false,
@@ -1669,6 +1680,13 @@ module.exports = {
              * @type object
              */
             keyboardNavigation: {
+                /**
+                 * @name GridBaseOptions.keyboardNavigation.enabled
+                 * @type boolean
+                 * @default true
+                 */
+                enabled: true,
+
                 /**
                  * @name GridBaseOptions.keyboardNavigation.enterKeyAction
                  * @type Enums.GridEnterKeyAction
@@ -1835,7 +1853,7 @@ module.exports = {
 
                     cellElements = this.getCellElements(rowIndex);
 
-                    if(this.option("useKeyboard") && cellElements) {
+                    if(this.getController("keyboardNavigation").isKeyboardEnabled() && cellElements) {
                         this.updateFocusElementTabIndex(cellElements);
                     }
                 },
@@ -1970,7 +1988,7 @@ module.exports = {
                     var keyboardNavigationController = this.getController("keyboardNavigation"),
                         $cell = this.callBase(rowIndex);
 
-                    if(this.option("useKeyboard") && keyboardNavigationController._focusedCellPosition.rowIndex === rowIndex) {
+                    if(keyboardNavigationController.isKeyboardEnabled() && keyboardNavigationController._focusedCellPosition.rowIndex === rowIndex) {
                         let $focusedCell = keyboardNavigationController._getFocusedCell();
                         if(isElementDefined($focusedCell) && !$focusedCell.hasClass('dx-command-edit')) {
                             $cell = $focusedCell;

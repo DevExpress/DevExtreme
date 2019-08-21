@@ -16332,6 +16332,13 @@ QUnit.testInActiveWindow("Focus on edited cell after the edit button in command 
     assert.ok($(dataGrid.getRowElement(0)).find(".dx-editor-cell").eq(0).hasClass("dx-focused"), "first editable cell is active");
 });
 
+QUnit.test("Deprecated options test", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid();
+    // assert
+    assert.ok(dataGrid._deprecatedOptions.useKeyboard, "useKeyboard deprecated");
+});
+
 QUnit.module("Editing", baseModuleConfig);
 
 // T759458

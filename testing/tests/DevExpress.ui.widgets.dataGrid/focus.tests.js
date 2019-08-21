@@ -90,6 +90,9 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
 
         this.options = $.extend(true, {
             useKeyboard: true,
+            keyboardNavigation: {
+                enabled: true
+            },
             tabIndex: 0,
             showColumnHeaders: true,
             commonColumnSettings: {

@@ -810,7 +810,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.highlightChanges */
         highlightChanges?: boolean;
         /** @name GridBase.Options.keyboardNavigation */
-        keyboardNavigation?: { editOnKeyPress?: boolean, enterKeyAction?: 'startEdit' | 'moveFocus', enterKeyDirection?: 'none' | 'column' | 'row' };
+        keyboardNavigation?: { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: 'startEdit' | 'moveFocus', enterKeyDirection?: 'none' | 'column' | 'row' };
         /** @name GridBase.Options.loadPanel */
         loadPanel?: { enabled?: boolean | 'auto', height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number };
         /** @name GridBase.Options.noDataText */
@@ -881,6 +881,9 @@ declare module DevExpress.ui {
         stateStoring?: { customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((gridState: any) => any), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: 'custom' | 'localStorage' | 'sessionStorage' };
         /** @name GridBase.Options.twoWayBindingEnabled */
         twoWayBindingEnabled?: boolean;
+        /** @deprecated */
+        /** @name GridBase.Options.useKeyboard */
+        useKeyboard?: boolean;
         /** @name GridBase.Options.wordWrapEnabled */
         wordWrapEnabled?: boolean;
     }
