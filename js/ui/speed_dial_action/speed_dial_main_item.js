@@ -65,6 +65,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         this._moveToContainer();
         this._renderCloseIcon();
         this._renderClick();
+        this._stopAnimation();
     },
 
     _renderCloseIcon() {
