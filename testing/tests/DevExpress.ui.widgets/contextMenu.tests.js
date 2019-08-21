@@ -1266,18 +1266,12 @@ QUnit.module("Options", moduleConfig, () => {
         const items2 = [{ text: "item 3" }, { text: "item 4" }];
         const instance = new ContextMenu(this.$element, { items: items1, focusStateEnabled: true, visible: true });
 
-        const keyboard = keyboardMock(instance.itemsContainer());
-        keyboard.keyDown("down");
+        keyboardMock(instance.itemsContainer())
+            .keyDown("down")
+            .keyDown("enter");
 
-        const cachedFocusedElement = instance.option("focusedElement");
-        keyboard.keyDown("enter");
-
-        assert.equal($(instance.option("focusedElement")).length, 0, "focused element is cleaned after hide");
-
-        instance.option("focusedElement", cachedFocusedElement);
-        assert.equal($(instance.option("focusedElement")).length, 1, "syntetic focused element is set");
         instance.option("items", items2);
-        assert.notOk(instance.option("focusedElement"), "focused element is cleaned");
+        assert.strictEqual(instance.option("focusedElement"), null, "focused element is cleaned");
     });
 
     QUnit.test("items changed should not break keyboard navigation", (assert) => {
@@ -2187,7 +2181,7 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
             .keyDown("down")
             .keyDown("enter");
 
-        assert.strictEqual($(instance.option("focusedElement")).length, 0, "focusedElement is cleaned");
+        assert.strictEqual(instance.option("focusedElement"), null, "focusedElement is cleaned");
 
         instance.show();
         keyboard = keyboardMock(instance.itemsContainer());
