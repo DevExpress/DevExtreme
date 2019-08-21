@@ -65,11 +65,11 @@
                         type: "async",
                         message: "textBox1 is invalid (async)",
                         validationCallback: function(params) {
-                            return new Promise(function(resolve) {
-                                setTimeout(function() {
-                                   // resolve(params.value === "test");
-                                }, 5000);
-                            });
+                            let d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve(params.value === "test");
+                            }, 5000);
+                            return d.promise();
                         }
                     }]
                 });
@@ -90,20 +90,20 @@
                         type: "async",
                         message: "textBox2 is invalid async",
                         validationCallback: function(params) {
-                            return new Promise((resolve, reject) => {
-                                setTimeout(() => {
-                                    let res = params.value === "test1";
-                                    if (res) {
-                                        reject({
-                                            isValid: false,
-                                            message: "textBox2 value is too simple"
-                                        })
-                                    }
-                                    else {
-                                        resolve(true);
-                                    }
-                                }, 3000);
-                            });
+                            let d = $.Deferred();
+                            setTimeout(function() {
+                                let res = params.value === "test1";
+                                if (res) {
+                                    d.reject({
+                                        isValid: false,
+                                        message: "textBox2 value is too simple"
+                                    })
+                                }
+                                else {
+                                    d.resolve(true);
+                                }
+                            }, 3000);
+                            return d.promise();
                         }
                     }]
                 });
@@ -113,31 +113,31 @@
                         type: "async",
                         message: "textBox3 is invalid async1",
                         validationCallback: function(params) {
-                            return new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve(params.value === "test2");
-                                }, 1000);
-                            });
+                            let d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve(params.value === "test2");
+                            }, 1000);
+                            return d.promise();
                         }
                     },
                     {
                         type: "async",
                         message: "textBox3 is invalid async2",
                         validationCallback: function(params) {
-                            return new Promise((resolve, reject) => {
-                                setTimeout(() => {
-                                    let res = params.value === "test2";
-                                    if (res) {
-                                        reject({
-                                            isValid: false,
-                                            message: "textBox3 value is too simple"
-                                        })
-                                    }
-                                    else {
-                                        resolve(true);
-                                    }
-                                }, 3000);
-                            });
+                            let d = $.Deferred();
+                            setTimeout(function() {
+                                let res = params.value === "test2";
+                                if (res) {
+                                    d.reject({
+                                        isValid: false,
+                                        message: "textBox3 value is too simple"
+                                    })
+                                }
+                                else {
+                                    d.resolve(true);
+                                }
+                            }, 3000);
+                            return d.promise();
                         }
                     },
                     {

@@ -8,6 +8,8 @@ import commonUtils from "../core/utils/common";
 import typeUtils from "../core/utils/type";
 import numberLocalization from "../localization/number";
 import messageLocalization from "../localization/message";
+import Promise from "../core/polyfills/promise";
+import { fromPromise } from "../core/utils/deferred";
 
 class BaseRuleValidator {
     constructor() {
@@ -305,7 +307,6 @@ class AsyncRuleValidator extends CustomRuleValidator {
                 resolve(true);
             });
         }
-
         const validator = rule.validator,
             dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
             data = typeUtils.isFunction(dataGetter) && dataGetter(),
@@ -314,7 +315,6 @@ class AsyncRuleValidator extends CustomRuleValidator {
                 validator: validator,
                 rule: rule
             };
-
         if(data) {
             params.data = data;
         }
@@ -322,7 +322,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
         if(!typeUtils.isPromise(callbackResult)) {
             throw errors.Error("validationCallback should return the Promise object");
         }
-        return callbackResult;
+        return fromPromise(callbackResult).promise();
     }
 }
 
