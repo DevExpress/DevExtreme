@@ -1,23 +1,24 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    domUtils = require("../../core/utils/dom"),
-    focused = require("../widget/selectors").focused,
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
-    themes = require("../themes"),
-    Editor = require("../editor/editor"),
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    ClearButton = require("./ui.text_editor.clear").default,
-    TextEditorButtonCollection = require("./texteditor_button_collection/index").default,
-    config = require("../../core/config"),
-    errors = require("../widget/ui.errors"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import domUtils from "../../core/utils/dom";
+import { focused } from "../widget/selectors";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import { each } from "../../core/utils/iterator";
+import themes from "../themes";
+import Editor from "../editor/editor";
+import eventUtils from "../../events/utils";
+import pointerEvents from "../../events/pointer";
+import ClearButton from "./ui.text_editor.clear";
+import TextEditorButtonCollection from "./texteditor_button_collection/index";
+import config from "../../core/config";
+import errors from "../widget/ui.errors";
+import { Deferred } from "../../core/utils/deferred";
+import LoadIndicator from "../load_indicator";
 
-var TEXTEDITOR_CLASS = "dx-texteditor",
+const TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_INPUT_CONTAINER_CLASS = "dx-texteditor-input-container",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     TEXTEDITOR_INPUT_SELECTOR = "." + TEXTEDITOR_INPUT_CLASS,
@@ -32,14 +33,16 @@ var TEXTEDITOR_CLASS = "dx-texteditor",
         TEXTEDITOR_STYLING_MODE_PREFIX + "underlined"
     ],
 
-    STATE_INVISIBLE_CLASS = "dx-state-invisible";
+    STATE_INVISIBLE_CLASS = "dx-state-invisible",
+    TEXTEDITOR_PENDING_INDICATOR_CLASS = "dx-pending-indicator",
+    TEXTEDITOR_VALIDATION_PENDING_CLASS = "dx-validation-pending";
 
-var EVENTS_LIST = [
+const EVENTS_LIST = [
     "KeyDown", "KeyPress", "KeyUp",
     "Change", "Cut", "Copy", "Paste", "Input"
 ];
 
-var CONTROL_KEYS = [
+const CONTROL_KEYS = [
     "tab",
     "enter",
     "shift",
@@ -67,7 +70,7 @@ function checkButtonsOptionType(buttons) {
 * @inherits Editor
 * @hidden
 */
-var TextEditorBase = Editor.inherit({
+const TextEditorBase = Editor.inherit({
     ctor: function(_, options) {
         if(options) {
             checkButtonsOptionType(options.buttons);
@@ -422,6 +425,33 @@ var TextEditorBase = Editor.inherit({
         this._$textEditorInputContainer.append(this._createInput());
 
         this._renderButtonContainers();
+    },
+
+    _renderPendingIndicator: function() {
+        const $indicatorElement = $("<div>")
+            .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
+            .appendTo(this._$textEditorInputContainer);
+        this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator);
+    },
+
+    _disposePendingIndicator: function() {
+        this._pendingIndicator.dispose();
+        this._pendingIndicator.$element().remove();
+        this._pendingIndicator = null;
+    },
+
+    _renderValidationState: function() {
+        this.callBase();
+        const isPending = this.option("validationStatus") === "pending",
+            $element = this.$element();
+        $element.toggleClass(TEXTEDITOR_VALIDATION_PENDING_CLASS, isPending);
+        if(isPending && !this._pendingIndicator) {
+            this._renderPendingIndicator();
+            return;
+        }
+        if(this._pendingIndicator) {
+            this._disposePendingIndicator();
+        }
     },
 
     _renderButtonContainers: function() {

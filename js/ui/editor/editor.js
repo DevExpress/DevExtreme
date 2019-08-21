@@ -27,7 +27,7 @@ const READONLY_STATE_CLASS = "dx-state-readonly",
 * @export default
 * @hidden
 */
-var Editor = Widget.inherit({
+const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
         this.callBase.apply(this, arguments);
@@ -224,7 +224,6 @@ var Editor = Widget.inherit({
         if(!validationErrors && this.option("validationError")) {
             validationErrors = [this.option("validationError")];
         }
-        $element.toggleClass("dx-pending", this.option("validationStatus") === "pending");
         $element.toggleClass(INVALID_CLASS, !isValid);
         this.setAria("invalid", !isValid || undefined);
 

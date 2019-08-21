@@ -54,16 +54,12 @@ class ValidationGroup extends DOMComponent {
     _initMarkup() {
         const $element = this.$element();
         $element.addClass(VALIDATION_ENGINE_CLASS);
-
         $element.find(`.${VALIDATOR_CLASS}`).each(function(_, validatorContainer) {
             Validator.getInstance($(validatorContainer))._initGroupRegistration();
         });
-
-
         $element.find(`.${VALIDATION_SUMMARY_CLASS}`).each(function(_, summaryContainer) {
             ValidationSummary.getInstance($(summaryContainer))._initGroupRegistration();
         });
-
         super._initMarkup();
     }
 

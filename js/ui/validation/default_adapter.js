@@ -4,15 +4,11 @@ class DefaultAdapter {
     constructor(editor, validator) {
         this.editor = editor;
         this.validator = validator;
-
         this.validationRequestsCallbacks = Callbacks();
-
         const handler = () => {
             this.validationRequestsCallbacks.fire();
         };
-
         editor.validationRequest.add(handler);
-
         editor.on("disposing", function() {
             editor.validationRequest.remove(handler);
         });

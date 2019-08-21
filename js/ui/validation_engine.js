@@ -96,7 +96,6 @@ class NumericRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-
         if(rule.useCultureSettings && typeUtils.isString(value)) {
             return !isNaN(numberLocalization.parse(value));
         } else {
@@ -142,17 +141,14 @@ class RangeRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-
         const validNumber = rulesValidators["numeric"].validate(value, rule),
             validValue = typeUtils.isDefined(value) && value !== "",
             number = validNumber ? parseFloat(value) : validValue && value.valueOf(),
             min = rule.min,
             max = rule.max;
-
         if(!(validNumber || typeUtils.isDate(value)) && !validValue) {
             return false;
         }
-
         if(typeUtils.isDefined(min)) {
             if(typeUtils.isDefined(max)) {
                 return number >= min && number <= max;
@@ -206,11 +202,9 @@ class StringLengthRuleValidator extends BaseRuleValidator {
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
-
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-
         return rulesValidators.range.validate(value.length,
             extend({}, rule));
     }
@@ -255,7 +249,6 @@ class CustomRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-
         const validator = rule.validator,
             dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
             data = typeUtils.isFunction(dataGetter) && dataGetter(),
@@ -264,11 +257,9 @@ class CustomRuleValidator extends BaseRuleValidator {
                 validator: validator,
                 rule: rule
             };
-
         if(data) {
             params.data = data;
         }
-
         return rule.validationCallback(params);
     }
 }
@@ -374,16 +365,12 @@ class CompareRuleValidator extends BaseRuleValidator {
         if(!rule.comparisonTarget) {
             throw errors.Error("E0102");
         }
-
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-
         extend(rule, { reevaluate: true });
-
         const otherValue = rule.comparisonTarget(),
             type = rule.comparisonType || "==";
-
         switch(type) {
             case "==":
                 return value == otherValue; // eslint-disable-line eqeqeq
@@ -401,7 +388,6 @@ class CompareRuleValidator extends BaseRuleValidator {
                 return value < otherValue;
             case "<=":
                 return value <= otherValue;
-
         }
     }
 }
@@ -512,7 +498,7 @@ const rulesValidators = {
     "custom": new CustomRuleValidator(),
 
     /**
-     * @name CustomRule
+     * @name AsyncRule
      * @section dxValidator
      * @type object
      */
@@ -582,10 +568,6 @@ const GroupConfig = Class.inherit({
         each(this.validators, (_, validator) => {
             const validatorResult = validator.validate();
             result.isValid = result.isValid && validatorResult.isValid;
-
-            // if(validatorResult.brokenRule) {
-            //     result.brokenRules.push(validatorResult.brokenRule);
-            // }
             if(validatorResult.brokenRules) {
                 result.brokenRules = result.brokenRules.concat(validatorResult.brokenRules);
             }
@@ -618,7 +600,7 @@ const GroupConfig = Class.inherit({
 
     _getAsyncResult(result, values) {
         values.forEach((val, index) => {
-            if(!val.isValid) {
+            if(val && !val.isValid) {
                 result.brokenRules = result.brokenRules.concat(this._asyncValidationResults[index].brokenRules);
             }
         });
@@ -673,7 +655,6 @@ const ValidationEngine = {
         const result = commonUtils.grep(this.groups, function(config) {
             return config.group === group;
         });
-
         if(result.length) {
             return result[0];
         }
@@ -691,18 +672,15 @@ const ValidationEngine = {
             config = new GroupConfig(group);
             this.groups.push(config);
         }
-
         return config;
     },
 
     removeGroup(group) {
         const config = this.getGroupConfig(group),
             index = inArray(config, this.groups);
-
         if(index > -1) {
             this.groups.splice(index, 1);
         }
-
         return config;
     },
 
@@ -769,7 +747,6 @@ const ValidationEngine = {
         each(rules || [], function(_, rule) {
             const ruleValidator = rulesValidators[rule.type];
             let ruleValidationResult;
-
             if(ruleValidator) {
                 if(rule.type === "async") {
                     asyncRuleItems.push({
@@ -786,18 +763,14 @@ const ValidationEngine = {
                     }
                     return true;
                 }
-
                 rule.value = value;
-
                 ruleValidationResult = ruleValidator.validate(value, rule);
                 rule.isValid = ruleValidationResult;
-
                 if(!ruleValidationResult) {
                     result.isValid = false;
                     that._setDefaultMessage(rule, ruleValidator, name);
                     result.brokenRule = rule;
                 }
-
                 if(!rule.isValid) {
                     return false;
                 }
@@ -848,7 +821,6 @@ const ValidationEngine = {
 
     registerValidatorInGroup(group, validator) {
         const groupConfig = ValidationEngine.addGroup(group);
-
         if(inArray(validator, groupConfig.validators) < 0) {
             groupConfig.validators.push(validator);
         }
@@ -857,7 +829,6 @@ const ValidationEngine = {
     _shouldRemoveGroup(group, validatorsInGroup) {
         const isDefaultGroup = group === undefined,
             isValidationGroupInstance = group && group.NAME === "dxValidationGroup";
-
         return !isDefaultGroup && !isValidationGroupInstance && !validatorsInGroup.length;
     },
 
@@ -890,11 +861,9 @@ const ValidationEngine = {
     */
     validateGroup(group) {
         const groupConfig = ValidationEngine.getGroupConfig(group);
-
         if(!groupConfig) {
             throw errors.Error("E0110");
         }
-
         return groupConfig.validate();
     },
 
@@ -913,14 +882,11 @@ const ValidationEngine = {
     */
     resetGroup(group) {
         const groupConfig = ValidationEngine.getGroupConfig(group);
-
         if(!groupConfig) {
             throw errors.Error("E0110");
         }
-
         return groupConfig.reset();
     }
-
 };
 
 ValidationEngine.initGroups();

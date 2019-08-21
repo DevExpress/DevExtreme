@@ -21,26 +21,21 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
     <style>
-        .dx-pending.dx-texteditor.dx-editor-filled .dx-texteditor-input-container:after,
-        .dx-pending.dx-texteditor.dx-editor-underlined .dx-texteditor-input-container:after,
-        .dx-pending.dx-texteditor.dx-editor-outlined .dx-texteditor-input-container:after {
+        .dx-validation-pending.dx-texteditor.dx-editor-filled .dx-texteditor-input-container .dx-pending-indicator,
+        .dx-validation-pending.dx-texteditor.dx-editor-underlined .dx-texteditor-input-container .dx-pending-indicator,
+        .dx-validation-pending.dx-texteditor.dx-editor-outlined .dx-texteditor-input-container .dx-pending-indicator {
             pointer-events: none;
-            font-weight: bold;
-            background-color: green;
-            color: #fff;
-            content: '!';
             position: absolute;
             top: 50%;
-            margin-top: -9px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 18px;
-            font-size: 13px;
+            margin-top: -11px;
+            width: 22px;
+            height: 22px;
         }
-        .dx-texteditor.dx-pending .dx-texteditor-input-container:after {
+        .dx-texteditor.dx-validation-pending .dx-texteditor-input-container .dx-pending-indicator {
              right: 4px;
+        }
+        .dx-texteditor.dx-validation-pending .dx-texteditor-input-container .dx-texteditor-input {
+            padding-right: 26px;
         }
     </style>
 </head>
@@ -70,9 +65,9 @@
                         type: "async",
                         message: "textBox1 is invalid (async)",
                         validationCallback: function(params) {
-                            return new Promise((resolve) => {
-                                setTimeout(() => {
-                                    resolve(params.value === "test");
+                            return new Promise(function(resolve) {
+                                setTimeout(function() {
+                                   // resolve(params.value === "test");
                                 }, 5000);
                             });
                         }
@@ -155,8 +150,9 @@
                 type: "success",
                 onClick: function(params) {
                     let res = params.validationGroup.validate();
+                    //params.validationGroup.reset();
                     res.complete.then(function(value) {
-                        debugger;
+                        console.log("complete");
                     });
                 }
             });

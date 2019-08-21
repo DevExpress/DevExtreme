@@ -108,33 +108,27 @@ const Validator = DOMComponent.inherit({
     _init() {
         this.callBase();
         this._initGroupRegistration();
-
         this.focused = Callbacks();
         this._initAdapter();
     },
 
     _initGroupRegistration() {
         const group = this._findGroup();
-
         if(!this._groupWasInit) {
             this.on("disposing", function(args) {
                 ValidationEngine.removeRegisteredValidator(args.component._validationGroup, args.component);
             });
         }
-
         if(!this._groupWasInit || this._validationGroup !== group) {
             ValidationEngine.removeRegisteredValidator(this._validationGroup, this);
-
             this._groupWasInit = true;
             this._validationGroup = group;
-
             ValidationEngine.registerValidatorInGroup(group, this);
         }
     },
 
     _setOptionsByReference() {
         this.callBase();
-
         extend(this._optionsByReference, {
             validationGroup: true
         });
@@ -147,19 +141,15 @@ const Validator = DOMComponent.inherit({
         if(!adapter) {
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
-
                 adapter.validationRequestsCallbacks.add(() => {
                     this.validate();
                 });
-
                 this.option("adapter", adapter);
                 return;
             }
             throw errors.Error("E0120");
         }
-
         const callbacks = adapter.validationRequestsCallbacks;
-
         if(callbacks) {
             if(Array.isArray(callbacks)) {
                 callbacks.push(() => {
@@ -208,16 +198,11 @@ const Validator = DOMComponent.inherit({
                 return extend({}, rule, { validator: this });
             });
         }
-
         return this._validationRules;
     },
 
     _resetValidationRules() {
         delete this._validationRules;
-    },
-
-    _resetValidationResult() {
-        this.option("validationResul", null);
     },
 
     /**
@@ -233,7 +218,6 @@ const Validator = DOMComponent.inherit({
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
             rules = this._getValidationRules();
         let result;
-
         if(bypass) {
             result = { isValid: true };
         } else if(currentError && currentError.editorSpecific) {
@@ -245,7 +229,7 @@ const Validator = DOMComponent.inherit({
         if(result.complete) {
             this._applyValidationResult(result, adapter);
             result.complete = result.complete.then((values) => {
-                if(!this.option("validationResult")) {
+                if(!this.option("validationResult") || (this.option("validationResult") && this.option("validationResult").status !== "pending")) {
                     return;
                 }
                 values.forEach(function(val, index) {
@@ -284,9 +268,11 @@ const Validator = DOMComponent.inherit({
         const adapter = this.option("adapter"),
             result = {
                 isValid: true,
-                brokenRule: null
+                brokenRule: null,
+                brokenRules: null,
+                status: "valid"
             };
-        this._resetValidationResult();
+        this.option("validationResult", result);
         adapter.reset();
         this._resetValidationRules();
         this._applyValidationResult(result, adapter);
@@ -295,9 +281,7 @@ const Validator = DOMComponent.inherit({
     _applyValidationResult(result, adapter) {
         const validatedAction = this._createActionByOption("onValidated");
         result.validator = this;
-
         adapter.applyValidationResults && adapter.applyValidationResults(result);
-
         this.option({
             isValid: result.isValid,
             validationResult: result
