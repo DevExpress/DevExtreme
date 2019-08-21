@@ -940,14 +940,14 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderView();
         this._attachEvents();
         this._setFocusOnCellByOption(this.option("selectedCellData"));
-
-        this._setFixedContainerPosition();
     },
 
     _render: function() {
         this.callBase();
         this._renderDateTimeIndication();
         this._setIndicationUpdateInterval();
+
+        this._setFixedContainerPosition();
     },
 
     _setFixedContainerPosition: function() {
