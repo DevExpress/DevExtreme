@@ -117,10 +117,6 @@
             cursor: pointer;
         }
 
-        .dx-sort-index-indicator + .dx-datagrid-text-content {
-            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
-        }
-
         .dx-column-indicators {
             display: inline-block;
             vertical-align: top;
@@ -131,11 +127,10 @@
             }
 
             .dx-sort-index {
-                padding-left: 4px;
-                padding-right: 4px;
-                height: 15px;
+                padding-right: 3px;
+                margin-left: -3px;
                 width: @GRID_SORT_INDEX_WIDTH;
-                color: #959595;
+                font-weight: 500;
             }
 
             .dx-sort,
@@ -595,8 +590,28 @@
             }
         }
 
+        .dx-sort-indicator.dx-header-filter-indicator {
+            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN));
+        }
+
         .dx-sort-indicator.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
             max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + @GRID_TEXT_CONTENT_MARGIN*2));
+        }
+
+        .dx-sort-indicator.dx-sort-index-indicator {
+            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
+
+            &.dx-header-filter-indicator {
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
+            }
+
+            &.dx-text-content-alignment-left.dx-text-content-alignment-right {
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN*2 + @GRID_SORT_INDEX_WIDTH));
+            }
+
+            &.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + @GRID_TEXT_CONTENT_MARGIN*2 + @GRID_SORT_INDEX_WIDTH));
+            }
         }
     }
 

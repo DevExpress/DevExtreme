@@ -2564,18 +2564,20 @@ QUnit.module('Multiple sorting', {
         };
 
         that.setupDataGrid = function(options) {
-            options.columns = [{
-                dataField: "field1"
-            }, {
-                dataField: "field2",
-                sortIndex: 1,
-                sortOrder: "asc"
-            }, {
-                dataField: "field3",
-                sortIndex: 0,
-                sortOrder: "asc"
-            }];
-            dataGridMocks.setupDataGridModules(that, ["data", "columns", "columnHeaders", "sorting"], {
+            if(!options.columns) {
+                options.columns = [{
+                    dataField: "field1"
+                }, {
+                    dataField: "field2",
+                    sortIndex: 1,
+                    sortOrder: "asc"
+                }, {
+                    dataField: "field3",
+                    sortIndex: 0,
+                    sortOrder: "asc"
+                }];
+            }
+            dataGridMocks.setupDataGridModules(that, ["data", "columns", "headerFilter", "columnHeaders", "sorting"], {
                 initViews: true,
                 initDefaultOptions: true,
                 options: options
@@ -2617,7 +2619,14 @@ QUnit.test("Sort index icons should be rendered when showSortIndexes is true", f
             sorting: {
                 showSortIndexes: true,
                 mode: 'multiple'
-            }
+            },
+            columns: [{
+                dataField: "field1"
+            }, {
+                dataField: "field2",
+                sortIndex: 0,
+                sortOrder: "asc"
+            }]
         },
         $headerCells;
 
@@ -2628,27 +2637,27 @@ QUnit.test("Sort index icons should be rendered when showSortIndexes is true", f
     $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "", "first column's sort index");
-    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "2", "second column's sort index");
-    assert.equal($headerCells.eq(2).find(".dx-sort-index").text(), "1", "third column's sort index");
+    assert.notOk($testElement.find(".dx-sort-index").length, "no sort indexes");
+    assert.notOk($testElement.find(".dx-sort-index-indicator").length, "no sort index indicators");
 
     // act
     this.columnOption(0, "sortOrder", "asc");
     $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "3", "first column's sort index");
-    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "2", "second column's sort index");
-    assert.equal($headerCells.eq(2).find(".dx-sort-index").text(), "1", "third column's sort index");
+    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "2", "first column's sort index");
+    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "1", "second column's sort index");
+
+    assert.ok($headerCells.eq(0).find(".dx-sort-index-indicator").length, "first column's sort index indicator");
+    assert.ok($headerCells.eq(1).find(".dx-sort-index-indicator").length, "second column's sort index indicator");
 
     // act
-    this.columnOption(2, "sortOrder", null);
+    this.columnOption(1, "sortOrder", null);
     $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "2", "first column's sort index");
-    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "1", "second column's sort index");
-    assert.equal($headerCells.eq(2).find(".dx-sort-index").text(), "", "third column's sort index");
+    assert.notOk($testElement.find(".dx-sort-index").length, "no sort indexes");
+    assert.notOk($testElement.find(".dx-sort-index-indicator").length, "no sort index indicators");
 });
 
 QUnit.test("Sort index icons should not be rendered when showSortIndexes is false", function(assert) {
@@ -2668,4 +2677,124 @@ QUnit.test("Sort index icons should not be rendered when showSortIndexes is fals
 
     // assert
     assert.notOk($testElement.find(".dx-sort-index").length, "no sort indexes");
+});
+
+function checkWidthTest(assert, that, options, baseWidthDecrease, withSortWidthDecrease) {
+    // arrange
+    var $headerCell,
+        sortIndexWidth = 15,
+        $testElement = that.$element().addClass("dx-widget"),
+        baseWidth = baseWidthDecrease ? `calc(100% + -${baseWidthDecrease}px)` : "100%",
+        widthWithSort = `calc(100% + -${baseWidthDecrease + withSortWidthDecrease}px)`,
+        widthWithSortIndex = `calc(100% + -${baseWidthDecrease + withSortWidthDecrease + sortIndexWidth}px)`;
+
+    that.setupDataGrid(options);
+
+    // act
+    that.columnHeadersView.render($testElement);
+
+    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+
+    // assert
+    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), widthWithSortIndex, "max-width");
+
+    // act
+    that.columnOption(1, "sortOrder", null);
+    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+
+    // assert
+    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), widthWithSort, "max-width");
+
+    // act
+    that.columnOption(0, "sortOrder", null);
+    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+
+    // assert
+    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), baseWidth, "max-width");
+
+    // act
+    that.columnOption(0, "sortOrder", "asc");
+    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+
+    // assert
+    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), widthWithSort, "max-width");
+
+    // act
+    that.columnOption(1, "sortOrder", "asc");
+    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+
+    // assert
+    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), widthWithSortIndex, "max-width");
+}
+
+QUnit.test("Check column max-width", function(assert) {
+    var options = {
+        sorting: { mode: 'multiple' },
+        columns: [{
+            dataField: "field1",
+            sortIndex: 1,
+            sortOrder: "asc"
+        }, {
+            dataField: "field2",
+            sortIndex: 0,
+            sortOrder: "asc"
+        }]
+    };
+
+    checkWidthTest(assert, this, options, 0, 17);
+});
+
+QUnit.test("Check max-width: column with headerFilter", function(assert) {
+    var options = {
+        sorting: { mode: 'multiple' },
+        headerFilter: { visible: true },
+        columns: [{
+            dataField: "field1",
+            sortIndex: 1,
+            sortOrder: "asc"
+        }, {
+            dataField: "field2",
+            sortIndex: 0,
+            sortOrder: "asc"
+        }]
+    };
+
+    checkWidthTest(assert, this, options, 17, 14);
+});
+
+QUnit.test("Check max-width: column with center alignment", function(assert) {
+    var options = {
+        sorting: { mode: 'multiple' },
+        columns: [{
+            dataField: "field1",
+            sortIndex: 1,
+            sortOrder: "asc",
+            alignment: 'center'
+        }, {
+            dataField: "field2",
+            sortIndex: 0,
+            sortOrder: "asc"
+        }]
+    };
+
+    checkWidthTest(assert, this, options, 0, 34);
+});
+
+QUnit.test("Check max-width: column with center alignment and headerFilter", function(assert) {
+    var options = {
+        sorting: { mode: 'multiple' },
+        headerFilter: { visible: true },
+        columns: [{
+            dataField: "field1",
+            sortIndex: 1,
+            sortOrder: "asc",
+            alignment: 'center'
+        }, {
+            dataField: "field2",
+            sortIndex: 0,
+            sortOrder: "asc"
+        }]
+    };
+
+    checkWidthTest(assert, this, options, 34, 28);
 });
