@@ -12419,6 +12419,7 @@ QUnit.test("Scrollable should be updated after expand master detail row with nes
 
 QUnit.test("Column hiding should works with masterDetail and column fixing", function(assert) {
     // arrange
+    var detailGridCount = 0;
     var dataGrid = createDataGrid({
         dataSource: [{ id: 1 }],
         columnHidingEnabled: true,
@@ -12434,6 +12435,7 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
         masterDetail: {
             enabled: true,
             template: function() {
+                detailGridCount++;
                 return $("<div>").dxDataGrid({
                     dataSource: [{}]
                 });
@@ -12460,6 +12462,7 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
     var $masterDetailRows = $($(dataGrid.$element()).find(".dx-master-detail-row"));
     assert.equal($masterDetailRows.length, 2, "master-detail row count");
     assert.notOk($masterDetailRows.is(":visible"), "master-detail rows are not visible");
+    assert.equal(detailGridCount, 1, "master detail is rendered once");
 });
 
 // T648744
