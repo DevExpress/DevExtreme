@@ -369,6 +369,8 @@ extend(legendPrototype, {
             y: 0
         };
 
+        this.erase();
+
         if(that.isVisible() && !that._title) {
             that._title = new title.Title({ renderer: that._renderer, cssClass: that._titleGroupClass, root: that._legendGroup });
         }
@@ -964,7 +966,7 @@ extend(legendPrototype, {
 
     // BaseWidget_layout_implementation
     layoutOptions: function() {
-        if(!this.getOptions().visible) {
+        if(!this.isVisible()) {
             return null;
         }
         const pos = this.getLayoutOptions();
