@@ -1,7 +1,9 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isFunction } from "../../core/utils/type";
-import { getWindow } from "../../core/utils/window";
+import { getWindow, hasWindow } from "../../core/utils/window";
+import { addNamespace } from "../../events/utils";
+import eventsEngine from "../../events/core/events_engine";
 
 import Widget from "../widget/ui.widget";
 import Drawer from "../drawer/ui.drawer";
@@ -9,6 +11,9 @@ import SplitterControl from "../splitter";
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
+
+const FILE_MANAGER_NAMESPACE = "dxFileManagerResizing";
+const FILE_MANAGER_WINDOW_RESIZE_EVENT_NAME = addNamespace("resize", FILE_MANAGER_NAMESPACE);
 
 class FileManagerAdaptivityControl extends Widget {
 
@@ -30,6 +35,7 @@ class FileManagerAdaptivityControl extends Widget {
             opened: true,
             template: this._createDrawerTemplate.bind(this)
         });
+        this.option("dirsPanelWidth", this._splitter.convertToPercentRelativeToContainer(this.option("dirsPanelWidth")));
     }
 
     _createDrawerTemplate(container) {
@@ -51,13 +57,34 @@ class FileManagerAdaptivityControl extends Widget {
     _render() {
         super._render();
         this._checkAdaptiveState();
+        this._detachEventHandlers();
+        this._attachEventHandlers();
     }
 
-    _onApplyPanelSize(elementsWidth) {
-        let newDirsPanelWidth = elementsWidth.actionValue;
-        let newItemsPanelWidth = this._splitter.computeRightPanelWidth(newDirsPanelWidth);
-        this._leftElement.width(newDirsPanelWidth);
-        this._rightElement.width(newItemsPanelWidth);
+    _detachEventHandlers() {
+        eventsEngine.off(getWindow(), FILE_MANAGER_WINDOW_RESIZE_EVENT_NAME);
+    }
+    _attachEventHandlers() {
+        eventsEngine.on(getWindow(), FILE_MANAGER_WINDOW_RESIZE_EVENT_NAME, this._windowResizeHandler.bind(this));
+    }
+
+    _windowResizeHandler() {
+        if(!this.isInAdaptiveState()) {
+            this._updateWidth(this.option("dirsPanelWidth"));
+        }
+    }
+
+    _onApplyPanelSize(newDirsPanelWidth) {
+        this.option("dirsPanelWidth", newDirsPanelWidth.actionValue);
+    }
+
+    _updateWidth(newDirsPanelWidth) {
+        if(!hasWindow()) {
+            return;
+        }
+
+        this._leftElement.width(`${newDirsPanelWidth}%`);
+        this._rightElement.width(`${100 - newDirsPanelWidth}%`);
     }
 
     _dimensionChanged(dimension) {
@@ -72,6 +99,7 @@ class FileManagerAdaptivityControl extends Widget {
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
+            this._toggleSplitter(!this._isInAdaptiveState);
         }
     }
 
@@ -93,7 +121,8 @@ class FileManagerAdaptivityControl extends Widget {
         return extend(super._getDefaultOptions(), {
             drawerTemplate: null,
             contentTemplate: null,
-            onAdaptiveStateChanged: null
+            onAdaptiveStateChanged: null,
+            dirsPanelWidth: 250
         });
     }
 
@@ -108,6 +137,9 @@ class FileManagerAdaptivityControl extends Widget {
             case "onAdaptiveStateChanged":
                 this._actions[name] = this._createActionByOption(name);
                 break;
+            case "dirsPanelWidth":
+                this._updateWidth(args.value);
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -120,6 +152,14 @@ class FileManagerAdaptivityControl extends Widget {
     toggleDrawer(showing, skipAnimation) {
         this._drawer.option("animationEnabled", !skipAnimation);
         this._drawer.toggle(showing);
+    }
+
+    _toggleSplitter(isActive) {
+        if(isActive) {
+            this._splitter.$element().removeClass("dx-state-disabled");
+        } else {
+            this._splitter.$element().addClass("dx-state-disabled");
+        }
     }
 
 }

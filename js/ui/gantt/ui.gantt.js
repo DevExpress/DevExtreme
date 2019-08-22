@@ -47,11 +47,12 @@ class Gantt extends Widget {
         const rightElement = this._$ganttView;
         this._splitter = this._createComponent("<div>", SplitterControl, {
             container: this.$element(),
-            leftElement: leftElement,
-            rightElement: rightElement,
+            leftElement,
+            rightElement,
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
         this._splitter.$element().appendTo(leftElement);
+        this.option("treeListWidth", this._splitter.convertToPercentRelativeToContainer(this.option("treeListWidth")));
     }
 
     _render() {
@@ -60,14 +61,12 @@ class Gantt extends Widget {
         this._attachEventHandlers();
     }
     _renderTreeList() {
-        this._$treeListWrapper.width(this.option("treeListWidth"));
-        this._$treeList.width(this.option("treeListWidth"));
-
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
             dataSource: this._tasks,
             columns: this.option("columns"),
             columnResizingMode: "widget",
             height: "100%",
+            width: "",
             selection: { mode: this._getSelectionMode(this.option("allowSelection")) },
             sorting: { mode: "none" },
             scrolling: { showScrollbar: "onHover", mode: "standard" },
@@ -80,6 +79,7 @@ class Gantt extends Widget {
             onRowExpanded: (e) => this._ganttView.changeTaskExpanded(e.key, true),
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); }
         });
+        this._$treeList.width("100%");
     }
 
     _detachEventHandlers() {
@@ -106,6 +106,7 @@ class Gantt extends Widget {
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this)
         });
+        this._updateWidth(this.option("treeListWidth"));
     }
 
     _windowResizeHandler() {
@@ -168,10 +169,9 @@ class Gantt extends Widget {
         if(!hasWindow()) {
             return;
         }
-        let newGanttViewWidth = this._splitter.computeRightPanelWidth(treeListWidth);
-        this._$treeList.width(treeListWidth);
-        this._$treeListWrapper.width(treeListWidth);
-        this._ganttView && this._ganttView.setWidth(newGanttViewWidth);
+        this._$treeListWrapper.width(`${treeListWidth}%`);
+        this._ganttView && this._ganttView._$element.width(`${100 - treeListWidth}%`);
+        this._ganttView && this._ganttView.setWidth(this._ganttView._$element.width());
     }
 
     _setGanttViewOption(optionName, value) {

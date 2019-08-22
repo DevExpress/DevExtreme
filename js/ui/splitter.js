@@ -61,6 +61,7 @@ export default class SplitterControl extends Widget {
         e.preventDefault();
         this._isSplitterActive = true;
         this._cursorLastPos = e.clientX;
+        this._containerWidth = this._container.width();
         this._$splitter.removeClass(SPLITTER_TRANSPARENT_CLASS);
     }
 
@@ -78,15 +79,15 @@ export default class SplitterControl extends Widget {
         }
     }
 
-    computeRightPanelWidth(leftPanelWidth) {
-        return this._container.width() - leftPanelWidth - this._$splitterBorder.width();
-    }
-
     _computeLeftPanelWidth(e) {
         this._cursorLastPos = e.pageX - this._container.offset().left;
         this._cursorLastPos = Math.max(100, this._cursorLastPos);
-        this._cursorLastPos = Math.min(this._container.width(), this._cursorLastPos);
-        return this._cursorLastPos;
+        this._cursorLastPos = Math.min(this._containerWidth - this._$splitterBorder.width(), this._cursorLastPos);
+        return this._cursorLastPos / this._containerWidth * 100;
+    }
+
+    convertToPercentRelativeToContainer(value) {
+        return value / this._container.width() * 100;
     }
 
 }

@@ -1,6 +1,6 @@
 .dx-splitter-wrapper {
     height: 100%;
-    width: 2px;
+    width: 0;
     display: inline-flex;
     position: relative;
     z-index: 998;
@@ -14,11 +14,16 @@
     cursor: col-resize;
     z-index: 999; // Below @OVERLAY_ZINDEX: 1000
     right: 0;
-}
 
-.dx-splitter.dx-splitter-transparent {
-    z-index: 998;
-    background-color: transparent;
+    &.dx-splitter-transparent {
+        z-index: 998;
+        background-color: transparent;
+    }
+
+    &.dx-state-disabled {
+        width: 0;
+        cursor: default;
+    }
 }
 
 .dx-splitter-border {
