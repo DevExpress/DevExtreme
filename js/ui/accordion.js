@@ -226,19 +226,20 @@ var Accordion = CollectionWidget.inherit({
     _initMarkup: function() {
         this._deferredItems = [];
         this.callBase();
+
         this.setAria({
             "role": "tablist",
             "multiselectable": this.option("multiple")
         });
-    },
-
-    _render: function() {
-        this.callBase();
 
         deferRender(() => {
             const selectedItemIndices = this._getSelectedItemIndices();
             this._renderSelection(selectedItemIndices, []);
         });
+    },
+
+    _render: function() {
+        this.callBase();
 
         this._updateItemHeightsWrapper(true);
     },

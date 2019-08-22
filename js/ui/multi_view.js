@@ -219,6 +219,9 @@ const MultiView = CollectionWidget.inherit({
         this._deferredItems = [];
 
         this.callBase();
+
+        var selectedItemIndices = this._getSelectedItemIndices();
+        this._updateItemsVisibility(selectedItemIndices[0]);
     },
 
     _afterItemElementDeleted: function($item, deletedActionArgs) {
