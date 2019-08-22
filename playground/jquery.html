@@ -44,6 +44,7 @@
         <div id="textBox1"></div>
         <div id="textBox2"></div>
         <div id="textBox3"></div>
+        <div id="summary"></div>
         <div id="button"></div>
     </form>
     <script>
@@ -145,6 +146,7 @@
                         message: "textBox3 is required"
                     }]
                 });
+            $("#summary").dxValidationSummary({ });
             $("#button").dxButton({
                 text: "Register",
                 type: "success",
