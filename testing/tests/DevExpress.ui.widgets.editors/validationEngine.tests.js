@@ -1216,7 +1216,7 @@ QUnit.test("Simple group - call validateGroup method", function(assert) {
     var group = "newGroup",
         validator = sinon.createStubInstance(Validator);
 
-    validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false } });
+    validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false }, brokenRules: [{ type: "required", isValid: false }] });
 
     ValidationEngine.registerValidatorInGroup(group, validator);
     // act
@@ -1234,7 +1234,7 @@ QUnit.test("Simple group - call validateGroup method", function(assert) {
 QUnit.test("Simple group - call validateGroup method for undefined group", function(assert) {
     var validator = sinon.createStubInstance(Validator);
 
-    validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false } });
+    validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false }, brokenRules: [{ type: "required", isValid: false }] });
 
     ValidationEngine.registerValidatorInGroup(undefined, validator);
     // act
@@ -1264,7 +1264,7 @@ QUnit.test("Event Validated should be triggered", function(assert) {
         rule = { type: "required", isValid: false },
         handler = sinon.spy();
 
-    validator.validate.returns({ isValid: false, brokenRule: rule });
+    validator.validate.returns({ isValid: false, brokenRule: rule, brokenRules: [rule] });
 
     ValidationEngine.registerValidatorInGroup(group, validator);
     ValidationEngine.getGroupConfig(group).on("validated", handler);
@@ -1292,7 +1292,7 @@ QUnit.test("Undefined group is defined by default", function(assert) {
 QUnit.test("Simple group - call validate method on group config object", function(assert) {
     var validator = sinon.createStubInstance(Validator);
 
-    validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false } });
+    validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false }, brokenRules: [{ type: "required", isValid: false }] });
 
     ValidationEngine.registerValidatorInGroup(undefined, validator);
     var groupConfig = ValidationEngine.getGroupConfig();
