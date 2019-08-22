@@ -67,7 +67,7 @@ const moduleSetup = {
 
 QUnit.module("widget rendering", moduleSetup);
 
-QUnit.test("content should be rendered if create widget inside deferUpdate (React)", function(assert) {
+QUnit.test("Widget should be rendered without exception inside deferUpdate", function(assert) {
     let $accordion;
 
     deferUpdate(function() {
@@ -76,8 +76,8 @@ QUnit.test("content should be rendered if create widget inside deferUpdate (Reac
         });
     });
 
-    const $accordionItemTitles = $accordion.find(".dx-accordion-item-title-caption");
-    const $accordionItemBodies = $accordion.find(".dx-accordion-item-body");
+    const $accordionItemTitles = $accordion.find(`.${ACCORDION_ITEM_TITLE_CLASS}-caption`);
+    const $accordionItemBodies = $accordion.find(`.${ACCORDION_ITEM_BODY_CLASS}`);
 
     assert.equal($accordionItemTitles.length, 2, "two item are rendered");
     assert.equal($accordionItemTitles.eq(0).text(), "Test1", "first title");
@@ -212,7 +212,7 @@ QUnit.test("onContentReady action should be fired after opened item was rendered
         items: this.items,
         selectedIndex: 0,
         onContentReady: function(e) {
-            assert.equal($(e.element).find(".dx-accordion-item-body").length, 1, "item is opened");
+            assert.equal($(e.element).find(`.${ACCORDION_ITEM_BODY_CLASS}`).length, 1, "item is opened");
             count++;
         }
     }).dxAccordion("instance");
