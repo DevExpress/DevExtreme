@@ -21,8 +21,7 @@ const normalizeCss = (css) => css
 
 const lessCompiler = require("less/lib/less-node");
 
-const lessPath = path.join(__dirname, "..", "data", "less", "bundles");
-const lessPaths = [ "material", "generic", ".." ].map((dir) => require('path').join(lessPath, dir));
+const lessPaths = [ path.join(__dirname, "..", "data", "less", "bundles") ];
 
 lessCompiler.options = lessCompiler.options || {};
 lessCompiler.options["paths"] = lessPaths;
