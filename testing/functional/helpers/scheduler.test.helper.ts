@@ -55,7 +55,7 @@ export default class SchedulerTestHelper {
                    .nth(index);
     }
 
-    getAppointmenttDate(appointment) {
+    getAppointmentDate(appointment) {
         const appointmentContentDate = appointment.find('.dx-scheduler-appointment-content-date');
         return {
             startTime:
