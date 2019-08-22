@@ -369,8 +369,6 @@ extend(legendPrototype, {
             y: 0
         };
 
-        this.erase();
-
         if(that.isVisible() && !that._title) {
             that._title = new title.Title({ renderer: that._renderer, cssClass: that._titleGroupClass, root: that._legendGroup });
         }
@@ -381,6 +379,8 @@ extend(legendPrototype, {
             themeManagerTitleOptions.horizontalAlignment = getTitleHorizontalAlignment(options);
             that._title.update(themeManagerTitleOptions, titleOptions);
         }
+
+        this.erase();
 
         return that;
     },
