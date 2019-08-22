@@ -185,6 +185,7 @@ setPublicElementWrapper(function(element) {
 
 var createTextElementHiddenCopy = function(element, text, options) {
     var elementStyles = window.getComputedStyle($(element).get(0));
+    var includePaddings = options && options.includePaddings;
 
     return $("<div>").text(text).css({
         "fontStyle": elementStyles.fontStyle,
@@ -194,7 +195,10 @@ var createTextElementHiddenCopy = function(element, text, options) {
         "fontFamily": elementStyles.fontFamily,
         "letterSpacing": elementStyles.letterSpacing,
         "border": elementStyles.border,
-        "padding": options && options.includePaddings ? elementStyles.padding : "",
+        "paddingTop": includePaddings ? elementStyles.padding : "",
+        "paddingRight": includePaddings ? elementStyles.padding : "",
+        "paddingBottom": includePaddings ? elementStyles.padding : "",
+        "paddingLeft": includePaddings ? elementStyles.padding : "",
         "visibility": "hidden",
         "whiteSpace": "nowrap",
         "position": "absolute",

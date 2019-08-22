@@ -745,7 +745,7 @@ const TagBox = SelectBox.inherit({
     _renderInputSize: function() {
         const $input = this._input();
         const value = $input.val();
-        const minWidth = 10;
+        const minWidth = 5;
         const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
 
         $calculationElement.appendTo(this._input().parent());

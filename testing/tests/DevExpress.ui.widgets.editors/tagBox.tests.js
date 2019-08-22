@@ -2633,7 +2633,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const inputWidth = $input.width();
 
-        keyboardMock($input).type("test");
+        keyboardMock($input).type("te");
 
         assert.ok($input.width() > inputWidth, "input size increase");
     });
@@ -2661,6 +2661,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: true,
             items: ["test1", "test2"]
         });
+
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const initInputWidth = $input.width();
 
@@ -2732,7 +2733,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+        const $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS);
         assert.equal($tagContainer.text(), "1", "tags is refreshed correctly");
     });
 
