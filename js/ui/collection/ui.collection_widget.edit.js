@@ -4,7 +4,7 @@ import BaseCollectionWidget from "./ui.collection_widget.base";
 import errors from "../widget/ui.errors";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
-import { noop, deferRender } from "../../core/utils/common";
+import { noop } from "../../core/utils/common";
 import { isDefined } from "../../core/utils/type";
 import PlainEditStrategy from "./ui.collection_widget.edit.strategy.plain";
 import { compileGetter } from "../../core/utils/data";
@@ -305,11 +305,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
 
         this.callBase();
-
-        deferRender(() => {
-            const selectedItemIndices = this._getSelectedItemIndices();
-            this._renderSelection(selectedItemIndices, []);
-        });
     },
     _render: function() {
         this.callBase();
@@ -465,8 +460,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         return new Deferred().resolve().promise();
     },
 
-    _renderSelection: noop,
-
     _itemClickHandler: function(e) {
         this._createAction((function(e) {
             this._itemSelectHandler(e.event);
@@ -556,9 +549,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         })({ addedItems: addedItems, removedItems: removedItems });
     },
 
-    _updateSelection: function() {
-        this._renderSelection.apply(this, arguments);
-    },
+    _updateSelection: noop,
 
     _setAriaSelected: function($target, value) {
         this.setAria("selected", value, $target);
