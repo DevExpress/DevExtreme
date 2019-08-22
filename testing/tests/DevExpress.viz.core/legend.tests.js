@@ -1852,6 +1852,14 @@ QUnit.test('Erasing', function(assert) {
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
 });
 
+// T808328
+QUnit.test('Erase legend on update options', function(assert) {
+    this.createAndDrawLegend();
+    this.legend.update(this.options);
+
+    assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
+});
+
 QUnit.test('Check groups order', function(assert) {
     this.options.title = {
         text: "title"
