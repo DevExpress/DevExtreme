@@ -128,8 +128,8 @@ export default class FileItemsController {
             return loadItemsDeferred;
         }
 
-        const providerDirKey = parentDirectoryInfo.fileItem.isRoot ? "" : parentDirectoryInfo.fileItem.key;
-        loadItemsDeferred = when(this._fileProvider.getItems(providerDirKey))
+        const pathInfo = this._getPathInfo(parentDirectoryInfo);
+        loadItemsDeferred = when(this._fileProvider.getItems(pathInfo))
             .then(fileItems => {
                 parentDirectoryInfo.items = fileItems.map(fileItem =>
                     fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this._createFileInfo(fileItem, parentDirectoryInfo)
@@ -394,6 +394,17 @@ export default class FileItemsController {
         this._selectedDirectory = null;
         this._rootDirectoryInfo.items = [ ];
         this._loadedItems = { };
+    }
+
+    _getPathInfo(directoryInfo) {
+        const pathInfo = [ ];
+        for(let dirInfo = directoryInfo; dirInfo && !dirInfo.fileItem.isRoot; dirInfo = dirInfo.parentDirectory) {
+            pathInfo.unshift({
+                key: dirInfo.fileItem.key,
+                name: dirInfo.fileItem.name
+            });
+        }
+        return pathInfo;
     }
 
 }

@@ -21,7 +21,6 @@ import FileManagerNotificationControl from "./ui.file_manager.notification";
 import FileManagerEditingControl from "./ui.file_manager.editing";
 import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
 import FileManagerAdaptivityControl from "./ui.file_manager.adaptivity";
-import { getName, getParentPath } from "./ui.file_manager.utils";
 
 import { FileManagerItem } from "./file_provider/file_provider";
 
@@ -298,7 +297,7 @@ class FileManager extends Widget {
             : this._controller.getFiles(selectedDir);
 
         if(this.option("itemView.showParentFolder") && !selectedDir.fileItem.isRoot) {
-            let parentDirItem = new FileManagerItem(selectedDir.fileItem, "..", true);
+            let parentDirItem = new FileManagerItem(null, "..", true);
             parentDirItem.isParentFolder = true;
             itemInfos = when(itemInfos)
                 .then(items => {
@@ -330,12 +329,6 @@ class FileManager extends Widget {
         return {
             thumbnail: fileInfo.icon
         };
-    }
-
-    _createFolderItemByPath(path) {
-        const parentPath = getParentPath(path);
-        const name = getName(path);
-        return new FileManagerItem(parentPath, name, true);
     }
 
     _getDefaultOptions() {
