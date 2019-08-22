@@ -1326,7 +1326,8 @@ QUnit.module("defaultOptions", {
         assert.equal(instance.option("opt5.subOpt2"), "someValue");
 
         instance.resetOption('opt4');
-        instance.resetOption('opt5');
+        instance.resetOption('opt5.subOpt1');
+        instance.resetOption('opt5.subOpt2');
 
         assert.equal(instance.option("opt4"), "default");
         assert.equal(instance.option("opt5.subOpt1"), "default");

@@ -1,7 +1,7 @@
 var Config = require("./config"),
     domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
-    optionHelper = require("./option_helper").optionHelper,
+    optionHelper = require("./option_helper").OptionHelper,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
@@ -229,8 +229,6 @@ var Component = Class.inherit({
             this.endUpdate();
         }
     },
-
-    _optionHelper: {},
 
     _initOptions: function(options) {
         this.option(options);
@@ -566,10 +564,14 @@ var Component = Class.inherit({
         if(!name) {
             return;
         }
-        const value = this._getDefaultOptions()[name];
+        let defaultValue = this._getDefaultOptions();
+        const fullPath = name.split(".");
+        for(let path of fullPath) {
+            defaultValue = defaultValue[path];
+        }
 
         this.beginUpdate();
-        this._optionHelper.setOption(name, value, false);
+        this._optionHelper.setOption(name, defaultValue, false);
         this.endUpdate();
     },
 
