@@ -886,6 +886,32 @@ const ValidationEngine = {
             throw errors.Error("E0110");
         }
         return groupConfig.reset();
+    },
+
+    getValidatorAsyncResult(validator, result, values) {
+        const curValidationResult = validator.getValidationResult();
+        if(!curValidationResult || (curValidationResult && curValidationResult.status !== "pending")) {
+            return;
+        }
+        values.forEach(function(val, index) {
+            if(val.isValid === false) {
+                result.isValid = val.isValid;
+                result.brokenRules = result.brokenRules || [];
+                let rule;
+                if(typeUtils.isDefined(val.message) && typeUtils.isString(val.message) && val.message.length) {
+                    rule = extend({}, result.asyncValidationRules[index]);
+                    rule.message = val.message;
+                } else {
+                    rule = result.asyncValidationRules[index];
+                }
+                result.brokenRules.push(rule);
+                if(!result.brokenRule) {
+                    result.brokenRule = rule;
+                }
+            }
+        });
+        result.status = result.isValid ? "valid" : "invalid";
+        return result;
     }
 };
 

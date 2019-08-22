@@ -1,43 +1,65 @@
-var each = require("../../core/utils/iterator").each,
-    Class = require("../../core/class"),
-    EventsMixin = require("../../core/events_mixin"),
-    ValidationEngine = require("../../ui/validation_engine"),
-    ko = require("knockout");
+import { each } from "../../core/utils/iterator";
+import Class from "../../core/class";
+import EventsMixin from "../../core/events_mixin";
+import ValidationEngine from "../../ui/validation_engine";
+import ko from "knockout";
 
-var koDxValidator = Class.inherit({
-    ctor: function(target, option) {
-        var that = this;
-        that.target = target;
-        that.validationRules = option.validationRules;
-        that.name = option.name;
-        that.isValid = ko.observable(true);
-        that.validationError = ko.observable();
+const koDxValidator = Class.inherit({
+    ctor(target, option) {
+        this.target = target;
+        this.validationRules = option.validationRules;
+        this.name = option.name;
+        this.isValid = ko.observable(true);
+        this.validationError = ko.observable();
+        this.validationErrors = ko.observable();
+        this.validationStatus = ko.observable("valid");
 
-        each(this.validationRules, function(_, rule) {
-            rule.validator = that;
+        each(this.validationRules, (_, rule) => {
+            rule.validator = this;
         });
     },
 
 
-    validate: function() {
-        var result = ValidationEngine.validate(this.target(), this.validationRules, this.name);
+    validate() {
+        let result = ValidationEngine.validate(this.target(), this.validationRules, this.name);
         this._applyValidationResult(result);
+        if(result.complete) {
+            result.complete = result.complete.then((values) => {
+                result = ValidationEngine.getValidatorAsyncResult(this, result, values);
+                this._applyValidationResult(result);
+                return result;
+            });
+        }
         return result;
     },
 
-    reset: function() {
+    reset() {
         this.target(null);
-        var result = { isValid: true, brokenRule: null };
+        const result = {
+            isValid: true,
+            brokenRule: null,
+            brokenRules: null,
+            status: "valid"
+        };
+        this.option("validationResult", result);
         this._applyValidationResult(result);
         return result;
     },
 
-    _applyValidationResult: function(result) {
+    _applyValidationResult(result) {
         result.validator = this;
-
+        this._validationResult = result;
         this.target.dxValidator.isValid(result.isValid);
         this.target.dxValidator.validationError(result.brokenRule);
-        this.fireEvent("validated", [result]);
+        this.target.dxValidator.validationErrors(result.brokenRules);
+        this.target.dxValidator.validationStatus(result.status);
+        if(result.status !== "pending") {
+            this.fireEvent("validated", [result]);
+        }
+    },
+
+    getValidationResult() {
+        return this._validationResult;
     }
 
 }).include(EventsMixin);
@@ -45,7 +67,6 @@ var koDxValidator = Class.inherit({
 
 ko.extenders.dxValidator = function(target, option) {
     target.dxValidator = new koDxValidator(target, option);
-
     target.subscribe(target.dxValidator.validate.bind(target.dxValidator));
 
     return target;

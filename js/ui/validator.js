@@ -8,7 +8,6 @@ import ValidationMixin from "./validation/validation_mixin";
 import ValidationEngine from "./validation_engine";
 import DefaultAdapter from "./validation/default_adapter";
 import registerComponent from "../core/component_registrator";
-import typeUtils from "../core/utils/type";
 
 const VALIDATOR_CLASS = "dx-validator";
 
@@ -226,39 +225,20 @@ const Validator = DOMComponent.inherit({
         } else {
             result = ValidationEngine.validate(value, rules, name);
         }
+        this._applyValidationResult(result, adapter);
         if(result.complete) {
-            this._applyValidationResult(result, adapter);
             result.complete = result.complete.then((values) => {
-                if(!this.option("validationResult") || (this.option("validationResult") && this.option("validationResult").status !== "pending")) {
-                    return;
-                }
-                values.forEach(function(val, index) {
-                    if(val.isValid === false) {
-                        result.isValid = val.isValid;
-                        result.brokenRules = result.brokenRules || [];
-                        let rule;
-                        if(typeUtils.isDefined(val.message) && typeUtils.isString(val.message) && val.message.length) {
-                            rule = extend({}, result.asyncValidationRules[index]);
-                            rule.message = val.message;
-                        } else {
-                            rule = result.asyncValidationRules[index];
-                        }
-                        result.brokenRules.push(rule);
-                        if(!result.brokenRule) {
-                            result.brokenRule = rule;
-                        }
-                    }
-                });
-                result.status = result.isValid ? "valid" : "invalid";
+                result = ValidationEngine.getValidatorAsyncResult(this, result, values);
                 this._applyValidationResult(result, adapter);
                 return result;
             });
-        } else {
-            this._applyValidationResult(result, adapter);
         }
         return result;
     },
 
+    getValidationResult() {
+        return this._validationResult;
+    },
 
     /**
     * @name dxValidatorMethods.reset
@@ -272,7 +252,7 @@ const Validator = DOMComponent.inherit({
                 brokenRules: null,
                 status: "valid"
             };
-        this.option("validationResult", result);
+        this._validationResult = result;
         adapter.reset();
         this._resetValidationRules();
         this._applyValidationResult(result, adapter);
@@ -282,9 +262,9 @@ const Validator = DOMComponent.inherit({
         const validatedAction = this._createActionByOption("onValidated");
         result.validator = this;
         adapter.applyValidationResults && adapter.applyValidationResults(result);
+        this._validationResult = result;
         this.option({
-            isValid: result.isValid,
-            validationResult: result
+            isValid: result.isValid
         });
         if(result.status !== "pending") {
             validatedAction(result);
