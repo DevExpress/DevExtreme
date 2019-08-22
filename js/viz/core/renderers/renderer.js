@@ -1,34 +1,24 @@
-var $ = require("../../../core/renderer"),
-    domAdapter = require("../../../core/dom_adapter"),
-    windowUtils = require("../../../core/utils/window"),
-    callOnce = require("../../../core/utils/call_once"),
-    window = windowUtils.getWindow(),
-    eventsEngine = require("../../../events/core/events_engine"),
-    browser = require("../../../core/utils/browser"),
-    getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,
-    animation = require("./animation"),
-    math = Math,
-    mathMin = math.min,
-    mathMax = math.max,
-    mathFloor = math.floor,
-    mathRound = math.round,
-    mathSin = math.sin,
-    mathCos = math.cos,
-    mathAbs = math.abs,
-    mathPI = math.PI,
+import $ from "../../../core/renderer";
+import domAdapter from "../../../core/dom_adapter";
+import windowUtils from "../../../core/utils/window";
+import callOnce from "../../../core/utils/call_once";
 
-    _isDefined = require("../../../core/utils/type").isDefined,
-    vizUtils = require("../utils"),
-    _normalizeEnum = vizUtils.normalizeEnum,
-    _normalizeBBox = vizUtils.normalizeBBox,
-    _rotateBBox = vizUtils.rotateBBox,
-    PI_DIV_180 = mathPI / 180,
-    _parseInt = parseInt,
-    _parseFloat = parseFloat,
-    SHARPING_CORRECTION = 0.5,
-    ARC_COORD_PREC = 5;
+import eventsEngine from "../../../events/core/events_engine";
+import browser from "../../../core/utils/browser";
+import { getSvgMarkup } from "../../../core/utils/svg";
+import animation from "./animation";
+import { normalizeBBox, rotateBBox, normalizeEnum } from "../utils";
+import { isDefined } from "../../../core/utils/type";
 
-var pxAddingExceptions = {
+const window = windowUtils.getWindow();
+
+const { max, min, floor, round, sin, cos, abs, PI } = Math;
+
+const PI_DIV_180 = PI / 180;
+const SHARPING_CORRECTION = 0.5;
+const ARC_COORD_PREC = 5;
+
+let pxAddingExceptions = {
     "column-count": true,
     "fill-opacity": true,
     "flex-grow": true,
@@ -43,24 +33,22 @@ var pxAddingExceptions = {
     "zoom": true
 };
 
-var KEY_TEXT = "text",
-    KEY_STROKE = "stroke",
-    KEY_STROKE_WIDTH = "stroke-width",
-    KEY_STROKE_OPACITY = "stroke-opacity",
-    KEY_FONT_SIZE = "font-size",
-    KEY_FONT_STYLE = "font-style",
-    KEY_FONT_WEIGHT = "font-weight",
-    KEY_TEXT_DECORATION = "text-decoration",
-    NONE = "none",
-
-    DEFAULT_FONT_SIZE = 12;
-
+const KEY_TEXT = "text";
+const KEY_STROKE = "stroke";
+const KEY_STROKE_WIDTH = "stroke-width";
+const KEY_STROKE_OPACITY = "stroke-opacity";
+const KEY_FONT_SIZE = "font-size";
+const KEY_FONT_STYLE = "font-style";
+const KEY_FONT_WEIGHT = "font-weight";
+const KEY_TEXT_DECORATION = "text-decoration";
+const NONE = "none";
+const DEFAULT_FONT_SIZE = 12;
 const ELLIPSIS = "...";
 
-var objectCreate = (function() {
+let objectCreate = (function() {
     if(!Object.create) {
         return function(proto) {
-            var F = function() { };
+            let F = function() { };
             F.prototype = proto;
             return new F();
         };
@@ -71,14 +59,14 @@ var objectCreate = (function() {
     }
 })();
 
-var DEFAULTS = {
+let DEFAULTS = {
     scaleX: 1,
     scaleY: 1,
     "pointer-events": ""
 };
 
-var getBackup = callOnce(function() {
-    var backupContainer = domAdapter.createElement("div"),
+let getBackup = callOnce(function() {
+    let backupContainer = domAdapter.createElement("div"),
         backupCounter = 0;
     backupContainer.style.left = "-9999px";
     backupContainer.style.position = "absolute";
@@ -105,8 +93,8 @@ function restoreRoot(root, container) {
     }
 }
 
-var getNextDefsSvgId = (function() {
-    var numDefsSvgElements = 1;
+let getNextDefsSvgId = (function() {
+    let numDefsSvgElements = 1;
     return function() { return "DevExpress_" + numDefsSvgElements++; };
 })();
 
@@ -123,7 +111,7 @@ function getFuncIri(id, pathModified) {
 }
 
 function extend(target, source) {
-    var key;
+    let key;
     for(key in source) {
         target[key] = source[key];
     }
@@ -132,21 +120,21 @@ function extend(target, source) {
 
 function roundValue(value, exp) {
     value = value.toString().split('e');
-    value = mathRound(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+    value = round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
     value = value.toString().split('e');
 
     return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
 }
 
 function getBoundingClientRect(element) {
-    var box;
+    let box;
     try {
         box = element.getBoundingClientRect();
     } catch(e) {}
     return box || { left: 0, top: 0 };
 }
 
-var preserveAspectRatioMap = {
+let preserveAspectRatioMap = {
     "full": NONE,
     "lefttop": "xMinYMin",
     "leftcenter": "xMinYMid",
@@ -164,12 +152,12 @@ var preserveAspectRatioMap = {
 //
 
 function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
-    var isCircle,
+    let isCircle,
         noArc = true,
         angleDiff = roundValue(endAngle, 3) - roundValue(startAngle, 3);
 
     if(angleDiff) {
-        if((mathAbs(angleDiff) % 360) === 0) {
+        if((abs(angleDiff) % 360) === 0) {
             startAngle = 0;
             endAngle = 360;
             isCircle = true;
@@ -196,19 +184,19 @@ function normalizeArcParams(x, y, innerR, outerR, startAngle, endAngle) {
     return [
         x,
         y,
-        mathMin(outerR, innerR),
-        mathMax(outerR, innerR),
-        mathCos(startAngle),
-        mathSin(startAngle),
-        mathCos(endAngle),
-        mathSin(endAngle),
+        min(outerR, innerR),
+        max(outerR, innerR),
+        cos(startAngle),
+        sin(startAngle),
+        cos(endAngle),
+        sin(endAngle),
         isCircle,
-        mathFloor(mathAbs(endAngle - startAngle) / mathPI) % 2 ? "1" : "0",
+        floor(abs(endAngle - startAngle) / PI) % 2 ? "1" : "0",
         noArc
     ];
 }
 
-var buildArcPath = function(x, y, innerR, outerR, startAngleCos, startAngleSin, endAngleCos, endAngleSin, isCircle, longFlag) {
+let buildArcPath = function(x, y, innerR, outerR, startAngleCos, startAngleSin, endAngleCos, endAngleSin, isCircle, longFlag) {
     return [
         "M", (x + outerR * startAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * startAngleSin).toFixed(ARC_COORD_PREC),
         "A", outerR.toFixed(ARC_COORD_PREC), outerR.toFixed(ARC_COORD_PREC), 0, longFlag, 0, (x + outerR * endAngleCos).toFixed(ARC_COORD_PREC), (y - outerR * endAngleSin).toFixed(ARC_COORD_PREC),
@@ -219,7 +207,7 @@ var buildArcPath = function(x, y, innerR, outerR, startAngleCos, startAngleSin, 
 };
 
 function buildPathSegments(points, type) {
-    var list = [["M", 0, 0]];
+    let list = [["M", 0, 0]];
     switch(type) {
         case "line":
             list = buildLineSegments(points);
@@ -246,7 +234,7 @@ function buildCurveSegments(points, close) {
 }
 
 function buildSegments(points, buildSimpleSegment, close) {
-    var i,
+    let i,
         ii,
         list = [];
     if(points[0] && points[0].length) {
@@ -260,7 +248,7 @@ function buildSegments(points, buildSimpleSegment, close) {
 }
 
 function buildSimpleLineSegment(points, close, list) {
-    var i = 0,
+    let i = 0,
         k0 = list.length,
         k = k0,
         ii = (points || []).length;
@@ -284,7 +272,7 @@ function buildSimpleLineSegment(points, close, list) {
 }
 
 function buildSimpleCurveSegment(points, close, list) {
-    var i,
+    let i,
         k = list.length,
         ii = (points || []).length;
     if(ii) {
@@ -324,7 +312,7 @@ function buildSimpleCurveSegment(points, close, list) {
 }
 
 function combinePathParam(segments) {
-    var d = [],
+    let d = [],
         k = 0,
         i,
         ii = segments.length,
@@ -341,7 +329,7 @@ function combinePathParam(segments) {
 }
 
 function compensateSegments(oldSegments, newSegments, type) {
-    var oldLength = oldSegments.length,
+    let oldLength = oldSegments.length,
         newLength = newSegments.length,
         i,
         originalNewSegments,
@@ -361,7 +349,7 @@ function compensateSegments(oldSegments, newSegments, type) {
 }
 
 function prepareConstSegment(constSeg, type) {
-    var x = constSeg[constSeg.length - 2],
+    let x = constSeg[constSeg.length - 2],
         y = constSeg[constSeg.length - 1];
     switch(type) {
         case "line":
@@ -378,7 +366,7 @@ function prepareConstSegment(constSeg, type) {
 }
 
 function makeEqualLineSegments(short, long, type) {
-    var constSeg = short[short.length - 1].slice(),
+    let constSeg = short[short.length - 1].slice(),
         i = short.length;
     prepareConstSegment(constSeg, type);
     for(; i < long.length; i++) {
@@ -387,7 +375,7 @@ function makeEqualLineSegments(short, long, type) {
 }
 
 function makeEqualAreaSegments(short, long, type) {
-    var i,
+    let i,
         head,
         shortLength = short.length,
         longLength = long.length,
@@ -401,7 +389,7 @@ function makeEqualAreaSegments(short, long, type) {
         constsSeg2 = short.slice(i + 1)[0].slice(0);
         prepareConstSegment(constsSeg1, type);
         prepareConstSegment(constsSeg2, type);
-        for(var j = i; j < (longLength - 1) / 2 - 1; j++) {
+        for(let j = i; j < (longLength - 1) / 2 - 1; j++) {
             short.splice(j + 1, 0, constsSeg1);
             short.splice(j + 3, 0, constsSeg2);
         }
@@ -409,7 +397,7 @@ function makeEqualAreaSegments(short, long, type) {
 }
 
 function baseCss(that, styles) {
-    var elemStyles = that._styles,
+    let elemStyles = that._styles,
         str = "",
         key,
         value;
@@ -417,7 +405,7 @@ function baseCss(that, styles) {
     styles = styles || {};
     for(key in styles) {
         value = styles[key];
-        if(_isDefined(value)) {
+        if(isDefined(value)) {
             value += typeof value === "number" && !pxAddingExceptions[key] ? "px" : "";
             elemStyles[key] = value !== "" ? value : null;
         }
@@ -435,7 +423,7 @@ function baseCss(that, styles) {
 }
 
 function fixFuncIri(wrapper, attribute) {
-    var element = wrapper.element,
+    let element = wrapper.element,
         id = wrapper.attr(attribute);
 
     if(id && id.indexOf("DevExpress") !== -1) {
@@ -446,7 +434,7 @@ function fixFuncIri(wrapper, attribute) {
 
 function baseAttr(that, attrs) {
     attrs = attrs || {};
-    var settings = that._settings,
+    let settings = that._settings,
         attributes = {},
         key,
         value,
@@ -507,7 +495,7 @@ function baseAttr(that, attrs) {
         sw = (("_originalSW" in that) ? that._originalSW : settings[KEY_STROKE_WIDTH]) || 1;
         key = "stroke-dasharray";
 
-        value = value === null ? "" : _normalizeEnum(value);
+        value = value === null ? "" : normalizeEnum(value);
 
         if(value === "" || value === "solid" || value === NONE) {
             that.element.removeAttribute(key);
@@ -515,7 +503,7 @@ function baseAttr(that, attrs) {
             value = value.replace(/longdash/g, "8,3,").replace(/dash/g, "4,3,").replace(/dot/g, "1,3,").replace(/,$/, "").split(",");
             i = value.length;
             while(i--) {
-                value[i] = _parseInt((value[i])) * sw;
+                value[i] = parseInt((value[i])) * sw;
             }
             that.element.setAttribute(key, value.join(","));
         }
@@ -529,7 +517,7 @@ function baseAttr(that, attrs) {
 }
 
 function pathAttr(attrs) {
-    var that = this,
+    let that = this,
         segments;
 
     if(isObjectArgument(attrs)) {
@@ -549,7 +537,7 @@ function pathAttr(attrs) {
 }
 
 function arcAttr(attrs) {
-    var settings = this._settings,
+    let settings = this._settings,
         x, y, innerRadius, outerRadius, startAngle, endAngle;
 
     if(isObjectArgument(attrs)) {
@@ -569,7 +557,7 @@ function arcAttr(attrs) {
 }
 
 function rectAttr(attrs) {
-    var that = this,
+    let that = this,
         x,
         y,
         width,
@@ -610,7 +598,7 @@ function rectAttr(attrs) {
 }
 
 function textAttr(attrs) {
-    var that = this,
+    let that = this,
         settings,
         isResetRequired,
         wasStroked,
@@ -622,7 +610,7 @@ function textAttr(attrs) {
 
     attrs = extend({}, attrs);
     settings = that._settings;
-    wasStroked = _isDefined(settings[KEY_STROKE]) && _isDefined(settings[KEY_STROKE_WIDTH]);
+    wasStroked = isDefined(settings[KEY_STROKE]) && isDefined(settings[KEY_STROKE_WIDTH]);
 
     if(attrs[KEY_TEXT] !== undefined) {
         settings[KEY_TEXT] = attrs[KEY_TEXT];
@@ -642,7 +630,7 @@ function textAttr(attrs) {
         delete attrs[KEY_STROKE_OPACITY];
     }
 
-    isStroked = _isDefined(settings[KEY_STROKE]) && _isDefined(settings[KEY_STROKE_WIDTH]);
+    isStroked = isDefined(settings[KEY_STROKE]) && isDefined(settings[KEY_STROKE_WIDTH]);
     baseAttr(that, attrs);
     isResetRequired = isResetRequired || (isStroked !== wasStroked && settings[KEY_TEXT]);
     if(isResetRequired) {
@@ -668,7 +656,7 @@ function textCss(styles) {
 }
 
 function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
-    var style,
+    let style,
         realStyle,
         i,
         ii,
@@ -707,7 +695,7 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
 }
 
 function adjustLineHeights(items) {
-    var i, ii,
+    let i, ii,
         currentItem = items[0],
         item;
     for(i = 1, ii = items.length; i < ii; ++i) {
@@ -715,7 +703,7 @@ function adjustLineHeights(items) {
         if(item.line === currentItem.line) {
             // T177039
             currentItem.height = maxLengthFontSize(currentItem.height, item.height);
-            currentItem.inherits = currentItem.inherits || _parseFloat(item.height) === 0;
+            currentItem.inherits = currentItem.inherits || parseFloat(item.height) === 0;
             item.height = NaN;
         } else {
             currentItem = item;
@@ -724,7 +712,7 @@ function adjustLineHeights(items) {
 }
 
 function removeExtraAttrs(html) {
-    var findTagAttrs = /(?:(<[a-z0-9]+\s*))([\s\S]*?)(>|\/>)/gi,
+    let findTagAttrs = /(?:(<[a-z0-9]+\s*))([\s\S]*?)(>|\/>)/gi,
         findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
 
     return html.replace(findTagAttrs, function(allTagAttrs, p1, p2, p3) {
@@ -737,7 +725,7 @@ function removeExtraAttrs(html) {
 }
 
 function parseHTML(text) {
-    var items = [],
+    let items = [],
         div = domAdapter.createElement("div");
     div.innerHTML = text.replace(/\r/g, "").replace(/\n/g, "<br/>");
     orderHtmlTree(items, 0, div, {}, "");
@@ -746,7 +734,7 @@ function parseHTML(text) {
 }
 
 function parseMultiline(text) {
-    var texts = text.replace(/\r/g, "").split(/\n/g),
+    let texts = text.replace(/\r/g, "").split(/\n/g),
         i = 0,
         items = [];
     for(; i < texts.length; i++) {
@@ -756,7 +744,7 @@ function parseMultiline(text) {
 }
 
 function createTspans(items, element, fieldName) {
-    var i, ii, item;
+    let i, ii, item;
     for(i = 0, ii = items.length; i < ii; ++i) {
         item = items[i];
         item[fieldName] = createElement("tspan");
@@ -774,7 +762,7 @@ function restoreText() {
 }
 
 function applyEllipsis(maxWidth) {
-    var that = this,
+    let that = this,
         lines,
         hasEllipsis = false,
         i,
@@ -805,7 +793,7 @@ function applyEllipsis(maxWidth) {
             }
             for(j = 0, jj = lineParts.length; j < jj; ++j) {
                 text = lineParts[j];
-                if(_isDefined(text.endIndex)) {
+                if(isDefined(text.endIndex)) {
                     setNewText(text, text.endIndex);
                     hasEllipsis = true;
                 } else if(text.startBox > maxWidth) {
@@ -831,8 +819,22 @@ function cloneAndRemoveAttrs(node) {
     return clone || node;
 }
 
+function detachAndStoreTitleElements(element) {
+    const titleElements = domAdapter.querySelectorAll(element, "title");
+
+    for(let i = 0; i < titleElements.length; i++) {
+        element.removeChild(titleElements[i]);
+    }
+
+    return () => {
+        for(let i = 0; i < titleElements.length; i++) {
+            element.appendChild(titleElements[i]);
+        }
+    };
+}
+
 function setMaxSize(maxWidth, maxHeight, options = {}) {
-    var that = this,
+    let that = this,
         lines = [],
         textChanged = false,
         textIsEmpty = false,
@@ -841,6 +843,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
         ellipsisMaxWidth = maxWidth;
 
     restoreText.call(that);
+    const restoreTitleElement = detachAndStoreTitleElements(this.element);
 
     ellipsis = that.renderer.text(ELLIPSIS).attr(that._styles).append(that.renderer.root);
     ellipsisWidth = ellipsis.getBBox().width;
@@ -880,12 +883,12 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
 
     ellipsis.remove();
     that._hasEllipsis = textChanged;
-
+    restoreTitleElement();
     return { rowCount: lines.length, textChanged, textIsEmpty };
 }
 
 function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
-    var k,
+    let k,
         kk;
     if(startBox <= maxWidth && endBox > maxWidth) {
         for(k = 1, kk = text.value.length; k <= kk; ++k) {
@@ -901,7 +904,7 @@ function getTextWidth(text) {
 }
 
 function prepareLines(element, texts, maxWidth) {
-    var lines = [],
+    let lines = [],
         i,
         ii,
         text,
@@ -1042,7 +1045,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
 
 function calculateLineHeight(line, lineHeight) {
     return line.parts.reduce((height, text) => {
-        return Math.max(height, getItemLineHeight(text, lineHeight));
+        return max(height, getItemLineHeight(text, lineHeight));
     }, 0);
 }
 
@@ -1124,7 +1127,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 
         startBox = endBox;
 
-        if(_isDefined(maxWidth) && endBox > maxWidth) {
+        if(isDefined(maxWidth) && endBox > maxWidth) {
             const wordWrapLines = wordWrap(text, maxWidth, ellipsisMaxWidth, options);
             if(!wordWrapLines.length) {
                 lines = [];
@@ -1139,7 +1142,7 @@ function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options)
 }
 
 function setNewText(text, index, insertString = ELLIPSIS) {
-    var newText = text.value.substr(0, index) + insertString;
+    let newText = text.value.substr(0, index) + insertString;
     text.value = text.tspan.textContent = newText;
     text.stroke && (text.stroke.textContent = newText);
     if(insertString === ELLIPSIS) {
@@ -1153,7 +1156,7 @@ function removeTextSpan(text) {
 }
 
 function createTextNodes(wrapper, text, isStroked) {
-    var items,
+    let items,
         parsedHtml;
 
     wrapper._texts = null;
@@ -1197,7 +1200,7 @@ function getItemLineHeight(item, defaultValue) {
 
 function locateTextNodes(wrapper) {
     if(!wrapper._texts) return;
-    var items = wrapper._texts,
+    let items = wrapper._texts,
         x = wrapper._settings.x,
         lineHeight = wrapper._getLineHeight(),
         i, ii,
@@ -1206,7 +1209,7 @@ function locateTextNodes(wrapper) {
     setTextNodeAttribute(item, "y", wrapper._settings.y);
     for(i = 1, ii = items.length; i < ii; ++i) {
         item = items[i];
-        if(_parseFloat(item.height) >= 0) {
+        if(parseFloat(item.height) >= 0) {
             setTextNodeAttribute(item, "x", x);
             const height = getItemLineHeight(item, lineHeight);
             setTextNodeAttribute(item, "dy", height); // T177039
@@ -1215,8 +1218,8 @@ function locateTextNodes(wrapper) {
 }
 
 function maxLengthFontSize(fontSize1, fontSize2) {
-    var parsedHeight1 = _parseFloat(fontSize1),
-        parsedHeight2 = _parseFloat(fontSize2),
+    let parsedHeight1 = parseFloat(fontSize1),
+        parsedHeight2 = parseFloat(fontSize2),
         height1 = parsedHeight1 || DEFAULT_FONT_SIZE,
         height2 = parsedHeight2 || DEFAULT_FONT_SIZE;
 
@@ -1225,7 +1228,7 @@ function maxLengthFontSize(fontSize1, fontSize2) {
 
 function strokeTextNodes(wrapper) {
     if(!wrapper._texts) return;
-    var items = wrapper._texts,
+    let items = wrapper._texts,
         stroke = wrapper._settings[KEY_STROKE],
         strokeWidth = wrapper._settings[KEY_STROKE_WIDTH],
         strokeOpacity = wrapper._settings[KEY_STROKE_OPACITY] || 1,
@@ -1241,13 +1244,13 @@ function strokeTextNodes(wrapper) {
 
 function baseAnimate(that, params, options, complete) {
     options = options || {};
-    var key,
+    let key,
         value,
         renderer = that.renderer,
         settings = that._settings,
         animationParams = {};
 
-    var defaults = {
+    let defaults = {
         translateX: 0,
         translateY: 0,
         scaleX: 1,
@@ -1288,7 +1291,7 @@ function baseAnimate(that, params, options, complete) {
 }
 
 function pathAnimate(params, options, complete) {
-    var that = this,
+    let that = this,
         curSegments = that.segments || [],
         newSegments,
         endSegments;
@@ -1305,7 +1308,7 @@ function pathAnimate(params, options, complete) {
 }
 
 function arcAnimate(params, options, complete) {
-    var that = this,
+    let that = this,
         settings = that._settings,
         arcParams = { from: {}, to: {} };
 
@@ -1346,7 +1349,7 @@ exports.DEBUG_removeBackupContainer = function() {
 ///#ENDDEBUG
 
 function buildLink(target, parameters) {
-    var obj = { is: false, name: parameters.name || parameters, after: parameters.after };
+    let obj = { is: false, name: parameters.name || parameters, after: parameters.after };
     if(target) {
         obj.to = target;
     } else {
@@ -1357,7 +1360,7 @@ function buildLink(target, parameters) {
 
 // SvgElement
 function SvgElement(renderer, tagName, type) {
-    var that = this;
+    let that = this;
     that.renderer = renderer;
     that.element = createElement(tagName);
     that._settings = {};
@@ -1382,7 +1385,7 @@ SvgElement.prototype = {
     },
 
     _addFixIRICallback: function() {
-        var that = this,
+        let that = this,
             fn = function() {
                 fixFuncIri(that, "fill");
                 fixFuncIri(that, "clip-path");
@@ -1396,8 +1399,8 @@ SvgElement.prototype = {
     },
 
     _clearChildrenFuncIri: function() {
-        var clearChildren = function(element) {
-            var i;
+        let clearChildren = function(element) {
+            let i;
 
             for(i = 0; i < element.childNodes.length; i++) {
                 removeFuncIriCallback(element.childNodes[i]._fixFuncIri);
@@ -1421,7 +1424,7 @@ SvgElement.prototype = {
     },
 
     remove: function() {
-        var element = this.element;
+        let element = this.element;
         element.parentNode && element.parentNode.removeChild(element);
         return this;
     },
@@ -1434,7 +1437,7 @@ SvgElement.prototype = {
 
     ///#DEBUG
     checkLinks: function() {
-        var count = 0,
+        let count = 0,
             links = this._links,
             i,
             ii = links.length;
@@ -1473,7 +1476,7 @@ SvgElement.prototype = {
 
     // It might be better to traverse list to start (not to end) as widget components more likely will be rendered in the same order as they were created
     linkAppend: function() {
-        var link = this._link,
+        let link = this._link,
             items = link.to._links,
             i,
             next;
@@ -1501,14 +1504,14 @@ SvgElement.prototype = {
     },
 
     toBackground: function() {
-        var elem = this.element,
+        let elem = this.element,
             parent = elem.parentNode;
         parent && parent.insertBefore(elem, parent.firstChild);
         return this;
     },
 
     toForeground: function() {
-        var elem = this.element,
+        let elem = this.element,
             parent = elem.parentNode;
         parent && parent.appendChild(elem);
         return this;
@@ -1519,8 +1522,8 @@ SvgElement.prototype = {
     },
 
     smartAttr: function(attrs) {
-        var that = this;
-        if(attrs.hatching && _normalizeEnum(attrs.hatching.direction) !== "none") {
+        let that = this;
+        if(attrs.hatching && normalizeEnum(attrs.hatching.direction) !== "none") {
             attrs = extend({}, attrs);
             attrs.fill = that._hatching = that.renderer.lockHatching(attrs.fill, attrs.hatching, that._hatching);
             delete attrs.hatching;
@@ -1573,8 +1576,8 @@ SvgElement.prototype = {
 
             transformations.push("rotate(" + tr.rotate + "," + (rotateX || 0) + "," + (rotateY || 0) + ")");
         }
-        scaleXDefined = _isDefined(tr.scaleX);
-        scaleYDefined = _isDefined(tr.scaleY);
+        scaleXDefined = isDefined(tr.scaleX);
+        scaleYDefined = isDefined(tr.scaleY);
         if(scaleXDefined || scaleYDefined) {
             transformations.push("scale(" + (scaleXDefined ? tr.scaleX : 1) + "," + (scaleYDefined ? tr.scaleY : 1) + ")");
         }
@@ -1585,10 +1588,10 @@ SvgElement.prototype = {
     },
 
     move: function(x, y, animate, animOptions) {
-        var obj = {};
+        let obj = {};
 
-        _isDefined(x) && (obj.translateX = x);
-        _isDefined(y) && (obj.translateY = y);
+        isDefined(x) && (obj.translateX = x);
+        isDefined(y) && (obj.translateY = y);
 
         if(!animate) {
             this.attr(obj);
@@ -1599,12 +1602,12 @@ SvgElement.prototype = {
     },
 
     rotate: function(angle, x, y, animate, animOptions) {
-        var obj = {
+        let obj = {
             rotate: angle || 0
         };
 
-        _isDefined(x) && (obj.rotateX = x);
-        _isDefined(y) && (obj.rotateY = y);
+        isDefined(x) && (obj.rotateX = x);
+        isDefined(y) && (obj.rotateY = y);
 
         if(!animate) {
             this.attr(obj);
@@ -1615,7 +1618,7 @@ SvgElement.prototype = {
     },
 
     _getElementBBox: function() {
-        var elem = this.element,
+        let elem = this.element,
             bBox;
 
         try {
@@ -1627,16 +1630,16 @@ SvgElement.prototype = {
 
     // TODO do we need to round results and consider rotation coordinates?
     getBBox: function() {
-        var transformation = this._settings,
+        let transformation = this._settings,
             bBox = this._getElementBBox();
 
         if(transformation.rotate) {
-            bBox = _rotateBBox(bBox, [
+            bBox = rotateBBox(bBox, [
                 (("rotateX" in transformation) ? transformation.rotateX : transformation.x) || 0,
                 (("rotateY" in transformation) ? transformation.rotateY : transformation.y) || 0
             ], -transformation.rotate); // Angle is transformed from svg to right-handed cartesian space
         } else {
-            bBox = _normalizeBBox(bBox);
+            bBox = normalizeBBox(bBox);
         }
         return bBox;
     },
@@ -1650,19 +1653,19 @@ SvgElement.prototype = {
     },
 
     stopAnimation: function(disableComplete) {
-        var animation = this.animation;
+        let animation = this.animation;
         animation && animation.stop(disableComplete);
         return this;
     },
 
     setTitle: function(text) {
-        var titleElem = createElement('title');
+        let titleElem = createElement('title');
         titleElem.textContent = text || '';
         this.element.appendChild(titleElem);
     },
 
     data: function(obj, val) {
-        var elem = this.element,
+        let elem = this.element,
             key;
         if(val !== undefined) {
             elem[obj] = val;
@@ -1675,21 +1678,21 @@ SvgElement.prototype = {
     },
 
     on: function() {
-        var args = [ this._getJQElement() ];
+        let args = [ this._getJQElement() ];
         args.push.apply(args, arguments);
         eventsEngine.on.apply(eventsEngine, args);
         return this;
     },
 
     off: function() {
-        var args = [ this._getJQElement() ];
+        let args = [ this._getJQElement() ];
         args.push.apply(args, arguments);
         eventsEngine.off.apply(eventsEngine, args);
         return this;
     },
 
     trigger: function() {
-        var args = [ this._getJQElement() ];
+        let args = [ this._getJQElement() ];
         args.push.apply(args, arguments);
         eventsEngine.trigger.apply(eventsEngine, args);
         return this;
@@ -1758,13 +1761,13 @@ extend(TextSvgElement.prototype, {
     setMaxSize,
     restoreText,
     _getLineHeight() {
-        return !isNaN(_parseFloat(this._styles[KEY_FONT_SIZE])) ? this._styles[KEY_FONT_SIZE] : DEFAULT_FONT_SIZE;
+        return !isNaN(parseFloat(this._styles[KEY_FONT_SIZE])) ? this._styles[KEY_FONT_SIZE] : DEFAULT_FONT_SIZE;
     }
 });
 // TextSvgElement
 
 function updateIndexes(items, k) {
-    var i,
+    let i,
         item;
     for(i = k; (item = items[i]); ++i) {
         item._link.i = i;
@@ -1772,7 +1775,7 @@ function updateIndexes(items, k) {
 }
 
 function linkItem(target, container) {
-    var items = container._links,
+    let items = container._links,
         key = (target._link.after = target._link.after || container._linkAfter),
         i,
         item;
@@ -1789,7 +1792,7 @@ function linkItem(target, container) {
 }
 
 function unlinkItem(target) {
-    var i,
+    let i,
         items = target._link.to._links;
     for(i = 0; items[i] !== target; ++i);
     items.splice(i, 1);
@@ -1797,7 +1800,7 @@ function unlinkItem(target) {
 }
 
 function Renderer(options) {
-    var that = this;
+    let that = this;
     that.root = that._createElement("svg", {
         xmlns: "http://www.w3.org/2000/svg",
         version: "1.1",
@@ -1831,7 +1834,7 @@ Renderer.prototype = {
     constructor: Renderer,
 
     _init: function() {
-        var that = this;
+        let that = this;
         that._defs = that._createElement("defs").append(that.root);
 
         that._animationController = new animation.AnimationController(that.root.element);
@@ -1843,7 +1846,7 @@ Renderer.prototype = {
             return;
         }
 
-        var box = getBoundingClientRect(this._$container.get(0)),
+        let box = getBoundingClientRect(this._$container.get(0)),
             dx = roundValue(box.left % 1, 2),
             dy = roundValue(box.top % 1, 2);
 
@@ -1869,7 +1872,7 @@ Renderer.prototype = {
     },
 
     setOptions: function(options) {
-        var that = this;
+        let that = this;
         that.rtl = !!options.rtl;
         that.encodeHtml = !!options.encodeHtml;
 
@@ -1880,13 +1883,13 @@ Renderer.prototype = {
     },
 
     _createElement: function(tagName, attr, type) {
-        var elem = new exports.SvgElement(this, tagName, type);
+        let elem = new exports.SvgElement(this, tagName, type);
         attr && elem.attr(attr);
         return elem;
     },
 
     lock: function() {
-        var that = this;
+        let that = this;
         if(that._locker === 0) {
             that._backed = !that._$container.is(":visible");
             if(that._backed) {
@@ -1898,7 +1901,7 @@ Renderer.prototype = {
     },
 
     unlock: function() {
-        var that = this;
+        let that = this;
         --that._locker;
         if(that._locker === 0) {
             if(that._backed) {
@@ -1918,7 +1921,7 @@ Renderer.prototype = {
     },
 
     dispose: function() {
-        var that = this,
+        let that = this,
             key;
         that.root.dispose();
         that._defs.dispose();
@@ -1953,7 +1956,7 @@ Renderer.prototype = {
 
     svg: function() {
         this.removePlacementFix();
-        var markup = this.root.markup();
+        let markup = this.root.markup();
         this.fixPlacement();
         return markup;
     },
@@ -1967,7 +1970,7 @@ Renderer.prototype = {
     },
 
     rect: function(x, y, width, height) {
-        var elem = new exports.RectSvgElement(this);
+        let elem = new exports.RectSvgElement(this);
         return elem.attr({ x: x || 0, y: y || 0, width: width || 0, height: height || 0 });
     },
 
@@ -1984,9 +1987,9 @@ Renderer.prototype = {
     },
 
     image: function(x, y, w, h, href, location) {
-        var image = this._createElement("image", {
+        let image = this._createElement("image", {
             x: x || 0, y: y || 0, width: w || 0, height: h || 0,
-            preserveAspectRatio: preserveAspectRatioMap[_normalizeEnum(location)] || NONE
+            preserveAspectRatio: preserveAspectRatioMap[normalizeEnum(location)] || NONE
         });
 
         image.element.setAttributeNS("http://www.w3.org/1999/xlink", "href", href || "");
@@ -1995,24 +1998,24 @@ Renderer.prototype = {
 
     // to combine different d attributes use helper methods
     path: function(points, type) {
-        var elem = new exports.PathSvgElement(this, type);
+        let elem = new exports.PathSvgElement(this, type);
         return elem.attr({ points: points || [] });
     },
 
     // TODO check B232257
     // TODO animate end angle special case
     arc: function(x, y, innerRadius, outerRadius, startAngle, endAngle) {
-        var elem = new exports.ArcSvgElement(this);
+        let elem = new exports.ArcSvgElement(this);
         return elem.attr({ x: x || 0, y: y || 0, innerRadius: innerRadius || 0, outerRadius: outerRadius || 0, startAngle: startAngle || 0, endAngle: endAngle || 0 });
     },
 
     text: function(text, x, y) {
-        var elem = new exports.TextSvgElement(this);
+        let elem = new exports.TextSvgElement(this);
         return elem.attr({ text: text, x: x || 0, y: y || 0 });
     },
 
     linearGradient: function(stops) {
-        var gradient,
+        let gradient,
             id = getNextDefsSvgId(),
             that = this;
         gradient = that._createElement("linearGradient", { id: id }).append(that._defs);
@@ -2029,7 +2032,7 @@ Renderer.prototype = {
     pattern: function(color, hatching, _id) {
         hatching = hatching || {};
 
-        var that = this,
+        let that = this,
             id,
             d,
             pattern,
@@ -2041,7 +2044,7 @@ Renderer.prototype = {
 
         id = _id || getNextDefsSvgId();
 
-        d = (_normalizeEnum(hatching.direction) === "right" ?
+        d = (normalizeEnum(hatching.direction) === "right" ?
             "M " + stepTo2 + " " + (-stepTo2) + " L " + (-stepTo2) + " " + stepTo2 + " M 0 " + step + " L " + step + " 0 M " + stepBy15 + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15
             : "M 0 0 L " + step + " " + step + " M " + (-stepTo2) + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15 + " M " + stepTo2 + " " + (-stepTo2) + " L " + stepBy15 + " " + stepTo2);
 
@@ -2070,7 +2073,7 @@ Renderer.prototype = {
 
     // appended automatically
     clipRect: function(x, y, width, height) {
-        var that = this,
+        let that = this,
             id = getNextDefsSvgId(),
             clipPath = that._createElement("clipPath", { id: id }).append(that._defs),
             rect = that.rect(x, y, width, height).append(clipPath);
@@ -2091,7 +2094,7 @@ Renderer.prototype = {
 
     // appended automatically
     shadowFilter: function(x, y, width, height, offsetX, offsetY, blur, color, opacity) {
-        var that = this,
+        let that = this,
             id = getNextDefsSvgId(),
             filter = that._createElement("filter", { id: id, x: x || 0, y: y || 0, width: width || 0, height: height || 0 }).append(that._defs),
             gaussianBlur = that._createElement("feGaussianBlur", { "in": "SourceGraphic", "result": "gaussianBlurResult", "stdDeviation": blur || 0 }).append(filter),
@@ -2108,7 +2111,7 @@ Renderer.prototype = {
         filter.finalComposite = finalComposite;
 
         filter.attr = function(attrs) {
-            var that = this,
+            let that = this,
                 filterAttrs = {},
                 offsetAttrs = {},
                 floodAttrs = {};
@@ -2136,7 +2139,7 @@ Renderer.prototype = {
     },
 
     brightFilter: function(type, slope) {
-        var that = this,
+        let that = this,
             id = getNextDefsSvgId(),
             filter = that._createElement("filter", { id: id }).append(that._defs),
             componentTransferElement = that._createElement("feComponentTransfer").append(filter),
@@ -2157,7 +2160,7 @@ Renderer.prototype = {
             return this._grayScaleFilter;
         }
 
-        var that = this,
+        let that = this,
             id = getNextDefsSvgId(),
             filter = that._createElement("filter", { id: id }).append(that._defs);
 
@@ -2172,7 +2175,7 @@ Renderer.prototype = {
     },
 
     initHatching: function() {
-        var storage = this._hatchingStorage = this._hatchingStorage || { byHash: {}, baseId: getNextDefsSvgId() },
+        let storage = this._hatchingStorage = this._hatchingStorage || { byHash: {}, baseId: getNextDefsSvgId() },
             byHash = storage.byHash,
             name;
 
@@ -2185,7 +2188,7 @@ Renderer.prototype = {
     },
 
     lockHatching: function(color, hatching, ref) {
-        var storage = this._hatchingStorage,
+        let storage = this._hatchingStorage,
             hash = getHatchingHash(color, hatching),
             storageItem,
             pattern;
@@ -2207,7 +2210,7 @@ Renderer.prototype = {
     },
 
     releaseHatching: function(ref) {
-        var storage = this._hatchingStorage,
+        let storage = this._hatchingStorage,
             hash = storage.refToHash[ref],
             storageItem = storage.byHash[hash];
 
@@ -2224,8 +2227,8 @@ function getHatchingHash(color, hatching) {
 }
 
 // paths modifier
-var fixFuncIriCallbacks = (function() {
-    var callbacks = [];
+let fixFuncIriCallbacks = (function() {
+    let callbacks = [];
 
     return {
         add: function(fn) {
