@@ -111,7 +111,12 @@ var legendItem = {
     * @name VectorMapLegendItem.color
     * @type string
     */
-    color: undefined
+    color: undefined,
+    /**
+    * @name VectorMapLegendItem.size
+    * @type number
+    */
+    size: 10
 };
 
 /**
