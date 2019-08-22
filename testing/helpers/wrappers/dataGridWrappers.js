@@ -7,6 +7,8 @@ export class DataGridWrapper {
         this.headerPanel = new HeaderPanelWrapper(containerSelector);
         this.headers = new HeadersWrapper(containerSelector);
         this.filterRow = new FilterRowWrapper(containerSelector);
+        this.columns = new ColumnWrapper(containerSelector);
+        this.rowsView = new RowsViewWrapper(containerSelector);
     }
 }
 
@@ -27,6 +29,10 @@ export class RowsViewWrapper extends WrapperBase {
 
     getVirtualCell(columnIndex) {
         return this.getVirtualRowElement().find("td").eq(columnIndex);
+    }
+
+    getFocusedRowElement() {
+        return this.getContainer().find(".dx-row-focused");
     }
 }
 

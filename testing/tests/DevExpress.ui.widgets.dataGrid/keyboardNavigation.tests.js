@@ -9266,6 +9266,90 @@ QUnit.module("Keyboard navigation accessibility", {
         assert.equal(keyDownFiresCount, 2, "keyDownFiresCount");
     });
 
+    testInDesktop("Focused row should be focused if focus event initiator not from rowsView if command column buttons present (T805341)", function(assert) {
+        var gridWrapper = new DataGridWrapper("#container"),
+            headerCell,
+            commandButton;
+
+        // arrange
+        this.columns = [
+            { dataField: "name", allowSorting: true, allowFiltering: true },
+            {
+                type: "buttons",
+                buttons: [{ text: "test0" }]
+            }
+        ];
+        this.options = {
+            editing: {
+                mode: "row",
+                allowUpdating: true
+            },
+            focusedRowEnabled: true,
+            focusedRowIndex: 1
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        $(this.getCellElement(1, 0)).attr("tabindex", 0);
+        headerCell = gridWrapper.headers.getHeaderItem(0, 0);
+        commandButton = gridWrapper.columns.getCommandButtons().get(0);
+        this.keyboardNavigationController._focusInHandler({
+            event: {
+                relatedTarget: headerCell,
+                target: commandButton,
+                originalEvent: {
+                    target: commandButton,
+                    preventDefault: () => {}
+                }
+            }
+        });
+
+        // assert
+        assert.ok(gridWrapper.rowsView.getFocusedRowElement().is(":focus"));
+    });
+
+    testInDesktop("Corrected cell should be focused if focus event initiator not from rowsView if command column buttons present (T805341)", function(assert) {
+        var gridWrapper = new DataGridWrapper("#container"),
+            headerCell,
+            commandButton;
+
+        // arrange
+        this.columns = [
+            { dataField: "name", allowSorting: true, allowFiltering: true },
+            {
+                type: "buttons",
+                buttons: [{ text: "test0" }]
+            }
+        ];
+        this.options = {
+            editing: {
+                mode: "row",
+                allowUpdating: true
+            }
+        };
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        $(this.getCellElement(0, 0)).attr("tabindex", 0);
+        headerCell = gridWrapper.headers.getHeaderItem(0, 0);
+        commandButton = gridWrapper.columns.getCommandButtons().get(0);
+        this.keyboardNavigationController._focusInHandler({
+            event: {
+                relatedTarget: headerCell,
+                target: commandButton,
+                originalEvent: {
+                    target: commandButton,
+                    preventDefault: () => {}
+                }
+            }
+        });
+
+        // assert
+        assert.ok($(this.getCellElement(0, 0)).is(":focus"));
+    });
+
     testInDesktop("Enter, Space key down by header filter indicator", function(assert) {
         var headersWrapper = new HeadersWrapper("#container"),
             keyDownFiresCount = 0,

@@ -256,7 +256,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _initFocusedViews: function() {
         var that = this,
-            clickAction = that.createAction(that._clickHandler);
+            clickAction = that.createAction(that._clickHandler),
+            focusinAction = that.createAction(that._focusInHandler);
 
         that._focusedViews = [];
 
@@ -275,13 +276,17 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         isFocusedViewCorrect = that._focusedView && that._focusedView.name === view.name,
                         needUpdateFocus = false,
                         isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
-                        keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
+                        keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`,
+                        focusinSelector = `.${ROW_CLASS} > .dx-command-edit > .dx-link`;
 
                     eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
                     eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), keyboardActionSelector, {
                         viewIndex: index,
                         view: view
                     }, clickAction);
+
+                    eventsEngine.off($element, eventUtils.addNamespace("focusin", "dxDataGridKeyboardNavigation"), focusinAction);
+                    eventsEngine.on($element, eventUtils.addNamespace("focusin", "dxDataGridKeyboardNavigation"), focusinSelector, focusinAction);
 
                     that._initKeyDownProcessor(that, $element, that._keyDownHandler);
 
@@ -292,6 +297,22 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 });
             }
         });
+    },
+
+    _focusInHandler: function(e) {
+        var event = e.event,
+            $relatedTarget = $(event.relatedTarget),
+            rowsView = this.getView("rowsView"),
+            $rowsViewElement = $(rowsView.element()),
+            isInitiatorInsideRowsView = $relatedTarget.closest(".dx-datagrid-rowsview").length > 0;
+
+        if(!isInitiatorInsideRowsView) {
+            let focusElement = $rowsViewElement.find("[tabindex]").get(0);
+            this._focusView(rowsView, 0);
+            if(focusElement) {
+                this._focus($(focusElement));
+            }
+        }
     },
 
     _initKeyDownProcessor: function(context, element, handler) {
@@ -899,7 +920,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var editingOptions = this.option("editing"),
             direction = eventArgs.shift ? "previous" : "next",
             isOriginalHandlerRequired = !eventArgs.shift && this._isLastValidCell(this._focusedCellPosition) || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition)),
-            eventTarget = eventArgs.originalEvent.target,
+            eventTarget = eventArgs.target || eventArgs.originalEvent.target,
             focusedViewElement = this._focusedView && this._focusedView.element();
 
         if(this._handleTabKeyOnMasterDetailCell(eventTarget, direction)) {
