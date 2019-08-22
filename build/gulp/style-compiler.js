@@ -62,7 +62,7 @@ gulp.task('style-compiler-tb-assets', gulp.parallel('style-compiler-tb-metadata'
             const validLessString = `selector{property:${match[0]};}`;
             lessCompiler.render(validLessString, { paths: [ path.join(process.cwd(), 'images') ] })
                 .then(
-                    (output) => callback(null, /url\([^)]+\)/.exec(output.css)[0]),
+                    (output) => callback(null, /url\(.*\)/.exec(output.css)[0]),
                     (error) => console.log(error)
                 );
         }))
