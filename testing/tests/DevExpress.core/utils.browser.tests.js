@@ -10,6 +10,7 @@ var userAgents = {
     safari: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14",
     chrome: "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
     chrome_ios: "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/74.0.3729.157 Mobile/13B143 Safari/601.1.46",
+    mozilla_ios: "Mozilla/5.0 (iPhone; CPU iPhone OS 12_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/18.2b15817 Mobile/15E148 Safari/605.1.15",
     phantom: "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1"
 };
 
@@ -78,4 +79,14 @@ QUnit.test("browser is chrome (mobile)", function(assert) {
     assert.ok(browserObject.webkit, "chrome is webkit browser");
     assert.ok(browserObject.chrome, "chrome is true");
     assert.strictEqual(browserObject.version, "74.0", "chrome version is correct");
+});
+
+QUnit.test("browser is mozilla (mobile)", function(assert) {
+    var browserObject = browser._fromUA(userAgents.mozilla_ios);
+
+    assert.ok(browserObject.mozilla, "mozilla detected");
+    assert.ok(browserObject.webkit, "firefox for ios is webkit browser");
+    assert.notOk(browserObject.safari, "firefox is not safari");
+    assert.notOk(browserObject.chrome, "firefox is not chrome");
+    assert.equal(browserObject.version, '18.2', "version was detect correctly");
 });
