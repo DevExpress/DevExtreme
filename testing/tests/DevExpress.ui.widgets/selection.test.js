@@ -1459,7 +1459,7 @@ QUnit.test("selectAll -> deselect items -> select item -> deselect item -> selec
     selection.getSelectedItemKeys().done(function(keys) {
         selectedKeys = keys;
     });
-    assert.deepEqual(selectedKeys, [2, 3, 4, 5, 6, 7], "no selected items");
+    assert.deepEqual(selectedKeys, [2, 3, 4, 5, 6, 7], "selected keys");
 });
 
 // T754974
@@ -1482,7 +1482,7 @@ QUnit.test("selectAll -> deselect items -> select/deselect item -> select All", 
     selection.getSelectedItemKeys().done(function(keys) {
         selectedKeys = keys;
     });
-    assert.deepEqual(selectedKeys, [2, 3, 4, 5, 6, 7], "no selected items");
+    assert.deepEqual(selectedKeys, [2, 3, 4, 5, 6, 7], "selected keys");
 });
 
 QUnit.test("Deselect one item after selectAll", function(assert) {
