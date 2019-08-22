@@ -1278,7 +1278,6 @@ var Overlay = Widget.inherit({
 
     _renderShading: function() {
         this._fixWrapperPosition();
-        this._renderShadingDimensions();
         this._renderShadingPosition();
     },
 
@@ -1290,25 +1289,6 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _renderShadingDimensions: function() {
-        var wrapperWidth, wrapperHeight;
-
-        if(this.option("shading")) {
-            var $container = this._getContainer();
-
-            wrapperWidth = this._isWindow($container) ? "100%" : $container.outerWidth(),
-            wrapperHeight = this._isWindow($container) ? "100%" : $container.outerHeight();
-        } else {
-            wrapperWidth = "";
-            wrapperHeight = "";
-        }
-
-        this._$wrapper.css({
-            width: wrapperWidth,
-            height: wrapperHeight
-        });
-    },
-
     _isWindow: function($element) {
         return !!$element && typeUtils.isWindow($element.get(0));
     },
@@ -1316,7 +1296,12 @@ var Overlay = Widget.inherit({
     _getContainer: function() {
         var position = this._position,
             container = this.option("container"),
-            positionOf = position ? position.of || window : null;
+            positionOf = null;
+
+        if(!container && position) {
+            var isEvent = !!(position.of && position.of.preventDefault);
+            positionOf = isEvent ? window : (position.of || window);
+        }
 
         return getElement(container || positionOf);
     },
