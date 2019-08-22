@@ -33,7 +33,6 @@ const TAGBOX_TAG_REMOVE_BUTTON_CLASS = "dx-tag-remove-button";
 const TAGBOX_ONLY_SELECT_CLASS = "dx-tagbox-only-select";
 const TAGBOX_SINGLE_LINE_CLASS = "dx-tagbox-single-line";
 const TAGBOX_POPUP_WRAPPER_CLASS = "dx-tagbox-popup-wrapper";
-const LIST_SELECT_ALL_CHECKBOX_CLASS = "dx-list-select-all-checkbox";
 const TAGBOX_TAG_CONTENT_CLASS = "dx-tag-content";
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template";
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template";
@@ -666,7 +665,7 @@ const TagBox = SelectBox.inherit({
 
     _getFirstPopupElement: function() {
         return this.option("showSelectionControls")
-            ? this._popup._wrapper().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`)
+            ? this._list.$element()
             : this.callBase();
     },
 
@@ -676,18 +675,11 @@ const TagBox = SelectBox.inherit({
 
     _renderList: function() {
         this.callBase();
-
         this._setListDataSourceFilter();
 
         if(!this.option("showSelectionControls")) {
-            return;
+            this._list.registerKeyHandler("escape", this._popupElementEscHandler.bind(this));
         }
-
-        const $selectAllCheckBox = this._list.$element().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
-        const selectAllCheckbox = $selectAllCheckBox.dxCheckBox("instance");
-
-        selectAllCheckbox.registerKeyHandler("tab", this._popupElementTabHandler.bind(this));
-        selectAllCheckbox.registerKeyHandler("escape", this._popupElementEscHandler.bind(this));
     },
 
     _listConfig: function() {
