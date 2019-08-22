@@ -246,6 +246,28 @@ QUnit.module("options changing", {
         }
     });
 
+    QUnit.test("'maxLength' should be ignored if mask is specified", (assert) => {
+        const originalDevices = devices.real();
+        const originalIE = browser.msie;
+        devices.real({
+            platform: "not android and not IE",
+            version: ["24"]
+        });
+        browser.msie = false;
+
+        try {
+            this.instance.option("maxLength", 4);
+            this.instance.option("mask", "00:00");
+            assert.equal(this.input.attr("maxLength"), null);
+
+            this.instance.option("mask", "");
+            assert.equal(this.input.attr("maxLength"), 4);
+        } finally {
+            devices.real(originalDevices);
+            browser.msie = originalIE;
+        }
+    });
+
     QUnit.test("readOnly", (assert) => {
         assert.expect(2);
 
