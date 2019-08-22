@@ -593,8 +593,8 @@ const GroupConfig = Class.inherit({
                 });
         } else {
             result.status = result.isValid ? "valid" : "invalid";
-            this._raiseValidatedEvent(result);
         }
+        this._raiseValidatedEvent(result);
         return result;
     },
 
@@ -708,12 +708,12 @@ const ValidationEngine = {
                 value: value,
                 /**
                  * @name dxValidatorResult.brokenRule
-                 * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
+                 * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
                  */
                 brokenRule: null,
                 /**
-                 * @name dxValidatorResult.brokenRule
-                 * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
+                 * @name dxValidatorResult.brokenRules
+                 * @type Array<RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule>
                  */
                 brokenRules: null,
                 /**
