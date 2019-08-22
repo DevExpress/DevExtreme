@@ -183,6 +183,25 @@ setPublicElementWrapper(function(element) {
     return element && element.get(0);
 });
 
+var createTextElementHiddenCopy = function(element, text, options) {
+    var elementStyles = window.getComputedStyle($(element).get(0));
+
+    return $("<div>").text(text).css({
+        "fontStyle": elementStyles.fontStyle,
+        "fontVariant": elementStyles.fontVariant,
+        "fontWeight": elementStyles.fontWeight,
+        "fontSize": elementStyles.fontSize,
+        "fontFamily": elementStyles.fontFamily,
+        "letterSpacing": elementStyles.letterSpacing,
+        "border": elementStyles.border,
+        "padding": options && options.includePaddings ? elementStyles.padding : "",
+        "visibility": "hidden",
+        "whiteSpace": "nowrap",
+        "position": "absolute",
+        "float": "left"
+    });
+};
+
 exports.setPublicElementWrapper = setPublicElementWrapper;
 exports.resetActiveElement = resetActiveElement;
 exports.createMarkupFromString = createMarkupFromString;
@@ -199,3 +218,4 @@ exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
 exports.contains = contains;
 exports.getPublicElement = getPublicElement;
+exports.createTextElementHiddenCopy = createTextElementHiddenCopy;

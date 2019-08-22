@@ -7,7 +7,7 @@ import browser from "../core/utils/browser";
 import { noop, ensureDefined, equalByValue } from "../core/utils/common";
 import { SelectionFilterCreator as FilterCreator } from "../core/utils/selection_filter";
 import { Deferred, when } from "../core/utils/deferred";
-import { getPublicElement } from "../core/utils/dom";
+import { getPublicElement, createTextElementHiddenCopy } from "../core/utils/dom";
 import { isDefined, isObject, isString } from "../core/utils/type";
 import { hasWindow } from "../core/utils/window";
 import { extend } from "../core/utils/extend";
@@ -744,7 +744,18 @@ const TagBox = SelectBox.inherit({
 
     _renderInputSize: function() {
         const $input = this._input();
-        $input.prop("size", $input.val() ? $input.val().length + 2 : 1);
+        const value = $input.val();
+        const minWidth = 10;
+        const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
+
+        $calculationElement.appendTo(this._input().parent());
+
+        const width = (this.option("searchEnabled") || this.option("editEnabled"))
+            ? $calculationElement.outerWidth() + minWidth
+            : "";
+
+        $calculationElement.remove();
+        $input.css("width", width);
     },
 
     _renderInputSubstitution: function() {
