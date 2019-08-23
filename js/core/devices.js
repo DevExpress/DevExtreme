@@ -23,10 +23,8 @@ var KNOWN_UA_TABLE = {
     "iPadMini": "iPad Mini",
     "androidPhone": "Android Mobile",
     "androidTablet": "Android",
-    "win8": "MSAppHost",
     "msSurface": "Windows ARM Tablet PC",
-    "desktop": "desktop",
-    "win10": "MSAppHost/3.0"
+    "desktop": "desktop"
 };
 
 /**
