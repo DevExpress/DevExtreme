@@ -677,9 +677,14 @@ const TagBox = SelectBox.inherit({
         this.callBase();
         this._setListDataSourceFilter();
 
-        if(!this.option("showSelectionControls")) {
-            this._list.registerKeyHandler("escape", this._popupElementEscHandler.bind(this));
+        if(this.option("showSelectionControls")) {
+            this._list.registerKeyHandler("tab", (e) => this._popupElementTabHandler(e));
+            this._list.registerKeyHandler("escape", (e) => this._popupElementEscHandler(e));
         }
+    },
+
+    _canListHaveFocus: function() {
+        return this.option("applyValueMode") === "useButtons";
     },
 
     _listConfig: function() {

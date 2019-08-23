@@ -7,7 +7,7 @@ const CLASSES = {
 };
 
 export default function ListModel(id) {
-    const mainElement = Selector(id);
+    const mainElement = typeof id === 'string' ? Selector(id) : id;
     const selectAllItem = mainElement.find(`.${CLASSES.selectAllItem}`);
 
     return {
