@@ -127,7 +127,7 @@ var uaParsers = {
     },
 
     android: function(userAgent) {
-        if(!/android|htc_|silk/i.test(userAgent) || /windows phone/i.test(userAgent)) {
+        if(!/android|htc_|silk/i.test(userAgent)) {
             return;
         }
 
