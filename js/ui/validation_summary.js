@@ -199,17 +199,17 @@ const ValidationSummary = CollectionWidget.inherit({
     },
 
     _getOrderedItems(validators, items) {
-        const orderedItems = [];
+        let orderedItems = [];
 
         iteratorUtils.each(validators, function(_, validator) {
-            const firstItem = grep(items, function(item) {
+            const foundItems = grep(items, function(item) {
                 if(item.validator === validator) {
                     return true;
                 }
-            })[0];
+            });
 
-            if(firstItem) {
-                orderedItems.push(firstItem);
+            if(foundItems.length) {
+                orderedItems = orderedItems.concat(foundItems);
             }
         });
 
@@ -220,7 +220,8 @@ const ValidationSummary = CollectionWidget.inherit({
         const items = this._getOrderedItems(params.validators, iteratorUtils.map(params.brokenRules, function(rule) {
             return {
                 text: rule.message,
-                validator: rule.validator
+                validator: rule.validator,
+                index: rule.index
             };
         }));
 
@@ -245,35 +246,25 @@ const ValidationSummary = CollectionWidget.inherit({
 
     _itemValidationHandler(itemValidationResult) {
         const isValid = itemValidationResult.isValid,
-            newMessage = itemValidationResult.brokenRule && itemValidationResult.brokenRule.message,
             validator = itemValidationResult.validator;
         let items = this.option("items"),
-            replacementFound = false,
-            elementIndex;
+            itemIndex = 0;
 
-        iteratorUtils.each(items, function(index, item) {
+        while(itemIndex < items.length) {
+            const item = items[itemIndex];
             if(item.validator === validator) {
-                if(isValid) {
-                    elementIndex = index;
-                } else {
-                    item.text = newMessage;
-                }
-
-                replacementFound = true;
-                return false;
+                items.splice(itemIndex, 1);
+                continue;
             }
-        });
-
-        if(isValid ^ replacementFound) {
-            return;
+            itemIndex++;
         }
 
-        if(isValid) {
-            items.splice(elementIndex, 1);
-        } else {
-            items.push({
-                text: newMessage,
-                validator: validator
+        if(!isValid) {
+            iteratorUtils.each(itemValidationResult.brokenRules, function(_, rule) {
+                items.push({
+                    text: rule.message,
+                    validator: validator
+                });
             });
         }
 

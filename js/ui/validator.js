@@ -193,8 +193,11 @@ const Validator = DOMComponent.inherit({
 
     _getValidationRules() {
         if(!this._validationRules) {
-            this._validationRules = map(this.option("validationRules"), (rule) => {
-                return extend({}, rule, { validator: this });
+            this._validationRules = map(this.option("validationRules"), (rule, index) => {
+                return extend({}, rule, {
+                    validator: this,
+                    index: index
+                });
             });
         }
         return this._validationRules;

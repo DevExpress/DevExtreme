@@ -897,12 +897,9 @@ const ValidationEngine = {
             if(val.isValid === false) {
                 result.isValid = val.isValid;
                 result.brokenRules = result.brokenRules || [];
-                let rule;
+                const rule = result.asyncValidationRules[index];
                 if(typeUtils.isDefined(val.message) && typeUtils.isString(val.message) && val.message.length) {
-                    rule = extend({}, result.asyncValidationRules[index]);
                     rule.message = val.message;
-                } else {
-                    rule = result.asyncValidationRules[index];
                 }
                 result.brokenRules.push(rule);
                 if(!result.brokenRule) {

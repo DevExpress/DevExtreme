@@ -1,4 +1,5 @@
-import { each } from "../../core/utils/iterator";
+import { each, map } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
 import Class from "../../core/class";
 import EventsMixin from "../../core/events_mixin";
 import ValidationEngine from "../../ui/validation_engine";
@@ -7,18 +8,19 @@ import ko from "knockout";
 const koDxValidator = Class.inherit({
     ctor(target, option) {
         this.target = target;
-        this.validationRules = option.validationRules;
         this.name = option.name;
         this.isValid = ko.observable(true);
         this.validationError = ko.observable();
         this.validationErrors = ko.observable();
         this.validationStatus = ko.observable("valid");
 
-        each(this.validationRules, (_, rule) => {
-            rule.validator = this;
+        this.validationRules = map(option.validationRules, (rule, index) => {
+            return extend({}, rule, {
+                validator: this,
+                index: index
+            });
         });
     },
-
 
     validate() {
         let result = ValidationEngine.validate(this.target(), this.validationRules, this.name);
