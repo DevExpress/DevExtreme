@@ -8,6 +8,7 @@ import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import modules from "./ui.grid_core.modules";
 import clickEvent from "../../events/click";
+import doubleClickEvent from "../../events/double_click";
 import pointerEvents from "../../events/pointer";
 import { getIndexByKey, createObjectWithChanges, setEmptyText, getSelectionRange, setSelectionRange, focusAndSelectElement } from "./ui.grid_core.utils";
 import { addNamespace } from "../../events/utils";
@@ -819,8 +820,9 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editCellInProgress = true;
                 that._delayedInputFocus($firstCell, function() {
                     that._editCellInProgress = false;
-                    var $cell = that.getFirstEditableCellInRow(insertKey.rowIndex);
-                    $cell && eventsEngine.trigger($cell, clickEvent.name);
+                    var $cell = that.getFirstEditableCellInRow(insertKey.rowIndex),
+                        eventToTrigger = that.option("editing.startEditAction") === "dblClick" ? doubleClickEvent.name : clickEvent.name;
+                    $cell && eventsEngine.trigger($cell, eventToTrigger);
                 });
             }
 
