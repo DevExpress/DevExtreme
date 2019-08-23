@@ -443,7 +443,16 @@ var dxFunnel = {
         * @type_function_param1 items:Array<FunnelLegendItem>
         * @type_function_return Array<FunnelLegendItem>
         */
-        customizeItems: undefined
+        customizeItems: undefined,
+        /**
+        * @name dxFunnelOptions.legend.markerTemplate
+        * @type template|function
+        * @default undefined
+        * @type_function_param1 legendItem:FunnelLegendItem
+        * @type_function_param2 element:SVGGElement
+        * @type_function_return string|SVGElement|jQuery
+        */
+        markerTemplate: undefined
     },
    /**
     * @name dxFunnelOptions.tooltip

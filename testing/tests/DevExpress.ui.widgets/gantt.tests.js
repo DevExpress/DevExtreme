@@ -15,6 +15,8 @@ const TASK_ARROW_SELECTOR = ".dx-gantt-arrow";
 const SPLITTER_SELECTOR = ".dx-gantt-splitter";
 const TASK_TITLE_IN_SELECTOR = ".dx-gantt-titleIn";
 const TASK_TITLE_OUT_SELECTOR = ".dx-gantt-titleOut";
+const TREELIST_EXPANDED = ".dx-treelist-expanded";
+const TREELIST_COLLAPSED = ".dx-treelist-collapsed";
 
 const tasks = [
     { "id": 1, "parentId": 0, "title": "Software Development", "start": new Date("2019-02-21T05:00:00.000Z"), "end": new Date("2019-07-04T12:00:00.000Z"), "progress": 31 },
@@ -184,5 +186,21 @@ QUnit.module("Options", moduleConfig, () => {
         const resourceElements = this.$element.find(TASK_RESOURCES_SELECTOR);
         assert.equal(resourceElements.length, resourceAssignmentsDS.length);
         assert.equal(resourceElements.first().text(), resourcesDS[0].t);
+    });
+});
+
+QUnit.module("Actions", moduleConfig, () => {
+    test("expand/collapse", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
+        const expandedElement = this.$element.find(TREELIST_EXPANDED).first();
+        expandedElement.trigger("dxclick");
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 1);
+        const collapsedElement = this.$element.find(TREELIST_COLLAPSED).first();
+        collapsedElement.trigger("dxclick");
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
     });
 });

@@ -10,6 +10,7 @@ import DiagramToolbar from "./ui.diagram.toolbar";
 import DiagramLeftPanel from "./ui.diagram.leftpanel";
 import DiagramRightPanel from "./ui.diagram.rightpanel";
 import DiagramContextMenu from "./ui.diagram.contextmenu";
+import DiagramDialog from './ui.diagram.dialogs';
 import DiagramToolbox from "./ui.diagram.toolbox";
 import DiagramOptionsUpdateBar from "./ui.diagram.optionsupdate";
 import NodesOption from "./ui.diagram.nodes";
@@ -21,6 +22,7 @@ import eventsEngine from "../../events/core/events_engine";
 import eventUtils from "../../events/utils";
 import messageLocalization from "../../localization/message";
 import numberLocalization from "../../localization/number";
+import DiagramDialogManager from "./ui.diagram.dialogmanager";
 
 const DIAGRAM_CLASS = "dx-diagram";
 const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
@@ -92,6 +94,8 @@ class Diagram extends Widget {
         if(this.option("contextMenu.enabled")) {
             this._renderContextMenu(this._content);
         }
+
+        this._renderDialog(this._content);
 
         !isServerSide && this._diagramInstance.createDocument(this._content[0]);
 
@@ -240,8 +244,31 @@ class Diagram extends Widget {
             commands: this.option("contextMenu.commands"),
             container: $mainElement,
             onContentReady: ({ component }) => this._diagramInstance.barManager.registerBar(component.bar),
-            onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar)
+            onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); }
         });
+    }
+
+    _onBeforeCommandExecuted(command) {
+        var dialogParameters = DiagramDialogManager.getDialogParameters(command);
+        if(dialogParameters) {
+            this._showDialog(dialogParameters);
+        }
+        return !!dialogParameters;
+    }
+
+    _renderDialog($mainElement) {
+        const $dialogElement = $("<div>").appendTo($mainElement);
+        this._dialogInstance = this._createComponent($dialogElement, DiagramDialog, { });
+    }
+
+    _showDialog(dialogParameters) {
+        if(this._dialogInstance) {
+            this._dialogInstance.option("onGetContent", dialogParameters.onGetContent);
+            this._dialogInstance.option("command", this._diagramInstance.commandManager.getCommand(dialogParameters.command));
+            this._dialogInstance.option("title", dialogParameters.title);
+            this._dialogInstance._show();
+        }
     }
 
     _showLoadingIndicator() {
@@ -390,8 +417,8 @@ class Diagram extends Widget {
                 setType: this._createOptionSetter("nodes.typeExpr"),
                 getText: this._createOptionGetter("nodes.textExpr"),
                 setText: this._createOptionSetter("nodes.textExpr"),
-                getImage: this._createOptionGetter("nodes.imageExpr"),
-                setImage: this._createOptionSetter("nodes.imageExpr"),
+                getImage: this._createOptionGetter("nodes.imageUrlExpr"),
+                setImage: this._createOptionSetter("nodes.imageUrlExpr"),
 
                 getLeft: this._createOptionGetter("nodes.leftExpr"),
                 setLeft: this._createOptionSetter("nodes.leftExpr"),
@@ -526,7 +553,7 @@ class Diagram extends Widget {
             let layoutType = layoutParametersOption.type || layoutParametersOption;
             if(layoutType === "tree") {
                 parameters.type = DataLayoutType.Tree;
-            } else if(layoutType === "sugiyama") {
+            } else if(layoutType === "layered") {
                 parameters.type = DataLayoutType.Sugiyama;
             }
             if(layoutParametersOption.orientation === "vertical") {
@@ -1038,12 +1065,12 @@ class Diagram extends Widget {
                 */
                 textExpr: "text",
                 /**
-                * @name dxDiagramOptions.nodes.imageExpr
+                * @name dxDiagramOptions.nodes.imageUrlExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default undefined
                 */
-                imageExpr: undefined,
+                imageUrlExpr: undefined,
                 /**
                 * @name dxDiagramOptions.nodes.parentKeyExpr
                 * @type string|function(data)

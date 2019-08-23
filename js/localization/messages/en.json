@@ -293,6 +293,7 @@
         "dxFileManager-errorDirectoryExistsFormat": "Directory '{0}' already exists.",
         "dxFileManager-errorFileExistsFormat": "File '{0}' already exists.",
         "dxFileManager-errorFileNotFoundFormat": "File '{0}' not found",
+        "dxFileManager-errorDirectoryNotFoundFormat": "Directory '{0}' not found",
         "dxFileManager-errorDefault": "Unspecified error.",
 
         "dxDiagram-categoryGeneral": "General",
@@ -350,8 +351,14 @@
         "dxDiagram-commandSendToBack": "Send to Back",
         "dxDiagram-commandLock": "Lock",
         "dxDiagram-commandUnlock": "Unlock",
+        "dxDiagram-commandChangeShapeImage": "Change Image...",
         "dxDiagram-unitIn": "in",
         "dxDiagram-unitCm": "cm",
-        "dxDiagram-unitPx": "px"
+        "dxDiagram-unitPx": "px",
+        "dxDiagram-dialogButtonOK": "OK",
+        "dxDiagram-dialogButtonCancel": "Cancel",
+        "dxDiagram-dialogChangeShapeImageTitle": "Change Image",
+        "dxDiagram-dialogChangeShapeImageSelectButton": "Select image",
+        "dxDiagram-dialogChangeShapeImageLabelText": "or drop file here"
     }
 }

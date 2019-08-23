@@ -796,7 +796,7 @@ QUnit.module("Form", () => {
         assert.equal(buttonValidationGroup, "test", "Button validationGroup is OK");
     });
 
-    test("The name argument should be defined in the template of a simple item", (assert) => {
+    test("Check name argument of the simple item template when name is defined", (assert) => {
         const templateStub = sinon.stub();
         $("#form").dxForm({
             items: [{
@@ -806,6 +806,42 @@ QUnit.module("Form", () => {
         });
 
         assert.equal(templateStub.getCall(0).args[0].name, "TestName", "name argument");
+    });
+
+    test("Check name argument of the simple item template when name and dataField are defined", (assert) => {
+        const templateStub = sinon.stub();
+        $("#form").dxForm({
+            items: [{
+                dataField: "TestDataField",
+                name: "TestName",
+                template: templateStub
+            }]
+        });
+
+        assert.equal(templateStub.getCall(0).args[0].name, "TestName", "name argument");
+    });
+
+    test("Check name argument of the simple item template when name is undefined", (assert) => {
+        const templateStub = sinon.stub();
+        $("#form").dxForm({
+            items: [{
+                template: templateStub
+            }]
+        });
+
+        assert.equal(templateStub.getCall(0).args[0].name, undefined, "name argument");
+    });
+
+    test("Check name argument of the simple item template when name is undefined and dataField is defined", (assert) => {
+        const templateStub = sinon.stub();
+        $("#form").dxForm({
+            items: [{
+                dataField: "TestDataField",
+                template: templateStub
+            }]
+        });
+
+        assert.equal(templateStub.getCall(0).args[0].name, undefined, "name argument");
     });
 });
 

@@ -1,5 +1,5 @@
 import { compileGetter } from "../../../core/utils/data";
-import { pathCombine, getFileExtension } from "../ui.file_manager.utils";
+import { pathCombine, getFileExtension, PATH_SEPARATOR } from "../ui.file_manager.utils";
 import { ensureDefined } from "../../../core/utils/common";
 import { deserializeDate } from "../../../core/utils/date_serialization";
 import { each } from "../../../core/utils/iterator";
@@ -50,7 +50,7 @@ class FileProvider {
         this._thumbnailGetter = compileGetter(options.thumbnailExpr || "thumbnail");
     }
 
-    getItems(path) {
+    getItems(pathInfo) {
         return [];
     }
 
@@ -89,16 +89,16 @@ class FileProvider {
         return this.getItems(path).filter(item => item.isDirectory === folders);
     }
 
-    _convertDataObjectsToFileItems(entries, path, itemType) {
+    _convertDataObjectsToFileItems(entries, pathInfo) {
         const result = [];
         each(entries, (_, entry) => {
-            const fileItem = this._createFileItem(entry, path);
+            const fileItem = this._createFileItem(entry, pathInfo);
             result.push(fileItem);
         });
         return result;
     }
-    _createFileItem(dataObj, path) {
-        let fileItem = new FileManagerItem(path, this._nameGetter(dataObj), !!this._isDirGetter(dataObj));
+    _createFileItem(dataObj, pathInfo) {
+        let fileItem = new FileManagerItem(pathInfo, this._nameGetter(dataObj), !!this._isDirGetter(dataObj));
 
         fileItem.size = this._sizeGetter(dataObj);
         if(fileItem.size === undefined) {
@@ -151,10 +151,13 @@ class FileProvider {
 }
 
 class FileManagerItem {
-    constructor(parentPath, name, isDirectory) {
-        this.parentPath = parentPath;
+    constructor(pathInfo, name, isDirectory) {
         this.name = name;
+
+        this.pathInfo = pathInfo && [...pathInfo] || [];
+        this.parentPath = this._getPathByPathInfo(this.pathInfo);
         this.key = this.relativeName = pathCombine(this.parentPath, name);
+
         this.isDirectory = isDirectory || false;
         this.isRoot = false;
 
@@ -163,6 +166,15 @@ class FileManagerItem {
 
         this.thumbnail = "";
         this.tooltipText = "";
+    }
+
+    getFullPathInfo() {
+        const pathInfo = [...this.pathInfo];
+        pathInfo.push({
+            key: this.key,
+            name: this.name
+        });
+        return pathInfo;
     }
 
     getExtension() {
@@ -174,7 +186,7 @@ class FileManagerItem {
     }
 
     createClone() {
-        const result = new FileManagerItem(this.parentPath, this.name, this.isDirectory);
+        const result = new FileManagerItem(this.pathInfo, this.name, this.isDirectory);
         result.key = this.key;
         result.size = this.size;
         result.dateModified = this.dateModified;
@@ -184,11 +196,17 @@ class FileManagerItem {
         result.dataItem = this.dataItem;
         return result;
     }
+
+    _getPathByPathInfo(pathInfo) {
+        return pathInfo
+            .map(info => info.name)
+            .join(PATH_SEPARATOR);
+    }
 }
 
 class FileManagerRootItem extends FileManagerItem {
     constructor() {
-        super("", "Files", true);
+        super(null, "Files", true);
         this.isRoot = true;
     }
 }

@@ -9,6 +9,7 @@ class DiagramContextMenu extends Widget {
     _init() {
         super._init();
         this._createOnVisibleChangedAction();
+        this._createOnItemClickAction();
         this.bar = new ContextMenuBar(this);
         this._tempState = undefined;
 
@@ -65,9 +66,16 @@ class DiagramContextMenu extends Widget {
         return items;
     }
     _onItemClick(itemData) {
-        const parameter = this._getExecCommandParameter(itemData);
-        this.bar.raiseBarCommandExecuted(itemData.command, parameter);
-        this._contextMenuInstance.hide();
+        var processed = false;
+        if(this._onItemClickAction) {
+            processed = this._onItemClickAction(itemData);
+        }
+
+        if(!processed) {
+            const parameter = this._getExecCommandParameter(itemData);
+            this.bar.raiseBarCommandExecuted(itemData.command, parameter);
+            this._contextMenuInstance.hide();
+        }
     }
     _getExecCommandParameter(itemData) {
         if(itemData.getParameter) {
@@ -95,10 +103,16 @@ class DiagramContextMenu extends Widget {
     _createOnVisibleChangedAction() {
         this._onVisibleChangedAction = this._createActionByOption("onVisibleChanged");
     }
+    _createOnItemClickAction() {
+        this._onItemClickAction = this._createActionByOption("onItemClick");
+    }
     _optionChanged(args) {
         switch(args.name) {
             case "onVisibleChanged":
                 this._createOnVisibleChangedAction();
+                break;
+            case "onItemClick":
+                this._createOnItemClickAction();
                 break;
             case "commands":
                 this._invalidate();

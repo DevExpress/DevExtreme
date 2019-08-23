@@ -1005,5 +1005,49 @@ var BaseLegend = {
             */
             offset: 0
         }
-    }    
+    }
+};
+
+/**
+* @name BaseLegendItem
+* @hidden
+* @type object
+*/
+var legendItem = {
+    /**
+    * @name BaseLegendItem.text
+    * @type string
+    */
+    text: undefined,
+    /**
+    * @name BaseLegendItem.visible
+    * @type boolean
+    */
+    visible: true,
+    /**
+    * @name BaseLegendItem.size
+    * @type number
+    */
+    size: undefined,
+    /**
+    * @name BaseLegendItem.markerAttributes
+    * @type object
+    */
+    markerAttributes: {
+        /**
+        * @name BaseLegendItem.markerAttributes.fill
+        * @type string
+        */
+        fill: "#fff",
+        /**
+        * @name BaseLegendItem.markerAttributes.opacity
+        * @type number
+        */
+        opacity: 1,
+        /**
+        * @name BaseLegendItem.markerAttributes.class
+        * @type string
+        */
+        class: undefined
+    }
 };

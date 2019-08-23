@@ -40,6 +40,8 @@ QUnit.test("captionize", function(assert) {
     assert.equal(inflector.captionize("testField1"), "Test Field 1");
     // T573115
     assert.equal(inflector.captionize("CompanyName(test)"), "Company Name (test)");
+    // T806881
+    assert.equal(inflector.captionize("slash/test"), "Slash/test");
 });
 
 QUnit.test("underscore", function(assert) {
