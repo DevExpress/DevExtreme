@@ -7747,6 +7747,43 @@ QUnit.test("Resize command column", function(assert) {
     assert.equal($(headersCols[1]).css("width"), "20px", "width of the second column - headers view");
 });
 
+// T807774
+QUnit.test("Editor should be rendered for hidden columns while editing in row mode with repaintChangesOnly", function(assert) {
+    // arrange
+    const dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        },
+        repaintChangesOnly: true,
+        columnHidingEnabled: true,
+        width: 200,
+        dataSource: [{ field1: "1", field2: "2" }]
+    }).dxDataGrid("instance");
+
+    // act
+    $(".dx-datagrid .dx-datagrid-adaptive-more")
+        .eq(0)
+        .trigger("dxclick");
+
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger(pointerEvents.up).click();
+    this.clock.tick();
+
+    var $firstRowEditors = $(dataGrid.getRowElement(1)).find(".dx-texteditor");
+
+    // assert
+    assert.ok($firstRowEditors.length, "row has editor");
+    assert.notOk($firstRowEditors.eq(0).parent().hasClass("dx-adaptive-item-text"), "editor's parent does not have class");
+
+    // act
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-cancel").trigger(pointerEvents.up).click();
+    this.clock.tick();
+
+    // assert
+    assert.notOk($(dataGrid.getRowElement(1)).find(".dx-texteditor").length, "row doesn't have editor");
+});
+
 QUnit.module("Virtual row rendering", baseModuleConfig);
 
 QUnit.test("editing should starts correctly if scrolling mode is virtual", function(assert) {
@@ -10448,6 +10485,17 @@ QUnit.test("Change editing.popup option should not reload data", function(assert
 
 QUnit.module("API methods", baseModuleConfig);
 
+QUnit.test("get methods for grid without options", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({});
+
+    // act, assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), []);
+    assert.deepEqual(dataGrid.getSelectedRowsData(), []);
+    assert.strictEqual(dataGrid.isScrollbarVisible(), false);
+    assert.strictEqual(dataGrid.getTopVisibleRowData(), undefined);
+});
+
 QUnit.test("begin custom loading", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
@@ -12488,6 +12536,7 @@ QUnit.test("Scrollable should be updated after expand master detail row with nes
 
 QUnit.test("Column hiding should works with masterDetail and column fixing", function(assert) {
     // arrange
+    var detailGridCount = 0;
     var dataGrid = createDataGrid({
         dataSource: [{ id: 1 }],
         columnHidingEnabled: true,
@@ -12503,6 +12552,7 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
         masterDetail: {
             enabled: true,
             template: function() {
+                detailGridCount++;
                 return $("<div>").dxDataGrid({
                     dataSource: [{}]
                 });
@@ -12529,6 +12579,7 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
     var $masterDetailRows = $($(dataGrid.$element()).find(".dx-master-detail-row"));
     assert.equal($masterDetailRows.length, 2, "master-detail row count");
     assert.notOk($masterDetailRows.is(":visible"), "master-detail rows are not visible");
+    assert.equal(detailGridCount, 1, "master detail is rendered once");
 });
 
 // T648744
@@ -15297,19 +15348,6 @@ QUnit.test("Rows should be synchronized after expand if column fixing is enabled
     assert.strictEqual($masterDetailRows.eq(1).find(".my-detail").length, 1, "masterDetail template is rendered");
     assert.ok($masterDetailRows.eq(1).height() > 400, "masterDetail row height is applied");
     assert.strictEqual($masterDetailRows.eq(0).height(), $masterDetailRows.eq(1).height(), "main and fixed master detail row are synchronized");
-});
-
-QUnit.module("API methods", baseModuleConfig);
-
-QUnit.test("get methods for grid without options", function(assert) {
-    // arrange
-    var dataGrid = createDataGrid({});
-
-    // act, assert
-    assert.deepEqual(dataGrid.getSelectedRowKeys(), []);
-    assert.deepEqual(dataGrid.getSelectedRowsData(), []);
-    assert.strictEqual(dataGrid.isScrollbarVisible(), false);
-    assert.strictEqual(dataGrid.getTopVisibleRowData(), undefined);
 });
 
 QUnit.module("columnWidth auto option", {

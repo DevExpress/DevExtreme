@@ -44,6 +44,10 @@ export default class SchedulerTestHelper {
         return this.getDateTableRow(rowIndex).find(`.dx-scheduler-date-table-cell`).nth(cellIndex);
     }
 
+    getDateTableCells() {
+        return this.scheduler.find(`.dx-scheduler-date-table-cell`);
+    }
+
     getHeaderPanelCell(index = 0) {
         return this.scheduler.find(`.dx-scheduler-header-panel-cell`).nth(index);
     }

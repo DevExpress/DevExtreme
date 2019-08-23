@@ -524,10 +524,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var that = this,
             i,
             rows = that._getRows(options.change),
-            columnIndices = options.change && options.change.columnIndices || [];
+            columnIndices = options.change && options.change.columnIndices || [],
+            changeTypes = options.change && options.change.changeTypes || [];
 
         for(i = 0; i < rows.length; i++) {
-            that._renderRow($table, extend({ row: rows[i], columnIndices: columnIndices[i] }, options));
+            that._renderRow($table, extend({ row: rows[i], columnIndices: columnIndices[i], changeType: changeTypes[i] }, options));
         }
     },
 
@@ -542,8 +543,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         $row = that._createRow(options.row);
         $wrappedRow = that._wrapRowIfNeed($table, $row);
-
-        that._renderCells($row, options);
+        if(options.changeType !== "remove") {
+            that._renderCells($row, options);
+        }
         that._appendRow($table, $wrappedRow);
         var rowOptions = extend({ columns: options.columns }, options.row);
 
