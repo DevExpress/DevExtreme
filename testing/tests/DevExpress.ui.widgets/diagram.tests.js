@@ -187,7 +187,7 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
     });
     test("should toggle fullscreen class name on button click", (assert) => {
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        let fullscreenButton = findToolbarItem(this.$element, "fullscreen");
+        let fullscreenButton = findToolbarItem(this.$element, "fullScreen");
         fullscreenButton.trigger("dxclick");
         assert.ok(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
         fullscreenButton.trigger("dxclick");
@@ -348,17 +348,17 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SwitchAutoZoom).execute(1);
         assert.equal(this.instance.option("autoZoom"), "fitContent");
     });
-    test("should change fullscreen property", (assert) => {
+    test("should change fullScreen property", (assert) => {
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
-        this.instance.option("fullscreen", true);
+        this.instance.option("fullScreen", true);
         assert.ok(this.instance._diagramInstance.settings.fullscreen);
-        this.instance.option("fullscreen", false);
+        this.instance.option("fullScreen", false);
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
     });
-    test("should sync fullscreen property", (assert) => {
-        assert.equal(this.instance.option("fullscreen"), false);
+    test("should sync fullScreen property", (assert) => {
+        assert.equal(this.instance.option("fullScreen"), false);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Fullscreen).execute(true);
-        assert.equal(this.instance.option("fullscreen"), true);
+        assert.equal(this.instance.option("fullScreen"), true);
     });
     test("should change showGrid property", (assert) => {
         assert.ok(this.instance._diagramInstance.settings.showGrid);

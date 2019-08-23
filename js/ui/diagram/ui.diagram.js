@@ -111,7 +111,7 @@ class Diagram extends Widget {
         if(this.option("readOnly") || this.option("disabled")) {
             this._updateReadOnlyState();
         }
-        if(this.option("fullscreen")) {
+        if(this.option("fullScreen")) {
             this._updateFullscreenState();
         }
 
@@ -753,7 +753,7 @@ class Diagram extends Widget {
     }
     _updateFullscreenState() {
         const { DiagramCommand } = getDiagram();
-        var fullscreen = this.option("fullscreen");
+        var fullscreen = this.option("fullScreen");
         this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
         this._onToggleFullscreen(fullscreen);
     }
@@ -903,11 +903,11 @@ class Diagram extends Widget {
             */
             autoZoom: DIAGRAM_DEFAULT_AUTOZOOM,
             /**
-            * @name dxDiagramOptions.fullscreen
+            * @name dxDiagramOptions.fullScreen
             * @type Boolean
             * @default false
             */
-            fullscreen: false,
+            fullScreen: false,
             /**
             * @name dxDiagramOptions.showGrid
             * @type Boolean
@@ -1555,7 +1555,7 @@ class Diagram extends Widget {
             case "simpleView":
                 this._updateSimpleViewState();
                 break;
-            case "fullscreen":
+            case "fullScreen":
                 this._updateFullscreenState();
                 break;
             case "showGrid":

@@ -226,7 +226,7 @@ const DiagramCommands = {
                         }
                     ]
                 },
-                fullscreen: {
+                fullScreen: {
                     command: DiagramCommand.Fullscreen,
                     hint: messageLocalization.format("dxDiagram-commandFullscreen"),
                     text: messageLocalization.format("dxDiagram-commandFullscreen"),
@@ -267,7 +267,7 @@ const DiagramCommands = {
             commands["separator"],
             commands["autoLayout"],
             commands["separator"],
-            commands["fullscreen"]
+            commands["fullScreen"]
         ];
     },
 

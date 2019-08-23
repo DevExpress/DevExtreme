@@ -1999,8 +1999,8 @@ declare module DevExpress.ui {
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), fromLineEndExpr?: string | ((data: any) => any), fromPointIndexExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), lineTypeExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), pointsExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any), toLineEndExpr?: string | ((data: any) => any), toPointIndexExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */
         export?: { fileName?: string, proxyUrl?: string };
-        /** @name dxDiagram.Options.fullscreen */
-        fullscreen?: boolean;
+        /** @name dxDiagram.Options.fullScreen */
+        fullScreen?: boolean;
         /** @name dxDiagram.Options.gridSize */
         gridSize?: number | { items?: Array<number>, value?: number };
         /** @name dxDiagram.Options.nodes */
