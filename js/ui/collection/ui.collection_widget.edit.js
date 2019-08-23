@@ -305,9 +305,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
 
         this.callBase();
-
-        var selectedItemIndices = this._getSelectedItemIndices();
-        this._renderSelection(selectedItemIndices, []);
     },
     _render: function() {
         this.callBase();
@@ -463,8 +460,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         return new Deferred().resolve().promise();
     },
 
-    _renderSelection: noop,
-
     _itemClickHandler: function(e) {
         this._createAction((function(e) {
             this._itemSelectHandler(e.event);
@@ -554,9 +549,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         })({ addedItems: addedItems, removedItems: removedItems });
     },
 
-    _updateSelection: function() {
-        this._renderSelection.apply(this, arguments);
-    },
+    _updateSelection: noop,
 
     _setAriaSelected: function($target, value) {
         this.setAria("selected", value, $target);
