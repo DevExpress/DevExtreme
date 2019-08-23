@@ -2633,7 +2633,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const inputWidth = $input.width();
 
-        keyboardMock($input).type("te");
+        keyboardMock($input).type("test text");
 
         assert.ok($input.width() > inputWidth, "input size increase");
     });
