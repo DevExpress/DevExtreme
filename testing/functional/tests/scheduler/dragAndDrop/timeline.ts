@@ -15,7 +15,7 @@ test(`Drag-n-drop in the timelineDay mode from 9am to 11am`, async t => {
 	const draggableAppointment = await scheduler.getAppointment(`Brochure Design Review`);
 
 	await t
-		.dragToElement(draggableAppointment, scheduler.getDateTableRowCell(0, 4));
+		.dragToElement(draggableAppointment, scheduler.getDateTableCell(0, 4));
 
 	await t
 		.expect(`140px`)
@@ -36,7 +36,7 @@ test(`Drag-n-drop in the timelineWeek mode from 9am to 11am`, async t => {
 	const draggableAppointment = await scheduler.getAppointment(`Brochure Design Review`);
 
 	await t
-		.dragToElement(draggableAppointment, scheduler.getDateTableRowCell(0, 4));
+		.dragToElement(draggableAppointment, scheduler.getDateTableCell(0, 4));
 
 	await t
 		.expect(`132px`)
@@ -58,7 +58,7 @@ test(`Drag-n-drop in the timelineWorkWeek mode from 9am to 11am`, async t => {
 	const draggableAppointment = await scheduler.getAppointment(`Brochure Design Review`);
 
 	await t
-		.dragToElement(draggableAppointment, scheduler.getDateTableRowCell(0, 4));
+		.dragToElement(draggableAppointment, scheduler.getDateTableCell(0, 4));
 
 	await t
 		.expect(`132px`)
@@ -79,7 +79,7 @@ test(`Drag-n-drop in the timelineMonth mode from Sun to Fri`, async t => {
 	const draggableAppointment = await scheduler.getAppointment(`Brochure Design Review`);
 
 	await t
-		.dragToElement(draggableAppointment, scheduler.getDateTableRowCell(0, 4));
+		.dragToElement(draggableAppointment, scheduler.getDateTableCell(0, 4));
 
 	await t
 		.expect(`140px`)
