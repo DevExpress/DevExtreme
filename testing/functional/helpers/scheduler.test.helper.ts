@@ -42,10 +42,21 @@ export default class SchedulerTestHelper {
                    .nth(index);
     }
 
-    getDateTableRowCell(rowIndex = 0, cellIndex = 0) {
+    getDateTableCell(rowIndex = 0, cellIndex = 0) {
         return this.getDateTableRow(rowIndex)
                    .find(`.dx-scheduler-date-table-cell`)
                    .nth(cellIndex);
+    }
+
+    getDateTableCells() {
+        return this.scheduler
+                   .find(`.dx-scheduler-date-table-cell`);
+    }
+
+    getHeaderPanelCell(index = 0) {
+        return this.scheduler
+                   .find(`.dx-scheduler-header-panel-cell`)
+                   .nth(index);
     }
 
     getAppointment(title, index = 0) {
