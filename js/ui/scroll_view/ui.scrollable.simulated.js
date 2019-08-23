@@ -189,7 +189,8 @@ var Scroller = Class.inherit({
             const realDimension = this._getRealDimension(element, this._dimension);
             const baseDimension = this._getBaseDimension(element, this._dimension);
 
-            this._scaleRatio = realDimension / baseDimension;
+            // round ratio to make size calculations more accurate
+            this._scaleRatio = Math.round((realDimension / baseDimension * 100)) / 100;
         }
 
         return this._scaleRatio || 1;
@@ -438,13 +439,19 @@ var Scroller = Class.inherit({
     },
 
     _updateScrollbar: deferUpdater(function() {
+        // real sizes (considering to zoom)
         const containerSize = this._containerSize();
         const contentSize = this._contentSize();
+        // base sizes (zoom = 100%)
+        const baseContainerSize = this._getBaseDimension(this._$container.get(0), this._dimension);
+        const baseContentSize = this._getBaseDimension(this._$content.get(0), this._dimension);
 
         deferRender(() => {
             this._scrollbar.option({
-                containerSize: containerSize,
-                contentSize: contentSize,
+                containerSize,
+                contentSize,
+                baseContainerSize,
+                baseContentSize,
                 scaleRatio: this._getScaleRatio()
             });
         });
