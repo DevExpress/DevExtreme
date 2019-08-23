@@ -187,7 +187,7 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
     });
     test("should toggle fullscreen class name on button click", (assert) => {
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        let fullScreenButton = findToolbarItem(this.$element, "Full Screen");
+        let fullScreenButton = findToolbarItem(this.$element, "full screen");
         fullScreenButton.trigger("dxclick");
         assert.ok(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
         fullScreenButton.trigger("dxclick");
@@ -502,7 +502,9 @@ QUnit.module("Options", moduleConfig, () => {
 });
 
 function findToolbarItem($diagram, label) {
-    return $diagram.find(TOOLBAR_SELECTOR).find(".dx-widget").filter(function() {
-        return $(this).text().toLowerCase().indexOf(label) >= 0;
-    });
+    return $diagram.find(TOOLBAR_SELECTOR)
+        .find(".dx-widget")
+        .filter(function() {
+            return $(this).text().toLowerCase().indexOf(label) >= 0;
+        });
 }
