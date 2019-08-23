@@ -128,29 +128,33 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             editingController = this.getController("editing");
 
         return function(options, container) {
-            var isItemEdited = that._isItemEdited(item),
-                $container = $(container),
+            var $container = $(container),
                 columnIndex = that._columnsController.getVisibleIndex(column.visibleIndex),
                 templateOptions = extend({}, cellOptions);
 
-            templateOptions.value = cellOptions.row.values[columnIndex];
-
-            if(isItemEdited || column.showEditorAlways) {
-                editingController.renderFormEditTemplate(templateOptions, item, options.component, $container, !isItemEdited);
-            } else {
-                templateOptions.column = column;
-                templateOptions.columnIndex = columnIndex;
-
-                templateOptions.watch && templateOptions.watch(function() {
-                    return templateOptions.column.selector(templateOptions.data);
-                }, function(newValue) {
-                    templateOptions.value = newValue;
-                    $container.contents().remove();
+            var renderFormTemplate = function() {
+                var isItemEdited = that._isItemEdited(item);
+                templateOptions.value = cellOptions.row.values[columnIndex];
+                if(isItemEdited || column.showEditorAlways) {
+                    editingController.renderFormEditTemplate(templateOptions, item, options.component, $container, !isItemEdited);
+                } else {
+                    templateOptions.column = column;
+                    templateOptions.columnIndex = columnIndex;
                     that._renderFormViewTemplate(item, templateOptions, $container);
-                });
+                }
+            };
 
-                that._renderFormViewTemplate(item, templateOptions, $container);
-            }
+            renderFormTemplate();
+            templateOptions.watch && templateOptions.watch(function() {
+                return {
+                    isItemEdited: that._isItemEdited(item),
+                    value: cellOptions.row.values[columnIndex]
+                };
+            }, function() {
+                $container.contents().remove();
+                $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
+                renderFormTemplate();
+            });
         };
     },
 
