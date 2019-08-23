@@ -7205,6 +7205,32 @@ QUnit.test("Add a custom icon for the 'buttons' command column", function(assert
     assert.strictEqual($linkElements.eq(2).attr("title"), "My icon", "title of the custom link");
 });
 
+QUnit.test("Add a custom cssClass for image icons in the 'buttons' command column (T807766)", function(assert) {
+    // arrange
+    var that = this,
+        $buttonElement,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.columns.push({
+        type: "buttons",
+        buttons: [{
+            icon: "https://test.svg",
+            cssClass: "myIcon"
+        }]
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $buttonElement = $testElement.find(".dx-command-edit").first().find("img").first();
+    assert.ok($testElement.find(".dx-command-edit").first().hasClass("dx-command-edit-with-icons"), "Command edit cell has icons");
+    assert.ok($buttonElement.hasClass("myIcon"), "Custom cssClass is applied");
+    assert.ok($buttonElement.hasClass("dx-icon"), "Custom icon is created");
+});
+
 QUnit.test("Add a custom command column", function(assert) {
     // arrange
     var that = this,
