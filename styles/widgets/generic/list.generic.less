@@ -99,10 +99,6 @@
             color: @list-item-focus-color;
         }
 
-        .dx-button .dx-icon {
-            color: @button-icon-color;
-        }
-
         .dx-list-item-chevron {
             border-color: @list-chevron-focus-color;
         }
@@ -121,10 +117,6 @@
             color: @list-item-active-color;
         }
 
-        .dx-button .dx-icon {
-            color: @button-icon-color;
-        }
-
         .dx-list-slide-item-content {
             background-color: @list-item-active-bg;
             color: @list-item-active-color;
@@ -133,6 +125,13 @@
 
     .dx-icon {
         color: @list-icon-color;
+    }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+        .dx-button .dx-icon {
+            color: @button-icon-color;
+        }
     }
 }
 
