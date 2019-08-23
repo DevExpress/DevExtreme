@@ -17,7 +17,6 @@ import { addNamespace } from "../../events/utils";
 import { renderNoDataText, renderLoadPanel } from "../grid_core/ui.grid_core.utils";
 import { setFieldProperty, findField, mergeArraysByMaxValue } from "./ui.pivot_grid.utils";
 import { DataController } from "./ui.pivot_grid.data_controller";
-import PivotGridDataSource from "./data_source";
 import { DataArea } from "./ui.pivot_grid.data_area";
 import { VerticalHeadersArea, HorizontalHeadersArea } from "./ui.pivot_grid.headers_area";
 import { getSize } from "../../core/utils/size";
@@ -884,14 +883,6 @@ var PivotGrid = Widget.inherit({
 
     _trigger: function(eventName, eventArg) {
         this._actions[eventName](eventArg);
-    },
-
-    _optionValuesEqual: function(name, oldValue, newValue) {
-        // T266402
-        if(name === "dataSource" && (newValue instanceof PivotGridDataSource) && (oldValue instanceof PivotGridDataSource)) {
-            return newValue === oldValue;
-        }
-        return this.callBase.apply(this, arguments);
     },
 
     _optionChanged: function(args) {

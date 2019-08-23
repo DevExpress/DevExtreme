@@ -1,11 +1,9 @@
 var Config = require("./config"),
-    domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
     optionHelper = require("./option_helper").OptionHelper,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
-    coreDataUtils = require("./utils/data"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
     deferredUtils = require("../core/utils/deferred"),
@@ -119,7 +117,7 @@ var Component = Class.inherit({
     },
 
     _setDefaultOptions: function() {
-        this._options = this._getDefaultOptions();
+        Object.assign(this._options, this._getDefaultOptions());
     },
 
     _defaultOptionsRules: function() {
@@ -196,7 +194,6 @@ var Component = Class.inherit({
     * @hidden
     */
     ctor: function(options) {
-        this._optionHelper = new optionHelper(this);
         this.NAME = publicComponentUtils.name(this.constructor);
 
         options = options || {};
@@ -211,12 +208,26 @@ var Component = Class.inherit({
         this._disposingCallbacks = options._disposingCallbacks || Callbacks();
         this.postponedOperations = new PostponedOperations();
 
+        const optionChanging = (name, previousValue, value) => {
+            if(this._initialized) {
+                this._optionChanging(name, previousValue, value);
+            }
+        };
+
         this.beginUpdate();
 
         try {
             this._suppressDeprecatedWarnings();
             this._setOptionsByReference();
             this._setDeprecatedOptions();
+            this._optionHelper = new optionHelper(
+                this._getOptionsByReference.bind(this),
+                this._options,
+                this._deprecatedOptions,
+                this._notifyOptionChanged.bind(this),
+                this._logWarningIfDeprecated.bind(this),
+                optionChanging);
+
             this._setDefaultOptions();
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
@@ -232,27 +243,6 @@ var Component = Class.inherit({
 
     _initOptions: function(options) {
         this.option(options);
-    },
-
-    _optionValuesEqual: function(name, oldValue, newValue) {
-        oldValue = coreDataUtils.toComparable(oldValue, true);
-        newValue = coreDataUtils.toComparable(newValue, true);
-
-        if(oldValue && newValue && typeUtils.isRenderer(oldValue) && typeUtils.isRenderer(newValue)) {
-            return newValue.is(oldValue);
-        }
-
-        var oldValueIsNaN = oldValue !== oldValue,
-            newValueIsNaN = newValue !== newValue;
-        if(oldValueIsNaN && newValueIsNaN) {
-            return true;
-        }
-
-        if(oldValue === null || typeof oldValue !== "object" || domAdapter.isElementNode(oldValue)) {
-            return oldValue === newValue;
-        }
-
-        return false;
     },
 
     _init: function() {
@@ -386,13 +376,13 @@ var Component = Class.inherit({
             currentInitialized = this._initialized;
         if(!this._initialOptions) {
             currentOptions = this._options;
-            this._options = {};
+            Object.keys(this._options).forEach(key => delete this._options[key]);
             this._initialized = false;
             this._setDefaultOptions();
             this._setOptionsByDevice(currentOptions.defaultOptionsRules);
 
             this._initialOptions = this._options;
-            this._options = currentOptions;
+            this._options = Object.assign(this._options, currentOptions);
             this._initialized = currentInitialized;
         }
 
@@ -532,13 +522,13 @@ var Component = Class.inherit({
      * @param1 options:object
      */
     option: function(options, value) {
-        var name = options;
-
-        if(arguments.length < 2 && typeUtils.type(name) !== "object") {
-            name = this._optionHelper.normalizeOptionName(name);
+        if(arguments.length < 2 && typeUtils.type(options) !== "object") {
+            const name = this._optionHelper.normalizeOptionName(options);
             return this._optionHelper.getOptionValue(this._options, name);
         }
 
+
+        var name = options;
         if(typeof name === "string") {
             options = {};
             options[name] = value;
@@ -549,10 +539,9 @@ var Component = Class.inherit({
         try {
             var optionName;
             for(optionName in options) {
-                this._optionHelper.prepareOption(options, optionName, options[optionName]);
+                this._optionHelper.normalizeOptionValue(options, optionName, options[optionName]);
             }
             for(optionName in options) {
-                // opt.setOption.bind(this)(optionName, options[optionName]);
                 this._optionHelper.setOption(optionName, options[optionName]);
             }
         } finally {
