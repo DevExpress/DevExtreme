@@ -90,6 +90,23 @@ var DEFAULT_DEVICE = {
 };
 
 var uaParsers = {
+    win: function(userAgent) {
+        var isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/),
+            isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent),
+            isDesktop = !isPhone && !isTablet && /msapphost/i.test(userAgent);
+
+        if(!(isPhone || isTablet || isDesktop)) {
+            return;
+        }
+
+        return {
+            deviceType: isPhone ? "phone" : isTablet ? "tablet" : "desktop",
+            platform: "generic",
+            version: [],
+            grade: "A"
+        };
+    },
+
     ios: function(userAgent) {
         if(!/ip(hone|od|ad)/i.test(userAgent)) {
             return;
