@@ -187,10 +187,10 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
     });
     test("should toggle fullscreen class name on button click", (assert) => {
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        let fullscreenButton = findToolbarItem(this.$element, "fullScreen");
-        fullscreenButton.trigger("dxclick");
+        let fullScreenButton = findToolbarItem(this.$element, "Full Screen");
+        fullScreenButton.trigger("dxclick");
         assert.ok(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        fullscreenButton.trigger("dxclick");
+        fullScreenButton.trigger("dxclick");
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
     });
     test("diagram should be focused after change font family", (assert) => {
