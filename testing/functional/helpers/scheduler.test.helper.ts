@@ -37,64 +37,46 @@ export default class SchedulerTestHelper {
     }
 
     getDateTableRow(index = 0) {
-        return this.scheduler
-                   .find(`.dx-scheduler-date-table-row`)
-                   .nth(index);
+        return this.scheduler.find(`.dx-scheduler-date-table-row`).nth(index);
     }
 
     getDateTableCell(rowIndex = 0, cellIndex = 0) {
-        return this.getDateTableRow(rowIndex)
-                   .find(`.dx-scheduler-date-table-cell`)
-                   .nth(cellIndex);
+        return this.getDateTableRow(rowIndex).find(`.dx-scheduler-date-table-cell`).nth(cellIndex);
     }
 
     getDateTableCells() {
-        return this.scheduler
-                   .find(`.dx-scheduler-date-table-cell`);
+        return this.scheduler.find(`.dx-scheduler-date-table-cell`);
     }
 
     getHeaderPanelCell(index = 0) {
-        return this.scheduler
-                   .find(`.dx-scheduler-header-panel-cell`)
-                   .nth(index);
+        return this.scheduler.find(`.dx-scheduler-header-panel-cell`).nth(index);
     }
 
     getAppointment(title, index = 0) {
-        return this.scheduler
-                   .find(`.dx-scheduler-appointment`)
-                   .withAttribute('title', title)
-                   .nth(index);
+        return this.scheduler.find(`.dx-scheduler-appointment`).withAttribute('title', title).nth(index);
     }
 
     getAppointmentDate(appointment) {
         const appointmentContentDate = appointment.find('.dx-scheduler-appointment-content-date');
         return {
-            startTime:
-                appointmentContentDate.nth(0).innerText,
-            endTime:
-                appointmentContentDate.nth(2).innerText
+            startTime: appointmentContentDate.nth(0).innerText,
+            endTime: appointmentContentDate.nth(2).innerText
         }
     }
 
     getAppointmentResizableHandle(appointment) {
         return {
-            left:
-                appointment.find('.dx-resizable-handle-left'),
-            right:
-                appointment.find('.dx-resizable-handle-right'),
-            top:
-                appointment.find('.dx-resizable-handle-top'),
-            bottom:
-                appointment.find('.dx-resizable-handle-bottom')
+            left: appointment.find('.dx-resizable-handle-left'),
+            right: appointment.find('.dx-resizable-handle-right'),
+            top: appointment.find('.dx-resizable-handle-top'),
+            bottom: appointment.find('.dx-resizable-handle-bottom')
         }
     }
 
     getAppointmentSize(appointment) {
         return {
-            width:
-                appointment.getStyleProperty('width'),
-            height:
-                appointment.getStyleProperty('height')
+            width: appointment.getStyleProperty('width'),
+            height: appointment.getStyleProperty('height')
         }
     }
 
