@@ -126,6 +126,13 @@
     .dx-icon {
         color: @list-icon-color;
     }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+        .dx-button .dx-icon {
+            color: @button-icon-color;
+        }
+    }
 }
 
 .dx-list-sizing(@item_horizontal_padding) {
