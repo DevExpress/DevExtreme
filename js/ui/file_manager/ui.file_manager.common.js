@@ -7,6 +7,7 @@ const ErrorCode = {
     FileExists: 1,
     FileNotFound: 2,
     DirectoryExists: 3,
+    DirectoryNotFound: 4,
     Other: 32767
 };
 

@@ -2,7 +2,7 @@ import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
 import SchedulerTestHelper from '../../helpers/scheduler.test.helper';
 import { ClientFunction } from 'testcafe';
 
-fixture `NativeScrolling`
+fixture `Scheduler: NativeScrolling`
     .page(getContainerFileUrl());
 
 const scheduler = new SchedulerTestHelper("#container");

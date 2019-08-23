@@ -9,13 +9,15 @@ if(useJQuery) {
         jQuery.event.special[name] = eventObject;
     });
 
-    eventsEngine.forcePassiveFalseEventNames.forEach(function(eventName) {
-        jQuery.event.special[eventName] = {
-            setup: function(data, namespaces, handler) {
-                domAdapter.listen(this, eventName, handler, { passive: false });
-            }
-        };
-    });
+    if(eventsEngine.passiveEventHandlersSupported()) {
+        eventsEngine.forcePassiveFalseEventNames.forEach(function(eventName) {
+            jQuery.event.special[eventName] = {
+                setup: function(data, namespaces, handler) {
+                    domAdapter.listen(this, eventName, handler, { passive: false });
+                }
+            };
+        });
+    }
 
     eventsEngine.set({
         on: function(element) {
