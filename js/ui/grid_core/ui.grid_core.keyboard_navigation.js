@@ -1392,7 +1392,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _getCellElementFromTarget: function(target) {
-        return $(target).closest("." + ROW_CLASS + "> td");
+        let $target = $(target);
+        if($target.is(`tr.${ROW_CLASS}`)) {
+            let focusedColumnIndex = this.option("focusedColumnIndex");
+            if(!isDefined(focusedColumnIndex) || focusedColumnIndex < 0) {
+                focusedColumnIndex = 0;
+            }
+            return $target.find("td").eq(focusedColumnIndex);
+        }
+        return $(target).closest(`.${ROW_CLASS} > td`);
     },
 
     init: function() {

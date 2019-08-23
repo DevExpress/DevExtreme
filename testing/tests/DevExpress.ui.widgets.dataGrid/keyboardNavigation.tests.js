@@ -368,6 +368,38 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
     assert.ok(navigationController._keyDownProcessor, "keyDownProcessor");
 });
 
+QUnit.testInActiveWindow("Cell should be correctly determined by row", function(assert) {
+    // arrange
+    var navigationController,
+        $cell,
+        row,
+        $rowsElement = $("<div />").append($("<tr class='dx-row'><td/><td/></tr><tr class='dx-row'><td/><td/></tr>")).appendTo("#container");
+
+    this.getView("rowsView").element = () => $rowsElement;
+
+    // act
+    navigationController = new KeyboardNavigationController(this.component);
+    navigationController.init();
+
+    callViewsRenderCompleted(this.component._views);
+
+    // act
+    row = $rowsElement.find(".dx-row").get(0);
+    $cell = navigationController._getCellElementFromTarget(row);
+    // assert
+    assert.equal($cell.index(), 0);
+
+    // act
+    row = $rowsElement.find(".dx-row").get(0);
+    $cell = navigationController._getCellElementFromTarget(row);
+
+    this.options.focusedColumnIndex = 1;
+    row = $rowsElement.find(".dx-row").get(1);
+    $cell = navigationController._getCellElementFromTarget(row);
+    // assert
+    assert.equal($cell.index(), 1);
+});
+
 // T667278
 QUnit.testInActiveWindow("Cell is focused when clicked on input in cell", function(assert) {
     // arrange
