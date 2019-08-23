@@ -6255,7 +6255,8 @@ QUnit.test("Load count on start when stateStoring enabled with search/filterRow 
 QUnit.test("Last row should not jump after selection by click if pager has showInfo", function(assert) {
     var data = [],
         dataGrid,
-        $lastRowElement;
+        $lastRowElement,
+        offset;
 
     for(let i = 0; i < 10; i++) {
         data.push({ id: i + 1 });
@@ -6280,20 +6281,16 @@ QUnit.test("Last row should not jump after selection by click if pager has showI
 
     // act
     $(dataGrid.getRowElement(0)).trigger("dxclick");
-
     dataGrid.getScrollable().scrollTo({ y: 200 });
 
     $lastRowElement = $(dataGrid.getRowElement(4));
+    offset = $lastRowElement.offset();
 
-    // assert
-    assert.deepEqual($lastRowElement.offset(), { left: -10000, top: -9892 }, "last row offset");
-
-    // act
     $lastRowElement.trigger('dxclick');
     $lastRowElement = $(dataGrid.getRowElement(4));
 
     // assert
-    assert.deepEqual($lastRowElement.offset(), { left: -10000, top: -9892 }, "last row offset");
+    assert.deepEqual($lastRowElement.offset(), offset, "last row offset");
 });
 
 // T489478
