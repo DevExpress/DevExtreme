@@ -206,6 +206,32 @@ var checkTwoGroups = function(assert, series) {
         assert.ok(this.createPoint.thirdCall.returnValue.dispose.called);
     });
 
+    // T808347
+    QUnit.test("Update points by index. datetime argument", function(assert) {
+        var series = createSeries({
+            type: seriesType,
+            point: { visible: false }
+
+        });
+        // act
+        series.updateData([{ arg: new Date(1000), val: 10 }, { arg: new Date(2000), val: 10 }, { arg: new Date(3000), val: 4 }]);
+        series.createPoints();
+        series.draw(false);
+        series.updateData([{ arg: new Date(2000), val: 10 }, { arg: new Date(3000), val: 10 }]);
+        series.createPoints();
+        series.draw(false);
+        // assert
+
+        assert.equal(this.createPoint.callCount, 3);
+
+        assert.deepEqual(this.createPoint.firstCall.returnValue.update.lastCall.args[0].argument, new Date(2000));
+        assert.ok(!this.createPoint.firstCall.returnValue.dispose.called);
+
+        assert.deepEqual(this.createPoint.secondCall.returnValue.update.lastCall.args[0].argument, new Date(3000));
+        assert.ok(!this.createPoint.secondCall.returnValue.dispose.called);
+        assert.ok(this.createPoint.thirdCall.returnValue.dispose.called);
+    });
+
     // T102876
     QUnit.test("paintNullPoints is false & undefined value field", function(assert) {
         var series = createSeries({

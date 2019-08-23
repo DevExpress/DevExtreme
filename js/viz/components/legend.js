@@ -396,6 +396,8 @@ extend(legendPrototype, {
             that._title.update(themeManagerTitleOptions, titleOptions);
         }
 
+        this.erase();
+
         return that;
     },
 
@@ -1009,7 +1011,7 @@ extend(legendPrototype, {
 
     // BaseWidget_layout_implementation
     layoutOptions: function() {
-        if(!this.getOptions().visible) {
+        if(!this.isVisible()) {
             return null;
         }
         const pos = this.getLayoutOptions();

@@ -2,6 +2,7 @@ const { test } = QUnit;
 
 import "ui/file_manager";
 import ArrayFileProvider from "ui/file_manager/file_provider/array";
+import { FileManagerRootItem } from "ui/file_manager/file_provider/file_provider";
 import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
 
 const moduleConfig = {
@@ -59,7 +60,8 @@ QUnit.module("Array File Provider", moduleConfig, () => {
         assert.equal(items[1].name, "F2");
         assert.notOk(items[1].hasSubDirs);
 
-        items = this.provider.getItems("F1");
+        let pathInfo = [ { key: "F1", name: "F1" } ];
+        items = this.provider.getItems(pathInfo);
         assert.equal(3, items.length);
         assert.equal(items[0].name, "F1.1");
         assert.notOk(items[0].hasSubDirs);
@@ -68,7 +70,11 @@ QUnit.module("Array File Provider", moduleConfig, () => {
         assert.equal(items[2].name, "F1.3");
         assert.ok(items[2].hasSubDirs);
 
-        items = this.provider.getItems("F1/F1.2");
+        pathInfo = [
+            { key: "F1", name: "F1" },
+            { key: "F1/F1.2", name: "F1.2" }
+        ];
+        items = this.provider.getItems(pathInfo);
         assert.equal(items.length, 1);
         assert.equal(items[0].name, "File1.2.txt");
     });
@@ -97,7 +103,8 @@ QUnit.module("Array File Provider", moduleConfig, () => {
         assert.equal(errorCount, 1);
         assert.equal(lastErrorId, ErrorCode.Other);
 
-        let subFolders = this.provider.getItems("F1");
+        const pathInfo = [ { key: "F1", name: "F1" } ];
+        let subFolders = this.provider.getItems(pathInfo);
         try {
             this.provider.moveItems([ subFolders[0] ], subFolders[0]);
         } catch(e) {
@@ -124,7 +131,8 @@ QUnit.module("Array File Provider", moduleConfig, () => {
         assert.equal(errorCount, 1);
         assert.equal(lastErrorId, ErrorCode.Other);
 
-        let subFolders = this.provider.getItems("F1");
+        const pathInfo = [ { key: "F1", name: "F1" } ];
+        let subFolders = this.provider.getItems(pathInfo);
         try {
             this.provider.copyItems([ subFolders[0] ], subFolders[0]);
         } catch(e) {
@@ -137,7 +145,7 @@ QUnit.module("Array File Provider", moduleConfig, () => {
     });
 
     test("create new folder with existing name", function(assert) {
-        this.provider.createFolder(null, "F1");
+        this.provider.createFolder(new FileManagerRootItem(), "F1");
 
         const dirs = this.provider.getItems();
         assert.equal(dirs[0].name, "F1");
@@ -149,6 +157,23 @@ QUnit.module("Array File Provider", moduleConfig, () => {
         assert.ok(dirs[2].key.length > 1);
     });
 
+    test("throw error on creating new directory in unexisting directory", function(assert) {
+        let errorCount = 0;
+        let errorId = 0;
+
+        const f1Dir = this.provider.getItems()[0];
+        this.options.data.splice(0, this.options.data.length);
+
+        try {
+            this.provider.createFolder(f1Dir, "NewDir");
+        } catch(e) {
+            errorCount++;
+            errorId = e.errorId;
+        }
+        assert.equal(errorCount, 1);
+        assert.equal(errorId, ErrorCode.DirectoryNotFound);
+    });
+
     test("rename file item with existing name", function(assert) {
         const fileItems = this.provider.getItems();
         this.provider.renameItem(fileItems[0], "F2");
@@ -158,6 +183,35 @@ QUnit.module("Array File Provider", moduleConfig, () => {
 
         assert.equal(fileItems[1].name, "F2");
         assert.equal(fileItems[1].key, "F2");
+    });
+
+    test("delete directory", function(assert) {
+        let fileItems = this.provider.getItems();
+        assert.equal("F1", fileItems[0].name);
+        assert.equal("F2", fileItems[1].name);
+        assert.equal(2, fileItems.length);
+
+        this.provider.deleteItems([ fileItems[0] ]);
+        fileItems = this.provider.getItems();
+        assert.equal("F2", fileItems[0].name);
+        assert.equal(1, fileItems.length);
+    });
+
+    test("throw exception if remove unexisting directory", function(assert) {
+        let errorCount = 0;
+        let errorId = 0;
+
+        const f1Dir = this.provider.getItems()[0];
+        this.options.data.splice(0, this.options.data.length);
+
+        try {
+            this.provider.deleteItems([ f1Dir ]);
+        } catch(e) {
+            errorCount++;
+            errorId = e.errorId;
+        }
+        assert.equal(errorCount, 1);
+        assert.equal(errorId, ErrorCode.DirectoryNotFound);
     });
 
 });

@@ -293,6 +293,7 @@
         "dxFileManager-errorDirectoryExistsFormat": "Directory '{0}' already exists.",
         "dxFileManager-errorFileExistsFormat": "File '{0}' already exists.",
         "dxFileManager-errorFileNotFoundFormat": "File '{0}' not found",
+        "dxFileManager-errorDirectoryNotFoundFormat": "Directory '{0}' not found",
         "dxFileManager-errorDefault": "Unspecified error.",
 
         "dxDiagram-categoryGeneral": "General",
