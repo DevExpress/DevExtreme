@@ -745,22 +745,24 @@ const TagBox = SelectBox.inherit({
     _renderInputSize: function() {
         const $input = this._input();
         const value = $input.val();
-        const additionalWidth = 5;
+        const cursorWidth = 5;
         let width = "";
-        const canUseInput = (this.option("searchEnabled") || this.option("editEnabled"));
+        let size = "";
+        const canTypeText = this.option("searchEnabled") || this.option("editEnabled");
 
-        if(value && canUseInput) {
+        if(value && canTypeText) {
             const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
 
             $calculationElement.insertAfter($input);
-            width = $calculationElement.outerWidth() + additionalWidth;
+            width = $calculationElement.outerWidth() + cursorWidth;
 
             $calculationElement.remove();
-        } else {
-            $input.attr("size", 1);
+        } else if(!value) {
+            size = 1;
         }
 
         $input.css("width", width);
+        $input.attr("size", size);
     },
 
     _renderInputSubstitution: function() {

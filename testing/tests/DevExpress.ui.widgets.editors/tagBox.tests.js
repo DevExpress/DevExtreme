@@ -18,7 +18,6 @@ import ODataStore from "data/odata/store";
 import TagBox from "ui/tag_box";
 
 import "common.css!";
-import "generic_light.css!";
 
 QUnit.testStart(() => {
     const markup =
@@ -2646,6 +2645,8 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         const text = "wwwwwwwwwwwwww";
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
+        $input.css("padding", "0 10px");
+
         keyboardMock($input).type(text);
         const inputWidth = $input.width();
 
@@ -3071,7 +3072,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         keyboardMock($input)
             .type("a");
         this.clock.tick(TIME_TO_WAIT);
-        assert.ok($input.width(), inputWidth, "input size is changed for substitution");
+        assert.ok($input.width() > inputWidth, "input size is changed for substitution");
     });
 
     QUnit.test("filter should be reset after the search value clearing (T385456)", assert => {
