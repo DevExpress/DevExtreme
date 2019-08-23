@@ -10,6 +10,7 @@ import devices from "core/devices";
 import { DataSource } from "data/data_source/data_source";
 import dataGridMocks from "../../helpers/dataGridMocks.js";
 import dateLocalization from "localization/date";
+import browser from "core/utils/browser";
 
 import "ui/data_grid/ui.data_grid";
 import "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
@@ -2684,9 +2685,19 @@ function checkWidthTest(assert, that, options, baseWidthDecrease, withSortWidthD
     var $headerCell,
         sortIndexWidth = 15,
         $testElement = that.$element().addClass("dx-widget"),
+        baseWidth,
+        widthWithSort,
+        widthWithSortIndex;
+
+    if(browser.mozilla) {
+        baseWidth = baseWidthDecrease ? `calc(-${baseWidthDecrease}px + 100%)` : "100%",
+        widthWithSort = `calc(-${baseWidthDecrease + withSortWidthDecrease}px + 100%)`,
+        widthWithSortIndex = `calc(-${baseWidthDecrease + withSortWidthDecrease + sortIndexWidth}px + 100%)`;
+    } else {
         baseWidth = baseWidthDecrease ? `calc(100% + -${baseWidthDecrease}px)` : "100%",
         widthWithSort = `calc(100% + -${baseWidthDecrease + withSortWidthDecrease}px)`,
         widthWithSortIndex = `calc(100% + -${baseWidthDecrease + withSortWidthDecrease + sortIndexWidth}px)`;
+    }
 
     that.setupDataGrid(options);
 

@@ -29,7 +29,7 @@ module.exports = {
                     .toggleClass(SORTUP_CLASS, column.sortOrder === "asc")
                     .toggleClass(SORTDOWN_CLASS, column.sortOrder === "desc");
 
-                let hasSeveralSortIndexes = !!that.getController("columns").columnOption("sortIndex:1");
+                let hasSeveralSortIndexes = that.getController && !!that.getController("columns").columnOption("sortIndex:1");
                 if(hasSeveralSortIndexes && that.option("sorting.showSortIndexes") && column.sortIndex >= 0) {
                     $("<span>")
                         .addClass(SORT_INDEX_CLASS)
