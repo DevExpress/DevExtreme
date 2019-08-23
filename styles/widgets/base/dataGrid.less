@@ -43,8 +43,13 @@
         .dx-icon-sortdown;
     }
 
-    .dx-sort-index {
-        font-family: @base-font-family;
+    .dx-sort-down,
+    .dx-sort-up {
+        font-family: inherit;
+
+        &:before {
+            font-family: 'DXIcons', sans-serif;
+        }
     }
 
     .dx-datagrid-header-panel {
