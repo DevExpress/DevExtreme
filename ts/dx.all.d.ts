@@ -5261,6 +5261,8 @@ declare module DevExpress.data {
         group?: any;
         /** @name LoadOptions.groupSummary */
         groupSummary?: any;
+        /** @name LoadOptions.parentIds */
+        parentIds?: Array<any>;
         /** @name LoadOptions.requireGroupCount */
         requireGroupCount?: boolean;
         /** @name LoadOptions.requireTotalCount */
