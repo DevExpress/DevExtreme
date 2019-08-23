@@ -2,7 +2,7 @@ import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
 import SchedulerTestHelper from '../../helpers/scheduler.test.helper';
 import { ClientFunction } from 'testcafe';
 
-fixture `Tooltip behavior when scrolling`
+fixture `Scheduler: Appointment Tooltip`
     .page(getContainerFileUrl());
 
 const scheduler = new SchedulerTestHelper("#container");

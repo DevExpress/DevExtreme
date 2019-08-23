@@ -271,7 +271,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
         if(isMultiSelection) {
             $cell = this._correctCellForGroup($cell);
-            var $targetCells = this._getCellsBetween($cell, this._$prevCell);
+            let orientation = this.option("type") === "day" && (!this.option("groups").length || this.option("groupOrientation") === "vertical")
+                ? "vertical"
+                : "horizontal";
+            let $targetCells = this._getCellsBetween($cell, this._$prevCell, orientation);
             this._focusedCells = $targetCells.toArray();
         } else {
             this._focusedCells = [$cell.get(0)];
@@ -300,9 +303,9 @@ var SchedulerWorkSpace = Widget.inherit({
         return focusedCellGroupIndex !== cellGroupIndex || isDifferentTables ? $focusedCell : $cell;
     },
 
-    _getCellsBetween: function($first, $last) {
+    _getCellsBetween: function($first, $last, direction) {
         var isAllDayTable = this._hasAllDayClass($last),
-            $cells = this._getCells(isAllDayTable),
+            $cells = this._getCells(isAllDayTable, direction),
             firstIndex = $cells.index($first),
             lastIndex = $cells.index($last);
 
@@ -1937,9 +1940,19 @@ var SchedulerWorkSpace = Widget.inherit({
             .eq(indexes.cellIndex);
     },
 
-    _getCells: function(allDay) {
-        var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
-        return this.$element().find("." + cellClass);
+    _getCells: function(allDay, direction) {
+        const cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
+        if(direction === "vertical") {
+            let result = [];
+            for(let i = 1; ; i++) {
+                const cells = this.$element().find(`tr .${cellClass}:nth-child(${i})`);
+                if(!cells.length) break;
+                result = result.concat(cells.toArray());
+            }
+            return $(result);
+        } else {
+            return this.$element().find("." + cellClass);
+        }
     },
 
     _setHorizontalGroupHeaderCellsHeight: function() {
