@@ -992,6 +992,32 @@ QUnit.test("should have no errors after value change if text editor buttons were
     }
 });
 
+QUnit.testInActiveWindow("widget should detach focus events before fieldTemplate rerender", (assert) => {
+    const focusOutSpy = sinon.stub();
+    const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        dataSource: [1, 2],
+        fieldTemplate: function(value, container) {
+            const $textBoxContainer = $("<div>").appendTo(container);
+            $("<div>").dxTextBox().appendTo($textBoxContainer);
+
+            $($textBoxContainer).one("dxremove", () => {
+                $textBoxContainer.detach();
+            });
+        },
+        onFocusOut: focusOutSpy,
+        opened: true
+    });
+
+    const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+    const keyboard = keyboardMock($input);
+
+    $input.focus();
+    keyboard.press("down");
+    keyboard.press("enter");
+
+    assert.strictEqual(focusOutSpy.callCount, 0, "there's no focus outs from deleted field container");
+});
+
 
 QUnit.module("options");
 
@@ -1383,14 +1409,12 @@ QUnit.test("aria-autocomplete property on input", function(assert) {
 
 QUnit.test("aria-owns should be removed when popup is not visible", function(assert) {
     var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({ opened: true }),
-        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`),
         instance = $dropDownEditor.dxDropDownEditor("instance");
 
-    assert.notEqual($input.attr("aria-owns"), undefined, "owns exists");
-    assert.equal($input.attr("aria-owns"), $(".dx-popup-content").attr("id"), "aria-owns points to popup's content id");
+    assert.notEqual($dropDownEditor.attr("aria-owns"), undefined, "owns exists");
+    assert.equal($dropDownEditor.attr("aria-owns"), $(".dx-popup-content").attr("id"), "aria-owns points to popup's content id");
 
     instance.close();
 
-    assert.strictEqual($input.attr("aria-owns"), undefined, "owns does not exist");
+    assert.strictEqual($dropDownEditor.attr("aria-owns"), undefined, "owns does not exist");
 });
-

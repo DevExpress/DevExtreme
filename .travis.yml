@@ -21,12 +21,18 @@ env:
     - TARGET=test BROWSER=firefox CONSTEL=ui.grid
     - TARGET=test BROWSER=firefox CONSTEL=ui.scheduler
     - TARGET=test BROWSER=firefox CONSTEL=viz
+    - TARGET=test_functional COMPONENT=dataGrid
+    - TARGET=test_functional COMPONENT=scheduler
     - TARGET=test_themebuilder
 
 cache:
   directories:
     - node_modules
     - dotnet_packages
+
+before_cache:
+  # See https://github.com/DevExpress/DevExtreme/pull/1251
+  - sudo chmod -R +Xr dotnet_packages
 
 script:
 
@@ -39,6 +45,7 @@ script:
     -e TARGET=$TARGET
     -e BROWSER=$BROWSER
     -e CONSTEL=$CONSTEL
+    -e COMPONENT=$COMPONENT
     -e JQUERY=$JQUERY
     -v $TRAVIS_BUILD_DIR:/devextreme
     docker.io/devexpress/devextreme-build:19_1

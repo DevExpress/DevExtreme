@@ -1,4 +1,5 @@
 import $ from "jquery";
+import devices from "core/devices";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 import caretWorkaround from "./caretWorkaround.js";
 
@@ -13,9 +14,9 @@ const testMaskRule = (title, config) => {
         });
         const textEditor = $textEditor.dxTextEditor("instance");
         const $input = $textEditor.find(".dx-texteditor-input");
-        const keyboard = keyboardMock($input);
+        const keyboard = keyboardMock($input, true);
 
-        caretWorkaround($input);
+        caretWorkaround($input, true);
 
         keyboard.type(config.text);
 
@@ -202,7 +203,7 @@ QUnit.module("typing", moduleConfig, () => {
 
         const $input = $textEditor.find(".dx-texteditor-input");
         const keyboard = keyboardMock($input, true);
-        keyboard.caret(0).keyPress("x");
+        keyboard.caret(0).type("x");
 
         assert.equal(keyboard.caret().start, 2, "cursor set after first fixed mask letter");
     });
@@ -276,7 +277,7 @@ QUnit.module("typing", moduleConfig, () => {
 
         keyboard
             .caret(0)
-            .keyPress("x");
+            .type("x");
 
         assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, "cursor in correct position");
     });
@@ -293,10 +294,10 @@ QUnit.module("typing", moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(0)
-            .keyDown("space")
-            .keyPress("1")
-            .keyDown("space")
-            .keyPress("x");
+            .type(" ")
+            .type("1")
+            .type(" ")
+            .type("x");
 
         assert.equal(keyboard.caret().start, 3, "caret in correct position");
     });
@@ -313,7 +314,7 @@ QUnit.module("typing", moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         keyboard.caret(1)
-            .keyPress("x");
+            .type("x");
 
         assert.equal(keyboard.caret().start, 3, "caret in correct position");
     });
@@ -381,8 +382,41 @@ QUnit.module("typing", moduleConfig, () => {
 
         const keyboard = keyboardMock($input, true);
 
-        keyboard.caret(1).type("x").caret(1).keyDown("enter");
+        keyboard.caret(1).type("x").caret(1).press("enter");
         assert.equal($input.val(), "_x", "second char is still there");
+    });
+
+    QUnit.test("TextEditor with mask option should firing the 'onChange' event", (assert) => {
+        const handler = sinon.stub();
+        const clock = sinon.useFakeTimers();
+
+        const $textEditor = $("#texteditor").dxTextEditor({
+            onChange: handler,
+            mask: "000000"
+        });
+
+        const $input = $textEditor.find(".dx-texteditor-input");
+        const keyboard = keyboardMock($input, true);
+
+        caretWorkaround($input);
+
+        $input.triggerHandler("focus");
+        clock.tick();
+
+        keyboard.type("123").press("enter");
+        assert.equal(handler.callCount, 1, "'change' event is fired on enter after value change");
+
+        keyboard.press("enter");
+        assert.equal(handler.callCount, 1, "'change' event is not fired on enter if value is not changed");
+
+        keyboard.type("456");
+        $input.triggerHandler("blur");
+        assert.equal(handler.callCount, 2, "'change' event is fired after value change and focus out");
+
+        $input.triggerHandler("focus");
+        $input.triggerHandler("blur");
+        assert.equal(handler.callCount, 2, "'change' event is not fired after focus out without value change");
+        clock.restore();
     });
 });
 
@@ -398,7 +432,7 @@ QUnit.module("backspace key", moduleConfig, () => {
         const $input = $textEditor.find(".dx-texteditor-input");
         const keyboard = keyboardMock($input, true);
 
-        keyboard.type("x").keyDown("backspace");
+        keyboard.type("x").press("backspace");
 
         this.clock.tick();
         assert.equal(keyboard.caret().start, 0, "caret moved backward");
@@ -418,11 +452,11 @@ QUnit.module("backspace key", moduleConfig, () => {
 
         caretWorkaround($input);
 
-        keyboard.type("x").keyDown("backspace");
+        keyboard.type("x").press("backspace");
 
         assert.equal(keyboard.caret().start, 1, "caret moved to fixed char");
 
-        keyboard.keyDown("backspace");
+        keyboard.press("backspace");
         this.clock.tick();
         assert.equal($input.val(), "_-_", "char was removed");
         assert.equal(keyboard.caret().start, 0, "caret moved to start position");
@@ -442,7 +476,7 @@ QUnit.module("backspace key", moduleConfig, () => {
         keyboard
             .type("x")
             .type("x")
-            .keyDown("backspace");
+            .press("backspace");
 
         assert.equal(keyboard.caret().start, 2, "cursor moved after fixed letters");
     });
@@ -457,7 +491,7 @@ QUnit.module("backspace key", moduleConfig, () => {
 
         const $input = $textEditor.find(".dx-texteditor-input");
         const keyboard = keyboardMock($input, true);
-        keyboard.caret(0).keyDown("backspace");
+        keyboard.caret(0).press("backspace");
 
         assert.equal(keyboard.caret().start, 0, "cursor at start position");
     });
@@ -482,9 +516,9 @@ QUnit.module("backspace key", moduleConfig, () => {
 
         keyboard.caret(3);
         keyboard
-            .keyDown("backspace")
-            .keyDown("backspace")
-            .keyDown("backspace");
+            .press("backspace")
+            .press("backspace")
+            .press("backspace");
 
         this.clock.tick();
 
@@ -508,6 +542,7 @@ QUnit.module("backspace key", moduleConfig, () => {
         caretWorkaround($input);
         keyboard
             .caret(3)
+            .beforeInput(null, BACKSPACE_INPUT_TYPE)
             .input(null, BACKSPACE_INPUT_TYPE);
 
         this.clock.tick();
@@ -531,7 +566,7 @@ QUnit.module("delete key", {}, () => {
         keyboard
             .type("x")
             .caret(0)
-            .keyDown("del");
+            .press("del");
 
         assert.equal($input.val(), "_", "letter deleted");
     });
@@ -551,7 +586,7 @@ QUnit.module("delete key", {}, () => {
 
         keyboard.type("xx")
             .caret({ start: 0, end: 3 })
-            .keyDown("del");
+            .press("del");
 
         assert.equal($input.val(), "_- x", "letter deleted");
     });
@@ -576,7 +611,7 @@ QUnit.module("selection", moduleConfig, () => {
             .type("x")
             .caret({ start: 0, end: 2 });
 
-        keyboard.keyDown("space").keyPress("x");
+        keyboard.type("x");
 
         assert.equal($input.val(), "x_", "printed only one char");
     });
@@ -588,6 +623,7 @@ QUnit.module("selection", moduleConfig, () => {
                 "X": "x"
             }
         });
+        const instance = $textEditor.dxTextEditor("instance");
 
         const $input = $textEditor.find(".dx-texteditor-input");
         const keyboard = keyboardMock($input, true);
@@ -600,9 +636,11 @@ QUnit.module("selection", moduleConfig, () => {
             .type("x")
             .caret({ start: 1, end: 3 });
 
-        keyboard.keyDown("backspace");
+        keyboard.press("backspace");
 
-        this.clock.tick();
+        if(instance._maskStrategy.NAME === "default") {
+            this.clock.tick();
+        }
 
         assert.equal($input.val(), "x__", "printed only one char");
         assert.equal(keyboard.caret().start, 1, "caret position set to start");
@@ -627,7 +665,7 @@ QUnit.module("selection", moduleConfig, () => {
             .type("x")
             .caret({ start: 1, end: 3 });
 
-        keyboard.keyDown("del");
+        keyboard.press("del");
 
         assert.equal($input.val(), "x__", "printed only one char");
         assert.equal(keyboard.caret().start, 1, "caret position set to start");
@@ -1041,8 +1079,8 @@ QUnit.module("value", moduleConfig, () => {
 
         const keyboard = keyboardMock($input);
         keyboard
-            .press("x")
-            .keyDown("enter");
+            .type("x")
+            .press("enter");
 
         assert.equal(valueChangedFired, 1, "change fired once on pressing enter key");
     });
@@ -1706,8 +1744,11 @@ QUnit.module("T9", moduleConfig, () => {
 
         keyboard
             .caret({ start: 0, end: 0 })
-            .keyDown("x");
+            .keyDown("x")
+            .beforeInput("x", "insertText");
+
         $input.val("x" + $input.val());
+
         keyboard
             .caret({ start: 0, end: 1 })
             .input("x");
@@ -1729,8 +1770,11 @@ QUnit.module("T9", moduleConfig, () => {
 
         keyboard
             .caret({ start: 0, end: 0 })
-            .keyDown("x");
+            .keyDown("x")
+            .beforeInput("x", "insertText");
+
         $input.val("x" + $input.val());
+
         keyboard
             .caret({ start: 0, end: 1 })
             .input("x");
@@ -1758,17 +1802,14 @@ QUnit.module("T9", moduleConfig, () => {
         keyboard.type("xx");
         this.clock.tick();
 
-        keyboard.keyDown("backspace");
+        keyboard.press("backspace");
         this.clock.tick();
-        keyboard.keyPress();
 
-        keyboard.keyDown("backspace");
+        keyboard.press("backspace");
         this.clock.tick();
-        keyboard.keyPress();
 
-        keyboard.keyDown("backspace");
+        keyboard.press("backspace");
         this.clock.tick();
-        keyboard.keyPress();
 
         assert.equal(keyboard.caret().start, 0, "caret moved backward");
         assert.equal($input.val(), "_-_", "chars was removed");
@@ -1914,5 +1955,35 @@ QUnit.module("Hidden input", {}, () => {
 
         const $hiddenInput = $textEditor.find("input[type=hidden]");
         assert.equal($hiddenInput.attr("name"), "Editor with mask", "name of hidden input");
+    });
+});
+
+QUnit.module("Strategies", () => {
+    QUnit.test("default strategy should be used for all devices, except android 5+", (assert) => {
+        const instance = $("#texteditor").dxTextEditor({
+            mask: "0"
+        }).dxTextEditor("instance");
+
+        const { android, version } = devices.real();
+        const isModernAndroidDevice = android && version[0] >= 5;
+        const expectedMaskStrategy = isModernAndroidDevice ? "android" : "default";
+
+        assert.strictEqual(instance._maskStrategy.NAME, expectedMaskStrategy, "strategy name is correct");
+    });
+
+    QUnit.test("default strategy should be used for devices with android less than v5", (assert) => {
+        const currentDevice = devices.real();
+
+        devices.real({
+            platform: "android",
+            version: [4, 4, 1]
+        });
+
+        const instance = $("#texteditor").dxTextEditor({
+            mask: "0"
+        }).dxTextEditor("instance");
+
+        assert.strictEqual(instance._maskStrategy.NAME, "default", "strategy name is correct");
+        devices.real(currentDevice);
     });
 });

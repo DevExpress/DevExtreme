@@ -25,6 +25,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     VIRTUAL_ROW_CLASS = "dx-virtual-row",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     EDITOR_CELL_CLASS = "dx-editor-cell",
+    EDIT_ROW_CLASS = "dx-edit-row",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
     COMMAND_SELECT_CLASS = "dx-command-select",
@@ -173,9 +174,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $target = $(event.currentTarget),
             data = event.data,
             focusedViewElement = data.view && data.view.element(),
-            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS);
+            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS),
+            isEditingRow = $target.parent().hasClass(EDIT_ROW_CLASS);
 
-        if(this._isEventInCurrentGrid(event) && this._isCellValid($target)) {
+        if(this._isEventInCurrentGrid(event) && this._isCellValid($target, true)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
 
@@ -189,6 +191,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 this._focusedView.focus();
             } else if(!isEditingCell && !this._isMasterDetailCell($target)) {
                 this._clickTargetCellHandler(event, $target);
+            } else if(isEditingCell && !isEditingRow) {
+                this._clickTargetCellHandler(event, $target);
+
+                this._updateFocusedCellPosition($target);
             } else {
                 this._updateFocusedCellPosition($target);
             }
@@ -411,7 +417,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
 
-    _isCellValid: function($cell) {
+    _isCellValid: function($cell, isClick) {
         if(isElementDefined($cell)) {
             var rowsView = this.getView("rowsView"),
                 $row = $cell.parent(),
@@ -456,7 +462,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     return false;
                 }
 
-                return !isEditing || column.allowEditing;
+                return !isEditing || column.allowEditing || isClick;
             }
         }
     },
@@ -1630,7 +1636,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanging: function(eventArgs, $newFocusedRow) {
         var newRowIndex = this._getRowIndex($newFocusedRow),
             dataController = this.getController("data"),
-            prevFocusedRowIndex = this.getVisibleRowIndex(),
+            prevFocusedRowIndex = this.option("focusedRowIndex"),
             loadingOperationTypes = dataController.loadingOperationTypes(),
             args = {
                 rowElement: $newFocusedRow,
@@ -1850,6 +1856,10 @@ module.exports = {
     extenders: {
         views: {
             rowsView: {
+                _rowClick: function(e) {
+                    this.getController("keyboardNavigation").setCellFocusType();
+                    this.callBase.apply(this, arguments);
+                },
                 renderFocusState: function() {
                     var dataController = this._dataController,
                         rowIndex = this.option("focusedRowIndex") || 0,

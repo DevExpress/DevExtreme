@@ -37,9 +37,7 @@ exports.pie = _extend({}, barSeries, {
     _getOldPoint: function(data, oldPointsByArgument, index) {
         var point = (this._points || [])[index];
         if(point) {
-            oldPointsByArgument[point.argument] = oldPointsByArgument[point.argument].filter(function(p) {
-                return p !== point;
-            });
+            oldPointsByArgument[point.argument.valueOf()] = oldPointsByArgument[point.argument.valueOf()].filter(p => p !== point);
         }
         return point;
     },

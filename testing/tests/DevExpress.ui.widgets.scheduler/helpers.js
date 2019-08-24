@@ -15,6 +15,8 @@ export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
 
+        this.getTimePanel = () => $(".dx-scheduler-time-panel"),
+
         this.tooltip = {
             getOverlayContentElement: () => {
                 return this.isAdaptivity() ? this.tooltip.getContentElement().find(".dx-overlay-content") : $(".dx-scheduler-appointment-tooltip-wrapper .dx-overlay-content");
@@ -34,6 +36,8 @@ export class SchedulerTestWrapper {
             getDeleteButton: (index = 0) => this.tooltip.getItemElement(index).find('.dx-tooltip-appointment-item-delete-button'),
 
             getMarkers: () => this.tooltip.getItemElements().find('.dx-tooltip-appointment-item-marker-body'),
+
+            getMarker: () => this.tooltip.getMarkers().first(),
 
             getDateText: (index = 0) => this.tooltip.getDateElement(index).text(),
             getTitleText: (index = 0) => this.tooltip.getTitleElement(index).text(),
@@ -138,6 +142,21 @@ export class SchedulerTestWrapper {
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $(".dx-scheduler-date-time-indicator"),
         };
+
+        this.navigator = {
+            getNavigator: () => $(".dx-scheduler-navigator"),
+            getCaption: () => $(".dx-scheduler-navigator").find(".dx-scheduler-navigator-caption").text(),
+            clickOnPrevButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-previous").trigger("dxclick");
+            },
+            clickOnNextButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-next").trigger("dxclick");
+            }
+        },
+
+        this.header = {
+            get: () => $(".dx-scheduler-header-panel")
+        },
 
         this.grouping = {
             getGroupHeaders: () => $(".dx-scheduler-group-header"),

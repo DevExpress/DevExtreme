@@ -186,6 +186,8 @@ var focused;
             $element.val(value.substring(0, caretStartPosition - 1) + value.substring(caretStartPosition, value.length));
             caret.setPosition(caretStartPosition - 1);
         }
+
+        return "deleteContentBackward";
     };
 
     var del = function() {
@@ -271,11 +273,22 @@ var focused;
                 return this;
             },
 
+            beforeInput: function(data, inputType) {
+                var params = { data: data };
+
+                if(inputType !== null) {
+                    params.originalEvent = $.Event("beforeinput", { data: data, inputType: inputType || "insertText" });
+                }
+
+                this.triggerEvent("beforeinput", params);
+                return this;
+            },
+
             input: function(data, inputType) {
                 var params = { data: data };
 
                 if(inputType !== null) {
-                    params.originalEvent = $.Event("input", { inputType: inputType || "insertText" });
+                    params.originalEvent = $.Event("input", { data: data, inputType: inputType || "insertText" });
                 }
 
                 this.triggerEvent("input", params);
@@ -354,9 +367,12 @@ var focused;
                         that.keyPress(keyValue);
                         if(shortcuts[key]) {
                             var oldValue = $element.val();
-                            shortcuts[key](element);
-                            if($element.val() !== oldValue) {
-                                that.input(keyValue);
+                            that.beforeInput(data);
+                            var inputType = shortcuts[key](element) || "insertText";
+                            var newValue = $element.val();
+                            if(newValue !== oldValue) {
+                                var data = inputType === "deleteContentBackward" ? null : newValue;
+                                that.input(data, inputType);
                             }
                         }
                     }
@@ -390,6 +406,7 @@ var focused;
                     }
 
                     if(!this.event.isDefaultPrevented()) {
+                        this.beforeInput(char);
                         typeChar(char);
                         this.input(char);
                     }

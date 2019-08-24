@@ -733,7 +733,7 @@ QUnit.testInActiveWindow("Focus by click is not applied when editing is enabled"
 
     // assert
     assert.deepEqual(navigationController._focusedCellPosition, {}, "focused cell position");
-    assert.ok(!isViewFocused, "view isn't focused");
+    assert.ok(isViewFocused, "view is focused");
 });
 
 QUnit.testInActiveWindow("Next cell is not focused when it is located in a command column", function(assert) {
@@ -1760,7 +1760,9 @@ QUnit.testInActiveWindow("Page down should scroll page down when paging disabled
     this.clock.tick();
 
     // assert
-    assert.ok(that.rowsView.element().is(":focus"), "rowsView is focused");
+    if(!browser.msie || parseInt(browser.version) > 11) {
+        assert.ok(that.rowsView.element().is(":focus"), "rowsview element is focused");
+    }
     assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 5 });
     assert.equal(this.rowsView.getScrollable().scrollTop(), 200);
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
@@ -5539,6 +5541,30 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         this.refresh();
         // assert
         assert.equal(focusedRowChangedFiresCount, 2, "onFocusedRowChanged fires count");
+    });
+
+    // T804439
+    QUnit.testInActiveWindow("onFocusedRowChanging should fire after clicking on boolean column", function(assert) {
+        // arrange
+        var focusedRowChangingFiresCount = 0;
+
+        this.options = {
+            dataSource: [{ id: 1, field: false }],
+            keyExpr: "id",
+            focusedRowEnabled: true,
+            columns: ["field"],
+            onFocusedRowChanging: () => ++focusedRowChangingFiresCount
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        $(".dx-data-row").eq(0).find("td").eq(0).trigger("dxpointerdown").trigger("dxclick");
+
+        // assert
+        assert.equal(focusedRowChangingFiresCount, 1, "onFocusedRowChanging fires count");
     });
 
     // T684122

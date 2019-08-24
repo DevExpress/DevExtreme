@@ -2017,7 +2017,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     iconType = iconUtils.getImageSourceType(icon);
 
                     if(iconType === "image") {
-                        $button = iconUtils.getImageContainer(icon);
+                        $button = iconUtils.getImageContainer(icon).addClass(button.cssClass);
                     } else {
                         $button.addClass("dx-icon" + (iconType === "dxIcon" ? "-" : " ") + icon).attr("title", button.text);
                     }

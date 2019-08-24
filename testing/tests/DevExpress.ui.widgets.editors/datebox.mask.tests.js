@@ -640,6 +640,19 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.paste("November 10 2018");
             assert.strictEqual(this.$input.val(), "November 10 2018", "pasting correct value is allowed");
         });
+
+        test("exception should not be thrown when the widget disposed on valueChange", (assert) => {
+            this.instance.option({
+                value: new Date(2019, 11, 31),
+                onValueChanged: function(e) {
+                    e.component.dispose();
+                }
+            });
+
+            this.keyboard.type("1");
+            this.$input.trigger("focusout");
+            assert.strictEqual(this.$input.val(), "January 31 2019", "value is correct");
+        });
     });
 
 
