@@ -16,8 +16,7 @@ const SpeedDialItem = Overlay.inherit({
     _actionEvents: [
         "initialized",
         "disposing",
-        "contentReady",
-        "click"
+        "contentReady"
     ],
 
     _clickActionArgs: null,
@@ -90,11 +89,7 @@ const SpeedDialItem = Overlay.inherit({
         this._actionEvents.forEach((actionEvent) => {
             this.on(actionEvent, () => {
                 const actionOption = "on" + actionEvent.charAt(0).toUpperCase() + actionEvent.substr(1);
-                this._getActionComponent()._createActionByOption(actionOption, {}, true)(
-                    actionEvent === "click" ?
-                        this._clickActionArgs :
-                        { actionElement: this.$element() }
-                );
+                this._getActionComponent()._createActionByOption(actionOption, {}, true)({ actionElement: this.$element() });
             });
         });
     },
@@ -129,7 +124,7 @@ const SpeedDialItem = Overlay.inherit({
     },
 
     _renderClick() {
-        this._clickAction = this._createActionByOption("onClick");
+        this._clickAction = this._getActionComponent()._createActionByOption("onClick");
         this._setClickAction();
     },
 

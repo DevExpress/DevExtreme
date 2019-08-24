@@ -101,7 +101,7 @@ const SpeedDialAction = Widget.inherit({
     },
 
     _createActionByOption(optionName, config, isExecute) {
-        return isExecute || (optionName !== "onInitialized" && optionName !== "onDisposing") ? this.callBase(optionName, config) : noop;
+        return !!isExecute || (optionName !== "onInitialized" && optionName !== "onDisposing") ? this.callBase(optionName, config) : noop;
     },
 
     _render() {
