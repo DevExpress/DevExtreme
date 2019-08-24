@@ -65,7 +65,6 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         this._moveToContainer();
         this._renderCloseIcon();
         this._renderClick();
-        this._stopAnimation();
     },
 
     _renderCloseIcon() {
@@ -154,9 +153,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     },
 
     _setPosition() {
-        this._stopAnimation();
-        this._normalizePosition();
-        this._actions.onPositioned({ position: this._renderPosition() });
+        this._hide();
+        this._show();
     },
 
     _optionChanged(args) {
