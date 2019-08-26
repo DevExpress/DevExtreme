@@ -50,16 +50,15 @@ export default function exportDataGrid(options) {
 function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell) {
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
+        const gridCell = cellData.cellSourceData;
 
-        const cell = row.getCell(startColumnIndex + cellIndex);
-        cell.value = cellData.value;
-
-        let gridCell = cellData.cellSourceData;
-        gridCell.value = cellData.value;
+        const excelCell = row.getCell(startColumnIndex + cellIndex);
+        excelCell.value = cellData.value;
 
         if(isDefined(customizeCell)) {
             customizeCell({
-                cell: cell,
+                cell: excelCell,
+                excelCell: excelCell,
                 gridCell: gridCell
             });
         }

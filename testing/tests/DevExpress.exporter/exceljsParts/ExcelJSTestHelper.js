@@ -62,7 +62,9 @@ class ExcelJSTestHelper {
 
         cellArgs.forEach((item) => {
             item.excelCell = { row: topLeft.row + row, column: topLeft.column + cell };
-            item.gridCell.value = values[row].values[cell];
+            if(!("value" in item.gridCell)) {
+                item.gridCell.value = values[row].values[cell];
+            }
 
             if(values[0].values.length - cell === 1) { row++; cell = 0; } else { cell++; }
         });
