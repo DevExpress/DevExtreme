@@ -298,10 +298,6 @@
                 margin-left: 0;
             }
         }
-
-        .dx-scheduler-fixed-appointments {
-            left: @size;
-        }
     }
 
     .dx-scheduler-work-space-both-scrollbar {
@@ -362,16 +358,6 @@
             }
         }
 
-
-        .dx-scheduler-fixed-appointments {
-            left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH;
-
-            .dx-rtl & {
-                right: @size + @SCHEDULER_LEFT_COLUMN_WIDTH;
-                left: 0;
-            }
-        }
-
         &.dx-scheduler-work-space-both-scrollbar {
             .dx-scheduler-date-table {
                 margin-left: 0;
@@ -379,10 +365,6 @@
 
             .dx-scheduler-date-table-scrollable {
                 margin-left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH  + 1px + @offset;
-            }
-
-            .dx-scheduler-fixed-appointments {
-                left: @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px + @offset;
             }
 
             .dx-scheduler-header-scrollable.dx-scrollable {
@@ -401,11 +383,6 @@
 
                 .dx-scheduler-header-scrollable.dx-scrollable {
                     margin: 0 @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px + @offset 0 0;
-                }
-
-                .dx-scheduler-fixed-appointments {
-                    left: 0;
-                    right: @size + @SCHEDULER_LEFT_COLUMN_WIDTH + 1px + @offset;
                 }
             }
         }
@@ -429,15 +406,6 @@
                 .dx-rtl & {
                     margin-right: 0;
                     margin-left: 0;
-                }
-            }
-
-            .dx-scheduler-fixed-appointments {
-                left: @size;
-
-                .dx-rtl & {
-                    right: @size;
-                    left: 0;
                 }
             }
 
@@ -511,11 +479,6 @@
     .dx-scheduler-fixed-appointments {
         z-index: 100;
         position: absolute;
-        left: @SCHEDULER_LEFT_COLUMN_WIDTH;
-
-        .dx-scheduler-small & {
-            left: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
-        }
     }
 
     .dx-scheduler-header {
@@ -1034,10 +997,6 @@
             top: 0;
         }
 
-        .dx-scheduler-fixed-appointments {
-            left: 0;
-        }
-
         &.dx-scheduler-work-space-count {
             .dx-scheduler-date-table-cell {
                 height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 1.5;
@@ -1066,10 +1025,6 @@
     }
 
     .dx-scheduler-timeline { // stylelint-disable-line no-duplicate-selectors
-        .dx-scheduler-fixed-appointments {
-            left: 0;
-        }
-
         .dx-scheduler-header-row,
         .dx-scheduler-date-table .dx-scheduler-date-table-row {
             &:before {
@@ -2535,10 +2490,6 @@
                 display: none;
             }
 
-            .dx-scheduler-fixed-appointments {
-                left: @SCHEDULER_LEFT_COLUMN_WIDTH + 1px;
-            }
-
             .dx-scheduler-group-header {
                 box-shadow: 0 -2px 0 @SCHEDULER_BASE_BORDER_COLOR;
                 border-bottom: none;
@@ -2767,10 +2718,6 @@
 
                 .dx-scheduler-date-table {
                     margin-right: 0;
-                }
-
-                .dx-scheduler-fixed-appointments {
-                    left: 0;
                 }
 
                 .dx-scheduler-group-header {
