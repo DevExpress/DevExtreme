@@ -10,6 +10,7 @@ import devices from "core/devices";
 import { DataSource } from "data/data_source/data_source";
 import dataGridMocks from "../../helpers/dataGridMocks.js";
 import dateLocalization from "localization/date";
+import browser from "core/utils/browser";
 
 import "ui/data_grid/ui.data_grid";
 import "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
@@ -2692,26 +2693,26 @@ function checkHeaderTextWidth(assert, that, options, widths) {
     // act
     that.columnHeadersView.render($testElement);
 
-    headerCellTextWidth = $testElement.find(".dx-header-row").children().eq(0).find(".dx-datagrid-text-content").eq(0).width();
+    headerCellTextWidth = $testElement.find(".dx-header-row").children().eq(0).find(".dx-datagrid-text-content").eq(0).width() + (browser.mozilla ? 1 : 0);
 
     // assert
-    assert.equal(Math.floor(headerCellTextWidth), widths.withSortIndex, "header text width");
+    assert.equal(Math.ceil(headerCellTextWidth), widths.withSortIndex, "header text width");
 
     // act
     that.columnOption(1, "sortOrder", null);
 
-    headerCellTextWidth = $testElement.find(".dx-header-row").children().eq(0).find(".dx-datagrid-text-content").eq(0).width();
+    headerCellTextWidth = $testElement.find(".dx-header-row").children().eq(0).find(".dx-datagrid-text-content").eq(0).width() + (browser.mozilla ? 1 : 0);
 
     // assert
-    assert.equal(Math.floor(headerCellTextWidth), widths.noSortIndex, "header text width");
+    assert.equal(Math.ceil(headerCellTextWidth), widths.noSortIndex, "header text width");
 
     // act
     that.columnOption(1, "sortOrder", "asc");
 
-    headerCellTextWidth = $testElement.find(".dx-header-row").children().eq(0).find(".dx-datagrid-text-content").eq(0).width();
+    headerCellTextWidth = $testElement.find(".dx-header-row").children().eq(0).find(".dx-datagrid-text-content").eq(0).width() + (browser.mozilla ? 1 : 0);
 
     // assert
-    assert.equal(Math.floor(headerCellTextWidth), widths.withSortIndex, "header text width");
+    assert.equal(Math.ceil(headerCellTextWidth), widths.withSortIndex, "header text width");
 }
 
 QUnit.test("Check header text width", function(assert) {
@@ -2827,7 +2828,7 @@ QUnit.test("Check header text width with columnAutoWidth", function(assert) {
     };
 
     checkHeaderTextWidth(assert, this, options, {
-        withSortIndex: 108,
-        noSortIndex: 108
+        withSortIndex: 109 - (browser.mozilla ? 1 : 0),
+        noSortIndex: 109 - (browser.mozilla ? 1 : 0)
     });
 });
