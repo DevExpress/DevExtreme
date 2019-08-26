@@ -6250,6 +6250,48 @@ QUnit.test("Load count on start when stateStoring enabled with search/filterRow 
     assert.deepEqual(loadFilter, [["field1", "contains", "200"], "or", ["field2", "=", 200]]);
 });
 
+// T808614
+QUnit.test("Last row should not jump after selection by click if pager has showInfo", function(assert) {
+    var data = [],
+        dataGrid,
+        $lastRowElement,
+        offset;
+
+    for(let i = 0; i < 10; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: data,
+        height: 200,
+        keyExpr: 'id',
+        selection: {
+            mode: 'single'
+        },
+        paging: {
+            enabled: true,
+            pageSize: 5
+        },
+        pager: {
+            showInfo: true
+        }
+    });
+
+    // act
+    $(dataGrid.getRowElement(0)).trigger("dxclick");
+    dataGrid.getScrollable().scrollTo({ y: 200 });
+
+    $lastRowElement = $(dataGrid.getRowElement(4));
+    offset = $lastRowElement.offset();
+
+    $lastRowElement.trigger('dxclick');
+    $lastRowElement = $(dataGrid.getRowElement(4));
+
+    // assert
+    assert.deepEqual($lastRowElement.offset(), offset, "last row offset");
+});
+
 // T489478
 QUnit.test("Console errors should not be occurs when stateStoring enabled with selectedRowKeys value", function(assert) {
     sinon.spy(errors, "log");
