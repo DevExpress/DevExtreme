@@ -1,7 +1,7 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isFunction } from "../../core/utils/type";
-import { getWindow } from "../../core/utils/window";
+import { getWindow, hasWindow } from "../../core/utils/window";
 
 import Widget from "../widget/ui.widget";
 import Drawer from "../drawer/ui.drawer";
@@ -57,6 +57,9 @@ class FileManagerAdaptivityControl extends Widget {
     }
 
     _setInnerElementsWidth(widths) {
+        if(!hasWindow()) {
+            return;
+        }
         this._leftElement.width(widths.leftPanelWidth);
         this._rightElement.width(widths.rightPanelWidth);
     }

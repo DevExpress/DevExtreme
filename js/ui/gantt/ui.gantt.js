@@ -6,6 +6,7 @@ import dataCoreUtils from '../../core/utils/data';
 import { GanttView } from "./ui.gantt.view";
 import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
+import { hasWindow } from "../../core/utils/window";
 import DataOption from "./ui.gantt.data.option";
 import SplitterControl from "../splitter";
 
@@ -149,6 +150,9 @@ class Gantt extends Widget {
 
 
     _setInnerElementsWidth(widths) {
+        if(!hasWindow()) {
+            return;
+        }
         if(!widths) {
             widths = this._getPanelsWidthByOption();
         }
