@@ -3790,7 +3790,7 @@ QUnit.test("First cell should be focused after inserting new row if startEditAct
     this.clock.tick(300);
 
     // assert
-    assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 1, 'When insert row and batch editing - focus first cell');
+    assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 1, 'first row has editor');
 });
 
 QUnit.test('Insert Row when batch editing', function(assert) {
