@@ -6,7 +6,8 @@ var $ = require("../core/renderer"),
     translator = require("../animation/translator"),
     dasherize = require("../core/utils/inflector").dasherize,
     extend = require("../core/utils/extend").extend,
-    DOMComponent = require("../core/dom_component"),
+    DOMComponentWithTemplate = require("../core/dom_component_with_template"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     eventUtils = require("../events/utils"),
     pointerEvents = require("../events/pointer"),
     dragEvents = require("../events/drag"),
@@ -23,7 +24,7 @@ var DRAGGABLE = "dxDraggable",
     DRAGGABLE_DRAGGING_CLASS = DRAGGABLE_CLASS + "-dragging";
 
 
-var Draggable = DOMComponent.inherit({
+var Draggable = DOMComponentWithTemplate.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             onDragStart: noop,
@@ -33,7 +34,10 @@ var Draggable = DOMComponent.inherit({
             direction: "both",
             area: window,
             boundOffset: 0,
-            allowMoveByClick: false
+            allowMoveByClick: false,
+            clone: false,
+            container: "body",
+            dragTemplate: undefined
         });
     },
 
@@ -42,12 +46,29 @@ var Draggable = DOMComponent.inherit({
         this._attachEventHandlers();
     },
 
+    _initPosition: function($dragElement) {
+        let $element = this.$element(),
+            isCloned = $element.get(0) !== $dragElement.get(0),
+            elementOffset = $element[isCloned ? "offset" : "position"](),
+            dragElementOffset;
+
+        if(isCloned) {
+            dragElementOffset = $dragElement.offset();
+            elementOffset.top -= dragElementOffset.top;
+            elementOffset.left -= dragElementOffset.left;
+        }
+
+        this._move(elementOffset, $dragElement);
+
+        this._startPosition = translator.locate($dragElement);
+    },
+
     _attachEventHandlers: function() {
         if(this.option("disabled")) {
             return;
         }
 
-        var $element = this.$element().css("position", "absolute"),
+        var $element = this.$element(),
             eventHandlers = {},
             allowMoveByClick = this.option("allowMoveByClick");
 
@@ -66,13 +87,41 @@ var Draggable = DOMComponent.inherit({
         });
     },
 
+    _createDragElement: function() {
+        let $element = this.$element(),
+            result = $element,
+            clone = this.option("clone"),
+            container = this.option("container"),
+            dragTemplate = this.option("dragTemplate");
+
+        if(dragTemplate) {
+            dragTemplate = this._getTemplate(dragTemplate);
+            result = $(dragTemplate.render({
+                container: getPublicElement($(container))
+            }));
+        } else if(clone) {
+            result = $element.clone().appendTo(container);
+        }
+
+        return result.toggleClass(DRAGGABLE_DRAGGING_CLASS, result.get(0) !== $element.get(0));
+    },
+
+    _removeDragElement: function() {
+        let $element = this.$element();
+
+        if(this._$dragElement && this._$dragElement.get(0) !== $element.get(0)) {
+            this._$dragElement.remove();
+            this._$dragElement = null;
+        }
+    },
+
     _detachEventHandlers: function() {
         eventsEngine.off(this.$element(), "." + DRAGGABLE);
         eventsEngine.off(this._getArea(), "." + DRAGGABLE);
     },
 
-    _move: function(position) {
-        translator.move(this.$element(), position);
+    _move: function(position, $element) {
+        translator.move($element || this._$dragElement, position);
     },
 
     _pointerDownHandler: function(e) {
@@ -82,44 +131,46 @@ var Draggable = DOMComponent.inherit({
 
         var areaOffset = this._getAreaOffset($(e.currentTarget)),
             direction = this.option("direction"),
-            position = {};
+            position = {},
+            $element = this.$element();
 
         if(direction === "horizontal" || direction === "both") {
-            position.left = e.pageX - this.$element().width() / 2 - areaOffset.left;
+            position.left = e.pageX - $element.width() / 2 - areaOffset.left;
         }
 
         if(direction === "vertical" || direction === "both") {
-            position.top = e.pageY - this.$element().height() / 2 - areaOffset.top;
+            position.top = e.pageY - $element.height() / 2 - areaOffset.top;
         }
 
-        this._move(position);
+        this._move(position, $element);
 
         this._getAction("onDrag")({ event: e });
     },
 
     _dragStartHandler: function(e) {
-        var $element = this.$element();
+        let $element = this.$element();
+
         if($element.is(".dx-state-disabled, .dx-state-disabled *")) {
             e.cancel = true;
             return;
         }
+
+        let $dragElement = this._$dragElement = this._createDragElement();
+        this._initPosition($dragElement);
+        this._toggleDraggingClass(true);
 
         var $area = this._getArea(),
             areaOffset = this._getAreaOffset($area),
             boundOffset = this._getBoundOffset(),
             areaWidth = $area.outerWidth(),
             areaHeight = $area.outerHeight(),
-            elementWidth = $element.width(),
-            elementHeight = $element.height();
-
-        this._toggleDraggingClass(true);
+            elementWidth = $dragElement.width(),
+            elementHeight = $dragElement.height();
 
         var startOffset = {
-            left: $element.offset().left - areaOffset.left,
-            top: $element.offset().top - areaOffset.top
+            left: $dragElement.offset().left - areaOffset.left,
+            top: $dragElement.offset().top - areaOffset.top
         };
-
-        this._startPosition = translator.locate($element);
 
         e.maxLeftOffset = startOffset.left - boundOffset.left;
         e.maxRightOffset = areaWidth - startOffset.left - elementWidth - boundOffset.right;
@@ -135,7 +186,7 @@ var Draggable = DOMComponent.inherit({
     },
 
     _toggleDraggingClass: function(value) {
-        this.$element().toggleClass(DRAGGABLE_DRAGGING_CLASS, value);
+        this._$dragElement.toggleClass(DRAGGABLE_DRAGGING_CLASS, value);
     },
 
     _getBoundOffset: function() {
@@ -170,6 +221,7 @@ var Draggable = DOMComponent.inherit({
 
     _dragEndHandler: function(e) {
         this._toggleDraggingClass(false);
+        this._removeDragElement();
 
         this._getAction("onDragEnd")({ event: e });
     },
@@ -209,6 +261,7 @@ var Draggable = DOMComponent.inherit({
     _dispose: function() {
         this.callBase();
         this._detachEventHandlers();
+        this._removeDragElement();
     }
 });
 
