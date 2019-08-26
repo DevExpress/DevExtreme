@@ -189,7 +189,8 @@ var Scroller = Class.inherit({
             const realDimension = this._getRealDimension(element, this._dimension);
             const baseDimension = this._getBaseDimension(element, this._dimension);
 
-            // round ratio to make size calculations more accurate
+            // NOTE: Ratio can be a very fractional number, which leads to inaccuracy in the calculation of sizes.
+            //      To reduce the inaccuracy and prevent the unexpected appearance of a scrollbar, round to hundredths.
             this._scaleRatio = Math.round((realDimension / baseDimension * 100)) / 100;
         }
 
@@ -439,10 +440,12 @@ var Scroller = Class.inherit({
     },
 
     _updateScrollbar: deferUpdater(function() {
-        // real sizes (considering to zoom)
         const containerSize = this._containerSize();
         const contentSize = this._contentSize();
-        // base sizes (zoom = 100%)
+        
+        // NOTE: Real container and content sizes can be very fractional number when scaling.
+        //       Let's remember sizes when scale = 100% to decide is scrollbar needed by more concrete numbers.
+        //       We can do it cause container size to content size ratio should remain approximately the same at any zoom.
         const baseContainerSize = this._getBaseDimension(this._$container.get(0), this._dimension);
         const baseContentSize = this._getBaseDimension(this._$content.get(0), this._dimension);
 

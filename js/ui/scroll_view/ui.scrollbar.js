@@ -180,10 +180,7 @@ var Scrollbar = Widget.inherit({
             baseContentSize = contentSize;
         }
 
-        // base sizes ratio for more accurate understanding is scrollbar needed
         this._baseContainerToContentRatio = (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
-
-        // real sizes ratio
         this._realContainerToContentRatio = (contentSize ? containerSize / contentSize : containerSize);
         var thumbSize = Math.round(Math.max(Math.round(containerSize * this._realContainerToContentRatio), THUMB_MIN_SIZE));
         this._thumbRatio = (containerSize - thumbSize) / (this.option("scaleRatio") * (contentSize - containerSize));
