@@ -1,33 +1,41 @@
 import { Selector } from 'testcafe';
 
-const CLASSES = {
-    focusedState: 'dx-state-focused',
-    listItem: 'dx-list-item',
+const CLASS = {
+    checkbox: 'dx-list-select-checkbox',
+    checked: 'dx-checkbox-checked',
+    focused: 'dx-state-focused',
+    item: 'dx-list-item',
     selectAllItem: 'dx-list-select-all'
 };
 
 export default function ListModel(id) {
-    const mainElement = typeof id === 'string' ? Selector(id) : id;
-    const selectAllItem = mainElement.find(`.${CLASSES.selectAllItem}`);
+    const element = typeof id === 'string' ? Selector(id) : id;
+    const selectAllItem = element.find(`.${CLASS.selectAllItem}`);
+    const items = element.find(`.${CLASS.item}`);
+    const getItem = (index = 0) => {
+        const item = items.nth(index);
+
+        return {
+            element: item,
+            checkBox: {
+                isFocused: item.hasClass(CLASS.focused),
+                isChecked: item.find(`.${CLASS.checkbox}`).hasClass(CLASS.checked)
+            }
+        };
+    };
 
     return {
         selectAllItem: {
             get isFocused() {
-                return selectAllItem.hasClass(CLASSES.focusedState);
+                return selectAllItem.hasClass(CLASS.focused);
             }
         },
 
-        getItem: (index = 0) => {
-            const itemElement = mainElement.find(`.${CLASSES.listItem}`).nth(index);
+        itemsCount: items.count,
 
-            return {
-                element: itemElement,
-                checkBox: {
-                    get isFocused() {
-                        return itemElement.hasClass(CLASSES.focusedState);
-                    }
-                }
-            };
-        }
+        isItemFocused: (index) => getItem(index).checkBox.isFocused,
+        isItemChecked: (index) => getItem(index).checkBox.isChecked,
+
+        getItem,
     };
 }

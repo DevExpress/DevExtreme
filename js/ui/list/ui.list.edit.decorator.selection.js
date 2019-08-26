@@ -105,15 +105,10 @@ registerDecorator(
             const hasSelectAllItem = !!$selectAll;
 
             if(hasSelectAllItem && isFocusOutOfList) {
-                list.focusListElement($selectAll);
+                list.option("focusedElement", $selectAll);
+                list.scrollToItem(list.option("focusedElement"));
 
                 return true;
-            } else {
-                const isSelectAllItemFocused = currentFocusedIndex === -1;
-
-                if(!isSelectAllItemFocused) {
-                    list.focusListItem(currentFocusedIndex);
-                }
             }
 
             return false;

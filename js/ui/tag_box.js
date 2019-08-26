@@ -51,6 +51,7 @@ const TagBox = SelectBox.inherit({
 
     _supportedKeys: function() {
         const parent = this.callBase();
+        const sendToList = (e) => this._list._keyboardProcessor.process(e);
 
         return extend(parent, {
             backspace: function(e) {
@@ -76,6 +77,8 @@ const TagBox = SelectBox.inherit({
                 this._removeTagElement($tagToDelete);
                 delete this._preserveFocusedTag;
             },
+            upArrow: sendToList,
+            downArrow: sendToList,
             del: function(e) {
                 if(!this._$focusedTag || !this._isCaretAtTheStart()) {
                     return;
@@ -103,23 +106,19 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
-                if(!this.option("opened")) {
-                    return;
+                if(this.option("opened")) {
+                    sendToList(e);
+                    e.preventDefault();
                 }
-
-                e.preventDefault();
-                this._keyboardProcessor._childProcessors[0].process(e);
             },
             space: function(e) {
                 const isOpened = this.option("opened");
                 const isInputActive = this._shouldRenderSearchEvent();
 
-                if(!isOpened || isInputActive) {
-                    return;
+                if(isOpened && !isInputActive) {
+                    sendToList(e);
+                    e.preventDefault();
                 }
-
-                e.preventDefault();
-                this._keyboardProcessor._childProcessors[0].process(e);
             },
             leftArrow: function(e) {
                 if(!this._isCaretAtTheStart()) {
