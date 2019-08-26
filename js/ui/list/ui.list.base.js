@@ -132,8 +132,9 @@ var ListBase = CollectionWidget.inherit({
             /**
              * @name dxListOptions.displayExpr
              * @type string|function(item)
-             * @type_function_param1 item:object
              * @default undefined
+             * @type_function_param1 item:object
+             * @type_function_return string
              */
 
             /**
