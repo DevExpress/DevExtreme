@@ -175,6 +175,11 @@ var Scrollbar = Widget.inherit({
             baseContainerSize = Math.round(this.option("baseContainerSize")),
             baseContentSize = Math.round(this.option("baseContentSize"));
 
+        if(isNaN(baseContentSize)) {
+            baseContainerSize = containerSize;
+            baseContentSize = contentSize;
+        }
+
         // base sizes ratio for more accurate understanding is scrollbar needed
         this._baseContainerToContentRatio = (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
 
