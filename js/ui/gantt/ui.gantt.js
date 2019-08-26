@@ -1,13 +1,11 @@
 import $ from "../../core/renderer";
+import typeUtils from "../../core/utils/type";
 import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
 import dataCoreUtils from '../../core/utils/data';
-import eventsEngine from "../../events/core/events_engine";
-import { addNamespace } from "../../events/utils";
 import { GanttView } from "./ui.gantt.view";
 import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
-import { getWindow, hasWindow } from "../../core/utils/window";
 import DataOption from "./ui.gantt.data.option";
 import SplitterControl from "../splitter";
 
@@ -17,9 +15,6 @@ const GANTT_COLLAPSABLE_ROW = "dx-gantt-collapsable-row";
 const GANTT_TREE_LIST_WRAPPER = "dx-gantt-treelist-wrapper";
 
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
-
-const GANTT_MODULE_NAMESPACE = "dxGanttResizing";
-const GANTT_WINDOW_RESIZE_EVENT_NAME = addNamespace("resize", GANTT_MODULE_NAMESPACE);
 
 class Gantt extends Widget {
     _init() {
@@ -52,13 +47,10 @@ class Gantt extends Widget {
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
         this._splitter.$element().appendTo(leftElement);
-        this.option("treeListWidth", this._splitter.convertToPercentRelativeToContainer(this.option("treeListWidth")));
     }
 
     _render() {
         this._renderTreeList();
-        this._detachEventHandlers();
-        this._attachEventHandlers();
     }
     _renderTreeList() {
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
@@ -66,7 +58,7 @@ class Gantt extends Widget {
             columns: this.option("columns"),
             columnResizingMode: "widget",
             height: "100%",
-            width: "",
+            width: this.option("treeListWidth"),
             selection: { mode: this._getSelectionMode(this.option("allowSelection")) },
             sorting: { mode: "none" },
             scrolling: { showScrollbar: "onHover", mode: "standard" },
@@ -79,14 +71,6 @@ class Gantt extends Widget {
             onRowExpanded: (e) => this._ganttView.changeTaskExpanded(e.key, true),
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); }
         });
-        this._$treeList.width("100%");
-    }
-
-    _detachEventHandlers() {
-        eventsEngine.off(getWindow(), GANTT_WINDOW_RESIZE_EVENT_NAME);
-    }
-    _attachEventHandlers() {
-        eventsEngine.on(getWindow(), GANTT_WINDOW_RESIZE_EVENT_NAME, this._windowResizeHandler.bind(this));
     }
 
     _initGanttView() {
@@ -94,6 +78,7 @@ class Gantt extends Widget {
             return;
         }
         this._ganttView = this._createComponent(this._$ganttView, GanttView, {
+            width: "100%",
             height: this._treeList._$element.get(0).offsetHeight,
             rowHeight: this._getTreeListRowHeight(),
             tasks: this._tasks,
@@ -106,15 +91,12 @@ class Gantt extends Widget {
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this)
         });
-        this._updateWidth(this.option("treeListWidth"));
+        this._setInnerElementsWidth();
     }
 
-    _windowResizeHandler() {
-        this._updateWidth(this.option("treeListWidth"));
-    }
-
-    _onApplyPanelSize(newTreeListWidth) {
-        this.option("treeListWidth", newTreeListWidth.actionValue);
+    _onApplyPanelSize(e) {
+        this._setInnerElementsWidth(e);
+        this.option("treeListWidth", this._$treeListWrapper.width());
     }
 
     _onTreeListContentReady(e) {
@@ -165,13 +147,31 @@ class Gantt extends Widget {
         return $row ? $row.last().outerHeight() : GANTT_DEFAULT_ROW_HEIGHT;
     }
 
-    _updateWidth(treeListWidth) {
-        if(!hasWindow()) {
-            return;
+
+    _setInnerElementsWidth(widths) {
+        if(!widths) {
+            widths = this._getPanelsWidthByOption();
         }
-        this._$treeListWrapper.width(`${treeListWidth}%`);
-        this._ganttView && this._ganttView._$element.width(`${100 - treeListWidth}%`);
-        this._ganttView && this._ganttView.setWidth(this._ganttView._$element.width());
+
+        const leftPanelWidth = widths.leftPanelWidth;
+        const rightPanelWidth = widths.rightPanelWidth;
+
+        this._$treeListWrapper.width(widths.leftPanelWidth);
+
+        const isPercentage = typeUtils.isString(leftPanelWidth) && leftPanelWidth.slice(-1) === "%";
+        this._$treeList.width(isPercentage ? "100%" : leftPanelWidth);
+
+        this._$ganttView.width(rightPanelWidth);
+
+        const innerGanttViewWidth = this._$element.width() - this._$treeList.width();
+        this._ganttView && this._ganttView.option("width", innerGanttViewWidth);
+    }
+
+    _getPanelsWidthByOption() {
+        return {
+            leftPanelWidth: this.option("treeListWidth"),
+            rightPanelWidth: this._$element.width() - this.option("treeListWidth")
+        };
     }
 
     _setGanttViewOption(optionName, value) {
@@ -242,7 +242,6 @@ class Gantt extends Widget {
 
     _clean() {
         delete this._ganttView;
-        this._detachEventHandlers();
         super._clean();
     }
 
@@ -462,7 +461,7 @@ class Gantt extends Widget {
                 this._refreshDataSource("resourceAssignments");
                 break;
             case "treeListWidth":
-                this._updateWidth(args.value);
+                this._setInnerElementsWidth();
                 break;
             case "showResources":
                 this._setGanttViewOption("showResources", args.value);
