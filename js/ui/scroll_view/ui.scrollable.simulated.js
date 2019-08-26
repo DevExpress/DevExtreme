@@ -442,10 +442,10 @@ var Scroller = Class.inherit({
     _updateScrollbar: deferUpdater(function() {
         const containerSize = this._containerSize();
         const contentSize = this._contentSize();
-        
-        // NOTE: Real container and content sizes can be very fractional number when scaling.
-        //       Let's remember sizes when scale = 100% to decide is scrollbar needed by more concrete numbers.
-        //       We can do it cause container size to content size ratio should remain approximately the same at any zoom.
+
+        //      NOTE: Real container and content sizes can be very fractional number when scaling.
+        //          Let's remember sizes when scale = 100% to decide is scrollbar needed by more concrete numbers.
+        //          We can do it cause container size to content size ratio should remain approximately the same at any zoom.
         const baseContainerSize = this._getBaseDimension(this._$container.get(0), this._dimension);
         const baseContentSize = this._getBaseDimension(this._$content.get(0), this._dimension);
 
