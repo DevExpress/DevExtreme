@@ -508,7 +508,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_2", "f2_2", "f3_2" ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 2 }, { row: 2, column: 3 });
@@ -551,7 +551,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f2_2", "f3_2" ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
@@ -594,7 +594,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_2", "f3_2" ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
@@ -637,7 +637,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_2", "f2_2" ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
@@ -732,7 +732,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ 3 ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then(() => {
                     helper.checkValues(expectedRows, topLeft);
@@ -780,7 +780,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "Max: f2_2" ], outlineLevel: 1 },
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkValues(expectedRows, topLeft);
@@ -832,7 +832,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_1", "f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
@@ -880,7 +880,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f3_2" ], outlineLevel: 2 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 5, column: topLeft.column }, { row: 6, column: 1 });
@@ -929,7 +929,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f3_2" ], outlineLevel: 2 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkValues(expectedRows, topLeft);
@@ -989,7 +989,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "Count: 2" ], outlineLevel: 2 },
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 10, column: topLeft.column }, { row: 11, column: 1 });
@@ -1065,7 +1065,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "Count: 2", "Count: 2" ], outlineLevel: 2 },
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 10, column: topLeft.column + 1 }, { row: 11, column: 2 });
@@ -1133,7 +1133,7 @@ QUnit.module("API", moduleConfig, () => {
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(4) } },
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 4, column: topLeft.column + 2 }, { row: 5, column: 3 });
@@ -1184,7 +1184,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_2", "f2_2", "f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 2 }, { row: 3, column: 3 });
@@ -1235,7 +1235,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_2", "f2_2", "f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 2 }, { row: 3, column: 3 });
@@ -1283,7 +1283,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f2_2", "f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
@@ -1331,7 +1331,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_2", "f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
@@ -1379,7 +1379,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_2", "f2_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
@@ -1440,7 +1440,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ undefined, undefined, "Max: f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 2 }, { row: 4, column: 3 });
@@ -1496,7 +1496,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_2", "f2_2", "f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 2 }, { row: 3, column: 3 });
@@ -1553,7 +1553,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ undefined, "Max: f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
@@ -1610,7 +1610,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ undefined, undefined ], outlineLevel: 1 },
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 3, column: 2 });
@@ -1663,7 +1663,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f2_2", "f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
@@ -1720,7 +1720,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ undefined, "Max: f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
@@ -1773,7 +1773,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "f1_2", "f3_2" ], outlineLevel: 1 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
@@ -1828,7 +1828,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "Min: f1_1", "Min: f2_1" ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
@@ -1880,7 +1880,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ undefined, undefined ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 2, column: 2 });
@@ -1932,7 +1932,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "Max: f2_2", undefined ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
@@ -1984,7 +1984,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ undefined, "Max: f3_2" ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
@@ -2036,7 +2036,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ "Max: f1_2", undefined ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
@@ -2088,7 +2088,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ undefined, undefined ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 2, column: 2 });
@@ -2140,7 +2140,7 @@ QUnit.module("API", moduleConfig, () => {
                     { values: [ undefined, "Max: f3_2" ], outlineLevel: 0 }
                 ];
 
-                expectedCustomizeCellArgs = helper._extendCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });

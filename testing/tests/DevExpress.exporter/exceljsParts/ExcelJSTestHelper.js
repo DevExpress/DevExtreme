@@ -58,20 +58,22 @@ class ExcelJSTestHelper {
         assert.equal(this.worksheet.actualColumnCount, actual.column, "worksheet.actualColumnCount");
     }
 
-    _extendCellArgs(cellArgs, expectedRows, topLeft) {
-        let rowIndex = 0;
-        let cellIndex = 0;
+    _extendExpectedCustomizeCellArgs(argsArray, expectedRows, topLeft) {
+        for(let rowIndex = 0; rowIndex < expectedRows.length; rowIndex++) {
+            const columnCount = expectedRows[rowIndex].values.length;
 
-        cellArgs.forEach((item) => {
-            item.excelCell = { row: topLeft.row + rowIndex, column: topLeft.column + cellIndex };
-            if(!("value" in item.gridCell)) {
-                item.gridCell.value = expectedRows[rowIndex].values[cellIndex];
+            for(let columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+                let args = argsArray[rowIndex * columnCount + columnIndex];
+
+                args.excelCell = {
+                    row: rowIndex + topLeft.row,
+                    column: columnIndex + topLeft.column,
+                };
+                if(!("value" in args.gridCell)) {
+                    args.gridCell.value = expectedRows[rowIndex].values[columnIndex];
+                }
             }
-
-            if(expectedRows[0].values.length - cellIndex === 1) { rowIndex++; cellIndex = 0; } else { cellIndex++; }
-        });
-
-        return cellArgs;
+        }
     }
 }
 
