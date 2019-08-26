@@ -117,6 +117,13 @@ class Diagram extends Widget {
 
         this._diagramInstance.barManager.registerBar(this.optionsUpdateBar);
     }
+    notifyBarCommandExecuted() {
+        this._diagramInstance.captureFocus();
+    }
+    _registerBar(component) {
+        component.bar.onChanged.add(this);
+        this._diagramInstance.barManager.registerBar(component.bar);
+    }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
@@ -127,7 +134,7 @@ class Diagram extends Widget {
         }
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
             commands: this.option("toolbar.commands"),
-            onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+            onContentReady: (e) => this._registerBar(e.component),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option("export"),
             widgetCommandNames: toolbarWidgetCommandNames
@@ -219,7 +226,7 @@ class Diagram extends Widget {
             template: ($options) => {
                 this._rightPanel = this._createComponent($options, DiagramRightPanel, {
                     propertyGroups: this.option("propertiesPanel.groups"),
-                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+                    onContentReady: (e) => this._registerBar(e.component),
                     onPointerUp: this._onPanelPointerUp.bind(this)
                 });
             }
@@ -243,7 +250,7 @@ class Diagram extends Widget {
         this._contextMenu = this._createComponent($contextMenu, DiagramContextMenu, {
             commands: this.option("contextMenu.commands"),
             container: $mainElement,
-            onContentReady: ({ component }) => this._diagramInstance.barManager.registerBar(component.bar),
+            onContentReady: ({ component }) => this._registerBar(component),
             onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); }
         });

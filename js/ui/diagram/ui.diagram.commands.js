@@ -399,9 +399,17 @@ const DiagramCommands = {
                     command: DiagramCommand.Unlock,
                     text: messageLocalization.format("dxDiagram-commandUnlock")
                 },
-                changeShapeImage: {
-                    command: DiagramCommand.ChangeShapeImage,
-                    text: messageLocalization.format("dxDiagram-commandChangeShapeImage")
+                insertShapeImage: {
+                    command: DiagramCommand.InsertShapeImage,
+                    text: messageLocalization.format("dxDiagram-commandInsertShapeImage")
+                },
+                editShapeImage: {
+                    command: DiagramCommand.EditShapeImage,
+                    text: messageLocalization.format("dxDiagram-commandEditShapeImage")
+                },
+                deleteShapeImage: {
+                    command: DiagramCommand.DeleteShapeImage,
+                    text: messageLocalization.format("dxDiagram-commandDeleteShapeImage")
                 }
             });
     },
@@ -424,7 +432,9 @@ const DiagramCommands = {
             commands["separator"],
             commands["lock"],
             commands["unlock"],
-            commands["changeShapeImage"]
+            commands["insertShapeImage"],
+            commands["editShapeImage"],
+            commands["deleteShapeImage"]
         ];
     },
 
