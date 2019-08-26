@@ -22,7 +22,8 @@
     @GRID_COMMAND_ADAPTIVE_COLUMN_WIDTH: 36px;
     @GRID_COLUMN_HEADER_INDICATOR_WIDTH: 14px;
     @GRID_TEXT_CONTENT_MARGIN: 3px;
-    @GRID_SORT_INDEX_WIDTH: 15px;
+    @GRID_SORT_INDEX_WIDTH: 12px;
+    @GRID_SORT_INDEX_OFFSET: 3px;
 
     .dx-@{widgetName}-checkbox-size {
         vertical-align: middle;
@@ -127,9 +128,9 @@
             }
 
             .dx-sort-index-icon {
-                padding-right: 3px;
-                margin-left: -3px;
-                width: @GRID_SORT_INDEX_WIDTH;
+                padding-right: @GRID_SORT_INDEX_OFFSET;
+                margin-left: -@GRID_SORT_INDEX_OFFSET;
+                width: @GRID_SORT_INDEX_WIDTH + @GRID_SORT_INDEX_OFFSET;
                 font-weight: 500;
             }
 

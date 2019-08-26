@@ -10,7 +10,6 @@ import devices from "core/devices";
 import { DataSource } from "data/data_source/data_source";
 import dataGridMocks from "../../helpers/dataGridMocks.js";
 import dateLocalization from "localization/date";
-import browser from "core/utils/browser";
 
 import "ui/data_grid/ui.data_grid";
 import "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
@@ -2683,132 +2682,152 @@ QUnit.test("Sort index icons should not be rendered when showSortIndexes is fals
     assert.notOk($testElement.find(SORT_INDEX_ICON_SELECTOR).length, "no sort indexes");
 });
 
-function checkWidthTest(assert, that, options, baseWidthDecrease, withSortWidthDecrease) {
+function checkHeaderTextWidth(assert, that, options, widths) {
     // arrange
-    var $headerCell,
-        sortIndexWidth = 15,
-        $testElement = that.$element().addClass("dx-widget"),
-        baseWidth,
-        widthWithSort,
-        widthWithSortIndex;
-
-    if(browser.mozilla) {
-        baseWidth = baseWidthDecrease ? `calc(-${baseWidthDecrease}px + 100%)` : "100%",
-        widthWithSort = `calc(-${baseWidthDecrease + withSortWidthDecrease}px + 100%)`,
-        widthWithSortIndex = `calc(-${baseWidthDecrease + withSortWidthDecrease + sortIndexWidth}px + 100%)`;
-    } else {
-        baseWidth = baseWidthDecrease ? `calc(100% + -${baseWidthDecrease}px)` : "100%",
-        widthWithSort = `calc(100% + -${baseWidthDecrease + withSortWidthDecrease}px)`,
-        widthWithSortIndex = `calc(100% + -${baseWidthDecrease + withSortWidthDecrease + sortIndexWidth}px)`;
-    }
+    var $testElement = that.$element().addClass("dx-widget"),
+        headerCellTextWidth;
 
     that.setupDataGrid(options);
 
     // act
     that.columnHeadersView.render($testElement);
 
-    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+    headerCellTextWidth = $testElement.find(".dx-header-row").children().eq(0).find(".dx-datagrid-text-content").eq(0).width();
 
     // assert
-    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), widthWithSortIndex, "max-width");
+    assert.equal(Math.floor(headerCellTextWidth), widths.withSortIndex, "header text width");
 
     // act
     that.columnOption(1, "sortOrder", null);
-    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+
+    headerCellTextWidth = $testElement.find(".dx-header-row").children().eq(0).find(".dx-datagrid-text-content").eq(0).width();
 
     // assert
-    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), widthWithSort, "max-width");
-
-    // act
-    that.columnOption(0, "sortOrder", null);
-    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
-
-    // assert
-    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), baseWidth, "max-width");
-
-    // act
-    that.columnOption(0, "sortOrder", "asc");
-    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
-
-    // assert
-    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), widthWithSort, "max-width");
+    assert.equal(Math.floor(headerCellTextWidth), widths.noSortIndex, "header text width");
 
     // act
     that.columnOption(1, "sortOrder", "asc");
-    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+
+    headerCellTextWidth = $testElement.find(".dx-header-row").children().eq(0).find(".dx-datagrid-text-content").eq(0).width();
 
     // assert
-    assert.equal($headerCell.find(".dx-datagrid-text-content").css("max-width"), widthWithSortIndex, "max-width");
+    assert.equal(Math.floor(headerCellTextWidth), widths.withSortIndex, "header text width");
 }
 
-QUnit.test("Check column max-width", function(assert) {
+QUnit.test("Check header text width", function(assert) {
+    // arrange
     var options = {
-        sorting: { mode: 'multiple' },
         columns: [{
-            dataField: "field1",
-            sortIndex: 1,
-            sortOrder: "asc"
-        }, {
-            dataField: "field2",
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
             sortIndex: 0,
-            sortOrder: "asc"
-        }]
+            width: 100,
+        }, {
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
+        }],
+        sorting: {
+            mode: "multiple"
+        }
     };
 
-    checkWidthTest(assert, this, options, 0, 17);
+    checkHeaderTextWidth(assert, this, options, {
+        withSortIndex: 57,
+        noSortIndex: 69
+    });
 });
 
-QUnit.test("Check max-width: column with headerFilter", function(assert) {
+QUnit.test("Check header text width: column with headerFilter", function(assert) {
+    // arrange
     var options = {
         sorting: { mode: 'multiple' },
         headerFilter: { visible: true },
         columns: [{
-            dataField: "field1",
-            sortIndex: 1,
-            sortOrder: "asc"
-        }, {
-            dataField: "field2",
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
             sortIndex: 0,
-            sortOrder: "asc"
+            width: 100,
+        }, {
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
         }]
     };
 
-    checkWidthTest(assert, this, options, 17, 14);
+    checkHeaderTextWidth(assert, this, options, {
+        withSortIndex: 43,
+        noSortIndex: 55
+    });
 });
 
-QUnit.test("Check max-width: column with center alignment", function(assert) {
+QUnit.test("Check header text width: column with center alignment", function(assert) {
+    // arrange
     var options = {
         sorting: { mode: 'multiple' },
         columns: [{
-            dataField: "field1",
-            sortIndex: 1,
+            dataField: "aaaaaaaaaaaaaaa",
             sortOrder: "asc",
+            sortIndex: 0,
+            width: 100,
             alignment: 'center'
         }, {
-            dataField: "field2",
-            sortIndex: 0,
-            sortOrder: "asc"
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
         }]
     };
 
-    checkWidthTest(assert, this, options, 0, 34);
+    checkHeaderTextWidth(assert, this, options, {
+        withSortIndex: 40,
+        noSortIndex: 52
+    });
 });
 
-QUnit.test("Check max-width: column with center alignment and headerFilter", function(assert) {
+QUnit.test("Check header text width: column with center alignment and headerFilter", function(assert) {
+    // arrange
     var options = {
         sorting: { mode: 'multiple' },
         headerFilter: { visible: true },
         columns: [{
-            dataField: "field1",
-            sortIndex: 1,
+            dataField: "aaaaaaaaaaaaaaa",
             sortOrder: "asc",
+            sortIndex: 0,
+            width: 100,
             alignment: 'center'
         }, {
-            dataField: "field2",
-            sortIndex: 0,
-            sortOrder: "asc"
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
         }]
     };
 
-    checkWidthTest(assert, this, options, 34, 28);
+    checkHeaderTextWidth(assert, this, options, {
+        withSortIndex: 12,
+        noSortIndex: 24
+    });
+});
+
+QUnit.test("Check header text width with columnAutoWidth", function(assert) {
+    // arrange
+    var options = {
+        sorting: { mode: 'multiple' },
+        headerFilter: { visible: true },
+        columnAutoWidth: true,
+        columns: [{
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 0,
+            alignment: 'center'
+        }, {
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
+        }]
+    };
+
+    checkHeaderTextWidth(assert, this, options, {
+        withSortIndex: 108,
+        noSortIndex: 108
+    });
 });
