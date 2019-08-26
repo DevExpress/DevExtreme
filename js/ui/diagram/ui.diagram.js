@@ -117,7 +117,7 @@ class Diagram extends Widget {
 
         this._diagramInstance.barManager.registerBar(this.optionsUpdateBar);
     }
-    NotifyBarCommandExecuted() {
+    notifyBarCommandExecuted() {
         this._diagramInstance.captureFocus();
     }
     _registerBar(component) {
