@@ -756,8 +756,9 @@ class Menu extends MenuBase {
 
         const isRootItemHovered = $(this._visibleSubmenu.$element().context).hasClass(DX_STATE_HOVER_CLASS);
         const isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent().find(`.${DX_STATE_HOVER_CLASS}`).length;
+        const hoveredElementFromSubMenu = this._visibleSubmenu.getOverlayContent().get(0).querySelector(":hover");
 
-        if(!isSubmenuItemHovered && !isRootItemHovered) {
+        if(!hoveredElementFromSubMenu && !isSubmenuItemHovered && !isRootItemHovered) {
             this._visibleSubmenu.hide();
         }
     }
