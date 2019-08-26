@@ -712,16 +712,16 @@ QUnit.module("API", moduleConfig, () => {
                     ],
                     dataSource: ds,
                     summary: {
-                        groupItems: [{ column: "f2", summaryType: "max" }]
+                        groupItems: [{ name: "GroupItems 1", column: "f2", summaryType: "max" }]
                     },
                     showColumnHeaders: false,
                     loadingTimeout: undefined
                 }).dxDataGrid("instance");
 
                 let expectedCustomizeCellArgs = [
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), groupSummaryItems: [{ name: "GroupItems 1", "value": 1 }] } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), groupSummaryItems: [{ name: "GroupItems 1", "value": 3 }] } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
                 ];
 
@@ -806,8 +806,8 @@ QUnit.module("API", moduleConfig, () => {
                     dataSource: ds,
                     summary: {
                         groupItems: [
-                            { column: "f2", summaryType: "count" },
-                            { column: "f3", summaryType: "count" }
+                            { name: "GroupItems 1", column: "f2", summaryType: "count" },
+                            { name: "GroupItems 2", column: "f3", summaryType: "count" }
                         ]
                     },
                     showColumnHeaders: false,
@@ -815,11 +815,11 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 let expectedCustomizeCellArgs = [
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1), groupSummaryItems: [{ "name": "GroupItems 1", "value": 1 }, { "name": "GroupItems 2", "value": 1 } ] } },
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1), groupSummaryItems: [{ "name": "GroupItems 1", "value": 1 }, { "name": "GroupItems 2", "value": 1 } ] } },
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
@@ -907,17 +907,17 @@ QUnit.module("API", moduleConfig, () => {
                     ],
                     dataSource: ds,
                     summary: {
-                        groupItems: [{ column: "f3", summaryType: "max" }, { column: "f3", summaryType: "count" }]
+                        groupItems: [{ name: "GroupItems 1", column: "f3", summaryType: "max" }, { name: "GroupItems 2", column: "f3", summaryType: "count" }]
                     },
                     showColumnHeaders: false,
                     loadingTimeout: undefined
                 }).dxDataGrid("instance");
 
                 let expectedCustomizeCellArgs = [
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
-                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), groupSummaryItems: [{ "name": "GroupItems 1", "value": "f3_2" }, { "name": "GroupItems 2", "value": 2 }] } },
+                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1), groupSummaryItems: [{ "name": "GroupItems 1", "value": "f3_1" }, { "name": "GroupItems 2", "value": 1 }] } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
-                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1), groupSummaryItems: [{ "name": "GroupItems 1", "value": "f3_2" }, { "name": "GroupItems 2", "value": 1 }] } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
                 ];
 
@@ -1095,8 +1095,8 @@ QUnit.module("API", moduleConfig, () => {
                     dataSource: ds,
                     summary: {
                         groupItems: [
-                            { column: "f4", summaryType: "max", alignByColumn: true }, { column: "f4", summaryType: "count", alignByColumn: true },
-                            { column: "f5", summaryType: "max", alignByColumn: true }, { column: "f5", summaryType: "count", alignByColumn: true }
+                            { name: "GroupItems 1", column: "f4", summaryType: "max", alignByColumn: true }, { name: "GroupItems 2", column: "f4", summaryType: "count", alignByColumn: true },
+                            { name: "GroupItems 3", column: "f5", summaryType: "max", alignByColumn: true }, { name: "GroupItems 4", column: "f5", summaryType: "count", alignByColumn: true }
                         ]
                     },
                     showColumnHeaders: false,
@@ -1113,20 +1113,20 @@ QUnit.module("API", moduleConfig, () => {
 
                 let expectedCustomizeCellArgs = [
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } },
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(4) } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3), groupSummaryItems: [{ "name": "GroupItems 1", "value": "f4_2" }, { "name": "GroupItems 2", "value": 2 }] } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(4), groupSummaryItems: [{ "name": "GroupItems 3", "value": "f5_2" }, { "name": "GroupItems 4", "value": 2 }] } },
 
                     { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1) } },
-                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(3) } },
-                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(4) } },
+                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(3), groupSummaryItems: [{ "name": "GroupItems 1", "value": "f4_1" }, { "name": "GroupItems 2", "value": 1 }] } },
+                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(4), groupSummaryItems: [{ "name": "GroupItems 3", "value": "f5_1" }, { "name": "GroupItems 4", "value": 1 }] } },
 
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } },
 
                     { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(1) } },
-                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(3) } },
-                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(4) } },
+                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(3), groupSummaryItems: [{ "name": "GroupItems 1", "value": "f4_2" }, { "name": "GroupItems 2", "value": 1 }] } },
+                    { gridCell: { rowType: "group", groupIndex: 1, column: dataGrid.columnOption(4), groupSummaryItems: [{ "name": "GroupItems 3", "value": "f5_2" }, { "name": "GroupItems 4", "value": 1 }] } },
 
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(3) } },
@@ -1468,7 +1468,7 @@ QUnit.module("API", moduleConfig, () => {
                     ],
                     summary: {
                         groupItems: [
-                            { column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: false }
+                            { name: "GroupItems 1", column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: false }
                         ]
                     },
                     dataSource: ds,
@@ -1479,7 +1479,7 @@ QUnit.module("API", moduleConfig, () => {
                 let expectedCustomizeCellArgs = [
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1) } },
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2), groupSummaryItems: [{ "name": "GroupItems 1", "value": "f3_2" }] } },
 
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
@@ -1638,7 +1638,7 @@ QUnit.module("API", moduleConfig, () => {
                     ],
                     summary: {
                         groupItems: [
-                            { column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: false }
+                            { name: "GroupItems 1", column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: false }
                         ]
                     },
                     dataSource: ds,
@@ -1648,7 +1648,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 let expectedCustomizeCellArgs = [
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2), groupSummaryItems: [{ "name": "GroupItems 1", "value": "f3_2" }] } },
 
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
@@ -1748,7 +1748,7 @@ QUnit.module("API", moduleConfig, () => {
                     ],
                     summary: {
                         groupItems: [
-                            { column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: false }
+                            { name: "GroupItems 1", column: "f3", summaryType: "max", alignByColumn: true, showInGroupFooter: false }
                         ]
                     },
                     dataSource: ds,
@@ -1758,7 +1758,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 let expectedCustomizeCellArgs = [
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(3) } },
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2), groupSummaryItems: [{ "name": "GroupItems 1", "value": "f3_2" }] } },
 
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
@@ -1800,10 +1800,10 @@ QUnit.module("API", moduleConfig, () => {
                     dataSource: ds,
                     summary: {
                         totalItems: [
-                            { column: "f1", summaryType: "max" },
-                            { column: "f1", summaryType: "min" },
-                            { column: "f2", summaryType: "max" },
-                            { column: "f2", summaryType: "min" }
+                            { name: 'TotalSummary 1', column: "f1", summaryType: "max" },
+                            { name: 'TotalSummary 2', column: "f1", summaryType: "min" },
+                            { name: 'TotalSummary 3', column: "f2", summaryType: "max" },
+                            { name: 'TotalSummary 4', column: "f2", summaryType: "min" }
                         ]
                     },
                     showColumnHeaders: false,
@@ -1815,10 +1815,10 @@ QUnit.module("API", moduleConfig, () => {
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0) } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1) } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0) } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), totalSummaryItemName: "TotalSummary 1" } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), totalSummaryItemName: "TotalSummary 3" } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), totalSummaryItemName: "TotalSummary 2" } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), totalSummaryItemName: "TotalSummary 4" } },
                 ];
 
                 const expectedRows = [

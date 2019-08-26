@@ -19,9 +19,13 @@ class ExcelJSTestHelper {
 
         const gridCellSkipProperties = ["column"];
 
-        for(const propertyName in expectedArgs[callIndex].gridCell) {
+        for(const propertyName in eventArgs.gridCell) {
             if(gridCellSkipProperties.indexOf(propertyName) === -1) {
-                assert.strictEqual(eventArgs.gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                if(propertyName === "groupSummaryItems") {
+                    assert.deepEqual(eventArgs.gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                } else {
+                    assert.strictEqual(eventArgs.gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                }
             }
         }
     }
