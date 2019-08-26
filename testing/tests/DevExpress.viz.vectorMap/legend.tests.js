@@ -154,9 +154,9 @@ QUnit.test('customizeText format object', function(assert) {
     this.updateData([10, 20, 30], [1, 2, 3, 4]);
 
     assert.strictEqual(spy.callCount, 3, "call count");
-    assert.deepEqual(spy.getCall(0).args, [{ start: 1, end: 2, index: 0, visible: true, "test-field": 10, markerAttributes: { fill: undefined, class: "dxl-normal", opacity: 1 }, states: { normal: { fill: undefined, class: "dxl-normal", opacity: 1 }, selection: undefined, hover: undefined }, size: 14 }], "item 1");
-    assert.deepEqual(spy.getCall(1).args, [{ start: 2, end: 3, index: 1, visible: true, "test-field": 20, markerAttributes: { fill: undefined, class: "dxl-normal", opacity: 1 }, states: { normal: { fill: undefined, class: "dxl-normal", opacity: 1 }, selection: undefined, hover: undefined }, size: 14 }], "item 2");
-    assert.deepEqual(spy.getCall(2).args, [{ start: 3, end: 4, index: 2, visible: true, "test-field": 30, markerAttributes: { fill: undefined, class: "dxl-normal", opacity: 1 }, states: { normal: { fill: undefined, class: "dxl-normal", opacity: 1 }, selection: undefined, hover: undefined }, size: 14 }], "item 3");
+    assert.deepEqual(spy.getCall(0).args, [{ start: 1, end: 2, index: 0, visible: true, "test-field": 10, marker: { size: 14, state: "normal", opacity: 1 }, states: { normal: { fill: undefined, state: "normal", opacity: 1 }, selection: undefined, hover: undefined }, size: 14 }], "item 1");
+    assert.deepEqual(spy.getCall(1).args, [{ start: 2, end: 3, index: 1, visible: true, "test-field": 20, marker: { size: 14, state: "normal", opacity: 1 }, states: { normal: { fill: undefined, state: "normal", opacity: 1 }, selection: undefined, hover: undefined }, size: 14 }], "item 2");
+    assert.deepEqual(spy.getCall(2).args, [{ start: 3, end: 4, index: 2, visible: true, "test-field": 30, marker: { size: 14, state: "normal", opacity: 1 }, states: { normal: { fill: undefined, state: "normal", opacity: 1 }, selection: undefined, hover: undefined }, size: 14 }], "item 3");
 });
 
 QUnit.test('default marker shapes', function(assert) {

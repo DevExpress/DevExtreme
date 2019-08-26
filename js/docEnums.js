@@ -1105,3 +1105,8 @@
  * @typedef {string} Enums.GanttTaskTitlePosition
  * @enum {'inside'|'outside'|'none'}
  */
+
+/**
+ * @typedef {string} Enums.LegendMarkerState
+ * @enum {'normal'|'hovered'|'selected'}
+ */

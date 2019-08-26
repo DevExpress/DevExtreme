@@ -5903,10 +5903,8 @@ declare module DevExpress.viz {
     }
     /** @name BaseLegendItem */
     export interface BaseLegendItem {
-        /** @name BaseLegendItem.markerAttributes */
-        markerAttributes?: { class?: string, fill?: string, opacity?: number };
-        /** @name BaseLegendItem.size */
-        size?: number;
+        /** @name BaseLegendItem.marker */
+        marker?: { fill?: string, opacity?: number, size?: number, state?: 'normal' | 'hovered' | 'selected' };
         /** @name BaseLegendItem.text */
         text?: string;
         /** @name BaseLegendItem.visible */
@@ -6230,6 +6228,8 @@ declare module DevExpress.viz {
         color?: string;
         /** @name VectorMapLegendItem.end */
         end?: number;
+        /** @name VectorMapLegendItem.size */
+        size?: number;
         /** @name VectorMapLegendItem.start */
         start?: number;
     }
