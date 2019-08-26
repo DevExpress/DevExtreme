@@ -2,16 +2,14 @@ import coreDataUtils from "./utils/data";
 import typeUtils from "./utils/type";
 import domAdapter from "./dom_adapter";
 
-export class OptionHelper {
+export class OptionManager {
     constructor(
         getOptionsByReference,
-        options,
         deprecatedOptions,
         notifyOptionChanged,
         logWarningIfDeprecated,
         optionChanging) {
         this._getOptionsByReference = getOptionsByReference;
-        this._options = options;
         this._deprecatedOptions = deprecatedOptions;
         this._notifyOptionChanged = notifyOptionChanged;
         this._logWarningIfDeprecated = logWarningIfDeprecated;
@@ -21,7 +19,7 @@ export class OptionHelper {
         this.cachedSetters = {};
     }
 
-    _optionValuesEqual(name, oldValue, newValue) {
+    _valuesEqual(name, oldValue, newValue) {
         oldValue = coreDataUtils.toComparable(oldValue, true);
         newValue = coreDataUtils.toComparable(newValue, true);
 
@@ -46,12 +44,12 @@ export class OptionHelper {
         return false;
     }
 
-    _clearOptionsField(options, name) {
+    _clearField(options, name) {
         delete options[name];
 
         const previousFieldName = this._getParentName(name);
         const fieldName = this._getFieldName(name);
-        const fieldObject = previousFieldName ? this.getOptionValue(options, previousFieldName, false) : options;
+        const fieldObject = previousFieldName ? this.getValue(options, previousFieldName, false) : options;
 
         if(fieldObject) {
             delete fieldObject[fieldName];
@@ -69,7 +67,7 @@ export class OptionHelper {
         return splitNames[splitNames.length - 1];
     }
 
-    _setOptionsField(options, fullName, value) {
+    _setField(options, fullName, value) {
         let fieldName = "";
         let fieldObject;
 
@@ -80,14 +78,14 @@ export class OptionHelper {
 
             fieldName = this._getFieldName(fullName) + fieldName;
             fullName = this._getParentName(fullName);
-            fieldObject = fullName ? this.getOptionValue(options, fullName, false) : options;
+            fieldObject = fullName ? this.getValue(options, fullName, false) : options;
 
         } while(!fieldObject);
 
         fieldObject[fieldName] = value;
     }
 
-    _setOptionValue(name, value, merge) {
+    _setValue(name, value, widgetOptions, merge) {
         if(!this.cachedSetters[name]) {
             this.cachedSetters[name] = coreDataUtils.compileSetter(name);
         }
@@ -95,25 +93,38 @@ export class OptionHelper {
         const path = name.split(/[.[]/);
         merge = typeUtils.isDefined(merge) ? merge : !this._getOptionsByReference()[name];
 
-        this.cachedSetters[name](this._options, value, {
+        this.cachedSetters[name](widgetOptions, value, {
             functionsAsIs: true,
             merge,
             unwrapObservables: path.length > 1 && !!this._getOptionsByReference()[path[0]]
         });
     }
 
-    _normalizePrimitiveOptionValue(options, name, value) {
+    _setNormalizeValue(name, value, widgetOptions, merge) {
+        const previousValue = this.getValue(widgetOptions, name, false);
+
+        if(this._valuesEqual(name, previousValue, value)) {
+            return;
+        }
+
+        this._optionChanging(name, previousValue, value);
+
+        this._setValue(name, value, widgetOptions, merge);
+        this._notifyOptionChanged(name, value, previousValue);
+    }
+
+    _normalizePrimitiveValue(options, name, value) {
         if(name) {
-            const alias = this.normalizeOptionName(name);
+            const alias = this.normalizeName(name);
 
             if(alias && alias !== name) {
-                this._setOptionsField(options, alias, value);
-                this._clearOptionsField(options, name);
+                this._setField(options, alias, value);
+                this._clearField(options, name);
             }
         }
     }
 
-    getOptionValue(options, name, unwrapObservables) {
+    getValue(options, name, unwrapObservables) {
         let getter = this.cachedGetters[name];
         if(!getter) {
             getter = this.cachedGetters[name] = coreDataUtils.compileGetter(name);
@@ -122,30 +133,32 @@ export class OptionHelper {
         return getter(options, { functionsAsIs: true, unwrapObservables });
     }
 
-    setOption(name, value, merge) {
-        const previousValue = this.getOptionValue(this._options, name, false);
-
-        if(this._optionValuesEqual(name, previousValue, value)) {
-            return;
+    setValue(options, value, widgetOptions) {
+        let name = options;
+        if(typeof name === "string") {
+            options = {};
+            options[name] = value;
         }
-
-        this._optionChanging(name, previousValue, value);
-
-        this._setOptionValue(name, value, merge);
-        this._notifyOptionChanged(name, value, previousValue);
+        let optionName;
+        for(optionName in options) {
+            this.normalizeValue(options, optionName, options[optionName]);
+        }
+        for(optionName in options) {
+            this._setNormalizeValue(optionName, options[optionName], widgetOptions);
+        }
     }
 
-    normalizeOptionValue(options, name, value) {
+    normalizeValue(options, name, value) {
         if(typeUtils.isPlainObject(value)) {
             for(const valueName in value) {
-                this.normalizeOptionValue(options, name + "." + valueName, value[valueName]);
+                this.normalizeValue(options, name + "." + valueName, value[valueName]);
             }
         }
 
-        this._normalizePrimitiveOptionValue(options, name, value);
+        this._normalizePrimitiveValue(options, name, value);
     }
 
-    normalizeOptionName(name) {
+    normalizeName(name) {
         if(name) {
             let deprecate;
             if(!this._cachedDeprecateNames.length) {

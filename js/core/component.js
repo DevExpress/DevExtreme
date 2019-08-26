@@ -1,6 +1,6 @@
 var Config = require("./config"),
     extend = require("./utils/extend").extend,
-    optionHelper = require("./option_helper").OptionHelper,
+    optionManager = require("./option_manager").OptionManager,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
@@ -117,7 +117,7 @@ var Component = Class.inherit({
     },
 
     _setDefaultOptions: function() {
-        Object.assign(this._options, this._getDefaultOptions());
+        this._options = this._getDefaultOptions();
     },
 
     _defaultOptionsRules: function() {
@@ -195,6 +195,11 @@ var Component = Class.inherit({
     */
     ctor: function(options) {
         this.NAME = publicComponentUtils.name(this.constructor);
+        const optionChanging = (name, previousValue, value) => {
+            if(this._initialized) {
+                this._optionChanging(name, previousValue, value);
+            }
+        };
 
         options = options || {};
         if(options.eventsStrategy) {
@@ -208,26 +213,18 @@ var Component = Class.inherit({
         this._disposingCallbacks = options._disposingCallbacks || Callbacks();
         this.postponedOperations = new PostponedOperations();
 
-        const optionChanging = (name, previousValue, value) => {
-            if(this._initialized) {
-                this._optionChanging(name, previousValue, value);
-            }
-        };
-
         this.beginUpdate();
 
         try {
             this._suppressDeprecatedWarnings();
             this._setOptionsByReference();
             this._setDeprecatedOptions();
-            this._optionHelper = new optionHelper(
+            this._optionManager = new optionManager(
                 this._getOptionsByReference.bind(this),
-                this._options,
                 this._deprecatedOptions,
                 this._notifyOptionChanged.bind(this),
                 this._logWarningIfDeprecated.bind(this),
                 optionChanging);
-
             this._setDefaultOptions();
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
@@ -376,13 +373,13 @@ var Component = Class.inherit({
             currentInitialized = this._initialized;
         if(!this._initialOptions) {
             currentOptions = this._options;
-            Object.keys(this._options).forEach(key => delete this._options[key]);
+            this._options = {};
             this._initialized = false;
             this._setDefaultOptions();
             this._setOptionsByDevice(currentOptions.defaultOptionsRules);
 
             this._initialOptions = this._options;
-            this._options = Object.assign(this._options, currentOptions);
+            this._options = currentOptions;
             this._initialized = currentInitialized;
         }
 
@@ -523,27 +520,14 @@ var Component = Class.inherit({
      */
     option: function(options, value) {
         if(arguments.length < 2 && typeUtils.type(options) !== "object") {
-            const name = this._optionHelper.normalizeOptionName(options);
-            return this._optionHelper.getOptionValue(this._options, name);
-        }
-
-
-        var name = options;
-        if(typeof name === "string") {
-            options = {};
-            options[name] = value;
+            const name = this._optionManager.normalizeName(options);
+            return this._optionManager.getValue(this._options, name);
         }
 
         this.beginUpdate();
 
         try {
-            var optionName;
-            for(optionName in options) {
-                this._optionHelper.normalizeOptionValue(options, optionName, options[optionName]);
-            }
-            for(optionName in options) {
-                this._optionHelper.setOption(optionName, options[optionName]);
-            }
+            this._optionManager.setValue(options, value, this._options);
         } finally {
             this.endUpdate();
         }
@@ -560,7 +544,7 @@ var Component = Class.inherit({
         }
 
         this.beginUpdate();
-        this._optionHelper.setOption(name, defaultValue, false);
+        this._optionManager.setValue(name, defaultValue, this._options, false);
         this.endUpdate();
     },
 
