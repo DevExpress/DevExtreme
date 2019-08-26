@@ -454,7 +454,7 @@ const Tabs = CollectionWidget.inherit({
         if(this._holdInterval) clearInterval(this._holdInterval);
     },
 
-    _renderSelection: function(addedSelection) {
+    _updateSelection: function(addedSelection) {
         this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]), { left: 1, right: 1 });
     },
 

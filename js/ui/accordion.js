@@ -1,33 +1,31 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    fx = require("../animation/fx"),
-    clickEvent = require("../events/click"),
-    devices = require("../core/devices"),
-    extend = require("../core/utils/extend").extend,
-    getPublicElement = require("../core/utils/dom").getPublicElement,
-    iteratorUtils = require("../core/utils/iterator"),
-    isPlainObject = require("../core/utils/type").isPlainObject,
-    registerComponent = require("../core/component_registrator"),
-    eventUtils = require("../events/utils"),
-    CollectionWidget = require("./collection/ui.collection_widget.live_update").default,
-    deferredUtils = require("../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    BindableTemplate = require("./widget/bindable_template"),
-    iconUtils = require("../core/utils/icon"),
-    isDefined = require("../core/utils/type").isDefined,
-    themes = require("./themes");
+import $ from "../core/renderer";
+import eventsEngine from "../events/core/events_engine";
+import fx from "../animation/fx";
+import clickEvent from "../events/click";
+import devices from "../core/devices";
+import { extend } from "../core/utils/extend";
+import { deferRender } from "../core/utils/common";
+import { getPublicElement } from "../core/utils/dom";
+import iteratorUtils from "../core/utils/iterator";
+import { isPlainObject, isDefined } from "../core/utils/type";
+import registerComponent from "../core/component_registrator";
+import eventUtils from "../events/utils";
+import CollectionWidget from "./collection/ui.collection_widget.live_update";
+import { when, Deferred } from "../core/utils/deferred";
+import BindableTemplate from "./widget/bindable_template";
+import iconUtils from "../core/utils/icon";
+import themes from "./themes";
 
-var ACCORDION_CLASS = "dx-accordion",
-    ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper",
-    ACCORDION_ITEM_CLASS = "dx-accordion-item",
-    ACCORDION_ITEM_OPENED_CLASS = "dx-accordion-item-opened",
-    ACCORDION_ITEM_CLOSED_CLASS = "dx-accordion-item-closed",
-    ACCORDION_ITEM_TITLE_CLASS = "dx-accordion-item-title",
-    ACCORDION_ITEM_BODY_CLASS = "dx-accordion-item-body",
-    ACCORDION_ITEM_TITLE_CAPTION_CLASS = "dx-accordion-item-title-caption",
+const ACCORDION_CLASS = "dx-accordion";
+const ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper";
+const ACCORDION_ITEM_CLASS = "dx-accordion-item";
+const ACCORDION_ITEM_OPENED_CLASS = "dx-accordion-item-opened";
+const ACCORDION_ITEM_CLOSED_CLASS = "dx-accordion-item-closed";
+const ACCORDION_ITEM_TITLE_CLASS = "dx-accordion-item-title";
+const ACCORDION_ITEM_BODY_CLASS = "dx-accordion-item-body";
+const ACCORDION_ITEM_TITLE_CAPTION_CLASS = "dx-accordion-item-title-caption";
 
-    ACCORDION_ITEM_DATA_KEY = "dxAccordionItemData";
+const ACCORDION_ITEM_DATA_KEY = "dxAccordionItemData";
 
 /**
 * @name dxAccordion
@@ -228,14 +226,21 @@ var Accordion = CollectionWidget.inherit({
     _initMarkup: function() {
         this._deferredItems = [];
         this.callBase();
+
         this.setAria({
             "role": "tablist",
             "multiselectable": this.option("multiple")
+        });
+
+        deferRender(() => {
+            const selectedItemIndices = this._getSelectedItemIndices();
+            this._renderSelection(selectedItemIndices, []);
         });
     },
 
     _render: function() {
         this.callBase();
+
         this._updateItemHeightsWrapper(true);
     },
 
