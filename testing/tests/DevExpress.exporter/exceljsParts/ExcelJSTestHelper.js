@@ -56,17 +56,17 @@ class ExcelJSTestHelper {
         assert.equal(this.worksheet.actualColumnCount, actual.column, "worksheet.actualColumnCount");
     }
 
-    _extendCellArgs(cellArgs, values, topLeft) {
-        let row = 0;
-        let cell = 0;
+    _extendCellArgs(cellArgs, expectedRows, topLeft) {
+        let rowIndex = 0;
+        let cellIndex = 0;
 
         cellArgs.forEach((item) => {
-            item.excelCell = { row: topLeft.row + row, column: topLeft.column + cell };
+            item.excelCell = { row: topLeft.row + rowIndex, column: topLeft.column + cellIndex };
             if(!("value" in item.gridCell)) {
-                item.gridCell.value = values[row].values[cell];
+                item.gridCell.value = expectedRows[rowIndex].values[cellIndex];
             }
 
-            if(values[0].values.length - cell === 1) { row++; cell = 0; } else { cell++; }
+            if(expectedRows[0].values.length - cellIndex === 1) { rowIndex++; cellIndex = 0; } else { cellIndex++; }
         });
 
         return cellArgs;
