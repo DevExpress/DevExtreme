@@ -737,7 +737,6 @@ class MenuBase extends HierarchicalCollectionWidget {
 
     _updateSelectedItems(oldSelection, newSelection) {
         if(oldSelection || newSelection) {
-            this._updateSelection(newSelection, oldSelection);
             this._fireSelectionChangeEvent(newSelection, oldSelection);
         }
     }
