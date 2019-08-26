@@ -694,57 +694,66 @@ const ValidationEngine = {
         }
     },
 
+    _addBrokenRule(result, rule) {
+        if(!result.brokenRule) {
+            result.brokenRule = rule;
+        }
+        if(!result.brokenRules) {
+            result.brokenRules = [];
+        }
+        result.brokenRules.push(rule);
+    },
+
     validate(value, rules, name) {
         /**
          * @name dxValidatorResult
          * @type Object
          */
         let result = {
-                name: name,
-                /**
-                 * @name dxValidatorResult.value
-                 * @type any
-                 */
-                value: value,
-                /**
-                 * @name dxValidatorResult.brokenRule
-                 * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
-                 */
-                brokenRule: null,
-                /**
-                 * @name dxValidatorResult.brokenRules
-                 * @type Array<RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule>
-                 */
-                brokenRules: null,
-                /**
-                 * @name dxValidatorResult.isValid
-                 * @type boolean
-                 */
-                isValid: true,
-                /**
-                 * @name dxValidatorResult.validationRules
-                 * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
-                 */
-                validationRules: rules,
-                /**
-                 * @name dxValidatorResult.asyncValidationRules
-                 * @type Array<AsyncRule>
-                 */
-                asyncValidationRules: null,
-                /**
-                 * @name dxValidatorResult.status
-                 * @type string
-                 */
-                status: "valid",
-                /**
-                 * @name dxValidatorResult.complete
-                 * @type Promise
-                 */
-                complete: null
-            },
-            that = this;
+            name: name,
+            /**
+             * @name dxValidatorResult.value
+             * @type any
+             */
+            value: value,
+            /**
+             * @name dxValidatorResult.brokenRule
+             * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
+             */
+            brokenRule: null,
+            /**
+             * @name dxValidatorResult.brokenRules
+             * @type Array<RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule>
+             */
+            brokenRules: null,
+            /**
+             * @name dxValidatorResult.isValid
+             * @type boolean
+             */
+            isValid: true,
+            /**
+             * @name dxValidatorResult.validationRules
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
+             */
+            validationRules: rules,
+            /**
+             * @name dxValidatorResult.pendingRules
+             * @type Array<AsyncRule>
+             */
+            pendingRules: null,
+            /**
+             * @name dxValidatorResult.status
+             * @type string
+             */
+            status: "valid",
+            /**
+             * @name dxValidatorResult.complete
+             * @type Promise
+             */
+            complete: null
+        };
         const asyncRuleItems = [];
-        each(rules || [], function(_, rule) {
+        each(rules || [], (_, rule) => {
             const ruleValidator = rulesValidators[rule.type];
             let ruleValidationResult;
             if(ruleValidator) {
@@ -758,7 +767,7 @@ const ValidationEngine = {
                 if(typeUtils.isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
                     if(!rule.isValid) {
                         result.isValid = false;
-                        result.brokenRule = rule;
+                        this._addBrokenRule(result, rule);
                         return false;
                     }
                     return true;
@@ -768,8 +777,8 @@ const ValidationEngine = {
                 rule.isValid = ruleValidationResult;
                 if(!ruleValidationResult) {
                     result.isValid = false;
-                    that._setDefaultMessage(rule, ruleValidator, name);
-                    result.brokenRule = rule;
+                    this._setDefaultMessage(rule, ruleValidator, name);
+                    this._addBrokenRule(result, rule);
                 }
                 if(!rule.isValid) {
                     return false;
@@ -778,20 +787,35 @@ const ValidationEngine = {
                 throw errors.Error("E0100");
             }
         });
-        if(result.brokenRule) {
-            result.brokenRules = [];
-            result.brokenRules.push(result.brokenRule);
-        }
         if(result.isValid && asyncRuleItems.length) {
-            result = this._getPatchedValidationResult(result, asyncRuleItems, value);
+            result = this._validateAsyncRules(value, asyncRuleItems, result);
         }
-        result.status = result.asyncValidationRules ? "pending" : (result.isValid ? "valid" : "invalid");
+        result.status = result.pendingRules ? "pending" : (result.isValid ? "valid" : "invalid");
+        return result;
+    },
+
+    _validateAsyncRules(value, items, result) {
+        const itemsToValidate = [];
+        each(items, (_, item) => {
+            if(typeUtils.isDefined(item.rule.isValid) && item.rule.value === value && !item.rule.reevaluate) {
+                if(!item.rule.isValid) {
+                    result.isValid = false;
+                    this._addBrokenRule(result, item.rule);
+                }
+                return true;
+            }
+            item.rule.value = value;
+            itemsToValidate.push(item);
+        });
+        if(itemsToValidate.length) {
+            result = this._getPatchedValidationResult(result, itemsToValidate, value);
+        }
         return result;
     },
 
     _getPatchedValidationResult(result, items, value) {
         const asyncResults = [];
-        result.asyncValidationRules = [];
+        result.pendingRules = [];
         const getPatchedResult = function(result, isValid = true) {
             let res;
             if(typeUtils.isObject(result)) {
@@ -806,12 +830,22 @@ const ValidationEngine = {
             }
             return res;
         };
+        const updateRuleConfig = function(rule, ruleResult) {
+            if(typeUtils.isDefined(ruleResult.message) && typeUtils.isString(ruleResult.message) && ruleResult.message.length) {
+                rule.message = ruleResult.message;
+            }
+            rule.isValid = ruleResult.isValid;
+        };
         items.forEach(function(item) {
-            result.asyncValidationRules.push(item.rule);
+            result.pendingRules.push(item.rule);
             const asyncResult = item.ruleValidator.validate(value, item.rule).then(function(res) {
-                return getPatchedResult(res);
+                const ruleResult = getPatchedResult(res);
+                updateRuleConfig(item.rule, ruleResult);
+                return ruleResult;
             }).catch(function(err) {
-                return getPatchedResult(err, false);
+                const ruleResult = getPatchedResult(err, false);
+                updateRuleConfig(item.rule, ruleResult);
+                return ruleResult;
             });
             asyncResults.push(asyncResult);
         });
@@ -897,16 +931,14 @@ const ValidationEngine = {
             if(val.isValid === false) {
                 result.isValid = val.isValid;
                 result.brokenRules = result.brokenRules || [];
-                const rule = result.asyncValidationRules[index];
-                if(typeUtils.isDefined(val.message) && typeUtils.isString(val.message) && val.message.length) {
-                    rule.message = val.message;
-                }
+                const rule = result.pendingRules[index];
                 result.brokenRules.push(rule);
                 if(!result.brokenRule) {
                     result.brokenRule = rule;
                 }
             }
         });
+        result.pendingRules = null;
         result.status = result.isValid ? "valid" : "invalid";
         return result;
     }

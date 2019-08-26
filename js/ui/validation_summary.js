@@ -246,25 +246,36 @@ const ValidationSummary = CollectionWidget.inherit({
 
     _itemValidationHandler(itemValidationResult) {
         const isValid = itemValidationResult.isValid,
-            validator = itemValidationResult.validator;
-        let items = this.option("items"),
-            itemIndex = 0;
+            validator = itemValidationResult.validator,
+            brokenRules = itemValidationResult.brokenRules;
+        let items = this.option("items");
 
-        while(itemIndex < items.length) {
-            const item = items[itemIndex];
-            if(item.validator === validator) {
-                items.splice(itemIndex, 1);
-                continue;
+        if(isValid) {
+            let itemIndex = 0;
+            while(itemIndex < items.length) {
+                const item = items[itemIndex];
+                if(item.validator === validator) {
+                    items.splice(itemIndex, 1);
+                    continue;
+                }
+                itemIndex++;
             }
-            itemIndex++;
-        }
-
-        if(!isValid) {
-            iteratorUtils.each(itemValidationResult.brokenRules, function(_, rule) {
-                items.push({
-                    text: rule.message,
-                    validator: validator
-                });
+        } else {
+            iteratorUtils.each(brokenRules, function(_, rule) {
+                const foundItem = grep(items, function(item) {
+                    return item.validator === validator && item.index === rule.index;
+                })[0];
+                if(foundItem && foundItem.text !== rule.message) {
+                    foundItem.text = rule.message;
+                    return true;
+                }
+                if(!foundItem) {
+                    items.push({
+                        text: rule.message,
+                        validator: validator,
+                        index: rule.index
+                    });
+                }
             });
         }
 
