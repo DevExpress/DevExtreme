@@ -6,11 +6,13 @@ class ExcelJSTestHelper {
     }
 
     checkCustomizeCell(eventArgs, expectedArgs, callIndex) {
-        let expectedAddress = expectedArgs[callIndex].excelCell;
-        assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, eventArgs.cell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
+        const { gridCell, excelCell } = eventArgs;
+        const expectedAddress = expectedArgs[callIndex].excelCell;
 
-        let expectedColumn = expectedArgs[callIndex].gridCell.column;
-        let actualColumn = eventArgs.gridCell.column;
+        assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, excelCell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
+
+        const expectedColumn = expectedArgs[callIndex].gridCell.column;
+        const actualColumn = gridCell.column;
 
         assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${callIndex}`);
         assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${callIndex}`);
@@ -19,12 +21,12 @@ class ExcelJSTestHelper {
 
         const gridCellSkipProperties = ["column"];
 
-        for(const propertyName in eventArgs.gridCell) {
+        for(const propertyName in gridCell) {
             if(gridCellSkipProperties.indexOf(propertyName) === -1) {
                 if(propertyName === "groupSummaryItems") {
-                    assert.deepEqual(eventArgs.gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                    assert.deepEqual(gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
                 } else {
-                    assert.strictEqual(eventArgs.gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                    assert.strictEqual(gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
                 }
             }
         }
