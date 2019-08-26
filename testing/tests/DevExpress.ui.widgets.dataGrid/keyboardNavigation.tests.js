@@ -2144,7 +2144,7 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
     var $prevCell = testElement.find(".dx-data-row").eq(0).children().eq(5);
 
     assert.equal($prevCell.attr("tabindex"), "0");
-    assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) - 1, testElement.find("[tabIndex]").index($prevCell), "previous focusable element");
+    assert.equal(testElement.find("[tabIndex=0]").index(testElement.find(":focus")) - 1, testElement.find("[tabIndex=0]").index($prevCell), "previous focusable element");
 });
 
 // T317001
