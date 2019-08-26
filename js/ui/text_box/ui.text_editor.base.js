@@ -435,9 +435,11 @@ const TextEditorBase = Editor.inherit({
     },
 
     _disposePendingIndicator: function() {
-        this._pendingIndicator.dispose();
-        this._pendingIndicator.$element().remove();
-        this._pendingIndicator = null;
+        if(this._pendingIndicator) {
+            this._pendingIndicator.dispose();
+            this._pendingIndicator.$element().remove();
+            this._pendingIndicator = null;
+        }
     },
 
     _renderValidationState: function() {
@@ -449,9 +451,7 @@ const TextEditorBase = Editor.inherit({
             this._renderPendingIndicator();
             return;
         }
-        if(this._pendingIndicator) {
-            this._disposePendingIndicator();
-        }
+        this._disposePendingIndicator();
     },
 
     _renderButtonContainers: function() {
@@ -770,6 +770,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _dispose: function() {
+        this._disposePendingIndicator();
         this._enterKeyAction = undefined;
         this.callBase();
     },
