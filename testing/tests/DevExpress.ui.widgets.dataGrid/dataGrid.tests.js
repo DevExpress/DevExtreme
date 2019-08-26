@@ -12377,6 +12377,63 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     assert.equal($rows.find("col").get(0).style.width, "1000px", "column width in detail grid is corrent");
 });
 
+// T803571
+QUnit.test("Detail Grid should not have scroll if vertical scrollbar is shown after expand master detail", function(assert) {
+    // arrange
+    var data = [
+        { OrderID: 1 },
+        { OrderID: 2 },
+        { OrderID: 3 },
+        { OrderID: 4 },
+        { OrderID: 5 }
+    ];
+    var nestedDataGrid;
+    var dataGrid = createDataGrid({
+        width: 1000,
+        height: 400,
+        dataSource: data,
+        keyExpr: "OrderID",
+        scrolling: {
+            useNative: true
+        },
+        columns: [{
+            dataField: "OrderID",
+            fixed: true,
+            width: 100
+        }, {
+            dataField: "ShipCity",
+            width: 1000
+        }],
+        masterDetail: {
+            enabled: true,
+            template: function(container) {
+                nestedDataGrid = $("<div>").appendTo(container).dxDataGrid({
+                    columnAutoWidth: true,
+                    dataSource: data,
+                    columns: ["OrderID"]
+                }).dxDataGrid("instance");
+            }
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    dataGrid.expandRow(1);
+    this.clock.tick();
+
+    // assert
+    var $rows = $(dataGrid.getRowElement(1));
+
+    assert.equal($rows.length, 2, "two rows: main row + fixed row");
+    assert.ok($rows.eq(0).hasClass("dx-master-detail-row"), "first row is master detail");
+    assert.ok($rows.eq(1).hasClass("dx-master-detail-row"), "second row is master detail");
+    assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
+
+    var scrollable = nestedDataGrid.getScrollable();
+    assert.equal(scrollable.clientWidth(), scrollable.scrollWidth(), "detail grid does not have scroll");
+});
+
 QUnit.test("Should update grid after error row rendered (T755293)", function(assert) {
     // arrange act
     var eventArray = [],
