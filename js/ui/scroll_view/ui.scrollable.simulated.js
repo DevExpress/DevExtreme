@@ -455,6 +455,7 @@ var Scroller = Class.inherit({
                 contentSize,
                 baseContainerSize,
                 baseContentSize,
+                isScrollUsedInsideOfScrollable: true,
                 scaleRatio: this._getScaleRatio()
             });
         });

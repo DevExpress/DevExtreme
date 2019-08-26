@@ -35,6 +35,7 @@ var Scrollbar = Widget.inherit({
             visibilityMode: SCROLLBAR_VISIBLE.onScroll,
             containerSize: 0,
             contentSize: 0,
+            isScrollUsedInsideOfScrollable: false,
             expandable: true,
             scaleRatio: 1
         });
@@ -173,9 +174,10 @@ var Scrollbar = Widget.inherit({
         var containerSize = Math.round(this.option("containerSize")),
             contentSize = Math.round(this.option("contentSize")),
             baseContainerSize = Math.round(this.option("baseContainerSize")),
-            baseContentSize = Math.round(this.option("baseContentSize"));
+            baseContentSize = Math.round(this.option("baseContentSize")),
+            isScrollUsedInsideOfScrollable = Math.round(this.option("isScrollUsedInsideOfScrollable"));
 
-        if(isNaN(baseContentSize)) {
+        if(!isScrollUsedInsideOfScrollable) {
             baseContainerSize = containerSize;
             baseContentSize = contentSize;
         }
@@ -235,6 +237,8 @@ var Scrollbar = Widget.inherit({
                 break;
             case "scaleRatio":
                 this._update();
+                break;
+            case "isScrollUsedInsideOfScrollable":
                 break;
             default:
                 this.callBase.apply(this, arguments);
