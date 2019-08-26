@@ -226,13 +226,16 @@ var FilterBuilder = Widget.inherit({
              * @name dxFilterBuilderField.lookup.valueExpr
              * @type string|function(data)
              * @default undefined
+             * @type_function_param1 data:object
+             * @type_function_return string
              */
 
             /**
              * @name dxFilterBuilderField.lookup.displayExpr
              * @type string|function(data)
-             * @type_function_param1 data:object
              * @default undefined
+             * @type_function_param1 data:object
+             * @type_function_return string
              */
 
             /**

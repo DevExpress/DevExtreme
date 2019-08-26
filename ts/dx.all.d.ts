@@ -685,7 +685,7 @@ declare module DevExpress.ui {
         /** @name DataExpressionMixin.Options.dataSource */
         dataSource?: string | Array<CollectionWidgetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name DataExpressionMixin.Options.displayExpr */
-        displayExpr?: string | ((item: any) => any);
+        displayExpr?: string | ((item: any) => string);
         /** @name DataExpressionMixin.Options.itemTemplate */
         itemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name DataExpressionMixin.Options.items */
@@ -693,7 +693,7 @@ declare module DevExpress.ui {
         /** @name DataExpressionMixin.Options.value */
         value?: any;
         /** @name DataExpressionMixin.Options.valueExpr */
-        valueExpr?: string | Function;
+        valueExpr?: string | ((item: any) => string);
     }
     /** @name DataExpressionMixin */
     export class DataExpressionMixin {
@@ -1165,7 +1165,7 @@ declare module DevExpress.ui {
         /** @name GridBaseColumn.isBand */
         isBand?: boolean;
         /** @name GridBaseColumn.lookup */
-        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store | ((options: { data?: any, key?: any }) => Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store), displayExpr?: string | ((data: any) => any), valueExpr?: string };
+        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store | ((options: { data?: any, key?: any }) => Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store), displayExpr?: string | ((data: any) => string), valueExpr?: string };
         /** @name GridBaseColumn.minWidth */
         minWidth?: number;
         /** @name GridBaseColumn.name */
@@ -1215,7 +1215,7 @@ declare module DevExpress.ui {
         /** @name HierarchicalCollectionWidget.Options.disabledExpr */
         disabledExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.displayExpr */
-        displayExpr?: string | ((item: any) => any);
+        displayExpr?: string | ((item: any) => string);
         /** @name HierarchicalCollectionWidget.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name HierarchicalCollectionWidget.Options.hoverStateEnabled */
@@ -1223,7 +1223,7 @@ declare module DevExpress.ui {
         /** @name HierarchicalCollectionWidget.Options.itemsExpr */
         itemsExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.keyExpr */
-        keyExpr?: string | Function;
+        keyExpr?: string | ((item: any) => string);
         /** @name HierarchicalCollectionWidget.Options.selectedExpr */
         selectedExpr?: string | Function;
     }
@@ -2474,7 +2474,7 @@ declare module DevExpress.ui {
         /** @name dxFilterBuilderField.format */
         format?: format;
         /** @name dxFilterBuilderField.lookup */
-        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => any), valueExpr?: string | Function };
+        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string) };
         /** @name dxFilterBuilderField.name */
         name?: string;
         /** @name dxFilterBuilderField.trueText */
@@ -2879,7 +2879,7 @@ declare module DevExpress.ui {
         /** @name dxList.Options.collapsibleGroups */
         collapsibleGroups?: boolean;
         /** @name dxList.Options.displayExpr */
-        displayExpr?: string | ((item: any) => any);
+        displayExpr?: string | ((item: any) => string);
         /** @name dxList.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxList.Options.groupTemplate */
@@ -3925,7 +3925,7 @@ declare module DevExpress.ui {
         /** @name dxScheduler.Options.resourceCellTemplate */
         resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxScheduler.Options.resources */
-        resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, displayExpr?: string | ((resource: any) => any), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
+        resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, displayExpr?: string | ((resource: any) => string), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
         /** @name dxScheduler.Options.selectedCellData */
         selectedCellData?: Array<any>;
         /** @name dxScheduler.Options.shadeUntilCurrentTime */

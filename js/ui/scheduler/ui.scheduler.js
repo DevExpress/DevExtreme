@@ -433,6 +433,7 @@ const Scheduler = Widget.inherit({
                     * @type string|function(resource)
                     * @type_function_param1 resource:object
                     * @default 'text'
+                 * @type_function_return string
                     */
 
                 /**
