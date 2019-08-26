@@ -244,29 +244,42 @@ module.exports = {
 
                     _cellPrepared: function($cell, options) {
                         var that = this,
-                            component = that.component;
+                            masterGrid = that.component;
 
                         that.callBase.apply(that, arguments);
 
                         if(options.rowType === "detail" && options.column.command === "detail") {
                             $cell.find("." + that.getWidgetContainerClass()).each(function() {
-                                var dataGrid = $(this).parent().data("dxDataGrid");
+                                var detailGrid = $(this).parent().data("dxDataGrid");
 
-                                if(dataGrid) {
-                                    dataGrid.on("contentReady", function() {
-                                        if(that._isFixedColumns) {
-                                            var $rows = $(component.getRowElement(options.rowIndex));
-                                            if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
-                                                component.updateDimensions();
-                                            }
-                                        } else {
-                                            var scrollable = component.getScrollable();
-                                            // T607490
-                                            scrollable && scrollable.update();
-                                        }
+                                if(detailGrid) {
+                                    detailGrid.on("contentReady", () => {
+                                        that._handleDetailGridContentReady(masterGrid, options.rowIndex, detailGrid);
                                     });
                                 }
                             });
+                        }
+                    },
+
+                    _handleDetailGridContentReady: function(masterGrid, masterRowIndex, detailGrid) {
+                        if(this._isFixedColumns) {
+                            let $rows = $(masterGrid.getRowElement(masterRowIndex));
+                            if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
+                                let detailGridWidth = detailGrid.$element().width();
+
+                                masterGrid.updateDimensions().done(function() {
+                                    let isDetailHorizontalScrollCanBeShown = detailGrid.option("columnAutoWidth") && masterGrid.option("scrolling.useNative") === true,
+                                        isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailGridWidth !== detailGrid.$element().width();
+
+                                    if(isDetailGridWidthChanged) {
+                                        detailGrid.updateDimensions();
+                                    }
+                                });
+                            }
+                        } else {
+                            let scrollable = masterGrid.getScrollable();
+                            // T607490
+                            scrollable && scrollable.update();
                         }
                     },
 
