@@ -126,7 +126,7 @@
                 visibility: hidden;
             }
 
-            .dx-sort-index {
+            .dx-sort-index-icon {
                 padding-right: 3px;
                 margin-left: -3px;
                 width: @GRID_SORT_INDEX_WIDTH;
@@ -137,7 +137,7 @@
             .dx-header-filter {
                 &.dx-sort,
                 &.dx-header-filter {
-                    display: inline;
+                    display: inline-block;
                 }
 
                 &.dx-header-filter:after {
@@ -333,6 +333,10 @@
             .dx-column-indicators .dx-sort {
                 &.dx-sort-none {
                     display: none;
+                }
+
+                &.dx-sort-index {
+                    width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH + @GRID_SORT_INDEX_WIDTH;
                 }
             }
         }

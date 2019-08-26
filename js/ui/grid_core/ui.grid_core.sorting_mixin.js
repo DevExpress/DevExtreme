@@ -6,6 +6,7 @@ var SORT_CLASS = "dx-sort",
     SORTUP_CLASS = "dx-sort-up",
     SORTDOWN_CLASS = "dx-sort-down",
     SORT_INDEX_CLASS = "dx-sort-index",
+    SORT_INDEX_ICON_CLASS = "dx-sort-index-icon",
     HEADERS_ACTION_CLASS = "action";
 
 
@@ -32,9 +33,10 @@ module.exports = {
                 let hasSeveralSortIndexes = that.getController && !!that.getController("columns").columnOption("sortIndex:1");
                 if(hasSeveralSortIndexes && that.option("sorting.showSortIndexes") && column.sortIndex >= 0) {
                     $("<span>")
-                        .addClass(SORT_INDEX_CLASS)
+                        .addClass(SORT_INDEX_ICON_CLASS)
                         .text(column.sortIndex + 1)
                         .appendTo($sortIndicator);
+                    $sortIndicator.addClass(SORT_INDEX_CLASS);
                 }
 
                 options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
@@ -56,7 +58,7 @@ module.exports = {
         if(name === "sort") {
             return SORT_CLASS;
         } else if(name === "sortIndex") {
-            return SORT_INDEX_CLASS;
+            return SORT_INDEX_ICON_CLASS;
         }
         return this.callBase(name);
     },

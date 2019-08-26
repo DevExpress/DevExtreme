@@ -16,6 +16,9 @@ import "ui/data_grid/ui.data_grid";
 import "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
 setTemplateEngine("hogan");
 
+var SORT_INDEX_ICON_SELECTOR = ".dx-sort-index-icon",
+    SORT_INDEX_INDICATOR_SELECTOR = ".dx-sort-index-indicator";
+
 $("body").addClass("dx-viewport");
 QUnit.testStart(function() {
     var markup =
@@ -2608,9 +2611,9 @@ QUnit.test("Sort index icons should be rendered by default", function(assert) {
     $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "", "first column's sort index");
-    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "2", "second column's sort index");
-    assert.equal($headerCells.eq(2).find(".dx-sort-index").text(), "1", "third column's sort index");
+    assert.equal($headerCells.eq(0).find(SORT_INDEX_ICON_SELECTOR).text(), "", "first column's sort index");
+    assert.equal($headerCells.eq(1).find(SORT_INDEX_ICON_SELECTOR).text(), "2", "second column's sort index");
+    assert.equal($headerCells.eq(2).find(SORT_INDEX_ICON_SELECTOR).text(), "1", "third column's sort index");
 });
 
 QUnit.test("Sort index icons should be rendered when showSortIndexes is true", function(assert) {
@@ -2638,27 +2641,27 @@ QUnit.test("Sort index icons should be rendered when showSortIndexes is true", f
     $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.notOk($testElement.find(".dx-sort-index").length, "no sort indexes");
-    assert.notOk($testElement.find(".dx-sort-index-indicator").length, "no sort index indicators");
+    assert.notOk($testElement.find(SORT_INDEX_ICON_SELECTOR).length, "no sort indexes");
+    assert.notOk($testElement.find(SORT_INDEX_INDICATOR_SELECTOR).length, "no sort index indicators");
 
     // act
     this.columnOption(0, "sortOrder", "asc");
     $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.equal($headerCells.eq(0).find(".dx-sort-index").text(), "2", "first column's sort index");
-    assert.equal($headerCells.eq(1).find(".dx-sort-index").text(), "1", "second column's sort index");
+    assert.equal($headerCells.eq(0).find(SORT_INDEX_ICON_SELECTOR).text(), "2", "first column's sort index");
+    assert.equal($headerCells.eq(1).find(SORT_INDEX_ICON_SELECTOR).text(), "1", "second column's sort index");
 
-    assert.ok($headerCells.eq(0).find(".dx-sort-index-indicator").length, "first column's sort index indicator");
-    assert.ok($headerCells.eq(1).find(".dx-sort-index-indicator").length, "second column's sort index indicator");
+    assert.ok($headerCells.eq(0).find(SORT_INDEX_INDICATOR_SELECTOR).length, "first column's sort index indicator");
+    assert.ok($headerCells.eq(1).find(SORT_INDEX_INDICATOR_SELECTOR).length, "second column's sort index indicator");
 
     // act
     this.columnOption(1, "sortOrder", null);
     $headerCells = $testElement.find(".dx-header-row").children();
 
     // assert
-    assert.notOk($testElement.find(".dx-sort-index").length, "no sort indexes");
-    assert.notOk($testElement.find(".dx-sort-index-indicator").length, "no sort index indicators");
+    assert.notOk($testElement.find(SORT_INDEX_ICON_SELECTOR).length, "no sort indexes");
+    assert.notOk($testElement.find(SORT_INDEX_INDICATOR_SELECTOR).length, "no sort index indicators");
 });
 
 QUnit.test("Sort index icons should not be rendered when showSortIndexes is false", function(assert) {
@@ -2677,7 +2680,7 @@ QUnit.test("Sort index icons should not be rendered when showSortIndexes is fals
     this.columnHeadersView.render($testElement);
 
     // assert
-    assert.notOk($testElement.find(".dx-sort-index").length, "no sort indexes");
+    assert.notOk($testElement.find(SORT_INDEX_ICON_SELECTOR).length, "no sort indexes");
 });
 
 function checkWidthTest(assert, that, options, baseWidthDecrease, withSortWidthDecrease) {
