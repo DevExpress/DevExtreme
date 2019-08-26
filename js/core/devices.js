@@ -90,12 +90,13 @@ var DEFAULT_DEVICE = {
 };
 
 var uaParsers = {
-    win: function(userAgent) {
+    generic: function(userAgent) {
         var isPhone = /windows phone/i.test(userAgent) || userAgent.match(/WPDesktop/),
             isTablet = !isPhone && /Windows(.*)arm(.*)Tablet PC/i.test(userAgent),
-            isDesktop = !isPhone && !isTablet && /msapphost/i.test(userAgent);
+            isDesktop = !isPhone && !isTablet && /msapphost/i.test(userAgent),
+            isMac = /((intel|ppc) mac os x)/.test(userAgent.toLowerCase());
 
-        if(!(isPhone || isTablet || isDesktop)) {
+        if(!(isPhone || isTablet || isDesktop || isMac)) {
             return;
         }
 
@@ -103,7 +104,8 @@ var uaParsers = {
             deviceType: isPhone ? "phone" : isTablet ? "tablet" : "desktop",
             platform: "generic",
             version: [],
-            grade: "A"
+            grade: "A",
+            mac: isMac
         };
     },
 
@@ -381,12 +383,7 @@ var Devices = Class.inherit({
             return this._fromConfig(config);
         }
 
-        var isMac = /(mac os)/.test(ua.toLowerCase()),
-            deviceWithOS = DEFAULT_DEVICE;
-
-        deviceWithOS.mac = isMac;
-
-        return deviceWithOS;
+        return DEFAULT_DEVICE;
     },
 
     _changeOrientation: function() {

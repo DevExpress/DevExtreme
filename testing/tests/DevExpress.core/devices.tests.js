@@ -73,6 +73,13 @@ QUnit.test("android by userAgent", function(assert) {
     assert.equal(device.deviceType, "phone", "deviceType is phone");
 });
 
+QUnit.test("win8 tablet by userAgent", function(assert) {
+    var device = fromUA(userAgents.win_arm_8);
+
+    assert.equal(device.platform, "generic", "platform is generic");
+    assert.equal(device.deviceType, "tablet", "deviceType is tablet");
+});
+
 QUnit.test("win8.1 IE11 by userAgent", function(assert) {
     var device = fromUA(userAgents.win8_1_ie11);
 
@@ -142,6 +149,7 @@ QUnit.test("android tablet by device name", function(assert) {
 QUnit.test("winphone10 by userAgent", function(assert) {
     var device = fromUA(userAgents.win_phone_10);
 
+    assert.strictEqual(device.deviceType, "phone", "correct deviceType");
     assert.strictEqual(device.platform, "generic", "platform is generic because win is deprecated");
 });
 
