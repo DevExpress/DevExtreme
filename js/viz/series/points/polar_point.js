@@ -40,16 +40,18 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
         return coords;
     },
 
-    _translate: function() {
-        var that = this,
-            center = that.series.getValueAxis().getCenter(),
-            coord = that._getCoords(that.argument, that.value);
+    _translate() {
+        const that = this;
+        const center = that.series.getValueAxis().getCenter();
+        const coord = that._getCoords(that.argument, that.value);
+        const maxRadius = that._getValTranslator().translate(CANVAS_POSITION_END);
+        const normalizedRadius = isDefined(coord.radius) && coord.radius > 0 ? coord.radius : null;
 
         that.vx = normalizeAngle(coord.angle);
-        that.vy = that.radiusOuter = that.radiusLabels = coord.radius;
+        that.vy = that.radiusOuter = that.radiusLabels = normalizedRadius;
         that.radiusLabels += RADIAL_LABEL_INDENT;
 
-        that.radius = coord.radius;
+        that.radius = normalizedRadius;
         that.middleAngle = -coord.angle;
         that.angle = -coord.angle;
 
@@ -60,7 +62,11 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
 
         that._translateErrorBars();
 
-        that.inVisibleArea = true;
+        that.inVisibleArea = that._checkRadiusForVisibleArea(normalizedRadius, maxRadius);
+    },
+
+    _checkRadiusForVisibleArea(radius, maxRadius) {
+        return isDefined(radius) && radius <= maxRadius;
     },
 
     _translateErrorBars: function() {
@@ -141,10 +147,11 @@ exports.polarBarPoint = _extend({}, barPoint, {
 
     _getCoords: exports.polarSymbolPoint._getCoords,
 
-    _translate: function() {
-        var that = this,
-            translator = that._getValTranslator(),
-            maxRadius = translator.translate(CANVAS_POSITION_END);
+    _translate() {
+        const that = this;
+        const translator = that._getValTranslator();
+        const businessRange = translator.getBusinessRange();
+        const maxRadius = translator.translate(CANVAS_POSITION_END);
 
         that.radiusInner = translator.translate(that.minValue);
 
@@ -153,7 +160,9 @@ exports.polarBarPoint = _extend({}, barPoint, {
         if(that.radiusInner === null) {
             that.radiusInner = that.radius = maxRadius;
         } else if(that.radius === null) {
-            this.radius = this.value >= 0 ? maxRadius : 0;
+            that.radius = that.value >= businessRange.minVisible ? maxRadius : 0;
+        } else if(that.radius > maxRadius) {
+            that.radius = maxRadius;
         }
 
         that.radiusOuter = that.radiusLabels = _max(that.radiusInner, that.radius);
@@ -161,6 +170,10 @@ exports.polarBarPoint = _extend({}, barPoint, {
         that.radiusInner = that.defaultRadius = _math.min(that.radiusInner, that.radius);
 
         that.middleAngle = that.angle = -normalizeAngle(that.middleAngleCorrection - that.angle);
+    },
+
+    _checkRadiusForVisibleArea(radius) {
+        return isDefined(radius) || this._getValTranslator().translate(this.minValue) > 0;
     },
 
     _getErrorBarBaseEdgeLength() {
