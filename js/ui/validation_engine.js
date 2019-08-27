@@ -788,13 +788,13 @@ const ValidationEngine = {
             }
         });
         if(result.isValid && asyncRuleItems.length) {
-            result = this._validateAsyncRules(value, asyncRuleItems, result);
+            result = this._validateAsyncRules(value, asyncRuleItems, result, name);
         }
         result.status = result.pendingRules ? "pending" : (result.isValid ? "valid" : "invalid");
         return result;
     },
 
-    _validateAsyncRules(value, items, result) {
+    _validateAsyncRules(value, items, result, name) {
         const itemsToValidate = [];
         each(items, (_, item) => {
             if(typeUtils.isDefined(item.rule.isValid) && item.rule.value === value && !item.rule.reevaluate) {
@@ -808,15 +808,15 @@ const ValidationEngine = {
             itemsToValidate.push(item);
         });
         if(itemsToValidate.length) {
-            result = this._getPatchedValidationResult(result, itemsToValidate, value);
+            result = this._getPatchedValidationResult(result, itemsToValidate, value, name);
         }
         return result;
     },
 
-    _getPatchedValidationResult(result, items, value) {
+    _getPatchedValidationResult(result, items, value, name) {
         const asyncResults = [];
         result.pendingRules = [];
-        const getPatchedResult = function(result, isValid = true) {
+        const getPatchedRuleResult = function(result, isValid = true) {
             let res;
             if(typeUtils.isObject(result)) {
                 res = extend({}, result);
@@ -830,26 +830,32 @@ const ValidationEngine = {
             }
             return res;
         };
-        const updateRuleConfig = function(rule, ruleResult) {
-            if(typeUtils.isDefined(ruleResult.message) && typeUtils.isString(ruleResult.message) && ruleResult.message.length) {
-                rule.message = ruleResult.message;
-            }
+        const updateRuleConfig = (rule, ruleResult, ruleValidator) => {
             rule.isValid = ruleResult.isValid;
+            if(!ruleResult.isValid) {
+                if(typeUtils.isDefined(ruleResult.message) && typeUtils.isString(ruleResult.message) && ruleResult.message.length) {
+                    rule.message = ruleResult.message;
+                } else {
+                    this._setDefaultMessage(rule, ruleValidator, name);
+                }
+            }
         };
-        items.forEach(function(item) {
+        each(items, function(_, item) {
             result.pendingRules.push(item.rule);
             const asyncResult = item.ruleValidator.validate(value, item.rule).then(function(res) {
-                const ruleResult = getPatchedResult(res);
-                updateRuleConfig(item.rule, ruleResult);
+                const ruleResult = getPatchedRuleResult(res);
+                updateRuleConfig(item.rule, ruleResult, item.ruleValidator);
                 return ruleResult;
             }).catch(function(err) {
-                const ruleResult = getPatchedResult(err, false);
-                updateRuleConfig(item.rule, ruleResult);
+                const ruleResult = getPatchedRuleResult(err, false);
+                updateRuleConfig(item.rule, ruleResult, item.ruleValidator);
                 return ruleResult;
             });
             asyncResults.push(asyncResult);
         });
-        result.complete = Promise.all(asyncResults);
+        result.complete = Promise.all(asyncResults).then((values) => {
+            return this._getAsyncRulesResult(result, values);
+        });
         return result;
     },
 
@@ -922,20 +928,12 @@ const ValidationEngine = {
         return groupConfig.reset();
     },
 
-    getValidatorAsyncResult(validator, result, values) {
-        const curValidationResult = validator.getValidationResult();
-        if(!curValidationResult || (curValidationResult && curValidationResult.status !== "pending")) {
-            return;
-        }
-        values.forEach(function(val, index) {
+    _getAsyncRulesResult(result, values) {
+        each(values, (index, val) => {
             if(val.isValid === false) {
                 result.isValid = val.isValid;
-                result.brokenRules = result.brokenRules || [];
                 const rule = result.pendingRules[index];
-                result.brokenRules.push(rule);
-                if(!result.brokenRule) {
-                    result.brokenRule = rule;
-                }
+                this._addBrokenRule(result, rule);
             }
         });
         result.pendingRules = null;

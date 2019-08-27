@@ -23,13 +23,15 @@ const koDxValidator = Class.inherit({
     },
 
     validate() {
+        if(this._validationResult && this._validationResult.status === "pending") {
+            return this._validationResult;
+        }
         let result = ValidationEngine.validate(this.target(), this.validationRules, this.name);
         this._applyValidationResult(result);
         if(result.complete) {
-            result.complete = result.complete.then((values) => {
-                result = ValidationEngine.getValidatorAsyncResult(this, result, values);
-                this._applyValidationResult(result);
-                return result;
+            result.complete = result.complete.then(() => {
+                this._applyValidationResult(this._validationResult);
+                return this._validationResult;
             });
         }
         return result;
@@ -40,10 +42,11 @@ const koDxValidator = Class.inherit({
         const result = {
             isValid: true,
             brokenRule: null,
-            brokenRules: null,
-            status: "valid"
+            pendingRules: null,
+            status: "valid",
+            complete: null
         };
-        this.option("validationResult", result);
+        this._validationResult = result;
         this._applyValidationResult(result);
         return result;
     },
@@ -58,12 +61,7 @@ const koDxValidator = Class.inherit({
         if(result.status !== "pending") {
             this.fireEvent("validated", [result]);
         }
-    },
-
-    getValidationResult() {
-        return this._validationResult;
     }
-
 }).include(EventsMixin);
 
 

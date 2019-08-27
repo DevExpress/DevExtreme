@@ -213,6 +213,9 @@ const Validator = DOMComponent.inherit({
     * @return dxValidatorResult
     */
     validate() {
+        if(this._validationResult && this._validationResult.status === "pending") {
+            return this._validationResult;
+        }
         const adapter = this.option("adapter"),
             name = this.option("name"),
             bypass = adapter.bypass && adapter.bypass(),
@@ -230,17 +233,12 @@ const Validator = DOMComponent.inherit({
         }
         this._applyValidationResult(result, adapter);
         if(result.complete) {
-            result.complete = result.complete.then((values) => {
-                result = ValidationEngine.getValidatorAsyncResult(this, result, values);
-                this._applyValidationResult(result, adapter);
-                return result;
+            result.complete = result.complete.then(() => {
+                this._applyValidationResult(this._validationResult, adapter);
+                return this._validationResult;
             });
         }
         return result;
-    },
-
-    getValidationResult() {
-        return this._validationResult;
     },
 
     /**
@@ -253,9 +251,10 @@ const Validator = DOMComponent.inherit({
                 isValid: true,
                 brokenRule: null,
                 brokenRules: null,
-                status: "valid"
+                pendingRules: null,
+                status: "valid",
+                complete: null
             };
-        this._validationResult = result;
         adapter.reset();
         this._resetValidationRules();
         this._applyValidationResult(result, adapter);
@@ -264,8 +263,8 @@ const Validator = DOMComponent.inherit({
     _applyValidationResult(result, adapter) {
         const validatedAction = this._createActionByOption("onValidated");
         result.validator = this;
-        adapter.applyValidationResults && adapter.applyValidationResults(result);
         this._validationResult = result;
+        adapter.applyValidationResults && adapter.applyValidationResults(result);
         this.option({
             isValid: result.isValid
         });
