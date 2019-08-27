@@ -3,6 +3,7 @@ var $ = require("../../core/renderer"),
     window = windowUtils.getWindow(),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
+    dom = require("../../core/utils/dom"),
     each = require("../../core/utils/iterator").each,
     compareVersions = require("../../core/utils/version").compare,
     extend = require("../../core/utils/extend").extend,
@@ -480,6 +481,25 @@ var DateBox = DropDownEditor.inherit({
 
         $element.width(calculateWidth(longestValue, $input, this.$element()));
         this._isSizeUpdatable = true;
+    },
+
+    _calculateWidth: function(value) {
+        var IE_ROUNDING_ERROR = 10;
+        var NATIVE_BUTTONS_WIDTH = 48;
+        var $input = this._input();
+        var $longestValueElement = dom.createTextElementHiddenCopy($input, value);
+
+        $longestValueElement.appendTo(this.$element());
+        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
+            rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight),
+            leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft),
+            beforeButtonsWidth = this._$beforeButtonsContainer ? parseFloat(window.getComputedStyle(this._$beforeButtonsContainer.get(0)).width) : 0,
+            afterButtonsWidth = this._$afterButtonsContainer ? parseFloat(window.getComputedStyle(this._$afterButtonsContainer.get(0)).width) : 0;
+
+        var width = elementWidth + rightPadding + leftPadding + IE_ROUNDING_ERROR + beforeButtonsWidth + afterButtonsWidth + ($input.prop("type") !== "text" ? NATIVE_BUTTONS_WIDTH : 0);
+        $longestValueElement.remove();
+
+        return width;
     },
 
     _attachChildKeyboardEvents: function() {
