@@ -141,27 +141,9 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             });
 
 
-            const actionOffsetX = action._options.label && !this._$label ?
-                (this._isPositionLeft(this._getPosition()) ? 1 : -1) * this.initialOption("childOffset") :
-                0;
-
-            const actionOffsetY = this.initialOption("indent") + this.initialOption("childIndent") * i;
-
-            const actionPositionAtMy = action._options.label ?
-                (this._isPositionLeft(this._getPosition()) ? "left" : "right") :
-                "center";
+            action._options.position = this._setActionPosition(action, i);
 
             const actionAnimationDelay = 30;
-
-            action._options.position = {
-                of: this.$content(),
-                at: actionPositionAtMy,
-                my: actionPositionAtMy,
-                offset: {
-                    x: actionOffsetX,
-                    y: -actionOffsetY
-                }
-            };
 
             action._options.animation.show.delay = actionAnimationDelay * i;
             action._options.animation.hide.delay = actionAnimationDelay * (lastActionIndex - i);
@@ -171,6 +153,29 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
             this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options, { visible: false })));
         }
+    },
+
+    _setActionPosition(action, index) {
+        const actionOffset = this.initialOption("childOffset");
+        const actionOffsetX = action._options.label && !this._$label ?
+            (this._isPositionLeft(this._getPosition()) ? actionOffset : -actionOffset) :
+            0;
+
+        const actionOffsetY = this.initialOption("indent") + this.initialOption("childIndent") * index;
+
+        const actionPositionAtMy = action._options.label ?
+            (this._isPositionLeft(this._getPosition()) ? "left" : "right") :
+            "center";
+
+        return {
+            of: this.$content(),
+            at: actionPositionAtMy,
+            my: actionPositionAtMy,
+            offset: {
+                x: actionOffsetX,
+                y: -actionOffsetY
+            }
+        };
     },
 
     _setPosition() {
