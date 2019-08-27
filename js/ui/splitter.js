@@ -73,6 +73,7 @@ export default class SplitterControl extends Widget {
 
     _onMouseDownHandler(e) {
         e.preventDefault();
+        this._offsetX = e.offsetX <= this._$splitterBorder.width() ? e.offsetX : 0;
         this._isSplitterActive = true;
         this._cursorLastPos = e.clientX;
         this._containerWidth = this._container.width();
@@ -105,7 +106,7 @@ export default class SplitterControl extends Widget {
     }
 
     _computeLeftPanelWidth(e) {
-        this._cursorLastPos = e.pageX - this._container.offset().left;
+        this._cursorLastPos = e.pageX - this._container.offset().left - this._offsetX;
         this._cursorLastPos = Math.max(this._$splitterBorder.width(), this._cursorLastPos);
         this._cursorLastPos = Math.min(this._containerWidth - this._$splitterBorder.width(), this._cursorLastPos);
         this._cursorLastPos = Math.max(this._cursorLastPos, this._leftPanelMinWidth);
