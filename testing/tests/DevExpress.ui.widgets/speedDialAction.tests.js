@@ -413,7 +413,7 @@ QUnit.module("add label option", (hooks) => {
         }).dxSpeedDialAction("instance");
 
         assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), "first action", "FAB has label");
-        assert.ok($(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-has-label"), "FAB has class");
+        assert.ok($(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB has class");
 
         let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
@@ -427,7 +427,7 @@ QUnit.module("add label option", (hooks) => {
         $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
         assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).length, 0, "FAB hasn't label if create second SDA");
-        assert.ok(!$(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-has-label"), "FAB hasn't class if create second SDA");
+        assert.ok(!$(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB hasn't class if create second SDA");
         assert.equal($(FAB_SELECTOR).find(FAB_LABEL_SELECTOR).eq(0).text(), "first action", "first SDA has label");
         assert.equal($(FAB_SELECTOR).find(FAB_LABEL_SELECTOR).eq(1).text(), "second action", "second SDA has label");
         assert.ok(!$(FAB_SELECTOR).find(".dx-overlay-content").eq(0).hasClass(FAB_CONTENT_REVERSE_CLASS), "first SDA has label on the left");

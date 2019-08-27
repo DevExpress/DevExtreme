@@ -1,4 +1,14 @@
-.dx-fa-button-mixin(@main-action-button-size, @action-button-size, @shadow, @icon-size) {
+.dx-fa-button-mixin(
+    @main-action-button-size,
+    @action-button-size,
+    @shadow,
+    @icon-size,
+    @font-size,
+    @label-height,
+    @label-padding,
+    @label-shadow,
+    @label-offset
+) {
     .dx-fa-button {
         &.dx-fa-button-main {
             .dx-overlay-content {
@@ -31,13 +41,16 @@
                     background-color: transparent;
                 }
 
-                .dx-fa-button-label {
+                .dx-fa-button-label-wrapper {
                     position: static;
-                    background: none;
-                    color: @button-default-color;
-                    box-shadow: none;
-                    border-radius: 0;
-                    margin-right: 0;
+
+                    .dx-fa-button-label {
+                        background: none;
+                        color: @button-default-color;
+                        box-shadow: none;
+                        border-radius: 0;
+                        margin-right: 0;
+                    }
                 }
 
                 .dx-inkripple {
@@ -45,7 +58,7 @@
                 }
             }
 
-            &.dx-fa-button-has-label {
+            &.dx-fa-button-with-label {
                 .dx-overlay-content {
                     display: flex;
                     flex-direction: row-reverse;
@@ -85,6 +98,16 @@
 
             &.dx-fa-button-content-reverse {
                 flex-direction: row-reverse;
+
+                .dx-fa-button-label-wrapper {
+                    right: auto;
+                    left: @action-button-size;
+
+                    .dx-fa-button-label {
+                        margin-left: @label-offset;
+                        margin-right: auto;
+                    }
+                }
             }
 
             &.dx-state-hover {
@@ -99,11 +122,22 @@
                 }
             }
 
-            .dx-fa-button-label {
-                background-color: @speed-dial-action-bg;
-                color: @speed-dial-action-color;
-                white-space: nowrap;
-                border-radius: 4px;
+            .dx-fa-button-label-wrapper {
+                position: absolute;
+                right: @action-button-size;
+
+                .dx-fa-button-label {
+                    background-color: @speed-dial-action-bg;
+                    color: @speed-dial-action-color;
+                    white-space: nowrap;
+                    border-radius: 4px;
+                    padding: @label-padding;
+                    margin-right: @label-offset;
+                    line-height: @label-height;
+                    height: @label-height;
+                    box-shadow: @label-shadow;
+                    font-size: @font-size - 2;
+                }
             }
 
             .dx-fa-button-icon {

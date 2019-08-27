@@ -11,6 +11,7 @@ import themes from "../themes";
 const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
 const FAB_LABEL_CLASS = "dx-fa-button-label";
+const FAB_LABEL_WRAPPER_CLASS = "dx-fa-button-label-wrapper";
 const FAB_CONTENT_REVERSE_CLASS = "dx-fa-button-content-reverse";
 const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
@@ -57,10 +58,11 @@ const SpeedDialItem = Overlay.inherit({
         }
 
         const $element = $("<div>").addClass(FAB_LABEL_CLASS);
+        const $wrapper = $("<div>").addClass(FAB_LABEL_WRAPPER_CLASS);
 
-        this._$label = $element
-            .html(labelText)
-            .prependTo(this.$content());
+        this._$label = $wrapper
+            .prependTo(this.$content())
+            .append($element.text(labelText));
 
         this.$content().toggleClass(FAB_CONTENT_REVERSE_CLASS, this._isPositionLeft(this.option("parentPosition")));
     },

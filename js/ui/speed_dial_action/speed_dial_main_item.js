@@ -8,7 +8,7 @@ import SpeedDialItem from "./speed_dial_item";
 import themes from "../themes";
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
-const FAB_MAIN_CLASS_HAS_TEXT = "dx-fa-button-has-label";
+const FAB_MAIN_CLASS_WITH_LABEL = "dx-fa-button-with-label";
 const FAB_CLOSE_ICON_CLASS = "dx-fa-button-icon-close";
 const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 
@@ -71,7 +71,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
     _renderLabel() {
         this.callBase();
-        this.$element().toggleClass(FAB_MAIN_CLASS_HAS_TEXT, !!this._$label);
+        this.$element().toggleClass(FAB_MAIN_CLASS_WITH_LABEL, !!this._$label);
         this._setPosition();
     },
 
@@ -138,8 +138,18 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._clickHandler();
             });
 
+
+            const actionOffset = (this.initialOption("indent") - this.initialOption("childIndent")) / 2;
+            const actionOffsetX = action._options.label && !this._$label ?
+                (this._isPositionLeft(this._getPosition()) ? actionOffset : -actionOffset) :
+                0;
+
             const actionOffsetY = this.initialOption("indent") + this.initialOption("childIndent") * i;
-            const actionPositionAtMy = this._$label ? (this._isPositionLeft(this._getPosition()) ? "left" : "right") : "center";
+
+            const actionPositionAtMy = action._options.label ?
+                (this._isPositionLeft(this._getPosition()) ? "left" : "right") :
+                "center";
+
             const actionAnimationDelay = 30;
 
             action._options.position = {
@@ -147,7 +157,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 at: actionPositionAtMy,
                 my: actionPositionAtMy,
                 offset: {
-                    x: 0,
+                    x: actionOffsetX,
                     y: -actionOffsetY
                 }
             };
