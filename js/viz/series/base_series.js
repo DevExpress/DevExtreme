@@ -346,8 +346,6 @@ Series.prototype = {
         });
     },
 
-    getErrorBarRangeCorrector: _noop,
-
     updateDataType: function(settings) {
         var that = this;
         that.argumentType = settings.argumentType;
