@@ -141,7 +141,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             });
 
 
-            action._options.position = this._setActionPosition(action, i);
+            action._options.position = this._getActionPosition(action, i);
 
             const actionAnimationDelay = 30;
 
@@ -155,7 +155,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         }
     },
 
-    _setActionPosition(action, index) {
+    _getActionPosition(action, index) {
         const actionOffset = this.initialOption("childOffset");
         const actionOffsetX = action._options.label && !this._$label ?
             (this._isPositionLeft(this._getPosition()) ? actionOffset : -actionOffset) :
