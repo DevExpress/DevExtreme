@@ -451,6 +451,23 @@ QUnit.test("translate, both values out of visible area", function(assert) {
     assert.notOk(point.inVisibleArea);
 });
 
+QUnit.test("translate negative value, value on edge of visible area", function(assert) {
+    this.data = { argument: 1, value: -2 };
+    this.valTranslator.translate.withArgs("canvas_position_default").returns(100);
+    this.valTranslator.translate.withArgs(-2).returns(0);
+    var point = createAndDrawPoint.call(this, { type: "bar" });
+
+    assert.deepEqual(point.getMarkerCoords(), {
+        x: 100,
+        y: 200,
+        startAngle: -310,
+        endAngle: -300,
+        innerRadius: 0,
+        outerRadius: 100
+    });
+    assert.ok(point.inVisibleArea);
+});
+
 QUnit.test("draw label", function(assert) {
     var label = createLabel.call(this, { type: "bar" });
 
