@@ -234,6 +234,26 @@ QUnit.test("Data with valueErrorBar. invalid mode", function(assert) {
     assert.strictEqual(rangeData.val.categories, undefined, "Categories arg should be undefined");
 });
 
+QUnit.test("Data with valueErrorBar - some items do not have errorbar data (T808399)", function(assert) {
+    var data = getOriginalData([
+            { arg: 2, val: 10, highError: 8, lowError: 11 },
+            { arg: 5, val: 1 },
+            { arg: 13, val: 10, highError: 9, lowError: 12 }
+        ]),
+        rangeData,
+        series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "auto", highValueField: "highError", lowValueField: "lowError" } });
+    series.updateData(data);
+    series.createPoints();
+
+    rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.val.min, 1, "Min arg should be correct");
+    assert.strictEqual(rangeData.val.max, 12, "Max arg should be correct");
+    assert.strictEqual(rangeData.val.interval, undefined, "Min interval arg should be correct");
+    assert.strictEqual(rangeData.val.categories, undefined, "Categories arg should be undefined");
+});
+
 QUnit.test("Datetime.", function(assert) {
     var date1 = new Date(1000),
         date2 = new Date(2000),
