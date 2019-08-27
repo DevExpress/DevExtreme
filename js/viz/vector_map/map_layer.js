@@ -1,45 +1,47 @@
-var noop = require("../../core/utils/common").noop,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    _Number = Number,
-    _String = String,
-    _abs = Math.abs,
-    _round = Math.round,
-    _min = Math.min,
-    _max = Math.max,
-    _sqrt = Math.sqrt,
-    DataHelperMixin = require("../../data_helper"),
-    _isFunction = require("../../core/utils/type").isFunction,
-    _isDefined = require("../../core/utils/type").isDefined,
-    _isArray = Array.isArray,
-    DeferredModule = require("../../core/utils/deferred"),
-    vizUtils = require("../core/utils"),
-    _parseScalar = vizUtils.parseScalar,
-    _patchFontOptions = vizUtils.patchFontOptions,
-    _normalizeEnum = vizUtils.normalizeEnum,
-    _noop = noop,
-    _extend = extend,
-    _each = each,
-    _concat = Array.prototype.concat,
+import { noop } from "../../core/utils/common";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import DataHelperMixin from "../../data_helper";
+import { isFunction as _isFunction } from "../../core/utils/type";
+import { isDefined as _isDefined } from "../../core/utils/type";
+import DeferredModule from "../../core/utils/deferred";
+import { parseScalar as _parseScalar,
+    patchFontOptions as _patchFontOptions,
+    normalizeEnum as _normalizeEnum
+} from "../core/utils";
 
-    TYPE_AREA = "area",
-    TYPE_LINE = "line",
-    TYPE_MARKER = "marker",
+const _noop = noop;
+const _extend = extend;
+const _each = each;
+const _concat = Array.prototype.concat;
 
-    STATE_DEFAULT = 0,
-    STATE_HOVERED = 1,
-    STATE_SELECTED = 2,
-    STATE_TO_INDEX = [0, 1, 2, 2],
+const TYPE_AREA = "area";
+const TYPE_LINE = "line";
+const TYPE_MARKER = "marker";
 
-    TOLERANCE = 1,
+const STATE_DEFAULT = 0;
+const STATE_HOVERED = 1;
+const STATE_SELECTED = 2;
+const STATE_TO_INDEX = [0, 1, 2, 2];
 
-    SELECTIONS = {
-        "none": null,
-        "single": -1,
-        "multiple": NaN
-    };
+const TOLERANCE = 1;
 
-function getMaxBound(arr) {
+const SELECTIONS = {
+    "none": null,
+    "single": -1,
+    "multiple": NaN
+};
+
+const _isArray = Array.isArray;
+const _Number = Number;
+const _String = String;
+const _abs = Math.abs;
+const _round = Math.round;
+const _min = Math.min;
+const _max = Math.max;
+const _sqrt = Math.sqrt;
+
+export function getMaxBound(arr) {
     return arr.reduce((a, c) => {
         return c ? [_min(a[0], c[0]),
             _min(a[1], c[1]),
@@ -1495,7 +1497,7 @@ function projectLineLabel(coordinates) {
     return resultData || [[], []];
 }
 
-function MapLayerCollection(params) {
+export function MapLayerCollection(params) {
     var that = this,
         renderer = params.renderer;
     that._params = params;
@@ -1615,34 +1617,31 @@ MapLayerCollection.prototype = {
     }
 };
 
-exports.MapLayerCollection = MapLayerCollection;
-exports.getMaxBound = getMaxBound;
-
 ///#DEBUG
-exports._TESTS_MapLayer = MapLayer;
-exports._TESTS_stub_MapLayer = function(stub) {
+export const _TESTS_MapLayer = MapLayer;
+export const _TESTS_stub_MapLayer = function(stub) {
     MapLayer = stub;
 };
-exports._TESTS_selectStrategy = selectStrategy;
-exports._TESTS_stub_selectStrategy = function(stub) {
+export const _TESTS_selectStrategy = selectStrategy;
+export const _TESTS_stub_selectStrategy = function(stub) {
     selectStrategy = stub;
 };
-exports._TESTS_MapLayerElement = MapLayerElement;
-exports._TESTS_stub_MapLayerElement = function(stub) {
+export const _TESTS_MapLayerElement = MapLayerElement;
+export const _TESTS_stub_MapLayerElement = function(stub) {
     MapLayerElement = stub;
 };
-exports._TESTS_createProxy = createProxy;
-exports._TESTS_stub_performGrouping = function(stub) {
+export const _TESTS_createProxy = createProxy;
+export const _TESTS_stub_performGrouping = function(stub) {
     performGrouping = stub;
 };
-exports._TESTS_performGrouping = performGrouping;
-exports._TESTS_stub_groupByColor = function(stub) {
+export const _TESTS_performGrouping = performGrouping;
+export const _TESTS_stub_groupByColor = function(stub) {
     groupByColor = stub;
 };
-exports._TESTS_groupByColor = groupByColor;
-exports._TESTS_stub_groupBySize = function(stub) {
+export const _TESTS_groupByColor = groupByColor;
+export const _TESTS_stub_groupBySize = function(stub) {
     groupBySize = stub;
 };
-exports._TESTS_groupBySize = groupBySize;
-exports._TESTS_findGroupingIndex = findGroupingIndex;
+export const _TESTS_groupBySize = groupBySize;
+export const _TESTS_findGroupingIndex = findGroupingIndex;
 ///#ENDDEBUG
