@@ -38,6 +38,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             hoverStateEnabled: true,
             indent: 56,
             childIndent: 40,
+            childOffset: 9,
             callOverlayRenderShading: true
         };
 
@@ -55,7 +56,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 },
                 options: {
                     indent: 72,
-                    childIndent: 56
+                    childIndent: 56,
+                    childOffset: 8
                 }
             }
         ]);
@@ -139,9 +141,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             });
 
 
-            const actionOffset = (this.initialOption("indent") - this.initialOption("childIndent")) / 2;
             const actionOffsetX = action._options.label && !this._$label ?
-                (this._isPositionLeft(this._getPosition()) ? actionOffset : -actionOffset) :
+                (this._isPositionLeft(this._getPosition()) ? 1 : -1) * this.initialOption("childOffset") :
                 0;
 
             const actionOffsetY = this.initialOption("indent") + this.initialOption("childIndent") * i;
