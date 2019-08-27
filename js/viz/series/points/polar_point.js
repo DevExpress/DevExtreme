@@ -45,7 +45,7 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
         const center = that.series.getValueAxis().getCenter();
         const coord = that._getCoords(that.argument, that.value);
         const maxRadius = that._getValTranslator().translate(CANVAS_POSITION_END);
-        const normalizedRadius = isDefined(coord.radius) && coord.radius > 0 ? coord.radius : null;
+        const normalizedRadius = isDefined(coord.radius) && coord.radius >= 0 ? coord.radius : null;
 
         that.vx = normalizeAngle(coord.angle);
         that.vy = that.radiusOuter = that.radiusLabels = normalizedRadius;

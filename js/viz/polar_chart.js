@@ -124,7 +124,6 @@ var dxPolarChart = AdvancedChart.inherit({
         center = { x: Math.round(center.x), y: Math.round(center.y) };
 
         that._createClipCircle(panesClipRects.fixed, center.x, center.y, radius);
-        that._createClipCircle(panesClipRects.base, center.x, center.y, radius);
 
         if(that.series.some(s => s.areErrorBarsVisible())) {
             that._createClipCircle(panesClipRects.wide, center.x, center.y, radius);
@@ -147,7 +146,9 @@ var dxPolarChart = AdvancedChart.inherit({
 
     _applyExtraSettings(series) {
         const wideClipRect = this._panesClipRects.wide[0];
-        series.setClippingParams(this._panesClipRects.base[0].id, wideClipRect && wideClipRect.id, false);
+        if(wideClipRect) {
+            series.setClippingParams(null, wideClipRect.id, false);
+        }
     },
 
     _applyPointMarkersAutoHiding: _noop,
