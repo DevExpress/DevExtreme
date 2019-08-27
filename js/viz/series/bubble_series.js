@@ -13,9 +13,6 @@ var lineSeries = require("./line_series").chart.line,
 
 exports.chart = {};
 exports.chart.bubble = _extend({}, scatterSeries, {
-
-    getErrorBarRangeCorrector: _noop,
-
     _calculateErrorBars: _noop,
 
     _getMainColor: chartBarSeries._getMainColor,
