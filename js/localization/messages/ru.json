@@ -21,6 +21,8 @@
         "validation-stringLength-formatted": "Неверная длина значения в поле {0}",
         "validation-custom": "Недопустимое значение",
         "validation-custom-formatted": "Недопустимое значение: {0}",
+        "validation-async": "Недопустимое значение",
+        "validation-async-formatted": "Недопустимое значение: {0}",
         "validation-compare": "Значения полей не соответствуют друг другу.",
         "validation-compare-formatted": "Значение поля {0} не соответствует",
         "validation-pattern": "Значение не соответствует шаблону",

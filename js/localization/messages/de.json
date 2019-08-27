@@ -21,6 +21,8 @@
         "validation-stringLength-formatted": "Die Länge von {0} ist nicht korrekt",
         "validation-custom": "Der Wert ist ungültig",
         "validation-custom-formatted": "{0} ist ungültig",
+        "validation-async": "Der Wert ist ungültig",
+        "validation-async-formatted": "{0} ist ungültig",
         "validation-compare": "Der Wert ist unpassend",
         "validation-compare-formatted": "{0} ist unpassend",
         "validation-pattern": "Der Wert passt nicht zum Muster",

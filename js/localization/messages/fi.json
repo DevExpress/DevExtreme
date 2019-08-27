@@ -23,6 +23,8 @@
         "validation-stringLength-formatted": "Arvolla {0} on väärä pituus",
         "validation-custom": "Arvo on virheellinen",
         "validation-custom-formatted": "{0} on virheellinen",
+        "validation-async": "Arvo on virheellinen",
+        "validation-async-formatted": "{0} on virheellinen",
         "validation-compare": "Arvot eivät täsmää",
         "validation-compare-formatted": "{0} eivät täsmää",
         "validation-pattern": "Arvo ei vastaa mallia",

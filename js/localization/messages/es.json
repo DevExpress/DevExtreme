@@ -21,6 +21,8 @@
         "validation-stringLength-formatted": "El tamaño de {0} es incorrecto",
         "validation-custom": "Valor inválido",
         "validation-custom-formatted": "{0} inválido",
+        "validation-async": "Valor inválido",
+        "validation-async-formatted": "{0} inválido",
         "validation-compare": "Valores no coinciden",
         "validation-compare-formatted": "{0} no coinciden",
         "validation-pattern": "Valor no coincide con el patrón",

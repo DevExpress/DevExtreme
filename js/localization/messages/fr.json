@@ -23,6 +23,8 @@
         "validation-stringLength-formatted": "La longueur de {0} est incorrecte",
         "validation-custom": "La valeur est invalide",
         "validation-custom-formatted": "{0} est invalide",
+        "validation-async": "La valeur est invalide",
+        "validation-async-formatted": "{0} est invalide",
         "validation-compare": "La valeur est inappropriée",
         "validation-compare-formatted": "{0} est inappropriée",
         "validation-pattern": "La valeur ne correspond pas au modèle",

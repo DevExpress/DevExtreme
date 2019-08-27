@@ -23,6 +23,8 @@
         "validation-stringLength-formatted": "Το μήκος της τιμής του πεδίου {0} δεν είναι σωστό",
         "validation-custom": "Η τιμή είναι άκυρη",
         "validation-custom-formatted": "Η τιμή του πεδίου {0} είναι άκυρη",
+        "validation-async": "Η τιμή είναι άκυρη",
+        "validation-async-formatted": "Η τιμή του πεδίου {0} είναι άκυρη",
         "validation-compare": "Οι τιμές δεν ταιριάζουν",
         "validation-compare-formatted": "Η τιμή του πεδίου {0} δεν ταιριάζει",
         "validation-pattern": "Η τιμη δεν είναι η αναμενόμενη",
