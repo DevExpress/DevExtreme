@@ -2842,7 +2842,9 @@ module.exports = {
                 optionChanged: function(args) {
                     switch(args.name) {
                         case "editing":
-                            this._invalidate();
+                            if(!(args.fullName && args.fullName.includes("editing.popup"))) {
+                                this._invalidate();
+                            }
                             this.callBase(args);
                             break;
                         default:
