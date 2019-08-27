@@ -4368,10 +4368,12 @@ QUnit.testInActiveWindow("Ctrl + F", function(assert) {
 
     $(this.rowsView.element()).click();
 
-    var isPreventDefaultCalled = this.triggerKeyDown("F", true).preventDefault;
+    var isPreventDefaultCalled = this.triggerKeyDown("F", true).preventDefault,
+        $searchPanelElement = $(".dx-datagrid-search-panel");
 
     // assert
-    assert.ok(this.keyboardNavigationController._testHeaderPanelFocused, "search panel is focused");
+    assert.ok($searchPanelElement.hasClass("dx-state-focused"), "search panel has focus class");
+    assert.ok($searchPanelElement.find(":focus").hasClass("dx-texteditor-input"), "search panel's editor is focused");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
