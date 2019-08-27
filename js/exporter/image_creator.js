@@ -154,7 +154,7 @@ function drawImage(context, options, shared) {
 }
 
 function drawPath(context, dAttr) {
-    var dArray = dAttr.replace(/,/g, " ").split(/([A-Z])/i).filter(item => item !== ""),
+    var dArray = dAttr.replace(/,/g, " ").split(/([A-Z])/i).filter(item => item.trim() !== ""),
         i = 0,
         params,
         prevParams,
