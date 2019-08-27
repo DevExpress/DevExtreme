@@ -72,12 +72,8 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
     },
 
     render: function() {
-        if(this._preventToolbarRendering) {
-            this._preventToolbarRendering = false;
-        } else {
-            this._toolbarOptions = this._getToolbarOptions();
-            this.callBase.apply(this, arguments);
-        }
+        this._toolbarOptions = this._getToolbarOptions();
+        this.callBase.apply(this, arguments);
     },
 
     setToolbarItemDisabled: function(name, optionValue) {
@@ -118,8 +114,6 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         if(args.name === "onToolbarPreparing") {
             this._invalidate();
             args.handled = true;
-        } else if(args.fullName && args.fullName.includes("editing.popup")) {
-            this._preventToolbarRendering = true;
         }
         this.callBase(args);
     },
