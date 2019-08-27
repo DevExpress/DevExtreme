@@ -45,7 +45,6 @@ export default class AppointmentDragBehavior {
         this.scheduler.notifyObserver("hideAppointmentTooltip");
 
         const containerShift = this.getContainerShift(this.isAllDay(appointment));
-
         this.initialPosition.left += containerShift.left;
         this.initialPosition.top += containerShift.top;
 
@@ -66,6 +65,10 @@ export default class AppointmentDragBehavior {
         const container = this.scheduler._getAppointmentContainer(this.isAllDay(appointment));
         container.append(appointment);
 
+        const containerShift = this.getContainerShift(this.isAllDay(appointment));
+        this.initialPosition.left -= containerShift.left;
+        this.initialPosition.top -= containerShift.top;
+
         if(this.scheduler._escPressed) {
             args.event.cancel = true;
         } else {
@@ -74,6 +77,8 @@ export default class AppointmentDragBehavior {
                 $appointment: appointment,
                 coordinates: this.initialPosition
             });
+
+            this.initialPosition = {};
         }
     }
 
@@ -87,5 +92,11 @@ export default class AppointmentDragBehavior {
             onDrag: args => this.onDragMove(args),
             onDragEnd: args => this.onDragEnd(args)
         });
+    }
+
+    moveBack(appointment) {
+        if(this.initialPosition.left !== undefined && this.initialPosition.top !== undefined) {
+            translator.move(appointment, this.initialPosition);
+        }
     }
 }
