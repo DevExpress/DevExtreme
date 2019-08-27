@@ -77,6 +77,7 @@ export default class SplitterControl extends Widget {
         this._cursorLastPos = e.clientX;
         this._containerWidth = this._container.width();
         this._leftPanelMinWidth = this._getLeftPanelMinWidth();
+        this._leftPanelMaxWidth = this._getLeftPanelMaxWidth();
         this._$splitter.removeClass(SPLITTER_TRANSPARENT_CLASS);
     }
 
@@ -108,6 +109,9 @@ export default class SplitterControl extends Widget {
         this._cursorLastPos = Math.max(this._$splitterBorder.width(), this._cursorLastPos);
         this._cursorLastPos = Math.min(this._containerWidth - this._$splitterBorder.width(), this._cursorLastPos);
         this._cursorLastPos = Math.max(this._cursorLastPos, this._leftPanelMinWidth);
+        if(this._leftPanelMaxWidth) {
+            this._cursorLastPos = Math.min(this._cursorLastPos, this._leftPanelMaxWidth);
+        }
         return this._cursorLastPos / this._containerWidth * 100;
     }
 
@@ -116,9 +120,14 @@ export default class SplitterControl extends Widget {
         return this._getElementMinWidthRecursive(this._leftElement.length ? this._leftElement[0] : this._leftElement);
     }
 
+    _getLeftPanelMaxWidth() {
+        this._window = getWindow();
+        return this._getElementMaxWidthRecursive(this._leftElement.length ? this._leftElement[0] : this._leftElement);
+    }
+
     _getElementMinWidthRecursive(element) {
         let elementMinWidth = 0;
-        if(element && element.nodeType && element.nodeType === 1) {
+        if(this._isDomElement(element)) {
             elementMinWidth = this._window.getComputedStyle(element).minWidth;
         }
         let minWidth = isString(elementMinWidth) && elementMinWidth.indexOf("%") < 0 ? parseFloat(elementMinWidth) : 0;
@@ -129,6 +138,25 @@ export default class SplitterControl extends Widget {
             minWidth = Math.max(minWidth, this._getElementMinWidthRecursive(element.childNodes[i]));
         }
         return minWidth;
+    }
+
+    _getElementMaxWidthRecursive(element) {
+        let elementMaxWidth = 0;
+        if(this._isDomElement(element)) {
+            elementMaxWidth = this._window.getComputedStyle(element).maxWidth;
+        }
+        let maxWidth = isString(elementMaxWidth) && elementMaxWidth.indexOf("%") < 0 ? parseFloat(elementMaxWidth) : 0;
+        if(isNaN(maxWidth)) {
+            maxWidth = 0;
+        }
+        for(let i = 0; i < element.childNodes.length; i++) {
+            maxWidth = Math.max(maxWidth, this._getElementMaxWidthRecursive(element.childNodes[i]));
+        }
+        return maxWidth;
+    }
+
+    _isDomElement(element) {
+        return element && element.nodeType && element.nodeType === 1;
     }
 
 }

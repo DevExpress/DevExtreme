@@ -26,7 +26,8 @@ class FileManagerAdaptivityControl extends Widget {
             contentRenderer($drawer);
         }
 
-        this._drawer = this._createComponent($drawer, Drawer, {
+        this._drawer = this._createComponent($drawer, Drawer);
+        this._drawer.option({
             opened: true,
             template: this._createDrawerTemplate.bind(this)
         });
@@ -35,7 +36,7 @@ class FileManagerAdaptivityControl extends Widget {
     _createDrawerTemplate(container) {
         this.option("drawerTemplate")(container);
         const leftElement = container;
-        const rightElement = this.$element().find(".dx-drawer-content");
+        const rightElement = this._drawer.viewContent();
         this._splitter = this._createComponent("<div>", SplitterControl, {
             container: this.$element(),
             leftElement,
