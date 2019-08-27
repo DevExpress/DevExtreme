@@ -95,24 +95,27 @@ registerDecorator(
             }
         },
 
-        handleKeyboardEvents: function(itemIndex, focusOnList) {
-            if(this._$selectAll && this._needMoveFocus(itemIndex, focusOnList)) {
-                this._list.option("focusedElement", undefined);
-                this._selectAllCheckBox.$element().addClass(FOCUSED_STATE_CLASS);
-                return true;
-            } else {
-                this._$selectAll && this._selectAllCheckBox.$element().removeClass(FOCUSED_STATE_CLASS);
-                this._list.focusListItem(itemIndex);
-                return false;
-            }
-        },
+        handleKeyboardEvents: function(currentFocusedIndex, moveFocusUp) {
+            const moveFocusDown = !moveFocusUp;
+            const list = this._list;
+            const $selectAll = this._$selectAll;
+            const lastItemIndex = list._getLastItemIndex();
+            const isFocusOutOfList = moveFocusUp && currentFocusedIndex === 0 ||
+                moveFocusDown && currentFocusedIndex === lastItemIndex;
+            const hasSelectAllItem = !!$selectAll;
 
-        _needMoveFocus: function(itemIndex, focusOnList) {
-            return !focusOnList && (itemIndex === 0 || itemIndex === this._list._getLastItemIndex());
+            if(hasSelectAllItem && isFocusOutOfList) {
+                list.option("focusedElement", $selectAll);
+                list.scrollToItem(list.option("focusedElement"));
+
+                return true;
+            }
+
+            return false;
         },
 
         handleEnterPressing: function() {
-            if(this._$selectAll && this._selectAllCheckBox.$element().hasClass(FOCUSED_STATE_CLASS)) {
+            if(this._$selectAll && this._$selectAll.hasClass(FOCUSED_STATE_CLASS)) {
                 this._selectAllCheckBox.option("value", !this._selectAllCheckBox.option("value"));
                 return true;
             }
@@ -123,9 +126,15 @@ registerDecorator(
                 list = this._list,
                 downArrowHandler = list._supportedKeys().downArrow.bind(list);
 
-            this._selectAllCheckBox = list._createComponent($("<div>")
-                .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
-                .appendTo($selectAll), CheckBox);
+            this._selectAllCheckBox = list._createComponent(
+                $("<div>")
+                    .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
+                    .appendTo($selectAll),
+                CheckBox, {
+                    focusStateEnabled: false,
+                    hoverStateEnabled: false
+                }
+            );
 
             this._selectAllCheckBox.registerKeyHandler("downArrow", downArrowHandler);
 

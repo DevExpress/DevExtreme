@@ -2121,7 +2121,7 @@ QUnit.testInActiveWindow("No scroll on opening the header filter when the popup 
         $popupContent = that.headerFilterView.getPopupContainer().$content();
         assert.strictEqual($testElement.parent().scrollTop(), 0, "scrollTop");
         assert.ok($popupContent.is(":visible"), "visible popup");
-        assert.ok($popupContent.find(".dx-checkbox").first().hasClass("dx-state-focused"));
+        assert.ok($popupContent.find(".dx-list-select-all").first().hasClass("dx-state-focused"));
     } finally {
         fx.off = false;
         viewPortUtils.value(viewPort);

@@ -42,9 +42,7 @@ const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template";
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template";
 const FOCUSED_CLASS = "dx-state-focused";
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
-const KEY_TAB = "Tab";
 const KEY_ENTER = "Enter";
-const KEY_ESC = "Escape";
 const KEY_DOWN = "ArrowDown";
 const KEY_SPACE = " ";
 
@@ -1949,75 +1947,6 @@ QUnit.module("keyboard navigation", {
 
         const $applyButton = this.instance._popup._wrapper().find(".dx-button.dx-popup-done");
         assert.ok($applyButton.hasClass("dx-state-focused"), "the apply button is focused");
-    });
-
-    QUnit.testInActiveWindow("the 'select all' checkbox should be focused on the 'tab' key press if the input is focused and showSelectionControls if true (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        keyboardMock(this.$element.find(`.${TEXTBOX_CLASS}`))
-            .focus()
-            .press("tab");
-
-        const $selectAllCheckbox = this.instance._popup._wrapper().find(".dx-list-select-all-checkbox");
-        assert.ok($selectAllCheckbox.hasClass("dx-state-focused"), "the select all checkbox is focused");
-    });
-
-    QUnit.testInActiveWindow("the input should be focused on the 'shift+tab' key press if the select all checkbox is focused (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        const $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
-
-        $selectAllCheckbox
-            .focus()
-            .trigger($.Event("keydown", {
-                key: KEY_TAB,
-                shiftKey: true
-            }));
-
-        assert.ok(this.$element.hasClass("dx-state-focused"), "widget is focused");
-    });
-
-    QUnit.testInActiveWindow("popup should be closed on the 'esc' key press if the select all checkbox is focused", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        const $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
-
-        $selectAllCheckbox
-            .focus()
-            .trigger($.Event("keydown", {
-                key: KEY_ESC,
-                shiftKey: true
-            }));
-
-        assert.ok(this.$element.hasClass("dx-state-focused"), "widget is focused");
-        assert.notOk(this.instance.option("opened"), "popup is closed");
     });
 });
 
