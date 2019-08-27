@@ -7,7 +7,7 @@ class DiagramBar {
         this._owner = owner;
     }
     raiseBarCommandExecuted(key, parameter) {
-        this.onChanged.raise("NotifyBarCommandExecuted", parseInt(key), parameter);
+        this.onChanged.raise("notifyBarCommandExecuted", parseInt(key), parameter);
     }
 
     getCommandKeys() { // IBar.getCommandKeys(): DiagramCommand[]

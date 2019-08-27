@@ -3769,6 +3769,31 @@ QUnit.test("Insert several rows and remove they with edit mode batch", function(
     });
 });
 
+// T808395
+QUnit.test("First cell should be focused after inserting new row if startEditAction is 'dblClick'", function(assert) {
+    // arrange
+    var that = this,
+        headerPanel = this.headerPanel,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowAdding: true,
+        mode: 'batch',
+        startEditAction: "dblClick"
+    };
+
+    headerPanel.render(testElement);
+    rowsView.render(testElement);
+
+    // act
+    this.addRow();
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 1, 'first row has editor');
+});
+
 QUnit.test('Insert Row when batch editing', function(assert) {
     // arrange
     var that = this,
@@ -7204,6 +7229,32 @@ QUnit.test("Add a custom icon for the 'buttons' command column", function(assert
     assert.ok($linkElements.eq(2).hasClass("myicon"), "icon has the myicon class");
     assert.strictEqual($linkElements.eq(2).text(), "", "text of the custom link");
     assert.strictEqual($linkElements.eq(2).attr("title"), "My icon", "title of the custom link");
+});
+
+QUnit.test("Add a custom cssClass for image icons in the 'buttons' command column (T807766)", function(assert) {
+    // arrange
+    var that = this,
+        $buttonElement,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.columns.push({
+        type: "buttons",
+        buttons: [{
+            icon: "https://test.svg",
+            cssClass: "myIcon"
+        }]
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $buttonElement = $testElement.find(".dx-command-edit").first().find("img").first();
+    assert.ok($testElement.find(".dx-command-edit").first().hasClass("dx-command-edit-with-icons"), "Command edit cell has icons");
+    assert.ok($buttonElement.hasClass("myIcon"), "Custom cssClass is applied");
+    assert.ok($buttonElement.hasClass("dx-icon"), "Custom icon is created");
 });
 
 QUnit.test("Add a custom command column", function(assert) {

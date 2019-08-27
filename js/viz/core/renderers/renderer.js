@@ -2079,24 +2079,34 @@ Renderer.prototype = {
     },
 
     // appended automatically
-    clipRect: function(x, y, width, height) {
-        let that = this,
-            id = getNextDefsSvgId(),
-            clipPath = that._createElement("clipPath", { id: id }).append(that._defs),
-            rect = that.rect(x, y, width, height).append(clipPath);
-        rect.id = id;
+    clipShape: function(method, methodArgs) {
+        const that = this;
+        const id = getNextDefsSvgId();
+        let clipPath = that._createElement("clipPath", { id: id }).append(that._defs);
+        const shape = method.apply(that, methodArgs).append(clipPath);
+        shape.id = id;
 
         ///#DEBUG
-        rect.clipPath = clipPath;
+        shape.clipPath = clipPath;
         ///#ENDDEBUG
 
-        rect.remove = function() { throw "Not implemented"; };
-        rect.dispose = function() {
+        shape.remove = function() { throw "Not implemented"; };
+        shape.dispose = function() {
             clipPath.dispose();
             clipPath = null;
             return this;
         };
-        return rect;
+        return shape;
+    },
+
+    // appended automatically
+    clipRect(x, y, width, height) {
+        return this.clipShape(this.rect, arguments);
+    },
+
+    // appended automatically
+    clipCircle(x, y, radius) {
+        return this.clipShape(this.circle, arguments);
     },
 
     // appended automatically

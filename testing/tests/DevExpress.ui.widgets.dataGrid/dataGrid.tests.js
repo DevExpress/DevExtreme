@@ -6251,6 +6251,48 @@ QUnit.test("Load count on start when stateStoring enabled with search/filterRow 
     assert.deepEqual(loadFilter, [["field1", "contains", "200"], "or", ["field2", "=", 200]]);
 });
 
+// T808614
+QUnit.test("Last row should not jump after selection by click if pager has showInfo", function(assert) {
+    var data = [],
+        dataGrid,
+        $lastRowElement,
+        offset;
+
+    for(let i = 0; i < 10; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: data,
+        height: 200,
+        keyExpr: 'id',
+        selection: {
+            mode: 'single'
+        },
+        paging: {
+            enabled: true,
+            pageSize: 5
+        },
+        pager: {
+            showInfo: true
+        }
+    });
+
+    // act
+    $(dataGrid.getRowElement(0)).trigger("dxclick");
+    dataGrid.getScrollable().scrollTo({ y: 200 });
+
+    $lastRowElement = $(dataGrid.getRowElement(4));
+    offset = $lastRowElement.offset();
+
+    $lastRowElement.trigger('dxclick');
+    $lastRowElement = $(dataGrid.getRowElement(4));
+
+    // assert
+    assert.deepEqual($lastRowElement.offset(), offset, "last row offset");
+});
+
 // T489478
 QUnit.test("Console errors should not be occurs when stateStoring enabled with selectedRowKeys value", function(assert) {
     sinon.spy(errors, "log");
@@ -7747,6 +7789,43 @@ QUnit.test("Resize command column", function(assert) {
     assert.equal($(headersCols[1]).css("width"), "20px", "width of the second column - headers view");
 });
 
+// T807774
+QUnit.test("Editor should be rendered for hidden columns while editing in row mode with repaintChangesOnly", function(assert) {
+    // arrange
+    const dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        },
+        repaintChangesOnly: true,
+        columnHidingEnabled: true,
+        width: 200,
+        dataSource: [{ field1: "1", field2: "2" }]
+    }).dxDataGrid("instance");
+
+    // act
+    $(".dx-datagrid .dx-datagrid-adaptive-more")
+        .eq(0)
+        .trigger("dxclick");
+
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-edit").trigger(pointerEvents.up).click();
+    this.clock.tick();
+
+    var $firstRowEditors = $(dataGrid.getRowElement(1)).find(".dx-texteditor");
+
+    // assert
+    assert.ok($firstRowEditors.length, "row has editor");
+    assert.notOk($firstRowEditors.eq(0).parent().hasClass("dx-adaptive-item-text"), "editor's parent does not have class");
+
+    // act
+    $(dataGrid.getRowElement(0)).find(".dx-command-edit > .dx-link-cancel").trigger(pointerEvents.up).click();
+    this.clock.tick();
+
+    // assert
+    assert.notOk($(dataGrid.getRowElement(1)).find(".dx-texteditor").length, "row doesn't have editor");
+});
+
 QUnit.module("Virtual row rendering", baseModuleConfig);
 
 QUnit.test("editing should starts correctly if scrolling mode is virtual", function(assert) {
@@ -7957,6 +8036,10 @@ QUnit.test("grouping should works correctly if row rendering mode is virtual and
 var realSetTimeout = window.setTimeout;
 
 QUnit.test("ungrouping after grouping should works correctly if row rendering mode is virtual", function(assert) {
+    if(browser.msie) {
+        assert.ok(true, "This test is unstable in IE/Edge");
+        return;
+    }
     this.clock.restore();
     var done = assert.async();
     // arrange, act
@@ -10448,6 +10531,17 @@ QUnit.test("Change editing.popup option should not reload data", function(assert
 
 QUnit.module("API methods", baseModuleConfig);
 
+QUnit.test("get methods for grid without options", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({});
+
+    // act, assert
+    assert.deepEqual(dataGrid.getSelectedRowKeys(), []);
+    assert.deepEqual(dataGrid.getSelectedRowsData(), []);
+    assert.strictEqual(dataGrid.isScrollbarVisible(), false);
+    assert.strictEqual(dataGrid.getTopVisibleRowData(), undefined);
+});
+
 QUnit.test("begin custom loading", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
@@ -12324,6 +12418,63 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
     // T641332
     assert.equal($rows.find("col").get(0).style.width, "1000px", "column width in detail grid is corrent");
+});
+
+// T803571
+QUnit.test("Detail Grid should not have scroll if vertical scrollbar is shown after expand master detail", function(assert) {
+    // arrange
+    var data = [
+        { OrderID: 1 },
+        { OrderID: 2 },
+        { OrderID: 3 },
+        { OrderID: 4 },
+        { OrderID: 5 }
+    ];
+    var nestedDataGrid;
+    var dataGrid = createDataGrid({
+        width: 1000,
+        height: 400,
+        dataSource: data,
+        keyExpr: "OrderID",
+        scrolling: {
+            useNative: true
+        },
+        columns: [{
+            dataField: "OrderID",
+            fixed: true,
+            width: 100
+        }, {
+            dataField: "ShipCity",
+            width: 1000
+        }],
+        masterDetail: {
+            enabled: true,
+            template: function(container) {
+                nestedDataGrid = $("<div>").appendTo(container).dxDataGrid({
+                    columnAutoWidth: true,
+                    dataSource: data,
+                    columns: ["OrderID"]
+                }).dxDataGrid("instance");
+            }
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    dataGrid.expandRow(1);
+    this.clock.tick();
+
+    // assert
+    var $rows = $(dataGrid.getRowElement(1));
+
+    assert.equal($rows.length, 2, "two rows: main row + fixed row");
+    assert.ok($rows.eq(0).hasClass("dx-master-detail-row"), "first row is master detail");
+    assert.ok($rows.eq(1).hasClass("dx-master-detail-row"), "second row is master detail");
+    assert.equal($rows.eq(0).height(), $rows.eq(1).height(), "row heights are synchronized");
+
+    var scrollable = nestedDataGrid.getScrollable();
+    assert.equal(scrollable.clientWidth(), scrollable.scrollWidth(), "detail grid does not have scroll");
 });
 
 QUnit.test("Should update grid after error row rendered (T755293)", function(assert) {
@@ -15300,19 +15451,6 @@ QUnit.test("Rows should be synchronized after expand if column fixing is enabled
     assert.strictEqual($masterDetailRows.eq(1).find(".my-detail").length, 1, "masterDetail template is rendered");
     assert.ok($masterDetailRows.eq(1).height() > 400, "masterDetail row height is applied");
     assert.strictEqual($masterDetailRows.eq(0).height(), $masterDetailRows.eq(1).height(), "main and fixed master detail row are synchronized");
-});
-
-QUnit.module("API methods", baseModuleConfig);
-
-QUnit.test("get methods for grid without options", function(assert) {
-    // arrange
-    var dataGrid = createDataGrid({});
-
-    // act, assert
-    assert.deepEqual(dataGrid.getSelectedRowKeys(), []);
-    assert.deepEqual(dataGrid.getSelectedRowsData(), []);
-    assert.strictEqual(dataGrid.isScrollbarVisible(), false);
-    assert.strictEqual(dataGrid.getTopVisibleRowData(), undefined);
 });
 
 QUnit.module("columnWidth auto option", {

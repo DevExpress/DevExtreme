@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { DataSource } from "data/data_source/data_source";
 import { isRenderer } from "core/utils/type";
+import { createTextElementHiddenCopy } from "core/utils/dom";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import browser from "core/utils/browser";
 import config from "core/config";
@@ -2631,9 +2632,29 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const inputWidth = $input.width();
 
-        keyboardMock($input).type("te");
+        keyboardMock($input).type("test text");
 
         assert.ok($input.width() > inputWidth, "input size increase");
+    });
+
+    QUnit.test("width of input is enougth for all content", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            searchEnabled: true,
+            width: 300
+        });
+        const text = "wwwwwwwwwwwwww";
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+
+        $input.css("padding", "0 10px");
+
+        keyboardMock($input).type(text);
+        const inputWidth = $input.width();
+
+        var inputCopy = createTextElementHiddenCopy($input, text);
+        inputCopy.appendTo("#qunit-fixture");
+
+        assert.ok(inputWidth >= inputCopy.width(), "correctWidth");
+        inputCopy.remove();
     });
 
     QUnit.test("size of input is reset after selecting item", assert => {
@@ -2641,6 +2662,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: true,
             items: ["test1", "test2"]
         });
+
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const initInputWidth = $input.width();
 
@@ -2653,6 +2675,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: false,
             editEnabled: false
         });
+
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         // NOTE: width should be 0.1 because of T393423
         assert.roughEqual($input.width(), 0.1, 0.101, "input has correct width");
@@ -3044,11 +3067,12 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchMode: "startswith"
         });
         const $input = $element.find(".dx-texteditor-input");
+        const inputWidth = $input.width();
 
         keyboardMock($input)
             .type("a");
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal(parseInt($input.attr("size")), items[0].length + 2, "input size is changed for substitution");
+        assert.ok($input.width() > inputWidth, "input size is changed for substitution");
     });
 
     QUnit.test("filter should be reset after the search value clearing (T385456)", assert => {
