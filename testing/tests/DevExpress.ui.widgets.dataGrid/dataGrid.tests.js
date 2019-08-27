@@ -7340,6 +7340,25 @@ QUnit.test("Custom toolbar item should be aligned", function(assert) {
     assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-toolbar .dx-datebox").offset().top, "toolbar custom item is aligned");
 });
 
+// T809423
+QUnit.test("Toolbar should not be rerendered if editing.popup options were changed", function(assert) {
+    var onToolbarPreparingSpy = sinon.spy(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [],
+            onToolbarPreparing: function(e) {
+                onToolbarPreparingSpy();
+            },
+            editing: {
+                mode: "popup"
+            }
+        });
+
+    dataGrid.option("editing.popup", {});
+
+    assert.equal(onToolbarPreparingSpy.callCount, 1, "onToolbarPreparing call count");
+});
+
 // T558301
 QUnit.testInActiveWindow("Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled", function(assert) {
     // arrange
