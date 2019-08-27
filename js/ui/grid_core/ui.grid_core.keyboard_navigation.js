@@ -1857,7 +1857,10 @@ module.exports = {
         views: {
             rowsView: {
                 _rowClick: function(e) {
-                    this.getController("keyboardNavigation").setCellFocusType();
+                    let editRowIndex = this.getController("editing").getEditRowIndex();
+                    if(editRowIndex === e.rowIndex) {
+                        this.getController("keyboardNavigation").setCellFocusType();
+                    }
                     this.callBase.apply(this, arguments);
                 },
                 renderFocusState: function() {

@@ -302,7 +302,8 @@ QUnit.testInActiveWindow("Arrow Down key should increase focusedRowIndex", funct
 });
 
 QUnit.testInActiveWindow("Click by cell should focus the row", function(assert) {
-    var rowsView;
+    var rowsView,
+        keyboardController;
 
     // arrange
     this.$element = function() {
@@ -321,29 +322,34 @@ QUnit.testInActiveWindow("Click by cell should focus the row", function(assert) 
     this.clock.tick();
 
     rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
 
     // assert
     assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex is undefined");
     assert.equal(rowsView.getRow(0).attr("tabindex"), 0, "Tabindex row 0");
     assert.notOk(rowsView.getRow(0).hasClass("dx-cell-focus-disabled"), "Row 0 has no .dx-cell-focus-disabled");
+
     // act
-    $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+    $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
     // assert
+    assert.ok(keyboardController.isRowFocusType(), "Row focus type");
     assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
     assert.equal(rowsView.getRow(0).attr("tabindex"), undefined, "Row 0 tabindex");
     assert.notOk(rowsView.getRow(0).hasClass("dx-cell-focus-disabled"), "Row 0 has no .dx-cell-focus-disabled");
     assert.equal(rowsView.getRow(1).attr("tabindex"), 0, "Row 1 tabindex");
     assert.ok(rowsView.getRow(1).hasClass("dx-cell-focus-disabled"), "Row 1 has .dx-cell-focus-disabled");
-    assert.equal(rowsView.getRow(1).find("td").eq(0).attr("tabindex"), undefined);
+    assert.equal($(rowsView.getCellElement(1, 0)).attr("tabindex"), undefined);
+
     // act
-    $(rowsView.getRow(0).find("td").eq(0)).trigger("dxpointerdown").click();
+    $(rowsView.getCellElement(0, 0)).trigger(CLICK_EVENT).click();
     rowsView = this.gridView.getView("rowsView");
     // assert
+    assert.ok(keyboardController.isRowFocusType(), "Row focus type");
     assert.equal(this.option("focusedRowIndex"), 0, "FocusedRowIndex = 0");
     assert.equal(rowsView.getRow(0).attr("tabindex"), 0, "Row 0 tabindex");
     assert.ok(rowsView.getRow(0).hasClass("dx-cell-focus-disabled"), "Row 0 has .dx-cell-focus-disabled");
 
-    assert.equal(rowsView.getRow(0).find("td").eq(0).attr("tabindex"), undefined);
+    assert.equal($(rowsView.getCellElement(0, 0)).attr("tabindex"), undefined);
     assert.equal(rowsView.getRow(1).attr("tabindex"), undefined, "Row 1 tabindex");
     assert.notOk(rowsView.getRow(1).hasClass("dx-cell-focus-disabled"), "Row 1 has no .dx-cell-focus-disabled");
 });
@@ -596,6 +602,53 @@ QUnit.testInActiveWindow("RightArrow key should focus the cell", function(assert
     assert.equal(rowsView.getRow(1).find("td").eq(1).attr("tabindex"), 0, "Cell[1,1] has tabindex");
 });
 
+QUnit.testInActiveWindow("ArrowUp / ArrowDown should not change focus type", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: true
+    };
+
+    this.data = [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Dan", phone: "553355", room: 2 },
+        { name: "Ben", phone: "6666666", room: 3 }
+    ];
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex");
+
+    // act
+    $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT).click();
+    // assert
+    assert.ok(this.keyboardNavigationController.isRowFocusType(), "Row focus type");
+
+    // act
+    this.triggerKeyDown("upArrow", false, false, $(rowsView.getCellElement(1, 0)));
+    this.clock.tick();
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 0, "FocusedRowIndex");
+    assert.ok(this.keyboardNavigationController.isRowFocusType(), "Row focus type");
+
+    // act
+    this.triggerKeyDown("downArrow", false, false, $(rowsView.getCellElement(0, 0)));
+    this.clock.tick();
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex");
+    assert.ok(this.keyboardNavigationController.isRowFocusType(), "Row focus type");
+});
+
 QUnit.testInActiveWindow("Focus row by click if virtual scrolling mode", function(assert) {
     var rowsView;
 
@@ -638,7 +691,7 @@ QUnit.testInActiveWindow("Focus row by click if virtual scrolling mode", functio
     // assert
     assert.equal(this.option("focusedRowIndex"), undefined, "FocusedRowIndex is undefined");
     // act
-    $(rowsView.getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+    $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
     // assert
     assert.equal(this.option("focusedRowIndex"), 3, "FocusedRowIndex = 3");
     assert.ok(this.keyboardNavigationController.isRowFocusType(), "Row focus type");
