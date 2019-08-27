@@ -248,39 +248,46 @@ const ValidationSummary = CollectionWidget.inherit({
         const isValid = itemValidationResult.isValid,
             validator = itemValidationResult.validator,
             brokenRules = itemValidationResult.brokenRules;
-        let items = this.option("items");
+        let items = this.option("items"),
+            itemsChanged = false;
 
-        if(isValid) {
-            let itemIndex = 0;
-            while(itemIndex < items.length) {
-                const item = items[itemIndex];
-                if(item.validator === validator) {
+        let itemIndex = 0;
+        while(itemIndex < items.length) {
+            const item = items[itemIndex];
+            if(item.validator === validator) {
+                const foundRule = grep(brokenRules || [], function(rule) {
+                    return rule.index === item.index;
+                })[0];
+                if(isValid || !foundRule) {
                     items.splice(itemIndex, 1);
+                    itemsChanged = true;
                     continue;
                 }
-                itemIndex++;
+                if(foundRule.message !== item.text) {
+                    item.text = foundRule.message;
+                    itemsChanged = true;
+                }
             }
-        } else {
-            iteratorUtils.each(brokenRules, function(_, rule) {
-                const foundItem = grep(items, function(item) {
-                    return item.validator === validator && item.index === rule.index;
-                })[0];
-                if(foundItem && foundItem.text !== rule.message) {
-                    foundItem.text = rule.message;
-                    return true;
-                }
-                if(!foundItem) {
-                    items.push({
-                        text: rule.message,
-                        validator: validator,
-                        index: rule.index
-                    });
-                }
-            });
+            itemIndex++;
         }
+        iteratorUtils.each(brokenRules, function(_, rule) {
+            const foundItem = grep(items, function(item) {
+                return item.validator === validator && item.index === rule.index;
+            })[0];
+            if(!foundItem) {
+                items.push({
+                    text: rule.message,
+                    validator: validator,
+                    index: rule.index
+                });
+                itemsChanged = true;
+            }
+        });
 
-        items = this._getOrderedItems(this.validators, items);
-        this.option("items", items);
+        if(itemsChanged) {
+            items = this._getOrderedItems(this.validators, items);
+            this.option("items", items);
+        }
     },
 
     _initMarkup() {
