@@ -195,7 +195,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
 
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[1], {
+        assert.deepEqual(this.log[2], {
             format: "mention",
             position: 0,
             value: {
@@ -215,7 +215,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
 
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[1], {
+        assert.deepEqual(this.log[2], {
             format: "mention",
             position: 0,
             value: {
@@ -235,7 +235,12 @@ QUnit.module("Mentions module", moduleConfig, () => {
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
         assert.deepEqual(this.log, [{
-            index: 0, // go to start of typing and remove the marker
+            index: 0, // insert space after the mention
+            text: " ",
+            operation: "insertText",
+            source: "silent"
+        }, {
+            index: 1, // remove the marker
             length: 1,
             operation: "deleteText"
         }, {
@@ -246,11 +251,6 @@ QUnit.module("Mentions module", moduleConfig, () => {
                 id: "Alex",
                 value: "Alex manager"
             }
-        }, {
-            index: 1, // insert space after the mention
-            text: " ",
-            operation: "insertText",
-            source: "silent"
         }, {
             index: 2, // restore selection
             operation: "setSelection"
@@ -333,7 +333,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         $items.first().trigger("dxclick");
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[1], {
+        assert.deepEqual(this.log[2], {
             format: "mention",
             position: 0,
             value: {
@@ -352,7 +352,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         $items.first().trigger("dxclick");
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[5], {
+        assert.deepEqual(this.log[6], {
             format: "mention",
             position: 0,
             value: {
@@ -474,7 +474,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
             this.$element.trigger($.Event("keydown", { key, which: code }));
             this.clock.tick();
 
-            assert.deepEqual(this.log[1], {
+            assert.deepEqual(this.log[2], {
                 format: "mention",
                 position: 0,
                 value: {
