@@ -22,6 +22,8 @@
     @GRID_COMMAND_ADAPTIVE_COLUMN_WIDTH: 36px;
     @GRID_COLUMN_HEADER_INDICATOR_WIDTH: 14px;
     @GRID_TEXT_CONTENT_MARGIN: 3px;
+    @GRID_SORT_INDEX_WIDTH: 12px;
+    @GRID_SORT_INDEX_OFFSET: 3px;
 
     .dx-@{widgetName}-checkbox-size {
         vertical-align: middle;
@@ -123,6 +125,13 @@
 
             &.dx-visibility-hidden {
                 visibility: hidden;
+            }
+
+            .dx-sort-index-icon {
+                padding-right: @GRID_SORT_INDEX_OFFSET;
+                margin-left: -@GRID_SORT_INDEX_OFFSET;
+                width: @GRID_SORT_INDEX_WIDTH + @GRID_SORT_INDEX_OFFSET;
+                font-weight: 500;
             }
 
             .dx-sort,
@@ -325,6 +334,10 @@
             .dx-column-indicators .dx-sort {
                 &.dx-sort-none {
                     display: none;
+                }
+
+                &.dx-sort-index {
+                    width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH + @GRID_SORT_INDEX_WIDTH;
                 }
             }
         }
@@ -588,6 +601,22 @@
 
         .dx-sort-indicator.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
             max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + @GRID_TEXT_CONTENT_MARGIN*2));
+        }
+
+        .dx-sort-indicator.dx-sort-index-indicator {
+            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
+
+            &.dx-header-filter-indicator {
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
+            }
+
+            &.dx-text-content-alignment-left.dx-text-content-alignment-right {
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN*2 + @GRID_SORT_INDEX_WIDTH));
+            }
+
+            &.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + @GRID_TEXT_CONTENT_MARGIN*2 + @GRID_SORT_INDEX_WIDTH));
+            }
         }
     }
 
