@@ -6726,9 +6726,7 @@ QUnit.test("Toolbar should not be rerendered if editing.popup options were chang
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [],
-            onToolbarPreparing: function(e) {
-                onToolbarPreparingSpy();
-            },
+            onToolbarPreparing: onToolbarPreparingSpy,
             editing: {
                 mode: "popup"
             }
