@@ -194,6 +194,7 @@ QUnit.test("Internal validation rules are should be reset when validation rules 
 
     assert.deepEqual(validator._getValidationRules(), [
         {
+            index: 0,
             isValid: undefined,
             message: "Value is invalid",
             type: "custom",
@@ -383,7 +384,7 @@ QUnit.module("Events", {
 QUnit.test("Validated event should fire", function(assert) {
     var value = "",
         name = "Login",
-        expectedFailedValidationRule = { type: 'required', isValid: false, message: "Login is required", validator: {}, value: value },
+        expectedFailedValidationRule = { index: 0, type: 'required', isValid: false, message: "Login is required", validator: {}, value: value },
         handler = sinon.stub();
 
 
@@ -405,6 +406,7 @@ QUnit.test("Validated event should fire", function(assert) {
     assert.equal(params.name, name, "Name of Validator should be passed");
     assert.strictEqual(params.isValid, false, "isValid was passed");
     assert.deepEqual(params.validationRules, [{
+        index: 0,
         isValid: false,
         message: "Login is required",
         type: "required",
