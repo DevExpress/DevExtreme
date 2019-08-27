@@ -6,11 +6,13 @@ class ExcelJSTestHelper {
     }
 
     checkCustomizeCell(eventArgs, expectedArgs, callIndex) {
-        let expectedAddress = expectedArgs[callIndex].excelCell;
-        assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, eventArgs.cell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
+        const { gridCell, excelCell } = eventArgs;
+        const expectedAddress = expectedArgs[callIndex].excelCell;
 
-        let expectedColumn = expectedArgs[callIndex].gridCell.column;
-        let actualColumn = eventArgs.gridCell.column;
+        assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, excelCell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
+
+        const expectedColumn = expectedArgs[callIndex].gridCell.column;
+        const actualColumn = gridCell.column;
 
         assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${callIndex}`);
         assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${callIndex}`);
@@ -19,9 +21,13 @@ class ExcelJSTestHelper {
 
         const gridCellSkipProperties = ["column"];
 
-        for(const propertyName in expectedArgs[callIndex].gridCell) {
+        for(const propertyName in gridCell) {
             if(gridCellSkipProperties.indexOf(propertyName) === -1) {
-                assert.strictEqual(eventArgs.gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                if(propertyName === "groupSummaryItems") {
+                    assert.deepEqual(gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                } else {
+                    assert.strictEqual(gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                }
             }
         }
     }
@@ -52,18 +58,22 @@ class ExcelJSTestHelper {
         assert.equal(this.worksheet.actualColumnCount, actual.column, "worksheet.actualColumnCount");
     }
 
-    _extendCellArgs(cellArgs, values, topLeft) {
-        let row = 0;
-        let cell = 0;
+    _extendExpectedCustomizeCellArgs(argsArray, expectedRows, topLeft) {
+        for(let rowIndex = 0; rowIndex < expectedRows.length; rowIndex++) {
+            const columnCount = expectedRows[rowIndex].values.length;
 
-        cellArgs.forEach((item) => {
-            item.excelCell = { row: topLeft.row + row, column: topLeft.column + cell };
-            item.gridCell.value = values[row].values[cell];
+            for(let columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+                let args = argsArray[rowIndex * columnCount + columnIndex];
 
-            if(values[0].values.length - cell === 1) { row++; cell = 0; } else { cell++; }
-        });
-
-        return cellArgs;
+                args.excelCell = {
+                    row: rowIndex + topLeft.row,
+                    column: columnIndex + topLeft.column,
+                };
+                if(!("value" in args.gridCell)) {
+                    args.gridCell.value = expectedRows[rowIndex].values[columnIndex];
+                }
+            }
+        }
     }
 }
 

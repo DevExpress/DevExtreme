@@ -1,7 +1,7 @@
-import typeUtils from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 
 export default function exportDataGrid(options) {
-    if(!typeUtils.isDefined(options)) return;
+    if(!isDefined(options)) return;
 
     let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled } = options;
 
@@ -50,20 +50,16 @@ export default function exportDataGrid(options) {
 function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell) {
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
-        const cell = row.getCell(startColumnIndex + cellIndex);
+        const gridCell = cellData.cellSourceData;
 
-        cell.value = cellData.value;
+        const excelCell = row.getCell(startColumnIndex + cellIndex);
+        excelCell.value = cellData.value;
 
-        if(typeUtils.isDefined(customizeCell)) {
+        if(isDefined(customizeCell)) {
             customizeCell({
-                cell: cell,
-                gridCell: {
-                    column: cellData.cellSourceData.column,
-                    rowType: cellData.cellSourceData.rowType,
-                    data: cellData.cellSourceData.data,
-                    value: cellData.value,
-                    groupIndex: cellData.cellSourceData.groupIndex
-                }
+                cell: excelCell,
+                excelCell: excelCell,
+                gridCell: gridCell
             });
         }
     }
