@@ -213,9 +213,9 @@ class MentionModule extends PopupModule {
         };
 
         setTimeout(function() {
-            this.quill.deleteText(startIndex, textLength, SILENT_ACTION);
+            this.quill.insertText(startIndex, ' ', SILENT_ACTION);
+            this.quill.deleteText(startIndex + 1, textLength, SILENT_ACTION);
             this.quill.insertEmbed(startIndex, "mention", value);
-            this.quill.insertText(startIndex + 1, ' ', SILENT_ACTION);
             this.quill.setSelection(startIndex + 2);
         }.bind(this));
     }
@@ -368,7 +368,6 @@ class MentionModule extends PopupModule {
             pageX: leftOffset + mentionLeft,
             pageY: topOffset + mentionTop
         });
-
         return {
             of: positionEvent,
             offset: {
