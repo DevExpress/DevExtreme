@@ -681,10 +681,10 @@ QUnit.test("crosshair should not be enabled", function(assert) {
     assert.ok(this.createSimplePolarChart(), "chart was successful created");
 });
 
-QUnit.test("ClipPaths. Clipping params of series not defined if has no wide clip path", function(assert) {
+QUnit.test("ClipPaths. Hide series by pane clip path (out visual range)", function(assert) {
     var chart = this.createSimplePolarChart({});
 
-    assert.equal(chart.series[0].setClippingParams.callCount, 0);
+    assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ["DevExpress_3", null, false, false]);
 });
 
 QUnit.test("ClipPaths. Hide constant lines and strips (out visual range)", function(assert) {
@@ -704,5 +704,5 @@ QUnit.test("ClipPaths. Hide error bars (out visual range)", function(assert) {
             valueErrorBar: {}
         }] });
 
-    assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, [null, "DevExpress_3", false]);
+    assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ["DevExpress_3", "DevExpress_4", false, false]);
 });
