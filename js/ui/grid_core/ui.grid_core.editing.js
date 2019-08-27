@@ -2036,6 +2036,10 @@ var EditingController = modules.ViewController.inherit((function() {
                     $button.attr("title", button.hint);
                 }
 
+                if(that.option("useKeyboard")) {
+                    $button.attr("tabindex", -1);
+                }
+
                 eventsEngine.on($button, addNamespace("click", EDITING_NAMESPACE), that.createAction(function(e) {
                     button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
                     e.event.preventDefault();
