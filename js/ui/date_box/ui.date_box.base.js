@@ -3,6 +3,7 @@ var $ = require("../../core/renderer"),
     window = windowUtils.getWindow(),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
+    dom = require("../../core/utils/dom"),
     each = require("../../core/utils/iterator").each,
     compareVersions = require("../../core/utils/version").compare,
     extend = require("../../core/utils/extend").extend,
@@ -62,19 +63,7 @@ var isRealWidthSet = function($element) {
 var calculateWidth = function(value, $input, $element) {
     var IE_ROUNDING_ERROR = 10;
     var NATIVE_BUTTONS_WIDTH = 48;
-    var $longestValueElement = $("<div>").text(value).css({
-        "fontStyle": $input.css("fontStyle"),
-        "fontVariant": $input.css("fontVariant"),
-        "fontWeight": $input.css("fontWeight"),
-        "fontSize": $input.css("fontSize"),
-        "fontFamily": $input.css("fontFamily"),
-        "letterSpacing": $input.css("letterSpacing"),
-        "border": $input.css("border"),
-        "visibility": "hidden",
-        "whiteSpace": "nowrap",
-        "position": "absolute",
-        "float": "left"
-    });
+    var $longestValueElement = dom.createTextElementHiddenCopy($input, value);
 
     $longestValueElement.appendTo($element);
     var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
