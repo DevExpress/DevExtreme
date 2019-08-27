@@ -41,10 +41,7 @@ const toMs = dateUtils.dateToMilliseconds;
 var SchedulerAppointments = CollectionWidget.inherit({
     ctor: function(element, options) {
         this.callBase(element, options);
-
-        if(this.option("allowDrag")) {
-            this.dragBehavior = new AppointmentDragBehavior(this);
-        }
+        this.dragBehavior = new AppointmentDragBehavior(this);
     },
 
     _supportedKeys: function() {
@@ -559,7 +556,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 }
             });
 
-            this.dragBehavior && this.dragBehavior.addTo($appointment);
+            this.option("allowDrag") && this.dragBehavior.addTo($appointment);
         }
     },
 
@@ -957,6 +954,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var $appointment = this._$currentAppointment,
             size = this._initialSize,
             coords = this._initialCoordinates;
+
+        this.dragBehavior.moveBack($appointment);
 
         if($appointment) {
             if(coords) {
