@@ -220,6 +220,29 @@ class MentionModule extends PopupModule {
         }.bind(this));
     }
 
+    _getLastInsertOperation(ops) {
+        const lastOperation = ops[ops.length - 1];
+        const isLastOperationInsert = 'insert' in lastOperation;
+
+        if(isLastOperationInsert) {
+            return lastOperation;
+        }
+
+        const isLastOperationDelete = 'delete' in lastOperation;
+
+        if(isLastOperationDelete && ops.length >= 2) {
+            const penultOperation = ops[ops.length - 2];
+            const isPenultOperationInsert = 'insert' in penultOperation;
+            const isSelectionReplacing = isLastOperationDelete && isPenultOperationInsert;
+
+            if(isSelectionReplacing) {
+                return penultOperation;
+            }
+        }
+
+        return null;
+    }
+
     onTextChange(newDelta, oldDelta, source) {
         if(source === USER_ACTION) {
             const lastOperation = newDelta.ops[newDelta.ops.length - 1];
@@ -227,7 +250,12 @@ class MentionModule extends PopupModule {
             if(this._isMentionActive) {
                 this._processSearchValue(lastOperation) && this._filterList(this._searchValue);
             } else {
-                this.checkMentionRequest(lastOperation, newDelta.ops);
+                const { ops } = newDelta;
+                const lastInsertOperation = this._getLastInsertOperation(ops);
+
+                if(lastInsertOperation) {
+                    this.checkMentionRequest(lastInsertOperation, ops);
+                }
             }
         }
     }

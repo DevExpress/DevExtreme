@@ -281,6 +281,20 @@ QUnit.module("Mentions module", moduleConfig, () => {
         assert.ok(showPopupSpy.calledOnce, "Show popup with suggestion list");
     });
 
+    test("Should appear after type a marker that replaces a selected text (T730303)", (assert) => {
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
+        const showPopupSpy = sinon.spy(mention._popup, "show");
+
+        const replaceAllDelta = { ops: [{ insert: "@" }, { delete: 2 }] };
+        const replaceLastWordDelta = { ops: [{ retain: 5 }, { insert: "@" }, { delete: 1 }] };
+
+        mention.onTextChange(replaceLastWordDelta, {}, "user");
+        assert.ok(showPopupSpy.calledOnce);
+
+        mention.onTextChange(replaceAllDelta, {}, "user");
+        assert.ok(showPopupSpy.calledTwice);
+    });
+
     test("display expression should be used in the suggestion list", (assert) => {
         const mention = new Mentions(this.quillMock, this.complexDataOptions);
 
