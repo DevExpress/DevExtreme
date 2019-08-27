@@ -3775,8 +3775,9 @@ QUnit.test("Scroll to element by focus", function(assert) {
     // arrange
     var testElement = $("#container"),
         rowsView = this.createRowsView(this.items, null, null, null, {
-            useKeyboard: true,
-            keyboardNavigation: { enabled: true },
+            keyboardNavigation: {
+                enabled: true
+            },
             columnAutoWidth: true
         }),
         isScrollTo,

@@ -99,7 +99,7 @@ module.exports = {
     },
 
     registerKeyboardAction: function(viewName, instance, $element, selector, action, executeKeyDown) {
-        if(instance.option("useLegacyKeyboardNavigation") || !instance.option("useKeyboard")) {
+        if(instance.option("useLegacyKeyboardNavigation")) {
             return;
         }
 

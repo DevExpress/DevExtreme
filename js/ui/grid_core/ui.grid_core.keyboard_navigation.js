@@ -256,10 +256,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
             clickAction = that.createAction(that._clickHandler),
             rowsView = that.getView("rowsView");
 
-        if(!rowsView || !rowsView.isVisible()) {
-            return;
-        }
-
         rowsView.renderCompleted.add(function(e) {
             var $element = rowsView.element(),
                 isFullUpdate = !e || e.changeType === "refresh",
@@ -1521,7 +1517,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var that = this;
 
         switch(args.name) {
-            case "useKeyboard":
             case "keyboardNavigation":
             case "useLegacyKeyboardNavigation":
                 args.handled = true;
@@ -1532,7 +1527,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     isKeyboardEnabled: function() {
-        return this.option("keyboardNavigation.enabled") && this.option("useKeyboard");
+        return this.option("keyboardNavigation.enabled");
     },
 
     dispose: function() {
@@ -1665,14 +1660,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            /**
-             * @name GridBaseOptions.useKeyboard
-             * @type boolean
-             * @deprecated GridBaseOptions.keyboardNavigation.enabled
-             * @default true
-             */
-            useKeyboard: true,
-
             useLegacyKeyboardNavigation: false,
 
             /**

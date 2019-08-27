@@ -1510,7 +1510,6 @@ QUnit.testInActiveWindow("Focus on a filtering cell after editing cell in 'batch
 
     that.options = {
         showColumnHeaders: true,
-        useKeyboard: true,
         keyboardNavigation: {
             enabled: true
         },
@@ -1573,7 +1572,6 @@ QUnit.testInActiveWindow("Focus on dxLookup editor", function(assert) {
         $testElement = $('#container');
 
     that.options = {
-        useKeyboard: true,
         keyboardNavigation: {
             enabled: true
         },
@@ -1622,7 +1620,6 @@ QUnit.testInActiveWindow("Focus on dxTextArea editor", function(assert) {
         $testElement = $('#container');
 
     that.options = {
-        useKeyboard: true,
         keyboardNavigation: {
             enabled: true
         },

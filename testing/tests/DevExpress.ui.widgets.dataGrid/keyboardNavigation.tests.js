@@ -198,7 +198,6 @@ QUnit.module("Keyboard navigation", {
             };
 
         that.options = {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             },
@@ -294,16 +293,6 @@ QUnit.test("Is keyboard enabled", function(assert) {
     assert.ok(navigation.isKeyboardEnabled());
 
     // act
-    navigation.option("useKeyboard", false);
-    // assert
-    assert.notOk(navigation.isKeyboardEnabled());
-
-    // act
-    navigation.option("useKeyboard", true);
-    // assert
-    assert.ok(navigation.isKeyboardEnabled());
-
-    // act
     navigation.option("keyboardNavigation.enabled", false);
     // assert
     assert.notOk(navigation.isKeyboardEnabled());
@@ -316,7 +305,6 @@ QUnit.test("Is keyboard enabled", function(assert) {
 
 QUnit.testInActiveWindow("Focused views is not initialized when enableKeyboardNavigation is false", function(assert) {
     // arrange
-    this.options.useKeyboard = false;
     this.options.keyboardNavigation = {
         enabled: false
     };
@@ -1061,7 +1049,6 @@ function setupModules(that, modulesOptions) {
     ];
 
     that.options = $.extend(true, { tabIndex: 0 }, that.options, {
-        useKeyboard: true,
         keyboardNavigation: {
             enabled: true,
             enterKeyAction: "startEdit",
@@ -1407,7 +1394,6 @@ QUnit.testInActiveWindow("Update focus when row is editing with form_T306378", f
     };
 
     this.options = {
-        useKeyboard: true,
         keyboardNavigation: {
             enabled: true,
             enterKeyAction: "startEdit",
@@ -3397,7 +3383,6 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
     };
 
     this.options = {
-        useKeyboard: true,
         keyboardNavigation: {
             enabled: true
         },
@@ -3447,7 +3432,6 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
     };
 
     this.options = {
-        useKeyboard: true,
         keyboardNavigation: {
             enabled: true
         },
@@ -4986,7 +4970,6 @@ QUnit.module("Rows view", {
 
             this.options = {
                 disabled: false,
-                useKeyboard: true,
                 keyboardNavigation: {
                     enabled: true
                 },
@@ -5205,7 +5188,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         };
 
         this.options = $.extend(true, {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             },
@@ -5239,7 +5221,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         };
 
         this.options = {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             },
@@ -5285,7 +5266,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
                 showCheckBoxesMode: "none"
             },
             focusedRowEnabled: true,
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             }
@@ -5309,7 +5289,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
                 mode: "multiple",
                 showCheckBoxesMode: "onClick"
             },
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             }
@@ -5337,7 +5316,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
                 mode: "multiple",
                 showCheckBoxesMode: "onClick"
             },
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             }
@@ -5367,7 +5345,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         };
 
         this.options = {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             },
@@ -5399,7 +5376,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         };
 
         this.options = {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             },
@@ -5429,7 +5405,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         };
 
         this.options = {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             },
@@ -5464,7 +5439,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         };
 
         this.options = {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             },
@@ -5527,7 +5501,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         };
 
         this.options = {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             },
@@ -6283,7 +6256,6 @@ QUnit.module("Customize keyboard navigation", {
             { dataField: "phone", dataType: "number" }
         ];
         this.options = $.extend(true, {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true,
                 enterKeyAction: "startEdit",
@@ -9022,7 +8994,6 @@ QUnit.module("Keyboard navigation accessibility", {
             { dataField: "phone", dataType: "number" }
         ];
         this.options = $.extend(true, {
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true,
                 dataCellsOnly: false

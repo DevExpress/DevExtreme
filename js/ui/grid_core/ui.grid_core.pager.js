@@ -69,7 +69,7 @@ var PagerView = modules.View.inherit({
                 },
                 onKeyDown: e => keyboardController && keyboardController.executeAction("onKeyDown", e),
                 useLegacyKeyboardNavigation: this.option("useLegacyKeyboardNavigation"),
-                useKeyboard: keyboardController && keyboardController.isKeyboardEnabled()
+                useKeyboard: this.option("keyboardNavigation.enabled")
             };
 
         if(isDefined(pagerOptions.infoText)) {

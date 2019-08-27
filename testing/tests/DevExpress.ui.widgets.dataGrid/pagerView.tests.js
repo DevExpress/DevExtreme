@@ -31,7 +31,6 @@ QUnit.module("Pager", {
                 allowedPageSizes: [2, 7, 9],
                 showPageSizeSelector: true
             },
-            useKeyboard: true,
             keyboardNavigation: {
                 enabled: true
             }

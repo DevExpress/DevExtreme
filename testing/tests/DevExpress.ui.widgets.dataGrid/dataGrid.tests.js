@@ -16335,8 +16335,21 @@ QUnit.testInActiveWindow("Focus on edited cell after the edit button in command 
 QUnit.test("Deprecated options test", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid();
+
     // assert
     assert.ok(dataGrid._deprecatedOptions.useKeyboard, "useKeyboard deprecated");
+    assert.equal(dataGrid.option("useKeyboard"), true);
+    assert.equal(dataGrid.option("keyboardNavigation.enabled"), true);
+
+    // act
+    dataGrid.option("useKeyboard", false);
+    // assert
+    assert.equal(dataGrid.option("keyboardNavigation.enabled"), false, "keyboardNavigation.enabled mapping");
+
+    // act
+    dataGrid.option("keyboardNavigation.enabled", true);
+    // assert
+    assert.equal(dataGrid.option("useKeyboard"), true, "useKeyboard mapping");
 });
 
 QUnit.module("Editing", baseModuleConfig);
