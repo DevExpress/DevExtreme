@@ -2715,8 +2715,8 @@ function checkHeaderWidths(assert, that, options, widthDiffs) {
     headerCellWidth = $headerCell.width();
 
     // assert
-    assert.equal(Math.ceil(headerCellWidth), Math.ceil(etalonHeaderCellWidth + widthDiffs.cellWidthDiff), "header cell width");
-    assert.equal(Math.ceil(headerCellTextWidth), Math.ceil(etalonHeaderCellTextWidth + widthDiffs.textContentWidthDiff), "header text width");
+    assert.equal(Math.floor(headerCellWidth), Math.floor(etalonHeaderCellWidth + widthDiffs.cellWidthDiff), "header cell width");
+    assert.equal(Math.floor(headerCellTextWidth), Math.floor(etalonHeaderCellTextWidth + widthDiffs.textContentWidthDiff), "header text width");
 
     // act
     that.columnOption(1, "sortOrder", "asc");
@@ -2727,8 +2727,8 @@ function checkHeaderWidths(assert, that, options, widthDiffs) {
     headerCellWidth = $headerCell.width();
 
     // assert
-    assert.equal(Math.ceil(headerCellWidth), Math.ceil(etalonHeaderCellWidth), "header cell width");
-    assert.equal(Math.ceil(headerCellTextWidth), Math.ceil(etalonHeaderCellTextWidth), "header text width");
+    assert.equal(Math.floor(headerCellWidth), Math.floor(etalonHeaderCellWidth), "header cell width");
+    assert.equal(Math.floor(headerCellTextWidth), Math.floor(etalonHeaderCellTextWidth), "header text width");
 }
 
 QUnit.test("Check header widths", function(assert) {
