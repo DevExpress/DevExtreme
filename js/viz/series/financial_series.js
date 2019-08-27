@@ -20,8 +20,6 @@ exports.stock = _extend({}, scatterSeries, {
 
     _getOptionsForPoint: barSeries._getOptionsForPoint,
 
-    getErrorBarRangeCorrector: _noop,
-
     _createErrorBarGroup: _noop,
 
     areErrorBarsVisible: _noop,
