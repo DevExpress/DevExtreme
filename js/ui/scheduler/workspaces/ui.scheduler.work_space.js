@@ -949,15 +949,6 @@ var SchedulerWorkSpace = Widget.inherit({
         this.callBase();
         this._renderDateTimeIndication();
         this._setIndicationUpdateInterval();
-
-        this._setFixedContainerPosition();
-    },
-
-    _setFixedContainerPosition: function() {
-        var value = $("." + SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS).css("marginLeft");
-        if(value) {
-            this._$fixedContainer && this._$fixedContainer.css("left", value);
-        }
     },
 
     _toggleGroupedClass: function() {
