@@ -5,7 +5,7 @@ const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
 export default function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, exportColumnWidths = true } = options;
+    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, exportColumnWidth = true } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -25,7 +25,7 @@ export default function exportDataGrid(options) {
             let headerRowCount = dataProvider.getHeaderRowCount();
             let dataRowsCount = dataProvider.getRowsCount();
 
-            if(exportColumnWidths) {
+            if(exportColumnWidth) {
                 _setColumnsWidth(worksheet, columns, result.from.column);
             }
 
