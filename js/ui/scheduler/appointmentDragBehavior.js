@@ -12,6 +12,8 @@ export default class AppointmentDragBehavior {
             left: 0,
             top: 0
         };
+
+        this.currentAppointment = null;
     }
 
     isAllDay(appointment) {
@@ -69,6 +71,8 @@ export default class AppointmentDragBehavior {
         this.initialPosition.left -= containerShift.left;
         this.initialPosition.top -= containerShift.top;
 
+        this.currentAppointment = appointment;
+
         if(this.scheduler._escPressed) {
             args.event.cancel = true;
         } else {
@@ -77,9 +81,10 @@ export default class AppointmentDragBehavior {
                 $appointment: appointment,
                 coordinates: this.initialPosition
             });
-
-            this.initialPosition = {};
         }
+
+        this.initialPosition = {};
+        this.currentAppointment = null;
     }
 
     addTo(appointment) {
@@ -94,9 +99,9 @@ export default class AppointmentDragBehavior {
         });
     }
 
-    moveBack(appointment) {
-        if(this.initialPosition.left !== undefined && this.initialPosition.top !== undefined) {
-            translator.move(appointment, this.initialPosition);
+    moveBack() {
+        if(this.currentAppointment && this.initialPosition.left !== undefined && this.initialPosition.top !== undefined) {
+            translator.move(this.currentAppointment, this.initialPosition);
         }
     }
 }

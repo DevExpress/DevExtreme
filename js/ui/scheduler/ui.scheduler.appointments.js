@@ -959,7 +959,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             size = this._initialSize,
             coords = this._initialCoordinates;
 
-        this.dragBehavior.moveBack($appointment);
+        this.dragBehavior.moveBack();
 
         if($appointment) {
             if(coords) {

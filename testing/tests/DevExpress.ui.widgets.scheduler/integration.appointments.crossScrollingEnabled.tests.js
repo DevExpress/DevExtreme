@@ -255,7 +255,6 @@ module("crossScrollingEnabled = true", config, () => {
             const $appointment = scheduler.appointments.getAppointment(),
                 scrollable = scheduler.instance.getWorkSpace().$element().find(".dx-scrollable").dxScrollable("instance");
 
-
             scrollable.scrollTo({ left: 400, top: 0 });
 
             const pointer = pointerMock($appointment).start();
