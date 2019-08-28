@@ -1105,10 +1105,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _ctrlFKeyHandler: function(eventArgs) {
-        let searchTextEditor;
-        if(this.option("searchPanel.visible") && (searchTextEditor = this._headerPanel.getSearchTextEditor())) {
-            searchTextEditor.focus();
-            eventArgs.originalEvent.preventDefault();
+        if(this.option("searchPanel.visible")) {
+            let searchTextEditor = this._headerPanel.getSearchTextEditor();
+            if(searchTextEditor) {
+                searchTextEditor.focus();
+                eventArgs.originalEvent.preventDefault();
+            }
         }
     },
 
