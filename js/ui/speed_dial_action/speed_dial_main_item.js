@@ -179,8 +179,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     },
 
     _setPosition() {
-        this._normalizePosition();
-        this._actions.onPositioned({ position: this._renderPosition() });
+        this._hide();
+        this._show();
     },
 
 

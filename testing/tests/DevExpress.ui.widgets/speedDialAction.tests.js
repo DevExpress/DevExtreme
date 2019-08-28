@@ -5,7 +5,6 @@ import "ui/speed_dial_action";
 import "common.css!";
 import "generic_light.css!";
 
-
 const { test } = QUnit;
 
 QUnit.testStart(() => {
@@ -184,6 +183,7 @@ QUnit.module("modify global action button config", (hooks) => {
         const $fabMainElement = $(FAB_MAIN_SELECTOR);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const fabDimensions = 64;
+        const done = assert.async();
 
         assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
         assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
@@ -196,8 +196,11 @@ QUnit.module("modify global action button config", (hooks) => {
 
         firstSDA.repaint();
 
-        assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
-        assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
+            assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+            done();
+        }, 500);
     });
 });
 
@@ -224,6 +227,7 @@ QUnit.module("add or remove action buttons", (hooks) => {
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const $fabElement = $(FAB_SELECTOR);
         const fabMainOffsetY = 16;
+        const done = assert.async();
 
         assert.equal($fabMainContent.parent(".dx-overlay-wrapper").length, 1, "main action button contain overlay wrapper");
         assert.equal($fabElement.length, 1, "one action button");
@@ -232,7 +236,11 @@ QUnit.module("add or remove action buttons", (hooks) => {
         $("#fab-one").dxSpeedDialAction("instance").option("icon", "favorites");
 
         assert.equal($fabMainContent.find(".dx-icon-favorites").length, 1, "use icon after change icon option");
-        assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), "use dafault position after change icon option");
+
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), "use dafault position after change icon option");
+            done();
+        }, 500);
 
         $("#fab-two").dxSpeedDialAction({
             icon: "trash",
