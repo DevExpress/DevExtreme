@@ -431,6 +431,7 @@ var dxVectorMap = BaseWidget.inherit({
 import componentRegistrator from "../../core/component_registrator";
 componentRegistrator("dxVectorMap", dxVectorMap);
 
+module.exports = dxVectorMap;
 ///#DEBUG
 export const _TESTS_resetDataKey = function() {
     nextDataKey = 1;
