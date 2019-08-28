@@ -74,6 +74,8 @@ test(`Drag-n-drop in the month mode from Sun to Fri`, async t => {
 	await t
 		.expect(`19px`)
 		.eql(await scheduler.getAppointmentSize(draggableAppointment).height)
+		.expect(`200px`)
+		.eql(await scheduler.getAppointmentSize(draggableAppointment).width)
 
 		.expect(`9:00 AM`)
 		.eql(await scheduler.getAppointmentDate(draggableAppointment).startTime)

@@ -23,6 +23,9 @@ test(`Resize in the timelineDay mode`, async t => {
 		.drag(resizableAppointmentHandle.right, oneHourCellWidth, 0);
 
 	await t
+		.expect('140px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('800px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -36,6 +39,9 @@ test(`Resize in the timelineDay mode`, async t => {
 		.drag(resizableAppointmentHandle.left, oneHourCellWidth, 0);
 
 	await t
+		.expect('140px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('400px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -49,6 +55,9 @@ test(`Resize in the timelineDay mode`, async t => {
 		.drag(resizableAppointmentHandle.left, -oneHourCellWidth, 0);
 
 	await t
+		.expect('140px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('800px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -62,6 +71,9 @@ test(`Resize in the timelineDay mode`, async t => {
 		.drag(resizableAppointmentHandle.right, -oneHourCellWidth, 0);
 
 	await t
+		.expect('140px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('400px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -81,6 +93,9 @@ test(`Resize in the timelineWeek mode`, async t => {
 		.drag(resizableAppointmentHandle.right, oneHourCellWidth, 0);
 
 	await t
+		.expect('132px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('800px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -94,6 +109,9 @@ test(`Resize in the timelineWeek mode`, async t => {
 		.drag(resizableAppointmentHandle.left, oneHourCellWidth, 0);
 
 	await t
+		.expect('132px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('400px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -107,6 +125,9 @@ test(`Resize in the timelineWeek mode`, async t => {
 		.drag(resizableAppointmentHandle.left, -oneHourCellWidth, 0);
 
 	await t
+		.expect('132px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('800px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -120,6 +141,9 @@ test(`Resize in the timelineWeek mode`, async t => {
 		.drag(resizableAppointmentHandle.right, -oneHourCellWidth, 0);
 
 	await t
+		.expect('132px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('400px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -139,6 +163,9 @@ test(`Resize in the timelineWorkWeek mode`, async t => {
 		.drag(resizableAppointmentHandle.right, oneHourCellWidth, 0);
 
 	await t
+		.expect('132px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('800px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -152,6 +179,9 @@ test(`Resize in the timelineWorkWeek mode`, async t => {
 		.drag(resizableAppointmentHandle.left, oneHourCellWidth, 0);
 
 	await t
+		.expect('132px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('400px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -165,6 +195,9 @@ test(`Resize in the timelineWorkWeek mode`, async t => {
 		.drag(resizableAppointmentHandle.left, -oneHourCellWidth, 0);
 
 	await t
+		.expect('132px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('800px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -178,6 +211,9 @@ test(`Resize in the timelineWorkWeek mode`, async t => {
 		.drag(resizableAppointmentHandle.right, -oneHourCellWidth, 0);
 
 	await t
+		.expect('132px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('400px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -197,6 +233,9 @@ test(`Resize in the timelineMonth mode`, async t => {
 		.drag(resizableAppointmentHandle.right, oneDayCellWidth, 0);
 
 	await t
+		.expect('140px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('400px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -210,6 +249,9 @@ test(`Resize in the timelineMonth mode`, async t => {
 		.drag(resizableAppointmentHandle.left, oneDayCellWidth, 0);
 
 	await t
+		.expect('140px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('200px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -223,6 +265,9 @@ test(`Resize in the timelineMonth mode`, async t => {
 		.drag(resizableAppointmentHandle.left, -oneDayCellWidth, 0);
 
 	await t
+		.expect('140px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('400px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
@@ -236,6 +281,9 @@ test(`Resize in the timelineMonth mode`, async t => {
 		.drag(resizableAppointmentHandle.right, -oneDayCellWidth, 0);
 
 	await t
+		.expect('140px')
+		.eql(await scheduler.getAppointmentSize(resizableAppointment).height)
+
 		.expect('200px')
 		.eql(await scheduler.getAppointmentSize(resizableAppointment).width)
 
