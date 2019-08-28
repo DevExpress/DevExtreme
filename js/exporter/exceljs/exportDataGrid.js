@@ -1,9 +1,11 @@
 import { isDefined } from "../../core/utils/type";
 
+const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
+
 export default function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled } = options;
+    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, exportColumnWidths = true } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -22,6 +24,10 @@ export default function exportDataGrid(options) {
             let columns = dataProvider.getColumns();
             let headerRowCount = dataProvider.getHeaderRowCount();
             let dataRowsCount = dataProvider.getRowsCount();
+
+            if(exportColumnWidths) {
+                _setColumnsWidth(worksheet, columns, result.from.column);
+            }
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(result.from.row + rowIndex);
@@ -65,4 +71,17 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
+function _setColumnsWidth(worksheet, columns, startColumnIndex) {
+    if(columns) {
+        for(let i = 0; i < columns.length; i++) {
+            worksheet.getColumn(startColumnIndex + i).width = _convertPixelsWidthToExcelWidth(columns[i].width);
+        }
+    }
+}
 
+function _convertPixelsWidthToExcelWidth(pixelsWidth) {
+    if(!pixelsWidth || pixelsWidth < 5) {
+        pixelsWidth = 100;
+    }
+    return Math.min(255, Math.floor((pixelsWidth - 5) / MAX_DIGIT_WIDTH_IN_PIXELS * 100 + 0.5) / 100);
+}
