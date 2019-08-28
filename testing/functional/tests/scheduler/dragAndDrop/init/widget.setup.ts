@@ -1,7 +1,7 @@
 import { createWidget } from "../../../../helpers/testHelper";
 
 export const widgetHeight = 833;
-export const widgetWidth = 1666;
+export const widgetWidth = 1403;
 export const maxAppointmentsPerCell = 5;
 export const startDayHour = 9;
 export const currentDate = new Date(2019, 3, 1);
