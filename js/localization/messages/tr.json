@@ -175,8 +175,7 @@
         "dxScheduler-recurrenceWeekly": "Haftalık",
         "dxScheduler-recurrenceMonthly": "Aylık",
         "dxScheduler-recurrenceYearly": "Yıllık",
-        "dxScheduler-recurrenceRepeatEvery": "Her tekrarla",
-        "dxScheduler-recurrenceRepeatOn": "Tekrarla",
+        "dxScheduler-recurrenceEvery": "Her tekrarla",
         "dxScheduler-recurrenceEnd": "Tekrarı bitir",
         "dxScheduler-recurrenceAfter": "Sonra",
         "dxScheduler-recurrenceOn": "İle",
@@ -251,11 +250,6 @@
         "dxHtmlEditor-dialogImageWidthField": "Genişlik (px)",
         "dxHtmlEditor-dialogImageHeightField": "Yükseklik (px)",
         "dxHtmlEditor-heading": "Başlık",
-        "dxHtmlEditor-normalText": "Normal metin",
-        "dxFileManager-errorNoAccess": "Erişim reddedildi. İşlem tamamlanamıyor.",
-        "dxFileManager-errorDirectoryExistsFormat": "Klasör '{0}' zaten var.",
-        "dxFileManager-errorFileExistsFormat": "Dosya '{0}' zaten var.",
-        "dxFileManager-errorFileNotFoundFormat": "Dosya '{0}' bulunamadı",
-        "dxFileManager-errorDefault": "Belirtilmemiş hata."
+        "dxHtmlEditor-normalText": "Normal metin"
     }
 }
