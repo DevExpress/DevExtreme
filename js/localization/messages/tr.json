@@ -11,6 +11,7 @@
         "Back": "Geri",
         "OK": "Tamam",
         "dxCollectionWidget-noDataText": "Gösterilecek bilgi yok",
+        "dxDropDownEditor-selectLabel": "Seç",
         "validation-required": "Zorunlu",
         "validation-required-formatted": "{0} gerekli",
         "validation-numeric": "Değer bir sayı olmalı",
