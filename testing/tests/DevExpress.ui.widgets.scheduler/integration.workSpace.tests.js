@@ -1909,8 +1909,8 @@ QUnit.test("Recurrent appointment with tail on next week has most top coordinate
         crossScrollingEnabled: true,
         dataSource: [{
             text: 'Recurrent',
-            startDate: "2019-05-13T19:59:00Z",
-            endDate: "2019-05-14T04:00:00Z",
+            startDate: "2019-05-13T19:59:00",
+            endDate: "2019-05-14T04:00:00",
             recurrenceRule: 'FREQ=WEEKLY;BYDAY=SU'
         }],
         startDayHour: 0,
