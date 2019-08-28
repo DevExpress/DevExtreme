@@ -210,6 +210,11 @@ var EditingController = modules.ViewController.inherit((function() {
             that._rowsView = that.getView("rowsView");
             that._editForm = null;
 
+            if(that._deferreds) {
+                that._deferreds.forEach(d => d.reject("cancel"));
+            }
+            that._deferreds = [];
+
             if(!that._dataChangedHandler) {
                 that._dataChangedHandler = that._handleDataChanged.bind(that);
                 that._dataController.changed.add(that._dataChangedHandler);
@@ -282,6 +287,7 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         _fireDataErrorOccurred: function(arg) {
+            if(arg === "cancel") return;
             let $popupContent = this.getPopupContent();
             this._dataController.dataErrorOccurred.fire(arg, $popupContent);
         },
@@ -1022,7 +1028,7 @@ var EditingController = modules.ViewController.inherit((function() {
             let d = new Deferred(),
                 coreResult;
 
-            when(this._deferred).done(() => {
+            when(...this._deferreds).done(() => {
                 coreResult = this._editCellCore(rowIndex, columnIndex);
                 when(coreResult)
                     .done(d.resolve)
@@ -1425,7 +1431,7 @@ var EditingController = modules.ViewController.inherit((function() {
          */
         saveEditData: function() {
             let d = new Deferred();
-            when(this._deferred).done(() => {
+            when(...this._deferreds).done(() => {
                 this._saveEditDataInner().done(d.resolve).fail(d.reject);
             }).fail(d.reject);
             return d;
@@ -1644,10 +1650,10 @@ var EditingController = modules.ViewController.inherit((function() {
             if(!isRowEditMode(that)) {
                 result = deferredUtils.Deferred();
                 setTimeout(() => {
-                    when(this._deferred).done(() => {
+                    when(...this._deferreds).done(() => {
                         this._closeEditCellCore(isError, oldEditRowIndex);
                         result.resolve();
-                    });
+                    }).fail(result.reject);
                 });
             }
             return result.promise();
@@ -1730,7 +1736,13 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
             }
 
-            that._deferred = setCellValueResult;
+            that._deferreds.push(setCellValueResult);
+            setCellValueResult.always(function() {
+                let index = that._deferreds.indexOf(setCellValueResult);
+                if(index >= 0) {
+                    that._deferreds.splice(index, 1);
+                }
+            });
             return deferred;
         },
 
