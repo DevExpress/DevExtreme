@@ -81,19 +81,18 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
     test("create new directory", function(assert) {
         const done = assert.async();
         const selectedDir = this.controller.getCurrentDirectory();
-        const that = this;
 
         this.controller
             .getDirectories(selectedDir)
             .then(() => {
                 assert.ok(selectedDir.itemsLoaded);
                 assert.ok(selectedDir.items.length > 0);
-                return that.controller.createDirectory(selectedDir, "New");
+                return this.controller.createDirectory(selectedDir, "New");
             })
             .then(() => {
                 assert.notOk(selectedDir.itemsLoaded);
                 assert.notOk(selectedDir.items.length > 0);
-                return that.controller.getDirectories(selectedDir);
+                return this.controller.getDirectories(selectedDir);
             })
             .then(directories => {
                 assert.equal(directories[2].fileItem.name, "New");
@@ -104,16 +103,18 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
     test("rename file item", function(assert) {
         const done = assert.async();
         const currentDir = this.controller.getCurrentDirectory();
-        const that = this;
+        let targetDir = null;
+
         this.controller
             .getDirectories(currentDir)
             .then(directories => {
-                return that.controller.renameItem(directories[0], "New");
+                targetDir = directories[0];
+                return this.controller.renameItem(targetDir, "New");
             })
             .then(() => {
                 assert.notOk(currentDir.itemsLoaded);
                 assert.equal(currentDir.items.length, 0);
-                return that.controller.getDirectories(currentDir);
+                return this.controller.getDirectories(currentDir);
             })
             .then(directories => {
                 assert.equal(directories[0].fileItem.name, "New");
@@ -122,23 +123,27 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
     });
 
     test("move file items", function(assert) {
-        const that = this;
         const done = assert.async();
         const rootDir = this.controller.getCurrentDirectory();
+        let targetItems = null;
+        let destinationDir = null;
+
         this.controller
             .getDirectories(rootDir)
             .then(directories => {
-                return that.controller.moveItems([ directories[0] ], directories[1]);
+                targetItems = [ directories[0] ];
+                destinationDir = directories[1];
+                return this.controller.moveItems(targetItems, destinationDir);
             })
             .then(() => {
                 assert.notOk(rootDir.itemsLoaded);
                 assert.equal(rootDir.items.length, 0);
-                return that.controller.getDirectories(rootDir);
+                return this.controller.getDirectories(rootDir);
             })
             .then(directories => {
                 assert.equal(directories.length, 1);
                 assert.equal(directories[0].fileItem.name, "F2");
-                return that.controller.getDirectories(directories[0]);
+                return this.controller.getDirectories(directories[0]);
             })
             .then(directories => {
                 assert.equal(directories.length, 1);
@@ -148,19 +153,22 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
     });
 
     test("copy file items", function(assert) {
-        const that = this;
         const done = assert.async();
         const rootDir = this.controller.getCurrentDirectory();
+        let targetItems = null;
+        let destinationDir = null;
+
         this.controller
             .getDirectories(rootDir)
             .then(directories => {
-                that.controller.copyItems([ directories[0] ], directories[1]);
-                return directories[1];
+                targetItems = [ directories[0] ];
+                destinationDir = directories[1];
+                return this.controller.copyItems(targetItems, destinationDir);
             })
-            .then(dirF2 => {
+            .then(() => {
                 assert.ok(rootDir.itemsLoaded);
                 assert.equal(rootDir.items.length, 3);
-                return that.controller.getDirectories(dirF2);
+                return this.controller.getDirectories(destinationDir);
             })
             .then(directories => {
                 assert.equal(directories.length, 1);
@@ -171,18 +179,20 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
     });
 
     test("delete file items", function(assert) {
-        const that = this;
         const done = assert.async();
         const currentDir = this.controller.getCurrentDirectory();
+        let targetItems = null;
+
         this.controller
             .getDirectoryContents(currentDir)
             .then(itemInfos => {
-                return that.controller.deleteItems([ itemInfos[1], itemInfos[2] ]);
+                targetItems = [ itemInfos[1], itemInfos[2] ];
+                return this.controller.deleteItems(targetItems);
             })
             .then(() => {
                 assert.notOk(currentDir.itemsLoaded);
                 assert.equal(currentDir.items.length, 0);
-                return that.controller.getDirectoryContents(currentDir);
+                return this.controller.getDirectoryContents(currentDir);
             })
             .then(itemInfos => {
                 assert.equal(itemInfos.length, 1);

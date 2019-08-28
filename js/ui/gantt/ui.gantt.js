@@ -11,10 +11,8 @@ import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
 import { getWindow, hasWindow } from "../../core/utils/window";
 import DataOption from "./ui.gantt.data.option";
-import themes from "../themes";
 
 const GANTT_CLASS = "dx-gantt";
-const GANTT_DARK_CLASS = "dx-gantt-dark";
 const GANTT_SPLITTER_CLASS = "dx-gantt-splitter";
 const GANTT_SPLITTER_TRANSPARENT_CLASS = "dx-gantt-splitter-transparent";
 const GANTT_SPLITTER_BORDER_CLASS = "dx-gantt-splitter-border";
@@ -41,9 +39,6 @@ class Gantt extends Widget {
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
-        if(themes.isDark()) {
-            this.$element().addClass(GANTT_DARK_CLASS);
-        }
 
         this._$treeListWrapper = $("<div>")
             .appendTo(this.$element());
@@ -84,8 +79,8 @@ class Gantt extends Widget {
             showRowLines: true,
             onContentReady: (e) => { this._onTreeListContentReady(e); },
             onSelectionChanged: (e) => this._ganttView.selectTask(e.currentSelectedRowKeys[0]),
-            onRowCollapsed: () => this._updateGanttView(),
-            onRowExpanded: () => this._updateGanttView(),
+            onRowCollapsed: (e) => this._ganttView.changeTaskExpanded(e.key, false),
+            onRowExpanded: (e) => this._ganttView.changeTaskExpanded(e.key, true),
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); }
         });
     }
@@ -186,7 +181,8 @@ class Gantt extends Widget {
         this._ganttView.option("tasks", this._getTasks());
     }
     _getTasks() {
-        return this._treeList.getVisibleRows().map(r => r.data);
+        this._tasks.forEach((t, i) => { t.expanded = this._treeList.isRowExpanded(i + 1); });
+        return this._tasks;
     }
     _initScrollSync(treeList) {
         const treeListScrollable = treeList.getScrollable();

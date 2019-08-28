@@ -1,5 +1,6 @@
 import $ from "jquery";
 import domUtils from "core/utils/dom";
+import domAdapter from "core/dom_adapter";
 import support from "core/utils/support";
 import styleUtils from "core/utils/style";
 import devices from "core/devices";
@@ -90,6 +91,23 @@ QUnit.test("clearSelection should not run if selectionType is 'Caret'", function
     }
 });
 
+QUnit.test("resetActiveElement should not throw an error in IE", function(assert) {
+    var getActiveElement = sinon.stub(domAdapter, "getActiveElement").returns({
+        blur: function() {
+            throw "IE throws an 'Incorrect Function' exception in blur method";
+        }
+    });
+    var bodyBlur = sinon.spy(document.body, "blur");
+
+    try {
+        domUtils.resetActiveElement();
+        assert.strictEqual(bodyBlur.callCount, 1, "body should be blured if blur function on element does not work");
+    } finally {
+        bodyBlur.restore();
+        getActiveElement.restore();
+    }
+});
+
 
 QUnit.module("initMobileViewPort");
 
@@ -115,36 +133,6 @@ QUnit.test("allowSelection should be detected by realDevice", function(assert) {
     } finally {
         devices.real(originalRealDevice);
         devices.current(originalCurrentDevice);
-    }
-});
-
-QUnit.test("dont prevent touch move on win10 devices", function(assert) {
-    if(!support.touch) {
-        assert.expect(0);
-        return;
-    }
-
-    var $viewPort = $("<div>").addClass("dx-viewport");
-    var originalRealDevice = devices.real();
-
-    $viewPort.appendTo("#qunit-fixture");
-
-    try {
-        var isPointerMoveDefaultPrevented = null;
-        $(document).off(".dxInitMobileViewport");
-
-        devices.real({ platform: "win", version: [10], deviceType: "mobile" });
-
-        initMobileViewport();
-
-        $(document).on("dxpointermove", function(e) {
-            isPointerMoveDefaultPrevented = e.isDefaultPrevented();
-        });
-        var pointerEvent = $.Event("dxpointermove", { pointers: [1, 2], pointerType: "touch" });
-        $("body").trigger(pointerEvent);
-        assert.strictEqual(isPointerMoveDefaultPrevented, false, "default behaviour is not prevented");
-    } finally {
-        devices.real(originalRealDevice);
     }
 });
 

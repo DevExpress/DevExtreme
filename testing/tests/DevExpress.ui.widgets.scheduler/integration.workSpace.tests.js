@@ -2,6 +2,7 @@ import $ from "jquery";
 import themes from "ui/themes";
 import dateLocalization from "localization/date";
 import { SchedulerTestWrapper } from './helpers.js';
+import devices from "core/devices";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -1494,24 +1495,55 @@ QUnit.test("Tables should take css class after width calculation(T491453)", func
     }
 });
 
-QUnit.test("ScrollTo of dateTable scrollable shouldn't be called when dateTable scrollable scroll in timeLine view", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2017, 3, 16),
-        dataSource: [],
-        currentView: "timelineWeek",
-        height: 500
+if(devices.real().deviceType === "desktop") {
+    QUnit.test("ScrollTo of dateTable scrollable shouldn't be called when dateTable scrollable scroll in timeLine view", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2017, 3, 16),
+            dataSource: [],
+            currentView: "timelineWeek",
+            height: 500
+        });
+
+        var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
+            dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+            headerScrollToSpy = sinon.spy(headerScrollable, "scrollTo"),
+            dateTableScrollToSpy = sinon.spy(dateTableScrollable, "scrollTo");
+
+        dateTableScrollable.scrollBy(1000);
+
+        assert.ok(headerScrollToSpy.calledOnce, "header scrollTo was called");
+        assert.notOk(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was not called");
     });
 
-    var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
-        dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
-        headerScrollToSpy = sinon.spy(headerScrollable, "scrollTo"),
-        dateTableScrollToSpy = sinon.spy(dateTableScrollable, "scrollTo");
+    QUnit.test("ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)", function(assert) {
+        const date = new Date(2019, 5, 1, 9, 40);
 
-    dateTableScrollable.scrollBy(1000);
+        this.createInstance({
+            dataSource: [],
+            views: ["timelineDay", "day", "timelineWeek", "week", "timelineMonth"],
+            currentView: "timelineDay",
+            currentDate: date,
+            firstDayOfWeek: 0,
+            startDayHour: 0,
+            endDayHour: 20,
+            cellDuration: 60,
+            groups: ["priority"],
+            height: 580,
+        });
 
-    assert.ok(headerScrollToSpy.calledOnce, "header scrollTo was called");
-    assert.notOk(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was not called");
-});
+        this.instance.scrollToTime(date.getHours() - 1, 30, date);
+        let scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
+
+        assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineDay");
+
+        this.instance.option("currentView", "timelineWeek");
+
+        this.instance.scrollToTime(date.getHours() - 1, 30, date);
+        scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
+
+        assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineWeek");
+    });
+}
 
 QUnit.test("OnScroll of header scrollable shouldn't be called when dateTable scrollable scroll in timeLine view", function(assert) {
     this.createInstance({
@@ -1848,35 +1880,6 @@ QUnit.test("Current time indicator calculates position correctly with workWeek v
     assert.notEqual(position, { left: 0, top: 0 }, "Current time indicator positioned correctly");
 });
 
-QUnit.test("ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)", function(assert) {
-    const date = new Date(2019, 5, 1, 9, 40);
-
-    this.createInstance({
-        dataSource: [],
-        views: ["timelineDay", "day", "timelineWeek", "week", "timelineMonth"],
-        currentView: "timelineDay",
-        currentDate: date,
-        firstDayOfWeek: 0,
-        startDayHour: 0,
-        endDayHour: 20,
-        cellDuration: 60,
-        groups: ["priority"],
-        height: 580,
-    });
-
-    this.instance.scrollToTime(date.getHours() - 1, 30, date);
-    let scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
-
-    assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineDay");
-
-    this.instance.option("currentView", "timelineWeek");
-
-    this.instance.scrollToTime(date.getHours() - 1, 30, date);
-    scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
-
-    assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineWeek");
-});
-
 QUnit.test("Month view; dates are rendered correctly with grouping by date & empty resources in groups (T759160)", function(assert) {
     this.createInstance({
         dataSource: [],
@@ -1900,4 +1903,29 @@ QUnit.test("Month view; dates are rendered correctly with grouping by date & emp
     }).length;
 
     assert.notOk(hasNaNCellData, "Container has valid data");
+});
+
+QUnit.test("Recurrent appointment with tail on next week has most top coordinate (T805446)", function(assert) {
+    this.createInstance({
+        views: ['week', { type: 'day', intervalCount: 2 }],
+        currentView: 'week',
+        crossScrollingEnabled: true,
+        dataSource: [{
+            text: 'Recurrent',
+            startDate: "2019-05-13T19:59:00",
+            endDate: "2019-05-14T04:00:00",
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=SU'
+        }],
+        startDayHour: 0,
+        endDayHour: 24,
+        firstDayOfWeek: 1,
+        cellDuration: 60,
+        currentDate: new Date(2019, 7, 19)
+    });
+
+    const appointment = this.scheduler.appointments.getAppointment();
+
+    const coords = translator.locate(appointment);
+
+    assert.ok(coords.top === 0, "Appointment tail has most top coordinate");
 });

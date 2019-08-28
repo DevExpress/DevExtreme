@@ -801,7 +801,7 @@ QUnit.test("space with radius", function(assert) {
         updateSide,
         layoutManager = createLayoutManager({ piePercentage: 0.7 });
 
-    updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes, false, { width: 350, height: 350 });
+    updateSide = layoutManager.needMoreSpaceForPanesCanvas(panes, false);
 
     assert.deepEqual(updateSide, { height: 20, width: 10 });
 });

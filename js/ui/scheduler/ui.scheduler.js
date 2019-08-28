@@ -433,6 +433,7 @@ const Scheduler = Widget.inherit({
                     * @type string|function(resource)
                     * @type_function_param1 resource:object
                     * @default 'text'
+                 * @type_function_return string
                     */
 
                 /**
@@ -1053,18 +1054,18 @@ const Scheduler = Widget.inherit({
                 options: {
                     /**
                        * @name dxSchedulerOptions.useDropDownViewSwitcher
-                       * @default true @for Android|iOS|Windows_Mobile
+                       * @default true @for Android|iOS
                        */
                     useDropDownViewSwitcher: true,
 
                     /**
                        * @name dxSchedulerOptions.editing.allowResizing
-                       * @default false @for Android|iOS|Windows_Mobile
+                       * @default false @for Android|iOS
                        */
 
                     /**
                        * @name dxSchedulerOptions.editing.allowDragging
-                       * @default false @for Android|iOS|Windows_Mobile
+                       * @default false @for Android|iOS
                        */
                     editing: {
                         allowDragging: false,
@@ -3090,13 +3091,13 @@ const Scheduler = Widget.inherit({
         * @param3 currentAppointmentData:Object|undefined
         */
     showAppointmentTooltip: function(appointmentData, target, currentAppointmentData) {
-        if(!appointmentData) {
-            return;
+        if(appointmentData) {
+            this.showAppointmentTooltipCore(target, [{
+                color: this._appointments._tryGetAppointmentColor(target),
+                data: appointmentData,
+                currentData: currentAppointmentData,
+            }], true);
         }
-        this.showAppointmentTooltipCore(target, [{
-            data: appointmentData,
-            currentData: currentAppointmentData,
-        }], true);
     },
 
     showAppointmentTooltipCore: function(target, data, isSingleBehavior) {

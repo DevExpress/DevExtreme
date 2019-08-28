@@ -6,6 +6,7 @@ import tooltipModule from "viz/core/tooltip";
 const Tooltip = tooltipModule.Tooltip;
 import vizUtils from "viz/core/utils";
 import rendererModule from "viz/core/renderers/renderer";
+import domAdapter from "core/dom_adapter";
 
 QUnit.testStart(function() {
     $("<div>")
@@ -13,7 +14,7 @@ QUnit.testStart(function() {
         .appendTo($("#qunit-fixture"));
 });
 
-const CANVAS = { left: 0, top: 0, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000, bottom: 0, right: 0 };
+const CANVAS = { left: 0, top: 0, width: 800, height: 600, bottom: 0, right: 0 };
 
 function getInitialOptions() {
     return {
@@ -237,6 +238,63 @@ QUnit.test("Tooltip should be appended in the closest element to root", function
     var $tooltipContainer = $(".test-tooltip").parent().eq(0);
     assert.ok($tooltipContainer.hasClass("tooltip-container"));
     assert.ok(!$tooltipContainer.hasClass("far"));
+});
+
+// T803622
+QUnit.test("Container has offset", function(assert) {
+    $("#qunit-fixture")
+        .append(`<div class="tooltipContainer" style="position: absolute; left: 20px; top:20px; width: 500px; height:100%;"></div>`);
+
+    const tooltip = new Tooltip({ eventTrigger: function() {} });
+
+    this.options.container = ".tooltipContainer";
+    tooltip.update(this.options);
+
+    // act
+    tooltip.show({ description: "some-text" }, { x: 100, y: 200 });
+
+    // assert
+    assert.equal(tooltip._wrapper.get(0).style.left, "10042px", "wrapper is moved to invisible area");
+    assert.equal(tooltip._wrapper.get(0).style.top, "10121px", "wrapper is moved to invisible area");
+});
+
+QUnit.test("Body has vertical scroll", function(assert) {
+    const container = $(`<div style="height: 4000px"></div>`).appendTo(domAdapter.getDocument().body);
+
+    try {
+        const tooltip = new Tooltip({ eventTrigger: function() { } });
+        tooltip.update(this.options);
+        // act
+        tooltip.show({ description: "some-text" }, { x: 100, y: 2000 });
+        // assert
+        assert.equal(tooltip._wrapper.get(0).style.left, "62px", "wrapper is moved to invisible area");
+        assert.equal(tooltip._wrapper.get(0).style.top, "1941px", "wrapper is moved to invisible area");
+    } finally {
+        container.remove();
+    }
+});
+
+QUnit.test("Body has horizontal scroll", function(assert) {
+    const container = $(`<div style="width: 4000px; height: 600px;"></div>`).appendTo(domAdapter.getDocument().body);
+    const documentElement = domAdapter.getDocument().documentElement;
+    const body = $("body").get(0);
+    const bodyScrollLeft = body.scrollLeft;
+    const documentScrollLeft = documentElement.scrollLeft;
+    body.scrollLeft = documentElement.scrollLeft = 3000;
+
+    try {
+        const tooltip = new Tooltip({ eventTrigger: function() { } });
+        tooltip.update(this.options);
+        // act
+        tooltip.show({ description: "some-text" }, { x: 3100, y: 100 });
+        // assert
+        assert.equal(tooltip._wrapper.get(0).style.left, "3062px");
+        assert.equal(tooltip._wrapper.get(0).style.top, "41px");
+    } finally {
+        body.scrollLeft = bodyScrollLeft;
+        documentElement.scrollLeft = documentScrollLeft;
+        container.remove();
+    }
 });
 
 QUnit.test("Set options. customizeTooltip", function(assert) {
@@ -1024,8 +1082,9 @@ QUnit.test("Show. W/o params. Html", function(assert) {
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, "textGroupHtml styles");
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: "#939393", width: null }]);
 
-    assert.equal(this.tooltip._textHtml.html.callCount, 1, "textHtml html");
-    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, ["some-html"], "textHtml html");
+    assert.equal(this.tooltip._textHtml.html.callCount, 2, "textHtml html");
+    assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, [""], "textHtml html");
+    assert.deepEqual(this.tooltip._textHtml.html.lastCall.args, ["some-html"], "textHtml html");
 
     assert.equal(this.tooltip._text.css.callCount, 0, "text styles");
     assert.equal(this.tooltip._text.attr.callCount, 1, "text attrs");
@@ -1672,7 +1731,7 @@ QUnit.module("Movements. Out of visible borders", {
             tooltip._renderer.stub("resize").reset();
         };
 
-        that.canvas = { left: 10, top: 20, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000, right: 0, bottom: 0 };
+        that.canvas = { left: 10, top: 20, width: 800, height: 600, right: 0, bottom: 0 };
         tooltip._getCanvas = function() { return that.canvas; };
     },
     afterEach: function() {

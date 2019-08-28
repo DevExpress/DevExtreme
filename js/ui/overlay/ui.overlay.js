@@ -71,16 +71,14 @@ var OVERLAY_CLASS = "dx-overlay",
 
 var realDevice = devices.real(),
     realVersion = realDevice.version,
-
     firefoxDesktop = browser.mozilla && realDevice.deviceType === "desktop",
     iOS = realDevice.platform === "ios",
     hasSafariAddressBar = browser.safari && realDevice.deviceType !== "desktop",
-    iOS7_0andBelow = iOS && compareVersions(realVersion, [7, 1]) < 0,
     android4_0nativeBrowser = realDevice.platform === "android" && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf("Chrome") === -1;
 
 var forceRepaint = function($element) {
-    // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713) and FF desktop (T581681)
-    if(iOS7_0andBelow || firefoxDesktop) {
+    // NOTE: force layout recalculation on FF desktop (T581681)
+    if(firefoxDesktop) {
         $element.width();
     }
 
@@ -751,7 +749,11 @@ var Overlay = Widget.inherit({
 
     _forceFocusLost: function() {
         var activeElement = domAdapter.getActiveElement();
-        activeElement && this._$content.find(activeElement).length && activeElement.blur();
+        var shouldResetActiveElement = !!this._$content.find(activeElement).length;
+
+        if(shouldResetActiveElement) {
+            domUtils.resetActiveElement();
+        }
     },
 
     _animate: function(animation, completeCallback, startCallback) {
@@ -1274,7 +1276,6 @@ var Overlay = Widget.inherit({
 
     _renderShading: function() {
         this._fixWrapperPosition();
-        this._renderShadingDimensions();
         this._renderShadingPosition();
     },
 
@@ -1286,25 +1287,6 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _renderShadingDimensions: function() {
-        var wrapperWidth, wrapperHeight;
-
-        if(this.option("shading")) {
-            var $container = this._getContainer();
-
-            wrapperWidth = this._isWindow($container) ? "100%" : $container.outerWidth(),
-            wrapperHeight = this._isWindow($container) ? "100%" : $container.outerHeight();
-        } else {
-            wrapperWidth = "";
-            wrapperHeight = "";
-        }
-
-        this._$wrapper.css({
-            width: wrapperWidth,
-            height: wrapperHeight
-        });
-    },
-
     _isWindow: function($element) {
         return !!$element && typeUtils.isWindow($element.get(0));
     },
@@ -1312,7 +1294,12 @@ var Overlay = Widget.inherit({
     _getContainer: function() {
         var position = this._position,
             container = this.option("container"),
-            positionOf = position ? position.of || window : null;
+            positionOf = null;
+
+        if(!container && position) {
+            var isEvent = !!(position.of && position.of.preventDefault);
+            positionOf = isEvent ? window : (position.of || window);
+        }
 
         return getElement(container || positionOf);
     },

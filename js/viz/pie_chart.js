@@ -1,7 +1,7 @@
 import { pieSeriesSpacing as seriesSpacing, states } from "./components/consts";
 import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords } from "./core/utils";
 import { extend as _extend } from "../core/utils/extend";
-import { isNumeric, isDefined } from "../core/utils/type";
+import { isNumeric } from "../core/utils/type";
 import { each as _each } from "../core/utils/iterator";
 import rangeModule from "./translators/range";
 import registerComponent from "../core/component_registrator";
@@ -232,7 +232,7 @@ var dxPieChart = BaseChart.inherit({
             delta = (layout.radiusOuter - layout.radiusInner - seriesSpacing * (lengthVisibleSeries - 1)) / lengthVisibleSeries;
             innerRad = layout.radiusInner;
 
-            that._setCenter({ x: layout.centerX, y: layout.centerY });
+            that._setGeometry(layout);
 
             visibleSeries.forEach(function(singleSeries) {
                 singleSeries.correctRadius({
@@ -257,48 +257,30 @@ var dxPieChart = BaseChart.inherit({
     },
 
     _renderExtraElements() {
-        let template = this.option("holeTemplate");
+        let template = this.option("centerTemplate");
 
-        if(this._holeTemplateGroup) {
-            this._holeTemplateGroup.clear();
+        if(this._centerTemplateGroup) {
+            this._centerTemplateGroup.clear();
         }
 
         if(!template) {
             return;
         }
 
-        if(!this._holeTemplateGroup) {
-            this._holeTemplateGroup = this._renderer.g().attr({ class: "dxc-hole-template" }).css(patchFontOptions(this._themeManager._font));
+        if(!this._centerTemplateGroup) {
+            this._centerTemplateGroup = this._renderer.g().attr({ class: "dxc-hole-template" }).css(patchFontOptions(this._themeManager._font));
         }
-        this._holeTemplateGroup.append(this._renderer.root);
+        this._centerTemplateGroup.append(this._renderer.root);
 
         template = this._getTemplate(template);
-        template.render({ model: this, container: this._holeTemplateGroup.element });
+        template.render({ model: this, container: this._centerTemplateGroup.element });
 
-        const bBox = this._holeTemplateGroup.getBBox();
-        this._holeTemplateGroup.move(this._center.x - (bBox.x + bBox.width / 2), this._center.y - (bBox.y + bBox.height / 2));
+        const bBox = this._centerTemplateGroup.getBBox();
+        this._centerTemplateGroup.move(this._center.x - (bBox.x + bBox.width / 2), this._center.y - (bBox.y + bBox.height / 2));
     },
 
-    getRadius() {
-        return this.series.reduce((r, series) => {
-
-            if(!series.isVisible()) {
-                return r;
-            }
-            const point = series.getVisiblePoints()[0];
-            if(!point) {
-                return r;
-            }
-
-            if(!isDefined(r.innerRadius)) {
-                r.innerRadius = point.radiusInner;
-                r.outerRadius = point.radiusOuter;
-            } else {
-                r.innerRadius = Math.min(r.innerRadius, point.radiusInner);
-                r.outerRadius = Math.max(r.outerRadius, point.radiusOuter);
-            }
-            return r;
-        }, { });
+    getInnerRadius() {
+        return this._innerRadius;
     },
 
     _getLegendCallBack: function() {
@@ -404,8 +386,9 @@ var dxPieChart = BaseChart.inherit({
         }
     },
 
-    _setCenter: function(center) {
-        this._center = center;
+    _setGeometry: function({ centerX: x, centerY: y, radiusInner }) {
+        this._center = { x, y };
+        this._innerRadius = radiusInner;
     },
 
     _disposeSeries(seriesIndex) {

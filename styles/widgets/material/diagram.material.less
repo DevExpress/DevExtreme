@@ -1,12 +1,40 @@
+@import (once) "../base/diagram.less";
+
 @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE: @MATERIAL_BASE_ICON_SIZE;
 @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH: 3px;
 
 .dx-diagram {
     border-color: @diagram-border-color;
-
-    .dxdi-control .dxdi-canvas { // stylelint-disable-line selector-class-pattern
+    // stylelint-disable selector-class-pattern
+    .dxdi-control .dxdi-canvas {
         background-color: darken(@overlay-content-bg, 15%);
+
+        .dxdi-main .dxdi-image {
+            .dxdi-spinner {
+                path {
+                    stroke: @diagram-image-icon-accent-color;
+                    stroke-opacity: 1;
+                }
+
+                ellipse {
+                    stroke: @diagram-image-icon-base-color;
+                    stroke-opacity: 0.5;
+                }
+            }
+
+            .dxdi-user .dxdi-background {
+                fill: @diagram-image-icon-base-color;
+                opacity: 0.5;
+            }
+
+            .dxdi-warning {
+                ellipse {
+                    fill: @base-danger;
+                }
+            }
+        }
     }
+    // stylelint-enable selector-class-pattern
 
     .dx-diagram-toolbar-wrapper:first-child {
         border-bottom: 1px solid @diagram-toolbar-border-color;
@@ -44,6 +72,10 @@
 
     .dx-diagram-left-panel {
         border-right-color: @diagram-toolbar-border-color;
+
+        .dxdi-toolbox .dxdi-canvas .dxdi-shape-text { // stylelint-disable-line selector-class-pattern
+            opacity: @diagram-toolbox-shape-text-opacity;
+        }
     }
 
     .dx-diagram-right-panel {
@@ -101,6 +133,17 @@
         width: 110px;
     }
 
+    .dx-diagram-color-b .dx-dropdowneditor-field-template-wrapper {
+        .dx-diagram-i,
+        .dx-icon {
+            border-bottom-width: @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH;
+            border-bottom-style: solid;
+        }
+    }
+}
+
+.dx-diagram-toolbar,
+.dx-dropdownmenu-popup {
     .dx-diagram-select-b,
     .dx-diagram-color-b {
         .dx-dropdowneditor-field-template-wrapper {
@@ -114,14 +157,6 @@
                 font-size: @MATERIAL_DIAGRAM_TOOLBAR_ICON_SIZE;
                 color: @base-text-color;
             }
-        }
-    }
-
-    .dx-diagram-color-b .dx-dropdowneditor-field-template-wrapper {
-        .dx-diagram-i,
-        .dx-icon {
-            border-bottom-width: @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH;
-            border-bottom-style: solid;
         }
     }
 }

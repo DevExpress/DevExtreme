@@ -323,6 +323,9 @@
 @diagram-default-format-active-bg: @base-default;
 @diagram-danger-format-active-bg: @base-danger;
 @diagram-success-format-active-bg: @base-success;
+@diagram-image-icon-base-color: fade(@base-bg, 50%);
+@diagram-image-icon-accent-color: fade(@base-shadow-color, 50%);
+@diagram-toolbox-shape-text-opacity: 0.5;
 
 // Drawer
 
@@ -1633,3 +1636,12 @@
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-inverted-text-color;
 @filemanager-file-item-select-bg: @base-inverted-bg;
+@filemanager-progressbox-shadow-color: @base-shadow-color;
+
+// SpeedDialAction
+@speed-dial-action-bg: @base-text-color;
+@speed-dial-action-color: @base-bg;
+
+// Gantt
+@gantt-collapsable-row-bg: lighten(@base-bg, 5%);
+@gantt-selection-bg: fade(@treelist-selection-bg, 30%);

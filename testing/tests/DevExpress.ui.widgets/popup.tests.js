@@ -130,8 +130,8 @@ QUnit.test("shading has width and height if enabled", function(assert) {
 
     var $wrapper = $("." + POPUP_WRAPPER_CLASS);
 
-    assert.notEqual($wrapper[0].style.height, "", "height is set");
-    assert.notEqual($wrapper[0].style.width, "", "width is set");
+    assert.equal($wrapper.outerHeight(), $(document.body).outerHeight(), "height is 100%");
+    assert.equal($wrapper.outerWidth(), $(document.body).outerWidth(), "width is 100%");
 });
 
 QUnit.test("default options", function(assert) {
@@ -196,27 +196,11 @@ QUnit.test("done button is located after cancel button in non-win8 device", func
     instance.option("toolbarItems", [{ shortcut: "cancel" }, { shortcut: "done" }]);
     $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
     assert.equal($popupBottom.text(), "CancelOK", "buttons order is correct");
-});
-
-QUnit.test("done button is located before cancel button in win10", function(assert) {
-    devices.current("win10");
-
-    var $popup = $("#popup").dxPopup({
-            toolbarItems: [{ shortcut: "cancel" }, { shortcut: "done" }],
-            animation: null,
-            visible: true
-        }),
-        instance = $popup.dxPopup("instance"),
-        $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
-
-    assert.equal($popupBottom.text(), "OKCancel", "buttons order is correct");
-
-    instance.option("toolbarItems", [{ shortcut: "done" }, { shortcut: "cancel" }]);
-    $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
-    assert.equal($popupBottom.text(), "OKCancel", "buttons order is correct");
+    devices.current(devices.real());
 });
 
 QUnit.test("buttons should be rendered correctly after toolbar was repainted", function(assert) {
+    devices.current("desktop");
     var $popup = $("#popup").dxPopup({
             visible: true,
             toolbarItems: [
@@ -230,6 +214,7 @@ QUnit.test("buttons should be rendered correctly after toolbar was repainted", f
 
     $popupBottom.dxToolbarBase("repaint");
     assert.equal($popupBottom.text(), "TodayOKCancel", "buttons order is correct");
+    devices.current(devices.real());
 });
 
 QUnit.test("Check that title do not render twice or more, Q553652", function(assert) {
@@ -299,6 +284,7 @@ QUnit.test("buttons rendering when aliases are specified", function(assert) {
 });
 
 QUnit.test("shortcut buttons are placed in specified location", function(assert) {
+    devices.current("desktop");
     $("#popup").dxPopup({
         visible: true,
         toolbarItems: [{ shortcut: "done", location: "after" }]
@@ -307,6 +293,7 @@ QUnit.test("shortcut buttons are placed in specified location", function(assert)
     var $button = $("." + POPUP_BOTTOM_CLASS).find(".dx-toolbar-after").find(".dx-popup-done");
 
     assert.equal($button.length, 1, "done button is at correct location");
+    devices.current(devices.real());
 });
 
 QUnit.test("items should be rendered with toolbarItems.toolbar='top' as default", function(assert) {
@@ -382,6 +369,7 @@ QUnit.test("toolbar must render 'default' type buttons if 'useDefaultToolbarButt
 });
 
 QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarButtons' is set", function(assert) {
+    devices.current("desktop");
     var popupInstance = $("#popup").dxPopup({
         visible: true,
         useFlatToolbarButtons: true,
@@ -400,6 +388,7 @@ QUnit.test("toolbar must render flat buttons and shortcuts if 'useFlatToolbarBut
 
     assert.ok(toolbarButtons.eq(0).hasClass("dx-button-mode-text"), "shortcut has dx-button-mode-text class");
     assert.ok(toolbarButtons.eq(1).hasClass("dx-button-mode-text"), "button has dx-button-mode-text class");
+    devices.current(devices.real());
 });
 
 
@@ -413,6 +402,7 @@ QUnit.module("dimensions", {
 });
 
 QUnit.test("content must not overlap bottom buttons", function(assert) {
+    devices.current("desktop");
     var $popup = $("#popup").dxPopup({
             toolbarItems: [{ shortcut: "cancel" }, { shortcut: "done" }, { shortcut: "clear" }],
             showCloseButton: true,
@@ -423,6 +413,7 @@ QUnit.test("content must not overlap bottom buttons", function(assert) {
         $popupBottom = $popupContent.parent().find(".dx-popup-bottom");
 
     assert.equal($popupContent.outerHeight() + $popupBottom.outerHeight(true), $popupContent.outerHeight(true), "content doesn't overlap bottom buttons");
+    devices.current(devices.real());
 });
 
 QUnit.test("dimensions should be shrunk correctly with height = auto specified", function(assert) {
@@ -683,6 +674,7 @@ QUnit.test("popup height should support top and bottom toolbars if height = auto
 });
 
 QUnit.test("popup height should support any maxHeight and minHeight option values if height = auto", assert => {
+    devices.current("desktop");
     const $content = $("<div>").attr("id", "content"),
         popup = $("#popup").dxPopup({
             visible: true,
@@ -711,6 +703,7 @@ QUnit.test("popup height should support any maxHeight and minHeight option value
     $content.empty();
     popup.option("minHeight", "auto");
     assert.strictEqual($popup.height(), $popup.find(toSelector(POPUP_TITLE_CLASS)).innerHeight() + popupContentPadding, "popup minHeight: auto");
+    devices.current(devices.real());
 });
 
 QUnit.test("popup overlay should have correct height strategy classes for all browsers", assert => {
@@ -782,10 +775,8 @@ QUnit.test("fullScreen", function(assert) {
 
     var $overlayContent = this.instance.$content().parent();
 
-    assert.equal($overlayContent.parent().get(0).style.width, "100%", "wrappers width specified");
-    assert.equal($overlayContent.parent().get(0).style.height, "100%", "wrappers height specified");
-    assert.equal($overlayContent.get(0).style.width, "100%");
-    assert.equal($overlayContent.get(0).style.height, "100%");
+    assert.equal($overlayContent.outerWidth(), $(document.body).outerWidth(), "wrapper has 100% width");
+    assert.equal($overlayContent.outerHeight(), $(document.body).outerHeight(), "wrapper has 100% height");
 
     assert.ok($overlayContent.hasClass(POPUP_FULL_SCREEN_CLASS), "fullscreen class added");
     assert.ok(!$overlayContent.hasClass(POPUP_NORMAL_CLASS), "normal class is removed");
@@ -885,27 +876,11 @@ QUnit.test("fullScreen with disabled shading", function(assert) {
         visible: true
     });
 
-    var $overlayContent = this.instance.$content().parent();
+    var $overlayContent = this.instance.$content().parent(),
+        $wrapper = $overlayContent.parent().get(0);
 
-    assert.equal($overlayContent.parent().get(0).style.width, "100%", "wrappers width specified");
-    assert.equal($overlayContent.parent().get(0).style.height, "100%", "wrappers height specified");
-});
-
-QUnit.test("shading should be synchronized with the option when popup goes from fullscreen to normal mode", function(assert) {
-    this.instance.option({
-        fullScreen: true,
-        shading: false,
-        width: 10,
-        height: 10,
-        visible: true
-    });
-
-    this.instance.option("fullScreen", false);
-
-    var $popupWrapper = this.instance.$content().closest("." + POPUP_WRAPPER_CLASS);
-
-    assert.equal($popupWrapper.prop('style').width, "", "wrapper is collapsed by width");
-    assert.equal($popupWrapper.prop('style').height, "", "wrapper is collapsed by height");
+    assert.equal(parseInt(getComputedStyle($wrapper).width), $(window).width(), "wrappers width specified");
+    assert.equal(parseInt(getComputedStyle($wrapper).height), $(window).height(), "wrappers height specified");
 });
 
 QUnit.test("title", function(assert) {

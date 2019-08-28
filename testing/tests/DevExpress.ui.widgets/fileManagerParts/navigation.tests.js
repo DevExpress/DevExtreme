@@ -107,24 +107,48 @@ QUnit.module("Navigation operations", moduleConfig, () => {
     });
 
     test("change current directory by public API", function(assert) {
-        const done = assert.async();
         const inst = this.wrapper.getInstance();
         assert.equal("", inst.option("currentPath"));
 
         const that = this;
+        let onCurrentDirectoryChangedCounter = 0;
         inst.option("onCurrentDirectoryChanged", function() {
-            assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"));
-
-            const $folder1Node = that.wrapper.getFolderNode(1);
-            assert.equal($folder1Node.find("span").text(), "Folder 1");
-
-            const $folder11Node = that.wrapper.getFolderNode(2);
-            assert.equal($folder11Node.find("span").text(), "Folder 1.1");
-
-            done();
+            onCurrentDirectoryChangedCounter++;
+            assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"), "The option 'currentPath' was changed");
         });
 
         inst.option("currentPath", "Folder 1/Folder 1.1");
+        this.clock.tick(800);
+
+        assert.equal(onCurrentDirectoryChangedCounter, 1);
+
+        const $folder1Node = that.wrapper.getFolderNode(1);
+        assert.equal($folder1Node.find("span").text(), "Folder 1");
+
+        const $folder11Node = that.wrapper.getFolderNode(2);
+        assert.equal($folder11Node.find("span").text(), "Folder 1.1");
+    });
+
+    test("change root file name by public API", function(assert) {
+        let treeViewNode = this.wrapper.getFolderNodes();
+        assert.equal(treeViewNode.length, 4, "Everything right on its' place");
+
+        let breadcrumbs = this.wrapper.getBreadcrumbsPath();
+        let target = this.wrapper.getFolderNodeText(0);
+        assert.equal(breadcrumbs, "Files", "Default breadcrumbs text is correct");
+        assert.equal(target, "Files", "Default is correct");
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("rootFolderName", "TestRFN");
+        this.clock.tick(400);
+
+        treeViewNode = this.wrapper.getFolderNodes();
+        assert.equal(treeViewNode.length, 4, "Everything right on its' place");
+
+        breadcrumbs = this.wrapper.getBreadcrumbsPath();
+        target = this.wrapper.getFolderNodeText(0);
+        assert.equal(breadcrumbs, "TestRFN", "Custom breadcrumbs text is correct");
+        assert.equal(target, "TestRFN", "Custom is correct");
     });
 
 });

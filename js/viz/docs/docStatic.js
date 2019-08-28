@@ -183,29 +183,6 @@ var staticMethods = {
     */
     map: {
         /**
-        * @name VectorMapProjectionConfig
-        * @namespace DevExpress.viz.map
-        * @type object
-        */
-        /**
-        * @name VectorMapProjectionConfig.to
-        * @type function
-        * @type_function_param1 coordinates:Array<number>
-        * @return Array<number>
-        */
-        /**
-        * @name VectorMapProjectionConfig.from
-        * @type function
-        * @type_function_param1 coordinates:Array<number>
-        * @return Array<number>
-        */
-        /**
-        * @name VectorMapProjectionConfig.aspectRatio
-        * @type number
-        * @default 1
-        */
-
-        /**
         * @name viz.mapmethods.projection
         * @publicName projection(data)
         * @param1 data:VectorMapProjectionConfig
@@ -229,6 +206,7 @@ var staticMethods = {
         * @return object
         * @namespace DevExpress.viz.map.projection
         * @static
+        * @hidden
         */
         /**
         * @name viz.map.projectionmethods.add

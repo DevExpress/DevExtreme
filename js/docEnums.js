@@ -1033,8 +1033,12 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramAutoLayout
- * @enum {'off'|'tree'|'sugiyama'}
+ * @typedef {string} Enums.DiagramDataLayoutType
+ * @enum {'off'|'tree'|'layered'}
+ */
+/**
+ * @typedef {string} Enums.DiagramDataLayoutOrientation
+ * @enum {'auto'|'vertical'|'horizontal'}
  */
 
 /**
@@ -1058,13 +1062,23 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramConnectorLineType
+ * @enum {'straight'|'orthogonal'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramConnectorLineEnd
+ * @enum {'none'|'arrow'}
+ */
+
+/**
  * @typedef {string} Enums.DiagramToolboxStyle
  * @enum {'icons'|'texts'}
  */
 
 /**
  * @typedef {string} Enums.DiagramToolbarCommand
- * @enum {'separator'|'export'|'undo'|'redo'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullscreen'}
+ * @enum {'separator'|'export'|'undo'|'redo'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullScreen'}
  */
 
 /**
@@ -1083,6 +1097,16 @@
  */
 
 /**
+ * @typedef {string} Enums.DiagramExportFormat
+ * @enum {'svg'|'png'|'jpg'}
+ */
+
+/**
  * @typedef {string} Enums.GanttTaskTitlePosition
  * @enum {'inside'|'outside'|'none'}
+ */
+
+/**
+ * @typedef {string} Enums.LegendMarkerState
+ * @enum {'normal'|'hovered'|'selected'}
  */

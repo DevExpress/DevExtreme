@@ -330,7 +330,7 @@ var SlideOut = CollectionWidget.inherit({
         return this._itemElements().eq(0);
     },
 
-    _renderSelection: function() {
+    _updateSelection: function() {
         this._prepareContent();
         this._renderContent();
     },
@@ -383,7 +383,7 @@ var SlideOut = CollectionWidget.inherit({
             case "items":
                 this._changeMenuOption("items", this.option("items"));
                 if(!this._selectedItemContentRendered) {
-                    this._renderSelection();
+                    this._updateSelection();
                 }
                 break;
             case "dataSource":

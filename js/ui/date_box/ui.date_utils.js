@@ -198,7 +198,7 @@ dateUtils.DATE_COMPONENTS_INFO = {
     "year": {
         getter: "getFullYear",
         setter: "setFullYear",
-        formatter: function(value, showNames, date) {
+        formatter: function(value, date) {
             var formatDate = new Date(date.getTime());
             formatDate.setFullYear(value);
             return dateLocalization.format(formatDate, "yyyy");
@@ -210,15 +210,10 @@ dateUtils.DATE_COMPONENTS_INFO = {
     "day": {
         getter: "getDate",
         setter: "setDate",
-        formatter: function(value, showNames, date) {
+        formatter: function(value, date) {
             var formatDate = new Date(date.getTime());
             formatDate.setDate(value);
-
-            if(!showNames) {
-                return dateLocalization.format(formatDate, "d");
-            }
-
-            return dateUtils.DATE_COMPONENT_TEXT_FORMATTER(value, dateLocalization.getDayNames()[formatDate.getDay()]);
+            return dateLocalization.format(formatDate, "d");
         },
         startValue: 1,
         endValue: undefined
@@ -227,9 +222,8 @@ dateUtils.DATE_COMPONENTS_INFO = {
     "month": {
         getter: "getMonth",
         setter: "setMonth",
-        formatter: function(value, showNames) {
-            var monthName = dateLocalization.getMonthNames()[value];
-            return showNames ? dateUtils.DATE_COMPONENT_TEXT_FORMATTER(value + 1, monthName) : monthName;
+        formatter: function(value) {
+            return dateLocalization.getMonthNames()[value];
         },
         startValue: 0,
         endValue: 11

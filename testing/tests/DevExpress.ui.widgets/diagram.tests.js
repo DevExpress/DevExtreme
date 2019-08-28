@@ -5,7 +5,7 @@ import "ui/diagram";
 import { DiagramCommand } from "devexpress-diagram";
 
 QUnit.testStart(() => {
-    const markup = '<div id="diagram"></div>';
+    const markup = '<style>.dxdi-control { width: 100%; height: 100%; overflow: auto; box-sizing: border-box; position: relative; }</style><div id="diagram"></div>';
     $("#qunit-fixture").html(markup);
 });
 
@@ -30,6 +30,71 @@ const moduleConfig = {
 function getToolbarIcon(button) {
     return button.find(".dx-dropdowneditor-field-template-wrapper").find(".dx-diagram-i, .dx-icon");
 }
+
+
+QUnit.module("Diagram DOM Layout", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach();
+    },
+    afterEach: () => {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
+    test("should return correct size of document container in default options", (assert) => {
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+    test("should return correct size of document container if options panel is hidden", (assert) => {
+        this.instance.option("propertiesPanel.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+    test("should return correct size of document container if toolbox is hidden", (assert) => {
+        this.instance.option("toolbox.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+    test("should return correct size of document container if toolbar is hidden", (assert) => {
+        this.instance.option("toolbar.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+    test("should return correct size of document container if all UI is hidden", (assert) => {
+        this.instance.option("toolbar.visible", false);
+        this.instance.option("toolbox.visible", false);
+        this.instance.option("propertiesPanel.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+
+    function assertSizes(assert, $scrollContainer, $actualContainer, inst) {
+        assert.equal($scrollContainer.width(), $actualContainer.width());
+        assert.equal($scrollContainer.height(), $actualContainer.height());
+        var coreScrollSize = inst._diagramInstance.render.view.scroll.getSize();
+        assert.equal(coreScrollSize.width, $actualContainer.width());
+        assert.equal(coreScrollSize.height, $actualContainer.height());
+    }
+});
 
 QUnit.module("Diagram Toolbar", moduleConfig, () => {
     test("should not render if toolbar.visible is false", (assert) => {
@@ -122,10 +187,10 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
     });
     test("should toggle fullscreen class name on button click", (assert) => {
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        let fullscreenButton = findToolbarItem(this.$element, "fullscreen");
-        fullscreenButton.trigger("dxclick");
+        let fullScreenButton = findToolbarItem(this.$element, "full screen");
+        fullScreenButton.trigger("dxclick");
         assert.ok(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        fullscreenButton.trigger("dxclick");
+        fullScreenButton.trigger("dxclick");
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
     });
     test("diagram should be focused after change font family", (assert) => {
@@ -248,6 +313,11 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("zoomLevel", 1);
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
     });
+    test("should sync zoomLevel property", (assert) => {
+        assert.equal(this.instance.option("zoomLevel"), 1);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ZoomLevel).execute(1.5);
+        assert.equal(this.instance.option("zoomLevel"), 1.5);
+    });
     test("should change zoomLevel object property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
         assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 7);
@@ -258,6 +328,12 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
         assert.equal(this.instance._diagramInstance.settings.zoomLevelItems.length, 2);
     });
+    test("should sync zoomLevel object property", (assert) => {
+        this.instance.option("zoomLevel", { value: 1.5, items: [ 1, 1.5, 2 ] });
+        assert.equal(this.instance.option("zoomLevel.value"), 1.5);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ZoomLevel).execute(2);
+        assert.equal(this.instance.option("zoomLevel.value"), 2);
+    });
     test("should change autoZoom property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
         this.instance.option("autoZoom", "fitContent");
@@ -267,12 +343,22 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("autoZoom", "disabled");
         assert.equal(this.instance._diagramInstance.settings.autoZoom, 0);
     });
-    test("should change fullscreen property", (assert) => {
+    test("should sync autoZoom property", (assert) => {
+        assert.equal(this.instance.option("autoZoom"), "disabled");
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SwitchAutoZoom).execute(1);
+        assert.equal(this.instance.option("autoZoom"), "fitContent");
+    });
+    test("should change fullScreen property", (assert) => {
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
-        this.instance.option("fullscreen", true);
+        this.instance.option("fullScreen", true);
         assert.ok(this.instance._diagramInstance.settings.fullscreen);
-        this.instance.option("fullscreen", false);
+        this.instance.option("fullScreen", false);
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
+    });
+    test("should sync fullScreen property", (assert) => {
+        assert.equal(this.instance.option("fullScreen"), false);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Fullscreen).execute(true);
+        assert.equal(this.instance.option("fullScreen"), true);
     });
     test("should change showGrid property", (assert) => {
         assert.ok(this.instance._diagramInstance.settings.showGrid);
@@ -281,6 +367,11 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("showGrid", true);
         assert.ok(this.instance._diagramInstance.settings.showGrid);
     });
+    test("should sync showGrid property", (assert) => {
+        assert.equal(this.instance.option("showGrid"), true);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ShowGrid).execute(false);
+        assert.equal(this.instance.option("showGrid"), false);
+    });
     test("should change snapToGrid property", (assert) => {
         assert.ok(this.instance._diagramInstance.settings.snapToGrid);
         this.instance.option("snapToGrid", false);
@@ -288,12 +379,22 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("snapToGrid", true);
         assert.ok(this.instance._diagramInstance.settings.snapToGrid);
     });
+    test("should sync snapToGrid property", (assert) => {
+        assert.equal(this.instance.option("snapToGrid"), true);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SnapToGrid).execute(false);
+        assert.equal(this.instance.option("snapToGrid"), false);
+    });
     test("should change gridSize property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
         this.instance.option("gridSize", 0.25);
         assert.equal(this.instance._diagramInstance.settings.gridSize, 360);
         this.instance.option("gridSize", 0.125);
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
+    });
+    test("should sync gridSize property", (assert) => {
+        assert.equal(this.instance.option("gridSize"), 0.125);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.GridSize).execute(0.25);
+        assert.equal(this.instance.option("gridSize"), 0.25);
     });
     test("should change gridSize object property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
@@ -305,12 +406,23 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.settings.gridSize, 180);
         assert.equal(this.instance._diagramInstance.settings.gridSizeItems.length, 2);
     });
+    test("should sync gridSize object property", (assert) => {
+        this.instance.option("gridSize", { value: 0.25, items: [0.125, 0.25, 1] });
+        assert.equal(this.instance.option("gridSize.value"), 0.25);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.GridSize).execute(1);
+        assert.equal(this.instance.option("gridSize.value"), 1);
+    });
     test("should change viewUnits property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
         this.instance.option("viewUnits", "cm");
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 1);
         this.instance.option("viewUnits", "in");
         assert.equal(this.instance._diagramInstance.settings.viewUnits, 0);
+    });
+    test("should sync viewUnits property", (assert) => {
+        assert.equal(this.instance.option("viewUnits"), "in");
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ViewUnits).execute(1);
+        assert.equal(this.instance.option("viewUnits"), "cm");
     });
     test("should change units property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.units, 0);
@@ -326,6 +438,14 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 4320);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
     });
+    test("should sync pageSize property", (assert) => {
+        this.instance.option("pageSize", { width: 3, height: 5 });
+        assert.equal(this.instance.option("pageSize.width"), 3);
+        assert.equal(this.instance.option("pageSize.height"), 5);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageSize).execute({ width: 4, height: 6 });
+        assert.equal(this.instance.option("pageSize.width"), 4);
+        assert.equal(this.instance.option("pageSize.height"), 6);
+    });
     test("should change pageSize object property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageSize.width, 8391);
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 11906);
@@ -335,6 +455,14 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(this.instance._diagramInstance.model.pageSize.height, 7200);
         assert.equal(this.instance._diagramInstance.settings.pageSizeItems.length, 1);
     });
+    test("should sync pageSize object property", (assert) => {
+        this.instance.option("pageSize", { width: 3, height: 5, items: [{ width: 3, height: 5, text: "A10" }, { width: 4, height: 6, text: "A11" }] });
+        assert.equal(this.instance.option("pageSize.width"), 3);
+        assert.equal(this.instance.option("pageSize.height"), 5);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageSize).execute({ width: 4, height: 6 });
+        assert.equal(this.instance.option("pageSize.width"), 4);
+        assert.equal(this.instance.option("pageSize.height"), 6);
+    });
     test("should change pageOrientation property", (assert) => {
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
         this.instance.option("pageOrientation", "landscape");
@@ -342,12 +470,22 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("pageOrientation", "portrait");
         assert.equal(this.instance._diagramInstance.model.pageLandscape, false);
     });
+    test("should sync pageOrientation property", (assert) => {
+        assert.equal(this.instance.option("pageOrientation"), "portrait");
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageLandscape).execute(1);
+        assert.equal(this.instance.option("pageOrientation"), "landscape");
+    });
     test("should change pageColor property", (assert) => {
-        assert.equal(this.instance._diagramInstance.model.pageColor, "white");
+        assert.equal(this.instance._diagramInstance.model.pageColor, -1); // FFFFFF
         this.instance.option("pageColor", "red");
-        assert.equal(this.instance._diagramInstance.model.pageColor, "red");
+        assert.equal(this.instance._diagramInstance.model.pageColor, -65536); // FF0000
         this.instance.option("pageColor", "white");
-        assert.equal(this.instance._diagramInstance.model.pageColor, "white");
+        assert.equal(this.instance._diagramInstance.model.pageColor, -1); // FFFFFF
+    });
+    test("should sync pageColor property", (assert) => {
+        assert.equal(this.instance.option("pageColor"), "#ffffff");
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.PageColor).execute("red");
+        assert.equal(this.instance.option("pageColor"), "#ff0000"); // FF0000
     });
     test("should change simpleView property", (assert) => {
         assert.equal(this.instance._diagramInstance.settings.simpleView, false);
@@ -356,10 +494,17 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("simpleView", false);
         assert.equal(this.instance._diagramInstance.settings.simpleView, false);
     });
+    test("should sync simpleView property", (assert) => {
+        assert.equal(this.instance.option("simpleView"), false);
+        this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ToggleSimpleView).execute(true);
+        assert.equal(this.instance.option("simpleView"), true);
+    });
 });
 
 function findToolbarItem($diagram, label) {
-    return $diagram.find(TOOLBAR_SELECTOR).find(".dx-widget").filter(function() {
-        return $(this).text().toLowerCase().indexOf(label) >= 0;
-    });
+    return $diagram.find(TOOLBAR_SELECTOR)
+        .find(".dx-widget")
+        .filter(function() {
+            return $(this).text().toLowerCase().indexOf(label) >= 0;
+        });
 }

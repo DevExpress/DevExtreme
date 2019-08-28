@@ -210,7 +210,7 @@ QUnit.test("Set visual range for all argument axis except original target one", 
     });
     chart._argumentAxes[0].visualRange.reset();
     // act
-    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), [10, 50]);
+    chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { range: [10, 50] });
     // assert
     assert.deepEqual(chart._argumentAxes[0].visualRange.firstCall.args[0], [10, 50]);
     assert.ok(!chart._argumentAxes[1].called);

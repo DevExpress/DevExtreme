@@ -1,3 +1,5 @@
+@import (once) "../base/diagram.less";
+
 @IOS7_DIAGRAM_TOOLBAR_ICON_SIZE: 18px;
 @DIAGRAM_TOOLBAR_COLORBUTTON_BORDER_WIDTH: 3px;
 
@@ -6,6 +8,13 @@
         border-bottom: 1px solid @IOS7_BORDER;
     }
 
+    &.dx-diagram-fullscreen {
+        background-color: @IOS7_BACKGROUND;
+    }
+}
+
+.dx-diagram-toolbar,
+.dx-dropdownmenu-popup {
     .dx-diagram-select-b,
     .dx-diagram-color-b {
         .dx-dropdowneditor-field-template-wrapper {
@@ -14,10 +23,6 @@
                 color: @IOS7_BUTTON_TEXT;
             }
         }
-    }
-
-    &.dx-diagram-fullscreen {
-        background-color: @IOS7_BACKGROUND;
     }
 }
 

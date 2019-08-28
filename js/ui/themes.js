@@ -246,7 +246,6 @@ function themeNameFromDevice(device) {
         case "ios":
             return "ios7";
         case "android":
-        case "win":
             return "generic";
     }
 

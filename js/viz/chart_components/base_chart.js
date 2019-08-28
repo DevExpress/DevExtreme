@@ -625,8 +625,7 @@ var BaseChart = BaseWidget.inherit({
         recreateCanvas = drawOptions.recreateCanvas;
 
         // T207665
-        that.__originalCanvas = that._canvas;
-        that._canvas = extend({}, that._canvas); // NOTE: Instance of the original canvas must be preserved
+        that._preserveOriginalCanvas();
 
         // T207665
         if(recreateCanvas) {
@@ -649,6 +648,11 @@ var BaseChart = BaseWidget.inherit({
         that._renderElements(drawOptions);
 
         that._lastRenderingTime = new Date() - startTime;
+    },
+
+    _preserveOriginalCanvas() {
+        this.__originalCanvas = this._canvas;
+        this._canvas = extend({}, this._canvas); // NOTE: Instance of the original canvas must be preserved
     },
 
     _layoutAxes: noop,
@@ -867,6 +871,7 @@ var BaseChart = BaseWidget.inherit({
 
         that._legend = new legendModule.Legend({
             renderer: that._renderer,
+            widget: that,
             group: that._legendGroup,
             backgroundClass: "dxc-border",
             itemGroupClass: "dxc-item",
@@ -935,10 +940,11 @@ var BaseChart = BaseWidget.inherit({
                 }
                 legendData.textOpacity = DEFAULT_OPACITY;
             }
+            const opacityStyle = { opacity: opacity };
             legendData.states = {
-                hover: style.hover,
-                selection: style.selection,
-                normal: _extend({}, style.normal, { opacity: opacity })
+                hover: _extend({}, style.hover, opacityStyle),
+                selection: _extend({}, style.selection, opacityStyle),
+                normal: _extend({}, style.normal, opacityStyle)
             };
 
             return legendData;

@@ -31,22 +31,6 @@ var DateViewStrategy = DateBoxStrategy.inherit({
 
             defaultOptionsRules: [
                 {
-                    device: function(device) {
-                        return device.platform === "win" && device.version && device.version[0] === 8;
-                    },
-                    options: {
-                        showNames: true
-                    }
-                },
-                {
-                    device: function(device) {
-                        return device.platform === "win" && device.phone && device.version && device.version[0] === 8;
-                    },
-                    options: {
-                        animation: null
-                    }
-                },
-                {
                     device: { platform: "android" },
                     options: {
                         width: 333,
@@ -55,9 +39,8 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                 },
                 {
                     device: function(device) {
-                        var platform = device.platform,
-                            version = device.version;
-                        return platform === "generic" || platform === "ios" || (platform === "win" && version && version[0] === 10);
+                        var platform = device.platform;
+                        return platform === "generic" || platform === "ios";
                     },
                     options: {
                         width: "auto",
