@@ -141,17 +141,16 @@ var Draggable = DOMComponentWithTemplate.inherit({
             return;
         }
 
-        var areaOffset = this._getAreaOffset($(e.currentTarget)),
-            direction = this.option("direction"),
-            position = {},
-            $element = this.$element();
+        let position = {},
+            $element = this.$element(),
+            direction = this.option("direction");
 
         if(direction === "horizontal" || direction === "both") {
-            position.left = e.pageX - $element.width() / 2 - areaOffset.left;
+            position.left = e.pageX - $element.offset().left + translator.locate($element).left - $element.width() / 2;
         }
 
         if(direction === "vertical" || direction === "both") {
-            position.top = e.pageY - $element.height() / 2 - areaOffset.top;
+            position.top = e.pageY - $element.offset().top + translator.locate($element).top - $element.height() / 2;
         }
 
         this._move(position, $element);

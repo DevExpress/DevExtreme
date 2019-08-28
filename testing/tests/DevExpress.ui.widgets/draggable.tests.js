@@ -357,7 +357,6 @@ QUnit.test("enabled", function(assert) {
     this.checkPosition(100 - this.$element.width() / 2, 100 - this.$element.height() / 2, assert);
 });
 
-// TODO fix in rtl mode
 QUnit.test("enabled in rtl mode", function(assert) {
     var $area = $("#area");
     $area.css("direction", "rtl");
@@ -371,6 +370,25 @@ QUnit.test("enabled in rtl mode", function(assert) {
     pointerMock($area).down(100, 100);
 
     this.checkPosition(100 - this.$element.width() / 2, 100 - this.$element.height() / 2, assert);
+});
+
+QUnit.test("Dragging an element should work correctly after click when it is positioned relative to an adjacent element", function(assert) {
+    // arragne
+    var $items = $("#items");
+
+    $items.children().css("display", "inline-block");
+    setupDraggable(this, $("#item2"));
+
+    this.createDraggable({
+        allowMoveByClick: true,
+        area: $items
+    });
+
+    // act
+    pointerMock($items).down(100, 300);
+
+    // assert
+    this.checkPosition(100 - this.$element.width() / 2, 300 - this.$element.height() / 2, assert);
 });
 
 QUnit.test("changing", function(assert) {
