@@ -1,13 +1,12 @@
 import { createWidget } from '../../helpers/testHelper';
 import { ClientFunction } from 'testcafe';
-import { pathToFileURL } from 'url';
-import { join } from  'path';
+import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 
 fixture `Scheduler: NativeScrolling`
-    .page(pathToFileURL(join(__dirname, '../container.html')).href);
+    .page(url(__dirname, '../container.html'));
 
-const createScheduler = (options: any) => createWidget("dxScheduler", options, true);
+const createScheduler = (options) => createWidget("dxScheduler", options, true);
 
 const scrollToTime = ClientFunction(() => {
     const date = new Date(2019, 5, 1, 9, 40);
@@ -45,7 +44,7 @@ test("ScrollToTime works correctly with timelineDay and timelineWeek view (T7499
             .expect(scheduler.workSpaceScroll.left).eql(expectedValue, `Work space is scrolled in ${name} view`)
             .expect(scheduler.headerSpaceScroll.left).eql(expectedValue, `Header space is scrolled in ${name} view`);
     }
-}).before(async () => createScheduler({
+}).before(() => createScheduler({
     dataSource: [],
     views: ["timelineDay", "timelineWeek"],
     currentView: "timelineDay",

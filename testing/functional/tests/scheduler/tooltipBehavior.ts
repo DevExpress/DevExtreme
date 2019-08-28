@@ -1,28 +1,25 @@
 import { createWidget } from '../../helpers/testHelper';
 import { ClientFunction } from 'testcafe';
-import { pathToFileURL } from 'url';
-import { join } from  'path';
+import url from '../../helpers/getPageUrl';
 import Scheduler from '../../model/scheduler';
 
 fixture `Scheduler: Appointment Tooltip`
-    .page(pathToFileURL(join(__dirname, '../container.html')).href);
+    .page(url(__dirname, '../container.html'));
 
 const scrollBrowser = ClientFunction(() => window.scrollBy(0,500));
 
-const createScheduler = async () => {
-    createWidget("dxScheduler", {
-        dataSource: [{
-            text: "Website Re-Design Plan",
-            startDate: new Date(2017, 4, 22, 9, 30),
-            endDate: new Date(2017, 4, 22, 11, 30)
-        }],
-        views: ["week"],
-		currentView: "week",
-		currentDate: new Date(2017, 4, 25),
-		startDayHour: 9,
-		height: 600
-    }, true);
-}
+const createScheduler = () => createWidget("dxScheduler", {
+    dataSource: [{
+        text: "Website Re-Design Plan",
+        startDate: new Date(2017, 4, 22, 9, 30),
+        endDate: new Date(2017, 4, 22, 11, 30)
+    }],
+    views: ["week"],
+    currentView: "week",
+    currentDate: new Date(2017, 4, 25),
+    startDayHour: 9,
+    height: 600
+}, true);
 
 test("Tooltip shouldn't hide after scroll in browser height is small (T755449)", async t => {
     const scheduler = new Scheduler("#container");
@@ -36,7 +33,7 @@ test("Tooltip shouldn't hide after scroll in browser height is small (T755449)",
 
     await t.expect(scheduler.tooltip.exists).notOk();
 
-}).before(() => createScheduler());
+}).before(createScheduler);
 
 test("Tooltip should hide after scroll", async t => {
     const scheduler = new Scheduler("#container");
@@ -49,4 +46,4 @@ test("Tooltip should hide after scroll", async t => {
     await scrollBrowser();
 
     await t.expect(scheduler.tooltip.exists).notOk();
-}).before(() => createScheduler());
+}).before(createScheduler);

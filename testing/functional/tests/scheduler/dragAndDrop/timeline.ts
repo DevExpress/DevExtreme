@@ -1,11 +1,10 @@
 import { dataSource } from './init/widget.data';
 import { createScheduler } from './init/widget.setup';
-import { pathToFileURL } from 'url';
-import { join } from  'path';
+import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture `Drag-and-drop appointments in the Scheduler timeline mode`
-    .page(pathToFileURL(join(__dirname, '../../container.html')).href);
+    .page(url(__dirname, '../../container.html'));
 
 test(`Drag-n-drop in the timelineDay mode from 9am to 11am`, async t => {
 	const scheduler = new Scheduler("#container");
@@ -31,7 +30,7 @@ test(`Drag-n-drop in the timelineWeek mode from 9am to 11am`, async t => {
         .expect(draggableAppointment.date.startTime).eql(`11:00 AM`)
         .expect(draggableAppointment.date.endTime).eql(`11:30 AM`);
 
-}).before(async () => { await createScheduler('timelineWeek', dataSource) });
+}).before(() => createScheduler('timelineWeek', dataSource));
 
 
 test(`Drag-n-drop in the timelineWorkWeek mode from 9am to 11am`, async t => {
