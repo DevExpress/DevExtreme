@@ -219,7 +219,7 @@
         "vizExport-exportButtonText": "{0} dosya",
         "dxFilterBuilder-and": "Ve",
         "dxFilterBuilder-or": "Veya",
-        "dxFilterBuilder-notAnd": "Değil",
+        "dxFilterBuilder-notAnd": "Değil Ve",
         "dxFilterBuilder-notOr": "Değil Veya",
         "dxFilterBuilder-addCondition": "Koşul Ekle",
         "dxFilterBuilder-addGroup": "Grup Ekle",
