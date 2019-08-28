@@ -2575,7 +2575,6 @@ QUnit.module("Circular axis. UpdateSize", $.extend({}, environment, {
         axis.updateSize(this.canvas);
         const { x, y } = this.renderer.text.lastCall.returnValue.attr.lastCall.args[0];
         return [x, y];
-
     }
 }));
 
