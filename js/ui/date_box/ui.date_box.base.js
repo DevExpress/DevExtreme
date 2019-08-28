@@ -753,6 +753,7 @@ var DateBox = DropDownEditor.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "showClearButton":
+            case "buttons":
                 this.callBase.apply(this, arguments);
                 this._updateSize();
                 break;
