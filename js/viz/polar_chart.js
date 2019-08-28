@@ -141,7 +141,7 @@ var dxPolarChart = AdvancedChart.inherit({
             clipCircle = that._renderer.clipCircle(left, top, radius);
             clipArray[0] = clipCircle;
         } else {
-            clipCircle.attr({ x: left, y: top, r: radius });
+            clipCircle.attr({ cx: left, cy: top, r: radius });
         }
     },
 
