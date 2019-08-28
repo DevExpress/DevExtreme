@@ -4889,6 +4889,44 @@ QUnit.test("deleteRow should not work if adding is started", function(assert) {
     assert.equal(testElement.find('.dx-data-row').length, 6, "row is removed");
 });
 
+// T804894
+QUnit.test("addRow should not work if updating is started with validation error", function(assert) {
+    // arrange
+    var that = this,
+        testElement = $('#container');
+
+    that.options.editing = {
+        mode: "cell"
+    };
+
+    that.options.onRowValidating = function(e) {
+        e.isValid = false;
+    };
+
+    that.validatingController.optionChanged({ name: "onRowValidating" });
+
+    that.rowsView.render(testElement);
+    that.editingController.init();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row count");
+
+    // act
+    that.editCell(0, 0);
+    that.cellValue(0, 0, "Test");
+    that.addRow();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row is not added");
+
+    // act
+    that.cancelEditData();
+    that.addRow();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 8, "row is added");
+});
+
 // T100624
 QUnit.test('Edit Cell when the width of the columns in percent', function(assert) {
     // arrange
