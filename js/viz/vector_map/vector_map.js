@@ -433,7 +433,7 @@ componentRegistrator("dxVectorMap", dxVectorMap);
 
 module.exports = dxVectorMap;
 ///#DEBUG
-export const _TESTS_resetDataKey = function() {
+module.exports._TESTS_resetDataKey = function() {
     nextDataKey = 1;
 };
 ///#ENDDEBUG
