@@ -16332,7 +16332,7 @@ QUnit.testInActiveWindow("Focus on edited cell after the edit button in command 
     assert.ok($(dataGrid.getRowElement(0)).find(".dx-editor-cell").eq(0).hasClass("dx-focused"), "first editable cell is active");
 });
 
-QUnit.test("Deprecated options test", function(assert) {
+QUnit.test("Test mutual influence of the useKeyboard and keyboardNavigation.enabled options", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid();
 
