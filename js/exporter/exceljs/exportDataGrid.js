@@ -1,4 +1,4 @@
-import { isDefined, isNumeric } from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 
 // https://docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
@@ -81,9 +81,10 @@ function _setColumnsWidth(worksheet, columns, startColumnIndex) {
         return;
     }
     for(let i = 0; i < columns.length; i++) {
-        if(isNumeric(columns[i].width)) {
+        const columnWidth = columns[i].width;
+        if((typeof columnWidth === "number") && isFinite(columnWidth)) { // TODO: review these values in angular/react/vue/width="125"/[width]="125"
             worksheet.getColumn(startColumnIndex + i).width =
-                Math.min(MAX_EXCEL_COLUMN_WIDTH, Math.floor(columns[i].width / MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
+                Math.min(MAX_EXCEL_COLUMN_WIDTH, Math.floor(columnWidth / MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
         }
     }
 }

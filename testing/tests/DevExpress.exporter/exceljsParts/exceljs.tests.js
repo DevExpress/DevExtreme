@@ -1,4 +1,5 @@
 import $ from "jquery";
+import browser from "core/utils/browser";
 import ExcelJS from "exceljs";
 import ExcelJSTestHelper from "./ExcelJSTestHelper.js";
 import { exportDataGrid } from "exporter/exceljs/excelExporter";
@@ -230,7 +231,13 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 exportDataGrid(getDataGridConfig(dataGrid, null, true)).then(() => {
-                    helper.checkColumnWidths([3.71, 67.71, undefined], topLeft.column);
+                    let expectedWidths = [3.71, 67.71, undefined];
+                    if(browser.mozilla) {
+                        expectedWidths = [3.85, 67.57, undefined];
+                    } else if(browser.msie) {
+                        expectedWidths = [3.77, 67.65, undefined];
+                    }
+                    helper.checkColumnWidths(expectedWidths, topLeft.column);
                     done();
                 });
             });
