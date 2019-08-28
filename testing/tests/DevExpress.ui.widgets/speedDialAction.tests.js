@@ -402,10 +402,12 @@ QUnit.module("add label option", (hooks) => {
     let firstSDA;
     let secondSDA;
     hooks.afterEach(() => {
-        firstSDA.dispose();
-        secondSDA.dispose();
+        firstSDA && firstSDA.dispose();
+        secondSDA && secondSDA.dispose();
     }),
-    test("check rendering", (assert) => {
+    test("check rendering if one action", (assert) => {
+        const done = assert.async();
+
         config({
             floatingActionButtonConfig: {
                 position: {
@@ -423,16 +425,28 @@ QUnit.module("add label option", (hooks) => {
         assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), "first action", "FAB has label");
         assert.ok($(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB has class");
 
-        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
-        assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "default position top doesn't change if FAB has label");
-        assert.roughEqual($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), 1, "default position left doesn't change if FAB has label");
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "default position top doesn't change if FAB has label");
+            assert.roughEqual($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), 1, "default position left doesn't change if FAB has label");
+            done();
+        }, 1000);
+
+    }),
+
+    test("check rendering if multiple actions", (assert) => {
+        const done = assert.async();
+
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
 
         secondSDA = $("#fab-two").dxSpeedDialAction({
             label: "second action"
         }).dxSpeedDialAction("instance");
 
-        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
         assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).length, 0, "FAB hasn't label if create second SDA");
         assert.ok(!$(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB hasn't class if create second SDA");
@@ -440,8 +454,23 @@ QUnit.module("add label option", (hooks) => {
         assert.equal($(FAB_SELECTOR).find(FAB_LABEL_SELECTOR).eq(1).text(), "second action", "second SDA has label");
         assert.ok(!$(FAB_SELECTOR).find(".dx-overlay-content").eq(0).hasClass(FAB_CONTENT_REVERSE_CLASS), "first SDA has label on the left");
         assert.ok(!$(FAB_SELECTOR).find(".dx-overlay-content").eq(1).hasClass(FAB_CONTENT_REVERSE_CLASS), "second SDA has label on the left");
-        assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "position top doesn't change if FAB has lost label");
-        assert.equal($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), "position left doesn't change if FAB has lost label");
+
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "position top doesn't change if FAB has lost label");
+            assert.equal($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), "position left doesn't change if FAB has lost label");
+            done();
+        }, 1000);
+    }),
+
+    test("check rendering if change position in config", (assert) => {
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            label: "second action"
+        }).dxSpeedDialAction("instance");
+
         config({
             floatingActionButtonConfig: {
                 label: "fab",
