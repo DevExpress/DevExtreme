@@ -4,6 +4,7 @@ import animationFrame from "animation/frame";
 import devices from "core/devices";
 import Scrollbar from "ui/scroll_view/ui.scrollbar";
 import pointerMock from "../../../helpers/pointerMock.js";
+import Scrollable from "ui/scroll_view/ui.scrollable";
 
 import "common.css!";
 
@@ -599,4 +600,18 @@ QUnit.test("content size should be rounded to prevent unexpected scrollbar appea
     });
 
     assert.ok(scrollbar.$element().is(":hidden"), "scrollbar is not visible");
+});
+
+QUnit.test("scrollbar shood be hidden when container size is almost similar to content size when zooming", function(assert) {
+    let scrollable = new Scrollable($('#scrollable'), {
+        'useNative': false
+    });
+
+    let verticalScroller = scrollable._strategy._scrollers['vertical'];
+    let verticalRealSizeStub = sinon.stub(verticalScroller, '_getRealDimension');
+    verticalRealSizeStub.withArgs(verticalScroller._$container.get(0), verticalScroller._dimension).returns(404)
+        .withArgs(verticalScroller._$content.get(0), verticalScroller._dimension).returns(405);
+    sinon.stub(verticalScroller, '_getBaseDimension').returns(405);
+    scrollable.update();
+    assert.notOk(verticalScroller._scrollbar._needScrollbar(), "scrollbar is hidden");
 });

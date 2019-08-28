@@ -175,7 +175,7 @@ var Scrollbar = Widget.inherit({
             baseContainerSize = Math.round(this.option("baseContainerSize")),
             baseContentSize = Math.round(this.option("baseContentSize"));
 
-        // NOTE: if current scrollbar's using outside of scrollbalbe
+        // NOTE: if current scrollbar's using outside of scrollable
         if(isNaN(baseContainerSize)) {
             baseContainerSize = containerSize;
             baseContentSize = contentSize;
