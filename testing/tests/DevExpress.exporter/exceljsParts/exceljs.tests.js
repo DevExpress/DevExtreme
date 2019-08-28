@@ -2,6 +2,7 @@ import $ from "jquery";
 import ExcelJS from "exceljs";
 import ExcelJSTestHelper from "./ExcelJSTestHelper.js";
 import { exportDataGrid } from "exporter/exceljs/excelExporter";
+import { MAX_EXCEL_COLUMN_WIDTH } from "exporter/exceljs/exportDataGrid";
 import { initializeDxObjectAssign, clearDxObjectAssign } from "./objectAssignHelper.js";
 import { initializeDxArrayFind, clearDxArrayFind } from "./arrayFindHelper.js";
 
@@ -14,12 +15,12 @@ import "generic_light.css!";
 
 let helper;
 
-const excelColumnWidthFromGrid500Pixels = 70.71;
-const excelColumnWidthFromColumn100Pixels = 13.57;
-const excelColumnWidthFromColumn150Pixels = 20.71;
-const excelColumnWidthFromColumn200Pixels = 27.86;
-const excelColumnWidthFromColumn250Pixels = 35;
-const excelColumnWidthFromColumn300Pixels = 42.14;
+const excelColumnWidthFromGrid500Pixels = 71.42;
+const excelColumnWidthFromColumn100Pixels = 14.28;
+const excelColumnWidthFromColumn150Pixels = 21.42;
+const excelColumnWidthFromColumn200Pixels = 28.57;
+const excelColumnWidthFromColumn250Pixels = 35.71;
+const excelColumnWidthFromColumn300Pixels = 42.85;
 
 QUnit.testStart(() => {
     let markup = "<div id='dataGrid'></div>";
@@ -60,7 +61,7 @@ QUnit.module("API", moduleConfig, () => {
 
         [true, false].forEach((excelFilterEnabled) => {
             let options = topLeftCellOption + `, excelFilterEnabled: ${excelFilterEnabled}`;
-            const getDataGridConfig = (dataGrid, expectedCustomizeCellArgs, exportColumnWidth) => {
+            const getDataGridConfig = (dataGrid, expectedCustomizeCellArgs, exportColumnWidth = true) => {
                 const result = {
                     component: dataGrid,
                     worksheet: this.worksheet,
@@ -72,9 +73,7 @@ QUnit.module("API", moduleConfig, () => {
                     },
                     excelFilterEnabled: excelFilterEnabled,
                 };
-                if(exportColumnWidth !== undefined) {
-                    result.exportColumnWidth = exportColumnWidth;
-                }
+                result.exportColumnWidth = exportColumnWidth;
                 return result;
             };
 
@@ -112,6 +111,38 @@ QUnit.module("API", moduleConfig, () => {
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, topLeft, "result.to");
+                    done();
+                });
+            });
+
+            QUnit.test("Header - 1 column, width: 1700" + options, (assert) => {
+                const done = assert.async();
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    width: 1700,
+                    columns: [{ caption: "f1" }]
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [ { excelCell: topLeft, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } } ];
+
+                exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                    helper.checkColumnWidths([242.85, undefined], topLeft.column);
+                    done();
+                });
+            });
+
+            QUnit.test("Header - 1 column, width: 1800" + options, (assert) => {
+                const done = assert.async();
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    width: 1800,
+                    columns: [{ caption: "f1" }]
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [ { excelCell: topLeft, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } } ];
+
+                exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                    helper.checkColumnWidths([MAX_EXCEL_COLUMN_WIDTH, undefined], topLeft.column);
                     done();
                 });
             });
@@ -158,6 +189,48 @@ QUnit.module("API", moduleConfig, () => {
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row, column: topLeft.column + 1 }, "result.to");
+                    done();
+                });
+            });
+
+            QUnit.test("Header - 2 column, column.width: XXXpx" + options, (assert) => {
+                const done = assert.async();
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    width: 500,
+                    columns: [{ caption: "f1", width: "200px" }, { caption: "f2", width: "300px" }]
+                }).dxDataGrid("instance");
+
+                exportDataGrid(getDataGridConfig(dataGrid, null, true)).then(() => {
+                    helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
+                    done();
+                });
+            });
+
+            QUnit.test("Header - 2 column, column.width: XX%" + options, (assert) => {
+                const done = assert.async();
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    width: 500,
+                    columns: [{ caption: "f1", width: "40%" }, { caption: "f2", width: "60%" }]
+                }).dxDataGrid("instance");
+
+                exportDataGrid(getDataGridConfig(dataGrid, null, true)).then(() => {
+                    helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
+                    done();
+                });
+            });
+
+            QUnit.test("Header - 2 column, column.width: auto" + options, (assert) => {
+                const done = assert.async();
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    width: 500,
+                    columns: [{ caption: "f1", width: "auto" }, { caption: "f2", width: "auto" }]
+                }).dxDataGrid("instance");
+
+                exportDataGrid(getDataGridConfig(dataGrid, null, true)).then(() => {
+                    helper.checkColumnWidths([3.71, 67.71, undefined], topLeft.column);
                     done();
                 });
             });
