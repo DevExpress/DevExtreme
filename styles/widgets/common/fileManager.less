@@ -141,23 +141,21 @@
             max-width: unset;
             width: 100%;
             display: inline-flex;
-            border-right: none;
         }
-    }
 
-    .dx-filemanager-container .dx-drawer-panel-content {
-        display: inline-flex;
-
-        &.dx-splitter-disabled {
-            .dx-filemanager-dirs-panel {
-                border-right: 1px solid;
+        .dx-drawer-opened {
+            .dx-splitter.dx-state-disabled {
+                width: 1px;
             }
+        }
+
+        .dx-drawer-panel-content {
+            display: inline-flex;
         }
     }
 
     .dx-filemanager-dirs-panel {
         height: 100%;
-        border-right: 1px solid;
     }
 
     .dx-filemanager-breadcrumbs {

@@ -35,17 +35,13 @@ class FileManagerAdaptivityControl extends Widget {
 
     _createDrawerTemplate(container) {
         this.option("drawerTemplate")(container);
-        const leftElement = container;
-        const rightElement = this._drawer.viewContent();
         this._splitter = this._createComponent("<div>", SplitterControl, {
             container: this.$element(),
-            leftElement,
-            rightElement,
+            leftElement: this._drawer.content(),
+            rightElement: this._drawer.viewContent(),
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
         this._splitter.$element().appendTo(container);
-        this._leftElement = leftElement;
-        this._rightElement = rightElement;
     }
 
     _render() {
@@ -54,15 +50,11 @@ class FileManagerAdaptivityControl extends Widget {
     }
 
     _onApplyPanelSize(e) {
-        this._setInnerElementsWidth(e);
-    }
-
-    _setInnerElementsWidth(widths) {
         if(!hasWindow()) {
             return;
         }
-        this._leftElement.width(widths.leftPanelWidth);
-        this._rightElement.width(widths.rightPanelWidth);
+        this._drawer.content().width(e.leftPanelWidth);
+        this._drawer.viewContent().width(e.rightPanelWidth);
     }
 
     _dimensionChanged(dimension) {
@@ -77,7 +69,7 @@ class FileManagerAdaptivityControl extends Widget {
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
-            this._toggleSplitter(!this._isInAdaptiveState);
+            this._splitter.toggleState(!this._isInAdaptiveState);
         }
     }
 
@@ -126,18 +118,6 @@ class FileManagerAdaptivityControl extends Widget {
     toggleDrawer(showing, skipAnimation) {
         this._drawer.option("animationEnabled", !skipAnimation);
         this._drawer.toggle(showing);
-    }
-
-    _toggleSplitter(isActive) {
-        if(isActive) {
-            $(this._leftElement).removeClass("dx-splitter-disabled");
-            this._splitter.$element().removeClass("dx-state-disabled");
-            this._splitter._$splitter.removeClass("dx-state-disabled");
-        } else {
-            $(this._leftElement).addClass("dx-splitter-disabled");
-            this._splitter.$element().addClass("dx-state-disabled");
-            this._splitter._$splitter.addClass("dx-state-disabled");
-        }
     }
 }
 

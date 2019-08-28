@@ -39,15 +39,13 @@ class Gantt extends Widget {
             .addClass(GANTT_VIEW_CLASS)
             .appendTo(this.$element());
 
-        const leftElement = this._$treeListWrapper;
-        const rightElement = this._$ganttView;
         this._splitter = this._createComponent("<div>", SplitterControl, {
             container: this.$element(),
-            leftElement,
-            rightElement,
+            leftElement: this._$treeListWrapper,
+            rightElement: this._$ganttView,
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
-        this._splitter.$element().appendTo(leftElement);
+        this._splitter.$element().appendTo(this._$treeListWrapper);
     }
 
     _render() {

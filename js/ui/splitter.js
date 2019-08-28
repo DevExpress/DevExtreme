@@ -150,4 +150,14 @@ export default class SplitterControl extends Widget {
     _isPercentValue(value) {
         return isString(value) && value.slice(-1) === "%";
     }
+
+    toggleState(isActive) {
+        if(isActive) {
+            this.$element().removeClass("dx-state-disabled");
+            this._$splitter.removeClass("dx-state-disabled");
+        } else {
+            this.$element().addClass("dx-state-disabled");
+            this._$splitter.addClass("dx-state-disabled");
+        }
+    }
 }
