@@ -38,6 +38,7 @@ QUnit.module("apply current config options", (hooks) => {
         const $fabMainElement = $("." + FAB_MAIN_CLASS);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const fabDimensions = 64;
+        const done = assert.async();
 
         assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
         assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
@@ -56,8 +57,11 @@ QUnit.module("apply current config options", (hooks) => {
 
         assert.equal($fabMainContent.find(".dx-icon-edit").length, 1, "default icon is changed");
         assert.equal($fabMainContent.find(".dx-icon-cancel").length, 1, "default close icon is changed");
-        assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
-        assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
+            assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+            done();
+        }, 500);
     });
 
     test("repaint with one action", (assert) => {
@@ -67,6 +71,7 @@ QUnit.module("apply current config options", (hooks) => {
         const $fabMainElement = $("." + FAB_MAIN_CLASS);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const fabDimensions = 64;
+        const done = assert.async();
 
         assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
         assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
@@ -86,7 +91,10 @@ QUnit.module("apply current config options", (hooks) => {
 
         assert.equal($fabMainContent.find(".dx-icon-trash").length, 1, "default icon is changed");
         assert.equal($fabMainContent.find(".dx-icon-cancel").length, 1, "default close icon is changed");
-        assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
-        assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
+            assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+            done();
+        }, 500);
     });
 });
