@@ -1,11 +1,12 @@
-import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
-import SchedulerTestHelper from '../../helpers/scheduler.test.helper';
+import { createWidget } from '../../helpers/testHelper';
 import { ClientFunction } from 'testcafe';
+import { pathToFileURL } from 'url';
+import { join } from  'path';
+import Scheduler from '../../model/scheduler';
 
 fixture `Scheduler: Appointment Tooltip`
-    .page(getContainerFileUrl());
+    .page(pathToFileURL(join(__dirname, '../container.html')).href);
 
-const scheduler = new SchedulerTestHelper("#container");
 const scrollBrowser = ClientFunction(() => window.scrollBy(0,500));
 
 const createScheduler = async () => {
@@ -24,22 +25,28 @@ const createScheduler = async () => {
 }
 
 test("Tooltip shouldn't hide after scroll in browser height is small (T755449)", async t => {
-    await t.resizeWindow(600, 400)
-        .click(scheduler.getAppointment(`Website Re-Design Plan`))
-        .expect(scheduler.isTooltipVisible()).ok();
+    const scheduler = new Scheduler("#container");
+
+    await t
+        .resizeWindow(600, 400)
+        .click(scheduler.getAppointment(`Website Re-Design Plan`).element)
+        .expect(scheduler.tooltip.exists).ok();
 
     await scrollBrowser();
 
-    await t.expect(scheduler.isTooltipVisible()).notOk();
+    await t.expect(scheduler.tooltip.exists).notOk();
 
-}).before(async () => await createScheduler());
+}).before(() => createScheduler());
 
 test("Tooltip should hide after scroll", async t => {
-    await t.resizeWindow(600, 600)
-        .click(scheduler.getAppointment(`Website Re-Design Plan`))
-        .expect(scheduler.isTooltipVisible()).ok();
+    const scheduler = new Scheduler("#container");
+
+    await t
+        .resizeWindow(600, 600)
+        .click(scheduler.getAppointment(`Website Re-Design Plan`).element)
+        .expect(scheduler.tooltip.exists).ok();
 
     await scrollBrowser();
 
-    await t.expect(scheduler.isTooltipVisible()).notOk();
-}).before(async () => await createScheduler());
+    await t.expect(scheduler.tooltip.exists).notOk();
+}).before(() => createScheduler());

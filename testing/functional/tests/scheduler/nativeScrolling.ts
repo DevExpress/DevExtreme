@@ -1,23 +1,24 @@
-import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
-import SchedulerTestHelper from '../../helpers/scheduler.test.helper';
+import { createWidget } from '../../helpers/testHelper';
 import { ClientFunction } from 'testcafe';
+import { pathToFileURL } from 'url';
+import { join } from  'path';
+import Scheduler from '../../model/scheduler';
 
 fixture `Scheduler: NativeScrolling`
-    .page(getContainerFileUrl());
+    .page(pathToFileURL(join(__dirname, '../container.html')).href);
 
-const scheduler = new SchedulerTestHelper("#container");
-
-const createScheduler = async (options: any) => {
-    createWidget("dxScheduler", options, true);
-}
+const createScheduler = (options: any) => createWidget("dxScheduler", options, true);
 
 const scrollToTime = ClientFunction(() => {
     const date = new Date(2019, 5, 1, 9, 40);
     const instance = ($("#container") as any)["dxScheduler"]("instance");
+
     instance.scrollToTime(date.getHours() - 1, 30, date);
 });
 
 test("ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)", async t => {
+    const scheduler = new Scheduler("#container");
+
     const views = [{
         name: "timelineDay",
         initValue: 0,
@@ -28,18 +29,21 @@ test("ScrollToTime works correctly with timelineDay and timelineWeek view (T7499
         expectedValue: 25700
     }];
 
-    for(let i = 0; i < views.length; i++) {
-        const view = views[i];
-        await scheduler.setOption("currentView", view.name);
+    for(let view of views) {
+        const { name, initValue, expectedValue } = view;
+
+        await scheduler.setOption("currentView", name);
         await scheduler.enableNativeScroll();
 
-        await t.expect(scheduler.getWorkSpaceScroll().left).eql(view.initValue, `Work space has init scroll position in ${view.name} view`);
-        await t.expect(scheduler.getHeaderSpaceScroll().left).eql(view.initValue, `Header space has init scroll position in ${view.name} view`);
+        await t
+            .expect(scheduler.workSpaceScroll.left).eql(initValue, `Work space has init scroll position in ${name} view`)
+            .expect(scheduler.headerSpaceScroll.left).eql(initValue, `Header space has init scroll position in ${name} view`);
 
         await scrollToTime();
 
-        await t.expect(scheduler.getWorkSpaceScroll().left).eql(view.expectedValue, `Work space is scrolled in ${view.name} view`);
-        await t.expect(scheduler.getHeaderSpaceScroll().left).eql(view.expectedValue, `Header space is scrolled in ${view.name} view`);
+        await t
+            .expect(scheduler.workSpaceScroll.left).eql(expectedValue, `Work space is scrolled in ${name} view`)
+            .expect(scheduler.headerSpaceScroll.left).eql(expectedValue, `Header space is scrolled in ${name} view`);
     }
 }).before(async () => createScheduler({
     dataSource: [],
