@@ -70,11 +70,12 @@ const SpeedDialItem = Overlay.inherit({
 
     _isPositionLeft(position) {
         const currentLocation = position ?
-            (position.at ? (position.at.x ? position.at.x : position.at)
-                : position)
-            : "";
+            (position.at ?
+                (position.at.x ? position.at.x : position.at) :
+                (typeof position === "string" ? position : "")) :
+            "";
 
-        return currentLocation.startsWith("left");
+        return currentLocation.split(" ")[0] === "left";
     },
 
     _renderButtonIcon($element, icon, iconClass) {
