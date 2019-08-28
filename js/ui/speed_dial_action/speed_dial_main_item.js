@@ -261,8 +261,7 @@ exports.initAction = function(newAction) {
             speedDialMainItem.option(extend({}, newAction._options, {
                 actions: savedActions,
                 visible: true,
-                position: speedDialMainItem._getPosition(),
-                label: speedDialMainItem._getDefaultOptions().label
+                position: speedDialMainItem._getPosition()
             }));
         } else {
             speedDialMainItem.option({
@@ -295,8 +294,7 @@ exports.disposeAction = function(actionId) {
         speedDialMainItem.option(extend({}, savedActions[0]._options, {
             actions: savedActions,
             visible: true,
-            position: speedDialMainItem._getPosition(),
-            label: speedDialMainItem._getDefaultOptions().label
+            position: speedDialMainItem._getPosition()
         }));
     } else {
         speedDialMainItem.option({
