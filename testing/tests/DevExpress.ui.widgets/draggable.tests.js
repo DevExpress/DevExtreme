@@ -2,17 +2,28 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     dragEvents = require("events/drag"),
     pointerMock = require("../../helpers/pointerMock.js"),
+    viewPort = require("core/utils/view_port").value,
     GestureEmitter = require("events/gesture/emitter.gesture.js");
 
 require("common.css!");
 require("ui/draggable");
 
+viewPort($("body").css({ margin: "0px", padding: "0px", height: "600px" }).addClass("dx-viewport"));
+
 QUnit.testStart(function() {
     var markup =
-        '<div id="area" style="width: 300px; height: 250px; position: relative; background: green;">\
-            <div style="width: 30px; height: 50px; background: yellow;" id="draggable"></div>\
-        </div>\
-        <div id="other"></div>';
+        `<div id="area" style="width: 300px; height: 250px; position: relative; background: green;">
+            <div style="width: 30px; height: 50px; background: yellow;" id="draggable"></div>
+            <div style="width: 100px; height: 100px; background: grey;" id="draggableWithHandle">
+                <div id="handle" style="width: 30px; height: 30px; background: grey;"></div>
+            </div>
+        </div>
+        <div id="items" style="width: 300px; height: 250px; position: relative; background: grey;">
+            <div id="item1" class="draggable" style="width: 30px; height: 50px; background: yellow;"></div>
+            <div id="item2" class="draggable" style="width: 30px; height: 50px; background: red;"></div>
+            <div id="item3" class="draggable" style="width: 30px; height: 50px; background: blue;"></div>
+        </div>
+        <div id="other"></div>`;
 
     $("#qunit-fixture").html(markup);
 });
@@ -24,18 +35,23 @@ var DRAGGABLE_CLASS = "dx-draggable",
         "onDragEnd": dragEvents.end
     };
 
+var setupDraggable = function(that, $element) {
+    $("#qunit-fixture").addClass("qunit-fixture-visible");
+
+    that.$element = $element;
+    that.createDraggable = function(options) {
+        return that.draggableInstance = that.$element.dxDraggable(options).dxDraggable("instance");
+    };
+    that.pointer = pointerMock(that.$element).start();
+
+    that.checkPosition = function(left, top, assert, $element) {
+        assert.deepEqual(($element || that.$element).offset(), { left: left, top: top });
+    };
+};
+
 var moduleConfig = {
     beforeEach: function() {
-        $("#qunit-fixture").addClass("qunit-fixture-visible");
-
-        this.$element = $("#draggable");
-        this.createDraggable = function(options) {
-            return this.draggableInstance = this.$element.dxDraggable(options).dxDraggable("instance");
-        };
-        this.pointer = pointerMock(this.$element).start();
-        this.checkPosition = function(left, top, assert, $element) {
-            assert.deepEqual(($element || this.$element).offset(), { left: left, top: top });
-        };
+        setupDraggable(this, $("#draggable"));
     },
     afterEach: function() {
         $("#qunit-fixture").removeClass("qunit-fixture-visible");
@@ -124,6 +140,7 @@ QUnit.test("'dx-state-disabled' class (T284305)", function(assert) {
     this.checkPosition(100, 0, assert);
 });
 
+
 QUnit.module("'direction' option", moduleConfig);
 
 QUnit.test("'horizontal'", function(assert) {
@@ -176,6 +193,7 @@ QUnit.test("dragging-class toggling", function(assert) {
     this.pointer.down().up();
     assert.ok(!this.$element.hasClass("dx-draggable-dragging"), "element has not appropriate class");
 });
+
 
 QUnit.module("bounds", moduleConfig);
 
@@ -326,6 +344,7 @@ QUnit.test("'boundOffset' option as string, quad", function(assert) {
     this.checkPosition(1, 2, assert);
 });
 
+
 QUnit.module("'allowMoveByClick' option", moduleConfig);
 
 QUnit.test("enabled", function(assert) {
@@ -333,13 +352,13 @@ QUnit.test("enabled", function(assert) {
         allowMoveByClick: true
     });
 
-    pointerMock(window).down(100, 100);
+    pointerMock(viewPort()).down(100, 100);
 
     this.checkPosition(100 - this.$element.width() / 2, 100 - this.$element.height() / 2, assert);
 });
 
 // TODO fix in rtl mode
-QUnit.skip("enabled in rtl mode", function(assert) {
+QUnit.test("enabled in rtl mode", function(assert) {
     var $area = $("#area");
     $area.css("direction", "rtl");
 
@@ -358,7 +377,7 @@ QUnit.test("changing", function(assert) {
     var draggable = this.createDraggable({ });
 
     draggable.option("allowMoveByClick", true);
-    pointerMock(window).down(100, 100);
+    pointerMock(viewPort()).down(100, 100);
 
     this.checkPosition(100 - this.$element.width() / 2, 100 - this.$element.height() / 2, assert);
 });
@@ -437,7 +456,7 @@ QUnit.module("clone", moduleConfig);
 
 QUnit.test("Clone an element when dragging", function(assert) {
     // arrange
-    let $cloneElement;
+    var $cloneElement;
 
     this.createDraggable({
         clone: true
@@ -457,7 +476,7 @@ QUnit.test("Clone an element when dragging", function(assert) {
 
 QUnit.test("Remove cloned element after the drop end", function(assert) {
     // arrange
-    let $cloneElement;
+    var $cloneElement;
 
     this.createDraggable({
         clone: true
@@ -479,7 +498,7 @@ QUnit.test("Remove cloned element after the drop end", function(assert) {
 
 QUnit.test("Remove cloned element when disposing", function(assert) {
     // arrange
-    let $cloneElement;
+    var $cloneElement;
 
     this.createDraggable({
         clone: true
@@ -623,7 +642,7 @@ QUnit.module("dragTemplate", moduleConfig);
 
 QUnit.test("Set dragTemplate", function(assert) {
     // arrange
-    let dragTemplate = sinon.spy(function() {
+    var dragTemplate = sinon.spy(function() {
         return $("<div id='myDragElement'/>").text("test");
     });
 
@@ -637,7 +656,7 @@ QUnit.test("Set dragTemplate", function(assert) {
     // assert
     assert.strictEqual($("body").children("#myDragElement").length, 1, "there is a drag element");
     assert.strictEqual(dragTemplate.callCount, 1, "dragTemplate is called");
-    assert.deepEqual($(dragTemplate.getCall(0).args[0]).get(0), $(this.draggableInstance.option("container")).get(0), "dragTemplate is called");
+    assert.deepEqual($(dragTemplate.getCall(0).args[0]).get(0), $(viewPort()).get(0), "dragTemplate is called");
 });
 
 QUnit.test("Remove my element after the drop end", function(assert) {
@@ -678,4 +697,68 @@ QUnit.test("Remove my element when disposing", function(assert) {
 
     // assert
     assert.strictEqual($("body").children("#myDragElement").length, 0, "there isn't a cloned element");
+});
+
+QUnit.module("items", $.extend({}, moduleConfig, {
+    beforeEach: function() {
+        setupDraggable(this, $("#items"));
+    }
+}));
+
+QUnit.test("Set items", function(assert) {
+    // arrange
+    var items,
+        $dragItemElement;
+
+    this.createDraggable({
+        items: ".draggable"
+    });
+    items = this.$element.children();
+
+    // act
+    $dragItemElement = items.eq(0);
+    pointerMock($dragItemElement).start().down().move(20, 20).up();
+
+    // assert
+    this.checkPosition(20, 270, assert, items.eq(0));
+
+    // act
+    $dragItemElement = items.eq(1);
+    pointerMock($dragItemElement).start().down().move(20, 20).up();
+
+    // assert
+    this.checkPosition(20, 320, assert, items.eq(1));
+
+    // act
+    $dragItemElement = items.eq(2);
+    pointerMock($dragItemElement).start().down().move(20, 20).up();
+
+    // assert
+    this.checkPosition(20, 370, assert, items.eq(2));
+});
+
+
+QUnit.module("handle", $.extend({}, moduleConfig, {
+    beforeEach: function() {
+        setupDraggable(this, $("#draggableWithHandle"));
+    }
+}));
+
+QUnit.test("Set handle", function(assert) {
+    // arrange
+    this.createDraggable({
+        handle: "#handle"
+    });
+
+    // act
+    this.pointer.down().move(10, 10).up();
+
+    // assert
+    this.checkPosition(0, 50, assert);
+
+    // act
+    pointerMock(this.$element.find("#handle").first()).start().down().move(10, 10);
+
+    // assert
+    this.checkPosition(10, 60, assert);
 });
