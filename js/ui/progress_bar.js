@@ -89,12 +89,6 @@ var ProgressBar = TrackBar.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: { platform: "win" },
-                options: {
-                    _animatingSegmentCount: 5
-                }
-            },
-            {
                 device: function(device) {
                     return device.platform === "android";
                 },

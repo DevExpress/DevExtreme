@@ -242,16 +242,6 @@ const ListEdit = ListBase.inherit({
                     */
                     itemDeleteMode: "swipe"
                 }
-            },
-            {
-                device: { platform: "win" },
-                options: {
-                    /**
-                    * @name dxListOptions.itemDeleteMode
-                    * @default 'context' @for Windows_Mobile
-                    */
-                    itemDeleteMode: "context"
-                }
             }
         ]);
     },

@@ -175,40 +175,6 @@ var Toast = Overlay.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 8;
-                },
-                options: {
-                    /**
-                    * @name dxToastOptions.position
-                    */
-                    position: "top center",
-
-                    /**
-                    * @name dxToastOptions.width
-                    */
-                    width: function() { return $(window).width(); }
-                }
-            },
-            {
-                device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 10;
-                },
-                options: {
-                    /**
-                   * @name dxToastOptions.position
-                   * @default 'bottom right' @for Windows_10_Mobile
-                   */
-                    position: "bottom right",
-
-                    /**
-                    * @name dxToastOptions.width
-                    * @default 'auto' @for Android|Windows_10_Mobile
-                    */
-                    width: "auto"
-                }
-            },
-            {
                 device: { platform: "android" },
                 options: {
                     /**
@@ -217,6 +183,10 @@ var Toast = Overlay.inherit({
                     */
                     closeOnOutsideClick: true,
 
+                    /**
+                    * @name dxToastOptions.width
+                    * @default 'auto' @for Android
+                    */
                     width: "auto",
 
                     /**
@@ -262,21 +232,20 @@ var Toast = Overlay.inherit({
             {
                 device: function(device) {
                     var isPhone = device.deviceType === "phone",
-                        isAndroid = device.platform === "android",
-                        isWin10 = device.platform === "win" && device.version && device.version[0] === 10;
+                        isAndroid = device.platform === "android";
 
-                    return isPhone && (isAndroid || isWin10);
+                    return isPhone && isAndroid;
                 },
                 options: {
                     /**
                     * @name dxToastOptions.width
-                    * @default function() { return $(window).width(); } @for phones_on_Android|phones_on_Windows_10_Mobile
+                    * @default function() { return $(window).width(); } @for phones_on_Android
                     */
                     width: function() { return $(window).width(); },
 
                     /**
                     * @name dxToastOptions.position
-                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for phones_on_Android|phones_on_Windows_10_Mobile
+                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for phones_on_Android
                     */
                     position: {
                         at: "bottom center",

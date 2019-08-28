@@ -258,28 +258,11 @@ var DateBox = DropDownEditor.inherit({
                 }
             },
             {
-                device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 8;
-                },
-                options: {
-                    buttonsLocation: "bottom after"
-                }
-            },
-            {
-                device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 10;
-                },
-                options: {
-                    buttonsLocation: "bottom center"
-                }
-            },
-            {
                 device: function(currentDevice) {
                     var realDevice = devices.real(),
                         platform = realDevice.platform,
-                        version = realDevice.version,
-                        isPhone = realDevice.phone;
-                    return platform === "generic" && currentDevice.deviceType !== "desktop" || platform === "win" && isPhone || (platform === "android" && compareVersions(version, [4, 4]) < 0);
+                        version = realDevice.version;
+                    return platform === "generic" && currentDevice.deviceType !== "desktop" || (platform === "android" && compareVersions(version, [4, 4]) < 0);
                 },
                 options: {
                     /**

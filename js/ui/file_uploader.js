@@ -375,9 +375,6 @@ class FileUploader extends Editor {
                 device: [
                     {
                         platform: "android"
-                    },
-                    {
-                        platform: "win"
                     }
                 ],
                 options: {

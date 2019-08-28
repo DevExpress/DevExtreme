@@ -257,19 +257,11 @@ QUnit.test("onPullDown action", function(assert) {
 });
 
 QUnit.test("no onPullDown hides pullDown", function(assert) {
-    if(devices.real().platform === "win") { // NOTE: pulldown is hidden always for win8
-        assert.expect(0);
-        return;
-    }
     var $scrollView = $("#scrollView").dxScrollView({});
     assert.ok($scrollView.find("." + SCROLLVIEW_PULLDOWN_CLASS).is(":hidden"), "pull down element is hidden");
 });
 
 QUnit.test("changing of onPullDown option changes pullDown visibility", function(assert) {
-    if(devices.real().platform === "win") { // NOTE: pulldown is hidden always for win8
-        assert.expect(0);
-        return;
-    }
     var $scrollView = $("#scrollView").dxScrollView({});
     $scrollView.dxScrollView("option", "onPullDown", noop);
     assert.ok($scrollView.find("." + SCROLLVIEW_PULLDOWN_CLASS).is(":visible"), "pull down element is visible");
@@ -2133,166 +2125,6 @@ QUnit.test("scroll fires with correctly arguments", function(assert) {
 });
 
 
-QUnit.module("native slideDown strategy", {
-    beforeEach: function() {
-        this.originalJQueryScrollTop = renderer.fn.scrollTop;
-
-        var currentTopValue = 0;
-        renderer.fn.scrollTop = function(value) {
-            if(arguments.length) {
-                currentTopValue = value;
-            } else {
-                return currentTopValue;
-            }
-        };
-
-        this.originalJQueryScrollLeft = renderer.fn.scrollLeft;
-
-        var currentLeftValue = 0;
-        renderer.fn.scrollLeft = function(value) {
-            if(arguments.length) {
-                currentLeftValue = value;
-            } else {
-                return currentLeftValue;
-            }
-        };
-
-        moduleConfig.beforeEach.call(this);
-        this._originalPlatform = devices.real().platform;
-        devices.real({ platform: "win" });
-        $("#qunit-fixture").addClass("dx-theme-win8");
-    },
-    afterEach: function() {
-        renderer.fn.scrollTop = this.originalJQueryScrollTop;
-        renderer.fn.scrollLeft = this.originalJQueryScrollLeft;
-        moduleConfig.afterEach.call(this);
-        devices.real({ platform: this._originalPlatform });
-        $("#qunit-fixture").removeClass("dx-theme-win8");
-    }
-});
-
-QUnit.test("markup", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({
-        useNative: true,
-        refreshStrategy: "slideDown",
-        onPullDown: noop
-    });
-
-    var $pullDown = $scrollView.find("." + SCROLLVIEW_PULLDOWN_CLASS),
-        $reachBottom = $scrollView.find("." + SCROLLVIEW_BOTTOM_POCKET_CLASS),
-        $content = $scrollView.find("." + SCROLLABLE_CONTENT_CLASS),
-        $topPocket = $scrollView.find("." + SCROLLVIEW_TOP_POCKET_CLASS);
-
-    assert.equal($pullDown.length, 0, "pull down container");
-    assert.equal($reachBottom.length, 1, "reach bottom container");
-    assert.equal($content.scrollTop(), $topPocket.height(), "content start on correctly position");
-});
-
-QUnit.test("onReachBottom", function(assert) {
-    assert.expect(1);
-
-    var scrollView = $("#scrollView").dxScrollView({
-        useNative: true,
-        refreshStrategy: "slideDown",
-        onReachBottom: function() {
-            assert.ok(true, "onReachBottom action was fired");
-        }
-    }).dxScrollView("instance");
-
-    var $container = scrollView.$element().find("." + SCROLLABLE_CONTAINER_CLASS);
-
-    $container.scrollTop($container.prop("scrollHeight") - $container.prop("clientHeight"));
-    $($container).trigger("scroll");
-});
-
-QUnit.test("reach bottom element toggle", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({
-        useNative: true,
-        refreshStrategy: "slideDown"
-    });
-
-    var $reachBottom = $scrollView.find("." + SCROLLVIEW_BOTTOM_POCKET_CLASS);
-
-    assert.ok($reachBottom.is(":hidden"), "reach bottom is hidden");
-
-    $scrollView.dxScrollView("option", "onReachBottom", noop);
-
-    assert.ok($reachBottom.is(":visible"), "reach bottom is hidden");
-});
-
-QUnit.test("release fires update", function(assert) {
-    var updated = 0;
-
-    var $scrollView = $("#scrollView").dxScrollView({
-        useNative: true,
-        onUpdated: function() {
-            updated++;
-        }
-    });
-    assert.equal(updated, 1, "update fired once after creation");
-    var clock = sinon.useFakeTimers();
-    try {
-        $scrollView.dxScrollView("release");
-        clock.tick(400);
-        assert.equal(updated, 2, "update fired");
-
-    } finally {
-        clock.restore();
-    }
-});
-
-QUnit.test("scroll fires with correctly arguments", function(assert) {
-    if(this._originalPlatform === "android" && devices.real().version[0] < 4) {
-        assert.expect(0);
-        return;
-    }
-
-    assert.expect(12);
-
-    var top = true,
-        left = true,
-        right = false,
-        bottom = false;
-
-    var $scrollView = $("#scrollView").width(50).height(50);
-    $scrollView.children().width(100).height(100);
-    $scrollView.dxScrollView({
-        useNative: true,
-        refreshStrategy: "slideDown",
-        direction: "both",
-        onScroll: function(e) {
-            assert.equal(e.reachedTop, top, "reached top is correct");
-            assert.equal(e.reachedLeft, left, "reached left is correct");
-            assert.equal(e.reachedRight, right, "reached right is correct");
-            assert.equal(e.reachedBottom, bottom, "reached bottom is correct");
-        }
-    });
-
-    var scrollView = $scrollView.dxScrollView("instance");
-
-    var $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollView).on("scroll", function(e) {
-        e.stopPropagation(); // NOTE: prevent bubbling of scroll event triggered with jQuery
-    });
-
-    $container.scrollTop(this.originalJQueryScrollTop.call($container)); // NOTE: update scrollTop position
-
-    $($container).trigger("scroll");
-
-    scrollView.scrollTo({ x: 1, y: 1 });
-
-    top = false; left = false;
-    $($container).trigger("scroll");
-    scrollView.scrollTo({
-        x: $container.prop("scrollWidth") - $container.prop("clientWidth"),
-        y: $container.prop("scrollHeight") - $container.prop("clientHeight")
-    });
-
-    right = true;
-    bottom = true;
-
-    $($container).trigger("scroll");
-});
-
 QUnit.module("regressions", moduleConfig);
 
 QUnit.skip("B251572 - dxScrollView - Scroll position flies away when setting the direction option to horizontal or both", function(assert) {
@@ -2328,16 +2160,6 @@ QUnit.test("refreshStrategy for ios set by real device", function(assert) {
 
     var scrollView = $("#scrollView").dxScrollView().dxScrollView("instance");
     assert.equal(scrollView.option("refreshStrategy"), "pullDown");
-});
-
-QUnit.test("refreshStrategy for win8 set by real device", function(assert) {
-    devices.real({ platform: "win" });
-    devices.current({ platform: "android" });
-
-    var scrollView = $("#scrollView").dxScrollView({ useNative: false }).dxScrollView("instance");
-
-    assert.equal(scrollView.option("refreshStrategy"), "slideDown");
-
 });
 
 QUnit.test("refreshStrategy for android set by real device", function(assert) {

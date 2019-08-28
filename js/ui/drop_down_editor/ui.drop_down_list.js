@@ -241,14 +241,6 @@ var DropDownList = DropDownEditor.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 8;
-                },
-                options: {
-                    popupPosition: { offset: { v: -6 } }
-                }
-            },
-            {
                 device: { platform: "ios" },
                 options: {
                     popupPosition: { offset: { v: -1 } }
