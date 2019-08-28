@@ -1,17 +1,19 @@
-import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
-import { ClientFunction } from 'testcafe';
-import { DataGridKeyboardTestHelper } from '../../helpers/dataGrid.test.helper';
+import { pathToFileURL } from 'url';
+import { join } from  'path';
+import { createWidget } from '../../helpers/testHelper';
+import DataGrid from '../../model/dataGrid';
 
-fixture`Editing`
-    .page(getContainerFileUrl());
-
-const dataGrid = new DataGridKeyboardTestHelper("#container");
+fixture `Editing`
+    .page(pathToFileURL(join(__dirname, '../container.html')).href);
 
 test("Tab key on editor should focus next cell if editing mode is cell", async t => {
-    await t.click(dataGrid.getDataCell(0, 1));
-    await t.pressKey("1");
-    await t.pressKey("tab");
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).ok();
+    const dataGrid = new DataGrid("#container");
+
+    await t
+        .click(dataGrid.getDataCell(0, 1).element)
+        .pressKey("1")
+        .pressKey("tab")
+        .expect(dataGrid.getDataCell(1, 1).isFocused).ok();
 
 }).before(async () => {
     await createWidget("dxDataGrid", {
