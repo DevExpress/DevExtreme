@@ -82,6 +82,7 @@ QUnit.test("Set bounds when data ready called. Without bounds in options", funct
     var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
 
     this.createMap({
+        getBoundsFromData: true,
         layers: [{ tag: "layer-1", dataSource: "data-1" }]
     });
 
@@ -334,7 +335,9 @@ QUnit.test("Applying bounds by data", function(assert) {
         }
     }];
     var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
-    this.createMap();
+    this.createMap({
+        getBoundsFromData: true
+    });
     this.layerCollection.stub("items").returns(layers);
 
     spy.lastCall.args[0].dataReady();
