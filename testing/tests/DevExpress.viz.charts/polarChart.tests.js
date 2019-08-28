@@ -148,7 +148,7 @@ var stubSeries = [createSeries(), createSeries()],
             that.clipFunc = function() {
                 return {
                     id: "DevExpress_" + that.getDefsSvgId(),
-                    attr: function() {},
+                    attr: sinon.spy(),
                     dispose: function() {}
                 };
             };
@@ -705,4 +705,13 @@ QUnit.test("ClipPaths. Hide error bars (out visual range)", function(assert) {
         }] });
 
     assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ["DevExpress_3", "DevExpress_4", false, false]);
+});
+
+QUnit.test("ClipPaths. Refresh clip path", function(assert) {
+    var chart = this.createSimplePolarChart({});
+
+    chart.render({ force: true });
+
+    assert.deepEqual(chart._panesClipRects.fixed[0].attr.lastCall.args[0], { cx: 100, cy: 100, r: 10 });
+    assert.deepEqual(chart._panesClipRects.base[0].attr.lastCall.args[0], { cx: 100, cy: 100, r: 10 });
 });
