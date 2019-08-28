@@ -90,7 +90,6 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _createDragElement: function($element) {
         let result = $element,
-            isCloned,
             clone = this.option("clone"),
             container = this._getContainer(),
             dragTemplate = this.option("dragTemplate");
@@ -104,13 +103,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             result = $element.clone().appendTo(container);
         }
 
-        isCloned = result.get(0) !== $element.get(0);
-
-        return result.css({
-            position: isCloned ? "absolute" : "relative",
-            top: 0,
-            left: 0
-        }).toggleClass(DRAGGABLE_CLONE_CLASS, isCloned);
+        return result.toggleClass(DRAGGABLE_CLONE_CLASS, result.get(0) !== $element.get(0));
     },
 
     _removeDragElement: function() {
@@ -203,7 +196,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _toggleDraggingClass: function(value) {
-        this._$dragElement.toggleClass(DRAGGABLE_DRAGGING_CLASS, value);
+        this._$dragElement && this._$dragElement.toggleClass(DRAGGABLE_DRAGGING_CLASS, value);
     },
 
     _getBoundOffset: function() {
