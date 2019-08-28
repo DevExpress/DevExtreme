@@ -12,18 +12,18 @@ viewPort($("body").css({ margin: "0px", padding: "0px", height: "600px" }).addCl
 
 QUnit.testStart(function() {
     var markup =
-        `<div id="area" style="width: 300px; height: 250px; position: relative; background: green;">
-            <div style="width: 30px; height: 50px; background: yellow;" id="draggable"></div>
-            <div style="width: 100px; height: 100px; background: grey;" id="draggableWithHandle">
-                <div id="handle" style="width: 30px; height: 30px; background: grey;"></div>
-            </div>
-        </div>
-        <div id="items" style="width: 300px; height: 250px; position: relative; background: grey;">
-            <div id="item1" class="draggable" style="width: 30px; height: 50px; background: yellow;"></div>
-            <div id="item2" class="draggable" style="width: 30px; height: 50px; background: red;"></div>
-            <div id="item3" class="draggable" style="width: 30px; height: 50px; background: blue;"></div>
-        </div>
-        <div id="other"></div>`;
+        '<div id="area" style="width: 300px; height: 250px; position: relative; background: green;">\
+            <div style="width: 30px; height: 50px; background: yellow;" id="draggable"></div>\
+            <div style="width: 100px; height: 100px; background: grey;" id="draggableWithHandle">\
+                <div id="handle" style="width: 30px; height: 30px; background: grey;"></div>\
+            </div>\
+        </div>\
+        <div id="items" style="width: 300px; height: 250px; position: relative; background: grey;">\
+            <div id="item1" class="draggable" style="width: 30px; height: 50px; background: yellow;"></div>\
+            <div id="item2" class="draggable" style="width: 30px; height: 50px; background: red;"></div>\
+            <div id="item3" class="draggable" style="width: 30px; height: 50px; background: blue;"></div>\
+        </div>\
+        <div id="other"></div>';
 
     $("#qunit-fixture").html(markup);
 });

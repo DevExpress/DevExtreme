@@ -34,8 +34,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             direction: "both",
             boundOffset: 0,
             allowMoveByClick: false,
-            clone: false,
-            dragTemplate: undefined
+            clone: false
         });
     },
 
@@ -277,14 +276,22 @@ var Draggable = DOMComponentWithTemplate.inherit({
             case "onDragEnd":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
+            case "dragTemplate":
+            case "container":
+            case "clone":
+                this._removeDragElement();
+                break;
             case "allowMoveByClick":
             case "direction":
             case "disabled":
+            case "area":
+            case "items":
+                this._removeDragElement();
                 this._detachEventHandlers();
                 this._attachEventHandlers();
                 break;
             case "boundOffset":
-            case "area":
+            case "handle":
                 break;
             default:
                 this.callBase(args);
