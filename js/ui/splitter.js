@@ -107,10 +107,6 @@ export default class SplitterControl extends Widget {
         }
     }
 
-    _computeRightPanelWidth(value) {
-        return this._$container.width() - this._$splitterBorder.width() - value;
-    }
-
     _computeLeftPanelWidth(e) {
         this._cursorLastPos = e.pageX - this._$container.offset().left - this._offsetX;
         this._cursorLastPos = Math.max(this._$splitterBorder.width(), this._cursorLastPos);
