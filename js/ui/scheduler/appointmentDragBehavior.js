@@ -39,8 +39,13 @@ export default class AppointmentDragBehavior {
         };
     }
 
-    onDragStart(args) {
-        const appointment = $(args.element);
+    onDragStart(e) {
+        const appointment = $(e.element);
+        this.onDragStartCore(appointment);
+        this.onDragMoveCore(appointment, { x: 0, y: 0 });
+    }
+
+    onDragStartCore(appointment) {
         this.initialPosition = translator.locate(appointment);
 
         this.scheduler.option(FIXED_CONTAINER_PROP_NAME).append(appointment);
@@ -49,21 +54,24 @@ export default class AppointmentDragBehavior {
         const containerShift = this.getContainerShift(this.isAllDay(appointment));
         this.initialPosition.left += containerShift.left;
         this.initialPosition.top += containerShift.top;
-
-        this.onDragMove(args);
     }
 
-    onDragMove(args) {
-        const mouseOffset = args.event.offset || { x: 0, y: 0 };
+    onDragMove(e) {
+        this.onDragMoveCore($(e.element), e.event.offset);
+    }
 
-        translator.move($(args.element), {
+    onDragMoveCore(appointment, mouseOffset) {
+        translator.move(appointment, {
             left: this.initialPosition.left + mouseOffset.x,
             top: this.initialPosition.top + mouseOffset.y
         });
     }
 
-    onDragEnd(args) {
-        const appointment = $(args.element);
+    onDragEnd(e) {
+        this.onDragEndCore($(e.element), e);
+    }
+
+    onDragEndCore(appointment, e) {
         const container = this.scheduler._getAppointmentContainer(this.isAllDay(appointment));
         container.append(appointment);
 
@@ -74,7 +82,7 @@ export default class AppointmentDragBehavior {
         this.currentAppointment = appointment;
 
         if(this.scheduler._escPressed) {
-            args.event.cancel = true;
+            e.event.cancel = true;
         } else {
             this.scheduler.notifyObserver("updateAppointmentAfterDrag", {
                 data: this.scheduler._getItemData(appointment),
@@ -93,9 +101,9 @@ export default class AppointmentDragBehavior {
             boundOffset: this.scheduler._calculateBoundOffset(),
             immediate: false,
 
-            onDragStart: args => this.onDragStart(args),
-            onDrag: args => this.onDragMove(args),
-            onDragEnd: args => this.onDragEnd(args)
+            onDragStart: e => this.onDragStart(e),
+            onDrag: e => this.onDragMove(e),
+            onDragEnd: e => this.onDragEnd(e)
         });
     }
 
