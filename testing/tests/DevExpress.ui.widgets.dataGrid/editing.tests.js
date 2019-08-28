@@ -4890,6 +4890,44 @@ QUnit.test("deleteRow should not work if adding is started", function(assert) {
     assert.equal(testElement.find('.dx-data-row').length, 6, "row is removed");
 });
 
+// T804894
+QUnit.test("addRow should not work if updating is started with validation error", function(assert) {
+    // arrange
+    var that = this,
+        testElement = $('#container');
+
+    that.options.editing = {
+        mode: "cell"
+    };
+
+    that.options.onRowValidating = function(e) {
+        e.isValid = false;
+    };
+
+    that.validatingController.optionChanged({ name: "onRowValidating" });
+
+    that.rowsView.render(testElement);
+    that.editingController.init();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row count");
+
+    // act
+    that.editCell(0, 0);
+    that.cellValue(0, 0, "Test");
+    that.addRow();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row is not added");
+
+    // act
+    that.cancelEditData();
+    that.addRow();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 8, "row is added");
+});
+
 // T100624
 QUnit.test('Edit Cell when the width of the columns in percent', function(assert) {
     // arrange
@@ -13894,6 +13932,35 @@ QUnit.test("Show editing popup on row adding", function(assert) {
     assert.ok(that.isEditingPopupVisible(), "Editing popup is visible");
     assert.equal($editingForm.find(".dx-texteditor").length, that.columns.length, "The expected count of editors are rendered");
     assert.equal($editingForm.find(".dx-texteditor input").val(), "", "Editor has empty initial value");
+});
+
+QUnit.test("Show editing popup with custom editCellTemplate on row adding", function(assert) {
+    var that = this;
+    var editCellTemplateOptions;
+
+    this.columns[0].editCellTemplate = function(container, options) {
+        $(container).addClass("test-editor");
+        editCellTemplateOptions = options;
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    // act
+    that.addRow();
+    that.clock.tick();
+    that.preparePopupHelpers();
+    that.clock.tick();
+
+
+    // assert
+    var $editingForm = that.getEditPopupContent().find(".dx-form");
+
+    assert.equal($editingForm.find(".test-editor").length, 1, "editCellTemplate is rendered in popup");
+    assert.strictEqual(editCellTemplateOptions.value, undefined, "editCellTemplate value");
+    assert.ok("value" in editCellTemplateOptions, "editCellTemplate value exists"); // T808450
+    assert.equal(editCellTemplateOptions.isOnForm, true, "editCellTemplate isOnForm");
+    assert.equal(typeof editCellTemplateOptions.setValue, "function", "editCellTemplate setValue exists");
 });
 
 QUnit.testInActiveWindow("Focus the first editor at popup shown", function(assert) {
