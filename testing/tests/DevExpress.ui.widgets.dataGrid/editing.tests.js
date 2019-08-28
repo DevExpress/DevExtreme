@@ -13933,6 +13933,35 @@ QUnit.test("Show editing popup on row adding", function(assert) {
     assert.equal($editingForm.find(".dx-texteditor input").val(), "", "Editor has empty initial value");
 });
 
+QUnit.test("Show editing popup with custom editCellTemplate on row adding", function(assert) {
+    var that = this;
+    var editCellTemplateOptions;
+
+    this.columns[0].editCellTemplate = function(container, options) {
+        $(container).addClass("test-editor");
+        editCellTemplateOptions = options;
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    // act
+    that.addRow();
+    that.clock.tick();
+    that.preparePopupHelpers();
+    that.clock.tick();
+
+
+    // assert
+    var $editingForm = that.getEditPopupContent().find(".dx-form");
+
+    assert.equal($editingForm.find(".test-editor").length, 1, "editCellTemplate is rendered in popup");
+    assert.strictEqual(editCellTemplateOptions.value, undefined, "editCellTemplate value");
+    assert.ok("value" in editCellTemplateOptions, "editCellTemplate value exists"); // T808450
+    assert.equal(editCellTemplateOptions.isOnForm, true, "editCellTemplate isOnForm");
+    assert.equal(typeof editCellTemplateOptions.setValue, "function", "editCellTemplate setValue exists");
+});
+
 QUnit.testInActiveWindow("Focus the first editor at popup shown", function(assert) {
     var that = this;
 
