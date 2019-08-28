@@ -97,7 +97,6 @@ class Gantt extends Widget {
 
     _onApplyPanelSize(e) {
         this._setInnerElementsWidth(e);
-        this.option("treeListWidth", this._$treeListWrapper.width());
     }
 
     _onTreeListContentReady(e) {

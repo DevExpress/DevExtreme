@@ -20,9 +20,9 @@ const SPLITTER_WINDOW_RESIZE_EVENT_NAME = addNamespace("resize", SPLITTER_MODULE
 
 export default class SplitterControl extends Widget {
     _initMarkup() {
-        this._container = this.option("container");
-        this._leftElement = this.option("leftElement");
-        this._rightElement = this.option("rightElement");
+        this._$container = this.option("container");
+        this._$leftElement = this.option("leftElement");
+        this._$rightElement = this.option("rightElement");
         this._onApplyPanelSize = this._createActionByOption("onApplyPanelSize");
 
         this.$element()
@@ -63,7 +63,13 @@ export default class SplitterControl extends Widget {
     }
 
     _windowResizeHandler(e) {
-        const leftPanelWidth = this._leftElement.width() / this._container.width() * 100;
+        const leftElementWidth = this._$leftElement[0].style.width;
+        const rightElementWidth = this._$rightElement[0].style.width;
+        if(this._isPercentValue(leftElementWidth) && this._isPercentValue(rightElementWidth)) {
+            return;
+        }
+
+        const leftPanelWidth = this._$leftElement.width() / this._$container.width() * 100;
         const rightPanelWidth = 100 - leftPanelWidth;
         this._onApplyPanelSize({
             leftPanelWidth: leftPanelWidth + "%",
@@ -76,7 +82,7 @@ export default class SplitterControl extends Widget {
         this._offsetX = e.offsetX <= this._$splitterBorder.width() ? e.offsetX : 0;
         this._isSplitterActive = true;
         this._cursorLastPos = e.clientX;
-        this._containerWidth = this._container.width();
+        this._containerWidth = this._$container.width();
         this._leftPanelMinWidth = this._getLeftPanelMinWidth();
         this._leftPanelMaxWidth = this._getLeftPanelMaxWidth();
         this._$splitter.removeClass(SPLITTER_TRANSPARENT_CLASS);
@@ -102,14 +108,16 @@ export default class SplitterControl extends Widget {
     }
 
     _computeRightPanelWidth(value) {
-        return this._container.width() - this._$splitterBorder.width() - value;
+        return this._$container.width() - this._$splitterBorder.width() - value;
     }
 
     _computeLeftPanelWidth(e) {
-        this._cursorLastPos = e.pageX - this._container.offset().left - this._offsetX;
+        this._cursorLastPos = e.pageX - this._$container.offset().left - this._offsetX;
         this._cursorLastPos = Math.max(this._$splitterBorder.width(), this._cursorLastPos);
         this._cursorLastPos = Math.min(this._containerWidth - this._$splitterBorder.width(), this._cursorLastPos);
-        this._cursorLastPos = Math.max(this._cursorLastPos, this._leftPanelMinWidth);
+        if(this._leftPanelMinWidth) {
+            this._cursorLastPos = Math.max(this._cursorLastPos, this._leftPanelMinWidth);
+        }
         if(this._leftPanelMaxWidth) {
             this._cursorLastPos = Math.min(this._cursorLastPos, this._leftPanelMaxWidth);
         }
@@ -117,47 +125,33 @@ export default class SplitterControl extends Widget {
     }
 
     _getLeftPanelMinWidth() {
-        this._window = getWindow();
-        return this._getElementMinWidthRecursive(this._leftElement.length ? this._leftElement[0] : this._leftElement);
+        return this._getElementMinMaxWidthRecursiveCore(this._$leftElement[0], "minWidth");
     }
 
     _getLeftPanelMaxWidth() {
-        this._window = getWindow();
-        return this._getElementMaxWidthRecursive(this._leftElement.length ? this._leftElement[0] : this._leftElement);
+        return this._getElementMinMaxWidthRecursiveCore(this._$leftElement[0], "maxWidth");
     }
 
-    _getElementMinWidthRecursive(element) {
-        let elementMinWidth = 0;
-        if(this._isDomElement(element)) {
-            elementMinWidth = this._window.getComputedStyle(element).minWidth;
-        }
-        let minWidth = isString(elementMinWidth) && elementMinWidth.indexOf("%") < 0 ? parseFloat(elementMinWidth) : 0;
-        if(isNaN(minWidth)) {
-            minWidth = 0;
-        }
-        for(let i = 0; i < element.childNodes.length; i++) {
-            minWidth = Math.max(minWidth, this._getElementMinWidthRecursive(element.childNodes[i]));
-        }
-        return minWidth;
-    }
-
-    _getElementMaxWidthRecursive(element) {
+    _getElementMinMaxWidthRecursiveCore(element, minMaxAttr) {
         let elementMaxWidth = 0;
         if(this._isDomElement(element)) {
-            elementMaxWidth = this._window.getComputedStyle(element).maxWidth;
+            elementMaxWidth = getWindow().getComputedStyle(element)[minMaxAttr];
         }
-        let maxWidth = isString(elementMaxWidth) && elementMaxWidth.indexOf("%") < 0 ? parseFloat(elementMaxWidth) : 0;
-        if(isNaN(maxWidth)) {
-            maxWidth = 0;
+        let width = !this._isPercentValue(elementMaxWidth) ? parseFloat(elementMaxWidth) : 0;
+        if(isNaN(width)) {
+            width = 0;
         }
         for(let i = 0; i < element.childNodes.length; i++) {
-            maxWidth = Math.max(maxWidth, this._getElementMaxWidthRecursive(element.childNodes[i]));
+            width = Math.max(width, this._getElementMinMaxWidthRecursiveCore(element.childNodes[i], minMaxAttr));
         }
-        return maxWidth;
+        return width;
     }
 
     _isDomElement(element) {
         return element && element.nodeType && element.nodeType === 1;
     }
 
+    _isPercentValue(value) {
+        return isString(value) && value.slice(-1) === "%";
+    }
 }

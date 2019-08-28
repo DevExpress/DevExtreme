@@ -130,9 +130,13 @@ class FileManagerAdaptivityControl extends Widget {
 
     _toggleSplitter(isActive) {
         if(isActive) {
+            this._leftElement.removeClass("dx-splitter-disabled");
             this._splitter.$element().removeClass("dx-state-disabled");
+            this._splitter._$splitter.removeClass("dx-state-disabled");
         } else {
+            this._leftElement.addClass("dx-splitter-disabled");
             this._splitter.$element().addClass("dx-state-disabled");
+            this._splitter._$splitter.addClass("dx-state-disabled");
         }
     }
 }
