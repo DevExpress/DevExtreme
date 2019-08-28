@@ -460,7 +460,7 @@ var dxRangeSelector = {
         opacity: 0.75
     },
     /**
-    *@name dxRangeSelectorOptions.value
+    * @name dxRangeSelectorOptions.value
     * @type Array<number,string,Date> | VizRange
     * @fires dxRangeSelectorOptions.onValueChanged
     * @notUsedInTheme
