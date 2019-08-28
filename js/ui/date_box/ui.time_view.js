@@ -18,8 +18,6 @@ var TIMEVIEW_CLASS = "dx-timeview",
     TIMEVIEW_FORMAT12_PM = 1,
     TIMEVIEW_MINUTEARROW_CLASS = "dx-timeview-minutearrow";
 
-var MAX_HOURS_VALUE = 24;
-
 var rotateArrow = function($arrow, angle, offset) {
     cssRotate($arrow, angle, offset);
 };
@@ -183,25 +181,27 @@ var TimeView = Editor.inherit({
         this._hourBox.setAria("label", "hours");
     },
 
+    _isPM: function() {
+        return !this.option("use24HourFormat") && this._format12.option("value") === 1;
+    },
+
     _onHourBoxValueChanged: function(args) {
         var currentValue = this._getValue(),
-            newHours = this._convertMaxHourToMin(this._getCalculatedHours(currentValue.getHours(), args.previousValue, args.value)),
+            newHours = this._convertMaxHourToMin(args.value),
             newValue = new Date(currentValue);
+
+        if(this._isPM()) {
+            newHours += 12;
+        }
 
         newValue.setHours(newHours);
         uiDateUtils.normalizeTime(newValue);
         this.option("value", newValue);
     },
 
-    _getCalculatedHours: function(currentHours, prevHours, newHours) {
-        if(Math.abs(prevHours - newHours) === 1) {
-            return currentHours + (newHours - prevHours);
-        }
-        return newHours;
-    },
-
     _convertMaxHourToMin: function(hours) {
-        return (MAX_HOURS_VALUE + hours) % MAX_HOURS_VALUE;
+        var maxHoursValue = this.option("use24HourFormat") ? 24 : 12;
+        return (maxHoursValue + hours) % maxHoursValue;
     },
 
     _createMinuteBox: function() {
