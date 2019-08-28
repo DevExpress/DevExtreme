@@ -1850,15 +1850,17 @@ var EditingController = modules.ViewController.inherit((function() {
                     cellElement: null,
                     isOnForm: true,
                     item: item,
-                    value: column.calculateCellValue(rowData),
                     column: extend({}, column, { editorType: editorType, editorOptions: item.editorOptions }),
                     id: form.getItemID(item.name || item.dataField),
                     columnIndex: column.index,
                     setValue: !isReadOnly && column.allowEditing && function(value) {
                         that.updateFieldValue(cellOptions, value);
                     }
-                }),
-                template = that._getFormEditItemTemplate.bind(that)(cellOptions, column);
+                });
+
+            cellOptions.value = column.calculateCellValue(rowData);
+
+            var template = that._getFormEditItemTemplate.bind(that)(cellOptions, column);
 
             if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length)) {
                 that._rowsView._updateCell($container, cellOptions);
