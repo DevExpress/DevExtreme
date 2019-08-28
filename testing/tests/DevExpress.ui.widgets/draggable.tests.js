@@ -755,6 +755,24 @@ QUnit.test("Set items", function(assert) {
     this.checkPosition(20, 370, assert, items.eq(2));
 });
 
+QUnit.test("No exceptions on area click", function(assert) {
+    // arrange
+    this.createDraggable({
+        items: ".draggable",
+        area: "#items"
+    });
+
+    try {
+        // act
+        pointerMock($("#items")).start().down().move(10, 10);
+
+        // assert
+        assert.ok(true, "No exceptions");
+    } catch(e) {
+        assert.ok(false, "exception");
+    }
+});
+
 
 QUnit.module("handle", $.extend({}, moduleConfig, {
     beforeEach: function() {

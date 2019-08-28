@@ -240,6 +240,11 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragHandler: function(e) {
+        if(!this._$dragElement) {
+            e.cancel = true;
+            return;
+        }
+
         var offset = e.offset,
             startPosition = this._startPosition;
 
