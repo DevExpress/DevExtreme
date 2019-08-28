@@ -90,3 +90,55 @@ QUnit.test("VectorMap should fire onCenterChanged and onZoomFactorChanged events
     assert.strictEqual(onCenterChanged.callCount, 1);
     assert.strictEqual(onZoomFactorChanged.callCount, 1);
 });
+
+QUnit.module("VectorMap bounds", {
+    beforeEach: function() {
+        this.dataSource = {
+            type: "FeatureCollection",
+            features: [
+                [
+                    [[100, 50], [120, 50], [150, 20], [50, 40]]
+                ],
+                [
+                    [[100, 10], [50, 60], [50, 30]],
+                    [[-10, 0], [0, 30], [40, 30], [40, -10]]
+                ],
+                []
+            ].map(function(item) {
+                return {
+                    type: "Feature",
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: item.coordinates ? item.coordinates : item
+                    },
+                    properties: item.properties || {}
+                };
+            })
+        };
+    }
+});
+
+QUnit.test("VectorMap should set prepared bounds from dataSource (root - FeatureCollection object)", function(assert) {
+    this.dataSource["bbox"] = [0, 50, 100, 0];
+    var map = $("#container").dxVectorMap({
+        layers: {
+            dataSource: this.dataSource
+        }
+    }).dxVectorMap("instance");
+
+    assert.deepEqual(map._projection._engine.min(), [0, 0]);
+    assert.deepEqual(map._projection._engine.max(), [100, 50]);
+});
+
+QUnit.test("VectorMap should set prepared bounds from dataSource (collect from feature objects)", function(assert) {
+    this.dataSource.features[0]["bbox"] = [-10, 50, 120, 0];
+    this.dataSource.features[1]["bbox"] = [0, 60, 100, -10];
+    var map = $("#container").dxVectorMap({
+        layers: {
+            dataSource: this.dataSource
+        }
+    }).dxVectorMap("instance");
+
+    assert.deepEqual(map._projection._engine.min(), [-10, -10]);
+    assert.deepEqual(map._projection._engine.max(), [120, 60]);
+});

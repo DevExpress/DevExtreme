@@ -1,24 +1,27 @@
 var noop = require("core/utils/common").noop,
     vizMocks = require("../../helpers/vizMocks.js"),
     mapLayerModule = require("viz/vector_map/map_layer"),
+    DeferredModule = require("core/utils/deferred"),
     StubMapLayer;
-
-QUnit.begin(function() {
-    StubMapLayer = vizMocks.stubClass(mapLayerModule._TESTS_MapLayer, null, {
-        $constructor: function() {
-            this.proxy = { name: arguments[2] };
-            StubMapLayer.items.push(this);
-        }
-    });
-    mapLayerModule._TESTS_stub_MapLayer(StubMapLayer);
-});
-
-QUnit.testStart(function() {
-    StubMapLayer.items = [];
-});
 
 QUnit.module("Basic", {
     beforeEach: function() {
+        var that = this;
+        that.readyCallbacks = [];
+        StubMapLayer = vizMocks.stubClass(mapLayerModule._TESTS_MapLayer, null, {
+            $constructor: function() {
+                this.proxy = { name: arguments[2] };
+                StubMapLayer.items.push(this);
+                var readyCallback = new DeferredModule.Deferred();
+                that.readyCallbacks.push(readyCallback);
+                this.getDataReadyCallback = function() {
+                    return readyCallback;
+                };
+            }
+        });
+        StubMapLayer.items = [];
+        mapLayerModule._TESTS_stub_MapLayer(StubMapLayer);
+
         this.params = {
             renderer: new vizMocks.Renderer(),
             dataKey: "data-key",
@@ -26,7 +29,8 @@ QUnit.module("Basic", {
                 on: sinon.spy(function() { return noop; }),
                 reset: sinon.spy()
             },
-            eventTrigger: sinon.spy()
+            eventTrigger: sinon.spy(),
+            dataReady: sinon.spy()
         };
         this.target = new mapLayerModule.MapLayerCollection(this.params);
     },
@@ -161,4 +165,18 @@ QUnit.test("Update hovered layer", function(assert) {
     this.target.setOptions([{ name: "layer-1" }, { name: "layer-2" }]);
 
     assert.strictEqual(this.params.tracker.reset.callCount, 1);
+});
+
+QUnit.test("Data is not ready", function(assert) {
+    this.target.setOptions([{ name: "layer-1" }, { name: "layer-2" }]);
+
+    assert.strictEqual(this.params.dataReady.callCount, 0);
+});
+
+QUnit.test("Data is ready", function(assert) {
+    this.target.setOptions([{ name: "layer-1" }, { name: "layer-2" }]);
+
+    this.readyCallbacks.forEach(rc => rc.resolve());
+
+    assert.strictEqual(this.params.dataReady.callCount, 1);
 });

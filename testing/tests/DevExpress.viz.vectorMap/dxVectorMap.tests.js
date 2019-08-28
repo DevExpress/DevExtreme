@@ -10,11 +10,19 @@ var $ = require("jquery"),
     layoutModule = require("viz/vector_map/layout"),
     mapLayerModule = require("viz/vector_map/map_layer"),
     tooltipViewerModule = require("viz/vector_map/tooltip_viewer"),
-    vizMocks = require("../../helpers/vizMocks.js");
+    vizMocks = require("../../helpers/vizMocks.js"),
+    typeUtils = require("core/utils/type");
 
 require("viz/vector_map/vector_map");
 
-QUnit.module("Map - elements", commons.environment);
+var stubLayersEnvironment = $.extend({}, commons.environment, {
+    beforeEach: function() {
+        commons.environment.beforeEach.apply(this, arguments);
+        this.layerCollection.stub("items").returns([]);
+    }
+});
+
+QUnit.module("Map - elements", stubLayersEnvironment);
 
 QUnit.test("Renderer", function(assert) {
     var spy = sinon.spy(rendererModule, "Renderer");
@@ -59,6 +67,7 @@ QUnit.test("Layer collection", function(assert) {
     assert.strictEqual(arg.tracker, this.tracker, 'parameter - tracker');
     assert.strictEqual(arg.dataExchanger, this.dataExchanger, 'parameter - data exchanger');
     assert.strictEqual(arg.dataKey, "vectormap-data-1", 'parameter - dataKey');
+    assert.ok(typeUtils.isFunction(arg.dataReady));
     assert.strictEqual(typeof arg.eventTrigger, 'function', 'parameter - event trigger');
     assert.strictEqual(typeof arg.notifyDirty, 'function', 'parameter - notify dirty');
     assert.strictEqual(typeof arg.notifyReady, 'function', 'parameter - notify ready');
@@ -66,6 +75,32 @@ QUnit.test("Layer collection", function(assert) {
     assert.deepEqual(this.layerCollection.setOptions.getCall(1).args, [[{ tag: "layer-1", dataSource: "data-1" }, { tag: "layer-2", dataSource: "data-2" }]], "options are passed");
     assert.ok(this.renderer.lock.getCall(0).calledBefore(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
     assert.ok(this.renderer.unlock.getCall(0).calledAfter(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
+    assert.strictEqual(this.projection.setBounds.callCount, 1);
+});
+
+QUnit.test("Set bounds when data ready called. Without bounds in options", function(assert) {
+    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+
+    this.createMap({
+        layers: [{ tag: "layer-1", dataSource: "data-1" }]
+    });
+
+    spy.lastCall.args[0].dataReady();
+
+    assert.strictEqual(this.projection.setBounds.callCount, 2);
+});
+
+QUnit.test("Set bounds when data ready called. With bounds in options", function(assert) {
+    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+
+    this.createMap({
+        bounds: [10, 10, 10, 10],
+        layers: [{ tag: "layer-1", dataSource: "data-1" }]
+    });
+
+    spy.lastCall.args[0].dataReady();
+
+    assert.strictEqual(this.projection.setBounds.callCount, 1);
 });
 
 QUnit.test("Layer collection - object option", function(assert) {
@@ -272,7 +307,40 @@ QUnit.test('Disposing - elements disposing order', function(assert) {
     }
 });
 
-QUnit.module('Map - API', commons.environment);
+QUnit.module('Map - API', stubLayersEnvironment);
+
+QUnit.test("Applying bounds by data", function(assert) {
+    var layers = [{
+        proxy: {
+            tag: "p1",
+            getBounds: function() {
+                return [0, 0, 10, 10];
+            }
+        },
+        getData: function() {
+            return { count: function() { return 0; } };
+        }
+    }, {
+        proxy: {
+            tag: "p2",
+            getBounds: function() {
+                return [-10, -10, 10, 10];
+            }
+        },
+        getData: function() {
+            return {
+                count: function() { return 0; }
+            };
+        }
+    }];
+    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+    this.createMap();
+    this.layerCollection.stub("items").returns(layers);
+
+    spy.lastCall.args[0].dataReady();
+
+    assert.deepEqual(this.projection.setBounds.lastCall.args[0], [ -10, 10, 10, -10]);
+});
 
 QUnit.test("getLayers", function(assert) {
     var layers = [{ proxy: { tag: "p1" } }, { proxy: { tag: "p2" } }, { proxy: { tag: "p3" } }];
@@ -395,7 +463,7 @@ QUnit.test('convertToXY', function(assert) {
     assert.deepEqual(this.projection.toScreenPoint.lastCall.args, [[10, 20]], 'projection is called');
 });
 
-QUnit.module("Map - option changing", $.extend({}, commons.environment, {
+QUnit.module("Map - option changing", $.extend({}, stubLayersEnvironment, {
     createMap: function() {
         commons.environment.createMap.apply(this, arguments);
         this.invalidate = sinon.spy(this.map, "_invalidate");
@@ -530,7 +598,7 @@ QUnit.test('"zoomingEnabled" option', function(assert) {
     assert.deepEqual(this.themeManager.theme.withArgs('zoomingEnabled').callCount, 2, 'theme');
 });
 
-QUnit.module("Map - preventing option merging", commons.environment);
+QUnit.module("Map - preventing option merging", stubLayersEnvironment);
 
 QUnit.test("'layers' array option", function(assert) {
     this.createMap({
@@ -705,7 +773,7 @@ QUnit.test("'layers[i]' option - same instance", function(assert) {
     }]);
 });
 
-QUnit.module('Map - life cycle', commons.environment);
+QUnit.module('Map - life cycle', stubLayersEnvironment);
 
 //  B250883
 QUnit.test('Rerender when data source was not defined', function(assert) {
@@ -738,7 +806,7 @@ QUnit.test('Immediate option changing when render is async', function(assert) {
     assert.ok(true, 'There must be no errors');
 });
 
-QUnit.module('drawn', commons.environment);
+QUnit.module('drawn', stubLayersEnvironment);
 
 QUnit.test('call drawn after layer collection ready', function(assert) {
     var onDrawn = sinon.spy(),
