@@ -782,7 +782,13 @@ var EditingController = modules.ViewController.inherit((function() {
             }
 
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
-                that.saveEditData();
+                that.saveEditData().done(function() {
+                    // T804894
+                    if(!that.hasChanges()) {
+                        that.addRow(parentKey);
+                    }
+                });
+                return;
             }
 
             that.refresh();
