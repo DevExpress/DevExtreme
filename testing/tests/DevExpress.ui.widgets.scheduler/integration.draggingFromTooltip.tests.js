@@ -152,29 +152,6 @@ QUnit.test("Phantom appointment position should be recalculated during dragging 
     pointer.dragEnd();
 });
 
-QUnit.test("Phantom appointment position should be corrected during dragging tooltip item", function(assert) {
-    this.createInstance();
-    this.showTooltip();
-
-    var $ddAppointment = this.getTooltipListItem();
-    var pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = this.getPhantomAppointment(),
-        initialPhantomPosition = translator.locate($phantomAppointment);
-
-    pointer.drag(30, 60);
-
-    var correctCoordinatesStub = sinon.stub(this.instance.getAppointmentsInstance(), "notifyObserver").withArgs("correctAppointmentCoordinates");
-
-    pointer.dragStart().drag(0, 0);
-
-    assert.ok(correctCoordinatesStub.calledOnce, "Observers are notified");
-    var args = correctCoordinatesStub.getCall(0).args;
-    assert.deepEqual(args[1].coordinates, { left: initialPhantomPosition.left + 60, top: initialPhantomPosition.top + 120 }, "Arguments are OK");
-    assert.deepEqual(args[1].allDay, undefined, "Arguments are OK");
-
-    pointer.dragEnd();
-});
-
 QUnit.test("Phantom appointment should have correct template", function(assert) {
     this.createInstance({
         editing: true,
