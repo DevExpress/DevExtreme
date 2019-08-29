@@ -1,32 +1,35 @@
-import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
-import { DataGridKeyboardTestHelper } from '../../helpers/dataGrid.test.helper';
+
+import { pathToFileURL } from 'url';
+import { join } from  'path';
+import { createWidget } from '../../helpers/testHelper';
+import DataGrid from '../../model/dataGrid';
 
 fixture `Keyboard Navigation`
-    .page(getContainerFileUrl());
-
-const dataGrid = new DataGridKeyboardTestHelper("#container");
+    .page(pathToFileURL(join(__dirname, '../container.html')).href);
 
 test("Cell should not highlighted after editing another cell when startEditAction is 'dblClick' and 'batch' edit mode", async t => {
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).notOk();
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).notOk();
+    const dataGrid = new DataGrid("#container");
 
-    await t.doubleClick(dataGrid.getDataCell(1, 1));
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).notOk();
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).ok();
+    await t
+        .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
+        .expect(dataGrid.getDataCell(1, 1).isFocused).notOk()
 
-    await t.click(dataGrid.getDataCell(0, 1));
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).notOk();
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).notOk();
-    await t.expect(dataGrid.isEditCell(1, 1)).notOk();
+        .doubleClick(dataGrid.getDataCell(1, 1).element)
+        .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
+        .expect(dataGrid.getDataCell(1, 1).isFocused).ok()
 
-    await t.doubleClick(dataGrid.getDataCell(1, 1));
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).notOk();
-    // await t.expect(dataGrid.cellHasFocusClass(1, 1)).ok();
+        .click(dataGrid.getDataCell(0, 1).element)
+        .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
+        .expect(dataGrid.getDataCell(1, 1).isFocused).notOk()
+        .expect(dataGrid.getDataCell(1, 1).isEditCell).notOk()
 
-    await t.click(dataGrid.getDataCell(0, 1));
-    await t.expect(dataGrid.getDataCell(0, 1).focused).ok();
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).notOk();
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).notOk();
+        .doubleClick(dataGrid.getDataCell(1, 1).element)
+        .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
+
+        .click(dataGrid.getDataCell(0, 1).element)
+        .expect(dataGrid.getDataCell(0, 1).element.focused).ok()
+        .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
+        .expect(dataGrid.getDataCell(1, 1).isFocused).notOk();
 }).before(async () => {
     await createWidget("dxDataGrid", {
         dataSource: [
@@ -43,26 +46,29 @@ test("Cell should not highlighted after editing another cell when startEditActio
 });
 
 test("Cell should highlighted after editing another cell when startEditAction is 'dblClick' and editing mode is 'cell'", async t => {
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).notOk();
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).notOk();
+    const dataGrid = new DataGrid("#container");
 
-    await t.doubleClick(dataGrid.getDataCell(1, 1));
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).notOk();
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).ok();
+    await t
+        .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
+        .expect(dataGrid.getDataCell(1, 1).isFocused).notOk()
 
-    await t.click(dataGrid.getDataCell(0, 1));
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).ok();
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).notOk();
-    await t.expect(dataGrid.isEditCell(1, 1)).notOk();
+        .doubleClick(dataGrid.getDataCell(1, 1).element)
+        .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
+        .expect(dataGrid.getDataCell(1, 1).isFocused).ok()
 
-    await t.doubleClick(dataGrid.getDataCell(1, 1));
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).notOk();
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).ok();
+        .click(dataGrid.getDataCell(0, 1).element)
+        .expect(dataGrid.getDataCell(0, 1).isFocused).ok()
+        .expect(dataGrid.getDataCell(1, 1).isFocused).notOk()
+        .expect(dataGrid.getDataCell(1, 1).isEditCell).notOk()
 
-    await t.click(dataGrid.getDataCell(0, 1));
-    await t.expect(dataGrid.getDataCell(0, 1).focused).ok();
-    await t.expect(dataGrid.cellHasFocusClass(0, 1)).ok();
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).notOk();
+        .doubleClick(dataGrid.getDataCell(1, 1).element)
+        .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
+        .expect(dataGrid.getDataCell(1, 1).isFocused).ok()
+
+        .click(dataGrid.getDataCell(0, 1).element)
+        .expect(dataGrid.getDataCell(0, 1).element.focused).ok()
+        .expect(dataGrid.getDataCell(0, 1).isFocused).ok()
+        .expect(dataGrid.getDataCell(1, 1).isFocused).notOk();
 }).before(async () => {
     await createWidget("dxDataGrid", {
         dataSource: [
@@ -80,22 +86,24 @@ test("Cell should highlighted after editing another cell when startEditAction is
 });
 
 test("Cell should be focused after Enter key press if enterKeyDirection is 'none' and enterKeyAction is 'moveFocus'", async t => {
-    var dataCell = dataGrid.getDataCell(0, 0),
-        commandCell = dataGrid.getDataCell(0, 1);
+    const dataGrid = new DataGrid("#container");
+    const dataCell = dataGrid.getDataCell(0, 0).element;
+    const commandCell = dataGrid.getDataCell(0, 1).element;
 
-    await t.click(dataCell);
-    await t.pressKey("esc");
-    await t.expect(dataCell.focused).ok();
-    await t.pressKey("enter");
-    await t.expect(dataCell.focused).ok();
+    await t
+        .click(dataCell)
+        .pressKey("esc")
+        .expect(dataCell.focused).ok()
+        .pressKey("enter")
+        .expect(dataCell.focused).ok()
 
-    await t.pressKey("enter");
-    await t.expect(dataCell.focused).ok();
+        .pressKey("enter")
+        .expect(dataCell.focused).ok()
 
-    await t.pressKey("tab");
-    await t.pressKey("enter");
-    await t.expect(commandCell.focused).ok();
-    await t.expect(dataGrid.isRowRemoved(0)).ok();
+        .pressKey("tab")
+        .pressKey("enter")
+        .expect(commandCell.focused).ok()
+        .expect(dataGrid.getDataRow(0).isRemoved).ok();
 }).before(async () => {
     await createWidget("dxDataGrid", {
         height: 200,

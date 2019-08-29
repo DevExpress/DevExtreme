@@ -1,17 +1,20 @@
-import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
-import DataGridTestHelper from '../../helpers/dataGrid.test.helper';
 
-fixture`Virtual Columns`
-    .page(getContainerFileUrl());
+import { pathToFileURL } from 'url';
+import { join } from  'path';
+import { createWidget } from '../../helpers/testHelper';
+import DataGrid from '../../model/dataGrid';
 
-const dataGrid = new DataGridTestHelper("#container");
+fixture `Virtual Columns`
+    .page(pathToFileURL(join(__dirname, '../container.html')).href);
 
 test("DataGrid should not scroll back to the focused cell after horizontal scrolling if 'columnRenderingMode' is virtual", async t => {
-    await t.click(dataGrid.getDataCell(0, 0));
+    const dataGrid = new DataGrid("#container");
+
+    await t.click(dataGrid.getDataCell(0, 0).element);
     await dataGrid.scrollTo({ x: 50 });
-    await t.expect(await dataGrid.getScrollLeft()).eql(50);
+    await t.expect(dataGrid.getScrollLeft()).eql(50);
     await dataGrid.scrollTo({ x: 100 });
-    await t.expect(await dataGrid.getScrollLeft()).eql(100);
+    await t.expect(dataGrid.getScrollLeft()).eql(100);
 }).before(async () => {
     var generateData = function (rowCount, columnCount) {
         var i, j;
