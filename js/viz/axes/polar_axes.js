@@ -234,10 +234,12 @@ circularAxes = polarAxes.circular = {
     },
 
     _createConstantLine: function(value, attr) {
-        var center = this.getCenter();
+        return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr);
+    },
 
-        return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr)
-            .rotate(value + this.getAngles()[0], center.x, center.y);
+    _rotateConstantLine(line, value) {
+        const { x, y } = this.getCenter();
+        line.rotate(value + this.getAngles()[0], x, y);
     },
 
     _getConstantLineLabelsCoords: function(value) {
