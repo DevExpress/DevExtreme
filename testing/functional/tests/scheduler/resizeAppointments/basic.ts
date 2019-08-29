@@ -8,7 +8,7 @@ fixture `Resize appointments in the Scheduler basic mode`
 
 ['day', 'week', 'workWeek'].forEach((mode) => test(`Resize in the "${mode}" mode`, async t => {
 	const scheduler = new Scheduler("#container");
-	const resizableAppointment = await scheduler.getAppointment('Brochure Design Review');
+	const resizableAppointment = scheduler.getAppointment('Brochure Design Review');
 
 	await t
 		.drag(resizableAppointment.resizableHandle.bottom, 0, 100)
@@ -35,7 +35,7 @@ fixture `Resize appointments in the Scheduler basic mode`
 
 test(`Resize in the "month" mode`, async t => {
 	const scheduler = new Scheduler("#container");
-	const resizableAppointment = await scheduler.getAppointment('Brochure Design Review');
+	const resizableAppointment = scheduler.getAppointment('Brochure Design Review');
 
 	await t
 		.drag(resizableAppointment.resizableHandle.right, 100, 0)
