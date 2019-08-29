@@ -28,6 +28,10 @@ export class RowsViewWrapper extends WrapperBase {
     getVirtualCell(columnIndex) {
         return this.getVirtualRowElement().find("td").eq(columnIndex);
     }
+
+    getEditorInputElement(rowIndex, columnIndex) {
+        return this.getElement().find(".dx-data-row").eq(rowIndex).find("td").eq(columnIndex).find(".dx-texteditor-input");
+    }
 }
 
 export class PagerWrapper extends WrapperBase {

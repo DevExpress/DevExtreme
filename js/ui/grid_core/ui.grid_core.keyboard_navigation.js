@@ -646,12 +646,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(!keyDownEvent.isDefaultPrevented()) {
             eventsEngine.trigger($input, keyPressEvent);
             if(!keyPressEvent.isDefaultPrevented()) {
-                $input.val(editorValue);
-                eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
-                eventsEngine.on($input, "focusout", function() {
-                    eventsEngine.trigger($input, "change");
-                });
                 setTimeout(function() {
+                    $input.val(editorValue);
+                    eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
+                    eventsEngine.on($input, "focusout", function() {
+                        eventsEngine.trigger($input, "change");
+                    });
                     eventsEngine.trigger($input, inputEvent);
                 });
             }
