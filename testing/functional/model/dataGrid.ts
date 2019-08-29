@@ -60,7 +60,7 @@ export default class DataGrid {
     }
 
     getFocusedRow(): Selector {
-        return this.dataRows.find(`.${CLASS.focusedRow}`);
+        return this.dataRows.filter(`.${CLASS.focusedRow}`);
     }
 
     scrollTo(options): Promise<void> {
