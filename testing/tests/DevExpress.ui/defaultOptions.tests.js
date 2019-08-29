@@ -306,7 +306,7 @@ testComponentDefaults(List,
 );
 
 testComponentDefaults(List,
-    { platform: "generic" },
+    { platform: "generic", deviceType: "desktop" },
     {
         showScrollbar: "onHover",
         pullRefreshEnabled: false,
@@ -315,7 +315,7 @@ testComponentDefaults(List,
     function() {
         this._realDevice = devices.real();
         this._supportNativeScrolling = support.nativeScrolling;
-        devices.real({ platform: "generic" });
+        devices.real({ platform: "generic", deviceType: "desktop" });
         support.nativeScrolling = false;
     },
     function() {
@@ -364,12 +364,12 @@ testComponentDefaults(Lookup,
 testComponentDefaults(Lookup,
     [
         { platform: "ios", tablet: true },
-        { platform: "generic" }
+        { platform: "generic", deviceType: "desktop" }
     ],
     { usePopover: true },
     function() {
         this._realDevice = devices.real();
-        devices.real({ platform: "generic" });
+        devices.real({ platform: "generic", deviceType: "desktop" });
     },
     function() {
         devices.real(this._realDevice);
@@ -377,14 +377,14 @@ testComponentDefaults(Lookup,
 );
 
 testComponentDefaults(Lookup,
-    { platform: "generic" },
+    { platform: "generic", deviceType: "desktop" },
     {
         pageLoadMode: "scrollBottom"
     },
     function() {
         this._realDevice = devices.real();
         this._supportNativeScrolling = support.nativeScrolling;
-        devices.real({ platform: "generic" });
+        devices.real({ platform: "generic", deviceType: "desktop" });
         support.nativeScrolling = false;
     },
     function() {
@@ -881,7 +881,7 @@ testComponentDefaults(Tabs,
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ platform: "generic", generic: true });
+        devices.real({ platform: "generic", generic: true, deviceType: "desktop" });
     },
     function() {
         devices.real(this._origDevice);
@@ -897,7 +897,8 @@ testComponentDefaults(Tabs,
     function() {
         this.originalRealDevice = devices.real();
         devices.real({
-            platform: "ios"
+            platform: "ios",
+            deviceType: "tablet"
         });
     },
     function() {
@@ -914,7 +915,7 @@ testComponentDefaults(Tabs,
     { name: "safari", version: "12.0", mode: "text" }
 ].forEach(function(item) {
     testComponentDefaults(NumberBox,
-        { browser: item.name, version: item.version, platform: "ios" },
+        { browser: item.name, version: item.version, platform: "ios", deviceType: "phone" },
         { mode: item.mode },
         function() {
             this.originalRealDevice = devices.real();
@@ -926,7 +927,7 @@ testComponentDefaults(Tabs,
             browser.version = item.version;
             browser[item.name] = true;
 
-            devices.real({ platform: "ios" });
+            devices.real({ platform: "ios", deviceType: "phone" });
         },
         function() {
             browser = this._origBrowser;

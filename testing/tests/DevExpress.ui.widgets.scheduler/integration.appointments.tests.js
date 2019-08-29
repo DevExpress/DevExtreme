@@ -680,7 +680,7 @@ QUnit.test("Recurrence repeat-type editor should have default 'never' value afte
 });
 
 QUnit.test("Disabled appointment could not be focused", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }

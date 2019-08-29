@@ -190,7 +190,7 @@ QUnit.test("Popup should contains start datebox with right value", function(asse
 });
 
 QUnit.test("Calendar of the start datebox should have right firstDayOfWeek value", function(assert) {
-    if(devices.current().generic) {
+    if(devices.current().deviceType === "desktop") {
         this.instance.option("firstDayOfWeek", 4);
         this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption" });
 
@@ -217,7 +217,7 @@ QUnit.test("Popup should contains end datebox with right value", function(assert
 });
 
 QUnit.test("Calendar of the end datebox should have right firstDayOfWeek value", function(assert) {
-    if(devices.current().generic) {
+    if(devices.current().deviceType === "desktop") {
         this.instance.option("firstDayOfWeek", 4);
         this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption" });
 

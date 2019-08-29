@@ -1816,7 +1816,7 @@ QUnit.testStart(function() {
     QUnit.test("Editing default option value", function(assert) {
         var defaultEditing = { allowAdding: true, allowUpdating: true, allowDeleting: true, allowResizing: true, allowDragging: true };
 
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             defaultEditing.allowDragging = false;
             defaultEditing.allowResizing = false;
         }

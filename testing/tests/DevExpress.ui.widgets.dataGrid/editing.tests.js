@@ -1787,39 +1787,39 @@ QUnit.test('Not close Editing Cell in batch mode on click detached element', fun
     assert.equal(testElement.find('.dx-datebox').length, 1, 'datebox count');
 });
 
-if(!device.win) {
-    // T110581
-    QUnit.testInActiveWindow('Not close Editing Cell in batch mode on click focus overlay', function(assert) {
-        // arrange
-        var that = this,
-            rowsView = this.rowsView,
-            testElement = $('#container');
 
-        that.options.editing = {
-            allowUpdating: true,
-            mode: 'batch'
-        };
+// T110581
+QUnit.testInActiveWindow('Not close Editing Cell in batch mode on click focus overlay', function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
 
-        rowsView.render(testElement);
-        that.$element = function() {
-            return testElement;
-        };
-        testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); // Edit
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
 
-        this.clock.tick();
-        var $focusOverlay = testElement.find('.dx-datagrid-focus-overlay');
-        assert.equal($focusOverlay.length, 1, 'focus overlay count');
+    rowsView.render(testElement);
+    that.$element = function() {
+        return testElement;
+    };
+    testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); // Edit
 
-        // act
-        $($focusOverlay).trigger('dxpointerdown');
-        $($focusOverlay).trigger('dxclick');
-        this.clock.tick();
+    this.clock.tick();
+    var $focusOverlay = testElement.find('.dx-datagrid-focus-overlay');
+    assert.equal($focusOverlay.length, 1, 'focus overlay count');
 
-        // assert
-        assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor count');
-        assert.equal($(".dx-datagrid-focus-overlay").length, 1, 'focus overlay count');
-    });
-}
+    // act
+    $($focusOverlay).trigger('dxpointerdown');
+    $($focusOverlay).trigger('dxclick');
+    this.clock.tick();
+
+    // assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1, 'editor count');
+    assert.equal($(".dx-datagrid-focus-overlay").length, 1, 'focus overlay count');
+});
+
 
 QUnit.test('Save changes when batch mode', function(assert) {
     // arrange

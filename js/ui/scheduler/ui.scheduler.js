@@ -1049,7 +1049,8 @@ const Scheduler = Widget.inherit({
             },
             {
                 device: function() {
-                    return !devices.current().generic;
+                    var currentDevice = devices.current();
+                    return currentDevice.platform !== "ios" || currentDevice.platform !== "android";
                 },
                 options: {
                     /**

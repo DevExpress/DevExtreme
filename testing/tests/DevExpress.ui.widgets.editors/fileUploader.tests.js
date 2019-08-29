@@ -1772,7 +1772,7 @@ QUnit.test("upload button should be focus target of fileUploader", function(asse
 });
 
 QUnit.test("T328503 - 'enter' press on select button should lead to input click", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "keyboard is not supported for not generic devices");
         return;
     }

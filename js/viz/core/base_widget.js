@@ -370,7 +370,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
         var $parents = $(this._renderer.root.element).parents(),
             scrollEvents = "scroll.viz_widgets";
 
-        if(devices.real().platform === "generic") {
+        if(devices.real().deviceType === "desktop") {
             $parents = $parents.add(windowUtils.getWindow());
         }
 
