@@ -77,12 +77,12 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 }
 
 function _setColumnsWidth(worksheet, columns, startColumnIndex) {
-    if(!columns) {
+    if(!isDefined(columns)) {
         return;
     }
     for(let i = 0; i < columns.length; i++) {
         const columnWidth = columns[i].width;
-        if((typeof columnWidth === "number") && isFinite(columnWidth)) { // TODO: review these values in angular/react/vue/width="125"/[width]="125"
+        if((typeof columnWidth === "number") && isFinite(columnWidth)) {
             worksheet.getColumn(startColumnIndex + i).width =
                 Math.min(MAX_EXCEL_COLUMN_WIDTH, Math.floor(columnWidth / MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
         }
