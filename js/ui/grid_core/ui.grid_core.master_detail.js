@@ -233,26 +233,37 @@ module.exports = {
                     var $masterDetailRow = $element.closest("." + MASTER_DETAIL_ROW_CLASS);
 
                     if($masterDetailRow.length) {
-                        when(this._updateMasterDataGrid($masterDetailRow)).done(() => {
+                        when(this._updateMasterDataGrid($masterDetailRow, $element)).done(() => {
                             this._updateParentDataGrids($masterDetailRow.parent());
                         });
                     }
                 },
-                _updateMasterDataGrid: function($masterDetailRow) {
-                    var options = $($masterDetailRow).data("options"),
+                _updateMasterDataGrid: function($masterDetailRow, $detailElement) {
+                    var masterRowOptions = $($masterDetailRow).data("options"),
                         masterDataGrid = $($masterDetailRow).closest("." + this.getWidgetContainerClass()).parent().data("dxDataGrid");
 
-                    if(options && masterDataGrid) {
+                    if(masterRowOptions && masterDataGrid) {
                         if(masterDataGrid.getView("rowsView").isFixedColumns()) {
-                            var $rows = $(masterDataGrid.getRowElement(options.rowIndex));
-                            if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
-                                return masterDataGrid.updateDimensions();
-                            }
+                            this._updateFixedMasterDetailGrids(masterDataGrid, masterRowOptions.rowIndex, $detailElement);
                         } else {
                             var scrollable = masterDataGrid.getScrollable();
                             // T607490
                             return scrollable && scrollable.update();
                         }
+                    }
+                },
+                _updateFixedMasterDetailGrids: function(masterDataGrid, masterRowIndex, $detailElement) {
+                    let $rows = $(masterDataGrid.getRowElement(masterRowIndex));
+                    if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
+                        let detailElementWidth = $detailElement.width();
+                        return masterDataGrid.updateDimensions().done(() => {
+                            let isDetailHorizontalScrollCanBeShown = this.option("columnAutoWidth") && masterDataGrid.option("scrolling.useNative") === true,
+                                isDetailGridWidthChanged = isDetailHorizontalScrollCanBeShown && detailElementWidth !== $detailElement.width();
+
+                            if(isDetailHorizontalScrollCanBeShown && isDetailGridWidthChanged) {
+                                this.updateDimensions();
+                            }
+                        });
                     }
                 }
             }

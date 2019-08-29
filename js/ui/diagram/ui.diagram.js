@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import Drawer from "../drawer";
+import LoadIndicator from "../load_indicator";
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import typeUtils from '../../core/utils/type';
@@ -9,6 +10,7 @@ import DiagramToolbar from "./ui.diagram.toolbar";
 import DiagramLeftPanel from "./ui.diagram.leftpanel";
 import DiagramRightPanel from "./ui.diagram.rightpanel";
 import DiagramContextMenu from "./ui.diagram.contextmenu";
+import DiagramDialog from './ui.diagram.dialogs';
 import DiagramToolbox from "./ui.diagram.toolbox";
 import DiagramOptionsUpdateBar from "./ui.diagram.optionsupdate";
 import NodesOption from "./ui.diagram.nodes";
@@ -18,6 +20,9 @@ import { getDiagram } from "./diagram_importer";
 import { hasWindow, getWindow } from "../../core/utils/window";
 import eventsEngine from "../../events/core/events_engine";
 import eventUtils from "../../events/utils";
+import messageLocalization from "../../localization/message";
+import numberLocalization from "../../localization/number";
+import DiagramDialogManager from "./ui.diagram.dialogmanager";
 
 const DIAGRAM_CLASS = "dx-diagram";
 const DIAGRAM_FULLSCREEN_CLASS = "dx-diagram-fullscreen";
@@ -25,6 +30,7 @@ const DIAGRAM_TOOLBAR_WRAPPER_CLASS = DIAGRAM_CLASS + "-toolbar-wrapper";
 const DIAGRAM_CONTENT_WRAPPER_CLASS = DIAGRAM_CLASS + "-content-wrapper";
 const DIAGRAM_DRAWER_WRAPPER_CLASS = DIAGRAM_CLASS + "-drawer-wrapper";
 const DIAGRAM_CONTENT_CLASS = DIAGRAM_CLASS + "-content";
+const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + "-loading-indicator";
 
 const DIAGRAM_DEFAULT_UNIT = "in";
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
@@ -71,24 +77,27 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
             .appendTo($contentWrapper);
 
-        const $drawer = $("<div>")
-            .appendTo($drawerWrapper);
-
-        const $content = $("<div>")
-            .addClass(DIAGRAM_CONTENT_CLASS)
-            .appendTo($drawer);
-
-        this._rightPanel = undefined;
         if(this.option("propertiesPanel.visible")) {
+            const $drawer = $("<div>")
+                .appendTo($drawerWrapper);
+            this._content = $("<div>")
+                .addClass(DIAGRAM_CONTENT_CLASS)
+                .appendTo($drawer);
             this._renderRightPanel($drawer);
+        } else {
+            this._content = $("<div>")
+                .addClass(DIAGRAM_CONTENT_CLASS)
+                .appendTo($drawerWrapper);
         }
 
         this._contextMenu = undefined;
         if(this.option("contextMenu.enabled")) {
-            this._renderContextMenu($content);
+            this._renderContextMenu(this._content);
         }
 
-        !isServerSide && this._diagramInstance.createDocument($content[0]);
+        this._renderDialog(this._content);
+
+        !isServerSide && this._diagramInstance.createDocument(this._content[0]);
 
         if(this.option("zoomLevel") !== DIAGRAM_DEFAULT_ZOOMLEVEL) {
             this._updateZoomLevelState();
@@ -102,11 +111,18 @@ class Diagram extends Widget {
         if(this.option("readOnly") || this.option("disabled")) {
             this._updateReadOnlyState();
         }
-        if(this.option("fullscreen")) {
+        if(this.option("fullScreen")) {
             this._updateFullscreenState();
         }
 
         this._diagramInstance.barManager.registerBar(this.optionsUpdateBar);
+    }
+    notifyBarCommandExecuted() {
+        this._diagramInstance.captureFocus();
+    }
+    _registerBar(component) {
+        component.bar.onChanged.add(this);
+        this._diagramInstance.barManager.registerBar(component.bar);
     }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
@@ -118,7 +134,7 @@ class Diagram extends Widget {
         }
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
             commands: this.option("toolbar.commands"),
-            onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+            onContentReady: (e) => this._registerBar(e.component),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option("export"),
             widgetCommandNames: toolbarWidgetCommandNames
@@ -210,7 +226,7 @@ class Diagram extends Widget {
             template: ($options) => {
                 this._rightPanel = this._createComponent($options, DiagramRightPanel, {
                     propertyGroups: this.option("propertiesPanel.groups"),
-                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+                    onContentReady: (e) => this._registerBar(e.component),
                     onPointerUp: this._onPanelPointerUp.bind(this)
                 });
             }
@@ -234,9 +250,45 @@ class Diagram extends Widget {
         this._contextMenu = this._createComponent($contextMenu, DiagramContextMenu, {
             commands: this.option("contextMenu.commands"),
             container: $mainElement,
-            onContentReady: ({ component }) => this._diagramInstance.barManager.registerBar(component.bar),
-            onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar)
+            onContentReady: ({ component }) => this._registerBar(component),
+            onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
+            onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); }
         });
+    }
+
+    _onBeforeCommandExecuted(command) {
+        var dialogParameters = DiagramDialogManager.getDialogParameters(command);
+        if(dialogParameters) {
+            this._showDialog(dialogParameters);
+        }
+        return !!dialogParameters;
+    }
+
+    _renderDialog($mainElement) {
+        const $dialogElement = $("<div>").appendTo($mainElement);
+        this._dialogInstance = this._createComponent($dialogElement, DiagramDialog, { });
+    }
+
+    _showDialog(dialogParameters) {
+        if(this._dialogInstance) {
+            this._dialogInstance.option("onGetContent", dialogParameters.onGetContent);
+            this._dialogInstance.option("command", this._diagramInstance.commandManager.getCommand(dialogParameters.command));
+            this._dialogInstance.option("title", dialogParameters.title);
+            this._dialogInstance._show();
+        }
+    }
+
+    _showLoadingIndicator() {
+        this._loadingIndicator = $("<div>").addClass(DIAGRAM_LOADING_INDICATOR_CLASS);
+        this._createComponent(this._loadingIndicator, LoadIndicator, {});
+        var $parent = this._content || this.$element();
+        $parent.append(this._loadingIndicator);
+    }
+    _hideLoadingIndicator() {
+        if(!this._loadingIndicator) return;
+
+        this._loadingIndicator.remove();
+        this._loadingIndicator = null;
     }
 
     _initDiagram() {
@@ -251,7 +303,10 @@ class Diagram extends Widget {
         this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
         this._diagramInstance.onToolboxDragStart = this._raiseToolboxDragStart.bind(this);
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
-        this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
+        this._diagramInstance.onToggleFullscreen = this._onToggleFullScreen.bind(this);
+
+        this._updateUnitItems();
+        this._updateFormatUnitsMethod();
 
         if(this.option("units") !== DIAGRAM_DEFAULT_UNIT) {
             this._updateUnitsState();
@@ -271,7 +326,6 @@ class Diagram extends Widget {
         if(this.option("pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
             this._updatePageColorState();
         }
-
         this._updateViewUnitsState();
         this._updateShowGridState();
         this._updateSnapToGridState();
@@ -370,8 +424,8 @@ class Diagram extends Widget {
                 setType: this._createOptionSetter("nodes.typeExpr"),
                 getText: this._createOptionGetter("nodes.textExpr"),
                 setText: this._createOptionSetter("nodes.textExpr"),
-                getImage: this._createOptionGetter("nodes.imageExpr"),
-                setImage: this._createOptionSetter("nodes.imageExpr"),
+                getImage: this._createOptionGetter("nodes.imageUrlExpr"),
+                setImage: this._createOptionSetter("nodes.imageUrlExpr"),
 
                 getLeft: this._createOptionGetter("nodes.leftExpr"),
                 setLeft: this._createOptionSetter("nodes.leftExpr"),
@@ -506,7 +560,7 @@ class Diagram extends Widget {
             let layoutType = layoutParametersOption.type || layoutParametersOption;
             if(layoutType === "tree") {
                 parameters.type = DataLayoutType.Tree;
-            } else if(layoutType === "sugiyama") {
+            } else if(layoutType === "layered") {
                 parameters.type = DataLayoutType.Sugiyama;
             }
             if(layoutParametersOption.orientation === "vertical") {
@@ -591,9 +645,9 @@ class Diagram extends Widget {
             ));
         }
     }
-    _onToggleFullscreen(fullscreen) {
-        this._changeNativeFullscreen(fullscreen);
-        this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullscreen);
+    _onToggleFullScreen(fullScreen) {
+        this._changeNativeFullscreen(fullScreen);
+        this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
         this._diagramInstance.updateLayout();
     }
     _changeNativeFullscreen(setModeOn) {
@@ -657,7 +711,7 @@ class Diagram extends Widget {
     _onNativeFullscreenChangeHandler() {
         if(!this._inNativeFullscreen()) {
             this._unsubscribeFullscreenNativeChanged();
-            this._onToggleFullscreen(false);
+            this._onToggleFullScreen(false);
         }
     }
 
@@ -706,9 +760,9 @@ class Diagram extends Widget {
     }
     _updateFullscreenState() {
         const { DiagramCommand } = getDiagram();
-        var fullscreen = this.option("fullscreen");
-        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
-        this._onToggleFullscreen(fullscreen);
+        var fullScreen = this.option("fullScreen");
+        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullScreen);
+        this._onToggleFullScreen(fullScreen);
     }
     _updateShowGridState() {
         const { DiagramCommand } = getDiagram();
@@ -734,11 +788,23 @@ class Diagram extends Widget {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.GridSizeItems, gridSizeItems);
     }
+    _updateUnitItems() {
+        const { DiagramUnit } = getDiagram();
+        var items = {};
+        items[DiagramUnit.In] = messageLocalization.format("dxDiagram-unitIn");
+        items[DiagramUnit.Cm] = messageLocalization.format("dxDiagram-unitCm");
+        items[DiagramUnit.Px] = messageLocalization.format("dxDiagram-unitPx");
+        this._diagramInstance.settings.unitItems = items;
+    }
+    _updateFormatUnitsMethod() {
+        this._diagramInstance.settings.formatUnit = function(value) {
+            return numberLocalization.format(value);
+        };
+    }
     _updateViewUnitsState() {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.ViewUnits, this._getDiagramUnitValue(this.option("viewUnits")));
     }
-
     _updateUnitsState() {
         const { DiagramCommand } = getDiagram();
         this._executeDiagramCommand(DiagramCommand.Units, this._getDiagramUnitValue(this.option("units")));
@@ -844,11 +910,11 @@ class Diagram extends Widget {
             */
             autoZoom: DIAGRAM_DEFAULT_AUTOZOOM,
             /**
-            * @name dxDiagramOptions.fullscreen
+            * @name dxDiagramOptions.fullScreen
             * @type Boolean
             * @default false
             */
-            fullscreen: false,
+            fullScreen: false,
             /**
             * @name dxDiagramOptions.showGrid
             * @type Boolean
@@ -1006,12 +1072,12 @@ class Diagram extends Widget {
                 */
                 textExpr: "text",
                 /**
-                * @name dxDiagramOptions.nodes.imageExpr
+                * @name dxDiagramOptions.nodes.imageUrlExpr
                 * @type string|function(data)
                 * @type_function_param1 data:object
                 * @default undefined
                 */
-                imageExpr: undefined,
+                imageUrlExpr: undefined,
                 /**
                 * @name dxDiagramOptions.nodes.parentKeyExpr
                 * @type string|function(data)
@@ -1496,7 +1562,7 @@ class Diagram extends Widget {
             case "simpleView":
                 this._updateSimpleViewState();
                 break;
-            case "fullscreen":
+            case "fullScreen":
                 this._updateFullscreenState();
                 break;
             case "showGrid":

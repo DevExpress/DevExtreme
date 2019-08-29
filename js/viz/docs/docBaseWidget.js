@@ -1005,5 +1005,49 @@ var BaseLegend = {
             */
             offset: 0
         }
-    }    
+    }
+};
+
+/**
+* @name BaseLegendItem
+* @hidden
+* @type object
+*/
+var legendItem = {
+    /**
+    * @name BaseLegendItem.text
+    * @type string
+    */
+    text: undefined,
+    /**
+    * @name BaseLegendItem.visible
+    * @type boolean
+    */
+    visible: true,
+    /**
+    * @name BaseLegendItem.marker
+    * @type object
+    */
+    marker: {
+        /**
+        * @name BaseLegendItem.marker.fill
+        * @type string
+        */
+        fill: "#fff",
+        /**
+        * @name BaseLegendItem.marker.opacity
+        * @type number
+        */
+        opacity: 1,
+        /**
+        * @name BaseLegendItem.marker.size
+        * @type number
+        */
+        size: 10,
+        /**
+        * @name BaseLegendItem.marker.state
+        * @type Enums.LegendMarkerState
+        */
+        state: "normal"
+    }
 };

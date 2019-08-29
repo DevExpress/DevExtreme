@@ -8,12 +8,12 @@
 
     .dx-diagram-toolbar-wrapper {
         padding: 5px;
-        flex: 0;
+        flex-grow: 0;
     }
 
     .dx-diagram-content-wrapper {
         display: flex;
-        flex: 1;
+        flex-grow: 1;
         flex-basis: 0;
         overflow: hidden;
     }
@@ -77,6 +77,10 @@
         position: fixed;
         z-index: 2;
     }
+
+    .dxdi-canvas { // stylelint-disable-line selector-class-pattern
+        overflow: hidden;
+    }
 }
 
 .dx-diagram-toolbar,
@@ -111,4 +115,12 @@
     background-repeat: no-repeat;
     background-position: 0 0;
     display: inline-block;
+}
+
+.dx-diagram-loading-indicator {
+    position: absolute;
+    top: calc(50% - 32px);
+    left: calc(50% - 32px);
+    width: 64px;
+    height: 64px;
 }

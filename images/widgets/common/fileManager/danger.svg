@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="_x30_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 22 22" style="enable-background:new 0 0 22 22;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:currentTextColor;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:currentDangerBgColor;}
+	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:currentDangerTextColor;}
+</style>
+<path id="_x33_" class="st0" d="M21,10l-6-1l1.87-1.87C15.6,5.24,13.44,4,11,4c-3.87,0-7,3.13-7,7H2c0-4.97,4.03-9,9-9
+	c3.02,0,5.7,1.42,7.35,3.65L20,4L21,10z M5.6,15.4C6.88,16.98,8.81,18,11,18c0.4,0,0.78-0.05,1.15-0.12
+	c0.15,0.69,0.42,1.32,0.77,1.91C12.3,19.92,11.66,20,11,20c-2.74,0-5.17-1.24-6.82-3.18L2,19l-1-6l6,1L5.6,15.4z"/>
+<path id="_x32_" class="st1" d="M17.5,12c2.49,0,4.5,2.01,4.5,4.5S19.99,21,17.5,21S13,18.99,13,16.5S15.01,12,17.5,12z"/>
+<path id="_x31_" class="st2" d="M17,20v-1h1v1H17z M17,13h1v5h-1V13z"/>
+</svg>

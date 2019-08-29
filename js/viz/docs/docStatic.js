@@ -206,6 +206,7 @@ var staticMethods = {
         * @return object
         * @namespace DevExpress.viz.map.projection
         * @static
+        * @hidden
         */
         /**
         * @name viz.map.projectionmethods.add

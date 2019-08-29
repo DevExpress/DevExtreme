@@ -94,6 +94,7 @@ var LayerElement = {
 /**
 * @name VectorMapLegendItem
 * @type object
+* @inherits BaseLegendItem
 */
 var legendItem = {
     /**
@@ -115,12 +116,7 @@ var legendItem = {
     * @name VectorMapLegendItem.size
     * @type number
     */
-    size: undefined,
-    /**
-    * @name VectorMapLegendItem.visible
-    * @type boolean
-    */
-    visible: true
+    size: 10
 };
 
 /**
@@ -131,13 +127,13 @@ var legendItem = {
 * @name VectorMapProjectionConfig.to
 * @type function
 * @type_function_param1 coordinates:Array<number>
-* @return Array<number>
+* @type_function_return Array<number>
 */
 /**
 * @name VectorMapProjectionConfig.from
 * @type function
 * @type_function_param1 coordinates:Array<number>
-* @return Array<number>
+* @type_function_return Array<number>
 */
 /**
 * @name VectorMapProjectionConfig.aspectRatio

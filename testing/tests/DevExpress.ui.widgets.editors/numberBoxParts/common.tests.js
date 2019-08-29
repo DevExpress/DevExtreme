@@ -2,11 +2,13 @@ import $ from "jquery";
 import SpinButton from "ui/number_box/number_box.spin";
 import config from "core/config";
 import devices from "core/devices";
+import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 import pointerMock from "../../../helpers/pointerMock.js";
 
 import "ui/number_box";
 import "ui/validator";
+import "generic_light.css!";
 
 const NUMBERBOX_CLASS = "dx-numberbox";
 const INVALID_CLASS = "dx-invalid";
@@ -332,6 +334,19 @@ QUnit.module("basics", {}, () => {
         });
 
         assert.ok($element.hasClass(SPIN_TOUCH_FRIENDLY_CLASS), "element has touchFriendly class");
+    });
+
+    QUnit.test("widget's width does not increase after buttons hover in FF (T806555)", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            showSpinButtons: true,
+            useLargeSpinButtons: true
+        });
+
+        const startHeight = $element.height();
+        const $spinButton = $element.find(`.${SPIN_UP_CLASS}`);
+        eventsEngine.trigger($spinButton, "dxhoverstart");
+
+        assert.strictEqual($element.height(), startHeight, "widget's width does not change");
     });
 
     QUnit.testInActiveWindow("input is focused when spin buttons are clicked if useLargeSpinButtons = false", (assert) => {
@@ -2038,6 +2053,15 @@ QUnit.module("aria accessibility", {}, () => {
         assert.equal($input.attr("aria-valuenow"), "0", "required 'aria-valuenow' attribute is defined");
         assert.ok(inputElement.hasAttribute("aria-valuemin"), "required 'aria-valuemin' attribute is defined");
         assert.ok(inputElement.hasAttribute("aria-valuemax"), "required 'aria-valuemax' attribute is defined");
+    });
+
+    QUnit.test("aria valuenow is defined for numberBox with null value (T801129)", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            value: null
+        });
+
+        const $input = $element.find(".dx-texteditor-input");
+        assert.strictEqual($input.attr("aria-valuenow"), "", "attribute is defined");
     });
 
     QUnit.test("aria properties", (assert) => {

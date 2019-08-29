@@ -256,10 +256,12 @@
         "dxHtmlEditor-normalText": "Normaler Text",
 
         "dxFileManager-newFolderName": "Ohne Titel",
+        "dxFileManager-rootFolderName": "Dateien",
         "dxFileManager-errorNoAccess": "Zugriff verweigert. Die Operation kann nicht durchgeführt werden.",
         "dxFileManager-errorDirectoryExistsFormat": "Ordner {0} existiert bereits.",
         "dxFileManager-errorFileExistsFormat": "Datei {0} existiert bereits.",
         "dxFileManager-errorFileNotFoundFormat": "Datei {0} wurde nicht gefunden.",
+        "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
         "dxFileManager-errorDefault": "Unbekannter Fehler"
     }
 }

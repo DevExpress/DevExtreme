@@ -1514,6 +1514,35 @@ if(devices.real().deviceType === "desktop") {
         assert.ok(headerScrollToSpy.calledOnce, "header scrollTo was called");
         assert.notOk(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was not called");
     });
+
+    QUnit.test("ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)", function(assert) {
+        const date = new Date(2019, 5, 1, 9, 40);
+
+        this.createInstance({
+            dataSource: [],
+            views: ["timelineDay", "day", "timelineWeek", "week", "timelineMonth"],
+            currentView: "timelineDay",
+            currentDate: date,
+            firstDayOfWeek: 0,
+            startDayHour: 0,
+            endDayHour: 20,
+            cellDuration: 60,
+            groups: ["priority"],
+            height: 580,
+        });
+
+        this.instance.scrollToTime(date.getHours() - 1, 30, date);
+        let scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
+
+        assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineDay");
+
+        this.instance.option("currentView", "timelineWeek");
+
+        this.instance.scrollToTime(date.getHours() - 1, 30, date);
+        scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
+
+        assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineWeek");
+    });
 }
 
 QUnit.test("OnScroll of header scrollable shouldn't be called when dateTable scrollable scroll in timeLine view", function(assert) {
@@ -1851,35 +1880,6 @@ QUnit.test("Current time indicator calculates position correctly with workWeek v
     assert.notEqual(position, { left: 0, top: 0 }, "Current time indicator positioned correctly");
 });
 
-QUnit.test("ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)", function(assert) {
-    const date = new Date(2019, 5, 1, 9, 40);
-
-    this.createInstance({
-        dataSource: [],
-        views: ["timelineDay", "day", "timelineWeek", "week", "timelineMonth"],
-        currentView: "timelineDay",
-        currentDate: date,
-        firstDayOfWeek: 0,
-        startDayHour: 0,
-        endDayHour: 20,
-        cellDuration: 60,
-        groups: ["priority"],
-        height: 580,
-    });
-
-    this.instance.scrollToTime(date.getHours() - 1, 30, date);
-    let scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
-
-    assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineDay");
-
-    this.instance.option("currentView", "timelineWeek");
-
-    this.instance.scrollToTime(date.getHours() - 1, 30, date);
-    scroll = this.scheduler.workSpace.getDateTableScrollable().find(".dx-scrollable-scroll")[0];
-
-    assert.notEqual(translator.locate($(scroll)).left, 0, "Container is scrolled in timelineWeek");
-});
-
 QUnit.test("Month view; dates are rendered correctly with grouping by date & empty resources in groups (T759160)", function(assert) {
     this.createInstance({
         dataSource: [],
@@ -1903,4 +1903,29 @@ QUnit.test("Month view; dates are rendered correctly with grouping by date & emp
     }).length;
 
     assert.notOk(hasNaNCellData, "Container has valid data");
+});
+
+QUnit.test("Recurrent appointment with tail on next week has most top coordinate (T805446)", function(assert) {
+    this.createInstance({
+        views: ['week', { type: 'day', intervalCount: 2 }],
+        currentView: 'week',
+        crossScrollingEnabled: true,
+        dataSource: [{
+            text: 'Recurrent',
+            startDate: "2019-05-13T19:59:00",
+            endDate: "2019-05-14T04:00:00",
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=SU'
+        }],
+        startDayHour: 0,
+        endDayHour: 24,
+        firstDayOfWeek: 1,
+        cellDuration: 60,
+        currentDate: new Date(2019, 7, 19)
+    });
+
+    const appointment = this.scheduler.appointments.getAppointment();
+
+    const coords = translator.locate(appointment);
+
+    assert.ok(coords.top === 0, "Appointment tail has most top coordinate");
 });

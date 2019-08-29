@@ -252,21 +252,12 @@ var BaseLabel = {
 /**
 * @name BaseChartLegendItem
 * @type object
+* @inherits BaseLegendItem
 */
 var legendItem = {
-  /**
-  * @name BaseChartLegendItem.text
-  * @type string
-  */
-  text: undefined,
   /**
   * @name BaseChartLegendItem.series
   * @type baseSeriesObject
   */
-  series: undefined,
-  /**
-  * @name BaseChartLegendItem.visible
-  * @type boolean
-  */
-  visible: true
+  series: undefined
 };

@@ -1,25 +1,23 @@
-import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
-import { ClientFunction } from 'testcafe';
-import { DataGridKeyboardTestHelper } from '../../helpers/dataGrid.test.helper';
+import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../helpers/testHelper';
+import DataGrid from '../../model/dataGrid';
 
-fixture`Editing`
-    .page(getContainerFileUrl());
-
-const dataGrid = new DataGridKeyboardTestHelper("#container");
+fixture `Editing`
+    .page(url(__dirname, '../container.html'));
 
 test("Tab key on editor should focus next cell if editing mode is cell", async t => {
-    await t.click(dataGrid.getDataCell(0, 1));
-    await t.pressKey("1");
-    await t.pressKey("tab");
-    await t.expect(dataGrid.cellHasFocusClass(1, 1)).ok();
+    const dataGrid = new DataGrid("#container");
 
-}).before(async () => {
-    await createWidget("dxDataGrid", {
-        dataSource: [{ name: "AaAaA", value: 1 }, { name: "aAaAa", value: 2 }],
-        editing: {
-            mode: "cell",
-            allowUpdating: true
-        },
-        columns: [{ dataField: "name", allowEditing: false }, { dataField: "value", showEditorAlways: true }]
-    });
-});
+    await t
+        .click(dataGrid.getDataCell(0, 1).element)
+        .pressKey("1 tab")
+        .expect(dataGrid.getDataCell(1, 1).isFocused).ok();
+
+}).before(() => createWidget("dxDataGrid", {
+    dataSource: [{ name: "AaAaA", value: 1 }, { name: "aAaAa", value: 2 }],
+    editing: {
+        mode: "cell",
+        allowUpdating: true
+    },
+    columns: [{ dataField: "name", allowEditing: false }, { dataField: "value", showEditorAlways: true }]
+}));

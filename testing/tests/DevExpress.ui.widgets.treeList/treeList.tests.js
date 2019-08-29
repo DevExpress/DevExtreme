@@ -1345,3 +1345,89 @@ QUnit.test("TreeList should not hang when scrolling", function(assert) {
         done();
     }, 1000);
 });
+
+// T806141
+QUnit.test("TreeList should correctly load data when filtering is remote and sorting is applied", function(assert) {
+    // arrange
+    var loadSpy = sinon.spy(),
+        data = [{ id: 0, parentId: "", hasItems: true }, { id: 1, parentId: 0, hasItems: false }],
+        treeList = createTreeList({
+            dataSource: {
+                load: function(options) {
+                    loadSpy(options);
+                    if(options.filter && options.filter[2] !== "") {
+                        return $.Deferred().resolve([data[1]]);
+                    }
+                    return $.Deferred().resolve([data[0]]);
+                }
+            },
+            remoteOperations: {
+                filtering: true
+            },
+            keyExpr: "id",
+            parentIdExpr: "parentId",
+            hasItemsExpr: "hasItems",
+            rootValue: "",
+            showBorders: true,
+            columns: [
+                { dataField: "id", sortOrder: "asc" }
+            ]
+        });
+
+    this.clock.tick(100);
+
+    // act
+    $("#treeList").find(".dx-treelist-collapsed").trigger("dxclick");
+    this.clock.tick(100);
+    this.clock.restore();
+
+    // assert
+    assert.equal(loadSpy.callCount, 2, "load call count");
+
+    assert.deepEqual(loadSpy.args[0][0].filter, ["parentId", "=", ""], "first load arguments");
+    assert.deepEqual(loadSpy.args[1][0].filter, ["parentId", "=", 0], "second load arguments");
+
+    assert.equal($(treeList.getCellElement(0, 0)).text(), "0", "first row first cell");
+    assert.equal($(treeList.getCellElement(1, 0)).text(), "1", "second row first cell");
+
+    loadSpy.reset();
+});
+
+// T806547
+QUnit.test("TreeList should correctly switch dx-row-alt class for fixed column after expand if repaintChangesOnly = true", function(assert) {
+    // arrange
+    var $row,
+        treeList = createTreeList({
+            rowAlternationEnabled: true,
+            autoExpandAll: false,
+            repaintChangesOnly: true,
+            columns: [{
+                dataField: "id",
+                fixed: true
+            }, "field"],
+            dataSource: [{
+                id: 1,
+                parentId: 0,
+                field: "data"
+            }, {
+                id: 2,
+                parentId: 1,
+                field: "data"
+            }, {
+                id: 3,
+                parentId: 0,
+                field: "data"
+            }]
+        });
+
+    this.clock.tick(100);
+
+    // act
+    treeList.expandRow(1);
+    this.clock.tick();
+    $row = $(treeList.getRowElement(2));
+
+    // assert
+    assert.notOk($row.eq(0).hasClass("dx-row-alt"), "unfixed table row element");
+    assert.notOk($row.eq(1).hasClass("dx-row-alt"), "fixed table row element");
+});

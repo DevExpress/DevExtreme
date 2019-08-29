@@ -28,6 +28,7 @@ export const Consts = {
     MENU_ITEM_CLASS: "dx-menu-item",
     SELECTION_CLASS: "dx-selection"
 };
+const showMoreButtonText = "\u22EE";
 
 export class FileManagerWrapper {
 
@@ -48,6 +49,11 @@ export class FileManagerWrapper {
 
     getFolderNode(index, inDialog) {
         return this.getFolderNodes(inDialog).eq(index);
+    }
+
+    getFolderNodeText(index, inDialog) {
+        const text = this.getFolderNode(index, inDialog).text() || "";
+        return text.replace(showMoreButtonText, "");
     }
 
     getFolderToggles(inDialog) {
@@ -146,6 +152,139 @@ export class FileManagerWrapper {
     }
 
 }
+
+export class FileManagerProgressPanelWrapper {
+
+    constructor($element) {
+        this._$element = $element;
+    }
+
+    getInfos() {
+        return this._$element
+            .find(".dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-info")
+            .map((_, info) => new FileManagerProgressPanelInfoWrapper($(info)))
+            .get();
+    }
+
+    findProgressBoxes($container) {
+        return $container
+            .children(".dx-filemanager-progress-box")
+            .map((_, element) => new FileManagerProgressPanelProgressBoxWrapper($(element)))
+            .get();
+    }
+
+    findError($container) {
+        return $container.find(".dx-filemanager-progress-box-error");
+    }
+
+    get $closeButton() {
+        return this._$element.find(".dx-filemanager-progress-panel-close-button");
+    }
+
+}
+
+export class FileManagerProgressPanelInfoWrapper {
+
+    constructor($element) {
+        this._$element = $element;
+    }
+
+    get common() {
+        const $common = this._$element.find(".dx-filemanager-progress-panel-common");
+        return new FileManagerProgressPanelProgressBoxWrapper($common);
+    }
+
+    get details() {
+        return this._$element
+            .find(".dx-filemanager-progress-panel-details > .dx-filemanager-progress-box")
+            .map((_, detailsInfo) => new FileManagerProgressPanelProgressBoxWrapper($(detailsInfo)))
+            .get();
+    }
+
+}
+
+export class FileManagerProgressPanelProgressBoxWrapper {
+
+    constructor($element) {
+        this._$element = $element;
+    }
+
+    get $element() {
+        return this._$element;
+    }
+
+    get $commonText() {
+        return this._$element.find(".dx-filemanager-progress-box-common");
+    }
+
+    get commonText() {
+        return this.$commonText.text();
+    }
+
+    get $progressBar() {
+        return this._$element.find(".dx-filemanager-progress-box-progress-bar");
+    }
+
+    get progressBar() {
+        return this.$progressBar.dxProgressBar("instance");
+    }
+
+    get progressBarStatusText() {
+        return this.$progressBar.find(".dx-progressbar-status").text();
+    }
+
+    get progressBarValue() {
+        return this.progressBar.option("value");
+    }
+
+    get $closeButton() {
+        return this._$element.find(".dx-filemanager-progress-box-close-button");
+    }
+
+    get closeButton() {
+        return this.$closeButton.dxButton("instance");
+    }
+
+    get closeButtonVisible() {
+        return this.closeButton.option("visible");
+    }
+
+    get $image() {
+        return this._$element.find(".dx-filemanager-progress-box-image");
+    }
+
+    get $error() {
+        return this._$element.find(".dx-filemanager-progress-box-error");
+    }
+
+    get errorText() {
+        return this.$error.text();
+    }
+
+    get hasError() {
+        return this.$error.length !== 0;
+    }
+
+}
+
+export const stringify = obj => {
+    if(Array.isArray(obj)) {
+        const content = obj
+            .map(item => stringify(item))
+            .join(",\n");
+        return `[ ${content} ]`;
+    }
+
+    if(typeof obj !== "object") {
+        return JSON.stringify(obj);
+    }
+
+    let props = Object
+        .keys(obj)
+        .map(key => `${key}: ${stringify(obj[key])}`)
+        .join(", ");
+    return `{ ${props} }`;
+};
 
 export const createTestFileSystem = () => {
     return [

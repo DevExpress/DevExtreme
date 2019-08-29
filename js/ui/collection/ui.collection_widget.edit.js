@@ -1,20 +1,16 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    BaseCollectionWidget = require("./ui.collection_widget.base"),
-    errors = require("../widget/ui.errors"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    noop = require("../../core/utils/common").noop,
-    isDefined = require("../../core/utils/type").isDefined,
-    PlainEditStrategy = require("./ui.collection_widget.edit.strategy.plain"),
-    compileGetter = require("../../core/utils/data").compileGetter,
-    DataSourceModule = require("../../data/data_source/data_source"),
-    DataSource = DataSourceModule.DataSource,
-    normalizeLoadResult = DataSourceModule.normalizeLoadResult,
-    Selection = require("../selection/selection"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import BaseCollectionWidget from "./ui.collection_widget.base";
+import errors from "../widget/ui.errors";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import { noop } from "../../core/utils/common";
+import { isDefined } from "../../core/utils/type";
+import PlainEditStrategy from "./ui.collection_widget.edit.strategy.plain";
+import { compileGetter } from "../../core/utils/data";
+import { DataSource, normalizeLoadResult } from "../../data/data_source/data_source";
+import Selection from "../selection/selection";
+import { when, Deferred, fromPromise } from "../../core/utils/deferred";
 
 var ITEM_DELETING_DATA_KEY = "dxItemDeleting",
     NOT_EXISTING_INDEX = -1;
@@ -309,9 +305,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
 
         this.callBase();
-
-        var selectedItemIndices = this._getSelectedItemIndices();
-        this._renderSelection(selectedItemIndices, []);
     },
     _render: function() {
         this.callBase();
@@ -467,8 +460,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         return new Deferred().resolve().promise();
     },
 
-    _renderSelection: noop,
-
     _itemClickHandler: function(e) {
         this._createAction((function(e) {
             this._itemSelectHandler(e.event);
@@ -558,9 +549,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         })({ addedItems: addedItems, removedItems: removedItems });
     },
 
-    _updateSelection: function() {
-        this._renderSelection.apply(this, arguments);
-    },
+    _updateSelection: noop,
 
     _setAriaSelected: function($target, value) {
         this.setAria("selected", value, $target);
@@ -657,7 +646,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
                 shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
 
-            when(deferredUtils.fromPromise(deletingActionArgs.cancel))
+            when(fromPromise(deletingActionArgs.cancel))
                 .always(function() {
                     $itemElement.data(ITEM_DELETING_DATA_KEY, false);
                 })

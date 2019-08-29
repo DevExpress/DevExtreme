@@ -8,7 +8,6 @@ var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     PullDownStrategy = require("./ui.scroll_view.native.pull_down"),
     SwipeDownStrategy = require("./ui.scroll_view.native.swipe_down"),
-    SlideDownStrategy = require("./ui.scroll_view.native.slide_down"),
     SimulatedStrategy = require("./ui.scroll_view.simulated"),
     Scrollable = require("./ui.scrollable"),
     LoadIndicator = require("../load_indicator"),
@@ -30,7 +29,6 @@ var SCROLLVIEW_CLASS = "dx-scrollview",
 var refreshStrategies = {
     pullDown: PullDownStrategy,
     swipeDown: SwipeDownStrategy,
-    slideDown: SlideDownStrategy,
     simulated: SimulatedStrategy
 };
 
@@ -106,14 +104,6 @@ var ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
                 },
                 options: {
                     refreshStrategy: "swipeDown"
-                }
-            },
-            {
-                device: function() {
-                    return devices.real().platform === "win";
-                },
-                options: {
-                    refreshStrategy: "slideDown"
                 }
             },
             {

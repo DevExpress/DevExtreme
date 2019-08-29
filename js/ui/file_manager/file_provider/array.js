@@ -1,3 +1,4 @@
+import { find } from "../../../core/utils/array";
 import { ensureDefined } from "../../../core/utils/common";
 import { compileGetter, compileSetter } from "../../../core/utils/data";
 import Guid from "../../../core/guid";
@@ -51,8 +52,8 @@ class ArrayFileProvider extends FileProvider {
         this._data = initialArray || [ ];
     }
 
-    getItems(path) {
-        return this._getItems(path);
+    getItems(pathInfo) {
+        return this._getItems(pathInfo);
     }
 
     renameItem(item, name) {
@@ -71,13 +72,20 @@ class ArrayFileProvider extends FileProvider {
     }
 
     createFolder(parentDir, name) {
+        if(!this._isFileItemExists(parentDir) || this._isDirGetter(parentDir.fileItem)) {
+            throw {
+                errorId: ErrorCode.DirectoryNotFound,
+                fileItem: parentDir
+            };
+        }
+
         let newDir = { };
         this._nameSetter(newDir, name);
         this._getIsDirSetter(newDir, true);
 
         this._keySetter(newDir, String(new Guid()));
 
-        const array = this._getDirectoryDataItems(parentDir);
+        const array = this._getDirectoryDataItems(parentDir.dataItem);
         array.push(newDir);
 
         if(parentDir && !parentDir.isRoot) {
@@ -90,7 +98,7 @@ class ArrayFileProvider extends FileProvider {
     }
 
     moveItems(items, destinationDir) {
-        let array = this._getDirectoryDataItems(destinationDir);
+        let array = this._getDirectoryDataItems(destinationDir.dataItem);
         each(items, (_, item) => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
             this._deleteItem(item);
@@ -99,7 +107,7 @@ class ArrayFileProvider extends FileProvider {
     }
 
     copyItems(items, destinationDir) {
-        const array = this._getDirectoryDataItems(destinationDir);
+        const array = this._getDirectoryDataItems(destinationDir.dataItem);
         each(items, (_, item) => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
 
@@ -136,63 +144,71 @@ class ArrayFileProvider extends FileProvider {
         return copyObj;
     }
 
-    _deleteItem({ parentPath, dataItem }) {
-        let array = this._data;
-        if(parentPath !== "") {
-            const folder = this._findItem(parentPath);
-            array = this._subFileItemsGetter(folder);
+    _deleteItem(fileItem) {
+        const fileItemObj = this._findFileItemObj(fileItem.getFullPathInfo());
+        if(!fileItemObj) {
+            throw {
+                errorId: fileItem.isDirectory ? ErrorCode.DirectoryNotFound : ErrorCode.FileNotFound,
+                fileItem: fileItem
+            };
         }
-        const index = array.indexOf(dataItem);
+
+        const parentDirDataObj = this._findFileItemObj(fileItem.pathInfo);
+        let array = this._getDirectoryDataItems(parentDirDataObj);
+        const index = array.indexOf(fileItemObj);
         array.splice(index, 1);
     }
 
-    _getDirectoryDataItems(directory) {
-        if(!directory || !directory.dataItem) {
+    _getDirectoryDataItems(directoryDataObj) {
+        if(!directoryDataObj) {
             return this._data;
         }
 
-        let dataItems = this._subFileItemsGetter(directory.dataItem);
+        let dataItems = this._subFileItemsGetter(directoryDataObj);
         if(!Array.isArray(dataItems)) {
             dataItems = [];
-            this._subFileItemsSetter(directory.dataItem, dataItems);
+            this._subFileItemsSetter(directoryDataObj, dataItems);
         }
         return dataItems;
     }
 
-    _getItems(parentDirKey) {
+    _getItems(pathInfo) {
+        const parentDirKey = pathInfo && pathInfo.length > 0 ? pathInfo[pathInfo.length - 1].key : null;
         let dirFileObjects = this._data;
         if(parentDirKey) {
-            const folderEntry = this._findItem(parentDirKey);
-            dirFileObjects = folderEntry && this._subFileItemsGetter(folderEntry) || [];
+            const directoryEntry = this._findFileItemObj(pathInfo);
+            dirFileObjects = directoryEntry && this._subFileItemsGetter(directoryEntry) || [];
         }
-        return this._convertDataObjectsToFileItems(dirFileObjects, parentDirKey || "");
+        return this._convertDataObjectsToFileItems(dirFileObjects, pathInfo);
     }
 
-    _findItem(key) {
-        return this._findItemRecursive(key, this._data, "");
-    }
-
-    _findItemRecursive(key, fileItemObjects, currentPath) {
-        if(!key || !Array.isArray(fileItemObjects)) {
-            return null;
+    _findFileItemObj(pathInfo) {
+        if(!Array.isArray(pathInfo)) {
+            pathInfo = [ ];
         }
 
-        let foundDataObj = null;
-        for(let i = 0; i < fileItemObjects.length && !foundDataObj; i++) {
-            const dataObj = fileItemObjects[i];
-            foundDataObj = this._getKeyByDataObject(dataObj, currentPath) === key && dataObj || null;
-            if(!foundDataObj && this._isDirGetter(dataObj)) {
-                const dirPath = pathCombine(currentPath, this._nameGetter(dataObj));
-                foundDataObj = this._findItemRecursive(key, this._subFileItemsGetter(dataObj), dirPath);
+        let currentPath = "";
+        let fileItemObj = null;
+        let fileItemObjects = this._data;
+        for(let i = 0; i < pathInfo.length && (i === 0 || fileItemObj); i++) {
+            const that = this;
+            fileItemObj = find(fileItemObjects, item => {
+                const hasCorrectFileItemType = that._isDirGetter(item) || i === pathInfo.length - 1;
+                return that._getKeyFromDataObject(item, currentPath) === pathInfo[i].key &&
+                    that._nameGetter(item) === pathInfo[i].name && hasCorrectFileItemType;
+            });
+            if(fileItemObj) {
+                currentPath = pathCombine(currentPath, this._nameGetter(fileItemObj));
+                fileItemObjects = this._subFileItemsGetter(fileItemObj);
             }
         }
-        return foundDataObj;
+        return fileItemObj;
     }
 
-    _getKeyByDataObject(dataObj, currentPath) {
+    _getKeyFromDataObject(dataObj, defaultKeyPrefix) {
         let key = this._keyGetter(dataObj);
         if(!key) {
-            key = pathCombine(currentPath, this._nameGetter(dataObj));
+            key = pathCombine(defaultKeyPrefix, this._nameGetter(dataObj));
         }
         return key;
     }
@@ -214,6 +230,10 @@ class ArrayFileProvider extends FileProvider {
 
     _getSetter(expr) {
         return typeUtils.isFunction(expr) ? expr : compileSetter(expr);
+    }
+
+    _isFileItemExists(fileItem) {
+        return fileItem.isDirectory && fileItem.isRoot || !!this._findFileItemObj(fileItem.getFullPathInfo());
     }
 
 }

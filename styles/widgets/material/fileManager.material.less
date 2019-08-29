@@ -1,5 +1,28 @@
+@import (once) "../base/fileManager.less";
+
 .dx-filemanager {
     border-color: @filemanager-border-color;
+
+    .dx-filemanager-notification-common {
+        border-color: @filemanager-border-color;
+    }
+
+    .dx-filemanager-progress-panel {
+        background-color: @base-bg;
+
+        .dx-filemanager-progress-panel-details {
+            border-color: @filemanager-border-color;
+
+            & > .dx-filemanager-progress-box {
+                box-shadow: 0 4px 8px 0 @filemanager-progressbox-shadow-color;
+            }
+        }
+    }
+
+    .dx-filemanager-progress-box-error {
+        color: @base-inverted-text-color;
+        background: @base-danger;
+    }
 
     .dx-filemanager-toolbar {
         background: @base-bg;
@@ -157,3 +180,5 @@
 .dx-filemanager-context-menu .dx-menu-item-has-text:not(.dx-menu-item-has-icon) .dx-menu-item-text {
     margin-left: @FILEMANAGER_CONTEXTMENU_TEXT_ITEM_LEFT_MARGIN;
 }
+
+.filemanager-icons-mixin(@base-text-color, @base-success, @base-inverted-text-color, @base-danger, @base-inverted-text-color, @FILEMANAGER_LARGE_ICON_SIZE);
