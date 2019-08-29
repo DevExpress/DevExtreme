@@ -5,7 +5,6 @@ import "ui/speed_dial_action";
 import "common.css!";
 import "generic_light.css!";
 
-
 const { test } = QUnit;
 
 QUnit.testStart(() => {
@@ -184,6 +183,7 @@ QUnit.module("modify global action button config", (hooks) => {
         const $fabMainElement = $(FAB_MAIN_SELECTOR);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const fabDimensions = 64;
+        const done = assert.async();
 
         assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
         assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
@@ -196,8 +196,11 @@ QUnit.module("modify global action button config", (hooks) => {
 
         firstSDA.repaint();
 
-        assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
-        assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
+            assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+            done();
+        }, 500);
     });
 });
 
@@ -224,6 +227,7 @@ QUnit.module("add or remove action buttons", (hooks) => {
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const $fabElement = $(FAB_SELECTOR);
         const fabMainOffsetY = 16;
+        const done = assert.async();
 
         assert.equal($fabMainContent.parent(".dx-overlay-wrapper").length, 1, "main action button contain overlay wrapper");
         assert.equal($fabElement.length, 1, "one action button");
@@ -232,7 +236,11 @@ QUnit.module("add or remove action buttons", (hooks) => {
         $("#fab-one").dxSpeedDialAction("instance").option("icon", "favorites");
 
         assert.equal($fabMainContent.find(".dx-icon-favorites").length, 1, "use icon after change icon option");
-        assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), "use dafault position after change icon option");
+
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, $(window).height() - fabMainOffsetY - $fabMainContent.height(), "use dafault position after change icon option");
+            done();
+        }, 500);
 
         $("#fab-two").dxSpeedDialAction({
             icon: "trash",
@@ -394,10 +402,12 @@ QUnit.module("add label option", (hooks) => {
     let firstSDA;
     let secondSDA;
     hooks.afterEach(() => {
-        firstSDA.dispose();
-        secondSDA.dispose();
+        firstSDA && firstSDA.dispose();
+        secondSDA && secondSDA.dispose();
     }),
-    test("check rendering", (assert) => {
+    test("check rendering if one action", (assert) => {
+        const done = assert.async();
+
         config({
             floatingActionButtonConfig: {
                 position: {
@@ -415,16 +425,28 @@ QUnit.module("add label option", (hooks) => {
         assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), "first action", "FAB has label");
         assert.ok($(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB has class");
 
-        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
-        assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "default position top doesn't change if FAB has label");
-        assert.roughEqual($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), 1, "default position left doesn't change if FAB has label");
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "default position top doesn't change if FAB has label");
+            assert.roughEqual($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), 1, "default position left doesn't change if FAB has label");
+            done();
+        }, 1000);
+
+    }),
+
+    test("check rendering if multiple actions", (assert) => {
+        const done = assert.async();
+
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
 
         secondSDA = $("#fab-two").dxSpeedDialAction({
             label: "second action"
         }).dxSpeedDialAction("instance");
 
-        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
         assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).length, 0, "FAB hasn't label if create second SDA");
         assert.ok(!$(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB hasn't class if create second SDA");
@@ -432,8 +454,23 @@ QUnit.module("add label option", (hooks) => {
         assert.equal($(FAB_SELECTOR).find(FAB_LABEL_SELECTOR).eq(1).text(), "second action", "second SDA has label");
         assert.ok(!$(FAB_SELECTOR).find(".dx-overlay-content").eq(0).hasClass(FAB_CONTENT_REVERSE_CLASS), "first SDA has label on the left");
         assert.ok(!$(FAB_SELECTOR).find(".dx-overlay-content").eq(1).hasClass(FAB_CONTENT_REVERSE_CLASS), "second SDA has label on the left");
-        assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "position top doesn't change if FAB has lost label");
-        assert.equal($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), "position left doesn't change if FAB has lost label");
+
+        setTimeout(() => {
+            assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "position top doesn't change if FAB has lost label");
+            assert.equal($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), "position left doesn't change if FAB has lost label");
+            done();
+        }, 1000);
+    }),
+
+    test("check rendering if change position in config", (assert) => {
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            label: "second action"
+        }).dxSpeedDialAction("instance");
+
         config({
             floatingActionButtonConfig: {
                 label: "fab",
