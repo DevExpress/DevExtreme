@@ -396,6 +396,16 @@ if(devices.real().deviceType === "desktop") {
             }.bind(this));
         });
 
+        test("Hours switching should not switch am/pm", (assert) => {
+            this.instance.option("displayFormat", "h a");
+            this.instance.option("value", new Date(2012, 3, 4, 23, 55, 0));
+
+            assert.strictEqual(this.$input.val(), "11 PM", "initial value is correct");
+
+            this.keyboard.press("up");
+            assert.strictEqual(this.$input.val(), "12 PM", "am/pm was not switched");
+        });
+
         test("Moving through the february should not break day value", (assert) => {
             this.instance.option({
                 value: new Date(2015, 0, 29),
