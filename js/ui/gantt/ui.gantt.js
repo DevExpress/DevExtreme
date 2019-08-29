@@ -512,14 +512,14 @@ class Gantt extends Widget {
                 this._setGanttViewOption("taskTitlePosition", args.value);
                 break;
             case "selectedRowKey":
-                this._treeList.option("selectedRowKeys", [args.value]);
+                this._setTreeListOption("selectedRowKeys", [args.value]);
                 break;
             case "onSelectionChanged":
                 this._createSelectionChangedAction();
                 break;
             case "allowSelection":
-                this._treeList.option("selection.mode", this._getSelectionMode(args.value));
-                this._ganttView.option("allowSelection", args.value);
+                this._setTreeListOption("selection.mode", this._getSelectionMode(args.value));
+                this._setGanttViewOption("allowSelection", args.value);
                 break;
             default:
                 super._optionChanged(args);
