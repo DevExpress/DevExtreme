@@ -1,5 +1,6 @@
 import $ from "jquery";
 import browser from "core/utils/browser";
+import devices from "core/devices";
 import ExcelJS from "exceljs";
 import ExcelJSTestHelper from "./ExcelJSTestHelper.js";
 import { exportDataGrid } from "exporter/exceljs/excelExporter";
@@ -223,6 +224,8 @@ QUnit.module("API", moduleConfig, () => {
             });
 
             QUnit.test("Header - 2 column, column.width: auto" + options, (assert) => {
+                const currentDevice = devices.current();
+                const isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "generic";
                 const done = assert.async();
 
                 let dataGrid = $("#dataGrid").dxDataGrid({
@@ -234,7 +237,7 @@ QUnit.module("API", moduleConfig, () => {
                     let expectedWidths = [3.71, 67.71, undefined];
                     if(browser.mozilla) {
                         expectedWidths = [3.85, 67.57, undefined];
-                    } else if(browser.msie) {
+                    } else if(browser.msie && !isWinPhone) {
                         expectedWidths = [3.77, 67.65, undefined];
                     }
                     helper.checkColumnWidths(expectedWidths, topLeft.column);
