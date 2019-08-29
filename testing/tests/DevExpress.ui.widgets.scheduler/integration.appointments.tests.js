@@ -1767,7 +1767,6 @@ QUnit.test("Appointment should push correct data to the onAppointmentUpdating ev
 //         }],
 //         height: 400
 //     });
-//     debugger;
 
 //     let $appointment = this.scheduler.appointments.getAppointment(),
 //         dragDistance = 50;
