@@ -16,7 +16,7 @@ test("onFocusedRowChanged event should fire once after changing focusedRowKey if
     await ClientFunction(() => (window as any).widget.option("focusedRowKey", "Ben"))();
 
     await t
-        .expect(dataGrid.getFocusedRow()).ok()
+        .expect(dataGrid.getFocusedRow().exists).ok()
         .expect(ClientFunction(() => (window as any).onFocusedRowChangedCounter)()).eql(2);
 }).before(async () => {
     await createWidget("dxDataGrid", {
