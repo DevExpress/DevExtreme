@@ -1,6 +1,7 @@
 import $ from "jquery";
 import config from "core/config";
 import repaintFloatingActionButton from "ui/speed_dial_action/repaint_floating_action_button";
+import fx from "animation/fx";
 
 import "ui/speed_dial_action";
 import "common.css!";
@@ -17,6 +18,8 @@ QUnit.testStart(() => {
 });
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
+
+fx.off = true;
 
 QUnit.module("apply current config options", (hooks) => {
     hooks.afterEach(() => {
@@ -38,7 +41,6 @@ QUnit.module("apply current config options", (hooks) => {
         const $fabMainElement = $("." + FAB_MAIN_CLASS);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const fabDimensions = 64;
-        const done = assert.async();
 
         assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
         assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
@@ -57,11 +59,8 @@ QUnit.module("apply current config options", (hooks) => {
 
         assert.equal($fabMainContent.find(".dx-icon-edit").length, 1, "default icon is changed");
         assert.equal($fabMainContent.find(".dx-icon-cancel").length, 1, "default close icon is changed");
-        setTimeout(() => {
-            assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
-            assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
-            done();
-        }, 500);
+        assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
+        assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
     });
 
     test("repaint with one action", (assert) => {
@@ -71,7 +70,6 @@ QUnit.module("apply current config options", (hooks) => {
         const $fabMainElement = $("." + FAB_MAIN_CLASS);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
         const fabDimensions = 64;
-        const done = assert.async();
 
         assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
         assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
@@ -91,10 +89,7 @@ QUnit.module("apply current config options", (hooks) => {
 
         assert.equal($fabMainContent.find(".dx-icon-trash").length, 1, "default icon is changed");
         assert.equal($fabMainContent.find(".dx-icon-cancel").length, 1, "default close icon is changed");
-        setTimeout(() => {
-            assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
-            assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
-            done();
-        }, 500);
+        assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
+        assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
     });
 });
