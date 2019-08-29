@@ -4,6 +4,7 @@ import translator2DModule from "viz/translators/translator2d";
 import tickGeneratorModule from "viz/axes/tick_generator";
 import rangeModule from "viz/translators/range";
 import { Axis } from "viz/axes/base_axis";
+import { extend } from "core/utils/extend";
 
 var TranslatorStubCtor = new vizMocks.ObjectPool(translator2DModule.Translator2D),
     RangeStubCtor = new vizMocks.ObjectPool(rangeModule.Range);
@@ -887,6 +888,18 @@ QUnit.test("create constant lines with label, option 'startAngle' > 0", function
     assert.deepEqual(this.renderer.path.getCall(0).args, [[20, 50, 40, 50], "line"]);
     assert.deepEqual(this.renderer.path.getCall(0).returnValue.rotate.firstCall.args, [60, 20, 50]);
     assert.deepEqual(this.renderer.text.getCall(0).args, ["10", 25, 59]);
+});
+
+QUnit.test("Update constant line", function(assert) {
+    this.options.startAngle = 50;
+    const updateCanvas = extend({}, this.canvas);
+    this.canvas.width = 300;
+    const axis = this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true } }], label: { visible: false } });
+    axis.updateSize(updateCanvas);
+
+    assert.deepEqual(this.renderer.path.getCall(0).returnValue.attr.lastCall.args, [{ points: [20, 50, 40, 50] }]);
+    assert.deepEqual(this.renderer.path.getCall(0).returnValue.rotate.lastCall.args, [60, 20, 50]);
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.lastCall.args, [{ x: 25, y: 59 }]);
 });
 
 QUnit.test("adjust constant line labels", function(assert) {
