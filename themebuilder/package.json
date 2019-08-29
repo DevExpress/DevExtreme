@@ -23,9 +23,9 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "express": "^4.16.4",
+    "less": "3.9.0",
     "mocha": "^5.2.0",
     "mock-require": "^3.0.2",
-    "less": "^3.9.0",
     "node-sass": "^4.9.3"
   }
 }

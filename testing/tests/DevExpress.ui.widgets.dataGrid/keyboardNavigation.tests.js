@@ -1761,7 +1761,9 @@ QUnit.testInActiveWindow("Page down should scroll page down when paging disabled
     this.clock.tick();
 
     // assert
-    assert.ok(that.rowsView.element().is(":focus"), $(":focus").attr("class"));
+    if(!browser.msie || parseInt(browser.version) > 11) {
+        assert.ok(that.rowsView.element().is(":focus"), "rowsview element is focused");
+    }
     assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 5 });
     assert.equal(this.rowsView.getScrollable().scrollTop(), 200);
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
@@ -2143,7 +2145,7 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
     var $prevCell = testElement.find(".dx-data-row").eq(0).children().eq(5);
 
     assert.equal($prevCell.attr("tabindex"), "0");
-    assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) - 1, testElement.find("[tabIndex]").index($prevCell), "previous focusable element");
+    assert.equal(testElement.find("[tabIndex=0]").index(testElement.find(":focus")) - 1, testElement.find("[tabIndex=0]").index($prevCell), "previous focusable element");
 });
 
 // T317001
@@ -4367,10 +4369,12 @@ QUnit.testInActiveWindow("Ctrl + F", function(assert) {
 
     $(this.rowsView.element()).click();
 
-    var isPreventDefaultCalled = this.triggerKeyDown("F", true).preventDefault;
+    var isPreventDefaultCalled = this.triggerKeyDown("F", true).preventDefault,
+        $searchPanelElement = $(".dx-datagrid-search-panel");
 
     // assert
-    assert.ok(this.keyboardNavigationController._testHeaderPanelFocused, "search panel is focused");
+    assert.ok($searchPanelElement.hasClass("dx-state-focused"), "search panel has focus class");
+    assert.ok($searchPanelElement.find(":focus").hasClass("dx-texteditor-input"), "search panel's editor is focused");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 

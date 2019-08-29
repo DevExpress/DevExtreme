@@ -685,7 +685,7 @@ declare module DevExpress.ui {
         /** @name DataExpressionMixin.Options.dataSource */
         dataSource?: string | Array<CollectionWidgetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name DataExpressionMixin.Options.displayExpr */
-        displayExpr?: string | ((item: any) => any);
+        displayExpr?: string | ((item: any) => string);
         /** @name DataExpressionMixin.Options.itemTemplate */
         itemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name DataExpressionMixin.Options.items */
@@ -693,7 +693,7 @@ declare module DevExpress.ui {
         /** @name DataExpressionMixin.Options.value */
         value?: any;
         /** @name DataExpressionMixin.Options.valueExpr */
-        valueExpr?: string | Function;
+        valueExpr?: string | ((item: any) => string);
     }
     /** @name DataExpressionMixin */
     export class DataExpressionMixin {
@@ -876,7 +876,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.showRowLines */
         showRowLines?: boolean;
         /** @name GridBase.Options.sorting */
-        sorting?: { ascendingText?: string, clearText?: string, descendingText?: string, mode?: 'multiple' | 'none' | 'single' };
+        sorting?: { ascendingText?: string, clearText?: string, descendingText?: string, mode?: 'multiple' | 'none' | 'single', showSortIndexes?: boolean };
         /** @name GridBase.Options.stateStoring */
         stateStoring?: { customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((gridState: any) => any), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: 'custom' | 'localStorage' | 'sessionStorage' };
         /** @name GridBase.Options.twoWayBindingEnabled */
@@ -1165,7 +1165,7 @@ declare module DevExpress.ui {
         /** @name GridBaseColumn.isBand */
         isBand?: boolean;
         /** @name GridBaseColumn.lookup */
-        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store | ((options: { data?: any, key?: any }) => Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store), displayExpr?: string | ((data: any) => any), valueExpr?: string };
+        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store | ((options: { data?: any, key?: any }) => Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store), displayExpr?: string | ((data: any) => string), valueExpr?: string };
         /** @name GridBaseColumn.minWidth */
         minWidth?: number;
         /** @name GridBaseColumn.name */
@@ -1215,7 +1215,7 @@ declare module DevExpress.ui {
         /** @name HierarchicalCollectionWidget.Options.disabledExpr */
         disabledExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.displayExpr */
-        displayExpr?: string | ((item: any) => any);
+        displayExpr?: string | ((item: any) => string);
         /** @name HierarchicalCollectionWidget.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name HierarchicalCollectionWidget.Options.hoverStateEnabled */
@@ -1223,7 +1223,7 @@ declare module DevExpress.ui {
         /** @name HierarchicalCollectionWidget.Options.itemsExpr */
         itemsExpr?: string | Function;
         /** @name HierarchicalCollectionWidget.Options.keyExpr */
-        keyExpr?: string | Function;
+        keyExpr?: string | ((item: any) => string);
         /** @name HierarchicalCollectionWidget.Options.selectedExpr */
         selectedExpr?: string | Function;
     }
@@ -1999,12 +1999,12 @@ declare module DevExpress.ui {
         edges?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), fromLineEndExpr?: string | ((data: any) => any), fromPointIndexExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), lineTypeExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), pointsExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any), toLineEndExpr?: string | ((data: any) => any), toPointIndexExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.export */
         export?: { fileName?: string, proxyUrl?: string };
-        /** @name dxDiagram.Options.fullscreen */
-        fullscreen?: boolean;
+        /** @name dxDiagram.Options.fullScreen */
+        fullScreen?: boolean;
         /** @name dxDiagram.Options.gridSize */
         gridSize?: number | { items?: Array<number>, value?: number };
         /** @name dxDiagram.Options.nodes */
-        nodes?: { autoLayout?: 'off' | 'tree' | 'sugiyama' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'sugiyama' }, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
+        nodes?: { autoLayout?: 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'layered' }, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /** @name dxDiagram.Options.onDataChanged */
         onDataChanged?: ((e: any) => any);
         /** @name dxDiagram.Options.pageColor */
@@ -2024,7 +2024,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.snapToGrid */
         snapToGrid?: boolean;
         /** @name dxDiagram.Options.toolbar */
-        toolbar?: { commands?: Array<'separator' | 'export' | 'undo' | 'redo' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'autoLayout' | 'fullscreen'>, visible?: boolean };
+        toolbar?: { commands?: Array<'separator' | 'export' | 'undo' | 'redo' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'autoLayout' | 'fullScreen'>, visible?: boolean };
         /** @name dxDiagram.Options.toolbox */
         toolbox?: { groups?: Array<{ category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, expanded?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipsis' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>, style?: 'icons' | 'texts', title?: string }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>, visible?: boolean };
         /** @name dxDiagram.Options.units */
@@ -2474,7 +2474,7 @@ declare module DevExpress.ui {
         /** @name dxFilterBuilderField.format */
         format?: format;
         /** @name dxFilterBuilderField.lookup */
-        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => any), valueExpr?: string | Function };
+        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string) };
         /** @name dxFilterBuilderField.name */
         name?: string;
         /** @name dxFilterBuilderField.trueText */
@@ -2879,7 +2879,7 @@ declare module DevExpress.ui {
         /** @name dxList.Options.collapsibleGroups */
         collapsibleGroups?: boolean;
         /** @name dxList.Options.displayExpr */
-        displayExpr?: string | ((item: any) => any);
+        displayExpr?: string | ((item: any) => string);
         /** @name dxList.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxList.Options.groupTemplate */
@@ -3925,7 +3925,7 @@ declare module DevExpress.ui {
         /** @name dxScheduler.Options.resourceCellTemplate */
         resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxScheduler.Options.resources */
-        resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, displayExpr?: string | ((resource: any) => any), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
+        resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, displayExpr?: string | ((resource: any) => string), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
         /** @name dxScheduler.Options.selectedCellData */
         selectedCellData?: Array<any>;
         /** @name dxScheduler.Options.shadeUntilCurrentTime */
@@ -4241,6 +4241,8 @@ declare module DevExpress.ui {
     export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
         /** @name dxSpeedDialAction.Options.icon */
         icon?: string;
+        /** @name dxSpeedDialAction.Options.label */
+        label?: string;
         /** @name dxSpeedDialAction.Options.onClick */
         onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement }) => any);
         /** @name dxSpeedDialAction.Options.visible */
@@ -5261,6 +5263,8 @@ declare module DevExpress.data {
         group?: any;
         /** @name LoadOptions.groupSummary */
         groupSummary?: any;
+        /** @name LoadOptions.parentIds */
+        parentIds?: Array<any>;
         /** @name LoadOptions.requireGroupCount */
         requireGroupCount?: boolean;
         /** @name LoadOptions.requireTotalCount */
@@ -5662,13 +5666,9 @@ declare module DevExpress.viz {
         value?: number;
     }
     /** @name BarGaugeLegendItem */
-    export interface BarGaugeLegendItem {
+    export interface BarGaugeLegendItem extends BaseLegendItem {
         /** @name BarGaugeLegendItem.item */
         item?: BarGaugeBarInfo;
-        /** @name BarGaugeLegendItem.text */
-        text?: string;
-        /** @name BarGaugeLegendItem.visible */
-        visible?: boolean;
     }
     /** @name BaseChart.Options */
     export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
@@ -5720,6 +5720,8 @@ declare module DevExpress.viz {
     interface BaseChartLegend extends BaseLegend {
         /** @name BaseChart.Options.legend.customizeItems */
         customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
+        /** @name BaseChart.Options.legend.markerTemplate */
+        markerTemplate?: DevExpress.core.template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
     }
     /** @name BaseChart.Options.tooltip */
     interface BaseChartTooltip extends BaseWidgetTooltip {
@@ -5752,13 +5754,9 @@ declare module DevExpress.viz {
         render(renderOptions: any): void;
     }
     /** @name BaseChartLegendItem */
-    export interface BaseChartLegendItem {
+    export interface BaseChartLegendItem extends BaseLegendItem {
         /** @name BaseChartLegendItem.series */
         series?: baseSeriesObject;
-        /** @name BaseChartLegendItem.text */
-        text?: string;
-        /** @name BaseChartLegendItem.visible */
-        visible?: boolean;
     }
     /** @name BaseGauge.Options */
     export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
@@ -5903,6 +5901,15 @@ declare module DevExpress.viz {
         /** @name BaseLegend.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseLegend.visible */
+        visible?: boolean;
+    }
+    /** @name BaseLegendItem */
+    export interface BaseLegendItem {
+        /** @name BaseLegendItem.marker */
+        marker?: { fill?: string, opacity?: number, size?: number, state?: 'normal' | 'hovered' | 'selected' };
+        /** @name BaseLegendItem.text */
+        text?: string;
+        /** @name BaseLegendItem.visible */
         visible?: boolean;
     }
     /** @name BaseSparkline.Options */
@@ -6140,13 +6147,9 @@ declare module DevExpress.viz {
         weight?: number;
     }
     /** @name FunnelLegendItem */
-    export interface FunnelLegendItem {
+    export interface FunnelLegendItem extends BaseLegendItem {
         /** @name FunnelLegendItem.item */
         item?: dxFunnelItem;
-        /** @name FunnelLegendItem.text */
-        text?: string;
-        /** @name FunnelLegendItem.visible */
-        visible?: boolean;
     }
     /** @name GaugeIndicator */
     export interface GaugeIndicator extends CommonIndicator {
@@ -6188,7 +6191,7 @@ declare module DevExpress.viz {
         selected(state: boolean): void;
     }
     /** @name PieChartLegendItem */
-    export interface PieChartLegendItem {
+    export interface PieChartLegendItem extends BaseLegendItem {
         /** @name PieChartLegendItem.argument */
         argument?: string | Date | number;
         /** @name PieChartLegendItem.argumentIndex */
@@ -6197,8 +6200,6 @@ declare module DevExpress.viz {
         points?: Array<piePointObject>;
         /** @name PieChartLegendItem.text */
         text?: any;
-        /** @name PieChartLegendItem.visible */
-        visible?: boolean;
     }
     /** @name PieChartSeries */
     export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
@@ -6224,7 +6225,7 @@ declare module DevExpress.viz {
         startValue?: number | Date | string;
     }
     /** @name VectorMapLegendItem */
-    export interface VectorMapLegendItem {
+    export interface VectorMapLegendItem extends BaseLegendItem {
         /** @name VectorMapLegendItem.color */
         color?: string;
         /** @name VectorMapLegendItem.end */
@@ -6233,8 +6234,6 @@ declare module DevExpress.viz {
         size?: number;
         /** @name VectorMapLegendItem.start */
         start?: number;
-        /** @name VectorMapLegendItem.visible */
-        visible?: boolean;
     }
     /** @name VectorMapProjectionConfig */
     export interface VectorMapProjectionConfig {
@@ -6462,6 +6461,8 @@ declare module DevExpress.viz {
         customizeText?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
         /** @name dxBarGauge.Options.legend.itemTextFormat */
         itemTextFormat?: DevExpress.ui.format;
+        /** @name dxBarGauge.Options.legend.markerTemplate */
+        markerTemplate?: DevExpress.core.template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxBarGauge.Options.legend.visible */
         visible?: boolean;
     }
@@ -8111,6 +8112,8 @@ declare module DevExpress.viz {
         customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>);
         /** @name dxFunnel.Options.legend.customizeText */
         customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
+        /** @name dxFunnel.Options.legend.markerTemplate */
+        markerTemplate?: DevExpress.core.template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxFunnel.Options.legend.visible */
         visible?: boolean;
     }
@@ -8248,6 +8251,8 @@ declare module DevExpress.viz {
         customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
         /** @name dxPieChart.Options.legend.hoverMode */
         hoverMode?: 'none' | 'allArgumentPoints';
+        /** @name dxPieChart.Options.legend.markerTemplate */
+        markerTemplate?: DevExpress.core.template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
     }
     /** @name dxPieChart */
     export class dxPieChart extends BaseChart {
@@ -9201,6 +9206,8 @@ declare module DevExpress.viz {
         markerShape?: 'circle' | 'square';
         /** @name dxVectorMap.Options.legends.markerSize */
         markerSize?: number;
+        /** @name dxVectorMap.Options.legends.markerTemplate */
+        markerTemplate?: DevExpress.core.template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxVectorMap.Options.legends.source */
         source?: { grouping?: string, layer?: string };
     }
@@ -9363,13 +9370,11 @@ declare module DevExpress {
         /** @name Device.phone */
         phone?: boolean;
         /** @name Device.platform */
-        platform?: 'android' | 'ios' | 'win' | 'generic';
+        platform?: 'android' | 'ios' | 'generic';
         /** @name Device.tablet */
         tablet?: boolean;
         /** @name Device.version */
         version?: Array<number>;
-        /** @name Device.win */
-        win?: boolean;
     }
     /** @name DevicesObject */
     export class DevicesObject {
@@ -9492,7 +9497,7 @@ declare module DevExpress {
         /** @name globalConfig.editorStylingMode */
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
         /** @name globalConfig.floatingActionButtonConfig */
-        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
+        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, label?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
         /** @name globalConfig.forceIsoDateParsing */
         forceIsoDateParsing?: boolean;
         /** @name globalConfig.oDataFilterToLower */

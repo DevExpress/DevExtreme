@@ -317,8 +317,17 @@
         "dxDiagram-commandSendToBack": "На задний план",
         "dxDiagram-commandLock": "Заблокировать",
         "dxDiagram-commandUnlock": "Разблокировать",
+        "dxDiagram-commandInsertShapeImage": "Добавить изображение...",
+        "dxDiagram-commandEditShapeImage": "Изменить изображение...",
+        "dxDiagram-commandDeleteShapeImage": "Удалить изображение",
         "dxDiagram-unitIn": "дюйм(а)",
         "dxDiagram-unitCm": "см",
-        "dxDiagram-unitPx": "пиксель(я)"
+        "dxDiagram-unitPx": "пиксель(я)",
+        "dxDiagram-dialogButtonOK": "ОК",
+        "dxDiagram-dialogButtonCancel": "Отмена",
+        "dxDiagram-dialogInsertShapeImageTitle": "Добавить изображение",
+        "dxDiagram-dialogEditShapeImageTitle": "Изменить изображение",
+        "dxDiagram-dialogEditShapeImageSelectButton": "Выберите изображение",
+        "dxDiagram-dialogEditShapeImageLabelText": "или перетащите файл сюда"
     }
 }

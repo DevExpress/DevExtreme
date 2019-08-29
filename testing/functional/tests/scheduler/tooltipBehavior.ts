@@ -2,7 +2,7 @@ import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
 import SchedulerTestHelper from '../../helpers/scheduler.test.helper';
 import { ClientFunction } from 'testcafe';
 
-fixture `Tooltip behavior when scrolling`
+fixture `Scheduler: Appointment Tooltip`
     .page(getContainerFileUrl());
 
 const scheduler = new SchedulerTestHelper("#container");
@@ -25,7 +25,7 @@ const createScheduler = async () => {
 
 test("Tooltip shouldn't hide after scroll in browser height is small (T755449)", async t => {
     await t.resizeWindow(600, 400)
-        .click(scheduler.getAppointment())
+        .click(scheduler.getAppointment(`Website Re-Design Plan`))
         .expect(scheduler.isTooltipVisible()).ok();
 
     await scrollBrowser();
@@ -36,7 +36,7 @@ test("Tooltip shouldn't hide after scroll in browser height is small (T755449)",
 
 test("Tooltip should hide after scroll", async t => {
     await t.resizeWindow(600, 600)
-        .click(scheduler.getAppointment())
+        .click(scheduler.getAppointment(`Website Re-Design Plan`))
         .expect(scheduler.isTooltipVisible()).ok();
 
     await scrollBrowser();

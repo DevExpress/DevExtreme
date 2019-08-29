@@ -494,30 +494,6 @@ QUnit.test("rollers coherence", function(assert) {
     assert.equal(this.instance._rollers.day.option("items").length, 28);
 });
 
-QUnit.test("rollers are opened on click on win8", function(assert) {
-    var currentDevice = devices.current();
-    devices.current({ platform: "win", version: [8] });
-
-    try {
-        var date = new Date(2013, 7, 31);
-
-        var $element = $("#customDateView").dxDateView({
-                visible: true,
-                value: date
-            }),
-            instance = $element.dxDateView("instance");
-
-        var $roller = instance._$rollersContainer.find("." + DATEVIEW_ROLLER_CLASS).eq(0),
-            $rollerContainer = $roller.find(".dx-scrollable-container");
-
-        $($rollerContainer).trigger("dxclick");
-
-        assert.ok($roller.hasClass(DATEVIEW_ROLLER_CURRENT_CLASS), "roller is active ");
-    } finally {
-        devices.current(currentDevice);
-    }
-});
-
 QUnit.test("setting 31st day after 30-day month was set is ok", function(assert) {
     var date = new Date(2013, 3, 30);
 
@@ -733,27 +709,6 @@ QUnit.test("click on non-selected roller item should change dateView value", fun
     $element.find("." + DATEVIEW_ROLLER_CLASS + "-day").eq(0)
         .find("." + DATEVIEW_ROLLER_ITEM_CLASS).eq(7).trigger("dxclick");
     assert.deepEqual(instance.option("value"), new Date(2015, 4, 8), "value is changed correctly");
-});
-
-QUnit.test("weekday should change after year or month roller scrolling", function(assert) {
-    var $dateView = $("#customDateView").dxDateView({
-        value: new Date(2015, 9, 5),
-        minDate: new Date(2015, 9, 1),
-        showNames: true
-    });
-
-    var instance = $dateView.dxDateView("instance");
-
-    var monthRoller = instance._rollers.month;
-    var yearRoller = instance._rollers.year;
-
-    yearRoller.option("selectedIndex", 1);
-
-    assert.equal($dateView.find(".dx-dateviewroller-day .dx-dateview-item-selected .dx-dateview-name-formatter").text(), "Wednesday", "weekday was change");
-
-    monthRoller.option("selectedIndex", 10);
-
-    assert.equal($dateView.find(".dx-dateviewroller-day .dx-dateview-item-selected .dx-dateview-name-formatter").text(), "Saturday", "weekday was change");
 });
 
 QUnit.test("should not fail if null is passed as value", function(assert) {

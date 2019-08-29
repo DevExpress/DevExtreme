@@ -73,8 +73,6 @@ var getButtonPlace = function(name) {
                 location = "after";
                 break;
         }
-    } else if(platform === "win") {
-        location = "after";
     } else if(platform === "android" && device.version && parseInt(device.version[0]) > 4) {
         switch(name) {
             case "cancel":
@@ -537,7 +535,7 @@ var Popup = Overlay.inherit({
                     extend(item, { location: data.location }, this._getToolbarItemByAlias(data));
                 }
 
-                var isLTROrder = currentPlatform === "win" || currentPlatform === "generic";
+                var isLTROrder = currentPlatform === "generic";
 
                 if((data.shortcut === "done" && isLTROrder) || (data.shortcut === "cancel" && !isLTROrder)) {
                     toolbarsItems.unshift(item);

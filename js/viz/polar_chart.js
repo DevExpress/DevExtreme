@@ -9,6 +9,7 @@ var dxPolarChart = AdvancedChart.inherit({
     _themeSection: 'polar',
 
     _createPanes: function() {
+        this.callBase();
         return [{ name: DEFAULT_PANE_NAME }];
     },
 
@@ -105,13 +106,53 @@ var dxPolarChart = AdvancedChart.inherit({
         return this.series;
     },
 
-    _applyExtraSettings: _noop,
+    _applyClipRects() {
+        const canvasClipRectID = this._getCanvasClipRectID();
+
+        this._createClipPathForPane();
+        this.getArgumentAxis().applyClipRects(this._getElementsClipRectID(), canvasClipRectID);
+        this._getValueAxis().applyClipRects(this._getElementsClipRectID(), canvasClipRectID);
+    },
+
+    _createClipPathForPane() {
+        const that = this;
+        const valueAxis = that._getValueAxis();
+        let center = valueAxis.getCenter();
+        const radius = valueAxis.getRadius();
+        const panesClipRects = that._panesClipRects;
+
+        center = { x: Math.round(center.x), y: Math.round(center.y) };
+
+        that._createClipCircle(panesClipRects.fixed, center.x, center.y, radius);
+        that._createClipCircle(panesClipRects.base, center.x, center.y, radius);
+
+        if(that.series.some(s => s.areErrorBarsVisible())) {
+            that._createClipCircle(panesClipRects.wide, center.x, center.y, radius);
+        } else {
+            panesClipRects.wide[0] = null;
+        }
+    },
+
+    _createClipCircle(clipArray, left, top, radius) {
+        const that = this;
+        let clipCircle = clipArray[0];
+
+        if(!clipCircle) {
+            clipCircle = that._renderer.clipCircle(left, top, radius);
+            clipArray[0] = clipCircle;
+        } else {
+            clipCircle.attr({ cx: left, cy: top, r: radius });
+        }
+    },
+
+    _applyExtraSettings(series) {
+        const wideClipRect = this._panesClipRects.wide[0];
+        series.setClippingParams(this._panesClipRects.base[0].id, wideClipRect && wideClipRect.id, false, false);
+    },
 
     _applyPointMarkersAutoHiding: _noop,
 
     _createScrollBar: _noop,
-
-    _applyClipRects: _noop,
 
     _isRotated: _noop,
 

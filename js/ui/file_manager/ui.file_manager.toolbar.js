@@ -11,6 +11,7 @@ const FILE_MANAGER_GENERAL_TOOLBAR_CLASS = "dx-filemanager-general-toolbar";
 const FILE_MANAGER_FILE_TOOLBAR_CLASS = "dx-filemanager-file-toolbar";
 const FILE_MANAGER_TOOLBAR_SEPARATOR_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-separator-item";
 const FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-viewmode-item";
+const FILE_MANAGER_TOOLBAR_HAS_LARGE_ICON_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-has-large-icon";
 
 const DEFAULT_TOOLBAR_FILE_ITEMS = [
     {
@@ -58,6 +59,17 @@ const DEFAULT_TOOLBAR_FILE_ITEMS = [
         }
     },
     {
+        commandName: "refresh",
+        visible: false,
+        location: "after",
+        showText: "inMenu",
+        cssClass: FILE_MANAGER_TOOLBAR_HAS_LARGE_ICON_CLASS,
+        compactMode: {
+            showText: "inMenu",
+            locateInMenu: "auto"
+        }
+    },
+    {
         commandName: "clear",
         location: "after",
         locateInMenu: "never",
@@ -92,6 +104,7 @@ const DEFAULT_TOOLBAR_GENERAL_ITEMS = [
         commandName: "refresh",
         location: "after",
         showText: "inMenu",
+        cssClass: FILE_MANAGER_TOOLBAR_HAS_LARGE_ICON_CLASS,
         compactMode: {
             showText: "inMenu",
             locateInMenu: "auto"
@@ -108,6 +121,13 @@ const DEFAULT_TOOLBAR_GENERAL_ITEMS = [
 ];
 
 const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ "separator", "viewMode" ];
+
+const REFRESH_ICON_MAP = {
+    default: "dx-filemanager-i dx-filemanager-i-refresh",
+    progress: "dx-filemanager-i dx-filemanager-i-progress",
+    success: "dx-filemanager-i dx-filemanager-i-done",
+    error: "dx-filemanager-i dx-filemanager-i-danger"
+};
 
 class FileManagerToolbar extends Widget {
 
@@ -315,7 +335,7 @@ class FileManagerToolbar extends Widget {
 
     _fileToolbarHasEffectiveItems(fileItems) {
         const items = this._fileToolbar.option("items");
-        return items.some(({ commandName }) => commandName !== "clear" && this._commandManager.isCommandAvailable(commandName, fileItems));
+        return items.some(({ commandName }) => commandName !== "clear" && commandName !== "refresh" && this._commandManager.isCommandAvailable(commandName, fileItems));
     }
 
     _executeCommand(command) {
@@ -324,6 +344,21 @@ class FileManagerToolbar extends Widget {
 
     _isCommandAvailable(commandName, fileItems) {
         return ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(commandName) > -1 || this._commandManager.isCommandAvailable(commandName, fileItems);
+    }
+
+    _updateItemInToolbar(toolbar, commandName, options) {
+        toolbar.beginUpdate();
+
+        const items = toolbar.option("items");
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if(item.commandName === commandName) {
+                toolbar.option(`items[${i}]`, options);
+                break;
+            }
+        }
+
+        toolbar.endUpdate();
     }
 
     _getDefaultOptions() {
@@ -344,6 +379,35 @@ class FileManagerToolbar extends Widget {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    updateRefreshItem(message, status) {
+        let generalToolbarOptions = null;
+        let visibleInFileToolbar = false;
+
+        if(status === "default") {
+            generalToolbarOptions = {
+                showText: "inMenu",
+                options: {
+                    text: "refresh",
+                    icon: REFRESH_ICON_MAP.default
+                }
+            };
+        } else {
+            generalToolbarOptions = {
+                showText: "always",
+                options: {
+                    text: message,
+                    icon: REFRESH_ICON_MAP[status]
+                }
+            };
+            visibleInFileToolbar = true;
+        }
+
+        const fileToolbarOptions = extend({ }, generalToolbarOptions, { visible: visibleInFileToolbar });
+
+        this._updateItemInToolbar(this._generalToolbar, "refresh", generalToolbarOptions);
+        this._updateItemInToolbar(this._fileToolbar, "refresh", fileToolbarOptions);
     }
 
     update(fileItems) {

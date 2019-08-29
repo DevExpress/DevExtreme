@@ -501,29 +501,6 @@ var Lookup = DropDownList.inherit({
                 }
             },
             {
-                device: function(device) {
-                    return device.platform === "win" && device.phone && device.version && device.version[0] === 8;
-                },
-                options: {
-                    /**
-                    * @name dxLookupOptions.showCancelButton
-                    */
-                    showCancelButton: false,
-                    /**
-                    * @name dxLookupOptions.fullScreen
-                    */
-                    fullScreen: true
-                }
-            },
-            {
-                device: function(device) {
-                    return device.platform === "win" && !device.phone && device.version && device.version[0] === 8;
-                },
-                options: {
-                    popupWidth: function() { return $(window).width(); }
-                }
-            },
-            {
                 device: { platform: "ios", phone: true },
                 options: {
                     /**
@@ -833,6 +810,8 @@ var Lookup = DropDownList.inherit({
             "hiding": this._popupHidingHandler.bind(this),
             "hidden": this._popupHiddenHandler.bind(this)
         });
+
+        this._setPopupContentId(this._popup.$content());
 
         this._popup.option("onContentReady", this._contentReadyHandler.bind(this));
         this._contentReadyHandler();

@@ -239,7 +239,7 @@ var environment = {
         var legendData = legend.update.lastCall.args[0];
 
         assert.ok(legendData, "Series were passed to legend");
-        assert.deepEqual(legendData[0].states, { hover: undefined, selection: undefined, normal: {} }, "Legend item color");
+        assert.deepEqual(legendData[0].states, { hover: {}, selection: {}, normal: {} }, "Legend item color");
         assert.strictEqual(legendData[0].text, "First series");
     });
 

@@ -1253,22 +1253,6 @@ QUnit.module("regressions", {
         assert.equal(numEditItems, 1, "we should have only one dx-texteditor-input in dxautocomplete instance");
     });
 
-    QUnit.test("B234608 check offset for win8 devices", assert => {
-        let popup;
-        let vOffset;
-        devices.current("win8");
-
-        const element = $("#autocomplete2").dxAutocomplete({
-            value: "",
-            dataSource: ["item 1", "item 2", "item 3"]
-        });
-
-        popup = element.dxAutocomplete("instance")._popup;
-        vOffset = popup.option("position").offset.v;
-        assert.equal(vOffset, -6, "vertical offset for win8 devices");
-        devices.current(null);
-    });
-
     QUnit.test("B234608 check offset for iOS devices", assert => {
         let popup;
         let vOffset;

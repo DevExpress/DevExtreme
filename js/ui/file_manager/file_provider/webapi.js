@@ -35,40 +35,44 @@ class WebApiFileProvider extends FileProvider {
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
     }
 
-    getItems(path) {
-        return this._getEntriesByPath(path)
-            .then(result => this._convertDataObjectsToFileItems(result.result, path));
+    getItems(pathInfo) {
+        return this._getEntriesByPath(pathInfo)
+            .then(result => this._convertDataObjectsToFileItems(result.result, pathInfo));
     }
 
     renameItem(item, name) {
         return this._executeRequest("Rename", {
-            id: item.relativeName,
+            pathInfo: item.getFullPathInfo(),
             name
         });
     }
 
-    createFolder(parentFolder, name) {
+    createFolder(parentDir, name) {
         return this._executeRequest("CreateDir", {
-            parentId: parentFolder.relativeName,
+            pathInfo: parentDir.getFullPathInfo(),
             name
+        }).done(() => {
+            if(parentDir && !parentDir.isRoot) {
+                parentDir.hasSubDirs = true;
+            }
         });
     }
 
     deleteItems(items) {
-        return items.map(item => this._executeRequest("Remove", { id: item.relativeName }));
+        return items.map(item => this._executeRequest("Remove", { pathInfo: item.getFullPathInfo() }));
     }
 
-    moveItems(items, destinationFolder) {
+    moveItems(items, destinationDirectory) {
         return items.map(item => this._executeRequest("Move", {
-            sourceId: item.relativeName,
-            destinationId: destinationFolder.relativeName + "/" + item.name
+            sourcePathInfo: item.getFullPathInfo(),
+            destinationPathInfo: destinationDirectory.getFullPathInfo()
         }));
     }
 
     copyItems(items, destinationFolder) {
         return items.map(item => this._executeRequest("Copy", {
-            sourceId: item.relativeName,
-            destinationId: destinationFolder.relativeName + "/" + item.name
+            sourcePathInfo: item.getFullPathInfo(),
+            destinationPathInfo: destinationFolder.getFullPathInfo()
         }));
     }
 
@@ -120,8 +124,8 @@ class WebApiFileProvider extends FileProvider {
         return items.map(it => it.relativeName);
     }
 
-    _getEntriesByPath(path) {
-        return this._executeRequest("GetDirContents", { parentId: path });
+    _getEntriesByPath(pathInfo) {
+        return this._executeRequest("GetDirContents", { pathInfo });
     }
 
     _executeRequest(command, args) {

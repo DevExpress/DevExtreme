@@ -163,16 +163,8 @@ module.exports = SelectionStrategy.inherit({
         selectionFilter = that._denormalizeFilter(selectionFilter);
 
         if(selectionFilter && selectionFilter.length) {
-            var lastOperation,
-                removedFilterInfo = that._removeSameFilter(selectionFilter, filter, isDeselect),
-                rootFilterIndex = removedFilterInfo && removedFilterInfo.rootFilterIndex;
-
-            if(isSelectAll && rootFilterIndex !== undefined) {
-                selectionFilter = rootFilterIndex >= 0 && selectionFilter.length > 1 ? selectionFilter[rootFilterIndex] : [];
-            } else {
-                removedFilterInfo = that._removeSameFilter(selectionFilter, filter, !isDeselect);
-                lastOperation = removedFilterInfo && removedFilterInfo.lastRemoveOperation;
-            }
+            that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
+            var lastOperation = that._removeSameFilter(selectionFilter, filter, !isDeselect);
 
             if(lastOperation && (lastOperation !== "or" && isDeselect || lastOperation !== "and" && !isDeselect)) {
                 needAddFilter = false;
@@ -200,39 +192,45 @@ module.exports = SelectionStrategy.inherit({
         return filter;
     },
 
-    _removeSameFilter: function(selectionFilter, filter, inverted, rootFilterIndex) {
+    _removeFilterByIndex: function(filter, filterIndex, isSelectAll) {
+        var lastRemoveOperation;
+
+        if(filterIndex > 0) {
+            lastRemoveOperation = filter.splice(filterIndex - 1, 2)[0];
+        } else {
+            lastRemoveOperation = filter.splice(filterIndex, 2)[1] || "undefined";
+        }
+
+        if(isSelectAll && lastRemoveOperation === "and") {
+            filter.splice(0, filter.length);
+        }
+
+        return lastRemoveOperation;
+    },
+
+    _removeSameFilter: function(selectionFilter, filter, inverted, isSelectAll) {
         filter = inverted ? ["!", filter] : filter;
 
-        var removedFilterInfo,
-            lastRemoveOperation,
-            filterIndex = this._findSubFilter(selectionFilter, filter),
-            hasRootFilterIndex = rootFilterIndex !== undefined;
+        var filterIndex = this._findSubFilter(selectionFilter, filter);
 
         if(JSON.stringify(filter) === JSON.stringify(selectionFilter)) {
             selectionFilter.splice(0, selectionFilter.length);
-            return { lastRemoveOperation: "undefined" };
+            return "undefined";
         }
 
         if(filterIndex >= 0) {
-            if(filterIndex > 0) {
-                lastRemoveOperation = selectionFilter.splice(filterIndex - 1, 2)[0];
-            } else {
-                lastRemoveOperation = selectionFilter.splice(filterIndex, 2)[1] || "undefined";
-            }
-
-            return {
-                lastRemoveOperation: lastRemoveOperation,
-                rootFilterIndex: hasRootFilterIndex ? rootFilterIndex : -1
-            };
+            return this._removeFilterByIndex(selectionFilter, filterIndex, isSelectAll);
         } else {
             for(var i = 0; i < selectionFilter.length; i++) {
-                rootFilterIndex = hasRootFilterIndex ? rootFilterIndex : i;
-                removedFilterInfo = Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2 && this._removeSameFilter(selectionFilter[i], filter, false, rootFilterIndex);
-                if(removedFilterInfo && removedFilterInfo.lastRemoveOperation) {
-                    if(selectionFilter[i].length === 1) {
+                var lastRemoveOperation = Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2 && this._removeSameFilter(selectionFilter[i], filter, false, isSelectAll);
+
+                if(lastRemoveOperation) {
+                    if(!selectionFilter[i].length) {
+                        this._removeFilterByIndex(selectionFilter, i, isSelectAll);
+                    } else if(selectionFilter[i].length === 1) {
                         selectionFilter[i] = selectionFilter[i][0];
                     }
-                    return removedFilterInfo;
+                    return lastRemoveOperation;
                 }
             }
         }

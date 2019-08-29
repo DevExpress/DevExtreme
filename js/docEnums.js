@@ -1034,7 +1034,7 @@
 
 /**
  * @typedef {string} Enums.DiagramDataLayoutType
- * @enum {'off'|'tree'|'sugiyama'}
+ * @enum {'off'|'tree'|'layered'}
  */
 /**
  * @typedef {string} Enums.DiagramDataLayoutOrientation
@@ -1078,7 +1078,7 @@
 
 /**
  * @typedef {string} Enums.DiagramToolbarCommand
- * @enum {'separator'|'export'|'undo'|'redo'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullscreen'}
+ * @enum {'separator'|'export'|'undo'|'redo'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullScreen'}
  */
 
 /**
@@ -1104,4 +1104,9 @@
 /**
  * @typedef {string} Enums.GanttTaskTitlePosition
  * @enum {'inside'|'outside'|'none'}
+ */
+
+/**
+ * @typedef {string} Enums.LegendMarkerState
+ * @enum {'normal'|'hovered'|'selected'}
  */

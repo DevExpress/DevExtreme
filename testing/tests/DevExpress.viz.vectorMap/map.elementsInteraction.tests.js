@@ -6,7 +6,12 @@ var $ = require("jquery"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     vizMocks = require("../../helpers/vizMocks.js");
 
-QUnit.module('Map - projection events', commons.environment);
+QUnit.module('Map - projection events', $.extend({}, commons.environment, {
+    beforeEach: function() {
+        commons.environment.beforeEach.apply(this, arguments);
+        this.layerCollection.stub("items").returns([]);
+    }
+}));
 
 QUnit.test('On center', function(assert) {
     var onCenterChanged = sinon.spy(),
@@ -43,6 +48,7 @@ QUnit.module('Map - event trigger interaction', $.extend({}, commons.environment
 var environmentForSize = $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.apply(this, arguments);
+        this.layerCollection.stub("items").returns([]);
         vizMocks.stubIncidentOccurredCreation();
     },
 
@@ -175,6 +181,7 @@ QUnit.test("With bottom title and exportMenu", function(assert) {
 QUnit.module('Map - resizing', $.extend({}, environmentForSize, {
     beforeEach: function() {
         environmentForSize.beforeEach.apply(this, arguments);
+        this.layerCollection.stub("items").returns([]);
         this.clock = sinon.useFakeTimers();
     },
 
