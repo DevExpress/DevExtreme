@@ -1734,15 +1734,16 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(options.values) {
                     options.values[options.columnIndex] = value;
                 }
+
+                that._deferreds.push(setCellValueResult);
+                setCellValueResult.always(function() {
+                    let index = that._deferreds.indexOf(setCellValueResult);
+                    if(index >= 0) {
+                        that._deferreds.splice(index, 1);
+                    }
+                });
             }
 
-            that._deferreds.push(setCellValueResult);
-            setCellValueResult.always(function() {
-                let index = that._deferreds.indexOf(setCellValueResult);
-                if(index >= 0) {
-                    that._deferreds.splice(index, 1);
-                }
-            });
             return deferred;
         },
 
