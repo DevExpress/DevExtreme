@@ -2564,6 +2564,8 @@ Axis.prototype = {
 
     _visualRange: _noop,
 
+    _rotateConstantLine: _noop,
+
     applyVisualRangeSetter: _noop,
     // T642779,T714928
     getCategoriesSorter() {
