@@ -607,17 +607,20 @@ QUnit.test("scrollbar should be hidden when container size is almost similar to 
         'useNative': false
     });
 
+    const dimension = "height";
     const fakeContainerSizeWhenZoomIs125 = 404;
     const fakeContentSizeWhenZoomIs125 = 405;
     const fakeContentAndContainerSizeWhenZoomIs100 = 405;
 
-    const verticalScroller = scrollable._strategy._scrollers['vertical'];
-    const verticalRealSizeStub = sinon.stub(verticalScroller, '_getRealDimension');
-    verticalRealSizeStub.withArgs(verticalScroller._$container.get(0), verticalScroller._dimension).returns(fakeContainerSizeWhenZoomIs125)
-        .withArgs(verticalScroller._$content.get(0), verticalScroller._dimension).returns(fakeContentSizeWhenZoomIs125);
-    sinon.stub(verticalScroller, '_getBaseDimension').returns(fakeContentAndContainerSizeWhenZoomIs100);
+    const scroller = scrollable._strategy._scrollers['vertical'];
+    const scrollerContainer = scroller._$container.get(0);
+    const scrollerContent = scroller._$content.get(0);
+
+    sinon.stub(scrollerContainer, 'getBoundingClientRect').returns({ [dimension]: fakeContainerSizeWhenZoomIs125 });
+    sinon.stub(scrollerContent, 'getBoundingClientRect').returns({ [dimension]: fakeContentSizeWhenZoomIs125 });
+    sinon.stub(scroller, '_getBaseDimension').returns(fakeContentAndContainerSizeWhenZoomIs100);
 
     scrollable.update();
 
-    assert.notOk(verticalScroller._scrollbar._needScrollbar(), "scrollbar is hidden");
+    assert.notOk(scroller._scrollbar._needScrollbar(), "scrollbar is hidden");
 });
