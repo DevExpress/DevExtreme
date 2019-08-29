@@ -1615,3 +1615,94 @@ QUnit.test('Save focused row state when data changed', function(assert) {
         filterValue: null
     });
 });
+
+QUnit.test("customSave should not fired on render if state is not changed (T807890)", function(assert) {
+    // arrange, act
+    var customSaveCallCount = 0;
+
+    var state = {
+        "columns": [{
+            "visibleIndex": 0,
+            "dataField": "field1",
+            "dataType": "number",
+            "visible": true
+        }],
+        "allowedPageSizes": [10, 20, 40],
+        "filterPanel": {},
+        "filterValue": null,
+        "searchText": "",
+        "pageIndex": 0,
+        "pageSize": 20
+    };
+
+    this.setupDataGridModules({
+        dataSource: [{ field1: 1 }],
+        stateStoring: {
+            enabled: true,
+            type: "custom",
+            customLoad: function() {
+                return state;
+            },
+            customSave: function() {
+                customSaveCallCount++;
+            }
+        },
+    });
+
+    this.clock.tick(2000);
+
+    // assert
+    assert.strictEqual(customSaveCallCount, 0, "customSave is not fired");
+});
+
+QUnit.test("customSave should fired on render if state is changed (T807890)", function(assert) {
+    // arrange, act
+    var customSaveCallCount = 0;
+
+    this.setupDataGridModules({
+        dataSource: [{ field1: 1 }],
+        stateStoring: {
+            enabled: true,
+            type: "custom",
+            customLoad: function() {
+            },
+            customSave: function() {
+                customSaveCallCount++;
+            }
+        },
+    });
+
+    this.clock.tick(2000);
+
+    // assert
+    assert.strictEqual(customSaveCallCount, 1, "customSave is fired");
+});
+
+QUnit.test("customSave should not fired after refresh (T807890)", function(assert) {
+    // arrange
+    var customSaveCallCount = 0;
+
+    this.setupDataGridModules({
+        dataSource: [{ field1: 1 }],
+        stateStoring: {
+            enabled: true,
+            type: "custom",
+            customLoad: function() {
+            },
+            customSave: function() {
+                customSaveCallCount++;
+            }
+        },
+    });
+
+    this.clock.tick(2000);
+    assert.strictEqual(customSaveCallCount, 1, "customSave is fired");
+    customSaveCallCount = 0;
+
+    // act
+    this.refresh();
+    this.clock.tick(2000);
+
+    // assert
+    assert.strictEqual(customSaveCallCount, 0, "customSave is not fired");
+});

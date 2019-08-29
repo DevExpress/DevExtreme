@@ -51,21 +51,12 @@ var DateView = Editor.inherit({
             maxDate: uiDateUtils.MAX_DATEVIEW_DEFAULT_DATE,
             type: TYPE.date,
             value: new Date(),
-            showNames: false,
             applyCompactClass: false
         });
     },
 
     _defaultOptionsRules: function() {
         return this.callBase().concat([
-            {
-                device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 8;
-                },
-                options: {
-                    showNames: true
-                }
-            },
             {
                 device: function(device) {
                     return device.deviceType !== "desktop";
@@ -167,7 +158,6 @@ var DateView = Editor.inherit({
             endValue = valueRange.endValue,
 
             formatter = componentInfo.formatter,
-            showNames = this.option("showNames"),
 
             curDate = this._getCurrentDate();
 
@@ -183,7 +173,7 @@ var DateView = Editor.inherit({
 
         for(var i = startValue; i <= endValue; i++) {
             config.valueItems.push(i);
-            config.displayItems.push(formatter(i, showNames, curDate));
+            config.displayItems.push(formatter(i, curDate));
         }
 
         config.selectedIndex = config.getIndex(curDate);
@@ -329,7 +319,6 @@ var DateView = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "showNames":
             case "minDate":
             case "maxDate":
             case "type":

@@ -89,7 +89,6 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.ok(selectedDir.items.length > 0);
                 return this.controller.createDirectory(selectedDir, "New");
             })
-            .then(() => this.controller.completeCreateDirectory(selectedDir))
             .then(() => {
                 assert.notOk(selectedDir.itemsLoaded);
                 assert.notOk(selectedDir.items.length > 0);
@@ -110,9 +109,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             .getDirectories(currentDir)
             .then(directories => {
                 targetDir = directories[0];
-                this.controller.renameItem(targetDir, "New");
+                return this.controller.renameItem(targetDir, "New");
             })
-            .then(() => this.controller.completeRenameItem(targetDir))
             .then(() => {
                 assert.notOk(currentDir.itemsLoaded);
                 assert.equal(currentDir.items.length, 0);
@@ -137,7 +135,6 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 destinationDir = directories[1];
                 return this.controller.moveItems(targetItems, destinationDir);
             })
-            .then(() => this.controller.completeMoveItems(targetItems, destinationDir))
             .then(() => {
                 assert.notOk(rootDir.itemsLoaded);
                 assert.equal(rootDir.items.length, 0);
@@ -168,7 +165,6 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 destinationDir = directories[1];
                 return this.controller.copyItems(targetItems, destinationDir);
             })
-            .then(() => this.controller.completeCopyItems(targetItems, destinationDir))
             .then(() => {
                 assert.ok(rootDir.itemsLoaded);
                 assert.equal(rootDir.items.length, 3);
@@ -193,7 +189,6 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 targetItems = [ itemInfos[1], itemInfos[2] ];
                 return this.controller.deleteItems(targetItems);
             })
-            .then(() => this.controller.completeDeleteItems(targetItems))
             .then(() => {
                 assert.notOk(currentDir.itemsLoaded);
                 assert.equal(currentDir.items.length, 0);

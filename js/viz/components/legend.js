@@ -45,14 +45,14 @@ var _Number = Number,
     parsePosition = _enumParser([OUTSIDE, INSIDE]),
     parseItemsAlignment = _enumParser([LEFT, CENTER, RIGHT]);
 
-function getState(state, color, className) {
+function getState(state, color, stateName) {
     if(!state) {
         return;
     }
     var colorFromAction = state.fill;
 
     return extend({}, {
-        class: className,
+        state: stateName,
         fill: colorFromAction === NONE ? color : colorFromAction,
         opacity: state.opacity,
         hatching: _extend({}, state.hatching, {
@@ -62,7 +62,7 @@ function getState(state, color, className) {
     });
 }
 
-function getAttributes(item, state) {
+function getAttributes(item, state, size) {
     const attrs = processHatchingAttrs(item, state);
 
     if(attrs.fill && attrs.fill.indexOf("DevExpress") === 0) {
@@ -71,7 +71,7 @@ function getAttributes(item, state) {
 
     attrs.opacity = attrs.opacity >= 0 ? attrs.opacity : 1;
 
-    return attrs;
+    return extend({}, attrs, { size });
 }
 
 function parseMargins(options) {
@@ -374,10 +374,29 @@ extend(legendPrototype, {
         return this._options;
     },
 
-    update: function(data, options, themeManagerTitleOptions = {}) {
+    update: function(data = [], options, themeManagerTitleOptions = {}) {
         const that = this;
         options = that._options = parseOptions(options, that._textField, that._allowInsidePosition) || {};
-        that._data = data && options.customizeItems && options.customizeItems(data.slice()) || data;
+        const initMarkerSize = options.markerSize;
+        this._data = data.map((dataItem) => {
+            dataItem.size = _Number(dataItem.size > 0 ? dataItem.size : initMarkerSize);
+            dataItem.marker = getAttributes(dataItem, dataItem.states.normal);
+            Object.defineProperty(dataItem.marker, "size", {
+                get() {
+                    return dataItem.size;
+                },
+                set(value) {
+                    dataItem.size = value;
+                }
+            });
+
+            return dataItem;
+        });
+
+        if(options.customizeItems) {
+            that._data = options.customizeItems(data.slice()) || data;
+        }
+
         that._boundingRect = {
             width: 0,
             height: 0,
@@ -395,6 +414,8 @@ extend(legendPrototype, {
             themeManagerTitleOptions.horizontalAlignment = getTitleHorizontalAlignment(options);
             that._title.update(themeManagerTitleOptions, titleOptions);
         }
+
+        this.erase();
 
         return that;
     },
@@ -448,7 +469,6 @@ extend(legendPrototype, {
     _createItems: function(items) {
         var that = this,
             options = that._options,
-            initMarkerSize = options.markerSize,
             renderer = that._renderer,
             maxBBoxHeight = 0,
             createMarker = getMarkerCreator(options.markerShape);
@@ -456,9 +476,12 @@ extend(legendPrototype, {
         that._markersId = {};
 
         const templateFunction = !options.markerTemplate ? (dataItem, group) => {
-            const attrs = dataItem.markerAttributes;
-            createMarker(renderer, dataItem.size)
-                .attr(attrs)
+            const attrs = dataItem.marker;
+            createMarker(renderer, attrs.size)
+                .attr({
+                    fill: attrs.fill,
+                    opacity: attrs.opacity
+                })
                 .append({ element: group });
         } : options.markerTemplate;
 
@@ -469,17 +492,15 @@ extend(legendPrototype, {
         markersGroup.css(patchFontOptions(options.font));
 
         that._items = (items || []).map((dataItem, i) => {
-            const markerSize = _Number(dataItem.size > 0 ? dataItem.size : initMarkerSize);
-            dataItem.size = markerSize;
-
             const stateOfDataItem = dataItem.states;
             const normalState = stateOfDataItem.normal;
             const normalStateFill = normalState.fill;
+            dataItem.size = dataItem.marker.size;
 
             const states = {
-                normal: extend(normalState, { fill: normalStateFill || options.markerColor || options.defaultColor, class: "dxl-normal" }),
-                hover: getState(stateOfDataItem.hover, normalStateFill, "dxl-hovered"),
-                selection: getState(stateOfDataItem.selection, normalStateFill, "dxl-selected")
+                normal: extend(normalState, { fill: normalStateFill || options.markerColor || options.defaultColor, state: "normal" }),
+                hover: getState(stateOfDataItem.hover, normalStateFill, "hovered"),
+                selection: getState(stateOfDataItem.selection, normalStateFill, "selected")
             };
             dataItem.states = states;
 
@@ -492,14 +513,13 @@ extend(legendPrototype, {
                 marker: markerGroup,
                 renderer,
                 group: itemGroup,
-                markerSize: markerSize,
                 tracker: { id: dataItem.id, argument: dataItem.argument, argumentIndex: dataItem.argumentIndex },
                 states: states,
                 itemTextPosition: options.itemTextPosition,
                 markerOffset: 0,
                 bBoxes: [],
                 renderMarker(state) {
-                    dataItem.markerAttributes = getAttributes(item, state);
+                    dataItem.marker = getAttributes(item, state, dataItem.size);
                     markerGroup.clear();
                     template.render({ model: dataItem, container: markerGroup.element });
                 }
@@ -1009,7 +1029,7 @@ extend(legendPrototype, {
 
     // BaseWidget_layout_implementation
     layoutOptions: function() {
-        if(!this.getOptions().visible) {
+        if(!this.isVisible()) {
             return null;
         }
         const pos = this.getLayoutOptions();

@@ -10,7 +10,6 @@ import styleUtils from "../core/utils/style";
 import { each } from "../core/utils/iterator";
 import browser from "../core/utils/browser";
 import CollectionWidgetItem from "./collection/item";
-import devices from "../core/devices";
 import CollectionWidget from "./collection/ui.collection_widget.edit";
 
 const BOX_CLASS = "dx-box";
@@ -525,10 +524,7 @@ class Box extends CollectionWidget {
         return super._defaultOptionsRules().concat([
             {
                 device: function() {
-                    const device = devices.real();
-                    const isOldAndroid = (device.platform === "android") && (device.version[0] < 4 || (device.version[0] === 4 && device.version[1] < 4)),
-                        isOldIos = (device.platform === "ios") && (device.version[0] < 7);
-                    return device.platform === "win" || browser["msie"] || isOldAndroid || isOldIos;
+                    return browser["msie"];
                 },
                 options: {
                     _layoutStrategy: "fallback"

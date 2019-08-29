@@ -10,6 +10,9 @@ import themes from "../themes";
 
 const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
+const FAB_LABEL_CLASS = "dx-fa-button-label";
+const FAB_LABEL_WRAPPER_CLASS = "dx-fa-button-label-wrapper";
+const FAB_CONTENT_REVERSE_CLASS = "dx-fa-button-content-reverse";
 const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
 const SpeedDialItem = Overlay.inherit({
@@ -17,7 +20,8 @@ const SpeedDialItem = Overlay.inherit({
         return extend(this.callBase(), {
             shading: false,
             useInkRipple: false,
-            callOverlayRenderShading: false
+            callOverlayRenderShading: false,
+            width: "auto"
         });
     },
 
@@ -38,8 +42,40 @@ const SpeedDialItem = Overlay.inherit({
         this.$element().addClass(FAB_CLASS);
         this.callBase();
         this._renderIcon();
+        this._renderLabel();
         this.option("useInkRipple") && this._renderInkRipple();
         this._renderClick();
+    },
+
+    _renderLabel() {
+        !!this._$label && this._$label.remove();
+
+        const labelText = this.option("label");
+
+        if(!labelText) {
+            this._$label = null;
+            return;
+        }
+
+        const $element = $("<div>").addClass(FAB_LABEL_CLASS);
+        const $wrapper = $("<div>").addClass(FAB_LABEL_WRAPPER_CLASS);
+
+        this._$label = $wrapper
+            .prependTo(this.$content())
+            .append($element.text(labelText));
+
+        this.$content().toggleClass(FAB_CONTENT_REVERSE_CLASS, this._isPositionLeft(this.option("parentPosition")));
+    },
+
+
+    _isPositionLeft(position) {
+        const currentLocation = position ?
+            (position.at ?
+                (position.at.x ? position.at.x : position.at) :
+                (typeof position === "string" ? position : "")) :
+            "";
+
+        return currentLocation.split(" ")[0] === "left";
     },
 
     _renderButtonIcon($element, icon, iconClass) {
@@ -100,6 +136,10 @@ const SpeedDialItem = Overlay.inherit({
         this._inkRipple = inkRipple.render();
     },
 
+    _getInkRippleContainer() {
+        return this._$icon;
+    },
+
     _toggleActiveState($element, value, e) {
         this.callBase.apply(this, arguments);
 
@@ -108,7 +148,7 @@ const SpeedDialItem = Overlay.inherit({
         }
 
         const config = {
-            element: this.$content(),
+            element: this._getInkRippleContainer(),
             event: e
         };
 
@@ -126,6 +166,9 @@ const SpeedDialItem = Overlay.inherit({
                 break;
             case "onClick":
                 this._renderClick();
+                break;
+            case "label":
+                this._renderLabel();
                 break;
             case "useInkRipple":
                 this._render();

@@ -409,20 +409,7 @@ var dxChart = AdvancedChart.inherit({
 
     _initCore: function() {
         this.paneAxis = {};
-        this._panesClipRects = {};
         this.callBase();
-    },
-
-    _disposeCore: function() {
-        var that = this,
-            disposeObjectsInArray = this._disposeObjectsInArray,
-            panesClipRects = that._panesClipRects;
-
-        that.callBase();
-        disposeObjectsInArray.call(panesClipRects, "fixed");
-        disposeObjectsInArray.call(panesClipRects, "base");
-        disposeObjectsInArray.call(panesClipRects, "wide");
-        that._panesClipRects = null;
     },
 
     _correctAxes: function() {
@@ -430,15 +417,6 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _getExtraOptions: noop,
-
-    _cleanPanesClipRects: function(clipArrayName) {
-        var that = this,
-            clipArray = that._panesClipRects[clipArrayName];
-        _each(clipArray || [], function(_, clipRect) {
-            clipRect && clipRect.dispose();
-        });
-        that._panesClipRects[clipArrayName] = [];
-    },
 
     _createPanes: function() {
         var that = this,
@@ -450,9 +428,7 @@ var dxChart = AdvancedChart.inherit({
             panes = DEFAULT_PANES;
         }
 
-        that._cleanPanesClipRects("fixed");
-        that._cleanPanesClipRects("base");
-        that._cleanPanesClipRects("wide");
+        that.callBase();
 
         defaultPane = that.option("defaultPane");
         panes = _extend(true, [], _isArray(panes) ? panes : [panes]);
@@ -1261,28 +1237,12 @@ var dxChart = AdvancedChart.inherit({
         });
     },
 
-    _getPaneIndex: function(paneName) {
-        var paneIndex;
-
-        _each(this.panes, function(index, pane) {
-            if(pane.name === paneName) {
-                paneIndex = index;
-                return false;
-            }
-        });
-        return paneIndex;
-    },
-
     _getPaneBorderVisibility: function(paneIndex) {
         var commonPaneBorderVisible = this._themeManager.getOptions("commonPaneSettings").border.visible,
             pane = this.panes[paneIndex] || {},
             paneBorder = pane.border || {};
 
         return "visible" in paneBorder ? paneBorder.visible : commonPaneBorderVisible;
-    },
-
-    _getElementsClipRectID: function(paneName) {
-        return this._panesClipRects.fixed[this._getPaneIndex(paneName)].id;
     },
 
     _getCanvasForPane: function(paneName) {

@@ -27,7 +27,7 @@ var KeyboardNavigationController = keyboardNavigationModule.controllers.keyboard
 import { RowsView } from "ui/data_grid/ui.data_grid.rows";
 import { setupDataGridModules, MockDataController, MockColumnsController, MockEditingController, MockSelectionController } from "../../helpers/dataGridMocks.js";
 import publicComponentUtils from "core/utils/public_component";
-import { PagerWrapper, HeaderPanelWrapper, FilterPanelWrapper, DataGridWrapper, HeadersWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import { PagerWrapper, HeaderPanelWrapper, FilterPanelWrapper, DataGridWrapper, HeadersWrapper, RowsViewWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 import fx from "animation/fx";
 
 var device = devices.real();
@@ -1761,7 +1761,9 @@ QUnit.testInActiveWindow("Page down should scroll page down when paging disabled
     this.clock.tick();
 
     // assert
-    assert.ok(that.rowsView.element().is(":focus"), $(":focus").attr("class"));
+    if(!browser.msie || parseInt(browser.version) > 11) {
+        assert.ok(that.rowsView.element().is(":focus"), "rowsview element is focused");
+    }
     assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 5 });
     assert.equal(this.rowsView.getScrollable().scrollTop(), 200);
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
@@ -2143,7 +2145,7 @@ QUnit.testInActiveWindow("Focus previous cell after shift+tab on first form edit
     var $prevCell = testElement.find(".dx-data-row").eq(0).children().eq(5);
 
     assert.equal($prevCell.attr("tabindex"), "0");
-    assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) - 1, testElement.find("[tabIndex]").index($prevCell), "previous focusable element");
+    assert.equal(testElement.find("[tabIndex=0]").index(testElement.find(":focus")) - 1, testElement.find("[tabIndex=0]").index($prevCell), "previous focusable element");
 });
 
 // T317001
@@ -4367,10 +4369,12 @@ QUnit.testInActiveWindow("Ctrl + F", function(assert) {
 
     $(this.rowsView.element()).click();
 
-    var isPreventDefaultCalled = this.triggerKeyDown("F", true).preventDefault;
+    var isPreventDefaultCalled = this.triggerKeyDown("F", true).preventDefault,
+        $searchPanelElement = $(".dx-datagrid-search-panel");
 
     // assert
-    assert.ok(this.keyboardNavigationController._testHeaderPanelFocused, "search panel is focused");
+    assert.ok($searchPanelElement.hasClass("dx-state-focused"), "search panel has focus class");
+    assert.ok($searchPanelElement.find(":focus").hasClass("dx-texteditor-input"), "search panel's editor is focused");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
@@ -8089,6 +8093,39 @@ QUnit.module("Customize keyboard navigation", {
         assert.deepEqual(this.getController("data").items()[0].data, { name: "Alex", date: "01/02/2003", room: 1, phone: 555555 }, "row 0 data");
         assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 2, phone: 666666 }, "row 1 data");
         assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
+    });
+
+    testInDesktop("Input should have a correct value in fast editing mode in Microsoft Edge Browser (T808348)", function(assert) {
+        // arrange
+        let rowsViewWrapper = new RowsViewWrapper("#container"),
+            $input;
+
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.columns = [
+            { dataField: "name" }
+        ];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(0, 0);
+        this.triggerKeyDown("1");
+
+        // arrange, assert
+        $input = rowsViewWrapper.getEditorInputElement(0, 0);
+        assert.equal($input.val(), "Alex", "input value has not changed");
+
+        this.clock.tick();
+
+        assert.equal($input.val(), "1", "input value has changed after timeout");
     });
 
     testInDesktop("Editing navigation mode - arrow keys should operate with drop down if it is expanded", function(assert) {

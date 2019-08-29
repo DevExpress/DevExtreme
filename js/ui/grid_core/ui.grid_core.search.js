@@ -218,7 +218,7 @@ module.exports = {
                         return items;
                     },
 
-                    _getSearchTextEditor: function() {
+                    getSearchTextEditor: function() {
                         var $element = this.element(),
                             $searchPanel = $element.find("." + this.addWidgetPrefix(SEARCH_PANEL_CLASS)).filter(function() {
                                 return $(this).closest(".dx-datagrid-header-panel").is($element);
@@ -240,7 +240,7 @@ module.exports = {
                         if(args.name === "searchPanel") {
 
                             if(args.fullName === "searchPanel.text") {
-                                var editor = this._getSearchTextEditor();
+                                var editor = this.getSearchTextEditor();
                                 if(editor) {
                                     editor.option("value", args.value);
                                 }

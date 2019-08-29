@@ -2,6 +2,9 @@
 
 .dx-overlay-wrapper {
     top: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
     left: 0;
     z-index: @OVERLAY_ZINDEX;
 
@@ -22,10 +25,12 @@
 
 .dx-overlay-shader {
     background-color: rgba(128, 128, 128, 0.5);
+    pointer-events: auto;
 }
 
 .dx-overlay-content {
     position: absolute;
+    pointer-events: auto;
     z-index: @OVERLAY_ZINDEX;
     outline: 0;
     overflow: hidden;

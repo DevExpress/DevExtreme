@@ -283,14 +283,14 @@ extend(exports, {
         return elementRules.some(rule => !!rule.style[property]);
     },
 
-    convertPolarToXY: function(centerCoords, startAngle, angle, radius) {
-        var shiftAngle = 90,
-            cosSin;
+    convertPolarToXY(centerCoords, startAngle, angle, radius) {
+        const shiftAngle = 90;
+        const normalizedRadius = radius > 0 ? radius : 0;
 
         angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
-        cosSin = getCosAndSin(angle);
+        const cosSin = getCosAndSin(angle);
 
-        return { x: _round(centerCoords.x + radius * cosSin.cos), y: _round(centerCoords.y + radius * cosSin.sin) };
+        return { x: _round(centerCoords.x + normalizedRadius * cosSin.cos), y: _round(centerCoords.y + normalizedRadius * cosSin.sin) };
     },
 
     convertXYToPolar: function(centerCoords, x, y) {

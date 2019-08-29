@@ -27,7 +27,7 @@ const supportProp = function(prop) {
 const isNativeScrollingSupported = function() {
     const { platform, version, mac: isMac } = devices.real();
     const isObsoleteAndroid = (version && version[0] < 4 && platform === "android");
-    const isNativeScrollDevice = !isObsoleteAndroid && inArray(platform, ["ios", "android", "win"]) > -1 || isMac;
+    const isNativeScrollDevice = !isObsoleteAndroid && inArray(platform, ["ios", "android"]) > -1 || isMac;
 
     return isNativeScrollDevice;
 };

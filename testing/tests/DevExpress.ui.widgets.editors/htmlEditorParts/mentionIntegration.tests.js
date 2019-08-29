@@ -74,7 +74,7 @@ module("Mentions integration", {
 }, () => {
     test("insert mention after click on item", (assert) => {
         const done = assert.async();
-        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false"><span>@</span>John</span></span></p>`;
+        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false"><span>@</span>John</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
             if(valueChangeSpy.calledOnce) {
                 assert.strictEqual(value, "<p>@</p>", "marker has been added");
@@ -167,7 +167,7 @@ module("Mentions integration", {
 
     test("change mentions marker", (assert) => {
         const done = assert.async();
-        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="#" data-mention-value="Freddy" data-id="Freddy"><span contenteditable="false"><span>#</span>Freddy</span></span></p>`;
+        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="#" data-mention-value="Freddy" data-id="Freddy"><span contenteditable="false"><span>#</span>Freddy</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
             if(valueChangeSpy.calledOnce) {
                 assert.strictEqual(value, "<p>#</p>", "marker has been added");
@@ -321,7 +321,7 @@ module("Mentions integration", {
 
     test("new mention should be selected after press 'enter' key", (assert) => {
         const done = assert.async();
-        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false"><span>@</span>John</span></span></p>`;
+        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false"><span>@</span>John</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
             if(valueChangeSpy.calledOnce) {
                 this.clock.tick();
@@ -420,7 +420,7 @@ module("Mentions integration", {
 
     test("input text should be removed after item select", (assert) => {
         const done = assert.async();
-        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="Freddy" data-id="Freddy"><span contenteditable="false"><span>@</span>Freddy</span></span></p>`;
+        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="Freddy" data-id="Freddy"><span contenteditable="false"><span>@</span>Freddy</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
             const element = this.$element.find("p").get(0);
 
@@ -545,7 +545,7 @@ module("Mentions integration", {
 
     test("template", (assert) => {
         const done = assert.async();
-        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false">John!</span></span></p>`;
+        const expectedMention = `<p><span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John" data-id="John"><span contenteditable="false">John!</span></span> </p>`;
         const valueChangeSpy = sinon.spy(({ value }) => {
             if(valueChangeSpy.calledOnce) {
                 $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger("dxclick");
