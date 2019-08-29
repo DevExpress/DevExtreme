@@ -9,7 +9,7 @@ QUnit.testStart(function() {
 import "common.css!";
 import "ui/data_grid/ui.data_grid";
 
-import devices from "core/devices";
+import browser from "core/utils/browser";
 import columnsView from "ui/grid_core/ui.grid_core.columns_view";
 import fx from "animation/fx";
 import dataGridMocks from "../../helpers/dataGridMocks.js";
@@ -119,24 +119,22 @@ QUnit.test("Create table by default", function(assert) {
     assert.ok($table.hasClass("dx-datagrid-table-fixed"), "is contains data grid table class");
 });
 
-QUnit.test("Create table with columns in iOS", function(assert) {
+// T198380, T809552
+QUnit.test("Create table with thead in safari", function(assert) {
     // arrange
-    var realDevice = devices.real(),
-        currentDevice = devices.current();
+    var oldSafari = browser.safari;
+    try {
+        browser.safari = true;
+        // act
+        var $table = this.columnsView._createTable(this.columns),
+            $thead = $table.children("thead");
 
-    devices.current("iPad");
-    devices._realDevice = devices.current();
-
-    // act
-    var $table = this.columnsView._createTable(this.columns),
-        $thead = $table.find("thead");
-
-    // assert
-    assert.ok($thead.length, "is contains thead element");
-    assert.equal($thead.html().toLowerCase(), "<tr></tr>", "and contain empty tr");
-
-    devices.current(currentDevice);
-    devices._realDevice = realDevice;
+        // assert
+        assert.ok($thead.length, "table contains thead element");
+        assert.equal($thead.html().toLowerCase(), "<tr></tr>", "thead contains empty tr");
+    } finally {
+        browser.safari = oldSafari;
+    }
 });
 
 QUnit.test("Create table by columnWidth auto", function(assert) {
