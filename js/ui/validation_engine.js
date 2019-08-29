@@ -763,13 +763,6 @@ const ValidationEngine = {
             const ruleValidator = rulesValidators[rule.type];
             let ruleValidationResult;
             if(ruleValidator) {
-                if(rule.type === "async") {
-                    asyncRuleItems.push({
-                        rule: rule,
-                        ruleValidator: ruleValidator
-                    });
-                    return true;
-                }
                 if(typeUtils.isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
                     if(!rule.isValid) {
                         result.isValid = false;
@@ -782,6 +775,13 @@ const ValidationEngine = {
                     return true;
                 }
                 rule.value = value;
+                if(rule.type === "async") {
+                    asyncRuleItems.push({
+                        rule: rule,
+                        ruleValidator: ruleValidator
+                    });
+                    return true;
+                }
                 ruleValidationResult = ruleValidator.validate(value, rule);
                 rule.isValid = ruleValidationResult;
                 if(!ruleValidationResult) {
@@ -803,7 +803,7 @@ const ValidationEngine = {
                 throw errors.Error("E0100");
             }
         });
-        if(result.isValid && asyncRuleItems.length) {
+        if(result.isValid && !result.brokenRules && asyncRuleItems.length) {
             result = this._validateAsyncRules({
                 value,
                 items: asyncRuleItems,
@@ -816,36 +816,7 @@ const ValidationEngine = {
     },
 
     _validateAsyncRules(info) {
-        const { value, items, name } = info,
-            itemsToValidate = [];
-        let { result } = info;
-        each(items, (_, item) => {
-            if(typeUtils.isDefined(item.rule.isValid) && item.rule.value === value && !item.rule.reevaluate) {
-                if(!item.rule.isValid) {
-                    result.isValid = false;
-                    this._addBrokenRule({
-                        result,
-                        rule: item.rule
-                    });
-                }
-                return true;
-            }
-            item.rule.value = value;
-            itemsToValidate.push(item);
-        });
-        if(itemsToValidate.length) {
-            result = this._getPatchedValidationResult({
-                result,
-                items: itemsToValidate,
-                value,
-                name
-            });
-        }
-        return result;
-    },
-
-    _getPatchedValidationResult(info) {
-        const { result, items, value, name } = info,
+        const { result, value, items, name } = info,
             asyncResults = [];
         result.pendingRules = [];
         each(items, (_, item) => {

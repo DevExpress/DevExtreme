@@ -231,6 +231,7 @@ const Validator = DOMComponent.inherit({
         } else {
             result = ValidationEngine.validate(value, rules, name);
         }
+        this._validationResult = result;
         this._applyValidationResult(result, adapter);
         if(result.complete) {
             result.complete = result.complete.then(() => {
@@ -255,6 +256,7 @@ const Validator = DOMComponent.inherit({
                 status: "valid",
                 complete: null
             };
+        this._validationResult = result;
         adapter.reset();
         this._resetValidationRules();
         this._applyValidationResult(result, adapter);
@@ -263,7 +265,6 @@ const Validator = DOMComponent.inherit({
     _applyValidationResult(result, adapter) {
         const validatedAction = this._createActionByOption("onValidated");
         result.validator = this;
-        this._validationResult = result;
         adapter.applyValidationResults && adapter.applyValidationResults(result);
         this.option({
             isValid: result.isValid

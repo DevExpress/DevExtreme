@@ -27,6 +27,7 @@ const koDxValidator = Class.inherit({
             return this._validationResult;
         }
         let result = ValidationEngine.validate(this.target(), this.validationRules, this.name);
+        this._validationResult = result;
         this._applyValidationResult(result);
         if(result.complete) {
             result.complete = result.complete.then(() => {
@@ -53,7 +54,6 @@ const koDxValidator = Class.inherit({
 
     _applyValidationResult(result) {
         result.validator = this;
-        this._validationResult = result;
         this.target.dxValidator.isValid(result.isValid);
         this.target.dxValidator.validationError(result.brokenRule);
         this.target.dxValidator.validationErrors(result.brokenRules);
