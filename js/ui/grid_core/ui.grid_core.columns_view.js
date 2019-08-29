@@ -13,7 +13,6 @@ import typeUtils from "../../core/utils/type";
 import iteratorUtils from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import { getDefaultAlignment } from "../../core/utils/position";
-import devices from "../../core/devices";
 import modules from "./ui.grid_core.modules";
 import { checkChanges } from "./ui.grid_core.utils";
 import columnStateMixin from "./ui.grid_core.column_state_mixin";
@@ -207,8 +206,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(columns && !isAppend) {
             $table.append(that._createColGroup(columns));
-            if(devices.real().ios) {
-                // T198380
+            if(browser.safari) {
+                // T198380, T809552
                 $table.append($("<thead>").append("<tr>"));
             }
             that.setAria("role", "presentation", $table);
