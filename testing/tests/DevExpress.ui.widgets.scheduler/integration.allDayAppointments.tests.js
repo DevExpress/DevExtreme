@@ -518,7 +518,7 @@ QUnit.test("Appointment should have right position while dragging, after change 
 
     var currentPosition = translator.locate($appointment);
 
-    assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 0.501, "Appointment position is correct");
+    assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 1.1, "Appointment position is correct");
     pointer.dragEnd();
 });
 
