@@ -506,6 +506,31 @@ QUnit.test("with expand", function(assert) {
         .always(done);
 });
 
+QUnit.test("expand should be undefined if it is not specified in the extraOptions", function(assert) {
+    assert.expect(1);
+
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata2.org(42)",
+        callback: function(bag) {
+            this.responseText = { d: { expandClause: bag.data.$expand } };
+        }
+    });
+
+
+    new ODataStore({ url: "odata2.org" })
+        .byKey(42, { select: ["prop1"] })
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .done((value) => {
+            assert.deepEqual(value, { expandClause: undefined });
+        })
+        .always(done);
+
+});
+
 QUnit.test("with select", function(assert) {
     assert.expect(3);
 
