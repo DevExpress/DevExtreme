@@ -2,21 +2,21 @@ import { Selector, ClientFunction } from "testcafe";
 
 const CLASS = {
     dataRow: 'dx-data-row',
+    editCell: 'dx-editor-cell',
     focused: 'dx-focused',
     focusedRow: 'dx-row-focused',
-    editCell: 'dx-editor-cell',
     rowRemoved: 'dx-row-removed',
 };
 
 class DataCell {
     element: Selector;
-    isFocused: Promise<boolean>;
     isEditCell: Promise<boolean>;
+    isFocused: Promise<boolean>;
 
     constructor(dataRow: Selector, index: number) {
         this.element = dataRow.find(`td:nth-child(${++index})`);
-        this.isFocused = this.element.hasClass(CLASS.focused);
         this.isEditCell = this.element.hasClass(CLASS.editCell);
+        this.isFocused = this.element.hasClass(CLASS.focused);
     }
 }
 
@@ -46,7 +46,7 @@ export default class DataGrid {
         const dataGrid =  this.element;
 
         this.getGridInstance = ClientFunction(
-            () => $(dataGrid())["dxDataGrid"]("instance"),
+            () => $(dataGrid())['dxDataGrid']('instance'),
             { dependencies: { dataGrid }}
         );
     }
@@ -77,7 +77,7 @@ export default class DataGrid {
 
         return ClientFunction(
             () => getGridInstance().getScrollable().scrollLeft(),
-            { dependencies: { getGridInstance: this.getGridInstance } }
+            { dependencies: { getGridInstance } }
         )();
     }
 }
