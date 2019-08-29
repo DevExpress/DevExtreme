@@ -514,7 +514,7 @@ QUnit.test("expand should be undefined if it is not specified in the extraOption
     ajaxMock.setup({
         url: "odata2.org(42)",
         callback: function(bag) {
-            this.responseText = { d: { expandClause: bag.data.$expand } };
+            assert.deepEqual(bag.data.$expand, undefined);
         }
     });
 
@@ -523,9 +523,6 @@ QUnit.test("expand should be undefined if it is not specified in the extraOption
         .byKey(42, { select: ["prop1"] })
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
-        })
-        .done((value) => {
-            assert.deepEqual(value, { expandClause: undefined });
         })
         .always(done);
 
