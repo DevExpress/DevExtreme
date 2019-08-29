@@ -12,8 +12,8 @@ export const resources = [
 	{ id: "2", color: "#1e65e8" }
 ];
 
-export const createScheduler = async (mode, dataSource, firstDayOfWeek = 1) => {
-	await createWidget("dxScheduler", {
+export const createScheduler = (mode, dataSource, firstDayOfWeek = 1) => {
+	createWidget("dxScheduler", {
 		dataSource: dataSource,
 		resources: [
 			{
