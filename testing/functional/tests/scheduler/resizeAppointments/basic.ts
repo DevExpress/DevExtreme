@@ -41,21 +41,21 @@ test(`Resize in the "month" mode`, async t => {
 		.drag(resizableAppointment.resizableHandle.right, 100, 0)
 		.expect(resizableAppointment.size.width).eql(`400px`)
 		.expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-		.expect(resizableAppointment.date.endTime).eql(`11:00 PM`)
+		.expect(resizableAppointment.date.endTime).eql(`11:00 AM`)
 
 		.drag(resizableAppointment.resizableHandle.left, 100, 0)
 		.expect(resizableAppointment.size.width).eql(`200px`)
 		.expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-		.expect(resizableAppointment.date.endTime).eql(`11:00 PM`)
+		.expect(resizableAppointment.date.endTime).eql(`11:00 AM`)
 
 		.drag(resizableAppointment.resizableHandle.left, -100, 0)
 		.expect(resizableAppointment.size.width).eql(`400px`)
 		.expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-		.expect(resizableAppointment.date.endTime).eql(`11:00 PM`)
+		.expect(resizableAppointment.date.endTime).eql(`11:00 AM`)
 
 		.drag(resizableAppointment.resizableHandle.left, -100, 0)
 		.expect(resizableAppointment.size.width).eql(`200px`)
 		.expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
-		.expect(resizableAppointment.date.endTime).eql(`11:00 PM`);
+		.expect(resizableAppointment.date.endTime).eql(`11:00 AM`);
 
 }).before(() => createScheduler('month', dataSource));
