@@ -184,13 +184,6 @@ class Gantt extends Widget {
         }
     }
 
-    _updateGanttView() {
-        this._ganttView.option("tasks", this._getTasks());
-    }
-    _getTasks() {
-        this._tasks.forEach((t, i) => { t.expanded = this._treeList.isRowExpanded(i + 1); });
-        return this._tasks;
-    }
     _initScrollSync(treeList) {
         const treeListScrollable = treeList.getScrollable();
         if(treeListScrollable) {
