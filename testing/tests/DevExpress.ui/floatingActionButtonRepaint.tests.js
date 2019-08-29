@@ -22,6 +22,9 @@ const FAB_MAIN_CLASS = "dx-fa-button-main";
 fx.off = true;
 
 QUnit.module("apply current config options", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         config({
             floatingActionButtonConfig: {
@@ -32,6 +35,8 @@ QUnit.module("apply current config options", (hooks) => {
                 }
             }
         });
+
+        fx.off = false;
     }),
 
     test("repaint with multiple actions", (assert) => {

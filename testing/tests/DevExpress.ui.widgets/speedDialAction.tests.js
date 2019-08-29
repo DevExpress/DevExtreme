@@ -22,8 +22,6 @@ const FAB_MAIN_SELECTOR = ".dx-fa-button-main";
 const FAB_LABEL_SELECTOR = ".dx-fa-button-label";
 const FAB_CONTENT_REVERSE_CLASS = "dx-fa-button-content-reverse";
 
-fx.off = true;
-
 QUnit.module("create one action", () => {
     test("check rendering", (assert) => {
         this.instance = $("#fab-one")
@@ -127,6 +125,9 @@ QUnit.module("create multiple actions", (hooks) => {
 });
 
 QUnit.module("modify global action button config", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
@@ -141,6 +142,7 @@ QUnit.module("modify global action button config", (hooks) => {
             }
         });
 
+        fx.off = false;
     }),
 
     test("check main fab rendering", (assert) => {
@@ -204,9 +206,14 @@ QUnit.module("modify global action button config", (hooks) => {
 });
 
 QUnit.module("add or remove action buttons", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
+
+        fx.off = false;
     }),
 
     test("check main fab rendering", (assert) => {
@@ -395,9 +402,14 @@ QUnit.module("add visible option", (hooks) => {
 QUnit.module("add label option", (hooks) => {
     let firstSDA;
     let secondSDA;
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         firstSDA && firstSDA.dispose();
         secondSDA && secondSDA.dispose();
+
+        fx.off = false;
     }),
     test("check rendering if one action", (assert) => {
         config({
