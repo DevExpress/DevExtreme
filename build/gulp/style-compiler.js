@@ -6,7 +6,7 @@ const gulpLess = require('gulp-less');
 const plumber = require('gulp-plumber');
 const lessCompiler = require('less');
 const LessAutoPrefix = require('less-plugin-autoprefix');
-const lessChanged = require('gulp-less-changed');
+// onst lessChanged = require('gulp-less-changed');
 
 const generator = require('../../themebuilder/modules/metadata-generator');
 const context = require('./context');
@@ -29,10 +29,10 @@ gulp.task('style-compiler-styles', () => {
     return gulp
         .src('styles/bundles/*.less')
         .pipe(plumber())
-        .pipe(lessChanged({
-            paths: [ paths ],
-            getOutputFileName: file => path.join(cssArtifactsPath, path.basename(file, '.less') + '.css')
-        }))
+        // .pipe(lessChanged({
+        //     paths: [ paths ],
+        //     getOutputFileName: file => path.join(cssArtifactsPath, path.basename(file, '.less') + '.css')
+        // }))
         .on('data', (chunk) => console.log('Build: ', chunk.path))
         .pipe(gulpLess({
             paths: [ paths ],
