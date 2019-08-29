@@ -35,12 +35,14 @@ QUnit.module("default", {
                 };
             },
 
-            _setDefaultOptions: function() {
-                this.callBase();
-                this.option({
-                    opt1: "default",
-                    opt2: "default"
-                });
+            _getDefaultOptions: function() {
+                return $.extend(
+                    this.callBase(),
+                    {
+                        opt1: "default",
+                        opt2: "default"
+                    }
+                );
             },
 
             _optionChanged: function(name, value, prevValue) {

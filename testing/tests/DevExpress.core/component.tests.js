@@ -20,15 +20,6 @@ const TestComponent = Component.inherit({
         });
     },
 
-    _getDefaultOptions() {
-        return {
-            opt4: "default",
-            opt5: {
-                subOpt1: "default"
-            }
-        };
-    },
-
     _setDeprecatedOptions() {
         this.callBase();
 
@@ -49,24 +40,30 @@ const TestComponent = Component.inherit({
         });
     },
 
-    _setDefaultOptions() {
-        this.callBase();
-        this.option({
-            opt1: "default",
-            opt2: "default",
-            deprecatedOption: "test",
-            secondLevel: {
-                deprecatedOption: 1
-            },
-            thirdLevel: {
-                option: {
-                    deprecatedAlias: "deprecatedValue"
+    _getDefaultOptions() {
+        return $.extend(
+            this.callBase(),
+            {
+                opt1: "default",
+                opt2: "default",
+                opt4: "default",
+                opt5: {
+                    subOpt1: "default"
+                },
+                deprecatedOption: "test",
+                secondLevel: {
+                    deprecatedOption: 1
+                },
+                thirdLevel: {
+                    option: {
+                        deprecatedAlias: "deprecatedValue"
+                    }
+                },
+                funcOption() {
+                    return this;
                 }
-            },
-            funcOption() {
-                return this;
             }
-        });
+        );
     },
 
     _optionChanged(name, value, prevValue) {
@@ -264,9 +261,6 @@ QUnit.module("default", {}, () => {
             "beginUpdate",
             "endUpdate",
 
-            "beginUpdate",
-            "endUpdate",
-
             // "beginUpdate", // optionByDevice options applying
             // "endUpdate",
             "endUpdate",
@@ -319,16 +313,16 @@ QUnit.module("default", {}, () => {
         let component1 = Component.inherit({
             NAME: "component1",
 
-            _setDefaultOptions() {
-                this.callBase();
-
-                this.option({
-                    plain: {
-                        a: {
-                            b: "b"
+            _getDefaultOptions() {
+                return $.extend(
+                    this.callBase(), {
+                        plain: {
+                            a: {
+                                b: "b"
+                            }
                         }
                     }
-                });
+                );
             }
         });
 
@@ -802,20 +796,6 @@ QUnit.module("default", {}, () => {
         }
     });
 
-    QUnit.test("option overriding to undefined value (T115847)", (assert) => {
-        const inheritor = TestComponent.inherit({
-            _setDefaultOptions() {
-                this.callBase();
-                this.option({
-                    opt1: undefined
-                });
-            }
-        });
-
-        const inheritorInstance = new inheritor();
-        assert.strictEqual(inheritorInstance.option("opt1"), undefined);
-    });
-
     QUnit.test("'onDisposing' action and event should be fired on component disposing", (assert) => {
         let actionArgs = null;
         let eventArgs = null;
@@ -1220,19 +1200,21 @@ QUnit.module("defaultOptions", {
 
     QUnit.test("initial option test", (assert) => {
         const TestComponent = Component.inherit({
-            _setDefaultOptions() {
+            _getDefaultOptions() {
                 return {
                     test: "parent"
                 };
             }
         });
         const ChildComponent = TestComponent.inherit({
-            _setDefaultOptions() {
-                this.callBase();
-                this.option({
-                    anotherTest: "default",
-                    test: "initial"
-                });
+            _getDefaultOptions() {
+                return $.extend(
+                    this.callBase(),
+                    {
+                        anotherTest: "default",
+                        test: "initial"
+                    }
+                );
             },
             _defaultOptionsRules() {
                 return this.callBase().slice(0).concat([{

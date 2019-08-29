@@ -25,12 +25,13 @@ QUnit.module("ngmodel editor integration", {
         registerComponent("dxEditor", Editor.inherit({}));
 
         const MultiEditor = Editor.inherit({
-            _setDefaultOptions() {
-                this.callBase();
-
-                this.option({
-                    values: []
-                });
+            _getDefaultOptions() {
+                return $.extend(
+                    this.callBase(),
+                    {
+                        values: []
+                    }
+                );
             }
         });
 

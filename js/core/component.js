@@ -195,17 +195,13 @@ var Component = Class.inherit({
     */
     ctor: function(options) {
         this.NAME = publicComponentUtils.name(this.constructor);
-        const optionChanging = (name, previousValue, value) => {
-            if(this._initialized) {
-                this._optionChanging(name, previousValue, value);
-            }
-        };
 
         options = options || {};
         if(options.eventsStrategy) {
             this.setEventsStrategy(options.eventsStrategy);
         }
         this._options = {};
+        this._optionManager = {};
 
         this._updateLockCount = 0;
 
@@ -219,13 +215,24 @@ var Component = Class.inherit({
             this._suppressDeprecatedWarnings();
             this._setOptionsByReference();
             this._setDeprecatedOptions();
+            this._setDefaultOptions();
             this._optionManager = new optionManager(
+                this._options,
                 this._getOptionsByReference.bind(this),
                 this._deprecatedOptions,
-                this._notifyOptionChanged.bind(this),
-                this._logWarningIfDeprecated.bind(this),
-                optionChanging);
-            this._setDefaultOptions();
+                this._logWarningIfDeprecated.bind(this));
+
+            this._optionManager.onChanging((name, previousValue, value) => {
+                if(this._initialized) {
+                    this._optionChanging(name, previousValue, value);
+                }
+            });
+
+            this._optionManager.onChanged((name, value, previousValue) => {
+                this._notifyOptionChanged(name, value, previousValue);
+            });
+
+
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
             }
@@ -520,6 +527,9 @@ var Component = Class.inherit({
      */
     option: function(options, value) {
         if(arguments.length < 2 && typeUtils.type(options) !== "object") {
+            if(typeUtils.isEmptyObject(this._options)) {
+                return;
+            }
             const name = this._optionManager.normalizeName(options);
             return this._optionManager.getValue(this._options, name);
         }
@@ -527,7 +537,7 @@ var Component = Class.inherit({
         this.beginUpdate();
 
         try {
-            this._optionManager.setValue(options, value, this._options);
+            this._optionManager.setValue(options, value);
         } finally {
             this.endUpdate();
         }

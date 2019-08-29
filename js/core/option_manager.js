@@ -4,16 +4,14 @@ import domAdapter from "./dom_adapter";
 
 export class OptionManager {
     constructor(
+        options,
         getOptionsByReference,
         deprecatedOptions,
-        notifyOptionChanged,
-        logWarningIfDeprecated,
-        optionChanging) {
+        logWarningIfDeprecated) {
+        this._options = options;
         this._getOptionsByReference = getOptionsByReference;
         this._deprecatedOptions = deprecatedOptions;
-        this._notifyOptionChanged = notifyOptionChanged;
         this._logWarningIfDeprecated = logWarningIfDeprecated;
-        this._optionChanging = optionChanging;
         this._cachedDeprecateNames = [];
         this.cachedGetters = {};
         this.cachedSetters = {};
@@ -85,7 +83,7 @@ export class OptionManager {
         fieldObject[fieldName] = value;
     }
 
-    _setValue(name, value, widgetOptions, merge) {
+    _setValue(name, value, merge) {
         if(!this.cachedSetters[name]) {
             this.cachedSetters[name] = coreDataUtils.compileSetter(name);
         }
@@ -93,24 +91,24 @@ export class OptionManager {
         const path = name.split(/[.[]/);
         merge = typeUtils.isDefined(merge) ? merge : !this._getOptionsByReference()[name];
 
-        this.cachedSetters[name](widgetOptions, value, {
+        this.cachedSetters[name](this._options, value, {
             functionsAsIs: true,
             merge,
             unwrapObservables: path.length > 1 && !!this._getOptionsByReference()[path[0]]
         });
     }
 
-    _setNormalizeValue(name, value, widgetOptions, merge) {
-        const previousValue = this.getValue(widgetOptions, name, false);
+    _setNormalizedValue(name, value, merge) {
+        const previousValue = this.getValue(this._options, name, false);
 
         if(this._valuesEqual(name, previousValue, value)) {
             return;
         }
 
-        this._optionChanging(name, previousValue, value);
+        this._changing(name, previousValue, value);
 
-        this._setValue(name, value, widgetOptions, merge);
-        this._notifyOptionChanged(name, value, previousValue);
+        this._setValue(name, value, merge);
+        this._changed(name, value, previousValue);
     }
 
     _normalizePrimitiveValue(options, name, value) {
@@ -124,6 +122,14 @@ export class OptionManager {
         }
     }
 
+    onChanging(callBack) {
+        this._changing = callBack;
+    }
+
+    onChanged(callBack) {
+        this._changed = callBack;
+    }
+
     getValue(options, name, unwrapObservables) {
         let getter = this.cachedGetters[name];
         if(!getter) {
@@ -133,7 +139,7 @@ export class OptionManager {
         return getter(options, { functionsAsIs: true, unwrapObservables });
     }
 
-    setValue(options, value, widgetOptions) {
+    setValue(options, value) {
         let name = options;
         if(typeof name === "string") {
             options = {};
@@ -144,7 +150,7 @@ export class OptionManager {
             this.normalizeValue(options, optionName, options[optionName]);
         }
         for(optionName in options) {
-            this._setNormalizeValue(optionName, options[optionName], widgetOptions);
+            this._setNormalizedValue(optionName, options[optionName]);
         }
     }
 
