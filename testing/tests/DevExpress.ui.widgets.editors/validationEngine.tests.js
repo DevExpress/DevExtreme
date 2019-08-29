@@ -1053,6 +1053,23 @@ const testAsyncRules = function(rules, value, assert, name) {
     return result;
 };
 
+QUnit.test("Unknown result of validationCallback", function(assert) {
+    assert.throws(
+        function() {
+            ValidationEngine.validate("CoolValue", [{
+                type: "async",
+                validationCallback: function() {
+                    return true;
+                }
+            }]);
+        },
+        function(e) {
+            return /E0103/.test(e.message);
+        },
+        "Exception messages should be readable"
+    );
+});
+
 QUnit.test("Can be validated positively", function(assert) {
     const customCallback = sinon.spy(function() {
             const d = new Deferred();
