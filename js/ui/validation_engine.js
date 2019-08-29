@@ -320,7 +320,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
         }
         const callbackResult = rule.validationCallback(params);
         if(!typeUtils.isPromise(callbackResult)) {
-            throw errors.Error("validationCallback should return the Promise object");
+            throw errors.Error("E0103");
         }
         return fromPromise(callbackResult).promise();
     }
@@ -587,7 +587,10 @@ const GroupConfig = Class.inherit({
                     if(!this._asyncValidationResults) {
                         return;
                     }
-                    const res = this._getAsyncResult(result, values);
+                    const res = this._getAsyncResult({
+                        result,
+                        values
+                    });
                     this._raiseValidatedEvent(res);
                     return res;
                 });
@@ -598,7 +601,8 @@ const GroupConfig = Class.inherit({
         return result;
     },
 
-    _getAsyncResult(result, values) {
+    _getAsyncResult(info) {
+        const { result, values } = info;
         values.forEach((val, index) => {
             if(val && !val.isValid) {
                 result.brokenRules = result.brokenRules.concat(this._asyncValidationResults[index].brokenRules);
@@ -684,7 +688,8 @@ const ValidationEngine = {
         return config;
     },
 
-    _setDefaultMessage(rule, validator, name) {
+    _setDefaultMessage(info) {
+        const { rule, validator, name } = info;
         if(!typeUtils.isDefined(rule.message)) {
             if(validator.defaultFormattedMessage && typeUtils.isDefined(name)) {
                 rule.message = validator.defaultFormattedMessage(name);
@@ -694,7 +699,8 @@ const ValidationEngine = {
         }
     },
 
-    _addBrokenRule(result, rule) {
+    _addBrokenRule(info) {
+        const { result, rule } = info;
         if(!result.brokenRule) {
             result.brokenRule = rule;
         }
@@ -767,7 +773,10 @@ const ValidationEngine = {
                 if(typeUtils.isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
                     if(!rule.isValid) {
                         result.isValid = false;
-                        this._addBrokenRule(result, rule);
+                        this._addBrokenRule({
+                            result,
+                            rule
+                        });
                         return false;
                     }
                     return true;
@@ -777,8 +786,15 @@ const ValidationEngine = {
                 rule.isValid = ruleValidationResult;
                 if(!ruleValidationResult) {
                     result.isValid = false;
-                    this._setDefaultMessage(rule, ruleValidator, name);
-                    this._addBrokenRule(result, rule);
+                    this._setDefaultMessage({
+                        rule,
+                        validator: ruleValidator,
+                        name
+                    });
+                    this._addBrokenRule({
+                        result,
+                        rule
+                    });
                 }
                 if(!rule.isValid) {
                     return false;
@@ -788,19 +804,29 @@ const ValidationEngine = {
             }
         });
         if(result.isValid && asyncRuleItems.length) {
-            result = this._validateAsyncRules(value, asyncRuleItems, result, name);
+            result = this._validateAsyncRules({
+                value,
+                items: asyncRuleItems,
+                result,
+                name
+            });
         }
         result.status = result.pendingRules ? "pending" : (result.isValid ? "valid" : "invalid");
         return result;
     },
 
-    _validateAsyncRules(value, items, result, name) {
-        const itemsToValidate = [];
+    _validateAsyncRules(info) {
+        const { value, items, name } = info,
+            itemsToValidate = [];
+        let { result } = info;
         each(items, (_, item) => {
             if(typeUtils.isDefined(item.rule.isValid) && item.rule.value === value && !item.rule.reevaluate) {
                 if(!item.rule.isValid) {
                     result.isValid = false;
-                    this._addBrokenRule(result, item.rule);
+                    this._addBrokenRule({
+                        result,
+                        rule: item.rule
+                    });
                 }
                 return true;
             }
@@ -808,54 +834,102 @@ const ValidationEngine = {
             itemsToValidate.push(item);
         });
         if(itemsToValidate.length) {
-            result = this._getPatchedValidationResult(result, itemsToValidate, value, name);
+            result = this._getPatchedValidationResult({
+                result,
+                items: itemsToValidate,
+                value,
+                name
+            });
         }
         return result;
     },
 
-    _getPatchedValidationResult(result, items, value, name) {
-        const asyncResults = [];
+    _getPatchedValidationResult(info) {
+        const { result, items, value, name } = info,
+            asyncResults = [];
         result.pendingRules = [];
-        const getPatchedRuleResult = function(result, isValid = true) {
-            let res;
-            if(typeUtils.isObject(result)) {
-                res = extend({}, result);
-                if(!typeUtils.isDefined(res.isValid)) {
-                    res.isValid = isValid;
-                }
-            } else {
-                res = {
-                    isValid: typeUtils.isBoolean(result) ? result : isValid
-                };
-            }
-            return res;
-        };
-        const updateRuleConfig = (rule, ruleResult, ruleValidator) => {
-            rule.isValid = ruleResult.isValid;
-            if(!ruleResult.isValid) {
-                if(typeUtils.isDefined(ruleResult.message) && typeUtils.isString(ruleResult.message) && ruleResult.message.length) {
-                    rule.message = ruleResult.message;
-                } else {
-                    this._setDefaultMessage(rule, ruleValidator, name);
-                }
-            }
-        };
-        each(items, function(_, item) {
+        each(items, (_, item) => {
             result.pendingRules.push(item.rule);
-            const asyncResult = item.ruleValidator.validate(value, item.rule).then(function(res) {
-                const ruleResult = getPatchedRuleResult(res);
-                updateRuleConfig(item.rule, ruleResult, item.ruleValidator);
+            const asyncResult = item.ruleValidator.validate(value, item.rule).then((res) => {
+                const ruleResult = this._getPatchedRuleResult({ ruleResult: res });
+                this._updateRuleConfig({
+                    rule: item.rule,
+                    ruleResult,
+                    validator: item.ruleValidator,
+                    name
+                });
                 return ruleResult;
-            }).catch(function(err) {
-                const ruleResult = getPatchedRuleResult(err, false);
-                updateRuleConfig(item.rule, ruleResult, item.ruleValidator);
+            }).catch((err) => {
+                const ruleResult = this._getPatchedRuleResult({
+                    ruleResult: err,
+                    isValid: false
+                });
+                this._updateRuleConfig({
+                    rule: item.rule,
+                    ruleResult,
+                    validator: item.ruleValidator,
+                    name
+                });
                 return ruleResult;
             });
             asyncResults.push(asyncResult);
         });
         result.complete = Promise.all(asyncResults).then((values) => {
-            return this._getAsyncRulesResult(result, values);
+            return this._getAsyncRulesResult({
+                result,
+                values
+            });
         });
+        return result;
+    },
+
+    _updateRuleConfig(info) {
+        const { rule, ruleResult, validator, name } = info;
+        rule.isValid = ruleResult.isValid;
+        if(!ruleResult.isValid) {
+            if(typeUtils.isDefined(ruleResult.message) && typeUtils.isString(ruleResult.message) && ruleResult.message.length) {
+                rule.message = ruleResult.message;
+            } else {
+                this._setDefaultMessage({
+                    rule,
+                    validator: validator,
+                    name
+                });
+            }
+        }
+    },
+
+    _getPatchedRuleResult(info) {
+        const { ruleResult, isValid = true } = info;
+        let result;
+        if(typeUtils.isObject(ruleResult)) {
+            result = extend({}, ruleResult);
+            if(!typeUtils.isDefined(result.isValid)) {
+                result.isValid = isValid;
+            }
+        } else {
+            result = {
+                isValid: typeUtils.isBoolean(ruleResult) ? ruleResult : isValid
+            };
+        }
+        return result;
+    },
+
+    _getAsyncRulesResult(info) {
+        const { values } = info;
+        let { result } = info;
+        each(values, (index, val) => {
+            if(val.isValid === false) {
+                result.isValid = val.isValid;
+                const rule = result.pendingRules[index];
+                this._addBrokenRule({
+                    result,
+                    rule
+                });
+            }
+        });
+        result.pendingRules = null;
+        result.status = result.isValid ? "valid" : "invalid";
         return result;
     },
 
@@ -926,19 +1000,6 @@ const ValidationEngine = {
             throw errors.Error("E0110");
         }
         return groupConfig.reset();
-    },
-
-    _getAsyncRulesResult(result, values) {
-        each(values, (index, val) => {
-            if(val.isValid === false) {
-                result.isValid = val.isValid;
-                const rule = result.pendingRules[index];
-                this._addBrokenRule(result, rule);
-            }
-        });
-        result.pendingRules = null;
-        result.status = result.isValid ? "valid" : "invalid";
-        return result;
     }
 };
 
