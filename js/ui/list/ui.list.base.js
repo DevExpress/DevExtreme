@@ -39,7 +39,7 @@ var LIST_CLASS = "dx-list",
     LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator",
     LIST_HAS_NEXT_CLASS = "dx-has-next",
     LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
-    SELECT_ALL_SELECTOR = ".dx-list-select-all",
+    SELECT_ALL_ITEM_SELECTOR = ".dx-list-select-all",
 
     LIST_ITEM_DATA_KEY = "dxListItemData",
     LIST_FEEDBACK_SHOW_TIMEOUT = 70;
@@ -48,7 +48,7 @@ var groupItemsGetter = compileGetter("items");
 
 var ListBase = CollectionWidget.inherit({
 
-    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_SELECTOR].join(","),
+    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(","),
 
     _supportedKeys: function() {
         var that = this;

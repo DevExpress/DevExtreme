@@ -551,8 +551,10 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _attachChildKeyboardEvents: function() {
-        this._childKeyboardProcessor = this._keyboardProcessor.attachChildProcessor();
-        this._setListOption("_keyboardProcessor", this._childKeyboardProcessor);
+        if(!this._canListHaveFocus()) {
+            this._childKeyboardProcessor = this._keyboardProcessor.attachChildProcessor();
+            this._setListOption("_keyboardProcessor", this._childKeyboardProcessor);
+        }
     },
 
     _fireContentReadyAction: commonUtils.noop,
@@ -632,7 +634,6 @@ var DropDownList = DropDownEditor.inherit({
             keyExpr: this._getCollectionKeyExpr(),
             displayExpr: this._displayGetterExpr(),
             groupTemplate: this.option("groupTemplate"),
-            tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
             _keyboardProcessor: this._childKeyboardProcessor,
@@ -640,8 +641,15 @@ var DropDownList = DropDownEditor.inherit({
             focusStateEnabled: this._isDesktopDevice() ? this.option("focusStateEnabled") : false
         };
 
+        if(!this._canListHaveFocus()) {
+            options.tabIndex = null;
+            options._keyboardProcessor = this._childKeyboardProcessor;
+        }
+
         return options;
     },
+
+    _canListHaveFocus: () => false,
 
     _getDataSource: function() {
         return this._needPassDataSourceToList() ? this._dataSource : null;

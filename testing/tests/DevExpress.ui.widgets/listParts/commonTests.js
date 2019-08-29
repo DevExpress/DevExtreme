@@ -2427,6 +2427,7 @@ QUnit.module("keyboard navigation", {
 
         const keyboard = keyboardMock($element);
         const $selectAllCheckBox = $element.find(".dx-list-select-all-checkbox");
+        const $selectAllItem = $element.find(".dx-list-select-all");
         const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
 
         $firstItem.trigger("dxpointerdown");
@@ -2434,7 +2435,7 @@ QUnit.module("keyboard navigation", {
 
         keyboard.keyDown("up");
         this.clock.tick();
-        assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
+        assert.ok($selectAllItem.hasClass("dx-state-focused"), "selectAll checkbox is focused");
 
         $element.trigger($.Event("keydown", { key: "Enter" }));
 
@@ -2459,7 +2460,7 @@ QUnit.module("keyboard navigation", {
         });
 
         const keyboard = keyboardMock($element);
-        const $selectAllCheckBox = $element.find(".dx-list-select-all-checkbox");
+        const $selectAllCheckBox = $element.find(".dx-list-select-all");
         const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
         const $lastItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(4);
 
@@ -2472,6 +2473,7 @@ QUnit.module("keyboard navigation", {
 
         keyboard.keyDown("up");
         this.clock.tick();
+
         assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");
         assert.ok($lastItem.hasClass("dx-state-focused"), "last item is focused");
 
@@ -2482,31 +2484,6 @@ QUnit.module("keyboard navigation", {
         keyboard.keyDown("down");
         this.clock.tick();
         assert.ok(!$selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox isn't focused");
-        assert.ok($firstItem.hasClass("dx-state-focused"), "first item is focused");
-    });
-
-    QUnit.test("focusing next item after 'down' pressing if selectAll checkbox is focused", assert => {
-        if(!isDeviceDesktop(assert)) {
-            return;
-        }
-        assert.expect(2);
-
-        const $element = $("#list").dxList({
-            showSelectionControls: true,
-            selectionMode: "all",
-            focusStateEnabled: true,
-            items: [0, 1, 2, 3, 4]
-        });
-
-        const $selectAllCheckBox = $element.find(".dx-list-select-all-checkbox");
-        const keyboard = keyboardMock($selectAllCheckBox);
-        const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
-
-        $selectAllCheckBox.trigger("focusin");
-        keyboard.keyDown("down");
-        this.clock.tick();
-
-        assert.notOk($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is not focused");
         assert.ok($firstItem.hasClass("dx-state-focused"), "first item is focused");
     });
 

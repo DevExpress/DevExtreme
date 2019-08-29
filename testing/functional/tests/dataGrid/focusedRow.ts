@@ -1,19 +1,23 @@
-import { createWidget, getContainerFileUrl } from '../../helpers/testHelper';
+import { pathToFileURL } from 'url';
+import { join } from  'path';
+import { createWidget } from '../../helpers/testHelper';
 import { ClientFunction } from 'testcafe';
-import DataGridTestHelper from '../../helpers/dataGrid.test.helper';
+import DataGrid from '../../model/dataGrid';
 
-fixture`Focused Row`
-    .page(getContainerFileUrl());
-
-const dataGrid = new DataGridTestHelper("#container");
+fixture `Editing`
+    .page(pathToFileURL(join(__dirname, '../container.html')).href);
 
 test("onFocusedRowChanged event should fire once after changing focusedRowKey if paging.enabled = false (T755722)", async t => {
-    await t.expect(ClientFunction(() => (window as any).onFocusedRowChangedCounter)()).eql(1);
+    const dataGrid = new DataGrid("#container");
+
+    await t
+        .expect(ClientFunction(() => (window as any).onFocusedRowChangedCounter)()).eql(1);
 
     await ClientFunction(() => (window as any).widget.option("focusedRowKey", "Ben"))();
 
-    await t.expect(dataGrid.getFocusedRow()).ok();
-    await t.expect(ClientFunction(() => (window as any).onFocusedRowChangedCounter)()).eql(2);
+    await t
+        .expect(dataGrid.getFocusedRow().exists).ok()
+        .expect(ClientFunction(() => (window as any).onFocusedRowChangedCounter)()).eql(2);
 }).before(async () => {
     await createWidget("dxDataGrid", {
         dataSource: [
@@ -28,7 +32,7 @@ test("onFocusedRowChanged event should fire once after changing focusedRowKey if
             enabled: false
         },
         onFocusedRowChanged: function(e) {
-            var global = window as any;
+            const global = window as any;
             if(!global.onFocusedRowChangedCounter) {
                 global.onFocusedRowChangedCounter = 0;
             }

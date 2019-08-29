@@ -461,6 +461,70 @@ QUnit.test("Undelete command buttons should contains aria-label accessibility at
     });
 });
 
+QUnit.test("Command buttons should contains tabindex=-1 (T805341)", function(assert) {
+    // arrange
+    var wrapper = new ColumnWrapper(".dx-datagrid"),
+        dataGrid = createDataGrid({
+            dataSource: [{ id: 0, c0: "c0" }],
+            columns: [
+                {
+                    type: "buttons",
+                    buttons: ["edit", "delete", "save", "cancel"]
+                },
+                "id"
+            ],
+            editing: {
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: true
+            }
+        });
+
+    this.clock.tick();
+
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        assert.equal($(button).attr("tabindex"), -1, "tabIndex = -1");
+    });
+
+    // act
+    dataGrid.editRow(0);
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        assert.equal($(button).attr("tabindex"), -1, "tabIndex = -1");
+    });
+});
+
+QUnit.test("Undelete command button should contains tabindex=-1 (T805341)", function(assert) {
+    // arrange
+    var wrapper = new ColumnWrapper(".dx-datagrid"),
+        dataGrid = createDataGrid({
+            dataSource: [{ id: 0, c0: "c0" }],
+            columns: [
+                {
+                    type: "buttons",
+                    buttons: ["undelete"]
+                },
+                "id"
+            ],
+            editing: {
+                mode: "batch",
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: true
+            }
+        });
+
+    this.clock.tick();
+
+    // act
+    dataGrid.deleteRow(0);
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        assert.equal($(button).attr("tabindex"), -1, "tabIndex = -1");
+    });
+});
+
 QUnit.test("Customize text called for column only (T653374)", function(assert) {
     createDataGrid({
         columns:
@@ -7338,6 +7402,23 @@ QUnit.test("Custom toolbar item should be aligned", function(assert) {
     // assert
     assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-datagrid-search-panel").offset().top, "toolbar sarch panel is aligned");
     assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-toolbar .dx-datebox").offset().top, "toolbar custom item is aligned");
+});
+
+// T809423
+QUnit.test("Toolbar should not be rerendered if editing.popup options were changed", function(assert) {
+    var onToolbarPreparingSpy = sinon.spy(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [],
+            onToolbarPreparing: onToolbarPreparingSpy,
+            editing: {
+                mode: "popup"
+            }
+        });
+
+    dataGrid.option("editing.popup", {});
+
+    assert.equal(onToolbarPreparingSpy.callCount, 1, "onToolbarPreparing call count");
 });
 
 // T558301

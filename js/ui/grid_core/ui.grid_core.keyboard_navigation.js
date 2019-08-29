@@ -646,12 +646,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(!keyDownEvent.isDefaultPrevented()) {
             eventsEngine.trigger($input, keyPressEvent);
             if(!keyPressEvent.isDefaultPrevented()) {
-                $input.val(editorValue);
-                eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
-                eventsEngine.on($input, "focusout", function() {
-                    eventsEngine.trigger($input, "change");
-                });
                 setTimeout(function() {
+                    $input.val(editorValue);
+                    eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
+                    eventsEngine.on($input, "focusout", function() {
+                        eventsEngine.trigger($input, "change");
+                    });
                     eventsEngine.trigger($input, inputEvent);
                 });
             }
@@ -1104,12 +1104,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _ctrlFKeyHandler: function(eventArgs) {
-        if(eventArgs.ctrl && this.option("searchPanel") && this.option("searchPanel").visible) {
-            ///#DEBUG
-            this._testHeaderPanelFocused = true;
-            ///#ENDDEBUG
-            this._headerPanel.focus();
-            eventArgs.originalEvent.preventDefault();
+        if(this.option("searchPanel.visible")) {
+            let searchTextEditor = this._headerPanel.getSearchTextEditor();
+            if(searchTextEditor) {
+                searchTextEditor.focus();
+                eventArgs.originalEvent.preventDefault();
+            }
         }
     },
 
@@ -1857,7 +1857,10 @@ module.exports = {
         views: {
             rowsView: {
                 _rowClick: function(e) {
-                    this.getController("keyboardNavigation").setCellFocusType();
+                    let editRowIndex = this.getController("editing").getEditRowIndex();
+                    if(editRowIndex === e.rowIndex) {
+                        this.getController("keyboardNavigation").setCellFocusType();
+                    }
                     this.callBase.apply(this, arguments);
                 },
                 renderFocusState: function() {
