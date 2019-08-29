@@ -1270,6 +1270,40 @@ QUnit.test("Only async rules should be broken", function(assert) {
     });
 });
 
+QUnit.test("One rule is reevaluated", function(assert) {
+    const customCallback = sinon.spy(function() {
+            const d = new Deferred();
+            d.resolve({
+                isValid: false
+            });
+            return d.promise();
+        }),
+        value = "Some value",
+        rules = [
+            {
+                type: "async",
+                validationCallback: customCallback
+            },
+            {
+                type: "async",
+                reevaluate: true,
+                validationCallback: customCallback
+            }
+        ],
+        result = testAsyncRules(rules, value, assert),
+        done = assert.async();
+
+    assert.ok(result, "Result is defined");
+    assert.ok(customCallback.calledTwice, "Validation callback was called twice");
+    result.complete.then((res) => {
+        const result1 = ValidationEngine.validate(value, rules);
+        assert.equal(result1.status, "invalid", "result.status === 'invalid'");
+        assert.ok(customCallback.calledTwice);
+        assert.equal(result1.brokenRules.length, 1, "Only a single rule should be broken");
+        done();
+    });
+});
+
 QUnit.test("Validation callback must have the 'data' in arguments when validator has 'dataGetter' option", function(assert) {
     let params;
     const customCallback = sinon.spy(function() {
