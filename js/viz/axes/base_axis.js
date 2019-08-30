@@ -1184,7 +1184,7 @@ Axis.prototype = {
         return center;
     },
 
-    setBusinessRange(range, axisReinitialized, oppositeVisualRangeUpdateMode) {
+    setBusinessRange(range, axisReinitialized, oppositeVisualRangeUpdateMode, argCategories) {
         const that = this;
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
@@ -1225,7 +1225,7 @@ Axis.prototype = {
         if(!that.isArgumentAxis && options.showZero) {
             that._seriesData.correctValueZeroLevel();
         }
-        that._seriesData.sortCategories(that.getCategoriesSorter());
+        that._seriesData.sortCategories(that.getCategoriesSorter(argCategories));
 
         that._seriesData.breaks =
             that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
@@ -2567,11 +2567,18 @@ Axis.prototype = {
     _rotateConstantLine: _noop,
 
     applyVisualRangeSetter: _noop,
-    // T642779,T714928
-    getCategoriesSorter() {
-        const categoriesSortingMethod = this._options.categoriesSortingMethod;
 
-        return isDefined(categoriesSortingMethod) ? categoriesSortingMethod : this._options.categories;
+    // T642779, T714928, T810801
+    getCategoriesSorter(argCategories) {
+        let sort;
+        if(this.isArgumentAxis) {
+            sort = argCategories;
+        } else {
+            const categoriesSortingMethod = this._options.categoriesSortingMethod;
+            sort = isDefined(categoriesSortingMethod) ? categoriesSortingMethod : this._options.categories;
+        }
+
+        return sort;
     },
 
     _getAdjustedBusinessRange() {
