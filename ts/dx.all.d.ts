@@ -2781,12 +2781,12 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorToolbar.container */
         container?: string | Element | JQuery;
         /** @name dxHtmlEditorToolbar.items */
-        items?: Array<dxHtmlEditorToolbarItem | string>;
+        items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear'>;
     }
     /** @name dxHtmlEditorToolbarItem */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
         /** @name dxHtmlEditorToolbarItem.formatName */
-        formatName?: string;
+        formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block';
         /** @name dxHtmlEditorToolbarItem.formatValues */
         formatValues?: Array<string | number | boolean>;
         /** @name dxHtmlEditorToolbarItem.location */
