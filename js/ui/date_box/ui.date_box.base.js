@@ -303,7 +303,7 @@ var DateBox = DropDownEditor.inherit({
             pickerType = PICKER_TYPE.list;
         }
 
-        this.option("showDropDownButton", devices.real().deviceType !== "desktop" || pickerType !== PICKER_TYPE["native"]);
+        this.option("showDropDownButton", devices.real().platform !== "generic" || pickerType !== PICKER_TYPE["native"]);
         this._pickerType = pickerType;
     },
 

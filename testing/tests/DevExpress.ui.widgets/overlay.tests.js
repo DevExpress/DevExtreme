@@ -1913,7 +1913,7 @@ testModule("close on target scroll", moduleConfig, () => {
         const originalPlatform = devices.real().platform;
 
         try {
-            devices.real({ platform: "generic" });
+            devices.real({ platform: "generic", deviceType: "desktop" });
 
             const $overlay = $("#overlay").dxOverlay({
                 closeOnTargetScroll: true

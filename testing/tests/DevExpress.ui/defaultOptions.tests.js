@@ -552,7 +552,7 @@ testComponentDefaults(Scrollable,
 
 testComponentDefaults(Scrollable,
     [
-        { platform: "generic" }
+        { platform: "generic", deviceType: "desktop" }
     ],
     {
         scrollByThumb: true,
@@ -566,7 +566,7 @@ testComponentDefaults(Scrollable,
         this._supportTouch = support.touch;
         support.touch = false;
         this._originalRealDevice = devices.real();
-        devices.real({ platform: "generic" });
+        devices.real({ platform: "generic", deviceType: "desktop" });
     },
     function() {
         support.nativeScrolling = this._supportNativeScrolling;
