@@ -1295,7 +1295,7 @@ var BaseChart = BaseWidget.inherit({
         const incidentOccurred = that._incidentOccurred;
         let seriesThemes = that._populateSeriesOptions(data);
         let particularSeries;
-        let changedStateSeriesCount = 0;
+        let disposeSeriesFamilies = false;
 
         that.needToPopulateSeries = false;
 
@@ -1307,7 +1307,7 @@ var BaseChart = BaseWidget.inherit({
                 seriesBasis.push({ series: curSeries, options: theme });
             } else {
                 seriesBasis.push({ options: theme });
-                changedStateSeriesCount++;
+                disposeSeriesFamilies = true;
             }
         });
 
@@ -1316,13 +1316,14 @@ var BaseChart = BaseWidget.inherit({
         _reverseEach(that.series, (index, series) => {
             if(!seriesBasis.some(s => series === s.series)) {
                 that._disposeSeries(index);
-                changedStateSeriesCount++;
+                disposeSeriesFamilies = true;
             }
         });
 
-        that.series = [];
+        !disposeSeriesFamilies && (disposeSeriesFamilies = seriesBasis.some(sb => sb.series.name !== seriesThemes[sb.series.index].name));
 
-        changedStateSeriesCount > 0 && that._disposeSeriesFamilies();
+        that.series = [];
+        disposeSeriesFamilies && that._disposeSeriesFamilies();
         that._themeManager.resetPalette();
         const eventPipe = function(data) {
             that.series.forEach(function(currentSeries) {
