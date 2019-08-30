@@ -63,7 +63,7 @@ QUnit.module("API", moduleConfig, () => {
 
         [true, false].forEach((excelFilterEnabled) => {
             let options = topLeftCellOption + `, excelFilterEnabled: ${excelFilterEnabled}`;
-            const getDataGridConfig = (dataGrid, expectedCustomizeCellArgs, exportColumnWidth = true) => {
+            const getDataGridConfig = (dataGrid, expectedCustomizeCellArgs, keepColumnWidths = true) => {
                 const result = {
                     component: dataGrid,
                     worksheet: this.worksheet,
@@ -75,7 +75,7 @@ QUnit.module("API", moduleConfig, () => {
                     },
                     excelFilterEnabled: excelFilterEnabled,
                 };
-                result.exportColumnWidth = exportColumnWidth;
+                result.keepColumnWidths = keepColumnWidths;
                 return result;
             };
 
@@ -245,7 +245,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - 2 column, exportColumnWidth: false" + options, (assert) => {
+            QUnit.test("Header - 2 column, keepColumnWidths: false" + options, (assert) => {
                 const done = assert.async();
 
                 let dataGrid = $("#dataGrid").dxDataGrid({
