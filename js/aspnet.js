@@ -27,6 +27,7 @@
     }
 })(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml) {
     var templateCompiler = createTemplateCompiler();
+    var pendingCreateComponentRoutines = [ ];
 
     function createTemplateCompiler() {
         var OPEN_TAG = "<%",
@@ -124,25 +125,19 @@
 
     function createComponent(name, options, id, validatorOptions) {
         var selector = "#" + id.replace(/[^\w-]/g, "\\$&");
-
-        var render = function(_, container) {
-            var $element = $(selector, container);
-            if(!$element.length) {
-                // This means that the callback originates from a nested template
-                // of another widget within this template.
-                return;
-            }
-
-            templateRendered.remove(render);
-
-            var $component = $element[name](options);
+        pendingCreateComponentRoutines.push(function() {
+            var $component = $(selector)[name](options);
             if($.isPlainObject(validatorOptions)) {
                 $component.dxValidator(validatorOptions);
             }
-        };
-
-        templateRendered.add(render);
+        });
     }
+
+    templateRendered.add(function() {
+        var snapshot = pendingCreateComponentRoutines.slice();
+        pendingCreateComponentRoutines = [ ];
+        snapshot.forEach(function(func) { func(); });
+    });
 
     return {
         createComponent: createComponent,
