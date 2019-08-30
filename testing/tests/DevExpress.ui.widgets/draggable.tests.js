@@ -8,7 +8,7 @@ var $ = require("jquery"),
 require("common.css!");
 require("ui/draggable");
 
-viewPort($("body").css({ margin: "0px", padding: "0px", height: "600px" }).addClass("dx-viewport"));
+viewPort($("body").css({ margin: "0px", padding: "0px", height: "600px" }));
 
 QUnit.testStart(function() {
     var markup =
@@ -40,7 +40,7 @@ var setupDraggable = function(that, $element) {
 
     that.$element = $element;
     that.createDraggable = function(options) {
-        return that.draggableInstance = that.$element.dxDraggable(options).dxDraggable("instance");
+        return that.draggableInstance = that.$element.dxDraggable($.extend({ area: $("body") }, options)).dxDraggable("instance");
     };
     that.pointer = pointerMock(that.$element).start();
 
