@@ -3701,7 +3701,8 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key", function(asser
     this.options = {
         keyExpr: "name",
         editing: {
-            allowEditing: false
+            allowEditing: true,
+            mode: "batch"
         },
         onFocusedCellChanging: function(e) {
             if(++focusedCellChangingCounter > 2) {
@@ -3738,6 +3739,7 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key", function(asser
     assert.equal(keyboardController.getFocusedColumnIndex(), 1, "FocusedColumnIndex");
     assert.equal(focusedCellChangingCounter, 2, "focusedCellChanging count");
     // assert, act
+    this.editCell(1, 1);
     this.triggerKeyDown("tab", false, false, rowsView.getRow(1).find("td:focus"));
     assert.ok(keyboardController.isCellFocusType(), "Cell focus type");
     assert.equal(keyboardController.getFocusedColumnIndex(), 2, "FocusedColumnIndex");
@@ -3767,7 +3769,8 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key in back order (s
     this.options = {
         keyExpr: "name",
         editing: {
-            allowEditing: false
+            allowEditing: true,
+            mode: "batch"
         },
         onFocusedCellChanging: function(e) {
             if(++focusedCellChangingCounter > 2) {
@@ -3804,6 +3807,7 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key in back order (s
     assert.equal(keyboardController.getFocusedColumnIndex(), 1, "FocusedColumnIndex");
     assert.equal(focusedCellChangingCounter, 2, "focusedCellChanging count");
     // assert, act
+    this.editCell(1, 1);
     this.triggerKeyDown("tab", false, true, rowsView.getRow(1).find("td:focus"));
     assert.ok(keyboardController.isCellFocusType(), "Cell focus type");
     assert.equal(keyboardController.getFocusedColumnIndex(), 0, "FocusedColumnIndex");
