@@ -208,7 +208,7 @@
 
 /**
  * @typedef {string} Enums.AnnotationType
- * @enum {'text'|'image'}
+ * @enum {'text'|'image'|'custom'}
  */
 
 /**
@@ -772,6 +772,11 @@
  */
 
 /**
+ * @typedef {string} Enums.VectorMapProjection
+ * @enum {'equirectangular'|'lambert'|'mercator'|'miller'}
+ */
+
+/**
  * @typedef {string} Enums.AnimationType
  * @enum {'css'|'fade'|'fadeIn'|'fadeOut'|'pop'|'slide'|'slideIn'|'slideOut'}
  */
@@ -1028,11 +1033,80 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramAutoLayout
- * @enum {'tree'|'sugiyama'}
+ * @typedef {string} Enums.DiagramDataLayoutType
+ * @enum {'off'|'tree'|'layered'}
+ */
+/**
+ * @typedef {string} Enums.DiagramDataLayoutOrientation
+ * @enum {'auto'|'vertical'|'horizontal'}
  */
 
 /**
- * @typedef {string} Enums.DiagramConnectionPointSide
- * @enum {'north'|'east'|'south'|'west'}
+ * @typedef {string} Enums.DiagramUnits
+ * @enum {'in'|'cm'|'px'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramPageOrientation
+ * @enum {'portrait'|'landscape'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramShapeCategory
+ * @enum {'general'|'flowchart'|'orgChart'|'containers'|'custom'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramShapeType
+ * @enum {'text'|'rectangle'|'ellipsis'|'cross'|'triangle'|'diamond'|'heart'|'pentagon'|'octagon'|'star'|'arrowLeft'|'arrowTop'|'arrowRight'|'arrowBottom'|'arrowNorthSouth'|'arrowEastWest'|'process'|'decision'|'terminator'|'predefinedProcess'|'document'|'multipleDocuments'|'manualInput'|'preparation'|'data'|'database'|'hardDisk'|'internalStorage'|'paperTape'|'manualOperation'|'delay'|'storedData'|'display'|'merge'|'or'|'summingJunction'|'verticalContainer'|'horizontalContainer'|'cardWithImageOnLeft'|'cardWithImageOnTop'|'cardWithImageOnRight'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramConnectorLineType
+ * @enum {'straight'|'orthogonal'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramConnectorLineEnd
+ * @enum {'none'|'arrow'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramToolboxStyle
+ * @enum {'icons'|'texts'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramToolbarCommand
+ * @enum {'separator'|'export'|'undo'|'redo'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'autoLayout'|'fullScreen'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramContextMenuCommand
+ * @enum {'cut'|'copy'|'paste'|'selectAll'|'delete'|'bringToFront'|'sendToBack'|'lock'|'unlock'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramPropertiesPanelCommand
+ * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageLandscape'|'pageColor'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramAutoZoom
+ * @enum {'fitContent'|'fitWidth'|'disabled'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramExportFormat
+ * @enum {'svg'|'png'|'jpg'}
+ */
+
+/**
+ * @typedef {string} Enums.GanttTaskTitlePosition
+ * @enum {'inside'|'outside'|'none'}
+ */
+
+/**
+ * @typedef {string} Enums.LegendMarkerState
+ * @enum {'normal'|'hovered'|'selected'}
  */

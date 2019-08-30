@@ -13,6 +13,8 @@
 
         "dxCollectionWidget-noDataText": "Žádná data k zobrazení",
 
+        "dxDropDownEditor-selectLabel": "Výběr",
+
         "validation-required": "povinné",
         "validation-required-formatted": "{0} je povinných",
         "validation-numeric": "Hodnota musí být číslo",

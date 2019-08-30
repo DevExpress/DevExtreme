@@ -2,8 +2,9 @@ var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    adjust = require("../../core/utils/math").adjust,
+    mathUtils = require("../../core/utils/math"),
     dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
+    domAdapter = require("../../core/dom_adapter"),
     isDefined = typeUtils.isDefined,
     isNumber = typeUtils.isNumeric,
     isExponential = typeUtils.isExponential,
@@ -26,6 +27,9 @@ var cosFunc = Math.cos,
     _isNaN = isNaN,
     _Number = Number,
     _NaN = NaN;
+
+const { adjust, sign } = mathUtils;
+const PANE_PADDING = 10;
 
 var getLog = function(value, base) {
     if(!value) {
@@ -262,14 +266,31 @@ extend(exports, {
         return fontOptions;
     },
 
-    convertPolarToXY: function(centerCoords, startAngle, angle, radius) {
-        var shiftAngle = 90,
-            cosSin;
+    checkElementHasPropertyFromStyleSheet(element, property) {
+        const slice = Array.prototype.slice;
+        const cssRules = slice.call(domAdapter.getDocument().styleSheets).reduce((rules, styleSheet) => {
+            return rules.concat(slice.call(styleSheet.cssRules || styleSheet.rules));
+        }, []);
+
+        const elementRules = cssRules.filter(rule => {
+            try {
+                return domAdapter.elementMatches(element, rule.selectorText);
+            } catch(e) {
+                return false;
+            }
+        });
+
+        return elementRules.some(rule => !!rule.style[property]);
+    },
+
+    convertPolarToXY(centerCoords, startAngle, angle, radius) {
+        const shiftAngle = 90;
+        const normalizedRadius = radius > 0 ? radius : 0;
 
         angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
-        cosSin = getCosAndSin(angle);
+        const cosSin = getCosAndSin(angle);
 
-        return { x: _round(centerCoords.x + radius * cosSin.cos), y: _round(centerCoords.y + radius * cosSin.sin) };
+        return { x: _round(centerCoords.x + normalizedRadius * cosSin.cos), y: _round(centerCoords.y + normalizedRadius * cosSin.sin) };
     },
 
     convertXYToPolar: function(centerCoords, x, y) {
@@ -344,20 +365,60 @@ extend(exports, {
 
     setCanvasValues: setCanvasValues,
 
-    updatePanesCanvases: function(panes, canvas, rotated) {
-        var weightSum = 0;
-        each(panes, function(_, pane) {
-            pane.weight = pane.weight || 1;
-            weightSum += pane.weight;
+    normalizePanesHeight(panes) {
+        panes.forEach(pane => {
+            const height = pane.height;
+            let unit = 0;
+            let parsedHeight = parseFloat(height) || undefined;
+
+            if(typeUtils.isString(height) && height.indexOf("px") > -1 ||
+                typeUtils.isNumeric(height) && height > 1) {
+                parsedHeight = _round(parsedHeight);
+                unit = 1;
+            }
+
+            if(!unit && parsedHeight) {
+                if(typeUtils.isString(height) && height.indexOf("%") > -1) {
+                    parsedHeight = parsedHeight / 100;
+                } else if(parsedHeight < 0) {
+                    parsedHeight = parsedHeight < -1 ? 1 : _math.abs(parsedHeight);
+                }
+            }
+
+            pane.height = parsedHeight;
+            pane.unit = unit;
         });
-        var distributedSpace = 0,
-            padding = panes.padding || 10,
-            paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom,
-            oneWeight = (paneSpace - padding * (panes.length - 1)) / weightSum,
-            startName = rotated ? "left" : "top",
-            endName = rotated ? "right" : "bottom";
-        each(panes, function(_, pane) {
-            var calcLength = _round(pane.weight * oneWeight);
+        const weightSum = panes.filter((pane) => !pane.unit)
+            .reduce((prev, next) => prev + (next.height || 0), 0);
+        const weightHeightCount = panes.filter((pane) => !pane.unit).length;
+        const emptyHeightCount = panes.filter((pane) => !pane.unit && !pane.height).length;
+
+        if(weightSum < 1 && emptyHeightCount) {
+            panes.filter((pane) => !pane.unit && !pane.height).forEach((pane) => pane.height = (1 - weightSum) / emptyHeightCount);
+        } else if(weightSum > 1 || weightSum < 1 && !emptyHeightCount || weightSum === 1 && emptyHeightCount) {
+            if(emptyHeightCount) {
+                const weightForEmpty = weightSum / weightHeightCount;
+                const emptyWeightSum = emptyHeightCount * weightForEmpty;
+                panes.filter((pane) => !pane.unit && pane.height).forEach((pane) => pane.height *= (weightSum - emptyWeightSum) / weightSum);
+                panes.filter((pane) => !pane.unit && !pane.height).forEach((pane) => pane.height = weightForEmpty);
+            }
+            panes.forEach((pane) => !pane.unit && (pane.height *= 1 / weightSum));
+        }
+    },
+
+    updatePanesCanvases(panes, canvas, rotated) {
+        let distributedSpace = 0;
+        const padding = PANE_PADDING;
+        const paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom;
+        let usefulSpace = paneSpace - padding * (panes.length - 1);
+        const startName = rotated ? "left" : "top";
+        const endName = rotated ? "right" : "bottom";
+
+        const totalCustomSpace = panes.reduce((prev, cur) => prev + (cur.unit ? cur.height : 0), 0);
+        usefulSpace -= totalCustomSpace;
+
+        panes.forEach(pane => {
+            const calcLength = pane.unit ? pane.height : _round(pane.height * usefulSpace);
             pane.canvas = pane.canvas || {};
             extend(pane.canvas, canvas);
             pane.canvas[startName] = canvas[startName] + distributedSpace;
@@ -428,8 +489,8 @@ function getAddFunction(range, correctZeroLevel) {
 
     if(range.axisType === "logarithmic") {
         return function(rangeValue, marginValue, sign = 1) {
-            var log = getLog(rangeValue, range.base) + sign * marginValue;
-            return raiseTo(log, range.base);
+            var log = getLogExt(rangeValue, range.base) + sign * marginValue;
+            return raiseToExt(log, range.base);
         };
     }
 
@@ -506,13 +567,47 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     };
 }
 
+function getLogExt(value, base, allowNegatives = false, linearThreshold) {
+    if(!allowNegatives) {
+        return getLog(value, base);
+    }
+    if(value === 0) {
+        return 0;
+    }
+    const transformValue = getLog(Math.abs(value), base) - (linearThreshold - 1);
+    if(transformValue < 0) {
+        return 0;
+    }
+    return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold - 1).toFixed(Math.abs(linearThreshold))));
+}
+
+function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
+    if(!allowNegatives) {
+        return raiseTo(value, base);
+    }
+
+    if(value === 0) {
+        return 0;
+    }
+
+    const transformValue = raiseTo(Math.abs(value) + (linearThreshold - 1), base);
+
+    if(transformValue < 0) {
+        return 0;
+    }
+
+    return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold).toFixed(Math.abs(linearThreshold))));
+}
+
 exports.getVizRangeObject = getVizRangeObject;
 exports.convertVisualRangeObject = convertVisualRangeObject;
 exports.adjustVisualRange = adjustVisualRange;
 exports.getAddFunction = getAddFunction;
 exports.getLog = getLog;
+exports.getLogExt = getLogExt;
 exports.getAdjustedLog10 = getAdjustedLog10;
 exports.raiseTo = raiseTo;
+exports.raiseToExt = raiseToExt;
 
 exports.normalizeAngle = normalizeAngle;
 exports.convertAngleToRendererSpace = convertAngleToRendererSpace;
@@ -527,3 +622,4 @@ exports.getPower = getPower;
 
 exports.rotateBBox = rotateBBox;
 exports.normalizeBBox = normalizeBBox;
+exports.PANE_PADDING = PANE_PADDING;

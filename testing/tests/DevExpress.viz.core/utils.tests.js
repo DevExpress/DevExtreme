@@ -283,6 +283,137 @@ QUnit.module("Layout canvas utils", {
     }
 });
 
+QUnit.test('Normalize pane weight', function(assert) {
+    var defSingle = [{ name: "default" }];
+    utils.normalizePanesHeight(defSingle);
+
+    assert.deepEqual(defSingle, [{
+        name: "default",
+        height: 1,
+        unit: 0
+    }], "Default for single pane");
+
+    var defFew = [{ name: "default1" }, { name: "default2" }];
+    utils.normalizePanesHeight(defFew);
+
+    assert.deepEqual(defFew, [{
+        name: "default1",
+        height: 0.5,
+        unit: 0
+    }, {
+        name: "default2",
+        height: 0.5,
+        unit: 0
+    }], "Default for a few panes");
+
+    var simpleMultiPane = [{ name: "pane1", height: 0.6 }, { name: "pane2" }, { name: "pane3" }];
+    utils.normalizePanesHeight(simpleMultiPane);
+
+    assert.deepEqual(simpleMultiPane, [{
+        name: "pane1",
+        height: 0.6,
+        unit: 0
+    }, {
+        name: "pane2",
+        height: 0.2,
+        unit: 0
+    }, {
+        name: "pane3",
+        height: 0.2,
+        unit: 0
+    }], "Simple multipane (with unknown weight)");
+
+    var incorrectMultiPane = [{ name: "pane1", height: "abc" }, { name: "pane2", height: -150 }];
+    utils.normalizePanesHeight(incorrectMultiPane);
+
+    assert.deepEqual(incorrectMultiPane, [{
+        name: "pane1",
+        height: 0.5,
+        unit: 0
+    }, {
+        name: "pane2",
+        height: 0.5,
+        unit: 0
+    }], "Simple multipane (with incorrect weight/height)");
+
+    var underWeightMultiPane = [{ name: "pane1", height: 0.2 }, { name: "pane2", height: 0.3 }];
+    utils.normalizePanesHeight(underWeightMultiPane);
+
+    assert.deepEqual(underWeightMultiPane, [{
+        name: "pane1",
+        height: 0.4,
+        unit: 0
+    }, {
+        name: "pane2",
+        height: 0.6,
+        unit: 0
+    }], "Underweight of pane height");
+
+    var overWeightMultiPane = [{ name: "pane1", height: 0.4 }, { name: "pane2", height: 0.4 }, { name: "pane3" }, { name: "pane4", height: 0.4 }];
+    utils.normalizePanesHeight(overWeightMultiPane);
+
+    assert.deepEqual(overWeightMultiPane, [{
+        name: "pane1",
+        height: 0.25,
+        unit: 0
+    }, {
+        name: "pane2",
+        height: 0.25,
+        unit: 0
+    }, {
+        name: "pane3",
+        height: 0.25,
+        unit: 0
+    }, {
+        name: "pane4",
+        height: 0.25,
+        unit: 0
+    }], "Overweight of pane height (with unknown weight)");
+});
+
+QUnit.test('Normalize pane weight (percentages)', function(assert) {
+    var simple = [{ name: "perc", height: "60%" }, { name: "pane" }];
+    utils.normalizePanesHeight(simple);
+
+    assert.deepEqual(simple, [{
+        name: "perc",
+        height: 0.6,
+        unit: 0
+    }, {
+        name: "pane",
+        height: 0.4,
+        unit: 0
+    }], "Simple example");
+
+    var overWeight = [{ name: "perc", height: "60%" }, { name: "over", height: "140%" }];
+    utils.normalizePanesHeight(overWeight);
+
+    assert.deepEqual(overWeight, [{
+        name: "perc",
+        height: 0.3,
+        unit: 0
+    }, {
+        name: "over",
+        height: 0.7,
+        unit: 0
+    }], "Overweight of pane height");
+});
+
+QUnit.test('Normalize pane height (pixels)', function(assert) {
+    var panes = [{ name: "pane1", height: 300 }, { name: "pane2", height: "400px" }];
+    utils.normalizePanesHeight(panes);
+
+    assert.deepEqual(panes, [{
+        name: "pane1",
+        height: 300,
+        unit: 1
+    }, {
+        name: "pane2",
+        height: 400,
+        unit: 1
+    }]);
+});
+
 QUnit.test("setCanvasValues", function(assert) {
     var canvas = { top: 11, bottom: 22, left: 33, right: 44 };
 
@@ -302,6 +433,7 @@ QUnit.test('Single pane - main case (no specific options provided)', function(as
     var pane = { name: 'default' };
 
     utils.setCanvasValues(this.canvas);
+    utils.normalizePanesHeight([pane]);
     utils.updatePanesCanvases([pane], this.canvas);
 
     assert.ok(pane.canvas, 'Canvas added to pane');
@@ -326,18 +458,17 @@ QUnit.test('Single pane - main case (no specific options provided)', function(as
 
 QUnit.test('Two equal panes - vertical alignment', function(assert) {
     var topPane = {
-            name: 'topPane',
-            weight: 1
+            name: 'topPane'
         },
         bottomPane = {
-            name: 'bottomPane',
-            weight: 1
+            name: 'bottomPane'
         },
         chartCanvasHeight = this.canvas.height - this.canvas.top - this.canvas.bottom,
         panePadding = 10,
         expectedPaneHeight = (chartCanvasHeight - panePadding) / 2;
 
     utils.setCanvasValues(this.canvas);
+    utils.normalizePanesHeight([topPane, bottomPane]);
     utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
 
 
@@ -370,20 +501,111 @@ QUnit.test('Two equal panes - vertical alignment', function(assert) {
     assert.strictEqual(bottomPane.canvas.originalBottom, this.canvas.bottom, 'Pane Canvas Bottom margin should be equal to main canvas');
 });
 
+QUnit.test('Two not equal panes - vertical alignment (weight)', function(assert) {
+    var topPane = {
+            name: 'topPane',
+            height: 0.7
+        },
+        bottomPane = {
+            name: 'bottomPane'
+        },
+        chartCanvasHeight = this.canvas.height - this.canvas.top - this.canvas.bottom,
+        panePadding = 10,
+        expectedBottomPaneHeight = (chartCanvasHeight - panePadding) * 0.3,
+        expectedTopPaneHeight = (chartCanvasHeight - panePadding) * 0.7;
+
+    utils.setCanvasValues(this.canvas);
+    utils.normalizePanesHeight([topPane, bottomPane]);
+    utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
+
+    assert.strictEqual(topPane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
+    assert.strictEqual(topPane.canvas.bottom, this.canvas.bottom + expectedBottomPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
+
+    assert.strictEqual(topPane.canvas.originalTop, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
+    assert.strictEqual(topPane.canvas.originalBottom, this.canvas.bottom + expectedBottomPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
+
+    assert.strictEqual(bottomPane.canvas.top, this.canvas.top + expectedTopPaneHeight + panePadding, 'Pane Canvas Top margin should change');
+    assert.strictEqual(bottomPane.canvas.bottom, this.canvas.bottom, 'Pane Canvas Bottom margin should be equal to main canvas');
+
+    assert.strictEqual(bottomPane.canvas.originalTop, this.canvas.top + expectedTopPaneHeight + panePadding, 'Pane Canvas Top margin should change');
+    assert.strictEqual(bottomPane.canvas.originalBottom, this.canvas.bottom, 'Pane Canvas Bottom margin should be equal to main canvas');
+});
+
+QUnit.test('Two not equal panes - vertical alignment (pixels)', function(assert) {
+    var expectedBottomPaneHeight = 220,
+        topPane = {
+            name: 'topPane'
+        },
+        bottomPane = {
+            name: 'bottomPane',
+            height: expectedBottomPaneHeight
+        },
+        chartCanvasHeight = this.canvas.height - this.canvas.top - this.canvas.bottom,
+        panePadding = 10,
+        expectedTopPaneHeight = chartCanvasHeight - panePadding - expectedBottomPaneHeight;
+
+    utils.setCanvasValues(this.canvas);
+    utils.normalizePanesHeight([topPane, bottomPane]);
+    utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
+
+    assert.strictEqual(topPane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
+    assert.strictEqual(topPane.canvas.bottom, this.canvas.bottom + expectedBottomPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
+
+    assert.strictEqual(topPane.canvas.originalTop, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
+    assert.strictEqual(topPane.canvas.originalBottom, this.canvas.bottom + expectedBottomPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
+
+    assert.strictEqual(bottomPane.canvas.top, this.canvas.top + expectedTopPaneHeight + panePadding, 'Pane Canvas Top margin should change');
+    assert.strictEqual(bottomPane.canvas.bottom, this.canvas.bottom, 'Pane Canvas Bottom margin should be equal to main canvas');
+
+    assert.strictEqual(bottomPane.canvas.originalTop, this.canvas.top + expectedTopPaneHeight + panePadding, 'Pane Canvas Top margin should change');
+    assert.strictEqual(bottomPane.canvas.originalBottom, this.canvas.bottom, 'Pane Canvas Bottom margin should be equal to main canvas');
+});
+
+QUnit.test('Two not equal panes - vertical alignment (both panes sized by pixels)', function(assert) {
+    var expectedBottomPaneHeight = 200,
+        expectedTopPaneHeight = 160,
+        topPane = {
+            name: 'topPane',
+            height: expectedTopPaneHeight
+        },
+        bottomPane = {
+            name: 'bottomPane',
+            height: expectedBottomPaneHeight
+        },
+        panePadding = 10;
+
+    utils.setCanvasValues(this.canvas);
+    utils.normalizePanesHeight([topPane, bottomPane]);
+    utils.updatePanesCanvases([topPane, bottomPane], this.canvas);
+
+    assert.strictEqual(topPane.canvas.top, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
+    assert.strictEqual(topPane.canvas.bottom, this.canvas.bottom + expectedBottomPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
+
+    assert.strictEqual(topPane.canvas.originalTop, this.canvas.top, 'Pane Canvas Top margin should be equal to main canvas');
+    assert.strictEqual(topPane.canvas.originalBottom, this.canvas.bottom + expectedBottomPaneHeight + panePadding, 'Pane Canvas Bottom margin should change');
+
+    assert.strictEqual(bottomPane.canvas.top, this.canvas.top + expectedTopPaneHeight + panePadding, 'Pane Canvas Top margin should change');
+    assert.strictEqual(bottomPane.canvas.bottom, this.canvas.bottom, 'Pane Canvas Bottom margin should be equal to main canvas');
+
+    assert.strictEqual(bottomPane.canvas.originalTop, this.canvas.top + expectedTopPaneHeight + panePadding, 'Pane Canvas Top margin should change');
+    assert.strictEqual(bottomPane.canvas.originalBottom, this.canvas.bottom, 'Pane Canvas Bottom margin should be equal to main canvas');
+});
+
 QUnit.test('Two equal panes - rotated, horizontal alignment', function(assert) {
     var leftPane = {
             name: 'leftPane',
-            weight: 1
+            height: 1
         },
         rightPane = {
             name: 'rightPane',
-            weight: 1
+            height: 1
         },
         chartCanvasWidth = this.canvas.width - this.canvas.left - this.canvas.right,
         panePadding = 10,
         expectedPaneWidth = (chartCanvasWidth - panePadding) / 2;
 
     utils.setCanvasValues(this.canvas);
+    utils.normalizePanesHeight([leftPane, rightPane]);
     utils.updatePanesCanvases([leftPane, rightPane], this.canvas, true);
 
     assert.ok(rightPane.canvas, 'Canvas added to pane');

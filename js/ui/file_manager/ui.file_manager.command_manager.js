@@ -57,7 +57,7 @@ export class FileManagerCommandManager {
             {
                 name: "refresh",
                 text: "Refresh",
-                icon: "refresh",
+                icon: "dx-filemanager-i dx-filemanager-i-refresh",
                 enabled: true,
                 noFileItemRequired: true
             },
@@ -114,7 +114,7 @@ export class FileManagerCommandManager {
         return this._commandMap[name];
     }
 
-    isCommandAvailable(commandName, items) {
+    isCommandAvailable(commandName, itemInfos) {
         const command = this.getCommandByName(commandName);
         if(!command || !command.enabled) {
             return false;
@@ -124,8 +124,8 @@ export class FileManagerCommandManager {
             return true;
         }
 
-        const itemsLength = items && items.length || 0;
-        if(itemsLength === 0 || items.some(item => item.isRoot() || item.isParentFolder)) {
+        const itemsLength = itemInfos && itemInfos.length || 0;
+        if(itemsLength === 0 || itemInfos.some(item => item.fileItem.isRoot || item.fileItem.isParentFolder)) {
             return false;
         }
         return !command.isSingleFileItemCommand || itemsLength === 1;

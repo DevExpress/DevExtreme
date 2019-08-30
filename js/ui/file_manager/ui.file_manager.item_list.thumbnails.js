@@ -339,30 +339,31 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         }
     }
 
-    _renderItem(item) {
+    _renderItem(fileItemInfo) {
         const $item = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CLASS)
-            .attr("title", this._getTooltipText(item))
-            .data("index", item._state.index);
+            .attr("title", this._getTooltipText(fileItemInfo))
+            .data("index", fileItemInfo._state.index);
 
         const $itemContent = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
 
-        const $itemThumbnail = this._getItemThumbnailContainer(item);
+        const $itemThumbnail = this._getItemThumbnailContainer(fileItemInfo);
         eventsEngine.on($itemThumbnail, "dragstart", this._disableDragging);
 
         const $itemSpacer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);
 
         const $itemName = $("<div>")
             .addClass(FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS)
-            .text(item.name);
+            .text(fileItemInfo.fileItem.name);
 
         $item.append($itemContent);
         $itemContent.append($itemThumbnail, $itemSpacer, $itemName);
         this._$itemViewContainer.append($item);
 
-        item._state.$element = $item;
+        fileItemInfo._state.$element = $item;
     }
 
-    _getTooltipText(item) {
+    _getTooltipText(fileItemInfo) {
+        const item = fileItemInfo.fileItem;
         if(item.tooltipText) {
             return item.tooltipText;
         }
@@ -389,7 +390,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         });
     }
 
-    refreshData() {
+    refresh() {
         this.clearSelection();
         this._loadItems();
     }

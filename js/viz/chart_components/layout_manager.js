@@ -238,20 +238,21 @@ LayoutManager.prototype = {
         correctLabelRadius(sizeLabels, radius, series, canvas, averageWidthLabels, layout.centerX);
     },
 
-    needMoreSpaceForPanesCanvas: function(panes, rotated) {
-        var options = this._options,
-            width = options.width,
-            height = options.height,
-            piePercentage = options.piePercentage,
-            percentageIsValid = _isNumber(piePercentage),
-            needHorizontalSpace = 0,
-            needVerticalSpace = 0;
+    needMoreSpaceForPanesCanvas(panes, rotated, fixedSizeCallback) {
+        const options = this._options;
+        const width = options.width;
+        const height = options.height;
+        const piePercentage = options.piePercentage;
+        const percentageIsValid = _isNumber(piePercentage);
+        let needHorizontalSpace = 0;
+        let needVerticalSpace = 0;
 
-        panes.forEach(function(pane) {
-            var paneCanvas = pane.canvas,
-                minSize = percentageIsValid ? _min(paneCanvas.width, paneCanvas.height) * piePercentage : undefined,
-                needPaneHorizontalSpace = (percentageIsValid ? minSize : width) - (paneCanvas.width - paneCanvas.left - paneCanvas.right),
-                needPaneVerticalSpace = (percentageIsValid ? minSize : height) - (paneCanvas.height - paneCanvas.top - paneCanvas.bottom);
+        panes.forEach(pane => {
+            const paneCanvas = pane.canvas;
+            const minSize = percentageIsValid ? _min(paneCanvas.width, paneCanvas.height) * piePercentage : undefined;
+            const paneSized = fixedSizeCallback ? fixedSizeCallback(pane) : { width: false, height: false };
+            const needPaneHorizontalSpace = !paneSized.width ? (percentageIsValid ? minSize : width) - (paneCanvas.width - paneCanvas.left - paneCanvas.right) : 0;
+            const needPaneVerticalSpace = !paneSized.height ? (percentageIsValid ? minSize : height) - (paneCanvas.height - paneCanvas.top - paneCanvas.bottom) : 0;
 
             if(rotated) {
                 needHorizontalSpace += needPaneHorizontalSpace > 0 ? needPaneHorizontalSpace : 0;

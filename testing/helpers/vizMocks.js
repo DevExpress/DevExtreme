@@ -68,6 +68,7 @@
             return this;
         },
         append: function(parent) {
+            !parent.children && (parent.children = []);
             parent.children.push(this);
             this.parent = parent;
             return this;
@@ -117,14 +118,11 @@
             this.children = [];
             this._stored_settings = {};
             this._stored_styles = {};
-
-            this.element = {
-                nodeType: 1,
-                getScreenCTM: function() { return [0, 1, 1, 0, 210, 240]; },
-                createSVGPoint: function() { return { matrixTransform: function() { return { x: 3, y: 5 }; } }; },
-                addEventListener: function() {},
-                removeEventListener: function() {}
-            };
+            this.element = document.createElement("svg");
+            this.element.getScreenCTM = function() { return [0, 1, 1, 0, 210, 240]; };
+            this.element.createSVGPoint = function() { return { matrixTransform: function() { return { x: 3, y: 5 }; } }; };
+            this.element.addEventListener = function() {};
+            this.element.removeEventListener = function() {};
         },
         $thisReturnFunctions: [
             "toBackground",

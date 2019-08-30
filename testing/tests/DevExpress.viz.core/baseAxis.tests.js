@@ -352,6 +352,63 @@ QUnit.test("Logarithmic axis. calculateInterval - returns difference of logarith
     assert.equal(this.axis.calculateInterval(32, 0.25), 7);
 });
 
+QUnit.test("Logarithmic axis. calculateInterval - returns difference of logarithms. with allow negatives", function(assert) {
+    this.updateOptions({
+        type: "logarithmic",
+        allowNegatives: true,
+        logarithmBase: 2
+    });
+
+    this.axis.setBusinessRange({
+        linearThreshold: -4
+    });
+
+    assert.equal(this.axis.calculateInterval(32, 0.25), 7);
+});
+
+QUnit.test("Get visual range center. Logaritmic", function(assert) {
+    this.updateOptions({
+        type: "logarithmic",
+        allowNegatives: false,
+        logarithmBase: 10
+    });
+
+    const range = new Range({
+        min: 10,
+        max: 1000,
+        minVisible: 10,
+        maxVisible: 1000
+    });
+
+    this.axis.setBusinessRange(range);
+    this.translator.getBusinessRange.returns(range);
+
+    assert.equal(this.axis.getVisualRangeCenter(range), 100);
+});
+
+QUnit.test("Get visual range center. Logarithmic with negative values", function(assert) {
+    this.updateOptions({
+        type: "logarithmic",
+        allowNegatives: true,
+        logarithmBase: 10
+    });
+
+    const range = new Range({
+        min: -100,
+        max: 100,
+        minVisible: -100,
+        maxVisible: 100,
+        linearThreshold: -3,
+        allowNegatives: true
+    });
+
+    this.axis.setBusinessRange(range);
+    this.translator.getBusinessRange.returns(range);
+
+    assert.equal(this.axis.getVisualRangeCenter(range), 0);
+});
+
+
 QUnit.test("getCategoriesSorter returns categoriesSortingMethod option value", function(assert) {
     this.updateOptions({
         categoriesSortingMethod: "sorting method"
@@ -735,7 +792,9 @@ QUnit.test("Get visual range after setBusinessRange. Discrete", function(assert)
 });
 
 QUnit.test("Trigger zoom events", function(assert) {
-    this.updateOptions();
+    this.updateOptions({
+        type: "continuous"
+    });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -760,7 +819,8 @@ QUnit.test("Trigger zoom events", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
@@ -824,7 +884,7 @@ QUnit.test("Can cancel zooming on zoom end", function(assert) {
 });
 
 QUnit.test("Can prevent zoomStart", function(assert) {
-    this.updateOptions();
+    this.updateOptions({ type: "continuous" });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -841,12 +901,13 @@ QUnit.test("Can prevent zoomStart", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
 QUnit.test("Can prevent zoomEnd", function(assert) {
-    this.updateOptions();
+    this.updateOptions({ type: "continuous" });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -864,7 +925,8 @@ QUnit.test("Can prevent zoomEnd", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
@@ -3590,8 +3652,8 @@ QUnit.test("Set logarithm base for logarithmic axis", function(assert) {
     assert.equal(businessRange.axisType, "logarithmic");
 });
 
-QUnit.test("Viewport and whole range can't have negative values if logarithmic axis", function(assert) {
-    this.updateOptions({ min: -10, max: -100, wholeRange: [-10, -100], type: "logarithmic" });
+QUnit.test("Viewport and whole range can't have negative values if logarithmic axis and allowNegatives is set to false", function(assert) {
+    this.updateOptions({ min: -10, max: -100, wholeRange: [-10, -100], type: "logarithmic", allowNegatives: false });
     this.axis.validate();
     this.axis.setBusinessRange({
         min: 10,
@@ -3606,7 +3668,23 @@ QUnit.test("Viewport and whole range can't have negative values if logarithmic a
     assert.equal(businessRange.axisType, "logarithmic");
 });
 
-QUnit.test("Visual range and whole range can't have negative values if logarithmic axis", function(assert) {
+QUnit.test("Viewport and whole range can have negative values if logarithmic axis and allowNegatives is set to true", function(assert) {
+    this.updateOptions({ visualRange: [-10, -100], wholeRange: [-10, -100], type: "logarithmic", allowNegatives: true });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 10,
+        max: 1000
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.equal(businessRange.min, -100);
+    assert.equal(businessRange.max, -10);
+    assert.equal(businessRange.minVisible, -100);
+    assert.equal(businessRange.maxVisible, -10);
+    assert.equal(businessRange.axisType, "logarithmic");
+});
+
+QUnit.test("Viewport and whole range can have negative values if logarithmic axis and allowNegatives is set not set", function(assert) {
     this.updateOptions({ visualRange: [-10, -100], wholeRange: [-10, -100], type: "logarithmic" });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -3615,10 +3693,10 @@ QUnit.test("Visual range and whole range can't have negative values if logarithm
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.equal(businessRange.min, 10);
-    assert.equal(businessRange.max, 1000);
-    assert.equal(businessRange.minVisible, 10);
-    assert.equal(businessRange.maxVisible, 1000);
+    assert.equal(businessRange.min, -100);
+    assert.equal(businessRange.max, -10);
+    assert.equal(businessRange.minVisible, -100);
+    assert.equal(businessRange.maxVisible, -10);
     assert.equal(businessRange.axisType, "logarithmic");
 });
 
@@ -3716,6 +3794,98 @@ QUnit.test("Create ticks with empty range. Range is still empty", function(asser
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.equal(businessRange.isEmpty(), true);
+});
+
+
+QUnit.test("Pass linearThreshold to translator range", function(assert) {
+    this.updateOptions({
+        type: "logarithmic"
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        linearThreshold: 1
+    });
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].linearThreshold, 1);
+});
+
+QUnit.test("Get minLog value from options", function(assert) {
+    this.updateOptions({
+        type: "logarithmic",
+        linearThreshold: 2
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        linearThreshold: 1
+    });
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].linearThreshold, 2);
+});
+
+QUnit.test("take linearThreshold on addRange", function(assert) {
+    this.updateOptions({
+        type: "logarithmic"
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        linearThreshold: 1
+    });
+
+    const resultRange = this.translator.updateBusinessRange.lastCall.args[0].addRange({ linearThreshold: -2 });
+    assert.deepEqual(resultRange.linearThreshold, -2);
+});
+
+QUnit.test("Logarithmic axis. Pass allowNegatives options to range. false value", function(assert) {
+    this.updateOptions({
+        allowNegatives: false,
+        type: "logarithmic"
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({});
+
+    assert.ok(!this.translator.updateBusinessRange.lastCall.args[0].allowNegatives);
+});
+
+QUnit.test("Logarithmic axis. Pass allowNegatives options to range. true value", function(assert) {
+    this.updateOptions({
+        allowNegatives: true,
+        type: "logarithmic"
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({});
+
+    assert.ok(this.translator.updateBusinessRange.lastCall.args[0].allowNegatives);
+});
+
+QUnit.test("Logarithmic axis. allowNegatives if option is not set and min<=0", function(assert) {
+    this.updateOptions({
+        type: "logarithmic"
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 100
+    });
+
+    assert.ok(this.translator.updateBusinessRange.lastCall.args[0].allowNegatives);
+});
+
+QUnit.test("Logarithmic axis. Do not allowNegatives if option is not set and min > 0", function(assert) {
+    this.updateOptions({
+        type: "logarithmic"
+    });
+
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 1,
+        max: 100
+    });
+
+    assert.ok(!this.translator.updateBusinessRange.lastCall.args[0].allowNegatives);
 });
 
 QUnit.module("Set business range. Value axis", {

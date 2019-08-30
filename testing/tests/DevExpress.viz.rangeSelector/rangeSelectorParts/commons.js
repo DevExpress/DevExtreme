@@ -67,6 +67,7 @@ exports.environment = {
         this.tracker = new StubTracker();
         this.axis = new StubAxis();
         this.axis.stub("getMarginOptions").returns({});
+        this.axis.stub("getOptions").returns({});
 
         this.axis.stub("getTranslator").returns(this.translator);
         this.axis.calculateInterval = function(a, b) { return a - b; };

@@ -1199,21 +1199,6 @@ QUnit.module("dateView integration", {
         }
     });
 
-    QUnit.test("pickerType should not be 'native' on Win8", (assert) => {
-        support.inputType = () => {
-            return true;
-        };
-
-        const originalDevice = devices.real();
-        devices.real({ platform: "win", win: true });
-
-        const dateBox = $("#dateBox").dxDateBox().dxDateBox("instance");
-        assert.ok(dateBox.option("pickerType") !== "native");
-
-        support.inputType = this.originalInputType;
-        devices.real(originalDevice);
-    });
-
     QUnit.test("B230631 - Can not clear datebox field", (assert) => {
         this.instance.option({
             value: new Date(),
@@ -1405,6 +1390,57 @@ QUnit.module("widget sizing render", {}, () => {
         instance.option("width", customWidth);
 
         assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
+    });
+
+    QUnit.test("it should update widget size after toggle the 'readOnly' option", (assert) => {
+        if(devices.current().platform !== "generic") {
+            assert.ok(true, "automatic size fitting working with generic devices only");
+            return;
+        }
+
+        const $element = $("#dateBox");
+        const instance = $element.dxDateBox({
+            pickerType: "calendar",
+            readOnly: true,
+            displayFormat: "shortDate"
+        }).dxDateBox("instance");
+
+        const initialWidth = $element.outerWidth();
+
+        instance.option({
+            readOnly: false,
+            value: new Date()
+        });
+
+        const actualWidth = $element.outerWidth();
+
+        assert.notEqual(actualWidth, initialWidth, "width has been changed");
+        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
+    });
+
+    QUnit.test("it should update widget size after the 'buttons' option changed (T809858)", (assert) => {
+        if(devices.current().platform !== "generic") {
+            assert.ok(true, "automatic size fitting working with generic devices only");
+            return;
+        }
+
+        const $element = $("#dateBox");
+        const instance = $element.dxDateBox({
+            pickerType: "calendar",
+            displayFormat: "shortDate"
+        }).dxDateBox("instance");
+
+        const initialWidth = $element.outerWidth();
+
+        instance.option("buttons", [{
+            name: "test",
+            options: { text: "after" }
+        }]);
+
+        const actualWidth = $element.outerWidth();
+
+        assert.notEqual(actualWidth, initialWidth, "width has been changed");
+        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
     });
 });
 
@@ -2930,8 +2966,8 @@ QUnit.module("datebox with time component", {
             type: "datetime",
             pickerType: "calendar",
             opened: true,
-            min: new Date("2015/1/25 12:00:00"),
-            value: new Date("2015/1/25 12:00:00")
+            min: new Date("2015/1/25 13:00:00"),
+            value: new Date("2015/1/25 13:00:00")
         }).dxDateBox("instance");
         const $submitElement = $("#dateBox").find("input[type=hidden]");
         const $hourDownButton = $(dateBox.content()).find(".dx-numberbox-spin-down").first();
@@ -2940,7 +2976,7 @@ QUnit.module("datebox with time component", {
         $(".dx-popup-done.dx-button").first().trigger("dxclick");
 
         assert.notOk(dateBox.option("isValid"), "editor is invalid");
-        assert.equal($submitElement.val(), "2015-01-25T12:00:00", "submit element has correct value");
+        assert.equal($submitElement.val(), "2015-01-25T13:00:00", "submit element has correct value");
     });
 
     QUnit.test("Reset seconds and milliseconds when DateBox has no value for time view", assert => {
@@ -3186,12 +3222,36 @@ QUnit.module("datebox w/ time list", {
 
     QUnit.test("list should have items if the 'min' option is specified (T395529)", (assert) => {
         this.dateBox.option({
-            min: new Date(2016, 5, 20),
+            min: new Date(new Date(null).setHours(15)),
             opened: true
         });
 
         const list = $(".dx-list").dxList("instance");
         assert.ok(list.option("items").length > 0, "list is not empty");
+    });
+
+    QUnit.test("selected date should be in 1970 when it was set from the null value", (assert) => {
+        this.dateBox.option({
+            opened: true,
+            value: null
+        });
+
+        const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+        $item.trigger("dxclick");
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), new Date(null).getFullYear(), "year is correct");
+    });
+
+    QUnit.test("selected date should be in value year when value is specified", (assert) => {
+        this.dateBox.option({
+            opened: true,
+            value: new Date(2018, 5, 6, 14, 12)
+        });
+
+        const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+        $item.trigger("dxclick");
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), 2018, "year is correct");
     });
 
     QUnit.test("the value's date part should not be changed if editing input's text by keyboard (T395685)", (assert) => {
@@ -3390,6 +3450,17 @@ QUnit.module("datebox w/ time list", {
         assert.equal($input.val(), "1:00 PM", "Correct input value");
         assert.equal(value.getHours(), 13, "Correct hours");
         assert.equal(value.getMinutes(), 0, "Correct minutes");
+    });
+
+    QUnit.test("items are rendered when value is 'undefined' (T805931)", (assert) => {
+        this.dateBox.option({
+            value: undefined
+        });
+
+        this.dateBox.option("opened", true);
+
+        const $timeListItems = $(".dx-list .dx-list-item");
+        assert.ok($timeListItems.length > 0);
     });
 });
 
@@ -3782,6 +3853,26 @@ QUnit.module("datebox validation", {}, () => {
             .change();
 
         assert.ok(dateBox.option("isValid"), "widget is valid");
+    });
+
+    QUnit.test("required validator should not block valuechange in datetime strategy", (assert) => {
+        const $dateBox = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            opened: true,
+            value: null
+        }).dxValidator({
+            validationRules: [{
+                type: "required"
+            }]
+        });
+        const dateBox = $dateBox.dxDateBox("instance");
+        const $done = $(dateBox.content()).parent().find(".dx-popup-done.dx-button");
+
+        $done.trigger("dxclick");
+
+        assert.ok(dateBox.option("isValid"), "widget is valid");
+        assert.ok(dateBox.option("value"), "value is not empty");
     });
 
     QUnit.test("widget is still valid after drop down is opened", assert => {
@@ -4385,76 +4476,4 @@ QUnit.module("DateBox number and string value support", {
         });
     });
 
-    QUnit.test("T678838: DateBox doesn't switch format when time is changed", assert => {
-        const $dateBox = $("#dateBox").dxDateBox({
-            value: new Date(2018, 6, 6, 2),
-            type: "datetime",
-            pickerType: "calendar"
-        });
-
-        const instance = $dateBox.dxDateBox("instance");
-        instance.open();
-
-        const $inputs = $("." + DATEBOX_WRAPPER_CLASS + " ." + TEXTEDITOR_INPUT_CLASS);
-        const $hoursInput = $inputs.eq(0);
-        const $formatInput = $inputs.eq(2);
-
-        assert.equal($formatInput.val(), "AM", "format value is correct");
-
-        $hoursInput
-            .val(16)
-            .trigger("change");
-
-        assert.equal(parseInt($hoursInput.val()), 4, "hour input value is correct formated after set hour in 24 format");
-        assert.equal($formatInput.val(), "PM", "format value is changed");
-
-        $("." + DATEBOX_WRAPPER_CLASS)
-            .find(".dx-button.dx-popup-done")
-            .trigger("dxclick");
-
-        assert.equal(instance.option("value").valueOf(), (new Date(2018, 6, 6, 16)).valueOf(), "DateBox value is correct");
-    });
-
-    QUnit.test("date value should be formatted after change AM/PM format", assert => {
-        const TIMEVIEW_FORMAT12_AM = -1;
-        const TIMEVIEW_FORMAT12_PM = 1;
-
-        const $dateBox = $("#dateBox").dxDateBox({
-            value: new Date(2018, 6, 6, 16),
-            type: "datetime",
-            pickerType: "calendar"
-        });
-
-        const dateBox = $dateBox.dxDateBox("instance");
-
-        dateBox.open();
-        const formatSelectBox = $(".dx-timeview-format12").dxSelectBox("instance");
-        const $hourDown = $(dateBox.content()).parent().find(".dx-numberbox-spin-down").eq(0);
-        const $hourUp = $(dateBox.content()).parent().find(".dx-numberbox-spin-up").eq(0);
-        const $hoursInput = $(".dx-numberbox").eq(0).find("." + TEXTEDITOR_INPUT_CLASS);
-
-        assert.equal(formatSelectBox.option("value"), TIMEVIEW_FORMAT12_PM, "correct value on init");
-
-        formatSelectBox.option("value", TIMEVIEW_FORMAT12_AM);
-        $("." + DATEBOX_WRAPPER_CLASS)
-            .find(".dx-button.dx-popup-done")
-            .trigger("dxclick");
-
-        assert.equal(dateBox.option("value").valueOf(), (new Date(2018, 6, 6, 4)).valueOf(), "DateBox value is formatted");
-
-        dateBox.option("value", new Date(2018, 6, 6, 16));
-        dateBox.open();
-
-        $hourDown.trigger("dxpointerdown");
-        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_PM, "date format should be PM after decrement hours");
-
-        $hourUp.trigger("dxpointerdown");
-        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_PM, "date format should be PM after increment hours");
-
-        $hoursInput.val(9).trigger("change");
-        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_AM, "date format should be AM after change value to 9");
-
-        $hoursInput.val(16).trigger("change");
-        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_PM, "date format should be PM after change value to 16");
-    });
 });

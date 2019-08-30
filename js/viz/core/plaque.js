@@ -198,11 +198,11 @@ function getCloudPoints({ width, height }, x, y, anchorX, anchorY, { arrowWidth,
 }
 
 export class Plaque {
-    constructor(options, widget, root, renderContent, bounded = true, measureContent = (_, g)=>g.getBBox(), moveContentGroup = (_, g, x, y)=>g.move(x, y)) {
+    constructor(options, widget, root, contentTemplate, bounded = true, measureContent = (_, g)=>g.getBBox(), moveContentGroup = (_, g, x, y)=>g.move(x, y)) {
         this.widget = widget;
         this.options = options;
         this.root = root;
-        this.renderContent = renderContent;
+        this.contentTemplate = contentTemplate;
         this.bonded = bounded;
         this.measureContent = measureContent;
         this.moveContentGroup = moveContentGroup;
@@ -239,10 +239,13 @@ export class Plaque {
         const contentWidth = options.width > 0 ? options.width : null;
         const contentHeight = options.height > 0 ? options.height : null;
 
-        this.renderContent(this.widget, this._contentGroup, {
-            width: contentWidth,
-            height: contentHeight
-        });
+        if(this.contentTemplate.render) {
+            this.contentTemplate.render({ model: options, container: this._contentGroup.element });
+        } else {
+            // TODO this is for tooltip, made it use template
+            this.contentTemplate(this.widget, this._contentGroup);
+        }
+
         const bBox = this._contentBBox = this.measureContent(this.widget, this._contentGroup);
 
         const size = this._size = {
@@ -330,7 +333,7 @@ export class Plaque {
         }
 
         const shadowSettings = extend({ x: "-50%", y: "-50%", width: "200%", height: "200%" }, options.shadow);
-        const shadow = renderer.shadowFilter().attr(shadowSettings);
+        const shadow = this._shadow = renderer.shadowFilter().attr(shadowSettings);
 
         const group = this._root = renderer.g().append(this.root);
         if(options.type) {
@@ -357,6 +360,7 @@ export class Plaque {
     clear() {
         if(this._root) {
             this._root.remove();
+            this._shadow.remove();
             this._root = null;
         }
         return this;

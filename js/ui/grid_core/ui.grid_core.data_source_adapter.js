@@ -114,7 +114,8 @@ module.exports = gridCore.Controller.inherit((function() {
         },
         dispose: function(isSharedDataSource) {
             var that = this,
-                dataSource = that._dataSource;
+                dataSource = that._dataSource,
+                store = dataSource.store();
 
             dataSource.off("changed", that._dataChangedHandler);
             dataSource.off("customizeStoreLoadOptions", that._dataLoadingHandler);
@@ -122,7 +123,8 @@ module.exports = gridCore.Controller.inherit((function() {
             dataSource.off("loadingChanged", that._loadingChangedHandler);
             dataSource.off("loadError", that._loadErrorHandler);
             dataSource.off("changing", that._changingHandler);
-            dataSource.store().off("push", that._pushHandler);
+            store && store.off("push", that._pushHandler);
+
             if(!isSharedDataSource) {
                 dataSource.dispose();
             }
@@ -160,7 +162,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
             this._cachedPagingData = undefined;
 
-            this.resetPagesCache();
+            this.resetPagesCache(true);
 
             if(this._cachedStoreData) {
                 arrayUtils.applyBatch(store, this._cachedStoreData, changes);
@@ -225,7 +227,9 @@ module.exports = gridCore.Controller.inherit((function() {
                 cachedPagesData = that._cachedPagesData;
 
             if((options.storeLoadOptions.filter && !options.remoteOperations.filtering) || (options.storeLoadOptions.sort && !options.remoteOperations.sorting)) {
-                options.remoteOperations = {};
+                options.remoteOperations = {
+                    filtering: options.remoteOperations.filtering
+                };
             }
 
             if(isReload) {
@@ -410,7 +414,7 @@ module.exports = gridCore.Controller.inherit((function() {
                     options.extra.totalCount = options.data.length;
                 }
 
-                if(options.extra && options.extra.totalCount >= 0 && storeLoadOptions.requireTotalCount === false) {
+                if(options.extra && options.extra.totalCount >= 0 && (storeLoadOptions.requireTotalCount === false || loadOptions.requireTotalCount === false)) {
                     options.extra.totalCount = -1;
                 }
 
@@ -439,11 +443,11 @@ module.exports = gridCore.Controller.inherit((function() {
             this.loadingChanged.fire(isLoading);
         },
         _handleLoadError: function(error) {
+            this.loadError.fire(error);
             this.changed.fire({
                 changeType: "loadError",
                 error: error
             });
-            this.loadError.fire(error);
         },
         _handleDataChanged: function(args) {
             var that = this,

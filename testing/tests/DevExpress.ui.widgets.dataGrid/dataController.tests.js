@@ -736,6 +736,33 @@ QUnit.test("Operation filter should generates correctly when sorting, remoteOper
     assert.equal(JSON.stringify(filter), '[["name","<","Dan"],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', "Operation filter");
 });
 
+// T755462
+QUnit.test("Check the filter generator for the boolean field", function(assert) {
+    // act, assert
+    var filter = this.dataController._generateBooleanFilter("isRoom", true, { desc: false });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",true]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", false, { desc: false });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","=",null]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", true, { desc: true });
+    assert.strictEqual(JSON.stringify(filter), undefined, "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", false, { desc: true });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","=",true]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", null, { desc: true });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",null]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", null, { desc: false });
+    assert.strictEqual(JSON.stringify(filter), undefined, "filter");
+});
+
 QUnit.test("Get page index by simple key", function(assert) {
     // arrange
     var count = 0,
@@ -1385,8 +1412,12 @@ QUnit.test("Get row index if group by two columns and simple key and remote oper
         ++foundRowCount;
         assert.equal(globalRowIndex, 24, "Alice");
     });
+    dataController.getGlobalRowIndexByKey(["internal"]).done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, -1, "[internal]");
+    });
 
-    assert.equal(foundRowCount, 9, "Found row count");
+    assert.equal(foundRowCount, 10, "Found row count");
 });
 
 QUnit.test("Get row index if group by two columns and simple key and OData", function(assert) {
@@ -12896,6 +12927,28 @@ QUnit.test("assign loaded dataSource", function(assert) {
     assert.equal(this.dataController.items().length, 3, "items count");
     assert.equal(this.dataController.totalCount(), 5, "total count");
     assert.equal(this.dataController.pageCount(), 2, "page count");
+});
+
+// T752955
+QUnit.test("There are no exceptions when disposing of the shared dataSource", function(assert) {
+    // arrange
+    this.setupDataGridModules({
+        dataSource: this.dataSource
+    });
+
+    this.clock.tick();
+
+    try {
+        // act
+        this.dataSource.dispose();
+        this.dataController.dataSource().dispose(true);
+
+        // assert
+        assert.ok(true, "No exception");
+    } catch(e) {
+        // assert
+        assert.ok(false, "exception");
+    }
 });
 
 QUnit.module("Exporting", {

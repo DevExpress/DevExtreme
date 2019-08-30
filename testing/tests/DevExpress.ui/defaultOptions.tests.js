@@ -14,8 +14,6 @@ var $ = require("jquery"),
     ColorBox = require("ui/color_box"),
     DataGrid = require("ui/data_grid"),
     DateBox = require("ui/date_box"),
-    DateView = require("ui/date_box/ui.date_view"),
-    DateViewRoller = require("ui/date_box/ui.date_view_roller"),
     FakeDialogComponent = require("ui/dialog").FakeDialogComponent,
     DropDownEditor = require("ui/drop_down_editor/ui.drop_down_editor"),
     DropDownBox = require("ui/drop_down_box"),
@@ -141,19 +139,6 @@ testComponentDefaults(DateBox,
 );
 
 testComponentDefaults(DateBox,
-    { platform: "win" },
-    { pickerType: "rollers" },
-    function() {
-        this._origDevice = devices.real();
-
-        devices.real({ platform: "win", win: true, phone: true });
-    },
-    function() {
-        devices.real(this._origDevice);
-    }
-);
-
-testComponentDefaults(DateBox,
     [
         { platform: "generic", deviceType: "desktop" },
     ],
@@ -162,57 +147,6 @@ testComponentDefaults(DateBox,
         this._origDevice = devices.real();
 
         devices.real({ platform: "generic", deviceType: "desktop", phone: false });
-    },
-    function() {
-        devices.real(this._origDevice);
-    }
-);
-
-testComponentDefaults(DateBox,
-    { platform: "win" },
-    { pickerType: "calendar" },
-    function() {
-        this._origDevice = devices.real();
-
-        devices.real({ platform: "win", win: true, phone: false });
-    },
-    function() {
-        devices.real(this._origDevice);
-    }
-);
-
-testComponentDefaults(DateView,
-    { platform: "win", version: [8] },
-    { showNames: true }
-);
-
-testComponentDefaults(DateViewRoller,
-    { platform: "win", version: [8] },
-    {
-        showOnClick: true
-    }
-);
-
-testComponentDefaults(Box,
-    {},
-    { _layoutStrategy: 'fallback' },
-    function() {
-        this._origDevice = devices.real();
-
-        devices.real({ platform: "android", android: true, version: [4, 3] });
-    },
-    function() {
-        devices.real(this._origDevice);
-    }
-);
-
-testComponentDefaults(Box,
-    {},
-    { _layoutStrategy: 'fallback' },
-    function() {
-        this._origDevice = devices.real();
-
-        devices.real({ platform: "ios", android: true, version: [6, 0] });
     },
     function() {
         devices.real(this._origDevice);
@@ -244,13 +178,6 @@ testComponentDefaults(FakeDialogComponent,
         lWidth: "60%",
         pWidth: "80%"
     }
-);
-
-testComponentDefaults(DropDownMenu,
-    [
-        { platform: "ios", version: [6, 7, 8] }
-    ],
-    { usePopover: true }
 );
 
 testComponentDefaults(DropDownMenu,
@@ -319,6 +246,7 @@ testComponentDefaults(DropDownButton, {}, {
     keyExpr: "this",
     displayExpr: "this",
     useSelectMode: false,
+    wrapItemText: false,
     opened: false,
     splitButton: false,
     showArrowIcon: true,
@@ -335,23 +263,10 @@ testComponentDefaults(DropDownButton, {}, {
 });
 
 testComponentDefaults(DropDownList,
-    [
-        { platform: "win", version: [8] }
-    ],
-    {
-        popupPosition: {
-            my: "left top",
-            at: "left bottom",
-            offset: { h: 0, v: -6 },
-            collision: "flip"
-        }
-    }
-);
-
-testComponentDefaults(DropDownList,
     {},
     {
         groupTemplate: "group",
+        wrapItemText: false,
         grouped: false
     }
 );
@@ -383,49 +298,10 @@ testComponentDefaults(List,
 );
 
 testComponentDefaults(List,
-    { platform: "win" },
-    {
-        itemDeleteMode: "context",
-        menuMode: "context"
-    }
-);
-
-testComponentDefaults(List,
-    { platform: "win" },
-    {
-        bounceEnabled: false
-    },
-    function() {
-        this._isSimulator = devices.isSimulator;
-        devices.isSimulator = function() {
-            return true;
-        };
-    },
-    function() {
-        devices.isSimulator = this._isSimulator;
-    }
-);
-
-testComponentDefaults(List,
-    { platform: "win" },
-    {
-        bounceEnabled: true
-    },
-    function() {
-        this._isSimulator = devices.isSimulator;
-        devices.isSimulator = function() {
-            return false;
-        };
-    },
-    function() {
-        devices.isSimulator = this._isSimulator;
-    }
-);
-
-testComponentDefaults(List,
     { platform: "generic" },
     {
-        itemDeleteMode: "static"
+        itemDeleteMode: "static",
+        wrapItemText: false
     }
 );
 
@@ -477,12 +353,6 @@ testComponentDefaults(Lookup,
         devices.real(this._origDevice);
     }
 );
-
-testComponentDefaults(Lookup,
-    { platform: "win", version: [8], phone: true },
-    { showCancelButton: false, fullScreen: true }
-);
-
 
 testComponentDefaults(Lookup,
     [
@@ -734,18 +604,6 @@ testComponentDefaults(ScrollView,
 
 testComponentDefaults(ScrollView,
     {},
-    { refreshStrategy: "slideDown" },
-    function() {
-        this._originalRealDevice = devices.real();
-        devices.real({ platform: "win" });
-    },
-    function() {
-        devices.real(this._originalRealDevice);
-    }
-);
-
-testComponentDefaults(ScrollView,
-    {},
     {
         pullingDownText: "",
         pulledDownText: "",
@@ -781,41 +639,6 @@ testComponentDefaults(Toast,
 
 testComponentDefaults(Toast,
     { platform: "android", deviceType: "phone" },
-    {
-        position: {
-            my: "bottom center",
-            at: "bottom center",
-            offset: "0 0"
-        }
-    }
-);
-
-testComponentDefaults(Toast,
-    { platform: "win", version: [8] },
-    {
-        position: {
-            my: "top center",
-            at: "top center",
-            offset: "0 0"
-        }
-    }
-);
-
-testComponentDefaults(Toast,
-    { platform: "win", version: [10] },
-    {
-        position: {
-            at: "bottom right",
-            my: "bottom right",
-            of: null,
-            offset: "0 -20"
-        },
-        width: "auto"
-    }
-);
-
-testComponentDefaults(Toast,
-    { platform: "win", version: [10], deviceType: "phone" },
     {
         position: {
             my: "bottom center",

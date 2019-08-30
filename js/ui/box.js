@@ -10,7 +10,6 @@ import styleUtils from "../core/utils/style";
 import { each } from "../core/utils/iterator";
 import browser from "../core/utils/browser";
 import CollectionWidgetItem from "./collection/item";
-import devices from "../core/devices";
 import CollectionWidget from "./collection/ui.collection_widget.edit";
 
 const BOX_CLASS = "dx-box";
@@ -456,14 +455,12 @@ class Box extends CollectionWidget {
             /**
             * @name dxBoxOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             activeStateEnabled: false,
 
             /**
             * @name dxBoxOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
             focusStateEnabled: false,
 
@@ -476,60 +473,49 @@ class Box extends CollectionWidget {
             /**
             * @name dxBoxOptions.hint
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.noDataText
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.onSelectionChanged
             * @action
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxBoxOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxBoxOptions.items
              * @type Array<string, dxBoxItem, object>
              * @fires dxBoxOptions.onOptionChanged
-             * @inheritdoc
              */
         });
     }
@@ -538,10 +524,7 @@ class Box extends CollectionWidget {
         return super._defaultOptionsRules().concat([
             {
                 device: function() {
-                    const device = devices.real();
-                    const isOldAndroid = (device.platform === "android") && (device.version[0] < 4 || (device.version[0] === 4 && device.version[1] < 4)),
-                        isOldIos = (device.platform === "ios") && (device.version[0] < 7);
-                    return device.platform === "win" || browser["msie"] || isOldAndroid || isOldIos;
+                    return browser["msie"];
                 },
                 options: {
                     _layoutStrategy: "fallback"
@@ -731,14 +714,12 @@ class Box extends CollectionWidget {
     * @name dxBoxMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxBoxMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 }
 /**

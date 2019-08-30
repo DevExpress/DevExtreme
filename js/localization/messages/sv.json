@@ -13,6 +13,8 @@
 
         "dxCollectionWidget-noDataText": "Inget data att visa",
 
+        "dxDropDownEditor-selectLabel": "Välj",
+
         "validation-required": "Krävs",
         "validation-required-formatted": "{0} krävs",
         "validation-numeric": "Värdet måste vara ett nummer",

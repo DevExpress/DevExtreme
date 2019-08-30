@@ -9,7 +9,6 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     stringUtils = require("../../core/utils/string"),
-    errors = require("../widget/ui.errors"),
     browser = require("../../core/utils/browser"),
     domUtils = require("../../core/utils/dom"),
     messageLocalization = require("../../localization/message"),
@@ -299,6 +298,7 @@ var Form = Widget.inherit({
              * @type_function_param1_field2 dataField:string
              * @type_function_param1_field3 editorOptions:object
              * @type_function_param1_field4 editorType:string
+             * @type_function_param1_field5 name:string
              * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
@@ -814,6 +814,7 @@ var Form = Widget.inherit({
     },
 
     _initMarkup: function() {
+        ValidationEngine.addGroup(this._getValidationGroup());
         this._clearCachedInstances();
         this._prepareFormData();
         this.$element().addClass(FORM_CLASS);
@@ -980,6 +981,10 @@ var Form = Widget.inherit({
         });
     },
 
+    _tryGetItemsForTemplate: function(item) {
+        return item.items || [];
+    },
+
     _itemTabbedTemplate: function(item, e, $container) {
         var that = this,
             $tabPanel = $("<div>").appendTo($container),
@@ -993,7 +998,7 @@ var Form = Widget.inherit({
                         $container = $(container),
                         alignItemLabels = utils.ensureDefined(itemData.alignItemLabels, true);
 
-                    layoutManager = that._renderLayoutManager(itemData.items, $container, {
+                    layoutManager = that._renderLayoutManager(that._tryGetItemsForTemplate(itemData), $container, {
                         colCount: itemData.colCount,
                         alignItemLabels: alignItemLabels,
                         screenByWidth: this.option("screenByWidth"),
@@ -1053,7 +1058,7 @@ var Form = Widget.inherit({
                 container: domUtils.getPublicElement($groupContent)
             });
         } else {
-            layoutManager = this._renderLayoutManager(item.items, $groupContent, {
+            layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(item), $groupContent, {
                 colCount: item.colCount,
                 colCountByScreen: item.colCountByScreen,
                 alignItemLabels: item.alignItemLabels,
@@ -1231,6 +1236,10 @@ var Form = Widget.inherit({
                 if(args.value) {
                     domUtils.triggerShownEvent(this.$element());
                 }
+                break;
+            case "validationGroup":
+                ValidationEngine.removeGroup(args.previousValue || this);
+                this._invalidate();
                 break;
             default:
                 this.callBase(args);
@@ -1596,6 +1605,11 @@ var Form = Widget.inherit({
         }
     },
 
+    _dispose: function() {
+        ValidationEngine.removeGroup(this._getValidationGroup());
+        this.callBase();
+    },
+
     /**
      * @name dxFormMethods.resetValues
      * @publicName resetValues()
@@ -1707,11 +1721,7 @@ var Form = Widget.inherit({
      * @return dxValidationGroupResult
      */
     validate: function() {
-        try {
-            return ValidationEngine.validateGroup(this._getValidationGroup());
-        } catch(e) {
-            errors.log("E1036", e.message);
-        }
+        return ValidationEngine.validateGroup(this._getValidationGroup());
     },
 
     getItemID: function(name) {

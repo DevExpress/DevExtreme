@@ -5,7 +5,7 @@ import { getPublicElement } from "../../core/utils/dom";
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import Widget from "../widget/ui.widget";
-import EmptyTemplate from "../widget/empty_template";
+import { EmptyTemplate } from "../../core/templates/empty_template";
 import { hasWindow } from "../../core/utils/window";
 import PushStrategy from "./ui.drawer.rendering.strategy.push";
 import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
@@ -136,19 +136,16 @@ const Drawer = Widget.inherit({
             /**
             * @name dxDrawerOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDrawerOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxDrawerOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -210,8 +207,8 @@ const Drawer = Widget.inherit({
     _initTemplates() {
         this.callBase();
 
-        this._defaultTemplates["panel"] = new EmptyTemplate(this);
-        this._defaultTemplates["content"] = new EmptyTemplate(this);
+        this._defaultTemplates["panel"] = new EmptyTemplate();
+        this._defaultTemplates["content"] = new EmptyTemplate();
     },
 
     _initCloseOnOutsideClickHandler() {
@@ -620,14 +617,12 @@ const Drawer = Widget.inherit({
     * @name dxDrawerMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxDrawerMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 

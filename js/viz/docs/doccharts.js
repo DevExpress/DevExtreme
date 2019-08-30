@@ -84,14 +84,14 @@ var dxChart = {
     * @name dxChartOptions.barGroupPadding
     * @type number
     * @default 0.3
-    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
     */
     barGroupPadding: 0.3,
     /**
     * @name dxChartOptions.barGroupWidth
     * @type number
     * @default undefined
-    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
     */
     barGroupWidth: undefined,
     /**
@@ -346,7 +346,13 @@ var dxChart = {
         * @type string
         * @default undefined
         */
-        name: undefined
+        name: undefined,
+        /**
+        * @name dxChartOptions.panes.height
+        * @type number|string
+        * @default undefined
+        */
+        height: undefined
     }],
     /**
     * @name dxChartOptions.dataPrepareSettings
@@ -1354,6 +1360,12 @@ var dxChart = {
         */
         aggregationInterval: undefined,
         /**
+        * @name dxChartOptions.argumentAxis.aggregateByCategory
+        * @type boolean
+        * @default false
+        */
+        aggregateByCategory: false,
+        /**
         * @name dxChartOptions.argumentAxis.label
         * @type object
         */
@@ -1565,6 +1577,12 @@ var dxChart = {
         */
         logarithmBase: 10,
         /**
+        * @name dxChartOptions.argumentAxis.linearThreshold
+        * @type number
+        * @default undefined
+        */
+        linearThreshold: undefined,
+        /**
         * @name dxChartOptions.argumentAxis.argumentType
         * @type Enums.ChartDataType
         * @default undefined
@@ -1580,7 +1598,6 @@ var dxChart = {
         * @name dxChartOptions.argumentAxis.endOnTick
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         endOnTick: false
     },
@@ -1875,6 +1892,12 @@ var dxChart = {
         */
         logarithmBase: 10,
         /**
+        * @name dxChartOptions.valueAxis.linearThreshold
+        * @type number
+        * @default undefined
+        */
+        linearThreshold: undefined,
+        /**
         * @name dxChartOptions.valueAxis.valueType
         * @type Enums.ChartDataType
         * @default undefined
@@ -1890,14 +1913,12 @@ var dxChart = {
         * @name dxChartOptions.valueAxis.endOnTick
         * @type boolean
         * @default undefined
-        * @inheritdoc
         */
         endOnTick: undefined
     },
     /**
     * @name dxChartOptions.tooltip
     * @type object
-    * @inheritdoc
     **/
     tooltip: {
         /**
@@ -1910,7 +1931,7 @@ var dxChart = {
         * @name dxChartOptions.tooltip.location
         * @type Enums.ChartTooltipLocation
         * @default 'center'
-        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandlestickSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.BubbleSeries,dxChartSeriesTypes.StockSeries,dxChartSeriesTypes.CandleStickSeries
         */
         location: 'center'
     },
@@ -2050,7 +2071,12 @@ var dxChart = {
 * @module viz/pie_chart
 * @export default
 */
-var dxPieChart = {
+var dxPieChart = {/**
+    * @name dxPieChartMethods.getInnerRadius
+    * @publicName getInnerRadius()
+    * @return number
+    */
+    getInnerRadius: function() { },
     /**
     * @name dxPieChartOptions.seriesTemplate
     * @type object
@@ -2109,9 +2135,17 @@ var dxPieChart = {
        * @type function(items)
        * @type_function_param1 items:Array<PieChartLegendItem>
        * @type_function_return Array<PieChartLegendItem>
-       * @inheritdoc
        */
-       customizeItems: undefined
+       customizeItems: undefined,
+       /**
+       * @name dxPieChartOptions.legend.markerTemplate
+       * @type template|function
+       * @default undefined
+       * @type_function_param1 legendItem:PieChartLegendItem
+       * @type_function_param2 element:SVGGElement
+       * @type_function_return string|SVGElement|jQuery
+       */
+       markerTemplate: undefined
     },
     /**
     * @name dxPieChartOptions.resolveLabelOverlapping
@@ -2174,7 +2208,7 @@ var dxPieChart = {
     * @name dxPieChartOptions.innerRadius
     * @type number
     * @default 0.5
-    * @propertyOf dxChartSeriesTypes.DoughnutSeries
+    * @propertyOf dxPieChartSeriesTypes.DoughnutSeries
     */
     innerRadius: 0.5,
     /**
@@ -2195,7 +2229,16 @@ var dxPieChart = {
     * @type string
     * @default undefined
     */
-    sizeGroup: undefined
+    sizeGroup: undefined,
+    /**
+    * @name dxPieChartOptions.centerTemplate
+    * @type template|function
+    * @default undefined
+    * @type_function_param1 component:dxPieChart
+    * @type_function_param2 element:SVGGElement
+    * @type_function_return string|SVGElement|jQuery
+    */
+    centerTemplate: undefined
 };
 
 /**
@@ -2304,7 +2347,7 @@ var dxPolarChart = {
     * @name dxPolarChartOptions.negativesAsZeroes
     * @type boolean
     * @default false
-    * @propertyOf dxChartSeriesTypes.stackedbarpolarseries
+    * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries
     */
     negativesAsZeroes: false,
     /**
@@ -2893,6 +2936,12 @@ var dxPolarChart = {
         */
         logarithmBase: 10,
         /**
+        * @name dxPolarChartOptions.argumentAxis.linearThreshold
+        * @type number
+        * @default undefined
+        */
+        linearThreshold: undefined,
+        /**
         * @name dxPolarChartOptions.argumentAxis.argumentType
         * @type Enums.ChartDataType
         * @default undefined
@@ -2907,7 +2956,6 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.argumentAxis.tick
         * @type object
-        * @inheritdoc
         */
         tick: {
             /**
@@ -2920,7 +2968,6 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.argumentAxis.minorTick
         * @type object
-        * @inheritdoc
         */
         minorTick: {
             /**
@@ -2962,14 +3009,12 @@ var dxPolarChart = {
         /**
         * @name dxPolarChartOptions.valueAxis.tick
         * @type object
-        * @inheritdoc
         */
         tick: {
             /**
             * @name dxPolarChartOptions.valueAxis.tick.visible
             * @type boolean
             * @default false
-            * @inheritdoc
             */
             visible: false,
         },
@@ -3121,6 +3166,12 @@ var dxPolarChart = {
         */
         logarithmBase: 10,
         /**
+        * @name dxPolarChartOptions.valueAxis.linearThreshold
+        * @type number
+        * @default undefined
+        */
+        linearThreshold: undefined,
+        /**
         * @name dxPolarChartOptions.valueAxis.valueType
         * @type Enums.ChartDataType
         * @default undefined
@@ -3130,14 +3181,12 @@ var dxPolarChart = {
         * @name dxPolarChartOptions.valueAxis.endOnTick
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         endOnTick: false
     },
     /**
     * @name dxPolarChartOptions.tooltip
     * @type object
-    * @inheritdoc
     **/
     tooltip: {
         /**
@@ -3329,7 +3378,16 @@ var BaseChart = {
         * @type_function_param1 items:Array<BaseChartLegendItem>
         * @type_function_return Array<BaseChartLegendItem>
         */
-        customizeItems: undefined
+        customizeItems: undefined,
+        /**
+        * @name BaseChartOptions.legend.markerTemplate
+        * @type template|function
+        * @default undefined
+        * @type_function_param1 legendItem:BaseChartLegendItem
+        * @type_function_param2 element:SVGGElement
+        * @type_function_return string|SVGElement|jQuery
+        */
+        markerTemplate: undefined
     },
     /**
     * @name BaseChartOptions.series
@@ -3418,7 +3476,6 @@ var BaseChart = {
         * @name dxPolarChartOptions.adaptiveLayout.width
         * @type number
         * @default 170
-        * @inheritdoc
         */
         width: 80,
         /**
@@ -3430,7 +3487,6 @@ var BaseChart = {
         * @name dxPolarChartOptions.adaptiveLayout.height
         * @type number
         * @default 170
-        * @inheritdoc
         */
         height: 80,
         /**
@@ -3442,7 +3498,6 @@ var BaseChart = {
         * @name dxPieChartOptions.adaptiveLayout.keepLabels
         * @type boolean
         * @default false
-        * @inheritdoc
         */
         keepLabels: true
     }
@@ -3564,7 +3619,7 @@ var dxChartCommonAnnotationConfig = {
         * @name dxChartCommonAnnotationConfig.border.cornerRadius
         * @type number
         * @default 0
-        * @default 4 @for Material 
+        * @default 4 @for Material
         */
         cornerRadius: 0
     },
@@ -3666,6 +3721,15 @@ var dxChartCommonAnnotationConfig = {
     * @default undefined
     */
     text: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.template
+    * @type template|function
+    * @default undefined
+    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_param2 element:SVGGElement
+    * @type_function_return string|SVGElement|jQuery
+    */
+    template: undefined,
     /**
     * @name dxChartCommonAnnotationConfig.description
     * @type string

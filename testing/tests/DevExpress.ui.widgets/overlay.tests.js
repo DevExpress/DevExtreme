@@ -9,7 +9,7 @@ import positionUtils from "animation/position";
 import domUtils from "core/utils/dom";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import devices from "core/devices";
-import Template from "ui/widget/template";
+import { Template } from "core/templates/template";
 import Overlay from "ui/overlay";
 import pointerMock from "../../helpers/pointerMock.js";
 import eventsEngine from "events/core/events_engine";
@@ -808,6 +808,19 @@ testModule("position", moduleConfig, () => {
         assert.strictEqual($overlayWrapper.css("position"), devices.real().ios ? "absolute" : "fixed");
     });
 
+    test("wrapper should have 100% width and height when shading is disabled", (assert) => {
+        $("#overlay").dxOverlay({
+            visible: true,
+            shading: false
+        });
+
+        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
+        const wrapperStyle = getComputedStyle($overlayWrapper.get(0));
+
+        assert.strictEqual(parseInt(wrapperStyle.width), $(window).width(), "width is 100%");
+        assert.strictEqual(parseInt(wrapperStyle.height), $(window).height(), "height is 100%");
+    });
+
     test("overlay should be correctly animated with custom 'animation.show.to'", (assert) => {
         const $container = $("<div>").css({
             height: "500px",
@@ -859,17 +872,21 @@ testModule("position", moduleConfig, () => {
 
 
 testModule("shading", moduleConfig, () => {
-    test("shading should be present", (assert) => {
-        const overlay = $("#overlay").dxOverlay({
-            shading: true,
-            visible: true
-        }).dxOverlay("instance");
-        const $wrapper = $(overlay.$content().parent());
+    [true, false].forEach((value) => {
+        test("render shading", (assert) => {
+            const overlay = $("#overlay").dxOverlay({
+                shading: value,
+                visible: true
+            }).dxOverlay("instance");
+            const $wrapper = $(overlay.$content().parent());
 
-        assert.ok($wrapper.hasClass(OVERLAY_SHADER_CLASS));
+            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), value, "shader class is correct");
+            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, value ? "auto" : "none", "shading wrapper have correct pointer-events");
 
-        overlay.option("shading", false);
-        assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
+            overlay.option("shading", !value);
+            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), !value, "shader class is correct");
+            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, !value ? "auto" : "none", "shading wrapper have correct pointer-events");
+        });
     });
 
     test("shading height should change after container resize (B237292)", (assert) => {
@@ -1769,7 +1786,9 @@ testModule("close on outside click", moduleConfig, () => {
             fx.off = true;
         }
     });
+});
 
+testModule("reset focus", moduleConfig, () => {
     QUnit.testInActiveWindow("inputs inside should loose focus when overlay is hidden with animation disabled", (assert) => {
         const focusOutStub = sinon.stub();
         const $input = $("<input id='alter-box' />")
@@ -1790,8 +1809,33 @@ testModule("close on outside click", moduleConfig, () => {
 
         assert.strictEqual(focusOutStub.called, true, "input lost focus");
     });
-});
 
+    QUnit.testInActiveWindow("there is no errors when overlay try reset active element", (assert) => {
+        const $input = $("<input>");
+        const overlay = $("#overlay")
+            .dxOverlay({
+                animation: false,
+                shading: false,
+                visible: true,
+                contentTemplate: function(contentElement) {
+                    $(contentElement).append($input);
+                }
+            })
+            .dxOverlay("instance");
+        let isOK = true;
+
+        $input.focus();
+        $input[0].blur = null;
+
+        try {
+            overlay.hide();
+        } catch(e) {
+            isOK = false;
+        }
+
+        assert.ok(isOK, "overlay reset active element without error");
+    });
+});
 
 testModule("close on target scroll", moduleConfig, () => {
     test("overlay should be hidden if any of target's parents were scrolled", (assert) => {
@@ -2323,6 +2367,24 @@ testModule("API", moduleConfig, () => {
 
         overlay.toggle();
         assert.strictEqual(overlay.option("visible"), false);
+    });
+
+    test("toggle should be resolved with visibility state", (assert) => {
+        const done = assert.async();
+
+        const $overlay = $("#overlay").dxOverlay({
+            visible: false
+        });
+        const overlay = $overlay.dxOverlay("instance");
+
+        overlay.toggle().done((isVisible) => {
+            assert.strictEqual(isVisible, true, "visibility is true");
+
+            overlay.toggle().done((isVisible) => {
+                assert.strictEqual(isVisible, false, "visibility is false");
+                done();
+            });
+        });
     });
 
     test("toggle with args", (assert) => {
@@ -3136,7 +3198,7 @@ testModule("focus policy", {
         assert.notOk(tabbableSpy.withArgs(0, middleElement).called, "middle element hasn't been checked");
     });
 
-    test("tab target inside of wrapper but outside of content should not be outside", (assert) => {
+    QUnit.testInActiveWindow("tab target inside of wrapper but outside of content should not be outside", (assert) => {
         const overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
             visible: true,
             shading: true,
@@ -3209,9 +3271,7 @@ testModule("scrollable interaction", {
             assert.ok(false, "scroll should not be fired");
         });
 
-        pointerMock($shader)
-            .start()
-            .wheel(10);
+        pointerMock($shader).start().wheel(10);
 
         $($shader.parent()).off(".TEST");
     });
@@ -3475,5 +3535,71 @@ testModule("overlay utils", moduleConfig, () => {
         zIndex.remove(9999);
 
         assert.strictEqual(zIndex.create(), index + 1, "the next index has been created");
+    });
+});
+
+testModule("renderGeometry", {
+    beforeEach: () => {
+        fx.off = true;
+        this.overlayInstance = $("#overlay").dxOverlay({ deferRendering: false }).dxOverlay("instance");
+        this.renderGeometrySpy = sinon.spy(this.overlayInstance, "_renderGeometry");
+    },
+    afterEach: () => {
+        zIndex.clearStack();
+        Overlay.baseZIndex(1500);
+        fx.off = false;
+    }
+}, () => {
+    test("visibility change", (assert) => {
+        assert.ok(this.renderGeometrySpy.notCalled, "render geometry isn't called yet");
+
+        this.overlayInstance.show();
+        assert.ok(this.renderGeometrySpy.calledOnce, "render geometry called once");
+
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(0).args[0];
+        assert.notOk(isDimensionChanged);
+    });
+
+    test("dimension change", (assert) => {
+        this.overlayInstance.show();
+        resizeCallbacks.fire();
+
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
+        assert.ok(isDimensionChanged);
+    });
+
+    test("repaint", (assert) => {
+        this.overlayInstance.show();
+        this.overlayInstance.repaint();
+
+        const isDimensionChanged = !!this.renderGeometrySpy.getCall(1).args[0];
+        assert.notOk(isDimensionChanged);
+    });
+
+    test("option change", (assert) => {
+        const options = this.overlayInstance.option();
+        const newOptions = {
+            dragEnabled: !options.dragEnabled,
+            resizeEnabled: !options.resizeEnabled,
+            width: 500,
+            height: 500,
+            minWidth: 100,
+            maxWidth: 1000,
+            minHeight: 100,
+            maxHeight: 1000,
+            boundaryOffset: { h: 10, v: 10 },
+            position: { of: this.overlayInstance.element() }
+        };
+        this.overlayInstance.show();
+
+        for(const optionName in newOptions) {
+            const initialCallCount = this.renderGeometrySpy.callCount;
+
+            this.overlayInstance.option(optionName, newOptions[optionName]);
+
+            const isDimensionChanged = !!this.renderGeometrySpy.lastCall.args[0];
+            assert.ok(initialCallCount < this.renderGeometrySpy.callCount, "renderGeomentry callCount has increased");
+            assert.notOk(isDimensionChanged);
+        }
     });
 });

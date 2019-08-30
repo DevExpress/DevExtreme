@@ -1,7 +1,51 @@
+@gantt_successor_background_color: white;
+
 .dx-gantt {
     border: 1px solid @base-border-color;
 
+    .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row > td,
+    .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row:hover > td,
+    .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row > tr > td,
+    .dx-treelist .dx-treelist-rowsview .dx-selection.dx-row:hover > tr > td {
+        background-color: @gantt-selection-bg;
+    }
+
+    .dx-treelist-rowsview .dx-selection.dx-row > td,
+    .dx-treelist-rowsview .dx-selection.dx-row:hover > td,
+    .dx-treelist-rowsview .dx-selection.dx-row > tr > td,
+    .dx-treelist-rowsview .dx-selection.dx-row:hover > tr > td {
+        color: @base-text-color;
+    }
+
+    .dx-treelist-rowsview .dx-selection.dx-row.dx-row-lines > td,
+    .dx-treelist-rowsview .dx-selection.dx-row:hover.dx-row-lines > td,
+    .dx-treelist-rowsview .dx-selection.dx-row.dx-row-lines > tr > td,
+    .dx-treelist-rowsview .dx-selection.dx-row:hover.dx-row-lines > tr > td {
+        border-bottom-color: @base-border-color;
+    }
+
+    .dx-treelist-rowsview .dx-selection.dx-row.dx-column-lines > td,
+    .dx-treelist-rowsview .dx-selection.dx-row:hover.dx-column-lines > td,
+    .dx-treelist-rowsview .dx-selection.dx-row.dx-column-lines > tr > td,
+    .dx-treelist-rowsview .dx-selection.dx-row:hover.dx-column-lines > tr > td {
+        border-left-color: @base-border-color;
+        border-right-color: @base-border-color;
+    }
+
+    .dx-treelist-rowsview tr:not(.dx-row-focused).dx-selection .dx-treelist-empty-space {
+        color: @base-label-color;
+    }
+
     .dx-gantt-splitter {
+        width: 4px;
+        background-color: @datagrid-column-separator-bg;
+    }
+
+    .dx-gantt-splitter-transparent {
+        background-color: transparent;
+    }
+
+    .dx-gantt-splitter-border {
         border-left: 2px solid @base-border-color;
     }
 
@@ -10,13 +54,11 @@
     }
 
     .dx-header-row {
-        height: 45px;
+        height: @GANTT_HEADER_ITEM_HEIGHT;
     }
 
     .dx-gantt-header {
         color: @treelist-columnchooser-item-color;
-        border-bottom: 1px solid @base-border-color;
-        margin-bottom: -1px;
 
         .dx-gantt-tsac,
         .dx-gantt-tsa,
@@ -27,24 +69,25 @@
         }
     }
 
+    .dx-gantt-tac {
+        margin-top: -1px;
+        height: calc(100% - @GANTT_HEADER_ITEM_HEIGHT);
+    }
+
     .dx-gantt-si {
-        height: 23px;
         padding-left: 16px;
         padding-right: 16px;
     }
 
     .dx-gantt-si,
     .dx-gantt-tsa .dx-gantt-vb {
-        height: 23px;
+        height: @GANTT_SCALE_ITEM_HEIGHT;
+        line-height: @GANTT_SCALE_ITEM_HEIGHT;
     }
 
     .dx-gantt-tsac,
     .dx-gantt-tsa {
         border-bottom: 1px solid @base-border-color;
-    }
-
-    .dx-gantt-tsac {
-        border-right: 1px solid @base-border-color;
     }
 
     .dx-gantt-hb {
@@ -56,23 +99,21 @@
     }
 
     .dx-gantt-taskWrapper {
-        padding-top: 8px;
+        padding-top: @GANTT_TASK_WRAPPER_PADDING_TOP;
 
         .dx-gantt-task,
         .dx-gantt-titleOut,
         .dx-gantt-taskRes {
-            height: 19px;
+            height: @GANTT_TASK_HEIGHT;
         }
 
         .dx-gantt-task {
-            background-color: @base-accent;
+            background-color: lighten(@base-accent, 10%);
             border-radius: @base-border-radius;
 
             .dx-gantt-tPrg {
                 border-radius: @base-border-radius;
-                background-color: darken(@base-accent, 15%);
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
+                background-color: darken(@base-accent, 10%);
             }
 
             &.dx-gantt-smallTask {
@@ -99,14 +140,9 @@
             padding-right: 4px;
         }
 
-        .dx-gantt-taskTitle,
-        .dx-gantt-taskRes {
-            font-size: 0.95em;
-        }
-
         .dx-gantt-titleIn {
             color: #fff;
-            padding: 0 8px;
+            padding: 0 @GANTT_TASK_WRAPPER_PADDING_TOP;
         }
 
         .dx-gantt-titleOut {
@@ -114,8 +150,52 @@
         }
     }
 
+    .dx-gantt-task-edit-wrapper {
+        padding-top: @GANTT_TASK_WRAPPER_PADDING_TOP;
+        padding-left: 1px;
+
+        .dx-gantt-task-edit-frame {
+            height: @GANTT_TASK_HEIGHT;
+            border: 1px solid darken(@base-accent, 10%);
+            border-radius: @base-border-radius;
+        }
+    }
+
+    .dx-gantt-task-edit-wrapper-successor {
+        padding-top: @GANTT_TASK_WRAPPER_PADDING_TOP;
+
+        .dx-gantt-task-edit-frame-successor {
+            height: @GANTT_TASK_HEIGHT;
+        }
+    }
+
+    .dx-gantt-task-edit-dependency-r,
+    .dx-gantt-task-edit-successor-dependency-r,
+    .dx-gantt-task-edit-dependency-l,
+    .dx-gantt-task-edit-successor-dependency-l {
+        background: @gantt_successor_background_color;
+        border: 1px solid darken(@base-accent, 10%);
+        width: @GANTT_DEPENDENCY_SUCCESSOR_SIZE;
+        height: @GANTT_DEPENDENCY_SUCCESSOR_SIZE;
+        top: (@GANTT_TASK_HEIGHT - @GANTT_DEPENDENCY_SUCCESSOR_SIZE - 1) / 2;
+    }
+
+    .dx-gantt-task-edit-dependency-r,
+    .dx-gantt-task-edit-successor-dependency-r {
+        left: -@GANTT_DEPENDENCY_SUCCESSOR_SIZE - 1px;
+    }
+
+    .dx-gantt-task-edit-dependency-l,
+    .dx-gantt-task-edit-successor-dependency-l {
+        right: -@GANTT_DEPENDENCY_SUCCESSOR_SIZE - 1px;
+    }
+
+    .dx-gantt-task-edit-dependency-line {
+        background-color: @base-text-color;
+    }
+
     .dx-gantt-sel {
-        background-color: @base-border-color;
+        background-color: @gantt-selection-bg;
     }
 
     .dx-gantt-conn-v {
@@ -128,5 +208,10 @@
 
     .dx-gantt-arrow {
         border: 5px solid @base-text-color;
+    }
+
+    .dx-gantt-altRow,
+    .dx-gantt-collapsable-row {
+        background-color: @gantt-collapsable-row-bg;
     }
 }

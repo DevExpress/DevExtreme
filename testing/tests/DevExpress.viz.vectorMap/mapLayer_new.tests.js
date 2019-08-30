@@ -569,3 +569,22 @@ QUnit.test("getDataSource method", function(assert) {
 
     assert.ok(map.getLayers()[0].getDataSource() instanceof dataSourceModule.DataSource);
 });
+
+QUnit.test("Bounds calculation", function(assert) {
+    var map = this.createLayers({
+        dataSource: createData("Polygon", [
+            [
+                [[100, 50], [200, 50], [200, 200], [100, 200]]
+            ],
+            [
+                [[200, 100], [400, 0], [400, 300]],
+                [[0, 0], [0, 300], [400, 300], [400, 0]]
+            ],
+            []
+        ])
+    });
+
+    var bounds = map.getLayers()[0].getBounds();
+
+    assert.deepEqual(bounds, [0, 0, 400, 300]);
+});

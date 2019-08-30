@@ -9,6 +9,7 @@ import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHe
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
+    BUTTON_CONTENT_CLASS = "dx-button-content",
     BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
     BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + "-item-has-width";
@@ -83,7 +84,7 @@ QUnit.module("option changed", {
     QUnit.test("change the width option when item has template", function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{ text: "button 1" }, { text: "button 2" }],
-            itemTemplate: () => "<div/>",
+            buttonTemplate: () => "<div/>",
         });
 
         buttonGroup.option("width", 500);
@@ -92,6 +93,71 @@ QUnit.module("option changed", {
         assert.equal(buttonGroup.$element().width(), 500, "button group width");
         assert.ok($items.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item when button group has width");
         assert.ok($items.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has width");
+    });
+
+    QUnit.test("template property of the item should be passed to the inner dxButton", function(assert) {
+        const buttonGroup = this.createButtonGroup({
+            items: [{
+                text: "button 1", template: () => {
+                    return "Template";
+                }
+            }]
+        });
+        const $buttonGroup = buttonGroup.$element();
+
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "Template", "template has been applied");
+
+        buttonGroup.option("items[0].template", function() {
+            return "New Template";
+        });
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "New Template", "template has been updated");
+    });
+
+    QUnit.test("buttonTemplate property should be passed to all inner dxButtons", function(assert) {
+        const buttonGroup = this.createButtonGroup({
+            items: [{ text: "button 1" }],
+            buttonTemplate: () => {
+                return "Template";
+            }
+        });
+        const $buttonGroup = buttonGroup.$element();
+
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "Template", "template has been applied");
+
+        buttonGroup.option("buttonTemplate", function() {
+            return "New Template";
+        });
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "New Template", "template has been updated");
+    });
+
+    QUnit.test("custom item property should be passed to buttonTemplate function", function(assert) {
+        const templateMock = sinon.stub().returns("Template");
+        const item1 = { text: "button 1", icon: "box", custom: 1 };
+        const item2 = { text: "button 2", icon: "box", custom: 2 };
+        this.createButtonGroup({
+            items: [item1, item2],
+            buttonTemplate: templateMock
+        });
+
+        assert.strictEqual(templateMock.callCount, 2, "template method was called 2 times");
+        assert.deepEqual(templateMock.getCall(0).args[0], item1, "full item should be passed to the template");
+        assert.deepEqual(templateMock.getCall(1).args[0], item2, "full item should be passed to the template");
+    });
+
+    QUnit.test("item.template should have higher priority than the buttonTemplate option", function(assert) {
+        const buttonGroup = this.createButtonGroup({
+            items: [{
+                text: "button 1", template: () => {
+                    return "item.template";
+                }
+            }],
+            buttonTemplate: () => {
+                return "buttonTemplate";
+            }
+        });
+        const $buttonGroup = buttonGroup.$element();
+
+        assert.strictEqual($buttonGroup.find(`.${BUTTON_CONTENT_CLASS}`).text(), "item.template", "template is correct");
     });
 
     QUnit.test("it should be possible to set full set of options for each button", assert => {

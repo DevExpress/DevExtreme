@@ -625,8 +625,7 @@ var BaseChart = BaseWidget.inherit({
         recreateCanvas = drawOptions.recreateCanvas;
 
         // T207665
-        that.__originalCanvas = that._canvas;
-        that._canvas = extend({}, that._canvas); // NOTE: Instance of the original canvas must be preserved
+        that._preserveOriginalCanvas();
 
         // T207665
         if(recreateCanvas) {
@@ -649,6 +648,11 @@ var BaseChart = BaseWidget.inherit({
         that._renderElements(drawOptions);
 
         that._lastRenderingTime = new Date() - startTime;
+    },
+
+    _preserveOriginalCanvas() {
+        this.__originalCanvas = this._canvas;
+        this._canvas = extend({}, this._canvas); // NOTE: Instance of the original canvas must be preserved
     },
 
     _layoutAxes: noop,
@@ -867,6 +871,7 @@ var BaseChart = BaseWidget.inherit({
 
         that._legend = new legendModule.Legend({
             renderer: that._renderer,
+            widget: that,
             group: that._legendGroup,
             backgroundClass: "dxc-border",
             itemGroupClass: "dxc-item",
@@ -935,10 +940,11 @@ var BaseChart = BaseWidget.inherit({
                 }
                 legendData.textOpacity = DEFAULT_OPACITY;
             }
+            const opacityStyle = { opacity: opacity };
             legendData.states = {
-                hover: style.hover,
-                selection: style.selection,
-                normal: _extend({}, style.normal, { opacity: opacity })
+                hover: _extend({}, style.hover, opacityStyle),
+                selection: _extend({}, style.selection, opacityStyle),
+                normal: _extend({}, style.normal, opacityStyle)
             };
 
             return legendData;
@@ -1032,7 +1038,7 @@ var BaseChart = BaseWidget.inherit({
         scrollBar: "SCROLL_BAR"
     },
 
-    _optionChangesOrder: ["ROTATED", "PALETTE", "REFRESH_SERIES_REINIT", "AXES_AND_PANES", "INIT", "REINIT", "DATA_SOURCE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "FORCE_DATA_INIT", "CORRECT_AXIS"],
+    _optionChangesOrder: ["ROTATED", "PALETTE", "REFRESH_SERIES_REINIT", "AXES_AND_PANES", "INIT", "REINIT", "DATA_SOURCE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "FORCE_DATA_INIT", "REFRESH_AXES", "CORRECT_AXIS"],
 
     _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES",
         "FORCE_RENDER", "VISUAL_RANGE", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT", "REFRESH", "FULL_RENDER"],
@@ -1086,6 +1092,18 @@ var BaseChart = BaseWidget.inherit({
 
     _change_REFRESH_SERIES_REINIT: function() {
         this._refreshSeries("INIT");
+    },
+
+    _change_REFRESH_AXES() {
+        const that = this;
+
+        _setCanvasValues(that._canvas);
+        that._reinitAxes();
+
+        that._requestChange([
+            "CORRECT_AXIS",
+            "FULL_RENDER"
+        ]);
     },
 
     _change_SCROLL_BAR: function() {

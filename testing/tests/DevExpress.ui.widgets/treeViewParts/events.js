@@ -1,4 +1,4 @@
-/* global DATA, internals, initTree, stripFunctions */
+/* global DATA, internals, initTree, makeSlowDataSource, stripFunctions */
 
 import $ from "jquery";
 import commonUtils from "core/utils/common";
@@ -8,6 +8,9 @@ import devices from "core/devices";
 import fx from "animation/fx";
 import contextMenuEvent from "events/contextmenu";
 import dblclickEvent from "events/dblclick";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
+
+const createInstance = (options) => new TreeViewTestWrapper(options);
 
 const checkEventArgs = function(assert, e) {
     assert.ok(e.component);
@@ -781,6 +784,25 @@ QUnit.test("onItemExpanded should be called after animation completed", function
     }
 });
 
+QUnit.test("onItemExpanded event should not be called when the expandAll is called", function(assert) {
+    const itemExpandedHandler = sinon.stub();
+    const treeView = initTree({
+        items: [{
+            id: 1,
+            text: "Item 1",
+            items: [{
+                id: 2,
+                text: "Nested items"
+            }]
+        }],
+        onItemExpanded: itemExpandedHandler
+    }).dxTreeView("instance");
+
+    treeView.expandAll();
+
+    assert.equal(itemExpandedHandler.callCount, 0, "the expandItem event never called");
+});
+
 QUnit.test("Expand event handler has correct arguments", function(assert) {
     var treeView = initTree({
             items: [{ id: 1, text: "Item 1", items: [{ id: 2, text: "Nested items" }] }],
@@ -864,6 +886,89 @@ QUnit.test("Rendered event handler has correct arguments", function(assert) {
     assert.ok(treeView);
 });
 
+QUnit.test("onItemRendered event arguments", function(assert) {
+    const checkOnItemRenderedEventArgs = (assert, eventArgs, expectedArgs) => {
+        const { component, element, itemData, itemElement, itemIndex, node } = expectedArgs;
+
+        assert.deepEqual(eventArgs.component, component, "component");
+        assert.ok(element.is(eventArgs.element), "element");
+        assert.deepEqual(eventArgs.itemData, itemData, "itemData");
+        assert.ok(itemElement.is(eventArgs.itemElement), "itemElement");
+        assert.strictEqual(eventArgs.itemIndex, itemIndex, "itemIndex");
+        assert.deepEqual(eventArgs.node, node, "node");
+
+        // node arguments
+        assert.deepEqual(eventArgs.node.children, node.children, "children");
+        assert.strictEqual(eventArgs.node.disabled, node.disabled, "disabled");
+        assert.strictEqual(eventArgs.node.expanded, node.expanded, "expanded");
+        assert.strictEqual(eventArgs.node.itemData, node.itemData, "itemData");
+        assert.strictEqual(eventArgs.node.key, node.key, "key");
+        assert.deepEqual(eventArgs.node.parent, node.parent, "parent");
+        assert.strictEqual(eventArgs.node.selected, node.selected, "selected");
+        assert.strictEqual(eventArgs.node.text, node.text, "text");
+    };
+
+    const onItemRenderedHandler = sinon.spy();
+    const items = [
+        {
+            key: "1", text: "Item 1", items: [
+                { key: "1_1", text: "Nested item 1" },
+                { key: "1_2", text: "Nested item 2" }
+            ]
+        },
+        { key: "2", text: "Item 2" }
+    ];
+    const treeView = createInstance({
+        items: items,
+        keyExpr: "key",
+        showCheckBoxesMode: "none",
+        selectByClick: true,
+        onItemRendered: onItemRenderedHandler
+    });
+
+    assert.strictEqual(onItemRenderedHandler.callCount, 2);
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(0).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element(),
+        itemData: items[1],
+        itemElement: treeView.getItems().eq(1),
+        itemIndex: 1,
+        node: treeView.instance.getNodes()[1]
+    });
+
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element(),
+        itemData: items[0],
+        itemElement: treeView.getItems().eq(0),
+        itemIndex: 0,
+        node: treeView.instance.getNodes()[0]
+    });
+
+    onItemRenderedHandler.reset();
+    treeView.instance.expandItem("1");
+
+    assert.strictEqual(onItemRenderedHandler.callCount, 2);
+
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(0).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element(),
+        itemData: items[0].items[1],
+        itemElement: treeView.getItems().eq(2),
+        itemIndex: 3,
+        node: treeView.instance.getNodes()[0].children[1]
+    });
+
+    checkOnItemRenderedEventArgs(assert, onItemRenderedHandler.getCall(1).args[0], {
+        component: treeView.instance,
+        element: treeView.instance.$element(),
+        itemData: items[0].items[0],
+        itemElement: treeView.getItems().eq(1),
+        itemIndex: 2,
+        node: treeView.instance.getNodes()[0].children[0]
+    });
+});
+
 QUnit.test("Fire contentReady event if new dataSource is empty", function(assert) {
     var contentReadyHandler = sinon.stub();
 
@@ -887,4 +992,21 @@ QUnit.test("Fire contentReady event when search", function(assert) {
     instance.option("searchValue", "2");
 
     assert.strictEqual(contentReadyHandler.callCount, 2, "onContentReady was second time");
+});
+
+QUnit.test("ContentReady event rise once when the data source is remote by first rendering", function(assert) {
+    var contentReadyHandler = sinon.spy();
+
+    initTree({
+        dataSource: makeSlowDataSource([{
+            id: 1,
+            text: "Item 1",
+            parentId: 0
+        }]),
+        onContentReady: contentReadyHandler
+    }).dxTreeView("instance");
+
+    this.clock.tick(300);
+
+    assert.strictEqual(contentReadyHandler.callCount, 1, "onContentReady was first time");
 });

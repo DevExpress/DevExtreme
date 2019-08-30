@@ -19,7 +19,8 @@ var extend = require("../../core/utils/extend").extend,
     mergeMarginOptions = vizUtils.mergeMarginOptions,
 
     FONT = "font",
-    COMMON_AXIS_SETTINGS = "commonAxisSettings";
+    COMMON_AXIS_SETTINGS = "commonAxisSettings",
+    DEFAULT_PANE_NAME = 'default';
 
 function prepareAxis(axisOptions) {
     return _isArray(axisOptions) ? axisOptions.length === 0 ? [{}] : axisOptions : [axisOptions];
@@ -51,6 +52,22 @@ var AdvancedChart = BaseChart.inherit({
 
     _fontFields: [COMMON_AXIS_SETTINGS + ".label." + FONT, COMMON_AXIS_SETTINGS + ".title." + FONT],
 
+    _initCore() {
+        this._panesClipRects = {};
+        this.callBase();
+    },
+
+    _disposeCore() {
+        const disposeObjectsInArray = this._disposeObjectsInArray;
+        const panesClipRects = this._panesClipRects;
+
+        this.callBase();
+        disposeObjectsInArray.call(panesClipRects, "fixed");
+        disposeObjectsInArray.call(panesClipRects, "base");
+        disposeObjectsInArray.call(panesClipRects, "wide");
+        this._panesClipRects = null;
+    },
+
     _dispose: function() {
         var that = this,
             disposeObjectsInArray = this._disposeObjectsInArray;
@@ -65,6 +82,36 @@ var AdvancedChart = BaseChart.inherit({
         disposeObjectsInArray.call(that, "panesBackground");
         disposeObjectsInArray.call(that, "seriesFamilies");
         that._disposeAxes();
+    },
+
+    _createPanes: function() {
+        this._cleanPanesClipRects("fixed");
+        this._cleanPanesClipRects("base");
+        this._cleanPanesClipRects("wide");
+    },
+
+    _cleanPanesClipRects(clipArrayName) {
+        const clipArray = this._panesClipRects[clipArrayName];
+        (clipArray || []).forEach(clipRect => clipRect && clipRect.dispose());
+        this._panesClipRects[clipArrayName] = [];
+    },
+
+    _getElementsClipRectID(paneName) {
+        const clipShape = this._panesClipRects.fixed[this._getPaneIndex(paneName)];
+        return clipShape && clipShape.id;
+    },
+
+    _getPaneIndex(paneName) {
+        let paneIndex;
+        const name = paneName || DEFAULT_PANE_NAME;
+
+        _each(this.panes, (index, pane) => {
+            if(pane.name === name) {
+                paneIndex = index;
+                return false;
+            }
+        });
+        return paneIndex;
     },
 
     _reinitAxes: function() {
@@ -439,7 +486,6 @@ var AdvancedChart = BaseChart.inherit({
             that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._axesReinitialized));
         }
 
-        that._axesReinitialized = false;
         that._populateMarginOptions();
     },
 
@@ -570,7 +616,7 @@ var AdvancedChart = BaseChart.inherit({
         const that = this;
         const cleanPanesCanvases = drawAxes();
 
-        const needSpace = that.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
+        const needSpace = that.checkForMoreSpaceForPanesCanvas();
 
         if(needSpace) {
             const size = this._layout.backward(this._rect, this._rect, [needSpace.width, needSpace.height]);
@@ -580,6 +626,14 @@ var AdvancedChart = BaseChart.inherit({
 
             drawAxes(needSpace, cleanPanesCanvases);
         }
+    },
+
+    checkForMoreSpaceForPanesCanvas() {
+        return this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
+    },
+
+    _notify() {
+        this._axesReinitialized = false;
     }
 });
 

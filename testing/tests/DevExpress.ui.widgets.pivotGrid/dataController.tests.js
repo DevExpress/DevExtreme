@@ -6005,18 +6005,12 @@ QUnit.module("Remote paging", {
             return items;
         };
 
-        var createValues = function(loadOptions, columnCount, filter) {
+        var createValues = function(loadOptions, columnCount) {
             var result = [];
             for(var rowIndex = loadOptions.rowSkip; rowIndex < loadOptions.rowSkip + loadOptions.rowTake + 1; rowIndex++) {
-                if(filter && filter.area === "row" && filter.filterValues.indexOf("row " + (rowIndex + 1)) < 0) {
-                    continue;
-                }
                 var row = [];
                 result.push(row);
                 for(var columnIndex = loadOptions.columnSkip; columnIndex < loadOptions.columnSkip + loadOptions.columnTake + 1; columnIndex++) {
-                    if(filter && filter.area === "column" && filter.filterValues.indexOf("column " + (rowIndex + 1)) < 0) {
-                        continue;
-                    }
                     row.push([ rowIndex * 10 + columnIndex ]);
                 }
             }
@@ -6041,16 +6035,11 @@ QUnit.module("Remote paging", {
                 that.loadArgs.push(loadOptions);
                 var rowCount = loadOptions.rows.length ? this._rowCount : 0;
                 var columnCount = loadOptions.columns.length ? this._columnCount : 0;
-                var filter = loadOptions.filters[0];
 
                 return $.Deferred().resolve({
-                    rows: createItems(rowCount, "row ", loadOptions.rowSkip, loadOptions.rowTake, rowCount && loadOptions.rows[0].sortOrder === "desc").filter(function(item) {
-                        return !filter || filter.area !== "row" || filter.filterValues.indexOf(item.value) >= 0;
-                    }),
-                    columns: createItems(columnCount, "column ", loadOptions.columnSkip, loadOptions.columnTake, columnCount && loadOptions.columns[0].sortOrder === "desc").filter(function(item) {
-                        return !filter || filter.area !== "column" || filter.filterValues.indexOf(item.value) >= 0;
-                    }),
-                    values: createValues(loadOptions, filter),
+                    rows: createItems(rowCount, "row ", loadOptions.rowSkip, loadOptions.rowTake, rowCount && loadOptions.rows[0].sortOrder === "desc"),
+                    columns: createItems(columnCount, "column ", loadOptions.columnSkip, loadOptions.columnTake, columnCount && loadOptions.columns[0].sortOrder === "desc"),
+                    values: createValues(loadOptions),
                     grandTotalRowIndex: 0,
                     grandTotalColumnIndex: 0
                 });
@@ -6189,24 +6178,13 @@ QUnit.test("load after scroll", function(assert) {
 
     dataController.setViewportPosition(0, 4 * 20);
 
-    assert.strictEqual(this.loadArgs.length, 2, "one load");
+    assert.strictEqual(this.loadArgs.length, 1, "one load");
     assert.strictEqual(this.loadArgs[0].rows.length, 1, "load args rows");
     assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
-    assert.strictEqual(this.loadArgs[0].filters.length, 1, "load args filters");
-    assert.deepEqual(this.loadArgs[0].filters[0].filterValues, ["column 1", "column 2"], "load args filterValues");
     assert.strictEqual(this.loadArgs[0].rowSkip, 4, "load args rowSkip");
     assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnSkip, undefined, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].columnTake, undefined, "load args columnTake");
-
-    assert.strictEqual(this.loadArgs[1].rows.length, 1, "load args rows");
-    assert.strictEqual(this.loadArgs[1].columns.length, 1, "load args columns");
-    assert.strictEqual(this.loadArgs[1].filters.length, 1, "load args filters");
-    assert.deepEqual(this.loadArgs[1].filters[0].filterValues, ["row 5", "row 6", "row 7", "row 8"], "load args filterValues");
-    assert.strictEqual(this.loadArgs[1].rowSkip, undefined, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[1].rowTake, undefined, "load args rowTake");
-    assert.strictEqual(this.loadArgs[1].columnSkip, 0, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[1].columnTake, 4, "load args columnTake");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[0].columnTake, 4, "load args columnTake");
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
@@ -6400,7 +6378,6 @@ QUnit.test("expand several rows and columns", function(assert) {
         return {
             path: options.path,
             oppositePath: options.oppositePath,
-            filterValues: options.filters.map(filter => filter.filterValues),
             area: options.area,
             rowSkip: options.rowSkip,
             rowTake: options.rowTake,
@@ -6408,9 +6385,9 @@ QUnit.test("expand several rows and columns", function(assert) {
             columnTake: options.columnTake
         };
     }), [
-        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: undefined, columnTake: undefined, oppositePath: undefined, filterValues: [["column 1"]] },
-        { path: ["row 1", "row 2"], area: "row", rowSkip: undefined, rowTake: undefined, columnSkip: undefined, columnTake: undefined, oppositePath: ["column 1"], filterValues: [["column 1", "column 2"], ["row 1", "row 2", "row 3", "row 4"]] },
-        { path: ["row 1", "row 2"], area: "row", rowSkip: undefined, rowTake: undefined, columnSkip: undefined, columnTake: undefined, oppositePath: ["column 1", "column 2"], filterValues: [["column 1"], ["row 1", "row 2", "row 3", "row 4"]] },
+        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: undefined },
+        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: ["column 1"] },
+        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: ["column 1", "column 2"] },
     ], "load options");
 
     assert.deepEqual(dataController.getColumnsInfo(), [
@@ -6480,7 +6457,7 @@ QUnit.test("expand several rows and columns", function(assert) {
             },
             {
                 "colspan": 2,
-                "dataSourceIndex": 4,
+                "dataSourceIndex": 6,
                 "expanded": false,
                 "isLast": true,
                 "path": [
@@ -6493,7 +6470,7 @@ QUnit.test("expand several rows and columns", function(assert) {
         ],
         [
             {
-                "dataSourceIndex": 5,
+                "dataSourceIndex": 7,
                 "expanded": true,
                 "path": [
                     "row 1",
@@ -6504,7 +6481,7 @@ QUnit.test("expand several rows and columns", function(assert) {
                 "type": "D"
             },
             {
-                "dataSourceIndex": 15,
+                "dataSourceIndex": 11,
                 "isLast": true,
                 "path": [
                     "row 1",
@@ -6596,15 +6573,14 @@ QUnit.test("scroll by rows after expand column", function(assert) {
     assert.deepEqual(this.loadArgs.map(function(options) {
         return {
             path: options.path,
-            filterValues: options.filters.map(filter => filter.filterValues),
             columnSkip: options.columnSkip,
             columnTake: options.columnTake,
             rowSkip: options.rowSkip,
             rowTake: options.rowTake
         };
     }), [
-        { path: undefined, columnSkip: undefined, columnTake: undefined, rowSkip: 4, rowTake: 4, filterValues: [["column 1", "column 2"]] },
-        { path: ["column 2"], columnSkip: undefined, columnTake: undefined, rowSkip: undefined, rowTake: undefined, filterValues: [["column 1"], ["row 5", "row 6", "row 7", "row 8"]] }
+        { path: undefined, columnSkip: 0, columnTake: 4, rowSkip: 4, rowTake: 4 },
+        { path: ["column 2"], columnSkip: 0, columnTake: 4, rowSkip: 4, rowTake: 4 }
     ], "load options");
 
     assert.deepEqual(dataController.getColumnsInfo(), [

@@ -16,7 +16,7 @@ var $ = require("../core/renderer"),
     Button = require("./button"),
     themes = require("./themes"),
     Overlay = require("./overlay"),
-    EmptyTemplate = require("./widget/empty_template"),
+    EmptyTemplate = require("../core/templates/empty_template").EmptyTemplate,
     domUtils = require("../core/utils/dom"),
     sizeUtils = require("../core/utils/size"),
     windowUtils = require("../core/utils/window");
@@ -73,8 +73,6 @@ var getButtonPlace = function(name) {
                 location = "after";
                 break;
         }
-    } else if(platform === "win") {
-        location = "after";
     } else if(platform === "android" && device.version && parseInt(device.version[0]) > 4) {
         switch(name) {
             case "cancel":
@@ -161,7 +159,6 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions.position
             * @type Enums.PositionAlignment|positionConfig|function
-            * @inheritdoc
             */
 
             /**
@@ -191,13 +188,11 @@ var Popup = Overlay.inherit({
             /**
              * @name dxPopupOptions.width
              * @fires dxPopupOptions.onResize
-             * @inheritdoc
              */
 
             /**
              * @name dxPopupOptions.height
              * @fires dxPopupOptions.onResize
-             * @inheritdoc
              */
 
             /**
@@ -270,17 +265,14 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions.animation
                     * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} @for iOS
-                    * @inheritdoc
                     */
                     /**
                     * @name dxPopupOptions.animation.show
                     * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} @for iOS
-                    * @inheritdoc
                     */
                     /**
                     * @name dxPopupOptions.animation.hide
                     * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} @for iOS
-                    * @inheritdoc
                     */
                     animation: this._iosAnimation
                 }
@@ -322,7 +314,6 @@ var Popup = Overlay.inherit({
                     * @name dxPopupOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -415,8 +406,8 @@ var Popup = Overlay.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["title"] = new EmptyTemplate(this);
-        this._defaultTemplates["bottom"] = new EmptyTemplate(this);
+        this._defaultTemplates["title"] = new EmptyTemplate();
+        this._defaultTemplates["bottom"] = new EmptyTemplate();
     },
 
     _renderContentImpl: function() {
@@ -544,7 +535,7 @@ var Popup = Overlay.inherit({
                     extend(item, { location: data.location }, this._getToolbarItemByAlias(data));
                 }
 
-                var isLTROrder = currentPlatform === "win" || currentPlatform === "generic";
+                var isLTROrder = currentPlatform === "generic";
 
                 if((data.shortcut === "done" && isLTROrder) || (data.shortcut === "cancel" && !isLTROrder)) {
                     toolbarsItems.unshift(item);
@@ -634,8 +625,10 @@ var Popup = Overlay.inherit({
         return this.topToolbar();
     },
 
-    _renderGeometryImpl: function() {
-        this._resetContentHeight();
+    _renderGeometryImpl: function(isDimensionChanged) {
+        if(!isDimensionChanged) {
+            this._resetContentHeight();
+        }
         this.callBase.apply(this, arguments);
         this._setContentHeight();
     },
@@ -757,6 +750,10 @@ var Popup = Overlay.inherit({
         };
     },
 
+    _useFixedPosition: function() {
+        return this.callBase() || this.option("fullScreen");
+    },
+
     _renderDimensions: function() {
         if(this.option("fullScreen")) {
             this._$content.css({
@@ -773,17 +770,6 @@ var Popup = Overlay.inherit({
 
     _renderFullscreenWidthClass: function() {
         this.overlayContent().toggleClass(POPUP_FULL_SCREEN_WIDTH_CLASS, this.overlayContent().outerWidth() === $(window).width());
-    },
-
-    _renderShadingDimensions: function() {
-        if(this.option("fullScreen")) {
-            this._wrapper().css({
-                width: "100%",
-                height: "100%"
-            });
-        } else {
-            this.callBase.apply(this, arguments);
-        }
     },
 
     refreshPosition: function() {
@@ -838,6 +824,7 @@ var Popup = Overlay.inherit({
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
+                this._toggleSafariScrolling(!args.value);
                 this._renderGeometry();
                 domUtils.triggerResizeEvent(this._$content);
                 break;

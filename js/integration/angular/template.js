@@ -1,26 +1,23 @@
-var $ = require("../../core/renderer"),
-    TemplateBase = require("../../ui/widget/ui.template_base"),
-    isFunction = require("../../core/utils/type").isFunction,
-    domUtils = require("../../core/utils/dom");
+import $ from "../../core/renderer";
+import { TemplateBase } from "../../core/templates/template_base";
+import { isFunction } from "../../core/utils/type";
+import { normalizeTemplateElement } from "../../core/utils/dom";
 
-var NgTemplate = TemplateBase.inherit({
-
-    ctor: function(element, templateCompiler) {
+export const NgTemplate = class extends TemplateBase {
+    constructor(element, templateCompiler) {
+        super();
         this._element = element;
 
-        this._compiledTemplate = templateCompiler(domUtils.normalizeTemplateElement(this._element));
-    },
-
-    _renderCore: function(options) {
-        var compiledTemplate = this._compiledTemplate;
-
-        return isFunction(compiledTemplate) ? compiledTemplate(options) : compiledTemplate;
-    },
-
-    source: function() {
-        return $(this._element).clone();
+        this._compiledTemplate = templateCompiler(normalizeTemplateElement(this._element));
     }
 
-});
+    _renderCore(options) {
+        const compiledTemplate = this._compiledTemplate;
 
-module.exports = NgTemplate;
+        return isFunction(compiledTemplate) ? compiledTemplate(options) : compiledTemplate;
+    }
+
+    source() {
+        return $(this._element).clone();
+    }
+};

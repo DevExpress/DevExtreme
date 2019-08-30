@@ -50,26 +50,13 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             .addClass(FILE_MANAGER_DETAILS_ITEM_LIST_CLASS)
             .append(this._filesView.$element());
 
-        this._loadFilesViewData();
-    }
-
-    _createFilesViewStore() {
-        return new CustomStore({
-            key: "relativeName",
-            load: this._getItems.bind(this)
-        });
-    }
-
-    _loadFilesViewData() {
-        this._filesView.option("dataSource", {
-            "store": this._createFilesViewStore()
-        });
+        this.refresh();
     }
 
     _createColumns() {
         let columns = [
             {
-                dataField: "thumbnail",
+                dataField: "isDirectory",
                 caption: "",
                 width: 64,
                 alignment: "center",
@@ -77,6 +64,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             },
             {
                 dataField: "name",
+                caption: "Name",
                 cellTemplate: this._createNameColumnCell.bind(this)
             },
             {
@@ -94,23 +82,25 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
             }
         ];
+
         const customizeDetailColumns = this.option("customizeDetailColumns");
         if(typeUtils.isFunction(customizeDetailColumns)) {
             columns = customizeDetailColumns(columns);
-            for(let i = 0; i < columns.length; i++) {
-                if(PREDEFINED_COLUMN_NAMES.indexOf(columns[i].dataField) < 0) {
-                    columns[i].dataField = "dataItem." + columns[i].dataField;
-                }
-            }
+        }
+
+        for(let i = 0; i < columns.length; i++) {
+            const dataItemSuffix = PREDEFINED_COLUMN_NAMES.indexOf(columns[i].dataField) < 0 ? "dataItem." : "";
+            columns[i].dataField = "fileItem." + dataItemSuffix + columns[i].dataField;
         }
         return columns;
     }
 
     _onFileItemActionButtonClick({ component, element, event }) {
         event.stopPropagation();
+
         const $row = component.$element().closest(this._getItemSelector());
-        const item = $row.data("item");
-        this._ensureItemSelected(item);
+        const fileItemInfo = $row.data("item");
+        this._ensureItemSelected(fileItemInfo);
         this._showContextMenu(this.getSelectedItems(), element);
         this._activeFileActionsButton = component;
         this._activeFileActionsButton.setActive(true);
@@ -132,8 +122,8 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _onItemDblClick(e) {
         const $row = $(e.currentTarget);
-        const item = $row.data("item");
-        this._raiseSelectedItemOpened(item);
+        const fileItemInfo = $row.data("item");
+        this._raiseSelectedItemOpened(fileItemInfo);
     }
 
     _onRowPrepared(e) {
@@ -162,7 +152,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const $button = $("<div>");
 
         const $name = $("<span>")
-            .text(cellInfo.data.name)
+            .text(cellInfo.data.fileItem.name)
             .addClass(FILE_MANAGER_DETAILS_ITEM_NAME_CLASS);
 
         const $wrapper = $("<div>")
@@ -177,23 +167,30 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _calculateSizeColumnCellValue(rowData) {
-        return rowData.isDirectory ? "" : getDisplayFileSize(rowData.size);
+        return rowData.fileItem.isDirectory ? "" : getDisplayFileSize(rowData.fileItem.size);
     }
 
-    _ensureItemSelected(item) {
-        if(!this._filesView.isRowSelected(item.relativeName)) {
+    _ensureItemSelected(fileItemInfo) {
+        const fileItem = fileItemInfo.fileItem;
+        if(!this._filesView.isRowSelected(fileItem.key)) {
             const selectionController = this._filesView.getController("selection");
             const preserve = selectionController.isSelectionWithCheckboxes();
-            this._filesView.selectRows([item.relativeName], preserve);
+            this._filesView.selectRows([fileItem.key], preserve);
         }
-    }
-
-    refreshData() {
-        this._loadFilesViewData();
     }
 
     clearSelection() {
         this._filesView.clearSelection();
+    }
+
+    refresh() {
+        this.clearSelection();
+        this._filesView.option("dataSource", {
+            "store": new CustomStore({
+                key: "fileItem.key",
+                load: this._getItems.bind(this)
+            })
+        });
     }
 
     getSelectedItems() {

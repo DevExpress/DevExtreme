@@ -418,10 +418,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _renderInputType: function() {
         var isNumberType = this.option("mode") === "number",
-            isMobileDevice = devices.real().deviceType !== "desktop";
+            isDesktop = devices.real().deviceType === "desktop";
 
         if(this._useMaskBehavior() && isNumberType) {
-            this._setInputType(isMobileDevice ? "tel" : "text");
+            this._setInputType(isDesktop || this._isSupportInputMode() ? "text" : "tel");
         } else {
             this.callBase();
         }
@@ -682,13 +682,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(e);
         }
 
-        this._saveValueChangeEvent(e);
+        var caret = this._caret();
 
+        this._saveValueChangeEvent(e);
         this._lastKey = null;
         this._lastKeyName = null;
 
         this._adjustParsedValue();
         this.option("value", this._parsedValue);
+
+        if(caret) {
+            this._caret(caret);
+        }
     },
 
     _optionChanged: function(args) {

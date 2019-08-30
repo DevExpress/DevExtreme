@@ -426,7 +426,6 @@ var commonPieChartSeries = {
 * @name dxPieChartSeriesTypes.DoughnutSeries
 * @type object
 * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
-* @hidePropertyOf
 */
 var doughnutSeries = {
 
@@ -436,7 +435,6 @@ var doughnutSeries = {
 * @name dxPieChartSeriesTypes.PieSeries
 * @type object
 * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
-* @hidePropertyOf
 */
 var pieSeries = {
 

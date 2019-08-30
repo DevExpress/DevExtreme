@@ -1,4 +1,15 @@
-var $ = require("jquery");
+import $ from "jquery";
+import devices from "core/devices";
+
+import "common.css!";
+import "generic_light.css!";
+
+import fx from "animation/fx";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
+import Color from "color";
+
+import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -7,16 +18,8 @@ QUnit.testStart(function() {
             </div>');
 });
 
-require("common.css!");
-require("generic_light.css!");
-
-
-var fx = require("animation/fx"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store"),
-    Color = require("color");
-
-require("ui/scheduler/ui.scheduler");
+const SCHEDULER_HORIZONTAL_SCROLLBAR = ".dx-scheduler-date-table-scrollable .dx-scrollbar-horizontal",
+    SCHEDULER_SCROLLBAR_CONTAINER = ".dx-scheduler-work-space-both-scrollbar";
 
 QUnit.module("Integration: Resources", {
     beforeEach: function() {
@@ -428,3 +431,51 @@ QUnit.test("Appointment should have correct color after resources option changin
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
     assert.equal(new Color($appointments.eq(0).css("backgroundColor")).toHex(), "#ff0000", "Color is OK");
 });
+
+if(devices.real().deviceType === "desktop") {
+    QUnit.module("Integration: Multiple resources", {
+        beforeEach: function() {
+            $("#qunit-fixture").css({ top: 0, left: 0 });
+            this.createInstance = (options) => {
+                this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            };
+            $("#qunit-fixture").html(
+                `<div style="width: 400px; height: 500px;">
+                    <div id="scheduler" style="height: 100%;">
+                        <div data-options="dxTemplate: { name: 'template' }">Task Template</div>
+                    </div>
+                </div>`);
+        },
+        afterEach: function() {
+            $("#qunit-fixture").css({ top: "-10000px", left: "-10000px" });
+        }
+    }, () => {
+        QUnit.test("Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)", function(assert) {
+            const getData = function(count) {
+                let result = [];
+                for(let i = 0; i < count; i++) {
+                    result.push({
+                        facilityId: i,
+                        facilityName: i.toString(),
+                    });
+                }
+                return result;
+            };
+
+            this.createInstance({
+                groups: ["facilityId"],
+                crossScrollingEnabled: true,
+                dataSource: [],
+                resources: [{
+                    dataSource: getData(10),
+                    displayExpr: "facilityName",
+                    valueExpr: "facilityId",
+                    fieldExpr: "facilityId",
+                    allowMultiple: false,
+                }]
+            });
+            var scrollbar = $(this.instance.$element()).find(SCHEDULER_HORIZONTAL_SCROLLBAR);
+            assert.roughEqual(scrollbar.offset().top + scrollbar.outerHeight(), $(this.instance.$element()).find(SCHEDULER_SCROLLBAR_CONTAINER).outerHeight(), 1, "Horizontal scrollbar has visible top coordinate");
+        });
+    });
+}

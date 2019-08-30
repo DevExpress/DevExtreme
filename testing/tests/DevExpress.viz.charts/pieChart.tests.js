@@ -68,7 +68,7 @@ function createPoint(options) {
     point.visible = options.visible;
     point.fullState = 0;
 
-    point.getLegendStyles = sinon.stub().returns({ normal: {} });
+    point.getLegendStyles = sinon.stub().returns({ normal: {}, selection: {}, hover: {} });
 
     return point;
 }
@@ -195,7 +195,6 @@ var environment = {
             series.getOptions = function() { return { label: { position: position || "outside" } }; };
             series.getVisiblePoints = sinon.stub().returns(this._createStubPoints(labels, series));
             chartMocks.seriesMockData.series.push(series);
-
         },
         createStubLabels: function(bBoxes) {
             var labels = [];
@@ -375,6 +374,77 @@ var environment = {
         } finally {
             devices.real({ platform: originalPlatform });
         }
+    });
+
+    QUnit.test("Get inner raduis API", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        this.layoutManager.applyPieChartSeriesLayout.returns({ radiusInner: 80, radiusOuter: 300, centerX: 100, centerY: 200 });
+
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            type: "donut",
+            series: [{}]
+        });
+
+        const radius = chart.getInnerRadius();
+
+        assert.strictEqual(radius, 80);
+    });
+
+    QUnit.test("Hole template. No option - no group created", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}]
+        });
+
+        const templateGroup = chart._renderer.root.children.filter(c => {
+            const attrCall = c.stub("attr").getCall(0);
+            return attrCall.class === "dxc-hole-template";
+        })[0];
+
+        assert.equal(templateGroup, undefined);
+    });
+
+    QUnit.test("Hole template. First rendering", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const centerTemplateSpy = sinon.spy();
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}],
+            centerTemplate: centerTemplateSpy
+        });
+
+        const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
+
+        assert.deepEqual(templateGroup.attr.getCall(0).args, [{ class: "dxc-hole-template" }]);
+        assert.strictEqual(centerTemplateSpy.callCount, 1);
+        assert.deepEqual(centerTemplateSpy.getCall(0).args, [chart, templateGroup.element]);
+
+        assert.deepEqual(templateGroup.move.getCall(0).args, [100 - (1 + 20 / 2), 200 - (2 + 10 / 2)]);
+    });
+
+    QUnit.test("Hole template. Second rendering - remove old content", function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const centerTemplateSpy = sinon.spy();
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}],
+            centerTemplate: centerTemplateSpy
+        });
+        const groups = chart._renderer.root.children;
+        const templateGroup = groups[groups.length - 1];
+
+        chart.render({ force: true });
+
+        assert.strictEqual(centerTemplateSpy.callCount, 2);
+
+        assert.strictEqual(templateGroup.clear.callCount, 1);
+        assert.ok(templateGroup.clear.getCall(0).calledAfter(centerTemplateSpy.getCall(0)));
+        assert.ok(templateGroup.clear.getCall(0).calledBefore(centerTemplateSpy.getCall(1)));
+
+        assert.ok(templateGroup.append.getCall(1).calledAfter(templateGroup.clear.getCall(0)));
+        assert.ok(templateGroup.append.getCall(1).calledBefore(centerTemplateSpy.getCall(1)));
     });
 
     QUnit.module("Creation series for tracker", {
@@ -1022,8 +1092,8 @@ var environment = {
             argumentIndex: 0,
             textOpacity: 0.3,
             states: {
-                hover: undefined,
-                selection: undefined,
+                hover: { opacity: 0.3 },
+                selection: { opacity: 0.3 },
                 normal: { opacity: 0.3 }
             },
             visible: true
@@ -1035,8 +1105,8 @@ var environment = {
             text: "Second",
             textOpacity: undefined,
             states: {
-                hover: undefined,
-                selection: undefined,
+                hover: {},
+                selection: {},
                 normal: {}
             },
             visible: true
@@ -1066,7 +1136,7 @@ var environment = {
         var stubPoints = this.stubPoints;
         updateArgs[0].forEach(function(args, i) {
             assert.strictEqual(args.text, stubPoints[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(args.states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(args.states, { hover: {}, selection: {}, normal: {} }, "Legend states for " + i.toString());
             assert.deepEqual(args.states, stubPoints[i].getLegendStyles(), "Legend states for " + i.toString());
             assert.equal(args.points.length, 1);
             assert.equal(args.points[0], stubPoints[i]);
@@ -1089,7 +1159,7 @@ var environment = {
         assert.equal(updateArgs[0].length, 3, "update args");
         updateArgs[0].forEach(function(args, i) {
             assert.strictEqual(args.text, points[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(args.states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(args.states, { hover: {}, selection: {}, normal: {} }, "Legend states for " + i.toString());
             assert.deepEqual(args.states, points[i].getLegendStyles(), "Legend states for " + i.toString());
             assert.equal(args.points.length, 2);
         });
@@ -1121,7 +1191,7 @@ var environment = {
         assert.equal(updateArgs[0].length, 5, "update args");
         for(i = 0; i < updateArgs[0].length; i++) {
             assert.strictEqual(updateArgs[0][i].text, points[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, "Legend stated for " + i.toString());
+            assert.deepEqual(updateArgs[0][i].states, { hover: {}, selection: {}, normal: {} }, "Legend stated for " + i.toString());
             assert.deepEqual(updateArgs[0][i].states, points[i].getLegendStyles(), "Legend states for " + i.toString());
             assert.deepEqual(updateArgs[0][i].id, points[i].index, "Legend id for " + i.toString());
         }
@@ -1164,7 +1234,7 @@ var environment = {
         assert.equal(updateArgs[0].length, 7, "update args");
         for(i = 0; i < updateArgs[0].length; i++) {
             assert.strictEqual(updateArgs[0][i].text, points[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(updateArgs[0][i].states, { hover: {}, selection: {}, normal: {} }, "Legend states for " + i.toString());
             assert.deepEqual(updateArgs[0][i].states, points[i].getLegendStyles(), "Legend states for " + i.toString());
             assert.deepEqual(updateArgs[0][i].id, points[i].index, "Legend id for " + i.toString());
         }
@@ -1196,9 +1266,9 @@ var environment = {
         });
 
         var updateArgs = commons.getLegendStub().stub("update").lastCall.args;
-        assert.deepEqual(updateArgs[0][0].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states");
-        assert.deepEqual(updateArgs[0][1].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states");
-        assert.deepEqual(updateArgs[0][2].states, { hover: undefined, selection: undefined, normal: { opacity: 0.3 } }, "Legend states");
+        assert.deepEqual(updateArgs[0][0].states, { hover: {}, selection: {}, normal: {} }, "Legend states");
+        assert.deepEqual(updateArgs[0][1].states, { hover: {}, selection: {}, normal: {} }, "Legend states");
+        assert.deepEqual(updateArgs[0][2].states, { hover: { opacity: 0.3 }, selection: { opacity: 0.3 }, normal: { opacity: 0.3 } }, "Legend states");
     });
 
     QUnit.test("index of points", function(assert) {

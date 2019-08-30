@@ -284,7 +284,6 @@ const TextEditorBase = Editor.inherit({
              * @name dxTextEditorOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -292,7 +291,6 @@ const TextEditorBase = Editor.inherit({
              * @name dxTextEditorOptions.focusStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             focusStateEnabled: true,
 
@@ -303,7 +301,7 @@ const TextEditorBase = Editor.inherit({
             */
             text: undefined,
 
-            valueFormat: function(value) {
+            displayValueFormatter: function(value) {
                 return isDefined(value) && value !== false ? value : "";
             },
 
@@ -311,7 +309,6 @@ const TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
 
             /**
@@ -512,12 +509,12 @@ const TextEditorBase = Editor.inherit({
 
         var text = this.option("text"),
             displayValue = this.option("displayValue"),
-            valueFormat = this.option("valueFormat");
+            displayValueFormatter = this.option("displayValueFormatter");
 
         if(displayValue !== undefined && value !== null) {
-            text = valueFormat(displayValue);
+            text = displayValueFormatter(displayValue);
         } else if(!isDefined(text)) {
-            text = valueFormat(value);
+            text = displayValueFormatter(value);
         }
 
         this.option("text", text);
@@ -841,7 +838,7 @@ const TextEditorBase = Editor.inherit({
                 this._buttonCollection.clean();
                 this._renderButtonContainers();
                 break;
-            case "valueFormat":
+            case "displayValueFormatter":
                 this._invalidate();
                 break;
             default:

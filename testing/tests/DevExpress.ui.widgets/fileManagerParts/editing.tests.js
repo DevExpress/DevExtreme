@@ -71,6 +71,33 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
     });
 
+    test("rename folder in folders area by Enter in dialog input", function(assert) {
+        let $folderNode = this.wrapper.getFolderNode(1);
+        assert.equal($folderNode.find("span").text(), "Folder 1", "has target folder");
+
+        $folderNode.trigger("dxclick");
+        $folderNode.trigger("click");
+        this.clock.tick(400);
+
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('Rename')`);
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        assert.equal($input.val(), "Folder 1", "input has value");
+
+        $input.val("TestFolder 1");
+        $input.trigger("change");
+
+        $input.trigger($.Event("keyup", { key: "enter" }));
+        this.clock.tick(400);
+
+        $folderNode = this.wrapper.getFolderNode(1);
+        assert.equal($folderNode.find("span").text(), "TestFolder 1", "folder renamed");
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+    });
+
     test("rename file in items area", function(assert) {
         let $cell = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td`).eq(1);
         assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
@@ -116,6 +143,32 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $input.trigger("change");
         const $okButton = $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('Create')`);
         $okButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        const $folderNode = this.wrapper.getFolderNode(4);
+        assert.equal($folderNode.find("span").text(), "Test 4", "folder created");
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+    });
+
+    test("create folder in folders area from items area without folders by Enter in dialog input", function(assert) {
+        const $row = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS}`).eq(1);
+        $row.trigger("dxclick");
+
+        assert.ok($row.hasClass(Consts.SELECTION_CLASS), "file selected");
+
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New folder')`);
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        assert.ok($input.has(":focus"), "dialog's input element should be focused");
+        assert.equal("Untitled folder", $input.val(), "input has default value");
+
+        $input.val("Test 4");
+        $input.trigger("change");
+
+        $input.trigger($.Event("keyup", { key: "enter" }));
         this.clock.tick(400);
 
         const $folderNode = this.wrapper.getFolderNode(4);
@@ -266,7 +319,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $okButton.trigger("dxclick");
         this.clock.tick(400);
 
-        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 3", "destination folder should be selected");
 
         $folderNodes = this.wrapper.getFolderNodes();
         assert.equal($folderNodes.length, initialCount - 1, "folders count decreased");
@@ -288,7 +341,6 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
     test("copy folder in folders area", function(assert) {
         let $folderNodes = this.wrapper.getFolderNodes();
-        const initialCount = $folderNodes.length;
         const $folderNode = $folderNodes.eq(1);
         assert.equal($folderNode.find("span").text(), "Folder 1", "has target folder");
 
@@ -306,16 +358,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $okButton.trigger("dxclick");
         this.clock.tick(400);
 
-        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1", "target folder selected");
-
-        $folderNodes = this.wrapper.getFolderNodes();
-        assert.equal($folderNodes.length, initialCount, "folders count not changed");
-        assert.equal($folderNodes.eq(1).find("span").text(), "Folder 1", "first folder is target folder");
-        assert.equal($folderNodes.eq(2).find("span").text(), "Folder 2", "second folder is not target folder");
-
-        const $folderToggles = this.wrapper.getFolderToggles();
-        $folderToggles.eq(2).trigger("dxclick");
-        this.clock.tick(400);
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 3", "target folder should be selected");
 
         $folderNodes = this.wrapper.getFolderNodes();
         assert.equal($folderNodes.eq(4).find("span").text(), "Folder 1", "target folder copied");
@@ -324,6 +367,11 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         assert.equal(this.wrapper.getDetailsItemName(0), "File 1-1.txt", "file copied with target folder");
         assert.equal(this.wrapper.getDetailsItemName(1), "File 1-2.jpg", "file copied with target folder");
+
+        $folderNodes = this.wrapper.getFolderNodes();
+        assert.equal($folderNodes.eq(1).find("span").text(), "Folder 1", "first folder is target folder");
+        assert.equal($folderNodes.eq(2).find("span").text(), "Folder 2", "second folder is not target folder");
+        assert.equal($folderNodes.eq(3).find("span").text(), "Folder 3", "third folder is not target folder");
     });
 
     test("move file in items area", function(assert) {
@@ -347,18 +395,18 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $okButton.trigger("dxclick");
         this.clock.tick(400);
 
-        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 3", "destination folder should be selected");
+
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "file moved to another folder");
+
+        $folderNodes = this.wrapper.getFolderNodes();
+        $folderNodes.eq(0).trigger("dxclick");
+        this.clock.tick(400);
 
         $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
         assert.equal($cells.length, initialCount - 1, "file count decreased");
         assert.equal(this.wrapper.getDetailsItemName(0), "File 2.jpg", "first file is not target file");
         assert.equal(this.wrapper.getDetailsItemName(1), "File 3.xml", "second file is not target file");
-
-        $folderNodes = this.wrapper.getFolderNodes();
-        $folderNodes.eq(3).trigger("dxclick");
-        this.clock.tick(400);
-
-        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "file moved to another folder");
     });
 
     test("copy file in items area", function(assert) {
@@ -384,16 +432,16 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $okButton.trigger("dxclick");
         this.clock.tick(400);
 
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "file moved to another folder");
+
+        $folderNodes = this.wrapper.getFolderNodes();
+        $folderNodes.eq(0).trigger("dxclick");
+        this.clock.tick(400);
+
         $cells = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:nth-child(2)`);
         assert.equal($cells.length, initialCount, "file count not changed");
         assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "first file is the target file");
         assert.equal(this.wrapper.getDetailsItemName(1), "File 2.jpg", "second file is not target file");
-
-        $folderNodes = this.wrapper.getFolderNodes();
-        $folderNodes.eq(3).trigger("dxclick");
-        this.clock.tick(400);
-
-        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "file moved to another folder");
     });
 
 });

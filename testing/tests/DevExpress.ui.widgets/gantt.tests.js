@@ -9,10 +9,15 @@ QUnit.testStart(() => {
 });
 
 const TREELIST_SELECTOR = ".dx-treelist";
-const GANTT_VIEW_SELECTOR = ".dx-gantt-view";
 const TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper";
 const TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes";
 const TASK_ARROW_SELECTOR = ".dx-gantt-arrow";
+const SPLITTER_SELECTOR = ".dx-gantt-splitter";
+const TASK_TITLE_IN_SELECTOR = ".dx-gantt-titleIn";
+const TASK_TITLE_OUT_SELECTOR = ".dx-gantt-titleOut";
+const TREELIST_EXPANDED = ".dx-treelist-expanded";
+const TREELIST_COLLAPSED = ".dx-treelist-collapsed";
+const SELECTION_SELECTOR = ".dx-gantt-sel";
 
 const tasks = [
     { "id": 1, "parentId": 0, "title": "Software Development", "start": new Date("2019-02-21T05:00:00.000Z"), "end": new Date("2019-07-04T12:00:00.000Z"), "progress": 31 },
@@ -43,12 +48,14 @@ const resourceAssignments = [
     { "id": 3, "taskId": 6, "resourceId": 2 },
     { "id": 4, "taskId": 6, "resourceId": 3 },
 ];
-const tasksOnlyOptions = { tasks: tasks };
+const tasksOnlyOptions = {
+    tasks: { dataSource: tasks }
+};
 const allSourcesOptions = {
-    tasks: tasks,
-    dependencies: dependencies,
-    resources: resources,
-    resourceAssignments: resourceAssignments
+    tasks: { dataSource: tasks },
+    dependencies: { dataSource: dependencies },
+    resources: { dataSource: resources },
+    resourceAssignments: { dataSource: resourceAssignments }
 };
 
 const moduleConfig = {
@@ -71,15 +78,6 @@ QUnit.module("Markup", moduleConfig, () => {
         const treeListElements = this.$element.find(TREELIST_SELECTOR);
         assert.ok(treeListElements.length === 1);
     });
-    test("should render GanttView", (assert) => {
-        this.createInstance(tasksOnlyOptions);
-        this.clock.tick();
-        const ganttViewElements = this.$element.find(GANTT_VIEW_SELECTOR);
-        assert.ok(ganttViewElements.length === 1);
-    });
-});
-
-QUnit.module("Options", moduleConfig, () => {
     test("should render task wrapper for each task", (assert) => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
@@ -97,5 +95,147 @@ QUnit.module("Options", moduleConfig, () => {
         this.clock.tick();
         const element = this.$element.find(TASK_RESOURCES_SELECTOR);
         assert.equal(element.length, resourceAssignments.length);
+    });
+});
+
+QUnit.module("Options", moduleConfig, () => {
+    test("treeListWidth", (assert) => {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        const treeListElement = this.$element.find(TREELIST_SELECTOR)[0];
+        const splitter = this.$element.find(SPLITTER_SELECTOR)[0];
+        assert.equal(treeListElement.offsetWidth, 300);
+        assert.equal(splitter.style.left, "300px");
+        this.instance.option("treeListWidth", 500);
+        assert.equal(treeListElement.offsetWidth, 500);
+        assert.equal(splitter.style.left, "500px");
+    });
+    test("showResources", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_RESOURCES_SELECTOR).length, resourceAssignments.length);
+        this.instance.option("showResources", false);
+        assert.equal(this.$element.find(TASK_RESOURCES_SELECTOR).length, 0);
+        this.instance.option("showResources", true);
+        assert.equal(this.$element.find(TASK_RESOURCES_SELECTOR).length, resourceAssignments.length);
+    });
+    test("taskTitlePosition", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        const milestoneCount = tasks.reduce((count, t) => {
+            return t.start.getTime() === t.end.getTime() ? count + 1 : count;
+        }, 0);
+        assert.equal(this.$element.find(TASK_TITLE_IN_SELECTOR).length, tasks.length - milestoneCount);
+        assert.equal(this.$element.find(TASK_TITLE_OUT_SELECTOR).length, 0);
+        this.instance.option("taskTitlePosition", 'none');
+        assert.equal(this.$element.find(TASK_TITLE_IN_SELECTOR).length, 0);
+        assert.equal(this.$element.find(TASK_TITLE_OUT_SELECTOR).length, 0);
+        this.instance.option("taskTitlePosition", 'outside');
+        assert.equal(this.$element.find(TASK_TITLE_IN_SELECTOR).length, 0);
+        assert.equal(this.$element.find(TASK_TITLE_OUT_SELECTOR).length, tasks.length);
+    });
+    test("expr", (assert) => {
+        const tasksDS = [
+            { "i": 1, "pid": 0, "t": "Software Development", "s": new Date("2019-02-21T05:00:00.000Z"), "e": new Date("2019-07-04T12:00:00.000Z"), "p": 31 },
+            { "i": 2, "pid": 1, "t": "Scope", "s": new Date("2019-02-21T05:00:00.000Z"), "e": new Date("2019-02-26T09:00:00.000Z"), "p": 60 },
+            { "i": 3, "pid": 2, "t": "Determine project scope", "s": new Date("2019-02-21T05:00:00.000Z"), "e": new Date("2019-02-21T09:00:00.000Z"), "p": 100 }
+        ];
+        const dependenciesDS = [{ "i": 0, "pid": 1, "sid": 2, "t": 0 }];
+        const resourcesDS = [{ "i": 1, "t": "Management" }];
+        const resourceAssignmentsDS = [{ "i": 0, "tid": 3, "rid": 1 }];
+        const options = {
+            tasks: {
+                dataSource: tasksDS,
+                keyExpr: "i",
+                parentIdExpr: "pid",
+                startExpr: "s",
+                endExpr: "e",
+                progressExpr: "p",
+                titleExpr: "t",
+            },
+            dependencies: {
+                dataSource: dependenciesDS,
+                keyExpr: "i",
+                predecessorIdExpr: "pid",
+                successorIdExpr: "sid",
+                typeExpr: "t",
+            },
+            resources: {
+                dataSource: resourcesDS,
+                keyExpr: "i",
+                textExpr: "t"
+            },
+            resourceAssignments: {
+                dataSource: resourceAssignmentsDS,
+                keyExpr: "i",
+                taskIdExpr: "tid",
+                resourceIdExpr: "rid"
+            }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const taskWrapperElements = this.$element.find(TASK_WRAPPER_SELECTOR);
+        assert.equal(taskWrapperElements.length, tasksDS.length);
+        const firstTitle = taskWrapperElements.first().children().children().first().text();
+        assert.equal(firstTitle, tasksDS[0].t);
+        const firstProgressElement = taskWrapperElements.first().children().children().last();
+        assert.ok(firstProgressElement.width() > 0);
+
+        const dependencyElements = this.$element.find(TASK_ARROW_SELECTOR);
+        assert.equal(dependencyElements.length, dependenciesDS.length);
+
+        const resourceElements = this.$element.find(TASK_RESOURCES_SELECTOR);
+        assert.equal(resourceElements.length, resourceAssignmentsDS.length);
+        assert.equal(resourceElements.first().text(), resourcesDS[0].t);
+    });
+    test("selectedRowKey", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 0);
+        this.instance.option("selectedRowKey", 1);
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 1);
+        this.instance.option("selectedRowKey", undefined);
+        this.clock.tick();
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 0);
+    });
+    test("allowSelection", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        this.instance.option("selectedRowKey", 1);
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 1);
+        this.instance.option("allowSelection", false);
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 0);
+    });
+});
+
+QUnit.module("Events", moduleConfig, () => {
+    test("selection changed", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option("onSelectionChanged", (e) => {
+            keyFromEvent = e.selectedRowKey;
+        });
+        this.instance.option("selectedRowKey", key);
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+    });
+});
+
+QUnit.module("Actions", moduleConfig, () => {
+    test("expand/collapse", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
+        const expandedElement = this.$element.find(TREELIST_EXPANDED).first();
+        expandedElement.trigger("dxclick");
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 1);
+        const collapsedElement = this.$element.find(TREELIST_COLLAPSED).first();
+        collapsedElement.trigger("dxclick");
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
     });
 });

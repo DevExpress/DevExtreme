@@ -213,6 +213,14 @@
         .dx-column-indicators {
             height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
 
+            .dx-sort-index-icon {
+                padding-right: 4px;
+                margin-left: -1px;
+                font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE - 1px;
+                position: relative;
+                bottom: 1px;
+            }
+
             > div {
                 .dx-icon-sizing(@MATERIAL_GRID_BASE_HEADER_ICON_SIZE);
             }
@@ -783,6 +791,10 @@
 
     .dx-datagrid-export-menu {
         .dx-menu-item .dx-icon-exportxlsx {
+            .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+        }
+
+        .dx-menu-item .dx-icon-exportselected {
             .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
         }
     }

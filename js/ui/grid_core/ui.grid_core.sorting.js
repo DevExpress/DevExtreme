@@ -172,7 +172,13 @@ module.exports = {
                  * @type string
                  * @default "Clear Sorting"
                  */
-                clearText: messageLocalization.format("dxDataGrid-sortingClearText")
+                clearText: messageLocalization.format("dxDataGrid-sortingClearText"),
+                /**
+                 * @name GridBaseOptions.sorting.showSortIndexes
+                 * @type boolean
+                 * @default true
+                 */
+                showSortIndexes: true
             }
         };
     },

@@ -99,8 +99,14 @@ function createStubAxis() {
     stubAxis.getOptions = function() {
         return this._options;
     };
-    stubAxis.measureLabels.returns({ width: 20, height: 10 });
+    stubAxis.getMargins.returns({ left: 20, right: 20, top: 10, bottom: 10 });
     stubAxis.getSpiderTicks.returns([]);
+    stubAxis.getCenter = sinon.stub().returns({
+        x: 100,
+        y: 100
+    });
+    stubAxis.getRadius = sinon.stub().returns(10);
+    stubAxis.applyClipRects = sinon.stub();
     return stubAxis;
 }
 function checkAxisGroup(assert, createAxisArguments, chart) {
@@ -123,7 +129,8 @@ var stubSeries = [createSeries(), createSeries()],
     environment = {
         beforeEach: function() {
             var that = this,
-                seriesIndex = 0;
+                seriesIndex = 0,
+                defsSvgId = 0;
 
             axesIndex = 0;
 
@@ -135,8 +142,22 @@ var stubSeries = [createSeries(), createSeries()],
                 return stubThemeManager;
             });
 
+            that.getDefsSvgId = function() {
+                return ++defsSvgId;
+            };
+            that.clipFunc = function() {
+                return {
+                    id: "DevExpress_" + that.getDefsSvgId(),
+                    attr: sinon.spy(),
+                    dispose: function() {}
+                };
+            };
+
             that.createRenderer = sinon.stub(rendererModule, "Renderer", function() {
-                return new vizMocks.Renderer();
+                var stubRenderer = new vizMocks.Renderer();
+                stubRenderer.clipCircle = that.clipFunc;
+                stubRenderer.clipRect = that.clipFunc;
+                return stubRenderer;
             });
 
             that.createTooltip = sinon.stub(tooltipModule, "Tooltip", function() {
@@ -153,15 +174,20 @@ var stubSeries = [createSeries(), createSeries()],
             that.createSeries = sinon.stub(seriesModule, "Series", function(settings, seriesTheme) {
                 resetStub(stubSeries[seriesIndex]);
                 stubSeries[seriesIndex].getValueAxis.returns(settings.valueAxis);
+                if(seriesTheme.valueErrorBar) {
+                    stubSeries[seriesIndex].areErrorBarsVisible.returns(true);
+                }
                 return $.extend(true, stubSeries[seriesIndex++], seriesTheme);
             });
 
             that.createAxis = sinon.stub(axisModule, "Axis", function() {
                 resetStub(stubAxes[axesIndex]);
 
-                stubAxes[axesIndex].measureLabels.returns({
-                    width: 50,
-                    height: 70
+                stubAxes[axesIndex].getMargins.returns({
+                    left: 50,
+                    right: 50,
+                    top: 70,
+                    bottom: 70
                 });
 
                 return stubAxes[axesIndex++];
@@ -424,6 +450,20 @@ QUnit.test("draw Axes", function(assert) {
 
     assert.equal(chart._argumentAxes[0].draw.callCount, 1);
     assert.deepEqual(chart._argumentAxes[0].draw.getCall(0).args, [{
+        bottom: 0,
+        height: 400,
+        left: 0,
+        right: 0,
+        top: 0,
+        width: 1000,
+        originalTop: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0
+    }]);
+
+    assert.equal(chart.getArgumentAxis().updateSize.callCount, 1);
+    assert.deepEqual(chart.getArgumentAxis().updateSize.getCall(0).args, [{
         bottom: 70,
         height: 400,
         left: 50,
@@ -449,35 +489,29 @@ QUnit.test("draw Axes", function(assert) {
         originalLeft: 0,
         originalRight: 0
     }]);
-
-    assert.deepEqual(chart._argumentAxes[0].measureLabels.getCall(0).args[0], {
-        bottom: 0,
-        height: 400,
-        left: 0,
-        right: 0,
-        top: 0,
-        width: 1000,
-        originalTop: 0,
-        originalBottom: 0,
-        originalLeft: 0,
-        originalRight: 0
-    });
-
-    assert.strictEqual(chart._argumentAxes[0].measureLabels.getCall(0).args[1], true);
 });
 
 QUnit.test("Adaptive layout", function(assert) {
     stubLayoutManager.needMoreSpaceForPanesCanvas.returns({ width: 10 });
     stubThemeManager.getOptions.withArgs("adaptiveLayout").returns({ width: 1000, keepLabels: false });
+
+
+    stubAxes[0].getMargins.onCall(1).returns({ left: 2, right: 2, top: 2, bottom: 2 });
+    stubAxes[0].getMargins.onCall(2).returns({ left: 2, right: 2, top: 2, bottom: 2 });
+    stubAxes[0].getCanvas.returns({ stubAxisCanvas: true });
+
     var chart = this.createSimplePolarChart();
 
+    assert.deepEqual(stubLayoutManager.needMoreSpaceForPanesCanvas.getCall(0).args[0], [{ canvas: stubAxes[0].getCanvas() }]);
+
+    assert.equal(stubAxes[0].getMargins.callCount, 3);
     assert.equal(chart._argumentAxes[0].hideOuterElements.callCount, 1);
     assert.deepEqual(chart._argumentAxes[0].updateSize.getCall(0).args, [{
-        bottom: 0,
+        bottom: 70,
         height: 400,
-        left: 0,
-        right: 0,
-        top: 0,
+        left: 50,
+        right: 50,
+        top: 70,
         width: 1000,
         originalTop: 0,
         originalBottom: 0,
@@ -485,11 +519,23 @@ QUnit.test("Adaptive layout", function(assert) {
         originalRight: 0
     }]);
     assert.deepEqual(chart._valueAxes[0].updateSize.getCall(0).args, [{
-        bottom: 0,
+        bottom: 2,
         height: 400,
-        left: 0,
-        right: 0,
-        top: 0,
+        left: 2,
+        right: 2,
+        top: 2,
+        width: 1000,
+        originalTop: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0
+    }]);
+    assert.deepEqual(chart.getArgumentAxis().updateSize.lastCall.args, [{
+        bottom: 2,
+        height: 400,
+        left: 2,
+        right: 2,
+        top: 2,
         width: 1000,
         originalTop: 0,
         originalBottom: 0,
@@ -655,4 +701,39 @@ QUnit.test("Create Tracker.", function(assert) {
 QUnit.test("crosshair should not be enabled", function(assert) {
     stubThemeManager.getOptions.withArgs("crosshair").returns({ enabled: true });
     assert.ok(this.createSimplePolarChart(), "chart was successful created");
+});
+
+QUnit.test("ClipPaths. Hide series by pane clip path (out visual range)", function(assert) {
+    var chart = this.createSimplePolarChart({});
+
+    assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ["DevExpress_3", null, false, false]);
+});
+
+QUnit.test("ClipPaths. Hide constant lines and strips (out visual range)", function(assert) {
+    this.createSimplePolarChart({});
+    var argAxis = this.createAxis.returnValues[0],
+        valueAxis = this.createAxis.returnValues[1];
+
+    assert.equal(argAxis.applyClipRects.lastCall.args[0], "DevExpress_2");
+    assert.equal(argAxis.applyClipRects.lastCall.args[1], "DevExpress_1", "canvas clip path");
+    assert.equal(valueAxis.applyClipRects.lastCall.args[0], "DevExpress_2");
+    assert.equal(valueAxis.applyClipRects.lastCall.args[1], "DevExpress_1", "canvas clip path");
+});
+
+QUnit.test("ClipPaths. Hide error bars (out visual range)", function(assert) {
+    var chart = this.createSimplePolarChart({
+        series: [{
+            valueErrorBar: {}
+        }] });
+
+    assert.deepEqual(chart.series[0].setClippingParams.lastCall.args, ["DevExpress_3", "DevExpress_4", false, false]);
+});
+
+QUnit.test("ClipPaths. Refresh clip path", function(assert) {
+    var chart = this.createSimplePolarChart({});
+
+    chart.render({ force: true });
+
+    assert.deepEqual(chart._panesClipRects.fixed[0].attr.lastCall.args[0], { cx: 100, cy: 100, r: 10 });
+    assert.deepEqual(chart._panesClipRects.base[0].attr.lastCall.args[0], { cx: 100, cy: 100, r: 10 });
 });

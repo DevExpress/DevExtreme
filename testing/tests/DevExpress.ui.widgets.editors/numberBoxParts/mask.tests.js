@@ -32,11 +32,18 @@ const moduleConfig = {
 };
 
 QUnit.module("format: api value changing", moduleConfig, () => {
-    QUnit.test("number type of input should be converted to tel on mobile device", assert => {
+    QUnit.test("number type of input should be converted to tel on mobile device when inputMode is unsupported", assert => {
         const realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "mobile" });
+        const realBrowser = browser;
         const $element = $("<div>").appendTo("body");
 
         try {
+            browser.chrome = true;
+            browser.version = "50.0";
+            browser.chrome = false;
+            browser.safari = false;
+            browser.msie = false;
+
             const instance = $element.dxNumberBox({
                 useMaskBehavior: true,
                 format: "#",
@@ -48,6 +55,10 @@ QUnit.module("format: api value changing", moduleConfig, () => {
             instance.option("mode", "number");
             assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
         } finally {
+            browser.chrome = realBrowser.chrome;
+            browser.safari = realBrowser.safari;
+            browser.msie = realBrowser.msie;
+            browser.version = realBrowser.version;
             realDeviceMock.restore();
             $element.remove();
         }
@@ -366,6 +377,19 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
 
         assert.equal(this.input.val(), "<<123.4>>", "value is correct");
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret is good");
+    });
+
+    QUnit.test("NumberBox should keep selected range after the ValueChange event", (assert) => {
+        this.instance.option({
+            format: "#0.#;<<#0.#>>",
+            value: 123.4
+        });
+
+        this.keyboard.caret({ start: 1, end: 2 }).press("-").change();
+        this.clock.tick();
+
+        assert.equal(this.input.val(), "<<123.4>>", "value is correct");
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret preserved");
     });
 });
 

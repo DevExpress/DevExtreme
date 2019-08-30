@@ -271,7 +271,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
         if(isMultiSelection) {
             $cell = this._correctCellForGroup($cell);
-            var $targetCells = this._getCellsBetween($cell, this._$prevCell);
+            let orientation = this.option("type") === "day" && (!this.option("groups").length || this.option("groupOrientation") === "vertical")
+                ? "vertical"
+                : "horizontal";
+            let $targetCells = this._getCellsBetween($cell, this._$prevCell, orientation);
             this._focusedCells = $targetCells.toArray();
         } else {
             this._focusedCells = [$cell.get(0)];
@@ -300,9 +303,9 @@ var SchedulerWorkSpace = Widget.inherit({
         return focusedCellGroupIndex !== cellGroupIndex || isDifferentTables ? $focusedCell : $cell;
     },
 
-    _getCellsBetween: function($first, $last) {
+    _getCellsBetween: function($first, $last, direction) {
         var isAllDayTable = this._hasAllDayClass($last),
-            $cells = this._getCells(isAllDayTable),
+            $cells = this._getCells(isAllDayTable, direction),
             firstIndex = $cells.index($first),
             lastIndex = $cells.index($last);
 
@@ -684,7 +687,6 @@ var SchedulerWorkSpace = Widget.inherit({
     _dateTableScrollableConfig: function() {
         var config = {
             useKeyboard: false,
-            useNative: false,
             bounceEnabled: false,
             updateManually: true,
             pushBackValue: 0
@@ -1920,15 +1922,8 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCellPosition: function($cell) {
-        var isRtl = this.option("rtlEnabled"),
-            position = $cell.position();
-
-        if(position) {
-            position.left = Math.round(position.left * 100) / 100;
-            position.top = Math.round(position.top * 100) / 100;
-        }
-
-        if(isRtl) {
+        const position = $cell.position();
+        if(this.option("rtlEnabled")) {
             position.left += $cell.get(0).getBoundingClientRect().width;
         }
         return position;
@@ -1944,9 +1939,19 @@ var SchedulerWorkSpace = Widget.inherit({
             .eq(indexes.cellIndex);
     },
 
-    _getCells: function(allDay) {
-        var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
-        return this.$element().find("." + cellClass);
+    _getCells: function(allDay, direction) {
+        const cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
+        if(direction === "vertical") {
+            let result = [];
+            for(let i = 1; ; i++) {
+                const cells = this.$element().find(`tr .${cellClass}:nth-child(${i})`);
+                if(!cells.length) break;
+                result = result.concat(cells.toArray());
+            }
+            return $(result);
+        } else {
+            return this.$element().find("." + cellClass);
+        }
     },
 
     _setHorizontalGroupHeaderCellsHeight: function() {
@@ -2153,7 +2158,13 @@ var SchedulerWorkSpace = Widget.inherit({
 
         currentDayStart.setHours(this.option("startDayHour"), 0, 0, 0);
 
-        return ((date.getTime() - currentDayStart.getTime()) % cellDuration) / cellDuration;
+        let currentDateTime = date.getTime(),
+            currentDayStartTime = currentDayStart.getTime(),
+            minTime = this._firstViewDate.getTime();
+
+        return (currentDateTime > minTime)
+            ? ((currentDateTime - currentDayStartTime) % cellDuration) / cellDuration
+            : 0;
     },
 
     getCoordinatesByDateInGroup: function(date, appointmentResources, inAllDayRow) {
@@ -2198,7 +2209,6 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getCellWidth: function() {
         var cell = this._getCells().first().get(0);
-
         return cell && cell.getBoundingClientRect().width;
     },
 

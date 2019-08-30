@@ -4117,7 +4117,9 @@ QUnit.module("Keyboard navigation", {
         ];
 
         this.options = $.extend({
-            useKeyboard: true,
+            keyboardNavigation: {
+                enabled: true
+            },
             tabIndex: 0,
             editing: {
                 mode: 'batch',

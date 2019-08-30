@@ -2,11 +2,13 @@ import $ from "jquery";
 import SpinButton from "ui/number_box/number_box.spin";
 import config from "core/config";
 import devices from "core/devices";
+import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 import pointerMock from "../../../helpers/pointerMock.js";
 
 import "ui/number_box";
 import "ui/validator";
+import "generic_light.css!";
 
 const NUMBERBOX_CLASS = "dx-numberbox";
 const INVALID_CLASS = "dx-invalid";
@@ -59,7 +61,7 @@ QUnit.module("basics", {}, () => {
 
     QUnit.test("input should have inputmode attribute for numeric keyboard on mobile devices", function(assert) {
         const $element = $("#numberbox").dxNumberBox();
-        assert.equal($element.find("." + INPUT_CLASS).attr("inputmode"), "numeric", "inputmode is correct");
+        assert.equal($element.find("." + INPUT_CLASS).attr("inputmode"), "decimal", "inputmode is correct");
     });
 
     QUnit.test("onContentReady fired after the widget is fully ready", (assert) => {
@@ -334,6 +336,19 @@ QUnit.module("basics", {}, () => {
         assert.ok($element.hasClass(SPIN_TOUCH_FRIENDLY_CLASS), "element has touchFriendly class");
     });
 
+    QUnit.test("widget's width does not increase after buttons hover in FF (T806555)", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            showSpinButtons: true,
+            useLargeSpinButtons: true
+        });
+
+        const startHeight = $element.height();
+        const $spinButton = $element.find(`.${SPIN_UP_CLASS}`);
+        eventsEngine.trigger($spinButton, "dxhoverstart");
+
+        assert.strictEqual($element.height(), startHeight, "widget's width does not change");
+    });
+
     QUnit.testInActiveWindow("input is focused when spin buttons are clicked if useLargeSpinButtons = false", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             showSpinButtons: true,
@@ -576,10 +591,10 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual($input.val(), "", "value is still cleared");
     });
 
-    QUnit.test("T220209 - the 'valueFormat' option", (assert) => {
+    QUnit.test("T220209 - the 'displayValueFormatter' option", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 5,
-            valueFormat(value) {
+            displayValueFormatter(value) {
                 return (value < 10 ? "0" : "") + value;
             }
         });
@@ -588,7 +603,7 @@ QUnit.module("basics", {}, () => {
         assert.equal($numberBox.find(".dx-texteditor-input").val(), "05", "input value is correct");
     });
 
-    QUnit.test("T220209 - the 'valueFormat' option when value is changed using keyboard", (assert) => {
+    QUnit.test("T220209 - the 'displayValueFormatter' option when value is changed using keyboard", (assert) => {
         if(devices.real().platform !== "generic") {
             assert.ok(true, "this test is actual only for desktop ");
             return;
@@ -596,7 +611,7 @@ QUnit.module("basics", {}, () => {
 
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 5,
-            valueFormat(value) {
+            displayValueFormatter(value) {
                 return (value < 10 ? "0" : "") + value;
             }
         });
@@ -614,10 +629,10 @@ QUnit.module("basics", {}, () => {
         assert.equal($numberBox.find(".dx-texteditor-input").val(), "50", "input value is correct");
     });
 
-    QUnit.test("T220209 - the 'valueFormat' option when value is changed using spin buttons", (assert) => {
+    QUnit.test("T220209 - the 'displayValueFormatter' option when value is changed using spin buttons", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 5,
-            valueFormat(value) {
+            displayValueFormatter(value) {
                 return (value < 10 ? "0" : "") + value;
             },
             showSpinButtons: true
@@ -2029,11 +2044,24 @@ QUnit.module("number validation", {}, () => {
 });
 
 QUnit.module("aria accessibility", {}, () => {
-    QUnit.test("aria role", (assert) => {
+    QUnit.test("default render", (assert) => {
         const $element = $("#numberbox").dxNumberBox({});
         const $input = $element.find(".dx-texteditor-input");
+        const inputElement = $input.get(0);
 
         assert.equal($input.attr("role"), "spinbutton", "aria role is correct");
+        assert.equal($input.attr("aria-valuenow"), "0", "required 'aria-valuenow' attribute is defined");
+        assert.ok(inputElement.hasAttribute("aria-valuemin"), "required 'aria-valuemin' attribute is defined");
+        assert.ok(inputElement.hasAttribute("aria-valuemax"), "required 'aria-valuemax' attribute is defined");
+    });
+
+    QUnit.test("aria valuenow is defined for numberBox with null value (T801129)", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            value: null
+        });
+
+        const $input = $element.find(".dx-texteditor-input");
+        assert.strictEqual($input.attr("aria-valuenow"), "", "attribute is defined");
     });
 
     QUnit.test("aria properties", (assert) => {
@@ -2062,7 +2090,7 @@ QUnit.module("aria accessibility", {}, () => {
         assert.strictEqual($input.attr("aria-valuemax"), "0", "aria max is correct");
     });
 
-    QUnit.test("the dxNumberBox should not have valuemin when max only is specified", (assert) => {
+    QUnit.test("the dxNumberBox should have value[min/max] when max or min only is specified", (assert) => {
         const $element = $("#numberbox").dxNumberBox({
             max: 30,
             value: 25
@@ -2070,20 +2098,20 @@ QUnit.module("aria accessibility", {}, () => {
         const numberBox = $element.dxNumberBox("instance");
         const $input = $element.find(".dx-texteditor-input").get(0);
 
-        assert.notOk($input.hasAttribute("aria-valuemin"), "there is no valuemin");
+        assert.ok($input.hasAttribute("aria-valuemin"), "there is valuemin");
 
         numberBox.option({
             min: 4,
             max: undefined
         });
-        assert.notOk($input.hasAttribute("aria-valuemax"), "there is no valuemax");
+        assert.ok($input.hasAttribute("aria-valuemax"), "there is valuemax");
         assert.strictEqual($($input).attr("aria-valuemin"), "4", "valuemin is correct");
 
         numberBox.option({
             min: undefined,
             max: undefined
         });
-        assert.notOk($input.hasAttribute("aria-valuemax"), "there is no valuemin");
-        assert.notOk($input.hasAttribute("aria-valuemax"), "there is no valuemax");
+        assert.ok($input.hasAttribute("aria-valuemax"), "there is valuemin");
+        assert.ok($input.hasAttribute("aria-valuemax"), "there is valuemax");
     });
 });

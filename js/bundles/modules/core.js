@@ -59,6 +59,7 @@ DevExpress.utils.resizeCallbacks = require("../../core/utils/resize_callbacks");
 DevExpress.utils.console = require("../../core/utils/console");
 DevExpress.utils.string = require("../../core/utils/string");
 DevExpress.utils.support = require("../../core/utils/support");
+DevExpress.utils.ajax = require("../../core/utils/ajax");
 
 DevExpress.viewPort = require("../../core/utils/view_port").value;
 
@@ -79,5 +80,8 @@ DevExpress.events.utils = require("../../events/utils");
 DevExpress.events.GestureEmitter = require("../../events/gesture/emitter.gesture");
 
 DevExpress.localization = require("../../localization");
+
+DevExpress.templateRendered = require("../../core/templates/template_base").renderedCallbacks;
+DevExpress.setTemplateEngine = require("../../core/templates/template_engine_registry").setTemplateEngine;
 
 module.exports = DevExpress;

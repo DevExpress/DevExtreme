@@ -12,7 +12,7 @@ var $ = require("../core/renderer"),
     eventUtils = require("../events/utils"),
     themes = require("./themes"),
     clickEvent = require("../events/click"),
-    FunctionTemplate = require("./widget/function_template");
+    FunctionTemplate = require("../core/templates/function_template").FunctionTemplate;
 
 var BUTTON_CLASS = "dx-button",
     BUTTON_CONTENT_CLASS = "dx-button-content",
@@ -70,7 +70,6 @@ var Button = Widget.inherit({
              * @name dxButtonOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -143,6 +142,7 @@ var Button = Widget.inherit({
             useSubmitBehavior: false,
 
             useInkRipple: false,
+            _templateData: {},
 
             /**
             * @name dxButtonOptions.stylingMode
@@ -177,7 +177,6 @@ var Button = Widget.inherit({
                     * @name dxButtonOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -218,7 +217,7 @@ var Button = Widget.inherit({
                 $iconElement.addClass(ICON_RIGHT_CLASS);
                 $container.append($iconElement);
             }
-        }, this);
+        });
     },
 
     _initMarkup: function() {
@@ -338,10 +337,10 @@ var Button = Widget.inherit({
             icon = "back";
         }
 
-        return {
+        return extend({
             icon: icon,
             text: text
-        };
+        }, this.option("_templateData"));
     },
 
     _renderClick: function() {
@@ -384,7 +383,7 @@ var Button = Widget.inherit({
         var ariaLabel = text || icon || "";
         ariaLabel = ariaLabel.toString().trim();
 
-        this.setAria("label", ariaLabel);
+        this.setAria("label", ariaLabel.length ? ariaLabel : null);
     },
 
     _renderType: function() {
@@ -431,6 +430,8 @@ var Button = Widget.inherit({
                 this._refreshType(args.previousValue);
                 this._updateContent();
                 this._updateAriaLabel();
+                break;
+            case "_templateData":
                 break;
             case "template":
             case "iconPosition":

@@ -6,7 +6,7 @@ import registerComponent from "core/component_registrator";
 import { DataSource } from "data/data_source/data_source";
 import Store from "data/abstract_store";
 import ArrayStore from "data/array_store";
-import setTemplateEngine from "ui/set_template_engine";
+import { setTemplateEngine } from "core/templates/template_engine_registry";
 import support from "core/utils/support";
 import holdEvent from "events/hold";
 import CollectionWidget from "ui/collection/ui.collection_widget.edit";
@@ -47,25 +47,25 @@ class TestComponent extends CollectionWidget {
 QUnit.testStart(() => {
     const markup = `
         <div id="cmp"></div>
-        
+
         <div id="cmp-with-template">
             <div data-options="dxTemplate : { name: 'testTemplate' } ">
                 First Template
             </div>
         </div>
-        
+
         <div id="cmp-with-zero-template">
             <div data-options="dxTemplate: { name: '0' }">zero</div>
         </div>
-        
+
         <script type="text/html" id="externalTemplate">
             Test
         </script>
-        
+
         <script type="text/html" id="externalTemplateNoRootElement">
             Outer text <div>Test</div>
         </script>
-        
+
         <div id="container-with-jq-template">
             <div data-options="dxTemplate : { name: 'firstTemplate' } ">
                 First Template
@@ -230,6 +230,34 @@ module("render", {
 
         const $item = instance.itemElements().eq(0);
         assert.equal($.trim($item.text()), "First Template", "item has correct template");
+    });
+
+    test("showItemDataTitle as primitive", (assert) => {
+        const $element = $("#cmp-with-template");
+        const instance = new TestComponent(
+            $element, {
+                showItemDataTitle: true,
+                items: [1]
+            });
+
+        const $item = instance.itemElements().eq(0);
+        assert.strictEqual($item.attr("title"), "1", "title is correct");
+
+        instance.option("showItemDataTitle", false);
+        assert.strictEqual(instance.itemElements().eq(0).attr("title"), undefined, "title was removed");
+    });
+
+    test("showItemDataTitle as object", (assert) => {
+        const $element = $("#cmp-with-template");
+        const instance = new TestComponent(
+            $element, {
+                showItemDataTitle: true,
+                items: [{ name: "Test", id: 1 }],
+                displayExpr: "name"
+            });
+
+        const $item = instance.itemElements().eq(0);
+        assert.strictEqual($item.attr("title"), "Test", "title is correct");
     });
 
     test("item takes new template", assert => {
@@ -1856,6 +1884,28 @@ module("Data layer integration", {
         deferred.reject();
 
         assert.equal(contentReadyFired, 1, "onContentReady fired once on loading fail");
+    });
+
+    test("collection correctly handle loadResult object", (assert) => {
+        const mapStub = sinon.stub();
+        const instance = new TestWidget("#cmp", {
+            dataSource: {
+                load({ filter }) {
+                    const items = filter ? [{ id: 3, text: "test3" }] : [{ id: 1, text: "test1" }, { id: 2, text: "test2" }];
+                    return $.Deferred().resolve({ data: items }).promise();
+                },
+                key: "id",
+                map: mapStub
+            },
+            selectionMode: "single"
+        });
+
+        instance.option("selectedItemKeys", [3]);
+
+        const filteredItems = mapStub.lastCall.args[2];
+        assert.ok(mapStub.callCount > 1, "the 'map' function was called not only during the initial loading");
+        assert.ok(Array.isArray(filteredItems), "receive array");
+        assert.deepEqual(filteredItems, [{ id: 3, text: "test3" }], "correct data");
     });
 });
 

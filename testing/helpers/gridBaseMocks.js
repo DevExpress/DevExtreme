@@ -888,7 +888,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     attrValue = attrValue.toString();
                 }
 
-                domUtils.toggleAttr(option.target, attrName, attrValue);
+                option.target.attr(attrName, attrValue);
             };
 
             if(!$.isPlainObject(arguments[0])) {
@@ -1006,6 +1006,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         that._suppressDeprecatedWarnings = commonUtils.noop;
 
         that._resumeDeprecatedWarnings = commonUtils.noop;
+
+        that._optionsByReference = {};
 
         that.dispose = function() {
             $.each(that._controllers, function() {

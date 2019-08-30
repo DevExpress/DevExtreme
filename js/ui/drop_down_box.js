@@ -57,7 +57,6 @@ var DropDownBox = DropDownEditor.inherit({
         return extend(this.callBase(), {
             /**
              * @name dxDropDownBoxOptions.attr
-             * @inheritdoc
              * @hidden
              */
 
@@ -120,13 +119,11 @@ var DropDownBox = DropDownEditor.inherit({
              * @name dxDropDownBoxOptions.itemTemplate
              * @type template
              * @default "item"
-             * @inheritdoc
              * @hidden
              */
 
             /**
              * @name dxDropDownBoxOptions.openOnFieldClick
-             * @inheritdoc
              * @default true
              */
             openOnFieldClick: true,
@@ -137,7 +134,13 @@ var DropDownBox = DropDownEditor.inherit({
              * @default "change"
              */
 
-            valueFormat: function(value) {
+            /**
+             * @name dxDropDownBoxOptions.displayValueFormatter
+             * @type function(value)
+             * @type_function_param1 value:string|Array<any>
+             * @type_function_return string
+             */
+            displayValueFormatter: function(value) {
                 return Array.isArray(value) ? value.join(", ") : value;
             },
             useHiddenSubmitElement: true

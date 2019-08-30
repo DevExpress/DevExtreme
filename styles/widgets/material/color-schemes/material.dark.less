@@ -3,65 +3,54 @@
 /**
 * @name 10. Font family
 * @type text
-* @group base.typography
 */
 @base-font-family: "Roboto", "RobotoFallback", "Helvetica", "Arial", sans-serif;
 
 /**
 * @name 20. Label color
 * @type color
-* @group base.typography
 */
 @base-label-color: @base-text-color;
 
 /**
 * @name 30. Link color
 * @type color
-* @group base.typography
 */
 @base-link-color: @base-accent;
 
 /**
 * @name 40. Icon color
 * @type color
-* @group base.typography
-* @paletteColorOpacity 1
 */
 @base-icon-color: fade(@base-text-color, 54%);
 
 /**
 * @name 50. Spin icon color
 * @type color
-* @group base.typography
-* @paletteColorOpacity 1
 */
 @base-spin-icon-color: fade(@base-text-color, 54%);
 
 /**
 * @name 20. Text color
 * @type color
-* @group base.common
 */
 @base-text-color: #fff;
 
 /**
 * @name 30. Background color
 * @type color
-* @group base.common
 */
 @base-bg: #363640;
 
 /**
 * @name 40. Border color
 * @type color
-* @group base.common
 */
 @base-border-color: #515159;
 
 /**
 * @name 120. Border radius
 * @type text
-* @group base.common
 */
 @base-border-radius: @MATERIAL_BASE_BORDER_RADIUS;
 
@@ -72,7 +61,6 @@
 /**
 * @name 50. Success color
 * @type color
-* @group base.common
 */
 
 @base-success:         #8BC34A;
@@ -80,7 +68,6 @@
 /**
 * @name 60. Warning color
 * @type color
-* @group base.common
 */
 
 @base-warning:         #FFC107;
@@ -88,37 +75,30 @@
 /**
 * @name 70. Danger color
 * @type color
-* @group base.common
 */
 @base-danger:          #F44336;
 
 /**
 * @name 80. Hovered state text color
 * @type color
-* @group base.common
 */
 @base-hover-color: @base-text-color;
 
 /**
 * @name 90. Hovered state background color
 * @type color
-* @group base.common
-* @paletteColorOpacity .15
 */
 @base-hover-bg: lighten(@base-bg, 4%);
 
 /**
 * @name 100. Focused state text color
 * @type color
-* @group base.common
 */
 @base-focus-color: @base-inverted-text-color;
 
 /**
 * @name 110. Focused state background color
 * @type color
-* @group base.common
-* @paletteColorOpacity 1
 */
 @base-focus-bg: lighten(@base-bg, 20%);
 
@@ -142,14 +122,12 @@
 /**
 * @name 130. Badge text color
 * @type color
-* @group base.common
 */
 @badge-color: @base-inverted-text-color;
 
 /**
 * @name 140. Badge background color
 * @type color
-* @group base.common
 */
 @badge-bg: @base-accent;
 @badge-invalid-bg: @base-invalid-color;
@@ -160,58 +138,48 @@
 /**
 * @name 10. Text color
 * @type color
-* @group editors.texteditors
 */
 @texteditor-color: @base-text-color;
 
 /**
 * @name 20. Placeholder text color
 * @type color
-* @group editors.texteditors
 */
 @texteditor-placeholder-color: darken(@texteditor-color, 50%);
 
 /**
 * @name 10. Background color
 * @type color
-* @group editors.texteditors
 */
 @texteditor-bg: fade(@base-text-color, 4%);
 
 /**
 * @name 30. Focused background color
 * @type color
-* @group editors.texteditors
-* @paletteColorOpacity 1
 */
 @texteditor-focused-bg: fade(@base-text-color, 4%);
 
 /**
 * @name 20. Border color
 * @type color
-* @group editors.texteditors
 */
 @texteditor-border-color: fade(@texteditor-color, 42%);
 
 /**
 * @name 40. Hovered border color
 * @type color
-* @group editors.texteditors
 */
 @texteditor-hover-border-color: @texteditor-color;
 
 /**
 * @name 30. Focused border color
 * @type color
-* @group editors.texteditors
-* @paletteColorOpacity 1
 */
 @texteditor-focused-border-color: @base-accent;
 
 /**
 * @name 40. Hovered background color
 * @type color
-* @group editors.texteditors
 */
 @texteditor-hover-bg: fade(@base-text-color, 7%);
 
@@ -227,7 +195,6 @@
 /**
 * @name 70. Search icon color
 * @type color
-* @group editors.texteditors
 */
 @textbox-search-icon-color: @base-icon-color;
 
@@ -244,21 +211,18 @@
 /**
 * @name 10. Item title text color
 * @type color
-* @group navigations.accordion
 */
 @accordion-title-color: @accordion-color;
 
 /**
 * @name 20. Item border color
 * @type color
-* @group navigations.accordion
 */
 @accordion-item-border-color: @base-border-color;
 
 /**
 * @name 30. Item active state icon color
 * @type color
-* @group navigations.accordion
 */
 @accordion-icon-active-color: @accordion-color;
 
@@ -293,35 +257,30 @@
 /**
 * @name 10. Text color
 * @type color
-* @group buttons.normal
 */
 @button-normal-color: @base-text-color;
 
 /**
 * @name 20. Background color
 * @type color
-* @group buttons.normal
 */
 @button-normal-bg: @base-element-bg;
 
 /**
 * @name 30. Hovered state background color
 * @type color
-* @group buttons.normal
 */
 @button-normal-hover-bg: darken(@button-normal-bg, 8%);
 
 /**
 * @name 40. Focused state background color
 * @type color
-* @group buttons.normal
 */
 @button-normal-focused-bg: darken(@button-normal-bg, 12%);
 
 /**
 * @name 60. Active state background color
 * @type color
-* @group buttons.normal
 */
 @button-normal-active-bg: darken(@button-normal-bg, 12%);
 
@@ -332,35 +291,30 @@
 /**
 * @name 10. Text color
 * @type color
-* @group buttons.default
 */
 @button-default-color: @base-inverted-text-color;
 
 /**
 * @name 20. Background color
 * @type color
-* @group buttons.default
 */
 @button-default-bg: @base-accent;
 
 /**
 * @name 30. Hovered state background color
 * @type color
-* @group buttons.default
 */
 @button-default-hover-bg: darken(@button-default-bg, 8%);
 
 /**
 * @name 40. Focused state background color
 * @type color
-* @group buttons.default
 */
 @button-default-focused-bg: darken(@button-default-bg, 12%);
 
 /**
 * @name 60. Active state background color
 * @type color
-* @group buttons.default
 */
 @button-default-active-bg: darken(@button-default-focused-bg, 12%);
 @button-default-icon-color: @button-inverted-icon-color;
@@ -370,35 +324,30 @@
 /**
 * @name 10. Text color
 * @type color
-* @group buttons.danger
 */
 @button-danger-color: @base-inverted-text-color;
 
 /**
 * @name 20. Background color
 * @type color
-* @group buttons.danger
 */
 @button-danger-bg: @base-danger;
 
 /**
 * @name 40. Hovered state background color
 * @type color
-* @group buttons.danger
 */
 @button-danger-hover-bg: darken(@button-danger-bg, 8%);
 
 /**
 * @name 60. Focused state background color
 * @type color
-* @group buttons.danger
 */
 @button-danger-focused-bg: darken(@button-danger-bg, 12%);
 
 /**
 * @name 80. Active state background color
 * @type color
-* @group buttons.danger
 */
 @button-danger-active-bg: darken(@button-danger-bg, 12%);
 @button-danger-icon-color: @button-inverted-icon-color;
@@ -408,35 +357,30 @@
 /**
 * @name 10. Text color
 * @type color
-* @group buttons.success
 */
 @button-success-color: @base-inverted-text-color;
 
 /**
 * @name 20. Background color
 * @type color
-* @group buttons.success
 */
 @button-success-bg: @base-success;
 
 /**
 * @name 40. Hovered state background color
 * @type color
-* @group buttons.success
 */
 @button-success-hover-bg: darken(@button-success-bg, 8%);
 
 /**
 * @name 60. Focused state background color
 * @type color
-* @group buttons.success
 */
 @button-success-focused-bg: darken(@button-success-bg, 12%);
 
 /**
 * @name 80. Active state background color
 * @type color
-* @group buttons.success
 */
 @button-success-active-bg: darken(@button-success-bg, 12%);
 @button-success-icon-color: @button-inverted-icon-color;
@@ -446,7 +390,6 @@
 /**
 * @name 10. Text color
 * @type color
-* @group buttons.flat
 */
 @button-flat-color: @base-text-color;
 
@@ -479,13 +422,15 @@
 @diagram-default-format-active-bg: darken(@button-default-bg, 10%);
 @diagram-danger-format-active-bg: darken(@button-danger-bg, 10%);
 @diagram-success-format-active-bg: darken(@button-success-bg, 10%);
+@diagram-image-icon-base-color: @base-border-color;
+@diagram-image-icon-accent-color: @base-accent;
+@diagram-toolbox-shape-text-opacity: 0.5;
 
 // Drawer
 
 /**
 * @name 10. Shader background color
 * @type color
-* @group navigations.drawer
 */
 @drawer-shader-background-color: fade(@base-shadow-color, 50%);
 
@@ -494,21 +439,18 @@
 /**
 * @name 10. Filename text color
 * @type color
-* @group editors.fileuploader
 */
 @fileuploader-filename-color: @base-text-color;
 
 /**
 * @name 20. File status text color
 * @type color
-* @group editors.fileuploader
 */
 @fileuploader-falename-status-color: lighten(@fileuploader-filename-color, 40%);
 
 /**
 * @name 30. Border color on dragover
 * @type color
-* @group editors.fileuploader
 */
 @fileuploader-border-color: @base-border-color;
 
@@ -518,22 +460,18 @@
 /**
 * @name 10. Indicator background color
 * @type color
-* @group gallery
-* @paletteColorOpacity 1
 */
 @gallery-indicator-bg: @base-bg;
 
 /**
 * @name 20. Selected indicator background color
 * @type color
-* @group gallery
 */
 @gallery-indicator-item-selected-bg: @base-accent;
 
 /**
 * @name 30. Focused indicator background color
 * @type color
-* @group gallery
 */
 @gallery-indicator-focused-bg: @base-accent;
 
@@ -546,14 +484,12 @@
 /**
 * @name 30. Hovered navigation button color
 * @type color
-* @group gallery
 */
 @gallery-navbutton-hover-color: @base-accent;
 
 /**
 * @name 30. Active navigation button color
 * @type color
-* @group gallery
 */
 @gallery-navbutton-active-color: @base-accent;
 
@@ -576,51 +512,42 @@
 /**
 * @name 20. Group border color
 * @type color
-* @group list
 */
 @list-border-color: @base-border-color;
 
 /**
 * @name 30. Group header background color
 * @type color
-* @group list
 */
 @list-group-header-bg: fade(@base-bg, 0);
 
 /**
 * @name 10. Item text color
 * @type color
-* @group list
 */
 @list-normal-color: @base-text-color;
 
 /**
 * @name 20. Group header text color
 * @type color
-* @group list
 */
 @list-group-color: fade(@base-text-color, 60%);
 
 /**
 * @name 25. Expanded group header text color
 * @type color
-* @group list
 */
 @list-expanded-group-color: @base-accent;
 
 /**
 * @name 30. Hovered item background color
 * @type color
-* @group list
-* @paletteColorOpacity .15
 */
 @list-item-hover-bg: @base-hover-bg;
 
 /**
 * @name 50. Selected item state background color
 * @type color
-* @group list
-* @paletteColorOpacity .25
 */
 @list-item-selected-bg: lighten(@base-bg, 12%);
 @list-item-focused-selected-bg: fade(@base-focus-bg, 70%);
@@ -632,8 +559,6 @@
 /**
 * @name 40. Active state item background color
 * @type color
-* @group list
-* @paletteColorOpacity 1
 */
 @list-item-active-bg: lighten(@base-bg, 20%);
 @list-holdmenu-bg: @base-bg;
@@ -660,14 +585,12 @@
 /**
 * @name 10. Content background color
 * @type color
-* @group overlays.common
 */
 @overlay-content-bg: @base-bg;
 
 /**
 * @name 40. Shader background color
 * @type color
-* @group overlays.common
 */
 @overlay-shader-bg: fade(@base-shadow-color, 61%);
 
@@ -676,7 +599,6 @@
 /**
 * @name 20. Header background color
 * @type color
-* @group overlays.popup
 */
 @popup-title-bg: transparent;
 @popup-title-color: @base-text-color;
@@ -694,7 +616,6 @@
 /**
 * @name 90. Spin active icon color
 * @type color
-* @group editors.texteditors
 */
 @dropdowneditor-icon-active-color: @base-spin-icon-color;
 
@@ -707,7 +628,6 @@
 /**
 * @name 10. Item background color
 * @type color
-* @group editors.selectbox
 */
 @selectbox-list-bg: @base-bg;
 @selectbox-shadow-color: fade(@base-shadow-color, 40%);
@@ -717,8 +637,6 @@
 /**
 * @name 10. Tab text color
 * @type color
-* @group navigations.tabs
-* @paletteColorOpacity 1
 */
 @tabs-tab-color: fade(@base-text-color, 54%);
 @tabs-tab-icon-color: @tabs-tab-color;
@@ -726,8 +644,6 @@
 /**
 * @name 20. Selected tab text color
 * @type color
-* @group navigations.tabs
-* @paletteColorOpacity 1
 */
 @tabs-tab-selected-color: @base-accent;
 @tabs-tab-icon-selected-color: @tabs-tab-selected-color;
@@ -736,23 +652,18 @@
 /**
 * @name 30. Selected tab bottom border color
 * @type color
-* @group navigations.tabs
-* @paletteColorOpacity 1
 */
 @tabs-selected-tab-bottom-border-color: @base-accent;
 
 /**
 * @name 40. Tab background color
 * @type color
-* @group navigations.tabs
 */
 @tabs-tab-bg: darken(@base-bg, 3%);
 
 /**
 * @name 50. Hovered tab background color
 * @type color
-* @group navigations.tabs
-* @paletteColorOpacity 1
 */
 @tabs-hovered-tab-bg-color: lighten(@base-bg, 7%);
 
@@ -762,15 +673,12 @@
 /**
 * @name 10. Tag text color
 * @type color
-* @group editors.tagbox
 */
 @tagbox-tag-color: fade(@base-text-color, 60%);
 
 /**
 * @name 20. Tag background color
 * @type color
-* @group editors.tagbox
-* @paletteColorOpacity 0.3
 */
 @tagbox-tag-bg: lighten(@base-bg, 12%);
 @tagbox-tag-hover-bg: lighten(@base-bg, 15%);
@@ -778,7 +686,6 @@
 /**
 * @name 30. Tag active text color
 * @type color
-* @group editors.tagbox
 */
 @tagbox-tag-active-color: @base-text-color;
 @tagbox-tag-border-radius: 16px;
@@ -786,8 +693,6 @@
 /**
 * @name 40. Tag close button color
 * @type color
-* @group editors.tagbox
-* @paletteColorOpacity 1
 */
 @tagbox-tag-button-remove-bg: rgba(0, 0, 0, 0.36);
 @tagbox-tag-button-remove-color: lighten(@base-bg, 22%);
@@ -799,28 +704,24 @@
 /**
 * @name 10. Tab text color
 * @type color
-* @group navigations.navbar
 */
 @navbar-tab-color: @base-text-color;
 
 /**
 * @name 20. Selected tab text color
 * @type color
-* @group navigations.navbar
 */
 @navbar-tab-selected-color: @base-text-color;
 
 /**
 * @name 30. Tab background color
 * @type color
-* @group navigations.navbar
 */
 @navbar-tab-bg: darken(@base-bg, 3%);
 
 /**
 * @name 40. Selected tab background color
 * @type color
-* @group navigations.navbar
 */
 @navbar-tab-selected-bg: @base-bg;
 @navbar-tab-focused-border-color: @base-focus-bg;
@@ -832,7 +733,6 @@
 /**
 * @name 10. Scroller background color
 * @type color
-* @group scrollview
 */
 @scrollable-scroll-bg: fade(lighten(@scrollable-bg, 25%), 70%);
 
@@ -849,7 +749,6 @@
 /**
 * @name 10. Background color
 * @type color
-* @group navigations.toolbar
 */
 @toolbar-bg: @base-bg;
 
@@ -861,7 +760,6 @@
 /**
 * @name 10. Text color
 * @type color
-* @group overlays.toasts
 */
 @toast-color: fade(#fff, 87%);
 
@@ -871,28 +769,24 @@
 /**
 * @name 20. Info background color
 * @type color
-* @group overlays.toasts
 */
 @toast-info-bg: @toast-default-bg;
 
 /**
 * @name 30. Warning background color
 * @type color
-* @group overlays.toasts
 */
 @toast-warning-bg: @base-warning;
 
 /**
 * @name 40. Error background color
 * @type color
-* @group overlays.toasts
 */
 @toast-error-bg: @base-danger;
 
 /**
 * @name 50. Success background color
 * @type color
-* @group overlays.toasts
 */
 @toast-success-bg: @base-success;
 
@@ -901,7 +795,6 @@
 /**
 * @name 10. Load indicator color
 * @type color
-* @group overlays.loadpanel
 */
 @load-indicator-segment-bg-color: @base-accent;
 
@@ -913,7 +806,6 @@
 /**
 * @name 20. Loadpanel background color
 * @type color
-* @group overlays.loadpanel
 * @inherit @overlay-content-bg
 * @isLastSubGroupItem true
 */
@@ -924,15 +816,12 @@
 /**
 * @name 10. Slider bar background color
 * @type color
-* @group sliders
 */
 @material-slider-bar-bg: fade(@base-accent, 24%);
 
 /**
 * @name 20. Selected range background color
 * @type color
-* @group sliders
-* @paletteColorOpacity 1
 */
 @material-slider-bg: @base-accent;
 @material-slider-active: fade(@base-accent, 24%);
@@ -944,7 +833,6 @@
 /**
 * @name 30. Slider tooltip text color
 * @type color
-* @group sliders
 */
 @material-slider-tooltip-color: @base-inverted-text-color;
 
@@ -953,15 +841,12 @@
 /**
 * @name 10. Bar background color
 * @type color
-* @group progressbars
 */
 @progressbar-bg:  fade(@base-accent, 30%);
 
 /**
 * @name 20. Selected range background color
 * @type color
-* @group progressbars
-* @paletteColorOpacity 1
 */
 @progressbar-range-bg: @base-accent;
 
@@ -971,8 +856,6 @@
 /**
 * @name 30. Label color
 * @type color
-* @group progressbars
-* @paletteColorOpacity 1
 */
 @progressbar-label-color: @base-accent;
 
@@ -982,8 +865,6 @@
 /**
 * @name 20. Track 'OFF' background color
 * @type color
-* @group editors.switch
-* @paletteColorOpacity 1
 */
 @switch-bg: lighten(@base-element-bg, 38%);
 
@@ -991,8 +872,6 @@
 /**
 * @name 30. Handle 'OFF' background color
 * @type color
-* @group editors.switch
-* @paletteColorOpacity 1
 */
 
 @switch-handle-off-bg: lighten(@base-element-bg, 2%);
@@ -1001,7 +880,6 @@
 /**
 * @name 40. Track 'ON' background color
 * @type color
-* @group editors.switch
 */
 
 @switch-on-bg: fade(@base-accent, 50%);
@@ -1009,7 +887,6 @@
 /**
 * @name 50. Handle 'ON' background color
 * @type color
-* @group editors.switch
 */
 
 @switch-handle-on-bg: @base-accent;
@@ -1027,16 +904,12 @@
 /**
 * @name 150. Pager selected item text color
 * @type color
-* @group base.common
-* @paletteColorOpacity 1
 */
 @pager-page-selected-color: @base-inverted-text-color;
 
 /**
 * @name 160. Pager selected item background color
 * @type color
-* @group base.common
-* @paletteColorOpacity 1
 */
 @pager-page-selected-bg: @base-accent;
 
@@ -1045,7 +918,6 @@
 /**
 * @name 10. Overlay background
 * @type color
-* @group editors.colorbox
 */
 @colorbox-overlay-bg: @overlay-content-bg;
 @colorbox-palette-cell-bg: @colorbox-overlay-bg;
@@ -1062,7 +934,6 @@
 /**
 * @name 20. Header text color
 * @type color
-* @group datagrid
 */
 @datagrid-columnchooser-item-color: fade(@datagrid-base-color, 60%);
 @datagrid-columnchooser-hover-icon-color: fade(@datagrid-base-color, 38%);
@@ -1072,14 +943,12 @@
 * @name 25. Header text weight
 * @type select
 * @typeValues 300|500|700
-* @group datagrid
 */
 @datagrid-columnchooser-font-weight: 500;
 
 /**
 * @name 35. Draggable header border color
 * @type color
-* @group datagrid
 */
 @datagrid-drag-header-shadow-color: fade(@base-shadow-color, 30%);
 @datagrid-drag-header-second-shadow-color: fade(@base-shadow-color, 40%);
@@ -1091,36 +960,30 @@
 /**
 * @name 55. Selected row background color
 * @type color
-* @group datagrid
-* @paletteColorOpacity 1
 */
 @datagrid-selection-bg: fade(@base-accent, 7%);
 
 /**
 * @name 60. Selected row border color
 * @type color
-* @group datagrid
 */
 @datagrid-row-selected-border-color: @datagrid-border-color;
 
 /**
 * @name 50. Selected row text color
 * @type color
-* @group datagrid
 */
 @datagrid-row-selected-color: @datagrid-base-color;
 
 /**
 * @name 65. Focused row text color
 * @type color
-* @group datagrid
 */
 @datagrid-row-focused-color: @base-inverted-text-color;
 
 /**
 * @name 70. Focused row background color
 * @type color
-* @group datagrid
 */
 @datagrid-row-focused-bg: @base-accent;
 
@@ -1130,14 +993,12 @@
 /**
 * @name 30. Context menu icons color
 * @type color
-* @group datagrid
 */
 @datagrid-menu-icon-color: lighten(@base-icon-color, 33.7%);
 
 /**
 * @name 40. Modified data background color
 * @type color
-* @group datagrid
 */
 @datagrid-cell-modified-border-color: fade(@base-success, 32%);
 
@@ -1146,7 +1007,6 @@
 /**
 * @name 45. Invalidate data faded color
 * @type color
-* @group datagrid
 */
 @datagrid-row-invalid-faded-border-color: fade(@base-invalid-faded-border-color, 32%);
 
@@ -1155,14 +1015,12 @@
 /**
 * @name 90. Group row text color
 * @type color
-* @group datagrid
 */
 @datagrid-group-row-color: fade(@datagrid-base-color, 54%);
 
 /**
 * @name 95. Group row background color
 * @type color
-* @group datagrid
 */
 @datagrid-group-row-bg: fade(@datagrid-base-background-color, 100%);
 
@@ -1171,7 +1029,6 @@
 /**
 * @name 105. Highlighted text color
 * @type color
-* @group datagrid
 */
 @datagrid-search-color: @base-inverted-text-color;
 @datagrid-chevron-icon-color: lighten(@base-spin-icon-color, 38.5%);
@@ -1179,22 +1036,18 @@
 /**
 * @name 110. Highlighted text background color
 * @type color
-* @group datagrid
-* @paletteColorOpacity 1
 */
 @datagrid-search-bg: @base-accent;
 
 /**
 * @name 115. Error row text color
 * @type color
-* @group datagrid
 */
 @datagrid-row-error-color: rgba(255, 255, 255, 1);
 
 /**
 * @name 120. Error row background color
 * @type color
-* @group datagrid
 */
 @datagrid-row-error-bg: mix(@base-invalid-color, @datagrid-base-background-color, 60%);
 
@@ -1203,15 +1056,12 @@
 /**
 * @name 75. Focused cell border color
 * @type color
-* @group datagrid
-* @paletteColorOpacity 1
 */
 @datagrid-focused-border-color: @base-accent;
 
 /**
 * @name 80. Editor background
 * @type color
-* @group datagrid
 */
 @datagrid-editor-bg: fade(@datagrid-base-background-color, 0%);
 
@@ -1224,14 +1074,12 @@
 /**
 * @name 85. Row alternation background color
 * @type color
-* @group datagrid
 */
 @datagrid-row-alternation-bg: lighten(@datagrid-base-background-color, 4%);
 
 /**
 * @name 100. Summary item color
 * @type color
-* @group datagrid
 */
 @datagrid-summary-color: fade(@datagrid-base-color, 70%);
 @datagrid-columnchooser-message-color: lighten(@datagrid-base-color, 40%);
@@ -1240,7 +1088,7 @@
 @datagrid-column-separator-bg: fade(@base-accent, 50%);
 @datagrid-filter-row-background-color: darken(@datagrid-base-background-color, 2%);
 @datagrid-active-header-filter-icon-color: @base-accent;
-@datagrid-text-stub-background-image-path: url(images/widgets/material/color-schemes/dark/grid/text-stub.png);
+@datagrid-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/dark/grid/text-stub.png');
 @datagrid-filter-panel-color: @base-accent;
 
 //TreeList
@@ -1313,7 +1161,7 @@
 @treelist-column-separator-bg: fade(@base-accent, 50%);
 @treelist-filter-row-background-color: darken(@treelist-base-background-color, 2%);
 @treelist-active-header-filter-icon-color: @base-accent;
-@treelist-text-stub-background-image-path: url(images/widgets/material/color-schemes/dark/grid/text-stub.png);
+@treelist-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/dark/grid/text-stub.png');
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
@@ -1322,7 +1170,6 @@
 /**
 * @name 10. Header text color
 * @type color
-* @group pivotgrid
 */
 @PIVOTGRID_AREA_COLOR: fade(@base-text-color, 54%);
 
@@ -1333,21 +1180,18 @@
 /**
 * @name 20. Totals background color
 * @type color
-* @group pivotgrid
 */
 @PIVOTGRID_TOTALCOLOR: fade(darken(@PIVOTGRID_AREA_BACKGROUND, 13.3%), 20%);
 
 /**
 * @name 30. Grand totals background color
 * @type color
-* @group pivotgrid
 */
 @PIVOTGRID_GRANDTOTALCOLOR: @base-hover-bg;
 
 /**
 * @name 40. Field area text color
 * @type color
-* @group pivotgrid
 */
 @PIVOTGRID_FIELD_AREA_TEXT_COLOR: fade(darken(@PIVOTGRID_AREA_COLOR, 26.2%), 30%);
 
@@ -1356,14 +1200,14 @@
 @PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: fade(@base-shadow-color, 10%);
 @PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: fade(@base-shadow-color, 20%);
 
-@PIVOTGRID_AREA_ALL_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-all.png);
-@PIVOTGRID_AREA_FILTER_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-filter.png);
-@PIVOTGRID_AREA_COLUMN_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-column.png);
-@PIVOTGRID_AREA_ROW_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-row.png);
-@PIVOTGRID_AREA_DATA_IMAGE: url(images/widgets/material/color-schemes/dark/grid/area-data.png);
+@PIVOTGRID_AREA_ALL_IMAGE: data-uri('images/widgets/material/color-schemes/dark/grid/area-all.png');
+@PIVOTGRID_AREA_FILTER_IMAGE: data-uri('images/widgets/material/color-schemes/dark/grid/area-filter.png');
+@PIVOTGRID_AREA_COLUMN_IMAGE: data-uri('images/widgets/material/color-schemes/dark/grid/area-column.png');
+@PIVOTGRID_AREA_ROW_IMAGE: data-uri('images/widgets/material/color-schemes/dark/grid/area-row.png');
+@PIVOTGRID_AREA_DATA_IMAGE: data-uri('images/widgets/material/color-schemes/dark/grid/area-data.png');
 
-@PIVOTGRID_DIMENSION_IMAGE: url(images/widgets/material/color-schemes/dark/grid/dimension.png);
-@PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/material/color-schemes/dark/grid/hierarchy.png);
+@PIVOTGRID_DIMENSION_IMAGE: data-uri('images/widgets/material/color-schemes/dark/grid/dimension.png');
+@PIVOTGRID_HIERARCHY_IMAGE: data-uri('images/widgets/material/color-schemes/dark/grid/hierarchy.png');
 
 @PIVOTGRID_POSITION_INDICATOR_COLOR: gray;
 @pivotgrid-chevron-icon-color: @PIVOTGRID_AREA_COLOR;
@@ -1375,7 +1219,6 @@
 /**
 * @name 10. Border color
 * @type color
-* @group scheduler
 */
 @SCHEDULER_BASE_BORDER_COLOR: @base-border-color;
 
@@ -1387,7 +1230,6 @@
 /**
 * @name 20. Hour separator color
 * @type color
-* @group scheduler
 */
 @SCHEDULER_ACCENT_BORDER_COLOR: @base-border-color;
 
@@ -1395,7 +1237,6 @@
 /**
 * @name 30. Appointment text color
 * @type color
-* @group scheduler
 */
 @SCHEDULER_APPOINTMENT_TEXT_COLOR: @base-inverted-text-color;
 @scheduler-appointment-focus-color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
@@ -1403,28 +1244,24 @@
 /**
 * @name 40. Appointment background color
 * @type color
-* @group scheduler
 */
 @SCHEDULER_APPOINTMENT_BASE_COLOR: @base-accent;
 
 /**
 * @name 50. Start appointment color
 * @type color
-* @group scheduler
 */
 @SCHEDULER_APPOINTMENT_START_COLOR: fade(@base-shadow-color, 30%);
 
 /**
 * @name 60. Focused cell color
 * @type color
-* @group scheduler
 */
 @SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: fade(@base-accent, 12%);
 
 /**
 * @name 70. First day of month separator color
 * @type color
-* @group scheduler
 */
 @SCHEDULER_FIRST_MONTH_BORDER_COLOR: @base-border-color;
 @SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR: darken(@base-element-bg, 5%);
@@ -1435,7 +1272,6 @@
 /**
 * @name 80. Date-time indicator color
 * @type color
-* @group scheduler
 */
 @SCHEDULER_CURRENT_TIME_CELL_COLOR: @base-accent;
 @SCHEDULER_TIME_INDICATOR_COLOR: #EB5757;
@@ -1465,7 +1301,6 @@
 /**
 * @name 10. Text color
 * @type color
-* @group navigations.menu
 */
 @menu-color: lighten(@base-text-color, 46%);
 @menu-item-expanded-color: @menu-color;
@@ -1473,8 +1308,6 @@
 /**
 * @name 60. Selected item background color
 * @type color
-* @group navigations.menu
-* @paletteColorOpacity 1
 */
 @menu-item-selected-bg: lighten(@base-bg, 8%);
 @menu-popup-border-color: @base-border-color;
@@ -1490,14 +1323,12 @@
 /**
 * @name 20. Header text color
 * @type color
-* @group editors.calendar
 */
 @calendar-header-color: lighten(@calendar-color, 40%);
 
 /**
 * @name 30. Other month text color
 * @type color
-* @group editors.calendar
 */
 @calendar-cell-other-color: lighten(@calendar-color, 49%);
 @calendar-cell-other-hover-color: lighten(@calendar-color, 49%);
@@ -1509,8 +1340,6 @@
 /**
 * @name 40. Selected cell background color
 * @type color
-* @group editors.calendar
-* @paletteColorOpacity 1
 */
 @calendar-cell-selected-bg: @base-accent;
 
@@ -1526,7 +1355,6 @@
 /**
 * @name 50. Shevron icon color
 * @type color
-* @group editors.calendar
 */
 @calendar-shevron-icon-color: @base-accent;
 
@@ -1538,14 +1366,12 @@
 /**
 * @name 10. Text color
 * @type color
-* @group overlays.tooltip
 */
 @tooltip-color: @base-text-color;
 
 /**
 * @name 20. Background color
 * @type color
-* @group overlays.tooltip
 */
 @tooltip-bg: rgba(0, 0, 0, 1);
 @tooltip-border-radius: @base-border-radius;
@@ -1559,7 +1385,6 @@
 /**
 * @name 10. Item text color
 * @type color
-* @group tileview
 */
 @tileview-color: @base-text-color;
 @tileview-bg: @base-element-bg;
@@ -1576,8 +1401,6 @@
 /**
 * @name 80. Focused state background color
 * @type color
-* @group navigations.treeview
-* @paletteColorOpacity 1
 */
 @treeview-focused-bg: @base-hover-bg;
 @treeview-focus-color: @base-text-color;
@@ -1612,16 +1435,15 @@
 /**
 * @name 20. Group border color
 * @type color
-* @group form
 */
 @form-group-border-color: @base-border-color;
 @form-field-required-color: @form-field-item-color;
 @form-field-mark-color: @form-field-item-color;
 
 // Images
-@list-item-icon-toggle-delete-bg: url(images/widgets/material/color-schemes/dark/list/delete.png);
-@colorbox-preview-empty-bg: url(images/widgets/material/color-schemes/dark/colorbox/nocolor.png);
-@loadindicator-background-image: url(images/widgets/material/color-schemes/dark/loader64.gif);
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/material/color-schemes/dark/list/delete.png');
+@colorbox-preview-empty-bg: data-uri('images/widgets/material/color-schemes/dark/colorbox/nocolor.png');
+@loadindicator-background-image: data-uri('images/widgets/material/color-schemes/dark/loader64.gif');
 
 // Fieldset
 
@@ -1634,21 +1456,18 @@
 /**
 * @name 10. Text color
 * @type color
-* @group filterbuilder
 */
 @filterbuilder-text-color: @base-text-color;
 
 /**
 * @name 20. Focused text color
 * @type color
-* @group filterbuilder
 */
 @filterbuilder-text-focus-color: #FFF;
 
 /**
 * @name 30. Plus icon color
 * @type color
-* @group filterbuilder
 */
 @filterbuilder-plus-icon-color: fade(@base-success, 70%);
 @filterbuilder-plus-icon-hover-color: fadein(@filterbuilder-plus-icon-color, 100%);
@@ -1657,7 +1476,6 @@
 /**
 * @name 40. Remove icon color
 * @type color
-* @group filterbuilder
 */
 @filterbuilder-remove-icon-color: fade(@base-danger, 70%);
 @filterbuilder-remove-icon-hover-color: fadein(@filterbuilder-remove-icon-color, 100%);
@@ -1666,7 +1484,6 @@
 /**
 * @name 50. Group operation button color
 * @type color
-* @group filterbuilder
 */
 @filterbuilder-group-operation-color: fade(@base-danger, 30%);
 @filterbuilder-group-operation-hover-color: fadein(@filterbuilder-group-operation-color, 20%);
@@ -1675,7 +1492,6 @@
 /**
 * @name 60. Data field button color
 * @type color
-* @group filterbuilder
 */
 @filterbuilder-item-field-color: fade(@base-accent, 30%);
 @filterbuilder-item-field-hover-color: fadein(@filterbuilder-item-field-color, 20%);
@@ -1684,7 +1500,6 @@
 /**
 * @name 70. Operation button color
 * @type color
-* @group filterbuilder
 */
 @filterbuilder-item-operator-color: fade(@base-success, 30%);
 @filterbuilder-item-operator-hover-color: fadein(@filterbuilder-item-operator-color, 20%);
@@ -1693,7 +1508,6 @@
 /**
 * @name 80. Value button color
 * @type color
-* @group filterbuilder
 */
 @filterbuilder-item-value-color: fade(@base-border-color, 50%);
 @filterbuilder-item-value-hover-color: @filterbuilder-item-value-color;
@@ -1710,4 +1524,12 @@
 @filemanager-breadcrumbs-item-focus-color: @base-text-color;
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-text-color;
-@filemanager-file-item-select-bg: @base-accent;
+@filemanager-file-item-select-bg: fade(@base-accent, 7%);
+@filemanager-progressbox-shadow-color: fade(darken(@base-shadow-color, 100%), 30%);
+
+// SpeedDialAction
+@speed-dial-action-bg: fade(@base-text-color, 5%);
+@speed-dial-action-color: @base-text-color;
+
+// Gantt
+@gantt-collapsable-row-bg: lighten(@base-bg, 5%);

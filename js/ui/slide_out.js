@@ -8,8 +8,8 @@ var $ = require("../core/renderer"),
     SlideOutView = require("./slide_out_view"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     List = require("./list"),
-    ChildDefaultTemplate = require("./widget/child_default_template"),
-    EmptyTemplate = require("./widget/empty_template"),
+    ChildDefaultTemplate = require("../core/templates/child_default_template").ChildDefaultTemplate,
+    EmptyTemplate = require("../core/templates/empty_template").EmptyTemplate,
     DataConverterMixin = require("./shared/grouped_data_converter_mixin").default;
 
 var SLIDEOUT_CLASS = "dx-slideout",
@@ -45,7 +45,6 @@ var SlideOut = CollectionWidget.inherit({
              * @name dxSlideOutOptions.items
              * @type Array<string, dxSlideOutItem, object>
              * @fires dxSlideOutOptions.onOptionChanged
-             * @inheritdoc
              */
 
             /**
@@ -143,37 +142,31 @@ var SlideOut = CollectionWidget.inherit({
             /**
             * @name dxSlideOutOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.keyExpr
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -200,9 +193,9 @@ var SlideOut = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["menuItem"] = new ChildDefaultTemplate("item", this);
-        this._defaultTemplates["menuGroup"] = new ChildDefaultTemplate("group", this);
-        this._defaultTemplates["content"] = new EmptyTemplate(this);
+        this._defaultTemplates["menuItem"] = new ChildDefaultTemplate("item");
+        this._defaultTemplates["menuGroup"] = new ChildDefaultTemplate("group");
+        this._defaultTemplates["content"] = new EmptyTemplate();
     },
 
     _initEditStrategy: function() {
@@ -337,7 +330,7 @@ var SlideOut = CollectionWidget.inherit({
         return this._itemElements().eq(0);
     },
 
-    _renderSelection: function() {
+    _updateSelection: function() {
         this._prepareContent();
         this._renderContent();
     },
@@ -390,7 +383,7 @@ var SlideOut = CollectionWidget.inherit({
             case "items":
                 this._changeMenuOption("items", this.option("items"));
                 if(!this._selectedItemContentRendered) {
-                    this._renderSelection();
+                    this._updateSelection();
                 }
                 break;
             case "dataSource":
@@ -456,14 +449,12 @@ var SlideOut = CollectionWidget.inherit({
     * @name dxSlideOutMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxSlideOutMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 }).include(DataConverterMixin);
 

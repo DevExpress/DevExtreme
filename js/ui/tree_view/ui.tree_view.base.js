@@ -146,7 +146,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewOptions.items
             * @type Array<dxTreeViewItem>
-            * @inheritdoc
             */
             /**
             * @name dxTreeViewOptions.animationEnabled
@@ -229,7 +228,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field8 event:event
             * @type_function_param1_field9 node:dxTreeViewNode
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -244,7 +242,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field8 event:event
             * @type_function_param1_field9 node:dxTreeViewNode
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -257,7 +254,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field6 itemIndex:number
             * @type_function_param1_field7 node:dxTreeViewNode
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -271,7 +267,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field7 event:event
             * @type_function_param1_field8 node:dxTreeViewNode
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -389,25 +384,21 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions.selectedItems
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions.selectedItemKeys
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions.selectedIndex
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxTreeViewItem
@@ -623,7 +614,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        if(this._initialized && this._isVirtualMode() && this.option("items").length) {
+        const items = this.option("items");
+
+        if(this._initialized && this._isVirtualMode() && items.length) {
             return;
         }
 
@@ -807,7 +800,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _fireContentReadyAction: function() {
-        this.callBase();
+        var dataSource = this.getDataSource();
+        var skipContentReadyAction = dataSource && !dataSource.isLoaded();
+
+        if(!skipContentReadyAction) {
+            this.callBase();
+        }
 
         if(this._scrollableContainer && windowUtils.hasWindow()) {
             this._scrollableContainer.update();
@@ -871,13 +869,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const length = nodes.length - 1;
 
         for(let i = length; i >= 0; i--) {
-            this._renderItem(nodes[i], $nodeContainer);
+            this._renderItem(i, nodes[i], $nodeContainer);
         }
-
+        this._renderedItemsCount += nodes.length;
         this._renderFocusTarget();
     },
 
-    _renderItem: function(node, $nodeContainer) {
+    _renderItem: function(nodeIndex, node, $nodeContainer) {
         const $node = this._createDOMElement($nodeContainer, node);
         const nodeData = node.internalFields;
         const showCheckBox = this._showCheckboxes();
@@ -887,8 +885,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this.setAria("selected", nodeData.selected, $node);
         this._toggleSelectedClass($node, nodeData.selected);
-
-        this.callBase(nodeData.key, nodeData.item, $node);
+        this.callBase(this._renderedItemsCount + nodeIndex, nodeData.item, $node);
 
         if(nodeData.item.visible !== false) {
             this._renderChildren($node, node);
@@ -956,14 +953,14 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _executeItemRenderAction: function(key, itemData, itemElement) {
-        const node = this._dataAdapter.getNodeByKey(key);
+    _executeItemRenderAction: function(itemIndex, itemData, itemElement) {
+        const node = this._getNode(itemElement);
 
         this._getItemRenderAction()({
             itemElement: itemElement,
-            itemIndex: key,
+            itemIndex: itemIndex,
             itemData: itemData,
-            node: node
+            node: this._dataAdapter.getPublicNode(node)
         });
     },
 
@@ -1048,7 +1045,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         this._dataAdapter.toggleExpansion(node.internalFields.key, state);
-        node.internalFields.expanded = state;
 
         this._updateExpandedItemsUI(node, state, e);
     },
@@ -1884,9 +1880,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     * @publicName expandAll()
     */
     expandAll: function() {
-        each(this._dataAdapter.getData(), (function(_, node) {
-            this._toggleExpandedState(node.internalFields.key, true);
-        }).bind(this));
+        const dataAdapter = this._dataAdapter;
+        each(dataAdapter.getData(), (_, node) => dataAdapter.toggleExpansion(node.internalFields.key, true));
+        this.repaint();
     },
 
     /**

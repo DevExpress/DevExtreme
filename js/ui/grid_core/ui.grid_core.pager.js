@@ -26,7 +26,7 @@ var PagerView = modules.View.inherit({
                 } else {
                     that.render();
                 }
-            } else if(!e || e.changeType !== "update") {
+            } else if(!e || e.changeType !== "update" && e.changeType !== "updateSelection") {
                 that.render();
             }
         });
@@ -42,6 +42,7 @@ var PagerView = modules.View.inherit({
             $element = that.element().addClass(that.addWidgetPrefix(PAGER_CLASS)),
             pagerOptions = that.option("pager") || {},
             dataController = that.getController("data"),
+            keyboardController = that.getController("keyboardNavigation"),
             options = {
                 maxPagesCount: MAX_PAGES_COUNT,
                 pageIndex: 1 + (parseInt(dataController.pageIndex()) || 0),
@@ -66,11 +67,9 @@ var PagerView = modules.View.inherit({
                         dataController.pageSize(pageSize);
                     });
                 },
-                onKeyDown: e => {
-                    let keyboardController = that.getController("keyboardNavigation");
-                    keyboardController && keyboardController.executeAction("onKeyDown", e);
-                },
-                useLegacyKeyboardNavigation: this.option("useLegacyKeyboardNavigation")
+                onKeyDown: e => keyboardController && keyboardController.executeAction("onKeyDown", e),
+                useLegacyKeyboardNavigation: this.option("useLegacyKeyboardNavigation"),
+                useKeyboard: this.option("keyboardNavigation.enabled")
             };
 
         if(isDefined(pagerOptions.infoText)) {

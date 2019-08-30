@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import Button from "../button";
 import translator from "../../animation/translator";
 import messageLocalization from "../../localization/message";
-import FunctionTemplate from "../widget/function_template";
+import { FunctionTemplate } from "../../core/templates/function_template";
 import deferredUtils from "../../core/utils/deferred";
 
 const APPOINTMENT_COLLECTOR_CLASS = "dx-scheduler-appointment-collector",

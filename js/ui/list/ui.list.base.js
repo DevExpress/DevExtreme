@@ -22,7 +22,7 @@ var $ = require("../../core/renderer"),
     ScrollView = require("../scroll_view"),
     deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
     CollectionWidget = require("../collection/ui.collection_widget.live_update").default,
-    BindableTemplate = require("../widget/bindable_template"),
+    BindableTemplate = require("../../core/templates/bindable_template").BindableTemplate,
     Deferred = require("../../core/utils/deferred").Deferred,
     DataConverterMixin = require("../shared/grouped_data_converter_mixin").default;
 
@@ -39,7 +39,8 @@ var LIST_CLASS = "dx-list",
     LIST_GROUP_HEADER_INDICATOR_CLASS = "dx-list-group-header-indicator",
     LIST_HAS_NEXT_CLASS = "dx-has-next",
     LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
-    SELECT_ALL_SELECTOR = ".dx-list-select-all",
+    WRAP_ITEM_TEXT_CLASS = "dx-wrap-item-text",
+    SELECT_ALL_ITEM_SELECTOR = ".dx-list-select-all",
 
     LIST_ITEM_DATA_KEY = "dxListItemData",
     LIST_FEEDBACK_SHOW_TIMEOUT = 70;
@@ -48,7 +49,7 @@ var groupItemsGetter = compileGetter("items");
 
 var ListBase = CollectionWidget.inherit({
 
-    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_SELECTOR].join(","),
+    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(","),
 
     _supportedKeys: function() {
         var that = this;
@@ -131,15 +132,15 @@ var ListBase = CollectionWidget.inherit({
             /**
              * @name dxListOptions.displayExpr
              * @type string|function(item)
-             * @type_function_param1 item:object
              * @default undefined
+             * @type_function_param1 item:object
+             * @type_function_return string
              */
 
             /**
              * @name dxListOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -332,20 +333,21 @@ var ListBase = CollectionWidget.inherit({
             /**
             * @name dxListOptions.selectedItem
             * @hidden
-            * @inheritdoc
             */
 
             /**
              * @name dxListOptions.activeStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             activeStateEnabled: true,
 
             _itemAttributes: { "role": "option" },
+            _listAttributes: { "role": "listbox" },
 
             useInkRipple: false,
+
+            wrapItemText: false,
 
             /**
             * @name dxListOptions.onItemClick
@@ -358,7 +360,6 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -372,7 +373,6 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
-            * @inheritdoc
             */
 
             /**
@@ -386,14 +386,12 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
-            * @inheritdoc
             */
 
             /**
              * @name dxListOptions.items
              * @type Array<string, dxListItem, object>
              * @fires dxListOptions.onOptionChanged
-             * @inheritdoc
              */
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
@@ -471,18 +469,8 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
-                }
-            },
-            {
-                device: function() {
-                    return devices.current().platform === "win" && devices.isSimulator();
-                },
-
-                options: {
-                    bounceEnabled: false
                 }
             },
             {
@@ -592,8 +580,6 @@ var ListBase = CollectionWidget.inherit({
 
         this._feedbackShowTimeout = LIST_FEEDBACK_SHOW_TIMEOUT;
         this._createGroupRenderAction();
-
-        this.setAria("role", "listbox");
     },
 
     _scrollBottomMode: function() {
@@ -644,6 +630,10 @@ var ListBase = CollectionWidget.inherit({
         });
 
         this._$container = $(this._scrollView.content());
+
+        if(this.option("wrapItemText")) {
+            this._$container.addClass(WRAP_ITEM_TEXT_CLASS);
+        }
 
         this._createScrollViewActions();
     },
@@ -874,6 +864,8 @@ var ListBase = CollectionWidget.inherit({
         this.$element().addClass(LIST_CLASS);
         this.callBase();
         this.option("useInkRipple") && this._renderInkRipple();
+
+        this.setAria("role", this.option("_listAttributes").role);
     },
 
     _renderInkRipple: function() {
@@ -1113,6 +1105,9 @@ var ListBase = CollectionWidget.inherit({
             case "groupTemplate":
                 this._invalidate();
                 break;
+            case "wrapItemText":
+                this._$container.toggleClass(WRAP_ITEM_TEXT_CLASS, args.value);
+                break;
             case "onGroupRendered":
                 this._createGroupRenderAction();
                 break;
@@ -1135,6 +1130,8 @@ var ListBase = CollectionWidget.inherit({
             case "showChevronExpr":
             case "badgeExpr":
                 this._invalidate();
+                break;
+            case "_listAttributes":
                 break;
             default:
                 this.callBase(args);

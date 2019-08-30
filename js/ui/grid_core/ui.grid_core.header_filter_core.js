@@ -4,7 +4,6 @@ import gridCoreUtils from "./ui.grid_core.utils";
 import { isDefined, isFunction } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
-import eventsEngine from "../../events/core/events_engine";
 import Popup from "../popup";
 import TreeView from "../tree_view";
 import List from "../list";
@@ -165,7 +164,7 @@ exports.HeaderFilterView = modules.View.inherit({
             var group = options.dataSource.group;
             if(Array.isArray(group) && group.length > 0) {
                 return group[0].selector;
-            } else if(isFunction(group)) {
+            } else if(isFunction(group) && !options.remoteFiltering) {
                 return group;
             }
         }
@@ -190,7 +189,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 shading: false,
                 showTitle: false,
                 showCloseButton: false,
-                closeOnTargetScroll: true,
+                closeOnTargetScroll: false, // T756320
                 dragEnabled: false,
                 closeOnOutsideClick: true,
                 focusStateEnabled: false,
@@ -216,8 +215,8 @@ exports.HeaderFilterView = modules.View.inherit({
                     that._initializeListContainer(options);
                     options.onShowing && options.onShowing(e);
                 },
-                onShown: function(e) {
-                    eventsEngine.trigger(e.component.$content().find(".dx-checkbox").first(), "focus");
+                onShown: function() {
+                    that.getListContainer().focus();
                 },
                 onHidden: options.onHidden,
                 onInitialized: function(e) {

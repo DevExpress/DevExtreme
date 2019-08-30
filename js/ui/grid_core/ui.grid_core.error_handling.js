@@ -37,6 +37,8 @@ var ErrorHandlingController = modules.ViewController.inherit({
                     $errorRow = $(tableElement).children("tbody").children("tr").eq(errorRowIndex);
                     that.removeErrorRow($errorRow);
                 });
+
+                that.getController("resizing") && that.getController("resizing").fireContentReadyAction();
             }));
 
             $("<td>")
@@ -104,6 +106,10 @@ var ErrorHandlingController = modules.ViewController.inherit({
                 }
             }
         });
+        if(!$popupContent) {
+            let resizingController = that.getController("resizing");
+            resizingController && resizingController.fireContentReadyAction();
+        }
         return $firstErrorRow;
     },
 
@@ -160,7 +166,10 @@ module.exports = {
                             errorHandlingController.renderErrorRow(error, undefined, $popupContent);
                         }
                     });
-                    that.changed.add(function() {
+                    that.changed.add(function(e) {
+                        if(e && e.changeType === "loadError") {
+                            return;
+                        }
                         var errorHandlingController = that.getController("errorHandling"),
                             editingController = that.getController("editing");
 

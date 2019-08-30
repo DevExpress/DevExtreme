@@ -35,6 +35,12 @@ var dxRangeSelector = {
         */
         logarithmBase: 10,
         /**
+        * @name dxRangeSelectorOptions.scale.linearThreshold
+        * @type number
+        * @default 0
+        */
+        linearThreshold,
+        /**
         * @name dxRangeSelectorOptions.scale.minorTickCount
         * @type number
         * @default undefined
@@ -333,6 +339,12 @@ var dxRangeSelector = {
         * @inherits VizTimeInterval
         */
         aggregationInterval: undefined,
+        /**
+        * @name dxRangeSelectorOptions.scale.aggregateByCategory
+        * @type boolean
+        * @default false
+        */
+        aggregateByCategory: false,
     },
     /**
     * @name dxRangeSelectorOptions.sliderMarker
@@ -448,7 +460,7 @@ var dxRangeSelector = {
         opacity: 0.75
     },
     /**
-    *@name dxRangeSelectorOptions.value
+    * @name dxRangeSelectorOptions.value
     * @type Array<number,string,Date> | VizRange
     * @fires dxRangeSelectorOptions.onValueChanged
     * @notUsedInTheme
@@ -561,7 +573,6 @@ var dxRangeSelector = {
     /**
     * @name dxRangeSelectorOptions.tooltip
     * @hidden
-    * @inheritdoc
     */
     tooltip: undefined,
     /**
@@ -708,14 +719,14 @@ var dxRangeSelector = {
         * @name dxRangeSelectorOptions.chart.barGroupPadding
         * @type number
         * @default 0.3
-        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
         */
         barGroupPadding: 0.3,
         /**
         * @name dxRangeSelectorOptions.chart.barGroupWidth
         * @type number
         * @default undefined
-        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
         */
         barGroupWidth: undefined,
         /**

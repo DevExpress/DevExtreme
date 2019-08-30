@@ -323,10 +323,6 @@ module.exports = {
         },
 
         _updateAxisElementPosition: function() {
-            if(!this._axisElement) {
-                return;
-            }
-
             var axisCoord = this._axisPosition,
                 canvas = this._getCanvasStartEnd();
 
@@ -399,7 +395,7 @@ module.exports = {
         _drawTitleText: function(group, coords) {
             var options = this._options,
                 titleOptions = options.title,
-                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment };
+                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment, "class": titleOptions.cssClass };
 
             if(!titleOptions.text || !group) {
                 return;

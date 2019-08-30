@@ -848,8 +848,8 @@ export const MockPoint = Class.inherit(
         },
         getLegendStyles: function() {
             return {
-                hover: undefined,
-                selection: undefined,
+                hover: {},
+                selection: {},
                 normal: {
                 }
             };

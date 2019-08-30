@@ -1081,6 +1081,22 @@ QUnit.test("Indents with logarithmic scale", function(assert) {
     assert.strictEqual(this.renderer.text.getCall(1).args[0], "1024");
 });
 
+QUnit.test("Indents with logarithmic scale. Negative startValue", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: -100,
+            endValue: 100,
+            type: "logarithmic",
+            logarithmBase: -10,
+            label: {
+                visible: true
+            }
+        }
+    });
+
+    assert.strictEqual(this.renderer.text.getCall(1).args[0], "-100");
+});
+
 QUnit.test("During indents estimation, format scale labels the same way the axis formats its labels", function(assert) {
     this.createWidget({
         scale: {

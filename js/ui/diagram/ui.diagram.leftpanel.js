@@ -3,7 +3,6 @@ import $ from "../../core/renderer";
 import DiagramPanel from "./diagram.panel";
 import Accordion from "../accordion";
 import ScrollView from "../scroll_view";
-import ShapeCategories from "./ui.diagram.shape.categories";
 import { Deferred } from "../../core/utils/deferred";
 
 const DIAGRAM_LEFT_PANEL_CLASS = "dx-diagram-left-panel";
@@ -12,10 +11,9 @@ class DiagramLeftPanel extends DiagramPanel {
     _init() {
         super._init();
 
-        this._dataSources = this.option("dataSources") || {};
-        this._customShapes = this.option("customShapes") || [];
-        this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered");
-        this._onDataToolboxRenderedAction = this._createActionByOption("onDataToolboxRendered");
+        this._onShapeCategoryRenderedAction = this._createActionByOption("onShapeCategoryRendered", {
+            excludeValidators: ["disabled"]
+        });
     }
     _initMarkup() {
         super._initMarkup();
@@ -32,27 +30,26 @@ class DiagramLeftPanel extends DiagramPanel {
     }
     _getAccordionDataSource() {
         var result = [];
-        var categories = ShapeCategories.load(this._customShapes.length > 0);
-        for(var i = 0; i < categories.length; i++) {
-            result.push({
-                category: categories[i].category,
-                title: categories[i].title,
+        var toolboxGroups = this.option("toolboxGroups");
+        for(var i = 0; i < toolboxGroups.length; i++) {
+            var category = toolboxGroups[i].category;
+            var title = toolboxGroups[i].title;
+            var groupObj = {
+                category,
+                title: title || category,
+                expanded: toolboxGroups[i].expanded,
+                style: toolboxGroups[i].style,
+                shapes: toolboxGroups[i].shapes,
                 onTemplate: (widget, $element, data) => {
-                    this._onShapeCategoryRenderedAction({ category: data.category, $element });
+                    this._onShapeCategoryRenderedAction({
+                        category: data.category,
+                        style: data.style,
+                        shapes: data.shapes,
+                        $element
+                    });
                 }
-            });
-        }
-        for(var key in this._dataSources) {
-            if(Object.prototype.hasOwnProperty.call(this._dataSources, key)) {
-                result.push({
-                    key,
-                    title: this._dataSources[key].title,
-                    onTemplate: (widget, $element, data) => {
-                        this._onDataToolboxRenderedAction({ key: data.key, $element });
-                    }
-                });
-                this._hasDataSources = true;
-            }
+            };
+            result.push(groupObj);
         }
         return result;
     }
@@ -63,15 +60,19 @@ class DiagramLeftPanel extends DiagramPanel {
             collapsible: true,
             displayExpr: "title",
             dataSource: data,
+            disabled: this.option("disabled"),
             itemTemplate: (data, index, $element) => data.onTemplate(this, $element, data),
             onContentReady: (e) => {
                 this._updateScrollAnimateSubscription(e.component);
             }
         });
-        // TODO option for expanded item
-        if(this._customShapes.length > 0 || this._hasDataSources) {
-            this._accordionInstance.collapseItem(0);
-            this._accordionInstance.expandItem(data.length - 1);
+
+        for(var i = 0; i < data.length; i++) {
+            if(data[i].expanded === false) {
+                this._accordionInstance.collapseItem(i);
+            } else if(data[i].expanded === true) {
+                this._accordionInstance.expandItem(i);
+            }
         }
     }
 
@@ -85,12 +86,10 @@ class DiagramLeftPanel extends DiagramPanel {
 
     _optionChanged(args) {
         switch(args.name) {
-            case "customShapes":
-                this._customShapes = args.value || [];
-                this._invalidate();
+            case "disabled":
+                this._accordionInstance.option('disabled', args.value);
                 break;
-            case "dataSources":
-                this._dataSources = args.value || {};
+            case "toolboxGroups":
                 this._invalidate();
                 break;
             default:

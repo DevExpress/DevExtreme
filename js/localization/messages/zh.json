@@ -13,6 +13,8 @@
 
     "dxCollectionWidget-noDataText": "没有要显示的数据",
 
+    "dxDropDownEditor-selectLabel": "选择",
+
     "validation-required": "必需",
     "validation-required-formatted": "{0} 是必需的",
     "validation-numeric": "值必须是一个数字",

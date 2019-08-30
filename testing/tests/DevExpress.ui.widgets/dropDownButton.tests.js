@@ -250,6 +250,22 @@ QUnit.module("popup integration", {
         }
     });
 
+    QUnit.test("popup width should be recalculated when button dimension changed", function(assert) {
+        const instance = new DropDownButton("#dropDownButton2", {
+            deferRendering: false,
+            opened: true
+        });
+        const repaintMock = sinon.spy(getPopup(instance), "repaint");
+
+        instance.option({
+            icon: "box",
+            text: "Test",
+            showArrowIcon: false
+        });
+
+        assert.strictEqual(repaintMock.callCount, 3, "popup has been repainted 3 times");
+    });
+
     QUnit.test("a user can redefine dropdown options", (assert) => {
         const instance = new DropDownButton("#dropDownButton2", {
             deferRendering: false,
@@ -343,6 +359,33 @@ QUnit.module("list integration", {}, () => {
         assert.strictEqual(list.option("grouped"), true, "grouped option transfered");
         assert.strictEqual(list.option("noDataText"), "No data", "noDataText option transfered");
         assert.strictEqual(list.option("selectionMode"), "single", "selectionMode is always single. The widget uses selectedItems to prevent extra dataSource loads");
+    });
+
+    QUnit.test("showItemDataTitle should be true for the list", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton", {
+            items: [{ key: 1, name: "Item 1", icon: "box" }],
+            deferRendering: false
+        });
+
+        const list = getList(dropDownButton);
+
+        assert.strictEqual(list.option("showItemDataTitle"), true, "option is true");
+    });
+
+    QUnit.test("wrapItemText option", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton", {
+            items: ["Text"],
+            deferRendering: false,
+            wrapItemText: true
+        });
+
+        const list = getList(dropDownButton);
+        const $itemContainer = list._itemContainer();
+
+        assert.ok($itemContainer.hasClass("dx-wrap-item-text"), "class was added");
+
+        dropDownButton.option("wrapItemText", false);
+        assert.notOk($itemContainer.hasClass("dx-wrap-item-text"), "class was removed");
     });
 
     QUnit.test("list selection should depend on selectedItemKey option", (assert) => {
@@ -521,6 +564,26 @@ QUnit.module("public methods", {
 
         dropDownButton.option("opened", false);
         assert.notOk(getPopup(dropDownButton).option("visible"), "popup is closed");
+    });
+
+    QUnit.test("optionChange should be called when popup opens manually", (assert) => {
+        const optionChangedHandler = sinon.spy();
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            onOptionChanged: optionChangedHandler
+        });
+        const $actionButton = getActionButton(dropDownButton);
+
+        eventsEngine.trigger($actionButton, "dxclick");
+        assert.ok(getPopup(dropDownButton).option("visible"), "popup is opened");
+        assert.strictEqual(optionChangedHandler.callCount, 1, "optionChanged was called");
+        assert.strictEqual(optionChangedHandler.getCall(0).args[0].name, "opened", "option name is correct");
+        assert.strictEqual(optionChangedHandler.getCall(0).args[0].value, true, "option value is correct");
+
+        eventsEngine.trigger($actionButton, "dxclick");
+        assert.notOk(getPopup(dropDownButton).option("visible"), "popup is closed");
+        assert.strictEqual(optionChangedHandler.callCount, 2, "optionChanged was called");
+        assert.strictEqual(optionChangedHandler.getCall(1).args[0].name, "opened", "option name is correct");
+        assert.strictEqual(optionChangedHandler.getCall(1).args[0].value, false, "option value is correct");
     });
 });
 

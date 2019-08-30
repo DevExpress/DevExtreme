@@ -82,8 +82,7 @@ var Toast = Overlay.inherit({
             /**
             * @name dxToastOptions.position
             * @type positionConfig|string
-            * @default: "bottom center"
-            * @inheritdoc
+            * @default "bottom center"
             */
             position: "bottom center",
 
@@ -91,7 +90,6 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions.animation
             * @type object
             * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, to: 0 } }
-            * @inheritdoc
             */
             animation: {
                 /**
@@ -121,26 +119,22 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions.shading
             * @type boolean
             * @default false
-            * @inheritdoc
             */
             shading: false,
 
             /**
             * @name dxToastOptions.disabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxToastOptions.width
             * @default function() {return $(window).width() * 0.8 }
-            * @inheritdoc
             */
 
             /**
             * @name dxToastOptions.height
             * @default 'auto'
-            * @inheritdoc
             */
             height: "auto",
 
@@ -148,7 +142,6 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions.closeOnBackButton
             * @type boolean
             * @default false
-            * @inheritdoc
             */
             closeOnBackButton: false,
 
@@ -169,14 +162,12 @@ var Toast = Overlay.inherit({
             /**
             * @name dxToastOptions.resizeEnabled
             * @hidden
-            * @inheritdoc
             */
             resizeEnabled: false
 
             /**
             * @name dxToastOptions.dragEnabled
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -184,59 +175,23 @@ var Toast = Overlay.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 8;
-                },
-                options: {
-                    /**
-                    * @name dxToastOptions.position
-                    * @inheritdoc
-                    */
-                    position: "top center",
-
-                    /**
-                    * @name dxToastOptions.width
-                    * @inheritdoc
-                    */
-                    width: function() { return $(window).width(); }
-                }
-            },
-            {
-                device: function(device) {
-                    return device.platform === "win" && device.version && device.version[0] === 10;
-                },
-                options: {
-                    /**
-                   * @name dxToastOptions.position
-                   * @default 'bottom right' @for Windows_10_Mobile
-                   * @inheritdoc
-                   */
-                    position: "bottom right",
-
-                    /**
-                    * @name dxToastOptions.width
-                    * @default 'auto' @for Android|Windows_10_Mobile
-                    * @inheritdoc
-                    */
-                    width: "auto"
-                }
-            },
-            {
                 device: { platform: "android" },
                 options: {
                     /**
                     * @name dxToastOptions.closeOnOutsideClick
                     * @default true @for Android
-                    * @inheritdoc
                     */
                     closeOnOutsideClick: true,
 
+                    /**
+                    * @name dxToastOptions.width
+                    * @default 'auto' @for Android
+                    */
                     width: "auto",
 
                     /**
                     * @name dxToastOptions.position
                     * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} @for Android
-                    * @inheritdoc
                     */
                     position: {
                         at: "bottom left",
@@ -247,7 +202,6 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions.animation
                     * @default {show: {type: 'slide', duration: 200, from: { position: {my: 'top', at: 'bottom', of: window}}}, hide: { type: 'slide', duration: 200, to: { position: {my: 'top', at: 'bottom', of: window}}}} @for Android
-                    * @inheritdoc
                     */
                     animation: {
                         show: {
@@ -278,23 +232,20 @@ var Toast = Overlay.inherit({
             {
                 device: function(device) {
                     var isPhone = device.deviceType === "phone",
-                        isAndroid = device.platform === "android",
-                        isWin10 = device.platform === "win" && device.version && device.version[0] === 10;
+                        isAndroid = device.platform === "android";
 
-                    return isPhone && (isAndroid || isWin10);
+                    return isPhone && isAndroid;
                 },
                 options: {
                     /**
                     * @name dxToastOptions.width
-                    * @default function() { return $(window).width(); } @for phones_on_Android|phones_on_Windows_10_Mobile
-                    * @inheritdoc
+                    * @default function() { return $(window).width(); } @for phones_on_Android
                     */
                     width: function() { return $(window).width(); },
 
                     /**
                     * @name dxToastOptions.position
-                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for phones_on_Android|phones_on_Windows_10_Mobile
-                    * @inheritdoc
+                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for phones_on_Android
                     */
                     position: {
                         at: "bottom center",
@@ -311,13 +262,11 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions.minWidth
                     * @default 344 @for Material
-                    * @inheritdoc
                     */
                     minWidth: 344,
                     /**
                     * @name dxToastOptions.maxWidth
                     * @default 568 @for Material
-                    * @inheritdoc
                     */
                     maxWidth: 568,
                     /**

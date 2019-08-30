@@ -54,6 +54,10 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
 
         date.setDate(value);
     },
+    h: (date, value) => {
+        const isPM = date.getHours() >= 12;
+        date.setHours((+value % 12) + (isPM ? 12 : 0));
+    },
     M: monthSetter,
     L: monthSetter,
     E: (date, value) => {

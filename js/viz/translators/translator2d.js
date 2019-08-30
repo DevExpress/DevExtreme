@@ -7,8 +7,9 @@ var extend = require("../../core/utils/extend").extend,
     logarithmicTranslator = require("./logarithmic_translator"),
     vizUtils = require("../core/utils"),
     typeUtils = require("../../core/utils/type"),
-    getLog = vizUtils.getLog,
+    getLog = vizUtils.getLogExt,
     getPower = vizUtils.getPower,
+    raiseToExt = vizUtils.raiseToExt,
     isDefined = typeUtils.isDefined,
     adjust = require("../../core/utils/math").adjust,
     _abs = Math.abs,
@@ -95,10 +96,10 @@ function getCanvasBounds(range) {
     let isLogarithmic = range.axisType === 'logarithmic';
 
     if(isLogarithmic) {
-        maxVisible = getLog(maxVisible, range.base);
-        minVisible = getLog(minVisible, range.base);
-        min = getLog(min, range.base);
-        max = getLog(max, range.base);
+        maxVisible = getLog(maxVisible, range.base, range.allowNegatives, range.linearThreshold);
+        minVisible = getLog(minVisible, range.base, range.allowNegatives, range.linearThreshold);
+        min = getLog(min, range.base, range.allowNegatives, range.linearThreshold);
+        max = getLog(max, range.base, range.allowNegatives, range.linearThreshold);
     }
 
     return { base: range.base, rangeMin: min, rangeMax: max, rangeMinVisible: minVisible, rangeMaxVisible: maxVisible };
@@ -480,8 +481,8 @@ _Translator2d.prototype = {
         let newMin = canvasOptions.rangeMinVisible.valueOf() - correction;
         let newMax = canvasOptions.rangeMaxVisible.valueOf() + correction;
 
-        newMin = isLogarithmic ? adjust(Math.pow(canvasOptions.base, newMin)) : isDateTime ? new Date(newMin) : newMin;
-        newMax = isLogarithmic ? adjust(Math.pow(canvasOptions.base, newMax)) : isDateTime ? new Date(newMax) : newMax;
+        newMin = isLogarithmic ? adjust(raiseToExt(newMin, canvasOptions.base)) : isDateTime ? new Date(newMin) : newMin;
+        newMax = isLogarithmic ? adjust(raiseToExt(newMax, canvasOptions.base)) : isDateTime ? new Date(newMax) : newMax;
 
         return {
             min: newMin,
@@ -543,7 +544,7 @@ _Translator2d.prototype = {
             if(!isDefined(bp) || range.maxVisible.valueOf() !== bp.valueOf()) {
                 return null;
             }
-            return this.translateSpecialCase(bp === 0 ? "canvas_position_default" : "canvas_position_middle");
+            return this.translateSpecialCase(bp === 0 && this._options.shiftZeroValue ? "canvas_position_default" : "canvas_position_middle");
         }
 
         bp = this._fromValue(bp);

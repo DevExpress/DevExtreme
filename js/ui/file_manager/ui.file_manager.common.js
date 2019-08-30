@@ -1,4 +1,4 @@
-import { when } from "../../core/utils/deferred";
+import { when, Deferred } from "../../core/utils/deferred";
 import { noop } from "../../core/utils/common";
 import typeUtils from "../../core/utils/type";
 
@@ -7,6 +7,7 @@ const ErrorCode = {
     FileExists: 1,
     FileNotFound: 2,
     DirectoryExists: 3,
+    DirectoryNotFound: 4,
     Other: 32767
 };
 
@@ -21,8 +22,9 @@ const whenSome = function(arg, onSuccess, onError) {
     const deferreds = arg.map((item, index) => {
         return when(item)
             .then(
-                () => {
-                    typeUtils.isFunction(onSuccess) && onSuccess();
+                result => {
+                    typeUtils.isFunction(onSuccess) && onSuccess({ item, index, result });
+                    return result;
                 },
                 error => {
                     if(!error) {
@@ -30,6 +32,7 @@ const whenSome = function(arg, onSuccess, onError) {
                     }
                     error.index = index;
                     typeUtils.isFunction(onError) && onError(error);
+                    return new Deferred().resolve().promise();
                 });
     });
 

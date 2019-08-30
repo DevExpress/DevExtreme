@@ -33,6 +33,7 @@ var Legend = function(parameters) {
     parameters.layoutControl.addItem(that);
     _BaseLegend.call(that, {
         renderer: parameters.renderer,
+        widget: parameters.widget,
         group: that._root,
         backgroundClass: null,
         itemsGroupClass: null,

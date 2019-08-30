@@ -135,7 +135,7 @@ var checkThatTestingIsPossible = function() {
     }
 
     var realDevice = devices.real();
-    if(realDevice.platform === "android" || realDevice.platform === "ios" || realDevice.platform === "win") {
+    if(realDevice.platform === "android" || realDevice.platform === "ios") {
         QUnit.test("Temporarily we do not test on mobile devices", function(assert) {
             assert.ok(true);
         });

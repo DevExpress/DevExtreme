@@ -8,7 +8,6 @@ var dxVectorMap = {
     /**
     * @name dxVectorMapOptions.margin
     * @hidden
-    * @inheritdoc
     */
     margin: undefined,
     /**
@@ -293,7 +292,6 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.tooltip.format
         * @hidden
-        * @inheritdoc
         */
         format: undefined
     },
@@ -377,9 +375,17 @@ var dxVectorMap = {
         */
         customizeItems: undefined,
         /**
+        * @name dxVectorMapOptions.legends.markerTemplate
+        * @type template|function
+        * @default undefined
+        * @type_function_param1 legendItem:VectorMapLegendItem
+        * @type_function_param2 element:SVGGElement
+        * @type_function_return string|SVGElement|jQuery
+        */
+        markerTemplate: undefined,
+        /**
         * @name dxVectorMapOptions.legends.font
         * @type Font
-        * @inheritdoc
         * @default '#2b2b2b' @prop color
         */
         font: {
@@ -388,7 +394,6 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.legends.markerSize
         * @type number
-        * @inheritdoc
         * @default 12
         */
         markerSize: 12,
@@ -407,11 +412,11 @@ var dxVectorMap = {
     }],
     /**
     * @name dxVectorMapOptions.projection
-    * @type object
-    * @default undefined
+    * @type Enums.VectorMapProjection|VectorMapProjectionConfig|string|object
+    * @default "mercator"
     * @notUsedInTheme
     */
-    projection: undefined,
+    projection: "mercator",
     /**
     * @name dxVectorMapOptions.bounds
     * @type Array<number>

@@ -136,7 +136,6 @@ var Popover = Popup.inherit({
             * @name dxPopoverOptions.shading
             * @type boolean
             * @default false
-            * @inheritdoc
             */
             shading: false,
 
@@ -150,7 +149,6 @@ var Popover = Popup.inherit({
             /**
             * @name dxPopoverOptions.closeOnOutsideClick
             * @default true
-            * @inheritdoc
             */
             closeOnOutsideClick: true,
 
@@ -207,14 +205,12 @@ var Popover = Popup.inherit({
             /**
              * @name dxPopoverOptions.dragEnabled
              * @hidden
-             * @inheritdoc
              */
             dragEnabled: false,
 
             /**
             * @name dxPopoverOptions.resizeEnabled
             * @hidden
-            * @inheritdoc
             */
             resizeEnabled: false,
 
@@ -223,7 +219,6 @@ var Popover = Popup.inherit({
             * @extends Action
             * @action
             * @hidden
-            * @inheritdoc
             */
 
             /**
@@ -231,7 +226,6 @@ var Popover = Popup.inherit({
             * @extends Action
             * @action
             * @hidden
-            * @inheritdoc
             */
 
             /**
@@ -239,13 +233,11 @@ var Popover = Popup.inherit({
             * @extends Action
             * @action
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxPopoverOptions.fullScreen
             * @hidden
-            * @inheritdoc
             */
 
             /**
@@ -289,19 +281,16 @@ var Popover = Popup.inherit({
             /**
             * @name dxPopoverOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxPopoverOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxPopoverOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -547,15 +536,6 @@ var Popover = Popup.inherit({
         }
     },
 
-    _renderShadingDimensions: function() {
-        if(this.option("shading")) {
-            this._$wrapper.css({
-                width: "100%",
-                height: "100%"
-            });
-        }
-    },
-
     _normalizePosition: function() {
         var position = extend({}, this._transformStringPosition(this.option("position"), POSITION_ALIASES));
 
@@ -608,12 +588,6 @@ var Popover = Popup.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "showTitle":
-            case "title":
-            case "titleTemplate":
-                this.callBase(args);
-                this._renderGeometry();
-                break;
             case "boundaryOffset":
             case "arrowPosition":
             case "arrowOffset":
@@ -650,7 +624,7 @@ var Popover = Popup.inherit({
     * @name dxPopoverMethods.show
     * @publicName show(target)
     * @param1 target:string|Node|jQuery
-    * @return Promise<void>
+    * @return Promise<boolean>
     */
     show: function(target) {
         if(target) {
@@ -664,14 +638,12 @@ var Popover = Popup.inherit({
     * @name dxPopoverMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxPopoverMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 
 });

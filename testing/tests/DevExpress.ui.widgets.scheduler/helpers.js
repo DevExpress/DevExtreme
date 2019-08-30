@@ -1,5 +1,6 @@
 import $ from "jquery";
 import { extend } from "core/utils/extend";
+import "ui/scheduler/ui.scheduler";
 
 export const TOOLBAR_TOP_LOCATION = "top";
 export const TOOLBAR_BOTTOM_LOCATION = "bottom";
@@ -14,6 +15,8 @@ export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULE
 export class SchedulerTestWrapper {
     constructor(instance) {
         this.instance = instance;
+
+        this.getTimePanel = () => $(".dx-scheduler-time-panel"),
 
         this.tooltip = {
             getOverlayContentElement: () => {
@@ -34,6 +37,8 @@ export class SchedulerTestWrapper {
             getDeleteButton: (index = 0) => this.tooltip.getItemElement(index).find('.dx-tooltip-appointment-item-delete-button'),
 
             getMarkers: () => this.tooltip.getItemElements().find('.dx-tooltip-appointment-item-marker-body'),
+
+            getMarker: () => this.tooltip.getMarkers().first(),
 
             getDateText: (index = 0) => this.tooltip.getDateElement(index).text(),
             getTitleText: (index = 0) => this.tooltip.getTitleElement(index).text(),
@@ -125,7 +130,10 @@ export class SchedulerTestWrapper {
 
         this.workSpace = {
             getWorkSpace: () => $(".dx-scheduler-work-space"),
+
             getDateTableScrollable: () => $(".dx-scheduler-date-table-scrollable"),
+            getHeaderScrollable: () => $(".dx-scheduler-header-scrollable"),
+
             getDateTable: () => $(".dx-scheduler-date-table"),
             getDateTableHeight: () => this.workSpace.getDateTable().height(),
             getCells: () => $(".dx-scheduler-date-table-cell"),
@@ -137,7 +145,27 @@ export class SchedulerTestWrapper {
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $(".dx-scheduler-date-time-indicator"),
+
+            getScrollPosition: () => {
+                const element = this.workSpace.getDateTableScrollable().find(".dx-scrollable-container");
+                return { left: element.scrollLeft(), top: element.scrollTop() };
+            }
         };
+
+        this.navigator = {
+            getNavigator: () => $(".dx-scheduler-navigator"),
+            getCaption: () => $(".dx-scheduler-navigator").find(".dx-scheduler-navigator-caption").text(),
+            clickOnPrevButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-previous").trigger("dxclick");
+            },
+            clickOnNextButton: () => {
+                this.navigator.getNavigator().find(".dx-scheduler-navigator-next").trigger("dxclick");
+            }
+        },
+
+        this.header = {
+            get: () => $(".dx-scheduler-header-panel")
+        },
 
         this.grouping = {
             getGroupHeaders: () => $(".dx-scheduler-group-header"),
@@ -146,6 +174,10 @@ export class SchedulerTestWrapper {
             getGroupTable: () => $(".dx-scheduler-group-table"),
             getGroupTableHeight: () => this.grouping.getGroupTable().height()
         };
+    }
+
+    option(name, value) {
+        this.instance.option(name, value);
     }
 
     isAdaptivity() {
