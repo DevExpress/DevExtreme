@@ -45,7 +45,7 @@ var setupDraggable = function(that, $element) {
     that.pointer = pointerMock(that.$element).start();
 
     that.checkPosition = function(left, top, assert, $element) {
-        assert.deepEqual(($element || that.$element).offset(), { left: left, top: top });
+        assert.deepEqual(($element || that.$element).offset(), { left: left, top: top }, "position of the draggable element");
     };
 };
 
@@ -486,8 +486,9 @@ QUnit.test("Clone an element when dragging", function(assert) {
     // assert
     $cloneElement = $("body").children("#draggable");
     assert.strictEqual($cloneElement.length, 1, "cloned element");
-    assert.ok($cloneElement.hasClass("dx-draggable-dragging"), 1, "cloned element has dragging class");
-    assert.notOk(this.$element.hasClass("dx-draggable-dragging"), 1, "original element hasn't dragging class");
+    assert.ok($cloneElement.hasClass("dx-draggable-dragging"), "cloned element has dragging class");
+    assert.ok($cloneElement.hasClass("dx-draggable-clone"), "cloned element has dragging class");
+    assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "original element hasn't dragging class");
     this.checkPosition(10, 10, assert, $cloneElement);
     this.checkPosition(0, 0, assert);
 });

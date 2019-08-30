@@ -150,9 +150,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._getAction("onDrag")({ event: e });
     },
 
-    _isValidateElement: function(event, $element) {
+    _isValidElement: function(event, $element) {
         let handle = this.option("handle"),
-            isHandleElement = handle && $(event.originalEvent.target).is(handle);
+            isHandleElement = handle && $(event.originalEvent.target).closest(handle).length;
 
         return !$element.is(".dx-state-disabled, .dx-state-disabled *") && (!handle || isHandleElement);
     },
@@ -160,7 +160,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _dragStartHandler: function(e) {
         let $element = this._getDraggableElement(e);
 
-        if(!this._isValidateElement(e, $element)) {
+        if(!this._isValidElement(e, $element)) {
             e.cancel = true;
             return;
         }
