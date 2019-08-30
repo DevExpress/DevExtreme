@@ -6772,6 +6772,35 @@ QUnit.test("calculateFilterExpression should not be called infinite times if it 
     }
 });
 
+// T802967
+QUnit.test("getCombinedFilter should work correctly if filterPanel is visible and calculateFilterExpression returns function", function(assert) {
+    var data = [];
+    for(let i = 0; i < 21; i++) {
+        data.push({ test: i });
+    }
+    var calculateFilterExpressionCallCount = 0,
+        grid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: data,
+            filterPanel: { visible: true },
+            columns: [{
+                selectedFilterOperation: "=",
+                filterValue: 0,
+                dataField: "test",
+                calculateFilterExpression: function() {
+                    calculateFilterExpressionCallCount++;
+                    return function() {
+                        return true;
+                    };
+                }
+            }]
+        });
+
+    assert.equal(calculateFilterExpressionCallCount, 4, "calculateFilterExpression call count");
+    assert.ok(grid.getCombinedFilter(), "combined filter");
+    assert.equal(calculateFilterExpressionCallCount, 5, "calculateFilterExpression call count");
+});
+
 // T364210
 QUnit.test("Load count on start when EdmLiteral in calculatedFilterExpression is used and scrolling mode is virtual", function(assert) {
     var loadCallCount = 0,
