@@ -279,7 +279,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
     /**
      * @name AsyncRule.validationCallback
      * @type function
-     * @type_function_return Promise
+     * @type_function_return Promise<any>
      * @type_function_param1 options:object
      * @type_function_param1_field1 value:string|number
      * @type_function_param1_field2 rule:object
@@ -560,7 +560,7 @@ const GroupConfig = Class.inherit({
             status: "valid",
             /**
              * @name dxValidationGroupResult.complete
-             * @type Promise
+             * @type Promise<dxValidationGroupResult>
              */
             complete: null
         };
@@ -754,7 +754,7 @@ const ValidationEngine = {
             status: "valid",
             /**
              * @name dxValidatorResult.complete
-             * @type Promise
+             * @type Promise<dxValidatorResult>
              */
             complete: null
         };
