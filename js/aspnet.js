@@ -123,11 +123,11 @@
     }
 
     function createComponent(name, options, id, validatorOptions) {
-        var render = function(_, container) {
+        var render = function() {
             templateRendered.remove(render);
 
             var selector = "#" + id.replace(/[^\w-]/g, "\\$&"),
-                $component = $(selector, container)[name](options);
+                $component = $(selector)[name](options);
             if($.isPlainObject(validatorOptions)) {
                 $component.dxValidator(validatorOptions);
             }
