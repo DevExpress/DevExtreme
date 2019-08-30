@@ -123,11 +123,19 @@
     }
 
     function createComponent(name, options, id, validatorOptions) {
-        var render = function() {
+        var selector = "#" + id.replace(/[^\w-]/g, "\\$&");
+
+        var render = function(_, container) {
+            var $element = $(selector, container);
+            if(!$element.length) {
+                // This means that the callback originates from a nested template
+                // of another widget within this template.
+                return;
+            }
+
             templateRendered.remove(render);
 
-            var selector = "#" + id.replace(/[^\w-]/g, "\\$&"),
-                $component = $(selector)[name](options);
+            var $component = $element[name](options);
             if($.isPlainObject(validatorOptions)) {
                 $component.dxValidator(validatorOptions);
             }
