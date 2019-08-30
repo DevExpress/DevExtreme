@@ -140,8 +140,8 @@ const Validator = DOMComponent.inherit({
         if(!adapter) {
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
-                adapter.validationRequestsCallbacks.add(() => {
-                    this.validate();
+                adapter.validationRequestsCallbacks.add((args) => {
+                    this.validate(args);
                 });
                 this.option("adapter", adapter);
                 return;
@@ -151,13 +151,13 @@ const Validator = DOMComponent.inherit({
         const callbacks = adapter.validationRequestsCallbacks;
         if(callbacks) {
             if(Array.isArray(callbacks)) {
-                callbacks.push(() => {
-                    this.validate();
+                callbacks.push((args) => {
+                    this.validate(args);
                 });
             } else {
                 errors.log("W0014", "validationRequestsCallbacks", "jQuery.Callbacks", "17.2", "Use the array instead");
-                callbacks.add(() => {
-                    this.validate();
+                callbacks.add((args) => {
+                    this.validate(args);
                 });
             }
         }
@@ -212,14 +212,14 @@ const Validator = DOMComponent.inherit({
     * @publicName validate()
     * @return dxValidatorResult
     */
-    validate() {
+    validate(args) {
         if(this._validationResult && this._validationResult.status === "pending") {
             return this._validationResult;
         }
         const adapter = this.option("adapter"),
             name = this.option("name"),
             bypass = adapter.bypass && adapter.bypass(),
-            value = adapter.getValue(),
+            value = (args && args.value !== undefined) ? args.value : adapter.getValue(),
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
             rules = this._getValidationRules();
         let result;
