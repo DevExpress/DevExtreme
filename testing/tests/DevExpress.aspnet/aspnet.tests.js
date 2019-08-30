@@ -415,7 +415,7 @@
 
 
             $("#qunit-fixture").html(
-                '<div id="popop1">' +
+                '<div id="popup1">' +
                 '</div>' +
 
                 '<script id="popup1_contentTemplate" type="text/html">' +
@@ -429,7 +429,7 @@
                 '</script>'
             );
 
-            $("#popop1").dxPopup({
+            $("#popup1").dxPopup({
                 contentTemplate: $("#popup1_contentTemplate"),
                 visible: true
             });
