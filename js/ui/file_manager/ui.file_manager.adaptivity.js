@@ -47,14 +47,29 @@ class FileManagerAdaptivityControl extends Widget {
     _render() {
         super._render();
         this._checkAdaptiveState();
+        this._splitter.option({ leftElement: this._drawer.content() });
     }
 
     _onApplyPanelSize(e) {
         if(!hasWindow()) {
             return;
         }
-        this._drawer.content().width(e.leftPanelWidth);
-        this._drawer.viewContent().width(e.rightPanelWidth);
+
+        if(!this._splitter.isSplitterMoved()) {
+            this._updateDrawerDimensions();
+            return;
+        }
+        $(this._drawer.content()).find(".dx-filemanager-dirs-panel")
+            .css("minWidth", "unset")
+            .css("maxWidth", "unset");
+        $(this._drawer.content()).width(e.leftPanelWidth);
+        this._drawer.resizeContent();
+    }
+
+    _updateDrawerDimensions() {
+        this._drawer.content().css('width', '');
+        this._drawer._initSize();
+        this._drawer._strategy.setPanelSize(true);
     }
 
     _dimensionChanged(dimension) {

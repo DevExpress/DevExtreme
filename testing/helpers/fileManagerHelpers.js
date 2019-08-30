@@ -6,10 +6,15 @@ export const Consts = {
     GENERAL_TOOLBAR_CLASS: "dx-filemanager-general-toolbar",
     FILE_TOOLBAR_CLASS: "dx-filemanager-file-toolbar",
     CONTAINER_CLASS: "dx-filemanager-container",
+    DRAWER_WRAPPER_CLASS: "dx-drawer-wrapper",
+    DRAWER_PANEL_CONTENT_CLASS: "dx-drawer-panel-content",
+    DRAWER_CONTENT_CLASS: "dx-drawer-content",
+    DRAWER_OPENED_STATE_CLASS: "dx-drawer-opened",
     DIALOG_CLASS: "dx-filemanager-dialog",
     THUMBNAILS_ITEM_CLASS: "dx-filemanager-thumbnails-item",
     GRID_DATA_ROW_CLASS: "dx-data-row",
     FILE_ACTION_BUTTON_CLASS: "dx-filemanager-file-actions-button",
+    FILES_TREE_VIEW_CLASS: "dx-filemanager-dirs-panel",
     FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
     BREADCRUMBS_CLASS: "dx-filemanager-breadcrumbs",
@@ -26,7 +31,11 @@ export const Consts = {
     MENU_ITEM_WITH_TEXT_CLASS: "dx-menu-item-has-text",
     CONTEXT_MENU_CLASS: "dx-context-menu",
     MENU_ITEM_CLASS: "dx-menu-item",
-    SELECTION_CLASS: "dx-selection"
+    SELECTION_CLASS: "dx-selection",
+    SPLITTER_WRAPPER_CLASS: "dx-splitter-wrapper",
+    SPLITTER_CLASS: "dx-splitter",
+    DISABLED_STATE_CLASS: "dx-state-disabled",
+    ADAPTIVE_STATE_SCREEN_WIDTH: 573
 };
 const showMoreButtonText = "\u22EE";
 
@@ -149,6 +158,30 @@ export class FileManagerWrapper {
 
     _findActionButton($container) {
         return $container.find(`.${Consts.FILE_ACTION_BUTTON_CLASS} .${Consts.BUTTON_CLASS}`);
+    }
+
+    getSplitterContainerWrapper() {
+        return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_WRAPPER_CLASS}`);
+    }
+
+    getFilesTreeViewWrapper() {
+        return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
+    }
+
+    getFilesTreeView() {
+        return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.FILES_TREE_VIEW_CLASS}`);
+    }
+
+    getItemsPanelWrapper() {
+        return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_CONTENT_CLASS}`);
+    }
+
+    getSplitterWrapper() {
+        return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.SPLITTER_WRAPPER_CLASS}`);
+    }
+
+    getSplitter() {
+        return this.getSplitterWrapper().find(`.${Consts.SPLITTER_CLASS}`);
     }
 
 }

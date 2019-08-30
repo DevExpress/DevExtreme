@@ -11,6 +11,9 @@ const SPLITTER_CLASS = "dx-splitter";
 const SPLITTER_WRAPPER_CLASS = `${SPLITTER_CLASS}-wrapper`;
 const SPLITTER_TRANSPARENT_CLASS = `${SPLITTER_CLASS}-transparent`;
 const SPLITTER_BORDER_CLASS = `${SPLITTER_CLASS}-border`;
+const SPLITTER_INITIAL_STATE_CLASS = `${SPLITTER_CLASS}-initial`;
+
+const STATE_DISABLED_CLASS = "dx-state-disabled";
 
 const SPLITTER_MODULE_NAMESPACE = "dxSplitterResizing";
 const SPLITTER_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, SPLITTER_MODULE_NAMESPACE);
@@ -26,7 +29,8 @@ export default class SplitterControl extends Widget {
         this._onApplyPanelSize = this._createActionByOption("onApplyPanelSize");
 
         this.$element()
-            .addClass(SPLITTER_WRAPPER_CLASS);
+            .addClass(SPLITTER_WRAPPER_CLASS)
+            .addClass(SPLITTER_INITIAL_STATE_CLASS);
         this._$splitterBorder = $("<div>")
             .addClass(SPLITTER_BORDER_CLASS)
             .appendTo(this.$element());
@@ -63,37 +67,33 @@ export default class SplitterControl extends Widget {
     }
 
     _windowResizeHandler(e) {
-        const leftElementWidth = this._$leftElement[0].style.width;
-        const rightElementWidth = this._$rightElement[0].style.width;
-        if(this._isPercentValue(leftElementWidth) && this._isPercentValue(rightElementWidth)) {
-            return;
-        }
-
-        const leftPanelWidth = this._$leftElement.width() / this._$container.width() * 100;
+        let leftPanelWidth = parseFloat(this._lastLeftPanelWidth);
         const rightPanelWidth = 100 - leftPanelWidth;
         this._onApplyPanelSize({
             leftPanelWidth: leftPanelWidth + "%",
             rightPanelWidth: rightPanelWidth + "%"
         });
+        this.setSplitterPositionLeft(this._$leftElement.width());
     }
 
     _onMouseDownHandler(e) {
         e.preventDefault();
+        this.$element().removeClass(SPLITTER_INITIAL_STATE_CLASS);
         this._offsetX = e.offsetX <= this._$splitterBorder.width() ? e.offsetX : 0;
         this._isSplitterActive = true;
-        this._cursorLastPos = e.clientX;
         this._containerWidth = this._$container.width();
-        this._leftPanelMinWidth = this._getLeftPanelMinWidth();
-        this._leftPanelMaxWidth = this._getLeftPanelMaxWidth();
         this._$splitter.removeClass(SPLITTER_TRANSPARENT_CLASS);
+        this.setSplitterPositionLeft(this._getNewSplitterPositionLeft(e));
     }
 
     _onMouseMoveHandler(e) {
         if(!this._isSplitterActive) {
             return;
         }
-        const leftPanelWidth = this._computeLeftPanelWidth(e);
+        const splitterPositionLeft = this._getNewSplitterPositionLeft(e);
+        const leftPanelWidth = splitterPositionLeft / this._containerWidth * 100;
         const rightPanelWidth = 100 - leftPanelWidth;
+        this.setSplitterPositionLeft(splitterPositionLeft);
         this._onApplyPanelSize({
             leftPanelWidth: leftPanelWidth + "%",
             rightPanelWidth: rightPanelWidth + "%"
@@ -104,43 +104,15 @@ export default class SplitterControl extends Widget {
         if(this._isSplitterActive) {
             this._$splitter.addClass(SPLITTER_TRANSPARENT_CLASS);
             this._isSplitterActive = false;
+            this._lastLeftPanelWidth = $(this._$leftElement).prop("style")["width"];
         }
     }
 
-    _computeLeftPanelWidth(e) {
-        this._cursorLastPos = e.pageX - this._$container.offset().left - this._offsetX;
-        this._cursorLastPos = Math.max(this._$splitterBorder.width(), this._cursorLastPos);
-        this._cursorLastPos = Math.min(this._containerWidth - this._$splitterBorder.width(), this._cursorLastPos);
-        if(this._leftPanelMinWidth) {
-            this._cursorLastPos = Math.max(this._cursorLastPos, this._leftPanelMinWidth);
-        }
-        if(this._leftPanelMaxWidth) {
-            this._cursorLastPos = Math.min(this._cursorLastPos, this._leftPanelMaxWidth);
-        }
-        return this._cursorLastPos / this._containerWidth * 100;
-    }
-
-    _getLeftPanelMinWidth() {
-        return this._getElementMinMaxWidthRecursiveCore(this._$leftElement[0], "minWidth");
-    }
-
-    _getLeftPanelMaxWidth() {
-        return this._getElementMinMaxWidthRecursiveCore(this._$leftElement[0], "maxWidth");
-    }
-
-    _getElementMinMaxWidthRecursiveCore(element, minMaxAttr) {
-        let elementMaxWidth = 0;
-        if(this._isDomElement(element)) {
-            elementMaxWidth = getWindow().getComputedStyle(element)[minMaxAttr];
-        }
-        let width = !this._isPercentValue(elementMaxWidth) ? parseFloat(elementMaxWidth) : 0;
-        if(isNaN(width)) {
-            width = 0;
-        }
-        for(let i = 0; i < element.childNodes.length; i++) {
-            width = Math.max(width, this._getElementMinMaxWidthRecursiveCore(element.childNodes[i], minMaxAttr));
-        }
-        return width;
+    _getNewSplitterPositionLeft(e) {
+        let newSplitterPositionLeft = e.pageX - this._$container.offset().left - this._offsetX;
+        newSplitterPositionLeft = Math.max(0, newSplitterPositionLeft);
+        newSplitterPositionLeft = Math.min(this._containerWidth - this._$splitterBorder.width(), newSplitterPositionLeft);
+        return newSplitterPositionLeft;
     }
 
     _isDomElement(element) {
@@ -152,12 +124,30 @@ export default class SplitterControl extends Widget {
     }
 
     toggleState(isActive) {
-        if(isActive) {
-            this.$element().removeClass("dx-state-disabled");
-            this._$splitter.removeClass("dx-state-disabled");
-        } else {
-            this.$element().addClass("dx-state-disabled");
-            this._$splitter.addClass("dx-state-disabled");
+        const classAction = isActive ? "removeClass" : "addClass";
+        this.$element()[classAction](STATE_DISABLED_CLASS);
+        this._$splitter[classAction](STATE_DISABLED_CLASS);
+    }
+
+    isSplitterMoved() {
+        return !this.$element().hasClass(SPLITTER_INITIAL_STATE_CLASS);
+    }
+
+    setSplitterPositionLeft(splitterPositionLeft) {
+        this.$element().css("left", splitterPositionLeft);
+    }
+
+    _optionChanged(args) {
+        switch(args.name) {
+            case "initialLeftPanelWidth":
+                this._lastLeftPanelWidth = args.value / this._$container.width() * 100 + "%";
+                break;
+            case "leftElement":
+                this._$leftElement = args.value;
+                this._lastLeftPanelWidth = this._$leftElement.width() / this._$container.width() * 100 + "%";
+                break;
+            default:
+                super._optionChanged(args);
         }
     }
 }

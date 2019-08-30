@@ -91,6 +91,7 @@ class Gantt extends Widget {
             onScroll: this._onGanttViewScroll.bind(this)
         });
         this._setInnerElementsWidth();
+        this._splitter.option({ initialLeftPanelWidth: this.option("treeListWidth") });
     }
 
     _onApplyPanelSize(e) {
@@ -157,15 +158,15 @@ class Gantt extends Widget {
         const leftPanelWidth = widths.leftPanelWidth;
         const rightPanelWidth = widths.rightPanelWidth;
 
-        this._$treeListWrapper.width(widths.leftPanelWidth);
+        this._$treeListWrapper.width(leftPanelWidth);
 
         const isPercentage = typeUtils.isString(leftPanelWidth) && leftPanelWidth.slice(-1) === "%";
         this._$treeList.width(isPercentage ? "100%" : leftPanelWidth);
 
-        this._$ganttView.width(rightPanelWidth);
+        this._splitter.setSplitterPositionLeft(leftPanelWidth);
 
-        const innerGanttViewWidth = this._$element.width() - this._$treeList.width();
-        this._ganttView && this._ganttView.option("width", innerGanttViewWidth);
+        this._$ganttView.width(rightPanelWidth);
+        this._ganttView && this._ganttView.option("width", this._$ganttView.width());
     }
 
     _getPanelsWidthByOption() {
