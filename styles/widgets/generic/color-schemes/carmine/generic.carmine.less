@@ -46,7 +46,7 @@
 * @name 40. Border color
 * @type color
 */
-@base-border-color: #dee1e3;
+@base-border-color: fade(#000000, 13%);
 
 /**
 * @name 120. Border radius
@@ -93,10 +93,10 @@
 * @name 90. Hovered state background color
 * @type color
 */
-@base-hover-bg: fade(@base-text-color, 5%);
+@base-hover-bg: fade(@base-accent, 12%);
 
 @base-select-color: @base-text-color;
-@base-select-bg: fade(@base-text-color, 12%);
+@base-select-bg: fade(@base-accent, 48%);
 
 /**
 * @name 100. Focused state text color
@@ -497,6 +497,8 @@
 * @type color
 */
 @list-item-selected-bg: @base-select-bg; // #f05b41 => #ffb5a8
+
+@list-item-selected-hover-bg: fade(@base-accent, 30%);
 @list-item-focused-selected-bg: fade(@base-focus-bg, 70%);
 @list-focused-bg: @base-focus-bg;
 @list-item-color: @base-text-color;
@@ -1436,7 +1438,8 @@
 @treeview-item-hover-color: @base-hover-color;
 @treeview-border-color: @base-border-color;
 @treeview-item-selected-color: @treeview-color;
-@treeview-item-selected-bg: darken(@base-bg, 10%);
+@treeview-item-selected-bg: fade(@base-accent, 48%);
+@treeview-item-selected-hover-bg: fade(@base-accent, 30%);
 
 /**
 * @name 120. Spin icon color

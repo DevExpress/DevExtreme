@@ -168,6 +168,14 @@
             color: @treeview-item-selected-color;
             background-color: @treeview-item-selected-bg;
         }
+
+        &:not(.dx-state-focused) {
+            > .dx-treeview-item {
+                &.dx-state-hover {
+                    background-color: @treeview-item-selected-hover-bg;
+                }
+            }
+        }
     }
 
     &.dx-state-focused {
