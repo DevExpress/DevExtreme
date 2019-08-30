@@ -141,12 +141,11 @@ function updateTicksPosition(ticks, options, animate) {
 function updateGridsPosition(ticks, animate) {
     callAction(ticks, "updateGridPosition", animate);
 }
-
-function measureLabels(items) {
+const measureLabels = exports.measureLabels = function(items) {
     items.forEach(function(item) {
         item.labelBBox = item.label ? item.label.getBBox() : { x: 0, y: 0, width: 0, height: 0 };
     });
-}
+};
 
 function cleanUpInvalidTicks(ticks) {
     var i = ticks.length - 1;
@@ -259,6 +258,30 @@ function convertVisualRangeObject(visualRange, optionValue) {
 function getConstantLineSharpDirection(coord, axisCanvas) {
     return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
 }
+
+const calculateCanvasMargins = exports.calculateCanvasMargins = function(bBoxes, canvas) {
+    const cLeft = canvas.left;
+    const cTop = canvas.top;
+    const cRight = canvas.width - canvas.right;
+    const cBottom = canvas.height - canvas.bottom;
+    return bBoxes
+        .reduce(function(margins, bBox) {
+            if(!bBox || bBox.isEmpty) {
+                return margins;
+            }
+            return {
+                left: _max(margins.left, cLeft - bBox.x),
+                top: _max(margins.top, cTop - bBox.y),
+                right: _max(margins.right, bBox.x + bBox.width - cRight),
+                bottom: _max(margins.bottom, bBox.y + bBox.height - cBottom)
+            };
+        }, {
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0
+        });
+};
 
 const Axis = exports.Axis = function(renderSettings) {
     var that = this;
@@ -513,6 +536,15 @@ Axis.prototype = {
         });
     },
 
+    _adjustLabelsCoord(offset, maxWidth, checkCanvas) {
+        const that = this;
+        that._majorTicks.forEach(function(tick) {
+            if(tick.label) {
+                tick.label.attr(that._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas));
+            }
+        });
+    },
+
     _adjustLabels: function(offset) {
         var that = this,
             maxSize = that._majorTicks.reduce(function(size, tick) {
@@ -526,11 +558,7 @@ Axis.prototype = {
             }, {}),
             additionalOffset = that._isHorizontal ? maxSize.height : maxSize.width;
 
-        that._majorTicks.forEach(function(tick) {
-            if(tick.label) {
-                tick.label.attr(that._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxSize.width));
-            }
-        });
+        that._adjustLabelsCoord(offset, maxSize.width);
 
         return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + maxSize.offset;
     },
@@ -753,24 +781,9 @@ Axis.prototype = {
                         box.height = cBottom - cTop;
                     }
                     return box;
-                })(that._axisTitleGroup)),
-            margins = boxes
-                .reduce(function(margins, bBox) {
-                    if(!bBox || bBox.isEmpty) {
-                        return margins;
-                    }
-                    return {
-                        left: _max(margins.left, cLeft - bBox.x),
-                        top: _max(margins.top, cTop - bBox.y),
-                        right: _max(margins.right, bBox.x + bBox.width - cRight),
-                        bottom: _max(margins.bottom, bBox.y + bBox.height - cBottom)
-                    };
-                }, {
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0
-                });
+                })(that._axisTitleGroup));
+
+        const margins = calculateCanvasMargins(boxes, canvas);
 
         margins[position] += options.crosshairMargin;
 
@@ -1925,7 +1938,9 @@ Axis.prototype = {
         cleanUpInvalidTicks(that._minorTicks);
         cleanUpInvalidTicks(that._boundaryTicks);
 
-        that._updateAxisElementPosition();
+        if(this._axisElement) {
+            that._updateAxisElementPosition();
+        }
 
         updateTicksPosition(that._majorTicks, options.tick, animationEnabled);
         updateTicksPosition(that._minorTicks, options.minorTick, animationEnabled);
@@ -2413,9 +2428,7 @@ Axis.prototype = {
         if(step > 1 && boxes.some(checkLabels)) {
             that._applyLabelMode(mode, step, boxes, behavior);
         }
-        if(mode === "hide") {
-            that._checkBoundedLabelsOverlapping(step, majorTicks, boxes);
-        }
+        that._checkBoundedLabelsOverlapping(majorTicks, boxes, mode);
     },
 
     _applyLabelMode: function(mode, step, boxes, behavior, notRecastStep) {
@@ -2550,6 +2563,8 @@ Axis.prototype = {
     drawScaleBreaks: _noop,
 
     _visualRange: _noop,
+
+    _rotateConstantLine: _noop,
 
     applyVisualRangeSetter: _noop,
     // T642779,T714928

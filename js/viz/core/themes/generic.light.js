@@ -1509,8 +1509,8 @@ registerTheme({
             }
         },
         adaptiveLayout: {
-            width: 170,
-            height: 170,
+            width: 80,
+            height: 80,
             keepLabels: true
         },
         equalBarWidth: true,

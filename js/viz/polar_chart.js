@@ -60,41 +60,49 @@ var dxPolarChart = AdvancedChart.inherit({
         return {};
     },
 
+    _calcCanvas: function() {
+        const canvas = extend({}, this._canvas);
+        const argumentAxis = this.getArgumentAxis();
+        const margins = argumentAxis.getMargins();
+        Object.keys(margins).forEach(margin => canvas[margin] = canvas[`original${margin[0].toUpperCase()}${margin.slice(1)}`] + margins[margin]);
+        return canvas;
+    },
+
     _renderAxes: function(drawOptions) {
         var that = this,
             valueAxis = that._getValueAxis(),
             argumentAxis = that.getArgumentAxis();
 
-        var canvas = that._calcCanvas(argumentAxis.measureLabels(extend({}, that._canvas), true));
-
-        argumentAxis.draw(canvas);
+        argumentAxis.draw(that._canvas);
         valueAxis.setSpiderTicks(argumentAxis.getSpiderTicks());
+
+        const canvas = that._calcCanvas();
+
+        argumentAxis.updateSize(canvas);
         valueAxis.draw(canvas);
+
+        return canvas;
     },
 
     _getValueAxis: function() {
         return this._valueAxes[0];
     },
 
-    _shrinkAxes: function(sizeShortage) {
+    _shrinkAxes: function(sizeStorage) {
         var valueAxis = this._getValueAxis(),
             argumentAxis = this.getArgumentAxis();
 
-        if(sizeShortage && (sizeShortage.width || sizeShortage.height)) {
+        if(sizeStorage && (sizeStorage.width || sizeStorage.height)
+        ) {
             argumentAxis.hideOuterElements();
-            argumentAxis.updateSize(this._canvas);
-            valueAxis.updateSize(this._canvas);
+            const canvas = this._calcCanvas();
+            argumentAxis.updateSize(canvas);
+            valueAxis.updateSize(canvas);
         }
     },
 
-    _calcCanvas: function(measure) {
-        var canvas = extend({}, this._canvas);
-
-        canvas.left += measure.width;
-        canvas.right += measure.width;
-        canvas.top += measure.height;
-        canvas.bottom += measure.height;
-        return canvas;
+    checkForMoreSpaceForPanesCanvas() {
+        return this.layoutManager.needMoreSpaceForPanesCanvas([{ canvas: this.getArgumentAxis().getCanvas() }], this._isRotated());
     },
 
     _getLayoutTargets: function() {

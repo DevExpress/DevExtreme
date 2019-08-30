@@ -78,7 +78,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 if(!lineElement) {
                     return;
                 }
-                if(settings.points === null) {
+                if(settings.points === null || settings.r === null) {
                     lineElement.remove();
                     return;
                 }

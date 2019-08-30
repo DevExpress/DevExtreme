@@ -323,10 +323,6 @@ module.exports = {
         },
 
         _updateAxisElementPosition: function() {
-            if(!this._axisElement) {
-                return;
-            }
-
             var axisCoord = this._axisPosition,
                 canvas = this._getCanvasStartEnd();
 
