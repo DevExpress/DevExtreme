@@ -436,7 +436,7 @@ var AdvancedChart = BaseChart.inherit({
         });
 
         if(!updatedAxis || updatedAxis && series.length) {
-            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._axesReinitialized));
+            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._axesReinitialized, undefined, that._groupsData.categories));
         }
 
         that._populateMarginOptions();
