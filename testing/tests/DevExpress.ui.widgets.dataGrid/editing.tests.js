@@ -79,7 +79,11 @@ QUnit.module('Editing', {
 
         setupDataGridModules(this, ['data', 'columns', 'headerPanel', 'rows', 'pager', 'editing', 'editorFactory', 'keyboardNavigation', 'virtualScrolling'], {
             initViews: true,
-            options: { useKeyboard: true },
+            options: {
+                keyboardNavigation: {
+                    enabled: true
+                }
+            },
             controllers: {
                 columns: new MockColumnsController(this.columns),
                 data: new MockDataController(this.dataControllerOptions)
@@ -13503,7 +13507,9 @@ QUnit.test("Render detail form row - creation а validator should not throw an e
 // T554950
 QUnit.testInActiveWindow("Focus on lookup column should be preserved after changing a value in lookup", function(assert) {
     // arrange
-    this.options.useKeyboard = true;
+    this.options.keyboardNavigation = {
+        enabled: true
+    };
     this.options.dataSource.store = [{ name: "Bob", state: 1 }];
     this.options.columns = ["name", {
         dataField: "state",

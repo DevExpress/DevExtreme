@@ -2,7 +2,8 @@ import accessibility from "../../ui/shared/accessibility";
 
 module.exports = {
     registerKeyboardAction: function(viewName, instance, $element, selector, action) {
-        if(instance.option("useLegacyKeyboardNavigation")) {
+        var keyboardController = instance.getController("keyboardNavigation");
+        if(instance.option("useLegacyKeyboardNavigation") || (keyboardController && !keyboardController.isKeyboardEnabled())) {
             return;
         }
 
