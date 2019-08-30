@@ -170,6 +170,11 @@ const SpeedDialItem = Overlay.inherit({
             case "label":
                 this._renderLabel();
                 break;
+            case "visible":
+                args.value ?
+                    this._show() :
+                    this._hide();
+                break;
             case "useInkRipple":
                 this._render();
                 break;

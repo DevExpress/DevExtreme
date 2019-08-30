@@ -103,14 +103,13 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     },
 
     _clickHandler() {
-        const actions = this._actionItems;
-        actions.forEach(action => {
-            action.toggle();
+        const actions = this._actionItems.filter((action) => action.option("actionVisible"));
 
-            if(action.option("visible")) {
-                action._$wrapper.css("position", this._$wrapper.css("position"));
-            }
-        });
+        for(let i = 0; i < actions.length; i++) {
+            actions[i].option("position", this._getActionPosition(actions[i], i));
+            actions[i]._$wrapper.css("position", this._$wrapper.css("position"));
+            actions[i].toggle();
+        }
 
         this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
         this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
@@ -126,6 +125,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 actionItem.dispose();
                 actionItem.$element().remove();
             });
+            this._actionItems = [];
         }
 
         if(actions.length === minActionButtonCount) return;
@@ -140,9 +140,6 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._clickHandler();
             });
 
-
-            action._options.position = this._getActionPosition(action, i);
-
             const actionAnimationDelay = 30;
 
             action._options.animation.show.delay = actionAnimationDelay * i;
@@ -150,6 +147,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
             action._options.actionComponent = action;
             action._options.parentPosition = this._getPosition();
+            action._options.actionVisible = action._options.visible;
 
             this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, extend({}, action._options, { visible: false })));
         }
@@ -219,8 +217,6 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 });
 
 exports.initAction = function(newAction) {
-    if(!newAction._options.visible) return;
-
     // TODO: workaround for Angular/React/Vue
     delete newAction._options.onInitializing;
 
@@ -233,8 +229,7 @@ exports.initAction = function(newAction) {
 
         speedDialMainItem = newAction._createComponent($fabMainElement, SpeedDialMainItem,
             extend({}, newAction._options, {
-                actions: [ newAction ],
-                visible: true
+                actions: [ newAction ]
             })
         );
     } else {
@@ -247,8 +242,10 @@ exports.initAction = function(newAction) {
             }
         });
 
+        const visibleSavedActions = savedActions.filter((action) => action.option("visible"));
+
         if(!isActionExist) {
-            if(savedActions.length >= speedDialMainItem.option("maxSpeedDialActionCount")) {
+            if(visibleSavedActions.length >= speedDialMainItem.option("maxSpeedDialActionCount")) {
                 newAction.dispose();
                 errors.log("W1014");
                 return;
@@ -257,17 +254,17 @@ exports.initAction = function(newAction) {
             speedDialMainItem.option(extend(speedDialMainItem._getDefaultOptions(), {
                 actions: savedActions
             }));
-        } else if(savedActions.length === 1) {
-            speedDialMainItem.option(extend({}, newAction._options, {
+        } else if(visibleSavedActions.length === 1) {
+            speedDialMainItem.option(extend({}, visibleSavedActions[0]._options, {
                 actions: savedActions,
-                visible: true,
                 position: speedDialMainItem._getPosition()
             }));
         } else {
             speedDialMainItem.option({
                 actions: savedActions,
                 position: speedDialMainItem._getPosition(),
-                label: speedDialMainItem._getDefaultOptions().label
+                label: speedDialMainItem._getDefaultOptions().label,
+                icon: speedDialMainItem._getDefaultOptions().icon
             });
         }
     }
@@ -286,12 +283,14 @@ exports.disposeAction = function(actionId) {
 
     if(savedActionsCount === savedActions.length) return;
 
+    const visibleSavedActions = savedActions.filter((action) => action.option("visible"));
+
     if(!savedActions.length) {
         speedDialMainItem.dispose();
         speedDialMainItem.$element().remove();
         speedDialMainItem = null;
-    } else if(savedActions.length === 1) {
-        speedDialMainItem.option(extend({}, savedActions[0]._options, {
+    } else if(visibleSavedActions.length === 1) {
+        speedDialMainItem.option(extend({}, visibleSavedActions[0]._options, {
             actions: savedActions,
             visible: true,
             position: speedDialMainItem._getPosition()
