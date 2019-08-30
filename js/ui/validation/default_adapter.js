@@ -6,8 +6,8 @@ const DefaultAdapter = Class.inherit({
         this.editor = editor;
         this.validator = validator;
         this.validationRequestsCallbacks = Callbacks();
-        const handler = () => {
-            this.validationRequestsCallbacks.fire();
+        const handler = (args) => {
+            this.validationRequestsCallbacks.fire(args);
         };
         editor.validationRequest.add(handler);
         editor.on("disposing", function() {
