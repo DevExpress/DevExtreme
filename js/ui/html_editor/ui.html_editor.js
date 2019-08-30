@@ -117,7 +117,7 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxHtmlEditorToolbar.items
-            * @type Array<dxHtmlEditorToolbarItem,string>
+            * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
             */
 
             /**
@@ -126,7 +126,7 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatName
-            * @type string
+            * @type Enums.HtmlEditorFormat
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatValues
