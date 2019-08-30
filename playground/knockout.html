@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css" />
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
 
@@ -23,24 +24,192 @@
     <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>-->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
+    <style>
+        .dx-validation-pending.dx-texteditor.dx-editor-filled .dx-texteditor-input-container .dx-pending-indicator,
+        .dx-validation-pending.dx-texteditor.dx-editor-underlined .dx-texteditor-input-container .dx-pending-indicator,
+        .dx-validation-pending.dx-texteditor.dx-editor-outlined .dx-texteditor-input-container .dx-pending-indicator {
+            pointer-events: none;
+            position: absolute;
+            top: 50%;
+            margin-top: -11px;
+            width: 22px;
+            height: 22px;
+        }
+
+        .dx-texteditor.dx-validation-pending .dx-texteditor-input-container .dx-pending-indicator {
+            right: 4px;
+        }
+
+        .dx-texteditor.dx-validation-pending .dx-texteditor-input-container .dx-texteditor-input {
+            padding-right: 26px;
+        }
+    </style>
 </head>
 
 <body>
-    <div data-bind="dxButton: buttonOptions"></div>
-
+    <form id="form2" action="your-action" style="width:400px;">
+        <div class="dx-fieldset">
+            <div class="dx-field">
+                <div class="dx-field-label">Text 1</div>
+                <div class="dx-field-value">
+                    <div data-bind="dxTextBox:{
+                        value: textBox1,
+                        isValid: textBox1.dxValidator.isValid,
+                        validationError: textBox1.dxValidator.validationError,
+                        validationErrors: textBox1.dxValidator.validationErrors,
+                        validationStatus: textBox1.dxValidator.validationStatus
+                    }"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Text 2</div>
+                <div class="dx-field-value">
+                    <div data-bind="dxTextBox:{
+                        value: textBox2,
+                        isValid: textBox2.dxValidator.isValid,
+                        validationError: textBox2.dxValidator.validationError,
+                        validationErrors: textBox2.dxValidator.validationErrors,
+                        validationStatus: textBox2.dxValidator.validationStatus
+                    }"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Text 3</div>
+                <div class="dx-field-value">
+                    <div data-bind="dxTextBox:{
+                        value: textBox3,
+                        isValid: textBox3.dxValidator.isValid,
+                        validationError: textBox3.dxValidator.validationError,
+                        validationErrors: textBox3.dxValidator.validationErrors,
+                        validationStatus: textBox3.dxValidator.validationStatus
+                    }"></div>
+                </div>
+            </div>
+        </div>
+        <div data-bind="dxValidationSummary: {}"></div>
+        <div data-bind="dxButton: buttonOptions"></div>
+    </form>
     <script>
-        $(function() {
-            var viewModel = {
+        $(function () {
+            var viewModel2 = {
+                textBox1: ko.observable("").extend({
+                    dxValidator: {
+                        validationRules: [{
+                            type: "required",
+                            message: "textBox1 is required"
+                        },
+                        {
+                            type: "custom",
+                            message: "textBox1 is invalid",
+                            validationCallback: function (params) {
+                                return params.value === "test";
+                            }
+                        },
+                        {
+                            type: "async",
+                            message: "textBox1 is invalid (async)",
+                            validationCallback: function (params) {
+                                let d = $.Deferred();
+                                setTimeout(function () {
+                                    d.resolve(params.value === "test");
+                                }, 5000);
+                                return d.promise();
+                            }
+                        }]
+                    }
+                }),
+                textBox2: ko.observable("").extend({
+                    dxValidator: {
+                        validationRules: [{
+                            type: "required",
+                            message: "textBox2 is required"
+                        },
+                        {
+                            type: "custom",
+                            message: "textBox2 is invalid",
+                            validationCallback: function (params) {
+                                return params.value === "test1";
+                            }
+                        },
+                        {
+                            type: "async",
+                            message: "textBox2 is invalid async",
+                            validationCallback: function (params) {
+                                let d = $.Deferred();
+                                setTimeout(function () {
+                                    let res = params.value === "test12";
+                                    if (res) {
+                                        d.reject({
+                                            isValid: false,
+                                            message: "textBox2 value is too simple"
+                                        })
+                                    }
+                                    else {
+                                        d.resolve(true);
+                                    }
+                                }, 3000);
+                                return d.promise();
+                            }
+                        }]
+                    }
+                }),
+                textBox3: ko.observable("").extend({
+                    dxValidator: {
+                        validationRules: [
+                        {
+                            type: "async",
+                            message: "textBox3 is invalid async1",
+                            validationCallback: function (params) {
+                                let d = $.Deferred();
+                                setTimeout(function () {
+                                    d.resolve(params.value === "test22");
+                                }, 1000);
+                                return d.promise();
+                            }
+                        },
+                        {
+                            type: "async",
+                            message: "textBox3 is invalid async2",
+                            validationCallback: function (params) {
+                                let d = $.Deferred();
+                                setTimeout(function () {
+                                    let res = params.value === "test223";
+                                    if (res) {
+                                        d.reject({
+                                            isValid: false,
+                                            message: "textBox3 value is too simple"
+                                        })
+                                    }
+                                    else {
+                                        d.resolve(true);
+                                    }
+                                }, 3000);
+                                return d.promise();
+                            }
+                        },
+                        {
+                            type: "required",
+                            message: "textBox3 is required"
+                        }]
+                    }
+                }),
                 buttonOptions: {
-                    text: 'Click me!',
-                    onClick: function(e) {
-                        alert("clicked");
+                    text: "Register",
+                    type: "success",
+                    onClick: function (params) {
+                        debugger;
+                        let res = params.validationGroup.validate();
+
+                        res.complete && res.complete.then(function (value) {
+                            console.log("complete");
+                        });
                     }
                 }
             };
-
-            ko.applyBindings(viewModel);
+            DevExpress.validationEngine.registerModelForValidation(viewModel2);
+            ko.applyBindings(viewModel2, document.getElementById("form2"));
         });
     </script>
 </body>
+
 </html>

@@ -40,10 +40,27 @@
     </style>
 </head>
 <body>
-    <form id="form" action="your-action">
-        <div id="textBox1"></div>
-        <div id="textBox2"></div>
-        <div id="textBox3"></div>
+    <form id="form" action="your-action" style="width:400px;">
+        <div class="dx-fieldset">
+            <div class="dx-field">
+                <div class="dx-field-label">Text 1</div>
+                <div class="dx-field-value">
+                    <div id="textBox1"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Text 2</div>
+                <div class="dx-field-value">
+                    <div id="textBox2"></div>
+                </div>
+            </div>
+            <div class="dx-field">
+                <div class="dx-field-label">Text 3</div>
+                <div class="dx-field-value">
+                    <div id="textBox3"></div>
+                </div>
+            </div>
+        </div>
         <div id="summary"></div>
         <div id="button"></div>
     </form>
@@ -93,7 +110,7 @@
                         validationCallback: function(params) {
                             let d = $.Deferred();
                             setTimeout(function() {
-                                let res = params.value === "test1";
+                                let res = params.value === "test12";
                                 if (res) {
                                     d.reject({
                                         isValid: false,
@@ -112,11 +129,12 @@
                 .dxValidator({
                     validationRules: [{
                         type: "async",
+                        reevaluate: true,
                         message: "textBox3 is invalid async1",
                         validationCallback: function(params) {
                             let d = $.Deferred();
                             setTimeout(function() {
-                                d.resolve(params.value === "test2");
+                                d.resolve(params.value === "test22");
                             }, 1000);
                             return d.promise();
                         }
@@ -127,7 +145,7 @@
                         validationCallback: function(params) {
                             let d = $.Deferred();
                             setTimeout(function() {
-                                let res = params.value === "test2";
+                                let res = params.value === "test223";
                                 if (res) {
                                     d.reject({
                                         isValid: false,
@@ -152,8 +170,9 @@
                 type: "success",
                 onClick: function(params) {
                     let res = params.validationGroup.validate();
+                    debugger;
                     //params.validationGroup.reset();
-                    res.complete.then(function(value) {
+                    res.complete && res.complete.then(function(value) {
                         console.log("complete");
                     });
                 }
