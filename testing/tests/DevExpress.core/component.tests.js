@@ -474,7 +474,7 @@ QUnit.module("default", {}, () => {
             assert.strictEqual(option, deprecatedOption);
         };
 
-        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._optionManager._logDeprecatedWarning = _logDeprecatedWarningMock;
         assert.expect(3);
         instance.option(deprecatedOption);
         instance.option(deprecatedOption, true);
@@ -523,7 +523,7 @@ QUnit.module("default", {}, () => {
             ++warningCount;
         };
 
-        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._optionManager._logDeprecatedWarning = _logDeprecatedWarningMock;
         instance.option();
         assert.strictEqual(warningCount, 0);
     });
@@ -532,7 +532,7 @@ QUnit.module("default", {}, () => {
         const instance = new TestComponent();
         const deprecatedOption = "deprecatedOption";
 
-        instance._suppressDeprecatedWarnings();
+        instance._optionManager.suppressDeprecatedWarnings();
         instance.option(deprecatedOption);
         assert.strictEqual(instance._logDeprecatedWarningCount, 0);
     });
@@ -541,8 +541,8 @@ QUnit.module("default", {}, () => {
         const instance = new TestComponent();
         const deprecatedOption = "deprecatedOption";
 
-        instance._suppressDeprecatedWarnings();
-        instance._resumeDeprecatedWarnings();
+        instance._optionManager.suppressDeprecatedWarnings();
+        instance._optionManager.resumeDeprecatedWarnings();
         instance.option(deprecatedOption);
         assert.strictEqual(instance._logDeprecatedWarningCount, 1);
     });

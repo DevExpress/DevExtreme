@@ -541,10 +541,10 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponentWithTemplate.i
     _getActionForUpdating: function(args) {
         var that = this;
 
-        return that._deprecatedOptionsSuppressed ? function() { // T479911
-            that._suppressDeprecatedWarnings();
+        return that._optionManager._deprecatedOptionsSuppressed ? function() { // T479911
+            that._optionManager.suppressDeprecatedWarnings();
             _option.apply(that, args);
-            that._resumeDeprecatedWarnings();
+            that._optionManager.resumeDeprecatedWarnings();
         } : function() {
             _option.apply(that, args);
         };

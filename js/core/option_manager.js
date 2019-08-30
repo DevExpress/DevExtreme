@@ -3,15 +3,12 @@ import typeUtils from "./utils/type";
 import domAdapter from "./dom_adapter";
 
 export class OptionManager {
-    constructor(
-        options,
-        getOptionsByReference,
-        deprecatedOptions,
-        logWarningIfDeprecated) {
+    constructor(options, getOptionsByReference, logDeprecatedWarning, deprecatedOptions) {
         this._options = options;
         this._getOptionsByReference = getOptionsByReference;
         this._deprecatedOptions = deprecatedOptions;
-        this._logWarningIfDeprecated = logWarningIfDeprecated;
+        this._logDeprecatedWarning = logDeprecatedWarning;
+        this._deprecatedOptionsSuppressed;
         this._cachedDeprecateNames = [];
         this.cachedGetters = {};
         this.cachedSetters = {};
@@ -40,6 +37,13 @@ export class OptionManager {
         }
 
         return false;
+    }
+
+    _logWarningIfDeprecated(option) {
+        var info = this._deprecatedOptions[option];
+        if(info && !this._deprecatedOptionsSuppressed) {
+            this._logDeprecatedWarning(option, info);
+        }
     }
 
     _clearField(options, name) {
@@ -120,6 +124,14 @@ export class OptionManager {
                 this._clearField(options, name);
             }
         }
+    }
+
+    suppressDeprecatedWarnings() {
+        this._deprecatedOptionsSuppressed = true;
+    }
+
+    resumeDeprecatedWarnings() {
+        this._deprecatedOptionsSuppressed = false;
     }
 
     onChanging(callBack) {

@@ -212,15 +212,14 @@ var Component = Class.inherit({
         this.beginUpdate();
 
         try {
-            this._suppressDeprecatedWarnings();
             this._setOptionsByReference();
             this._setDeprecatedOptions();
             this._setDefaultOptions();
             this._optionManager = new optionManager(
                 this._options,
                 this._getOptionsByReference.bind(this),
-                this._deprecatedOptions,
-                this._logWarningIfDeprecated.bind(this));
+                this._logDeprecatedWarning.bind(this),
+                this._deprecatedOptions);
 
             this._optionManager.onChanging((name, previousValue, value) => {
                 if(this._initialized) {
@@ -231,13 +230,13 @@ var Component = Class.inherit({
             this._optionManager.onChanged((name, value, previousValue) => {
                 this._notifyOptionChanged(name, value, previousValue);
             });
-
+            this._optionManager.suppressDeprecatedWarnings();
 
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
             }
             this._setOptionsByDevice(options.defaultOptionsRules);
-            this._resumeDeprecatedWarnings();
+            this._optionManager.resumeDeprecatedWarnings();
 
             this._initOptions(options);
         } finally {
@@ -255,6 +254,14 @@ var Component = Class.inherit({
         this.on("disposing", function(args) {
             this._disposingCallbacks.fireWith(this, [args]);
         }.bind(this));
+    },
+
+    _logDeprecatedWarningCount: 0,
+
+    _logDeprecatedWarning(option, info) {
+        var message = info.message || ("Use the '" + info.alias + "' option instead");
+        errors.log("W0001", this.NAME, option, info.since, message);
+        ++this._logDeprecatedWarningCount;
     },
 
     _createOptionChangedAction: function() {
@@ -324,29 +331,6 @@ var Component = Class.inherit({
                 }
             }
         }
-    },
-
-    _logWarningIfDeprecated: function(option) {
-        var info = this._deprecatedOptions[option];
-        if(info && !this._deprecatedOptionsSuppressed) {
-            this._logDeprecatedWarning(option, info);
-        }
-    },
-
-    _logDeprecatedWarningCount: 0,
-
-    _logDeprecatedWarning: function(option, info) {
-        var message = info.message || ("Use the '" + info.alias + "' option instead");
-        errors.log("W0001", this.NAME, option, info.since, message);
-        ++this._logDeprecatedWarningCount;
-    },
-
-    _suppressDeprecatedWarnings: function() {
-        this._deprecatedOptionsSuppressed = true;
-    },
-
-    _resumeDeprecatedWarnings: function() {
-        this._deprecatedOptionsSuppressed = false;
     },
 
     _optionChanging: noop,
@@ -461,9 +445,9 @@ var Component = Class.inherit({
                     beforeExecute && beforeExecute.apply(that, arguments);
                     that.fireEvent(eventName, args.args);
                 };
-                that._suppressDeprecatedWarnings();
+                that._optionManager.suppressDeprecatedWarnings();
                 action = that._createAction(actionFunc, config);
-                that._resumeDeprecatedWarnings();
+                that._optionManager.resumeDeprecatedWarnings();
             }
 
             if(Config().wrapActionsBeforeExecute) {

@@ -750,10 +750,6 @@ function getEvent(options) {
 
                 NAME: "dxDataGrid",
 
-                _suppressDeprecatedWarnings: noop,
-
-                _resumeDeprecatedWarnings: noop,
-
                 updateDimensions: noop,
 
                 setAria: function(name, value, $target) {
@@ -832,6 +828,11 @@ function getEvent(options) {
 
                 _createActionByOption: function() {
                     return function() { };
+                },
+
+                _optionManager: {
+                    suppressDeprecatedWarnings: noop,
+                    resumeDeprecatedWarnings: noop
                 }
             };
 
@@ -3000,10 +3001,6 @@ function getEvent(options) {
                     return $("#container");
                 },
 
-                _suppressDeprecatedWarnings: noop,
-
-                _resumeDeprecatedWarnings: noop,
-
                 _controllers: {
                     data: new MockDataController({
                         rows: [{ values: ['', ''] }]
@@ -3055,6 +3052,11 @@ function getEvent(options) {
 
                 _createActionByOption: function() {
                     return function() { };
+                },
+
+                _optionManager: {
+                    suppressDeprecatedWarnings: noop,
+                    resumeDeprecatedWarnings: noop
                 }
             };
 
@@ -6347,10 +6349,6 @@ function getEvent(options) {
                     return $("#gridInSwatch");
                 },
 
-                _suppressDeprecatedWarnings: noop,
-
-                _resumeDeprecatedWarnings: noop,
-
                 _controllers: {
                     data: new MockDataController({
                         rows: [{ values: ['', ''] }]
@@ -6369,6 +6367,11 @@ function getEvent(options) {
 
                 _createActionByOption: function() {
                     return function() { };
+                },
+
+                _optionManager: {
+                    suppressDeprecatedWarnings: noop,
+                    resumeDeprecatedWarnings: noop
                 }
             };
 

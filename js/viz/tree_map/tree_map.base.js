@@ -317,7 +317,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
 
         settings.labelState = _buildTextAppearance(options, filter);
         settings.labelState.visible = !("visible" in options) || !!options.visible;
-        this._suppressDeprecatedWarnings();
+        this._optionManager.suppressDeprecatedWarnings();
         settings.labelParams = {
             height: bBox.height,
             rtlEnabled: this._getOption("rtlEnabled", true),
@@ -328,7 +328,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
             tileLabelOverflow: tileLabelOptions.textOverflow,
             groupLabelOverflow: groupLabelOptions.textOverflow
         };
-        this._resumeDeprecatedWarnings();
+        this._optionManager.resumeDeprecatedWarnings();
     },
 
     _changeMaxDepth: function() {
