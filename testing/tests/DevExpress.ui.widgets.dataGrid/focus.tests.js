@@ -3842,7 +3842,7 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key if cell is being
     this.gridView.render($("#container"));
     this.clock.tick();
 
-    $(this.gridView.getView("rowsView").getRow(1).find("td").eq(0)).trigger(pointerEvents.up).click();
+    $(this.gridView.getView("rowsView").getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
     this.clock.tick();
 
     rowsView = this.gridView.getView("rowsView");
