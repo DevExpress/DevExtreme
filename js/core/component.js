@@ -124,22 +124,30 @@ var Component = Class.inherit({
         return [];
     },
 
-    _setOptionsByDevice: function(customRules) {
+    _getOptionByRules: function(customRules) {
         var rules = this._defaultOptionsRules();
 
         if(Array.isArray(customRules)) {
             rules = rules.concat(customRules);
         }
 
-        var rulesOptions = this._convertRulesToOptions(rules);
+        return this._convertRulesToOptions(rules);
+    },
 
-        extend(true, this._options, rulesOptions);
+    _setRulesOptions: function(options, rulesOptions) {
+        extend(true, options, rulesOptions);
 
         for(var fieldName in this._optionsByReference) {
             if(Object.prototype.hasOwnProperty.call(rulesOptions, fieldName)) {
-                this._options[fieldName] = rulesOptions[fieldName];
+                options[fieldName] = rulesOptions[fieldName];
             }
         }
+    },
+
+    _setOptionsByDevice: function(customRules) {
+        var rulesOptions = this._getOptionByRules(customRules);
+
+        this._setRulesOptions(this._options, rulesOptions);
     },
 
     _convertRulesToOptions: function(rules) {
