@@ -231,8 +231,6 @@ QUnit.test("component lifecycle, changing a couple of options", function(assert)
         // "beginUpdate", // optionByDevice options applying
         // "endUpdate",
 
-        "beginUpdate", // user options applying
-        "endUpdate",
         "endUpdate",
         "_init",
         "_render",
