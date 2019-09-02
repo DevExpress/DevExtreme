@@ -226,13 +226,16 @@ var Component = Class.inherit({
             this._optionManager = new optionManager(
                 this._options,
                 this._getOptionsByReference(),
-                this._logDeprecatedWarning.bind(this),
                 this._deprecatedOptions);
 
             this._optionManager.onChanging((name, previousValue, value) => {
                 if(this._initialized) {
                     this._optionChanging(name, previousValue, value);
                 }
+            });
+
+            this._optionManager.onLogWarning((option, info) => {
+                this._logDeprecatedWarning(option, info);
             });
 
             this._optionManager.onChanged((name, value, previousValue) => {
@@ -518,8 +521,8 @@ var Component = Class.inherit({
             if(typeUtils.isEmptyObject(this._options)) {
                 return;
             }
-            const name = this._optionManager.normalizeName(options);
-            return this._optionManager.getValue(this._options, name);
+
+            return this._optionManager.getValue(this._options, options);
         }
 
         this.beginUpdate();

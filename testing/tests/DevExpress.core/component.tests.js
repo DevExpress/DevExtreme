@@ -474,7 +474,7 @@ QUnit.module("default", {}, () => {
             assert.strictEqual(option, deprecatedOption);
         };
 
-        instance._optionManager._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
         assert.expect(3);
         instance.option(deprecatedOption);
         instance.option(deprecatedOption, true);
@@ -523,7 +523,7 @@ QUnit.module("default", {}, () => {
             ++warningCount;
         };
 
-        instance._optionManager._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
         instance.option();
         assert.strictEqual(warningCount, 0);
     });
@@ -536,7 +536,7 @@ QUnit.module("default", {}, () => {
             ++warningCount;
         };
 
-        instance._optionManager._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
 
         instance._optionManager.suppressDeprecatedWarnings();
         instance.option(deprecatedOption);
@@ -551,7 +551,7 @@ QUnit.module("default", {}, () => {
             ++warningCount;
         };
 
-        instance._optionManager._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
 
         instance._optionManager.suppressDeprecatedWarnings();
         instance._optionManager.resumeDeprecatedWarnings();
@@ -567,7 +567,7 @@ QUnit.module("default", {}, () => {
             ++warningCount;
         };
 
-        instance._optionManager._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
 
         assert.strictEqual(warningCount, 0);
         instance.option(deprecatedOption);
@@ -1463,7 +1463,7 @@ QUnit.module("action API", {}, () => {
             ++warningCount;
         };
 
-        instance._optionManager._logDeprecatedWarning = _logDeprecatedWarningMock;
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
         instance._createActionByOption(deprecatedOption, {});
         assert.strictEqual(warningCount, 0);
         instance.option(deprecatedOption);

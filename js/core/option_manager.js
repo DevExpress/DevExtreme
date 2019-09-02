@@ -1,14 +1,17 @@
 import coreDataUtils from "./utils/data";
 import typeUtils from "./utils/type";
+import CallBacks from "./utils/callbacks";
 import domAdapter from "./dom_adapter";
 
 export class OptionManager {
-    constructor(options, optionsByReference, logDeprecatedWarning, deprecatedOptions) {
+    constructor(options, optionsByReference, deprecatedOptions) {
         this._options = options;
         this._optionsByReference = optionsByReference;
         this._deprecatedOptions = deprecatedOptions;
-        this._logDeprecatedWarning = logDeprecatedWarning;
         this._deprecatedOptionsSuppressed = false;
+        this._changingCallbacks = CallBacks();
+        this._changedCallbacks = CallBacks();
+        this._logWarningCallbacks = CallBacks();
         this._cachedDeprecateNames = [];
         this.cachedGetters = {};
         this.cachedSetters = {};
@@ -42,7 +45,7 @@ export class OptionManager {
     _logWarningIfDeprecated(option) {
         var info = this._deprecatedOptions[option];
         if(info && !this._deprecatedOptionsSuppressed) {
-            this._logDeprecatedWarning(option, info);
+            this._logWarningCallbacks.fire(option, info);
         }
     }
 
@@ -51,7 +54,7 @@ export class OptionManager {
 
         const previousFieldName = this._getParentName(name);
         const fieldName = this._getFieldName(name);
-        const fieldObject = previousFieldName ? this.getValue(options, previousFieldName, false) : options;
+        const fieldObject = previousFieldName ? this._getValue(options, previousFieldName, false) : options;
 
         if(fieldObject) {
             delete fieldObject[fieldName];
@@ -80,7 +83,7 @@ export class OptionManager {
 
             fieldName = this._getFieldName(fullName) + fieldName;
             fullName = this._getParentName(fullName);
-            fieldObject = fullName ? this.getValue(options, fullName, false) : options;
+            fieldObject = fullName ? this._getValue(options, fullName, false) : options;
 
         } while(!fieldObject);
 
@@ -103,21 +106,21 @@ export class OptionManager {
     }
 
     _setNormalizedValue(name, value, merge) {
-        const previousValue = this.getValue(this._options, name, false);
+        const previousValue = this._getValue(this._options, name, false);
 
         if(this._valuesEqual(name, previousValue, value)) {
             return;
         }
 
-        this._changing(name, previousValue, value);
+        this._changingCallbacks.fire(name, previousValue, value);
 
         this._setValue(name, value, merge);
-        this._changed(name, value, previousValue);
+        this._changedCallbacks.fire(name, value, previousValue);
     }
 
     _normalizePrimitiveValue(options, name, value) {
         if(name) {
-            const alias = this.normalizeName(name);
+            const alias = this._normalizeName(name);
 
             if(alias && alias !== name) {
                 this._setField(options, alias, value);
@@ -126,57 +129,7 @@ export class OptionManager {
         }
     }
 
-    suppressDeprecatedWarnings() {
-        this._deprecatedOptionsSuppressed = true;
-    }
-
-    resumeDeprecatedWarnings() {
-        this._deprecatedOptionsSuppressed = false;
-    }
-
-    onChanging(callBack) {
-        this._changing = callBack;
-    }
-
-    onChanged(callBack) {
-        this._changed = callBack;
-    }
-
-    getValue(options, name, unwrapObservables) {
-        let getter = this.cachedGetters[name];
-        if(!getter) {
-            getter = this.cachedGetters[name] = coreDataUtils.compileGetter(name);
-        }
-
-        return getter(options, { functionsAsIs: true, unwrapObservables });
-    }
-
-    setValue(options, value) {
-        let name = options;
-        if(typeof name === "string") {
-            options = {};
-            options[name] = value;
-        }
-        let optionName;
-        for(optionName in options) {
-            this.normalizeValue(options, optionName, options[optionName]);
-        }
-        for(optionName in options) {
-            this._setNormalizedValue(optionName, options[optionName]);
-        }
-    }
-
-    normalizeValue(options, name, value) {
-        if(typeUtils.isPlainObject(value)) {
-            for(const valueName in value) {
-                this.normalizeValue(options, name + "." + valueName, value[valueName]);
-            }
-        }
-
-        this._normalizePrimitiveValue(options, name, value);
-    }
-
-    normalizeName(name) {
+    _normalizeName(name) {
         if(name) {
             let deprecate;
             if(!this._cachedDeprecateNames.length) {
@@ -201,5 +154,64 @@ export class OptionManager {
         }
 
         return name;
+    }
+
+    _normalizeValue(options, name, value) {
+        if(typeUtils.isPlainObject(value)) {
+            for(const valueName in value) {
+                this._normalizeValue(options, name + "." + valueName, value[valueName]);
+            }
+        }
+
+        this._normalizePrimitiveValue(options, name, value);
+    }
+
+    _getValue(options, name, unwrapObservables) {
+        let getter = this.cachedGetters[name];
+        if(!getter) {
+            getter = this.cachedGetters[name] = coreDataUtils.compileGetter(name);
+        }
+
+        return getter(options, { functionsAsIs: true, unwrapObservables });
+    }
+
+    suppressDeprecatedWarnings() {
+        this._deprecatedOptionsSuppressed = true;
+    }
+
+    resumeDeprecatedWarnings() {
+        this._deprecatedOptionsSuppressed = false;
+    }
+
+    onChanging(callBack) {
+        this._changingCallbacks.add(callBack);
+    }
+
+    onChanged(callBack) {
+        this._changedCallbacks.add(callBack);
+    }
+
+    onLogWarning(callBack) {
+        this._logWarningCallbacks.add(callBack);
+    }
+
+    getValue(options, name, unwrapObservables) {
+        const normalizedName = this._normalizeName(name);
+        return this._getValue(options, normalizedName, unwrapObservables);
+    }
+
+    setValue(options, value) {
+        let name = options;
+        if(typeof name === "string") {
+            options = {};
+            options[name] = value;
+        }
+        let optionName;
+        for(optionName in options) {
+            this._normalizeValue(options, optionName, options[optionName]);
+        }
+        for(optionName in options) {
+            this._setNormalizedValue(optionName, options[optionName]);
+        }
     }
 }
