@@ -225,7 +225,7 @@ var Component = Class.inherit({
             this._setDefaultOptions();
             this._optionManager = new optionManager(
                 this._options,
-                this._getOptionsByReference.bind(this),
+                this._getOptionsByReference(),
                 this._logDeprecatedWarning.bind(this),
                 this._deprecatedOptions);
 
@@ -368,21 +368,20 @@ var Component = Class.inherit({
     },
 
     initialOption: function(optionName) {
-        var currentOptions,
-            currentInitialized = this._initialized;
         if(!this._initialOptions) {
-            currentOptions = this._options;
-            this._options = {};
-            this._initialized = false;
-            this._setDefaultOptions();
-            this._setOptionsByDevice(currentOptions.defaultOptionsRules);
-
-            this._initialOptions = this._options;
-            this._options = currentOptions;
-            this._initialized = currentInitialized;
+            this._initialOptions = {};
+            this._initialOptions = this._getDefaultOptions();
+            const rulesOptions = this._getOptionByRules(this._options.defaultOptionsRules);
+            this._setRulesOptions(this._initialOptions, rulesOptions);
         }
 
-        return this._initialOptions[optionName];
+        const fullPath = optionName.split(".");
+        let value;
+        for(let path of fullPath) {
+            value = value ? value[path] : this._initialOptions[path];
+        }
+
+        return value;
     },
 
     _defaultActionConfig: function() {
@@ -539,12 +538,7 @@ var Component = Class.inherit({
         if(!name) {
             return;
         }
-        let defaultValue = this._getDefaultOptions();
-        const fullPath = name.split(".");
-        for(let path of fullPath) {
-            defaultValue = defaultValue[path];
-        }
-
+        const defaultValue = this.initialOption(name);
         this.beginUpdate();
         this._optionManager.setValue(name, defaultValue, this._options, false);
         this.endUpdate();

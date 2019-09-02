@@ -3,9 +3,9 @@ import typeUtils from "./utils/type";
 import domAdapter from "./dom_adapter";
 
 export class OptionManager {
-    constructor(options, getOptionsByReference, logDeprecatedWarning, deprecatedOptions) {
+    constructor(options, optionsByReference, logDeprecatedWarning, deprecatedOptions) {
         this._options = options;
-        this._getOptionsByReference = getOptionsByReference;
+        this._optionsByReference = optionsByReference;
         this._deprecatedOptions = deprecatedOptions;
         this._logDeprecatedWarning = logDeprecatedWarning;
         this._deprecatedOptionsSuppressed;
@@ -93,12 +93,12 @@ export class OptionManager {
         }
 
         const path = name.split(/[.[]/);
-        merge = typeUtils.isDefined(merge) ? merge : !this._getOptionsByReference()[name];
+        merge = typeUtils.isDefined(merge) ? merge : !this._optionsByReference[name];
 
         this.cachedSetters[name](this._options, value, {
             functionsAsIs: true,
             merge,
-            unwrapObservables: path.length > 1 && !!this._getOptionsByReference()[path[0]]
+            unwrapObservables: path.length > 1 && !!this._optionsByReference[path[0]]
         });
     }
 
