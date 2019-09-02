@@ -87,7 +87,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     },
 
     _renderClick() {
-        this._clickAction = this.option("actions").length === 1 ?
+        this._clickAction = this._getVisibleActions().length === 1 ?
             this._createActionByOption("onClick") :
             this._createAction(this._clickHandler);
 
@@ -95,11 +95,17 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     },
 
     _defaultActionArgs() {
-        const actions = this.option("actions");
+        const actions = this._getVisibleActions();
 
         return {
             component: actions.length === 1 ? actions[0] : this
         };
+    },
+
+    _getVisibleActions(actions) {
+        const currentActions = actions || this.option("actions");
+
+        return currentActions.filter((action) => action.option("visible"));
     },
 
     _clickHandler() {
@@ -244,7 +250,7 @@ exports.initAction = function(newAction) {
             }
         });
 
-        const visibleSavedActions = savedActions.filter((action) => action.option("visible"));
+        const visibleSavedActions = speedDialMainItem._getVisibleActions(savedActions);
 
         if(!isActionExist) {
             if(visibleSavedActions.length >= speedDialMainItem.option("maxSpeedDialActionCount")) {
@@ -285,7 +291,7 @@ exports.disposeAction = function(actionId) {
 
     if(savedActionsCount === savedActions.length) return;
 
-    const visibleSavedActions = savedActions.filter((action) => action.option("visible"));
+    const visibleSavedActions = speedDialMainItem._getVisibleActions(savedActions);
 
     if(!savedActions.length) {
         speedDialMainItem.dispose();

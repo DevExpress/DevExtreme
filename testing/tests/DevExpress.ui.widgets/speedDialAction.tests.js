@@ -469,8 +469,11 @@ QUnit.module("add visible option", (hooks) => {
             }
         });
 
+        const clickHandler = sinon.spy();
+
         firstSDA = $("#fab-one").dxSpeedDialAction({
-            icon: "edit"
+            icon: "edit",
+            onClick: clickHandler
         }).dxSpeedDialAction("instance");
 
         secondSDA = $("#fab-two").dxSpeedDialAction({
@@ -487,6 +490,7 @@ QUnit.module("add visible option", (hooks) => {
 
         $fabMainContent.trigger("dxclick");
 
+        assert.ok(clickHandler.calledOnce, "Handler should be called");
         assert.equal($(FAB_INVISIBLE_SELECTOR).length, 2, "only FAB visible");
         assert.ok($(FAB_MAIN_SELECTOR).find(".dx-icon-edit"), "FAB has action icon if second SDA invisible");
 
