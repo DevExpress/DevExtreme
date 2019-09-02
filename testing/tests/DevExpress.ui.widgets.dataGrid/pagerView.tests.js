@@ -30,6 +30,9 @@ QUnit.module("Pager", {
                 visible: true,
                 allowedPageSizes: [2, 7, 9],
                 showPageSizeSelector: true
+            },
+            keyboardNavigation: {
+                enabled: true
             }
         };
         this.dataControllerOptions = {
@@ -42,7 +45,11 @@ QUnit.module("Pager", {
         setupDataGridModules(this, ['data', 'pager'], {
             initViews: true,
             controllers: {
-                data: this.dataController
+                data: this.dataController,
+                keyboardNavigation: {
+                    isKeyboardEnabled: () => true,
+                    executeAction: () => { }
+                }
             }
         });
         this.clock = sinon.useFakeTimers();

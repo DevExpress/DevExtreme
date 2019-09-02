@@ -68,7 +68,7 @@ function createPoint(options) {
     point.visible = options.visible;
     point.fullState = 0;
 
-    point.getLegendStyles = sinon.stub().returns({ normal: {} });
+    point.getLegendStyles = sinon.stub().returns({ normal: {}, selection: {}, hover: {} });
 
     return point;
 }
@@ -1092,8 +1092,8 @@ var environment = {
             argumentIndex: 0,
             textOpacity: 0.3,
             states: {
-                hover: undefined,
-                selection: undefined,
+                hover: { opacity: 0.3 },
+                selection: { opacity: 0.3 },
                 normal: { opacity: 0.3 }
             },
             visible: true
@@ -1105,8 +1105,8 @@ var environment = {
             text: "Second",
             textOpacity: undefined,
             states: {
-                hover: undefined,
-                selection: undefined,
+                hover: {},
+                selection: {},
                 normal: {}
             },
             visible: true
@@ -1136,7 +1136,7 @@ var environment = {
         var stubPoints = this.stubPoints;
         updateArgs[0].forEach(function(args, i) {
             assert.strictEqual(args.text, stubPoints[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(args.states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(args.states, { hover: {}, selection: {}, normal: {} }, "Legend states for " + i.toString());
             assert.deepEqual(args.states, stubPoints[i].getLegendStyles(), "Legend states for " + i.toString());
             assert.equal(args.points.length, 1);
             assert.equal(args.points[0], stubPoints[i]);
@@ -1159,7 +1159,7 @@ var environment = {
         assert.equal(updateArgs[0].length, 3, "update args");
         updateArgs[0].forEach(function(args, i) {
             assert.strictEqual(args.text, points[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(args.states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(args.states, { hover: {}, selection: {}, normal: {} }, "Legend states for " + i.toString());
             assert.deepEqual(args.states, points[i].getLegendStyles(), "Legend states for " + i.toString());
             assert.equal(args.points.length, 2);
         });
@@ -1191,7 +1191,7 @@ var environment = {
         assert.equal(updateArgs[0].length, 5, "update args");
         for(i = 0; i < updateArgs[0].length; i++) {
             assert.strictEqual(updateArgs[0][i].text, points[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, "Legend stated for " + i.toString());
+            assert.deepEqual(updateArgs[0][i].states, { hover: {}, selection: {}, normal: {} }, "Legend stated for " + i.toString());
             assert.deepEqual(updateArgs[0][i].states, points[i].getLegendStyles(), "Legend states for " + i.toString());
             assert.deepEqual(updateArgs[0][i].id, points[i].index, "Legend id for " + i.toString());
         }
@@ -1234,7 +1234,7 @@ var environment = {
         assert.equal(updateArgs[0].length, 7, "update args");
         for(i = 0; i < updateArgs[0].length; i++) {
             assert.strictEqual(updateArgs[0][i].text, points[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(updateArgs[0][i].states, { hover: {}, selection: {}, normal: {} }, "Legend states for " + i.toString());
             assert.deepEqual(updateArgs[0][i].states, points[i].getLegendStyles(), "Legend states for " + i.toString());
             assert.deepEqual(updateArgs[0][i].id, points[i].index, "Legend id for " + i.toString());
         }
@@ -1266,9 +1266,9 @@ var environment = {
         });
 
         var updateArgs = commons.getLegendStub().stub("update").lastCall.args;
-        assert.deepEqual(updateArgs[0][0].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states");
-        assert.deepEqual(updateArgs[0][1].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states");
-        assert.deepEqual(updateArgs[0][2].states, { hover: undefined, selection: undefined, normal: { opacity: 0.3 } }, "Legend states");
+        assert.deepEqual(updateArgs[0][0].states, { hover: {}, selection: {}, normal: {} }, "Legend states");
+        assert.deepEqual(updateArgs[0][1].states, { hover: {}, selection: {}, normal: {} }, "Legend states");
+        assert.deepEqual(updateArgs[0][2].states, { hover: { opacity: 0.3 }, selection: { opacity: 0.3 }, normal: { opacity: 0.3 } }, "Legend states");
     });
 
     QUnit.test("index of points", function(assert) {

@@ -572,7 +572,6 @@ QUnit.module("misc", () => {
 
     test("themeNameFromDevice for removed mobile themes (breaking change BC4928)", (assert) => {
         assert.equal(themes.themeNameFromDevice({ platform: "android" }), "generic");
-        assert.equal(themes.themeNameFromDevice({ platform: "win" }), "generic");
     });
 });
 

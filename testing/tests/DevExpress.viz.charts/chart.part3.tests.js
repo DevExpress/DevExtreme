@@ -1008,7 +1008,7 @@ QUnit.test("Create Horizontal Legend with single named series, position = outsid
 
     assert.strictEqual(updateCall.args[1]._incidentOccurred, chart._incidentOccurred, "pass incidentOccurred function");
     assert.strictEqual(updateCall.args[0][0].text, "First series", "Correct text for series");
-    assert.deepEqual(updateCall.args[0][0].states, { hover: undefined, selection: undefined, normal: {} }, "States");
+    assert.deepEqual(updateCall.args[0][0].states, { hover: {}, selection: {}, normal: {} }, "States");
     assert.equal(updateCall.args[0][0].series, chart.getAllSeries()[0], "series");
 
     assert.strictEqual(legendCtorArgs.renderer, rendererModule.Renderer.lastCall.returnValue, "Correct renderer was passed to legend");
@@ -1020,8 +1020,8 @@ QUnit.test("Create Horizontal Legend with single named series, position = outsid
         id: "id",
         text: "text",
         states: {
-            hover: undefined,
-            selection: undefined,
+            hover: {},
+            selection: {},
             normal: {
                 fill: "fill"
             }

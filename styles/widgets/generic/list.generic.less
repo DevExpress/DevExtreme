@@ -126,6 +126,13 @@
     .dx-icon {
         color: @list-icon-color;
     }
+
+    &.dx-state-active,
+    &.dx-state-focused {
+        .dx-button .dx-icon {
+            color: @button-icon-color;
+        }
+    }
 }
 
 .dx-list-sizing(@item_horizontal_padding) {
@@ -141,7 +148,8 @@
         }
 
         &.dx-list-select-decorator-enabled {
-            .dx-list-item {
+            .dx-list-item,
+            .dx-list-select-all {
                 &.dx-state-hover {
                     .dx-radiobutton-icon:before,
                     .dx-checkbox-icon {

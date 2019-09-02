@@ -261,6 +261,7 @@
         "dxFileManager-errorDirectoryExistsFormat": "ディレクトリ {0} は既に存在します。",
         "dxFileManager-errorFileExistsFormat": "ファイル {0} は既に存在します。",
         "dxFileManager-errorFileNotFoundFormat": "ファイル {0} が見つかりません。",
+        "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
         "dxFileManager-errorDefault": "特定できないエラー"
     }
 }

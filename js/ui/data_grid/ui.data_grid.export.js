@@ -732,7 +732,7 @@ dataGridCore.registerModule("export", {
              * @action
              */
             /**
-            @name dxDataGridOptions.onFileSaving
+            * @name dxDataGridOptions.onFileSaving
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field3 fileName:string

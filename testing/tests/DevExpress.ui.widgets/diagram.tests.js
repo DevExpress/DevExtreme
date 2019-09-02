@@ -5,7 +5,7 @@ import "ui/diagram";
 import { DiagramCommand } from "devexpress-diagram";
 
 QUnit.testStart(() => {
-    const markup = '<div id="diagram"></div>';
+    const markup = '<style>.dxdi-control { width: 100%; height: 100%; overflow: auto; box-sizing: border-box; position: relative; }</style><div id="diagram"></div>';
     $("#qunit-fixture").html(markup);
 });
 
@@ -30,6 +30,71 @@ const moduleConfig = {
 function getToolbarIcon(button) {
     return button.find(".dx-dropdowneditor-field-template-wrapper").find(".dx-diagram-i, .dx-icon");
 }
+
+
+QUnit.module("Diagram DOM Layout", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach();
+    },
+    afterEach: () => {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
+    test("should return correct size of document container in default options", (assert) => {
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+    test("should return correct size of document container if options panel is hidden", (assert) => {
+        this.instance.option("propertiesPanel.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+    test("should return correct size of document container if toolbox is hidden", (assert) => {
+        this.instance.option("toolbox.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+    test("should return correct size of document container if toolbar is hidden", (assert) => {
+        this.instance.option("toolbar.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+    test("should return correct size of document container if all UI is hidden", (assert) => {
+        this.instance.option("toolbar.visible", false);
+        this.instance.option("toolbox.visible", false);
+        this.instance.option("propertiesPanel.visible", false);
+        this.clock.tick(10000);
+        assertSizes(assert,
+            this.$element.find(".dxdi-control"),
+            this.$element.find(".dx-diagram-drawer-wrapper"),
+            this.instance);
+    });
+
+
+    function assertSizes(assert, $scrollContainer, $actualContainer, inst) {
+        assert.equal($scrollContainer.width(), $actualContainer.width());
+        assert.equal($scrollContainer.height(), $actualContainer.height());
+        var coreScrollSize = inst._diagramInstance.render.view.scroll.getSize();
+        assert.equal(coreScrollSize.width, $actualContainer.width());
+        assert.equal(coreScrollSize.height, $actualContainer.height());
+    }
+});
 
 QUnit.module("Diagram Toolbar", moduleConfig, () => {
     test("should not render if toolbar.visible is false", (assert) => {
@@ -122,10 +187,10 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
     });
     test("should toggle fullscreen class name on button click", (assert) => {
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        let fullscreenButton = findToolbarItem(this.$element, "fullscreen");
-        fullscreenButton.trigger("dxclick");
+        let fullScreenButton = findToolbarItem(this.$element, "full screen");
+        fullScreenButton.trigger("dxclick");
         assert.ok(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
-        fullscreenButton.trigger("dxclick");
+        fullScreenButton.trigger("dxclick");
         assert.notOk(this.$element.hasClass(DIAGRAM_FULLSCREEN_CLASS));
     });
     test("diagram should be focused after change font family", (assert) => {
@@ -283,17 +348,17 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.SwitchAutoZoom).execute(1);
         assert.equal(this.instance.option("autoZoom"), "fitContent");
     });
-    test("should change fullscreen property", (assert) => {
+    test("should change fullScreen property", (assert) => {
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
-        this.instance.option("fullscreen", true);
+        this.instance.option("fullScreen", true);
         assert.ok(this.instance._diagramInstance.settings.fullscreen);
-        this.instance.option("fullscreen", false);
+        this.instance.option("fullScreen", false);
         assert.notOk(this.instance._diagramInstance.settings.fullscreen);
     });
-    test("should sync fullscreen property", (assert) => {
-        assert.equal(this.instance.option("fullscreen"), false);
+    test("should sync fullScreen property", (assert) => {
+        assert.equal(this.instance.option("fullScreen"), false);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Fullscreen).execute(true);
-        assert.equal(this.instance.option("fullscreen"), true);
+        assert.equal(this.instance.option("fullScreen"), true);
     });
     test("should change showGrid property", (assert) => {
         assert.ok(this.instance._diagramInstance.settings.showGrid);
@@ -437,7 +502,9 @@ QUnit.module("Options", moduleConfig, () => {
 });
 
 function findToolbarItem($diagram, label) {
-    return $diagram.find(TOOLBAR_SELECTOR).find(".dx-widget").filter(function() {
-        return $(this).text().toLowerCase().indexOf(label) >= 0;
-    });
+    return $diagram.find(TOOLBAR_SELECTOR)
+        .find(".dx-widget")
+        .filter(function() {
+            return $(this).text().toLowerCase().indexOf(label) >= 0;
+        });
 }

@@ -14,6 +14,7 @@ export class GanttView extends Widget {
         this._ganttViewCore = new GanttView(this.$element().get(0), this, {
             showResources: this.option("showResources"),
             taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition")),
+            allowSelectTask: this.option("allowSelection"),
             areAlternateRowsEnabled: false
         });
         this._ganttViewCore.setViewType(3);
@@ -28,6 +29,12 @@ export class GanttView extends Widget {
         }
         this._ganttViewCore.selectTask(id);
         this.lastSelectedId = id;
+    }
+    changeTaskExpanded(rowIndex, value) {
+        const model = this._ganttViewCore.viewModel;
+        model.beginUpdate();
+        model.changeTaskExpanded(rowIndex, value);
+        model.endUpdate();
     }
     updateView() {
         this._ganttViewCore.updateView();
@@ -66,6 +73,9 @@ export class GanttView extends Widget {
             case "taskTitlePosition":
                 this._ganttViewCore.setTaskTitlePosition(this._getTaskTitlePosition(args.value));
                 break;
+            case "allowSelection":
+                this._ganttViewCore.setAllowSelection(args.value);
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -101,5 +111,8 @@ export class GanttView extends Widget {
     }
     onGanttScroll(scrollTop) {
         this._onScroll({ scrollTop: scrollTop });
+    }
+    getModelChangesListener() {
+        return null;
     }
 }

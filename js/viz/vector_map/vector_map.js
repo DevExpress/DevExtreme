@@ -1,29 +1,35 @@
-var _parseScalar = require("../core/utils").parseScalar,
-    projectionModule = require("./projection.main"),
-    controlBarModule = require("./control_bar"),
-    gestureHandlerModule = require("./gesture_handler"),
-    trackerModule = require("./tracker"),
-    dataExchangerModule = require("./data_exchanger"),
-    legendModule = require("./legend"),
-    layoutModule = require("./layout"),
-    mapLayerModule = require("./map_layer"),
-    tooltipViewerModule = require("./tooltip_viewer"),
+import { parseScalar as _parseScalar } from "../core/utils";
+import { Projection } from "./projection.main";
+import controlBarModule from "./control_bar";
+import gestureHandlerModule from "./gesture_handler";
+import trackerModule from "./tracker";
+import dataExchangerModule from "./data_exchanger";
+import legendModule from "./legend";
+import layoutModule from "./layout";
+import { MapLayerCollection, getMaxBound } from "./map_layer";
+import tooltipViewerModule from "./tooltip_viewer";
 
-    DEFAULT_WIDTH = 800,
-    DEFAULT_HEIGHT = 400,
+const DEFAULT_WIDTH = 800;
+const DEFAULT_HEIGHT = 400;
+const RE_STARTS_LAYERS = /^layers/;
+const RE_ENDS_DATA_SOURCE = /\.dataSource$/;
+let nextDataKey = 1;
 
-    nextDataKey = 1,
-
-    RE_STARTS_LAYERS = /^layers/,
-    RE_ENDS_DATA_SOURCE = /\.dataSource$/;
-
-require("./projection");
+import "./projection";
+import BaseWidget from "../core/base_widget";
 
 function generateDataKey() {
     return "vectormap-data-" + nextDataKey++;
 }
 
-var dxVectorMap = require("../core/base_widget").inherit({
+function mergeBounds(sumBounds, dataBounds) {
+    return dataBounds ? [Math.min(dataBounds[0], dataBounds[2], sumBounds[0]),
+        Math.max(dataBounds[1], dataBounds[3], sumBounds[1]),
+        Math.max(dataBounds[0], dataBounds[2], sumBounds[2]),
+        Math.min(dataBounds[1], dataBounds[3], sumBounds[3])] : sumBounds;
+}
+
+var dxVectorMap = BaseWidget.inherit({
     _eventsMap: {
         "onClick": { name: "click" },
         "onCenterChanged": { name: "centerChanged" },
@@ -46,7 +52,7 @@ var dxVectorMap = require("../core/base_widget").inherit({
 
     _initLayerCollection: function(dataKey) {
         var that = this;
-        that._layerCollection = new mapLayerModule.MapLayerCollection({
+        that._layerCollection = new MapLayerCollection({
             renderer: that._renderer,
             projection: that._projection,
             themeManager: that._themeManager,
@@ -56,7 +62,22 @@ var dxVectorMap = require("../core/base_widget").inherit({
             dataExchanger: that._dataExchanger,
             tooltip: that._tooltip,
             notifyDirty: that._notifyDirty,
-            notifyReady: that._notifyReady
+            notifyReady: that._notifyReady,
+            dataReady() {
+                if(!that.option("bounds") && that.option("getBoundsFromData")) {
+                    that._preventProjectionEvents();
+                    let bounds = that._getBoundingBoxFromDataSource();
+
+                    if(!bounds) {
+                        const boundsByData = getMaxBound(that.getLayers().map(l => l.getBounds()));
+                        if(boundsByData) {
+                            bounds = [boundsByData[0], boundsByData[3], boundsByData[2], boundsByData[1]];
+                        }
+                    }
+                    that._projection.setBounds(bounds);
+                    that._allowProjectionEvents();
+                }
+            }
         });
     },
 
@@ -65,6 +86,7 @@ var dxVectorMap = require("../core/base_widget").inherit({
         that._legendsControl = new legendModule.LegendsControl({
             renderer: that._renderer,
             container: that._root,
+            widget: that,
             layoutControl: that._layoutControl,
             themeManager: that._themeManager,
             dataExchanger: that._dataExchanger,
@@ -88,23 +110,30 @@ var dxVectorMap = require("../core/base_widget").inherit({
     _initElements: function() {
         var that = this,
             dataKey = generateDataKey(),
-            notifyCounter = 0,
-            preventProjectionEvents = true;
+            notifyCounter = 0;
+        var preventProjectionEvents;
 
+        that._preventProjectionEvents = function() {
+            preventProjectionEvents = true;
+        };
+        that._allowProjectionEvents = function() {
+            preventProjectionEvents = false;
+        };
         that._notifyDirty = function() {
             that._resetIsReady();
             ++notifyCounter;
         };
         that._notifyReady = function() {
-            preventProjectionEvents = false;
+            that._allowProjectionEvents();
             if(--notifyCounter === 0) {
                 that._drawn();
             }
         };
+        that._preventProjectionEvents();
         that._dataExchanger = new dataExchangerModule.DataExchanger();
 
         // The `{ eventTrigger: that._eventTrigger }` object cannot be passed to the Projection because later backward option updating is going to be added.
-        that._projection = new projectionModule.Projection({
+        that._projection = new Projection({
             centerChanged: function(value) {
                 if(!preventProjectionEvents) {
                     that._eventTrigger("centerChanged", { center: value });
@@ -293,6 +322,29 @@ var dxVectorMap = require("../core/base_widget").inherit({
         this._layerCollection.setOptions(this.option("layers"));
     },
 
+    _getBoundingBoxFromDataSource() {
+        const that = this;
+        const layers = that._layerCollection.items();
+        const infinityBounds = [Infinity, -Infinity, -Infinity, Infinity];
+        const resultBBox = layers && layers.length ? layers.reduce((sumBBox, l) => {
+            const layerData = l.getData();
+            const itemCount = layerData.count();
+            if(itemCount > 0) {
+                const rootBBox = layerData.getBBox();
+                if(rootBBox) {
+                    sumBBox = mergeBounds(sumBBox, rootBBox);
+                } else {
+                    for(let i = 0; i < itemCount; i++) {
+                        sumBBox = mergeBounds(sumBBox, layerData.getBBox(i));
+                    }
+                }
+            }
+            return sumBBox;
+        }, infinityBounds) : undefined;
+
+        return resultBBox === infinityBounds ? undefined : resultBBox;
+    },
+
     _setControlBarOptions: function() {
         this._controlBar.setOptions(this._getOption("controlBar"));
     },
@@ -308,15 +360,8 @@ var dxVectorMap = require("../core/base_widget").inherit({
         });
     },
 
-    getLayers: function() {
-        var layers = this._layerCollection.items(),
-            list = [],
-            i,
-            ii = list.length = layers.length;
-        for(i = 0; i < ii; ++i) {
-            list[i] = layers[i].proxy;
-        }
-        return list;
+    getLayers() {
+        return this._layerCollection.items().map((l) => l.proxy);
     },
 
     getLayerByIndex: function(index) {
@@ -383,10 +428,10 @@ var dxVectorMap = require("../core/base_widget").inherit({
     }
 });
 
-require("../../core/component_registrator")("dxVectorMap", dxVectorMap);
+import componentRegistrator from "../../core/component_registrator";
+componentRegistrator("dxVectorMap", dxVectorMap);
 
 module.exports = dxVectorMap;
-
 ///#DEBUG
 module.exports._TESTS_resetDataKey = function() {
     nextDataKey = 1;
@@ -394,7 +439,12 @@ module.exports._TESTS_resetDataKey = function() {
 ///#ENDDEBUG
 
 // PLUGINS_SECTION
-dxVectorMap.addPlugin(require("../core/export").plugin);
-dxVectorMap.addPlugin(require("../core/title").plugin);
-dxVectorMap.addPlugin(require("../core/tooltip").plugin);
-dxVectorMap.addPlugin(require("../core/loading_indicator").plugin);
+import { plugin as ExportPlugin } from "../core/export";
+import { plugin as TitlePlugin } from "../core/title";
+import { plugin as TooltipPlugin } from "../core/tooltip";
+import { plugin as LoadingIndicatorPlugin } from "../core/loading_indicator";
+dxVectorMap.addPlugin(ExportPlugin);
+dxVectorMap.addPlugin(TitlePlugin);
+dxVectorMap.addPlugin(TooltipPlugin);
+dxVectorMap.addPlugin(LoadingIndicatorPlugin);
+

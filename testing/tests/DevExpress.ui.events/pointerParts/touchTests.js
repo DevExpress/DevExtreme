@@ -3,7 +3,8 @@ var $ = require("jquery"),
     registerEvent = require("events/core/event_registrator"),
     nativePointerMock = require("../../../helpers/nativePointerMock.js"),
     noop = require("core/utils/common").noop,
-    special = require("../../../helpers/eventHelper.js").special;
+    special = require("../../../helpers/eventHelper.js").special,
+    eventsEngine = require("events/core/events_engine");
 
 QUnit.module("touch events", {
     beforeEach: function() {
@@ -138,6 +139,11 @@ $.each({
 });
 
 QUnit.test("touchmove should not have a passive event listener", function(assert) {
+    if(!eventsEngine.passiveEventHandlersSupported()) {
+        assert.expect(0);
+        return;
+    }
+
     var $element = $("<div style=\"height: 20px; width: 20px;\"></div>").appendTo("#qunit-fixture"),
         element = $element.get(0),
         origAddEventListener = element.addEventListener,

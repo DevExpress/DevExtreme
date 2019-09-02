@@ -15,6 +15,9 @@ const TASK_ARROW_SELECTOR = ".dx-gantt-arrow";
 const SPLITTER_SELECTOR = ".dx-gantt-splitter";
 const TASK_TITLE_IN_SELECTOR = ".dx-gantt-titleIn";
 const TASK_TITLE_OUT_SELECTOR = ".dx-gantt-titleOut";
+const TREELIST_EXPANDED = ".dx-treelist-expanded";
+const TREELIST_COLLAPSED = ".dx-treelist-collapsed";
+const SELECTION_SELECTOR = ".dx-gantt-sel";
 
 const tasks = [
     { "id": 1, "parentId": 0, "title": "Software Development", "start": new Date("2019-02-21T05:00:00.000Z"), "end": new Date("2019-07-04T12:00:00.000Z"), "progress": 31 },
@@ -184,5 +187,55 @@ QUnit.module("Options", moduleConfig, () => {
         const resourceElements = this.$element.find(TASK_RESOURCES_SELECTOR);
         assert.equal(resourceElements.length, resourceAssignmentsDS.length);
         assert.equal(resourceElements.first().text(), resourcesDS[0].t);
+    });
+    test("selectedRowKey", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 0);
+        this.instance.option("selectedRowKey", 1);
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 1);
+        this.instance.option("selectedRowKey", undefined);
+        this.clock.tick();
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 0);
+    });
+    test("allowSelection", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        this.instance.option("selectedRowKey", 1);
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 1);
+        this.instance.option("allowSelection", false);
+        assert.equal(this.$element.find(SELECTION_SELECTOR).length, 0);
+    });
+});
+
+QUnit.module("Events", moduleConfig, () => {
+    test("selection changed", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option("onSelectionChanged", (e) => {
+            keyFromEvent = e.selectedRowKey;
+        });
+        this.instance.option("selectedRowKey", key);
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+    });
+});
+
+QUnit.module("Actions", moduleConfig, () => {
+    test("expand/collapse", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
+        const expandedElement = this.$element.find(TREELIST_EXPANDED).first();
+        expandedElement.trigger("dxclick");
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 1);
+        const collapsedElement = this.$element.find(TREELIST_COLLAPSED).first();
+        collapsedElement.trigger("dxclick");
+        this.clock.tick();
+        assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
     });
 });

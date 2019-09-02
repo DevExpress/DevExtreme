@@ -1130,15 +1130,15 @@ QUnit.module("defaultOptions", {
     QUnit.test("set default options for filtering device with custom function", (assert) => {
         const TestComponent = this.createClass([{
             device(device) {
-                return device.platform !== "win";
+                return device.platform !== "android";
             },
             options: {
                 test: "value"
             }
         }]);
 
-        devices._currentDevice = { platform: "win" };
-        assert.notEqual(new TestComponent().option("test"), "value", "test option is not configured for win8");
+        devices._currentDevice = { platform: "android" };
+        assert.notEqual(new TestComponent().option("test"), "value", "test option is not configured for android");
 
         devices._currentDevice = { platform: "ios" };
         assert.equal(new TestComponent().option("test"), "value", "test option is configured for ios");
