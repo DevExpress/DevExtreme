@@ -1268,6 +1268,43 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
+            QUnit.test("Grouping - 1 level, 2 group row, selectedRowKeys: [ds[1]]" + options, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: 'str1_1', f2: 'str1_2', f3: "str1_3" }, { f1: 'str2_1', f2: 'str2_2', f3: "str2_3" }];
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", dataType: "string", groupIndex: 0 },
+                        { dataField: "f2", dataType: "string" },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined,
+                    showColumnHeaders: false,
+                    selectedRowKeys: [ds[1]]
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: ds[1].f1 } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } }
+                ];
+
+                const expectedRows = [
+                    { values: [ "F1: str2_1" ], outlineLevel: 0 },
+                    { values: [ "str2_2" ], outlineLevel: 1 }
+                ];
+
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+                exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs, true, true)).then((result) => {
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column }, { row: 2, column: 1 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkValues(expectedRows, topLeft);
+                    assert.deepEqual(result.from, topLeft, "result.from");
+                    assert.deepEqual(result.to, { row: topLeft.row + 1, column: topLeft.column }, "result.to");
+                    done();
+                });
+            });
+
             QUnit.test("Grouping - 1 level - 1 summary group node" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
@@ -1410,6 +1447,58 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkValues(expectedRows, topLeft);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
+                    done();
+                });
+            });
+
+            QUnit.test("Grouping - 1 level & 2 column, 1 summary showInGroupFooter, 1 summary alignByColumn, selectedRowKeys: [ds[1]]" + options, (assert) => {
+                const done = assert.async();
+                const ds = [
+                    { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
+                    { f1: "f1_1", f2: "f2_2", f3: "f3_2" }
+                ];
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", caption: "f1", dataType: "string" },
+                        { dataField: "f2", caption: "f2", dataType: "string", groupIndex: 0 },
+                        { dataField: "f3", caption: "f3", dataType: "string" },
+                    ],
+                    dataSource: ds,
+                    summary: {
+                        groupItems: [
+                            { name: "GroupItems 1", column: "f3", summaryType: "count", showInGroupFooter: true },
+                            { name: "GroupItems 2", column: "f3", summaryType: "count", alignByColumn: true }
+                        ]
+                    },
+                    selectedRowKeys: [ds[1]],
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1), value: ds[1].f2 } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2), groupSummaryItems: [{ "name": "GroupItems 2", value: 1 }] } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
+                    { gridCell: { rowType: "groupFooter", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "groupFooter", data: ds[1], column: dataGrid.columnOption(2), value: 1, totalSummaryItemName: "GroupItems 1" } },
+                ];
+
+                const expectedRows = [
+                    { values: [ "f2: f2_2", "Count: 1"], outlineLevel: 0 },
+                    { values: [ "f1_1", "f3_2" ], outlineLevel: 1 },
+                    { values: [ undefined, "Count: 1" ], outlineLevel: 1 }
+                ];
+
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+                exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs, true, true)).then((result) => {
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkValues(expectedRows, topLeft);
+                    assert.deepEqual(result.from, topLeft, "result.from");
+                    assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
                     done();
                 });
             });
@@ -2416,6 +2505,59 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkValues(expectedRows, topLeft);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
+                    done();
+                });
+            });
+
+            QUnit.test("Total summary, selectedRowKeys: [ds[1]]" + options, (assert) => {
+                const done = assert.async();
+                const ds = [
+                    { f1: "f1_1", f2: "f2_1" },
+                    { f1: "f1_2", f2: "f2_2" }
+                ];
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", caption: "f1", dataType: "string" },
+                        { dataField: "f2", caption: "f2", dataType: "string" },
+                    ],
+                    dataSource: ds,
+                    summary: {
+                        totalItems: [
+                            { name: 'TotalSummary 1', column: "f1", summaryType: "max" },
+                            { name: 'TotalSummary 2', column: "f1", summaryType: "min" },
+                            { name: 'TotalSummary 3', column: "f2", summaryType: "max" },
+                            { name: 'TotalSummary 4', column: "f2", summaryType: "min" }
+                        ]
+                    },
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined,
+                    selectedRowKeys: [ds[1]]
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 1" } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 3" } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 2" } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 4" } },
+                ];
+
+                const expectedRows = [
+                    { values: [ "f1_2", "f2_2" ], outlineLevel: 0 },
+                    { values: [ "Max: f1_2", "Max: f2_2" ], outlineLevel: 0 },
+                    { values: [ "Min: f1_2", "Min: f2_2" ], outlineLevel: 0 }
+                ];
+
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+                exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs, true, true)).then((result) => {
+                    helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkValues(expectedRows, topLeft);
+                    assert.deepEqual(result.from, topLeft, "result.from");
+                    assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
                     done();
                 });
             });
