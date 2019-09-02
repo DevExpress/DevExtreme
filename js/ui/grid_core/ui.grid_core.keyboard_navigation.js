@@ -939,14 +939,16 @@ var KeyboardNavigationController = core.ViewController.inherit({
             column,
             row,
             $cell = this._getCellElementFromTarget(eventTarget),
-            isEditingAllowed;
+            isEditingAllowed,
+            $event = eventArgs.originalEvent,
+            elementType = this._getElementType(eventTarget);
 
         if($cell.is(COMMAND_CELL_SELECTOR)) {
             return !this._targetCellTabHandler(eventArgs, direction);
         }
 
         this._updateFocusedCellPosition($cell);
-        $cell = this._getNextCell(direction);
+        $cell = this._getNextCellByTabKey($event, direction, elementType);
 
         if(!$cell || this._handleTabKeyOnMasterDetailCell($cell, direction)) {
             return false;

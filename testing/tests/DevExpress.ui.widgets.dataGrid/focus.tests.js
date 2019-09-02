@@ -3811,6 +3811,68 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key in back order (s
     assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
 });
 
+QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key if cell is being edited", function(assert) {
+    var rowsView,
+        keyboardController,
+        focusedCellChangingCounter = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        editing: {
+            allowEditing: true,
+            mode: "batch"
+        },
+        onFocusedCellChanging: function(e) {
+            ++focusedCellChangingCounter;
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    $(this.gridView.getView("rowsView").getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // assert
+    assert.equal(keyboardController.getVisibleRowIndex(), 1, "FocusedRowIndex");
+    assert.equal(keyboardController.getFocusedColumnIndex(), 0, "FocusedColumnIndex");
+
+    // act
+    this.editCell(1, 0);
+    this.triggerKeyDown("tab", false, false, rowsView.getRow(1).find("td:focus"));
+
+    // assert
+    assert.ok(keyboardController.isCellFocusType(), "Cell focus type");
+    assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
+    assert.equal(keyboardController.getFocusedColumnIndex(), 1, "FocusedColumnIndex");
+    assert.equal(focusedCellChangingCounter, 2, "focusedCellChanging count");
+
+    // act
+    this.triggerKeyDown("tab", false, true, rowsView.getRow(1).find("td:focus"));
+
+    // assert
+    assert.ok(keyboardController.isCellFocusType(), "Cell focus type");
+    assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
+    assert.equal(keyboardController.getFocusedColumnIndex(), 0, "FocusedColumnIndex");
+    assert.equal(focusedCellChangingCounter, 3, "focusedCellChanging count");
+});
+
 QUnit.testInActiveWindow("Fire onFocusedCellChanging by Enter key if 'enterKeyDirection' is 'row', 'enterKeyAction' is 'moveFocus'", function(assert) {
     var rowsView,
         keyboardController,
