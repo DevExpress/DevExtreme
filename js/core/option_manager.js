@@ -8,7 +8,7 @@ export class OptionManager {
         this._optionsByReference = optionsByReference;
         this._deprecatedOptions = deprecatedOptions;
         this._logDeprecatedWarning = logDeprecatedWarning;
-        this._deprecatedOptionsSuppressed;
+        this._deprecatedOptionsSuppressed = false;
         this._cachedDeprecateNames = [];
         this.cachedGetters = {};
         this.cachedSetters = {};

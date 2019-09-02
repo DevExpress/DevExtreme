@@ -264,12 +264,9 @@ var Component = Class.inherit({
         }.bind(this));
     },
 
-    _logDeprecatedWarningCount: 0,
-
     _logDeprecatedWarning(option, info) {
         var message = info.message || ("Use the '" + info.alias + "' option instead");
         errors.log("W0001", this.NAME, option, info.since, message);
-        ++this._logDeprecatedWarningCount;
     },
 
     _createOptionChangedAction: function() {
