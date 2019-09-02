@@ -36,7 +36,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             visible: true,
             activeStateEnabled: true,
             hoverStateEnabled: true,
-            indent: 56,
+            indent: 55,
             childIndent: 40,
             childOffset: 9,
             callOverlayRenderShading: true

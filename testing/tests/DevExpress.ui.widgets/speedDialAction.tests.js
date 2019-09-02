@@ -76,6 +76,10 @@ QUnit.module("create multiple actions", (hooks) => {
     let firstInstance;
     let secondInstance;
 
+    hooks.afterEach(() => {
+        fx.off = false;
+    });
+
     hooks.beforeEach(() => {
         const firstElement = $("#fab-one").dxSpeedDialAction({
             icon: "arrowdown",
@@ -87,6 +91,8 @@ QUnit.module("create multiple actions", (hooks) => {
         });
         firstInstance = firstElement.dxSpeedDialAction("instance");
         secondInstance = secondElement.dxSpeedDialAction("instance");
+
+        fx.off = true;
     }),
 
     test("check rendering", (assert) => {
@@ -115,6 +121,14 @@ QUnit.module("create multiple actions", (hooks) => {
 
         assert.equal($fabContent.eq(1).find(".dx-icon-find").length, 1, "first action icon changed on icon find");
         assert.equal($fabContent.eq(2).find(".dx-icon-filter").length, 1, "second action icon changed on icon filter");
+
+        const fabDimensions = 30;
+        const fabOffsetY = 10;
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "right first action position");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions - fabOffsetY, 110, "right second action position");
 
         secondInstance.dispose();
 
@@ -347,41 +361,6 @@ QUnit.module("check action buttons click args", (hooks) => {
     });
 });
 
-QUnit.module("add visible option", (hooks) => {
-    let firstSDA;
-    let secondSDA;
-
-    hooks.beforeEach(() => {
-        firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
-        secondSDA = $("#fab-two").dxSpeedDialAction().dxSpeedDialAction("instance");
-    }),
-
-    hooks.afterEach(() => {
-        firstSDA.dispose();
-        secondSDA.dispose();
-    }),
-
-    test("check position", (assert) => {
-        config({
-            floatingActionButtonConfig: {
-                position: "left top"
-            }
-        });
-
-        firstSDA.option("visible", false);
-        secondSDA.option("visible", false);
-
-        firstSDA.option("visible", true);
-        secondSDA.option("visible", true);
-
-        const $fabMainElement = $(FAB_MAIN_SELECTOR);
-        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
-
-        assert.equal($fabMainContent.offset().top, 0, "correct position top");
-        assert.equal($fabMainContent.offset().left, 0, "correct position left");
-    });
-});
-
 QUnit.module("add label option", (hooks) => {
     let firstSDA;
     let secondSDA;
@@ -470,11 +449,26 @@ QUnit.module("add label option", (hooks) => {
 QUnit.module("add visible option", (hooks) => {
     let firstSDA;
     let secondSDA;
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         firstSDA.dispose();
         secondSDA.dispose();
+
+        fx.off = false;
     }),
     test("check rendering", (assert) => {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+
         firstSDA = $("#fab-one").dxSpeedDialAction({
             icon: "edit"
         }).dxSpeedDialAction("instance");
@@ -501,11 +495,12 @@ QUnit.module("add visible option", (hooks) => {
         assert.ok($(FAB_MAIN_SELECTOR).find(".dx-icon-add"), "FAB return default icon if second SDA visible");
 
         const $fabContent = $(FAB_SELECTOR).not(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
-        const fabActionHeight = 30;
+        const fabDimensions = 30;
+        const fabOffsetY = 10;
 
         $fabMainContent.trigger("dxclick");
 
-        assert.equal($(window).height() - $fabContent.eq(0).offset().top - fabActionHeight, 72, "right fist action position");
-        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabActionHeight, 102, "right second action position");
+        assert.equal($(window).height() - $fabContent.eq(0).offset().top - fabDimensions, 80, "right edit action position");
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions - fabOffsetY, 110, "right trash action position");
     });
 });
