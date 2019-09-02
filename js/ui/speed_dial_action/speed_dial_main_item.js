@@ -105,6 +105,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     _clickHandler() {
         const actions = this._actionItems.filter((action) => action.option("actionVisible"));
 
+        if(actions.length === 1) return;
+
         for(let i = 0; i < actions.length; i++) {
             actions[i].option("position", this._getActionPosition(actions[i], i));
             actions[i]._$wrapper.css("position", this._$wrapper.css("position"));

@@ -21,6 +21,7 @@ const FAB_SELECTOR = ".dx-fa-button";
 const FAB_MAIN_SELECTOR = ".dx-fa-button-main";
 const FAB_LABEL_SELECTOR = ".dx-fa-button-label";
 const FAB_CONTENT_REVERSE_CLASS = "dx-fa-button-content-reverse";
+const FAB_INVISIBLE_SELECTOR = ".dx-fa-button.dx-state-invisible";
 
 QUnit.module("create one action", () => {
     test("check rendering", (assert) => {
@@ -105,9 +106,6 @@ QUnit.module("create multiple actions", (hooks) => {
         assert.equal($fabElement.eq(2).attr("title"), "Arrow up", "second action with right hint");
         assert.equal($fabContent.eq(1).find(".dx-icon-arrowdown").length, 1, "first action with arrowdown icon");
         assert.equal($fabContent.eq(2).find(".dx-icon-arrowup").length, 1, "second action with arrowup icon");
-
-        assert.equal(firstInstance.option("position").offset.y, -56, "right fist action position");
-        assert.equal(secondInstance.option("position").offset.y, -96, "right second action position");
 
         firstInstance.option("icon", "find");
         secondInstance.option("icon", "filter");
@@ -354,21 +352,6 @@ QUnit.module("add visible option", (hooks) => {
         secondSDA.dispose();
     }),
 
-    test("check rendering", (assert) => {
-        firstSDA.option("visible", false);
-        secondSDA.option("visible", false);
-        assert.equal($(FAB_SELECTOR).length, 0, "invisible if change visible option to false");
-
-        firstSDA.option("icon", "edit");
-        assert.equal($(FAB_SELECTOR).length, 0, "invisible if change icon option when visible is false");
-
-        firstSDA.option("visible", true);
-        assert.equal($(FAB_SELECTOR).length, 1, "create one action if second is invisible");
-
-        secondSDA.option("visible", true);
-        assert.equal($(FAB_SELECTOR).length, 3, "create two actions if second is visible");
-    });
-
     test("check position", (assert) => {
         config({
             floatingActionButtonConfig: {
@@ -453,4 +436,45 @@ QUnit.module("add label option", (hooks) => {
     });
 });
 
+QUnit.module("add visible option", (hooks) => {
+    let firstSDA;
+    let secondSDA;
+    hooks.afterEach(() => {
+        firstSDA.dispose();
+        secondSDA.dispose();
+    }),
+    test("check rendering", (assert) => {
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            icon: "edit"
+        }).dxSpeedDialAction("instance");
 
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            icon: "trash"
+        }).dxSpeedDialAction("instance");
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(FAB_SELECTOR).not(FAB_MAIN_SELECTOR).length, 2, "two actions visible");
+
+        secondSDA.option("visible", false);
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 2, "only FAB visible");
+        assert.ok($(FAB_MAIN_SELECTOR).find(".dx-icon-edit"), "FAB has action icon if second SDA invisible");
+
+        secondSDA.option("visible", true);
+
+        assert.ok($(FAB_MAIN_SELECTOR).find(".dx-icon-add"), "FAB return default icon if second SDA visible");
+
+        const $fabContent = $(FAB_SELECTOR).not(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        const fabActionHeight = 30;
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(window).height() - $fabContent.eq(0).offset().top - fabActionHeight, 72, "right fist action position");
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabActionHeight, 102, "right second action position");
+    });
+});
