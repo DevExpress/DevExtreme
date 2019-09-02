@@ -1,10 +1,12 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    Class = require("core/class"),
-    DefaultAdapter = require("ui/validation/default_adapter"),
-    ValidationEngine = require("ui/validation_engine");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import Class from "core/class";
+import DefaultAdapter from "ui/validation/default_adapter";
+import ValidationEngine from "ui/validation_engine";
+import { Deferred } from "core/utils/deferred";
+import { isPromise } from "core/utils/type";
 
-require("ui/validator");
+import "ui/validator";
 
 var Fixture = Class.inherit({
     createValidator: function(options, element) {
@@ -572,6 +574,42 @@ QUnit.test("Validation happens on firing callback, result are applied through cu
     assert.ok(adapter.getValue.calledOnce, "Value should be requested");
     assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
     assert.ok(adapter.applyValidationResults.calledOnce, "ApplyValidationResults function should be called");
+});
+
+QUnit.test("Validator should not be re-validated on pending with the same value", function(assert) {
+    const adapter = {
+            getValue: sinon.stub(),
+            applyValidationResults: sinon.stub()
+        },
+        validatedHandler = sinon.stub(),
+        validator = this.fixture.createValidator({
+            adapter: adapter,
+            validationRules: [{
+                type: "async",
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(function() {
+                        d.resolve(true);
+                    }, 1000);
+                    return d.promise();
+                }
+            }],
+            onValidated: validatedHandler
+        }),
+        done = assert.async();
+    adapter.getValue.returns("123");
+    const result1 = validator.validate(),
+        result2 = validator.validate();
+
+    assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
+    assert.strictEqual(result1, result2, "The result should be the same");
+    assert.ok(isPromise(result1.complete), "result1.complete is a Promise object");
+    result1.complete.then(function(res) {
+        assert.strictEqual(result1, res, "result1 === res");
+        assert.strictEqual(res.status, "valid", "res.status === 'valid'");
+        assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
+        done();
+    });
 });
 
 QUnit.test("Validation happens on firing callback when validationRequestsCallbacks is array", function(assert) {

@@ -213,15 +213,15 @@ const Validator = DOMComponent.inherit({
     * @return dxValidatorResult
     */
     validate(args) {
-        if(this._validationResult && this._validationResult.status === "pending") {
-            return this._validationResult;
-        }
         const adapter = this.option("adapter"),
             name = this.option("name"),
             bypass = adapter.bypass && adapter.bypass(),
             value = (args && args.value !== undefined) ? args.value : adapter.getValue(),
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
             rules = this._getValidationRules();
+        if(this._validationResult && this._validationResult.status === "pending" && this._validationResult.value === value) {
+            return this._validationResult;
+        }
         let result;
         if(bypass) {
             result = { isValid: true };
