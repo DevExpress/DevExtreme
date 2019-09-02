@@ -413,7 +413,7 @@
 
 
             $("#qunit-fixture").html(
-                '<div id="popop1">' +
+                '<div id="popup1">' +
                 '</div>' +
 
                 '<script id="popup1_contentTemplate" type="text/html">' +
@@ -427,7 +427,7 @@
                 '</script>'
             );
 
-            $("#popop1").dxPopup({
+            $("#popup1").dxPopup({
                 contentTemplate: $("#popup1_contentTemplate"),
                 visible: true
             });
@@ -447,6 +447,36 @@
             setTemplateEngine("default");
             delete window.__createForm;
             delete window.__createTextBox;
+        }
+    });
+
+    QUnit.test("T810336", function(assert) {
+        aspnet.setTemplateEngine();
+
+        window.__createButton = function(buttonID) {
+            DevExpress.aspnet.createComponent("dxButton", { text: buttonID }, buttonID);
+        };
+
+        try {
+            $("#qunit-fixture").html(
+                '<div id="popup1"></div>' +
+                '<script id="popup1_contentTemplate" type="text/html">' +
+                '  <div id="b1"></div><% __createButton("b1") %>' +
+                '  <div id="b2"></div><% __createButton("b2") %>' +
+                '</script>'
+            );
+
+            $("#popup1").dxPopup({
+                contentTemplate: $("#popup1_contentTemplate"),
+                visible: true
+            });
+
+            assert.ok($("#b1").dxButton("instance"));
+            assert.ok($("#b2").dxButton("instance"));
+
+        } finally {
+            setTemplateEngine("default");
+            delete window.__createButton;
         }
     });
 
