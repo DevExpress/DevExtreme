@@ -389,6 +389,8 @@ function getConditionFilterExpression(condition, fields, customOperations, targe
 
     if(customOperation && customOperation.calculateFilterExpression) {
         return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field, target]);
+    } else if(field.createFilterExpression) {
+        return field.createFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     } else if(field.calculateFilterExpression) {
         return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     } else {

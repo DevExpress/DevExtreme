@@ -188,6 +188,117 @@ QUnit.test("change series options only", function(assert) {
     assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
+QUnit.test("change series order only", function(assert) {
+    // arrange
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    var chart = this.createChart({
+        series: [
+            { name: "First series", type: "line" },
+            { name: "Second series", type: "line" }
+        ]
+    });
+    $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
+    $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
+    $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
+    $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
+
+    this.validateData.reset();
+    chart.seriesFamilies[0].adjustSeriesValues.reset();
+
+    // Act
+    chart.option({
+        series: [
+            { name: "Second series", type: "line" },
+            { name: "First series", type: "line" }
+        ]
+    });
+    // Assert
+    assert.ok(!chart.seriesDisposed, "Series should be disposed");
+    assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
+    assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
+    assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
+    assert.equal(chart.series.length, 2, "series length");
+    assert.equal(chart.series[0].options.name, "Second series", "name");
+    assert.equal(chart.series[1].options.name, "First series", "name");
+});
+
+QUnit.test("change series - pass less series than chart has", function(assert) {
+    // arrange
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    var chart = this.createChart({
+        series: [
+            { name: "First series", type: "line" },
+            { name: "Second series", type: "line" }
+        ]
+    });
+    $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
+    $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
+    $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
+    $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
+
+    this.validateData.reset();
+    chart.seriesFamilies[0].adjustSeriesValues.reset();
+
+    // Act
+    chart.option({
+        series: [
+            { name: "Second series", type: "line" }
+        ]
+    });
+    // Assert
+    assert.ok(chart.seriesDisposed, "Series should be disposed");
+    assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
+    assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
+    assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
+    assert.equal(chart.series.length, 1, "series length");
+    assert.equal(chart.series[0].options.name, "Second series", "name");
+});
+
+QUnit.test("change series - pass more series than chart has", function(assert) {
+    // arrange
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries3 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
+    var chart = this.createChart({
+        series: [
+            { name: "First series", type: "line" }
+        ]
+    });
+    $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
+    $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
+    $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
+    $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
+
+    this.validateData.reset();
+    chart.seriesFamilies[0].adjustSeriesValues.reset();
+
+    // Act
+    chart.option({
+        series: [
+            { name: "First series", type: "line" },
+            { name: "Second series", type: "line" }
+        ]
+    });
+    // Assert
+    assert.ok(!chart.seriesDisposed, "Series should be disposed");
+    assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
+    assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
+    assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
+    assert.equal(chart.series.length, 2, "series length");
+    assert.equal(chart.series[0].options.name, "First series", "name");
+    assert.equal(chart.series[1].options.name, "Second series", "name");
+});
+
 QUnit.test("change rotated option only", function(assert) {
     // arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });

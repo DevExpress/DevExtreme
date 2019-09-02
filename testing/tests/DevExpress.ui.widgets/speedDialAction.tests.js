@@ -1,10 +1,10 @@
 import $ from "jquery";
 import config from "core/config";
+import fx from "animation/fx";
 
 import "ui/speed_dial_action";
 import "common.css!";
 import "generic_light.css!";
-
 
 const { test } = QUnit;
 
@@ -123,6 +123,9 @@ QUnit.module("create multiple actions", (hooks) => {
 });
 
 QUnit.module("modify global action button config", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
@@ -137,6 +140,7 @@ QUnit.module("modify global action button config", (hooks) => {
             }
         });
 
+        fx.off = false;
     }),
 
     test("check main fab rendering", (assert) => {
@@ -200,9 +204,14 @@ QUnit.module("modify global action button config", (hooks) => {
 });
 
 QUnit.module("add or remove action buttons", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
+
+        fx.off = false;
     }),
 
     test("check main fab rendering", (assert) => {
@@ -376,11 +385,16 @@ QUnit.module("add visible option", (hooks) => {
 QUnit.module("add label option", (hooks) => {
     let firstSDA;
     let secondSDA;
-    hooks.afterEach(() => {
-        firstSDA.dispose();
-        secondSDA.dispose();
+    hooks.beforeEach(() => {
+        fx.off = true;
     }),
-    test("check rendering", (assert) => {
+    hooks.afterEach(() => {
+        firstSDA && firstSDA.dispose();
+        secondSDA && secondSDA.dispose();
+
+        fx.off = false;
+    }),
+    test("check rendering if one action", (assert) => {
         config({
             floatingActionButtonConfig: {
                 position: {
@@ -398,16 +412,22 @@ QUnit.module("add label option", (hooks) => {
         assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), "first action", "FAB has label");
         assert.ok($(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB has class");
 
-        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
         assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "default position top doesn't change if FAB has label");
         assert.roughEqual($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), 1, "default position left doesn't change if FAB has label");
+    }),
+
+    test("check rendering if multiple actions", (assert) => {
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
 
         secondSDA = $("#fab-two").dxSpeedDialAction({
             label: "second action"
         }).dxSpeedDialAction("instance");
 
-        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
         assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).length, 0, "FAB hasn't label if create second SDA");
         assert.ok(!$(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB hasn't class if create second SDA");
@@ -417,6 +437,17 @@ QUnit.module("add label option", (hooks) => {
         assert.ok(!$(FAB_SELECTOR).find(".dx-overlay-content").eq(1).hasClass(FAB_CONTENT_REVERSE_CLASS), "second SDA has label on the left");
         assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "position top doesn't change if FAB has lost label");
         assert.equal($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), "position left doesn't change if FAB has lost label");
+    }),
+
+    test("check rendering if change position in config", (assert) => {
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            label: "second action"
+        }).dxSpeedDialAction("instance");
+
         config({
             floatingActionButtonConfig: {
                 label: "fab",

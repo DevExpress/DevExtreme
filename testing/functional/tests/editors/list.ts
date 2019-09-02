@@ -1,10 +1,9 @@
 import { Selector } from 'testcafe';
-import { pathToFileURL } from 'url';
-import { join } from  'path';
+import url from '../../helpers/getPageUrl';
 import List from '../../model/list';
 
 fixture `List`
-    .page(pathToFileURL(join(__dirname, './pages/t718398.html')).href);
+    .page(url(__dirname, './pages/t718398.html'));
 
 test("List selection should work with keyboard arrows (T718398)", async t => {
     const list = new List('#list');

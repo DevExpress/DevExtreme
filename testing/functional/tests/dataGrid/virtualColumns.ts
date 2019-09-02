@@ -1,11 +1,10 @@
 
-import { pathToFileURL } from 'url';
-import { join } from  'path';
+import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/testHelper';
 import DataGrid from '../../model/dataGrid';
 
 fixture `Virtual Columns`
-    .page(pathToFileURL(join(__dirname, '../container.html')).href);
+    .page(url(__dirname, '../container.html'));
 
 test("DataGrid should not scroll back to the focused cell after horizontal scrolling if 'columnRenderingMode' is virtual", async t => {
     const dataGrid = new DataGrid("#container");
@@ -15,21 +14,24 @@ test("DataGrid should not scroll back to the focused cell after horizontal scrol
     await t.expect(dataGrid.getScrollLeft()).eql(50);
     await dataGrid.scrollTo({ x: 100 });
     await t.expect(dataGrid.getScrollLeft()).eql(100);
-}).before(async () => {
-    var generateData = function (rowCount, columnCount) {
-        var i, j;
-        var items = [];
+}).before(() => {
+    const generateData = (rowCount, columnCount) => {
+        const items = [];
 
-        for (i = 0; i < rowCount; i++) {
-            var item = { };
-            for (j = 0; j < columnCount; j++) {
-                item["field" + (j + 1)] = (i + 1) + "-" + (j + 1);
+        for (let i = 0; i < rowCount; i++) {
+            const item = { };
+
+            for (let j = 0; j < columnCount; j++) {
+                item[`field${j + 1}`] = `${i + 1}-${j + 1}`;
             }
+
             items.push(item);
         }
+
         return items;
     };
-    await createWidget("dxDataGrid", {
+
+    return createWidget("dxDataGrid", {
         width: 450,
         dataSource: generateData(10, 30),
         columnWidth: 100,
