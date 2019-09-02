@@ -4,10 +4,11 @@ import { getWindow } from "../core/utils/window";
 import eventsEngine from "../events/core/events_engine";
 import registerComponent from "../core/component_registrator";
 import Callbacks from "../core/utils/callbacks";
-import { isDefined } from "../core/utils/type";
+import { isDefined, isFunction } from "../core/utils/type";
 import { each } from "../core/utils/iterator";
 import { extend } from "../core/utils/extend";
 import { inArray } from "../core/utils/array";
+import { when } from "../core/utils/deferred";
 import ajax from "../core/utils/ajax";
 import Editor from "./editor/editor";
 import Button from "./button";
@@ -349,6 +350,10 @@ class FileUploader extends Editor {
             * @action
             */
 
+            uploadFile: null,
+            uploadChunk: null,
+            abortUpload: null,
+
             validationMessageOffset: { h: 0, v: 0 },
 
             useNativeInputClick: false,
@@ -417,17 +422,27 @@ class FileUploader extends Editor {
         this._initFileInput();
         this._initLabel();
 
+        this._setUploadStrategy();
         this._createFiles();
         this._createUploadStartedAction();
         this._createUploadedAction();
         this._createProgressAction();
         this._createUploadErrorAction();
         this._createUploadAbortedAction();
-        this._setUploadStrategy();
     }
 
     _setUploadStrategy() {
-        this._uploadStrategy = this.option("chunkSize") > 0 ? new ChunksFileUploadStrategy(this) : new WholeFileUploadStrategy(this);
+        let strategy = null;
+
+        if(this.option("chunkSize") > 0) {
+            const uploadChunk = this.option("uploadChunk");
+            strategy = uploadChunk && isFunction(uploadChunk) ? new CustomChunksFileUploadStrategy(this) : new StandardChunksFileUploadStrategy(this);
+        } else {
+            const uploadFile = this.option("uploadFile");
+            strategy = uploadFile && isFunction(uploadFile) ? new CustomWholeFileUploadStrategy(this) : new StandardWholeFileUploadStrategy(this);
+        }
+
+        this._uploadStrategy = strategy;
     }
 
     _initFileInput() {
@@ -574,8 +589,12 @@ class FileUploader extends Editor {
     _createFiles() {
         const value = this.option("value");
 
-        if(!this._files || value.length === 0 || !this._shouldFileListBeExtended()) {
+        if(this._files && (value.length === 0 || !this._shouldFileListBeExtended())) {
             this._preventFilesUploading(this._files);
+            this._files = null;
+        }
+
+        if(!this._files) {
             this._files = [];
         }
 
@@ -587,9 +606,7 @@ class FileUploader extends Editor {
     }
 
     _preventFilesUploading(files) {
-        each(files, (_, file) => {
-            file.request && file.request.abort();
-        });
+        files.forEach(file => this._uploadStrategy.abortUpload(file));
     }
 
     _validateFile(file) {
@@ -1280,9 +1297,12 @@ class FileUploader extends Editor {
                     this._renderFiles();
                 }
                 break;
+            case "uploadFile":
+            case "uploadChunk":
             case "chunkSize":
                 this._setUploadStrategy();
                 break;
+            case "abortUpload":
             case "uploadUrl":
             case "progress":
             case "uploadMethod":
@@ -1390,7 +1410,34 @@ class FileUploadStrategyBase {
         }
     }
 
+    abortUpload(file) {
+        file.request && file.request.abort();
+        file.isAborted = true;
+
+        if(this._isCustomAbortUpload()) {
+            const callback = this.fileUploader.option("abortUpload");
+            const arg = this._createAbortUploadArgument(file);
+            const result = callback(file.value, arg);
+            when(result)
+                .done(() => file.onAbort.fire())
+                .fail(() => this._handleFileError(file));
+        }
+    }
+
+    _createAbortUploadArgument(file) {
+    }
+
     _uploadCore(file) {
+    }
+
+    _isCustomAbortUpload() {
+        const callback = this.fileUploader.option("abortUpload");
+        return callback && isFunction(callback);
+    }
+
+    _handleFileError(file) {
+        file._isError = true;
+        file.onError.fire();
     }
 
     _prepareFileBeforeUpload(file) {
@@ -1468,7 +1515,7 @@ class FileUploadStrategyBase {
     }
 }
 
-class ChunksFileUploadStrategy extends FileUploadStrategyBase {
+class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     constructor(fileUploader) {
         super(fileUploader);
         this.chunkSize = this.fileUploader.option("chunkSize");
@@ -1476,66 +1523,98 @@ class ChunksFileUploadStrategy extends FileUploadStrategyBase {
 
     _uploadCore(file) {
         const realFile = file.value;
-        this._sendChunk(file, {
+        const chunksData = {
             name: realFile.name,
             loadedBytes: 0,
             type: realFile.type,
             blobReader: new FileBlobReader(realFile, this.chunkSize),
             guid: new Guid(),
             fileSize: realFile.size,
-            count: Math.ceil(realFile.size / this.chunkSize)
-        });
+            count: Math.ceil(realFile.size / this.chunkSize),
+            customData: {}
+        };
+        file.chunksData = chunksData;
+        this._sendChunk(file, chunksData);
     }
 
     _sendChunk(file, chunksData) {
         const chunk = chunksData.blobReader.read();
+        chunksData.currentChunk = chunk;
         if(chunk) {
-            chunksData.loadedBytes += chunk.blob.size;
-            ajax.sendRequest({
-                url: this.fileUploader.option("uploadUrl"),
-                method: this.fileUploader.option("uploadMethod"),
-                headers: this.fileUploader.option("uploadHeaders"),
-                beforeSend: xhr => {
-                    file.request = xhr;
-                },
-                upload: {
-                    "onloadstart": () => {
-                        if(!file.isStartLoad) {
-                            file.isStartLoad = true;
-                            file.onLoadStart.fire();
-                        }
-                    },
-                    "onabort": () => {
-                        file.onAbort.fire();
+            this._sendChunkCore(file, chunksData, chunk)
+                .done(() => {
+                    if(file.isAborted) {
+                        return;
                     }
-                },
-                data: this._createFormData({
-                    fileName: chunksData.name,
-                    blobName: this.fileUploader.option("name"),
-                    blob: chunk.blob,
-                    index: chunk.index,
-                    count: chunksData.count,
-                    type: chunksData.type,
-                    guid: chunksData.guid,
-                    size: chunksData.fileSize
-                })
-            }).done(() => {
-                file.onProgress.fire({
-                    loaded: chunksData.loadedBytes,
-                    total: file.value.size
-                });
 
-                if(chunk.isCompleted) {
-                    file.onLoad.fire();
-                }
-                this._sendChunk(file, chunksData);
-            }).fail(e => {
-                if(this._isStatusError(e.status)) {
-                    file._isError = true;
-                    file.onError.fire();
-                }
-            });
+                    chunksData.loadedBytes += chunk.blob.size;
+
+                    file.onProgress.fire({
+                        loaded: chunksData.loadedBytes,
+                        total: file.value.size
+                    });
+
+                    if(chunk.isCompleted) {
+                        file.onLoad.fire();
+                    }
+
+                    this._sendChunk(file, chunksData);
+                })
+                .fail(e => {
+                    if(this._shouldHandleError(e)) {
+                        this._handleFileError(file);
+                    }
+                });
         }
+    }
+
+    _sendChunkCore(file, chunksData, chunk) {
+    }
+
+    _shouldHandleError(e) {
+    }
+
+    _tryRaiseStartLoad(file) {
+        if(!file.isStartLoad) {
+            file.isStartLoad = true;
+            file.onLoadStart.fire();
+        }
+    }
+
+    _getEvent(e) {
+        return null;
+    }
+}
+
+class StandardChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
+
+    _sendChunkCore(file, chunksData, chunk) {
+        return ajax.sendRequest({
+            url: this.fileUploader.option("uploadUrl"),
+            method: this.fileUploader.option("uploadMethod"),
+            headers: this.fileUploader.option("uploadHeaders"),
+            beforeSend: xhr => {
+                file.request = xhr;
+            },
+            upload: {
+                "onloadstart": () => this._tryRaiseStartLoad(file),
+                "onabort": () => file.onAbort.fire()
+            },
+            data: this._createFormData({
+                fileName: chunksData.name,
+                blobName: this.fileUploader.option("name"),
+                blob: chunk.blob,
+                index: chunk.index,
+                count: chunksData.count,
+                type: chunksData.type,
+                guid: chunksData.guid,
+                size: chunksData.fileSize
+            })
+        });
+    }
+
+    _shouldHandleError(e) {
+        return this._isStatusError(e.status);
     }
 
     _createFormData(options) {
@@ -1552,15 +1631,82 @@ class ChunksFileUploadStrategy extends FileUploadStrategyBase {
         return formData;
     }
 
-    _getEvent(e) {
-        return null;
+}
+
+class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
+
+    _sendChunkCore(file, chunksData) {
+        this._tryRaiseStartLoad(file);
+
+        const chunksInfo = this._createChunksInfo(chunksData);
+        const uploadChunk = this.fileUploader.option("uploadChunk");
+        const result = uploadChunk(file.value, chunksInfo);
+        return when(result);
+    }
+
+    _createAbortUploadArgument(file) {
+        return this._createChunksInfo(file.chunksData);
+    }
+
+    _shouldHandleError(e) {
+        return true;
+    }
+
+    _createChunksInfo(chunksData) {
+        return {
+            bytesLoaded: chunksData.loadedBytes,
+            chunkCount: chunksData.count,
+            customData: chunksData.customData,
+            chunkBlob: chunksData.currentChunk.blob,
+            chunkIndex: chunksData.currentChunk.index
+        };
+    }
+
+}
+
+class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
+
+    _uploadCore(file) {
+        file.loadedSize = 0;
+        this._uploadFile(file)
+            .done(() => {
+                if(!file.isAborted) {
+                    file.onLoad.fire();
+                }
+            })
+            .fail(e => {
+                if(this._shouldHandleError(file, e)) {
+                    this._handleFileError(file);
+                }
+            });
+    }
+
+    _uploadFile(file) {
+    }
+
+    _shouldHandleError(file, e) {
+    }
+
+    _handleProgress(file, e) {
+        if(file._isError) {
+            return;
+        }
+
+        file._isProgressStarted = true;
+        file.onProgress.fire(e);
+    }
+
+    _getLoadedData(loaded, total, segmentSize, event) {
+        const result = super._getLoadedData(loaded, total, segmentSize, event);
+        result.event = event;
+        return result;
     }
 }
 
-class WholeFileUploadStrategy extends FileUploadStrategyBase {
-    _uploadCore(file) {
-        file.loadedSize = 0;
-        ajax.sendRequest({
+class StandardWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
+
+    _uploadFile(file) {
+        return ajax.sendRequest({
             url: this.fileUploader.option("uploadUrl"),
             method: this.fileUploader.option("uploadMethod"),
             headers: this.fileUploader.option("uploadHeaders"),
@@ -1568,30 +1714,16 @@ class WholeFileUploadStrategy extends FileUploadStrategyBase {
                 file.request = xhr;
             },
             upload: {
-                "onprogress": e => {
-                    if(file._isError) {
-                        return;
-                    }
-
-                    file._isProgressStarted = true;
-                    file.onProgress.fire(e);
-                },
-                "onloadstart": () => {
-                    file.onLoadStart.fire();
-                },
-                "onabort": () => {
-                    file.onAbort.fire();
-                }
+                "onprogress": e => this._handleProgress(file, e),
+                "onloadstart": () => file.onLoadStart.fire(),
+                "onabort": () => file.onAbort.fire()
             },
             data: this._createFormData(this.fileUploader.option("name"), file.value)
-        }).done(() => {
-            file.onLoad.fire();
-        }).fail(e => {
-            if(this._isStatusError(e.status) || !file._isProgressStarted) {
-                file._isError = true;
-                file.onError.fire();
-            }
         });
+    }
+
+    _shouldHandleError(file, e) {
+        return this._isStatusError(e.status) || !file._isProgressStarted;
     }
 
     _createFormData(fieldName, fieldValue) {
@@ -1600,11 +1732,30 @@ class WholeFileUploadStrategy extends FileUploadStrategyBase {
         return formData;
     }
 
-    _getLoadedData(loaded, total, segmentSize, event) {
-        const result = super._getLoadedData(loaded, total, segmentSize, event);
-        result.event = event;
-        return result;
+}
+
+class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
+
+    _uploadFile(file) {
+        file.onLoadStart.fire();
+
+        const progressCallback = loadedBytes => {
+            const arg = {
+                loaded: loadedBytes,
+                total: file.size
+            };
+            this._handleProgress(file, arg);
+        };
+
+        const uploadFile = this.fileUploader.option("uploadFile");
+        const result = uploadFile(file, progressCallback);
+        return when(result);
     }
+
+    _shouldHandleError(file, e) {
+        return true;
+    }
+
 }
 
 registerComponent("dxFileUploader", FileUploader);
