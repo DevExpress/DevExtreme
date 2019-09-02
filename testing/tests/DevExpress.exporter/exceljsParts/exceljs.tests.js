@@ -63,7 +63,7 @@ QUnit.module("API", moduleConfig, () => {
 
         [true, false].forEach((excelFilterEnabled) => {
             let options = topLeftCellOption + `, excelFilterEnabled: ${excelFilterEnabled}`;
-            const getDataGridConfig = (dataGrid, expectedCustomizeCellArgs, keepColumnWidths = true, exportSelectedRows = false) => {
+            const getDataGridConfig = (dataGrid, expectedCustomizeCellArgs, keepColumnWidths = true, selectedRowsOnly = false) => {
                 const result = {
                     component: dataGrid,
                     worksheet: this.worksheet,
@@ -76,7 +76,7 @@ QUnit.module("API", moduleConfig, () => {
                     excelFilterEnabled: excelFilterEnabled,
                 };
                 result.keepColumnWidths = keepColumnWidths;
-                result.exportSelectedRows = exportSelectedRows;
+                result.selectedRowsOnly = selectedRowsOnly;
                 return result;
             };
 
@@ -608,7 +608,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]], dataField property not exist in dataSource" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]], dataField property does not exist in dataSource" + options, (assert) => {
                 const done = assert.async();
                 const ds = [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }];
 
@@ -1401,13 +1401,13 @@ QUnit.module("API", moduleConfig, () => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
-                    { f1: "f1_1", f2: "f2_2", f3: "f3_2" }
+                    { f1: "f1_2", f2: "f2_2", f3: "f3_2" }
                 ];
 
                 let dataGrid = $("#dataGrid").dxDataGrid({
                     columns: [
-                        { dataField: "f1", caption: "f1", dataType: "string" },
-                        { dataField: "f2", caption: "f2", dataType: "string", groupIndex: 0 },
+                        { dataField: "f1", caption: "f1", dataType: "string", groupIndex: 0 },
+                        { dataField: "f2", caption: "f2", dataType: "string" },
                         { dataField: "f3", caption: "f3", dataType: "string" },
                     ],
                     dataSource: ds,
@@ -1422,21 +1422,21 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 let expectedCustomizeCellArgs = [
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1), value: ds[0].f2, groupSummaryItems: [{ "name": "GroupItems 1", value: 1 }, { "name": "GroupItems 2", value: 1 } ] } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ "name": "GroupItems 1", value: 1 }, { "name": "GroupItems 2", value: 1 } ] } },
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
-                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
                     { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1), value: ds[1].f2, groupSummaryItems: [{ "name": "GroupItems 1", value: 1 }, { "name": "GroupItems 2", value: 1 } ] } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: ds[0].f2, groupSummaryItems: [{ "name": "GroupItems 1", value: 1 }, { "name": "GroupItems 2", value: 1 } ] } },
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2) } },
-                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
                 ];
 
                 const expectedRows = [
-                    { values: [ "f2: f1_2 (Count: 1, Count: 1)", undefined ], outlineLevel: 0 },
-                    { values: [ "f1_1", "f3_1" ], outlineLevel: 1 },
-                    { values: [ "f2: f2_2 (Count: 1, Count: 1)", undefined], outlineLevel: 0 },
-                    { values: [ "f1_1", "f3_2" ], outlineLevel: 1 }
+                    { values: [ "f1: f1_1 (Count: 1, Count: 1)", undefined ], outlineLevel: 0 },
+                    { values: [ "f1_2", "f3_1" ], outlineLevel: 1 },
+                    { values: [ "f1: f1_2 (Count: 1, Count: 1)", undefined], outlineLevel: 0 },
+                    { values: [ "f2_2", "f3_2" ], outlineLevel: 1 }
                 ];
 
                 helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
@@ -1455,13 +1455,13 @@ QUnit.module("API", moduleConfig, () => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
-                    { f1: "f1_1", f2: "f2_2", f3: "f3_2" }
+                    { f1: "f2_1", f2: "f2_2", f3: "f3_2" }
                 ];
 
                 let dataGrid = $("#dataGrid").dxDataGrid({
                     columns: [
-                        { dataField: "f1", caption: "f1", dataType: "string" },
-                        { dataField: "f2", caption: "f2", dataType: "string", groupIndex: 0 },
+                        { dataField: "f1", caption: "f1", dataType: "string", groupIndex: 0 },
+                        { dataField: "f2", caption: "f2", dataType: "string" },
                         { dataField: "f3", caption: "f3", dataType: "string" },
                     ],
                     dataSource: ds,
@@ -1477,17 +1477,17 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 let expectedCustomizeCellArgs = [
-                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(1), value: ds[1].f2 } },
+                    { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: ds[1].f1 } },
                     { gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(2), groupSummaryItems: [{ "name": "GroupItems 2", value: 1 }] } },
-                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) } },
-                    { gridCell: { rowType: "groupFooter", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "groupFooter", data: ds[1], column: dataGrid.columnOption(1) } },
                     { gridCell: { rowType: "groupFooter", data: ds[1], column: dataGrid.columnOption(2), value: 1, totalSummaryItemName: "GroupItems 1" } },
                 ];
 
                 const expectedRows = [
-                    { values: [ "f2: f2_2", "Count: 1"], outlineLevel: 0 },
-                    { values: [ "f1_1", "f3_2" ], outlineLevel: 1 },
+                    { values: [ "f1: f2_1", "Count: 1"], outlineLevel: 0 },
+                    { values: [ "f2_2", "f3_2" ], outlineLevel: 1 },
                     { values: [ undefined, "Count: 1" ], outlineLevel: 1 }
                 ];
 

@@ -10,7 +10,7 @@ const MAX_EXCEL_COLUMN_WIDTH = 255;
 function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, keepColumnWidths = true, exportSelectedRows = false } = options;
+    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, keepColumnWidths = true, selectedRowsOnly = false } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -22,7 +22,7 @@ function exportDataGrid(options) {
         to: { row: topLeftCell.row, column: topLeftCell.column }
     };
 
-    let dataProvider = component.getDataProvider(exportSelectedRows);
+    let dataProvider = component.getDataProvider(selectedRowsOnly);
 
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
