@@ -8934,15 +8934,15 @@ declare module DevExpress.viz {
     /** @name dxSankey.Options.tooltip */
     export interface dxSankeyTooltip extends BaseWidgetTooltip {
         /** @name dxSankey.Options.tooltip.customizeLinkTooltip */
-        customizeLinkTooltip?: ((info: dxSankeyConnectionInfoObject) => any);
+        customizeLinkTooltip?: ((info: { source?: string, target?: string, weight?: number }) => any);
         /** @name dxSankey.Options.tooltip.customizeNodeTooltip */
-        customizeNodeTooltip?: ((info: dxSankeyNodeInfoObject) => any);
+        customizeNodeTooltip?: ((info: { title?: string, weightIn?: number, weightOut?: number }) => any);
         /** @name dxSankey.Options.tooltip.enabled */
         enabled?: boolean;
         /** @name dxSankey.Options.tooltip.linkTooltipTemplate */
-        linkTooltipTemplate?: DevExpress.core.template | ((info: dxSankeyConnectionInfoObject, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        linkTooltipTemplate?: DevExpress.core.template | ((info: { source?: string, target?: string, weight?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxSankey.Options.tooltip.nodeTooltipTemplate */
-        nodeTooltipTemplate?: DevExpress.core.template | ((info: dxSankeyNodeInfoObject, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        nodeTooltipTemplate?: DevExpress.core.template | ((info: { title?: string, weightIn?: number, weightOut?: number }) => string | Element | JQuery);
     }
     /** @name dxSankey */
     export class dxSankey extends BaseWidget {
@@ -8995,15 +8995,6 @@ declare module DevExpress.viz {
         isHovered(): boolean;
         /** @name dxSankeyNode.showTooltip() */
         showTooltip(): void;
-    }
-    /** @name dxSankeyNodeInfoObject */
-    export interface dxSankeyNodeInfoObject {
-        /** @name dxSankeyNodeInfoObject.title */
-        title?: string;
-        /** @name dxSankeyNodeInfoObject.weightIn */
-        weightIn?: number;
-        /** @name dxSankeyNodeInfoObject.weightOut */
-        weightOut?: number;
     }
     /** @name dxSparkline.Options */
     export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
