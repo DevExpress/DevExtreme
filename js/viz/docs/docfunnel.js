@@ -470,7 +470,7 @@ var dxFunnel = {
         /**
         * @name dxFunnelOptions.tooltip.contentTemplate
         * @type template|function(info, element)
-        * @type_function_param1 info:FunnelTootltipInfo
+        * @type_function_param1 info:FunnelTooltipInfo
         * @type_function_param2 element:dxElement
         * @type_function_return string|Node|jQuery
         * @default undefined

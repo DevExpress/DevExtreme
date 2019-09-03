@@ -5666,6 +5666,11 @@ declare module DevExpress.viz {
         /** @name BarGaugeLegendItem.item */
         item?: BarGaugeBarInfo;
     }
+    /** @name BarGaugeTooltipInfo */
+    export interface BarGaugeTooltipInfo extends BaseTooltipInfo {
+        /** @name BarGaugeTooltipInfo.index */
+        index?: number;
+    }
     /** @name BaseChart.Options */
     export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
         /** @name BaseChart.Options.adaptiveLayout */
@@ -5723,6 +5728,8 @@ declare module DevExpress.viz {
     interface BaseChartTooltip extends BaseWidgetTooltip {
         /** @name BaseChart.Options.tooltip.argumentFormat */
         argumentFormat?: DevExpress.ui.format;
+        /** @name BaseChart.Options.tooltip.contentTemplate */
+        contentTemplate?: DevExpress.core.template | ((pointInfo: any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseChart.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((pointInfo: any) => any);
     }
@@ -5844,8 +5851,10 @@ declare module DevExpress.viz {
     }
     /** @name BaseGauge.Options.tooltip */
     interface BaseGaugeTooltip extends BaseWidgetTooltip {
+        /** @name BaseGauge.Options.tooltip.contentTemplate */
+        contentTemplate?: DevExpress.core.template | ((info: BaseTooltipInfo, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseGauge.Options.tooltip.customizeTooltip */
-        customizeTooltip?: ((scaleValue: { value?: number, valueText?: string }) => any);
+        customizeTooltip?: ((scaleValue: BaseTooltipInfo) => any);
     }
     /** @name BaseGauge */
     export class BaseGauge extends BaseWidget {
@@ -5921,6 +5930,8 @@ declare module DevExpress.viz {
     }
     /** @name BaseSparkline.Options.tooltip */
     interface BaseSparklineTooltip extends BaseWidgetTooltip {
+        /** @name BaseSparkline.Options.tooltip.contentTemplate */
+        contentTemplate?: DevExpress.core.template | ((pointsInfo: any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseSparkline.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((pointsInfo: any) => any);
         /** @name BaseSparkline.Options.tooltip.enabled */
@@ -5930,6 +5941,13 @@ declare module DevExpress.viz {
     export class BaseSparkline extends BaseWidget {
         constructor(element: Element, options?: BaseSparklineOptions)
         constructor(element: JQuery, options?: BaseSparklineOptions)
+    }
+    /** @name BaseTooltipInfo */
+    export interface BaseTooltipInfo {
+        /** @name BaseTooltipInfo.value */
+        value?: number;
+        /** @name BaseTooltipInfo.valueText */
+        valueText?: string;
     }
     /** @name BaseWidget.Options */
     export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
@@ -6148,6 +6166,15 @@ declare module DevExpress.viz {
     export interface FunnelLegendItem extends BaseLegendItem {
         /** @name FunnelLegendItem.item */
         item?: dxFunnelItem;
+    }
+    /** @name FunnelTooltipInfo */
+    export interface FunnelTooltipInfo extends BaseTooltipInfo {
+        /** @name FunnelTooltipInfo.item */
+        item?: dxFunnelItem;
+        /** @name FunnelTooltipInfo.percent */
+        percent?: number;
+        /** @name FunnelTooltipInfo.percentText */
+        percentText?: string;
     }
     /** @name GaugeIndicator */
     export interface GaugeIndicator extends CommonIndicator {
@@ -6467,8 +6494,10 @@ declare module DevExpress.viz {
     }
     /** @name dxBarGauge.Options.tooltip */
     export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
+        /** @name dxBarGauge.Options.tooltip.contentTemplate */
+        contentTemplate?: DevExpress.core.template | ((info: BarGaugeTooltipInfo, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxBarGauge.Options.tooltip.customizeTooltip */
-        customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
+        customizeTooltip?: ((scaleValue: BarGaugeTooltipInfo) => any);
     }
     /** @name dxBarGauge */
     export class dxBarGauge extends BaseWidget {
@@ -7129,6 +7158,8 @@ declare module DevExpress.viz {
         textOverflow?: 'ellipsis' | 'hide' | 'none';
         /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
+        /** @name dxChartCommonAnnotationConfig.tooltipTemplate */
+        tooltipTemplate?: DevExpress.core.template | ((annotationItem: dxChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxChartCommonAnnotationConfig.type */
         type?: 'text' | 'image' | 'custom';
         /** @name dxChartCommonAnnotationConfig.value */
@@ -8115,8 +8146,10 @@ declare module DevExpress.viz {
     }
     /** @name dxFunnel.Options.tooltip */
     export interface dxFunnelTooltip extends BaseWidgetTooltip {
+        /** @name dxFunnel.Options.tooltip.contentTemplate */
+        contentTemplate?: DevExpress.core.template | ((info: FunnelTooltipInfo, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxFunnel.Options.tooltip.customizeTooltip */
-        customizeTooltip?: ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => any);
+        customizeTooltip?: ((info: FunnelTooltipInfo) => any);
     }
     /** @name dxFunnel */
     export class dxFunnel extends BaseWidget {
@@ -8912,9 +8945,9 @@ declare module DevExpress.viz {
     /** @name dxSankey.Options.tooltip */
     export interface dxSankeyTooltip extends BaseWidgetTooltip {
         /** @name dxSankey.Options.tooltip.customizeLinkTooltip */
-        customizeLinkTooltip?: ((info: { source?: string, target?: string, weight?: number }) => any);
+        customizeLinkTooltip?: ((info: dxSankeyConnectionInfoObject) => any);
         /** @name dxSankey.Options.tooltip.customizeNodeTooltip */
-        customizeNodeTooltip?: ((info: { title?: string, weightIn?: number, weightOut?: number }) => any);
+        customizeNodeTooltip?: ((info: dxSankeyNodeInfoObject) => any);
         /** @name dxSankey.Options.tooltip.enabled */
         enabled?: boolean;
     }
@@ -8969,6 +9002,15 @@ declare module DevExpress.viz {
         isHovered(): boolean;
         /** @name dxSankeyNode.showTooltip() */
         showTooltip(): void;
+    }
+    /** @name dxSankeyNodeInfoObject */
+    export interface dxSankeyNodeInfoObject {
+        /** @name dxSankeyNodeInfoObject.title */
+        title?: string;
+        /** @name dxSankeyNodeInfoObject.weightIn */
+        weightIn?: number;
+        /** @name dxSankeyNodeInfoObject.weightOut */
+        weightOut?: number;
     }
     /** @name dxSparkline.Options */
     export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
@@ -9078,8 +9120,10 @@ declare module DevExpress.viz {
     }
     /** @name dxTreeMap.Options.tooltip */
     export interface dxTreeMapTooltip extends BaseWidgetTooltip {
+        /** @name dxTreeMap.Options.tooltip.contentTemplate */
+        contentTemplate?: DevExpress.core.template | ((info: dxTreeMapTooltipInfo, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxTreeMap.Options.tooltip.customizeTooltip */
-        customizeTooltip?: ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }) => any);
+        customizeTooltip?: ((info: dxTreeMapTooltipInfo) => any);
     }
     /** @name dxTreeMap */
     export class dxTreeMap extends BaseWidget {
@@ -9142,6 +9186,11 @@ declare module DevExpress.viz {
         showTooltip(): void;
         /** @name dxTreeMapNode.value() */
         value(): number;
+    }
+    /** @name dxTreeMapTooltipInfo */
+    export interface dxTreeMapTooltipInfo extends BaseTooltipInfo {
+        /** @name dxTreeMapTooltipInfo.node */
+        node?: dxTreeMapNode;
     }
     /** @name dxVectorMap.Options */
     export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
@@ -9209,6 +9258,8 @@ declare module DevExpress.viz {
     }
     /** @name dxVectorMap.Options.tooltip */
     export interface dxVectorMapTooltip extends BaseWidgetTooltip {
+        /** @name dxVectorMap.Options.tooltip.contentTemplate */
+        contentTemplate?: DevExpress.core.template | ((info: MapLayerElement, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxVectorMap.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((info: MapLayerElement) => any);
     }
