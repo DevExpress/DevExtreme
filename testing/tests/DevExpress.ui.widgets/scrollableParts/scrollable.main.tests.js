@@ -409,14 +409,6 @@ QUnit.test("initViewport disables panning for non-native scrolling", function(as
 });
 
 QUnit.test("dxpointermove is prevented when scrolling is disabled (Q574378)", function(assert) {
-    var realDevice = devices.real(),
-        isWin10 = realDevice.platform === "win" && realDevice.version[0] === 10;
-
-    if(isWin10) {
-        assert.ok(true, "test is not relevant for win10 devices");
-        return;
-    }
-
     var $scrollable = $("#scrollable");
 
     $scrollable
@@ -667,14 +659,8 @@ var nativeScrollable = [
     { real: "ios", current: "desktop" },
     { real: "android", current: "android", version: [4] },
     { real: "android", current: "generic", version: [4] },
-    { real: "win", current: "win" },
-    { real: "win", current: "generic" },
     { real: "ios", current: "android" },
-    { real: "ios", current: "win" },
-    { real: "android", current: "ios", version: [4] },
-    { real: "android", current: "win", version: [4] },
-    { real: "win", current: "android" },
-    { real: "win", current: "ios" }
+    { real: "android", current: "ios", version: [4] }
 ];
 
 $.each(nativeScrollable, function() {
@@ -707,7 +693,6 @@ var simulatedScrollable = [
     { real: "android", current: "android", version: [2] },
     { real: "generic", current: "ios" },
     { real: "generic", current: "android" },
-    { real: "generic", current: "win" },
     { real: "generic", current: "generic" },
     { real: "generic", current: "desktop" }
 ];
@@ -796,7 +781,6 @@ var testBlurInNativeScrolling = function(platform, shouldBeBlurred) {
 
 testBlurInNativeScrolling("ios", true);
 testBlurInNativeScrolling("android");
-testBlurInNativeScrolling("win");
 testBlurInNativeScrolling("desktop");
 
 QUnit.testInActiveWindow("scrollable should not reset active element outside (B250228)", function(assert) {

@@ -43,7 +43,8 @@ const createController = (context, providerOptions) => {
     const provider = new TestFileProvider(config);
 
     context.controller = new FileItemsController({
-        fileProvider: provider
+        fileProvider: provider,
+        rootText: "Files"
     });
 };
 

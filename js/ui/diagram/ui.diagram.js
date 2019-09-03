@@ -111,11 +111,18 @@ class Diagram extends Widget {
         if(this.option("readOnly") || this.option("disabled")) {
             this._updateReadOnlyState();
         }
-        if(this.option("fullscreen")) {
+        if(this.option("fullScreen")) {
             this._updateFullscreenState();
         }
 
         this._diagramInstance.barManager.registerBar(this.optionsUpdateBar);
+    }
+    notifyBarCommandExecuted() {
+        this._diagramInstance.captureFocus();
+    }
+    _registerBar(component) {
+        component.bar.onChanged.add(this);
+        this._diagramInstance.barManager.registerBar(component.bar);
     }
     _renderToolbar() {
         const $toolbarWrapper = $("<div>")
@@ -127,7 +134,7 @@ class Diagram extends Widget {
         }
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
             commands: this.option("toolbar.commands"),
-            onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+            onContentReady: (e) => this._registerBar(e.component),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option("export"),
             widgetCommandNames: toolbarWidgetCommandNames
@@ -219,7 +226,7 @@ class Diagram extends Widget {
             template: ($options) => {
                 this._rightPanel = this._createComponent($options, DiagramRightPanel, {
                     propertyGroups: this.option("propertiesPanel.groups"),
-                    onContentReady: (e) => this._diagramInstance.barManager.registerBar(e.component.bar),
+                    onContentReady: (e) => this._registerBar(e.component),
                     onPointerUp: this._onPanelPointerUp.bind(this)
                 });
             }
@@ -243,7 +250,7 @@ class Diagram extends Widget {
         this._contextMenu = this._createComponent($contextMenu, DiagramContextMenu, {
             commands: this.option("contextMenu.commands"),
             container: $mainElement,
-            onContentReady: ({ component }) => this._diagramInstance.barManager.registerBar(component.bar),
+            onContentReady: ({ component }) => this._registerBar(component),
             onVisibleChanged: ({ component }) => this._diagramInstance.barManager.updateBarItemsState(component.bar),
             onItemClick: (itemData) => { return this._onBeforeCommandExecuted(itemData.command); }
         });
@@ -296,7 +303,7 @@ class Diagram extends Widget {
         this._diagramInstance.onNodeRemoved = this._raiseNodeRemovedAction.bind(this);
         this._diagramInstance.onToolboxDragStart = this._raiseToolboxDragStart.bind(this);
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
-        this._diagramInstance.onToggleFullscreen = this._onToggleFullscreen.bind(this);
+        this._diagramInstance.onToggleFullscreen = this._onToggleFullScreen.bind(this);
 
         this._updateUnitItems();
         this._updateFormatUnitsMethod();
@@ -638,9 +645,9 @@ class Diagram extends Widget {
             ));
         }
     }
-    _onToggleFullscreen(fullscreen) {
-        this._changeNativeFullscreen(fullscreen);
-        this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullscreen);
+    _onToggleFullScreen(fullScreen) {
+        this._changeNativeFullscreen(fullScreen);
+        this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
         this._diagramInstance.updateLayout();
     }
     _changeNativeFullscreen(setModeOn) {
@@ -704,7 +711,7 @@ class Diagram extends Widget {
     _onNativeFullscreenChangeHandler() {
         if(!this._inNativeFullscreen()) {
             this._unsubscribeFullscreenNativeChanged();
-            this._onToggleFullscreen(false);
+            this._onToggleFullScreen(false);
         }
     }
 
@@ -753,9 +760,9 @@ class Diagram extends Widget {
     }
     _updateFullscreenState() {
         const { DiagramCommand } = getDiagram();
-        var fullscreen = this.option("fullscreen");
-        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
-        this._onToggleFullscreen(fullscreen);
+        var fullScreen = this.option("fullScreen");
+        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullScreen);
+        this._onToggleFullScreen(fullScreen);
     }
     _updateShowGridState() {
         const { DiagramCommand } = getDiagram();
@@ -903,11 +910,11 @@ class Diagram extends Widget {
             */
             autoZoom: DIAGRAM_DEFAULT_AUTOZOOM,
             /**
-            * @name dxDiagramOptions.fullscreen
+            * @name dxDiagramOptions.fullScreen
             * @type Boolean
             * @default false
             */
-            fullscreen: false,
+            fullScreen: false,
             /**
             * @name dxDiagramOptions.showGrid
             * @type Boolean
@@ -1555,7 +1562,7 @@ class Diagram extends Widget {
             case "simpleView":
                 this._updateSimpleViewState();
                 break;
-            case "fullscreen":
+            case "fullScreen":
                 this._updateFullscreenState();
                 break;
             case "showGrid":

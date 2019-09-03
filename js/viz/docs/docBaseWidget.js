@@ -1025,30 +1025,30 @@ var legendItem = {
     */
     visible: true,
     /**
-    * @name BaseLegendItem.size
-    * @type number
-    */
-    size: undefined,
-    /**
-    * @name BaseLegendItem.markerAttributes
+    * @name BaseLegendItem.marker
     * @type object
     */
-    markerAttributes: {
+    marker: {
         /**
-        * @name BaseLegendItem.markerAttributes.fill
+        * @name BaseLegendItem.marker.fill
         * @type string
         */
         fill: "#fff",
         /**
-        * @name BaseLegendItem.markerAttributes.opacity
+        * @name BaseLegendItem.marker.opacity
         * @type number
         */
         opacity: 1,
         /**
-        * @name BaseLegendItem.markerAttributes.class
-        * @type string
+        * @name BaseLegendItem.marker.size
+        * @type number
         */
-        class: undefined
+        size: 10,
+        /**
+        * @name BaseLegendItem.marker.state
+        * @type Enums.LegendMarkerState
+        */
+        state: "normal"
     }
 };
 

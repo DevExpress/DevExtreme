@@ -7,7 +7,7 @@ class DiagramOptionsUpdateBar extends DiagramBar {
 
         const { DiagramCommand } = getDiagram();
         this.commandOptions = {};
-        this.commandOptions[DiagramCommand.Fullscreen] = "fullscreen";
+        this.commandOptions[DiagramCommand.Fullscreen] = "fullScreen";
         this.commandOptions[DiagramCommand.ZoomLevel] = function(value) {
             if(typeof this._getOption("zoomLevel") === "object") {
                 this._setOption("zoomLevel.value", value);

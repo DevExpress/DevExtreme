@@ -12,7 +12,6 @@ import CollectionWidget from "./collection/ui.collection_widget.live_update";
 import Swipeable from "../events/gesture/swipeable";
 import { Deferred } from "../core/utils/deferred";
 
-
 const MULTIVIEW_CLASS = "dx-multiview";
 const MULTIVIEW_WRAPPER_CLASS = "dx-multiview-wrapper";
 const MULTIVIEW_ITEM_CONTAINER_CLASS = "dx-multiview-item-container";
@@ -220,6 +219,9 @@ const MultiView = CollectionWidget.inherit({
         this._deferredItems = [];
 
         this.callBase();
+
+        var selectedItemIndices = this._getSelectedItemIndices();
+        this._updateItemsVisibility(selectedItemIndices[0]);
     },
 
     _afterItemElementDeleted: function($item, deletedActionArgs) {
@@ -264,13 +266,8 @@ const MultiView = CollectionWidget.inherit({
 
         deferRender(() => {
             var selectedItemIndices = this._getSelectedItemIndices();
-            this._updateItemsPosition(selectedItemIndices[0]);
-            this._updateItemsVisibility(selectedItemIndices[0]);
+            this._updateItems(selectedItemIndices[0]);
         });
-    },
-
-    _renderSelection: function(addedSelection) {
-        this._updateItemsVisibility(addedSelection[0]);
     },
 
     _updateItems: function(selectedIndex, newIndex) {

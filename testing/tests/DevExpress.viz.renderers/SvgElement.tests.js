@@ -1,7 +1,12 @@
-var $ = require("jquery"),
-    typeUtils = require("core/utils/type"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    Color = require("color");
+import jQuery from "jquery";
+import typeUtils from "core/utils/type";
+import rendererModule from "viz/core/renderers/renderer";
+import coreRenderer from "core/renderer";
+import eventsEngine from "events/core/events_engine";
+import domAdapter from "core/dom_adapter";
+import Color from "color";
+
+let $ = jQuery;
 
 function isFirefoxOnLinux() {
     const ua = navigator.userAgent;
@@ -536,8 +541,8 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.Element = renderer.SvgElement;
 
             this.jQuery = $;
-            $ = require("core/renderer");
-            this.eventsEngine = require("events/core/events_engine");
+            $ = coreRenderer;
+            this.eventsEngine = eventsEngine;
             this.rendererStub = { fake: "fake", root: { element: document.createElement("div") } };
             this.$emptyStub = sinon.stub($.fn, "empty");
             this.$removeStub = sinon.stub($.fn, "remove", function() { return this; });
@@ -6222,6 +6227,19 @@ function checkDashStyle(assert, elem, result, style, value) {
             });
 
             assert.equal(text.element.textContent, "");
+        });
+
+        QUnit.test("WordWrap normal with title element", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "Text Text Text Text Text Text" }),
+                result;
+
+            text.setTitle("hint");
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxSize(110, undefined, {
+                wordWrap: "normal"
+            });
+            assert.ok(result.textChanged);
+            assert.equal(domAdapter.querySelectorAll(text.element, "title").length, 1);
         });
     }
 })();

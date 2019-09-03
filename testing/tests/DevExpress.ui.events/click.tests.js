@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    clickEvent = require("events/click"),
-    domUtils = require("core/utils/dom"),
-    support = require("core/utils/support"),
-    devices = require("core/devices"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    nativePointerMock = require("../../helpers/nativePointerMock.js");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import clickEvent from "events/click";
+import domUtils from "core/utils/dom";
+import support from "core/utils/support";
+import devices from "core/devices";
+import pointerMock from "../../helpers/pointerMock.js";
+import nativePointerMock from "../../helpers/nativePointerMock.js";
 
 QUnit.testStart(function() {
     var markup =
@@ -157,7 +157,7 @@ QUnit.test("click subscription should not add onclick attr for native strategy (
 QUnit.module("hacks", moduleConfig);
 
 QUnit.test("dxpointer events on iOS7 with alert", function(assert) {
-    if(clickEvent.useNativeClick || !support.touchEvents || !(devices.real().tablet || devices.real().phone) || devices.real().platform === "win") {
+    if(clickEvent.useNativeClick || !support.touchEvents || !(devices.real().tablet || devices.real().phone)) {
         assert.expect(0);
         return;
     }
@@ -775,4 +775,27 @@ QUnit.test("dxclick should be fired even if propagation was stopped", function(a
         });
 
     pointer.start().down().up();
+});
+
+QUnit.test("dxclick should not be fired twice when 'click' is triggered from its handler (T503035)", (assert) => {
+    assert.expect(1);
+
+    if(!clickEvent.useNativeClick) {
+        assert.expect(0);
+        return;
+    }
+
+    const $element = $("#element");
+    const pointer = nativePointerMock($element);
+
+    $(document).on("dxclick", $.noop);
+
+    $element
+        .on("dxclick", () => {
+            $("#inputWrapper").trigger("click");
+            assert.ok(true, "dxclick fired");
+        });
+
+    pointer.start().down().up();
+    $(document).off("dxclick", $.noop);
 });

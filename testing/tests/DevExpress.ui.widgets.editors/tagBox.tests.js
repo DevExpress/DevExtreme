@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { DataSource } from "data/data_source/data_source";
 import { isRenderer } from "core/utils/type";
+import { createTextElementHiddenCopy } from "core/utils/dom";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import browser from "core/utils/browser";
 import config from "core/config";
@@ -41,9 +42,7 @@ const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template";
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template";
 const FOCUSED_CLASS = "dx-state-focused";
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
-const KEY_TAB = "Tab";
 const KEY_ENTER = "Enter";
-const KEY_ESC = "Escape";
 const KEY_DOWN = "ArrowDown";
 const KEY_SPACE = " ";
 
@@ -1682,7 +1681,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("Value should be correct when not last item is focused and the 'tab' key pressed", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
         }
@@ -1789,7 +1788,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("tagBox selects item on enter key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1810,7 +1809,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("tagBox selects item on space key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1831,7 +1830,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("tagBox didn't selects item on space key if it acceptCustomValue", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1853,7 +1852,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("tagBox didn't selects item on space key if search is enabled", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1875,7 +1874,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("the 'enter' key should not add/remove tags if the editor is closed (T378292)", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1897,7 +1896,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("onValueChanged shouldn't be fired on the 'tab' key press", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1915,7 +1914,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("value shouldn't be changed on 'tab' if there is a focused item in the drop down list", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1932,7 +1931,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("the 'apply' button should be focused on the 'tab' key press if the input is focused and showSelectionControls if false (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
         }
@@ -1948,75 +1947,6 @@ QUnit.module("keyboard navigation", {
 
         const $applyButton = this.instance._popup._wrapper().find(".dx-button.dx-popup-done");
         assert.ok($applyButton.hasClass("dx-state-focused"), "the apply button is focused");
-    });
-
-    QUnit.testInActiveWindow("the 'select all' checkbox should be focused on the 'tab' key press if the input is focused and showSelectionControls if true (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        keyboardMock(this.$element.find(`.${TEXTBOX_CLASS}`))
-            .focus()
-            .press("tab");
-
-        const $selectAllCheckbox = this.instance._popup._wrapper().find(".dx-list-select-all-checkbox");
-        assert.ok($selectAllCheckbox.hasClass("dx-state-focused"), "the select all checkbox is focused");
-    });
-
-    QUnit.testInActiveWindow("the input should be focused on the 'shift+tab' key press if the select all checkbox is focused (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        const $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
-
-        $selectAllCheckbox
-            .focus()
-            .trigger($.Event("keydown", {
-                key: KEY_TAB,
-                shiftKey: true
-            }));
-
-        assert.ok(this.$element.hasClass("dx-state-focused"), "widget is focused");
-    });
-
-    QUnit.testInActiveWindow("popup should be closed on the 'esc' key press if the select all checkbox is focused", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        const $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
-
-        $selectAllCheckbox
-            .focus()
-            .trigger($.Event("keydown", {
-                key: KEY_ESC,
-                shiftKey: true
-            }));
-
-        assert.ok(this.$element.hasClass("dx-state-focused"), "widget is focused");
-        assert.notOk(this.instance.option("opened"), "popup is closed");
     });
 });
 
@@ -2631,9 +2561,29 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const inputWidth = $input.width();
 
-        keyboardMock($input).type("te");
+        keyboardMock($input).type("test text");
 
         assert.ok($input.width() > inputWidth, "input size increase");
+    });
+
+    QUnit.test("width of input is enougth for all content", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            searchEnabled: true,
+            width: 300
+        });
+        const text = "wwwwwwwwwwwwww";
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+
+        $input.css("padding", "0 10px");
+
+        keyboardMock($input).type(text);
+        const inputWidth = $input.width();
+
+        var inputCopy = createTextElementHiddenCopy($input, text);
+        inputCopy.appendTo("#qunit-fixture");
+
+        assert.ok(inputWidth >= inputCopy.width(), "correctWidth");
+        inputCopy.remove();
     });
 
     QUnit.test("size of input is reset after selecting item", assert => {
@@ -2641,6 +2591,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: true,
             items: ["test1", "test2"]
         });
+
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const initInputWidth = $input.width();
 
@@ -2653,6 +2604,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: false,
             editEnabled: false
         });
+
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         // NOTE: width should be 0.1 because of T393423
         assert.roughEqual($input.width(), 0.1, 0.101, "input has correct width");
@@ -2716,7 +2668,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
     });
 
     QUnit.test("list item obtained focus only after press on control key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -2780,7 +2732,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
     });
 
     QUnit.test("tagBox set focused class with searchEnabled after press 'delete' key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3044,11 +2996,12 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchMode: "startswith"
         });
         const $input = $element.find(".dx-texteditor-input");
+        const inputWidth = $input.width();
 
         keyboardMock($input)
             .type("a");
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal(parseInt($input.attr("size")), items[0].length + 2, "input size is changed for substitution");
+        assert.ok($input.width() > inputWidth, "input size is changed for substitution");
     });
 
     QUnit.test("filter should be reset after the search value clearing (T385456)", assert => {
@@ -3283,11 +3236,6 @@ QUnit.module("popup position and size", moduleSetup, () => {
     });
 
     QUnit.test("popup changes its position when field height changed", assert => {
-        if(devices.real().platform === "win") { // NOTE: win8 popup top position equals tagBox top position
-            assert.expect(0);
-            return;
-        }
-
         const $tagBox = $("#tagBox").dxTagBox({
             items: ["item1", "item2", "item3", "item4", "item5", "item6"],
             showSelectionControls: true,
@@ -4645,7 +4593,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
     });
 
     QUnit.test("the focused tag should be visible during keyboard navigation to the right in the RTL mode", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test is not relevant for mobile devices");
             return;
         }
@@ -4679,7 +4627,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
     });
 
     QUnit.test("the focused tag should be visible during keyboard navigation to the left in the RTL mode", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test is not relevant for mobile devices");
             return;
         }
@@ -5435,7 +5383,7 @@ QUnit.module("regression", {
     });
 
     QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T516798)", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }

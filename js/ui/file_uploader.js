@@ -1,26 +1,27 @@
-var $ = require("../core/renderer"),
-    Class = require("../core/class"),
-    Guid = require("../core/guid"),
-    window = require("../core/utils/window").getWindow(),
-    eventsEngine = require("../events/core/events_engine"),
-    registerComponent = require("../core/component_registrator"),
-    Callbacks = require("../core/utils/callbacks"),
-    isDefined = require("../core/utils/type").isDefined,
-    each = require("../core/utils/iterator").each,
-    extend = require("../core/utils/extend").extend,
-    inArray = require("../core/utils/array").inArray,
-    ajax = require("../core/utils/ajax"),
-    Editor = require("./editor/editor"),
-    Button = require("./button"),
-    ProgressBar = require("./progress_bar"),
-    browser = require("../core/utils/browser"),
-    devices = require("../core/devices"),
-    eventUtils = require("../events/utils"),
-    clickEvent = require("../events/click"),
-    messageLocalization = require("../localization/message"),
-    themes = require("./themes");
+import $ from "../core/renderer";
+import Guid from "../core/guid";
+import { getWindow } from "../core/utils/window";
+import eventsEngine from "../events/core/events_engine";
+import registerComponent from "../core/component_registrator";
+import Callbacks from "../core/utils/callbacks";
+import { isDefined } from "../core/utils/type";
+import { each } from "../core/utils/iterator";
+import { extend } from "../core/utils/extend";
+import { inArray } from "../core/utils/array";
+import ajax from "../core/utils/ajax";
+import Editor from "./editor/editor";
+import Button from "./button";
+import ProgressBar from "./progress_bar";
+import browser from "../core/utils/browser";
+import devices from "../core/devices";
+import eventUtils from "../events/utils";
+import clickEvent from "../events/click";
+import messageLocalization from "../localization/message";
+import themes from "./themes";
 
-var FILEUPLOADER_CLASS = "dx-fileuploader",
+const window = getWindow();
+
+const FILEUPLOADER_CLASS = "dx-fileuploader",
     FILEUPLOADER_EMPTY_CLASS = "dx-fileuploader-empty",
     FILEUPLOADER_SHOW_FILE_LIST_CLASS = "dx-fileuploader-show-file-list",
     FILEUPLOADER_DRAGOVER_CLASS = "dx-fileuploader-dragover",
@@ -51,13 +52,9 @@ var FILEUPLOADER_CLASS = "dx-fileuploader",
     FILEUPLOADER_AFTER_LOAD_DELAY = 400,
     FILEUPLOADER_CHUNK_META_DATA_NAME = "chunkMetadata";
 
-var renderFileUploaderInput = function() {
-    return $("<input>").attr("type", "file");
-};
+let renderFileUploaderInput = () => $("<input>").attr("type", "file");
 
-var isFormDataSupported = function() {
-    return !!window.FormData;
-};
+const isFormDataSupported = () => !!window.FormData;
 
 /**
 * @name dxFileUploader
@@ -65,32 +62,31 @@ var isFormDataSupported = function() {
 * @module ui/file_uploader
 * @export default
 */
-var FileUploader = Editor.inherit({
-    _uploadStrategy: null,
+class FileUploader extends Editor {
 
-    _supportedKeys: function() {
-        var click = function(e) {
+    _supportedKeys() {
+        const click = e => {
             e.preventDefault();
-            var $selectButton = this._selectButton.$element();
+            const $selectButton = this._selectButton.$element();
             eventsEngine.trigger($selectButton, clickEvent.name);
         };
 
-        return extend(this.callBase(), {
+        return extend(super._supportedKeys(), {
             space: click,
             enter: click
         });
-    },
+    }
 
-    _setOptionsByReference: function() {
-        this.callBase();
+    _setOptionsByReference() {
+        super._setOptionsByReference();
 
         extend(this._optionsByReference, {
             value: true
         });
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             /**
             * @name dxFileUploaderOptions.chunkSize
             * @type number
@@ -360,14 +356,12 @@ var FileUploader = Editor.inherit({
             nativeDropSupported: true,
             _uploadButtonType: "normal"
         });
-    },
+    }
 
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
+    _defaultOptionsRules() {
+        return super._defaultOptionsRules().concat([
             {
-                device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
-                },
+                device: () => devices.real().deviceType === "desktop" && !devices.isSimulator(),
                 options: {
                     /**
                     * @name dxFileUploaderOptions.focusStateEnabled
@@ -381,9 +375,6 @@ var FileUploader = Editor.inherit({
                 device: [
                     {
                         platform: "android"
-                    },
-                    {
-                        platform: "win"
                     }
                 ],
                 options: {
@@ -391,42 +382,34 @@ var FileUploader = Editor.inherit({
                 }
             },
             {
-                device: function() {
-                    return devices.real().platform !== "generic";
-                },
+                device: () => devices.real().deviceType !== "desktop",
                 options: {
                     useDragOver: false
                 }
             },
             {
-                device: function() {
-                    return !isFormDataSupported();
-                },
+                device: () => !isFormDataSupported(),
                 options: {
                     uploadMode: "useForm"
                 }
             },
             {
-                device: function() {
-                    return browser.msie || devices.real().platform !== "generic";
-                },
+                device: () => browser.msie || devices.real().deviceType !== "desktop",
                 options: {
                     nativeDropSupported: false
                 }
             },
             {
-                device: function() {
-                    return themes.isMaterial();
-                },
+                device: () => themes.isMaterial(),
                 options: {
                     _uploadButtonType: "default"
                 }
             }
         ]);
-    },
+    }
 
-    _init: function() {
-        this.callBase.apply(this, arguments);
+    _init() {
+        super._init();
 
         this._initFileInput();
         this._initLabel();
@@ -438,23 +421,23 @@ var FileUploader = Editor.inherit({
         this._createUploadErrorAction();
         this._createUploadAbortedAction();
         this._setUploadStrategy();
-    },
+    }
 
-    _setUploadStrategy: function() {
+    _setUploadStrategy() {
         this._uploadStrategy = this.option("chunkSize") > 0 ? new ChunksFileUploadStrategy(this) : new WholeFileUploadStrategy(this);
-    },
+    }
 
-    _initFileInput: function() {
+    _initFileInput() {
         this._isCustomClickEvent = false;
 
         if(!this._$fileInput) {
             this._$fileInput = renderFileUploaderInput();
 
             eventsEngine.on(this._$fileInput, "change", this._inputChangeHandler.bind(this));
-            eventsEngine.on(this._$fileInput, "click", (function(e) {
+            eventsEngine.on(this._$fileInput, "click", e => {
                 e.stopPropagation();
                 return this.option("useNativeInputClick") || this._isCustomClickEvent;
-            }).bind(this));
+            });
         }
 
         this._$fileInput.prop({
@@ -462,93 +445,91 @@ var FileUploader = Editor.inherit({
             accept: this.option("accept"),
             tabIndex: -1
         });
-    },
+    }
 
-    _inputChangeHandler: function() {
+    _inputChangeHandler() {
         if(this._doPreventInputChange) {
             return;
         }
 
-        var fileName = this._$fileInput.val().replace(/^.*\\/, ''),
+        const fileName = this._$fileInput.val().replace(/^.*\\/, ''),
             files = this._$fileInput.prop("files");
 
         if(files && !files.length) {
             return;
         }
 
-        var value = files ? this._getFiles(files) : [{ name: fileName }];
+        const value = files ? this._getFiles(files) : [{ name: fileName }];
         this._changeValue(value);
 
         if(this.option("uploadMode") === "instantly") {
             this._uploadFiles();
         }
-    },
+    }
 
-    _shouldFileListBeExtended: function() {
+    _shouldFileListBeExtended() {
         return this.option("uploadMode") !== "useForm" && this.option("extendSelection") && this.option("multiple");
-    },
+    }
 
-    _removeDuplicates: function(files, value) {
-        var result = [];
+    _removeDuplicates(files, value) {
+        const result = [];
 
-        for(var i = 0; i < value.length; i++) {
+        for(let i = 0; i < value.length; i++) {
             if(!this._isFileInArray(files, value[i])) {
                 result.push(value[i]);
             }
         }
 
         return result;
-    },
+    }
 
-    _isFileInArray: function(files, file) {
-        for(var i = 0; i < files.length; i++) {
-            var item = files[i];
+    _isFileInArray(files, file) {
+        for(let i = 0; i < files.length; i++) {
+            const item = files[i];
             if(item.size === file.size && item.name === file.name) {
                 return true;
             }
         }
 
         return false;
-    },
+    }
 
-    _changeValue: function(value) {
-        var files = this._shouldFileListBeExtended() ? this.option("value").slice() : [];
+    _changeValue(value) {
+        const files = this._shouldFileListBeExtended() ? this.option("value").slice() : [];
 
         if(this.option("uploadMode") !== "instantly") {
             value = this._removeDuplicates(files, value);
         }
 
         this.option("value", files.concat(value));
-    },
+    }
 
-    _getFiles: function(fileList) {
-        var values = [];
+    _getFiles(fileList) {
+        const values = [];
 
-        each(fileList, function(_, value) {
-            values.push(value);
-        });
+        each(fileList, (_, value) => values.push(value));
 
         return values;
-    },
+    }
 
-    _initLabel: function() {
+    _initLabel() {
         if(!this._$inputLabel) {
             this._$inputLabel = $("<div>");
         }
 
         this._$inputLabel.text(this.option("labelText"));
-    },
+    }
 
-    _focusTarget: function() {
+    _focusTarget() {
         return this.$element().find("." + FILEUPLOADER_BUTTON_CLASS);
-    },
+    }
 
-    _getSubmitElement: function() {
+    _getSubmitElement() {
         return this._$fileInput;
-    },
+    }
 
-    _initMarkup: function() {
-        this.callBase();
+    _initMarkup() {
+        super._initMarkup();
 
         this.$element().addClass(FILEUPLOADER_CLASS);
 
@@ -559,108 +540,108 @@ var FileUploader = Editor.inherit({
         this._renderUploadButton();
 
         this._preventRecreatingFiles = true;
-    },
+    }
 
-    _render: function() {
+    _render() {
         this._preventRecreatingFiles = false;
         this._renderDragEvents();
 
         this._renderFiles();
 
-        this.callBase();
-    },
+        super._render();
+    }
 
-    _createFileProgressBar: function(file) {
+    _createFileProgressBar(file) {
         file.progressBar = this._createProgressBar(file.value.size);
         file.progressBar.$element().appendTo(file.$file);
         this._initStatusMessage(file);
         this._initCancelButton(file);
-    },
+    }
 
-    _setStatusMessage: function(file, key) {
-        setTimeout(function() {
+    _setStatusMessage(file, key) {
+        setTimeout(() => {
             if(this.option("showFileList")) {
                 file.$statusMessage.text(this.option(key));
                 file.$statusMessage.css("display", "");
                 file.progressBar.$element().remove();
             }
-        }.bind(this), FILEUPLOADER_AFTER_LOAD_DELAY);
-    },
+        }, FILEUPLOADER_AFTER_LOAD_DELAY);
+    }
 
-    _createFiles: function() {
-        var value = this.option("value");
+    _createFiles() {
+        const value = this.option("value");
 
         if(!this._files || value.length === 0 || !this._shouldFileListBeExtended()) {
             this._preventFilesUploading(this._files);
             this._files = [];
         }
 
-        each(value.slice(this._files.length), function(_, value) {
-            var file = this._createFile(value);
+        each(value.slice(this._files.length), (_, value) => {
+            const file = this._createFile(value);
             this._validateFile(file);
             this._files.push(file);
-        }.bind(this));
-    },
+        });
+    }
 
-    _preventFilesUploading: function(files) {
-        each(files, function(_, file) {
+    _preventFilesUploading(files) {
+        each(files, (_, file) => {
             file.request && file.request.abort();
-        }.bind(this));
-    },
+        });
+    }
 
-    _validateFile: function(file) {
+    _validateFile(file) {
         file.isValidFileExtension = this._validateFileExtension(file);
         file.isValidMinSize = this._validateMinFileSize(file);
         file.isValidMaxSize = this._validateMaxFileSize(file);
-    },
+    }
 
-    _validateFileExtension: function(file) {
-        var allowedExtensions = this.option("allowedFileExtensions"),
+    _validateFileExtension(file) {
+        const allowedExtensions = this.option("allowedFileExtensions"),
             fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
         if(allowedExtensions.length === 0) {
             return true;
         }
-        for(var i = 0; i < allowedExtensions.length; i++) {
+        for(let i = 0; i < allowedExtensions.length; i++) {
             if(fileExtension === allowedExtensions[i].toLowerCase()) {
                 return true;
             }
         }
         return false;
-    },
+    }
 
-    _validateMaxFileSize: function(file) {
-        var fileSize = file.value.size,
+    _validateMaxFileSize(file) {
+        const fileSize = file.value.size,
             maxFileSize = this.option("maxFileSize");
         return maxFileSize > 0 ? fileSize <= maxFileSize : true;
-    },
+    }
 
-    _validateMinFileSize: function(file) {
-        var fileSize = file.value.size,
+    _validateMinFileSize(file) {
+        const fileSize = file.value.size,
             minFileSize = this.option("minFileSize");
         return minFileSize > 0 ? fileSize >= minFileSize : true;
-    },
+    }
 
-    _createUploadStartedAction: function() {
+    _createUploadStartedAction() {
         this._uploadStartedAction = this._createActionByOption("onUploadStarted");
-    },
+    }
 
-    _createUploadedAction: function() {
+    _createUploadedAction() {
         this._uploadedAction = this._createActionByOption("onUploaded");
-    },
+    }
 
-    _createProgressAction: function() {
+    _createProgressAction() {
         this._progressAction = this._createActionByOption("onProgress");
-    },
+    }
 
-    _createUploadAbortedAction: function() {
+    _createUploadAbortedAction() {
         this._uploadAbortedAction = this._createActionByOption("onUploadAborted");
-    },
+    }
 
-    _createUploadErrorAction: function() {
+    _createUploadErrorAction() {
         this._uploadErrorAction = this._createActionByOption("onUploadError");
-    },
+    }
 
-    _createFile: function(value) {
+    _createFile(value) {
         return {
             value: value,
             loadedSize: 0,
@@ -672,14 +653,14 @@ var FileUploader = Editor.inherit({
             isValidFileExtension: true,
             isValidMaxSize: true,
             isValidMinSize: true,
-            isValid: function() {
+            isValid() {
                 return this.isValidFileExtension && this.isValidMaxSize && this.isValidMinSize;
             }
         };
-    },
+    }
 
-    _renderFiles: function() {
-        var value = this.option("value");
+    _renderFiles() {
+        const value = this.option("value");
 
         if(!this._$filesContainer) {
             this._$filesContainer = $("<div>")
@@ -689,13 +670,11 @@ var FileUploader = Editor.inherit({
             this._$filesContainer.empty();
         }
 
-        var showFileList = this.option("showFileList");
+        const showFileList = this.option("showFileList");
         if(showFileList) {
-            var that = this;
-
-            each(this._files, function(_, file) {
+            each(this._files, (_, file) => {
                 if(!file.$file) {
-                    that._renderFile(file);
+                    this._renderFile(file);
                 }
             });
         }
@@ -705,12 +684,12 @@ var FileUploader = Editor.inherit({
         this._updateFileNameMaxWidth();
 
         this._$validationMessage && this._$validationMessage.dxOverlay("instance").repaint();
-    },
+    }
 
-    _renderFile: function(file) {
-        var value = file.value;
+    _renderFile(file) {
+        const value = file.value;
 
-        var $fileContainer = $("<div>")
+        const $fileContainer = $("<div>")
             .addClass(FILEUPLOADER_FILE_CONTAINER_CLASS)
             .appendTo(this._$filesContainer);
 
@@ -720,7 +699,7 @@ var FileUploader = Editor.inherit({
             .addClass(FILEUPLOADER_FILE_CLASS)
             .appendTo($fileContainer);
 
-        var $fileInfo = $("<div>")
+        const $fileInfo = $("<div>")
             .addClass(FILEUPLOADER_FILE_INFO_CLASS)
             .appendTo(file.$file);
 
@@ -754,36 +733,36 @@ var FileUploader = Editor.inherit({
             }
             $fileContainer.addClass(FILEUPLOADER_INVALID_CLASS);
         }
-    },
-    _createValidationElement: function(key) {
+    }
+    _createValidationElement(key) {
         return $("<span>").text(this.option(key));
-    },
+    }
 
-    _updateFileNameMaxWidth: function() {
-        var cancelButtonsCount = this.option("allowCanceling") && this.option("uploadMode") !== "useForm" ? 1 : 0,
+    _updateFileNameMaxWidth() {
+        const cancelButtonsCount = this.option("allowCanceling") && this.option("uploadMode") !== "useForm" ? 1 : 0,
             uploadButtonsCount = this.option("uploadMode") === "useButtons" ? 1 : 0,
             filesContainerWidth = this._$filesContainer.find("." + FILEUPLOADER_FILE_CONTAINER_CLASS).first().width() || this._$filesContainer.width(),
             $buttonContainer = this._$filesContainer.find("." + FILEUPLOADER_BUTTON_CONTAINER_CLASS).eq(0),
             buttonsWidth = $buttonContainer.width() * (cancelButtonsCount + uploadButtonsCount),
             $fileSize = this._$filesContainer.find("." + FILEUPLOADER_FILE_SIZE_CLASS).eq(0);
 
-        var prevFileSize = $fileSize.text();
+        const prevFileSize = $fileSize.text();
         $fileSize.text("1000 Mb");
-        var fileSizeWidth = $fileSize.width();
+        const fileSizeWidth = $fileSize.width();
         $fileSize.text(prevFileSize);
 
         this._$filesContainer.find("." + FILEUPLOADER_FILE_NAME_CLASS).css("maxWidth", filesContainerWidth - buttonsWidth - fileSizeWidth);
-    },
+    }
 
-    _renderFileButtons: function(file, $container) {
-        var $cancelButton = this._getCancelButton(file);
+    _renderFileButtons(file, $container) {
+        const $cancelButton = this._getCancelButton(file);
         $cancelButton && $container.append($cancelButton);
 
-        var $uploadButton = this._getUploadButton(file);
+        const $uploadButton = this._getUploadButton(file);
         $uploadButton && $container.append($uploadButton);
-    },
+    }
 
-    _getCancelButton: function(file) {
+    _getCancelButton(file) {
         if(this.option("uploadMode") === "useForm") {
             return null;
         }
@@ -791,9 +770,7 @@ var FileUploader = Editor.inherit({
         file.cancelButton = this._createComponent(
             $("<div>").addClass(FILEUPLOADER_BUTTON_CLASS + " " + FILEUPLOADER_CANCEL_BUTTON_CLASS),
             Button, {
-                onClick: (function() {
-                    this._removeFile(file);
-                }).bind(this),
+                onClick: () => this._removeFile(file),
                 icon: "close",
                 visible: this.option("allowCanceling"),
                 integrationOptions: {}
@@ -803,9 +780,9 @@ var FileUploader = Editor.inherit({
         return $("<div>")
             .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
             .append(file.cancelButton.$element());
-    },
+    }
 
-    _getUploadButton: function(file) {
+    _getUploadButton(file) {
         if(!file.isValid() || this.option("uploadMode") !== "useButtons") {
             return null;
         }
@@ -814,28 +791,24 @@ var FileUploader = Editor.inherit({
             $("<div>").addClass(FILEUPLOADER_BUTTON_CLASS + " " + FILEUPLOADER_UPLOAD_BUTTON_CLASS),
             Button,
             {
-                onClick: (function() {
-                    this._uploadFile(file);
-                }).bind(this),
+                onClick: () => this._uploadFile(file),
                 icon: "upload"
             }
         );
 
-        file.onLoadStart.add((function() {
-            file.uploadButton.$element().remove();
-        }).bind(this));
+        file.onLoadStart.add(() => file.uploadButton.$element().remove());
 
         return $("<div>")
             .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
             .append(file.uploadButton.$element());
-    },
+    }
 
-    _removeFile: function(file) {
+    _removeFile(file) {
         file.$file.parent().remove();
 
         this._files.splice(inArray(file, this._files), 1);
 
-        var value = this.option("value").slice();
+        const value = this.option("value").slice();
         value.splice(inArray(file.value, value), 1);
 
         this._preventRecreatingFiles = true;
@@ -847,23 +820,23 @@ var FileUploader = Editor.inherit({
         this._doPreventInputChange = true;
         this._$fileInput.val("");
         this._doPreventInputChange = false;
-    },
+    }
 
-    _toggleFileUploaderEmptyClassName: function() {
+    _toggleFileUploaderEmptyClassName() {
         this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length || this._hasInvalidFile(this._files));
-    },
-    _hasInvalidFile: function(files) {
-        for(var i = 0; i < files.length; i++) {
+    }
+    _hasInvalidFile(files) {
+        for(let i = 0; i < files.length; i++) {
             if(!files[i].isValid()) {
                 return true;
             }
         }
         return false;
-    },
+    }
 
-    _getFileSize: function(size) {
-        var i = 0,
-            labels = [
+    _getFileSize(size) {
+        let i = 0;
+        const labels = [
                 messageLocalization.format("dxFileUploader-bytes"),
                 messageLocalization.format("dxFileUploader-kb"),
                 messageLocalization.format("dxFileUploader-Mb"),
@@ -877,10 +850,10 @@ var FileUploader = Editor.inherit({
         }
 
         return Math.round(size) + " " + labels[i];
-    },
+    }
 
-    _renderSelectButton: function() {
-        var $button = $("<div>")
+    _renderSelectButton() {
+        const $button = $("<div>")
             .addClass(FILEUPLOADER_BUTTON_CLASS)
             .appendTo(this._$inputWrapper);
 
@@ -897,30 +870,28 @@ var FileUploader = Editor.inherit({
             eventsEngine.off($button, "click");
             eventsEngine.on($button, "click", this._selectButtonClickHandler.bind(this));
         }
-    },
+    }
 
-    _selectButtonClickHandler: function() {
-        var that = this;
-
-        if(that.option("useNativeInputClick")) {
+    _selectButtonClickHandler() {
+        if(this.option("useNativeInputClick")) {
             return;
         }
 
-        if(that.option("disabled")) {
+        if(this.option("disabled")) {
             return false;
         }
 
-        that._isCustomClickEvent = true;
-        eventsEngine.trigger(that._$fileInput, "click");
-        that._isCustomClickEvent = false;
-    },
+        this._isCustomClickEvent = true;
+        eventsEngine.trigger(this._$fileInput, "click");
+        this._isCustomClickEvent = false;
+    }
 
-    _renderUploadButton: function() {
+    _renderUploadButton() {
         if(this.option("uploadMode") !== "useButtons") {
             return;
         }
 
-        var $uploadButton = $("<div>")
+        const $uploadButton = $("<div>")
             .addClass(FILEUPLOADER_BUTTON_CLASS)
             .addClass(FILEUPLOADER_UPLOAD_BUTTON_CLASS)
             .appendTo(this._$content);
@@ -931,17 +902,17 @@ var FileUploader = Editor.inherit({
             type: this.option("_uploadButtonType"),
             integrationOptions: {}
         });
-    },
+    }
 
-    _uploadButtonClickHandler: function() {
+    _uploadButtonClickHandler() {
         this._uploadFiles();
-    },
+    }
 
-    _shouldDragOverBeRendered: function() {
+    _shouldDragOverBeRendered() {
         return this.option("uploadMode") !== "useForm" || this.option("nativeDropSupported");
-    },
+    }
 
-    _renderInputContainer: function() {
+    _renderInputContainer() {
         this._$inputContainer = $("<div>")
             .addClass(FILEUPLOADER_INPUT_CONTAINER_CLASS)
             .appendTo(this._$inputWrapper);
@@ -958,20 +929,20 @@ var FileUploader = Editor.inherit({
         this._$inputLabel
             .addClass(FILEUPLOADER_INPUT_LABEL_CLASS)
             .appendTo(this._$inputContainer);
-    },
+    }
 
-    _renderInput: function() {
+    _renderInput() {
         if(this.option("useNativeInputClick")) {
             this._selectButton.option("template", this._selectButtonInputTemplate.bind(this));
         } else {
             this._$fileInput.appendTo(this._$inputContainer);
             this._selectButton.option("template", "content");
         }
-    },
+    }
 
-    _selectButtonInputTemplate: function(data, content) {
-        var $content = $(content);
-        var $text = $("<span>")
+    _selectButtonInputTemplate(data, content) {
+        const $content = $(content);
+        const $text = $("<span>")
             .addClass("dx-button-text")
             .text(data.text);
 
@@ -980,15 +951,15 @@ var FileUploader = Editor.inherit({
             .append(this._$fileInput);
 
         return $content;
-    },
+    }
 
-    _renderInputWrapper: function() {
+    _renderInputWrapper() {
         this._$inputWrapper = $("<div>")
             .addClass(FILEUPLOADER_INPUT_WRAPPER_CLASS)
             .appendTo(this._$content);
-    },
+    }
 
-    _renderDragEvents: function() {
+    _renderDragEvents() {
         eventsEngine.off(this._$inputWrapper, "." + this.NAME);
 
         if(!this._shouldDragOverBeRendered()) {
@@ -1001,13 +972,13 @@ var FileUploader = Editor.inherit({
         eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragover", this.NAME), this._dragOverHandler.bind(this));
         eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragleave", this.NAME), this._dragLeaveHandler.bind(this));
         eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("drop", this.NAME), this._dropHandler.bind(this));
-    },
+    }
 
-    _useInputForDrop: function() {
+    _useInputForDrop() {
         return this.option("nativeDropSupported") && this.option("uploadMode") === "useForm";
-    },
+    }
 
-    _dragEnterHandler: function(e) {
+    _dragEnterHandler(e) {
         if(this.option("disabled")) {
             return false;
         }
@@ -1019,15 +990,15 @@ var FileUploader = Editor.inherit({
         this._updateEventTargets(e);
 
         this.$element().addClass(FILEUPLOADER_DRAGOVER_CLASS);
-    },
+    }
 
-    _dragOverHandler: function(e) {
+    _dragOverHandler(e) {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
-    },
+    }
 
-    _dragLeaveHandler: function(e) {
+    _dragLeaveHandler(e) {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
@@ -1037,10 +1008,10 @@ var FileUploader = Editor.inherit({
         if(!this._dragEventsTargets.length) {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
-    },
+    }
 
-    _updateEventTargets: function(e) {
-        var targetIndex = this._dragEventsTargets.indexOf(e.target),
+    _updateEventTargets(e) {
+        const targetIndex = this._dragEventsTargets.indexOf(e.target),
             isTargetExists = targetIndex !== -1;
 
         if(e.type === "dragenter") {
@@ -1048,9 +1019,9 @@ var FileUploader = Editor.inherit({
         } else {
             isTargetExists && this._dragEventsTargets.splice(targetIndex, 1);
         }
-    },
+    }
 
-    _dropHandler: function(e) {
+    _dropHandler(e) {
         this._dragEventsTargets = [];
         this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
 
@@ -1060,7 +1031,7 @@ var FileUploader = Editor.inherit({
 
         e.preventDefault();
 
-        var fileList = e.originalEvent.dataTransfer.files,
+        const fileList = e.originalEvent.dataTransfer.files,
             files = this._getFiles(fileList);
 
         if(!this.option("multiple") && files.length > 1) {
@@ -1072,44 +1043,42 @@ var FileUploader = Editor.inherit({
         if(this.option("uploadMode") === "instantly") {
             this._uploadFiles();
         }
-    },
+    }
 
-    _filterFiles: function(files) {
+    _filterFiles(files) {
         if(!files.length) {
             return files;
         }
 
-        var accept = this.option("accept");
+        const accept = this.option("accept");
 
         if(!accept.length) {
             return files;
         }
 
-        var result = [],
+        const result = [],
             allowedTypes = this._getAllowedFileTypes(accept);
 
-        for(var i = 0, n = files.length; i < n; i++) {
+        for(let i = 0, n = files.length; i < n; i++) {
             if(this._isFileTypeAllowed(files[i], allowedTypes)) {
                 result.push(files[i]);
             }
         }
 
         return result;
-    },
+    }
 
-    _getAllowedFileTypes: function(acceptSting) {
+    _getAllowedFileTypes(acceptSting) {
         if(!acceptSting.length) {
             return [];
         }
 
-        return acceptSting.split(',').map(function(item) {
-            return item.trim();
-        });
-    },
+        return acceptSting.split(',').map(item => item.trim());
+    }
 
-    _isFileTypeAllowed: function(file, allowedTypes) {
-        for(var i = 0, n = allowedTypes.length; i < n; i++) {
-            var allowedType = allowedTypes[i];
+    _isFileTypeAllowed(file, allowedTypes) {
+        for(let i = 0, n = allowedTypes.length; i < n; i++) {
+            let allowedType = allowedTypes[i];
 
             if(allowedType[0] === ".") {
                 allowedType = allowedType.replace(".", "\\.");
@@ -1126,39 +1095,37 @@ var FileUploader = Editor.inherit({
             }
         }
         return false;
-    },
+    }
 
-    _renderWrapper: function() {
-        var $wrapper = $("<div>")
+    _renderWrapper() {
+        const $wrapper = $("<div>")
             .addClass(FILEUPLOADER_WRAPPER_CLASS)
             .appendTo(this.$element());
 
-        var $container = $("<div>")
+        const $container = $("<div>")
             .addClass(FILEUPLOADER_CONTAINER_CLASS)
             .appendTo($wrapper);
 
         this._$content = $("<div>")
             .addClass(FILEUPLOADER_CONTENT_CLASS)
             .appendTo($container);
-    },
+    }
 
-    _clean: function() {
+    _clean() {
         this._$fileInput.detach();
         delete this._$filesContainer;
-        this.callBase.apply(this, arguments);
-    },
+        super._clean();
+    }
 
-    _uploadFiles: function() {
+    _uploadFiles() {
         if(isFormDataSupported()) {
-            each(this._files, (function(_, file) {
-                this._uploadFile(file);
-            }).bind(this));
+            each(this._files, (_, file) => this._uploadFile(file));
         }
-    },
-    _uploadFile: function(file) {
+    }
+    _uploadFile(file) {
         this._uploadStrategy.upload(file);
-    },
-    _updateProgressBar: function(file, loadedFileData) {
+    }
+    _updateProgressBar(file, loadedFileData) {
         file.progressBar && file.progressBar.option({
             value: loadedFileData.loaded,
             showStatus: true
@@ -1172,25 +1139,25 @@ var FileUploader = Editor.inherit({
             event: loadedFileData.event,
             request: file.request
         });
-    },
-    _updateTotalProgress: function(totalFilesSize, totalLoadedFilesSize) {
-        var progress = totalFilesSize ? Math.round(totalLoadedFilesSize / totalFilesSize * 100) : 0;
+    }
+    _updateTotalProgress(totalFilesSize, totalLoadedFilesSize) {
+        const progress = totalFilesSize ? Math.round(totalLoadedFilesSize / totalFilesSize * 100) : 0;
         this.option("progress", progress);
         this._setLoadedSize(totalLoadedFilesSize);
-    },
+    }
 
-    _initStatusMessage: function(file) {
+    _initStatusMessage(file) {
         file.$statusMessage.css("display", "none");
-    },
+    }
 
-    _initCancelButton: function(file) {
-        file.cancelButton.option("onClick", function() {
+    _initCancelButton(file) {
+        file.cancelButton.option("onClick", () => {
             this._preventFilesUploading([file]);
             this._removeFile(file);
-        }.bind(this));
+        });
 
-        var hideCancelButton = function() {
-            setTimeout(function() {
+        const hideCancelButton = () => {
+            setTimeout(() => {
                 file.cancelButton.option({
                     visible: false
                 });
@@ -1199,63 +1166,63 @@ var FileUploader = Editor.inherit({
 
         file.onLoad.add(hideCancelButton);
         file.onError.add(hideCancelButton);
-    },
+    }
 
-    _createProgressBar: function(fileSize) {
+    _createProgressBar(fileSize) {
         return this._createComponent($("<div>"), ProgressBar, {
             value: undefined,
             min: 0,
             max: fileSize,
-            statusFormat: function(ratio) {
+            statusFormat(ratio) {
                 return Math.round(ratio * 100) + "%";
             },
             showStatus: false,
             statusPosition: "right"
         });
-    },
+    }
 
-    _getTotalFilesSize: function() {
+    _getTotalFilesSize() {
         if(!this._totalFilesSize) {
             this._totalFilesSize = 0;
-            each(this._files, function(_, file) {
+            each(this._files, (_, file) => {
                 this._totalFilesSize += file.value.size;
-            }.bind(this));
+            });
         }
         return this._totalFilesSize;
-    },
+    }
 
-    _getTotalLoadedFilesSize: function() {
+    _getTotalLoadedFilesSize() {
         if(!this._totalLoadedFilesSize) {
             this._totalLoadedFilesSize = 0;
-            each(this._files, function(_, file) {
+            each(this._files, (_, file) => {
                 this._totalLoadedFilesSize += file.loadedSize;
-            }.bind(this));
+            });
         }
         return this._totalLoadedFilesSize;
-    },
+    }
 
-    _setLoadedSize: function(value) {
+    _setLoadedSize(value) {
         this._totalLoadedFilesSize = value;
-    },
+    }
 
-    _recalculateProgress: function() {
+    _recalculateProgress() {
         this._totalFilesSize = 0;
         this._totalLoadedFilesSize = 0;
         this._updateTotalProgress(this._getTotalFilesSize(), this._getTotalLoadedFilesSize());
-    },
+    }
 
-    _getValidationMessageTarget: function() {
+    _getValidationMessageTarget() {
         return this._$inputWrapper;
-    },
+    }
 
-    _optionChanged: function(args) {
-        var value = args.value;
+    _optionChanged(args) {
+        const value = args.value;
 
         switch(args.name) {
             case "height":
             case "width":
                 this._updateFileNameMaxWidth();
-                this.callBase(args);
+                super._optionChanged(args);
                 break;
             case "value":
                 !value.length && this._$fileInput.val("");
@@ -1267,11 +1234,11 @@ var FileUploader = Editor.inherit({
 
                 this._recalculateProgress();
 
-                this.callBase(args);
+                super._optionChanged(args);
                 break;
             case "name":
                 this._initFileInput();
-                this.callBase(args);
+                super._optionChanged(args);
                 break;
             case "accept":
                 this._initFileInput();
@@ -1349,57 +1316,55 @@ var FileUploader = Editor.inherit({
                 this._invalidate();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
+    }
 
-    reset: function() {
+    reset() {
         this.option("value", []);
     }
-});
+}
 
 ///#DEBUG
 FileUploader.__internals = {
-    changeFileInputRenderer: function(renderer) {
+    changeFileInputRenderer(renderer) {
         renderFileUploaderInput = renderer;
     },
-    resetFileInputTag: function() {
-        renderFileUploaderInput = function() {
-            return $("<input>").attr("type", "file");
-        };
+    resetFileInputTag() {
+        renderFileUploaderInput = () => $("<input>").attr("type", "file");
     }
 };
 ///#ENDDEBUG
 
-var FileBlobReader = Class.inherit({
-    ctor: function(file, chunkSize) {
+class FileBlobReader {
+    constructor(file, chunkSize) {
         this.file = file;
         this.chunkSize = chunkSize;
         this.index = 0;
-    },
+    }
 
-    read: function() {
+    read() {
         if(!this.file) {
             return null;
         }
-        var result = this.createBlobResult(this.file, this.index, this.chunkSize);
+        const result = this.createBlobResult(this.file, this.index, this.chunkSize);
         if(result.isCompleted) {
             this.file = null;
         }
         this.index++;
         return result;
-    },
+    }
 
-    createBlobResult: function(file, index, chunkSize) {
-        var currentPosition = index * chunkSize;
+    createBlobResult(file, index, chunkSize) {
+        const currentPosition = index * chunkSize;
         return {
             blob: this.sliceFile(file, currentPosition, chunkSize),
             index: index,
             isCompleted: currentPosition + chunkSize >= file.size
         };
-    },
+    }
 
-    sliceFile: function(file, startPos, length) {
+    sliceFile(file, startPos, length) {
         if(file.slice) {
             return file.slice(startPos, startPos + length);
         }
@@ -1408,24 +1373,24 @@ var FileBlobReader = Class.inherit({
         }
         return null;
     }
-});
+}
 
-var FileUploadStrategyBase = Class.inherit({
-    ctor: function(fileUploader) {
+class FileUploadStrategyBase {
+    constructor(fileUploader) {
         this.fileUploader = fileUploader;
-    },
+    }
 
-    upload: function(file) {
+    upload(file) {
         if(file.isValid() && !file.uploadStarted) {
             this._prepareFileBeforeUpload(file);
             this._uploadCore(file);
         }
-    },
+    }
 
-    _uploadCore: function(file) {
-    },
+    _uploadCore(file) {
+    }
 
-    _prepareFileBeforeUpload: function(file) {
+    _prepareFileBeforeUpload(file) {
         if(file.$file) {
             this.fileUploader._createFileProgressBar(file);
         }
@@ -1435,13 +1400,13 @@ var FileUploadStrategyBase = Class.inherit({
         file.onError.add(this._onErrorHandler.bind(this, file));
         file.onAbort.add(this._onAbortHandler.bind(this, file));
         file.onProgress.add(this._onProgressHandler.bind(this, file));
-    },
+    }
 
-    _isStatusError: function(status) {
+    _isStatusError(status) {
         return 400 <= status && status < 500 || 500 <= status && status < 600;
-    },
+    }
 
-    _onUploadStarted: function(file, e) {
+    _onUploadStarted(file, e) {
         file.uploadStarted = true;
 
         this.fileUploader._uploadStartedAction({
@@ -1449,65 +1414,65 @@ var FileUploadStrategyBase = Class.inherit({
             event: e,
             request: file.request
         });
-    },
+    }
 
-    _onAbortHandler: function(file, e) {
+    _onAbortHandler(file, e) {
         this.fileUploader._uploadAbortedAction({
             file: file.value,
             event: e,
             request: file.request
         });
-    },
+    }
 
-    _onErrorHandler: function(file, e) {
+    _onErrorHandler(file, e) {
         this.fileUploader._setStatusMessage(file, "uploadFailedMessage");
         this.fileUploader._uploadErrorAction({
             file: file.value,
             event: e,
             request: file.request
         });
-    },
+    }
 
-    _onLoadedHandler: function(file, e) {
+    _onLoadedHandler(file, e) {
         this.fileUploader._setStatusMessage(file, "uploadedMessage");
         this.fileUploader._uploadedAction({
             file: file.value,
             event: e,
             request: file.request
         });
-    },
+    }
 
-    _onProgressHandler: function(file, e) {
+    _onProgressHandler(file, e) {
         if(file) {
-            var totalFilesSize = this.fileUploader._getTotalFilesSize();
-            var totalLoadedFilesSize = this.fileUploader._getTotalLoadedFilesSize();
+            const totalFilesSize = this.fileUploader._getTotalFilesSize();
+            const totalLoadedFilesSize = this.fileUploader._getTotalLoadedFilesSize();
 
-            var loadedSize = Math.min(e.loaded, file.value.size);
-            var segmentSize = loadedSize - file.loadedSize;
+            const loadedSize = Math.min(e.loaded, file.value.size);
+            const segmentSize = loadedSize - file.loadedSize;
             file.loadedSize = loadedSize;
 
             this.fileUploader._updateTotalProgress(totalFilesSize, totalLoadedFilesSize + segmentSize);
             this.fileUploader._updateProgressBar(file, this._getLoadedData(loadedSize, e.total, segmentSize, e));
         }
-    },
+    }
 
-    _getLoadedData: function(loaded, total, currentSegmentSize, event) {
+    _getLoadedData(loaded, total, currentSegmentSize, event) {
         return {
             loaded: loaded,
             total: total,
             currentSegmentSize: currentSegmentSize
         };
     }
-});
+}
 
-var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
-    ctor: function(fileUploader) {
-        this.callBase(fileUploader);
+class ChunksFileUploadStrategy extends FileUploadStrategyBase {
+    constructor(fileUploader) {
+        super(fileUploader);
         this.chunkSize = this.fileUploader.option("chunkSize");
-    },
+    }
 
-    _uploadCore: function(file) {
-        var realFile = file.value;
+    _uploadCore(file) {
+        const realFile = file.value;
         this._sendChunk(file, {
             name: realFile.name,
             loadedBytes: 0,
@@ -1517,27 +1482,27 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
             fileSize: realFile.size,
             count: Math.ceil(realFile.size / this.chunkSize)
         });
-    },
+    }
 
-    _sendChunk: function(file, chunksData) {
-        var chunk = chunksData.blobReader.read();
+    _sendChunk(file, chunksData) {
+        const chunk = chunksData.blobReader.read();
         if(chunk) {
             chunksData.loadedBytes += chunk.blob.size;
             ajax.sendRequest({
                 url: this.fileUploader.option("uploadUrl"),
                 method: this.fileUploader.option("uploadMethod"),
                 headers: this.fileUploader.option("uploadHeaders"),
-                beforeSend: function(xhr) {
+                beforeSend: xhr => {
                     file.request = xhr;
                 },
                 upload: {
-                    "onloadstart": function() {
+                    "onloadstart": () => {
                         if(!file.isStartLoad) {
                             file.isStartLoad = true;
                             file.onLoadStart.fire();
                         }
                     },
-                    "onabort": function() {
+                    "onabort": () => {
                         file.onAbort.fire();
                     }
                 },
@@ -1551,7 +1516,7 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
                     guid: chunksData.guid,
                     size: chunksData.fileSize
                 })
-            }).done(function() {
+            }).done(() => {
                 file.onProgress.fire({
                     loaded: chunksData.loadedBytes,
                     total: file.value.size
@@ -1561,17 +1526,17 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
                     file.onLoad.fire();
                 }
                 this._sendChunk(file, chunksData);
-            }.bind(this)).fail(function(e) {
+            }).fail(e => {
                 if(this._isStatusError(e.status)) {
                     file._isError = true;
                     file.onError.fire();
                 }
-            }.bind(this));
+            });
         }
-    },
+    }
 
-    _createFormData: function(options) {
-        var formData = new window.FormData();
+    _createFormData(options) {
+        const formData = new window.FormData();
         formData.append(options.blobName, options.blob);
         formData.append(FILEUPLOADER_CHUNK_META_DATA_NAME, JSON.stringify({
             FileName: options.fileName,
@@ -1582,25 +1547,25 @@ var ChunksFileUploadStrategy = FileUploadStrategyBase.inherit({
             FileGuid: options.guid
         }));
         return formData;
-    },
+    }
 
-    _getEvent: function(e) {
+    _getEvent(e) {
         return null;
     }
-});
+}
 
-var WholeFileUploadStrategy = FileUploadStrategyBase.inherit({
-    _uploadCore: function(file) {
+class WholeFileUploadStrategy extends FileUploadStrategyBase {
+    _uploadCore(file) {
         file.loadedSize = 0;
         ajax.sendRequest({
             url: this.fileUploader.option("uploadUrl"),
             method: this.fileUploader.option("uploadMethod"),
             headers: this.fileUploader.option("uploadHeaders"),
-            beforeSend: function(xhr) {
+            beforeSend: xhr => {
                 file.request = xhr;
             },
             upload: {
-                "onprogress": function(e) {
+                "onprogress": e => {
                     if(file._isError) {
                         return;
                     }
@@ -1608,36 +1573,36 @@ var WholeFileUploadStrategy = FileUploadStrategyBase.inherit({
                     file._isProgressStarted = true;
                     file.onProgress.fire(e);
                 },
-                "onloadstart": function() {
+                "onloadstart": () => {
                     file.onLoadStart.fire();
                 },
-                "onabort": function() {
+                "onabort": () => {
                     file.onAbort.fire();
                 }
             },
             data: this._createFormData(this.fileUploader.option("name"), file.value)
-        }).done(function() {
+        }).done(() => {
             file.onLoad.fire();
-        }).fail(function(e) {
+        }).fail(e => {
             if(this._isStatusError(e.status) || !file._isProgressStarted) {
                 file._isError = true;
                 file.onError.fire();
             }
-        }.bind(this));
-    },
+        });
+    }
 
-    _createFormData: function(fieldName, fieldValue) {
-        var formData = new window.FormData();
+    _createFormData(fieldName, fieldValue) {
+        const formData = new window.FormData();
         formData.append(fieldName, fieldValue);
         return formData;
-    },
+    }
 
-    _getLoadedData: function(loaded, total, segmentSize, event) {
-        var result = this.callBase(loaded, total, segmentSize, event);
+    _getLoadedData(loaded, total, segmentSize, event) {
+        const result = super._getLoadedData(loaded, total, segmentSize, event);
         result.event = event;
         return result;
     }
-});
+}
 
 registerComponent("dxFileUploader", FileUploader);
 

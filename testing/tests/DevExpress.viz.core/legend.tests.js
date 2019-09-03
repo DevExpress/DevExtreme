@@ -313,7 +313,7 @@ QUnit.test('Creates correct types of objects for series', function(assert) {
     for(var i = 0; i < this.data.length; i++) {
         marker = this.renderer.rect.getCall(i).returnValue;
         text = this.renderer.text.getCall(i).returnValue;
-        assert.deepEqual(marker.attr.firstCall.args[0], { 'fill': this.data[i].states.normal.fill, opacity: 1, class: "dxl-normal" }, 'Rect element not found for series ' + i);
+        assert.deepEqual(marker.attr.firstCall.args[0], { 'fill': this.data[i].states.normal.fill, opacity: 1 }, 'Rect element not found for series ' + i);
 
         assert.equal(text.typeOfNode, 'text', 'Text element for series ' + i);
         assert.equal(text.stub("setTitle").callCount, 0, 'Text element for series ' + i);
@@ -1539,9 +1539,9 @@ QUnit.test('Pass color & opacity to markers on create', function(assert) {
     this.createSimpleLegend()
         .draw(200, 200);
 
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], { fill: 'color_0', opacity: 0.1, class: "dxl-normal" });
-    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: 'color_1', opacity: 1, class: "dxl-normal" });
-    assert.deepEqual(this.renderer.rect.getCall(2).returnValue.attr.getCall(0).args[0], { fill: 'color_2', opacity: 0.2, class: "dxl-normal" });
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(0).args[0], { fill: 'color_0', opacity: 0.1 });
+    assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: 'color_1', opacity: 1 });
+    assert.deepEqual(this.renderer.rect.getCall(2).returnValue.attr.getCall(0).args[0], { fill: 'color_2', opacity: 0.2 });
 });
 
 QUnit.test('Pass color & opacity to markers on update', function(assert) {
@@ -1565,7 +1565,7 @@ QUnit.test('Pass color & opacity to markers on update', function(assert) {
 
     legend.draw();
 
-    assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.getCall(0).args[0], { fill: 'new_color_0', opacity: 0.5, class: "dxl-normal" });
+    assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.getCall(0).args[0], { fill: 'new_color_0', opacity: 0.5 });
 });
 
 QUnit.module("getLayoutOptions", environment);
@@ -1791,7 +1791,6 @@ QUnit.test("Change state - leads to redraw marker", function(assert) {
     const marker = this.renderer.rect.lastCall.returnValue;
     assert.equal(marker.append.lastCall.args[0].element, markersGroup.children[0].children[0].element);
     assert.deepEqual(marker._stored_settings, {
-        class: "dxl-hovered",
         fill: "url(#DevExpress)",
         height: 14,
         opacity: 1,
@@ -1826,7 +1825,6 @@ QUnit.test('applySelected', function(assert) {
     this.legend.applySelected(0);
 
     assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.fill, "url(#DevExpress)");
-    assert.equal(this.renderer.rect.lastCall.returnValue._stored_settings.class, "dxl-selected");
     assert.equal(this.renderer.lockHatching.lastCall.args[0], "black");
 });
 
@@ -1909,6 +1907,20 @@ QUnit.test('Erasing', function(assert) {
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
 });
 
+// T808328
+QUnit.test('Erase legend on update options', function(assert) {
+    this.createAndDrawLegend();
+    this.options.title = {
+        text: "title"
+    };
+    const titleGroup = this.renderer.g.firstCall.returnValue;
+    titleGroup.linkRemove.reset();
+    this.legend.update([]);
+
+    assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
+    assert.ok(this.renderer.g.getCall(1).returnValue.remove.lastCall.calledAfter(titleGroup.linkRemove.lastCall), [], 'group is removed');
+});
+
 QUnit.test('Check groups order', function(assert) {
     this.options.title = {
         text: "title"
@@ -1968,7 +1980,7 @@ QUnit.test('Colors', function(assert) {
 
     var createMarker = this.createMarker;
     $.each(this.data, function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, class: "dxl-normal" }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
     });
 });
 
@@ -1981,7 +1993,7 @@ QUnit.test('Common color', function(assert) {
 
     var createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'common-color', opacity: 1, class: "dxl-normal" }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'common-color', opacity: 1 }], String(i));
     });
 });
 
@@ -1994,7 +2006,7 @@ QUnit.test('No state color, no marker color - use default color', function(asser
 
     var createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'default-color', opacity: 1, class: "dxl-normal" }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: 'default-color', opacity: 1 }], String(i));
     });
 });
 
@@ -2028,7 +2040,7 @@ QUnit.test('Items in inverted order', function(assert) {
 
     var createMarker = this.createMarker;
     $.each(this.data.reverse(), function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, class: "dxl-normal" }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
     });
 });
 
@@ -2040,7 +2052,7 @@ QUnit.test('Customize order using customizeItems', function(assert) {
 
     var createMarker = this.createMarker;
     $.each(this.data.reverse(), function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, class: "dxl-normal" }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
     });
 });
 
@@ -2050,7 +2062,7 @@ QUnit.test('Process items return nothing - get original items', function(assert)
 
     var createMarker = this.createMarker;
     $.each(this.data, function(i, data) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1, class: "dxl-normal" }], String(i));
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: 1 }], String(i));
     });
 });
 
@@ -2064,7 +2076,7 @@ QUnit.test('Do not render hidden items', function(assert) {
 });
 
 QUnit.test('Can hide all items', function(assert) {
-    this.data[1] = this.data.map(i => {
+    this.data = this.data.map(i => {
         i.visible = false;
         return i;
     });
@@ -2087,7 +2099,7 @@ QUnit.test('markers centering(partial markers sizes).', function(assert) {
     createMarker = this.createMarker;
 
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: 1, class: "dxl-normal" }]);
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: 1 }]);
         assert.deepEqual(createMarker.getCall(i).args[1], i + 4, "marker size");
     });
 });
@@ -2104,7 +2116,7 @@ QUnit.test('markers centering(partial markers sizes). markerShape = circle', fun
 
     createMarker = this.createMarker;
     $.each(this.data, function(i) {
-        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: 1, class: "dxl-normal" }]);
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.lastCall.args, [{ fill: "color-" + (1 + i), opacity: 1 }]);
         assert.deepEqual(createMarker.getCall(i).args[1], i + 4, "marker size");
     });
 });
@@ -2559,14 +2571,15 @@ QUnit.test("Call template function", function(assert) {
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0], {
         id: 0,
         size: 14,
-        markerAttributes: {
+        marker: {
+            size: 14,
             fill: "color-1",
             opacity: 1,
-            class: "dxl-normal"
+            state: "normal"
         },
         states: {
             hover: {
-                class: "dxl-hovered",
+                state: "hovered",
                 fill: "hover-color",
                 hatching: {
                     step: 5,
@@ -2575,7 +2588,7 @@ QUnit.test("Call template function", function(assert) {
                 opacity: 0.2
             },
             selection: {
-                class: "dxl-selected",
+                state: "selected",
                 fill: "selection-color",
                 hatching: {
                     step: 5,
@@ -2585,7 +2598,7 @@ QUnit.test("Call template function", function(assert) {
             },
             normal: {
                 fill: "color-1",
-                class: "dxl-normal",
+                state: "normal",
                 opacity: 1
             }
         },
@@ -2601,6 +2614,41 @@ QUnit.test("Call second time when state changed", function(assert) {
     this.legend.applyHover(0);
 
     assert.equal(this.options.markerTemplate.callCount, 1);
-    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].markerAttributes.class, "dxl-hovered");
-    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].markerAttributes.opacity, 0.2);
+    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.state, "hovered");
+    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.2);
 });
+
+QUnit.test("can customize legendItem.marker.size", function(assert) {
+    this.options.customizeItems = items => {
+        items.forEach(i => i.marker.size = 60);
+    };
+    this.createAndDrawLegend();
+
+    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.size, 60);
+});
+
+// legendItem.size backward capability
+QUnit.test("can customize legendItem.size", function(assert) {
+    this.options.customizeItems = items => {
+        items.forEach(i => i.size = 60);
+    };
+    this.createAndDrawLegend();
+
+    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.size, 60);
+});
+
+
+QUnit.test("Pass customized item size to hover state", function(assert) {
+    this.options.customizeItems = items => {
+        items.forEach(i => i.marker.size = 60);
+    };
+
+    this.createAndDrawLegend();
+    this.options.markerTemplate.reset();
+
+    this.legend.applyHover(0);
+
+    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.state, "hovered");
+    assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.size, 60);
+});
+

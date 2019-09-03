@@ -1149,13 +1149,13 @@ QUnit.module("platform specific templates", {
     });
 
     QUnit.test("search best template", (assert) => {
-        devices.current({ platform: "win" });
+        devices.current({ platform: "android" });
         const $testContainer = $("#platformSpecificContainer").TestContainerWidget();
         assert.equal($testContainer.children().eq(0).text(), "common", "best template was chosen");
     });
 
     QUnit.test("container widget without best template", (assert) => {
-        devices.current({ platform: "win" });
+        devices.current({ platform: "android" });
         const $testContainer = $("#platformSpecificContainer2").TestContainerWidget();
         const instance = $testContainer.TestContainerWidget("instance");
 

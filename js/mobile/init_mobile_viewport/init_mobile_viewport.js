@@ -53,7 +53,7 @@ var initMobileViewport = function(options) {
 
     realDevice = devices.real();
 
-    if(support.touch && !(realDevice.platform === "win" && realDevice.version[0] === 10)) {
+    if(support.touch) {
         eventsEngine.off(domAdapter.getDocument(), ".dxInitMobileViewport");
         eventsEngine.on(domAdapter.getDocument(), "dxpointermove.dxInitMobileViewport", function(e) {
             var count = e.pointers.length,

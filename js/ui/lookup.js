@@ -485,7 +485,7 @@ var Lookup = DropDownList.inherit({
             },
             {
                 device: function(device) {
-                    return !devices.isSimulator() && devices.real().platform === "generic" && device.platform === "generic";
+                    return !devices.isSimulator() && devices.real().deviceType === "desktop" && device.platform === "generic";
                 },
                 options: {
                     /**
@@ -498,29 +498,6 @@ var Lookup = DropDownList.inherit({
                     * @default 'auto' @for desktop|iPad
                     */
                     popupHeight: "auto"
-                }
-            },
-            {
-                device: function(device) {
-                    return device.platform === "win" && device.phone && device.version && device.version[0] === 8;
-                },
-                options: {
-                    /**
-                    * @name dxLookupOptions.showCancelButton
-                    */
-                    showCancelButton: false,
-                    /**
-                    * @name dxLookupOptions.fullScreen
-                    */
-                    fullScreen: true
-                }
-            },
-            {
-                device: function(device) {
-                    return device.platform === "win" && !device.phone && device.version && device.version[0] === 8;
-                },
-                options: {
-                    popupWidth: function() { return $(window).width(); }
                 }
             },
             {

@@ -201,10 +201,11 @@ Series.prototype = {
         };
     },
 
-    setClippingParams: function(baseId, wideId, forceClipping) {
+    setClippingParams(baseId, wideId, forceClipping, clipLabels = true) {
         this._paneClipRectID = baseId;
         this._widePaneClipRectID = wideId;
         this._forceClipping = forceClipping;
+        this._clipLabels = clipLabels;
     },
 
     applyClip: function() {
@@ -345,8 +346,6 @@ Series.prototype = {
             p.dispose();
         });
     },
-
-    getErrorBarRangeCorrector: _noop,
 
     updateDataType: function(settings) {
         var that = this;
@@ -569,7 +568,7 @@ Series.prototype = {
 
     _setLabelGroupSettings: function(animationEnabled) {
         var settings = { "class": "dxc-labels" };
-        this._applyElementsClipRect(settings);
+        this._clipLabels && this._applyElementsClipRect(settings);
         this._applyClearingSettings(settings);
         animationEnabled && (settings.opacity = 0.001);
         this._labelsGroup.attr(settings).append(this._extGroups.labelsGroup);

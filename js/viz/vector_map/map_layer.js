@@ -1,42 +1,54 @@
-var noop = require("../../core/utils/common").noop,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    _Number = Number,
-    _String = String,
-    _abs = Math.abs,
-    _round = Math.round,
-    _min = Math.min,
-    _max = Math.max,
-    _sqrt = Math.sqrt,
-    DataHelperMixin = require("../../data_helper"),
-    _isFunction = require("../../core/utils/type").isFunction,
-    _isDefined = require("../../core/utils/type").isDefined,
-    _isArray = Array.isArray,
-    vizUtils = require("../core/utils"),
-    _parseScalar = vizUtils.parseScalar,
-    _patchFontOptions = vizUtils.patchFontOptions,
-    _normalizeEnum = vizUtils.normalizeEnum,
-    _noop = noop,
-    _extend = extend,
-    _each = each,
-    _concat = Array.prototype.concat,
+import { noop } from "../../core/utils/common";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import DataHelperMixin from "../../data_helper";
+import { isFunction as _isFunction } from "../../core/utils/type";
+import { isDefined as _isDefined } from "../../core/utils/type";
+import DeferredModule from "../../core/utils/deferred";
+import { parseScalar as _parseScalar,
+    patchFontOptions as _patchFontOptions,
+    normalizeEnum as _normalizeEnum
+} from "../core/utils";
 
-    TYPE_AREA = "area",
-    TYPE_LINE = "line",
-    TYPE_MARKER = "marker",
+const _noop = noop;
+const _extend = extend;
+const _each = each;
+const _concat = Array.prototype.concat;
 
-    STATE_DEFAULT = 0,
-    STATE_HOVERED = 1,
-    STATE_SELECTED = 2,
-    STATE_TO_INDEX = [0, 1, 2, 2],
+const TYPE_AREA = "area";
+const TYPE_LINE = "line";
+const TYPE_MARKER = "marker";
 
-    TOLERANCE = 1,
+const STATE_DEFAULT = 0;
+const STATE_HOVERED = 1;
+const STATE_SELECTED = 2;
+const STATE_TO_INDEX = [0, 1, 2, 2];
 
-    SELECTIONS = {
-        "none": null,
-        "single": -1,
-        "multiple": NaN
-    };
+const TOLERANCE = 1;
+
+const SELECTIONS = {
+    "none": null,
+    "single": -1,
+    "multiple": NaN
+};
+
+const _isArray = Array.isArray;
+const _Number = Number;
+const _String = String;
+const _abs = Math.abs;
+const _round = Math.round;
+const _min = Math.min;
+const _max = Math.max;
+const _sqrt = Math.sqrt;
+
+export function getMaxBound(arr) {
+    return arr.reduce((a, c) => {
+        return c ? [_min(a[0], c[0]),
+            _min(a[1], c[1]),
+            _max(a[2], c[2]),
+            _max(a[3], c[3])] : a;
+    }, arr[0]);
+}
 
 function getSelection(selectionMode) {
     var selection = _normalizeEnum(selectionMode);
@@ -75,6 +87,10 @@ ArraySource.prototype = {
 
     attributes: function(item) {
         return item.attributes;
+    },
+
+    getBBox: function(index) {
+        return arguments.length === 0 ? undefined : this.raw[index]["bbox"];
     }
 };
 
@@ -99,6 +115,10 @@ GeoJsonSource.prototype = {
 
     attributes: function(item) {
         return item.properties;
+    },
+
+    getBBox: function(index) {
+        return arguments.length === 0 ? this.raw["bbox"] : this.raw.features[index]["bbox"];
     }
 };
 
@@ -828,6 +848,10 @@ function createLayerProxy(layer, name, index) {
 
         getDataSource: function() {
             return layer.getDataSource();
+        },
+
+        getBounds() {
+            return layer.getBounds();
         }
     };
     return proxy;
@@ -858,10 +882,15 @@ var MapLayer = function(params, container, name, index) {
     that._handles = [];
     // The `_data` field may be accessed in the `setOptions` when data is not set
     that._data = new EmptySource();
+    that._dataSourceLoaded = null;
 };
 
 MapLayer.prototype = _extend({
     constructor: MapLayer,
+
+    getDataReadyCallback() {
+        return this._dataSourceLoaded;
+    },
 
     _onProjection: function() {
         var that = this;
@@ -879,6 +908,10 @@ MapLayer.prototype = _extend({
                 that._transform();
             }
         });
+    },
+
+    getData() {
+        return this._data;
     },
 
     _dataSourceLoadErrorHandler: function() {
@@ -926,6 +959,7 @@ MapLayer.prototype = _extend({
     setOptions: function(options) {
         var that = this;
         options = that._options = options || {};
+        that._dataSourceLoaded = new DeferredModule.Deferred();
         if("dataSource" in options && options.dataSource !== that._options_dataSource) {
             that._options_dataSource = options.dataSource;
             that._params.notifyDirty();
@@ -985,15 +1019,28 @@ MapLayer.prototype = _extend({
         context.str.updateGrouping(context);
         that._updateHandles();
         that._params.notifyReady();
+        that._dataSourceLoaded.resolve();
+        that._dataSourceLoaded = null;
     },
 
-    _destroyHandles: function() {
-        var handles = this._handles,
-            i,
-            ii = handles.length;
-        for(i = 0; i < ii; ++i) {
-            handles[i].dispose();
-        }
+    getBounds() {
+        return getMaxBound(this._handles.map(({ proxy }) =>
+            proxy.coordinates().map(coords => {
+                if(!_isArray(coords)) {
+                    return;
+                }
+                const initValue = coords[0];
+
+                return coords.reduce((min, c) => {
+                    return [_min(min[0], c[0]), _min(min[1], c[1]), _max(min[2], c[0]), _max(min[3], c[1])];
+                }, [initValue[0], initValue[1], initValue[0], initValue[1]]);
+            })
+        ).map(getMaxBound));
+    },
+
+    _destroyHandles() {
+        this._handles.forEach(h => h.dispose());
+
         if(this._context.selection) {
             this._context.selection.state = {};
         }
@@ -1073,15 +1120,8 @@ MapLayer.prototype = _extend({
         }
     },
 
-    getProxies: function() {
-        var handles = this._handles,
-            proxies = [],
-            i,
-            ii = proxies.length = handles.length;
-        for(i = 0; i < ii; ++i) {
-            proxies[i] = handles[i].proxy;
-        }
-        return proxies;
+    getProxies() {
+        return this._handles.map(p => p.proxy);
     },
 
     getProxy: function(index) {
@@ -1457,7 +1497,7 @@ function projectLineLabel(coordinates) {
     return resultData || [[], []];
 }
 
-function MapLayerCollection(params) {
+export function MapLayerCollection(params) {
     var that = this,
         renderer = params.renderer;
     that._params = params;
@@ -1469,6 +1509,7 @@ function MapLayerCollection(params) {
     that._background = renderer.rect().attr({ "class": "dxm-background" }).data(params.dataKey, { name: "background" }).append(renderer.root);
     that._container = renderer.g().attr({ "class": "dxm-layers", "clip-path": that._clip.id }).append(renderer.root).enableLinks();
     that._subscribeToTracker(params.tracker, renderer, params.eventTrigger);
+    that._dataReady = params.dataReady;
 }
 
 MapLayerCollection.prototype = {
@@ -1518,6 +1559,7 @@ MapLayerCollection.prototype = {
         const optionList = options ? (_isArray(options) ? options : [options]) : [];
         let layerByName = that._layerByName;
         let layers = that._layers;
+        let readyCallbacks = [];
         const needToCreateLayers = optionList.length !== layers.length || layers.some((l, i) => {
             const name = getName(optionList, i);
             return _isDefined(name) && name !== l.proxy.name;
@@ -1538,6 +1580,10 @@ MapLayerCollection.prototype = {
         layers.forEach((l, i) => {
             l.setOptions(optionList[i]);
         });
+        readyCallbacks = layers.map(l => {
+            return l.getDataReadyCallback();
+        });
+        readyCallbacks.length && DeferredModule.when.apply(undefined, readyCallbacks).done(that._dataReady);
     },
 
     _updateClip: function() {
@@ -1571,33 +1617,31 @@ MapLayerCollection.prototype = {
     }
 };
 
-exports.MapLayerCollection = MapLayerCollection;
-
 ///#DEBUG
-exports._TESTS_MapLayer = MapLayer;
-exports._TESTS_stub_MapLayer = function(stub) {
+export const _TESTS_MapLayer = MapLayer;
+export const _TESTS_stub_MapLayer = function(stub) {
     MapLayer = stub;
 };
-exports._TESTS_selectStrategy = selectStrategy;
-exports._TESTS_stub_selectStrategy = function(stub) {
+export const _TESTS_selectStrategy = selectStrategy;
+export const _TESTS_stub_selectStrategy = function(stub) {
     selectStrategy = stub;
 };
-exports._TESTS_MapLayerElement = MapLayerElement;
-exports._TESTS_stub_MapLayerElement = function(stub) {
+export const _TESTS_MapLayerElement = MapLayerElement;
+export const _TESTS_stub_MapLayerElement = function(stub) {
     MapLayerElement = stub;
 };
-exports._TESTS_createProxy = createProxy;
-exports._TESTS_stub_performGrouping = function(stub) {
+export const _TESTS_createProxy = createProxy;
+export const _TESTS_stub_performGrouping = function(stub) {
     performGrouping = stub;
 };
-exports._TESTS_performGrouping = performGrouping;
-exports._TESTS_stub_groupByColor = function(stub) {
+export const _TESTS_performGrouping = performGrouping;
+export const _TESTS_stub_groupByColor = function(stub) {
     groupByColor = stub;
 };
-exports._TESTS_groupByColor = groupByColor;
-exports._TESTS_stub_groupBySize = function(stub) {
+export const _TESTS_groupByColor = groupByColor;
+export const _TESTS_stub_groupBySize = function(stub) {
     groupBySize = stub;
 };
-exports._TESTS_groupBySize = groupBySize;
-exports._TESTS_findGroupingIndex = findGroupingIndex;
+export const _TESTS_groupBySize = groupBySize;
+export const _TESTS_findGroupingIndex = findGroupingIndex;
 ///#ENDDEBUG

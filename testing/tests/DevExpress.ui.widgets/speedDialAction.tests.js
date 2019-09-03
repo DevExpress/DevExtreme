@@ -1,10 +1,10 @@
 import $ from "jquery";
 import config from "core/config";
+import fx from "animation/fx";
 
 import "ui/speed_dial_action";
 import "common.css!";
 import "generic_light.css!";
-
 
 const { test } = QUnit;
 
@@ -19,6 +19,8 @@ QUnit.testStart(() => {
 
 const FAB_SELECTOR = ".dx-fa-button";
 const FAB_MAIN_SELECTOR = ".dx-fa-button-main";
+const FAB_LABEL_SELECTOR = ".dx-fa-button-label";
+const FAB_CONTENT_REVERSE_CLASS = "dx-fa-button-content-reverse";
 
 QUnit.module("create one action", () => {
     test("check rendering", (assert) => {
@@ -123,6 +125,9 @@ QUnit.module("create multiple actions", (hooks) => {
 });
 
 QUnit.module("modify global action button config", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
@@ -137,6 +142,7 @@ QUnit.module("modify global action button config", (hooks) => {
             }
         });
 
+        fx.off = false;
     }),
 
     test("check main fab rendering", (assert) => {
@@ -200,9 +206,14 @@ QUnit.module("modify global action button config", (hooks) => {
 });
 
 QUnit.module("add or remove action buttons", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
+
+        fx.off = false;
     }),
 
     test("check main fab rendering", (assert) => {
@@ -385,6 +396,91 @@ QUnit.module("add visible option", (hooks) => {
 
         assert.equal($fabMainContent.offset().top, 0, "correct position top");
         assert.equal($fabMainContent.offset().left, 0, "correct position left");
+    });
+});
+
+QUnit.module("add label option", (hooks) => {
+    let firstSDA;
+    let secondSDA;
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
+    hooks.afterEach(() => {
+        firstSDA && firstSDA.dispose();
+        secondSDA && secondSDA.dispose();
+
+        fx.off = false;
+    }),
+    test("check rendering if one action", (assert) => {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
+
+        assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), "first action", "FAB has label");
+        assert.ok($(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB has class");
+
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "default position top doesn't change if FAB has label");
+        assert.roughEqual($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), 1, "default position left doesn't change if FAB has label");
+    }),
+
+    test("check rendering if multiple actions", (assert) => {
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            label: "second action"
+        }).dxSpeedDialAction("instance");
+
+        const $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).length, 0, "FAB hasn't label if create second SDA");
+        assert.ok(!$(FAB_MAIN_SELECTOR).hasClass("dx-fa-button-with-label"), "FAB hasn't class if create second SDA");
+        assert.equal($(FAB_SELECTOR).find(FAB_LABEL_SELECTOR).eq(0).text(), "first action", "first SDA has label");
+        assert.equal($(FAB_SELECTOR).find(FAB_LABEL_SELECTOR).eq(1).text(), "second action", "second SDA has label");
+        assert.ok(!$(FAB_SELECTOR).find(".dx-overlay-content").eq(0).hasClass(FAB_CONTENT_REVERSE_CLASS), "first SDA has label on the left");
+        assert.ok(!$(FAB_SELECTOR).find(".dx-overlay-content").eq(1).hasClass(FAB_CONTENT_REVERSE_CLASS), "second SDA has label on the left");
+        assert.equal($fabMainContent.offset().top, $(window).height() - ($fabMainContent.outerHeight() + 16), "position top doesn't change if FAB has lost label");
+        assert.equal($fabMainContent.offset().left, $(window).width() - ($fabMainContent.outerWidth() + 16), "position left doesn't change if FAB has lost label");
+    }),
+
+    test("check rendering if change position in config", (assert) => {
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            label: "first action"
+        }).dxSpeedDialAction("instance");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            label: "second action"
+        }).dxSpeedDialAction("instance");
+
+        config({
+            floatingActionButtonConfig: {
+                label: "fab",
+                position: {
+                    at: "left bottom",
+                    my: "left bottom",
+                    offset: "16 16"
+                }
+            }
+        });
+
+        firstSDA.repaint();
+
+        assert.equal($(FAB_MAIN_SELECTOR).find(FAB_LABEL_SELECTOR).text(), "fab", "FAB has label if set it in config");
+        assert.ok($(FAB_SELECTOR).find(".dx-overlay-content").eq(1).hasClass(FAB_CONTENT_REVERSE_CLASS), "first SDA has label on the right");
+        assert.ok($(FAB_SELECTOR).find(".dx-overlay-content").eq(2).hasClass(FAB_CONTENT_REVERSE_CLASS), "second SDA has label on the right");
     });
 });
 

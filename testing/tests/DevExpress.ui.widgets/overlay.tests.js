@@ -808,6 +808,19 @@ testModule("position", moduleConfig, () => {
         assert.strictEqual($overlayWrapper.css("position"), devices.real().ios ? "absolute" : "fixed");
     });
 
+    test("wrapper should have 100% width and height when shading is disabled", (assert) => {
+        $("#overlay").dxOverlay({
+            visible: true,
+            shading: false
+        });
+
+        const $overlayWrapper = viewport().find(toSelector(OVERLAY_WRAPPER_CLASS));
+        const wrapperStyle = getComputedStyle($overlayWrapper.get(0));
+
+        assert.strictEqual(parseInt(wrapperStyle.width), $(window).width(), "width is 100%");
+        assert.strictEqual(parseInt(wrapperStyle.height), $(window).height(), "height is 100%");
+    });
+
     test("overlay should be correctly animated with custom 'animation.show.to'", (assert) => {
         const $container = $("<div>").css({
             height: "500px",
@@ -859,17 +872,21 @@ testModule("position", moduleConfig, () => {
 
 
 testModule("shading", moduleConfig, () => {
-    test("shading should be present", (assert) => {
-        const overlay = $("#overlay").dxOverlay({
-            shading: true,
-            visible: true
-        }).dxOverlay("instance");
-        const $wrapper = $(overlay.$content().parent());
+    [true, false].forEach((value) => {
+        test("render shading", (assert) => {
+            const overlay = $("#overlay").dxOverlay({
+                shading: value,
+                visible: true
+            }).dxOverlay("instance");
+            const $wrapper = $(overlay.$content().parent());
 
-        assert.ok($wrapper.hasClass(OVERLAY_SHADER_CLASS));
+            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), value, "shader class is correct");
+            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, value ? "auto" : "none", "shading wrapper have correct pointer-events");
 
-        overlay.option("shading", false);
-        assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
+            overlay.option("shading", !value);
+            assert.strictEqual($wrapper.hasClass(OVERLAY_SHADER_CLASS), !value, "shader class is correct");
+            assert.strictEqual(getComputedStyle($wrapper.get(0)).pointerEvents, !value ? "auto" : "none", "shading wrapper have correct pointer-events");
+        });
     });
 
     test("shading height should change after container resize (B237292)", (assert) => {
@@ -1893,10 +1910,13 @@ testModule("close on target scroll", moduleConfig, () => {
     });
 
     test("overlay should be hidden on window scroll event on desktop", (assert) => {
-        const originalPlatform = devices.real().platform;
+        const originalDevice = {
+            platform: devices.real().platform,
+            deviceType: devices.real().deviceType
+        };
 
         try {
-            devices.real({ platform: "generic" });
+            devices.real({ platform: "generic", deviceType: "desktop" });
 
             const $overlay = $("#overlay").dxOverlay({
                 closeOnTargetScroll: true
@@ -1910,15 +1930,18 @@ testModule("close on target scroll", moduleConfig, () => {
             $(window).triggerHandler("scroll");
             assert.strictEqual($content.is(":visible"), false, "Overlay should be hidden after scroll event on window");
         } finally {
-            devices.real({ platform: originalPlatform });
+            devices.real(originalDevice);
         }
     });
 
     test("overlay should not be hidden on window scroll event on mobile devices", (assert) => {
-        const originalPlatform = devices.real().platform;
+        const originalDevice = {
+            platform: devices.real().platform,
+            deviceType: devices.real().deviceType
+        };
 
         try {
-            devices.real({ platform: "ios" });
+            devices.real({ platform: "ios", deviceType: "phone" });
 
             const $overlay = $("#overlay").dxOverlay({
                 closeOnTargetScroll: true
@@ -1932,7 +1955,7 @@ testModule("close on target scroll", moduleConfig, () => {
             $(window).triggerHandler("scroll");
             assert.strictEqual($content.is(":visible"), true, "Overlay should not be hidden after scroll event on window");
         } finally {
-            devices.real({ platform: originalPlatform });
+            devices.real(originalDevice);
         }
     });
 

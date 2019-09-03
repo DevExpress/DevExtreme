@@ -7,7 +7,6 @@ const Tooltip = tooltipModule.Tooltip;
 import vizUtils from "viz/core/utils";
 import rendererModule from "viz/core/renderers/renderer";
 import domAdapter from "core/dom_adapter";
-import windowUtils from "core/utils/window";
 
 QUnit.testStart(function() {
     $("<div>")
@@ -277,10 +276,11 @@ QUnit.test("Body has vertical scroll", function(assert) {
 
 QUnit.test("Body has horizontal scroll", function(assert) {
     const container = $(`<div style="width: 4000px; height: 600px;"></div>`).appendTo(domAdapter.getDocument().body);
-    const window = windowUtils.getWindow();
-    const scrollLeft = window.pageXOffset;
-
-    window.pageXOffset = 3000;
+    const documentElement = domAdapter.getDocument().documentElement;
+    const body = $("body").get(0);
+    const bodyScrollLeft = body.scrollLeft;
+    const documentScrollLeft = documentElement.scrollLeft;
+    body.scrollLeft = documentElement.scrollLeft = 3000;
 
     try {
         const tooltip = new Tooltip({ eventTrigger: function() { } });
@@ -288,10 +288,11 @@ QUnit.test("Body has horizontal scroll", function(assert) {
         // act
         tooltip.show({ description: "some-text" }, { x: 3100, y: 100 });
         // assert
-        assert.equal(tooltip._wrapper.get(0).style.left, "62px", "wrapper is moved to invisible area");
-        assert.equal(tooltip._wrapper.get(0).style.top, "41px", "wrapper is moved to invisible area");
+        assert.equal(tooltip._wrapper.get(0).style.left, "3062px");
+        assert.equal(tooltip._wrapper.get(0).style.top, "41px");
     } finally {
-        window.pageXOffset = scrollLeft;
+        body.scrollLeft = bodyScrollLeft;
+        documentElement.scrollLeft = documentScrollLeft;
         container.remove();
     }
 });

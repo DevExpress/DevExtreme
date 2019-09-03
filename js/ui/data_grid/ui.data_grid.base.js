@@ -68,6 +68,14 @@ var DataGrid = Widget.inherit({
         return result;
     },
 
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            "useKeyboard": { since: "19.2", alias: "keyboardNavigation.enabled" }
+        });
+    },
+
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {

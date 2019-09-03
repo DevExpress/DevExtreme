@@ -100,6 +100,13 @@ const config = {
         closeIcon: "close",
 
         /**
+        * @name globalConfig.floatingActionButtonConfig.label
+        * @type string
+        * @default ""
+        */
+        label: "",
+
+        /**
         * @name globalConfig.floatingActionButtonConfig.position
         * @type Enums.PositionAlignment|positionConfig|function
         * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"

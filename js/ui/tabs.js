@@ -151,7 +151,7 @@ const Tabs = CollectionWidget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().platform !== "generic";
+                    return devices.real().deviceType !== "desktop";
                 },
                 options: {
                     /**
@@ -162,7 +162,7 @@ const Tabs = CollectionWidget.inherit({
                 }
             },
             {
-                device: { platform: "generic" },
+                device: { deviceType: "desktop" },
                 options: {
                     /**
                     * @name dxTabsOptions.scrollByContent
@@ -454,7 +454,7 @@ const Tabs = CollectionWidget.inherit({
         if(this._holdInterval) clearInterval(this._holdInterval);
     },
 
-    _renderSelection: function(addedSelection) {
+    _updateSelection: function(addedSelection) {
         this._scrollable && this._scrollable.scrollToElement(this.itemElements().eq(addedSelection[0]), { left: 1, right: 1 });
     },
 

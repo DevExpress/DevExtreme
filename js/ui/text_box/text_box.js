@@ -89,7 +89,8 @@ var TextBox = TextEditor.inherit({
         }
 
         var maxLength = this.option("maxLength");
-        if(maxLength > 0) {
+        var isMaskSpecified = !!this.option("mask");
+        if(maxLength > 0 && !isMaskSpecified) {
             this._input().attr("maxLength", maxLength);
         } else {
             this._input().removeAttr("maxLength");
@@ -129,6 +130,10 @@ var TextBox = TextEditor.inherit({
             case "maxLength":
                 this._toggleMaxLengthProp();
                 this._renderMaxLengthHandlers();
+                break;
+            case "mask":
+                this.callBase(args);
+                this._toggleMaxLengthProp();
                 break;
             default:
                 this.callBase(args);
