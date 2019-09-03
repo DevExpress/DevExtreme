@@ -39,7 +39,7 @@ class ExcelJSTestHelper {
             if(gridCell[propertyName] !== "data") {
                 assert.deepEqual(excelCell.font, { bold: true }, `excelCell.font`);
             } else {
-                assert.deepEqual(excelCell.font, undefined, `excelCell.font`);
+                assert.strictEqual(excelCell.font, undefined, `excelCell.font`);
             }
         }
     }
