@@ -439,7 +439,7 @@ QUnit.module("dxAutocomplete", {
     });
 
     QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -547,7 +547,7 @@ QUnit.module("dxAutocomplete", {
     });
 
     QUnit.testInActiveWindow("key_tab for autocomplete current value", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -592,7 +592,7 @@ QUnit.module("dxAutocomplete", {
     QUnit.testInActiveWindow("enter - prevent default", (assert) => {
         assert.expect(1);
 
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1101,7 +1101,7 @@ QUnit.module("regressions", {
     });
 
     QUnit.testInActiveWindow("update input value on press complete key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1116,7 +1116,7 @@ QUnit.module("regressions", {
     });
 
     QUnit.testInActiveWindow("update input value on press enter key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }

@@ -318,7 +318,7 @@ QUnit.test("Cancel & Done buttons should not be rendered in details popup if edi
 });
 
 QUnit.test("Appointment should not be draggable & resizable if editing.allowUpdating is false", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }

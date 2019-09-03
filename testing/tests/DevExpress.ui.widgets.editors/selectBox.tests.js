@@ -472,7 +472,7 @@ QUnit.module("functionality", moduleSetup, () => {
     });
 
     QUnit.test("list item obtained focus only after press on control key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3510,7 +3510,7 @@ QUnit.module("regressions", moduleSetup, () => {
     });
 
     QUnit.test("press 'enter' key sets option value (T100679)", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3540,7 +3540,7 @@ QUnit.module("regressions", moduleSetup, () => {
     });
 
     QUnit.test("press 'space' key sets option value", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3570,7 +3570,7 @@ QUnit.module("regressions", moduleSetup, () => {
     });
 
     QUnit.test("press 'space' key shouldn't sets option value if SelectBox accept custom value", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3601,7 +3601,7 @@ QUnit.module("regressions", moduleSetup, () => {
     });
 
     QUnit.test("press 'space' key shouldn't sets option value if search is enabled", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -4394,7 +4394,7 @@ QUnit.module("keyboard navigation 'TAB' button", moduleSetup, () => {
     });
 
     QUnit.test("After highlighting item and pressing 'tab' it should be chosen", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -4478,7 +4478,7 @@ QUnit.module("keyboard navigation 'TAB' button", moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow("the 'tab' key press should focus the 'apply' button if the input is focused", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
         }

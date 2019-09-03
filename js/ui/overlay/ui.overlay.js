@@ -930,7 +930,7 @@ var Overlay = Widget.inherit({
             $parents = getElement(target).parents(),
             scrollEvent = eventUtils.addNamespace("scroll", this.NAME);
 
-        if(devices.real().platform === "generic") {
+        if(devices.real().deviceType === "desktop") {
             $parents = $parents.add(window);
         }
 

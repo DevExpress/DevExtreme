@@ -417,7 +417,7 @@ QUnit.test("dropdownOptions should not be cleared after repaint", function(asser
 QUnit.module("focus policy");
 
 QUnit.testInActiveWindow("editor should save focus on button clicking", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "blur preventing unnecessary on mobile devices");
         return;
     }
@@ -453,7 +453,7 @@ QUnit.testInActiveWindow("editor should save focus on button clicking", function
 });
 
 QUnit.testInActiveWindow("editor should save focus on clearbutton clicking, fieldTemplate is used", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "blur preventing unnecessary on mobile devices");
         return;
     }
@@ -696,7 +696,7 @@ QUnit.test("Keyboard navigation with field template", function(assert) {
 });
 
 QUnit.testInActiveWindow("Focus policy with field template", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "blur preventing unnecessary on mobile devices");
         return;
     }
@@ -767,7 +767,7 @@ QUnit.module("keyboard navigation inside popup", {
 });
 
 QUnit.testInActiveWindow("the first popup element should be focused on the 'tab' key press if the input is focused", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "desktop specific test");
         return;
     }
@@ -778,7 +778,7 @@ QUnit.testInActiveWindow("the first popup element should be focused on the 'tab'
 });
 
 QUnit.testInActiveWindow("the input should be focused on the 'tab' key press if the last element is focused", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "desktop specific test");
         return;
     }
@@ -789,7 +789,7 @@ QUnit.testInActiveWindow("the input should be focused on the 'tab' key press if 
 });
 
 QUnit.testInActiveWindow("the input should be focused on the 'tab+shift' key press if the first element is focused", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "desktop specific test");
         return;
     }
@@ -800,7 +800,7 @@ QUnit.testInActiveWindow("the input should be focused on the 'tab+shift' key pre
 });
 
 QUnit.testInActiveWindow("the last popup element should be focused on the 'tab+shift' key press if the input is focused", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "desktop specific test");
         return;
     }
@@ -811,7 +811,7 @@ QUnit.testInActiveWindow("the last popup element should be focused on the 'tab+s
 });
 
 QUnit.testInActiveWindow("default event should be prevented on the tab key press if the input is focused", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "desktop specific test");
         return;
     }
@@ -824,7 +824,7 @@ QUnit.testInActiveWindow("default event should be prevented on the tab key press
 });
 
 QUnit.testInActiveWindow("default event should be prevented on the tab key press if the last element is focused", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "desktop specific test");
         return;
     }
@@ -837,7 +837,7 @@ QUnit.testInActiveWindow("default event should be prevented on the tab key press
 });
 
 QUnit.testInActiveWindow("popup should be closed on the 'esc' key press if the button inside is focused", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "desktop specific test");
         return;
     }

@@ -295,7 +295,7 @@ var Popup = Overlay.inherit({
             },
             {
                 device: function(device) {
-                    return devices.real().platform === "generic" && device.platform === "generic";
+                    return devices.real().deviceType === "desktop" && device.platform === "generic";
                 },
                 options: {
                     /**
