@@ -223,7 +223,25 @@ var dxSankey = {
         * @type_function_param1 info:dxSankeyConnectionInfoObject
         * @type_function_return object
         */
-        customizeLinkTooltip: undefined
+        customizeLinkTooltip: undefined,
+        /**
+        * @name dxSankeyOptions.tooltip.linkTooltipTemplate
+        * @type template|function(info, element)
+        * @type_function_param1 info:dxSankeyConnectionInfoObject|any
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        linkTooltipTemplate: undefined,
+        /**
+        * @name dxSankeyOptions.tooltip.nodeTooltipTemplate
+        * @type template|function(info, element)
+        * @type_function_param1 info:dxSankeyNodeInfoObject|any
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        nodeTooltipTemplate: undefined
     },
     /**
     * @name dxSankeyOptions.node
