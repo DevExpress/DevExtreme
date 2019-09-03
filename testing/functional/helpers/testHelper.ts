@@ -16,11 +16,3 @@ export async function createWidget(widgetName: string, options: any, disableAnim
     if(disableAnimation)
         await (ClientFunction(() => (window as any).DevExpress.fx.off = true))();
 }
-
-export function getContainerFileUrl() {
-    return getFileUrl(`/testing/functional/tests/container.html`);
-}
-
-export function getFileUrl(relativePath: string) {
-    return `file://${process.cwd()}/${relativePath}`;
-}

@@ -1,84 +1,55 @@
-import { ClientFunction } from 'testcafe';
-import { getContainerFileUrl } from '../../../helpers/testHelper';
-
 import { dataSource } from './init/widget.data';
 import { createScheduler } from './init/widget.setup';
-
-import SchedulerTestHelper from '../../../helpers/scheduler.test.helper';
-
-const scheduler = new SchedulerTestHelper("#container");
+import url from '../../../helpers/getPageUrl';
+import Scheduler from '../../../model/scheduler';
 
 fixture `Drag-and-drop appointments in the Scheduler basic mode`
-	.page(getContainerFileUrl());
+    .page(url(__dirname, '../../container.html'));
 
 test(`Drag-n-drop in the day mode from 9am to 11am`, async t => {
-	const draggableAppointment = await scheduler.getAppointment(`Brochure Design Review`);
+    const scheduler = new Scheduler("#container");
+    const draggableAppointment = scheduler.getAppointment(`Brochure Design Review`);
 
 	await t
-		.dragToElement(draggableAppointment, scheduler.getDateTableCell(4, 0));
+		.dragToElement(draggableAppointment.element, scheduler.getDateTableCell(4, 0))
+		.expect(draggableAppointment.size.height).eql(`50px`)
+		.expect(draggableAppointment.date.startTime).eql(`11:00 AM`)
+        .expect(draggableAppointment.date.endTime).eql(`11:30 AM`);
 
-	await t
-		.expect(`50px`)
-		.eql(await scheduler.getAppointmentSize(draggableAppointment).height)
-
-		.expect(`11:00 AM`)
-		.eql(await scheduler.getAppointmentDate(draggableAppointment).startTime)
-
-		.expect(`11:30 AM`)
-		.eql(await scheduler.getAppointmentDate(draggableAppointment).endTime);
-
-}).before(async () => { await createScheduler('day', dataSource) });
+}).before(() => createScheduler('day', dataSource));
 
 test(`Drag-n-drop in the week mode from 9am to 11am`, async t => {
-	const draggableAppointment = await scheduler.getAppointment(`Brochure Design Review`);
+    const scheduler = new Scheduler("#container");
+    const draggableAppointment = scheduler.getAppointment(`Brochure Design Review`);
 
 	await t
-		.dragToElement(draggableAppointment, scheduler.getDateTableCell(4, 0));
+		.dragToElement(draggableAppointment.element, scheduler.getDateTableCell(4, 0))
+		.expect(draggableAppointment.size.height).eql(`50px`)
+		.expect(draggableAppointment.date.startTime).eql(`11:00 AM`)
+		.expect(draggableAppointment.date.endTime).eql(`11:30 AM`);
 
-	await t
-		.expect(`50px`)
-		.eql(await scheduler.getAppointmentSize(draggableAppointment).height)
-
-		.expect(`11:00 AM`)
-		.eql(await scheduler.getAppointmentDate(draggableAppointment).startTime)
-
-		.expect(`11:30 AM`)
-		.eql(await scheduler.getAppointmentDate(draggableAppointment).endTime);
-
-}).before(async () => { await createScheduler('week', dataSource) });
+}).before(() => createScheduler('week', dataSource));
 
 test(`Drag-n-drop in the workWeek mode from 9am to 11am`, async t => {
-	const draggableAppointment = await scheduler.getAppointment(`Brochure Design Review`);
+	const scheduler = new Scheduler("#container");
+    const draggableAppointment = scheduler.getAppointment(`Brochure Design Review`);
 
 	await t
-		.dragToElement(draggableAppointment, scheduler.getDateTableCell(4, 0));
+		.dragToElement(draggableAppointment.element, scheduler.getDateTableCell(4, 0))
+		.expect(draggableAppointment.size.height).eql(`50px`)
+		.expect(draggableAppointment.date.startTime).eql(`11:00 AM`)
+        .expect(draggableAppointment.date.endTime).eql(`11:30 AM`);
 
-	await t
-		.expect(`50px`)
-		.eql(await scheduler.getAppointmentSize(draggableAppointment).height)
-
-		.expect(`11:00 AM`)
-		.eql(await scheduler.getAppointmentDate(draggableAppointment).startTime)
-
-		.expect(`11:30 AM`)
-		.eql(await scheduler.getAppointmentDate(draggableAppointment).endTime);
-
-}).before(async () => { await createScheduler('workWeek', dataSource) });
+}).before(() => createScheduler('workWeek', dataSource));
 
 test(`Drag-n-drop in the month mode from Sun to Fri`, async t => {
-	const draggableAppointment = await scheduler.getAppointment(`Brochure Design Review`);
+	const scheduler = new Scheduler("#container");
+    const draggableAppointment = scheduler.getAppointment(`Brochure Design Review`);
 
 	await t
-		.dragToElement(draggableAppointment, scheduler.getDateTableCell(0, 4));
+		.dragToElement(draggableAppointment.element, scheduler.getDateTableCell(0, 4))
+        .expect(draggableAppointment.size.height).eql(`19px`)
+        .expect(draggableAppointment.date.startTime).eql(`9:00 AM`)
+		.expect(draggableAppointment.date.endTime).eql(`9:30 AM`);
 
-	await t
-		.expect(`19px`)
-		.eql(await scheduler.getAppointmentSize(draggableAppointment).height)
-
-		.expect(`9:00 AM`)
-		.eql(await scheduler.getAppointmentDate(draggableAppointment).startTime)
-
-		.expect(`9:30 AM`)
-		.eql(await scheduler.getAppointmentDate(draggableAppointment).endTime);
-
-}).before(async () => { await createScheduler('month', dataSource) })
+}).before(() => createScheduler('month', dataSource));

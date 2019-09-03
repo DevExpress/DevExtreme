@@ -485,7 +485,7 @@ var Lookup = DropDownList.inherit({
             },
             {
                 device: function(device) {
-                    return !devices.isSimulator() && devices.real().platform === "generic" && device.platform === "generic";
+                    return !devices.isSimulator() && devices.real().deviceType === "desktop" && device.platform === "generic";
                 },
                 options: {
                     /**

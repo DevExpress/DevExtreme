@@ -382,7 +382,7 @@ class FileUploader extends Editor {
                 }
             },
             {
-                device: () => devices.real().platform !== "generic",
+                device: () => devices.real().deviceType !== "desktop",
                 options: {
                     useDragOver: false
                 }
@@ -394,7 +394,7 @@ class FileUploader extends Editor {
                 }
             },
             {
-                device: () => browser.msie || devices.real().platform !== "generic",
+                device: () => browser.msie || devices.real().deviceType !== "desktop",
                 options: {
                     nativeDropSupported: false
                 }

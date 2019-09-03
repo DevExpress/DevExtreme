@@ -197,7 +197,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
         });
 
         const $dropDownButton = $dateBox.find(".dx-dropdowneditor-button");
-        const expectedButtonsNumber = devices.real().platform === "generic" ? 0 : 1;
+        const expectedButtonsNumber = devices.real().deviceType === "desktop" ? 0 : 1;
 
         assert.equal($dropDownButton.length, expectedButtonsNumber, "correct readOnly value");
     });
@@ -536,7 +536,7 @@ QUnit.module("focus policy", {}, () => {
     QUnit.test("dateBox should stay focused after value selecting in date strategy", assert => {
         assert.expect(1);
 
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -560,7 +560,7 @@ QUnit.module("focus policy", {}, () => {
     QUnit.test("dateBox should stay focused after value selecting in time strategy", assert => {
         assert.expect(1);
 
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -585,7 +585,7 @@ QUnit.module("focus policy", {}, () => {
     QUnit.test("dateBox should stay focused after value selecting in datetime strategy", assert => {
         assert.expect(1);
 
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -610,7 +610,7 @@ QUnit.module("focus policy", {}, () => {
     QUnit.test("calendar in datebox should not have tabIndex attribute", assert => {
         assert.expect(1);
 
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -628,7 +628,7 @@ QUnit.module("focus policy", {}, () => {
     });
 
     QUnit.testInActiveWindow("set focus on 'tab' key from editor to overlay and inversely", assert => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -2994,7 +2994,7 @@ QUnit.module("datebox with time component", {
     });
 
     QUnit.test("DateBox renders the right stylingMode for editors in time view overlay (default)", assert => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3015,7 +3015,7 @@ QUnit.module("datebox with time component", {
     });
 
     QUnit.test("DateBox renders the right stylingMode for editors in time view overlay (custom)", assert => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3499,7 +3499,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("home/end should not be handled", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3516,7 +3516,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("arrow keys control", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3547,7 +3547,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("apply contoured date on enter for date and datetime mode", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3662,7 +3662,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("the 'shift+tab' key press leads to the cancel button focus if the input is focused", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
         }
@@ -3690,33 +3690,31 @@ QUnit.module("keyboard navigation", {
 
 QUnit.module("aria accessibility", {}, () => {
     QUnit.test("aria-activedescendant on combobox should point to the active list item (date view)", assert => {
-        const isGeneric = devices.real().platform === "generic";
-
-        if(isGeneric) {
-            const $element = $("#dateBox").dxDateBox({
-                value: new Date(2008, 7, 8, 5, 0),
-                opened: true,
-                pickerType: "calendar"
-            });
-
-            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const keyboard = keyboardMock($input);
-
-            keyboard.keyDown("right");
-
-            const $contouredCell = $(".dx-calendar-contoured-date");
-
-            assert.notEqual($input.attr("aria-activedescendant"), undefined, "aria-activedescendant exists");
-            assert.equal($input.attr("aria-activedescendant"), $contouredCell.attr("id"), "aria-activedescendant equals contoured cell's id");
-        } else {
-            assert.ok(true, "skip test on devices");
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
         }
+        const $element = $("#dateBox").dxDateBox({
+            value: new Date(2008, 7, 8, 5, 0),
+            opened: true,
+            pickerType: "calendar"
+        });
+
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown("right");
+
+        const $contouredCell = $(".dx-calendar-contoured-date");
+
+        assert.notEqual($input.attr("aria-activedescendant"), undefined, "aria-activedescendant exists");
+        assert.equal($input.attr("aria-activedescendant"), $contouredCell.attr("id"), "aria-activedescendant equals contoured cell's id");
     });
 
     QUnit.test("aria-activedescendant on combobox should point to the active list item (time view)", assert => {
-        const isGeneric = devices.real().platform === "generic";
+        const isDesktop = devices.real().deviceType === "desktop";
 
-        if(isGeneric) {
+        if(isDesktop) {
             const $element = $("#dateBox").dxDateBox({
                 type: "time",
                 pickerType: "list",

@@ -410,7 +410,7 @@ QUnit.module("position", {
 });
 
 QUnit.test("check default position", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "unnecessary test on mobile devices");
         return;
     }

@@ -208,11 +208,6 @@ QUnit.module("general", {}, () => {
     });
 
     QUnit.testInActiveWindow("input is focused after click on the 'clear' button", (assert) => {
-        if(devices.real().win) { // TODO: check test after update wp8 on farm) {
-            assert.ok(true, "if window is inactive we do not test the case");
-            return;
-        }
-
         const $element = $("#texteditor").dxTextEditor({
             showClearButton: true,
             value: "Text"

@@ -1,12 +1,12 @@
-import { pathToFileURL } from 'url';
-import { join } from  'path';
+import url from '../../helpers/getPageUrl';
 import TagBox from '../../model/tagBox';
+import { createWidget } from '../../helpers/testHelper';
 
 fixture `TagBox`
-    .page(pathToFileURL(join(__dirname, './pages/tagBox.html')).href);
+    .page(url(__dirname, '../container.html'));
 
 test('Keyboard navigation should work then tagBox is focused or list is focused', async t => {
-    const tagBox = new TagBox('#tag-box');
+    const tagBox = new TagBox('#container');
 
     await t
         .click(tagBox.element)
@@ -51,10 +51,10 @@ test('Keyboard navigation should work then tagBox is focused or list is focused'
         .expect(firstItemCheckBox.isChecked).ok()
         .pressKey('enter')
         .expect(firstItemCheckBox.isChecked).notOk();
-});
+}).before(createTagBox);
 
 test('Select all checkbox should be focused by tab and closed by escape (T389453)', async t => {
-    const tagBox = new TagBox('#tag-box');
+    const tagBox = new TagBox('#container');
 
     await t
         .click(tagBox.element)
@@ -81,4 +81,13 @@ test('Select all checkbox should be focused by tab and closed by escape (T389453
         .pressKey('esc')
         .expect(tagBox.isFocused).ok()
         .expect(tagBox.opened).notOk();
-});
+}).before(createTagBox);
+
+function createTagBox(): Promise<void> {
+    return createWidget('dxTagBox', {
+        items: ['item1', 'item2', 'item3'],
+        showSelectionControls: true,
+        selectionMode: 'all',
+        applyValueMode: 'useButtons'
+    }, true);
+}

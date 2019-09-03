@@ -29,7 +29,7 @@ var supportPointerEvents = function() {
 var setGestureCover = callOnce(function() {
     var GESTURE_COVER_CLASS = "dx-gesture-cover";
 
-    var isDesktop = devices.real().platform === "generic";
+    var isDesktop = devices.real().deviceType === "desktop";
 
     if(!supportPointerEvents() || !isDesktop) {
         return noop;

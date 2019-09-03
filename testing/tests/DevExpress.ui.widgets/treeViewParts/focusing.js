@@ -63,7 +63,7 @@ QUnit.testInActiveWindow("widget should not have focus-state class after click o
 QUnit.test("focus on the item should move scroll position to this item (T226868)", function(assert) {
     assert.expect(1);
 
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "unnecessary test on mobile devices");
         return;
     }
