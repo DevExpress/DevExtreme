@@ -817,7 +817,6 @@ var EditingController = modules.ViewController.inherit((function() {
                 store = dataController.store(),
                 key = store && store.key(),
                 param = { data: {} },
-                // insertKey = {},
                 editMode = getEditMode(that);
 
             if(!store) {
