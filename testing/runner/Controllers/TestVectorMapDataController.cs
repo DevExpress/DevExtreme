@@ -18,8 +18,8 @@ namespace Runner.Controllers
 
         private const int NodeServerCheckTimeout = 100;
         private const int NodeServerKillTimeout = 200;
-        private const int NodeScriptTimeout = 3000;
-        private const int DirectoryKillTimeout = 3000;
+        private const int NodeScriptTimeout = 15000;
+        private const int DirectoryKillTimeout = 5000;
 
         private const string PathToDataDirectory = "testing/content/VectorMapData/";
 
