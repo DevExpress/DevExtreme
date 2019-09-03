@@ -1,9 +1,16 @@
 import { isDefined } from "../../core/utils/type";
 
-export default function exportDataGrid(options) {
+// docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
+const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
+
+// support.office.com/en-us/article/change-the-column-width-and-row-height-72f5e3cc-994d-43e8-ae58-9774a0905f46 - "Column.Max - 255"
+// support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3 - "Column width limit - 255 characters"
+const MAX_EXCEL_COLUMN_WIDTH = 255;
+
+function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled } = options;
+    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, keepColumnWidths = true } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -22,6 +29,10 @@ export default function exportDataGrid(options) {
             let columns = dataProvider.getColumns();
             let headerRowCount = dataProvider.getHeaderRowCount();
             let dataRowsCount = dataProvider.getRowsCount();
+
+            if(keepColumnWidths) {
+                _setColumnsWidth(worksheet, columns, result.from.column);
+            }
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(result.from.row + rowIndex);
@@ -65,4 +76,17 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
+function _setColumnsWidth(worksheet, columns, startColumnIndex) {
+    if(!isDefined(columns)) {
+        return;
+    }
+    for(let i = 0; i < columns.length; i++) {
+        const columnWidth = columns[i].width;
+        if((typeof columnWidth === "number") && isFinite(columnWidth)) {
+            worksheet.getColumn(startColumnIndex + i).width =
+                Math.min(MAX_EXCEL_COLUMN_WIDTH, Math.floor(columnWidth / MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
+        }
+    }
+}
 
+export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH };

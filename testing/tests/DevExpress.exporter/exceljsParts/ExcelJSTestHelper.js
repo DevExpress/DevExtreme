@@ -51,6 +51,12 @@ class ExcelJSTestHelper {
         }
     }
 
+    checkColumnWidths(expectedWidths, startColumnIndex) {
+        for(let i = 0; i < expectedWidths.length; i++) {
+            assert.equal(this.worksheet.getColumn(startColumnIndex + i).width, expectedWidths[i], `worksheet.getColumns(${i}).width`);
+        }
+    }
+
     checkRowAndColumnCount(total, actual) {
         assert.equal(this.worksheet.rowCount, total.row, "worksheet.rowCount");
         assert.equal(this.worksheet.columnCount, total.column, "worksheet.columnCount");
