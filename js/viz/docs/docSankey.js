@@ -227,7 +227,7 @@ var dxSankey = {
         /**
         * @name dxSankeyOptions.tooltip.linkTooltipTemplate
         * @type template|function(info, element)
-        * @type_function_param1 info:dxSankeyConnectionInfoObject|any
+        * @type_function_param1 info:dxSankeyConnectionInfoObject
         * @type_function_param2 element:dxElement
         * @type_function_return string|Node|jQuery
         * @default undefined
@@ -236,7 +236,7 @@ var dxSankey = {
         /**
         * @name dxSankeyOptions.tooltip.nodeTooltipTemplate
         * @type template|function(info, element)
-        * @type_function_param1 info:dxSankeyNodeInfoObject|any
+        * @type_function_param1 info:dxSankeyNodeInfoObject
         * @type_function_param2 element:dxElement
         * @type_function_return string|Node|jQuery
         * @default undefined

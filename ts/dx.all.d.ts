@@ -8940,9 +8940,9 @@ declare module DevExpress.viz {
         /** @name dxSankey.Options.tooltip.enabled */
         enabled?: boolean;
         /** @name dxSankey.Options.tooltip.linkTooltipTemplate */
-        linkTooltipTemplate?: DevExpress.core.template | ((info: dxSankeyConnectionInfoObject | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        linkTooltipTemplate?: DevExpress.core.template | ((info: dxSankeyConnectionInfoObject, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxSankey.Options.tooltip.nodeTooltipTemplate */
-        nodeTooltipTemplate?: DevExpress.core.template | ((info: dxSankeyNodeInfoObject | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        nodeTooltipTemplate?: DevExpress.core.template | ((info: dxSankeyNodeInfoObject, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxSankey */
     export class dxSankey extends BaseWidget {
