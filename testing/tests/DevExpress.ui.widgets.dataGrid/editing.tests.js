@@ -14717,3 +14717,226 @@ QUnit.test("The editCellTemplate should be called once for the form when adding 
     assert.strictEqual($(this.getRowElement(0)).find(".myEditor").length, 0, "row hasn't custom editor");
     assert.strictEqual($(this.getEditPopupContent()).find(".myEditor").length, 1, "form has custom editor");
 });
+
+QUnit.module("Promises in callbacks and events", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.array = [
+            { name: "Alex", age: 15, lastName: "John", phone: "555555", room: 1 },
+            { name: "Dan", age: 16, lastName: "Skip", phone: "553355", room: 2 },
+            { name: "Vadim", age: 17, lastName: "Dog", phone: "225555", room: 3 },
+            { name: "Dmitry", age: 18, lastName: "Cat", phone: "115555", room: 4 },
+            { name: "Sergey", age: 18, lastName: "Larry", phone: "550055", room: 5 },
+            { name: "Kate", age: 20, lastName: "Glock", phone: "501555", room: 6 },
+            { name: "Dan", age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
+        ];
+        this.columns = [{
+            dataField: "name",
+            setCellValue: (newData, value) => {
+                let deferred = $.Deferred();
+                this.deferred = deferred;
+                newData.name = value;
+                setTimeout(() =>{
+                    newData.age = 99;
+                    deferred.resolve();
+                }, 100);
+                return deferred;
+            }
+        }, "age", "lastName", "phone", "room"];
+        this.options = {
+            errorRowEnabled: true,
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: this.columns,
+            dataSource: this.array,
+            useKeyboard: true
+        };
+
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "gridView", "keyboardNavigation", "editing", "editorFactory", "headerPanel", "validating", "errorHandling"], {
+            initViews: true
+        });
+
+        this.find = function($element, selector) {
+            var $targetElement = $element.find(selector);
+            QUnit.assert.equal($targetElement.length, 1, 'one element with selector ' + '"' + selector + '" found');
+            return $targetElement;
+        };
+        this.click = function($element, selector) {
+            var $targetElement = this.find($element, selector);
+            var isLink = $targetElement.hasClass("dx-link");
+            $($targetElement).trigger(isLink ? "click" : "dxclick");
+            this.clock.tick();
+        };
+        this.editCell = function(rowIndex, columnIndex, text) {
+            let testElement = $("#container");
+            testElement.find("tbody > tr").eq(rowIndex).find("td").eq(columnIndex).trigger("dxclick"); // Edit
+            testElement.find("input").eq(0).val(text);
+            testElement.find("input").eq(0).trigger("change");
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Saving on enter key while editing cell with async setCellValue works correctly", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $("#container");
+
+    rowsView.render(testElement);
+    that.columnsController.init();
+
+    // act
+    this.editCell(0, 0, "Test");
+    this.clock.tick();
+
+    // assert
+    let $input = getInputElements(testElement).first();
+    $($input).trigger($.Event("keydown", { key: "Enter" }));
+    assert.equal(testElement.find("input").length, 1, "Editor in not closed until data is changed");
+
+    // act
+    this.clock.tick(100);
+
+    // assert
+    assert.equal(testElement.find("input").length, 0, "No cells in editing mode");
+    assert.equal(this.array[0].name, "Test", "First cell changed");
+    assert.equal(this.array[0].age, 99, "Second cell changed");
+});
+
+QUnit.test("Closing cell editor with async setCellValue works", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $("#container");
+
+    rowsView.render(testElement);
+    that.columnsController.init();
+
+    // act
+    this.editCell(0, 0, "Test");
+    this.editingController.closeEditCell();
+
+    // assert
+    assert.equal(testElement.find("input").length, 1, "Editor in not closed until data is changed");
+
+    // act
+    this.clock.tick(100);
+
+    // assert
+    assert.equal(testElement.find("input").length, 0, "No cells in editing mode");
+    assert.equal(this.array[0].name, "Test", "First cell changed");
+    assert.equal(this.array[0].age, 99, "Second cell changed");
+});
+
+QUnit.test("Cancel changes after closing cell editor with async setCellValue", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $("#container");
+
+    rowsView.render(testElement);
+    that.columnsController.init();
+
+    // act
+    this.editCell(0, 0, "Test");
+    this.editingController.closeEditCell();
+    this.clock.tick();
+    this.cancelEditData();
+
+    // assert
+    assert.equal(testElement.find("input").length, 0, "Editor is closed");
+
+    // act
+    this.clock.tick(100);
+
+    // assert
+    assert.notOk(this.hasEditData(), "no editData");
+    assert.equal(this.array[0].name, "Alex", "First cell is not changed");
+    assert.equal(this.array[0].age, 15, "Second cell is not changed");
+});
+
+QUnit.test("Changing editing cell save data when promises are used", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $("#container");
+
+    rowsView.render(testElement);
+    that.columnsController.init();
+
+    // act
+    this.editCell(0, 0, "Test");
+    testElement.find("tbody > tr").eq(1).find("td").eq(3).trigger("dxclick");
+
+    // assert
+    assert.ok($(this.getCellElement(0, 0)).hasClass("dx-editor-cell"), "Cell is still in editing mode");
+    assert.equal(testElement.find("input").length, 1, "Editor in not closed until data is changed");
+
+    // act
+    this.clock.tick(100);
+
+    // assert
+    assert.ok($(this.getCellElement(1, 3)).hasClass("dx-editor-cell"), "New editor created");
+    assert.equal(testElement.find("input").length, 1, "New cell in editing mode");
+    assert.equal(this.array[0].name, "Test", "First cell changed");
+    assert.equal(this.array[0].age, 99, "Second cell changed");
+});
+
+QUnit.test("Error row should be shown if promise returned from setCellValue is rejected", function(assert) {
+    // arrange
+    var that = this,
+        testElement = $("#container");
+
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.columnsController.init();
+
+    // act
+    this.editCell(0, 0, "Test");
+    this.editingController.closeEditCell();
+    this.clock.tick();
+
+    // assert
+    assert.equal(testElement.find("input").length, 1, "Editor is not closed");
+
+    // act
+    this.deferred.reject("TestError");
+    this.clock.tick(100);
+
+    // assert
+    assert.notOk(this.hasEditData(), "No edit data");
+    assert.equal(testElement.find("input").length, 1, "Editor is visible");
+    assert.equal(testElement.find(".dx-error-row").length, 1, "Error row is visible");
+    assert.equal(testElement.find(".dx-error-row .dx-error-message").text(), "TestError", "Error row text");
+});
+
+QUnit.test("Closing cell should work after promise returned from setCellValue is rejected", function(assert) {
+    // arrange
+    var that = this,
+        testElement = $("#container");
+
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.columnsController.init();
+
+    // act
+    this.editCell(0, 0, "Test");
+    this.deferred.reject("TestError");
+    this.clock.tick(100);
+    this.editingController.closeEditCell();
+    this.clock.tick();
+
+    // assert
+    assert.notOk(this.hasEditData(), "No edit data");
+    assert.equal(testElement.find("input").length, 0, "Editor is closed");
+    assert.equal(testElement.find(".dx-error-row").length, 0, "Error row is not visible");
+});
