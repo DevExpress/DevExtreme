@@ -93,7 +93,7 @@ exports.HorizontalHeadersArea = AreaItem.inherit({
     },
 
     hasScroll: function() {
-        var tableWidth = this._virtualContent ? this._virtualContentWidth : this._tableWidth;
+        var tableWidth = this._virtualContent && this._virtualContentHeight ? this._virtualContentWidth : this._tableWidth;
         if(this._groupWidth && tableWidth) {
             return (tableWidth - this._groupWidth) >= 1;
         }
@@ -194,7 +194,7 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
     },
 
     hasScroll: function() {
-        var tableHeight = this._virtualContent ? this._virtualContentHeight : this._tableHeight;
+        var tableHeight = this._virtualContent && this._virtualContentHeight ? this._virtualContentHeight : this._tableHeight;
         if(this._groupHeight && tableHeight) {
             return (tableHeight - this._groupHeight) >= 1;
         }
