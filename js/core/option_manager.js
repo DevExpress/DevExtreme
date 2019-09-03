@@ -105,7 +105,7 @@ export class OptionManager {
         });
     }
 
-    _setNormalizedValue(name, value, merge) {
+    _setPreparedValue(name, value, merge) {
         const previousValue = this._getValue(this._options, name, false);
 
         if(this._valuesEqual(name, previousValue, value)) {
@@ -118,7 +118,7 @@ export class OptionManager {
         this._changedCallbacks.fire(name, value, previousValue);
     }
 
-    _normalizePrimitiveValue(options, name, value) {
+    _setRelevantNames(options, name, value) {
         if(name) {
             const alias = this._normalizeName(name);
 
@@ -156,14 +156,14 @@ export class OptionManager {
         return name;
     }
 
-    _normalizeValue(options, name, value) {
+    _prepareRelevantNames(options, name, value) {
         if(typeUtils.isPlainObject(value)) {
             for(const valueName in value) {
-                this._normalizeValue(options, name + "." + valueName, value[valueName]);
+                this._prepareRelevantNames(options, name + "." + valueName, value[valueName]);
             }
         }
 
-        this._normalizePrimitiveValue(options, name, value);
+        this._setRelevantNames(options, name, value);
     }
 
     _getValue(options, name, unwrapObservables) {
@@ -200,6 +200,12 @@ export class OptionManager {
         return this._getValue(options, normalizedName, unwrapObservables);
     }
 
+    setValueSilently(options, value) {
+        this._deprecatedOptionsSuppressed = true;
+        this.setValue(options, value);
+        this._deprecatedOptionsSuppressed = false;
+    }
+
     setValue(options, value) {
         let name = options;
         if(typeof name === "string") {
@@ -208,10 +214,10 @@ export class OptionManager {
         }
         let optionName;
         for(optionName in options) {
-            this._normalizeValue(options, optionName, options[optionName]);
+            this._prepareRelevantNames(options, optionName, options[optionName]);
         }
         for(optionName in options) {
-            this._setNormalizedValue(optionName, options[optionName]);
+            this._setPreparedValue(optionName, options[optionName]);
         }
     }
 }
