@@ -6484,7 +6484,7 @@ declare module DevExpress.viz {
     /** @name dxBarGauge.Options.tooltip */
     export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
         /** @name dxBarGauge.Options.tooltip.contentTemplate */
-        contentTemplate?: DevExpress.core.template | ((scaleValue: { value?: number, valueText?: string }, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        contentTemplate?: DevExpress.core.template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxBarGauge.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
     }
