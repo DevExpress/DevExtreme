@@ -306,17 +306,43 @@ var Button = Widget.inherit({
         }
     },
 
-    _renderSubmitInput: function() {
-        var submitAction = this._createAction(function(args) {
-            var e = args.event,
-                validationGroup = ValidationEngine.getGroupConfig(args.component._findGroup());
+    _setDisabled: function(value) {
+        this.option("disabled", value);
+        this._needValidate = !value;
+    },
 
-            if(validationGroup && !validationGroup.validate().isValid) {
-                e.preventDefault();
+    _waitForValidationCompleting: function(complete) {
+        complete.then((result) => {
+            this._validationStatus = result.status;
+            if(this._validationStatus === "valid") {
+                this._$submitInput.get(0).click();
+            } else {
+                this._setDisabled(false);
             }
+            return result;
+        });
+    },
+
+    _renderSubmitInput: function() {
+        const submitAction = this._createAction((args) => {
+            const e = args.event;
+            if(this._needValidate) {
+                const validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
+                if(validationGroup) {
+                    const result = validationGroup.validate();
+                    this._validationStatus = result.status;
+                    if(this._validationStatus === "pending") {
+                        this._setDisabled(true);
+                        this._waitForValidationCompleting(result.complete);
+                    }
+                }
+            }
+            this._validationStatus !== "pending" && !this._needValidate && this._setDisabled(false);
+            this._validationStatus !== "valid" && e.preventDefault();
             e.stopPropagation();
         });
-
+        this._needValidate = true;
+        this._validationStatus = "valid";
         this._$submitInput = $("<input>")
             .attr("type", "submit")
             .attr("tabindex", -1)
