@@ -2987,7 +2987,7 @@ QUnit.test("Virtual scrolling should work on columns area if data is empty", fun
         // assert
         assert.ok(pivotGrid._scrollLeft, "pivotGrid's _scrollLeft value");
         assert.ok(scrollable.scrollLeft() > 0, "scrollLeft is not zero");
-        assert.equal(scrollable.scrollLeft(), 531, "scrollLeft is in max right position");
+        assert.roughEqual(scrollable.scrollLeft() + scrollable._container().width(), scrollable.$content().width(), 1, "scrollLeft is in max right position");
 
         done();
     };
@@ -3029,7 +3029,7 @@ QUnit.test("Virtual scrolling should work on rows area if data is empty", functi
         // assert
         assert.ok(pivotGrid._scrollTop, "pivotGrid's _scrollTop value");
         assert.ok(scrollable.scrollTop() > 0, "scrollTop is not zero");
-        assert.equal(scrollable.scrollTop(), 72, "scrollTop is in max bottom position");
+        assert.roughEqual(scrollable.scrollTop() + scrollable._container().height(), scrollable.$content().height(), 1, "scrollTop is in max bottom position");
 
         done();
     };
