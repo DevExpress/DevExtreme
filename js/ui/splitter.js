@@ -4,7 +4,6 @@ import domAdapter from "../core/dom_adapter";
 import eventsEngine from "../events/core/events_engine";
 import pointerEvents from "../events/pointer";
 import { addNamespace } from "../events/utils";
-import { getWindow } from "../core/utils/window";
 import { isString } from "../core/utils/type";
 
 const SPLITTER_CLASS = "dx-splitter";
@@ -19,7 +18,6 @@ const SPLITTER_MODULE_NAMESPACE = "dxSplitterResizing";
 const SPLITTER_POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, SPLITTER_MODULE_NAMESPACE);
 const SPLITTER_POINTER_MOVE_EVENT_NAME = addNamespace(pointerEvents.move, SPLITTER_MODULE_NAMESPACE);
 const SPLITTER_POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, SPLITTER_MODULE_NAMESPACE);
-const SPLITTER_WINDOW_RESIZE_EVENT_NAME = addNamespace("resize", SPLITTER_MODULE_NAMESPACE);
 
 export default class SplitterControl extends Widget {
     _initMarkup() {
@@ -41,6 +39,8 @@ export default class SplitterControl extends Widget {
     }
 
     _render() {
+        super._render();
+
         this._detachEventHandlers();
         this._attachEventHandlers();
     }
@@ -55,7 +55,6 @@ export default class SplitterControl extends Widget {
         eventsEngine.on(this._$splitter, SPLITTER_POINTER_DOWN_EVENT_NAME, this._onMouseDownHandler.bind(this));
         eventsEngine.on(document, SPLITTER_POINTER_MOVE_EVENT_NAME, this._onMouseMoveHandler.bind(this));
         eventsEngine.on(document, SPLITTER_POINTER_UP_EVENT_NAME, this._onMouseUpHandler.bind(this));
-        eventsEngine.on(getWindow(), SPLITTER_WINDOW_RESIZE_EVENT_NAME, this._windowResizeHandler.bind(this));
     }
 
     _detachEventHandlers() {
@@ -63,14 +62,17 @@ export default class SplitterControl extends Widget {
         eventsEngine.off(this._$splitter, SPLITTER_POINTER_DOWN_EVENT_NAME);
         eventsEngine.off(document, SPLITTER_POINTER_MOVE_EVENT_NAME);
         eventsEngine.off(document, SPLITTER_POINTER_UP_EVENT_NAME);
-        eventsEngine.off(getWindow(), SPLITTER_WINDOW_RESIZE_EVENT_NAME);
     }
 
-    _windowResizeHandler(e) {
-        let leftPanelWidth = parseFloat(this._lastLeftPanelWidth);
-        const rightPanelWidth = 100 - leftPanelWidth;
+    _dimensionChanged() {
+        if(this._leftPanelPercentageWidth === undefined) {
+            let leftElementWidth = this._$leftElement.get(0).clientWidth;
+            this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(leftElementWidth);
+        }
+
+        const rightPanelWidth = 100 - this._leftPanelPercentageWidth;
         this._onApplyPanelSize({
-            leftPanelWidth: leftPanelWidth + "%",
+            leftPanelWidth: this._leftPanelPercentageWidth + "%",
             rightPanelWidth: rightPanelWidth + "%"
         });
         this.setSplitterPositionLeft(this._$leftElement.width());
@@ -79,10 +81,10 @@ export default class SplitterControl extends Widget {
     _onMouseDownHandler(e) {
         e.preventDefault();
         this.$element().removeClass(SPLITTER_INITIAL_STATE_CLASS);
+        this._$splitter.removeClass(SPLITTER_TRANSPARENT_CLASS);
         this._offsetX = e.offsetX <= this._$splitterBorder.width() ? e.offsetX : 0;
         this._isSplitterActive = true;
-        this._containerWidth = this._$container.width();
-        this._$splitter.removeClass(SPLITTER_TRANSPARENT_CLASS);
+        this._containerWidth = this._$container.get(0).clientWidth;
         this.setSplitterPositionLeft(this._getNewSplitterPositionLeft(e));
     }
 
@@ -91,27 +93,27 @@ export default class SplitterControl extends Widget {
             return;
         }
         const splitterPositionLeft = this._getNewSplitterPositionLeft(e);
-        const leftPanelWidth = splitterPositionLeft / this._containerWidth * 100;
+        const leftPanelWidth = this._convertLeftPanelWidthToPercentage(splitterPositionLeft);
         const rightPanelWidth = 100 - leftPanelWidth;
         this.setSplitterPositionLeft(splitterPositionLeft);
         this._onApplyPanelSize({
             leftPanelWidth: leftPanelWidth + "%",
             rightPanelWidth: rightPanelWidth + "%"
         });
+        this._leftPanelPercentageWidth = leftPanelWidth;
     }
 
     _onMouseUpHandler() {
         if(this._isSplitterActive) {
             this._$splitter.addClass(SPLITTER_TRANSPARENT_CLASS);
             this._isSplitterActive = false;
-            this._lastLeftPanelWidth = $(this._$leftElement).prop("style")["width"];
         }
     }
 
     _getNewSplitterPositionLeft(e) {
         let newSplitterPositionLeft = e.pageX - this._$container.offset().left - this._offsetX;
         newSplitterPositionLeft = Math.max(0, newSplitterPositionLeft);
-        newSplitterPositionLeft = Math.min(this._containerWidth - this._$splitterBorder.width(), newSplitterPositionLeft);
+        newSplitterPositionLeft = Math.min(this._containerWidth - this._$splitterBorder.get(0).clientWidth, newSplitterPositionLeft);
         return newSplitterPositionLeft;
     }
 
@@ -140,14 +142,18 @@ export default class SplitterControl extends Widget {
     _optionChanged(args) {
         switch(args.name) {
             case "initialLeftPanelWidth":
-                this._lastLeftPanelWidth = args.value / this._$container.width() * 100 + "%";
+                this._leftPanelPercentageWidth = this._convertLeftPanelWidthToPercentage(args.value);
+                this._dimensionChanged();
                 break;
             case "leftElement":
-                this._$leftElement = args.value;
-                this._lastLeftPanelWidth = this._$leftElement.width() / this._$container.width() * 100 + "%";
+                this.repaint();
                 break;
             default:
                 super._optionChanged(args);
         }
+    }
+
+    _convertLeftPanelWidthToPercentage(leftPanelWidth) {
+        return leftPanelWidth / this._$container.get(0).clientWidth * 100;
     }
 }

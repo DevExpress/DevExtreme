@@ -10,6 +10,8 @@ import SplitterControl from "../splitter";
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
 
+const DRAWER_PANEL_CONTENT_INITIAL = "dx-drawer-panel-content-initial";
+
 class FileManagerAdaptivityControl extends Widget {
 
     _initMarkup() {
@@ -31,14 +33,15 @@ class FileManagerAdaptivityControl extends Widget {
             opened: true,
             template: this._createDrawerTemplate.bind(this)
         });
+        $(this._drawer.content()).addClass(DRAWER_PANEL_CONTENT_INITIAL);
     }
 
     _createDrawerTemplate(container) {
         this.option("drawerTemplate")(container);
         this._splitter = this._createComponent("<div>", SplitterControl, {
             container: this.$element(),
-            leftElement: this._drawer.content(),
-            rightElement: this._drawer.viewContent(),
+            leftElement: $(this._drawer.content()),
+            rightElement: $(this._drawer.viewContent()),
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
         this._splitter.$element().appendTo(container);
@@ -47,7 +50,6 @@ class FileManagerAdaptivityControl extends Widget {
     _render() {
         super._render();
         this._checkAdaptiveState();
-        this._splitter.option({ leftElement: this._drawer.content() });
     }
 
     _onApplyPanelSize(e) {
@@ -59,15 +61,13 @@ class FileManagerAdaptivityControl extends Widget {
             this._updateDrawerDimensions();
             return;
         }
-        $(this._drawer.content()).find(".dx-filemanager-dirs-panel")
-            .css("minWidth", "unset")
-            .css("maxWidth", "unset");
-        $(this._drawer.content()).width(e.leftPanelWidth);
+        $(this._drawer.content()).removeClass(DRAWER_PANEL_CONTENT_INITIAL);
+        $(this._drawer.content()).css("width", e.leftPanelWidth);
         this._drawer.resizeContent();
     }
 
     _updateDrawerDimensions() {
-        this._drawer.content().css('width', '');
+        $(this._drawer.content()).css("width", "");
         this._drawer._initSize();
         this._drawer._strategy.setPanelSize(true);
     }
