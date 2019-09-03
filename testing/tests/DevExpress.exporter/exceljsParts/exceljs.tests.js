@@ -225,7 +225,7 @@ QUnit.module("API", moduleConfig, () => {
 
             QUnit.test("Header - 2 column, column.width: auto" + options, (assert) => {
                 const currentDevice = devices.current();
-                const isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "generic";
+                const isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "win";
                 const done = assert.async();
 
                 let dataGrid = $("#dataGrid").dxDataGrid({
