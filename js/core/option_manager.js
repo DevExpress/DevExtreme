@@ -25,8 +25,8 @@ export class OptionManager {
             return newValue.is(oldValue);
         }
 
-        var oldValueIsNaN = oldValue !== oldValue,
-            newValueIsNaN = newValue !== newValue;
+        const oldValueIsNaN = oldValue !== oldValue;
+        const newValueIsNaN = newValue !== newValue;
         if(oldValueIsNaN && newValueIsNaN) {
             return true;
         }
@@ -43,7 +43,7 @@ export class OptionManager {
     }
 
     _logWarningIfDeprecated(option) {
-        var info = this._deprecatedOptions[option];
+        const info = this._deprecatedOptions[option];
         if(info && !this._deprecatedOptionsSuppressed) {
             this._logWarningCallbacks.fire(option, info);
         }
