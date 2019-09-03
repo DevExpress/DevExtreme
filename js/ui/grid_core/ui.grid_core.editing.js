@@ -806,7 +806,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 rowsView = that.getView("rowsView"),
                 param = { data: {} },
                 parentRowIndex = dataController.getRowIndexByKey(parentKey),
-                insertKey,
+                insertKey = {},
                 editMode = getEditMode(that);
 
             if(!store) {
@@ -836,12 +836,15 @@ var EditingController = modules.ViewController.inherit((function() {
                 param.data.__KEY__ = String(new Guid());
             }
 
-            when(that._initNewRow(param)).done(() => {
-                insertKey = {
-                    pageIndex: dataController.pageIndex(),
-                    rowIndex: (parentRowIndex >= 0 ? parentRowIndex + 1 : (rowsView ? rowsView.getTopVisibleItemIndex(true) : 0)),
-                    parentKey: parentKey
-                };
+            insertKey.parentKey = parentKey;
+
+            when(that._initNewRow(param, insertKey)).done(() => {
+                insertKey.pageIndex = dataController.pageIndex();
+                insertKey.rowIndex = (parentRowIndex >= 0 ? parentRowIndex + 1 : (rowsView ? rowsView.getTopVisibleItemIndex(true) : 0));
+
+                if(insertKey.parentKey === undefined) {
+                    insertKey.parentKey = parentKey;
+                }
 
                 insertIndex = that._getInsertIndex();
 
