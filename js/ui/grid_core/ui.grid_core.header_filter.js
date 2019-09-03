@@ -212,7 +212,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
             }
 
             if(isFunction(headerFilterDataSource)) {
-                headerFilterDataSource.call(column, options);
+                options.dataSource = headerFilterDataSource.call(column, options);
             }
 
             origPostProcess = options.dataSource.postProcess;
