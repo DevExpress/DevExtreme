@@ -285,7 +285,7 @@ var GESTURE_COVER_CLASS = "dx-gesture-cover",
     $gestureCover = $("." + GESTURE_COVER_CLASS);
 
 var gestureCoverExists = function() {
-    return devices.real().platform === "generic" && $gestureCover.css("pointerEvents") !== undefined;
+    return devices.real().deviceType === "desktop" && $gestureCover.css("pointerEvents") !== undefined;
 };
 
 QUnit.test("wheel should be prevented on gesture cover (T319068)", function(assert) {

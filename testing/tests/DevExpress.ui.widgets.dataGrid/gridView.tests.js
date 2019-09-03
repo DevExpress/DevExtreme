@@ -565,7 +565,7 @@ function createGridView(options, userOptions) {
         var scrollerWidth = gridView.getView("rowsView").getScrollbarWidth();
         var device = devices.real();
 
-        if(device.ios || device.win || device.android) {
+        if(device.ios || device.android || (device.deviceType !== "desktop")) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);
@@ -778,7 +778,7 @@ function createGridView(options, userOptions) {
         headersTable = gridView.getView("columnHeadersView")._tableElement;
         scrollerWidth = gridView.getView("rowsView").getScrollbarWidth();
 
-        if(device.ios || device.win || device.android) {
+        if(device.ios || device.android || (device.deviceType !== "desktop")) {
             assert.strictEqual(scrollerWidth, 0);
         } else {
             assert.notStrictEqual(scrollerWidth, 0);

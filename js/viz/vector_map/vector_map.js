@@ -24,9 +24,9 @@ function generateDataKey() {
 
 function mergeBounds(sumBounds, dataBounds) {
     return dataBounds ? [Math.min(dataBounds[0], dataBounds[2], sumBounds[0]),
-        Math.max(dataBounds[1], dataBounds[3], sumBounds[1]),
+        Math.min(dataBounds[1], dataBounds[3], sumBounds[3]),
         Math.max(dataBounds[0], dataBounds[2], sumBounds[2]),
-        Math.min(dataBounds[1], dataBounds[3], sumBounds[3])] : sumBounds;
+        Math.max(dataBounds[1], dataBounds[3], sumBounds[1])] : sumBounds;
 }
 
 var dxVectorMap = BaseWidget.inherit({
@@ -64,21 +64,54 @@ var dxVectorMap = BaseWidget.inherit({
             notifyDirty: that._notifyDirty,
             notifyReady: that._notifyReady,
             dataReady() {
-                if(!that.option("bounds") && that.option("getBoundsFromData")) {
+                let bounds;
+                if(!that.option("getBoundsFromData")) {
+                    return;
+                }
+                if(!that.option("bounds")) {
                     that._preventProjectionEvents();
-                    let bounds = that._getBoundingBoxFromDataSource();
-
-                    if(!bounds) {
-                        const boundsByData = getMaxBound(that.getLayers().map(l => l.getBounds()));
-                        if(boundsByData) {
-                            bounds = [boundsByData[0], boundsByData[3], boundsByData[2], boundsByData[1]];
-                        }
-                    }
+                    bounds = that._getBoundsFromData();
                     that._projection.setBounds(bounds);
                     that._allowProjectionEvents();
                 }
+                if(!that.option("projection")) {
+                    bounds = bounds || that._getBoundsFromData();
+
+                    if(Math.ceil(bounds[0]) < -180 || Math.ceil(bounds[3]) < -90 || Math.floor(bounds[2]) > 180 || Math.floor(bounds[1]) > 90) {
+                        const longitudeLength = bounds[2] - bounds[0];
+                        const latitudeLength = bounds[1] - bounds[3];
+                        that._projection.setEngine({
+                            to(coordinates) {
+                                return [
+                                    (coordinates[0] - bounds[0]) * 2 / longitudeLength - 1,
+                                    (coordinates[1] - bounds[3]) * 2 / latitudeLength - 1
+                                ];
+                            },
+                            from(coordinates) {
+                                return [
+                                    (coordinates[0] + 1) * longitudeLength / 2 + bounds[0],
+                                    (coordinates[1] + 1) * latitudeLength / 2 + bounds[3]
+                                ];
+                            }
+                        });
+                    }
+                }
             }
         });
+    },
+
+    _getBoundsFromData() {
+        let bounds = this._getBoundingBoxFromDataSource();
+
+        if(!bounds) {
+            const boundsByData = getMaxBound(this.getLayers().map(l => l.getBounds()));
+            if(boundsByData) {
+                bounds = boundsByData;
+            }
+        }
+        bounds = bounds || [];
+        bounds = [bounds[0], bounds[3], bounds[2], bounds[1]];
+        return bounds;
     },
 
     _initLegendsControl: function() {

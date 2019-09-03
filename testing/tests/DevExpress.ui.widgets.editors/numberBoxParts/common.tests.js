@@ -604,7 +604,7 @@ QUnit.module("basics", {}, () => {
     });
 
     QUnit.test("T220209 - the 'displayValueFormatter' option when value is changed using keyboard", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "this test is actual only for desktop ");
             return;
         }
@@ -1433,7 +1433,7 @@ QUnit.module("options changed callbacks", {
     });
 
     QUnit.testInActiveWindow("onValueChanged option should get jQuery event as a parameter when mouse wheel is used", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "this test is actual only for desktop ");
             return;
         }

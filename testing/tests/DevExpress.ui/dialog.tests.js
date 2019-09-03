@@ -82,7 +82,7 @@ module("dialog tests", {
     });
 
     testInActiveWindow("first button in dialog obtained focus on shown", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "focus is absent on mobile devices");
             return;
         }

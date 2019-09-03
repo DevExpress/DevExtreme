@@ -192,6 +192,10 @@ class WebApiFileProvider extends FileProvider {
         return typeof hasSubDirs === "boolean" ? hasSubDirs : true;
     }
 
+    _getKeyExpr(options) {
+        return options.keyExpr || "key";
+    }
+
 }
 
 module.exports = WebApiFileProvider;
