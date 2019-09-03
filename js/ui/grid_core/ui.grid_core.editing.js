@@ -746,19 +746,30 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 when(fromPromise(options.promise))
                     .done(deferred.resolve)
-                    .fail(deferred.reject)
+                    .fail(createFailureHandler(deferred))
                     .fail((arg) => this._fireDataErrorOccurred(arg));
 
                 return deferred;
             }
         },
 
-        _setInsertKey: function(insertKey, insertIndex) {
-            var dataController = this._dataController,
+        _getInsertKey: function(parentKey) {
+            var that = this,
+                insertKey,
+                dataController = that._dataController,
+                rowsView = that.getView("rowsView"),
                 rows = dataController.items(),
-                row = rows[insertKey.rowIndex],
-                that = this,
+                parentRowIndex = dataController.getRowIndexByKey(parentKey),
+                row,
                 editMode = getEditMode(that);
+
+            insertKey = {
+                parentKey,
+                pageIndex: dataController.pageIndex(),
+                rowIndex: (parentRowIndex >= 0 ? parentRowIndex + 1 : (rowsView ? rowsView.getTopVisibleItemIndex(true) : 0))
+            };
+
+            row = rows[insertKey.rowIndex];
 
             if(row && (!row.isEditing && row.rowType === "detail" || row.rowType === "detailAdaptive")) {
                 insertKey.rowIndex++;
@@ -772,7 +783,9 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editRowIndex = insertKey.rowIndex + that._dataController.getRowIndexOffset();
             }
 
-            insertKey[INSERT_INDEX] = insertIndex;
+            insertKey[INSERT_INDEX] = that._getInsertIndex();
+
+            return insertKey;
         },
 
         _getInsertIndex: function() {
@@ -803,10 +816,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 dataController = that._dataController,
                 store = dataController.store(),
                 key = store && store.key(),
-                rowsView = that.getView("rowsView"),
                 param = { data: {} },
-                parentRowIndex = dataController.getRowIndexByKey(parentKey),
-                insertKey = {},
+                // insertKey = {},
                 editMode = getEditMode(that);
 
             if(!store) {
@@ -826,9 +837,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that.refresh();
 
-            var insertIndex = that._getInsertIndex();
-
-            if(editMode !== EDIT_MODE_BATCH && insertIndex > 1) {
+            if(!that._allowRowAdding()) {
                 return;
             }
 
@@ -836,30 +845,28 @@ var EditingController = modules.ViewController.inherit((function() {
                 param.data.__KEY__ = String(new Guid());
             }
 
-            insertKey.parentKey = parentKey;
-
-            when(that._initNewRow(param, insertKey)).done(() => {
-                insertKey.pageIndex = dataController.pageIndex();
-                insertKey.rowIndex = (parentRowIndex >= 0 ? parentRowIndex + 1 : (rowsView ? rowsView.getTopVisibleItemIndex(true) : 0));
-
-                if(insertKey.parentKey === undefined) {
-                    insertKey.parentKey = parentKey;
+            when(that._initNewRow(param, parentKey)).done(() => {
+                if(that._allowRowAdding()) {
+                    that._addRowCore(param.data, parentKey);
                 }
-
-                insertIndex = that._getInsertIndex();
-
-                if(editMode !== EDIT_MODE_BATCH && insertIndex > 1) {
-                    return;
-                }
-
-                that._setInsertKey(insertKey, insertIndex);
-
-                that._addRowCore(insertKey, param.data);
             });
         },
 
-        _addRowCore: function(insertKey, data) {
+        _allowRowAdding: function() {
             var that = this,
+                editMode = getEditMode(that),
+                insertIndex = that._getInsertIndex();
+
+            if(editMode !== EDIT_MODE_BATCH && insertIndex > 1) {
+                return false;
+            }
+
+            return true;
+        },
+
+        _addRowCore: function(data, parentKey) {
+            var that = this,
+                insertKey = that._getInsertKey(parentKey),
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
                 editMode = getEditMode(that);
 
