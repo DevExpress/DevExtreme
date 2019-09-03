@@ -436,10 +436,10 @@ class FileUploader extends Editor {
 
         if(this.option("chunkSize") > 0) {
             const uploadChunk = this.option("uploadChunk");
-            strategy = uploadChunk && isFunction(uploadChunk) ? new CustomChunksFileUploadStrategy(this) : new StandardChunksFileUploadStrategy(this);
+            strategy = uploadChunk && isFunction(uploadChunk) ? new CustomChunksFileUploadStrategy(this) : new DefaultChunksFileUploadStrategy(this);
         } else {
             const uploadFile = this.option("uploadFile");
-            strategy = uploadFile && isFunction(uploadFile) ? new CustomWholeFileUploadStrategy(this) : new StandardWholeFileUploadStrategy(this);
+            strategy = uploadFile && isFunction(uploadFile) ? new CustomWholeFileUploadStrategy(this) : new DefaultWholeFileUploadStrategy(this);
         }
 
         this._uploadStrategy = strategy;
@@ -1586,7 +1586,7 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     }
 }
 
-class StandardChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
+class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
 
     _sendChunkCore(file, chunksData, chunk) {
         return ajax.sendRequest({
@@ -1703,7 +1703,7 @@ class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
     }
 }
 
-class StandardWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
+class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
 
     _uploadFile(file) {
         return ajax.sendRequest({
