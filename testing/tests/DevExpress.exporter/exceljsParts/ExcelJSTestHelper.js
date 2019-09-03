@@ -26,8 +26,20 @@ class ExcelJSTestHelper {
                 if(propertyName === "groupSummaryItems") {
                     assert.deepEqual(gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
                 } else {
+                    this._checkPredefinedStyles(propertyName, gridCell, excelCell);
+
                     assert.strictEqual(gridCell[propertyName], expectedArgs[callIndex].gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
                 }
+            }
+        }
+    }
+
+    _checkPredefinedStyles(propertyName, gridCell, excelCell) {
+        if(propertyName === "rowType") {
+            if(gridCell[propertyName] !== "data") {
+                assert.deepEqual(excelCell.font, { bold: true }, `excelCell.font`);
+            } else {
+                assert.deepEqual(excelCell.font, undefined, `excelCell.font`);
             }
         }
     }

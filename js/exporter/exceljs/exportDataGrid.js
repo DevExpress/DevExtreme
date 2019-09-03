@@ -66,6 +66,8 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         const excelCell = row.getCell(startColumnIndex + cellIndex);
         excelCell.value = cellData.value;
 
+        _setPredefinedCellStyles(gridCell, excelCell);
+
         if(isDefined(customizeCell)) {
             customizeCell({
                 cell: excelCell,
@@ -86,6 +88,15 @@ function _setColumnsWidth(worksheet, columns, startColumnIndex) {
             worksheet.getColumn(startColumnIndex + i).width =
                 Math.min(MAX_EXCEL_COLUMN_WIDTH, Math.floor(columnWidth / MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
         }
+    }
+}
+
+function _setPredefinedCellStyles(gridCell, excelCell) {
+    let { rowType } = gridCell;
+
+    if(rowType !== "data") {
+        excelCell.font = excelCell.font || {};
+        excelCell.font.bold = true;
     }
 }
 
