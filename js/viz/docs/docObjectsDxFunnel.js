@@ -74,26 +74,3 @@ var legendItem = {
     */
     item: undefined
 };
-
-/**
-* @name FunnelTooltipInfo
-* @type object
-* @inherits BaseTooltipInfo
-*/
-var FunnelTooltipInfo = {
-    /**
-    * @name FunnelTooltipInfo.item
-    * @type dxFunnelItem
-    */
-    item: undefined,
-    /**
-    * @name FunnelTooltipInfo.percent
-    * @type number
-    */
-    percent: 0,
-    /**
-    * @name FunnelTooltipInfo.percentText
-    * @type string
-    */
-    percentText: "text"
-};

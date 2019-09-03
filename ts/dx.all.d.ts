@@ -5676,11 +5676,6 @@ declare module DevExpress.viz {
         /** @name BarGaugeLegendItem.item */
         item?: BarGaugeBarInfo;
     }
-    /** @name BarGaugeTooltipInfo */
-    export interface BarGaugeTooltipInfo extends BaseTooltipInfo {
-        /** @name BarGaugeTooltipInfo.index */
-        index?: number;
-    }
     /** @name BaseChart.Options */
     export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
         /** @name BaseChart.Options.adaptiveLayout */
@@ -5862,9 +5857,9 @@ declare module DevExpress.viz {
     /** @name BaseGauge.Options.tooltip */
     interface BaseGaugeTooltip extends BaseWidgetTooltip {
         /** @name BaseGauge.Options.tooltip.contentTemplate */
-        contentTemplate?: DevExpress.core.template | ((info: BaseTooltipInfo, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        contentTemplate?: DevExpress.core.template | ((scaleValue: { value?: number, valueText?: string }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseGauge.Options.tooltip.customizeTooltip */
-        customizeTooltip?: ((scaleValue: BaseTooltipInfo) => any);
+        customizeTooltip?: ((scaleValue: { value?: number, valueText?: string }) => any);
     }
     /** @name BaseGauge */
     export class BaseGauge extends BaseWidget {
@@ -5949,13 +5944,6 @@ declare module DevExpress.viz {
     export class BaseSparkline extends BaseWidget {
         constructor(element: Element, options?: BaseSparklineOptions)
         constructor(element: JQuery, options?: BaseSparklineOptions)
-    }
-    /** @name BaseTooltipInfo */
-    export interface BaseTooltipInfo {
-        /** @name BaseTooltipInfo.value */
-        value?: number;
-        /** @name BaseTooltipInfo.valueText */
-        valueText?: string;
     }
     /** @name BaseWidget.Options */
     export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
@@ -6174,15 +6162,6 @@ declare module DevExpress.viz {
     export interface FunnelLegendItem extends BaseLegendItem {
         /** @name FunnelLegendItem.item */
         item?: dxFunnelItem;
-    }
-    /** @name FunnelTooltipInfo */
-    export interface FunnelTooltipInfo extends BaseTooltipInfo {
-        /** @name FunnelTooltipInfo.item */
-        item?: dxFunnelItem;
-        /** @name FunnelTooltipInfo.percent */
-        percent?: number;
-        /** @name FunnelTooltipInfo.percentText */
-        percentText?: string;
     }
     /** @name GaugeIndicator */
     export interface GaugeIndicator extends CommonIndicator {
@@ -6505,9 +6484,9 @@ declare module DevExpress.viz {
     /** @name dxBarGauge.Options.tooltip */
     export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
         /** @name dxBarGauge.Options.tooltip.contentTemplate */
-        contentTemplate?: DevExpress.core.template | ((info: BarGaugeTooltipInfo, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        contentTemplate?: DevExpress.core.template | ((scaleValue: { value?: number, valueText?: string }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxBarGauge.Options.tooltip.customizeTooltip */
-        customizeTooltip?: ((scaleValue: BarGaugeTooltipInfo) => any);
+        customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
     }
     /** @name dxBarGauge */
     export class dxBarGauge extends BaseWidget {
@@ -8157,9 +8136,9 @@ declare module DevExpress.viz {
     /** @name dxFunnel.Options.tooltip */
     export interface dxFunnelTooltip extends BaseWidgetTooltip {
         /** @name dxFunnel.Options.tooltip.contentTemplate */
-        contentTemplate?: DevExpress.core.template | ((info: FunnelTooltipInfo, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        contentTemplate?: DevExpress.core.template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxFunnel.Options.tooltip.customizeTooltip */
-        customizeTooltip?: ((info: FunnelTooltipInfo) => any);
+        customizeTooltip?: ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => any);
     }
     /** @name dxFunnel */
     export class dxFunnel extends BaseWidget {
@@ -9135,9 +9114,9 @@ declare module DevExpress.viz {
     /** @name dxTreeMap.Options.tooltip */
     export interface dxTreeMapTooltip extends BaseWidgetTooltip {
         /** @name dxTreeMap.Options.tooltip.contentTemplate */
-        contentTemplate?: DevExpress.core.template | ((info: dxTreeMapTooltipInfo, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        contentTemplate?: DevExpress.core.template | ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxTreeMap.Options.tooltip.customizeTooltip */
-        customizeTooltip?: ((info: dxTreeMapTooltipInfo) => any);
+        customizeTooltip?: ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }) => any);
     }
     /** @name dxTreeMap */
     export class dxTreeMap extends BaseWidget {
@@ -9200,11 +9179,6 @@ declare module DevExpress.viz {
         showTooltip(): void;
         /** @name dxTreeMapNode.value() */
         value(): number;
-    }
-    /** @name dxTreeMapTooltipInfo */
-    export interface dxTreeMapTooltipInfo extends BaseTooltipInfo {
-        /** @name dxTreeMapTooltipInfo.node */
-        node?: dxTreeMapNode;
     }
     /** @name dxVectorMap.Options */
     export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {

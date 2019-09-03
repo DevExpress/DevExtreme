@@ -1051,20 +1051,3 @@ var legendItem = {
         state: "normal"
     }
 };
-
-/**
-* @name BaseTooltipInfo
-* @type object
-*/
-var TooltipInfo = {
-    /**
-    * @name BaseTooltipInfo.value
-    * @type number
-    */
-    value: undefined, 
-    /**
-    * @name BaseTooltipInfo.valueText
-    * @type string
-    */
-    valueText: "text"
-};

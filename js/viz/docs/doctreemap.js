@@ -408,14 +408,20 @@ var dxTreeMap = {
         * @name dxTreeMapOptions.tooltip.customizeTooltip
         * @default undefined
         * @type function(info)
-        * @type_function_param1 info:dxTreeMapTooltipInfo
+        * @type_function_param1 info:object
+        * @type_function_param1_field1 value:Number
+        * @type_function_param1_field2 valueText:string
+        * @type_function_param1_field3 node:dxTreeMapNode
         * @type_function_return object
         */
         customizeTooltip: undefined,
         /**
         * @name dxTreeMapOptions.tooltip.contentTemplate
         * @type template|function(info, element)
-        * @type_function_param1 info:dxTreeMapTooltipInfo
+        * @type_function_param1 info:object
+        * @type_function_param1_field1 value:Number
+        * @type_function_param1_field2 valueText:string
+        * @type_function_param1_field3 node:dxTreeMapNode
         * @type_function_param2 element:dxElement
         * @type_function_return string|Node|jQuery
         * @default undefined
