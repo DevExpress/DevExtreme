@@ -14754,7 +14754,9 @@ QUnit.module("Promises in callbacks and events", {
             },
             columns: this.columns,
             dataSource: this.array,
-            useKeyboard: true
+            keyboardNavigation: {
+                enabled: true
+            }
         };
 
         setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "gridView", "keyboardNavigation", "editing", "editorFactory", "headerPanel", "validating", "errorHandling"], {
