@@ -66,7 +66,7 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
         this._bottomPocketSize = considerPockets ? this._$bottomPocket[this._dimension]() : 0;
 
         this.callBase();
-
+        // console.log(this._minOffset + " " + this._bottomPocketSize);
         this._bottomBound = this._minOffset + this._bottomPocketSize;
     },
 
@@ -99,6 +99,7 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
     },
 
     _isReachBottom: function() {
+        // console.log(`location: ${this._location}; _bottomBound: ${this._bottomBound}`);
         return this._reachBottomEnabled && this._location <= this._bottomBound;
     },
 
