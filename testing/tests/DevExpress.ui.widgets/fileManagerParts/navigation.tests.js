@@ -179,14 +179,14 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
         this.wrapper.moveSplitter(-oldTreeViewWidth * 2);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, 0, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, fileManagerWidth);
+        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, fileManagerWidth, "Item view has correct width");
 
         const splitterWidth = this.wrapper.getSplitter().get(0).clientWidth;
         oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
         oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
         this.wrapper.moveSplitter(oldItemViewWidth * 2);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, fileManagerWidth - splitterWidth, "Dirs tree has correct width");
-        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, splitterWidth);
+        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, splitterWidth, "Item view has correct width");
     });
 
 });

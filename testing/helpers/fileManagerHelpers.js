@@ -174,7 +174,7 @@ export class FileManagerWrapper {
         const contentRect = $drawerContent[0].getBoundingClientRect();
         $splitter.trigger($.Event("dxpointermove", {
             pointerType,
-            pageX: contentRect.left + contentRect.width + delta
+            pageX: contentRect.right + delta
         }));
 
         $splitter.trigger($.Event("dxpointerup", { pointerType }));
