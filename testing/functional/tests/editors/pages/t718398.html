@@ -10,14 +10,21 @@
         <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
     </head>
     <body>
+        <div id="button"></div>
+        <br />
         <input id="input" type="text"/>
         <div id="list"></div>
         <script>
             $(function(){
-                $("#list").dxList({
+                const list = $('#list').dxList({
                     items: ['item1', 'item2', 'item3'],
                     showSelectionControls: true,
-                    selectionMode: "all"
+                    selectionMode: 'all'
+                }).dxList('instance');
+
+                $('#button').dxButton({
+                    text: 'Swich selection mode',
+                    onClick: () => list.option('selectionMode',  'single')
                 });
             });
         </script>
