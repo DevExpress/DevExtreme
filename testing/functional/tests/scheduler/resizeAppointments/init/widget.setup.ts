@@ -16,7 +16,7 @@ export const createScheduler = (currentView: string, dataSource: Array<any>, fir
 				label: "Color"
 			}
 		],
-		width: 1666,
+		width: 1402,
 		height: 833,
 		startDayHour: 9,
 		firstDayOfWeek: firstDayOfWeek,

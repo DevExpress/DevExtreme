@@ -80,10 +80,19 @@ QUnit.test("Layer collection", function(assert) {
 
 QUnit.test("Set bounds when data ready called. Without bounds in options", function(assert) {
     var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+    var layers = [{
+        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        getData: function() { return { count: function() { return 0; } }; }
+    }, {
+        proxy: { tag: "p2", getBounds: function() { return [-200, -10, 10, 10]; } },
+        getData: function() { return { count: function() { return 0; } }; }
+    }];
+
+    this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
         getBoundsFromData: true,
-        layers: [{ tag: "layer-1", dataSource: "data-1" }]
+        layers: layers
     });
 
     spy.lastCall.args[0].dataReady();
@@ -91,12 +100,111 @@ QUnit.test("Set bounds when data ready called. Without bounds in options", funct
     assert.strictEqual(this.projection.setBounds.callCount, 2);
 });
 
+QUnit.test("Projection by data. Default bounds are include common bounds", function(assert) {
+    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+    var layers = [{
+        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        getData: function() { return { count: function() { return 0; } }; }
+    }, {
+        proxy: { tag: "p2", getBounds: function() { return [-60, -10, 10, 10]; } },
+        getData: function() { return { count: function() { return 0; } }; }
+    }];
+
+    this.layerCollection.stub("items").returns(layers);
+
+    this.createMap({
+        layers: layers,
+        getBoundsFromData: true
+    });
+
+    spy.lastCall.args[0].dataReady();
+
+    assert.strictEqual(this.projection.setEngine.callCount, 1);
+});
+
+QUnit.test("Projection by data. Without projection in options", function(assert) {
+    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+    var layers = [{
+        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        getData: function() { return { count: function() { return 0; } }; }
+    }, {
+        proxy: { tag: "p2", getBounds: function() { return [-200, -10, 10, 10]; } },
+        getData: function() { return { count: function() { return 0; } }; }
+    }];
+
+    this.layerCollection.stub("items").returns(layers);
+
+    this.createMap({
+        getBoundsFromData: true,
+        layers: layers
+    });
+
+    spy.lastCall.args[0].dataReady();
+
+    assert.strictEqual(this.projection.setEngine.callCount, 2);
+    assert.deepEqual(this.projection.setEngine.lastCall.args[0].to([-200, -10]), [-1, -1]);
+    assert.deepEqual(this.projection.setEngine.lastCall.args[0].from([-1, -1]), [-200, -10]);
+});
+
+QUnit.test("Projection by data. Projection in options", function(assert) {
+    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+    var layers = [{
+        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        getData: function() { return { count: function() { return 0; } }; }
+    }, {
+        proxy: { tag: "p2", getBounds: function() { return [-200, -10, 10, 10]; } },
+        getData: function() { return { count: function() { return 0; } }; }
+    }];
+
+    this.layerCollection.stub("items").returns(layers);
+
+    this.createMap({
+        layers: layers,
+        getBoundsFromData: true,
+        projection: {}
+    });
+
+    spy.lastCall.args[0].dataReady();
+    assert.strictEqual(this.projection.setEngine.callCount, 1);
+});
+
+QUnit.test("Projection by data. Empty bbox", function(assert) {
+    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+    var layers = [];
+
+    this.layerCollection.stub("items").returns(layers);
+
+    this.createMap({
+        layers: layers,
+        getBoundsFromData: true
+    });
+
+    spy.lastCall.args[0].dataReady();
+
+    assert.strictEqual(this.projection.setBounds.callCount, 2);
+    assert.deepEqual(this.projection.setBounds.lastCall.args[0], [undefined, undefined, undefined, undefined]);
+});
+
 QUnit.test("Set bounds when data ready called. With bounds in options", function(assert) {
     var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+    var layers = [{
+        proxy: { tag: "p1", getBounds: function() { return [0, 0, 10, 10]; } },
+        getData: function() {
+            return { count: function() { return 0; } };
+        }
+    }, {
+        proxy: { tag: "p2", getBounds: function() { return [-200, -10, 10, 10]; } },
+        getData: function() {
+            return { count: function() { return 0; } };
+        }
+    }];
+
+    this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
         bounds: [10, 10, 10, 10],
-        layers: [{ tag: "layer-1", dataSource: "data-1" }]
+        layers: [{ tag: "layer-1", dataSource: "data-1" }],
+        getBoundsFromData: true
     });
 
     spy.lastCall.args[0].dataReady();

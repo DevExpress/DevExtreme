@@ -55,6 +55,7 @@ function coreAnnotation(options, contentTemplate) {
         },
         showTooltip(tooltip, { x, y }) {
             if(tooltip.annotation !== this) {
+                tooltip.setTemplate(this.options.tooltipTemplate);
                 if(tooltip.show(this.options, { x, y }, { target: this.options }, this.options.customizeTooltip)) {
                     tooltip.annotation = this;
                 }
@@ -224,7 +225,8 @@ const corePlugin = {
             tooltip: new Tooltip({
                 cssClass: `${this._rootClassPrefix}-annotation-tooltip`,
                 eventTrigger: this._eventTrigger,
-                widgetRoot: this.element()
+                widgetRoot: this.element(),
+                widget: this
             }),
             hideTooltip() {
                 this.tooltip.annotation = null;
@@ -235,7 +237,8 @@ const corePlugin = {
         this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
         const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
 
-        tooltipOptions.customizeTooltip = undefined;
+        tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
+
         this._annotations.tooltip.update(tooltipOptions);
     },
     dispose() {

@@ -151,7 +151,7 @@ const Tabs = CollectionWidget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return devices.real().platform !== "generic";
+                    return devices.real().deviceType !== "desktop";
                 },
                 options: {
                     /**
@@ -162,7 +162,7 @@ const Tabs = CollectionWidget.inherit({
                 }
             },
             {
-                device: { platform: "generic" },
+                device: { deviceType: "desktop" },
                 options: {
                     /**
                     * @name dxTabsOptions.scrollByContent

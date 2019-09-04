@@ -285,8 +285,12 @@ module.exports = {
                     if(!$parent.length) {
                         $parent = $("<div>").append(cellElement);
                     } else if(column) {
-                        columnIndex = that._columnsController.getVisibleIndex(column.index);
-                        $items = $parent.children("td").eq(columnIndex).find("*");
+                        if(column.groupIndex >= 0 && !column.showWhenGrouped) {
+                            $items = cellElement;
+                        } else {
+                            columnIndex = that._columnsController.getVisibleIndex(column.index);
+                            $items = $parent.children("td").eq(columnIndex).find("*");
+                        }
                     }
                     $items = $items && $items.length ? $items : $parent.find("*");
 

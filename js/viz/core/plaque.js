@@ -242,7 +242,6 @@ export class Plaque {
         if(this.contentTemplate.render) {
             this.contentTemplate.render({ model: options, container: this._contentGroup.element });
         } else {
-            // TODO this is for tooltip, made it use template
             this.contentTemplate(this.widget, this._contentGroup);
         }
 
