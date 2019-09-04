@@ -1726,7 +1726,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
                 options.value = value;
 
-                setCellValueResult = when(fromPromise(options.column.setCellValue(newData, value, extend(true, {}, oldData), text)));
+                setCellValueResult = fromPromise(options.column.setCellValue(newData, value, extend(true, {}, oldData), text));
                 setCellValueResult.done(function() {
                     deferred.resolve({
                         data: newData,
