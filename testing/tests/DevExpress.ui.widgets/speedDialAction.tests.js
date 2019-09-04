@@ -473,18 +473,25 @@ QUnit.module("add visible option", (hooks) => {
 
         firstSDA = $("#fab-one").dxSpeedDialAction({
             icon: "edit",
+            visible: false,
             onClick: clickHandler
         }).dxSpeedDialAction("instance");
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 1, "one invisible action");
+
+        firstSDA.option("visible", true);
 
         secondSDA = $("#fab-two").dxSpeedDialAction({
             icon: "trash"
         }).dxSpeedDialAction("instance");
 
-        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
         $fabMainContent.trigger("dxclick");
 
-        assert.equal($(FAB_SELECTOR).not(FAB_MAIN_SELECTOR).length, 2, "two actions visible");
+        assert.equal($(FAB_SELECTOR).not(FAB_MAIN_SELECTOR).length, 2, "two visible actions");
 
         secondSDA.option("visible", false);
 
