@@ -840,11 +840,12 @@ const subscribes = {
     },
 
     getEndDayHour: function() {
-        return this.option("endDayHour");
+        return this._workSpace.option("endDayHour") || this.option("endDayHour");
     },
 
+
     getStartDayHour: function() {
-        return this.option("startDayHour");
+        return this._workSpace.option("startDayHour") || this.option("startDayHour");
     },
 
     isAdaptive: function() {
