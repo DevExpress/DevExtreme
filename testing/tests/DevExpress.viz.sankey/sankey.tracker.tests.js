@@ -1,14 +1,14 @@
-var $ = require("jquery"),
-    common = require("./commonParts/common.js"),
-    createSankey = common.createSankey,
-    environment = common.environment,
-    trackerModule = require("viz/sankey/tracker"),
-    tooltipModule = require("viz/core/tooltip"),
-    clickEventName = require("events/click").name,
-    pointerEvents = require("events/pointer"),
-    setTooltipCustomOptions = require("viz/sankey/tooltip").setTooltipCustomOptions;
+import $ from "jquery";
+import common, { createSankey, environment } from "./commonParts/common.js";
+import trackerModule from "viz/sankey/tracker";
+import tooltipModule from "viz/core/tooltip";
+import { name as clickEventName } from "events/click";
+import pointerEvents from "events/pointer";
+import { setTooltipCustomOptions } from "viz/sankey/tooltip";
+import domAdapter from "core/dom_adapter";
 
-var dxSankey = require("viz/sankey/sankey");
+
+import dxSankey from "viz/sankey/sankey";
 dxSankey.addPlugin(trackerModule.plugin);
 dxSankey.addPlugin(tooltipModule.plugin);
 setTooltipCustomOptions(dxSankey);
@@ -219,4 +219,60 @@ QUnit.test("Show custom tooltip (html) on hovered link", function(assert) {
     this.trigger(pointerEvents.move, 3);
     assert.ok(stub.called);
     assert.deepEqual(stub.getCall(0).args[0], { source: 'A', target: 'Z', weight: 1 });
+});
+
+
+QUnit.test("Tooltip with template. Hover node - call node template", function(assert) {
+    const nodeTooltipTemplate = sinon.spy();
+    const linkTooltipTemplate = sinon.spy();
+    createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        tooltip: {
+            enabled: true,
+            nodeTooltipTemplate,
+            linkTooltipTemplate
+        }
+    });
+
+    this.trigger(pointerEvents.move, 2, { pageX: 100, pageY: 100 });
+    assert.equal(nodeTooltipTemplate.callCount, 1);
+    assert.deepEqual(nodeTooltipTemplate.getCall(0).args[0], { title: 'Z', weightIn: 2, weightOut: 0 });
+    assert.ok(domAdapter.isNode(nodeTooltipTemplate.getCall(0).args[1].get(0)));
+
+    assert.equal(linkTooltipTemplate.callCount, 0);
+});
+
+QUnit.test("Show custom tooltip (text) on hovered link", function(assert) {
+    const nodeTooltipTemplate = sinon.spy();
+    const linkTooltipTemplate = sinon.spy();
+    createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        tooltip: {
+            enabled: true,
+            linkTooltipTemplate,
+            nodeTooltipTemplate
+        }
+    });
+
+    this.trigger(pointerEvents.move, 3, { pageX: 100, pageY: 100 });
+    assert.equal(linkTooltipTemplate.callCount, 1);
+    assert.deepEqual(linkTooltipTemplate.getCall(0).args[0], { source: 'A', target: 'Z', weight: 1 });
+    assert.ok(domAdapter.isNode(linkTooltipTemplate.getCall(0).args[1].get(0)));
+
+    assert.equal(nodeTooltipTemplate.callCount, 0);
+});
+
+QUnit.test("Set skip template in tooltip cusomizeObject if templates are not defined", function(assert) {
+    const customizeLinkTooltip = sinon.spy(() => ({ html: "html" }));
+    const sankey = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        tooltip: {
+            enabled: true,
+            customizeLinkTooltip
+        }
+    });
+
+    this.trigger(pointerEvents.move, 3, { pageX: 100, pageY: 100 });
+
+    assert.equal(sankey._tooltip._textHtml.html(), "html");
 });
