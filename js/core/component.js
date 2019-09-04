@@ -241,13 +241,12 @@ var Component = Class.inherit({
             this._optionManager.onChanged((name, value, previousValue) => {
                 this._notifyOptionChanged(name, value, previousValue);
             });
-            this._optionManager.suppressDeprecatedWarnings();
+
 
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
             }
             this._setOptionsByDevice(options.defaultOptionsRules);
-            this._optionManager.resumeDeprecatedWarnings();
 
             this._initOptions(options);
         } finally {
@@ -453,9 +452,7 @@ var Component = Class.inherit({
                     beforeExecute && beforeExecute.apply(that, arguments);
                     that.fireEvent(eventName, args.args);
                 };
-                that._optionManager.suppressDeprecatedWarnings();
                 action = that._createAction(actionFunc, config);
-                that._optionManager.resumeDeprecatedWarnings();
             }
 
             if(Config().wrapActionsBeforeExecute) {

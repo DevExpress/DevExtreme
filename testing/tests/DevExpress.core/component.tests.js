@@ -528,37 +528,6 @@ QUnit.module("default", {}, () => {
         assert.strictEqual(warningCount, 0);
     });
 
-    QUnit.test("_suppressDeprecatedWarnings should suppress the _logDeprecatedWarning method call", (assert) => {
-        const instance = new TestComponent();
-        const deprecatedOption = "deprecatedOption";
-        let warningCount = 0;
-        const _logDeprecatedWarningMock = option => {
-            ++warningCount;
-        };
-
-        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
-
-        instance._optionManager.suppressDeprecatedWarnings();
-        instance.option(deprecatedOption);
-        assert.strictEqual(warningCount, 0);
-    });
-
-    QUnit.test("_resumeDeprecatedWarnings should restore the _logDeprecatedWarning method calling", (assert) => {
-        const instance = new TestComponent();
-        const deprecatedOption = "deprecatedOption";
-        let warningCount = 0;
-        const _logDeprecatedWarningMock = option => {
-            ++warningCount;
-        };
-
-        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
-
-        instance._optionManager.suppressDeprecatedWarnings();
-        instance._optionManager.resumeDeprecatedWarnings();
-        instance.option(deprecatedOption);
-        assert.strictEqual(warningCount, 1);
-    });
-
     QUnit.test("component should _suppressDeprecatedWarnings while initializing _defaultOptions in the constructor and _resumeDeprecatedWarnings afterwards", (assert) => {
         const instance = new TestComponent();
         const deprecatedOption = "deprecatedOption";

@@ -1003,11 +1003,6 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.off = commonUtils.noop;
 
-        that._optionManager = {
-            suppressDeprecatedWarnings: commonUtils.noop,
-            resumeDeprecatedWarnings: commonUtils.noop
-        };
-
         that._optionsByReference = {};
 
         that.dispose = function() {

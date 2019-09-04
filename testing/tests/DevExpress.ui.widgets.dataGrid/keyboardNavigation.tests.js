@@ -263,10 +263,6 @@ QUnit.module("Keyboard navigation", {
             },
             $element: function() {
                 return $("#container").parent();
-            },
-            _optionManager: {
-                suppressDeprecatedWarnings: commonUtils.noop,
-                resumeDeprecatedWarnings: commonUtils.noop
             }
         };
 

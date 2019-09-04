@@ -828,11 +828,6 @@ function getEvent(options) {
 
                 _createActionByOption: function() {
                     return function() { };
-                },
-
-                _optionManager: {
-                    suppressDeprecatedWarnings: noop,
-                    resumeDeprecatedWarnings: noop
                 }
             };
 
@@ -3052,11 +3047,6 @@ function getEvent(options) {
 
                 _createActionByOption: function() {
                     return function() { };
-                },
-
-                _optionManager: {
-                    suppressDeprecatedWarnings: noop,
-                    resumeDeprecatedWarnings: noop
                 }
             };
 
@@ -6367,11 +6357,6 @@ function getEvent(options) {
 
                 _createActionByOption: function() {
                     return function() { };
-                },
-
-                _optionManager: {
-                    suppressDeprecatedWarnings: noop,
-                    resumeDeprecatedWarnings: noop
                 }
             };
 

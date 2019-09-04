@@ -8,7 +8,6 @@ export class OptionManager {
         this._options = options;
         this._optionsByReference = optionsByReference;
         this._deprecatedOptions = deprecatedOptions;
-        this._deprecatedOptionsSuppressed = false;
         this._changingCallbacks = CallBacks();
         this._changedCallbacks = CallBacks();
         this._logWarningCallbacks = CallBacks();
@@ -44,7 +43,7 @@ export class OptionManager {
 
     _logWarningIfDeprecated(option) {
         const info = this._deprecatedOptions[option];
-        if(info && !this._deprecatedOptionsSuppressed) {
+        if(info) {
             this._logWarningCallbacks.fire(option, info);
         }
     }
@@ -129,7 +128,7 @@ export class OptionManager {
         }
     }
 
-    _normalizeName(name, silent) {
+    _normalizeName(name) {
         if(name) {
             let deprecate;
             if(!this._cachedDeprecateNames.length) {
@@ -144,9 +143,7 @@ export class OptionManager {
                 }
             }
             if(deprecate) {
-                if(!silent) {
-                    this._logWarningIfDeprecated(name);
-                }
+                this._logWarningIfDeprecated(name);
                 const alias = deprecate.alias;
 
                 if(alias) {
@@ -175,14 +172,6 @@ export class OptionManager {
         }
 
         return getter(options, { functionsAsIs: true, unwrapObservables });
-    }
-
-    suppressDeprecatedWarnings() {
-        this._deprecatedOptionsSuppressed = true;
-    }
-
-    resumeDeprecatedWarnings() {
-        this._deprecatedOptionsSuppressed = false;
     }
 
     onChanging(callBack) {

@@ -780,9 +780,7 @@ var DateBox = DropDownEditor.inherit({
                 this.option("applyValueMode", applyValueMode);
                 break;
             case "applyValueMode":
-                this._optionManager.suppressDeprecatedWarnings();
                 this.option("closeOnValueChange", args.value === "instantly");
-                this._optionManager.resumeDeprecatedWarnings();
                 this.callBase.apply(this, arguments);
                 break;
             case "text":

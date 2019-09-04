@@ -317,18 +317,16 @@ var dxTreeMap = require("../core/base_widget").inherit({
 
         settings.labelState = _buildTextAppearance(options, filter);
         settings.labelState.visible = !("visible" in options) || !!options.visible;
-        this._optionManager.suppressDeprecatedWarnings();
         settings.labelParams = {
             height: bBox.height,
             rtlEnabled: this._getOption("rtlEnabled", true),
             paddingTopBottom: paddingTopBottom,
             paddingLeftRight: paddingLeftRight,
-            resolveLabelOverflow: this._getOption("resolveLabelOverflow", true),
+            resolveLabelOverflow: this._options["resolveLabelOverflow"],
             tileLabelWordWrap: tileLabelOptions.wordWrap,
             tileLabelOverflow: tileLabelOptions.textOverflow,
             groupLabelOverflow: groupLabelOptions.textOverflow
         };
-        this._optionManager.resumeDeprecatedWarnings();
     },
 
     _changeMaxDepth: function() {
