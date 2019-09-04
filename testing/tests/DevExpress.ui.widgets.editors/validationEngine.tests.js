@@ -1282,11 +1282,11 @@ QUnit.test("One rule is reevaluated", function(assert) {
         rules = [
             {
                 type: "async",
+                reevaluate: false,
                 validationCallback: customCallback
             },
             {
                 type: "async",
-                reevaluate: true,
                 validationCallback: customCallback
             }
         ],
@@ -1400,7 +1400,7 @@ QUnit.test("Rule should  be revalidated after value change - valid value", funct
     assert.ok(handler.calledTwice, "Handler should be called twice as value changed");
 });
 
-QUnit.test("Async rule should not be revalidated if no value changed - invalid value", function(assert) {
+QUnit.test("Async rule should be revalidated if no value changed - invalid value", function(assert) {
     const handler = sinon.spy(function() {
             const d = new Deferred();
             d.resolve(false);
@@ -1416,17 +1416,19 @@ QUnit.test("Async rule should not be revalidated if no value changed - invalid v
         done = assert.async();
 
     const result1 = ValidationEngine.validate(value, [rule]);
-    result1.complete.then((res) => {
+    result1.complete.then(() => {
         const result2 = ValidationEngine.validate(value, [rule]);
-        assert.strictEqual(rule.isValid, false, "Rule should be marked as invalid");
-        assert.ok(handler.calledOnce, "Handler should be called only once as value did not change");
-        assert.ok(result2.brokenRule, "Rule should be marked as broken");
-        assert.equal(result2.brokenRule.message, message);
-        done();
+        result2.complete.then((res) => {
+            assert.strictEqual(rule.isValid, false, "Rule should be marked as invalid");
+            assert.ok(handler.calledTwice, "Handler should be called twice even when value did not change");
+            assert.ok(res.brokenRule, "Rule should be marked as broken");
+            assert.equal(res.brokenRule.message, message);
+            done();
+        });
     });
 });
 
-QUnit.test("Async rule should not be revalidated if no value changed - valid value", function(assert) {
+QUnit.test("Async rule should be revalidated if no value changed - valid value", function(assert) {
     const handler = sinon.spy(function() {
             const d = new Deferred();
             d.resolve(true);
@@ -1437,6 +1439,60 @@ QUnit.test("Async rule should not be revalidated if no value changed - valid val
         rule = {
             type: "async",
             message: message,
+            validationCallback: handler
+        },
+        done = assert.async();
+
+    const result1 = ValidationEngine.validate(value, [rule]);
+    result1.complete.then(() => {
+        const result2 = ValidationEngine.validate(value, [rule]);
+        result2.complete.then((res) => {
+            assert.strictEqual(rule.isValid, true, "Rule should be marked as valid");
+            assert.ok(handler.calledTwice, "Handler should be called twice even when value did not change");
+            done();
+        });
+    });
+});
+
+QUnit.test("Async rule should not be revalidated if no value changed - invalid value - reevaluate disabled", function(assert) {
+    const handler = sinon.spy(function() {
+            const d = new Deferred();
+            d.resolve(false);
+            return d.promise();
+        }),
+        value = "25",
+        message = "Custom error message",
+        rule = {
+            type: "async",
+            message: message,
+            reevaluate: false,
+            validationCallback: handler
+        },
+        done = assert.async();
+
+    const result1 = ValidationEngine.validate(value, [rule]);
+    result1.complete.then((res) => {
+        const result2 = ValidationEngine.validate(value, [rule]);
+        assert.strictEqual(rule.isValid, false, "Rule should be marked as invalid");
+        assert.ok(handler.calledOnce, "Handler should be called only once as value did not change");
+        assert.ok(result2.brokenRule, "Rule should be marked as broken");
+        assert.equal(result2.brokenRule.message, message);
+        done();
+    });
+});
+
+QUnit.test("Async rule should not be revalidated if no value changed - valid value - reevaluate disabled", function(assert) {
+    const handler = sinon.spy(function() {
+            const d = new Deferred();
+            d.resolve(true);
+            return d.promise();
+        }),
+        value = "25",
+        message = "Custom error message",
+        rule = {
+            type: "async",
+            message: message,
+            reevaluate: false,
             validationCallback: handler
         },
         done = assert.async();

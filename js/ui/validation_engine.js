@@ -294,7 +294,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
     /**
      * @name AsyncRule.reevaluate
      * @type boolean
-     * @default false
+     * @default true
      */
     /**
      * @name AsyncRule.ignoreEmptyValue
@@ -302,6 +302,9 @@ class AsyncRuleValidator extends CustomRuleValidator {
      * @default false
      */
     validate(value, rule) {
+        if(!typeUtils.isDefined(rule.reevaluate)) {
+            extend(rule, { reevaluate: true });
+        }
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return new Promise(function(resolve) {
                 resolve(true);
