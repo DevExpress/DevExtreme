@@ -311,9 +311,6 @@ class Diagram extends Widget {
         if(this.option("units") !== DIAGRAM_DEFAULT_UNIT) {
             this._updateUnitsState();
         }
-        if(this.option("pageOrientation") !== DIAGRAM_DEFAULT_PAGE_ORIENTATION) {
-            this._updatePageOrientationState();
-        }
         if(this.option("pageSize")) {
             if(this.option("pageSize.items")) {
                 this._updatePageSizeItemsState();
@@ -322,6 +319,9 @@ class Diagram extends Widget {
                this.option("pageSize").height !== DIAGRAM_DEFAULT_PAGE_SIZE.height) {
                 this._updatePageSizeState();
             }
+        }
+        if(this.option("pageOrientation") !== DIAGRAM_DEFAULT_PAGE_ORIENTATION) {
+            this._updatePageOrientationState();
         }
         if(this.option("pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
             this._updatePageColorState();
