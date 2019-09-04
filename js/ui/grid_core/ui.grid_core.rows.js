@@ -605,16 +605,17 @@ module.exports = {
                 _afterRowPrepared: function(e) {
                     var arg = e.args[0],
                         dataController = this._dataController,
+                        row = dataController.getVisibleRows()[arg.rowIndex],
                         watch = this.option("integrationOptions.watchMethod");
 
-                    if(!arg.data || arg.rowType !== "data" || arg.inserted || !this.option("twoWayBindingEnabled") || !watch) return;
+                    if(!arg.data || arg.rowType !== "data" || arg.inserted || !this.option("twoWayBindingEnabled") || !watch || !row) return;
 
                     var dispose = watch(
                         () => {
                             return dataController.generateDataValues(arg.data, arg.columns);
                         },
                         () => {
-                            dataController.repaintRows([arg.rowIndex], this.option("repaintChangesOnly"));
+                            dataController.repaintRows([row.rowIndex], this.option("repaintChangesOnly"));
                         },
                         {
                             deep: true,
