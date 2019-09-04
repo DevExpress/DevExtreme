@@ -8,9 +8,9 @@ export class OptionManager {
         this._options = options;
         this._optionsByReference = optionsByReference;
         this._deprecatedOptions = deprecatedOptions;
-        this._changingCallbacks = CallBacks();
-        this._changedCallbacks = CallBacks();
-        this._logWarningCallbacks = CallBacks();
+        this._changingCallbacks = CallBacks({ syncStrategy: true });
+        this._changedCallbacks = CallBacks({ syncStrategy: true });
+        this._logWarningCallbacks = CallBacks({ syncStrategy: true });
         this._cachedDeprecateNames = [];
         this.cachedGetters = {};
         this.cachedSetters = {};
