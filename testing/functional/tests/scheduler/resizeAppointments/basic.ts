@@ -31,7 +31,11 @@ fixture `Resize appointments in the Scheduler basic views`
         .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
         .expect(resizableAppointment.date.endTime).eql(`11:00 AM`);
 
-}).before(() => createScheduler(view, dataSource)));
+}).before(() => createScheduler({
+    views: [view],
+    currentView: view, 
+    dataSource: dataSource
+})));
 
 test(`Resize in the "month" view`, async t => {
     const scheduler = new Scheduler("#container");
@@ -58,4 +62,8 @@ test(`Resize in the "month" view`, async t => {
         .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
         .expect(resizableAppointment.date.endTime).eql(`11:00 AM`);
 
-}).before(() => createScheduler('month', dataSource));
+}).before(() => createScheduler({
+    views: ['month'],
+    currentView: 'month', 
+    dataSource: dataSource
+}));
