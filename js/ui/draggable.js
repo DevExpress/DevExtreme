@@ -20,10 +20,7 @@ var DRAGGABLE = "dxDraggable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE),
     DRAG_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, DRAGGABLE),
     DRAGEND_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, DRAGGABLE),
-    POINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, DRAGGABLE),
-    DRAGGABLE_CLASS = dasherize(DRAGGABLE),
-    DRAGGABLE_DRAGGING_CLASS = DRAGGABLE_CLASS + "-dragging",
-    DRAGGABLE_CLONE_CLASS = DRAGGABLE_CLASS + "-clone";
+    POINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, DRAGGABLE);
 
 var Draggable = DOMComponentWithTemplate.inherit({
     _getDefaultOptions: function() {
@@ -63,13 +60,23 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._startPosition = translator.locate($dragElement);
     },
 
+    _addWidgetPrefix: function(className) {
+        var componentName = this.NAME;
+
+        return dasherize(componentName) + (className ? "-" + className : "");
+    },
+
+    _getItemsSelector: function() {
+        return this.option("items") || "";
+    },
+
     _attachEventHandlers: function() {
         if(this.option("disabled")) {
             return;
         }
 
         var $element = this.$element(),
-            items = this.option("items") || "",
+            items = this._getItemsSelector(),
             allowMoveByClick = this.option("allowMoveByClick"),
             data = {
                 direction: this.option("direction"),
@@ -87,7 +94,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragElementIsCloned: function() {
-        return this._$dragElement && this._$dragElement.hasClass(DRAGGABLE_CLONE_CLASS);
+        return this._$dragElement && this._$dragElement.hasClass(this._addWidgetPrefix("clone"));
     },
 
     _createDragElement: function($element) {
@@ -105,7 +112,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             result = $element.clone().appendTo(container);
         }
 
-        return result.toggleClass(DRAGGABLE_CLONE_CLASS, result.get(0) !== $element.get(0));
+        return result.toggleClass(this._addWidgetPrefix("clone"), result.get(0) !== $element.get(0));
     },
 
     _removeDragElement: function() {
@@ -125,6 +132,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _getDraggableElement: function(e) {
+        if(this._$sourceElement) {
+            return this._$sourceElement;
+        }
+
         let allowMoveByClick = this.option("allowMoveByClick");
 
         return allowMoveByClick ? this.$element() : $(e.target);
@@ -167,9 +178,13 @@ var Draggable = DOMComponentWithTemplate.inherit({
             return;
         }
 
+        this._$sourceElement = $element;
         let $dragElement = this._$dragElement = this._createDragElement($element);
+
         this._initPosition($element, $dragElement);
+
         this._toggleDraggingClass(true);
+        this._toggleDragSourceClass(true);
 
         var $area = this._getArea(),
             areaOffset = this._getAreaOffset($area),
@@ -198,7 +213,11 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _toggleDraggingClass: function(value) {
-        this._$dragElement && this._$dragElement.toggleClass(DRAGGABLE_DRAGGING_CLASS, value);
+        this._$dragElement && this._$dragElement.toggleClass(this._addWidgetPrefix("dragging"), value);
+    },
+
+    _toggleDragSourceClass: function(value) {
+        this._$sourceElement && this._$sourceElement.toggleClass(this._addWidgetPrefix("source"), value);
     },
 
     _getBoundOffset: function() {
@@ -249,7 +268,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _dragEndHandler: function(e) {
         this._toggleDraggingClass(false);
+        this._toggleDragSourceClass(false);
         this._removeDragElement();
+        this._$sourceElement = null;
 
         this._getAction("onDragEnd")({ event: e });
     },
@@ -260,7 +281,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _render: function() {
         this.callBase();
-        this.$element().addClass(DRAGGABLE_CLASS);
+        this.$element().addClass(this._addWidgetPrefix());
     },
 
     _optionChanged: function(args) {
@@ -298,6 +319,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this.callBase();
         this._detachEventHandlers();
         this._removeDragElement();
+        this._$sourceElement = null;
     }
 });
 

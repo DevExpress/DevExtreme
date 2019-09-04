@@ -1043,17 +1043,17 @@ QUnit.test("Dragging between PivotGrid and FieldChooser", function(assert) {
         dataSource: new PivotGridDataSource({ store: { type: "array", data: [] } })
     });
 
-    assert.strictEqual($pivotGrid.dxSortable("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), true);
-    assert.strictEqual($pivotGrid.dxSortable("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), true);
-    assert.strictEqual($pivotGrid.dxSortable("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), false);
+    assert.strictEqual($pivotGrid.dxSortableOld("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($pivotGrid.dxSortableOld("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($pivotGrid.dxSortableOld("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), false);
 
-    assert.strictEqual($fieldChooser1.dxSortable("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), true);
-    assert.strictEqual($fieldChooser1.dxSortable("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), true);
-    assert.strictEqual($fieldChooser1.dxSortable("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), false);
+    assert.strictEqual($fieldChooser1.dxSortableOld("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($fieldChooser1.dxSortableOld("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($fieldChooser1.dxSortableOld("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), false);
 
-    assert.strictEqual($fieldChooser2.dxSortable("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), false);
-    assert.strictEqual($fieldChooser2.dxSortable("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), false);
-    assert.strictEqual($fieldChooser2.dxSortable("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($fieldChooser2.dxSortableOld("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), false);
+    assert.strictEqual($fieldChooser2.dxSortableOld("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), false);
+    assert.strictEqual($fieldChooser2.dxSortableOld("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), true);
 });
 
 QUnit.test("export to excel on export click", function(assert) {
