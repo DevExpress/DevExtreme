@@ -21,6 +21,7 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
     <style>
+
         .dx-validation-pending.dx-texteditor.dx-editor-filled .dx-texteditor-input-container .dx-pending-indicator,
         .dx-validation-pending.dx-texteditor.dx-editor-underlined .dx-texteditor-input-container .dx-pending-indicator,
         .dx-validation-pending.dx-texteditor.dx-editor-outlined .dx-texteditor-input-container .dx-pending-indicator {
@@ -37,9 +38,52 @@
         .dx-texteditor.dx-validation-pending .dx-texteditor-input-container .dx-texteditor-input {
             padding-right: 26px;
         }
+
+        @keyframes valid-check {
+            from {
+                opacity: 0;
+                transform: scale(0.1);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+
+        .dx-valid.dx-texteditor.dx-editor-filled .dx-texteditor-input-container:after,
+        .dx-valid.dx-texteditor.dx-editor-underlined .dx-texteditor-input-container:after,
+        .dx-valid.dx-texteditor.dx-editor-outlined .dx-texteditor-input-container:after {
+            pointer-events: none;
+            font-weight: bold;
+            font-family: "DXIcons";
+            color: #5cb85c;
+            content: "\f005";
+            position: absolute;
+            top: 50%;
+            margin-top: -9px;
+            width: 18px;
+            height: 18px;
+            text-align: center;
+            line-height: 18px;
+            font-size: 13px;
+            right: 4px;
+            opacity: 0;
+            transform: scale(0);
+            animation: valid-check .3s cubic-bezier(1.000, 0.008, 0.565, 1.650) .1s 1 forwards;
+        }
+        .dx-valid.dx-texteditor .dx-texteditor-input-container .dx-texteditor-input {
+            padding-right: 26px;
+        }
     </style>
 </head>
 <body>
+    <div>
+        <div>
+            <div class="myClass">
+            </div>
+        </div>
+    </div>
     <form id="form" action="your-action" style="width:400px;">
         <div class="dx-fieldset">
             <div class="dx-field">
@@ -66,8 +110,9 @@
     </form>
     <script>
         $(function() {
-            $("#textBox1").dxTextBox({})
-                .dxValidator({
+            $("#textBox1").dxSelectBox({
+                items: [1, 2, 3]
+            }).dxValidator({
                     validationRules: [{
                         type: "required",
                         message: "textBox1 is required"
@@ -76,7 +121,7 @@
                         type: "custom",
                         message: "textBox1 is invalid",
                         validationCallback: function(params) {
-                            return params.value === "test";
+                            return params.value === 1;
                         }
                     },
                     {
@@ -85,7 +130,7 @@
                         validationCallback: function(params) {
                             let d = $.Deferred();
                             setTimeout(function() {
-                                d.resolve(params.value === "test");
+                                d.resolve(params.value === 1);
                             }, 5000);
                             return d.promise();
                         }
@@ -168,14 +213,16 @@
             $("#button").dxButton({
                 text: "Register",
                 type: "success",
-                onClick: function(params) {
-                    let res = params.validationGroup.validate();
-                    debugger;
-                    //params.validationGroup.reset();
-                    res.complete && res.complete.then(function(value) {
-                        console.log("complete");
-                    });
-                }
+                icon: "check",
+                useSubmitBehavior: true
+                // onClick: function(params) {
+                //     let res = params.validationGroup.validate();
+                //     debugger;
+                //     //params.validationGroup.reset();
+                //     res.complete && res.complete.then(function(value) {
+                //         console.log("complete");
+                //     });
+                // }
             });
         });
     </script>

@@ -35,7 +35,8 @@ const TEXTEDITOR_CLASS = "dx-texteditor",
 
     STATE_INVISIBLE_CLASS = "dx-state-invisible",
     TEXTEDITOR_PENDING_INDICATOR_CLASS = "dx-pending-indicator",
-    TEXTEDITOR_VALIDATION_PENDING_CLASS = "dx-validation-pending";
+    TEXTEDITOR_VALIDATION_PENDING_CLASS = "dx-validation-pending",
+    TEXTEDITOR_VALID_CLASS = "dx-valid";
 
 const EVENTS_LIST = [
     "KeyDown", "KeyPress", "KeyUp",
@@ -444,6 +445,8 @@ const TextEditorBase = Editor.inherit({
         const isPending = this.option("validationStatus") === "pending",
             $element = this.$element();
         $element.toggleClass(TEXTEDITOR_VALIDATION_PENDING_CLASS, isPending);
+
+        $element.toggleClass(TEXTEDITOR_VALID_CLASS, this.option("validationStatus") === "valid" && !!this._pendingIndicator);
         if(isPending && !this._pendingIndicator) {
             this._renderPendingIndicator();
             return;
