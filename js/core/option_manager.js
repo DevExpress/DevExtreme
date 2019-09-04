@@ -129,7 +129,7 @@ export class OptionManager {
         }
     }
 
-    _normalizeName(name) {
+    _normalizeName(name, silent) {
         if(name) {
             let deprecate;
             if(!this._cachedDeprecateNames.length) {
@@ -144,7 +144,9 @@ export class OptionManager {
                 }
             }
             if(deprecate) {
-                this._logWarningIfDeprecated(name);
+                if(!silent) {
+                    this._logWarningIfDeprecated(name);
+                }
                 const alias = deprecate.alias;
 
                 if(alias) {
@@ -198,12 +200,6 @@ export class OptionManager {
     getValue(options, name, unwrapObservables) {
         const normalizedName = this._normalizeName(name);
         return this._getValue(options, normalizedName, unwrapObservables);
-    }
-
-    setValueSilently(options, value) {
-        this._deprecatedOptionsSuppressed = true;
-        this.setValue(options, value);
-        this._deprecatedOptionsSuppressed = false;
     }
 
     setValue(options, value) {
