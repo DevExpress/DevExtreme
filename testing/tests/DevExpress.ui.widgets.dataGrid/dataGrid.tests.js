@@ -13791,6 +13791,36 @@ QUnit.test("Repaint rows", function(assert) {
     assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
 });
 
+QUnit.test("Row should be updated via watchMethod after detail row expand (T810967)", function(assert) {
+    // arrange
+    var watchCallbacks = [];
+    var dataSource = [{ id: 1, value: 1 }, { id: 2, value: 2 }];
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: dataSource,
+        keyExpr: "id",
+        integrationOptions: {
+            watchMethod: function(fn, callback, options) {
+                watchCallbacks.push(callback);
+                return function() {
+                };
+            },
+        },
+        masterDetail: {
+            enabled: true
+        },
+        columns: ["id", "value"]
+    });
+
+    // act
+    dataGrid.expandRow(1);
+    dataSource[1].value = 666;
+    watchCallbacks[1]();
+
+    // assert
+    assert.equal($(dataGrid.getCellElement(2, 2)).text(), 666, "value is updated");
+});
+
 QUnit.test("Repaint rows with repaintChangesOnly", function(assert) {
     // arrange
     var $rowElements,
