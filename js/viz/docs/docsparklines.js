@@ -56,7 +56,16 @@ var BaseSparkline = {
         * @default undefined
         * @notUsedInTheme
         */
-        customizeTooltip: undefined
+        customizeTooltip: undefined,
+        /**
+        * @name BaseSparklineOptions.tooltip.contentTemplate
+        * @type template|function(pointsInfo, element)
+        * @type_function_param1 pointsInfo:object
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined
     },
     /**
     * @name BaseSparklineOptions.onTooltipShown

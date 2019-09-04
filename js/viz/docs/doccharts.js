@@ -3301,20 +3301,29 @@ var BaseChart = {
     * @type object
     */
     tooltip: {
-       /**
-       * @name BaseChartOptions.tooltip.customizeTooltip
-       * @type function(pointInfo)
-       * @type_function_param1 pointInfo:object
-       * @type_function_return object
-       * @default undefined
-       * @notUsedInTheme
-       */
+        /**
+        * @name BaseChartOptions.tooltip.customizeTooltip
+        * @type function(pointInfo)
+        * @type_function_param1 pointInfo:object
+        * @type_function_return object
+        * @default undefined
+        * @notUsedInTheme
+        */
         customizeTooltip: undefined,
+        /**
+        * @name BaseChartOptions.tooltip.contentTemplate
+        * @type template|function(pointInfo, element)
+        * @type_function_param1 pointInfo:object
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined,
         /**
         * @name BaseChartOptions.tooltip.argumentFormat
         * @extends CommonVizFormat
         */
-        argumentFormat: ''
+        argumentFormat: '',
     },
     /**
     * @name BaseChartOptions.onPointClick
@@ -3757,6 +3766,15 @@ var dxChartCommonAnnotationConfig = {
     * @notUsedInTheme
     */
     customizeTooltip: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.tooltipTemplate
+    * @type template|function(annotationItem, element)
+    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_param2 element:dxElement
+    * @type_function_return string|Node|jQuery
+    * @default undefined
+    */
+    tooltipTemplate: undefined,
     /**
     * @name dxChartCommonAnnotationConfig.wordWrap
     * @type Enums.VizWordWrap
