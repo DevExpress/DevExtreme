@@ -220,4 +220,10 @@ export class OptionManager {
             this._setPreparedValue(optionName, options[optionName]);
         }
     }
+
+    dispose() {
+        this._changingCallbacks.empty();
+        this._changedCallbacks.empty();
+        this._logWarningCallbacks.empty();
+    }
 }

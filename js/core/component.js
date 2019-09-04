@@ -298,6 +298,7 @@ var Component = Class.inherit({
         this._createDisposingAction();
         this._disposingAction();
         this._disposeEvents();
+        this._optionManager.dispose();
         this._disposed = true;
     },
 
