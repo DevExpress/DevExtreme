@@ -84,10 +84,6 @@ var TextBox = TextEditor.inherit({
     },
 
     _toggleMaxLengthProp: function() {
-        if(this._isAndroidOrIE()) {
-            return;
-        }
-
         var maxLength = this.option("maxLength");
         var isMaskSpecified = !!this.option("mask");
         if(maxLength > 0 && !isMaskSpecified) {
@@ -141,14 +137,14 @@ var TextBox = TextEditor.inherit({
     },
 
     _onKeyDownCutOffHandler: function(e) {
-        var maxLength = this.option("maxLength");
-        if(maxLength) {
+        var actualMaxLength = this._input().attr("maxLength");
+        if(actualMaxLength) {
             var $input = $(e.target),
                 key = eventUtils.normalizeKeyName(e);
 
             this._cutOffExtraChar($input);
 
-            return ($input.val().length < maxLength
+            return ($input.val().length < actualMaxLength
                     || inArray(key, ignoreKeys) !== -1
                     || window.getSelection().toString() !== "");
         } else {
@@ -164,10 +160,10 @@ var TextBox = TextEditor.inherit({
     },
 
     _cutOffExtraChar: function($input) {
-        var maxLength = this.option("maxLength"),
+        var actualMaxLength = this._input().attr("maxLength"),
             textInput = $input.val();
-        if(textInput.length > maxLength) {
-            $input.val(textInput.substr(0, maxLength));
+        if(actualMaxLength && textInput.length > actualMaxLength) {
+            $input.val(textInput.substr(0, actualMaxLength));
         }
     },
 
