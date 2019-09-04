@@ -49,11 +49,10 @@ exports.DataProvider = Class.inherit({
         var exportController = this._exportController,
             groupColumns = exportController._columnsController.getGroupColumns(),
             excelWrapTextEnabled = exportController.option("export.excelWrapTextEnabled");
-
         this._options = {
             columns: exportController._getColumns(this._initialColumnWidthsByColumnIndex),
             groupColumns: groupColumns,
-            items: exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
+            items: this._selectedRowsOnly || exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
             getVisibleIndex: exportController._columnsController.getVisibleIndex.bind(exportController._columnsController),
             isHeadersVisible: exportController.option("showColumnHeaders"),
             summaryTexts: exportController.option("summary.texts"),
@@ -78,9 +77,10 @@ exports.DataProvider = Class.inherit({
         }
     },
 
-    ctor: function(exportController, initialColumnWidthsByColumnIndex) {
+    ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
         this._exportController = exportController;
         this._initialColumnWidthsByColumnIndex = initialColumnWidthsByColumnIndex;
+        this._selectedRowsOnly = selectedRowsOnly;
     },
 
     getStyles: function() {
@@ -582,7 +582,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
     getExportFormat: function() { return ["EXCEL"]; },
 
-    getDataProvider: function() {
+    getDataProvider: function(selectedRowsOnly) {
         const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
         let initialColumnWidthsByColumnIndex;
         if(columnWidths && columnWidths.length) {
@@ -592,7 +592,8 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                 initialColumnWidthsByColumnIndex[columnsLastRowVisibleColumns[i].index] = columnWidths[i];
             }
         }
-        return new exports.DataProvider(this, initialColumnWidthsByColumnIndex);
+
+        return new exports.DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
     /**
     * @name dxDataGridMethods.exportToExcel
