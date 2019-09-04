@@ -615,6 +615,12 @@ var CollectionWidget = Widget.inherit({
         }
     },
 
+    _invalidate: function() {
+        this.option("focusedElement", null);
+
+        return this.callBase.apply(this, arguments);
+    },
+
     _loadNextPage: function() {
         var dataSource = this._dataSource;
 
