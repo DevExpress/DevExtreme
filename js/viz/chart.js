@@ -1025,7 +1025,7 @@ var dxChart = AdvancedChart.inherit({
         if(!sizeShortage || !panesCanvases) {
             return;
         }
-        this._renderer.stopAllAnimations();
+        this._renderer.stopAllAnimations(true);
         const that = this;
         const rotated = that._isRotated();
         const extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes);
