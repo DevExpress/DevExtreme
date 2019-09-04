@@ -736,7 +736,7 @@ QUnit.test("Columns - string, unbound, selectedRowIndexes: [1]", function(assert
     );
 });
 
-QUnit.test("Columns - string, unbound, selectedRowIndexes: [0], dataField property not exist in dataSource", function(assert) {
+QUnit.test("Columns - string, unbound, selectedRowIndexes: [0], dataField property does not exist in dataSource", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
