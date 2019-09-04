@@ -195,6 +195,8 @@ var Sortable = Draggable.inherit({
             case "onDragChange":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
+            case "orientation":
+                break;
             default:
                 this.callBase(args);
         }

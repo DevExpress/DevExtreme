@@ -303,6 +303,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             case "disabled":
             case "area":
             case "items":
+            case "immediate":
                 this._removeDragElement();
                 this._detachEventHandlers();
                 this._attachEventHandlers();
