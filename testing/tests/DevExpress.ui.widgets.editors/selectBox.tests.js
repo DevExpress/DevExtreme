@@ -4511,7 +4511,6 @@ QUnit.module("acceptCustomValue mode", moduleSetup, () => {
             searchTimeout: 500
         });
         const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        $selectBox.dxSelectBox("instance");
         const keyboard = keyboardMock($input);
 
         $input.focus();
