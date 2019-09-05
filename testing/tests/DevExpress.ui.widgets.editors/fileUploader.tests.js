@@ -519,6 +519,44 @@ QUnit.module("custom uploading", moduleConfig, () => {
         assert.strictEqual(onUploadedSpy.callCount, 0, "uploaded event is not raised");
     });
 
+    test("uploaded files are not aborted after resetting value", function(assert) {
+        const chunkSize = 20000,
+            fileSize = 50100,
+            uploadChunkSpy = sinon.spy(() => executeAfterDelay()),
+            onUploadedSpy = sinon.spy(),
+            onAbortedSpy = sinon.spy();
+
+        const $fileUploader = $("#fileuploader").dxFileUploader({
+            multiple: false,
+            uploadMode: "instantly",
+            chunkSize: chunkSize,
+            uploadChunk: uploadChunkSpy,
+            onUploaded: onUploadedSpy,
+            onUploadAborted: onAbortedSpy
+        });
+
+        const fileUploader = $fileUploader.dxFileUploader("instance");
+
+        const file = createBlobFile("image1.png", fileSize);
+        simulateFileChoose($fileUploader, [file]);
+
+        this.clock.tick(5000);
+        assert.strictEqual(uploadChunkSpy.callCount, 3, "custom function called for each chunk");
+        assert.strictEqual(onUploadedSpy.callCount, 1, "uploaded event raised");
+        assert.strictEqual(onAbortedSpy.callCount, 0, "upload aborted event is not called");
+
+        uploadChunkSpy.reset();
+        onUploadedSpy.reset();
+        onAbortedSpy.reset();
+
+        fileUploader.option("value", []);
+
+        this.clock.tick(1000);
+        assert.strictEqual(uploadChunkSpy.callCount, 0, "custom function not called");
+        assert.strictEqual(onUploadedSpy.callCount, 0, "uploaded event not raised");
+        assert.strictEqual(onAbortedSpy.callCount, 0, "upload aborted event is not called");
+    });
+
 });
 
 QUnit.module("uploading by chunks", moduleConfig, function() {
