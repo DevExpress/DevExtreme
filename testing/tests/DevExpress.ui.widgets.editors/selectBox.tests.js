@@ -3301,6 +3301,36 @@ QUnit.module("Scrolling", {
 });
 
 QUnit.module("Async tests", {}, () => {
+    QUnit.testInActiveWindow("All items should be displayed when widget focused out before search completion", function(assert) {
+        const $selectBox = $("#selectBox").dxSelectBox({
+                searchEnabled: true,
+                acceptCustomValue: true,
+                dataSource: ["aaa", "bbb"],
+                opened: true,
+                searchTimeout: 500
+            }),
+            itemsCount = 2,
+            $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
+            selectBox = $selectBox.dxSelectBox("instance"),
+            keyboard = keyboardMock($input),
+            done = assert.async();
+
+        $input.focus();
+
+        keyboard.press("down")
+            .press("enter")
+            .press("end")
+            .type("Xsdx");
+
+        $input.blur();
+
+        pointerMock($input).start().click();
+
+        setTimeout(() => {
+            assert.equal(selectBox.getDataSource()._items.length, itemsCount, "all items are displayed");
+            done();
+        }, 500);
+    });
 
     QUnit.testInActiveWindow("Value should be reset after on selectedItem after focusout", (assert) => {
         const done = assert.async(),
