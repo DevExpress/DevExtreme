@@ -673,6 +673,30 @@ QUnit.test("filterBulider is working in TreeList", function(assert) {
     assert.equal(handlerInit.called, 1);
 });
 
+// T812031
+QUnit.test("Change filterPanel.visible to false", function(assert) {
+    // arrange
+    // act
+    var treeList = createTreeList({
+        dataSource: [],
+        filterPanel: {
+            visible: true
+        },
+        columns: [{ dataField: "field" }]
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.ok(treeList.$element().find(".dx-treelist-filter-panel").is(":visible"), "filter panel is visible");
+
+    // act
+    treeList.option("filterPanel.visible", false);
+
+    // assert
+    assert.notOk(treeList.$element().find(".dx-treelist-filter-panel").is(":visible"), "filter panel is hidden");
+});
+
 QUnit.test("TreeList with paging", function(assert) {
     // arrange, act
     var $treeListElement,
