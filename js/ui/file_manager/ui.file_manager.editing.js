@@ -66,9 +66,7 @@ class FileManagerEditingControl extends Widget {
         return this._createComponent($fileUploader, this._getFileUploaderComponent(), {
             getController: this._getFileUploaderController.bind(this),
             onUploadSessionStarted: e => this._onUploadSessionStarted(e),
-            onUploadProgress: e => this._onUploadProgress(e),
-            onFilesUploaded: result => {},
-            onErrorOccurred: () => {}
+            onUploadProgress: e => this._onUploadProgress(e)
         });
     }
 

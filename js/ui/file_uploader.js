@@ -8,7 +8,7 @@ import { isDefined, isFunction } from "../core/utils/type";
 import { each } from "../core/utils/iterator";
 import { extend } from "../core/utils/extend";
 import { inArray } from "../core/utils/array";
-import { when } from "../core/utils/deferred";
+import { Deferred, when } from "../core/utils/deferred";
 import ajax from "../core/utils/ajax";
 import Editor from "./editor/editor";
 import Button from "./button";
@@ -1408,14 +1408,26 @@ class FileUploadStrategyBase {
     }
 
     abortUpload(file) {
+        if(file._isError || file._isLoaded || file.isAborted) {
+            return;
+        }
+
         file.request && file.request.abort();
         file.isAborted = true;
 
         if(this._isCustomAbortUpload()) {
-            const callback = this.fileUploader.option("abortUpload");
+            const abortUpload = this.fileUploader.option("abortUpload");
             const arg = this._createAbortUploadArgument(file);
-            const result = callback(file.value, arg);
-            when(result)
+
+            let deferred = null;
+            try {
+                const result = abortUpload(file.value, arg);
+                deferred = when(result);
+            } catch(error) {
+                deferred = new Deferred().reject(error).promise();
+            }
+
+            deferred
                 .done(() => file.onAbort.fire())
                 .fail(() => this._handleFileError(file));
         }
@@ -1481,6 +1493,7 @@ class FileUploadStrategyBase {
     }
 
     _onLoadedHandler(file, e) {
+        file._isLoaded = true;
         this.fileUploader._setStatusMessage(file, "uploadedMessage");
         this.fileUploader._uploadedAction({
             file: file.value,
@@ -1637,8 +1650,12 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
 
         const chunksInfo = this._createChunksInfo(chunksData);
         const uploadChunk = this.fileUploader.option("uploadChunk");
-        const result = uploadChunk(file.value, chunksInfo);
-        return when(result);
+        try {
+            const result = uploadChunk(file.value, chunksInfo);
+            return when(result);
+        } catch(error) {
+            return new Deferred().reject(error).promise();
+        }
     }
 
     _createAbortUploadArgument(file) {
@@ -1745,8 +1762,12 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
         };
 
         const uploadFile = this.fileUploader.option("uploadFile");
-        const result = uploadFile(file, progressCallback);
-        return when(result);
+        try {
+            const result = uploadFile(file, progressCallback);
+            return when(result);
+        } catch(error) {
+            return new Deferred().reject(error).promise();
+        }
     }
 
     _shouldHandleError(file, e) {

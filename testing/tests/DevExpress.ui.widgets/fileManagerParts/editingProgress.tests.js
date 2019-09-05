@@ -108,13 +108,15 @@ const createUploaderFiles = count => {
     const result = [];
 
     for(let i = 0; i < count; i++) {
+        const size = 300000 + i * 200000;
         const file = {
             name: `Upload file ${i}.txt`,
-            size: 300000 + i * 200000,
-            slice: (offset, size) => ({
+            size,
+            slice: (startPos, endPos) => ({
                 fileIndex: i,
-                offset,
-                size
+                startPos,
+                endPos,
+                size: Math.min(endPos, size) - startPos
             })
         };
         result.push(file);
@@ -329,8 +331,8 @@ const createTestData = () => {
             },
             { operationId: 1, itemIndex: 0, itemProgress: 66.7, commonProgress: 25, type: "progress-updateOperationItemProgress" },
             { operationId: 1, itemIndex: 1, itemProgress: 40, commonProgress: 50, type: "progress-updateOperationItemProgress" },
-            { operationId: 1, itemIndex: 0, itemProgress: 100, commonProgress: 62.5, type: "progress-updateOperationItemProgress" },
-            { operationId: 1, itemIndex: 1, itemProgress: 80, commonProgress: 87.5, type: "progress-updateOperationItemProgress" },
+            { operationId: 1, itemIndex: 1, itemProgress: 80, commonProgress: 75, type: "progress-updateOperationItemProgress" },
+            { operationId: 1, itemIndex: 0, itemProgress: 100, commonProgress: 88, type: "progress-updateOperationItemProgress" },
             { operationId: 1, itemIndex: 0, commonProgress: 0, type: "progress-completeOperationItem" },
             { operationId: 1, itemIndex: 1, itemProgress: 100, commonProgress: 100, type: "progress-updateOperationItemProgress" },
             { operationId: 1, itemIndex: 1, commonProgress: 0, type: "progress-completeOperationItem" },
@@ -354,7 +356,6 @@ const createTestData = () => {
             },
             { operationId: 1, itemIndex: 0, itemProgress: 66.7, commonProgress: 25, type: "progress-updateOperationItemProgress" },
             { operationId: 1, itemIndex: 1, itemProgress: 40, commonProgress: 50, type: "progress-updateOperationItemProgress" },
-            { operationId: 1, itemIndex: 0, itemProgress: 100, commonProgress: 62.5, type: "progress-updateOperationItemProgress" },
             { operationId: 1, index: 1, errorText: "Unspecified error.", type: "progress-addOperationDetailsError" },
             { errorText: "Unspecified error.", type: "progress-renderError" },
             {
@@ -365,6 +366,7 @@ const createTestData = () => {
             { errorText: "Unspecified error.", type: "progress-renderError" },
             { errorMode: true, commonText: "Item wasn't uploaded", detailsText: "Upload file 1.txtUnspecified error.", type: "notification-_showPopup" },
             { message: "Item wasn't uploaded", status: "error", type: "notification-onActionProgress" },
+            { operationId: 1, itemIndex: 0, itemProgress: 100, commonProgress: 63, type: "progress-updateOperationItemProgress" },
             { operationId: 1, itemIndex: 0, commonProgress: 0, type: "progress-completeOperationItem" },
             { operationId: 1, commonText: "Item wasn't uploaded", isError: true, type: "progress-completeOperation" },
             { message: "", status: "error", type: "notification-onActionProgress" },
@@ -415,7 +417,7 @@ const createTestData = () => {
             },
             { operationId: 1, itemIndex: 0, itemProgress: 66.7, commonProgress: 25, type: "progress-updateOperationItemProgress" },
             { operationId: 1, itemIndex: 1, itemProgress: 40, commonProgress: 50, type: "progress-updateOperationItemProgress" },
-            { operationId: 1, itemIndex: 0, itemProgress: 100, commonProgress: 62.5, type: "progress-updateOperationItemProgress" },
+            { operationId: 1, itemIndex: 0, itemProgress: 100, commonProgress: 63, type: "progress-updateOperationItemProgress" },
             { operationId: 1, itemIndex: 0, commonProgress: 0, type: "progress-completeOperationItem" },
             { commonText: "Uploaded 1 items to Files", type: "notification-_showPopup" },
             { operationId: 1, commonText: "Uploaded 1 items to Files", isError: false, type: "progress-completeOperation" },
@@ -438,7 +440,6 @@ const createTestData = () => {
             },
             { operationId: 1, itemIndex: 0, itemProgress: 66.7, commonProgress: 25, type: "progress-updateOperationItemProgress" },
             { operationId: 1, itemIndex: 1, itemProgress: 40, commonProgress: 50, type: "progress-updateOperationItemProgress" },
-            { operationId: 1, itemIndex: 1, itemProgress: 80, commonProgress: 75, type: "progress-updateOperationItemProgress" },
             { commonText: "2 items weren't uploaded", type: "notification-_showPopup" },
             { operationId: 1, commonText: "2 items weren't uploaded", isError: false, statusText: "Canceled", type: "progress-completeOperation" },
             { message: "", status: "success", type: "notification-onActionProgress" }
@@ -688,7 +689,7 @@ QUnit.module("Editing progress tests", moduleConfig, () => {
 
         this.editing.getCommandActions()["upload"]();
 
-        this.clock.tick(2000);
+        this.clock.tick(3000);
 
         const operationInfo = this.notificationControl._progressPanel.getStoredInfos()[0];
         this.editing._fileUploader.cancelFileUpload(operationInfo.uploadSessionId, 1);
@@ -711,7 +712,7 @@ QUnit.module("Editing progress tests", moduleConfig, () => {
 
         this.editing.getCommandActions()["upload"]();
 
-        this.clock.tick(2000);
+        this.clock.tick(2600);
 
         const operationInfo = this.notificationControl._progressPanel.getStoredInfos()[0];
         this.editing._fileUploader.cancelFileUpload(operationInfo.uploadSessionId, 0);
@@ -738,7 +739,7 @@ QUnit.module("Editing progress tests", moduleConfig, () => {
 
         this.editing.getCommandActions()["upload"]();
 
-        this.clock.tick(2000);
+        this.clock.tick(3000);
 
         const operationInfo = this.notificationControl._progressPanel.getStoredInfos()[0];
         this.editing._onCancelUploadSession(operationInfo);
@@ -765,7 +766,7 @@ QUnit.module("Editing progress tests", moduleConfig, () => {
 
         this.editing.getCommandActions()["upload"]();
 
-        this.clock.tick(2000);
+        this.clock.tick(2600);
 
         const operationInfo = this.notificationControl._progressPanel.getStoredInfos()[0];
         this.editing._fileUploader.cancelFileUpload(operationInfo.uploadSessionId, 0);
