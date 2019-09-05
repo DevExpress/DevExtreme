@@ -248,7 +248,7 @@ class Gantt extends Widget {
 
     _showDialog(e) {
         if(!this._dialogInstance) {
-            this._dialogInstance = this._createComponent(this._$dialog, GanttDialog);
+            this._dialogInstance = new GanttDialog(this, this._$dialog);
         }
         this._dialogInstance.show(e.name, e.parameters, e.callback);
     }

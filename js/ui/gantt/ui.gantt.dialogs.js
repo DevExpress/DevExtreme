@@ -1,12 +1,10 @@
-import Widget from "../widget/ui.widget";
 import Popup from "../popup";
 import dxForm from "../form";
 import $ from "../../core/renderer";
 
-export class GanttDialog extends Widget {
-    _initMarkup() {
-        super._initMarkup();
-        this._popupInstance = this._createComponent(this._$element, Popup);
+export class GanttDialog {
+    constructor(owner, $element) {
+        this._popupInstance = owner._createComponent($element, Popup);
 
         this.infoMap = {};
         this.infoMap["TaskEdit"] = TaskEditDialogInfo;
