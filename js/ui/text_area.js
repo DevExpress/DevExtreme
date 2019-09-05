@@ -165,8 +165,6 @@ var TextArea = TextBox.inherit({
         if(this._allowScroll(delta)) {
             e.isScrollingEvent = true;
             e.stopPropagation();
-        } else {
-            return false;
         }
 
         this._eventY = currentEventY;
