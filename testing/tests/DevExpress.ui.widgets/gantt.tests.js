@@ -300,3 +300,32 @@ QUnit.module("Actions", moduleConfig, () => {
         assert.equal(splitterWrapper.css("left"), `${splitterContainerWrapperWidth - splitter.width()}px`, "Splitter has not cross the right side");
     });
 });
+
+QUnit.module("Dialogs", moduleConfig, () => {
+    test("task editing", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        const ganttCore = this.instance._ganttView._ganttViewCore;
+        const task = ganttCore.viewModel.tasks.items[0];
+        ganttCore.commandManager.showTaskEditDialog.execute(task);
+        this.clock.tick();
+        const $dialog = $("body").find(".dx-popup-normal");
+        assert.equal($dialog.length, 1, "dialog is shown");
+
+        const $inputs = $dialog.find(".dx-texteditor-input");
+        assert.equal($inputs.eq(0).val(), tasks[0].title, "title text is shown");
+        assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), "start task text is shown");
+        assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), "end task text is shown");
+        assert.equal($inputs.eq(3).val(), tasks[0].progress, "progress text is shown");
+
+        const testTitle = "text";
+        const titleTextBox = $dialog.find(".dx-textbox").eq(0).dxTextBox("instance");
+        titleTextBox.option("value", testTitle);
+        const $okButton = $dialog.find(".dx-button").eq(1);
+        $okButton.trigger("dxclick");
+        this.clock.tick();
+        const $taskWrapper = this.$element.find(TASK_WRAPPER_SELECTOR).eq(0);
+        const firstTitle = $taskWrapper.children().children().first().text();
+        assert.equal(firstTitle, testTitle, "title text was modified");
+    });
+});

@@ -9,6 +9,7 @@ import { extend } from "../../core/utils/extend";
 import { hasWindow } from "../../core/utils/window";
 import DataOption from "./ui.gantt.data.option";
 import SplitterControl from "../splitter";
+import { GanttDialog } from "./ui.gantt.dialogs";
 
 const GANTT_CLASS = "dx-gantt";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
@@ -37,6 +38,8 @@ class Gantt extends Widget {
             .appendTo(this._$treeListWrapper);
         this._$ganttView = $("<div>")
             .addClass(GANTT_VIEW_CLASS)
+            .appendTo(this.$element());
+        this._$dialog = $("<div>")
             .appendTo(this.$element());
 
         this._splitter = this._createComponent("<div>", SplitterControl, {
@@ -88,7 +91,8 @@ class Gantt extends Widget {
             showResources: this.option("showResources"),
             taskTitlePosition: this.option("taskTitlePosition"),
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
-            onScroll: this._onGanttViewScroll.bind(this)
+            onScroll: this._onGanttViewScroll.bind(this),
+            onDialogShowing: this._showDialog.bind(this)
         });
         this._setInnerElementsWidth();
         this._splitter.option({ initialLeftPanelWidth: this.option("treeListWidth") });
@@ -240,6 +244,13 @@ class Gantt extends Widget {
     }
     _getSelectionMode(allowSelection) {
         return allowSelection ? "single" : "none";
+    }
+
+    _showDialog(e) {
+        if(!this._dialogInstance) {
+            this._dialogInstance = this._createComponent(this._$dialog, GanttDialog);
+        }
+        this._dialogInstance.show(e.name, e.parameters, e.callback);
     }
 
     _clean() {
