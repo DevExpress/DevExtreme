@@ -50,6 +50,15 @@
     }
 }
 
+.dx-tag-container.dx-texteditor-input-container {
+    padding-bottom: @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
+
+    .dx-texteditor-input {
+        padding-bottom: @GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING - @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
+        min-height: @GENERIC_TEXTEDITOR_INPUT_HEIGHT - @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
+    }
+}
+
 .dx-tag-content {
     margin: @GENERIC_TAGBOX_TAG_CONTENT_MARGIN;
     padding: @GENERIC_TAGBOX_TAG_CONTENT_PADDING;
