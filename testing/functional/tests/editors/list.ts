@@ -6,6 +6,25 @@ import List from '../../model/list';
 fixture `List`
     .page(pathToFileURL(join(__dirname, './pages/t718398.html')).href);
 
+test("Should focus first item after changing selection mode (T811770)", async t => {
+    const list = new List('#list');
+    const input = Selector('#input');
+    const switchSelectionMode = Selector('#button');
+    const { selectAll } = list;
+    const firstItemRadioButton = list.getItem().radioButton;
+
+    await t
+        .click(input)
+        .pressKey('tab')
+        .expect(selectAll.checkBox.isFocused).ok()
+
+        .click(switchSelectionMode)
+
+        .click(input)
+        .pressKey('tab')
+        .expect(firstItemRadioButton.isFocused).ok();
+});
+
 test("List selection should work with keyboard arrows (T718398)", async t => {
     const list = new List('#list');
     const input = Selector('#input');
