@@ -188,7 +188,7 @@ export class OptionManager {
     _setSilent(options, rulesOptions) {
         extend(true, options, rulesOptions);
 
-        for(var fieldName in this._optionsByReference) {
+        for(const fieldName in this._optionsByReference) {
             if(Object.prototype.hasOwnProperty.call(rulesOptions, fieldName)) {
                 options[fieldName] = rulesOptions[fieldName];
             }
