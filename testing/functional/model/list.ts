@@ -2,9 +2,11 @@ import { Selector } from 'testcafe';
 
 const CLASS = {
     checkbox: 'dx-checkbox',
-    checked: 'dx-checkbox-checked',
+    checkboxChecked: 'dx-checkbox-checked',
     focused: 'dx-state-focused',
     item: 'dx-list-item',
+    radioButton: 'dx-radiobutton',
+    radioButtonChecked: 'dx-radiobutton-checked',
     selectAllItem: 'dx-list-select-all'
 };
 
@@ -15,20 +17,34 @@ class CheckBox {
 
     constructor (item: Selector) {
         this.element = item.find(`.${CLASS.checkbox}`);
-        this.isChecked = this.element.hasClass(CLASS.checked);
+        this.isChecked = this.element.hasClass(CLASS.checkboxChecked);
         this.isFocused = item.hasClass(CLASS.focused);
     }
 };
+
+class RadioButton {
+    element: Selector;
+    isChecked: Promise<boolean>;
+    isFocused: Promise<boolean>;
+
+    constructor (item: Selector) {
+        this.element = item.find(`.${CLASS.radioButton}`);
+        this.isChecked = this.element.hasClass(CLASS.radioButtonChecked);
+        this.isFocused = item.hasClass(CLASS.focused);
+    }
+}
 
 class Item {
     element: Selector;
     checkBox: CheckBox;
     isFocused: Promise<boolean>;
+    radioButton: RadioButton;
 
     constructor (element: Selector) {
         this.element = element;
         this.checkBox = new CheckBox(element);
         this.isFocused = element.hasClass(CLASS.focused);
+        this.radioButton = new RadioButton(element);
     }
 };
 
