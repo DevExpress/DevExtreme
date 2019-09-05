@@ -476,11 +476,11 @@ QUnit.module("default", {}, () => {
 
         instance._logDeprecatedWarning = _logDeprecatedWarningMock;
 
-        instance._setOptionSilently({
+        instance._setOptionSilent({
             deprecatedOption: true,
         });
 
-        assert.equal(instance._getOptionSilently("deprecatedOption"), true);
+        assert.equal(instance._getOptionSilent("deprecatedOption"), true);
         assert.equal(warningCount, 0);
     });
 
