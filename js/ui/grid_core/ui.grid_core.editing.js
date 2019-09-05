@@ -764,7 +764,7 @@ var EditingController = modules.ViewController.inherit((function() {
             insertKey = {
                 parentKey,
                 pageIndex: dataController.pageIndex(),
-                rowIndex: that._getRowIndex(parentKey)
+                rowIndex: that._getInsertRowIndex(parentKey)
             };
 
             row = rows[insertKey.rowIndex];
@@ -786,7 +786,7 @@ var EditingController = modules.ViewController.inherit((function() {
             return insertKey;
         },
 
-        _getRowIndex: function(parentKey) {
+        _getInsertRowIndex: function(parentKey) {
             var that = this,
                 rowsView = that.getView("rowsView"),
                 parentRowIndex = that._dataController.getRowIndexByKey(parentKey);
