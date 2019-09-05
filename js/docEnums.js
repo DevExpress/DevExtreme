@@ -262,6 +262,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ValueAxisVisualRangeUpdateMode
+ * @enum {'auto'|'keep'|'reset'}
+ */
+
+/**
  * @typedef {string} Enums.ChartZoomPanActionType
  * @enum {'zoom'|'pan'}
  */

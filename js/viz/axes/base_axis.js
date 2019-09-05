@@ -2073,10 +2073,20 @@ Axis.prototype = {
         this.handleZooming([null, null], { start: !!isSilent, end: !!isSilent });
     },
 
-    _applyZooming(visualRange) {
+    _setVisualRange(visualRange, allowPartialUpdate) {
+        const range = this.adjustRange(vizUtils.getVizRangeObject(visualRange));
+        if(allowPartialUpdate) {
+            isDefined(range.startValue) && (this._viewport.startValue = range.startValue);
+            isDefined(range.endValue) && (this._viewport.endValue = range.endValue);
+        } else {
+            this._viewport = range;
+        }
+    },
+
+    _applyZooming(visualRange, allowPartialUpdate) {
         const that = this;
         that._resetVisualRangeOption();
-        that._setVisualRange(visualRange);
+        that._setVisualRange(visualRange, allowPartialUpdate);
 
         const viewPort = that.getViewport();
 
@@ -2201,7 +2211,7 @@ Axis.prototype = {
         };
 
         if(!zoomStartEvent.cancel) {
-            isDefined(visualRange) && that._applyZooming(visualRange);
+            isDefined(visualRange) && that._applyZooming(visualRange, preventEvents.allowPartialUpdate);
             if(!isDefined(that._storedZoomEndParams)) {
                 that._storedZoomEndParams = {
                     startRange: previousRange,
@@ -2589,8 +2599,9 @@ Axis.prototype = {
 
     _rotateConstantLine: _noop,
 
-    applyVisualRangeSetter: _noop,
-
+    applyVisualRangeSetter(visualRangeSetter) {
+        this._visualRange = visualRangeSetter;
+    },
     // T642779, T714928, T810801
     getCategoriesSorter(argCategories) {
         let sort;
