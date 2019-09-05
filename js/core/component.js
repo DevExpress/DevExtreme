@@ -455,7 +455,7 @@ var Component = Class.inherit({
         return result;
     },
 
-    _getOptionSilent: function(name) {
+    _getOptionSilentн: function(name) {
         return this._optionManager.getSilently(name);
     },
 
@@ -475,6 +475,12 @@ var Component = Class.inherit({
     isOptionDeprecated: function(name) {
         var deprecatedOptions = this._getDeprecatedOptions();
         return Object.prototype.hasOwnProperty.call(deprecatedOptions, name);
+    },
+
+    _setOptionWithoutNotify: function(name, value) {
+        this._cancelOptionChange = name;
+        this.option(name, value);
+        this._cancelOptionChange = false;
     },
 
     _getOptionValue: function(name, context) {

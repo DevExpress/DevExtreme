@@ -328,13 +328,13 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 selectedItem = this._editStrategy.getItemDataByIndex(this.option("selectedIndex"));
 
                 if(isDefined(selectedItem)) {
-                    this._setOptionSilent("selectedItems", [selectedItem]);
-                    this._setOptionSilent("selectedItem", selectedItem);
-                    this._setOptionSilent("selectedItemKeys", this._editStrategy.getKeysByItems([selectedItem]));
+                    this._setOptionWithoutNotify("selectedItems", [selectedItem]);
+                    this._setOptionWithoutNotify("selectedItem", selectedItem);
+                    this._setOptionWithoutNotify("selectedItemKeys", this._editStrategy.getKeysByItems([selectedItem]));
                 } else {
-                    this._setOptionSilent("selectedItems", []);
-                    this._setOptionSilent("selectedItemKeys", []);
-                    this._setOptionSilent("selectedItem", null);
+                    this._setOptionWithoutNotify("selectedItems", []);
+                    this._setOptionWithoutNotify("selectedItemKeys", []);
+                    this._setOptionWithoutNotify("selectedItem", null);
                 }
                 break;
 
@@ -346,9 +346,9 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     return this._syncSelectionOptions("selectedIndex");
                 }
 
-                this._setOptionSilent("selectedItem", selectedItems[0]);
-                this._setOptionSilent("selectedIndex", selectedIndex);
-                this._setOptionSilent("selectedItemKeys", this._editStrategy.getKeysByItems(selectedItems));
+                this._setOptionWithoutNotify("selectedItem", selectedItems[0]);
+                this._setOptionWithoutNotify("selectedIndex", selectedIndex);
+                this._setOptionWithoutNotify("selectedItemKeys", this._editStrategy.getKeysByItems(selectedItems));
                 break;
 
             case "selectedItem":
@@ -360,13 +360,13 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 }
 
                 if(isDefined(selectedItem)) {
-                    this._setOptionSilent("selectedItems", [selectedItem]);
-                    this._setOptionSilent("selectedIndex", selectedIndex);
-                    this._setOptionSilent("selectedItemKeys", this._editStrategy.getKeysByItems([selectedItem]));
+                    this._setOptionWithoutNotify("selectedItems", [selectedItem]);
+                    this._setOptionWithoutNotify("selectedIndex", selectedIndex);
+                    this._setOptionWithoutNotify("selectedItemKeys", this._editStrategy.getKeysByItems([selectedItem]));
                 } else {
-                    this._setOptionSilent("selectedItems", []);
-                    this._setOptionSilent("selectedItemKeys", []);
-                    this._setOptionSilent("selectedIndex", NOT_EXISTING_INDEX);
+                    this._setOptionWithoutNotify("selectedItems", []);
+                    this._setOptionWithoutNotify("selectedItemKeys", []);
+                    this._setOptionWithoutNotify("selectedIndex", NOT_EXISTING_INDEX);
                 }
                 break;
 
@@ -423,7 +423,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
     _normalizeSelectedItems: function() {
         if(this.option("selectionMode") === "none") {
-            this._setOptionSilent("selectedItems", []);
+            this._setOptionWithoutNotify("selectedItems", []);
             this._syncSelectionOptions("selectedItems");
         } else if(this.option("selectionMode") === "single") {
             var newSelection = this.option("selectedItems");
@@ -443,7 +443,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
                 this._selection.setSelection(this._getKeysByItems([normalizedSelection]));
 
-                this._setOptionSilent("selectedItems", [normalizedSelection]);
+                this._setOptionWithoutNotify("selectedItems", [normalizedSelection]);
 
                 return this._syncSelectionOptions("selectedItems");
             } else {
@@ -624,7 +624,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _clearSelectedItems: function() {
-        this._setOptionSilent("selectedItems", []);
+        this._setOptionWithoutNotify("selectedItems", []);
         this._syncSelectionOptions("selectedItems");
     },
 

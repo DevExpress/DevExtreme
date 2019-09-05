@@ -1072,7 +1072,7 @@ const LayoutManager = Widget.inherit({
 
     _resetWidget(instance) {
         const defaultOptions = instance._getDefaultOptions();
-        instance._setOptionSilent("value", defaultOptions.value);
+        instance._setOptionWithoutNotify("value", defaultOptions.value);
         instance.option("isValid", true);
     },
 
