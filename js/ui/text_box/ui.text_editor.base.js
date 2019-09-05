@@ -426,6 +426,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderPendingIndicator: function() {
+        this.$element().addClass(TEXTEDITOR_VALIDATION_PENDING_CLASS);
         const $indicatorElement = $("<div>")
             .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
             .appendTo(this._$textEditorInputContainer);
@@ -433,25 +434,28 @@ const TextEditorBase = Editor.inherit({
     },
 
     _disposePendingIndicator: function() {
-        if(this._pendingIndicator) {
-            this._pendingIndicator.dispose();
-            this._pendingIndicator.$element().remove();
-            this._pendingIndicator = null;
-        }
+        this._pendingIndicator.dispose();
+        this._pendingIndicator.$element().remove();
+        this._pendingIndicator = null;
+        this.$element().removeClass(TEXTEDITOR_VALIDATION_PENDING_CLASS);
     },
 
     _renderValidationState: function() {
         this.callBase();
         const isPending = this.option("validationStatus") === "pending",
             $element = this.$element();
-        $element.toggleClass(TEXTEDITOR_VALIDATION_PENDING_CLASS, isPending);
 
-        $element.toggleClass(TEXTEDITOR_VALID_CLASS, this.option("validationStatus") === "valid" && !!this._pendingIndicator);
-        if(isPending && !this._pendingIndicator) {
-            this._renderPendingIndicator();
-            return;
+        if(isPending) {
+            !this._pendingIndicator && this._renderPendingIndicator();
+            this._showValidMark = false;
+        } else {
+            if(!this._showValidMark) {
+                this._showValidMark = this.option("validationStatus") === "valid" && !!this._pendingIndicator;
+            }
+            this._pendingIndicator && this._disposePendingIndicator();
         }
-        this._disposePendingIndicator();
+
+        $element.toggleClass(TEXTEDITOR_VALID_CLASS, this._showValidMark);
     },
 
     _renderButtonContainers: function() {
@@ -463,6 +467,7 @@ const TextEditorBase = Editor.inherit({
 
     _clean() {
         this._buttonCollection.clean();
+        this._pendingIndicator = null;
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._$textEditorContainer = null;
