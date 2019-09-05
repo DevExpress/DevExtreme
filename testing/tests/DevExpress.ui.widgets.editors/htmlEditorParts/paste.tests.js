@@ -35,9 +35,11 @@ const TEXT_WITH_DECORATION = "<span style='text-decoration: underline;'>test1</s
     "<span style='text-decoration: line-through;'>test2</span>" +
     "<span style='text-decoration: underline line-through;'>test3</span>";
 
+const MS_INVALID_LIST_PARAGRAPH = "<p class='MsoListParagraphCxSpFirst'><span>test<o:p></o:p></span></p>";
+
 const { module: testModule, test } = QUnit;
 
-testModule("Paste MS lists", () => {
+testModule("Paste from MS Word", () => {
     test("paste bullet list with indent", (assert) => {
         const done = assert.async();
         const instance = $("#htmlEditor")
@@ -65,6 +67,21 @@ testModule("Paste MS lists", () => {
             .dxHtmlEditor("instance");
 
         const newDelta = instance._quillInstance.clipboard.convert(MS_ORDERED_LIST);
+        instance._quillInstance.setContents(newDelta);
+    });
+
+    test("paste list paragraph without styles", (assert) => {
+        const done = assert.async();
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                onValueChanged: ({ value }) => {
+                    assert.equal(value, "<p>test</p>");
+                    done();
+                }
+            })
+            .dxHtmlEditor("instance");
+
+        const newDelta = instance._quillInstance.clipboard.convert(MS_INVALID_LIST_PARAGRAPH);
         instance._quillInstance.setContents(newDelta);
     });
 });
