@@ -2955,6 +2955,31 @@ QUnit.test("Scrolling when virtual scrolling is enabled", function(assert) {
     scrollable.scrollTo({ left: 10, top: 1 });
 });
 
+// T810822
+QUnit.test("hasScroll should return true if scrolling is virtual and data is empty", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+
+    this.dataSource.values = [];
+
+    var pivotGrid = createPivotGrid({
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "virtual",
+            timeout: 0
+        },
+        dataSource: this.dataSource
+    }, assert);
+
+    this.clock.tick();
+
+    assert.ok(pivotGrid._columnsArea.hasScroll(), "columns area scroll");
+    assert.ok(pivotGrid._rowsArea.hasScroll(), "rows area scroll");
+});
+
 // T518512
 QUnit.test("render should be called once after expand item if virtual scrolling enabled", function(assert) {
     $('#pivotGrid').empty();
