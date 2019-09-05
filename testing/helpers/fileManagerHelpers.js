@@ -6,6 +6,8 @@ export const Consts = {
     GENERAL_TOOLBAR_CLASS: "dx-filemanager-general-toolbar",
     FILE_TOOLBAR_CLASS: "dx-filemanager-file-toolbar",
     CONTAINER_CLASS: "dx-filemanager-container",
+    DRAWER_PANEL_CONTENT_CLASS: "dx-drawer-panel-content",
+    DRAWER_CONTENT_CLASS: "dx-drawer-content",
     DIALOG_CLASS: "dx-filemanager-dialog",
     THUMBNAILS_ITEM_CLASS: "dx-filemanager-thumbnails-item",
     GRID_DATA_ROW_CLASS: "dx-data-row",
@@ -26,7 +28,9 @@ export const Consts = {
     MENU_ITEM_WITH_TEXT_CLASS: "dx-menu-item-has-text",
     CONTEXT_MENU_CLASS: "dx-context-menu",
     MENU_ITEM_CLASS: "dx-menu-item",
-    SELECTION_CLASS: "dx-selection"
+    SELECTION_CLASS: "dx-selection",
+    SPLITTER_CLASS: "dx-splitter",
+    DISABLED_STATE_CLASS: "dx-state-disabled"
 };
 const showMoreButtonText = "\u22EE";
 
@@ -149,6 +153,39 @@ export class FileManagerWrapper {
 
     _findActionButton($container) {
         return $container.find(`.${Consts.FILE_ACTION_BUTTON_CLASS} .${Consts.BUTTON_CLASS}`);
+    }
+
+    getDrawerPanelContent() {
+        return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_PANEL_CONTENT_CLASS}`);
+    }
+
+    getItemsView() {
+        return this._$element.find(`.${Consts.CONTAINER_CLASS} .${Consts.DRAWER_CONTENT_CLASS}`);
+    }
+
+    moveSplitter(delta, pointerType) {
+        const $splitter = this.getSplitter();
+        const $drawerContent = this.getDrawerPanelContent();
+        if(!pointerType) {
+            pointerType = "mouse";
+        }
+
+        $splitter.trigger($.Event("dxpointerdown", { pointerType }));
+        const contentRect = $drawerContent[0].getBoundingClientRect();
+        $splitter.trigger($.Event("dxpointermove", {
+            pointerType,
+            pageX: contentRect.right + delta
+        }));
+
+        $splitter.trigger($.Event("dxpointerup", { pointerType }));
+    }
+
+    isSplitterActive() {
+        return !this.getSplitter().hasClass(Consts.DISABLED_STATE_CLASS);
+    }
+
+    getSplitter() {
+        return this._$element.find(`.${Consts.SPLITTER_CLASS}`);
     }
 
 }

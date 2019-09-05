@@ -148,15 +148,31 @@
         overflow: hidden;
 
         .dx-filemanager-dirs-panel {
-            min-width: 250px;
-            max-width: 300px;
             padding: 5px 10px;
+            height: 100%;
+            width: 100%;
+            display: block;
+        }
+
+        .dx-drawer-opened {
+            .dx-splitter.dx-state-disabled {
+                width: 1px;
+            }
+        }
+
+        .dx-drawer-panel-content {
+            display: block;
+            width: 30%;
+
+            &.dx-drawer-panel-content-initial {
+                min-width: 250px;
+                max-width: 300px;
+            }
         }
     }
 
     .dx-filemanager-dirs-panel {
         height: 100%;
-        border-right: 1px solid;
     }
 
     .dx-filemanager-breadcrumbs {
@@ -359,6 +375,8 @@
 }
 
 .dx-filemanager-dirs-tree {
+    width: 100%;
+
     .dx-treeview-item-content {
         display: flex;
         align-items: flex-end;
