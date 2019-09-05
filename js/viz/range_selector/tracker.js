@@ -208,7 +208,7 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
     return docEvents;
 }
 
-function Tracker(params) {
+export function Tracker(params) {
     var state = this._state = {},
         targets = params.controller.getTrackerTargets();
     if(msPointerEnabled) {
@@ -245,5 +245,3 @@ Tracker.prototype = {
         state.manualRangeSelectionEnabled = behavior.manualRangeSelectionEnabled;
     }
 };
-
-exports.Tracker = Tracker;
