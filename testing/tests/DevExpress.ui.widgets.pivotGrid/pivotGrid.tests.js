@@ -2956,9 +2956,7 @@ QUnit.test("Scrolling when virtual scrolling is enabled", function(assert) {
 });
 
 // T810822
-QUnit.test("Virtual scrolling should work on columns area if data is empty", function(assert) {
-    var done = assert.async();
-
+QUnit.test("hasScroll should return true if scrolling is virtual and data is empty", function(assert) {
     $('#pivotGrid').empty();
     $('#pivotGrid').width(100);
     $('#pivotGrid').height(150);
@@ -2977,66 +2975,9 @@ QUnit.test("Virtual scrolling should work on columns area if data is empty", fun
     }, assert);
 
     this.clock.tick();
-    assert.ok(pivotGrid);
 
-    var scrollable = pivotGrid._columnsArea._getScrollable();
-
-    var scrollAssert = function() {
-        scrollable.off("scroll", scrollAssert);
-
-        // assert
-        assert.ok(pivotGrid._scrollLeft, "pivotGrid's _scrollLeft value");
-        assert.ok(scrollable.scrollLeft() > 0, "scrollLeft is not zero");
-        assert.roughEqual(scrollable.scrollLeft() + scrollable._container().width(), scrollable.$content().width(), 1.01, "scrollLeft is in max right position");
-
-        done();
-    };
-
-    scrollable.on("scroll", scrollAssert);
-
-    scrollable.scrollTo({ left: 600 });
-});
-
-// T810822
-QUnit.test("Virtual scrolling should work on rows area if data is empty", function(assert) {
-    var done = assert.async();
-
-    $('#pivotGrid').empty();
-    $('#pivotGrid').width(100);
-    $('#pivotGrid').height(150);
-
-    this.dataSource.values = [];
-
-    var pivotGrid = createPivotGrid({
-        fieldChooser: {
-            enabled: false
-        },
-        scrolling: {
-            mode: "virtual",
-            timeout: 0
-        },
-        dataSource: this.dataSource
-    }, assert);
-
-    this.clock.tick();
-    assert.ok(pivotGrid);
-
-    var scrollable = pivotGrid._rowsArea._getScrollable();
-
-    var scrollAssert = function() {
-        scrollable.off("scroll", scrollAssert);
-
-        // assert
-        assert.ok(pivotGrid._scrollTop, "pivotGrid's _scrollTop value");
-        assert.ok(scrollable.scrollTop() > 0, "scrollTop is not zero");
-        assert.roughEqual(scrollable.scrollTop() + scrollable._container().height(), scrollable.$content().height(), 1.01, "scrollTop is in max bottom position");
-
-        done();
-    };
-
-    scrollable.on("scroll", scrollAssert);
-
-    scrollable.scrollTo({ top: 600 });
+    assert.ok(pivotGrid._columnsArea.hasScroll(), "columns area scroll");
+    assert.ok(pivotGrid._rowsArea.hasScroll(), "rows area scroll");
 });
 
 // T518512
