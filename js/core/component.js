@@ -133,7 +133,7 @@ var Component = Class.inherit({
     _setOptionsByDevice: function(customRules) {
         var rulesOptions = this._getOptionByRules(customRules);
 
-        this._optionManager.setSilently(rulesOptions);
+        this._setOptionSilent(rulesOptions);
     },
 
     _convertRulesToOptions: function(rules) {
@@ -354,8 +354,8 @@ var Component = Class.inherit({
         if(!this._initialOptions) {
             this._initialOptions = {};
             this._initialOptions = this._getDefaultOptions();
-            const rulesOptions = this._getOptionByRules(this._optionManager.getSilently["defaultOptionsRules"]);
-            this._optionManager._setRulesOptions(this._initialOptions, rulesOptions);
+            const rulesOptions = this._getOptionByRules(this._getOptionSilent("defaultOptionsRules"));
+            this._optionManager._setSilent(this._initialOptions, rulesOptions);
         }
 
         const fullPath = optionName.split(".");
@@ -456,11 +456,11 @@ var Component = Class.inherit({
     },
 
     _getOptionSilent: function(name) {
-        return this._optionManager.getSilently(name);
+        return this._optionManager.getSilent(name);
     },
 
     _setOptionSilent: function(options, value) {
-        this._optionManager.setSilently(options, value);
+        this._optionManager.setSilent(options, value);
     },
 
     _getEventName: function(actionName) {

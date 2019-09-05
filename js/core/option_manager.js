@@ -185,7 +185,7 @@ export class OptionManager {
         return getter(options, { functionsAsIs: true, unwrapObservables });
     }
 
-    _setRulesOptions(options, rulesOptions) {
+    _setSilent(options, rulesOptions) {
         extend(true, options, rulesOptions);
 
         for(var fieldName in this._optionsByReference) {
@@ -212,13 +212,13 @@ export class OptionManager {
         return this._getValue(this._options, normalizedName);
     }
 
-    setSilently(options, value) {
+    setSilent(options, value) {
         options = this._ensureObject(options, value);
 
-        this._setRulesOptions(this._options, options);
+        this._setSilent(this._options, options);
     }
 
-    getSilently(name) {
+    getSilent(name) {
         return this._options[name];
     }
 
