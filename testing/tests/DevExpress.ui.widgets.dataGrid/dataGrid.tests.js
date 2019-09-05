@@ -10639,6 +10639,48 @@ QUnit.test("Change editing.popup option should not reload data", function(assert
     assert.equal(dataGrid.getController("editing")._editPopup.option("title"), "New title", "popup title is updated");
 });
 
+QUnit.testInActiveWindow("First cell of added row should be focused after adding row during editing another cell if onInitNewRow is async", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ room: 1 }, { room: 2 }, { room: 3 }],
+            editing: {
+                allowAdding: true,
+                allowUpdating: true,
+                mode: "batch"
+            },
+            onInitNewRow: function(e) {
+                e.promise = $.Deferred();
+                setTimeout(() => {
+                    e.data = { room: 4 };
+                    e.promise.resolve();
+                }, 500);
+            }
+        }),
+        $insertedCell,
+        $editedCell;
+
+    // act
+    dataGrid.addRow();
+    this.clock.tick(250);
+
+    dataGrid.editCell(2, 0);
+
+    $editedCell = $(dataGrid.getCellElement(2, 0));
+
+    // assert
+    assert.ok($editedCell.find(".dx-texteditor").length, "cell element has editor");
+
+    // act
+    this.clock.tick(300);
+
+    $insertedCell = $(dataGrid.getCellElement(0, 0));
+
+    // assert
+    assert.ok($insertedCell.hasClass("dx-editor-cell"), "inserted row's cell has editor");
+    assert.ok($insertedCell.hasClass("dx-focused"), "inserted row's cell is focused");
+});
+
 QUnit.module("API methods", baseModuleConfig);
 
 QUnit.test("get methods for grid without options", function(assert) {
@@ -13858,6 +13900,36 @@ QUnit.test("Repaint rows", function(assert) {
     assert.ok($updatedRowElements.eq(3).is($rowElements.eq(3)), "fourth row isn't updated");
     assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test5", "first row - value of the first cell");
     assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
+});
+
+QUnit.test("Row should be updated via watchMethod after detail row expand (T810967)", function(assert) {
+    // arrange
+    var watchCallbacks = [];
+    var dataSource = [{ id: 1, value: 1 }, { id: 2, value: 2 }];
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: dataSource,
+        keyExpr: "id",
+        integrationOptions: {
+            watchMethod: function(fn, callback, options) {
+                watchCallbacks.push(callback);
+                return function() {
+                };
+            },
+        },
+        masterDetail: {
+            enabled: true
+        },
+        columns: ["id", "value"]
+    });
+
+    // act
+    dataGrid.expandRow(1);
+    dataSource[1].value = 666;
+    watchCallbacks[1]();
+
+    // assert
+    assert.equal($(dataGrid.getCellElement(2, 2)).text(), 666, "value is updated");
 });
 
 QUnit.test("Repaint rows with repaintChangesOnly", function(assert) {

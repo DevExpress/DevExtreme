@@ -1,19 +1,13 @@
 import { createWidget } from "../../../../helpers/testHelper";
 
-export const widgetHeight = 833;
-export const widgetWidth = 1666;
-export const maxAppointmentsPerCell = 5;
-export const startDayHour = 9;
-export const currentDate = new Date(2019, 3, 1);
-
-export const resources = [
-	{ id: "0", color: "#e01e38" },
-	{ id: "1", color: "#f98322" },
-	{ id: "2", color: "#1e65e8" }
+const resources = [
+	{ id: 0, color: "#e01e38" },
+	{ id: 1, color: "#f98322" },
+	{ id: 2, color: "#1e65e8" }
 ];
 
-export const createScheduler = async (mode, dataSource, firstDayOfWeek = 1) => {
-	await createWidget("dxScheduler", {
+export const createScheduler = (currentView: string, dataSource: Array<any>, firstDayOfWeek: number = 1) =>
+	createWidget("dxScheduler", {
 		dataSource: dataSource,
 		resources: [
 			{
@@ -22,13 +16,11 @@ export const createScheduler = async (mode, dataSource, firstDayOfWeek = 1) => {
 				label: "Color"
 			}
 		],
-		width: widgetWidth,
-		height: widgetHeight,
-		startDayHour: startDayHour,
+		width: 1666,
+		height: 833,
+		startDayHour: 9,
 		firstDayOfWeek: firstDayOfWeek,
-		maxAppointmentsPerCell: maxAppointmentsPerCell,
-		views: [mode],
-		currentView: mode,
-		currentDate: currentDate
+		maxAppointmentsPerCell: 5,
+		currentView: currentView,
+		currentDate: new Date(2019, 3, 1)
 	});
-};

@@ -170,7 +170,7 @@ class FileManagerItem {
 
     getFullPathInfo() {
         const pathInfo = [...this.pathInfo];
-        pathInfo.push({
+        !this.isRoot && pathInfo.push({
             key: this.key,
             name: this.name
         });

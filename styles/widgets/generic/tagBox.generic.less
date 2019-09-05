@@ -1,3 +1,5 @@
+@import (once) "./selectBox.generic.less";
+
 .dx-size-default() {
     @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM: 4px;
     @GENERIC_TAGBOX_TAG_CONTENT_MARGIN: 4px 0 0 4px;
@@ -47,6 +49,15 @@
 .dx-tagbox:not(.dx-tagbox-single-line) {
     .dx-texteditor-input {
         height: auto;
+    }
+}
+
+.dx-tag-container.dx-texteditor-input-container {
+    padding-bottom: @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
+
+    .dx-texteditor-input {
+        padding-bottom: @GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING - @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
+        min-height: @GENERIC_TEXTEDITOR_INPUT_HEIGHT - @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
     }
 }
 
