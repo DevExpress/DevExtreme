@@ -593,7 +593,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             renderer: renderer,
             root: scaleGroup,
             scaleBreaksGroup: scaleBreaksGroup,
-            updateSelectedRange: function(range) { that.setValue(convertVisualRangeObject(range)); },
+            updateSelectedRange: function(range, e) { that.setValue(convertVisualRangeObject(range), e); },
             incidentOccurred: that._incidentOccurred
         });
 
@@ -607,14 +607,15 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             renderer: renderer,
             root: slidersGroup,
             trackersGroup: trackersGroup,
-            updateSelectedRange: function(range, lastSelectedRange) {
+            updateSelectedRange: function(range, lastSelectedRange, e) {
                 if(!that._rangeOption) {
                     that.option(VALUE, convertVisualRangeObject(range, typeUtils.isPlainObject(that._options[VALUE])));
                 }
 
                 that._eventTrigger(VALUE_CHANGED, {
                     value: convertVisualRangeObject(range),
-                    previousValue: convertVisualRangeObject(lastSelectedRange)
+                    previousValue: convertVisualRangeObject(lastSelectedRange),
+                    event: e
                 });
             },
             axis: that._axis,
@@ -971,7 +972,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         return convertVisualRangeObject(this._slidersController.getSelectedRange());
     },
 
-    setValue: function(value) {
+    setValue: function(value, e) {
         var current;
         const visualRange = parseValue(value);
         if(!this._isUpdating && value) {
@@ -979,7 +980,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             // TODO: Move the check inside the SlidersController
             current = this._slidersController.getSelectedRange();
             if(!current || current.startValue !== visualRange.startValue || current.endValue !== visualRange.endValue) {
-                this._slidersController.setSelectedRange(parseValue(value));
+                this._slidersController.setSelectedRange(parseValue(value), e);
             }
         }
     },
@@ -1031,7 +1032,7 @@ function createDateMarkersEvent(scaleOptions, markerTrackers, setSelectedRange) 
             minRange = scaleOptions.minRange ? addInterval(range.startValue, scaleOptions.minRange) : undefined,
             maxRange = scaleOptions.maxRange ? addInterval(range.startValue, scaleOptions.maxRange) : undefined;
         if(!(minRange && minRange > range.endValue || maxRange && maxRange < range.endValue)) {
-            setSelectedRange(range);
+            setSelectedRange(range, e);
         }
     }
 }

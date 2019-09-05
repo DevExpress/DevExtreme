@@ -76,16 +76,16 @@ function initializeAreaEvents(controller, area, state, getRootOffsetLeft) {
                 if(isTouchEvent !== isTouchEventArgs(e)) return;
 
                 if(!isLeftButtonPressed(e)) {
-                    cancel();
+                    cancel(e);
                 }
                 if(isActive) {
                     position = getEventPageX(e);
                     offset = getRootOffsetLeft();
                     if(movingHandler) {
-                        movingHandler(position - offset);
+                        movingHandler(position - offset, e);
                     } else {
                         if(state.manualRangeSelectionEnabled && Math.abs(initialPosition - position) >= MIN_MANUAL_SELECTING_WIDTH) {
-                            movingHandler = controller.placeSliderAndBeginMoving(initialPosition - offset, position - offset);
+                            movingHandler = controller.placeSliderAndBeginMoving(initialPosition - offset, position - offset, e);
                         }
                     }
                 }
@@ -95,18 +95,18 @@ function initializeAreaEvents(controller, area, state, getRootOffsetLeft) {
                 if(isActive) {
                     position = getEventPageX(e);
                     if(!movingHandler && state.moveSelectedRangeByClick && Math.abs(initialPosition - position) < MIN_MANUAL_SELECTING_WIDTH) {
-                        controller.moveSelectedArea(position - getRootOffsetLeft());
+                        controller.moveSelectedArea(position - getRootOffsetLeft(), e);
                     }
-                    cancel();
+                    cancel(e);
                 }
             }
         };
 
-    function cancel() {
+    function cancel(e) {
         if(isActive) {
             isActive = false;
             if(movingHandler) {
-                movingHandler.complete();
+                movingHandler.complete(e);
                 movingHandler = null;
             }
         }
@@ -131,20 +131,20 @@ function initializeSelectedAreaEvents(controller, area, state, getRootOffsetLeft
                 if(isTouchEvent !== isTouchEventArgs(e)) return;
 
                 if(!isLeftButtonPressed(e)) {
-                    cancel();
+                    cancel(e);
                 }
                 if(isActive) {
                     preventDefault(e);
-                    movingHandler(getEventPageX(e) - getRootOffsetLeft());
+                    movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
                 }
             },
             [pointerEvents.up]: cancel
         };
 
-    function cancel() {
+    function cancel(e) {
         if(isActive) {
             isActive = false;
-            movingHandler.complete();
+            movingHandler.complete(e);
             movingHandler = null;
         }
     }
@@ -169,11 +169,11 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
                 if(isTouchEvent !== isTouchEventArgs(e)) return;
 
                 if(!isLeftButtonPressed(e)) {
-                    cancel();
+                    cancel(e);
                 }
                 if(isActive) {
                     preventDefault(e);
-                    movingHandler(getEventPageX(e) - getRootOffsetLeft());
+                    movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
                 }
             },
             [pointerEvents.up]: cancel
@@ -197,10 +197,10 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
         });
     });
 
-    function cancel() {
+    function cancel(e) {
         if(isActive) {
             isActive = false;
-            movingHandler.complete();
+            movingHandler.complete(e);
             movingHandler = null;
         }
     }
