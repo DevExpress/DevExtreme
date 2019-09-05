@@ -137,7 +137,7 @@ var TextBox = TextEditor.inherit({
     },
 
     _onKeyDownCutOffHandler: function(e) {
-        var actualMaxLength = this._input().attr("maxLength");
+        var actualMaxLength = this._getMaxLength();
         if(actualMaxLength) {
             var $input = $(e.target),
                 key = eventUtils.normalizeKeyName(e);
@@ -160,11 +160,16 @@ var TextBox = TextEditor.inherit({
     },
 
     _cutOffExtraChar: function($input) {
-        var actualMaxLength = this._input().attr("maxLength"),
+        var actualMaxLength = this._getMaxLength(),
             textInput = $input.val();
         if(actualMaxLength && textInput.length > actualMaxLength) {
             $input.val(textInput.substr(0, actualMaxLength));
         }
+    },
+
+    _getMaxLength: function() {
+        var isMaskSpecified = !!this.option("mask");
+        return isMaskSpecified ? null : this.option("maxLength");
     },
 
     _isAndroidOrIE: function() {
