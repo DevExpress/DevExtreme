@@ -322,7 +322,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
             rtlEnabled: this._getOption("rtlEnabled", true),
             paddingTopBottom: paddingTopBottom,
             paddingLeftRight: paddingLeftRight,
-            resolveLabelOverflow: this._getOptionSilently("resolveLabelOverflow"),
+            resolveLabelOverflow: this._getOptionSilent("resolveLabelOverflow"),
             tileLabelWordWrap: tileLabelOptions.wordWrap,
             tileLabelOverflow: tileLabelOptions.textOverflow,
             groupLabelOverflow: groupLabelOptions.textOverflow

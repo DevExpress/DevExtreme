@@ -476,7 +476,7 @@ QUnit.module("default", {}, () => {
 
         instance._logDeprecatedWarning = _logDeprecatedWarningMock;
 
-        instance._setOptionWithoutNotify({
+        instance._setOptionSilent({
             deprecatedOption: true,
         });
 

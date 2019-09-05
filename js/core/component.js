@@ -455,7 +455,7 @@ var Component = Class.inherit({
         return result;
     },
 
-    _getOptionSilentн: function(name) {
+    _getOptionSilent: function(name) {
         return this._optionManager.getSilently(name);
     },
 
