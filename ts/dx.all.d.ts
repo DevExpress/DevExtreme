@@ -2014,7 +2014,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.pageSize */
         pageSize?: { height?: number, items?: Array<{ height?: number, text?: string, width?: number }>, width?: number };
         /** @name dxDiagram.Options.propertiesPanel */
-        propertiesPanel?: { collapsible?: boolean, groups?: Array<{ commands?: Array<'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageLandscape' | 'pageColor'> }>, visible?: boolean };
+        propertiesPanel?: { collapsible?: boolean, groups?: Array<{ commands?: Array<'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'> }>, visible?: boolean };
         /** @name dxDiagram.Options.readOnly */
         readOnly?: boolean;
         /** @name dxDiagram.Options.showGrid */

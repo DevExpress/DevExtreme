@@ -1098,7 +1098,7 @@
 
 /**
  * @typedef {string} Enums.DiagramPropertiesPanelCommand
- * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageLandscape'|'pageColor'}
+ * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'}
  */
 
 /**
