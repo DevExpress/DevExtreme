@@ -249,7 +249,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _getDefaultPopupPosition: function() {
-        var position = getDefaultAlignment(this.option("rtlEnabled"));
+        var position = getDefaultAlignment();
 
         return {
             offset: { h: 0, v: -1 },

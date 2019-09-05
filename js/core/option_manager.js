@@ -2,6 +2,7 @@ import coreDataUtils from "./utils/data";
 import typeUtils from "./utils/type";
 import CallBacks from "./utils/callbacks";
 import domAdapter from "./dom_adapter";
+import { extend } from "./utils/extend";
 
 export class OptionManager {
     constructor(options, optionsByReference, deprecatedOptions) {
@@ -165,6 +166,16 @@ export class OptionManager {
         this._setRelevantNames(options, name, value);
     }
 
+    _ensureObject(options, value) {
+        let name = options;
+        if(typeof name === "string") {
+            options = {};
+            options[name] = value;
+        }
+
+        return options;
+    }
+
     _getValue(options, name, unwrapObservables) {
         let getter = this.cachedGetters[name];
         if(!getter) {
@@ -172,6 +183,16 @@ export class OptionManager {
         }
 
         return getter(options, { functionsAsIs: true, unwrapObservables });
+    }
+
+    _setRulesOptions(options, rulesOptions) {
+        extend(true, options, rulesOptions);
+
+        for(var fieldName in this._optionsByReference) {
+            if(Object.prototype.hasOwnProperty.call(rulesOptions, fieldName)) {
+                options[fieldName] = rulesOptions[fieldName];
+            }
+        }
     }
 
     onChanging(callBack) {
@@ -186,22 +207,27 @@ export class OptionManager {
         this._logWarningCallbacks.add(callBack);
     }
 
-    getValue(options, name, unwrapObservables) {
+    getValue(name) {
         const normalizedName = this._normalizeName(name);
-        return this._getValue(options, normalizedName, unwrapObservables);
+        return this._getValue(this._options, normalizedName);
+    }
+
+    setSilently(options, value) {
+        options = this._ensureObject(options, value);
+
+        this._setRulesOptions(this._options, options);
+    }
+
+    getSilently(name) {
+        return this._options[name];
     }
 
     setValue(options, value) {
-        let name = options;
-        if(typeof name === "string") {
-            options = {};
-            options[name] = value;
-        }
-        let optionName;
-        for(optionName in options) {
+        options = this._ensureObject(options, value);
+        for(const optionName in options) {
             this._prepareRelevantNames(options, optionName, options[optionName]);
         }
-        for(optionName in options) {
+        for(const optionName in options) {
             this._setPreparedValue(optionName, options[optionName]);
         }
     }

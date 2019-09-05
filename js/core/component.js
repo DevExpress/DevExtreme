@@ -116,10 +116,6 @@ var Component = Class.inherit({
         };
     },
 
-    _setDefaultOptions: function() {
-        this._options = this._getDefaultOptions();
-    },
-
     _defaultOptionsRules: function() {
         return [];
     },
@@ -134,20 +130,10 @@ var Component = Class.inherit({
         return this._convertRulesToOptions(rules);
     },
 
-    _setRulesOptions: function(options, rulesOptions) {
-        extend(true, options, rulesOptions);
-
-        for(var fieldName in this._optionsByReference) {
-            if(Object.prototype.hasOwnProperty.call(rulesOptions, fieldName)) {
-                options[fieldName] = rulesOptions[fieldName];
-            }
-        }
-    },
-
     _setOptionsByDevice: function(customRules) {
         var rulesOptions = this._getOptionByRules(customRules);
 
-        this._setRulesOptions(this._options, rulesOptions);
+        this._optionManager.setSilently(rulesOptions);
     },
 
     _convertRulesToOptions: function(rules) {
@@ -209,8 +195,6 @@ var Component = Class.inherit({
             this.setEventsStrategy(options.eventsStrategy);
         }
         this._options = {};
-        this._optionManager = {};
-
         this._updateLockCount = 0;
 
         this._optionChangedCallbacks = options._optionChangedCallbacks || Callbacks();
@@ -222,7 +206,7 @@ var Component = Class.inherit({
         try {
             this._setOptionsByReference();
             this._setDeprecatedOptions();
-            this._setDefaultOptions();
+            this._options = this._getDefaultOptions();
             this._optionManager = new optionManager(
                 this._options,
                 this._getOptionsByReference(),
@@ -241,7 +225,6 @@ var Component = Class.inherit({
             this._optionManager.onChanged((name, value, previousValue) => {
                 this._notifyOptionChanged(name, value, previousValue);
             });
-
 
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
@@ -371,8 +354,8 @@ var Component = Class.inherit({
         if(!this._initialOptions) {
             this._initialOptions = {};
             this._initialOptions = this._getDefaultOptions();
-            const rulesOptions = this._getOptionByRules(this._options.defaultOptionsRules);
-            this._setRulesOptions(this._initialOptions, rulesOptions);
+            const rulesOptions = this._getOptionByRules(this._optionManager.getSilently["defaultOptionsRules"]);
+            this._optionManager._setRulesOptions(this._initialOptions, rulesOptions);
         }
 
         const fullPath = optionName.split(".");
@@ -472,6 +455,14 @@ var Component = Class.inherit({
         return result;
     },
 
+    _getOptionSilently: function(name) {
+        return this._optionManager.getSilently(name);
+    },
+
+    _setOptionSilently: function(options, value) {
+        this._optionManager.setSilently(options, value);
+    },
+
     _getEventName: function(actionName) {
         return actionName.charAt(2).toLowerCase() + actionName.substr(3);
     },
@@ -490,6 +481,16 @@ var Component = Class.inherit({
         this._cancelOptionChange = name;
         this.option(name, value);
         this._cancelOptionChange = false;
+    },
+
+    _getOptionValue: function(name, context) {
+        var value = this.option(name);
+
+        if(isFunction(value)) {
+            return value.bind(context)();
+        }
+
+        return value;
     },
 
     /**
@@ -516,11 +517,7 @@ var Component = Class.inherit({
      */
     option: function(options, value) {
         if(arguments.length < 2 && typeUtils.type(options) !== "object") {
-            if(typeUtils.isEmptyObject(this._options)) {
-                return;
-            }
-
-            return this._optionManager.getValue(this._options, options);
+            return this._optionManager.getValue(options);
         }
 
         this.beginUpdate();
@@ -538,18 +535,8 @@ var Component = Class.inherit({
         }
         const defaultValue = this.initialOption(name);
         this.beginUpdate();
-        this._optionManager.setValue(name, defaultValue, this._options, false);
+        this._optionManager.setValue(name, defaultValue);
         this.endUpdate();
-    },
-
-    _getOptionValue: function(name, context) {
-        var value = this.option(name);
-
-        if(isFunction(value)) {
-            return value.bind(context)();
-        }
-
-        return value;
     }
 }).include(EventsMixin);
 

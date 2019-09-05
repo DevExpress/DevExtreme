@@ -467,6 +467,23 @@ QUnit.module("default", {}, () => {
         assert.strictEqual(instance.option("optionWithUndefinedValue"), undefined);
     });
 
+    QUnit.test("set and get option silently", (assert) => {
+        const instance = new TestComponent();
+        let warningCount = 0;
+        const _logDeprecatedWarningMock = option => {
+            ++warningCount;
+        };
+
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+
+        instance._setOptionSilently({
+            deprecatedOption: true,
+        });
+
+        assert.equal(instance._getOptionSilently("deprecatedOption"), true);
+        assert.equal(warningCount, 0);
+    });
+
     QUnit.test("reading & writing a deprecated option must invoke the _logDeprecatedWarning method and pass the option name as a parameter", (assert) => {
         const instance = new TestComponent();
         const deprecatedOption = "deprecatedOption";
