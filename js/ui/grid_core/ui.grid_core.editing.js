@@ -757,16 +757,14 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this,
                 insertKey,
                 dataController = that._dataController,
-                rowsView = that.getView("rowsView"),
                 rows = dataController.items(),
-                parentRowIndex = dataController.getRowIndexByKey(parentKey),
                 row,
                 editMode = getEditMode(that);
 
             insertKey = {
                 parentKey,
                 pageIndex: dataController.pageIndex(),
-                rowIndex: (parentRowIndex >= 0 ? parentRowIndex + 1 : (rowsView ? rowsView.getTopVisibleItemIndex(true) : 0))
+                rowIndex: that._getRowIndex(parentKey)
             };
 
             row = rows[insertKey.rowIndex];
@@ -786,6 +784,22 @@ var EditingController = modules.ViewController.inherit((function() {
             insertKey[INSERT_INDEX] = that._getInsertIndex();
 
             return insertKey;
+        },
+
+        _getRowIndex: function(parentKey) {
+            var that = this,
+                rowsView = that.getView("rowsView"),
+                parentRowIndex = that._dataController.getRowIndexByKey(parentKey);
+
+            if(parentRowIndex >= 0) {
+                return parentRowIndex + 1;
+            }
+
+            if(rowsView) {
+                return rowsView.getTopVisibleItemIndex(true);
+            }
+
+            return 0;
         },
 
         _getInsertIndex: function() {
