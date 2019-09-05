@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { Deferred, when } from "../../core/utils/deferred";
+import { Deferred } from "../../core/utils/deferred";
 import { isDefined } from "../../core/utils/type";
 import Guid from "../../core/guid";
 
@@ -85,47 +85,15 @@ class FileManagerFileUploader extends Widget {
     _fileUploaderUploadChunk(fileUploader, file, chunksInfo) {
         const { session, fileIndex } = this._findSessionByFile(fileUploader, file);
         const controller = session.controller;
-        let result = null;
-        let uploadState = null;
-
-        if(chunksInfo.chunkIndex === 0) {
-            uploadState = {
-                file,
-                fileIndex,
-                uploadedBytesCount: 0,
-                uploadedChunksCount: 0,
-                totalChunkCount: chunksInfo.chunkCount,
-                customData: {}
-            };
-            chunksInfo.customData.uploadState = uploadState;
-
-            result = when(controller.initiateUpload(uploadState));
-        } else {
-            uploadState = chunksInfo.customData.uploadState;
-            uploadState.uploadedBytesCount += chunksInfo.bytesLoaded;
-            uploadState.uploadedChunksCount = chunksInfo.chunkIndex;
-
-            result = new Deferred().resolve().promise();
-        }
-
-        let chunk = {
-            index: chunksInfo.chunkIndex,
-            size: chunksInfo.chunkBlob.size,
-            blob: chunksInfo.chunkBlob
-        };
-        result = result.then(() => controller.uploadChunk(uploadState, chunk));
-
-        if(chunksInfo.chunkIndex === chunksInfo.chunkCount - 1) {
-            result = result.then(() => controller.finalizeUpload(uploadState));
-        }
-
-        return result;
+        chunksInfo.fileIndex = fileIndex;
+        return controller.uploadFileChunk(file, chunksInfo);
     }
 
     _fileUploaderAbortUpload(fileUploader, file, chunksInfo) {
-        const { session } = this._findSessionByFile(fileUploader, file);
-        let uploadState = chunksInfo.customData.uploadState;
-        return when(session.controller.abortUpload(uploadState));
+        const { session, fileIndex } = this._findSessionByFile(fileUploader, file);
+        const controller = session.controller;
+        chunksInfo.fileIndex = fileIndex;
+        return controller.abortFileUpload(file, chunksInfo);
     }
 
     _onFileUploaderValueChanged({ component, value }) {
