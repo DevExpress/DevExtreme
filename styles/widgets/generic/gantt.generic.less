@@ -1,3 +1,6 @@
+@import (once) "./scrollView.generic.less";
+@import (once) "./treeList.generic.less";
+
 @gantt_successor_background_color: white;
 
 .dx-gantt {
@@ -34,19 +37,6 @@
 
     .dx-treelist-rowsview tr:not(.dx-row-focused).dx-selection .dx-treelist-empty-space {
         color: @base-label-color;
-    }
-
-    .dx-gantt-splitter {
-        width: 4px;
-        background-color: @datagrid-column-separator-bg;
-    }
-
-    .dx-gantt-splitter-transparent {
-        background-color: transparent;
-    }
-
-    .dx-gantt-splitter-border {
-        border-left: 2px solid @base-border-color;
     }
 
     .dx-gantt-view {

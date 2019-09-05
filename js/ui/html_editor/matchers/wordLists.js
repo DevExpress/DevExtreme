@@ -4,10 +4,17 @@ function getListType(matches) {
 }
 
 function getIndent(node) {
-    const style = node.getAttribute('style').replace(/\n+/g, '');
-    const level = style.match(/level(\d+)/);
+    const style = node.getAttribute('style');
 
-    return level ? level[1] - 1 : 0;
+    if(style) {
+        const level = style
+            .replace(/\n+/g, '')
+            .match(/level(\d+)/);
+
+        return level ? level[1] - 1 : 0;
+    } else {
+        return false;
+    }
 }
 
 function removeNewLineChar(operations) {
@@ -24,13 +31,13 @@ const getMatcher = (quill) => {
         let insertOperation = ops[0];
         insertOperation.insert = insertOperation.insert.replace(/^\s+/, "");
         const listDecoratorMatches = insertOperation.insert.match(/^(\S+)\s+/);
+        const indent = listDecoratorMatches && getIndent(node);
 
-        if(!listDecoratorMatches) {
+        if(!listDecoratorMatches || indent === false) {
             return delta;
         }
 
         insertOperation.insert = insertOperation.insert.substring(listDecoratorMatches[0].length, insertOperation.insert.length);
-        const indent = getIndent(node);
 
         removeNewLineChar(ops);
 

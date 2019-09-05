@@ -1,13 +1,16 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isFunction } from "../../core/utils/type";
-import { getWindow } from "../../core/utils/window";
+import { getWindow, hasWindow } from "../../core/utils/window";
 
 import Widget from "../widget/ui.widget";
 import Drawer from "../drawer/ui.drawer";
+import SplitterControl from "../splitter";
 
 const window = getWindow();
 const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
+
+const DRAWER_PANEL_CONTENT_INITIAL = "dx-drawer-panel-content-initial";
 
 class FileManagerAdaptivityControl extends Widget {
 
@@ -25,15 +28,48 @@ class FileManagerAdaptivityControl extends Widget {
             contentRenderer($drawer);
         }
 
-        this._drawer = this._createComponent($drawer, Drawer, {
+        this._drawer = this._createComponent($drawer, Drawer);
+        this._drawer.option({
             opened: true,
-            template: this.option("drawerTemplate")
+            template: this._createDrawerTemplate.bind(this)
         });
+        $(this._drawer.content()).addClass(DRAWER_PANEL_CONTENT_INITIAL);
+    }
+
+    _createDrawerTemplate(container) {
+        this.option("drawerTemplate")(container);
+        this._splitter = this._createComponent("<div>", SplitterControl, {
+            container: this.$element(),
+            leftElement: $(this._drawer.content()),
+            rightElement: $(this._drawer.viewContent()),
+            onApplyPanelSize: this._onApplyPanelSize.bind(this)
+        });
+        this._splitter.$element().appendTo(container);
     }
 
     _render() {
         super._render();
         this._checkAdaptiveState();
+    }
+
+    _onApplyPanelSize(e) {
+        if(!hasWindow()) {
+            return;
+        }
+
+        if(!this._splitter.isSplitterMoved()) {
+            this._updateDrawerDimensions();
+            return;
+        }
+        $(this._drawer.content()).removeClass(DRAWER_PANEL_CONTENT_INITIAL);
+        $(this._drawer.content()).css("width", e.leftPanelWidth);
+        this._drawer.resizeContent();
+    }
+
+    _updateDrawerDimensions() {
+        $(this._drawer.content()).css("width", "");
+        this._drawer._initSize();
+        this._drawer._strategy.setPanelSize(true);
     }
 
     _dimensionChanged(dimension) {
@@ -48,6 +84,7 @@ class FileManagerAdaptivityControl extends Widget {
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
+            this._splitter.toggleState(!this._isInAdaptiveState);
         }
     }
 
@@ -69,7 +106,7 @@ class FileManagerAdaptivityControl extends Widget {
         return extend(super._getDefaultOptions(), {
             drawerTemplate: null,
             contentTemplate: null,
-            onAdaptiveStateChanged: null
+            onAdaptiveStateChanged: null,
         });
     }
 
@@ -97,7 +134,6 @@ class FileManagerAdaptivityControl extends Widget {
         this._drawer.option("animationEnabled", !skipAnimation);
         this._drawer.toggle(showing);
     }
-
 }
 
 module.exports = FileManagerAdaptivityControl;

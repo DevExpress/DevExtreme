@@ -31,7 +31,11 @@ fixture `Resize appointments in the Scheduler basic views`
         .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
         .expect(resizableAppointment.date.endTime).eql(`11:00 AM`)
 
-}).before(() => createScheduler(view, dataSource)));
+}).before(() => createScheduler({
+    views: [view],
+    currentView: view,
+    dataSource: dataSource
+})));
 
 test(`Resize in the "timelineMonth" view`, async t => {
     const scheduler = new Scheduler("#container");
@@ -58,4 +62,31 @@ test(`Resize in the "timelineMonth" view`, async t => {
         .expect(resizableAppointment.date.startTime).eql(`10:00 AM`)
         .expect(resizableAppointment.date.endTime).eql(`11:00 AM`);
 
-}).before(() => createScheduler('timelineMonth', dataSource));
+}).before(() => createScheduler({
+    views: ['timelineMonth'],
+    currentView: 'timelineMonth',
+    dataSource: dataSource
+}));
+
+test(`Resize appointment on timelineWeek view with custom startDayHour & endDayHour (T804779)`, async t => {
+    const scheduler = new Scheduler("#container");
+    const appointment = scheduler.getAppointment('Appointment');
+
+    await t
+        .resizeWindow(1400, 800)
+        .drag(appointment.resizableHandle.right, -400, 0)
+        .expect(appointment.size.width).eql(`200px`)
+        .expect(appointment.date.startTime).eql(`2:00 PM`)
+        .expect(appointment.date.endTime).eql(`3:00 PM`)
+
+}).before(() => createScheduler({
+    views: [{type: 'timelineWeek', startDayHour: 10, endDayHour: 16, cellDuration: 60}],
+    currentView: 'timelineWeek',
+    currentDate: new Date(2019, 8, 1),
+    firstDayOfWeek: 0,
+    dataSource: [{
+        text: "Appointment",
+        startDate: new Date(2019, 8, 1, 14),
+        endDate: new Date(2019, 8, 2, 11),
+    }]
+}));

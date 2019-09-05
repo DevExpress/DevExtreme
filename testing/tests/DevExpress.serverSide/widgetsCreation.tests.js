@@ -17,6 +17,7 @@ var widgets = {
     DeferRendering: require("ui/defer_rendering"),
     Drawer: require("ui/drawer"),
     DropDownBox: require("ui/drop_down_box"),
+    FileManager: require("ui/file_manager"),
     FileUploader: require("ui/file_uploader"),
     FilterBuilder: require("ui/filter_builder"),
     Form: require("ui/form"),

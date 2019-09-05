@@ -1,3 +1,16 @@
+@import (once) "./toast.less";
+@import (once) "./drawer.less";
+@import (once) "./menu.less";
+@import (once) "./contextMenu.less";
+@import (once) "./popup.less";
+@import (once) "./textBox.less";
+@import (once) "./button.less";
+@import (once) "./treeView.less";
+@import (once) "./dataGrid.less";
+@import (once) "./progressBar.less";
+@import (once) "./scrollView.less";
+@import (once) "./toolbar.less";
+
 .dx-filemanager {
     height: 500px;
     border: 1px solid;
@@ -135,15 +148,31 @@
         overflow: hidden;
 
         .dx-filemanager-dirs-panel {
-            min-width: 250px;
-            max-width: 300px;
             padding: 5px 10px;
+            height: 100%;
+            width: 100%;
+            display: block;
+        }
+
+        .dx-drawer-opened {
+            .dx-splitter.dx-state-disabled {
+                width: 1px;
+            }
+        }
+
+        .dx-drawer-panel-content {
+            display: block;
+            width: 30%;
+
+            &.dx-drawer-panel-content-initial {
+                min-width: 250px;
+                max-width: 300px;
+            }
         }
     }
 
     .dx-filemanager-dirs-panel {
         height: 100%;
-        border-right: 1px solid;
     }
 
     .dx-filemanager-breadcrumbs {
@@ -191,10 +220,6 @@
         position: absolute;
         top: -5000px;
         left: -5000px;
-    }
-
-    .dx-filemanager-fileuploader .dx-filemanager-fileuploader-fileinput {
-        display: none;
     }
 
     .dx-row {
@@ -346,6 +371,8 @@
 }
 
 .dx-filemanager-dirs-tree {
+    width: 100%;
+
     .dx-treeview-item-content {
         display: flex;
         align-items: flex-end;

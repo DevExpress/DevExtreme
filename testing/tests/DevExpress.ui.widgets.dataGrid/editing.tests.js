@@ -14777,8 +14777,10 @@ QUnit.module("Promises in callbacks and events", {
         this.editCell = function(rowIndex, columnIndex, text) {
             let testElement = $("#container");
             testElement.find("tbody > tr").eq(rowIndex).find("td").eq(columnIndex).trigger("dxclick"); // Edit
-            testElement.find("input").eq(0).val(text);
-            testElement.find("input").eq(0).trigger("change");
+            if(text) {
+                testElement.find("input").eq(0).val(text);
+                testElement.find("input").eq(0).trigger("change");
+            }
         };
     },
     afterEach: function() {
@@ -14941,4 +14943,461 @@ QUnit.test("Closing cell should work after promise returned from setCellValue is
     assert.notOk(this.hasEditData(), "No edit data");
     assert.equal(testElement.find("input").length, 0, "Editor is closed");
     assert.equal(testElement.find(".dx-error-row").length, 0, "Error row is not visible");
+});
+
+var onInitNewRowTest = function(assert, that, mode) {
+    // arrange
+    var testElement = $("#container"),
+        visibleRows,
+        rowData = { room: 42 };
+
+    that.options.columns = ["room"];
+    that.options.editing = {
+        allowAdding: true,
+        mode: mode
+    };
+    that.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.data = rowData;
+            e.promise.resolve();
+        }, 500);
+    };
+
+    that.editingController.optionChanged({ name: "onInitNewRow" });
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.headerPanel.render(testElement);
+    that.columnsController.init();
+
+    // act
+    that.addRow();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 7);
+
+    // act
+    that.clock.tick(500);
+
+    that.saveEditData();
+    that.clock.tick();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 8, "row was added");
+    assert.deepEqual(visibleRows[7].data, rowData, "last row's data");
+};
+
+QUnit.test("Adding row with async onInitNewRow and batch mode", function(assert) {
+    onInitNewRowTest(assert, this, "batch");
+});
+
+QUnit.test("Adding row with async onInitNewRow and row mode", function(assert) {
+    onInitNewRowTest(assert, this, "row");
+});
+
+QUnit.test("Adding row with async onInitNewRow and cell mode", function(assert) {
+    onInitNewRowTest(assert, this, "cell");
+});
+
+var failingOnInitNewRowTest = function(assert, that, mode) {
+    // arrange
+    var testElement = $("#container"),
+        visibleRows,
+        rowData = { room: 42 },
+        errorText = "error text";
+
+    that.options.columns = ["room"];
+    that.options.editing = {
+        allowAdding: true,
+        mode: mode
+    };
+    that.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.data = rowData;
+            e.promise.reject(errorText);
+        }, 500);
+    };
+
+    that.editingController.optionChanged({ name: "onInitNewRow" });
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.headerPanel.render(testElement);
+    that.columnsController.init();
+
+    // act
+    that.addRow();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 7);
+
+    // act
+    that.clock.tick(500);
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 7, "row was not added");
+    assert.equal($(".dx-error-message").text(), errorText, "error row");
+};
+
+QUnit.test("Adding row with failing async onInitNewRow and batch mode", function(assert) {
+    failingOnInitNewRowTest(assert, this, "batch");
+});
+
+QUnit.test("Adding row with failing async onInitNewRow and row mode", function(assert) {
+    failingOnInitNewRowTest(assert, this, "row");
+});
+
+QUnit.test("Adding row with failing async onInitNewRow and cell mode", function(assert) {
+    failingOnInitNewRowTest(assert, this, "cell");
+});
+
+QUnit.test("Adding multiple rows with async onInitNewRow and batch mode", function(assert) {
+    // arrange
+    var testElement = $("#container"),
+        that = this,
+        visibleRows,
+        index = 8;
+
+    that.options.columns = ["room"];
+    that.options.editing = {
+        allowAdding: true,
+        mode: "batch"
+    };
+    that.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.data = { room: index++ };
+            e.promise.resolve();
+        }, 500);
+    };
+
+    that.editingController.optionChanged({ name: "onInitNewRow" });
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.headerPanel.render(testElement);
+    that.columnsController.init();
+
+    // act
+    that.addRow();
+    that.addRow();
+    that.addRow();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 7);
+
+    // act
+    that.clock.tick(500);
+
+    that.saveEditData();
+    that.clock.tick();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 10, "all rows were added");
+    assert.deepEqual(visibleRows[7].data, { room: 8 }, "row #7 data");
+    assert.deepEqual(visibleRows[8].data, { room: 9 }, " row #8 data");
+    assert.deepEqual(visibleRows[9].data, { room: 10 }, "last row's data");
+});
+
+QUnit.test("Adding multiple rows with async onInitNewRow and cell mode", function(assert) {
+    // arrange
+    var testElement = $("#container"),
+        that = this,
+        visibleRows,
+        index = 8;
+
+    that.options.columns = ["room"];
+    that.options.editing = {
+        allowAdding: true,
+        mode: "cell"
+    };
+    that.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.data = { room: index++ };
+            e.promise.resolve();
+        }, 500);
+    };
+
+    that.editingController.optionChanged({ name: "onInitNewRow" });
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.headerPanel.render(testElement);
+    that.columnsController.init();
+
+    // act
+    that.addRow();
+    that.addRow();
+    that.addRow();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 7);
+
+    // act
+    that.clock.tick(500);
+
+    that.saveEditData();
+    that.clock.tick();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 8, "one row was added");
+    assert.deepEqual(visibleRows[7].data, { room: 8 }, "row #7 data");
+});
+
+QUnit.test("Adding multiple rows with async onInitNewRow and row mode", function(assert) {
+    // arrange
+    var testElement = $("#container"),
+        that = this,
+        visibleRows,
+        index = 8;
+
+    that.options.columns = ["room"];
+    that.options.editing = {
+        allowAdding: true,
+        mode: "row"
+    };
+    that.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.data = { room: index++ };
+            e.promise.resolve();
+        }, 500);
+    };
+
+    that.editingController.optionChanged({ name: "onInitNewRow" });
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.headerPanel.render(testElement);
+    that.columnsController.init();
+
+    // act
+    that.addRow();
+    that.addRow();
+    that.addRow();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 7);
+
+    // act
+    that.clock.tick(500);
+
+    that.saveEditData();
+    that.clock.tick();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 8, "one row was added");
+    assert.deepEqual(visibleRows[7].data, { room: 8 }, "row #7 data");
+});
+
+QUnit.test("Adding multiple rows with async onInitNewRow (mixed failures and success) and batch mode", function(assert) {
+    // arrange
+    var testElement = $("#container"),
+        $insertedRows,
+        that = this,
+        visibleRows,
+        index = 8,
+        errorText = "error text";
+
+    that.options.columns = ["room"];
+    that.options.editing = {
+        allowAdding: true,
+        mode: "batch"
+    };
+    that.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.data = { room: index++ };
+            if(index % 2 === 0) {
+                e.promise.resolve();
+            } else {
+                e.promise.reject(errorText);
+            }
+        }, 500);
+    };
+
+    that.editingController.optionChanged({ name: "onInitNewRow" });
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.headerPanel.render(testElement);
+    that.columnsController.init();
+
+    // act
+    that.addRow();
+    that.addRow();
+    that.addRow();
+    that.addRow();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 7);
+
+    // act
+    that.clock.tick(500);
+
+    $insertedRows = $(".dx-row-inserted");
+
+    // assert
+    assert.equal($(".dx-error-message").text(), errorText, "error text");
+    assert.equal($insertedRows.length, 2, "two inserted rows");
+    assert.equal($insertedRows.eq(0).find(".dx-texteditor-input").attr("aria-valuenow"), "11", "last inserted row");
+    assert.equal($insertedRows.eq(1).text(), "9", "previously inserted row");
+
+    // act
+    that.saveEditData();
+    that.clock.tick();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 9, "two rows were added");
+    assert.deepEqual(visibleRows[7].data, { room: 9 }, "row #7 data");
+    assert.deepEqual(visibleRows[8].data, { room: 11 }, "row #8 data");
+});
+
+QUnit.test("Adding multiple rows with async onInitNewRow (mixed failures and success) and cell mode", function(assert) {
+    // arrange
+    var testElement = $("#container"),
+        $insertedRow,
+        that = this,
+        visibleRows,
+        index = 8,
+        errorText = "error text";
+
+    that.options.columns = ["room"];
+    that.options.editing = {
+        allowAdding: true,
+        mode: "cell"
+    };
+    that.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.data = { room: index++ };
+            if(index % 2 === 0) {
+                e.promise.resolve();
+            } else {
+                e.promise.reject(errorText);
+            }
+        }, 500);
+    };
+
+    that.editingController.optionChanged({ name: "onInitNewRow" });
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.headerPanel.render(testElement);
+    that.columnsController.init();
+
+    // act
+    that.addRow();
+    that.addRow();
+    that.addRow();
+    that.addRow();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 7);
+
+    // act
+    that.clock.tick(500);
+
+    $insertedRow = $(".dx-row-inserted");
+
+    // assert
+    assert.equal($(".dx-error-message").text(), errorText, "error text");
+    assert.equal($insertedRow.length, 1, "one inserted row");
+    assert.equal($insertedRow.find(".dx-texteditor-input").attr("aria-valuenow"), "9", "last inserted row");
+
+    // act
+    that.saveEditData();
+    that.clock.tick();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 8, "two rows were added");
+    assert.deepEqual(visibleRows[7].data, { room: 9 }, "row #7 data");
+});
+
+QUnit.test("Adding multiple rows with async onInitNewRow (mixed failures and success) and row mode", function(assert) {
+    // arrange
+    var testElement = $("#container"),
+        $insertedRow,
+        that = this,
+        visibleRows,
+        index = 8,
+        errorText = "error text";
+
+    that.options.columns = ["room"];
+    that.options.editing = {
+        allowAdding: true,
+        mode: "row"
+    };
+    that.options.onInitNewRow = function(e) {
+        e.promise = $.Deferred();
+        setTimeout(() => {
+            e.data = { room: index++ };
+            if(index % 2 === 0) {
+                e.promise.resolve();
+            } else {
+                e.promise.reject(errorText);
+            }
+        }, 500);
+    };
+
+    that.editingController.optionChanged({ name: "onInitNewRow" });
+    that.columnHeadersView.render(testElement);
+    that.rowsView.render(testElement);
+    that.headerPanel.render(testElement);
+    that.columnsController.init();
+
+    // act
+    that.addRow();
+    that.addRow();
+    that.addRow();
+    that.addRow();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 7);
+
+    // act
+    that.clock.tick(500);
+
+    $insertedRow = $(".dx-row-inserted");
+
+    // assert
+    assert.equal($(".dx-error-message").text(), errorText, "error text");
+    assert.equal($insertedRow.length, 1, "one inserted row");
+    assert.equal($insertedRow.find(".dx-texteditor-input").attr("aria-valuenow"), "9", "last inserted row");
+
+    // act
+    that.saveEditData();
+    that.clock.tick();
+
+    visibleRows = that.getVisibleRows();
+
+    // assert
+    assert.equal(visibleRows.length, 8, "two rows were added");
+    assert.deepEqual(visibleRows[7].data, { room: 9 }, "row #7 data");
 });

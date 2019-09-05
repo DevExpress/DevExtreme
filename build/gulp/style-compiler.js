@@ -6,7 +6,8 @@ const gulpLess = require('gulp-less');
 const plumber = require('gulp-plumber');
 const lessCompiler = require('less');
 const LessAutoPrefix = require('less-plugin-autoprefix');
-const lessChanged = require('gulp-less-changed');
+const parseArguments = require('minimist');
+const fs = require('fs');
 
 const generator = require('../../themebuilder/modules/metadata-generator');
 const context = require('./context');
@@ -17,22 +18,11 @@ const autoPrefix = new LessAutoPrefix({ browsers: browsersList });
 const cssArtifactsPath = path.join(process.cwd(), 'artifacts', 'css');
 const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
-
-gulp.task('copy-fonts-and-icons', () => {
-    return gulp
-        .src(['fonts/**/*', 'icons/**/*'], { base: '.' })
-        .pipe(gulp.dest(cssArtifactsPath));
-});
-
-gulp.task('style-compiler-styles', () => {
+const compileBundles = (bundles) => {
     const paths = path.join(process.cwd(), 'styles');
     return gulp
-        .src('styles/bundles/*.less')
+        .src(bundles)
         .pipe(plumber())
-        .pipe(lessChanged({
-            paths: [ paths ],
-            getOutputFileName: file => path.join(cssArtifactsPath, path.basename(file, '.less') + '.css')
-        }))
         .on('data', (chunk) => console.log('Build: ', chunk.path))
         .pipe(gulpLess({
             paths: [ paths ],
@@ -42,12 +32,37 @@ gulp.task('style-compiler-styles', () => {
         .pipe(replace(commentsRegex, ''))
         .pipe(starLicense())
         .pipe(gulp.dest(cssArtifactsPath));
+};
+
+
+gulp.task('copy-fonts-and-icons', () => {
+    return gulp
+        .src(['fonts/**/*', 'icons/**/*'], { base: '.' })
+        .pipe(gulp.dest(cssArtifactsPath));
 });
+
+gulp.task('style-compiler-styles', () => compileBundles('styles/bundles/*.less'));
 
 gulp.task('style-compiler-themes', gulp.parallel('style-compiler-styles', 'copy-fonts-and-icons'));
 
 gulp.task('style-compiler-themes-dev', () => {
-    gulp.watch('styles/**/*', gulp.series('style-compiler-themes'));
+    const args = parseArguments(process.argv);
+    const bundlesArg = args['bundles'];
+
+    const bundles = (
+        bundlesArg
+            ? bundlesArg.split(',')
+            : ['common', 'light', 'material.blue.light'])
+        .map((bundle) => {
+            const bundleName = `styles/bundles/dx.${bundle}.less`;
+            if(fs.existsSync(bundleName)) {
+                return bundleName;
+            }
+            console.log(`${bundleName} file does not exists`);
+            return null;
+        });
+
+    gulp.watch('styles/**/*', gulp.parallel(() => compileBundles(bundles), 'copy-fonts-and-icons'));
 });
 
 gulp.task('style-compiler-tb-metadata', () => {

@@ -96,8 +96,8 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
 
         addRow: function(key) {
             var that = this,
-                callBase = this.callBase,
-                dataController = this.getController("data");
+                callBase = that.callBase,
+                dataController = that.getController("data");
 
             if(key !== undefined && !dataController.isRowExpanded(key)) {
                 var d = new Deferred();
@@ -110,19 +110,17 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
                 return d;
             }
 
+            if(key === undefined) {
+                key = that.option("rootValue");
+            }
+
             callBase.call(that, key);
         },
 
-        _initNewRow: function(options, insertKey) {
-            var parentKey = insertKey.parentKey,
-                dataController = this.getController("data"),
+        _initNewRow: function(options, parentKey) {
+            var dataController = this.getController("data"),
                 dataSourceAdapter = dataController.dataSource(),
                 parentIdSetter = dataSourceAdapter.createParentIdSetter();
-
-            if(parentKey === undefined) {
-                parentKey = this.option("rootValue");
-                insertKey.parentKey = parentKey;
-            }
 
             parentIdSetter(options.data, parentKey);
 

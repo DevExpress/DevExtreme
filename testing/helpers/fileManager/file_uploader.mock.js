@@ -8,7 +8,9 @@ export default class FileManagerTestFileUploader extends FileManagerFileUploader
         if(filesSelector) {
             setTimeout(() => {
                 const files = filesSelector();
-                this._uploadFiles(files);
+                const info = this._uploaderInfos[0];
+                info.fileUploader.option("value", files);
+                info.fileUploader._uploadFiles();
             });
         }
     }
