@@ -143,6 +143,49 @@ QUnit.module("common", {}, () => {
         assert.equal(valueChangedHandler.callCount, 1, "valueChangedHandler has been called");
         assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
     });
+
+    QUnit.test("T810808 - should be possible to type characters in IE in TextBox with maxLength and mask", assert => {
+        const originalIE = browser.msie;
+
+        try {
+            browser.msie = true;
+            const $element = $("#textbox").dxTextBox({ maxLength: 1, mask: '0' });
+            const $input = $element.find("." + INPUT_CLASS);
+            let event = $.Event("keydown", { key: "1" });
+
+            $input.trigger(event);
+            $input.val("1");
+            assert.ok(!event.isDefaultPrevented());
+        } finally {
+            browser.msie = originalIE;
+        }
+    });
+
+    QUnit.test("TextBox shouldn't lose last characters on change event in IE", assert => {
+        const originalIE = browser.msie;
+
+        try {
+            browser.msie = true;
+            const $element = $("#textbox").dxTextBox({ maxLength: 1, mask: '00' });
+            const $input = $element.find("." + INPUT_CLASS);
+
+            let event = $.Event("keydown", { key: "1" });
+            $input.trigger(event);
+            $input.val("1");
+            assert.ok(!event.isDefaultPrevented());
+
+            event = $.Event("keydown", { key: "2" });
+            $input.trigger(event);
+            $input.val("12");
+            assert.ok(!event.isDefaultPrevented());
+
+            event = $.Event("change");
+            $input.trigger(event);
+            assert.equal($input.val(), "12");
+        } finally {
+            browser.msie = originalIE;
+        }
+    });
 });
 
 QUnit.module("options changing", {
