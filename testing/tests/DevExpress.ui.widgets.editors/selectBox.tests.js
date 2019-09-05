@@ -4502,17 +4502,17 @@ QUnit.module("keyboard navigation 'TAB' button", moduleSetup, () => {
 
 QUnit.module("acceptCustomValue mode", moduleSetup, () => {
     QUnit.test("All items should be displayed when widget focused out before search completion", (assert) => {
+        const items = ["aaa", "bbb"];
         const $selectBox = $("#selectBox").dxSelectBox({
-                searchEnabled: true,
-                acceptCustomValue: true,
-                dataSource: ["aaa", "bbb"],
-                opened: true,
-                searchTimeout: 500
-            }),
-            itemsCount = 2,
-            $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
-            selectBox = $selectBox.dxSelectBox("instance"),
-            keyboard = keyboardMock($input);
+            searchEnabled: true,
+            acceptCustomValue: true,
+            dataSource: items,
+            opened: true,
+            searchTimeout: 500
+        });
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        $selectBox.dxSelectBox("instance");
+        const keyboard = keyboardMock($input);
 
         $input.focus();
 
@@ -4526,7 +4526,9 @@ QUnit.module("acceptCustomValue mode", moduleSetup, () => {
 
         this.clock.tick(500);
 
-        assert.equal(selectBox.getDataSource()._items.length, itemsCount, "all items are displayed");
+        const $listItems = $(`.${POPUP_CONTENT_CLASS} .${LIST_ITEM_CLASS}`);
+        assert.equal($listItems.length, items.length, "all items are displayed");
+        assert.equal($listItems.text(), items.join(''), "items are displayed correctly");
     });
 
     QUnit.test("input value can be edited when acceptCustomValue=true", (assert) => {
