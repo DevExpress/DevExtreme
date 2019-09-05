@@ -67,6 +67,15 @@ QUnit.module("Value", function(hook) {
         assert.equal(incidentOccurred.callCount, 0);
     });
 
+    QUnit.test("Set value with event", function(assert) {
+        var valueChanged = sinon.spy();
+        this.rangeSelector.on("valueChanged", valueChanged);
+
+        this.rangeSelector.setValue([1, 2], { isEvent: true });
+
+        assert.deepEqual(valueChanged.lastCall.args[0].event, { isEvent: true });
+    });
+
     QUnit.test("range when value and scale are changed", function(assert) {
         this.rangeSelector.option("value", [3, 7]);
         this.rangeSelector.option("scale", { startValue: 1, endValue: 11 });
@@ -347,57 +356,52 @@ QUnit.module("onValueChanged event", function(assert) {
     });
 
     QUnit.test("Triggered on widget update after widget has been created with empty data", function(assert) {
-        var count = 0;
+        var valueChanged = sinon.spy();
         $("#container").dxRangeSelector({
-            onValueChanged: function() {
-                ++count;
-            }
+            onValueChanged: valueChanged
         });
 
         $("#container").dxRangeSelector({
             scale: { startValue: 1, endValue: 2 }
         });
 
-        assert.strictEqual(count, 1);
+        assert.strictEqual(valueChanged.callCount, 1);
     });
 
 
     QUnit.test("Triggered only once on axis' date marker click", function(assert) {
-        var count = 0;
+        var valueChanged = sinon.spy();
         $("#container").width(600).dxRangeSelector({
             scale: {
                 startValue: new Date(2011, 1, 1),
                 endValue: new Date(2011, 6, 1)
             },
-            onValueChanged: function() {
-                ++count;
-            }
+            onValueChanged: valueChanged
         });
 
-        $("#container .dxrs-range-selector-elements path:nth-last-child(3)").trigger("dxpointerdown");
+        $("#container .dxrs-range-selector-elements path:nth-last-child(3)").trigger("dxpointerdown", { eventArgs: true });
 
-        assert.strictEqual(count, 1);
+        assert.strictEqual(valueChanged.callCount, 1);
+        assert.strictEqual(valueChanged.lastCall.args[0].event.type, "dxpointerdown");
     });
 
     QUnit.test("Triggered with value and previousValue", function(assert) {
-        var value, previousValue;
+        var valueChanged = sinon.spy();
         $("#container").width(600).dxRangeSelector({
             scale: {
                 startValue: 1,
                 endValue: 11
             },
-            onValueChanged: function(e) {
-                value = e.value;
-                previousValue = e.previousValue;
-            }
+            onValueChanged: valueChanged
         });
 
         $("#container").dxRangeSelector({
             value: [4, 5]
         });
 
-        assert.deepEqual(value, [4, 5], "value");
-        assert.deepEqual(previousValue, [1, 11], "previousValue");
+        assert.deepEqual(valueChanged.lastCall.args[0].value, [4, 5], "value");
+        assert.deepEqual(valueChanged.lastCall.args[0].previousValue, [1, 11], "previousValue");
+        assert.strictEqual(valueChanged.lastCall.args[0].event, undefined);
     });
 
     QUnit.test("onValueChanged not raised on start when dataSource and value are used ", function(assert) {
