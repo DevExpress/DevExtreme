@@ -126,7 +126,7 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatName
-            * @type Enums.HtmlEditorFormat
+            * @type Enums.HtmlEditorToolbarItem|string
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatValues
@@ -689,7 +689,7 @@ const HtmlEditor = Editor.inherit({
     /**
     * @name dxHtmlEditorMethods.format
     * @publicName format(formatName, formatValue)
-    * @param1 formatName:string
+    * @param1 formatName:Enums.HtmlEditorFormat|string
     * @param2 formatValue:any
     */
     format: function(formatName, formatValue) {
@@ -701,7 +701,7 @@ const HtmlEditor = Editor.inherit({
     * @publicName formatText(index, length, formatName, formatValue)
     * @param1 index:number
     * @param2 length:number
-    * @param3 formatName:string
+    * @param3 formatName:Enums.HtmlEditorFormat|string
     * @param4 formatValue:any
     */
     /**
@@ -720,7 +720,7 @@ const HtmlEditor = Editor.inherit({
     * @publicName formatLine(index, length, formatName, formatValue)
     * @param1 index:number
     * @param2 length:number
-    * @param3 formatName:string
+    * @param3 formatName:Enums.HtmlEditorFormat|string
     * @param4 formatValue:any
     */
     /**
