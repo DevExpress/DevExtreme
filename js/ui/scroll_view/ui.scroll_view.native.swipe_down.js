@@ -176,7 +176,6 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        // console.log(`_reachBottomEnabled: ${this._reachBottomEnabled}; _location: ${this._location}; _scrollOffset: ${this._scrollOffset}; _bottomPocketSize ${this._bottomPocketSize}; result: ${this._reachBottomEnabled && this._location <= this._scrollOffset + this._bottomPocketSize}`);
         return this._reachBottomEnabled && this._location <= this._scrollOffset + this._bottomPocketSize;
     },
 

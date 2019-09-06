@@ -980,7 +980,6 @@ var SimulatedStrategy = Class.inherit({
         let horizontalScroller = this._scrollers[HORIZONTAL];
 
         if(verticalScroller) {
-            // console.log(`distance.top: ${distance.top}; verticalScroller._location: ${verticalScroller._location}; verticalScroller._location: ${verticalScroller._location} `);
             distance.top = verticalScroller._boundLocation(distance.top + verticalScroller._location) - verticalScroller._location;
         }
         if(horizontalScroller) {
