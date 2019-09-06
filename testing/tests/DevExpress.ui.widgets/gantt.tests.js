@@ -342,7 +342,7 @@ QUnit.module("Dialogs", moduleConfig, () => {
         const testTitle = "text";
         const titleTextBox = $dialog.find(".dx-textbox").eq(0).dxTextBox("instance");
         titleTextBox.option("value", testTitle);
-        const $okButton = $dialog.find(".dx-button").eq(1);
+        const $okButton = $dialog.find(".dx-popup-bottom").find(".dx-button").eq(0);
         $okButton.trigger("dxclick");
         this.clock.tick();
         const $taskWrapper = this.$element.find(TASK_WRAPPER_SELECTOR).eq(0);
