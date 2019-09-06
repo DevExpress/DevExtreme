@@ -84,24 +84,35 @@ export default class TestFileProvider extends FileProvider {
         return this._provider.copyItems(items, destinationDir);
     }
 
-    initiateFileUpload(uploadInfo) {
-        return this._doDelay(() => this._provider.initiateFileUpload(uploadInfo), 500, true);
+    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
+        let deferred = chunksInfo.chunkIndex === 0
+            ? this._initiateFileUpload()
+            : new Deferred().resolve().promise();
+
+        const delay = chunksInfo.chunkIndex === 0 ? (DEFAULT_DELAY * (1 + 0.15 * chunksInfo.fileIndex)) : DEFAULT_DELAY;
+
+        deferred = deferred.then(() => this._doDelay(() => {
+            this._raiseChunkError(chunksInfo.chunkIndex, chunksInfo.fileIndex);
+            return this._provider.uploadFileChunk(fileData, chunksInfo, destinationDirectory);
+        }, delay, true));
+
+        if(chunksInfo.chunkIndex === chunksInfo.chunkCount - 1) {
+            deferred = deferred.then(() => this._finalizeFileUpload());
+        }
+
+        return deferred;
     }
 
-    uploadFileChunk(uploadInfo, chunk) {
-        const delay = chunk.index === 0 ? (DEFAULT_DELAY * (1 + 0.15 * uploadInfo.fileIndex)) : DEFAULT_DELAY;
-        return this._doDelay(() => {
-            this._raiseChunkError(chunk.index, uploadInfo.fileIndex);
-            return this._provider.uploadFileChunk(uploadInfo, chunk);
-        }, delay, true);
+    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
+        return this._doDelay(() => this._provider.abortFileUpload(fileData, chunksInfo, destinationDirectory), DEFAULT_DELAY, true);
     }
 
-    finalizeFileUpload(uploadInfo) {
-        return this._doDelay(() => this._provider.finalizeFileUpload(uploadInfo), DEFAULT_DELAY, true);
+    _initiateFileUpload() {
+        return this._doDelay(null, 500, true);
     }
 
-    abortFileUpload(uploadInfo) {
-        return this._doDelay(() => this._provider.abortFileUpload(uploadInfo), DEFAULT_DELAY, true);
+    _finalizeFileUpload() {
+        return this._doDelay(null, DEFAULT_DELAY, true);
     }
 
     _getDelayedDeferreds(items, itemAction) {

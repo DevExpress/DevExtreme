@@ -213,20 +213,12 @@ export default class FileItemsController {
             () => this._resetDirectoryState(uploadDirectoryInfo));
     }
 
-    initiateFileUpload(state) {
-        return when(this._fileProvider.initiateFileUpload(state));
+    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
+        return when(this._fileProvider.uploadFileChunk(fileData, chunksInfo, destinationDirectory));
     }
 
-    uploadFileChunk(state, chunk) {
-        return when(this._fileProvider.uploadFileChunk(state, chunk));
-    }
-
-    finalizeFileUpload(state) {
-        return when(this._fileProvider.finalizeFileUpload(state));
-    }
-
-    abortFileUpload(state) {
-        return when(this._fileProvider.abortFileUpload(state));
+    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
+        return when(this._fileProvider.abortFileUpload(fileData, chunksInfo, destinationDirectory));
     }
 
     getFileUploadChunkSize() {

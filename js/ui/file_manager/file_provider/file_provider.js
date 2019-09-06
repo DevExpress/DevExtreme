@@ -69,16 +69,10 @@ class FileProvider {
     copyItems(items, destinationFolder) {
     }
 
-    initiateFileUpload(uploadInfo) {
+    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
     }
 
-    uploadFileChunk(uploadInfo, chunk) {
-    }
-
-    finalizeFileUpload(uploadInfo) {
-    }
-
-    abortFileUpload(uploadInfo) {
+    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
     }
 
     getFileUploadChunkSize() {
