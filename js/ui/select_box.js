@@ -635,6 +635,7 @@ var SelectBox = DropDownList.inherit({
     _focusOutHandler: function(e) {
         this.callBase(e);
 
+        this._clearSearchTimer();
         this._restoreInputText();
     },
 
