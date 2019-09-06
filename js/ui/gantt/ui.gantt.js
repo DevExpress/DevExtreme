@@ -258,6 +258,7 @@ class Gantt extends Widget {
 
     _clean() {
         delete this._ganttView;
+        delete this._dialogInstance;
         super._clean();
     }
 

@@ -8,19 +8,22 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
-const TREELIST_SELECTOR = ".dx-treelist";
-const TREELIST_WRAPPER_SELECTOR = ".dx-gantt-treelist-wrapper";
-const GANTT_VIEW = ".dx-gantt-view";
-const TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper";
-const TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes";
-const TASK_ARROW_SELECTOR = ".dx-gantt-arrow";
-const TASK_TITLE_IN_SELECTOR = ".dx-gantt-titleIn";
-const TASK_TITLE_OUT_SELECTOR = ".dx-gantt-titleOut";
-const TREELIST_EXPANDED = ".dx-treelist-expanded";
-const TREELIST_COLLAPSED = ".dx-treelist-collapsed";
-const SELECTION_SELECTOR = ".dx-gantt-sel";
-const SPLITTER_WRAPPER_CLASS = ".dx-splitter-wrapper";
-const SPLITTER_CLASS = ".dx-splitter";
+const TREELIST_SELECTOR = ".dx-treelist",
+    TREELIST_WRAPPER_SELECTOR = ".dx-gantt-treelist-wrapper",
+    GANTT_VIEW = ".dx-gantt-view",
+    TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper",
+    TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes",
+    TASK_ARROW_SELECTOR = ".dx-gantt-arrow",
+    TASK_TITLE_IN_SELECTOR = ".dx-gantt-titleIn",
+    TASK_TITLE_OUT_SELECTOR = ".dx-gantt-titleOut",
+    TREELIST_EXPANDED = ".dx-treelist-expanded",
+    TREELIST_COLLAPSED = ".dx-treelist-collapsed",
+    SELECTION_SELECTOR = ".dx-gantt-sel",
+    SPLITTER_WRAPPER_CLASS = ".dx-splitter-wrapper",
+    SPLITTER_CLASS = ".dx-splitter",
+    POPUP_CLASS = ".dx-popup-normal",
+    INPUT_TEXT_EDITOR_CLASS = ".dx-texteditor-input";
+
 
 const tasks = [
     { "id": 1, "parentId": 0, "title": "Software Development", "start": new Date("2019-02-21T05:00:00.000Z"), "end": new Date("2019-07-04T12:00:00.000Z"), "progress": 31 },
@@ -59,6 +62,11 @@ const allSourcesOptions = {
     dependencies: { dataSource: dependencies },
     resources: { dataSource: resources },
     resourceAssignments: { dataSource: resourceAssignments }
+};
+const showTaskEditDialog = (gantt) => {
+    const ganttCore = gantt._ganttView._ganttViewCore;
+    const task = ganttCore.viewModel.tasks.items[0];
+    ganttCore.commandManager.showTaskEditDialog.execute(task);
 };
 
 const moduleConfig = {
@@ -302,17 +310,30 @@ QUnit.module("Actions", moduleConfig, () => {
 });
 
 QUnit.module("Dialogs", moduleConfig, () => {
+    test("common", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        showTaskEditDialog(this.instance);
+        assert.equal($("body").find(POPUP_CLASS).length, 1, "dialog is shown");
+        this.instance.repaint();
+        assert.equal($("body").find(POPUP_CLASS).length, 0, "dialog is missed after widget repainting");
+        this.clock.tick();
+
+        showTaskEditDialog(this.instance);
+        assert.equal($("body").find(POPUP_CLASS).length, 1, "dialog is shown");
+        this.instance.dispose();
+        assert.equal($("body").find(POPUP_CLASS).length, 0, "dialog is missed after widget disposing");
+    });
     test("task editing", (assert) => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
-        const ganttCore = this.instance._ganttView._ganttViewCore;
-        const task = ganttCore.viewModel.tasks.items[0];
-        ganttCore.commandManager.showTaskEditDialog.execute(task);
+        showTaskEditDialog(this.instance);
         this.clock.tick();
-        const $dialog = $("body").find(".dx-popup-normal");
+        const $dialog = $("body").find(POPUP_CLASS);
         assert.equal($dialog.length, 1, "dialog is shown");
 
-        const $inputs = $dialog.find(".dx-texteditor-input");
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_CLASS);
         assert.equal($inputs.eq(0).val(), tasks[0].title, "title text is shown");
         assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), "start task text is shown");
         assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), "end task text is shown");
