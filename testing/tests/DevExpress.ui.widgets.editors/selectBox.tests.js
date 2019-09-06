@@ -44,6 +44,7 @@ QUnit.testStart(() => {
             <div style="position: fixed; right: 0; bottom: 0; width: 500px; height: 500px;">\
                 <div id="selectBoxWithoutScroll"></div>\
             </div>\
+            <div id="test-container"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -3820,6 +3821,42 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         assert.strictEqual(instance.option("value"), 4, "value is correct");
         assert.strictEqual($list.find(".dx-list-item").text(), "1234", "all previous list items are loaded");
     });
+
+    QUnit.test("downArrow should load next page if popup container has even and odd height", (assert) => {
+        const testContainer = $("#test-container").css("overflow", "hidden").height(145);
+
+        const $element = $("#selectBox").dxSelectBox({
+                dataSource: {
+                    store: [1, 2, 3, 4, 5, 6],
+                    paginate: true,
+                    pageSize: 4
+                },
+                value: null,
+                focusStateEnabled: true,
+                opened: false,
+                deferRendering: true,
+                dropDownOptions: {
+                    container: testContainer
+                }
+            }),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+            instance = $element.dxSelectBox("instance"),
+            $dropDownButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON)),
+            keyboard = keyboardMock($input);
+
+        $dropDownButton.trigger("dxclick");
+        keyboard.press("down");
+        keyboard.press("down");
+        keyboard.press("down");
+        keyboard.press("down");
+
+        const $list = $(instance.content()).find(".dx-list");
+
+        assert.ok($list.length, "list is rendered");
+        assert.strictEqual($list.find(".dx-list-item").text(), "123456", "all previous list items are loaded");
+        testContainer.height("auto");
+    });
+
 
     QUnit.test("value should be correctly changed via arrow keys when grouped datasource is used", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
