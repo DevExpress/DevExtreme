@@ -76,6 +76,8 @@ class Gantt extends Widget {
             rightElement: this._$ganttView,
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
+        this._setInnerElementsWidth();
+        this._splitter.option("initialLeftPanelWidth", this.option("treeListWidth"));
     }
 
     _initGanttView() {
@@ -107,8 +109,6 @@ class Gantt extends Widget {
         if(e.component.getDataSource()) {
             this._initGanttView();
             this._initScrollSync(e.component);
-            this._setInnerElementsWidth();
-            this._splitter.option("initialLeftPanelWidth", this.option("treeListWidth"));
         }
     }
     _onTreeListRowPrepared(e) {
