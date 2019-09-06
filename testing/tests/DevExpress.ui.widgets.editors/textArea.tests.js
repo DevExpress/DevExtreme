@@ -71,6 +71,17 @@ QUnit.test("scrolling with dxpointer events", assert => {
     $(document).off(".dxtestns");
 });
 
+QUnit.test("scrolling with dxpointer events, empty TextArea", assert => {
+    const $element = $("#textarea").dxTextArea({ height: 100, width: 100 });
+    const $input = $element.dxTextArea("instance")._input();
+
+    $(document).on("dxpointermove.dxtestns", e => {
+        assert.ok(true, "dxpointermove should not be prevented");
+    });
+    pointerMock($input).start().down().move(0, 40).scroll(0, 40).up();
+    $(document).off(".dxtestns");
+});
+
 
 QUnit.module("options changing");
 
