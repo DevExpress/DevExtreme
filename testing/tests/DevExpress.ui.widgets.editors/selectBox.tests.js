@@ -3301,7 +3301,6 @@ QUnit.module("Scrolling", {
 });
 
 QUnit.module("Async tests", {}, () => {
-
     QUnit.testInActiveWindow("Value should be reset after on selectedItem after focusout", (assert) => {
         const done = assert.async(),
             items = [1, 2],
@@ -4502,6 +4501,34 @@ QUnit.module("keyboard navigation 'TAB' button", moduleSetup, () => {
 });
 
 QUnit.module("acceptCustomValue mode", moduleSetup, () => {
+    QUnit.test("All items should be displayed when widget focused out before search completion", (assert) => {
+        const items = ["aaa", "bbb"];
+        const $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            acceptCustomValue: true,
+            dataSource: items,
+            opened: true,
+            searchTimeout: 500
+        });
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        $input.focus();
+
+        keyboard.press("down")
+            .press("enter")
+            .press("end")
+            .type("Xsdx");
+
+        $input.blur();
+        pointerMock($input).start().click();
+
+        this.clock.tick(500);
+
+        const $listItems = $(`.${POPUP_CONTENT_CLASS} .${LIST_ITEM_CLASS}`);
+        assert.equal($listItems.length, items.length, "all items are displayed");
+        assert.equal($listItems.text(), items.join(''), "items are displayed correctly");
+    });
 
     QUnit.test("input value can be edited when acceptCustomValue=true", (assert) => {
         const $selectBox = $("#selectBox").dxSelectBox({
