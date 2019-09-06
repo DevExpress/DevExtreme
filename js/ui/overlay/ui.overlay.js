@@ -460,7 +460,11 @@ var Overlay = Widget.inherit({
 
     _initOptions: function(options) {
         this._initTarget(options.target);
-        this._initContainer(options.container);
+        if(options.container === undefined) {
+            this._initContainer(this.option('container'));
+        } else {
+            this._initContainer(options.container);
+        }
         this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
         this.callBase(options);
