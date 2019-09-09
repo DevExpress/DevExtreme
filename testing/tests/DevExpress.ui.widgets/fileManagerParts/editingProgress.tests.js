@@ -4,7 +4,7 @@ import { Deferred } from "core/utils/deferred";
 import ArrayFileProvider from "ui/file_manager/file_provider/array";
 import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
 import FileItemsController from "ui/file_manager/file_items_controller";
-import { createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
+import { createTestFileSystem, createUploaderFiles } from "../../../helpers/fileManagerHelpers.js";
 import TestFileProvider from "../../../helpers/fileManager/file_provider.test.js";
 import FileManagerProgressPanelMock from "../../../helpers/fileManager/notification.progress_panel.mock.js";
 import FileManagerNotificationControlMock from "../../../helpers/fileManager/notification.mock.js";
@@ -102,27 +102,6 @@ const prepareEnvironment = (context, options) => {
     createController(context, options.provider);
     createNotificationControl(context, options.notification);
     createEditing(context, options.editing);
-};
-
-const createUploaderFiles = count => {
-    const result = [];
-
-    for(let i = 0; i < count; i++) {
-        const size = 300000 + i * 200000;
-        const file = {
-            name: `Upload file ${i}.txt`,
-            size,
-            slice: (startPos, endPos) => ({
-                fileIndex: i,
-                startPos,
-                endPos,
-                size: Math.min(endPos, size) - startPos
-            })
-        };
-        result.push(file);
-    }
-
-    return result;
 };
 
 const raiseErrorForItem = (fileItem, fileIndex) => {

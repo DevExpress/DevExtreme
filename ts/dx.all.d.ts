@@ -2319,11 +2319,13 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
-        permissions?: { copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
+        permissions?: { allowedFileExtensions?: Array<string>, copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.rootFolderName */
         rootFolderName?: string;
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
+        /** @name dxFileManager.Options.upload */
+        upload?: { maxFileSize?: number };
     }
     /** @name dxFileManager */
     export class dxFileManager extends Widget {

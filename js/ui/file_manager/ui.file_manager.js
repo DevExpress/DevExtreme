@@ -48,6 +48,8 @@ class FileManager extends Widget {
             currentPath: this.option("currentPath"),
             rootText: this.option("rootFolderName"),
             fileProvider: this.option("fileProvider"),
+            allowedFileExtensions: this.option("permissions").allowedFileExtensions,
+            maxUploadFileSize: this.option("upload").maxFileSize,
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
         this._commandManager = new FileManagerCommandManager(this.option("permissions"));
@@ -425,6 +427,19 @@ class FileManager extends Widget {
             onSelectedFileOpened: null,
 
             /**
+            * @name dxFileManagerOptions.upload
+            * @type object
+            */
+            upload: {
+                /**
+                * @name dxFileManagerOptions.upload.maxFileSize
+                * @type number
+                * @default 0
+                */
+                maxFileSize: 0
+            },
+
+            /**
              * @name dxFileManagerOptions.permissions
              * @type object
              */
@@ -464,7 +479,14 @@ class FileManager extends Widget {
                  * @type boolean
                  * @default false
                  */
-                upload: false
+                upload: false,
+
+                /**
+                * @name dxFileManagerOptions.permissions.allowedFileExtensions
+                * @type Array<string>
+                * @default [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv"]
+                */
+                allowedFileExtensions: [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv"]
             }
         });
     }
