@@ -1407,21 +1407,26 @@ var dxChart = AdvancedChart.inherit({
                 if(arg.fullName) {
                     axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
                 }
-                if(axisPath === "argumentAxis") {
-                    const pathElements = arg.fullName.split(".");
-                    const destElem = pathElements[pathElements.length - 1];
-                    if(destElem === "endValue" || destElem === "startValue") {
-                        that.getArgumentAxis().visualRange({
-                            [destElem]: arg.value
-                        });
-                    } else {
-                        that.getArgumentAxis().visualRange(arg.value, { skipEventRising: true });
-                    }
-                    return;
+
+                let visualRange = arg.value;
+                let options = {
+                    skipEventRising: true
+                };
+
+                const pathElements = arg.fullName.split(".");
+                const destElem = pathElements[pathElements.length - 1];
+                if(destElem === "endValue" || destElem === "startValue") {
+                    options = {
+                        allowPartialUpdate: true
+                    };
+                    visualRange = {
+                        [destElem]: arg.value
+                    };
                 }
-                const axis = that._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];
+
+                const axis = [that.getArgumentAxis()].concat(that._valueAxes).filter(a => a.getOptions().optionPath === axisPath)[0];
                 if(axis) {
-                    axis.visualRange(arg.value, { skipEventRising: true });
+                    axis.visualRange(visualRange, options);
                 }
             } else if(that.getPartialChangeOptionsName(arg).indexOf("visualRange") > -1) {
                 if(arg.name === "argumentAxis") {
@@ -1452,7 +1457,7 @@ var dxChart = AdvancedChart.inherit({
         const argumentVisualRange =
             convertVisualRangeObject(this._argumentAxes[0].visualRange(), !_isArray(that.option("argumentAxis.visualRange")));
 
-        if(!this._argumentAxes[0].skipEventRising || !rangesIsEqual(argumentVisualRange, that.option("argumentAxis.visualRange"))) {
+        if(!this._argumentAxes[0].skipEventRising || !rangesAreEqual(argumentVisualRange, that.option("argumentAxis.visualRange"))) {
             that.option("argumentAxis.visualRange", argumentVisualRange);
         } else {
             this._argumentAxes[0].skipEventRising = null;
@@ -1463,7 +1468,7 @@ var dxChart = AdvancedChart.inherit({
                 const path = `${axis.getOptions().optionPath}.visualRange`;
                 const visualRange = convertVisualRangeObject(axis.visualRange(), !_isArray(that.option(path)));
 
-                if(!axis.skipEventRising || !rangesIsEqual(visualRange, that.option(path))) {
+                if(!axis.skipEventRising || !rangesAreEqual(visualRange, that.option(path))) {
                     that.option(path, visualRange);
                 } else {
                     axis.skipEventRising = null;
@@ -1474,7 +1479,7 @@ var dxChart = AdvancedChart.inherit({
     }
 });
 
-function rangesIsEqual(range, rangeFromOptions) {
+function rangesAreEqual(range, rangeFromOptions) {
     if(_isArray(rangeFromOptions)) {
         return range.length === rangeFromOptions.length
             && range.every((item, i) => item === rangeFromOptions[i]);

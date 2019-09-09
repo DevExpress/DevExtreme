@@ -975,9 +975,14 @@ module.exports = {
             max: true
         },
 
-        _setVisualRange(visualRange) {
+        _setVisualRange(visualRange, allowPartialUpdate) {
             const range = this.adjustRange(vizUtils.getVizRangeObject(visualRange));
-            this._viewport = range;
+            if(allowPartialUpdate) {
+                isDefined(range.startValue) && (this._viewport.startValue = range.startValue);
+                isDefined(range.endValue) && (this._viewport.endValue = range.endValue);
+            } else {
+                this._viewport = range;
+            }
         },
 
         applyVisualRangeSetter(visualRangeSetter) {
