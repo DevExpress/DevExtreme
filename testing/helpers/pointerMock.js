@@ -180,8 +180,8 @@
                 return this;
             },
 
-            dragStart: function() {
-                triggerEvent("dxdragstart");
+            dragStart: function(args) {
+                triggerEvent("dxdragstart", args);
 
                 return this;
             },

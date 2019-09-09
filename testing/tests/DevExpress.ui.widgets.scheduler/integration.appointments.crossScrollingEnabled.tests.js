@@ -179,6 +179,8 @@ module("crossScrollingEnabled = true", config, () => {
         });
 
         test("Appointment should have correct position while horizontal dragging", assert => {
+            const dragDistance = 150;
+
             const scheduler = createWrapper({
                 height: 500,
                 editing: true,
@@ -191,16 +193,13 @@ module("crossScrollingEnabled = true", config, () => {
                 }]
             });
 
-            const dragDistance = 150;
             const $appointment = scheduler.appointments.getAppointment();
-            const timePanelWidth = scheduler.getTimePanel().outerWidth(true);
-
             const pointer = pointerMock($appointment).start(),
                 startPosition = translator.locate($appointment);
 
             pointer.dragStart().drag(dragDistance, 0);
 
-            assert.roughEqual(startPosition.left, translator.locate($appointment).left - dragDistance + timePanelWidth, 2, "Appointment position is correct");
+            assert.roughEqual(startPosition.left, translator.locate($appointment).left - dragDistance, 2, "Appointment position is correct");
             pointer.dragEnd();
         });
 
@@ -215,21 +214,21 @@ module("crossScrollingEnabled = true", config, () => {
                     startDate: new Date(2015, 1, 9, 1),
                     endDate: new Date(2015, 1, 9, 1, 30)
                 }],
-                crossScrollingEnabled: true,
+                crossScrollingEnabled: true
             });
 
             const $appointment = scheduler.appointments.getAppointment(),
                 dragDistance = 150;
 
-
             const pointer = pointerMock($appointment).start(),
-                startPosition = translator.locate($appointment);
+                startPosition = translator.locate($appointment),
+                timePanelWidth = scheduler.getTimePanel().outerWidth(true);
 
             pointer.dragStart().drag(dragDistance, 0);
 
             const currentPosition = translator.locate($appointment);
 
-            assert.roughEqual(startPosition.left, currentPosition.left - dragDistance, 2, "Appointment position is correct");
+            assert.roughEqual(startPosition.left, currentPosition.left - dragDistance - timePanelWidth, 2, "Appointment position is correct");
             pointer.dragEnd();
         });
 
@@ -254,20 +253,16 @@ module("crossScrollingEnabled = true", config, () => {
             });
 
             const $appointment = scheduler.appointments.getAppointment(),
-                scrollable = scheduler.instance.getWorkSpace().$element().find(".dx-scrollable").dxScrollable("instance"),
-                scrollDistance = 400,
-                dragDistance = 100;
+                scrollable = scheduler.instance.getWorkSpace().$element().find(".dx-scrollable").dxScrollable("instance");
 
-            scrollable.scrollTo({ left: scrollDistance, top: 0 });
+            scrollable.scrollTo({ left: 400, top: 0 });
 
-            const pointer = pointerMock($appointment).start(),
-                startPosition = translator.locate($appointment);
-
-            pointer.dragStart().drag(dragDistance, 0);
+            const pointer = pointerMock($appointment).start();
+            pointer.dragStart().drag(100, 0);
 
             const currentPosition = translator.locate($appointment);
 
-            assert.equal(startPosition.left, currentPosition.left + scrollDistance - dragDistance, "Appointment position is correct");
+            assert.equal(currentPosition.left, 400, "Appointment position is correct");
             pointer.dragEnd();
         });
     }

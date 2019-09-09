@@ -17,7 +17,6 @@ import config from "core/config";
 import Draggable from "ui/draggable";
 import Resizable from "ui/resizable";
 import fx from "animation/fx";
-import dragEvents from "events/drag";
 import { DataSource } from "data/data_source/data_source";
 
 const compileGetter = dataCoreUtils.compileGetter;
@@ -481,33 +480,6 @@ QUnit.test("Scheduler appointment should not be draggable if allowDrag is false"
     assert.notOk($appointment.data("dxDraggable"), "Appointment is not dxDraggable");
 });
 
-QUnit.test("Drag event should not contain maxBottomOffset & maxRightOffset", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9)
-        },
-        settings: [{}]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        items: [item]
-    });
-
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
-        pointer = pointerMock($appointment).start();
-
-    $($appointment).on(dragEvents.start, function(e) {
-        assert.equal(e.maxBottomOffset, null, "maxBottomOffset is not set");
-        assert.equal(e.maxRightOffset, null, "maxRightOffset is not set");
-    });
-
-    pointer.dragStart();
-    pointer.dragEnd();
-});
-
 QUnit.test("Allday appointment should stay in allDayContainer after small dragging", function(assert) {
     var item = {
         itemData: {
@@ -532,131 +504,6 @@ QUnit.test("Allday appointment should stay in allDayContainer after small draggi
     pointer.dragEnd();
 
     assert.equal($("#allDayContainer .dx-scheduler-appointment").length, 1, "appointment is in allDayContainer");
-});
-
-QUnit.test("Drag event should not contain maxBottomOffset & maxLeftOffset for RTL", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9),
-            allDay: true
-        },
-        settings: [{}]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        rtlEnabled: true,
-        items: [item]
-    });
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
-        pointer = pointerMock($appointment).start();
-
-    $($appointment).on(dragEvents.start, function(e) {
-        assert.equal(e.maxBottomOffset, null, "maxBottomOffset is not set");
-        assert.equal(e.maxLeftOffset, null, "maxLeftOffset is not set");
-    });
-
-    pointer.dragStart();
-    pointer.dragEnd();
-});
-
-QUnit.test("Appointment coordinates should be corrected during drag", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9),
-            allDay: true
-        },
-        settings: [{ allDay: true }]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        items: [item]
-    });
-
-    var updateSpy = sinon.spy(commonUtils.noop);
-
-    this.instance.notifyObserver = updateSpy;
-
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
-        pointer = pointerMock($appointment).start();
-
-    pointer.dragStart().drag(0, 60);
-
-    assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(1).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(1).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(1).args[1].allDay, true, "Arguments are OK");
-
-    pointer.dragEnd();
-});
-
-QUnit.test("Appointment coordinates should be corrected on dragend", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9),
-            allDay: true
-        },
-        settings: [{ allDay: true }]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        items: [item]
-    });
-
-    var updateSpy = sinon.spy(commonUtils.noop);
-
-    this.instance.notifyObserver = updateSpy;
-
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
-        pointer = pointerMock($appointment).start();
-
-    pointer.dragStart().drag(0, 60).dragEnd();
-
-    assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(2).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(2).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(2).args[1].allDay, true, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(2).args[1].isFixedContainer, true, "Arguments are OK");
-
-    pointer.dragEnd();
-});
-
-QUnit.test("Start & end date of appointment should be changed when drag is finished", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9)
-        },
-        settings: [{}]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        items: [item]
-    });
-
-    var updateSpy = sinon.spy(commonUtils.noop);
-
-    this.instance.notifyObserver = updateSpy;
-
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
-        pointer = pointerMock($appointment).start();
-
-    pointer.dragStart().drag(0, 60).dragEnd();
-
-    assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(3).args[0], "updateAppointmentAfterDrag", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(3).args[1].data, item.itemData, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(3).args[1].$appointment.get(0), $appointment.get(0), "Arguments are OK");
 });
 
 QUnit.test("Appointment tooltip should be hidden when drag is started", function(assert) {

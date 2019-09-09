@@ -2306,7 +2306,6 @@ QUnit.testStart(function() {
         var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)),
             initialPosition = translator.locate($appointment);
 
-
         $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(5)).trigger(dragEvents.enter);
 
         pointerMock($appointment)
