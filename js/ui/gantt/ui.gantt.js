@@ -9,6 +9,7 @@ import { extend } from "../../core/utils/extend";
 import { hasWindow } from "../../core/utils/window";
 import DataOption from "./ui.gantt.data.option";
 import SplitterControl from "../splitter";
+import { GanttDialog } from "./ui.gantt.dialogs";
 
 const GANTT_CLASS = "dx-gantt";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
@@ -35,21 +36,18 @@ class Gantt extends Widget {
             .appendTo(this.$element());
         this._$treeList = $("<div>")
             .appendTo(this._$treeListWrapper);
+        this._$splitter = $("<div>")
+            .appendTo(this.$element());
         this._$ganttView = $("<div>")
             .addClass(GANTT_VIEW_CLASS)
             .appendTo(this.$element());
-
-        this._splitter = this._createComponent("<div>", SplitterControl, {
-            container: this.$element(),
-            leftElement: this._$treeListWrapper,
-            rightElement: this._$ganttView,
-            onApplyPanelSize: this._onApplyPanelSize.bind(this)
-        });
-        this._splitter.$element().appendTo(this._$treeListWrapper);
+        this._$dialog = $("<div>")
+            .appendTo(this.$element());
     }
 
     _render() {
         this._renderTreeList();
+        this._renderSplitter();
     }
     _renderTreeList() {
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
@@ -60,7 +58,7 @@ class Gantt extends Widget {
             width: this.option("treeListWidth"),
             selection: { mode: this._getSelectionMode(this.option("allowSelection")) },
             sorting: { mode: "none" },
-            scrolling: { showScrollbar: "onHover", mode: "standard" },
+            scrolling: { showScrollbar: "onHover", mode: "virtual" },
             allowColumnResizing: true,
             autoExpandAll: true,
             showRowLines: true,
@@ -70,6 +68,16 @@ class Gantt extends Widget {
             onRowExpanded: (e) => this._ganttView.changeTaskExpanded(e.key, true),
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); }
         });
+    }
+    _renderSplitter() {
+        this._splitter = this._createComponent(this._$splitter, SplitterControl, {
+            container: this.$element(),
+            leftElement: this._$treeListWrapper,
+            rightElement: this._$ganttView,
+            onApplyPanelSize: this._onApplyPanelSize.bind(this)
+        });
+        this._setInnerElementsWidth();
+        this._splitter.option("initialLeftPanelWidth", this.option("treeListWidth"));
     }
 
     _initGanttView() {
@@ -88,10 +96,9 @@ class Gantt extends Widget {
             showResources: this.option("showResources"),
             taskTitlePosition: this.option("taskTitlePosition"),
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
-            onScroll: this._onGanttViewScroll.bind(this)
+            onScroll: this._onGanttViewScroll.bind(this),
+            onDialogShowing: this._showDialog.bind(this)
         });
-        this._setInnerElementsWidth();
-        this._splitter.option({ initialLeftPanelWidth: this.option("treeListWidth") });
     }
 
     _onApplyPanelSize(e) {
@@ -166,7 +173,7 @@ class Gantt extends Widget {
         this._splitter.setSplitterPositionLeft(leftPanelWidth);
 
         this._$ganttView.width(rightPanelWidth);
-        this._ganttView && this._ganttView.option("width", this._$ganttView.width());
+        this._setGanttViewOption("width", this._$ganttView.width());
     }
 
     _getPanelsWidthByOption() {
@@ -242,8 +249,16 @@ class Gantt extends Widget {
         return allowSelection ? "single" : "none";
     }
 
+    _showDialog(e) {
+        if(!this._dialogInstance) {
+            this._dialogInstance = new GanttDialog(this, this._$dialog);
+        }
+        this._dialogInstance.show(e.name, e.parameters, e.callback);
+    }
+
     _clean() {
         delete this._ganttView;
+        delete this._dialogInstance;
         super._clean();
     }
 

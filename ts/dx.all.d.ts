@@ -8357,6 +8357,10 @@ declare module DevExpress.viz {
         onSeriesHoverChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
         /** @name dxPolarChart.Options.onSeriesSelectionChanged */
         onSeriesSelectionChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
+        /** @name dxPolarChart.Options.onZoomEnd */
+        onZoomEnd?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, event?: event, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
+        /** @name dxPolarChart.Options.onZoomStart */
+        onZoomStart?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, event?: event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
         /** @name dxPolarChart.Options.resolveLabelOverlapping */
         resolveLabelOverlapping?: 'hide' | 'none';
         /** @name dxPolarChart.Options.series */
@@ -8618,6 +8622,8 @@ declare module DevExpress.viz {
         maxValueMargin?: number;
         /** @name dxPolarChart.Options.valueAxis.minValueMargin */
         minValueMargin?: number;
+        /** @name dxPolarChart.Options.valueAxis.minVisualRangeLength */
+        minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** @name dxPolarChart.Options.valueAxis.minorTickCount */
         minorTickCount?: number;
         /** @name dxPolarChart.Options.valueAxis.minorTickInterval */
@@ -8636,6 +8642,12 @@ declare module DevExpress.viz {
         valueMarginsEnabled?: boolean;
         /** @name dxPolarChart.Options.valueAxis.valueType */
         valueType?: 'datetime' | 'numeric' | 'string';
+        /** @name dxPolarChart.Options.valueAxis.visualRange */
+        visualRange?: VizRange | Array<number | string | Date>;
+        /** @name dxPolarChart.Options.valueAxis.visualRangeUpdateMode */
+        visualRangeUpdateMode?: 'auto' | 'keep' | 'reset';
+        /** @name dxPolarChart.Options.valueAxis.wholeRange */
+        wholeRange?: VizRange | Array<number | string | Date>;
     }
     /** @name dxPolarChart.Options.valueAxis.constantLines */
     export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
@@ -8687,6 +8699,10 @@ declare module DevExpress.viz {
     export class dxPolarChart extends BaseChart {
         constructor(element: Element, options?: dxPolarChartOptions)
         constructor(element: JQuery, options?: dxPolarChartOptions)
+        /** @name dxPolarChart.getValueAxis() */
+        getValueAxis(): chartAxisObject;
+        /** @name dxPolarChart.resetVisualRange() */
+        resetVisualRange(): void;
     }
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {
@@ -8861,7 +8877,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.indent */
         indent?: { left?: number, right?: number };
         /** @name dxRangeSelector.Options.onValueChanged */
-        onValueChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date> }) => any);
+        onValueChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: event }) => any);
         /** @name dxRangeSelector.Options.scale */
         scale?: { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: DevExpress.ui.format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
         /** @name dxRangeSelector.Options.selectedRangeColor */
