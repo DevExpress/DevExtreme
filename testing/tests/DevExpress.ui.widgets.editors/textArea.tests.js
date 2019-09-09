@@ -30,6 +30,7 @@ QUnit.testStart(() => {
 const TEXTAREA_CLASS = "dx-textarea";
 const INPUT_CLASS = "dx-texteditor-input";
 const PLACEHOLDER_CLASS = "dx-placeholder";
+const AUTO_RESIZE_CLASS = "dx-texteditor-input-auto-resize";
 
 const SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container";
 
@@ -311,6 +312,19 @@ QUnit.test("widget is resized on paste", assert => {
     assert.equal(inputHeight, $input[0].scrollHeight, "widget height is correct");
 });
 
+[true, false].forEach((autoResizeEnabled) => {
+    QUnit.test(`auto resize class depends on the "autoResizeEnabled" value, "autoResizeEnabled" is ${autoResizeEnabled}`, (assert) => {
+        const $element = $("#textarea").dxTextArea({
+            autoResizeEnabled,
+            value: "1"
+        });
+
+        const $input = $element.find(`.${INPUT_CLASS}`);
+
+        assert.strictEqual($input.hasClass(AUTO_RESIZE_CLASS), autoResizeEnabled, "Check auto resize class");
+    });
+});
+
 QUnit.test("widget has correct height with auto resize mode and the 'maxHeight' option", assert => {
     const boundaryHeight = 50;
 
@@ -330,6 +344,39 @@ QUnit.test("widget has correct height with auto resize mode and the 'maxHeight' 
 
     assert.equal(elementHeight, boundaryHeight, "widget height is correct");
     assert.equal(inputHeight, boundaryHeight - heightDifference, "widget height is correct");
+});
+
+QUnit.test("widget with auto resize should have a scrollbar if content is higher than the max height", assert => {
+    const boundaryHeight = 50;
+
+    const $element = $("#textarea");
+    const instance = $element.dxTextArea({
+        autoResizeEnabled: true,
+        value: "1\n2\n3\n4\n5\n6\n7\n8\n9",
+        maxHeight: boundaryHeight
+    }).dxTextArea("instance");
+
+    const $input = $element.find(`.${INPUT_CLASS}`);
+
+    assert.notOk($input.hasClass(AUTO_RESIZE_CLASS), "textarea hasn't an auto resize class");
+    assert.strictEqual($input.css("overflow-y"), "auto", "textarea has a scrollbar");
+
+    instance.option("value", "1");
+    assert.ok($input.hasClass(AUTO_RESIZE_CLASS), "textarea with auto resize hasn't a scrollbar in case the content fit into container");
+});
+
+QUnit.test("widget with auto resize should not have a scrollbar after max-height changed to the higher value", assert => {
+    const $element = $("#textarea");
+    const instance = $element.dxTextArea({
+        autoResizeEnabled: true,
+        value: "1\n2\n3\n4\n5\n6\n7\n8\n9",
+        maxHeight: 50
+    }).dxTextArea("instance");
+
+    const $input = $element.find(`.${INPUT_CLASS}`);
+
+    instance.option("maxHeight", 500);
+    assert.ok($input.hasClass(AUTO_RESIZE_CLASS), "textarea with auto resize hasn't a scrollbar in case the content fit into container");
 });
 
 QUnit.test("widget has correct height with auto resize mode and the 'minHeight' option", assert => {
