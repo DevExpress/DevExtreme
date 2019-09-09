@@ -5,6 +5,7 @@ import DefaultAdapter from "ui/validation/default_adapter";
 import ValidationEngine from "ui/validation_engine";
 import { Deferred } from "core/utils/deferred";
 import { isPromise } from "core/utils/type";
+import Promise from "core/polyfills/promise";
 
 import "ui/validator";
 
@@ -604,10 +605,53 @@ QUnit.test("Validator should not be re-validated on pending with the same value"
     assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
     assert.strictEqual(result1, result2, "The result should be the same");
     assert.ok(isPromise(result1.complete), "result1.complete is a Promise object");
+    assert.strictEqual(result1.complete, result2.complete, "result1.complete === result2.complete");
     result1.complete.then(function(res) {
         assert.strictEqual(result1, res, "result1 === res");
         assert.strictEqual(res.status, "valid", "res.status === 'valid'");
         assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
+        done();
+    });
+});
+
+QUnit.test("Validator should resolve result.complete with the last value", function(assert) {
+    const adapter = {
+            getValue: sinon.stub(),
+            applyValidationResults: sinon.stub()
+        },
+        validatedHandler = sinon.stub(),
+        validator = this.fixture.createValidator({
+            adapter: adapter,
+            validationRules: [{
+                type: "async",
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(function() {
+                        d.resolve(true);
+                    }, 1000);
+                    return d.promise();
+                }
+            }],
+            onValidated: validatedHandler
+        }),
+        done = assert.async();
+    adapter.getValue.returns("123");
+    const result1 = validator.validate();
+    adapter.getValue.returns("1234");
+    const result2 = validator.validate();
+
+    assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
+    assert.notOk(result1 === result2, "Results should be different");
+    assert.ok(isPromise(result1.complete), "result1.complete is a Promise object");
+    assert.ok(isPromise(result2.complete), "result2.complete is a Promise object");
+    assert.strictEqual(result1.complete, result2.complete, "result1.complete === result2.complete");
+    Promise.all([result1.complete, result2.complete]).then(function(values) {
+        assert.ok(values.length === 2, "Results should be resolved twice");
+        assert.notOk(values[0] === result1, "The first result should not equal resolved result");
+        assert.strictEqual(result2, values[1], "The second result should equal resolved result");
+        assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
+        assert.strictEqual(values[0], values[1], "Resolved results should be the same");
+        assert.strictEqual(values[0].value, values[1].value, "Values of resolved results should be the same");
         done();
     });
 });

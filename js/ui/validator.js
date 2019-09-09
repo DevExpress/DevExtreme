@@ -8,6 +8,7 @@ import ValidationMixin from "./validation/validation_mixin";
 import ValidationEngine from "./validation_engine";
 import DefaultAdapter from "./validation/default_adapter";
 import registerComponent from "../core/component_registrator";
+import { Deferred } from "../core/utils/deferred";
 
 const VALIDATOR_CLASS = "dx-validator";
 
@@ -109,6 +110,11 @@ const Validator = DOMComponent.inherit({
         this._initGroupRegistration();
         this.focused = Callbacks();
         this._initAdapter();
+        this._validationInfo = {
+            result: null,
+            deferred: null,
+            complete: null
+        };
     },
 
     _initGroupRegistration() {
@@ -219,8 +225,9 @@ const Validator = DOMComponent.inherit({
             value = (args && args.value !== undefined) ? args.value : adapter.getValue(),
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
             rules = this._getValidationRules();
-        if(this._validationResult && this._validationResult.status === "pending" && this._validationResult.value === value) {
-            return this._validationResult;
+        const currentResult = this._validationInfo && this._validationInfo.result;
+        if(currentResult && currentResult.status === "pending" && currentResult.value === value) {
+            return currentResult;
         }
         let result;
         if(bypass) {
@@ -231,14 +238,7 @@ const Validator = DOMComponent.inherit({
         } else {
             result = ValidationEngine.validate(value, rules, name);
         }
-        this._validationResult = result;
         this._applyValidationResult(result, adapter);
-        if(result.complete) {
-            result.complete = result.complete.then(() => {
-                this._applyValidationResult(this._validationResult, adapter);
-                return this._validationResult;
-            });
-        }
         return result;
     },
 
@@ -256,7 +256,6 @@ const Validator = DOMComponent.inherit({
                 status: "valid",
                 complete: null
             };
-        this._validationResult = result;
         adapter.reset();
         this._resetValidationRules();
         this._applyValidationResult(result, adapter);
@@ -269,8 +268,27 @@ const Validator = DOMComponent.inherit({
         this.option({
             isValid: result.isValid
         });
+        this._validationInfo.result = result;
+        if(result.complete) {
+            result.complete.then((res) => {
+                if(res === this._validationInfo.result) {
+                    this._applyValidationResult(res, adapter);
+                }
+                return res;
+            });
+            if(!this._validationInfo.deferred) {
+                this._validationInfo.deferred = new Deferred();
+                this._validationInfo.complete = this._validationInfo.deferred.promise();
+            }
+            this._validationInfo.result.complete = this._validationInfo.complete;
+            return;
+        }
         if(result.status !== "pending") {
             validatedAction(result);
+            if(this._validationInfo.deferred) {
+                this._validationInfo.deferred.resolve(result);
+                this._validationInfo.deferred = null;
+            }
         }
     },
     /**

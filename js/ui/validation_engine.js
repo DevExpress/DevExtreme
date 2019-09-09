@@ -890,8 +890,7 @@ const ValidationEngine = {
     },
 
     _getAsyncRulesResult(info) {
-        const { values } = info;
-        let { result } = info;
+        const { values, result } = info;
         each(values, (index, val) => {
             if(val.isValid === false) {
                 result.isValid = val.isValid;
@@ -903,6 +902,7 @@ const ValidationEngine = {
             }
         });
         result.pendingRules = null;
+        result.complete = null;
         result.status = result.isValid ? "valid" : "invalid";
         return result;
     },
