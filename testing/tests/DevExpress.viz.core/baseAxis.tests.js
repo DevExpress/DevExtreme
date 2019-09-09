@@ -920,6 +920,30 @@ QUnit.test("visualRange option is defined", function(assert) {
     assert.equal(this.axis.visualRange().endValue, 20, "visualRange[1] should be correct");
 });
 
+QUnit.test("visualRange option is defined. Set start edge", function(assert) {
+    this.updateOptions({
+        visualRange: [0, 50]
+    });
+    this.axis.validate();
+
+    this.axis.visualRange({ startValue: 10 }, { allowPartialUpdate: true });
+
+    assert.equal(this.axis.visualRange().startValue, 10, "visualRange[0] should be correct");
+    assert.equal(this.axis.visualRange().endValue, 50, "visualRange[1] should be correct");
+});
+
+QUnit.test("visualRange option is defined. Set end edge", function(assert) {
+    this.updateOptions({
+        visualRange: [0, 50]
+    });
+    this.axis.validate();
+
+    this.axis.visualRange({ endValue: 40 }, { allowPartialUpdate: true });
+
+    assert.equal(this.axis.visualRange().startValue, 0, "visualRange[0] should be correct");
+    assert.equal(this.axis.visualRange().endValue, 40, "visualRange[1] should be correct");
+});
+
 QUnit.test("min and max for discrete axis", function(assert) {
     this.updateOptions({
         type: "discrete",
