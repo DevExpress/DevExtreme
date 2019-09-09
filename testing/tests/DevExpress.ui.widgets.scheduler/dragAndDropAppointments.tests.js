@@ -27,6 +27,7 @@ const moduleConfig = {
 
     afterEach() {
         fx.off = false;
+        this.clock.restore();
     }
 };
 
@@ -279,5 +280,76 @@ module("Drag and drop appointments", moduleConfig, () => {
                 });
             });
         });
+    });
+
+    test("DropDownAppointment shouldn't be draggable if editing.allowDragging is false", function(assert) {
+        const tasks = [
+            {
+                text: "Task 1",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: "Task 2",
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 12, 0)
+            },
+            {
+                text: "Task 3",
+                startDate: new Date(2015, 1, 9, 13, 0),
+                endDate: new Date(2015, 1, 9, 14, 0)
+            }
+        ];
+
+        const scheduler = createWrapper({
+            editing: {
+                allowDragging: false
+            },
+            height: 600,
+            views: ["month"],
+            currentView: "month",
+            dataSource: tasks,
+            currentDate: new Date(2015, 1, 9)
+        });
+
+        scheduler.appointments.compact.click();
+
+        const appointment = scheduler.tooltip.getItemElement();
+        const renderStub = sinon.stub(scheduler.instance.getAppointmentsInstance(), "_renderItem");
+
+        appointment.trigger("dxdragstart");
+
+        assert.notOk(renderStub.calledOnce, "Phanton item was not rendered");
+    });
+
+    test("Phantom appointment should have correct template", function(assert) {
+        const scheduler = createWrapper({
+            editing: true,
+            height: 600,
+            views: [{ type: "timelineDay", maxAppointmentsPerCell: 1 }],
+            currentView: "timelineDay",
+            dataSource: [{
+                text: "Task 1",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: "Task 2",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            }],
+            currentDate: new Date(2015, 1, 9)
+        });
+
+        const pointer = pointerMock(scheduler.tooltip.getItemElement())
+            .start()
+            .dragStart();
+
+        const phantomAppointment = scheduler.appointments.getAppointment();
+
+        assert.equal(phantomAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), "1:00 AM", "Appointment start is correct");
+        assert.equal(phantomAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), "2:00 AM", "Appointment edn is correct");
+
+        pointer.dragEnd();
     });
 });
