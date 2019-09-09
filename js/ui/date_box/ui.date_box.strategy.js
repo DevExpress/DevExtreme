@@ -98,6 +98,10 @@ var DateBoxStrategy = Class.inherit({
 
     useCurrentDateByDefault: noop,
 
+    getDefaultDate: function() {
+        return new Date();
+    },
+
     textChangedHandler: noop,
 
     renderValue: function() {

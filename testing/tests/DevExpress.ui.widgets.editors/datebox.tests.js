@@ -901,7 +901,7 @@ QUnit.module("merging dates", moduleConfig, () => {
         assert.deepEqual(this.instance.option("value"), date);
     });
 
-    QUnit.test("if value isn't specified then current day is default for an editor with type 'time'", (assert) => {
+    QUnit.test("if value isn't specified then Unix Epoch is default for an editor with type 'time'", (assert) => {
         this.instance.option({
             type: "time",
             pickerType: "list",
@@ -913,11 +913,11 @@ QUnit.module("merging dates", moduleConfig, () => {
             .trigger("change");
 
         const value = this.instance.option("value");
-        const now = new Date();
+        const defaultDate = new Date(null);
 
-        assert.equal(value.getFullYear(), now.getFullYear(), "correct year");
-        assert.equal(value.getMonth(), now.getMonth(), "correct month");
-        assert.equal(value.getDate(), now.getDate(), "correct date");
+        assert.equal(value.getFullYear(), defaultDate.getFullYear(), "correct year");
+        assert.equal(value.getMonth(), defaultDate.getMonth(), "correct month");
+        assert.equal(value.getDate(), defaultDate.getDate(), "correct date");
     });
 
     QUnit.test("mergeDates must merge seconds when type is 'time'", (assert) => {
@@ -3267,6 +3267,20 @@ QUnit.module("datebox w/ time list", {
         $item.trigger("dxclick");
 
         assert.strictEqual(this.dateBox.option("value").getFullYear(), 2018, "year is correct");
+    });
+
+    QUnit.test("selected date should be in 1970 when it was set from user's input", (assert) => {
+        this.dateBox.option({
+            value: null,
+            displayFormat: "HH:mm"
+        });
+
+        keyboardMock(this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`))
+            .focus()
+            .type("11:11")
+            .change();
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), new Date(null).getFullYear(), "year is correct");
     });
 
     QUnit.test("the value's date part should not be changed if editing input's text by keyboard (T395685)", (assert) => {
