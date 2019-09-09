@@ -8,15 +8,11 @@ import { FunctionTemplate } from "../../../core/templates/function_template";
 import { touch } from "../../../core/utils/support";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
-const ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
-const SCROLLABLE_WRAPPER_CLASS_NAME = '.dx-scheduler-date-table-scrollable .dx-scrollable-wrapper';
-
 const MAX_TOOLTIP_HEIGHT = 200;
 
 class TooltipBehaviorBase {
-    constructor(scheduler, target) {
+    constructor(scheduler) {
         this.scheduler = scheduler;
-        this.target = target;
     }
 
     onListItemRendered(e) {
@@ -49,9 +45,10 @@ class TooltipSingleAppointmentBehavior extends TooltipBehaviorBase {
 }
 
 class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
-    constructor(scheduler, target) {
-        super(scheduler, target);
+    constructor(scheduler, isAllDay) {
+        super(scheduler);
         this.state = {
+            isAllDay: isAllDay,
             appointment: null,
             initPosition: {}
         };
@@ -125,14 +122,12 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     _createInitPosition(appointment, mousePosition) {
-        const { _workSpace } = this.scheduler;
-
-        const offset = this.scheduler._$element.find(SCROLLABLE_WRAPPER_CLASS_NAME).offset();
-        const scrollTop = appointment.hasClass(ALL_DAY_PANEL_APPOINTMENT_CLASS) ? _workSpace.getAllDayHeight() : _workSpace.getScrollableScrollTop();
+        const dragAndDropContainer = appointment.parent().get(0);
+        const dragAndDropContainerRect = dragAndDropContainer.getBoundingClientRect();
 
         return {
-            top: mousePosition.top - offset.top - (appointment.height() / 2) + scrollTop,
-            left: mousePosition.left - offset.left - (appointment.width() / 2)
+            top: mousePosition.top - dragAndDropContainerRect.top - appointment.height() / 2,
+            left: mousePosition.left - dragAndDropContainerRect.left - appointment.width() / 2
         };
     }
 
@@ -143,8 +138,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         translator.move(this.state.appointment, this.state.initPosition);
 
         const appointments = this._getAppointmentsInstance();
-        appointments.dragBehavior.onDragStartCore(this.state.appointment);
-        appointments.dragBehavior.onDragMoveCore(this.state.appointment, { x: 0, y: 0 });
+        appointments.dragBehavior.onDragStartCore(this.state.appointment, false);
     }
 
     _onDragMove(e) {
@@ -167,23 +161,22 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
 }
 
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
-
     constructor(scheduler) {
         super(scheduler);
         this.skipHidingOnScroll = false;
     }
 
     _showCore(target, dataList, isSingleBehavior) {
-        this.behavior = this._createBehavior(isSingleBehavior, target);
+        this.behavior = this._createBehavior(isSingleBehavior);
         super._showCore(target, dataList, isSingleBehavior);
         this.tooltip.option("position", this._getTooltipPosition(dataList));
         this.list.focus();
         this.list.option("focusedElement", null);
     }
 
-    _createBehavior(isSingleBehavior, target) {
-        return isSingleBehavior ? new TooltipSingleAppointmentBehavior(this.scheduler, target)
-            : new TooltipManyAppointmentsBehavior(this.scheduler, target);
+    _createBehavior(isSingleBehavior) {
+        return isSingleBehavior ? new TooltipSingleAppointmentBehavior(this.scheduler)
+            : new TooltipManyAppointmentsBehavior(this.scheduler);
     }
 
     _getTooltipPosition(dataList) {

@@ -41,19 +41,20 @@ export default class AppointmentDragBehavior {
 
     onDragStart(e) {
         const appointment = $(e.element);
-        this.onDragStartCore(appointment);
-        this.onDragMoveCore(appointment, { x: 0, y: 0 });
+        this.onDragStartCore(appointment, this.isAllDay(appointment));
     }
 
-    onDragStartCore(appointment) {
+    onDragStartCore(appointment, isAllDay) {
         this.initialPosition = translator.locate(appointment);
 
         this.scheduler.option(FIXED_CONTAINER_PROP_NAME).append(appointment);
         this.scheduler.notifyObserver("hideAppointmentTooltip");
 
-        const containerShift = this.getContainerShift(this.isAllDay(appointment));
+        const containerShift = this.getContainerShift(isAllDay);
         this.initialPosition.left += containerShift.left;
         this.initialPosition.top += containerShift.top;
+
+        this.onDragMoveCore(appointment, { x: 0, y: 0 });
     }
 
     onDragMove(e) {
