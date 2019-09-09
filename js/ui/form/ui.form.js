@@ -1273,6 +1273,10 @@ const Form = Widget.inherit({
         });
     },
 
+    _tryExecuteItemOptionAction: function(action) {
+        return action && action.tryExecute();
+    },
+
     _customHandlerOfComplexOption: function(args, rootOptionName) {
         const nameParts = args.fullName.split(".");
         const value = args.value;
@@ -1284,7 +1288,7 @@ const Form = Widget.inherit({
             const simpleOptionName = optionNameWithoutPath.split(".")[0].replace(/\[\d+]/, "");
             const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue);
 
-            if(!(itemAction && itemAction.tryExecute()) && item) {
+            if(!this._tryExecuteItemOptionAction(itemAction) && item) {
                 this._changeItemOption(item, optionNameWithoutPath, value);
                 const items = this._generateItemsFromData(this.option("items"));
                 this.option("items", items);
@@ -1680,7 +1684,7 @@ const Form = Widget.inherit({
             case 3: {
                 const itemAction = this._tryCreateItemOptionAction(option, item, value, item[option]);
                 this._changeItemOption(item, option, value);
-                if(!(itemAction && itemAction.tryExecute())) {
+                if(!this._tryExecuteItemOptionAction(itemAction)) {
                     this.option("items", items);
                 }
                 break;
@@ -1691,7 +1695,7 @@ const Form = Widget.inherit({
                     each(option, (optionName, optionValue) => {
                         const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName]);
                         this._changeItemOption(item, optionName, optionValue);
-                        if(!allowUpdateItems && !(itemAction && itemAction.tryExecute())) {
+                        if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
                             allowUpdateItems = true;
                         }
                     });
