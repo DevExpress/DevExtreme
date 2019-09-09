@@ -7,6 +7,7 @@ export const Consts = {
     FILE_TOOLBAR_CLASS: "dx-filemanager-file-toolbar",
     CONTAINER_CLASS: "dx-filemanager-container",
     DIALOG_CLASS: "dx-filemanager-dialog",
+    THUMBNAILS_ITEM_LIST_CLASS: "dx-filemanager-thumbnails",
     THUMBNAILS_ITEM_CLASS: "dx-filemanager-thumbnails-item",
     GRID_DATA_ROW_CLASS: "dx-data-row",
     FILE_ACTION_BUTTON_CLASS: "dx-filemanager-file-actions-button",
@@ -94,6 +95,10 @@ export class FileManagerWrapper {
 
     getCustomThumbnails() {
         return this._$element.find(`.${Consts.CUSTOM_THUMBNAIL_CLASS}`);
+    }
+
+    findThumbnailsItemList() {
+        return this._$element.find(`.${Consts.THUMBNAILS_ITEM_LIST_CLASS}`);
     }
 
     findThumbnailsItem(itemName) {

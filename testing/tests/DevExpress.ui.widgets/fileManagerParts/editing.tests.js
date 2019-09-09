@@ -124,6 +124,36 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
     });
 
+    test("create folder in thumbnails view", function(assert) {
+        this.$element.dxFileManager("option", {
+            itemView: {
+                showFolders: true,
+                mode: "thumbnails"
+            }
+        });
+        this.clock.tick(400);
+
+        const $thumbnailsItemList = this.wrapper.findThumbnailsItemList();
+        $thumbnailsItemList.trigger("dxcontextmenu");
+
+        this.wrapper.getContextMenuItem("New folder").trigger("dxclick");
+        this.clock.tick(400);
+
+        const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        assert.ok($input.has(":focus"), "dialog's input element should be focused");
+        assert.equal("Untitled folder", $input.val(), "input has default value");
+
+        $input.val("New Folder");
+        $input.trigger("change");
+        const $okButton = $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('Create')`);
+        $okButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        const $folderNode = this.wrapper.findThumbnailsItem("New Folder");
+        assert.equal($folderNode.find(".dx-filemanager-thumbnails-item-name").get(0).innerText, "New Folder", "folder created");
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+    });
+
     test("create sub-folder for new folder", function(assert) {
         this.$element.dxFileManager("option", {
             itemView: {
