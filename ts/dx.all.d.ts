@@ -8357,6 +8357,10 @@ declare module DevExpress.viz {
         onSeriesHoverChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
         /** @name dxPolarChart.Options.onSeriesSelectionChanged */
         onSeriesSelectionChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
+        /** @name dxPolarChart.Options.onZoomEnd */
+        onZoomEnd?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, event?: event, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
+        /** @name dxPolarChart.Options.onZoomStart */
+        onZoomStart?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, event?: event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
         /** @name dxPolarChart.Options.resolveLabelOverlapping */
         resolveLabelOverlapping?: 'hide' | 'none';
         /** @name dxPolarChart.Options.series */
@@ -8618,6 +8622,8 @@ declare module DevExpress.viz {
         maxValueMargin?: number;
         /** @name dxPolarChart.Options.valueAxis.minValueMargin */
         minValueMargin?: number;
+        /** @name dxPolarChart.Options.valueAxis.minVisualRangeLength */
+        minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /** @name dxPolarChart.Options.valueAxis.minorTickCount */
         minorTickCount?: number;
         /** @name dxPolarChart.Options.valueAxis.minorTickInterval */
@@ -8636,6 +8642,12 @@ declare module DevExpress.viz {
         valueMarginsEnabled?: boolean;
         /** @name dxPolarChart.Options.valueAxis.valueType */
         valueType?: 'datetime' | 'numeric' | 'string';
+        /** @name dxPolarChart.Options.valueAxis.visualRange */
+        visualRange?: VizRange | Array<number | string | Date>;
+        /** @name dxPolarChart.Options.valueAxis.visualRangeUpdateMode */
+        visualRangeUpdateMode?: 'auto' | 'keep' | 'reset';
+        /** @name dxPolarChart.Options.valueAxis.wholeRange */
+        wholeRange?: VizRange | Array<number | string | Date>;
     }
     /** @name dxPolarChart.Options.valueAxis.constantLines */
     export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
@@ -8687,6 +8699,10 @@ declare module DevExpress.viz {
     export class dxPolarChart extends BaseChart {
         constructor(element: Element, options?: dxPolarChartOptions)
         constructor(element: JQuery, options?: dxPolarChartOptions)
+        /** @name dxPolarChart.getValueAxis() */
+        getValueAxis(): chartAxisObject;
+        /** @name dxPolarChart.resetVisualRange() */
+        resetVisualRange(): void;
     }
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {
