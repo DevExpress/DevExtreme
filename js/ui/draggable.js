@@ -371,7 +371,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         switch(name) {
             case "onDragStart":
-            case "onDrag":
+            case "onDragMove":
             case "onDragEnd":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
