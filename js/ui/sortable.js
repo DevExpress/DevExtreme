@@ -29,7 +29,10 @@ var Sortable = Draggable.inherit({
     _removePlaceholderElement: function() {
         if(this._$placeholderElement && !this._$placeholderElement.hasClass(this._addWidgetPrefix(SOURCE_CLASS))) {
             this._$placeholderElement.remove();
+        } else {
+            this._togglePlaceholderClass(false);
         }
+        this._$placeholderElement = null;
     },
 
     _createPlaceholder: function() {
@@ -180,7 +183,6 @@ var Sortable = Draggable.inherit({
 
     _dragEndHandler: function() {
         this._moveSourceItem();
-        this._togglePlaceholderClass(false);
         this._removePlaceholderElement();
         this._itemPoints = null;
         this.callBase.apply(this, arguments);

@@ -120,6 +120,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _removeDragElement: function() {
         if(this._dragElementIsCloned()) {
             this._$dragElement.remove();
+        } else {
+            this._toggleDraggingClass(false);
         }
         this._$dragElement = null;
     },
@@ -269,7 +271,6 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragEndHandler: function(e) {
-        this._toggleDraggingClass(false);
         this._toggleDragSourceClass(false);
         this._removeDragElement();
         this._$sourceElement = null;

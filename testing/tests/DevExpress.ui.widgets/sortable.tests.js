@@ -243,6 +243,36 @@ QUnit.test("Remove my placeholder after the drop end", function(assert) {
     assert.strictEqual(this.$element.children(".dx-sortable-placeholder").length, 0, "there isn't a placeholder element");
 });
 
+QUnit.test("The placeholder should be correct after drag and drop items", function(assert) {
+    // arrange
+    let items,
+        $placeholder;
+
+    this.createSortable({
+        items: ".draggable"
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(0)).start().down().move(10, 0);
+
+    // assert
+    $placeholder = items.eq(0);
+    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "there is a placeholder");
+    assert.strictEqual($placeholder.attr("id"), "item1", "placeholder id");
+
+    // arrange
+    pointerMock(items.eq(0)).up();
+
+    // act
+    pointerMock(items.eq(1)).start().down().move(10, 0);
+
+    $placeholder = items.eq(1);
+    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "there is a placeholder");
+    assert.strictEqual($placeholder.attr("id"), "item2", "placeholder id");
+});
+
 
 QUnit.module("Events", moduleConfig);
 
