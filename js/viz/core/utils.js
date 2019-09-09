@@ -599,7 +599,7 @@ function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
     return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold).toFixed(Math.abs(linearThreshold))));
 }
 
-function rangesIsEqual(range, rangeFromOptions) {
+function rangesAreEqual(range, rangeFromOptions) {
     if(Array.isArray(rangeFromOptions)) {
         return range.length === rangeFromOptions.length
             && range.every((item, i) => item === rangeFromOptions[i]);
@@ -634,4 +634,4 @@ exports.rotateBBox = rotateBBox;
 exports.normalizeBBox = normalizeBBox;
 exports.PANE_PADDING = PANE_PADDING;
 
-exports.rangesIsEqual = rangesIsEqual;
+exports.rangesAreEqual = rangesAreEqual;
