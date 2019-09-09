@@ -434,6 +434,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _disposePendingIndicator: function() {
+        if(!this._pendingIndicator) {
+            return;
+        }
         this._pendingIndicator.dispose();
         this._pendingIndicator.$element().remove();
         this._pendingIndicator = null;
@@ -452,7 +455,7 @@ const TextEditorBase = Editor.inherit({
             if(!this._showValidMark) {
                 this._showValidMark = this.option("validationStatus") === "valid" && !!this._pendingIndicator;
             }
-            this._pendingIndicator && this._disposePendingIndicator();
+            this._disposePendingIndicator();
         }
 
         $element.toggleClass(TEXTEDITOR_VALID_CLASS, this._showValidMark);
