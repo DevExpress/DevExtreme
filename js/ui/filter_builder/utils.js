@@ -560,6 +560,7 @@ function pushItemAndCheckParent(originalItems, plainItems, item) {
         item.parentId = getParentIdFromItemDataField(dataField);
         if(!itemExists(plainItems, item.parentId) && !itemExists(originalItems, item.parentId)) {
             pushItemAndCheckParent(originalItems, plainItems, {
+                id: item.parentId,
                 dataType: "object",
                 dataField: item.parentId,
                 caption: generateCaptionByDataField(item.parentId, true),
@@ -594,6 +595,7 @@ function getItems(fields, allowHierarchicalFields) {
 
     for(var i = 0; i < fields.length; i++) {
         var item = extend(true, { caption: generateCaptionByDataField(fields[i].dataField, allowHierarchicalFields) }, fields[i]);
+        item.id = item.name || item.dataField;
 
         if(allowHierarchicalFields) {
             pushItemAndCheckParent(fields, items, item);

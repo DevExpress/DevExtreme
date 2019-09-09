@@ -186,15 +186,18 @@ QUnit.module("Utils", function() {
         assert.deepEqual(items, [{
             caption: "Field 1",
             dataField: "field1",
-            dataType: "string"
+            dataType: "string",
+            id: "field1"
         }, {
             caption: "Field 2",
             dataField: "field2",
-            dataType: "string"
+            dataType: "string",
+            id: "field2"
         }, {
             caption: "Group.Field 3",
             dataField: "group.field3",
-            dataType: "string"
+            dataType: "string",
+            id: "group.field3"
         }]);
     });
 
@@ -220,27 +223,32 @@ QUnit.module("Utils", function() {
         assert.deepEqual(plainItems, [{
             caption: "Group",
             dataField: "group",
-            dataType: "object"
+            dataType: "object",
+            id: "group"
         }, {
             caption: "Field 1",
             dataField: "group.field1",
             dataType: "string",
-            parentId: "group"
+            parentId: "group",
+            id: "group.field1"
         }, {
             caption: "Group 2",
             dataField: "group.group2",
             dataType: "object",
-            parentId: "group"
+            parentId: "group",
+            id: "group.group2"
         }, {
             caption: "Field 2",
             dataField: "group.group2.field2",
             dataType: "string",
-            parentId: "group.group2"
+            parentId: "group.group2",
+            id: "group.group2.field2"
         }, {
             caption: "Field 3",
             dataField: "group.group2.field3",
             dataType: "string",
-            parentId: "group.group2"
+            parentId: "group.group2",
+            id: "group.group2.field3"
         }]);
 
 
@@ -264,33 +272,39 @@ QUnit.module("Utils", function() {
             caption: "Group",
             dataField: "group",
             dataType: "object",
-            filterOperations: ["isblank", "isnotblank"]
+            filterOperations: ["isblank", "isnotblank"],
+            id: "group"
         }, {
             caption: "Field 1",
             dataField: "group.field1",
             dataType: "string",
-            parentId: "group"
+            parentId: "group",
+            id: "group.field1"
         }, {
             caption: "Group 2",
             dataField: "group.group2",
             dataType: "object",
             parentId: "group",
-            filterOperations: ["isblank", "isnotblank"]
+            filterOperations: ["isblank", "isnotblank"],
+            id: "group.group2"
         }, {
             caption: "Field 3",
             dataField: "group.group2.field3",
             dataType: "string",
-            parentId: "group.group2"
+            parentId: "group.group2",
+            id: "group.group2.field3"
         }, {
             caption: "Field 4",
             dataField: "group3.field4",
             dataType: "string",
-            parentId: "group3"
+            parentId: "group3",
+            id: "group3.field4"
         }, {
             caption: "Group 3",
             dataField: "group3",
             dataType: "object",
-            filterOperations: ["isblank", "isnotblank"]
+            filterOperations: ["isblank", "isnotblank"],
+            id: "group3"
         }]);
     });
 
