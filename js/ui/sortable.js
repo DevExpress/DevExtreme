@@ -160,7 +160,8 @@ var Sortable = Draggable.inherit({
     },
 
     _updatePlaceholderPosition: function(e, itemPoint, isLastPosition) {
-        let eventArgs = { event: e };
+        let eventArgs = { event: e },
+            fromIndex = this._dragInfo.fromIndex;
 
         this._getAction("onDragChange")(eventArgs);
 
@@ -178,7 +179,7 @@ var Sortable = Draggable.inherit({
             $placeholderElement.insertBefore(itemPoint.$item);
         }
 
-        this._dragInfo.toIndex = Math.max(itemPoint.index - 1, 0);
+        this._dragInfo.toIndex = Math.max(fromIndex > itemPoint.index ? itemPoint.index : itemPoint.index - 1, 0);
     },
 
     _moveItem: function(item) {

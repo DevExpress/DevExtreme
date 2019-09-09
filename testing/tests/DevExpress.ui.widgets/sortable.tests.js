@@ -358,7 +358,7 @@ QUnit.test("'onDragChange' event - not drag item when eventArgs.cancel is true",
     assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
 });
 
-QUnit.test("onDragEnd - check args", function(assert) {
+QUnit.test("onDragEnd - check args when dragging an item down", function(assert) {
     // arrange
     let items,
         args,
@@ -379,6 +379,30 @@ QUnit.test("onDragEnd - check args", function(assert) {
     args = onDragEnd.getCall(0).args;
     assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
+    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+});
+
+QUnit.test("onDragEnd - check args when dragging an item up", function(assert) {
+    // arrange
+    let items,
+        args,
+        onDragEnd = sinon.spy();
+
+
+    this.createSortable({
+        items: ".draggable",
+        onDragEnd: onDragEnd
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(2)).start().down().move(0, 30).up();
+
+    // assert
+    args = onDragEnd.getCall(0).args;
+    assert.deepEqual($(args[0].sourceElement).get(0), items.get(2), "source element");
+    assert.strictEqual(args[0].fromIndex, 2, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
 });
 
