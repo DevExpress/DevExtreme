@@ -81,58 +81,7 @@ QUnit.test("initial placeholder", function(assert) {
     assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "there is a placeholder");
 });
 
-QUnit.test("Change placeholder position after dragging", function(assert) {
-    // arrange
-    let items,
-        $placeholder,
-        $dragItemElement;
-
-    this.createSortable({
-        items: ".draggable"
-    });
-
-    items = this.$element.children();
-    $dragItemElement = items.eq(0);
-
-    // assert
-    assert.strictEqual(items.length, 3, "item count");
-
-    // act
-    pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
-
-    // assert
-    items = this.$element.children();
-    $placeholder = items.eq(1);
-    assert.strictEqual(items.length, 3, "item count");
-    assert.strictEqual($placeholder.attr("id"), "item1", "first item is a placeholder");
-    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "has placeholder class");
-});
-
-QUnit.test("placeholder-class toggling", function(assert) {
-    // arrange
-    this.createSortable({
-        items: ".draggable"
-    });
-
-    let items = this.$element.children(),
-        $dragItemElement = items.eq(0);
-
-    // act
-    pointerMock($dragItemElement).start().down().move(10, 0);
-
-    // assert
-    items = this.$element.children();
-    assert.ok(items.eq(0).hasClass("dx-sortable-placeholder"), "element has right class");
-
-    // act
-    this.pointer.up();
-
-    // assert
-    items = this.$element.children();
-    assert.ok(!items.eq(0).hasClass("dx-sortable-placeholder"), "element has not appropriate class");
-});
-
-QUnit.test("set placeholderTemplate", function(assert) {
+QUnit.test("initial placeholder when placeholderTemplate is specified", function(assert) {
     // arrange
     let items,
         $placeholder,
@@ -168,6 +117,79 @@ QUnit.test("set placeholderTemplate", function(assert) {
     assert.strictEqual(items.length, 4, "item count");
     assert.strictEqual($placeholder.children("#myPlaceholder").length, 1, "there is a custom placeholder");
     assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "element has right class");
+});
+
+QUnit.test("placeholder-class toggling", function(assert) {
+    // arrange
+    this.createSortable({
+        items: ".draggable"
+    });
+
+    let items = this.$element.children(),
+        $dragItemElement = items.eq(0);
+
+    // act
+    pointerMock($dragItemElement).start().down().move(10, 0);
+
+    // assert
+    items = this.$element.children();
+    assert.ok(items.eq(0).hasClass("dx-sortable-placeholder"), "element has right class");
+
+    // act
+    this.pointer.up();
+
+    // assert
+    items = this.$element.children();
+    assert.ok(!items.eq(0).hasClass("dx-sortable-placeholder"), "element has not appropriate class");
+});
+
+QUnit.test("Change placeholder position after dragging", function(assert) {
+    // arrange
+    let items,
+        $placeholder,
+        $dragItemElement;
+
+    this.createSortable({
+        items: ".draggable"
+    });
+
+    items = this.$element.children();
+    $dragItemElement = items.eq(0);
+
+    // assert
+    assert.strictEqual(items.length, 3, "item count");
+
+    // act
+    pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
+
+    // assert
+    items = this.$element.children();
+    $placeholder = items.eq(1);
+    assert.strictEqual(items.length, 3, "item count");
+    assert.strictEqual($placeholder.attr("id"), "item1", "first item is a placeholder");
+    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "has placeholder class");
+});
+
+QUnit.test("Drop when placeholderTemplate isn't specified", function(assert) {
+    // arrange
+    let items,
+        $dragItemElement;
+
+    this.createSortable({
+        items: ".draggable"
+    });
+
+    items = this.$element.children();
+    $dragItemElement = items.eq(0);
+
+    // act
+    pointerMock($dragItemElement).start().down(15, 15).move(0, 30).up();
+
+    // assert
+    items = this.$element.children();
+    assert.strictEqual(items.eq(0).attr("id"), "item2", "second item");
+    assert.strictEqual(items.eq(1).attr("id"), "item1", "first item");
+    assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
 });
 
 QUnit.test("Drop when placeholderTemplate is specified", function(assert) {
@@ -279,4 +301,29 @@ QUnit.test("'onDragChange' option changing", function(assert) {
 
     // assert
     checkCallback.call(this, sortable, callbackSpy, assert);
+});
+
+QUnit.test("'onDragChange' event - hide placeholder when eventArgs.cancel is true", function(assert) {
+    // arrange
+    let items,
+        $dragItemElement;
+
+    this.createSortable({
+        items: ".draggable",
+        onDragChange: function(e) {
+            e.cancel = true;
+        }
+    });
+
+    items = this.$element.children();
+    $dragItemElement = items.eq(0);
+
+    // act
+    pointerMock($dragItemElement).start().down(15, 15).move(0, 30).up();
+
+    // assert
+    items = this.$element.children();
+    assert.strictEqual(items.eq(0).attr("id"), "item1", "second item");
+    assert.strictEqual(items.eq(1).attr("id"), "item2", "first item");
+    assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
 });

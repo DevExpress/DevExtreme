@@ -3,10 +3,12 @@ import registerComponent from "../core/component_registrator";
 import { extend } from "../core/utils/extend";
 import Draggable from "./draggable";
 import { getPublicElement } from "../core/utils/dom";
-import { getWindow } from "../core/utils/window";
 
 var SORTABLE = "dxSortable",
-    DEFAULT_ITEMS = "> *";
+    DEFAULT_ITEMS = "> *",
+
+    SOURCE_CLASS = "source",
+    PLACEHOLDER_CLASS = "placeholder";
 
 var Sortable = Draggable.inherit({
     _getDefaultOptions: function() {
@@ -25,14 +27,13 @@ var Sortable = Draggable.inherit({
     },
 
     _removePlaceholderElement: function() {
-        if(this._$placeholderElement && !this._$placeholderElement.hasClass(this._addWidgetPrefix("source"))) {
+        if(this._$placeholderElement && !this._$placeholderElement.hasClass(this._addWidgetPrefix(SOURCE_CLASS))) {
             this._$placeholderElement.remove();
         }
     },
 
-    _createPlaceholder: function(e) {
-        let $item = $(e.target),
-            $placeholderContainer = $item,
+    _createPlaceholder: function() {
+        let $placeholderContainer = this._$sourceElement,
             placeholderTemplate = this.option("placeholderTemplate");
 
         if(placeholderTemplate) {
@@ -44,17 +45,20 @@ var Sortable = Draggable.inherit({
             }));
         }
 
-        return this._$placeholderElement = $placeholderContainer;
+        this._$placeholderElement = $placeholderContainer;
+        this._togglePlaceholderClass(true);
+
+        return $placeholderContainer;
     },
 
     _togglePlaceholderClass: function(value) {
-        this._$placeholderElement && this._$placeholderElement.toggleClass(this._addWidgetPrefix("placeholder"), value);
+        this._$placeholderElement && this._$placeholderElement.toggleClass(this._addWidgetPrefix(PLACEHOLDER_CLASS), value);
     },
 
     _getItems: function(e) {
         let itemsSelector = this._getItemsSelector();
 
-        return this.$element().find(itemsSelector).not("." + this._addWidgetPrefix("placeholder")).toArray();
+        return this.$element().find(itemsSelector).not("." + this._addWidgetPrefix(PLACEHOLDER_CLASS)).toArray();
     },
 
     _isValidPoint: function($items, itemPointIndex) {
@@ -109,8 +113,6 @@ var Sortable = Draggable.inherit({
             return;
         }
 
-        this._createPlaceholder(e);
-        this._togglePlaceholderClass(true);
         this._itemPoints = this._getItemPoints(e);
     },
 
@@ -129,59 +131,55 @@ var Sortable = Draggable.inherit({
             return;
         }
 
-        let i,
-            positionChanged,
-            isVertical = this.option("orientation") === "vertical",
+        let isVertical = this.option("orientation") === "vertical",
             axisName = isVertical ? "top" : "left",
             cursorPosition = isVertical ? e.pageY : e.pageX,
             itemPoints = this._itemPoints;
 
-        for(i = 0; i < itemPoints.length; i++) {
+        for(let i = 0; i < itemPoints.length; i++) {
             let itemPoint = itemPoints[i],
                 centerPosition = itemPoints[i + 1] && (itemPoint[axisName] + itemPoints[i + 1][axisName]) / 2;
 
             if(centerPosition > cursorPosition) {
-                if(itemPoint.isValid) {
-                    this._$placeholderElement.insertBefore(itemPoint.$item);
-                    positionChanged = true;
-                } else {
-                    this._$placeholderElement.detach();
-                }
+                this._updatePlaceholderPosition(e, itemPoint);
                 break;
             } else if(centerPosition === undefined) {
-                if(itemPoint.isValid) {
-                    this.$element().append(this._$placeholderElement);
-                    positionChanged = true;
-                } else {
-                    this._$placeholderElement.detach();
-                }
+                this._updatePlaceholderPosition(e, itemPoint, true);
                 break;
             }
         }
+    },
 
-        if(positionChanged) {
-            this._getAction("onDragChange")({ event: e });
+    _updatePlaceholderPosition: function(e, itemPoint, isLastPosition) {
+        let eventArgs = { event: e };
+
+        this._getAction("onDragChange")(eventArgs);
+
+        if(eventArgs.cancel || eventArgs.cancel === undefined && !itemPoint.isValid) {
+            this._$placeholderElement && this._$placeholderElement.hide();
+            return;
+        }
+
+        let $placeholderElement = this._$placeholderElement || this._createPlaceholder();
+        $placeholderElement.show();
+
+        if(isLastPosition) {
+            this.$element().append($placeholderElement);
+        } else {
+            $placeholderElement.insertBefore(itemPoint.$item);
         }
     },
 
-    _isVerticalOrientation: function(point) {
-        return "inline";
-    },
-
-    _updateItemPosition: function() {
+    _moveSourceItem: function() {
         let hasPlaceholderTemplate = !!this.option("placeholderTemplate");
 
         if(hasPlaceholderTemplate && this._$placeholderElement) {
-            let isDomElement = this._$placeholderElement.closest(getWindow().document).length;
-
-            if(isDomElement) {
-                this._$placeholderElement.replaceWith(this._$sourceElement);
-            }
+            this._$placeholderElement.replaceWith(this._$sourceElement);
         }
     },
 
-    _dragEndHandler: function(e) {
-        this._updateItemPosition();
+    _dragEndHandler: function() {
+        this._moveSourceItem();
         this._togglePlaceholderClass(false);
         this._removePlaceholderElement();
         this._itemPoints = null;
