@@ -20,7 +20,9 @@ var DRAGGABLE = "dxDraggable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE),
     DRAG_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, DRAGGABLE),
     DRAGEND_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, DRAGGABLE),
-    POINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, DRAGGABLE);
+    POINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, DRAGGABLE),
+
+    CLONE_CLASS = "clone";
 
 var Draggable = DOMComponentWithTemplate.inherit({
     _getDefaultOptions: function() {
@@ -94,7 +96,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragElementIsCloned: function() {
-        return this._$dragElement && this._$dragElement.hasClass(this._addWidgetPrefix("clone"));
+        return this._$dragElement && this._$dragElement.hasClass(this._addWidgetPrefix(CLONE_CLASS));
     },
 
     _createDragElement: function($element) {
@@ -112,7 +114,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             result = $element.clone().appendTo(container);
         }
 
-        return result.toggleClass(this._addWidgetPrefix("clone"), result.get(0) !== $element.get(0));
+        return result.toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0));
     },
 
     _removeDragElement: function() {
