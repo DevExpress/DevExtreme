@@ -200,12 +200,12 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         let provider = new WebApiFileProvider({
             endpointUrl: "myEndpoint"
         });
-        assert.ok(provider._getEndpointUrl("myCommand", { }).startsWith("myEndpoint?command=myCommand"));
+        assert.ok(provider._getEndpointUrl("myCommand", { }).indexOf("myEndpoint?command=myCommand") !== -1);
 
         provider = new WebApiFileProvider({
             endpointUrl: "myEndpoint?param1=value"
         });
-        assert.ok(provider._getEndpointUrl("myCommand", { }).startsWith("myEndpoint?param1=value&command=myCommand"));
+        assert.ok(provider._getEndpointUrl("myCommand", { }).indexOf("myEndpoint?param1=value&command=myCommand") !== -1);
     });
 
 });
