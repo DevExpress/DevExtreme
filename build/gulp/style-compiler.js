@@ -20,9 +20,13 @@ const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
 const compileBundles = (bundles) => {
     const paths = path.join(process.cwd(), 'styles');
+
     return gulp
         .src(bundles)
-        .pipe(plumber())
+        .pipe(plumber(e => {
+            console.log(e);
+            this.emit('end');
+        }))
         .on('data', (chunk) => console.log('Build: ', chunk.path))
         .pipe(gulpLess({
             paths: [ paths ],
