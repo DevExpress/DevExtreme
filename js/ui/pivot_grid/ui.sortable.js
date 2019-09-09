@@ -375,7 +375,7 @@ var Sortable = DOMComponent.inherit({
                 $itemContainer = $targetGroup.find(itemContainerSelector);
                 $items = $itemContainer.find(itemSelector);
 
-                var targetSortable = $targetGroup.closest("." + SORTABLE_CLASS).data("dxSortable"),
+                var targetSortable = $targetGroup.closest("." + SORTABLE_CLASS).data("dxSortableOld"),
                     useIndicator = targetSortable.option("useIndicator");
 
                 isVertical = (targetSortable || that).option("direction") === "vertical";
@@ -519,6 +519,7 @@ var Sortable = DOMComponent.inherit({
 Sortable.prototype.__SCROLL_STEP = SCROLL_STEP;
 ///#ENDDEBUG
 
-registerComponent("dxSortable", Sortable);
+// TODO remove dxSortableOld component
+registerComponent("dxSortableOld", Sortable);
 
 module.exports = Sortable;
