@@ -117,6 +117,13 @@ interface JQuery {
     dxDiagram(options: DevExpress.ui.dxDiagramOptions): JQuery;
 }
 interface JQuery {
+    dxDraggable(): JQuery;
+    dxDraggable(options: "instance"): DevExpress.ui.dxDraggable;
+    dxDraggable(options: string): any;
+    dxDraggable(options: string, ...params: any[]): any;
+    dxDraggable(options: DevExpress.ui.dxDraggableOptions): JQuery;
+}
+interface JQuery {
     dxDrawer(): JQuery;
     dxDrawer(options: "instance"): DevExpress.ui.dxDrawer;
     dxDrawer(options: string): any;
@@ -360,6 +367,13 @@ interface JQuery {
     dxSlider(options: string): any;
     dxSlider(options: string, ...params: any[]): any;
     dxSlider(options: DevExpress.ui.dxSliderOptions): JQuery;
+}
+interface JQuery {
+    dxSortable(): JQuery;
+    dxSortable(options: "instance"): DevExpress.ui.dxSortable;
+    dxSortable(options: string): any;
+    dxSortable(options: string, ...params: any[]): any;
+    dxSortable(options: DevExpress.ui.dxSortableOptions): JQuery;
 }
 interface JQuery {
     dxSpeedDialAction(): JQuery;
@@ -700,6 +714,32 @@ declare module DevExpress.ui {
         constructor(options?: DataExpressionMixinOptions)
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
+    }
+    /** @name DraggableBase.Options */
+    export interface DraggableBaseOptions<T = DraggableBase> extends DOMComponentOptions<T> {
+        /** @name DraggableBase.Options.area */
+        area?: string | Element | JQuery;
+        /** @name DraggableBase.Options.container */
+        container?: string | Element | JQuery;
+        /** @name DraggableBase.Options.direction */
+        direction?: 'both' | 'horizontal' | 'vertical';
+        /** @name DraggableBase.Options.dragTemplate */
+        dragTemplate?: DevExpress.core.template | (() => string | Element | JQuery);
+        /** @name DraggableBase.Options.handle */
+        handle?: string;
+        /** @name DraggableBase.Options.items */
+        items?: string;
+        /** @name DraggableBase.Options.onDragEnd */
+        onDragEnd?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        /** @name DraggableBase.Options.onDragMove */
+        onDragMove?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        /** @name DraggableBase.Options.onDragStart */
+        onDragStart?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+    }
+    /** @name DraggableBase */
+    export class DraggableBase extends DOMComponent {
+        constructor(element: Element, options?: DraggableBaseOptions)
+        constructor(element: JQuery, options?: DraggableBaseOptions)
     }
     /** @name Editor.Options */
     export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
@@ -2044,6 +2084,16 @@ declare module DevExpress.ui {
         exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
         /** @name dxDiagram.import(data, updateExistingItemsOnly) */
         import(data: string, updateExistingItemsOnly: boolean): void;
+    }
+    /** @name dxDraggable.Options */
+    export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
+        /** @name dxDraggable.Options.clone */
+        clone?: boolean;
+    }
+    /** @name dxDraggable */
+    export class dxDraggable extends DraggableBase {
+        constructor(element: Element, options?: dxDraggableOptions)
+        constructor(element: JQuery, options?: dxDraggableOptions)
     }
     /** @name dxDrawer.Options */
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
@@ -4242,6 +4292,22 @@ declare module DevExpress.ui {
     export class dxSliderBase extends dxTrackBar {
         constructor(element: Element, options?: dxSliderBaseOptions)
         constructor(element: JQuery, options?: dxSliderBaseOptions)
+    }
+    /** @name dxSortable.Options */
+    export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
+        /** @name dxSortable.Options.items */
+        items?: string;
+        /** @name dxSortable.Options.onDragChange */
+        onDragChange?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        /** @name dxSortable.Options.orientation */
+        orientation?: 'horizontal' | 'vertical';
+        /** @name dxSortable.Options.placeholderTemplate */
+        placeholderTemplate?: DevExpress.core.template | (() => string | Element | JQuery);
+    }
+    /** @name dxSortable */
+    export class dxSortable extends DraggableBase {
+        constructor(element: Element, options?: dxSortableOptions)
+        constructor(element: JQuery, options?: dxSortableOptions)
     }
     /** @name dxSpeedDialAction.Options */
     export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {

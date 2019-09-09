@@ -31,7 +31,7 @@ QUnit.testStart(function() {
 var DRAGGABLE_CLASS = "dx-draggable",
     DRAGGABLE_ACTION_TO_EVENT_MAP = {
         "onDragStart": dragEvents.start,
-        "onDrag": dragEvents.move,
+        "onDragMove": dragEvents.move,
         "onDragEnd": dragEvents.end
     };
 
@@ -452,18 +452,18 @@ QUnit.test("immediate drag after click should work correctly", function(assert) 
     this.checkPosition(60 - this.$element.width() / 2, 60 - this.$element.height() / 2, assert);
 });
 
-QUnit.test("'onDrag' callback should be fired on area click", function(assert) {
+QUnit.test("'onDragMove' callback should be fired on area click", function(assert) {
     var $area = $("#area"),
-        onDragSpy = sinon.spy(noop);
+        onDragMoveSpy = sinon.spy(noop);
 
     this.createDraggable({
         area: $area,
         allowMoveByClick: true,
-        onDrag: onDragSpy
+        onDragMove: onDragMoveSpy
     });
 
     this.pointer.down();
-    assert.ok(onDragSpy.calledOnce);
+    assert.ok(onDragMoveSpy.calledOnce);
 });
 
 QUnit.test("element position on click should be updated considering direction", function(assert) {

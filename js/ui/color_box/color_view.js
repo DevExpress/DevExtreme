@@ -373,7 +373,7 @@ var ColorView = Editor.inherit({
             boundOffset: (function() {
                 return -this._paletteHandleHeight / 2;
             }).bind(this),
-            onDrag: (function() {
+            onDragMove: (function() {
                 var paletteHandlePosition = translator.locate(this._$paletteHandle);
                 this._updateByDrag = true;
                 this._updateColorFromHsv(
@@ -440,7 +440,7 @@ var ColorView = Editor.inherit({
             area: this._$hueScaleWrapper,
             allowMoveByClick: true,
             direction: "vertical",
-            onDrag: (function() {
+            onDragMove: (function() {
                 this._updateByDrag = true;
                 this._updateColorHue(translator.locate(this._$hueScaleHandle).top + this._hueScaleHandleHeight / 2);
             }).bind(this)
@@ -699,7 +699,7 @@ var ColorView = Editor.inherit({
             area: $parent,
             allowMoveByClick: true,
             direction: "horizontal",
-            onDrag: (function() {
+            onDragMove: (function() {
                 this._updateByDrag = true;
                 var $alphaChannelHandle = this._$alphaChannelHandle,
                     alphaChannelHandlePosition = translator.locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;

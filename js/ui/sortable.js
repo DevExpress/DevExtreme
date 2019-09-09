@@ -5,25 +5,54 @@ import Draggable from "./draggable";
 import { getPublicElement } from "../core/utils/dom";
 
 var SORTABLE = "dxSortable",
-    DEFAULT_ITEMS = "> *",
 
     SOURCE_CLASS = "source",
     PLACEHOLDER_CLASS = "placeholder";
 
+/**
+* @name dxSortable
+* @inherits DraggableBase
+* @hasTranscludedContent
+* @module ui/sortable
+* @export default
+*/
+
 var Sortable = Draggable.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            clone: true,
+            /**
+             * @name dxSortableOptions.items
+             * @default "> *"
+             */
+            items: "> *",
+            /**
+             * @name dxSortableOptions.orientation
+             * @type Enums.Orientation
+             * @default "vertical"
+             */
             orientation: "vertical",
-            clone: true
+            /**
+             * @name dxSortableOptions.placeholderTemplate
+             * @type template|function
+             * @type_function_return string|Node|jQuery
+             * @default undefined
+             */
+            placeholderTemplate: undefined,
+            /**
+             * @name dxSortableOptions.onDragChange
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             */
+            onDragChange: null
         });
     },
 
     _init: function() {
         this.callBase();
-    },
-
-    _getItemsSelector: function() {
-        return this.callBase() || DEFAULT_ITEMS;
     },
 
     _removePlaceholderElement: function() {
@@ -119,7 +148,7 @@ var Sortable = Draggable.inherit({
         this._itemPoints = this._getItemPoints(e);
     },
 
-    _dragHandler: function(e) {
+    _dragMoveHandler: function(e) {
         this.callBase.apply(this, arguments);
 
         if(e.cancel === true) {

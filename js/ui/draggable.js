@@ -24,17 +24,96 @@ var DRAGGABLE = "dxDraggable",
 
     CLONE_CLASS = "clone";
 
+/**
+ * @name DraggableBase
+ * @inherits DOMComponent
+ * @export default
+ * @hidden
+ */
+
+/**
+ * @name dxDraggable
+ * @inherits DraggableBase
+ * @hasTranscludedContent
+ * @module ui/draggable
+ * @export default
+ */
+
 var Draggable = DOMComponentWithTemplate.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            onDragStart: noop,
-            onDrag: noop,
-            onDragEnd: noop,
+            /**
+             * @name DraggableBaseOptions.onDragStart
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             */
+            onDragStart: null,
+            /**
+             * @name DraggableBaseOptions.onDragMove
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             */
+            onDragMove: null,
+            /**
+             * @name DraggableBaseOptions.onDragEnd
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             */
+            onDragEnd: null,
             immediate: true,
+            /**
+             * @name DraggableBaseOptions.direction
+             * @type Enums.DragDirection
+             * @default "both"
+             */
             direction: "both",
+            /**
+             * @name DraggableBaseOptions.area
+             * @type string|Node|jQuery
+             * @default window
+             */
             area: window,
             boundOffset: 0,
             allowMoveByClick: false,
+            /**
+             * @name DraggableBaseOptions.container
+             * @type string|Node|jQuery
+             * @default undefined
+             */
+            container: undefined,
+            /**
+             * @name DraggableBaseOptions.dragTemplate
+             * @type template|function
+             * @type_function_return string|Node|jQuery
+             * @default undefined
+             */
+            dragTemplate: undefined,
+            /**
+             * @name DraggableBaseOptions.handle
+             * @type string
+             * @default ""
+             */
+            handle: "",
+            /**
+             * @name DraggableBaseOptions.items
+             * @type string
+             * @default ""
+             */
+            items: "",
+            /**
+             * @name dxDraggableOptions.clone
+             * @type boolean
+             * @default false
+             */
             clone: false
         });
     },
@@ -91,7 +170,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         }
 
         eventsEngine.on($element, DRAGSTART_EVENT_NAME, items, data, this._dragStartHandler.bind(this));
-        eventsEngine.on($element, DRAG_EVENT_NAME, data, this._dragHandler.bind(this));
+        eventsEngine.on($element, DRAG_EVENT_NAME, data, this._dragMoveHandler.bind(this));
         eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
     },
 
@@ -164,7 +243,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         this._move(position, $element);
 
-        this._getAction("onDrag")({ event: e });
+        this._getAction("onDragMove")({ event: e });
     },
 
     _isValidElement: function(event, $element) {
@@ -253,7 +332,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return $(container);
     },
 
-    _dragHandler: function(e) {
+    _dragMoveHandler: function(e) {
         if(!this._$dragElement) {
             e.cancel = true;
             return;
@@ -267,7 +346,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             top: startPosition.top + offset.y
         });
 
-        this._getAction("onDrag")({ event: e });
+        this._getAction("onDragMove")({ event: e });
     },
 
     _dragEndHandler: function(e) {
