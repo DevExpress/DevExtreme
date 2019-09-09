@@ -1,5 +1,6 @@
 import fx from "animation/fx";
 import $ from "jquery";
+import devices from "core/devices";
 import pointerMock from "../../helpers/pointerMock.js";
 import translator from "animation/translator";
 import {
@@ -32,6 +33,10 @@ const moduleConfig = {
 };
 
 module("Drag and drop appointments", moduleConfig, () => {
+    if(devices.real().deviceType !== "desktop") {
+        return;
+    }
+
     const views = [{
         type: "month",
         name: "month"
