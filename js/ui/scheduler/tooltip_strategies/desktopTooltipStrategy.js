@@ -8,15 +8,11 @@ import { FunctionTemplate } from "../../../core/templates/function_template";
 import { touch } from "../../../core/utils/support";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
-const ALL_DAY_PANEL_APPOINTMENT_CLASS = 'dx-scheduler-all-day-appointment';
-const SCROLLABLE_WRAPPER_CLASS_NAME = '.dx-scheduler-date-table-scrollable .dx-scrollable-wrapper';
-
 const MAX_TOOLTIP_HEIGHT = 200;
 
 class TooltipBehaviorBase {
-    constructor(scheduler, target) {
+    constructor(scheduler) {
         this.scheduler = scheduler;
-        this.target = target;
     }
 
     onListItemRendered(e) {
@@ -49,13 +45,22 @@ class TooltipSingleAppointmentBehavior extends TooltipBehaviorBase {
 }
 
 class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
+    constructor(scheduler, isAllDay) {
+        super(scheduler);
+        this.state = {
+            isAllDay: isAllDay,
+            appointment: null,
+            initPosition: {}
+        };
+    }
+
     onListItemRendered(e) {
         if(this.scheduler._allowDragging()) {
-            const appData = e.itemData.data;
+            const data = e.itemData.data;
 
-            eventsEngine.on(e.itemElement, dragEvents.start, (e) => this._onAppointmentDragStart(appData, appData.settings, e));
-            eventsEngine.on(e.itemElement, dragEvents.move, (e) => this._onAppointmentDragMove(e, appData.allDay));
-            eventsEngine.on(e.itemElement, dragEvents.end, () => this._onAppointmentDragEnd(appData));
+            eventsEngine.on(e.itemElement, dragEvents.start, e => this._onDragStart(e, data));
+            eventsEngine.on(e.itemElement, dragEvents.move, e => this._onDragMove(e));
+            eventsEngine.on(e.itemElement, dragEvents.end, e => this._onDragEnd(e, data));
         }
     }
 
@@ -88,107 +93,90 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         return this.scheduler.option("dropDownAppointmentTemplate") === "dropDownAppointment";
     }
 
-    _onAppointmentDragStart(itemData, settings, eventArgs) {
-        const appointmentInstance = this.scheduler.getAppointmentsInstance(),
-            appointmentIndex = appointmentInstance.option("items").length;
+    _getAppointmentsInstance() {
+        return this.scheduler.getAppointmentsInstance();
+    }
+
+    _createDragAppointment(itemData, settings) {
+        const appointments = this._getAppointmentsInstance();
+        const appointmentIndex = appointments.option("items").length;
 
         settings[0].isCompact = false;
         settings[0].virtual = false;
 
-        appointmentInstance._currentAppointmentSettings = settings;
-        appointmentInstance._renderItem(appointmentIndex, {
+        appointments._currentAppointmentSettings = settings;
+        appointments._renderItem(appointmentIndex, {
             itemData: itemData,
             settings: settings
         });
 
-        const $items = appointmentInstance._findItemElementByItem(itemData);
-        $items.length > 0 && this._prepareDragItem($items, settings, eventArgs);
-
-        this.scheduler.hideAppointmentTooltip();
-    }
-
-    _onAppointmentDragMove(eventArgs, allDay) {
-        let coordinates = {
-            left: this._startPosition.left + eventArgs.offset.x,
-            top: this._startPosition.top + eventArgs.offset.y
-        };
-
-        this.scheduler.getAppointmentsInstance().notifyObserver("correctAppointmentCoordinates", {
-            coordinates: coordinates,
-            allDay: allDay,
-            isFixedContainer: false,
-            callback: result => {
-                if(result) {
-                    coordinates = result;
-                }
-            }
-        });
-
-        translator.move(this._$draggedItem, coordinates);
-    }
-
-    _onAppointmentDragEnd(itemData) {
-        eventsEngine.trigger(this._$draggedItem, dragEvents.end);
-        this._removeFakeAppointmentIfDragEndOnCurrentCell(itemData);
-    }
-
-    _removeFakeAppointmentIfDragEndOnCurrentCell(itemData) {
-        const appointments = this.scheduler.getAppointmentsInstance(),
-            newCellIndex = this.scheduler._workSpace.getDroppableCellIndex(),
-            oldCellIndex = this.scheduler._workSpace.getCellIndexByCoordinates(this._startPosition);
-
-        newCellIndex === oldCellIndex && appointments._clearItem({ itemData: itemData });
-    }
-
-    _prepareDragItem($items, settings, eventArgs) {
-        const dragContainerOffset = this._getDragContainerOffset();
-        this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, settings[0].startDate) : $items[0];
-        const scrollTop = this._$draggedItem.hasClass(ALL_DAY_PANEL_APPOINTMENT_CLASS)
-            ? this.scheduler._workSpace.getAllDayHeight()
-            : this.scheduler._workSpace.getScrollableScrollTop();
-        this._startPosition = {
-            top: eventArgs.pageY - dragContainerOffset.top - (this._$draggedItem.height() / 2) + scrollTop,
-            left: eventArgs.pageX - dragContainerOffset.left - (this._$draggedItem.width() / 2)
-        };
-        translator.move(this._$draggedItem, this._startPosition);
-        eventsEngine.trigger(this._$draggedItem, dragEvents.start);
-    }
-
-    _getDragContainerOffset() {
-        return this.scheduler._$element.find(SCROLLABLE_WRAPPER_CLASS_NAME).offset();
+        const appointmentList = appointments._findItemElementByItem(itemData);
+        return appointmentList.length > 1 ? this._getRecurrencePart(appointmentList, settings[0].startDate) : appointmentList[0];
     }
 
     _getRecurrencePart(appointments, startDate) {
-        let result;
-        for(var i = 0; i < appointments.length; i++) {
-            const $appointment = appointments[i],
-                appointmentStartDate = $appointment.data("dxAppointmentStartDate");
-            if(appointmentStartDate.getTime() === startDate.getTime()) {
-                result = $appointment;
-            }
+        return appointments.some(appointment => {
+            const appointmentStartDate = appointment.data("dxAppointmentStartDate");
+            return appointmentStartDate.getTime() === startDate.getTime();
+        });
+    }
+
+    _createInitPosition(appointment, mousePosition) {
+        const dragAndDropContainer = appointment.parent().get(0);
+        const dragAndDropContainerRect = dragAndDropContainer.getBoundingClientRect();
+
+        return {
+            top: mousePosition.top - dragAndDropContainerRect.top - appointment.height() / 2,
+            left: mousePosition.left - dragAndDropContainerRect.left - appointment.width() / 2
+        };
+    }
+
+    _onDragStart(e, itemData) {
+        this.state.appointment = this._createDragAppointment(itemData, itemData.settings);
+        this.state.initPosition = this._createInitPosition(this.state.appointment, { top: e.pageY, left: e.pageX });
+
+        translator.move(this.state.appointment, this.state.initPosition);
+
+        const appointments = this._getAppointmentsInstance();
+        appointments.dragBehavior.onDragStartCore(this.state.appointment, false);
+    }
+
+    _onDragMove(e) {
+        this._getAppointmentsInstance().dragBehavior.onDragMoveCore(this.state.appointment, e.offset);
+    }
+
+    _onDragEnd(e, itemData) {
+        this._getAppointmentsInstance().dragBehavior.onDragEndCore(this.state.appointment, e);
+        this._removeAppointmentIfDragEndOnCurrentCell(itemData);
+    }
+
+    _removeAppointmentIfDragEndOnCurrentCell(itemData) {
+        const newCellIndex = this.scheduler._workSpace.getDroppableCellIndex();
+        const oldCellIndex = this.scheduler._workSpace.getCellIndexByCoordinates(this.state.initPosition);
+
+        if(newCellIndex === oldCellIndex) {
+            this.getAppointmentsInstance()._clearItem({ itemData: itemData });
         }
-        return result;
     }
 }
 
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
-
     constructor(scheduler) {
         super(scheduler);
         this.skipHidingOnScroll = false;
     }
 
     _showCore(target, dataList, isSingleBehavior) {
-        this.behavior = this._createBehavior(isSingleBehavior, target);
+        this.behavior = this._createBehavior(isSingleBehavior);
         super._showCore(target, dataList, isSingleBehavior);
         this.tooltip.option("position", this._getTooltipPosition(dataList));
         this.list.focus();
         this.list.option("focusedElement", null);
     }
 
-    _createBehavior(isSingleBehavior, target) {
-        return isSingleBehavior ? new TooltipSingleAppointmentBehavior(this.scheduler, target)
-            : new TooltipManyAppointmentsBehavior(this.scheduler, target);
+    _createBehavior(isSingleBehavior) {
+        return isSingleBehavior ? new TooltipSingleAppointmentBehavior(this.scheduler)
+            : new TooltipManyAppointmentsBehavior(this.scheduler);
     }
 
     _getTooltipPosition(dataList) {

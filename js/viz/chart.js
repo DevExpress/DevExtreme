@@ -8,7 +8,7 @@ import {
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
     normalizePanesHeight,
     checkElementHasPropertyFromStyleSheet,
-    rangesIsEqual
+    rangesAreEqual
 } from "./core/utils";
 import { type } from "../core/utils/type";
 import { getPrecision } from "../core/utils/math";
@@ -1395,7 +1395,7 @@ var dxChart = AdvancedChart.inherit({
         const argumentVisualRange =
             convertVisualRangeObject(argAxis.visualRange(), !_isArray(that.option("argumentAxis.visualRange")));
 
-        if(!argAxis.skipEventRising || !rangesIsEqual(argumentVisualRange, that.option("argumentAxis.visualRange"))) {
+        if(!argAxis.skipEventRising || !rangesAreEqual(argumentVisualRange, that.option("argumentAxis.visualRange"))) {
             that.option("argumentAxis.visualRange", argumentVisualRange);
         } else {
             argAxis.skipEventRising = null;

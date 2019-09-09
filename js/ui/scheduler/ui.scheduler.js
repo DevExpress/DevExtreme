@@ -1425,6 +1425,7 @@ const Scheduler = Widget.inherit({
         }
 
         this._appointments.option(editingConfig);
+        this.repaint();
     },
 
     _isAgenda: function() {
