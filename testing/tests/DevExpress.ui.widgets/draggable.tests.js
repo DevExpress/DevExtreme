@@ -689,7 +689,7 @@ QUnit.test("Set dragTemplate", function(assert) {
     // assert
     assert.strictEqual($("body").children("#myDragElement").length, 1, "there is a drag element");
     assert.strictEqual(dragTemplate.callCount, 1, "dragTemplate is called");
-    assert.deepEqual($(dragTemplate.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "args[0].itemElement");
+    assert.deepEqual($(dragTemplate.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "args[0].sourceElement");
     assert.deepEqual($(dragTemplate.getCall(0).args[1]).get(0), $(viewPort()).get(0), "args[1] - container");
 });
 
