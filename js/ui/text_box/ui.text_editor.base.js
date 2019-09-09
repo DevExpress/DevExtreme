@@ -452,6 +452,9 @@ const TextEditorBase = Editor.inherit({
             !this._pendingIndicator && this._renderPendingIndicator();
             this._showValidMark = false;
         } else {
+            if(this.option("validationStatus") === "invalid") {
+                this._showValidMark = false;
+            }
             if(!this._showValidMark) {
                 this._showValidMark = this.option("validationStatus") === "valid" && !!this._pendingIndicator;
             }
