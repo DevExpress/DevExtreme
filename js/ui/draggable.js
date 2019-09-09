@@ -108,7 +108,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
         if(dragTemplate) {
             dragTemplate = this._getTemplate(dragTemplate);
             result = $(dragTemplate.render({
-                container: getPublicElement($(container))
+                container: getPublicElement($(container)),
+                model: {
+                    itemElement: getPublicElement($element)
+                }
             }));
         } else if(clone) {
             result = $element.clone().appendTo(container);
