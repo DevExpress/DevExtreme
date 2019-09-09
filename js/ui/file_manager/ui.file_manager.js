@@ -505,6 +505,7 @@ class FileManager extends Widget {
             case "customizeDetailColumns":
             case "rootFolderName":
             case "permissions":
+            case "upload":
                 this.repaint();
                 break;
             case "onCurrentDirectoryChanged":
