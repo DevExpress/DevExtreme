@@ -152,6 +152,9 @@ gulp.task('npm-sources', gulp.series('npm-ts-modules-generator', function() {
         gulp.src(JSON_GLOBS)
             .pipe(gulp.dest(packagePath)),
 
+        gulp.src('themebuilder/data/less/**/*')
+            .pipe(gulp.dest(packagePath + '/less')),
+
         gulp.src('build/npm-bin/*.js')
             .pipe(eol('\n'))
             .pipe(gulp.dest(packagePath + '/bin')),
