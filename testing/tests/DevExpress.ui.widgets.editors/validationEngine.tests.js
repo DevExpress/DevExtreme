@@ -1657,6 +1657,9 @@ QUnit.test("Simple group - call validateGroup method", function(assert) {
     var group = "newGroup",
         validator = sinon.createStubInstance(Validator);
 
+    validator.on = sinon.stub();
+    validator.off = sinon.stub();
+
     validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false }, brokenRules: [{ type: "required", isValid: false }] });
 
     ValidationEngine.registerValidatorInGroup(group, validator);
@@ -1674,7 +1677,8 @@ QUnit.test("Simple group - call validateGroup method", function(assert) {
 
 QUnit.test("Simple group - call validateGroup method for undefined group", function(assert) {
     var validator = sinon.createStubInstance(Validator);
-
+    validator.on = sinon.stub();
+    validator.off = sinon.stub();
     validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false }, brokenRules: [{ type: "required", isValid: false }] });
 
     ValidationEngine.registerValidatorInGroup(undefined, validator);
@@ -1704,7 +1708,8 @@ QUnit.test("Event Validated should be triggered", function(assert) {
         validator = sinon.createStubInstance(Validator),
         rule = { type: "required", isValid: false },
         handler = sinon.spy();
-
+    validator.on = sinon.stub();
+    validator.off = sinon.stub();
     validator.validate.returns({ isValid: false, brokenRule: rule, brokenRules: [rule] });
 
     ValidationEngine.registerValidatorInGroup(group, validator);
@@ -1732,7 +1737,8 @@ QUnit.test("Undefined group is defined by default", function(assert) {
 
 QUnit.test("Simple group - call validate method on group config object", function(assert) {
     var validator = sinon.createStubInstance(Validator);
-
+    validator.on = sinon.stub();
+    validator.off = sinon.stub();
     validator.validate.returns({ isValid: false, brokenRule: { type: "required", isValid: false }, brokenRules: [{ type: "required", isValid: false }] });
 
     ValidationEngine.registerValidatorInGroup(undefined, validator);

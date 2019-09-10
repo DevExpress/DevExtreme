@@ -269,7 +269,7 @@ const Validator = DOMComponent.inherit({
             isValid: result.isValid
         });
         this._validationInfo.result = result;
-        if(result.complete) {
+        if(result.status === "pending") {
             result.complete.then((res) => {
                 if(res === this._validationInfo.result) {
                     this._applyValidationResult(res, adapter);
@@ -281,6 +281,7 @@ const Validator = DOMComponent.inherit({
                 this._validationInfo.complete = this._validationInfo.deferred.promise();
             }
             this._validationInfo.result.complete = this._validationInfo.complete;
+            this.fireEvent("validating", [this._validationInfo.result]);
             return;
         }
         if(result.status !== "pending") {

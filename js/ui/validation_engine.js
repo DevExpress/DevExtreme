@@ -9,7 +9,7 @@ import typeUtils from "../core/utils/type";
 import numberLocalization from "../localization/number";
 import messageLocalization from "../localization/message";
 import Promise from "../core/polyfills/promise";
-import { fromPromise } from "../core/utils/deferred";
+import { fromPromise, Deferred } from "../core/utils/deferred";
 
 class BaseRuleValidator {
     constructor() {
@@ -533,6 +533,9 @@ const GroupConfig = Class.inherit({
     ctor(group) {
         this.group = group;
         this.validators = [];
+        this._pendingValidators = [];
+        this._onValidatorStatusChanged = this._onValidatorStatusChanged.bind(this);
+        this._resetValidationInfo();
     },
 
     validate() {
@@ -567,7 +570,8 @@ const GroupConfig = Class.inherit({
              */
             complete: null
         };
-        delete this._asyncValidationResults;
+        this._pendingValidators = [];
+        this._resetValidationInfo();
         each(this.validators, (_, validator) => {
             const validatorResult = validator.validate();
             result.isValid = result.isValid && validatorResult.isValid;
@@ -575,61 +579,135 @@ const GroupConfig = Class.inherit({
                 result.brokenRules = result.brokenRules.concat(validatorResult.brokenRules);
             }
             result.validators.push(validator);
-            if(validatorResult.complete) {
-                this._asyncValidationResults = this._asyncValidationResults || [];
-                this._asyncValidationResults.push(validatorResult);
+            if(validatorResult.status === "pending") {
+                this._addPendingValidator(validator);
             }
+            this._subscribeToChangeEvents(validator);
         });
-        if(this._asyncValidationResults) {
+        if(this._pendingValidators.length) {
             result.status = "pending";
-            const completeList = this._asyncValidationResults.map(function(res) {
-                return res.complete;
-            });
-            result.complete = Promise.all(completeList)
-                .then((values) => {
-                    if(!this._asyncValidationResults) {
-                        return;
-                    }
-                    const res = this._getAsyncResult({
-                        result,
-                        values
-                    });
-                    this._raiseValidatedEvent(res);
-                    return res;
-                });
         } else {
             result.status = result.isValid ? "valid" : "invalid";
+            this._unsubscribeFromAllChangeEvents();
+            this._raiseValidatedEvent(result);
         }
-        this._raiseValidatedEvent(result);
+        this._updateValidationInfo(result);
         return result;
     },
 
-    _getAsyncResult(info) {
-        const { result, values } = info;
-        values.forEach((val, index) => {
-            if(val && !val.isValid) {
-                result.brokenRules = result.brokenRules.concat(this._asyncValidationResults[index].brokenRules);
+    _subscribeToChangeEvents(validator) {
+        validator.on("validating", this._onValidatorStatusChanged);
+        validator.on("validated", this._onValidatorStatusChanged);
+    },
+
+    _unsubscribeFromChangeEvents(validator) {
+        validator.off("validating", this._onValidatorStatusChanged);
+        validator.off("validated", this._onValidatorStatusChanged);
+    },
+
+    _unsubscribeFromAllChangeEvents() {
+        each(this.validators, (_, validator) => {
+            this._unsubscribeFromChangeEvents(validator);
+        });
+    },
+
+    _updateValidationInfo(result) {
+        this._validationInfo.result = result;
+        if(result.status !== "pending") {
+            return;
+        }
+        if(!this._validationInfo.deferred) {
+            this._validationInfo.deferred = new Deferred();
+        }
+        this._validationInfo.result.complete = this._validationInfo.deferred.promise();
+    },
+
+    _addPendingValidator(validator) {
+        const foundValidator = commonUtils.grep(this._pendingValidators, function(val) {
+            return val === validator;
+        })[0];
+        if(!foundValidator) {
+            this._pendingValidators.push(validator);
+        }
+    },
+
+    _removePendingValidator(validator) {
+        let index = -1;
+        each(this._pendingValidators, function(i, val) {
+            if(val === validator) {
+                index = i;
+                return false;
             }
         });
-        result.isValid = !result.brokenRules.length;
-        result.status = result.isValid ? "valid" : "invalid";
-        result.complete = null;
-        return result;
+        if(index >= 0) {
+            this._pendingValidators.splice(index, 1);
+        }
+    },
+
+    _orderBrokenRules(brokenRules) {
+        let orderedRules = [];
+        each(this.validators, function(_, validator) {
+            const foundRules = commonUtils.grep(brokenRules, function(rule) {
+                return rule.validator === validator;
+            });
+            if(foundRules.length) {
+                orderedRules = orderedRules.concat(foundRules);
+            }
+        });
+        return orderedRules;
+    },
+
+    _updateBrokenRules(result) {
+        let brokenRules = this._validationInfo.result.brokenRules;
+        const rules = commonUtils.grep(brokenRules, function(rule) {
+            return rule.validator !== result.validator;
+        });
+        if(result.brokenRules) {
+            brokenRules = rules.concat(result.brokenRules);
+        }
+        this._validationInfo.result.brokenRules = this._orderBrokenRules(brokenRules);
+    },
+
+    _onValidatorStatusChanged(result) {
+        if(result.status === "pending") {
+            this._addPendingValidator(result.validator);
+            return;
+        }
+        this._removePendingValidator(result.validator);
+        this._updateBrokenRules(result);
+        if(!this._pendingValidators.length) {
+            this._unsubscribeFromAllChangeEvents();
+            this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? "valid" : "invalid";
+            this._validationInfo.result.isValid = this._validationInfo.result.status === "valid";
+            const res = extend({}, this._validationInfo.result, { complete: null });
+            this._raiseValidatedEvent(res);
+            this._validationInfo.deferred && this._validationInfo.deferred.resolve(res);
+            this._resetValidationInfo();
+        }
     },
 
     _raiseValidatedEvent(result) {
-        this.fireEvent("validated", [{
-            validators: result.validators,
-            brokenRules: result.brokenRules,
-            isValid: result.isValid
-        }]);
+        this.fireEvent("validated", [result]);
+        // this.fireEvent("validated", [{
+        //     validators: result.validators,
+        //     brokenRules: result.brokenRules,
+        //     isValid: result.isValid
+        // }]);
+    },
+
+    _resetValidationInfo() {
+        this._validationInfo = {
+            result: null,
+            deferred: null
+        };
     },
 
     reset() {
-        delete this._asyncValidationResults;
         each(this.validators, function(_, validator) {
             validator.reset();
         });
+        this._pendingValidators = [];
+        this._resetValidationInfo();
     }
 }).include(EventsMixin);
 
