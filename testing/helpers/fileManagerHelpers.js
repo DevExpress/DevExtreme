@@ -10,6 +10,7 @@ export const Consts = {
     DRAWER_CONTENT_CLASS: "dx-drawer-content",
     DIALOG_CLASS: "dx-filemanager-dialog",
     THUMBNAILS_ITEM_CLASS: "dx-filemanager-thumbnails-item",
+    THUMBNAILS_ITEM_NAME_CLASS: "dx-filemanager-thumbnails-item-name",
     GRID_DATA_ROW_CLASS: "dx-data-row",
     FILE_ACTION_BUTTON_CLASS: "dx-filemanager-file-actions-button",
     FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
@@ -110,8 +111,20 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.CUSTOM_THUMBNAIL_CLASS}`);
     }
 
+    getDetailsItemList() {
+        return this._$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`);
+    }
+
+    getThumbnailsItems() {
+        return this._$element.find(`.${Consts.THUMBNAILS_ITEM_CLASS}`);
+    }
+
+    getThumbnailsItemName(index) {
+        return this.getThumbnailsItems().eq(index).find(`.${Consts.THUMBNAILS_ITEM_NAME_CLASS}`).text();
+    }
+
     findThumbnailsItem(itemName) {
-        return this._$element.find(`.${Consts.THUMBNAILS_ITEM_CLASS}:contains('${itemName}')`);
+        return this.getThumbnailsItems().filter(`:contains('${itemName}')`);
     }
 
     findDetailsItem(itemName) {
@@ -186,6 +199,14 @@ export class FileManagerWrapper {
 
     getSplitter() {
         return this._$element.find(`.${Consts.SPLITTER_CLASS}`);
+    }
+
+    getDialogTextInput() {
+        return $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+    }
+
+    getDialogButton(text) {
+        return $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
     }
 
 }
@@ -389,4 +410,25 @@ export const createTestFileSystem = () => {
             isDirectory: false
         }
     ];
+};
+
+export const createUploaderFiles = count => {
+    const result = [];
+
+    for(let i = 0; i < count; i++) {
+        const size = 300000 + i * 200000;
+        const file = {
+            name: `Upload file ${i}.txt`,
+            size,
+            slice: (startPos, endPos) => ({
+                fileIndex: i,
+                startPos,
+                endPos,
+                size: Math.min(endPos, size) - startPos
+            })
+        };
+        result.push(file);
+    }
+
+    return result;
 };

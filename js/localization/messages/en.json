@@ -296,6 +296,8 @@
         "dxFileManager-errorFileExistsFormat": "File '{0}' already exists.",
         "dxFileManager-errorFileNotFoundFormat": "File '{0}' not found",
         "dxFileManager-errorDirectoryNotFoundFormat": "Directory '{0}' not found",
+        "dxFileManager-errorWrongFileExtension": "File extension is not allowed",
+        "dxFileManager-errorMaxFileSizeExceeded": "File size exceeds the maximum allowed size",
         "dxFileManager-errorDefault": "Unspecified error.",
 
         "dxDiagram-categoryGeneral": "General",
