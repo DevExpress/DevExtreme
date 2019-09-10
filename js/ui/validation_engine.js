@@ -561,7 +561,7 @@ const GroupConfig = Class.inherit({
             validators: [],
             /**
              * @name dxValidationGroupResult.status
-             * @type string
+             * @type Enums.ValidationStatus
              */
             status: "valid",
             /**
@@ -688,11 +688,6 @@ const GroupConfig = Class.inherit({
 
     _raiseValidatedEvent(result) {
         this.fireEvent("validated", [result]);
-        // this.fireEvent("validated", [{
-        //     validators: result.validators,
-        //     brokenRules: result.brokenRules,
-        //     isValid: result.isValid
-        // }]);
     },
 
     _resetValidationInfo() {
@@ -810,7 +805,7 @@ const ValidationEngine = {
             brokenRule: null,
             /**
              * @name dxValidatorResult.brokenRules
-             * @type Array<RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule>
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
              */
             brokenRules: null,
             /**
@@ -820,7 +815,7 @@ const ValidationEngine = {
             isValid: true,
             /**
              * @name dxValidatorResult.validationRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
              */
             validationRules: rules,
             /**
@@ -830,7 +825,7 @@ const ValidationEngine = {
             pendingRules: null,
             /**
              * @name dxValidatorResult.status
-             * @type string
+             * @type Enums.ValidationStatus
              */
             status: "valid",
             /**

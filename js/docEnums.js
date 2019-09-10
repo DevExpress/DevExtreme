@@ -828,7 +828,7 @@
 
 /**
  * @typedef {string} Enums.ValidationRuleType
- * @enum {'required'|'numeric'|'range'|'stringLength'|'custom'|'compare'|'pattern'|'email'}
+ * @enum {'required'|'numeric'|'range'|'stringLength'|'custom'|'compare'|'pattern'|'email'|'async'}
  */
 
 /**
@@ -1124,4 +1124,9 @@
 /**
  * @typedef {string} Enums.LegendMarkerState
  * @enum {'normal'|'hovered'|'selected'}
+ */
+
+/**
+ * @typedef {string} Enums.ValidationStatus
+ * @enum {'valid'|'invalid'|'pending'}
  */

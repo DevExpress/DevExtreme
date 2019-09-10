@@ -96,22 +96,20 @@ const Editor = Widget.inherit({
             * @name EditorOptions.validationError
             * @type object
             * @ref
-            * @default undefined
+            * @default null
             */
             validationError: null,
 
             /**
             * @name EditorOptions.validationErrors
             * @type Array<object>
-            * @ref
-            * @default undefined
+            * @default null
             */
             validationErrors: null,
 
             /**
             * @name EditorOptions.validationStatus
-            * @type Array<object>
-            * @ref
+            * @type Enums.ValidationStatus
             * @default "valid"
             */
             validationStatus: "valid",
