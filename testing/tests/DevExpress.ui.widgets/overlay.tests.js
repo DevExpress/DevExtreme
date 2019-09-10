@@ -2260,7 +2260,7 @@ testModule("container", moduleConfig, () => {
             },
         });
 
-        const overlay = new TestOverlay('#overlay');
+        const overlay = new TestOverlay("#overlay");
         overlay.show();
         assert.strictEqual($("#customTargetContainer").children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
     });
