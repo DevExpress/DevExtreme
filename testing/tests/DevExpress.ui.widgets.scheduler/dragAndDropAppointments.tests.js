@@ -38,6 +38,9 @@ module("Drag and drop appointments", moduleConfig, () => {
     }
 
     const commonViews = [{
+        type: "day",
+        name: "day"
+    }, {
         type: "month",
         name: "month"
     }, {
