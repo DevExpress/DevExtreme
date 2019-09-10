@@ -262,6 +262,8 @@
         "dxFileManager-errorFileExistsFormat": "Datei {0} existiert bereits.",
         "dxFileManager-errorFileNotFoundFormat": "Datei {0} wurde nicht gefunden.",
         "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
+        "dxFileManager-errorWrongFileExtension": "TODO",
+        "dxFileManager-errorMaxFileSizeExceeded": "TODO",
         "dxFileManager-errorDefault": "Unbekannter Fehler"
     }
 }

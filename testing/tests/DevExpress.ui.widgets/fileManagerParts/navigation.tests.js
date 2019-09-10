@@ -153,9 +153,9 @@ QUnit.module("Navigation operations", moduleConfig, () => {
     });
 
     test("splitter should change width of dirs tree and file items areas", function(assert) {
-        renderer.fn.width = function() {
-            return 900;
-        };
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 900;
+
         $("#fileManager").css("width", "900px");
         this.wrapper.getInstance().repaint();
         const fileManagerWidth = $("#fileManager").get(0).clientWidth;
@@ -187,6 +187,18 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         this.wrapper.moveSplitter(oldItemViewWidth * 2);
         assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, fileManagerWidth - splitterWidth, "Dirs tree has correct width");
         assert.equal(this.wrapper.getItemsView().get(0).clientWidth, splitterWidth, "Item view has correct width");
+
+        renderer.fn.width = originalFunc;
+    });
+
+    test("file items with the wrong extension is not shown", function(assert) {
+        assert.strictEqual(this.wrapper.getThumbnailsItems().length, 6, "all items are shown");
+
+        this.wrapper.getInstance().option("allowedFileExtensions", [".xml"]);
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getThumbnailsItems().length, 4, "only items with allow extensions are shown");
+        assert.strictEqual(this.wrapper.getThumbnailsItemName(3), "File 3.xml", "item name has allowed extension");
     });
 
 });

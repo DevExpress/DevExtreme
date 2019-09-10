@@ -137,9 +137,9 @@ class FileManagerFileUploader extends Widget {
         deferred.resolve({ canceled: true });
     }
 
-    _onFileUploaderUploadError({ component, file }) {
+    _onFileUploaderUploadError({ component, file, error }) {
         const deferred = this._getDeferredForFile(component, file);
-        deferred.reject();
+        deferred.reject(error);
     }
 
     _uploadFiles(uploaderInfo, files) {

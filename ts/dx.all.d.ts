@@ -6558,6 +6558,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManager.Options */
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
+        /** @name dxFileManager.Options.allowedFileExtensions */
+        allowedFileExtensions?: Array<string>;
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
@@ -6578,6 +6580,8 @@ declare module DevExpress.ui {
         rootFolderName?: string;
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
+        /** @name dxFileManager.Options.upload */
+        upload?: { maxFileSize?: number };
     }
     /** @name dxFileManager */
     export class dxFileManager extends Widget {
