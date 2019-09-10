@@ -1429,7 +1429,7 @@ class FileUploadStrategyBase {
 
             deferred
                 .done(() => file.onAbort.fire())
-                .fail(() => this._handleFileError(file));
+                .fail(error => this._handleFileError(file, error));
         }
     }
 
@@ -1444,9 +1444,9 @@ class FileUploadStrategyBase {
         return callback && isFunction(callback);
     }
 
-    _handleFileError(file) {
+    _handleFileError(file, error) {
         file._isError = true;
-        file.onError.fire();
+        file.onError.fire(error);
     }
 
     _prepareFileBeforeUpload(file) {
@@ -1483,11 +1483,12 @@ class FileUploadStrategyBase {
         });
     }
 
-    _onErrorHandler(file, e) {
+    _onErrorHandler(file, error) {
         this.fileUploader._setStatusMessage(file, "uploadFailedMessage");
         this.fileUploader._uploadErrorAction({
             file: file.value,
-            event: e,
+            event: undefined,
+            error,
             request: file.request
         });
     }
@@ -1570,9 +1571,9 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
 
                     this._sendChunk(file, chunksData);
                 })
-                .fail(e => {
-                    if(this._shouldHandleError(e)) {
-                        this._handleFileError(file);
+                .fail(error => {
+                    if(this._shouldHandleError(error)) {
+                        this._handleFileError(file, error);
                     }
                 });
         }
@@ -1581,7 +1582,7 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     _sendChunkCore(file, chunksData, chunk) {
     }
 
-    _shouldHandleError(e) {
+    _shouldHandleError(error) {
     }
 
     _tryRaiseStartLoad(file) {
@@ -1688,9 +1689,9 @@ class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
                     file.onLoad.fire();
                 }
             })
-            .fail(e => {
-                if(this._shouldHandleError(file, e)) {
-                    this._handleFileError(file);
+            .fail(error => {
+                if(this._shouldHandleError(file, error)) {
+                    this._handleFileError(file, error);
                 }
             });
     }

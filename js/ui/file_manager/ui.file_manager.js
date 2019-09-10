@@ -48,6 +48,8 @@ class FileManager extends Widget {
             currentPath: this.option("currentPath"),
             rootText: this.option("rootFolderName"),
             fileProvider: this.option("fileProvider"),
+            allowedFileExtensions: this.option("allowedFileExtensions"),
+            maxUploadFileSize: this.option("upload").maxFileSize,
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
         this._commandManager = new FileManagerCommandManager(this.option("permissions"));
@@ -425,6 +427,26 @@ class FileManager extends Widget {
             onSelectedFileOpened: null,
 
             /**
+            * @name dxFileManagerOptions.allowedFileExtensions
+            * @type Array<string>
+            * @default [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".svg", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv", ""]
+            */
+            allowedFileExtensions: [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".svg", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv", ""],
+
+            /**
+            * @name dxFileManagerOptions.upload
+            * @type object
+            */
+            upload: {
+                /**
+                * @name dxFileManagerOptions.upload.maxFileSize
+                * @type number
+                * @default 0
+                */
+                maxFileSize: 0
+            },
+
+            /**
              * @name dxFileManagerOptions.permissions
              * @type object
              */
@@ -482,7 +504,9 @@ class FileManager extends Widget {
             case "customizeThumbnail":
             case "customizeDetailColumns":
             case "rootFolderName":
+            case "allowedFileExtensions":
             case "permissions":
+            case "upload":
                 this.repaint();
                 break;
             case "onCurrentDirectoryChanged":

@@ -4,7 +4,8 @@ import pointerMock from "../../helpers/pointerMock.js";
 import translator from "animation/translator";
 import {
     createWrapper,
-    initTestMarkup
+    initTestMarkup,
+    isDesktopEnvironment
 } from "./helpers.js";
 
 import "common.css!";
@@ -32,13 +33,22 @@ const moduleConfig = {
 };
 
 module("Drag and drop appointments", moduleConfig, () => {
-    const views = [{
+    if(!isDesktopEnvironment()) {
+        return;
+    }
+
+    const commonViews = [{
+        type: "day",
+        name: "day"
+    }, {
         type: "month",
         name: "month"
     }, {
         type: "week",
         name: "week"
-    }, {
+    }];
+
+    const timeLineViews = [{
         type: "timelineDay",
         name: "timelineDay"
     }, {
@@ -50,7 +60,9 @@ module("Drag and drop appointments", moduleConfig, () => {
     }, {
         type: "timelineMonth",
         name: "timelineMonth"
-    }, {
+    }];
+
+    const groupViews = [{
         type: "workWeek",
         name: "Vertical Grouping",
         groupOrientation: "vertical",
@@ -84,7 +96,7 @@ module("Drag and drop appointments", moduleConfig, () => {
         };
     };
 
-    test("Appointment should move a same distance in dragging from tooltip case", assert => {
+    module("Appointment should move a same distance in dragging from tooltip case", () => {
         const data = [
             {
                 text: "app1",
@@ -128,30 +140,32 @@ module("Drag and drop appointments", moduleConfig, () => {
             }
         ];
 
-        const scheduler = createWrapper({
-            dataSource: data,
-            views: views,
-            currentView: views[0].name,
-            currentDate: new Date(2017, 4, 25),
-            startDayHour: 9,
-            width: 800,
-            height: 600,
-            groups: ["priorityId"],
-            resources: [{
-                fieldExpr: "priorityId",
-                dataSource: priorityData,
-                label: "Priority"
-            }]
-        });
+        const createScheduler = (views) => {
+            return createWrapper({
+                dataSource: data,
+                views: views,
+                currentView: views[0].name,
+                currentDate: new Date(2017, 4, 25),
+                startDayHour: 9,
+                width: 800,
+                height: 600,
+                groups: ["priorityId"],
+                resources: [{
+                    fieldExpr: "priorityId",
+                    dataSource: priorityData,
+                    label: "Priority"
+                }]
+            });
+        };
 
-        const scrollToButton = button => {
+        const scrollToButton = (scheduler, button) => {
             const scrollContainer = scheduler.workSpace.getDataTableScrollableContainer();
 
             scrollContainer.scrollTop($(button).offset().top - scrollContainer.offset().top);
             scrollContainer.scrollLeft($(button).offset().left - scrollContainer.offset().left);
         };
 
-        const getFakeAppointmentPosition = () => {
+        const getFakeAppointmentPosition = scheduler => {
             const fakeAppointment = scheduler.appointments.compact.getFakeAppointment();
             const position = getAbsolutePosition(fakeAppointment);
 
@@ -170,10 +184,26 @@ module("Drag and drop appointments", moduleConfig, () => {
             };
         };
 
-        const testFakeAppointmentPosition = (button, index, viewName, rtlEnabled) => {
+        const testViews = (views, assert) => {
+            const scheduler = createScheduler(views);
+
+            commonViews.forEach(view => {
+                scheduler.option("currentView", view.name);
+
+                [false, true].forEach(rtlEnabled => {
+                    scheduler.option("rtlEnabled", rtlEnabled);
+
+                    scheduler.appointments.compact.getButtons().slice(0, 2).each((index, button) =>
+                        testFakeAppointmentPosition(scheduler, button, index, view.name, rtlEnabled, assert)
+                    );
+                });
+            });
+        };
+
+        const testFakeAppointmentPosition = (scheduler, button, index, viewName, rtlEnabled, assert) => {
             const dragOffset = { left: 100, top: 100 };
 
-            scrollToButton(button);
+            scrollToButton(scheduler, button);
             scheduler.appointments.compact.click(index);
 
             const compactAppointment = scheduler.appointments.compact.getAppointment();
@@ -183,7 +213,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 .dragStart({ pageX: mousePosition.x, pageY: mousePosition.y })
                 .drag(dragOffset.left, dragOffset.top);
 
-            const fakeAppointmentPosition = getFakeAppointmentPosition();
+            const fakeAppointmentPosition = getFakeAppointmentPosition(scheduler);
 
             assert.roughEqual(Math.round(fakeAppointmentPosition.left - dragOffset.left), Math.round(mousePosition.x), 1.1,
                 `appointment should have correct left position in ${viewName} and rtlEnable=${rtlEnabled}`);
@@ -194,20 +224,32 @@ module("Drag and drop appointments", moduleConfig, () => {
                 .dragEnd();
         };
 
-        views.forEach(view => {
-            scheduler.option("currentView", view.name);
-
-            [false, true].forEach(rtlEnabled => {
-                scheduler.option("rtlEnabled", rtlEnabled);
-
-                scheduler.appointments.compact.getButtons().slice(0, 2).each((index, button) => {
-                    testFakeAppointmentPosition(button, index, view.name, rtlEnabled);
-                });
-            });
-        });
+        test("in common views", assert => testViews(commonViews, assert));
+        test("in time line views", assert => testViews(timeLineViews, assert));
+        test("in group views", assert => testViews(groupViews, assert));
     });
 
-    test("Appointment should move a same distance as mouse", assert => {
+    module("Appointment should move a same distance as mouse", () => {
+        const createScheduler = views => {
+            return createWrapper({
+                dataSource: data,
+                width: 850,
+                height: 600,
+                views: views,
+                currentView: views[0].name,
+                crossScrollingEnabled: true,
+                currentDate: new Date(2018, 4, 21),
+                startDayHour: 9,
+                endDayHour: 16,
+                groups: ["priorityId"],
+                resources: [{
+                    fieldExpr: "priorityId",
+                    dataSource: priorityData,
+                    label: "Priority"
+                }]
+            });
+        };
+
         const data = [{
             text: "Website Re-Design Plan",
             priorityId: 2,
@@ -221,24 +263,6 @@ module("Drag and drop appointments", moduleConfig, () => {
             allDay: true
         }];
 
-        const scheduler = createWrapper({
-            dataSource: data,
-            width: 850,
-            height: 600,
-            views: views,
-            currentView: views[0].name,
-            crossScrollingEnabled: true,
-            currentDate: new Date(2018, 4, 21),
-            startDayHour: 9,
-            endDayHour: 16,
-            groups: ["priorityId"],
-            resources: [{
-                fieldExpr: "priorityId",
-                dataSource: priorityData,
-                label: "Priority"
-            }]
-        });
-
         const dragCases = [
             {
                 top: 20,
@@ -249,7 +273,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             }
         ];
 
-        const testAppointmentPosition = (text, rtlEnabled, dragCase, viewName) => {
+        const testAppointmentPosition = (scheduler, text, rtlEnabled, dragCase, viewName, assert) => {
             const appointment = scheduler.appointments.find(text);
 
             const positionBeforeDrag = getAbsolutePosition(appointment);
@@ -269,17 +293,25 @@ module("Drag and drop appointments", moduleConfig, () => {
                 `appointment '${text}' should have correct top position in ${viewName} and rtlEnabled=${rtlEnabled}`);
         };
 
-        views.forEach(view => {
-            scheduler.option("currentView", view.name);
+        const testViews = (views, assert) => {
+            const scheduler = createScheduler(views);
 
-            [false, true].forEach(rtlEnabled => {
-                scheduler.option("rtlEnabled", rtlEnabled);
+            views.forEach(view => {
+                scheduler.option("currentView", view.name);
 
-                dragCases.forEach(dragCase => {
-                    data.forEach(({ text }) => testAppointmentPosition(text, rtlEnabled, dragCase, view.name));
+                [false, true].forEach(rtlEnabled => {
+                    scheduler.option("rtlEnabled", rtlEnabled);
+
+                    dragCases.forEach(dragCase =>
+                        data.forEach(({ text }) => testAppointmentPosition(scheduler, text, rtlEnabled, dragCase, view.name, assert))
+                    );
                 });
             });
-        });
+        };
+
+        test("in common views", assert => testViews(commonViews, assert));
+        test("in time line views", assert => testViews(timeLineViews, assert));
+        test("in group views", assert => testViews(groupViews, assert));
     });
 
     test("DropDownAppointment shouldn't be draggable if editing.allowDragging is false", function(assert) {

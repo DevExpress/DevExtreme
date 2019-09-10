@@ -10,6 +10,7 @@ import ArrayFileProvider from "./array";
 * @inherits FileProvider
 * @type object
 * @module ui/file_manager/file_provider/ajax
+* @namespace DevExpress.fileProvider
 * @export default
 */
 class AjaxFileProvider extends FileProvider {

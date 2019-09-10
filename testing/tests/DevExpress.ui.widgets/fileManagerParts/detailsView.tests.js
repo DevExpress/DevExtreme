@@ -94,7 +94,7 @@ QUnit.module("Details View", moduleConfig, () => {
                         myDate: "2/2/2000"
                     },
                     {
-                        title: "Title",
+                        title: "Title.txt",
                         noFolder: false,
                         myDate: "1/1/2000",
                         count: 55
@@ -111,7 +111,7 @@ QUnit.module("Details View", moduleConfig, () => {
         assert.equal(getCellValueInDetailsView(this.$element, 1, 3).trim(), "2/2/2000");
         assert.equal(getCellValueInDetailsView(this.$element, 1, 4).trim(), "");
 
-        assert.ok(getCellValueInDetailsView(this.$element, 2, 2).indexOf("Title") === 0);
+        assert.ok(getCellValueInDetailsView(this.$element, 2, 2).indexOf("Title.txt") === 0);
         assert.equal(getCellValueInDetailsView(this.$element, 2, 3).trim(), "1/1/2000");
         assert.equal(getCellValueInDetailsView(this.$element, 2, 4).trim(), "55 B");
     });

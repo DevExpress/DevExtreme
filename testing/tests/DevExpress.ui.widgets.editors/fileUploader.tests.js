@@ -242,6 +242,7 @@ QUnit.module("custom uploading", moduleConfig, () => {
         assert.strictEqual(onProgressSpy.callCount, 1, "progress event is not called after error");
         assert.strictEqual(onUploadedSpy.callCount, 0, "uploaded event is not raised after error");
         assert.strictEqual(onUploadErrorSpy.callCount, 1, "upload error raised");
+        assert.strictEqual(onUploadErrorSpy.args[0][0].error, "Some error.", "upload error event has valid arguments");
 
         this.clock.tick(5000);
         assert.strictEqual(uploadChunkSpy.callCount, 2, "custom function is not called after error");
@@ -481,6 +482,7 @@ QUnit.module("custom uploading", moduleConfig, () => {
         assert.strictEqual(onProgressSpy.callCount, 0, "progress event is not called");
         assert.strictEqual(onUploadedSpy.callCount, 0, "uploaded event is not raised");
         assert.strictEqual(onUploadErrorSpy.callCount, 1, "upload error raised");
+        assert.strictEqual(onUploadErrorSpy.args[0][0].error, "Some error.", "upload error event has valid arguments");
     });
 
     test("whole file upload allows canceling", function(assert) {
