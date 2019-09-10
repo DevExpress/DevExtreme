@@ -8330,6 +8330,27 @@ QUnit.test("scrolling after ungrouping should works correctly with large amount 
     assert.ok($(dataGrid.element()).find(".dx-virtual-row").last().position().top >= dataGrid.getScrollable().scrollTop(), "second virtual row is not in viewport");
 });
 
+// T809900
+QUnit.testInActiveWindow("Focus should not return to cell from filter row after filtering", function(assert) {
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        filterRow: { visible: true },
+        dataSource: [{ field1: 1, field2: 2 }]
+    }).dxDataGrid("instance");
+
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+
+    $(".dx-datagrid-filter-row .dx-texteditor-input")
+        .eq(0)
+        .focus()
+        .val(1)
+        .trigger("change");
+
+    this.clock.tick();
+
+    assert.ok($(".dx-datagrid-filter-row .dx-texteditor-input").is(":focus"), "filter row's cell is focused");
+});
+
 // T716207
 QUnit.test("Filtering should works correctly if groupPaging is enabled and group is expanded", function(assert) {
     // arrange

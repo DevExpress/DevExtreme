@@ -275,7 +275,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         isFocusedViewCorrect = that._focusedView && that._focusedView.name === view.name,
                         needUpdateFocus = false,
                         isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
-                        keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
+                        keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`,
+                        $focusedElement;
 
                     eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
                     eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), keyboardActionSelector, {
@@ -285,7 +286,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                     that._initKeyDownProcessor(that, $element, that._keyDownHandler);
 
-                    if(isFocusedViewCorrect) {
+                    $focusedElement = $(":focus");
+
+                    if(isFocusedViewCorrect && (!$focusedElement.length || $focusedElement.closest($element).length)) {
                         needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
                         needUpdateFocus && that._updateFocus(true);
                     }

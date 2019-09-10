@@ -1212,7 +1212,7 @@ QUnit.testInActiveWindow("Down arrow", function(assert) {
 
     // assert
     assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "cellIndex");
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 3, "rowIndex");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 3, "rowIndex: detail row was skipped");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
