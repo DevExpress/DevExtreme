@@ -9,7 +9,7 @@ import domUtils from "../core/utils/dom";
 import windowUtils from "../core/utils/window";
 const window = windowUtils.getWindow();
 import { camelize } from "../core/utils/inflector";
-import { Deferred } from "../core/utils/deferred";
+import { Deferred, fromPromise } from "../core/utils/deferred";
 
 const _math = Math;
 const PI = _math.PI;
@@ -193,6 +193,8 @@ function drawPath(context, dAttr) {
                 context.closePath();
                 i += 1;
                 break;
+            default:
+                i++;
         }
     } while(i < dArray.length);
 }
@@ -640,27 +642,29 @@ function drawBackground(context, width, height, backgroundColor, margin) {
     context.fillRect(-margin, -margin, width + margin * 2, height + margin * 2);
 }
 
-function getCanvasFromSvg(markup, width, height, backgroundColor, margin) {
+function getCanvasFromSvg(markup, width, height, backgroundColor, margin, customParser) {
     var canvas = createCanvas(width, height, margin),
         context = canvas.getContext("2d"),
         svgElem = svgUtils.getSvgElement(markup);
-
     context.translate(margin, margin);
 
-    domAdapter.getBody().appendChild(canvas); // for rtl mode
+    domAdapter.getBody().appendChild(canvas);
+    // for rtl mode
     if(svgElem.attributes.direction) {
         canvas.dir = svgElem.attributes.direction.textContent;
     }
-
     drawBackground(context, width, height, backgroundColor, margin);
-    return drawCanvasElements(svgElem.childNodes, context, {}, {
-        clipPaths: {},
-        patterns: {},
-        filters: {}
-    }).then(() => {
-        domAdapter.getBody().removeChild(canvas);
-        return canvas;
-    });
+    let promise;
+    if(customParser) {
+        promise = fromPromise(customParser(svgElem, canvas));
+    } else {
+        promise = drawCanvasElements(svgElem.childNodes, context, {}, {
+            clipPaths: {},
+            patterns: {},
+            filters: {}
+        });
+    }
+    return promise.then(() => canvas).always(() => domAdapter.getBody().removeChild(canvas));
 }
 
 exports.imageCreator = {
@@ -675,7 +679,7 @@ exports.imageCreator = {
         }
 
         const deferred = new Deferred();
-        getCanvasFromSvg(markup, width, height, backgroundColor, options.margin).then(canvas => {
+        getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, options.customParser).then(canvas => {
             deferred.resolve(getStringFromCanvas(canvas, mimeType));
         });
         return deferred;
