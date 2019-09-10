@@ -35,7 +35,7 @@ function getOffset() {
 }
 
 const createInstance = function(options) {
-    const instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
+    let instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
     return new SchedulerTestWrapper(instance);
 };
 
@@ -518,7 +518,7 @@ QUnit.test("Appointment should have right position while dragging, after change 
 
     var currentPosition = translator.locate($appointment);
 
-    assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 0.501, "Appointment position is correct");
+    assert.roughEqual(startPosition.top, currentPosition.top + scrollDistance - allDayHeight - dragDistance - headerPanelHeight, 2.1, "Appointment position is correct");
     pointer.dragEnd();
 });
 
@@ -1562,4 +1562,32 @@ QUnit.test("allDayPanel cell with custom dataCellTemplate must open appointment 
     $allDayAppointment.trigger('dxdblclick');
 
     assert.ok(spy.calledOnce, "Method was called");
+});
+
+QUnit.test("Appointment in allDayPanel must not change position if `editing` option is changed (T807933)", function(assert) {
+    const scheduler = createInstance({
+        dataSource: [{
+            text: "Website Re-Design Plan",
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 23, 9, 30),
+            allDay: true,
+        }],
+        views: ["week"],
+        currentView: "week",
+        currentDate: new Date(2017, 4, 22),
+        startDayHour: 9,
+        endDayHour: 19,
+        height: 600
+    });
+
+    var $appointment = scheduler.appointments.getAppointment();
+    assert.ok($appointment, 'Appointment is rendered');
+
+    scheduler.instance.option("editing.allowUpdating", false);
+
+    $appointment = scheduler.appointments.getAppointment();
+
+    assert.ok($appointment.hasClass("dx-scheduler-all-day-appointment"), 'Appointment has `addDayAppointment` class');
+    assert.ok($(scheduler.instance.$element()).find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").length === 1, 'Appointment is in `allDayAppointments` container');
+    assert.ok(translator.locate($appointment).top === 0, 'Appointment is on top of it`s container');
 });

@@ -1514,6 +1514,25 @@ QUnit.module("format: removing", moduleConfig, () => {
         }
     });
 
+    [",", "."].forEach((separator) => {
+        QUnit.test(`caret should be moved to the float part by "${separator}"`, (assert) => {
+            this.instance.option({
+                format: {
+                    type: 'fixedPoint',
+                    precision: 2
+                },
+                value: 0
+            });
+
+            this.keyboard
+                .caret({ start: 0, end: 4 })
+                .type(`${separator}45`)
+                .change();
+
+            assert.strictEqual(this.instance.option("value"), 0.45, "Value is correct");
+        });
+    });
+
     QUnit.test("should parse float numbers with the ',' separator", (assert) => {
         const oldDecimalSeparator = config().decimalSeparator;
         const input = this.input;

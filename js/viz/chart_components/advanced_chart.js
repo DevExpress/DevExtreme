@@ -17,7 +17,7 @@ var extend = require("../../core/utils/extend").extend,
     vizUtils = require("../core/utils"),
     type = require("../../core/utils/type").type,
     convertVisualRangeObject = vizUtils.convertVisualRangeObject,
-    rangesIsEqual = vizUtils.rangesIsEqual,
+    rangesAreEqual = vizUtils.rangesAreEqual,
     _map = vizUtils.map,
     mergeMarginOptions = vizUtils.mergeMarginOptions,
 
@@ -57,7 +57,9 @@ function setAxisVisualRangeByOption(arg, axis, isDirectOption, index) {
         const pathElements = arg.fullName.split(".");
         const destElem = pathElements[pathElements.length - 1];
         if(destElem === "endValue" || destElem === "startValue") {
-            options.allowPartialUpdate = true;
+            options = {
+                allowPartialUpdate: true
+            };
             visualRange = {
                 [destElem]: arg.value
             };
@@ -755,7 +757,7 @@ var AdvancedChart = BaseChart.inherit({
                 const path = `${axis.getOptions().optionPath}.visualRange`;
                 const visualRange = convertVisualRangeObject(axis.visualRange(), !_isArray(that.option(path)));
 
-                if(!axis.skipEventRising || !rangesIsEqual(visualRange, that.option(path))) {
+                if(!axis.skipEventRising || !rangesAreEqual(visualRange, that.option(path))) {
                     that.option(path, visualRange);
                 } else {
                     axis.skipEventRising = null;

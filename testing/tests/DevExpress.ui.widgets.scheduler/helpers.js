@@ -67,6 +67,12 @@ export class SchedulerTestWrapper {
             getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
 
+            find: (text) => {
+                return this.appointments
+                    .getAppointments()
+                    .filter((index, element) => $(element).find(".dx-scheduler-appointment-title").text() === text);
+            },
+
             click: (index = 0) => {
                 this.clock = sinon.useFakeTimers();
                 this.appointments.getAppointment(index).trigger("dxclick");
@@ -82,11 +88,17 @@ export class SchedulerTestWrapper {
                 getButtons: () => $(".dx-scheduler-appointment-collector"),
                 getButtonCount: () => this.appointments.compact.getButtons().length,
                 getLastButtonIndex: () => this.appointments.compact.getButtonCount() - 1,
+
                 getButton: (index = 0) => $(this.appointments.compact.getButtons().get(index)),
                 getButtonText: (index = 0) => this.appointments.compact.getButton(index).find("span").text(),
-                click: (index = 0) => this.appointments.compact.getButton(index).trigger("dxclick"),
                 getButtonWidth: (index = 0) => this.appointments.compact.getButton(index).get(0).getBoundingClientRect().width,
                 getButtonHeight: (index = 0) => this.appointments.compact.getButton(index).get(0).getBoundingClientRect().height,
+
+                click: (index = 0) => this.appointments.compact.getButton(index).trigger("dxclick"),
+
+                getAppointment: (index = 0) => $(".dx-list-item").eq(index),
+
+                getFakeAppointment: () => $(".dx-scheduler-fixed-appointments .dx-scheduler-appointment")
             }
         };
 
@@ -146,8 +158,9 @@ export class SchedulerTestWrapper {
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $(".dx-scheduler-date-time-indicator"),
 
+            getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find(".dx-scrollable-container"),
             getScrollPosition: () => {
-                const element = this.workSpace.getDateTableScrollable().find(".dx-scrollable-container");
+                const element = this.workSpace.getDataTableScrollableContainer();
                 return { left: element.scrollLeft(), top: element.scrollTop() };
             }
         };

@@ -5,6 +5,7 @@ import commonUtils from "../../core/utils/common";
 import windowUtils from "../../core/utils/window";
 import { getDefaultAlignment } from "../../core/utils/position";
 import { extend } from "../../core/utils/extend";
+import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
 import ValidationMixin from "../validation/validation_mixin";
 import Overlay from "../overlay";
@@ -12,6 +13,7 @@ import Overlay from "../overlay";
 const READONLY_STATE_CLASS = "dx-state-readonly",
     INVALID_CLASS = "dx-invalid",
     INVALID_MESSAGE = "dx-invalid-message",
+    INVALID_MESSAGE_CONTENT = "dx-invalid-message-content",
     INVALID_MESSAGE_AUTO = "dx-invalid-message-auto",
     INVALID_MESSAGE_ALWAYS = "dx-invalid-message-always",
 
@@ -233,6 +235,7 @@ const Editor = Widget.inherit({
 
         if(this._$validationMessage) {
             this._$validationMessage.remove();
+            this.setAria("describedby", null);
             this._$validationMessage = null;
         }
 
@@ -250,10 +253,12 @@ const Editor = Widget.inherit({
                 .html(validationErrorMessage)
                 .appendTo($element);
 
+            var validationTarget = this._getValidationMessageTarget();
+
             this._validationMessage = this._createComponent(this._$validationMessage, Overlay, extend({
                 integrationOptions: {},
                 templatesRenderAsynchronously: false,
-                target: this._getValidationMessageTarget(),
+                target: validationTarget,
                 shading: false,
                 width: 'auto',
                 height: 'auto',
@@ -270,6 +275,14 @@ const Editor = Widget.inherit({
             this._$validationMessage
                 .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === "auto")
                 .toggleClass(INVALID_MESSAGE_ALWAYS, validationMessageMode === "always");
+
+            var messageId = "dx-" + new Guid();
+
+            this._validationMessage.$content()
+                .addClass(INVALID_MESSAGE_CONTENT)
+                .attr("id", messageId);
+
+            this.setAria("describedby", messageId);
 
             this._setValidationMessageMaxWidth();
             this._bindInnerWidgetOptions(this._validationMessage, "validationTooltipOptions");

@@ -1,6 +1,6 @@
 import $ from "jquery";
 import fx from "animation/fx";
-import { SchedulerTestWrapper, initTestMarkup, TOOLBAR_TOP_LOCATION, TOOLBAR_BOTTOM_LOCATION } from "./helpers.js";
+import { createWrapper, initTestMarkup, TOOLBAR_TOP_LOCATION, TOOLBAR_BOTTOM_LOCATION } from "./helpers.js";
 import { getSimpleDataArray } from './data.js';
 import resizeCallbacks from "core/utils/resize_callbacks";
 import devices from "core/devices";
@@ -14,7 +14,7 @@ const { testStart, test, module } = QUnit;
 
 testStart(() => initTestMarkup());
 
-const createInstance = function(options) {
+const createInstance = (options) => {
     const defaultOption = {
         dataSource: getSimpleDataArray(),
         views: ["agenda", "day", "week", "workWeek", "month"],
@@ -24,8 +24,7 @@ const createInstance = function(options) {
         height: 600,
         adaptivityEnabled: true
     };
-    const instance = $("#scheduler").dxScheduler($.extend(defaultOption, options)).dxScheduler("instance");
-    return new SchedulerTestWrapper(instance);
+    return createWrapper($.extend(defaultOption, options));
 };
 
 const moduleConfig = {

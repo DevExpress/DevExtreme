@@ -190,8 +190,20 @@ QUnit.test("dragging-class toggling", function(assert) {
     this.pointer.down().move(100);
     assert.ok(this.$element.hasClass("dx-draggable-dragging"), "element has right class");
 
-    this.pointer.down().up();
+    this.pointer.up();
     assert.ok(!this.$element.hasClass("dx-draggable-dragging"), "element has not appropriate class");
+});
+
+QUnit.test("source-class toggling", function(assert) {
+    this.createDraggable({});
+
+    assert.ok(!this.$element.hasClass("dx-draggable-source"), "element has not appropriate class before dragging");
+
+    this.pointer.down().move(100);
+    assert.ok(this.$element.hasClass("dx-draggable-source"), "element has right class");
+
+    this.pointer.down().up();
+    assert.ok(!this.$element.hasClass("dx-draggable-source"), "element has not appropriate class");
 });
 
 
@@ -487,8 +499,10 @@ QUnit.test("Clone an element when dragging", function(assert) {
     $cloneElement = $("body").children("#draggable");
     assert.strictEqual($cloneElement.length, 1, "cloned element");
     assert.ok($cloneElement.hasClass("dx-draggable-dragging"), "cloned element has dragging class");
-    assert.ok($cloneElement.hasClass("dx-draggable-clone"), "cloned element has dragging class");
+    assert.ok(this.$element.hasClass("dx-draggable-source"), "element has source class");
     assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "original element hasn't dragging class");
+    assert.notOk($cloneElement.hasClass("dx-draggable-source"), "cloned element hasn't source class");
+    assert.ok($cloneElement.hasClass("dx-draggable-clone"), "cloned element has dragging class");
     this.checkPosition(10, 10, assert, $cloneElement);
     this.checkPosition(0, 0, assert);
 });
