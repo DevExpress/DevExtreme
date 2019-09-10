@@ -3,8 +3,7 @@ class ModulesHandler {
         this.SPECIAL_COMMENT = "tb_widgets_list";
         this.FILE_FOR_PARSING = "theme.less";
 
-        this.widgets = widgetsList || [];
-        this.widgets = this.widgets.map(w => w.toLowerCase());
+        this.widgets = (widgetsList || []).map(w => w.toLowerCase());
 
         this.bundledWidgets = [];
     }
