@@ -1568,7 +1568,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.strictEqual(rect.attr("rotateY"), 0);
         assert.strictEqual(rect.attr("scaleX"), 1);
         assert.strictEqual(rect.attr("scaleY"), 1);
-        assert.strictEqual(rect.attr("pointer-events"), "");
+        assert.strictEqual(rect.attr("pointer-events"), null);
         assert.ok(!getAttrSpy.called);
     });
 
