@@ -62,11 +62,10 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
     _updateBounds: function() {
         var considerPockets = this._direction !== "horizontal";
 
-        this._topPocketSize = considerPockets ? this._$topPocket[this._dimension]() : 0;
-        this._bottomPocketSize = considerPockets ? this._$bottomPocket[this._dimension]() : 0;
+        this._topPocketSize = considerPockets ? Math.round(this._$topPocket[this._dimension]()) : 0;
+        this._bottomPocketSize = considerPockets ? Math.round(this._$bottomPocket[this._dimension]()) : 0;
 
         this.callBase();
-
         this._bottomBound = this._minOffset + this._bottomPocketSize;
     },
 
