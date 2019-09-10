@@ -48,7 +48,7 @@ class FileManager extends Widget {
             currentPath: this.option("currentPath"),
             rootText: this.option("rootFolderName"),
             fileProvider: this.option("fileProvider"),
-            allowedFileExtensions: this.option("permissions").allowedFileExtensions,
+            allowedFileExtensions: this.option("allowedFileExtensions"),
             maxUploadFileSize: this.option("upload").maxFileSize,
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
@@ -427,6 +427,13 @@ class FileManager extends Widget {
             onSelectedFileOpened: null,
 
             /**
+            * @name dxFileManagerOptions.allowedFileExtensions
+            * @type Array<string>
+            * @default [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".svg", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv", ""]
+            */
+            allowedFileExtensions: [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".svg", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv", ""],
+
+            /**
             * @name dxFileManagerOptions.upload
             * @type object
             */
@@ -479,14 +486,7 @@ class FileManager extends Widget {
                  * @type boolean
                  * @default false
                  */
-                upload: false,
-
-                /**
-                * @name dxFileManagerOptions.permissions.allowedFileExtensions
-                * @type Array<string>
-                * @default [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv"]
-                */
-                allowedFileExtensions: [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv"]
+                upload: false
             }
         });
     }
@@ -504,6 +504,7 @@ class FileManager extends Widget {
             case "customizeThumbnail":
             case "customizeDetailColumns":
             case "rootFolderName":
+            case "allowedFileExtensions":
             case "permissions":
             case "upload":
                 this.repaint();

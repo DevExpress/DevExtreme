@@ -2304,6 +2304,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManager.Options */
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
+        /** @name dxFileManager.Options.allowedFileExtensions */
+        allowedFileExtensions?: Array<string>;
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
@@ -2319,7 +2321,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
-        permissions?: { allowedFileExtensions?: Array<string>, copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
+        permissions?: { copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.rootFolderName */
         rootFolderName?: string;
         /** @name dxFileManager.Options.selectionMode */

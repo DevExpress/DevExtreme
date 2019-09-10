@@ -194,7 +194,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
     test("file items with the wrong extension is not shown", function(assert) {
         assert.strictEqual(this.wrapper.getThumbnailsItems().length, 6, "all items are shown");
 
-        this.wrapper.getInstance().option("permissions.allowedFileExtensions", [".xml"]);
+        this.wrapper.getInstance().option("allowedFileExtensions", [".xml"]);
         this.clock.tick(400);
 
         assert.strictEqual(this.wrapper.getThumbnailsItems().length, 4, "only items with allow extensions are shown");
