@@ -3022,7 +3022,7 @@ QUnit.test("Correct canvas for inverted value axis", function(assert) {
 
     var canvas = chart.getValueAxis().getTranslator()._canvas;
 
-    assert.equal(canvas.endPadding, 0);
+    assert.roughEqual(canvas.endPadding, 0, 0.5);
     assert.roughEqual(canvas.startPadding, 10.5, 0.5);
 });
 
