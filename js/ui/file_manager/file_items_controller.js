@@ -1,16 +1,21 @@
-import { FileProvider, FileManagerRootItem } from "./file_provider/file_provider";
+import { FileProvider, FileManagerItem, FileManagerRootItem } from "./file_provider/file_provider";
 import ArrayFileProvider from "./file_provider/array";
 import AjaxFileProvider from "./file_provider/ajax";
 import OneDriveFileProvider from "./file_provider/onedrive";
 import WebApiFileProvider from "./file_provider/webapi";
-import { pathCombine } from "./ui.file_manager.utils";
+import { pathCombine, getPathParts } from "./ui.file_manager.utils";
+import whenSome from "./ui.file_manager.common";
 
 import { Deferred, when } from "../../core/utils/deferred";
+import { find } from "../../core/utils/array";
 import { extend } from "../../core/utils/extend";
 
 export default class FileItemsController {
 
     constructor(options) {
+        options = options || {};
+        this._options = extend({ }, options);
+
         const rootDirectory = this._createRootDirectory(options.rootText);
         this._rootDirectoryInfo = this._createDirectoryInfo(rootDirectory, null);
 
@@ -20,6 +25,8 @@ export default class FileItemsController {
         this._onSelectedDirectoryChanged = options && options.onSelectedDirectoryChanged;
 
         this._loadedItems = {};
+
+        this.setCurrentPath(options.currentPath);
     }
 
     setProvider(fileProvider) {
@@ -56,6 +63,17 @@ export default class FileItemsController {
         return new ArrayFileProvider(fileProvider);
     }
 
+    setCurrentPath(path) {
+        const pathParts = getPathParts(path);
+        return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts)
+            .then(directoryInfo => {
+                for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
+                    info.expanded = true;
+                }
+                this.setCurrentDirectory(directoryInfo);
+            });
+    }
+
     getCurrentPath() {
         let currentPath = "";
         let directory = this.getCurrentDirectory();
@@ -75,12 +93,13 @@ export default class FileItemsController {
             return;
         }
 
-        if(this._currentDirectoryInfo && this._currentDirectoryInfo.fileItem.equals(directoryInfo.fileItem)) {
+        if(this._currentDirectoryInfo && this._currentDirectoryInfo === directoryInfo) {
             return;
         }
 
+        const requireRaiseSelectedDirectory = this._currentDirectoryInfo.fileItem.key !== directoryInfo.fileItem.key;
         this._currentDirectoryInfo = directoryInfo;
-        this._raiseSelectedDirectoryChanged(directoryInfo);
+        requireRaiseSelectedDirectory && this._raiseSelectedDirectoryChanged(directoryInfo);
     }
 
     getDirectories(parentDirectoryInfo) {
@@ -112,8 +131,8 @@ export default class FileItemsController {
             return loadItemsDeferred;
         }
 
-        const providerDirKey = parentDirectoryInfo.fileItem.isRoot ? "" : parentDirectoryInfo.fileItem.key;
-        loadItemsDeferred = when(this._fileProvider.getItems(providerDirKey))
+        const pathInfo = this._getPathInfo(parentDirectoryInfo);
+        loadItemsDeferred = when(this._fileProvider.getItems(pathInfo))
             .then(fileItems => {
                 parentDirectoryInfo.items = fileItems.map(fileItem =>
                     fileItem.isDirectory && this._createDirectoryInfo(fileItem, parentDirectoryInfo) || this._createFileInfo(fileItem, parentDirectoryInfo)
@@ -131,13 +150,17 @@ export default class FileItemsController {
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        return when(this._fileProvider.createFolder(parentDirectoryInfo.fileItem, name))
-            .done(() => this._resetDirectoryState(parentDirectoryInfo));
+        const actionInfo = this._createEditActionInfo("create", parentDirectoryInfo, parentDirectoryInfo);
+        return this._processEditAction(actionInfo,
+            () => this._fileProvider.createFolder(parentDirectoryInfo.fileItem, name),
+            () => this._resetDirectoryState(parentDirectoryInfo));
     }
 
     renameItem(fileItemInfo, name) {
-        return when(this._fileProvider.renameItem(fileItemInfo.fileItem, name))
-            .done(() => {
+        const actionInfo = this._createEditActionInfo("rename", fileItemInfo, fileItemInfo.parentDirectory);
+        return this._processEditAction(actionInfo,
+            () => this._fileProvider.renameItem(fileItemInfo.fileItem, name),
+            () => {
                 this._resetDirectoryState(fileItemInfo.parentDirectory);
                 this.setCurrentDirectory(fileItemInfo.parentDirectory);
             });
@@ -145,11 +168,11 @@ export default class FileItemsController {
 
     moveItems(itemInfos, destinationDirectory) {
         const items = itemInfos.map(i => i.fileItem);
-        return when(this._fileProvider.moveItems(items, destinationDirectory.fileItem))
-            .done(() => {
-                for(let i = 0; i < itemInfos.length; i++) {
-                    this._resetDirectoryState(itemInfos[i].parentDirectory);
-                }
+        const actionInfo = this._createEditActionInfo("move", itemInfos, destinationDirectory);
+        return this._processEditAction(actionInfo,
+            () => this._fileProvider.moveItems(items, destinationDirectory.fileItem),
+            () => {
+                itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory));
                 this._resetDirectoryState(destinationDirectory);
                 this.setCurrentDirectory(destinationDirectory);
             });
@@ -157,8 +180,10 @@ export default class FileItemsController {
 
     copyItems(itemInfos, destinationDirectory) {
         const items = itemInfos.map(i => i.fileItem);
-        return when(this._fileProvider.copyItems(items, destinationDirectory.fileItem))
-            .done(() => {
+        const actionInfo = this._createEditActionInfo("copy", itemInfos, destinationDirectory);
+        return this._processEditAction(actionInfo,
+            () => this._fileProvider.copyItems(items, destinationDirectory.fileItem),
+            () => {
                 this._resetDirectoryState(destinationDirectory);
                 this.setCurrentDirectory(destinationDirectory);
                 destinationDirectory.expanded = true;
@@ -167,14 +192,174 @@ export default class FileItemsController {
 
     deleteItems(itemInfos) {
         const items = itemInfos.map(i => i.fileItem);
-        return when(this._fileProvider.deleteItems(items))
-            .done(() => {
-                for(let i = 0; i < itemInfos.length; i++) {
-                    const parentDir = itemInfos[i].parentDirectory;
+        const directory = itemInfos.length > 0 ? itemInfos[0].parentDirectory : null;
+        const actionInfo = this._createEditActionInfo("delete", itemInfos, directory);
+        return this._processEditAction(actionInfo,
+            () => this._fileProvider.deleteItems(items),
+            () => {
+                itemInfos.forEach(itemInfo => {
+                    const parentDir = itemInfo.parentDirectory;
                     this._resetDirectoryState(parentDir);
                     this.setCurrentDirectory(parentDir);
-                }
+                });
             });
+    }
+
+    processUploadSession(sessionInfo, uploadDirectoryInfo) {
+        const itemInfos = this._getItemInfosForUploaderFiles(sessionInfo.files, uploadDirectoryInfo);
+        const actionInfo = this._createEditActionInfo("upload", itemInfos, uploadDirectoryInfo, { sessionInfo });
+        return this._processEditAction(actionInfo,
+            () => sessionInfo.deferreds,
+            () => this._resetDirectoryState(uploadDirectoryInfo));
+    }
+
+    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
+        return when(this._fileProvider.uploadFileChunk(fileData, chunksInfo, destinationDirectory));
+    }
+
+    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
+        return when(this._fileProvider.abortFileUpload(fileData, chunksInfo, destinationDirectory));
+    }
+
+    getFileUploadChunkSize() {
+        return this._fileProvider.getFileUploadChunkSize();
+    }
+
+    _processEditAction(actionInfo, action, completeAction) {
+        let actionResult = null;
+
+        this._raiseEditActionStarting(actionInfo);
+
+        try {
+            actionResult = action();
+        } catch(error) {
+            this._raiseEditActionError(actionInfo, error);
+            return new Deferred().reject().promise();
+        }
+
+        if(!Array.isArray(actionResult)) {
+            actionResult = [ actionResult ];
+        } else if(actionResult.length > 1) {
+            actionInfo.singleRequest = false;
+        }
+
+        this._raiseEditActionResultAcquired(actionInfo);
+
+        return whenSome(
+            actionResult,
+            info => this._raiseCompleteEditActionItem(actionInfo, info),
+            info => this._raiseEditActionItemError(actionInfo, info)
+        ).then(() => {
+            completeAction();
+            this._raiseCompleteEditAction(actionInfo);
+        });
+    }
+
+    _createEditActionInfo(name, itemInfos, directory, customData) {
+        itemInfos = Array.isArray(itemInfos) ? itemInfos : [ itemInfos ];
+        customData = customData || { };
+
+        const items = itemInfos.map(itemInfo => itemInfo.fileItem);
+        return { name, itemInfos, items, directory, customData, singleRequest: true };
+    }
+
+    _getItemInfosForUploaderFiles(files, parentDirectoryInfo) {
+        const pathInfo = this._getPathInfo(parentDirectoryInfo);
+        const result = [];
+        for(let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const item = new FileManagerItem(pathInfo, file.name, false);
+            const itemInfo = this._createFileInfo(item, parentDirectoryInfo);
+            result.push(itemInfo);
+        }
+        return result;
+    }
+
+    refresh() {
+        if(this._lockRefresh) {
+            return this._refreshDeferred;
+        }
+
+        this._lockRefresh = true;
+
+        const cachedRootInfo = {
+            items: this._rootDirectoryInfo.items
+        };
+        const selectedKeyParts = this._getDirectoryPathKeyParts(this.getCurrentDirectory());
+
+        this._resetDirectoryState(this._rootDirectoryInfo);
+
+        this.setCurrentDirectory(null);
+        return this._refreshDeferred = this._loadItemsRecursive(this._rootDirectoryInfo, cachedRootInfo)
+            .then(() => {
+                const dirInfo = this._findSelectedDirectoryByPathKeyParts(selectedKeyParts);
+                this.setCurrentDirectory(dirInfo);
+
+                delete this._lockRefresh;
+            });
+    }
+
+    _loadItemsRecursive(directoryInfo, cachedDirectoryInfo) {
+        return this.getDirectories(directoryInfo)
+            .then(dirInfos => {
+                const itemDeferreds = [ ];
+                for(let i = 0; i < dirInfos.length; i++) {
+                    const cachedItem = find(cachedDirectoryInfo.items, cache => dirInfos[i].fileItem.key === cache.fileItem.key);
+                    if(!cachedItem) continue;
+
+                    dirInfos[i].expanded = cachedItem.expanded;
+                    if(dirInfos[i].expanded) {
+                        itemDeferreds.push(this._loadItemsRecursive(dirInfos[i], cachedItem));
+                    }
+                }
+                return whenSome(itemDeferreds);
+            },
+            () => null);
+    }
+
+    _getDirectoryByPathParts(parentDirectoryInfo, pathParts) {
+        if(pathParts.length < 1) {
+            return new Deferred()
+                .resolve(parentDirectoryInfo)
+                .promise();
+        }
+
+        return this.getDirectories(parentDirectoryInfo)
+            .then(dirInfos => {
+                const subDirInfo = find(dirInfos, d => d.fileItem.name === pathParts[0]);
+                if(!subDirInfo) {
+                    return new Deferred().reject().promise();
+                }
+                return this._getDirectoryByPathParts(subDirInfo, pathParts.splice(1));
+            });
+    }
+
+    _getDirectoryPathKeyParts(directoryInfo) {
+        let pathParts = [ directoryInfo.fileItem.key ];
+        while(directoryInfo && directoryInfo.parentDirectory) {
+            pathParts.unshift(directoryInfo.parentDirectory.fileItem.key);
+            directoryInfo = directoryInfo.parentDirectory;
+        }
+        return pathParts;
+    }
+
+    _findSelectedDirectoryByPathKeyParts(keyParts) {
+        let selectedDirInfo = this._rootDirectoryInfo;
+        if(keyParts.length < 2 || keyParts[0] !== this._rootDirectoryInfo.fileItem.key) {
+            return selectedDirInfo;
+        }
+
+        let i = 1;
+        let newSelectedDir = selectedDirInfo;
+        while(newSelectedDir && i < keyParts.length) {
+            newSelectedDir = find(selectedDirInfo.items, info => info.fileItem.key === keyParts[i]);
+            if(newSelectedDir) {
+                selectedDirInfo = newSelectedDir;
+            }
+            i++;
+        }
+
+        return selectedDirInfo;
     }
 
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {
@@ -236,9 +421,7 @@ export default class FileItemsController {
 
     _createRootDirectory(text) {
         let root = new FileManagerRootItem();
-        if(text) {
-            root.name = text;
-        }
+        root.name = text || "";
         return root;
     }
 
@@ -247,10 +430,61 @@ export default class FileItemsController {
         this._onSelectedDirectoryChanged && this._onSelectedDirectoryChanged(e);
     }
 
+    _raiseEditActionStarting(actionInfo) {
+        if(this._options.onEditActionStarting) {
+            this._options.onEditActionStarting(actionInfo);
+        }
+    }
+
+    _raiseEditActionResultAcquired(actionInfo) {
+        if(this._options.onEditActionResultAcquired) {
+            this._options.onEditActionResultAcquired(actionInfo);
+        }
+    }
+
+    _raiseEditActionError(actionInfo, error) {
+        if(this._options.onEditActionError) {
+            this._options.onEditActionError(actionInfo, error);
+        }
+    }
+
+    _raiseEditActionItemError(actionInfo, info) {
+        if(this._options.onEditActionItemError) {
+            this._options.onEditActionItemError(actionInfo, info);
+        }
+    }
+
+    _raiseCompleteEditActionItem(actionInfo, info) {
+        if(this._options.onCompleteEditActionItem) {
+            this._options.onCompleteEditActionItem(actionInfo, info);
+        }
+    }
+
+    _raiseCompleteEditAction(actionInfo) {
+        if(this._options.onCompleteEditAction) {
+            this._options.onCompleteEditAction(actionInfo);
+        }
+    }
+
     _resetState() {
         this._selectedDirectory = null;
         this._rootDirectoryInfo.items = [ ];
         this._loadedItems = { };
     }
 
+    _getPathInfo(directoryInfo) {
+        const pathInfo = [ ];
+        for(let dirInfo = directoryInfo; dirInfo && !dirInfo.fileItem.isRoot; dirInfo = dirInfo.parentDirectory) {
+            pathInfo.unshift({
+                key: dirInfo.fileItem.key,
+                name: dirInfo.fileItem.name
+            });
+        }
+        return pathInfo;
+    }
+
+    on(eventName, eventHandler) {
+        const finalEventName = `on${eventName}`;
+        this._options[finalEventName] = eventHandler;
+    }
 }

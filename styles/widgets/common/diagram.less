@@ -1,3 +1,14 @@
+@import (once) "./drawer.less";
+@import (once) "./loadIndicator.less";
+@import (once) "./tooltip.less";
+@import (once) "./accordion.less";
+@import (once) "./scrollView.less";
+@import (once) "./form.less";
+@import (once) "./toolbar.less";
+@import (once) "./contextMenu.less";
+@import (once) "./fileUploader.less";
+@import (once) "./popup.less";
+
 @TRANSPARENT_BORDER: 1px solid transparent;
 
 .dx-diagram {
@@ -8,13 +19,14 @@
 
     .dx-diagram-toolbar-wrapper {
         padding: 5px;
-        flex: 0;
+        flex-grow: 0;
     }
 
     .dx-diagram-content-wrapper {
         display: flex;
-        flex: 1;
+        flex-grow: 1;
         flex-basis: 0;
+        overflow: hidden;
     }
 
     .dx-diagram-left-panel {
@@ -34,6 +46,8 @@
 
     .dx-diagram-drawer-wrapper {
         flex: 1 0;
+        overflow: hidden;
+        flex-basis: 0;
     }
 
     .dx-diagram-content {
@@ -44,8 +58,12 @@
         border-left: @TRANSPARENT_BORDER;
     }
 
-    .dx-diagram-right-panel .dx-accordion {
+    .dx-diagram-right-panel .dx-scrollview {
         width: 280px;
+    }
+
+    .dx-diagram-right-panel .dx-accordion {
+        width: 100%;
     }
 
     .dx-diagram-toolbar-separator {
@@ -62,33 +80,6 @@
         }
     }
 
-    .dx-diagram-toolbar {
-        .dx-diagram-select-b,
-        .dx-diagram-color-b {
-            .dx-texteditor {
-                width: auto;
-            }
-
-            .dx-dropdowneditor-field-template-wrapper {
-                display: flex;
-                align-items: center;
-
-                .dx-diagram-i {
-                    display: block;
-                }
-
-                .dx-textbox {
-                    width: 0;
-
-                    .dx-texteditor-input {
-                        width: 0;
-                        padding-left: 0;
-                    }
-                }
-            }
-        }
-    }
-
     &.dx-diagram-fullscreen {
         left: 0;
         top: 0;
@@ -97,10 +88,50 @@
         position: fixed;
         z-index: 2;
     }
+
+    .dxdi-canvas { // stylelint-disable-line selector-class-pattern
+        overflow: hidden;
+    }
+}
+
+.dx-diagram-toolbar,
+.dx-dropdownmenu-popup {
+    .dx-diagram-select-b,
+    .dx-diagram-color-b {
+        .dx-texteditor {
+            width: auto;
+        }
+
+        .dx-dropdowneditor-field-template-wrapper {
+            display: flex;
+            align-items: center;
+
+            .dx-diagram-i {
+                display: block;
+            }
+
+            .dx-textbox {
+                width: 0;
+
+                .dx-texteditor-input {
+                    width: 0;
+                    padding-left: 0;
+                }
+            }
+        }
+    }
 }
 
 .dx-diagram-i {
     background-repeat: no-repeat;
     background-position: 0 0;
     display: inline-block;
+}
+
+.dx-diagram-loading-indicator {
+    position: absolute;
+    top: calc(50% - 32px);
+    left: calc(50% - 32px);
+    width: 64px;
+    height: 64px;
 }

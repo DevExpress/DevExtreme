@@ -15,6 +15,7 @@ const mathCeil = Math.ceil;
 const mathMax = Math.max;
 const mathMin = Math.min;
 const window = windowUtils.getWindow();
+const DEFAULT_HTML_GROUP_WIDTH = 3000;
 
 function hideElement($element) {
     $element.css({ left: "-9999px" }).detach();
@@ -40,6 +41,7 @@ function Tooltip(params) {
 
     that._eventTrigger = params.eventTrigger;
     that._widgetRoot = params.widgetRoot;
+    that._widget = params.widget;
 
     that._wrapper = $("<div>")
         .css({ position: "absolute", overflow: "hidden", "pointerEvents": "none" }) // T265557, T447623
@@ -75,6 +77,11 @@ Tooltip.prototype = {
         return (container.length ? container : $("body")).get(0);
     },
 
+    setTemplate(contentTemplate) {
+        const that = this;
+        that._template = contentTemplate ? that._widget._getTemplate(contentTemplate) : null;
+    },
+
     setOptions: function(options) {
         options = options || {};
 
@@ -94,6 +101,34 @@ Tooltip.prototype = {
             this.plaque.clear();
         }
 
+        this.setTemplate(options.contentTemplate);
+
+        const drawTooltip = (tooltip, group) => {
+            const state = tooltip._state;
+            const template = tooltip._template;
+            const useTemplate = template && !state.formatObject.skipTemplate;
+            if(state.html || useTemplate) {
+                if(!state.isRendered) {
+                    if(useTemplate) {
+                        template.render({ model: state.formatObject, container: textHtml });
+                        state.html = textHtml.html();
+                        if(!state.html) {
+                            this.plaque.clear();
+                            return;
+                        }
+                    } else {
+                        that._text.attr({ text: "" });
+                        textHtml.html(state.html);
+                    }
+                    textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH });
+                    state.isRendered = true;
+                }
+            } else {
+                that._text.css({ fill: state.textColor }).attr({ text: state.text, class: options.cssClass }).append(group.attr({ align: options.textAlignment }));
+            }
+            tooltip.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor });
+        };
+
         this.plaque = new Plaque({
             opacity: that._options.opacity,
             color: that._options.color,
@@ -104,18 +139,7 @@ Tooltip.prototype = {
             arrowWidth: 20,
             shadow: that._options.shadow,
             cornerRadius: that._options.cornerRadius
-        }, that, that._renderer.root, (tooltip, group) => {
-            const state = tooltip._state;
-            if(state.html) {
-                that._text.attr({ text: "" });
-                textGroupHtml.css({ color: state.textColor, width: null });
-                textHtml.html(state.html);
-            } else {
-                textHtml.html("");
-                that._text.css({ fill: state.textColor }).attr({ text: state.text, "class": options.cssClass }).append(group.attr({ align: options.textAlignment }));
-            }
-            this.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor });
-        }, true, (tooltip, g) => {
+        }, that, that._renderer.root, drawTooltip, true, (tooltip, g) => {
             const state = tooltip._state;
             if(state.html) {
                 let bBox;
@@ -191,12 +215,14 @@ Tooltip.prototype = {
         state.color = customize.color || options.color;
         state.borderColor = customize.borderColor || (options.border || {}).color;
         state.textColor = customize.fontColor || (options.font || {}).color;
-        return !!state.text || !!state.html;
+        return !!state.text || !!state.html || !!this._template;
     },
 
     show: function(formatObject, params, eventData, customizeTooltip) {
         var that = this,
-            state = {};
+            state = {
+                formatObject
+            };
 
         if(!that._prepare(formatObject, state, customizeTooltip)) {
             return false;
@@ -205,6 +231,8 @@ Tooltip.prototype = {
         that._state = state;
 
         that._wrapper.appendTo(that._getContainer());
+
+        that._textHtml.html("");
 
         this.plaque.clear().draw(extend({}, that._options, {
             canvas: that._getCanvas()
@@ -285,44 +313,33 @@ Tooltip.prototype = {
     },
 
     _getCanvas: function() {
-        var container = this._getContainer(),
-            containerBox = container.getBoundingClientRect(),
-            html = domAdapter.getDocumentElement(),
-            body = domAdapter.getBody(),
-            left = window.pageXOffset || html.scrollLeft || 0,
-            top = window.pageYOffset || html.scrollTop || 0;
+        const container = this._getContainer();
+        const containerBox = container.getBoundingClientRect();
+        const html = domAdapter.getDocumentElement();
+        const document = domAdapter.getDocument();
+        let left = window.pageXOffset || html.scrollLeft || 0;
+        let top = window.pageYOffset || html.scrollTop || 0;
 
-        var box = {
+        const box = {
             left: left,
             top: top,
-            width: html.clientWidth || 0,
-            height: html.clientHeight || 0,
-            right: 0,
-            bottom: 0,
+            width: (html.clientWidth + left) || 0,
+            height: mathMax(
+                document.body.scrollHeight, html.scrollHeight,
+                document.body.offsetHeight, html.offsetHeight,
+                document.body.clientHeight, html.clientHeight
+            ) || 0,
 
-            /* scrollWidth */
-            fullWidth: mathMax(
-                body.scrollWidth, html.scrollWidth,
-                body.offsetWidth, html.offsetWidth,
-                body.clientWidth, html.clientWidth
-            ) - left,
-            /* scrollHeight */
-            fullHeight: mathMax(
-                body.scrollHeight, html.scrollHeight,
-                body.offsetHeight, html.offsetHeight,
-                body.clientHeight, html.clientHeight
-            ) - top
+            right: 0,
+            bottom: 0
         };
 
-        if(container !== body) {
+        if(container !== domAdapter.getBody()) {
             left = mathMax(box.left, box.left + containerBox.left);
             top = mathMax(box.top, box.top + containerBox.top);
 
-            box.width = mathMin(box.width + box.left - left, containerBox.width + (containerBox.left > 0 ? 0 : containerBox.left));
-            box.height = mathMin(box.height + box.top - top, containerBox.height + (containerBox.top > 0 ? 0 : containerBox.top));
-
-            box.fullWidth = box.width;
-            box.fullHeight = box.height;
+            box.width = mathMin(containerBox.width, box.width) + left + box.left;
+            box.height = mathMin(containerBox.height, box.height) + top + box.top;
 
             box.left = left;
             box.top = top;
@@ -350,7 +367,8 @@ exports.plugin = {
                 cssClass: this._rootClassPrefix + "-tooltip",
                 eventTrigger: this._eventTrigger,
                 pathModified: this.option("pathModified"),
-                widgetRoot: this.element()
+                widgetRoot: this.element(),
+                widget: this
             });
         },
         // The method exists only to be overridden in sparklines.

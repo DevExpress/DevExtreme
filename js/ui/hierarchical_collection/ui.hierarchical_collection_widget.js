@@ -6,7 +6,7 @@ import devices from "../../core/devices";
 import iconUtils from "../../core/utils/icon";
 import HierarchicalDataAdapter from "./ui.data_adapter";
 import CollectionWidget from "../collection/ui.collection_widget.edit";
-import BindableTemplate from "../widget/bindable_template";
+import { BindableTemplate } from "../../core/templates/bindable_template";
 import { isFunction } from "../../core/utils/type";
 import { noop } from "../../core/utils/common";
 
@@ -26,16 +26,19 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         return extend(this.callBase(), {
             /**
             * @name HierarchicalCollectionWidgetOptions.keyExpr
-            * @type string|function
+             * @type string|function(item)
             * @default 'id'
+             * @type_function_param1 item:object
+             * @type_function_return string
             */
             keyExpr: "id",
 
             /**
             * @name HierarchicalCollectionWidgetOptions.displayExpr
             * @type string|function(item)
-            * @type_function_param1 item:object
             * @default 'text'
+             * @type_function_param1 item:object
+             * @type_function_return string
             */
             displayExpr: "text",
 

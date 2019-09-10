@@ -1,3 +1,7 @@
+@import (once) "./dropDownList.material.less";
+@import (once) "./popover.material.less";
+@import (once) "./textBox.material.less";
+
 .dx-size-default() {
     @MATERIAL_FILLED_LOOKUP_HEIGHT: 56px;
     @MATERIAL_STANDARD_LOOKUP_HEIGHT: 32px;
@@ -65,12 +69,6 @@
         }
     }
 
-    &.dx-state-focused {
-        &:before {
-            content: none;
-        }
-    }
-
     &.dx-invalid {
         border-bottom-color: @base-invalid-faded-border-color;
 
@@ -92,6 +90,25 @@
 
 .dx-lookup-field {
     font-size: @MATERIAL_LOOKUP_FONT_SIZE;
+
+    .dx-texteditor {
+        border: none;
+
+        &:before,
+        &:after {
+            content: none;
+        }
+
+        &.dx-state-hover,
+        &.dx-state-focused,
+        &.dx-state-active,
+        &.dx-state-disabled,
+        &.dx-state-readonly,
+        &.dx-state-readonly.dx-state-hover,
+        & {
+            background-color: transparent;
+        }
+    }
 }
 
 .dx-lookup-arrow {

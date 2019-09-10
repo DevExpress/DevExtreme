@@ -570,20 +570,20 @@ module.exports = {
                     return $row;
                 },
 
-                _rowPrepared: function($row, row) {
-                    if(row.rowType === "data") {
+                _rowPrepared: function($row, rowOptions, row) {
+                    if(rowOptions.rowType === "data") {
                         if(this.option("rowAlternationEnabled")) {
                             var getRowAlt = () => {
                                 return row.dataIndex % 2 === 1;
                             };
                             getRowAlt() && $row.addClass(ROW_ALTERNATION_CLASS);
-                            row.watch && row.watch(getRowAlt, value => {
+                            rowOptions.watch && rowOptions.watch(getRowAlt, value => {
                                 $row.toggleClass(ROW_ALTERNATION_CLASS, value);
                             });
                         }
 
-                        this._setAriaRowIndex(row, $row);
-                        row.watch && row.watch(() => row.rowIndex, () => this._setAriaRowIndex(row, $row));
+                        this._setAriaRowIndex(rowOptions, $row);
+                        rowOptions.watch && rowOptions.watch(() => rowOptions.rowIndex, () => this._setAriaRowIndex(rowOptions, $row));
                     }
 
                     this.callBase.apply(this, arguments);
@@ -605,16 +605,17 @@ module.exports = {
                 _afterRowPrepared: function(e) {
                     var arg = e.args[0],
                         dataController = this._dataController,
+                        row = dataController.getVisibleRows()[arg.rowIndex],
                         watch = this.option("integrationOptions.watchMethod");
 
-                    if(!arg.data || arg.rowType !== "data" || arg.inserted || !this.option("twoWayBindingEnabled") || !watch) return;
+                    if(!arg.data || arg.rowType !== "data" || arg.inserted || !this.option("twoWayBindingEnabled") || !watch || !row) return;
 
                     var dispose = watch(
                         () => {
                             return dataController.generateDataValues(arg.data, arg.columns);
                         },
                         () => {
-                            dataController.repaintRows([arg.rowIndex], this.option("repaintChangesOnly"));
+                            dataController.repaintRows([row.rowIndex], this.option("repaintChangesOnly"));
                         },
                         {
                             deep: true,
@@ -1413,7 +1414,7 @@ module.exports = {
                     return $cells;
                 },
 
-                getTopVisibleItemIndex: function() {
+                getTopVisibleItemIndex: function(isFloor) {
                     var that = this,
                         itemIndex = 0,
                         prevOffsetTop = 0,
@@ -1435,8 +1436,10 @@ module.exports = {
                             if(rowElement.length) {
                                 offsetTop = rowElement.offset().top - contentElementOffsetTop;
                                 if(offsetTop > scrollPosition) {
-                                    if(scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop) && itemIndex) {
-                                        itemIndex--;
+                                    if(itemIndex) {
+                                        if(isFloor || scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop)) {
+                                            itemIndex--;
+                                        }
                                     }
                                     break;
                                 }

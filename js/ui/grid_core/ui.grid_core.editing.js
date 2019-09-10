@@ -8,6 +8,7 @@ import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import modules from "./ui.grid_core.modules";
 import clickEvent from "../../events/click";
+import doubleClickEvent from "../../events/double_click";
 import pointerEvents from "../../events/pointer";
 import { getIndexByKey, createObjectWithChanges, setEmptyText, getSelectionRange, setSelectionRange, focusAndSelectElement } from "./ui.grid_core.utils";
 import { addNamespace } from "../../events/utils";
@@ -76,7 +77,9 @@ var EDIT_FORM_CLASS = "edit-form",
     ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP],
     CELL_BASED_MODES = [EDIT_MODE_BATCH, EDIT_MODE_CELL],
     FORM_BASED_MODES = [EDIT_MODE_FORM, EDIT_MODE_POPUP],
-    MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];
+    MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM],
+
+    TARGET_COMPONENT_NAME = "targetComponent";
 
 var EDIT_LINK_CLASS = {
         save: "dx-link-save",
@@ -108,6 +111,13 @@ var EDIT_LINK_CLASS = {
         delete: "allowDeleting"
     },
     BUTTON_NAMES = ["edit", "save", "cancel", "delete", "undelete"];
+
+var createFailureHandler = function(deferred) {
+    return function(arg) {
+        var error = arg instanceof Error ? arg : new Error(arg && String(arg) || "Unknown error");
+        deferred.reject(error);
+    };
+};
 
 var getEditMode = function(that) {
     var editMode = that.option("editing.mode");
@@ -201,6 +211,11 @@ var EditingController = modules.ViewController.inherit((function() {
             that._rowsView = that.getView("rowsView");
             that._editForm = null;
 
+            if(that._deferreds) {
+                that._deferreds.forEach(d => d.reject("cancel"));
+            }
+            that._deferreds = [];
+
             if(!that._dataChangedHandler) {
                 that._dataChangedHandler = that._handleDataChanged.bind(that);
                 that._dataController.changed.add(that._dataChangedHandler);
@@ -223,17 +238,20 @@ var EditingController = modules.ViewController.inherit((function() {
                         isFocusOverlay,
                         isAddRowButton,
                         isCellEditMode,
-                        $target;
+                        $target,
+                        isAnotherComponent,
+                        targetComponent = event[TARGET_COMPONENT_NAME];
 
                     if(!isRowEditMode(that) && !that._editCellInProgress) {
                         $target = $(event.target);
                         isEditorPopup = $target.closest(".dx-dropdowneditor-overlay").length;
                         isDomElement = $target.closest(getWindow().document).length;
+                        isAnotherComponent = targetComponent && targetComponent !== that.component;
                         isAddRowButton = $target.closest("." + that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)).length;
                         isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
                         isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
 
-                        if(!isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && that.isEditing()) && isDomElement) {
+                        if(!isEditorPopup && !isFocusOverlay && !(isAddRowButton && isCellEditMode && that.isEditing()) && (isDomElement || isAnotherComponent)) {
                             that._closeEditItem.bind(that)($target);
                         }
                     }
@@ -269,16 +287,34 @@ var EditingController = modules.ViewController.inherit((function() {
                 .map(editData => editData.oldData);
         },
 
-        _needToCloseEditableCell: function($targetElement) {
-            var isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length,
-                $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
-                columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
-                rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent()),
-                visibleColumns = this._columnsController.getVisibleColumns(),
-                // TODO jsdmitry: Move this code to _rowClick method of rowsView
-                allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
+        _fireDataErrorOccurred: function(arg) {
+            if(arg === "cancel") return;
+            let $popupContent = this.getPopupContent();
+            this._dataController.dataErrorOccurred.fire(arg, $popupContent);
+        },
 
-            return this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)));
+        _needToCloseEditableCell: function($targetElement) {
+            let $element = this.component.$element(),
+                result = this.isEditing(),
+                isCurrentComponentElement = !$element || !!$targetElement.closest($element).length;
+
+            if(isCurrentComponentElement) {
+                let isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length;
+
+                if(isDataRow) {
+                    let $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
+                        columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
+                        rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent()),
+                        visibleColumns = this._columnsController.getVisibleColumns(),
+                        // TODO jsdmitry: Move this code to _rowClick method of rowsView
+                        allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
+
+                    result = result && !allowEditing && !this.isEditCell(rowIndex, columnIndex);
+                }
+
+            }
+
+            return result;
         },
 
         _closeEditItem: function($targetElement) {
@@ -702,12 +738,36 @@ var EditingController = modules.ViewController.inherit((function() {
             return this.addRow();
         },
 
-        _initNewRow: function(options, insertKey) {
+        _initNewRow: function(options) {
             this.executeAction("onInitNewRow", options);
 
-            var dataController = this._dataController,
+            if(options.promise) {
+                let deferred = new Deferred();
+
+                when(fromPromise(options.promise))
+                    .done(deferred.resolve)
+                    .fail(createFailureHandler(deferred))
+                    .fail((arg) => this._fireDataErrorOccurred(arg));
+
+                return deferred;
+            }
+        },
+
+        _getInsertKey: function(parentKey) {
+            var that = this,
+                insertKey,
+                dataController = that._dataController,
                 rows = dataController.items(),
-                row = rows[insertKey.rowIndex];
+                row,
+                editMode = getEditMode(that);
+
+            insertKey = {
+                parentKey,
+                pageIndex: dataController.pageIndex(),
+                rowIndex: that._getInsertRowIndex(parentKey)
+            };
+
+            row = rows[insertKey.rowIndex];
 
             if(row && (!row.isEditing && row.rowType === "detail" || row.rowType === "detailAdaptive")) {
                 insertKey.rowIndex++;
@@ -716,6 +776,30 @@ var EditingController = modules.ViewController.inherit((function() {
             insertKey.dataRowIndex = dataController.getRowIndexDelta() + rows.filter(function(row, index) {
                 return index < insertKey.rowIndex && (row.rowType === "data" || row.rowType === "group");
             }).length;
+
+            if(editMode !== EDIT_MODE_BATCH) {
+                that._editRowIndex = insertKey.rowIndex + that._dataController.getRowIndexOffset();
+            }
+
+            insertKey[INSERT_INDEX] = that._getInsertIndex();
+
+            return insertKey;
+        },
+
+        _getInsertRowIndex: function(parentKey) {
+            var that = this,
+                rowsView = that.getView("rowsView"),
+                parentRowIndex = that._dataController.getRowIndexByKey(parentKey);
+
+            if(parentRowIndex >= 0) {
+                return parentRowIndex + 1;
+            }
+
+            if(rowsView) {
+                return rowsView.getTopVisibleItemIndex(true);
+            }
+
+            return 0;
         },
 
         _getInsertIndex: function() {
@@ -746,17 +830,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 dataController = that._dataController,
                 store = dataController.store(),
                 key = store && store.key(),
-                rowsView = that.getView("rowsView"),
                 param = { data: {} },
-                parentRowIndex = dataController.getRowIndexByKey(parentKey),
-                insertKey = {
-                    pageIndex: dataController.pageIndex(),
-                    rowIndex: (parentRowIndex >= 0 ? parentRowIndex + 1 : (rowsView ? rowsView.getTopVisibleItemIndex() : 0)),
-                    parentKey: parentKey
-                },
-                oldEditRowIndex = that._getVisibleEditRowIndex(),
-                editMode = getEditMode(that),
-                $firstCell;
+                editMode = getEditMode(that);
 
             if(!store) {
                 dataController.fireError("E1052", this.component.NAME);
@@ -764,14 +839,18 @@ var EditingController = modules.ViewController.inherit((function() {
             }
 
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
-                that.saveEditData();
+                that.saveEditData().done(function() {
+                    // T804894
+                    if(!that.hasChanges()) {
+                        that.addRow(parentKey);
+                    }
+                });
+                return;
             }
 
             that.refresh();
 
-            var insertIndex = that._getInsertIndex();
-
-            if(editMode !== EDIT_MODE_BATCH && insertIndex > 1) {
+            if(!that._allowRowAdding()) {
                 return;
             }
 
@@ -779,18 +858,34 @@ var EditingController = modules.ViewController.inherit((function() {
                 param.data.__KEY__ = String(new Guid());
             }
 
-            that._initNewRow(param, insertKey);
+            when(that._initNewRow(param, parentKey)).done(() => {
+                if(that._allowRowAdding()) {
+                    that._addRowCore(param.data, parentKey);
+                }
+            });
+        },
 
-            editMode = getEditMode(that);
-            if(editMode !== EDIT_MODE_BATCH) {
-                that._editRowIndex = insertKey.rowIndex + that._dataController.getRowIndexOffset();
+        _allowRowAdding: function() {
+            var that = this,
+                editMode = getEditMode(that),
+                insertIndex = that._getInsertIndex();
+
+            if(editMode !== EDIT_MODE_BATCH && insertIndex > 1) {
+                return false;
             }
 
-            insertKey[INSERT_INDEX] = insertIndex;
+            return true;
+        },
 
-            that._addEditData({ key: insertKey, data: param.data, type: DATA_EDIT_DATA_INSERT_TYPE });
+        _addRowCore: function(data, parentKey) {
+            var that = this,
+                insertKey = that._getInsertKey(parentKey),
+                oldEditRowIndex = that._getVisibleEditRowIndex(),
+                editMode = getEditMode(that);
 
-            dataController.updateItems({
+            that._addEditData({ key: insertKey, data: data, type: DATA_EDIT_DATA_INSERT_TYPE });
+
+            that._dataController.updateItems({
                 changeType: "update",
                 rowIndices: [oldEditRowIndex, insertKey.rowIndex]
             });
@@ -798,16 +893,26 @@ var EditingController = modules.ViewController.inherit((function() {
             if(editMode === EDIT_MODE_POPUP) {
                 that._showEditPopup(insertKey.rowIndex);
             } else {
-                $firstCell = that.getFirstEditableCellInRow(insertKey.rowIndex);
-                that._editCellInProgress = true;
-                that._delayedInputFocus($firstCell, function() {
-                    that._editCellInProgress = false;
-                    var $cell = that.getFirstEditableCellInRow(insertKey.rowIndex);
-                    $cell && eventsEngine.trigger($cell, clickEvent.name);
-                });
+                that._focusFirstEditableCellInRow(insertKey.rowIndex);
             }
 
-            that._afterInsertRow({ key: insertKey, data: param.data });
+            that._afterInsertRow({ key: insertKey, data: data });
+        },
+
+        _focusFirstEditableCellInRow: function(rowIndex) {
+            var that = this,
+                $firstCell = that.getFirstEditableCellInRow(rowIndex);
+
+            that._editCellInProgress = true;
+
+            that._delayedInputFocus($firstCell, function() {
+                that._editCellInProgress = false;
+
+                var $cell = that.getFirstEditableCellInRow(rowIndex),
+                    eventToTrigger = that.option("editing.startEditAction") === "dblClick" ? doubleClickEvent.name : clickEvent.name;
+
+                $cell && eventsEngine.trigger($cell, eventToTrigger);
+            });
         },
 
         _isEditingStart: function(options) {
@@ -990,6 +1095,19 @@ var EditingController = modules.ViewController.inherit((function() {
          * @param2 dataField:string
          */
         editCell: function(rowIndex, columnIndex) {
+            let d = new Deferred(),
+                coreResult;
+
+            when(...this._deferreds).done(() => {
+                coreResult = this._editCellCore(rowIndex, columnIndex);
+                when(coreResult)
+                    .done(d.resolve)
+                    .fail(d.reject);
+            });
+
+            return coreResult !== undefined ? coreResult : d.promise();
+        },
+        _editCellCore: function(rowIndex, columnIndex) {
             var that = this,
                 columnsController = that._columnsController,
                 dataController = that._dataController,
@@ -1238,13 +1356,6 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 that.executeAction(actionName, params);
 
-                function createFailureHandler(deferred) {
-                    return function(arg) {
-                        var error = arg instanceof Error ? arg : new Error(arg && String(arg) || "Unknown error");
-                        deferred.reject(error);
-                    };
-                }
-
                 when(fromPromise(params.cancel)).done(function(cancel) {
                     if(cancel) {
                         setTimeout(function() {
@@ -1323,14 +1434,12 @@ var EditingController = modules.ViewController.inherit((function() {
         },
         _processSaveEditDataResult: function(results) {
             var that = this,
-                dataController = that._dataController,
                 i,
                 arg,
                 cancel,
                 editData,
                 editIndex,
                 isError,
-                $popupContent,
                 hasSavedData = false,
                 editMode = getEditMode(that);
 
@@ -1345,8 +1454,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     if(editData) {
                         editData.error = arg;
                     }
-                    $popupContent = that.getPopupContent();
-                    dataController.dataErrorOccurred.fire(arg, $popupContent);
+                    that._fireDataErrorOccurred(arg);
                     if(editMode !== EDIT_MODE_BATCH) {
                         if(editData && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
                             that._removeEditDataItem(editIndex);
@@ -1392,6 +1500,13 @@ var EditingController = modules.ViewController.inherit((function() {
          * @return Promise<void>
          */
         saveEditData: function() {
+            let d = new Deferred();
+            when(...this._deferreds).done(() => {
+                this._saveEditDataInner().done(d.resolve).fail(d.reject);
+            }).fail(d.reject);
+            return d;
+        },
+        _saveEditDataInner: function() {
             var that = this,
                 editData,
                 results = [],
@@ -1571,7 +1686,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     rowIndices: [rowIndex, rowIndex + 1]
                 });
             } else {
-                dataController.updateItems();
+                dataController.updateItems({
+                    repaintChangesOnly: that.option("repaintChangesOnly")
+                });
             }
 
             if(editMode === EDIT_MODE_POPUP) {
@@ -1597,38 +1714,45 @@ var EditingController = modules.ViewController.inherit((function() {
          */
         closeEditCell: function(isError) {
             var that = this,
-                editMode = getEditMode(that),
-                oldEditRowIndex = that._getVisibleEditRowIndex(),
-                dataController = that._dataController,
-                result = deferredUtils.when();
+                result = deferredUtils.when(),
+                oldEditRowIndex = that._getVisibleEditRowIndex();
 
             if(!isRowEditMode(that)) {
                 result = deferredUtils.Deferred();
-                setTimeout(function() {
-                    if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
-                        that.saveEditData().done(function(error) {
-                            if(!that.hasChanges()) {
-                                that.closeEditCell(!!error);
-                            }
-                        });
-                    } else if(oldEditRowIndex >= 0) {
-                        var rowIndices = [oldEditRowIndex];
-
-                        that._editRowIndex = -1;
-                        that._editColumnIndex = -1;
-
-                        that._beforeCloseEditCellInBatchMode(rowIndices);
-                        if(!isError) {
-                            dataController.updateItems({
-                                changeType: "update",
-                                rowIndices: rowIndices
-                            });
-                        }
-                    }
-                    result.resolve();
+                setTimeout(() => {
+                    when(...this._deferreds).done(() => {
+                        this._closeEditCellCore(isError, oldEditRowIndex);
+                        result.resolve();
+                    }).fail(result.reject);
                 });
             }
             return result.promise();
+        },
+
+        _closeEditCellCore(isError, oldEditRowIndex) {
+            var that = this,
+                editMode = getEditMode(that),
+                dataController = that._dataController;
+            if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
+                that.saveEditData().done(function(error) {
+                    if(!that.hasChanges()) {
+                        that.closeEditCell(!!error);
+                    }
+                });
+            } else if(oldEditRowIndex >= 0) {
+                var rowIndices = [oldEditRowIndex];
+
+                that._editRowIndex = -1;
+                that._editColumnIndex = -1;
+
+                that._beforeCloseEditCellInBatchMode(rowIndices);
+                if(!isError) {
+                    dataController.updateItems({
+                        changeType: "update",
+                        rowIndices: rowIndices
+                    });
+                }
+            }
         },
 
         update: function(changeType) {
@@ -1648,54 +1772,104 @@ var EditingController = modules.ViewController.inherit((function() {
             return skipCurrentRow ? [] : [row.rowIndex];
         },
 
-        updateFieldValue: function(options, value, text, forceUpdateRow) {
+        _prepareEditDataParams: function(options, value, text) {
             var that = this,
                 newData = {},
                 oldData = options.data,
                 rowKey = options.key,
                 $cellElement = $(options.cellElement),
                 editMode = getEditMode(that),
-                params,
-                columns,
-                isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
+                deferred = new Deferred(),
+                setCellValueResult;
+
+            if(rowKey !== undefined) {
+                if(editMode === EDIT_MODE_BATCH) {
+                    that._applyModified($cellElement, options);
+                }
+                options.value = value;
+
+                setCellValueResult = fromPromise(options.column.setCellValue(newData, value, extend(true, {}, oldData), text));
+                setCellValueResult.done(function() {
+                    deferred.resolve({
+                        data: newData,
+                        key: rowKey,
+                        oldData: oldData,
+                        type: DATA_EDIT_DATA_UPDATE_TYPE
+                    });
+                }).fail(createFailureHandler(deferred)).fail((arg) => that._fireDataErrorOccurred(arg));
+
+                if(text && options.column.displayValueMap) {
+                    options.column.displayValueMap[value] = text;
+                }
+                if(options.values) {
+                    options.values[options.columnIndex] = value;
+                }
+
+                that._deferreds.push(setCellValueResult);
+                setCellValueResult.always(function() {
+                    let index = that._deferreds.indexOf(setCellValueResult);
+                    if(index >= 0) {
+                        that._deferreds.splice(index, 1);
+                    }
+                });
+            }
+
+            return deferred;
+        },
+
+        updateFieldValue: function(options, value, text, forceUpdateRow) {
+            var that = this,
+                rowKey = options.key;
 
             if(rowKey === undefined) {
                 that._dataController.fireError("E1043");
             }
 
             if(options.column.setCellValue) {
-                if(rowKey !== undefined) {
-                    if(editMode === EDIT_MODE_BATCH) {
-                        that._applyModified($cellElement, options);
-                    }
-                    options.value = value;
-                    options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
-                    if(text && options.column.displayValueMap) {
-                        options.column.displayValueMap[value] = text;
-                    }
-                }
-                params = {
-                    data: newData,
-                    key: rowKey,
-                    oldData: oldData,
-                    type: DATA_EDIT_DATA_UPDATE_TYPE
-                };
+                this._prepareEditDataParams(options, value, text).done(params => {
+                    this._applyEditDataParams(options, params, forceUpdateRow);
+                });
+            }
+        },
+        _focusPreviousEditingCellIfNeed: function(options) {
+            var that = this;
 
-                that._addEditData(params, options.row);
-                that._updateEditButtons();
+            if(that.hasEditData() && !that.isEditCell(options.rowIndex, options.columnIndex)) {
+                that._focusEditingCell();
+                that._updateEditRow(options.row, true);
+                return true;
+            }
+        },
+        _applyEditDataParams: function(options, params, forceUpdateRow) {
+            var that = this,
+                editMode = getEditMode(that),
+                isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue,
+                showEditorAlways = options.column.showEditorAlways,
+                isUpdateInCellMode = editMode === EDIT_MODE_CELL && options.row && !options.row.inserted,
+                focusPreviousEditingCell = showEditorAlways && !forceUpdateRow && isUpdateInCellMode && that.hasEditData() && !that.isEditCell(options.rowIndex, options.columnIndex);
 
-                if(options.column.showEditorAlways && !forceUpdateRow) {
-                    if(editMode === EDIT_MODE_CELL && options.row && !options.row.inserted) {
-                        return that.saveEditData();
-                    } else if(editMode === EDIT_MODE_BATCH) {
-                        columns = that._columnsController.getVisibleColumns();
-                        forceUpdateRow = isCustomSetCellValue || columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
-                    }
-                }
+            if(focusPreviousEditingCell) {
+                that._focusEditingCell();
+                that._updateEditRow(options.row, true);
+                return;
+            }
 
-                if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
-                    that._updateEditRow(options.row, forceUpdateRow);
+            that._addEditData(params, options.row);
+            that._updateEditButtons();
+
+            if(showEditorAlways && !forceUpdateRow) {
+                if(isUpdateInCellMode) {
+                    that._editRowIndex = options.rowIndex + that._dataController.getRowIndexOffset();
+                    that._editColumnIndex = options.columnIndex;
+                    return that.saveEditData();
+                } else if(editMode === EDIT_MODE_BATCH) {
+                    let columns = that._columnsController.getVisibleColumns();
+                    forceUpdateRow = isCustomSetCellValue || columns.some((column) => column.calculateCellValue !== column.defaultCalculateCellValue);
                 }
+            }
+
+            if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
+                that._updateEditRow(options.row, forceUpdateRow);
             }
         },
         _updateEditRowCore: function(row, skipCurrentRow) {
@@ -1788,15 +1962,17 @@ var EditingController = modules.ViewController.inherit((function() {
                     cellElement: null,
                     isOnForm: true,
                     item: item,
-                    value: column.calculateCellValue(rowData),
                     column: extend({}, column, { editorType: editorType, editorOptions: item.editorOptions }),
                     id: form.getItemID(item.name || item.dataField),
                     columnIndex: column.index,
                     setValue: !isReadOnly && column.allowEditing && function(value) {
                         that.updateFieldValue(cellOptions, value);
                     }
-                }),
-                template = that._getFormEditItemTemplate.bind(that)(cellOptions, column);
+                });
+
+            cellOptions.value = column.calculateCellValue(rowData);
+
+            var template = that._getFormEditItemTemplate.bind(that)(cellOptions, column);
 
             if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length)) {
                 that._rowsView._updateCell($container, cellOptions);
@@ -1963,7 +2139,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     iconType = iconUtils.getImageSourceType(icon);
 
                     if(iconType === "image") {
-                        $button = iconUtils.getImageContainer(icon);
+                        $button = iconUtils.getImageContainer(icon).addClass(button.cssClass);
                     } else {
                         $button.addClass("dx-icon" + (iconType === "dxIcon" ? "-" : " ") + icon).attr("title", button.text);
                     }
@@ -1978,6 +2154,10 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 if(typeUtils.isDefined(button.hint)) {
                     $button.attr("title", button.hint);
+                }
+
+                if(that.option("useKeyboard")) {
+                    $button.attr("tabindex", -1);
                 }
 
                 eventsEngine.on($button, addNamespace("click", EDITING_NAMESPACE), that.createAction(function(e) {
@@ -2654,6 +2834,8 @@ module.exports = {
                     return eventName === startEditAction && allowUpdating && allowEditing && editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
                 },
                 _rowClick: function(e) {
+                    e.event[TARGET_COMPONENT_NAME] = this.component;
+
                     if(!this._editCellByClick(e, "click")) {
                         this.callBase.apply(this, arguments);
                     }
@@ -2784,7 +2966,9 @@ module.exports = {
                 optionChanged: function(args) {
                     switch(args.name) {
                         case "editing":
-                            this._invalidate();
+                            if(!(args.fullName && args.fullName.indexOf("editing.popup") === 0)) {
+                                this._invalidate();
+                            }
                             this.callBase(args);
                             break;
                         default:

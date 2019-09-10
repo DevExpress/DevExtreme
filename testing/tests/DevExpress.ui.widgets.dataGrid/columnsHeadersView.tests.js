@@ -3,7 +3,7 @@ import "generic_light.css!";
 
 import $ from "jquery";
 import dataUtils from "core/element_data";
-import setTemplateEngine from "ui/set_template_engine";
+import { setTemplateEngine } from "core/templates/template_engine_registry";
 import typeUtils from "core/utils/type";
 import config from "core/config";
 import devices from "core/devices";
@@ -14,6 +14,9 @@ import dateLocalization from "localization/date";
 import "ui/data_grid/ui.data_grid";
 import "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
 setTemplateEngine("hogan");
+
+var SORT_INDEX_ICON_SELECTOR = ".dx-sort-index-icon",
+    SORT_INDEX_INDICATOR_SELECTOR = ".dx-sort-index-indicator";
 
 $("body").addClass("dx-viewport");
 QUnit.testStart(function() {
@@ -2551,4 +2554,297 @@ QUnit.test("Filter row does not have rowspan attribute when band column is enabl
 
     var $filterRowFirstColumnElement = $testElement.find(".dx-datagrid-filter-row").first().children().eq(0);
     assert.strictEqual($filterRowFirstColumnElement.attr("rowspan"), undefined);
+});
+
+QUnit.module('Multiple sorting', {
+    beforeEach: function() {
+        var that = this;
+
+        that.clock = sinon.useFakeTimers();
+
+        that.$element = function() {
+            return $("#container");
+        };
+
+        that.setupDataGrid = function(options) {
+            if(!options.columns) {
+                options.columns = [{
+                    dataField: "field1"
+                }, {
+                    dataField: "field2",
+                    sortIndex: 1,
+                    sortOrder: "asc"
+                }, {
+                    dataField: "field3",
+                    sortIndex: 0,
+                    sortOrder: "asc"
+                }];
+            }
+            dataGridMocks.setupDataGridModules(that, ["data", "columns", "headerFilter", "columnHeaders", "sorting", "gridView", "rows"], {
+                initViews: true,
+                initDefaultOptions: true,
+                options: options
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Sort index icons should be rendered by default", function(assert) {
+    // arrange
+    var $testElement = this.$element().addClass("dx-widget"),
+        options = {
+            sorting: {
+                mode: 'multiple'
+            }
+        },
+        $headerCells;
+
+    this.setupDataGrid(options);
+
+    // act
+    this.columnHeadersView.render($testElement);
+    $headerCells = $testElement.find(".dx-header-row").children();
+
+    // assert
+    assert.equal($headerCells.eq(0).find(SORT_INDEX_ICON_SELECTOR).text(), "", "first column's sort index");
+    assert.equal($headerCells.eq(1).find(SORT_INDEX_ICON_SELECTOR).text(), "2", "second column's sort index");
+    assert.equal($headerCells.eq(2).find(SORT_INDEX_ICON_SELECTOR).text(), "1", "third column's sort index");
+});
+
+QUnit.test("Sort index icons should be rendered when showSortIndexes is true", function(assert) {
+    // arrange
+    var $testElement = this.$element().addClass("dx-widget"),
+        options = {
+            sorting: {
+                showSortIndexes: true,
+                mode: 'multiple'
+            },
+            columns: [{
+                dataField: "field1"
+            }, {
+                dataField: "field2",
+                sortIndex: 0,
+                sortOrder: "asc"
+            }]
+        },
+        $headerCells;
+
+    this.setupDataGrid(options);
+
+    // act
+    this.columnHeadersView.render($testElement);
+    $headerCells = $testElement.find(".dx-header-row").children();
+
+    // assert
+    assert.notOk($testElement.find(SORT_INDEX_ICON_SELECTOR).length, "no sort indexes");
+    assert.notOk($testElement.find(SORT_INDEX_INDICATOR_SELECTOR).length, "no sort index indicators");
+
+    // act
+    this.columnOption(0, "sortOrder", "asc");
+    $headerCells = $testElement.find(".dx-header-row").children();
+
+    // assert
+    assert.equal($headerCells.eq(0).find(SORT_INDEX_ICON_SELECTOR).text(), "2", "first column's sort index");
+    assert.equal($headerCells.eq(1).find(SORT_INDEX_ICON_SELECTOR).text(), "1", "second column's sort index");
+
+    assert.ok($headerCells.eq(0).find(SORT_INDEX_INDICATOR_SELECTOR).length, "first column's sort index indicator");
+    assert.ok($headerCells.eq(1).find(SORT_INDEX_INDICATOR_SELECTOR).length, "second column's sort index indicator");
+
+    // act
+    this.columnOption(1, "sortOrder", null);
+    $headerCells = $testElement.find(".dx-header-row").children();
+
+    // assert
+    assert.notOk($testElement.find(SORT_INDEX_ICON_SELECTOR).length, "no sort indexes");
+    assert.notOk($testElement.find(SORT_INDEX_INDICATOR_SELECTOR).length, "no sort index indicators");
+});
+
+QUnit.test("Sort index icons should not be rendered when showSortIndexes is false", function(assert) {
+    // arrange
+    var $testElement = this.$element().addClass("dx-widget"),
+        options = {
+            sorting: {
+                showSortIndexes: false,
+                mode: 'multiple'
+            }
+        };
+
+    this.setupDataGrid(options);
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    assert.notOk($testElement.find(SORT_INDEX_ICON_SELECTOR).length, "no sort indexes");
+});
+
+function checkHeaderWidths(assert, that, options, widthDiffs) {
+    // arrange
+    var $testElement = that.$element().addClass("dx-widget"),
+        $headerCell,
+        etalonHeaderCellTextWidth,
+        etalonHeaderCellWidth,
+        headerCellTextWidth,
+        headerCellWidth;
+
+    that.setupDataGrid(options);
+
+    // act
+    that.columnHeadersView.render($testElement);
+    that.rowsView.render($testElement);
+    that.resizingController.updateDimensions();
+
+    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+    etalonHeaderCellTextWidth = $headerCell.find(".dx-datagrid-text-content").eq(0).width();
+    etalonHeaderCellWidth = $headerCell.width();
+
+    // assert
+    assert.ok(etalonHeaderCellTextWidth, "header text width");
+    assert.ok(etalonHeaderCellWidth, "header cell width");
+
+    // act
+    that.columnOption(1, "sortOrder", null);
+    that.resizingController.updateDimensions();
+
+    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+    headerCellTextWidth = $headerCell.find(".dx-datagrid-text-content").eq(0).width();
+    headerCellWidth = $headerCell.width();
+
+    // assert
+    assert.equal(Math.floor(headerCellWidth), Math.floor(etalonHeaderCellWidth + widthDiffs.cellWidthDiff), "header cell width");
+    assert.equal(Math.floor(headerCellTextWidth), Math.floor(etalonHeaderCellTextWidth + widthDiffs.textContentWidthDiff), "header text width");
+
+    // act
+    that.columnOption(1, "sortOrder", "asc");
+    that.resizingController.updateDimensions();
+
+    $headerCell = $testElement.find(".dx-header-row").children().eq(0);
+    headerCellTextWidth = $headerCell.find(".dx-datagrid-text-content").eq(0).width();
+    headerCellWidth = $headerCell.width();
+
+    // assert
+    assert.equal(Math.floor(headerCellWidth), Math.floor(etalonHeaderCellWidth), "header cell width");
+    assert.equal(Math.floor(headerCellTextWidth), Math.floor(etalonHeaderCellTextWidth), "header text width");
+}
+
+QUnit.test("Check header widths", function(assert) {
+    // arrange
+    var options = {
+        columns: [{
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 0,
+            width: 100,
+        }, {
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
+        }],
+        sorting: {
+            mode: "multiple"
+        }
+    };
+
+    checkHeaderWidths(assert, this, options, {
+        textContentWidthDiff: 12,
+        cellWidthDiff: 0
+    });
+});
+
+QUnit.test("Check header widths: column with headerFilter", function(assert) {
+    // arrange
+    var options = {
+        sorting: { mode: 'multiple' },
+        headerFilter: { visible: true },
+        columns: [{
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 0,
+            width: 100,
+        }, {
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
+        }]
+    };
+
+    checkHeaderWidths(assert, this, options, {
+        textContentWidthDiff: 12,
+        cellWidthDiff: 0
+    });
+});
+
+QUnit.test("Check header widths: column with center alignment", function(assert) {
+    // arrange
+    var options = {
+        sorting: { mode: 'multiple' },
+        columns: [{
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 0,
+            width: 100,
+            alignment: 'center'
+        }, {
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
+        }]
+    };
+
+    checkHeaderWidths(assert, this, options, {
+        textContentWidthDiff: 12,
+        cellWidthDiff: 0
+    });
+});
+
+QUnit.test("Check header widths: column with center alignment and headerFilter", function(assert) {
+    // arrange
+    var options = {
+        sorting: { mode: 'multiple' },
+        headerFilter: { visible: true },
+        columns: [{
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 0,
+            width: 100,
+            alignment: 'center'
+        }, {
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
+        }]
+    };
+
+    checkHeaderWidths(assert, this, options, {
+        textContentWidthDiff: 12,
+        cellWidthDiff: 0
+    });
+});
+
+QUnit.test("Check header widths with columnAutoWidth", function(assert) {
+    // arrange
+    var options = {
+        sorting: { mode: 'multiple' },
+        columnAutoWidth: true,
+        columns: [{
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 0
+        }, {
+            dataField: "aaaaaaaaaaaaaaa",
+            sortOrder: "asc",
+            sortIndex: 1
+        }]
+    };
+
+    this.$element().width(200);
+
+    checkHeaderWidths(assert, this, options, {
+        textContentWidthDiff: 0,
+        cellWidthDiff: -12
+    });
 });

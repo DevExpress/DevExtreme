@@ -90,7 +90,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType),
             text = gridCoreUtils.formatValue(displayValue, column);
 
-        if(column.allowEditing && that.option("useKeyboard")) {
+        if(column.allowEditing && that.getController("keyboardNavigation").isKeyboardEnabled()) {
             $container.attr("tabIndex", that.option("tabIndex"));
             eventsEngine.off($container, "focus", focusAction);
             eventsEngine.on($container, "focus", focusAction);
@@ -128,29 +128,33 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             editingController = this.getController("editing");
 
         return function(options, container) {
-            var isItemEdited = that._isItemEdited(item),
-                $container = $(container),
+            var $container = $(container),
                 columnIndex = that._columnsController.getVisibleIndex(column.visibleIndex),
                 templateOptions = extend({}, cellOptions);
 
-            templateOptions.value = cellOptions.row.values[columnIndex];
-
-            if(isItemEdited || column.showEditorAlways) {
-                editingController.renderFormEditTemplate(templateOptions, item, options.component, $container, !isItemEdited);
-            } else {
-                templateOptions.column = column;
-                templateOptions.columnIndex = columnIndex;
-
-                templateOptions.watch && templateOptions.watch(function() {
-                    return templateOptions.column.selector(templateOptions.data);
-                }, function(newValue) {
-                    templateOptions.value = newValue;
-                    $container.contents().remove();
+            var renderFormTemplate = function() {
+                var isItemEdited = that._isItemEdited(item);
+                templateOptions.value = cellOptions.row.values[columnIndex];
+                if(isItemEdited || column.showEditorAlways) {
+                    editingController.renderFormEditTemplate(templateOptions, item, options.component, $container, !isItemEdited);
+                } else {
+                    templateOptions.column = column;
+                    templateOptions.columnIndex = columnIndex;
                     that._renderFormViewTemplate(item, templateOptions, $container);
-                });
+                }
+            };
 
-                that._renderFormViewTemplate(item, templateOptions, $container);
-            }
+            renderFormTemplate();
+            templateOptions.watch && templateOptions.watch(function() {
+                return {
+                    isItemEdited: that._isItemEdited(item),
+                    value: cellOptions.row.values[columnIndex]
+                };
+            }, function() {
+                $container.contents().remove();
+                $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
+                renderFormTemplate();
+            });
         };
     },
 
@@ -375,7 +379,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _isCellValid: function($cell) {
-        return !$cell.hasClass(MASTER_DETAIL_CELL_CLASS);
+        return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS);
     },
 
     _addCssClassToColumn: function(cssClassName, visibleIndex) {
@@ -1110,7 +1114,7 @@ module.exports = {
             },
             keyboardNavigation: {
                 _isCellValid: function($cell) {
-                    return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                    return this.callBase.apply(this, arguments) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                 },
 
                 _processNextCellInMasterDetail: function($nextCell) {

@@ -20,6 +20,18 @@ export class RowsViewWrapper extends WrapperBase {
     getElement() {
         return this.getContainer().find(".dx-datagrid-rowsview");
     }
+
+    getVirtualRowElement() {
+        return this.getContainer().find(".dx-virtual-row");
+    }
+
+    getVirtualCell(columnIndex) {
+        return this.getVirtualRowElement().find("td").eq(columnIndex);
+    }
+
+    getEditorInputElement(rowIndex, columnIndex) {
+        return this.getElement().find(".dx-data-row").eq(rowIndex).find("td").eq(columnIndex).find(".dx-texteditor-input");
+    }
 }
 
 export class PagerWrapper extends WrapperBase {
@@ -90,6 +102,10 @@ export class FilterRowWrapper extends WrapperBase {
 
     getTextEditorInput(index) {
         return this.getElement().find(".dx-texteditor-input").eq(index);
+    }
+
+    getMenuElement(index) {
+        return this.getElement().find(".dx-editor-cell").eq(index).find(".dx-menu");
     }
 }
 

@@ -9,23 +9,35 @@ class DiagramContextMenu extends Widget {
     _init() {
         super._init();
         this._createOnVisibleChangedAction();
+        this._createOnItemClickAction();
         this.bar = new ContextMenuBar(this);
         this._tempState = undefined;
+
+        this._commands = [];
         this._commandToIndexMap = {};
     }
     _initMarkup() {
         super._initMarkup();
-        const commands = DiagramCommands.getContextMenuCommands(this.option("commands"));
+
+        this._commands = DiagramCommands.getContextMenuCommands(this.option("commands"));
+        this._commandToIndexMap = {};
+        this._commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
+
         const $contextMenu = $("<div>")
             .appendTo(this.$element());
+
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             target: this.option("container"),
-            dataSource: commands,
-            displayExpr: "text",
-            onItemClick: ({ itemData }) => this._onItemClick(itemData.command),
+            items: this._getItems(this._commands),
+
+            onItemClick: ({ itemData }) => this._onItemClick(itemData),
             onShowing: (e) => {
                 this._tempState = true;
+                if(e.jQEvent) {
+                    this.clickPosition = { x: e.jQEvent.clientX, y: e.jQEvent.clientY };
+                }
                 this._onVisibleChangedAction({ visible: true, component: this });
+                this._contextMenuInstance.option("items", this._getItems(this._commands, true));
                 delete this._tempState;
             },
             onHiding: (e) => {
@@ -34,15 +46,49 @@ class DiagramContextMenu extends Widget {
                 delete this._tempState;
             }
         });
-        commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
     }
-    _onItemClick(command) {
-        this.bar.raiseBarCommandExecuted(command);
-        this._contextMenuInstance.hide();
+    _getItems(commands, onlyVisible) {
+        var items = [];
+        var beginGroup = false;
+        commands.forEach(function(command) {
+            if(command.widget === "separator") {
+                beginGroup = true;
+            } else if(command.visible || !onlyVisible) {
+                items.push({
+                    command: command.command,
+                    text: command.text,
+                    getParameter: command.getParameter,
+                    beginGroup: beginGroup
+                });
+                beginGroup = false;
+            }
+        });
+        return items;
+    }
+    _onItemClick(itemData) {
+        var processed = false;
+        if(this._onItemClickAction) {
+            processed = this._onItemClickAction(itemData);
+        }
+
+        if(!processed) {
+            const parameter = this._getExecCommandParameter(itemData);
+            this.bar.raiseBarCommandExecuted(itemData.command, parameter);
+            this._contextMenuInstance.hide();
+        }
+    }
+    _getExecCommandParameter(itemData) {
+        if(itemData.getParameter) {
+            return itemData.getParameter(this);
+        }
     }
     _setItemEnabled(key, enabled) {
+        this._setItemVisible(key, enabled);
+    }
+    _setItemVisible(key, visible) {
         if(key in this._commandToIndexMap) {
-            this._contextMenuInstance.option(`items[${this._commandToIndexMap[key]}].disabled`, !enabled);
+            var command = this._commands[this._commandToIndexMap[key]];
+            if(command) command.visible = visible;
         }
     }
     _setEnabled(enabled) {
@@ -57,10 +103,16 @@ class DiagramContextMenu extends Widget {
     _createOnVisibleChangedAction() {
         this._onVisibleChangedAction = this._createActionByOption("onVisibleChanged");
     }
+    _createOnItemClickAction() {
+        this._onItemClickAction = this._createActionByOption("onItemClick");
+    }
     _optionChanged(args) {
         switch(args.name) {
             case "onVisibleChanged":
                 this._createOnVisibleChangedAction();
+                break;
+            case "onItemClick":
+                this._createOnItemClickAction();
                 break;
             case "commands":
                 this._invalidate();
@@ -77,6 +129,9 @@ class ContextMenuBar extends DiagramBar {
     }
     setItemEnabled(key, enabled) {
         this._owner._setItemEnabled(key, enabled);
+    }
+    setItemVisible(key, visible) {
+        this._owner._setItemVisible(key, visible);
     }
     setEnabled(enabled) {
         this._owner._setEnabled(enabled);

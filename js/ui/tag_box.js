@@ -7,7 +7,7 @@ import browser from "../core/utils/browser";
 import { noop, ensureDefined, equalByValue } from "../core/utils/common";
 import { SelectionFilterCreator as FilterCreator } from "../core/utils/selection_filter";
 import { Deferred, when } from "../core/utils/deferred";
-import { getPublicElement } from "../core/utils/dom";
+import { getPublicElement, createTextElementHiddenCopy } from "../core/utils/dom";
 import { isDefined, isObject, isString } from "../core/utils/type";
 import { hasWindow } from "../core/utils/window";
 import { extend } from "../core/utils/extend";
@@ -20,7 +20,7 @@ import caret from "./text_box/utils.caret";
 import { normalizeLoadResult } from "../data/data_source/data_source";
 
 import SelectBox from "./select_box";
-import BindableTemplate from "./widget/bindable_template";
+import { BindableTemplate } from "../core/templates/bindable_template";
 
 const TAGBOX_TAG_DATA_KEY = "dxTagData";
 
@@ -33,7 +33,6 @@ const TAGBOX_TAG_REMOVE_BUTTON_CLASS = "dx-tag-remove-button";
 const TAGBOX_ONLY_SELECT_CLASS = "dx-tagbox-only-select";
 const TAGBOX_SINGLE_LINE_CLASS = "dx-tagbox-single-line";
 const TAGBOX_POPUP_WRAPPER_CLASS = "dx-tagbox-popup-wrapper";
-const LIST_SELECT_ALL_CHECKBOX_CLASS = "dx-list-select-all-checkbox";
 const TAGBOX_TAG_CONTENT_CLASS = "dx-tag-content";
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template";
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template";
@@ -52,6 +51,7 @@ const TagBox = SelectBox.inherit({
 
     _supportedKeys: function() {
         const parent = this.callBase();
+        const sendToList = (e) => this._list._keyboardProcessor.process(e);
 
         return extend(parent, {
             backspace: function(e) {
@@ -77,6 +77,8 @@ const TagBox = SelectBox.inherit({
                 this._removeTagElement($tagToDelete);
                 delete this._preserveFocusedTag;
             },
+            upArrow: sendToList,
+            downArrow: sendToList,
             del: function(e) {
                 if(!this._$focusedTag || !this._isCaretAtTheStart()) {
                     return;
@@ -104,23 +106,19 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
-                if(!this.option("opened")) {
-                    return;
+                if(this.option("opened")) {
+                    sendToList(e);
+                    e.preventDefault();
                 }
-
-                e.preventDefault();
-                this._keyboardProcessor._childProcessors[0].process(e);
             },
             space: function(e) {
                 const isOpened = this.option("opened");
                 const isInputActive = this._shouldRenderSearchEvent();
 
-                if(!isOpened || isInputActive) {
-                    return;
+                if(isOpened && !isInputActive) {
+                    sendToList(e);
+                    e.preventDefault();
                 }
-
-                e.preventDefault();
-                this._keyboardProcessor._childProcessors[0].process(e);
             },
             leftArrow: function(e) {
                 if(!this._isCaretAtTheStart()) {
@@ -666,7 +664,7 @@ const TagBox = SelectBox.inherit({
 
     _getFirstPopupElement: function() {
         return this.option("showSelectionControls")
-            ? this._popup._wrapper().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`)
+            ? this._list.$element()
             : this.callBase();
     },
 
@@ -676,18 +674,16 @@ const TagBox = SelectBox.inherit({
 
     _renderList: function() {
         this.callBase();
-
         this._setListDataSourceFilter();
 
-        if(!this.option("showSelectionControls")) {
-            return;
+        if(this.option("showSelectionControls")) {
+            this._list.registerKeyHandler("tab", (e) => this._popupElementTabHandler(e));
+            this._list.registerKeyHandler("escape", (e) => this._popupElementEscHandler(e));
         }
+    },
 
-        const $selectAllCheckBox = this._list.$element().find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
-        const selectAllCheckbox = $selectAllCheckBox.dxCheckBox("instance");
-
-        selectAllCheckbox.registerKeyHandler("tab", this._popupElementTabHandler.bind(this));
-        selectAllCheckbox.registerKeyHandler("escape", this._popupElementEscHandler.bind(this));
+    _canListHaveFocus: function() {
+        return this.option("applyValueMode") === "useButtons";
     },
 
     _listConfig: function() {
@@ -744,7 +740,25 @@ const TagBox = SelectBox.inherit({
 
     _renderInputSize: function() {
         const $input = this._input();
-        $input.prop("size", $input.val() ? $input.val().length + 2 : 1);
+        const value = $input.val();
+        const cursorWidth = 5;
+        let width = "";
+        let size = "";
+        const canTypeText = this.option("searchEnabled") || this.option("editEnabled");
+
+        if(value && canTypeText) {
+            const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
+
+            $calculationElement.insertAfter($input);
+            width = $calculationElement.outerWidth() + cursorWidth;
+
+            $calculationElement.remove();
+        } else if(!value) {
+            size = 1;
+        }
+
+        $input.css("width", width);
+        $input.attr("size", size);
     },
 
     _renderInputSubstitution: function() {
@@ -812,8 +826,13 @@ const TagBox = SelectBox.inherit({
             dataSource
                 .store()
                 .load({ filter, customQueryParams, expand })
-                .done(function(result) {
-                    const { data: items } = normalizeLoadResult(...arguments);
+                .done((data, extra) => {
+                    if(this._disposed) {
+                        d.reject();
+                        return;
+                    }
+
+                    const { data: items } = normalizeLoadResult(data, extra);
                     const mappedItems = dataSource._applyMapFunction(items);
                     d.resolve(mappedItems.filter(clientFilterFunction));
                 })
@@ -1050,6 +1069,7 @@ const TagBox = SelectBox.inherit({
         const e = args.event;
 
         e.stopPropagation();
+        this._saveValueChangeEvent(e);
 
         const $tag = $(e.target).closest(`.${TAGBOX_TAG_CLASS}`);
         this._removeTagElement($tag);

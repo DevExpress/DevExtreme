@@ -1043,17 +1043,17 @@ QUnit.test("Dragging between PivotGrid and FieldChooser", function(assert) {
         dataSource: new PivotGridDataSource({ store: { type: "array", data: [] } })
     });
 
-    assert.strictEqual($pivotGrid.dxSortable("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), true);
-    assert.strictEqual($pivotGrid.dxSortable("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), true);
-    assert.strictEqual($pivotGrid.dxSortable("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), false);
+    assert.strictEqual($pivotGrid.dxSortableOld("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($pivotGrid.dxSortableOld("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($pivotGrid.dxSortableOld("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), false);
 
-    assert.strictEqual($fieldChooser1.dxSortable("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), true);
-    assert.strictEqual($fieldChooser1.dxSortable("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), true);
-    assert.strictEqual($fieldChooser1.dxSortable("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), false);
+    assert.strictEqual($fieldChooser1.dxSortableOld("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($fieldChooser1.dxSortableOld("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($fieldChooser1.dxSortableOld("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), false);
 
-    assert.strictEqual($fieldChooser2.dxSortable("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), false);
-    assert.strictEqual($fieldChooser2.dxSortable("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), false);
-    assert.strictEqual($fieldChooser2.dxSortable("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), true);
+    assert.strictEqual($fieldChooser2.dxSortableOld("option", "groupFilter").call($pivotGrid.find(".dx-area-fields").get(0)), false);
+    assert.strictEqual($fieldChooser2.dxSortableOld("option", "groupFilter").call($fieldChooser1.find(".dx-area-fields").get(0)), false);
+    assert.strictEqual($fieldChooser2.dxSortableOld("option", "groupFilter").call($fieldChooser2.find(".dx-area-fields").get(0)), true);
 });
 
 QUnit.test("export to excel on export click", function(assert) {
@@ -2953,6 +2953,31 @@ QUnit.test("Scrolling when virtual scrolling is enabled", function(assert) {
     };
     // act2
     scrollable.scrollTo({ left: 10, top: 1 });
+});
+
+// T810822
+QUnit.test("hasScroll should return true if scrolling is virtual and data is empty", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+
+    this.dataSource.values = [];
+
+    var pivotGrid = createPivotGrid({
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "virtual",
+            timeout: 0
+        },
+        dataSource: this.dataSource
+    }, assert);
+
+    this.clock.tick();
+
+    assert.ok(pivotGrid._columnsArea.hasScroll(), "columns area scroll");
+    assert.ok(pivotGrid._rowsArea.hasScroll(), "rows area scroll");
 });
 
 // T518512

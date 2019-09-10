@@ -56,6 +56,12 @@
     }
   },
   {
+    "name": "core/set_template_engine",
+    "exports": {
+      "default": { "path": "setTemplateEngine" }
+    }
+  },
+  {
     "name": "data/array_store",
     "exports": {
       "default": { "path": "data.ArrayStore" }
@@ -542,7 +548,7 @@
   {
     "name": "ui/set_template_engine",
     "exports": {
-      "default": { "path": "ui.setTemplateEngine" }
+      "default": { "path": "setTemplateEngine" }
     }
   },
   {

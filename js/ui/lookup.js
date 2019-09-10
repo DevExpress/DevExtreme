@@ -16,7 +16,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     Popover = require("./popover"),
     TextBox = require("./text_box"),
-    ChildDefaultTemplate = require("./widget/child_default_template"),
+    ChildDefaultTemplate = require("../core/templates/child_default_template").ChildDefaultTemplate,
     translator = require("../animation/translator");
 
 var LOOKUP_CLASS = "dx-lookup",
@@ -485,7 +485,7 @@ var Lookup = DropDownList.inherit({
             },
             {
                 device: function(device) {
-                    return !devices.isSimulator() && devices.real().platform === "generic" && device.platform === "generic";
+                    return !devices.isSimulator() && devices.real().deviceType === "desktop" && device.platform === "generic";
                 },
                 options: {
                     /**
@@ -498,29 +498,6 @@ var Lookup = DropDownList.inherit({
                     * @default 'auto' @for desktop|iPad
                     */
                     popupHeight: "auto"
-                }
-            },
-            {
-                device: function(device) {
-                    return device.platform === "win" && device.phone && device.version && device.version[0] === 8;
-                },
-                options: {
-                    /**
-                    * @name dxLookupOptions.showCancelButton
-                    */
-                    showCancelButton: false,
-                    /**
-                    * @name dxLookupOptions.fullScreen
-                    */
-                    fullScreen: true
-                }
-            },
-            {
-                device: function(device) {
-                    return device.platform === "win" && !device.phone && device.version && device.version[0] === 8;
-                },
-                options: {
-                    popupWidth: function() { return $(window).width(); }
                 }
             },
             {
@@ -632,8 +609,8 @@ var Lookup = DropDownList.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["group"] = new ChildDefaultTemplate("group", this);
-        this._defaultTemplates["title"] = new ChildDefaultTemplate("title", this);
+        this._defaultTemplates["group"] = new ChildDefaultTemplate("group");
+        this._defaultTemplates["title"] = new ChildDefaultTemplate("title");
     },
 
     _initMarkup: function() {
@@ -833,6 +810,8 @@ var Lookup = DropDownList.inherit({
             "hiding": this._popupHidingHandler.bind(this),
             "hidden": this._popupHiddenHandler.bind(this)
         });
+
+        this._setPopupContentId(this._popup.$content());
 
         this._popup.option("onContentReady", this._contentReadyHandler.bind(this));
         this._contentReadyHandler();

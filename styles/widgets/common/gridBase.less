@@ -1,3 +1,26 @@
+@import (once) "./form.less";
+@import (once) "./button.less";
+@import (once) "./treeView.less";
+@import (once) "./popup.less";
+@import (once) "./contextMenu.less";
+@import (once) "./scrollable.less";
+@import (once) "./scrollView.less";
+@import (once) "./filterBuilder.less";
+@import (once) "./checkBox.less";
+@import (once) "./overlay.less";
+@import (once) "./menu.less";
+@import (once) "./list.less";
+@import (once) "./toolbar.less";
+@import (once) "./pager.less";
+@import (once) "./loadIndicator.less";
+@import (once) "./loadPanel.less";
+@import (once) "./validation.less";
+@import (once) "./tooltip.less";
+@import (once) "./textBox.less";
+@import (once) "./numberBox.less";
+@import (once) "./selectBox.less";
+@import (once) "./dateBox.less";
+
 .dx-gridbase-container {
     display: flex;
     flex-direction: column;
@@ -22,6 +45,8 @@
     @GRID_COMMAND_ADAPTIVE_COLUMN_WIDTH: 36px;
     @GRID_COLUMN_HEADER_INDICATOR_WIDTH: 14px;
     @GRID_TEXT_CONTENT_MARGIN: 3px;
+    @GRID_SORT_INDEX_WIDTH: 12px;
+    @GRID_SORT_INDEX_OFFSET: 3px;
 
     .dx-@{widgetName}-checkbox-size {
         vertical-align: middle;
@@ -123,6 +148,13 @@
 
             &.dx-visibility-hidden {
                 visibility: hidden;
+            }
+
+            .dx-sort-index-icon {
+                padding-right: @GRID_SORT_INDEX_OFFSET;
+                margin-left: -@GRID_SORT_INDEX_OFFSET;
+                width: @GRID_SORT_INDEX_WIDTH + @GRID_SORT_INDEX_OFFSET;
+                font-weight: 500;
             }
 
             .dx-sort,
@@ -293,10 +325,6 @@
         width: 100%;
     }
 
-    .dx-hidden {
-        display: none;
-    }
-
     input.dx-hidden {
         display: inline-block !important; // stylelint-disable-line declaration-no-important
         width: 0 !important; // stylelint-disable-line declaration-no-important
@@ -325,6 +353,10 @@
             .dx-column-indicators .dx-sort {
                 &.dx-sort-none {
                     display: none;
+                }
+
+                &.dx-sort-index {
+                    width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH + @GRID_SORT_INDEX_WIDTH;
                 }
             }
         }
@@ -588,6 +620,22 @@
 
         .dx-sort-indicator.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
             max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + @GRID_TEXT_CONTENT_MARGIN*2));
+        }
+
+        .dx-sort-indicator.dx-sort-index-indicator {
+            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
+
+            &.dx-header-filter-indicator {
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN + @GRID_SORT_INDEX_WIDTH));
+            }
+
+            &.dx-text-content-alignment-left.dx-text-content-alignment-right {
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN*2 + @GRID_SORT_INDEX_WIDTH));
+            }
+
+            &.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + @GRID_TEXT_CONTENT_MARGIN*2 + @GRID_SORT_INDEX_WIDTH));
+            }
         }
     }
 

@@ -4,7 +4,10 @@ import Accordion from "../accordion";
 import Form from "../form";
 import DiagramCommands from "./ui.diagram.commands";
 import { extend } from "../../core/utils/extend";
+import messageLocalization from "../../localization/message";
 import DiagramBar from "./diagram_bar";
+import ScrollView from "../scroll_view";
+import { Deferred } from "../../core/utils/deferred";
 
 const DIAGRAM_RIGHT_PANEL_CLASS = "dx-diagram-right-panel";
 const DIAGRAM_RIGHT_PANEL_BEGIN_GROUP_CLASS = "dx-diagram-right-panel-begin-group";
@@ -18,14 +21,17 @@ class DiagramRightPanel extends DiagramPanel {
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(DIAGRAM_RIGHT_PANEL_CLASS);
-        const $accordion = $("<div>")
+        const $scrollViewWrapper = $("<div>")
             .appendTo(this.$element());
+        this._scrollView = this._createComponent($scrollViewWrapper, ScrollView);
+        const $accordion = $("<div>")
+            .appendTo(this._scrollView.content());
 
         this._renderAccordion($accordion);
     }
     _getAccordionDataSource() {
         return [{
-            title: "Properties",
+            title: messageLocalization.format("dxDiagram-commandProperties"),
             onTemplate: (widget, $element) => widget._renderOptions($element)
         }];
     }
@@ -35,7 +41,17 @@ class DiagramRightPanel extends DiagramPanel {
             collapsible: true,
             displayExpr: "title",
             dataSource: this._getAccordionDataSource(),
-            itemTemplate: (data, index, $element) => data.onTemplate(this, $element)
+            itemTemplate: (data, index, $element) => data.onTemplate(this, $element),
+            onContentReady: (e) => {
+                this._updateScrollAnimateSubscription(e.component);
+            }
+        });
+    }
+    _updateScrollAnimateSubscription(component) {
+        component._deferredAnimate = new Deferred();
+        component._deferredAnimate.done(() => {
+            this._scrollView.update();
+            this._updateScrollAnimateSubscription(component);
         });
     }
     _renderOptions($container) {

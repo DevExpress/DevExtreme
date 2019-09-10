@@ -439,7 +439,7 @@ QUnit.module("dxAutocomplete", {
     });
 
     QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -547,7 +547,7 @@ QUnit.module("dxAutocomplete", {
     });
 
     QUnit.testInActiveWindow("key_tab for autocomplete current value", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -592,7 +592,7 @@ QUnit.module("dxAutocomplete", {
     QUnit.testInActiveWindow("enter - prevent default", (assert) => {
         assert.expect(1);
 
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1101,7 +1101,7 @@ QUnit.module("regressions", {
     });
 
     QUnit.testInActiveWindow("update input value on press complete key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1116,7 +1116,7 @@ QUnit.module("regressions", {
     });
 
     QUnit.testInActiveWindow("update input value on press enter key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1251,22 +1251,6 @@ QUnit.module("regressions", {
         const numEditItems = $('.dx-texteditor-input').length;
         assert.equal(this.element.children().length, childrenCount, "we should have only one dx-texteditor-input in dxautocomplete instance");
         assert.equal(numEditItems, 1, "we should have only one dx-texteditor-input in dxautocomplete instance");
-    });
-
-    QUnit.test("B234608 check offset for win8 devices", assert => {
-        let popup;
-        let vOffset;
-        devices.current("win8");
-
-        const element = $("#autocomplete2").dxAutocomplete({
-            value: "",
-            dataSource: ["item 1", "item 2", "item 3"]
-        });
-
-        popup = element.dxAutocomplete("instance")._popup;
-        vOffset = popup.option("position").offset.v;
-        assert.equal(vOffset, -6, "vertical offset for win8 devices");
-        devices.current(null);
     });
 
     QUnit.test("B234608 check offset for iOS devices", assert => {
@@ -1452,24 +1436,3 @@ QUnit.module("widget sizing render", {
     });
 });
 
-QUnit.module("aria accessibility", {}, () => {
-    QUnit.test("aria role should not change to listbox after it's second rendering (T290859)", assert => {
-        assert.expect(1);
-
-        const $element = $("#widget").dxSelectBox({
-            searchEnabled: true,
-            searchTimeout: 0,
-            opened: true,
-            items: ["item1", "item2", "item3"]
-        });
-
-        const $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
-        const keyboard = keyboardMock($input);
-
-        $input.focusin();
-
-        keyboard.type("it");
-
-        assert.equal($input.attr("role"), "combobox", "role was not changed");
-    });
-});

@@ -318,7 +318,7 @@ QUnit.test("Cancel & Done buttons should not be rendered in details popup if edi
 });
 
 QUnit.test("Appointment should not be draggable & resizable if editing.allowUpdating is false", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -409,19 +409,20 @@ QUnit.test("Appointment should not be deleted, if allowUpdating || allowDeleting
     });
 
     var appointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
-    assert.notOk(appointments.option("allowDelete"), "Delete is not allowed");
+    assert.ok(appointments.option("allowDelete") === false, "Delete is not allowed");
 
     this.instance.option("editing", {
         allowUpdating: false,
         allowDeleting: true
     });
 
-    assert.notOk(appointments.option("allowDelete"), "Delete is not allowed");
+    assert.ok(appointments.option("allowDelete") === false, "Delete is not allowed");
 
     this.instance.option("editing", {
         allowUpdating: true,
         allowDeleting: true
     });
 
-    assert.ok(appointments.option("allowDelete"), "Delete is allowed");
+    appointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
+    assert.ok(appointments.option("allowDelete") === true, "Delete is allowed");
 });

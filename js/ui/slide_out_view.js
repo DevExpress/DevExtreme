@@ -11,7 +11,7 @@ var $ = require("../core/renderer"),
     AsyncTemplateMixin = require("./shared/async_template_mixin"),
     Widget = require("./widget/ui.widget"),
     Swipeable = require("../events/gesture/swipeable"),
-    EmptyTemplate = require("./widget/empty_template"),
+    EmptyTemplate = require("../core/templates/empty_template").EmptyTemplate,
     Deferred = require("../core/utils/deferred").Deferred,
     windowUtils = require("../core/utils/window");
 
@@ -170,8 +170,8 @@ var SlideOutView = Widget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["menu"] = new EmptyTemplate(this);
-        this._defaultTemplates["content"] = new EmptyTemplate(this);
+        this._defaultTemplates["menu"] = new EmptyTemplate();
+        this._defaultTemplates["content"] = new EmptyTemplate();
     },
 
     _initMarkup: function() {

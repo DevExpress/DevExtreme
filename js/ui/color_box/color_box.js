@@ -154,11 +154,6 @@ var ColorBox = DropDownEditor.inherit({
             */
 
             /**
-            * @name dxColorBoxOptions.showClearButton
-            * @hidden
-            */
-
-            /**
             * @name dxColorBoxOptions.valueChangeEvent
             * @hidden
             */
@@ -168,6 +163,13 @@ var ColorBox = DropDownEditor.inherit({
             * @hidden
             */
         });
+    },
+
+    _popupHidingHandler: function() {
+        this.callBase();
+        if(this.option("applyValueMode") === "useButtons") {
+            this._updateColorViewValue(this.option("value"));
+        }
     },
 
     _popupConfig: function() {

@@ -488,7 +488,7 @@ QUnit.module("Lifecycle", {
         beforeEach() {
             this.onDrawn = sinon.spy();
         },
-        chart(annotationSettings, annotationItems) {
+        chart(annotationSettings, annotationItems, customizeAnnotation) {
             return $('<div>').appendTo("#qunit-fixture").dxChart({
                 size: {
                     width: 100,
@@ -510,6 +510,7 @@ QUnit.module("Lifecycle", {
                     visualRange: [0, 100]
                 },
                 onDrawn: this.onDrawn,
+                customizeAnnotation,
                 commonAnnotationSettings: annotationSettings,
                 annotations: annotationItems
             }).dxChart("instance");
@@ -531,15 +532,19 @@ QUnit.module("Lifecycle", {
         const annotationOptions = {
             some: "options"
         };
+        const customizeAnnotation = {
+            customize: "annotation"
+        };
         const items = [
             { x: 100, y: 200, },
             { value: 1, argument: 2 }
         ];
-        this.chart(annotationOptions, items);
+        const chart = this.chart(annotationOptions, items, customizeAnnotation);
 
         assert.equal(this.createAnnotationStub.callCount, 1);
-        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0], items);
-        assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], {
+        assert.equal(this.createAnnotationStub.getCall(0).args[0], chart);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], items);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[2], {
             some: "options",
             image: {
                 width: 30,
@@ -577,6 +582,7 @@ QUnit.module("Lifecycle", {
             },
             allowDragging: false
         });
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[3], customizeAnnotation);
     });
 
     QUnit.test("Pass widget instance and group to annotations.draw method", function(assert) {
@@ -627,8 +633,8 @@ QUnit.module("Lifecycle", {
 
         // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
-        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0], newItems);
-        assert.equal(this.createAnnotationStub.getCall(0).args[1].some, "options");
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], newItems);
+        assert.equal(this.createAnnotationStub.getCall(0).args[2].some, "options");
 
         const annotationsGroup = this.getAnnotationsGroup();
 
@@ -657,8 +663,8 @@ QUnit.module("Lifecycle", {
 
         // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
-        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0], items);
-        assert.equal(this.createAnnotationStub.getCall(0).args[1].some, "otherOptions");
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[1], items);
+        assert.equal(this.createAnnotationStub.getCall(0).args[2].some, "otherOptions");
 
         const annotationsGroup = this.getAnnotationsGroup();
 
@@ -724,12 +730,13 @@ const environment = {
 };
 
 QUnit.module("Tooltip", environment, function() {
-    QUnit.test("Create - use chart toltip options, but remove customize callback", function(assert) {
+    QUnit.test("Create - use chart toltip options, but remove customize callback and contentTemplate", function(assert) {
         this.createChart({
             tooltip: {
                 enabled: false,
                 otherCommonOption: "option",
-                customizeTooltip() { return "my tooltip"; }
+                customizeTooltip() { return "my tooltip"; },
+                contentTemplate: a => a
             }
         });
 
@@ -740,6 +747,7 @@ QUnit.module("Tooltip", environment, function() {
         assert.strictEqual(this.tooltip.update.getCall(0).args[0].enabled, false);
         assert.strictEqual(this.tooltip.update.getCall(0).args[0].otherCommonOption, "option");
         assert.strictEqual(this.tooltip.update.getCall(0).args[0].customizeTooltip, undefined);
+        assert.strictEqual(this.tooltip.update.getCall(0).args[0].contentTemplate, undefined);
     });
 
     QUnit.test("Show on pointer down", function(assert) {
@@ -817,6 +825,27 @@ QUnit.module("Tooltip", environment, function() {
 
         assert.equal(tooltip.move.callCount, 1);
         assert.deepEqual(tooltip.move.getCall(0).args, [73, 73]);
+    });
+
+    QUnit.test("set content template for tooltip", function(assert) {
+        const tooltipTemplate = sinon.spy();
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                tooltipTemplate
+            }
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+
+        chart.hideTooltip = sinon.spy();
+        chart.clearHover = sinon.spy();
+
+        pointer.start({ x: 70, y: 70 }).move().move(3, 3);
+
+        const tooltip = this.tooltip;
+        assert.equal(tooltip.setTemplate.callCount, 1);
+        assert.ok(tooltip.setTemplate.lastCall.calledBefore(tooltip.show.lastCall));
+        assert.equal(tooltip.show.callCount, 1);
     });
 
     QUnit.test("Do not move tooltip if it was not shown", function(assert) {

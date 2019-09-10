@@ -249,6 +249,26 @@ QUnit.test("Data with valueErrorBar. invalid mode", function(assert) {
     assert.strictEqual(rangeData.val.categories, undefined, "Categories arg should be undefined");
 });
 
+QUnit.test("Data with valueErrorBar - some items do not have errorbar data (T808399)", function(assert) {
+    var data = getOriginalData([
+            { arg: 2, val: 10, highError: 8, lowError: 11 },
+            { arg: 5, val: 1 },
+            { arg: 13, val: 10, highError: 9, lowError: 12 }
+        ]),
+        rangeData,
+        series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "auto", highValueField: "highError", lowValueField: "lowError" } });
+    series.updateData(data);
+    series.createPoints();
+
+    rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.val.min, 1, "Min arg should be correct");
+    assert.strictEqual(rangeData.val.max, 12, "Max arg should be correct");
+    assert.strictEqual(rangeData.val.interval, undefined, "Min interval arg should be correct");
+    assert.strictEqual(rangeData.val.categories, undefined, "Categories arg should be undefined");
+});
+
 QUnit.test("Datetime.", function(assert) {
     var date1 = new Date(1000),
         date2 = new Date(2000),
@@ -3008,6 +3028,16 @@ QUnit.test("Get argument range when discrete data", function(assert) {
 
     assert.ok(rangeData, "Range data should be created");
     assert.deepEqual(rangeData.categories, [0, 1, 2], "range data should have all categories");
+});
+
+QUnit.test("Get argument range when discrete data with repetitive categories - get unique categories", function(assert) {
+    var series = createSeries({ type: "line", argumentAxisType: "discrete" });
+    series.updateData([{ arg: 0, val: 0 }, { arg: 0, val: 0 }, { arg: 2, val: 0 }]);
+
+    var rangeData = series.getArgumentRange();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.deepEqual(rangeData.categories, [0, 2], "range data should have all categories");
 });
 
 QUnit.test("Calculate interval in range data when aggregation is enabled", function(assert) {

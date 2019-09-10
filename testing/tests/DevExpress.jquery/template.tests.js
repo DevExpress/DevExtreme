@@ -6,8 +6,8 @@ SystemJS.config({
 
 define(function(require) {
     var $ = require("jquery"),
-        Template = require("ui/widget/template"),
-        setTemplateEngine = require("ui/set_template_engine"),
+        Template = require("core/templates/template").Template,
+        setTemplateEngine = require("core/templates/template_engine_registry").setTemplateEngine,
         errors = require("core/errors");
 
     window.Handlebars = require("../../../node_modules/handlebars/dist/handlebars.min.js");

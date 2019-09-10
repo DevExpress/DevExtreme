@@ -30,7 +30,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
     Resizable = require("../resizable"),
-    EmptyTemplate = require("../widget/empty_template"),
+    EmptyTemplate = require("../../core/templates/empty_template").EmptyTemplate,
     Deferred = require("../../core/utils/deferred").Deferred,
     zIndexPool = require("./z_index"),
     swatch = require("../widget/swatch_container");
@@ -53,6 +53,8 @@ var OVERLAY_CLASS = "dx-overlay",
 
     DISABLED_STATE_CLASS = "dx-state-disabled",
 
+    PREVENT_SAFARI_SCROLLING_CLASS = "dx-prevent-safari-scrolling",
+
     TAB_KEY = "tab",
 
     POSITION_ALIASES = {
@@ -69,16 +71,14 @@ var OVERLAY_CLASS = "dx-overlay",
 
 var realDevice = devices.real(),
     realVersion = realDevice.version,
-
     firefoxDesktop = browser.mozilla && realDevice.deviceType === "desktop",
     iOS = realDevice.platform === "ios",
     hasSafariAddressBar = browser.safari && realDevice.deviceType !== "desktop",
-    iOS7_0andBelow = iOS && compareVersions(realVersion, [7, 1]) < 0,
     android4_0nativeBrowser = realDevice.platform === "android" && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf("Chrome") === -1;
 
 var forceRepaint = function($element) {
-    // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713) and FF desktop (T581681)
-    if(iOS7_0andBelow || firefoxDesktop) {
+    // NOTE: force layout recalculation on FF desktop (T581681)
+    if(firefoxDesktop) {
         $element.width();
     }
 
@@ -567,7 +567,7 @@ var Overlay = Widget.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["content"] = new EmptyTemplate(this);
+        this._defaultTemplates["content"] = new EmptyTemplate();
     },
 
     _isTopOverlay: function() {
@@ -664,6 +664,7 @@ var Overlay = Widget.inherit({
                     completeShowAnimation.apply(this, arguments);
                     that._showAnimationProcessing = false;
                     that._actions.onShown();
+                    that._toggleSafariScrolling(false);
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);
@@ -714,6 +715,8 @@ var Overlay = Widget.inherit({
 
         this._actions.onHiding(hidingArgs);
 
+        that._toggleSafariScrolling(true);
+
         if(hidingArgs.cancel) {
             this._isHidingActionCanceled = true;
             this.option("visible", true);
@@ -746,7 +749,11 @@ var Overlay = Widget.inherit({
 
     _forceFocusLost: function() {
         var activeElement = domAdapter.getActiveElement();
-        activeElement && this._$content.find(activeElement).length && activeElement.blur();
+        var shouldResetActiveElement = !!this._$content.find(activeElement).length;
+
+        if(shouldResetActiveElement) {
+            domUtils.resetActiveElement();
+        }
     },
 
     _animate: function(animation, completeCallback, startCallback) {
@@ -923,7 +930,7 @@ var Overlay = Widget.inherit({
             $parents = getElement(target).parents(),
             scrollEvent = eventUtils.addNamespace("scroll", this.NAME);
 
-        if(devices.real().platform === "generic") {
+        if(devices.real().deviceType === "desktop") {
             $parents = $parents.add(window);
         }
 
@@ -953,8 +960,14 @@ var Overlay = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._$content.appendTo(this.$element());
+        this._appendContentToElement();
         this._renderVisibilityAnimate(this.option("visible"));
+    },
+
+    _appendContentToElement: function() {
+        if(!this._$content.parent().is(this.$element())) {
+            this._$content.appendTo(this.$element());
+        }
     },
 
     _renderContent: function() {
@@ -971,6 +984,8 @@ var Overlay = Widget.inherit({
         }
 
         this._contentAlreadyRendered = true;
+        this._appendContentToElement();
+
         this.callBase();
     },
 
@@ -1002,9 +1017,6 @@ var Overlay = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        const $element = this.$element();
-        this._$content.appendTo($element);
-
         const whenContentRendered = new Deferred();
 
         const contentTemplateOption = this.option("contentTemplate"),
@@ -1240,15 +1252,30 @@ var Overlay = Widget.inherit({
     },
 
     _fixWrapperPosition: function() {
-        var $wrapper = this._$wrapper,
-            $container = this._getContainer();
+        this._$wrapper.css("position", this._useFixedPosition() ? "fixed" : "absolute");
+    },
 
-        $wrapper.css("position", this._isWindow($container) && !iOS ? "fixed" : "absolute");
+    _useFixedPosition: function() {
+        var $container = this._getContainer();
+        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined);
+    },
+
+    _toggleSafariScrolling: function(scrollingEnabled) {
+        if(iOS && this._useFixedPosition()) {
+            var body = domAdapter.getBody();
+            if(scrollingEnabled) {
+                $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                window.scrollTo(0, this._bodyScrollTop);
+                this._bodyScrollTop = undefined;
+            } else if(this.option("visible")) {
+                this._bodyScrollTop = window.pageYOffset;
+                $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
+            }
+        }
     },
 
     _renderShading: function() {
         this._fixWrapperPosition();
-        this._renderShadingDimensions();
         this._renderShadingPosition();
     },
 
@@ -1260,25 +1287,6 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _renderShadingDimensions: function() {
-        var wrapperWidth, wrapperHeight;
-
-        if(this.option("shading")) {
-            var $container = this._getContainer();
-
-            wrapperWidth = this._isWindow($container) ? "100%" : $container.outerWidth(),
-            wrapperHeight = this._isWindow($container) ? "100%" : $container.outerHeight();
-        } else {
-            wrapperWidth = "";
-            wrapperHeight = "";
-        }
-
-        this._$wrapper.css({
-            width: wrapperWidth,
-            height: wrapperHeight
-        });
-    },
-
     _isWindow: function($element) {
         return !!$element && typeUtils.isWindow($element.get(0));
     },
@@ -1286,7 +1294,12 @@ var Overlay = Widget.inherit({
     _getContainer: function() {
         var position = this._position,
             container = this.option("container"),
-            positionOf = position ? position.of || window : null;
+            positionOf = null;
+
+        if(!container && position) {
+            var isEvent = !!(position.of && position.of.preventDefault);
+            positionOf = isEvent ? window : (position.of || window);
+        }
 
         return getElement(container || positionOf);
     },
@@ -1409,6 +1422,7 @@ var Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
+        this._toggleSafariScrolling(true);
 
         this._actions = null;
 

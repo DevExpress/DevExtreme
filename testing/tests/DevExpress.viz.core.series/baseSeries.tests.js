@@ -1765,6 +1765,21 @@ QUnit.test("Symbol. With force", function(assert) {
     assert.equal(this.series._labelsGroup._stored_settings["clip-path"], "baseClipId", "labels group");
 });
 
+QUnit.test("Symbol. Without force. Without labels clipping", function(assert) {
+    this.options.type = "area";
+    this.options.border = { visible: true };
+    this.options.label.visible = true;
+
+    this.series.updateOptions(this.options);
+    this.series.createPoints();
+    this.series.updateData([{ arg: "First", val: 1 }]);
+
+    this.series.setClippingParams("baseClipId", "wideClipId", false, false);
+    this.series.draw(false);
+
+    assert.notOk(this.series._labelsGroup._stored_settings["clip-path"], "labels group");
+});
+
 QUnit.test("Symbol. Tracker. Without force", function(assert) {
     this.options.type = "line";
     this.options.border = { visible: true };

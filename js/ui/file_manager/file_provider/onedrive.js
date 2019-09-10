@@ -41,6 +41,7 @@ class OneDriveFileProvider extends FileProvider {
          */
 
         options = options || {};
+        options.keyExpr = "id";
         options.dateModifiedExpr = "lastModifiedDateTime";
         options.isDirectoryExpr = "folder";
         super(options);
@@ -55,36 +56,39 @@ class OneDriveFileProvider extends FileProvider {
         return `Bearer ${this._accessToken}`;
     }
 
-    getItems(path) {
-        return this._getItems(path);
+    getItems(pathInfo) {
+        return this._getItems(pathInfo);
     }
 
-    initiateFileUpload(uploadInfo) {
-        const folderPath = uploadInfo.destinationFolder.relativeName;
-        const fileName = uploadInfo.file.name;
-        const customData = uploadInfo.customData;
+    deleteItems(items) {
+        return items.map(item => this._ensureAccessTokenAcquired()
+            .then(() => this._deleteItem(item.key)));
+    }
 
+    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
+        const deferred = chunksInfo.chunkIndex === 0
+            ? this._initiateFileUpload(fileData, chunksInfo, destinationDirectory)
+            : new Deferred().resolve().promise();
+
+        return deferred.then(() => this._uploadFileChunkCore(
+            chunksInfo.customData.uploadUrl,
+            chunksInfo.chunkBlob,
+            chunksInfo.chunkBlob.size,
+            chunksInfo.bytesLoaded,
+            fileData.size));
+    }
+
+    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
         return this._ensureAccessTokenAcquired()
-            .then(() => this._createFile(folderPath, fileName))
-            .then(entry => {
-                return this._initiateUploadSession(entry.id)
-                    .done(info => { customData.uploadUrl = info.uploadUrl; });
-            });
+            .then(() => this._cancelUploadSession(chunksInfo.customData.uploadUrl))
+            .then(() => this._deleteItem(chunksInfo.customData.itemId));
     }
 
-    uploadFileChunk({ customData, uploadedBytesCount, file }, { blob, size }) {
-        return this._uploadFileChunk(customData.uploadUrl, blob, size, uploadedBytesCount, file.size);
-    }
-
-    abortFileUpload(uploadInfo) {
-        return this._ensureAccessTokenAcquired()
-            .then(() => this._cancelUploadSession(uploadInfo.customData.uploadUrl));
-    }
-
-    _getItems(path) {
+    _getItems(pathInfo) {
+        const path = pathInfo.map(part => part.name).join("/");
         return this._ensureAccessTokenAcquired()
             .then(() => this._getEntriesByPath(path))
-            .then(entries => this._convertDataObjectsToFileItems(entries.children, path));
+            .then(entries => this._convertDataObjectsToFileItems(entries.children, pathInfo));
     }
 
     _ensureAccessTokenAcquired() {
@@ -123,7 +127,32 @@ class OneDriveFileProvider extends FileProvider {
         });
     }
 
-    _uploadFileChunk(uploadUrl, chunkBlob, chunkSize, uploadedSize, totalSize) {
+    _deleteItem(itemId) {
+        const url = `${DRIVE_API_URL}/items/${itemId}`;
+        return ajax.sendRequest({
+            url,
+            method: "DELETE",
+            dataType: "json",
+            cache: false,
+            headers: { "Authorization": this._authorizationString }
+        });
+    }
+
+    _initiateFileUpload(fileData, chunksInfo, destinationDirectory) {
+        const folderPath = destinationDirectory.relativeName;
+        const fileName = fileData.name;
+        const customData = chunksInfo.customData;
+
+        return this._ensureAccessTokenAcquired()
+            .then(() => this._createFile(folderPath, fileName))
+            .then(entry => {
+                customData.itemId = entry.id;
+                return this._initiateUploadSession(entry.id)
+                    .done(info => { customData.uploadUrl = info.uploadUrl; });
+            });
+    }
+
+    _uploadFileChunkCore(uploadUrl, chunkBlob, chunkSize, uploadedSize, totalSize) {
         const chunkEndPosition = uploadedSize + chunkSize - 1;
         const contentRange = `bytes ${uploadedSize}-${chunkEndPosition}/${totalSize}`;
         return ajax.sendRequest({

@@ -227,7 +227,9 @@ module.exports = gridCore.Controller.inherit((function() {
                 cachedPagesData = that._cachedPagesData;
 
             if((options.storeLoadOptions.filter && !options.remoteOperations.filtering) || (options.storeLoadOptions.sort && !options.remoteOperations.sorting)) {
-                options.remoteOperations = {};
+                options.remoteOperations = {
+                    filtering: options.remoteOperations.filtering
+                };
             }
 
             if(isReload) {
@@ -412,7 +414,7 @@ module.exports = gridCore.Controller.inherit((function() {
                     options.extra.totalCount = options.data.length;
                 }
 
-                if(options.extra && options.extra.totalCount >= 0 && storeLoadOptions.requireTotalCount === false) {
+                if(options.extra && options.extra.totalCount >= 0 && (storeLoadOptions.requireTotalCount === false || loadOptions.requireTotalCount === false)) {
                     options.extra.totalCount = -1;
                 }
 

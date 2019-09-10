@@ -443,7 +443,16 @@ var dxFunnel = {
         * @type_function_param1 items:Array<FunnelLegendItem>
         * @type_function_return Array<FunnelLegendItem>
         */
-        customizeItems: undefined
+        customizeItems: undefined,
+        /**
+        * @name dxFunnelOptions.legend.markerTemplate
+        * @type template|function
+        * @default undefined
+        * @type_function_param1 legendItem:FunnelLegendItem
+        * @type_function_param2 element:SVGGElement
+        * @type_function_return string|SVGElement|jQuery
+        */
+        markerTemplate: undefined
     },
    /**
     * @name dxFunnelOptions.tooltip
@@ -462,7 +471,21 @@ var dxFunnel = {
         * @type_function_param1_field5 percentText:string
         * @type_function_return object
         */
-        customizeTooltip: undefined
+        customizeTooltip: undefined,
+        /**
+        * @name dxFunnelOptions.tooltip.contentTemplate
+        * @type template|function(info, element)
+        * @type_function_param1 info:object
+        * @type_function_param1_field1 item:dxFunnelItem
+        * @type_function_param1_field2 value:Number
+        * @type_function_param1_field3 valueText:string
+        * @type_function_param1_field4 percent:Number
+        * @type_function_param1_field5 percentText:string
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined
     },
     /**
     * @name dxFunnelOptions.onItemClick

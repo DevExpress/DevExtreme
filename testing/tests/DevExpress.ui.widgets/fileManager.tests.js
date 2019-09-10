@@ -13,6 +13,8 @@ import "./fileManagerParts/toolbar.tests.js";
 import "./fileManagerParts/navigation.tests.js";
 import "./fileManagerParts/editing.tests.js";
 import "./fileManagerParts/adaptivity.tests.js";
+import "./fileManagerParts/editingProgress.tests.js";
+import "./fileManagerParts/progressPanel.tests.js";
 import "./fileManagerParts/fileItemsController.tests.js";
 
 import "./fileManagerParts/ajaxProvider.tests.js";

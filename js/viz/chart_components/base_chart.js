@@ -625,8 +625,7 @@ var BaseChart = BaseWidget.inherit({
         recreateCanvas = drawOptions.recreateCanvas;
 
         // T207665
-        that.__originalCanvas = that._canvas;
-        that._canvas = extend({}, that._canvas); // NOTE: Instance of the original canvas must be preserved
+        that._preserveOriginalCanvas();
 
         // T207665
         if(recreateCanvas) {
@@ -649,6 +648,11 @@ var BaseChart = BaseWidget.inherit({
         that._renderElements(drawOptions);
 
         that._lastRenderingTime = new Date() - startTime;
+    },
+
+    _preserveOriginalCanvas() {
+        this.__originalCanvas = this._canvas;
+        this._canvas = extend({}, this._canvas); // NOTE: Instance of the original canvas must be preserved
     },
 
     _layoutAxes: noop,
@@ -867,6 +871,7 @@ var BaseChart = BaseWidget.inherit({
 
         that._legend = new legendModule.Legend({
             renderer: that._renderer,
+            widget: that,
             group: that._legendGroup,
             backgroundClass: "dxc-border",
             itemGroupClass: "dxc-item",
@@ -935,10 +940,11 @@ var BaseChart = BaseWidget.inherit({
                 }
                 legendData.textOpacity = DEFAULT_OPACITY;
             }
+            const opacityStyle = { opacity: opacity };
             legendData.states = {
-                hover: style.hover,
-                selection: style.selection,
-                normal: _extend({}, style.normal, { opacity: opacity })
+                hover: _extend({}, style.hover, opacityStyle),
+                selection: _extend({}, style.selection, opacityStyle),
+                normal: _extend({}, style.normal, opacityStyle)
             };
 
             return legendData;
@@ -1295,7 +1301,7 @@ var BaseChart = BaseWidget.inherit({
         const incidentOccurred = that._incidentOccurred;
         let seriesThemes = that._populateSeriesOptions(data);
         let particularSeries;
-        let changedStateSeriesCount = 0;
+        let disposeSeriesFamilies = false;
 
         that.needToPopulateSeries = false;
 
@@ -1307,7 +1313,7 @@ var BaseChart = BaseWidget.inherit({
                 seriesBasis.push({ series: curSeries, options: theme });
             } else {
                 seriesBasis.push({ options: theme });
-                changedStateSeriesCount++;
+                disposeSeriesFamilies = true;
             }
         });
 
@@ -1316,13 +1322,14 @@ var BaseChart = BaseWidget.inherit({
         _reverseEach(that.series, (index, series) => {
             if(!seriesBasis.some(s => series === s.series)) {
                 that._disposeSeries(index);
-                changedStateSeriesCount++;
+                disposeSeriesFamilies = true;
             }
         });
 
-        that.series = [];
+        !disposeSeriesFamilies && (disposeSeriesFamilies = seriesBasis.some(sb => sb.series.name !== seriesThemes[sb.series.index].name));
 
-        changedStateSeriesCount > 0 && that._disposeSeriesFamilies();
+        that.series = [];
+        disposeSeriesFamilies && that._disposeSeriesFamilies();
         that._themeManager.resetPalette();
         const eventPipe = function(data) {
             that.series.forEach(function(currentSeries) {

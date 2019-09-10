@@ -20,7 +20,7 @@ import messageLocalization from "../../localization/message";
 import dateSerialization from "../../core/utils/date_serialization";
 import Widget from "../widget/ui.widget";
 import subscribes from "./ui.scheduler.subscribes";
-import FunctionTemplate from "../widget/function_template";
+import { FunctionTemplate } from "../../core/templates/function_template";
 
 import { DesktopTooltipStrategy } from "./tooltip_strategies/desktopTooltipStrategy";
 import { MobileTooltipStrategy } from "./tooltip_strategies/mobileTooltipStrategy";
@@ -47,8 +47,8 @@ import loading from "./ui.loading";
 import AppointmentForm from "./ui.scheduler.appointment_form";
 import Popup from "../popup";
 import deferredUtils from "../../core/utils/deferred";
-import EmptyTemplate from "../widget/empty_template";
-import BindableTemplate from "../widget/bindable_template";
+import { EmptyTemplate } from "../../core/templates/empty_template";
+import { BindableTemplate } from "../../core/templates/bindable_template";
 import themes from "../themes";
 import browser from "../../core/utils/browser";
 import { touch } from "../../core/utils/support";
@@ -433,6 +433,7 @@ const Scheduler = Widget.inherit({
                     * @type string|function(resource)
                     * @type_function_param1 resource:object
                     * @default 'text'
+                 * @type_function_return string
                     */
 
                 /**
@@ -1053,18 +1054,18 @@ const Scheduler = Widget.inherit({
                 options: {
                     /**
                        * @name dxSchedulerOptions.useDropDownViewSwitcher
-                       * @default true @for Android|iOS|Windows_Mobile
+                       * @default true @for Android|iOS
                        */
                     useDropDownViewSwitcher: true,
 
                     /**
                        * @name dxSchedulerOptions.editing.allowResizing
-                       * @default false @for Android|iOS|Windows_Mobile
+                       * @default false @for Android|iOS
                        */
 
                     /**
                        * @name dxSchedulerOptions.editing.allowDragging
-                       * @default false @for Android|iOS|Windows_Mobile
+                       * @default false @for Android|iOS
                        */
                     editing: {
                         allowDragging: false,
@@ -1424,6 +1425,7 @@ const Scheduler = Widget.inherit({
         }
 
         this._appointments.option(editingConfig);
+        this.repaint();
     },
 
     _isAgenda: function() {
@@ -1517,9 +1519,8 @@ const Scheduler = Widget.inherit({
         return result.promise();
     },
 
-    _fireContentReadyAction(result) {
+    _fireContentReadyAction: function(result) {
         this.callBase();
-
         result && result.resolve();
     },
 
@@ -1610,9 +1611,9 @@ const Scheduler = Widget.inherit({
         this.callBase();
         this._initAppointmentTemplate();
 
-        this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate(this);
-        this._defaultTemplates["appointmentPopup"] = new EmptyTemplate(this);
-        this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate(this);
+        this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate();
+        this._defaultTemplates["appointmentPopup"] = new EmptyTemplate();
+        this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate();
     },
 
     _initAppointmentTemplate: function() {
@@ -1838,6 +1839,7 @@ const Scheduler = Widget.inherit({
         if(this._isLoaded()) {
             this._initMarkupCore(this._loadedResources);
             this._dataSourceChangedHandler(this._dataSource.items());
+            this._fireContentReadyAction();
         } else {
             this._loadResources().done((function(resources) {
                 this._initMarkupCore(resources);
@@ -3090,13 +3092,13 @@ const Scheduler = Widget.inherit({
         * @param3 currentAppointmentData:Object|undefined
         */
     showAppointmentTooltip: function(appointmentData, target, currentAppointmentData) {
-        if(!appointmentData) {
-            return;
+        if(appointmentData) {
+            this.showAppointmentTooltipCore(target, [{
+                color: this._appointments._tryGetAppointmentColor(target),
+                data: appointmentData,
+                currentData: currentAppointmentData,
+            }], true);
         }
-        this.showAppointmentTooltipCore(target, [{
-            data: appointmentData,
-            currentData: currentAppointmentData,
-        }], true);
     },
 
     showAppointmentTooltipCore: function(target, data, isSingleBehavior) {

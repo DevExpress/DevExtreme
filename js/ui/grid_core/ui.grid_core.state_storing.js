@@ -14,51 +14,40 @@ var processLoadState = function(that) {
 
     if(columnsController) {
         columnsController.columnsChanged.add(function() {
-            var columnsState = columnsController.getUserState(),
-                columnsStateHash = getKeyHash(columnsState),
-                currentColumnsStateHash = getKeyHash(that._state.columns);
-
-            if(!equalByValue(currentColumnsStateHash, columnsStateHash)) {
-                extend(that._state, {
-                    columns: columnsState
-                });
-                that.isEnabled() && that.save();
-            }
+            that.updateState({
+                columns: columnsController.getUserState()
+            });
         });
     }
 
     if(selectionController) {
         selectionController.selectionChanged.add(function(e) {
-            extend(that._state, {
+            that.updateState({
                 selectedRowKeys: e.selectedRowKeys,
                 selectionFilter: e.selectionFilter
             });
-            that.isEnabled() && that.save();
         });
     }
 
     if(dataController) {
         that._initialPageSize = that.option("paging.pageSize");
         dataController.changed.add(function() {
-            var userState = dataController.getUserState(),
-                focusedRowEnabled = that.option("focusedRowEnabled");
-
-            extend(that._state, userState, {
+            var state = extend({
                 allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined,
                 filterPanel: { filterEnabled: that.option("filterPanel.filterEnabled") },
                 filterValue: that.option("filterValue"),
-                focusedRowKey: focusedRowEnabled ? that.option("focusedRowKey") : undefined
-            });
-            that.isEnabled() && that.save();
+                focusedRowKey: that.option("focusedRowEnabled") ? that.option("focusedRowKey") : undefined
+            }, dataController.getUserState());
+
+            that.updateState(state);
         });
     }
 
     if(exportController) {
         exportController.selectionOnlyChanged.add(function() {
-            extend(that._state, {
+            that.updateState({
                 exportSelectionOnly: exportController.selectionOnly()
             });
-            that.isEnabled() && that.save();
         });
     }
 };
@@ -162,6 +151,21 @@ module.exports = {
                         this.applyState(extend({}, state));
                     }
                     return result;
+                },
+                updateState: function(state) {
+                    if(this.isEnabled()) {
+                        let oldState = this.state(),
+                            newState = extend({}, oldState, state),
+                            oldStateHash = getKeyHash(oldState),
+                            newStateHash = getKeyHash(newState);
+
+                        if(!equalByValue(oldStateHash, newStateHash)) {
+                            extend(this._state, state);
+                            this.save();
+                        }
+                    } else {
+                        extend(this._state, state);
+                    }
                 },
                 applyState: function(state) {
                     var that = this,

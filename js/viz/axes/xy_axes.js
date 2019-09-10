@@ -323,10 +323,6 @@ module.exports = {
         },
 
         _updateAxisElementPosition: function() {
-            if(!this._axisElement) {
-                return;
-            }
-
             var axisCoord = this._axisPosition,
                 canvas = this._getCanvasStartEnd();
 
@@ -977,15 +973,6 @@ module.exports = {
         _boundaryTicksVisibility: {
             min: true,
             max: true
-        },
-
-        _setVisualRange(visualRange) {
-            const range = this.adjustRange(vizUtils.getVizRangeObject(visualRange));
-            this._viewport = range;
-        },
-
-        applyVisualRangeSetter(visualRangeSetter) {
-            this._visualRange = visualRangeSetter;
         },
 
         adjust(alignToBounds) {

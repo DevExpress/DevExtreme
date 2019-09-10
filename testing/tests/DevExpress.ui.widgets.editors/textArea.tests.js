@@ -1,18 +1,25 @@
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
+import nativePointerMock from "../../helpers/nativePointerMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
+import devices from "core/devices";
 
 import "common.css!";
 import "ui/text_area";
+import "ui/scroll_view/ui.scrollable";
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="qunit-fixture">\
-            <div id="textarea"></div>\
-            <div id="widget"></div>\
-            <div id="widthRootStyle" style="width: 300px;"></div>\
-            <div id="container">\
-                <div id="withContainer"></div>\
+        '<div id="textarea"></div>\
+        <div id="widget"></div>\
+        <div id="widthRootStyle" style="width: 300px;"></div>\
+        <div id="container">\
+            <div id="withContainer"></div>\
+        </div>\
+        <div id="scrollable">\
+            <div id="content" style="width: 300px; height: 300px;">\
+                <div id="textAreaInScrollable" style="margin: 50px;">\
+                </div>\
             </div>\
         </div>';
 
@@ -23,7 +30,9 @@ QUnit.testStart(() => {
 const TEXTAREA_CLASS = "dx-textarea";
 const INPUT_CLASS = "dx-texteditor-input";
 const PLACEHOLDER_CLASS = "dx-placeholder";
+const AUTO_RESIZE_CLASS = "dx-texteditor-input-auto-resize";
 
+const SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container";
 
 QUnit.module("rendering");
 
@@ -60,6 +69,17 @@ QUnit.test("scrolling with dxpointer events", assert => {
     pointer.down().move(0, 40).scroll(0, 40).up();
     assert.equal($input.scrollTop(), 80);
 
+    $(document).off(".dxtestns");
+});
+
+QUnit.test("scrolling with dxpointer events, empty TextArea", assert => {
+    const $element = $("#textarea").dxTextArea({ height: 100, width: 100 });
+    const $input = $element.dxTextArea("instance")._input();
+
+    $(document).on("dxpointermove.dxtestns", e => {
+        assert.ok(true, "dxpointermove should not be prevented");
+    });
+    pointerMock($input).start().down().move(0, 40).scroll(0, 40).up();
     $(document).off(".dxtestns");
 });
 
@@ -213,6 +233,19 @@ QUnit.test("change width", assert => {
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
 });
 
+QUnit.test("widget renders correctly when minHeight and maxHeight is specified in pixels", assert => {
+    const minHeight = 100;
+    const $element = $("#widget").dxTextArea({
+        minHeight: minHeight + "px",
+        autoResizeEnabled: true
+    });
+
+    const $input = $element.find(".dx-texteditor-input");
+    const inputHeight = $input.outerHeight();
+
+    assert.strictEqual(inputHeight, minHeight, "height is ok");
+});
+
 
 QUnit.module("the 'autoResizeEnabled' option");
 
@@ -279,6 +312,19 @@ QUnit.test("widget is resized on paste", assert => {
     assert.equal(inputHeight, $input[0].scrollHeight, "widget height is correct");
 });
 
+[true, false].forEach((autoResizeEnabled) => {
+    QUnit.test(`auto resize class depends on the "autoResizeEnabled" value, "autoResizeEnabled" is ${autoResizeEnabled}`, (assert) => {
+        const $element = $("#textarea").dxTextArea({
+            autoResizeEnabled,
+            value: "1"
+        });
+
+        const $input = $element.find(`.${INPUT_CLASS}`);
+
+        assert.strictEqual($input.hasClass(AUTO_RESIZE_CLASS), autoResizeEnabled, "Check auto resize class");
+    });
+});
+
 QUnit.test("widget has correct height with auto resize mode and the 'maxHeight' option", assert => {
     const boundaryHeight = 50;
 
@@ -298,6 +344,39 @@ QUnit.test("widget has correct height with auto resize mode and the 'maxHeight' 
 
     assert.equal(elementHeight, boundaryHeight, "widget height is correct");
     assert.equal(inputHeight, boundaryHeight - heightDifference, "widget height is correct");
+});
+
+QUnit.test("widget with auto resize should have a scrollbar if content is higher than the max height", assert => {
+    const boundaryHeight = 50;
+
+    const $element = $("#textarea");
+    const instance = $element.dxTextArea({
+        autoResizeEnabled: true,
+        value: "1\n2\n3\n4\n5\n6\n7\n8\n9",
+        maxHeight: boundaryHeight
+    }).dxTextArea("instance");
+
+    const $input = $element.find(`.${INPUT_CLASS}`);
+
+    assert.notOk($input.hasClass(AUTO_RESIZE_CLASS), "textarea hasn't an auto resize class");
+    assert.strictEqual($input.css("overflow-y"), "auto", "textarea has a scrollbar");
+
+    instance.option("value", "1");
+    assert.ok($input.hasClass(AUTO_RESIZE_CLASS), "textarea with auto resize hasn't a scrollbar in case the content fit into container");
+});
+
+QUnit.test("widget with auto resize should not have a scrollbar after max-height changed to the higher value", assert => {
+    const $element = $("#textarea");
+    const instance = $element.dxTextArea({
+        autoResizeEnabled: true,
+        value: "1\n2\n3\n4\n5\n6\n7\n8\n9",
+        maxHeight: 50
+    }).dxTextArea("instance");
+
+    const $input = $element.find(`.${INPUT_CLASS}`);
+
+    instance.option("maxHeight", 500);
+    assert.ok($input.hasClass(AUTO_RESIZE_CLASS), "textarea with auto resize hasn't a scrollbar in case the content fit into container");
 });
 
 QUnit.test("widget has correct height with auto resize mode and the 'minHeight' option", assert => {
@@ -402,3 +481,116 @@ QUnit.test("widget can not scroll container to the top on change content height 
     keyboardMock($input).type("\n\n");
     assert.strictEqual(container.scrollTop(), 20);
 });
+
+QUnit.module("TextArea in simulated scrollable", () => {
+    if(devices.current().deviceType === "desktop") {
+        ["vertical", "horizontal"].forEach((direction) => {
+            class TextAreaInScrollableTestHelper {
+                constructor(direction) {
+                    this._direction = direction;
+                    this._isVerticalDirection = this._direction === 'vertical';
+                    this.$scrollable = this._getScrollable();
+                    this.$textArea = this._getTextArea();
+                    this.$textAreaInput = this.$textArea.find(`.${INPUT_CLASS}`);
+                    if(!this._isVerticalDirection) {
+                        this.$textAreaInput.css({ 'white-space': 'nowrap' });
+                    }
+                    this.maxScrollValue = this._getMaxScrollValue(this._isVerticalDirection ? 'Height' : 'Width');
+                }
+
+                _getScrollable() {
+                    return $("#scrollable").dxScrollable({
+                        width: 200,
+                        height: 200,
+                        useNative: false,
+                        direction: this._direction,
+                        showScrollbar: "always",
+                    });
+                }
+
+                _getTextArea() {
+                    return $("#textAreaInScrollable").dxTextArea({
+                        width: 100,
+                        height: 100,
+                        text: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\na\n"
+                    });
+                }
+
+                _getMaxScrollValue(prop) {
+                    return this.$textAreaInput.get(0)[`scroll${prop}`] - this.$textAreaInput.get(0)[`client${prop}`];
+                }
+
+                getScrollableContainer() {
+                    return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+                }
+
+                setPosition($element, scrollPosition) {
+                    this._isVerticalDirection ? $element.scrollTop(scrollPosition) : $element.scrollLeft(scrollPosition);
+                }
+
+                checkAsserts(assert, expectedOffset) {
+                    let $container = this.getScrollableContainer();
+
+                    if(this._isVerticalDirection) {
+                        assert.strictEqual($container.scrollTop(), expectedOffset, "scrollTop()");
+                    } else {
+                        assert.strictEqual($container.scrollLeft(), expectedOffset, "scrollLeft()");
+                    }
+                }
+
+                isShift() {
+                    return !this._isVerticalDirection;
+                }
+            }
+
+            QUnit.test(`mousewheel: textArea (scrollPosition - MIN) - wheel -> up -> down - scrollable direction: ${direction}`, (assert) => {
+                const helper = new TextAreaInScrollableTestHelper(direction);
+                const $container = helper.getScrollableContainer();
+
+                helper.setPosition($container, 100);
+
+                const pointer = nativePointerMock(helper.$textAreaInput);
+
+                pointer.start().wheel(20, helper.isShift());
+                helper.checkAsserts(assert, 80);
+
+                pointer.start().wheel(-20, helper.isShift());
+                helper.checkAsserts(assert, 80);
+            });
+
+            QUnit.test(`mousewheel: textArea (scrollPosition - MAX) - wheel -> down -> up - scrollable direction: ${direction}`, (assert) => {
+                const helper = new TextAreaInScrollableTestHelper(direction);
+                const $container = helper.getScrollableContainer();
+
+                helper.setPosition($container, 50);
+                helper.setPosition(helper.$textAreaInput, helper.maxScrollValue);
+
+                const pointer = nativePointerMock(helper.$textAreaInput);
+
+                pointer.start().wheel(-20, helper.isShift());
+                helper.checkAsserts(assert, 70);
+
+                pointer.start().wheel(20, helper.isShift());
+                helper.checkAsserts(assert, 70);
+            });
+
+            QUnit.test(`mousewheel: textArea (scrollPosition - MIDDLE) - wheel -> down -> up - scrollable direction: ${direction}`, (assert) => {
+                const helper = new TextAreaInScrollableTestHelper(direction);
+                const $container = helper.getScrollableContainer();
+
+                helper.setPosition($container, 100);
+                helper.setPosition(helper.$textAreaInput, helper.maxScrollValue / 2);
+
+                const pointer = nativePointerMock(helper.$textAreaInput);
+
+                pointer.start().wheel(-20, helper.isShift());
+                helper.checkAsserts(assert, 100);
+
+                pointer.start().wheel(20, helper.isShift());
+                helper.checkAsserts(assert, 100);
+            });
+
+        });
+    }
+});
+

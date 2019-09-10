@@ -226,13 +226,16 @@ var FilterBuilder = Widget.inherit({
              * @name dxFilterBuilderField.lookup.valueExpr
              * @type string|function(data)
              * @default undefined
+             * @type_function_param1 data:object
+             * @type_function_return string
              */
 
             /**
              * @name dxFilterBuilderField.lookup.displayExpr
              * @type string|function(data)
-             * @type_function_param1 data:object
              * @default undefined
+             * @type_function_param1 data:object
+             * @type_function_return string
              */
 
             /**
@@ -521,17 +524,19 @@ var FilterBuilder = Widget.inherit({
                 this._invalidate();
                 break;
             case "value":
-                var disableInvalidateForValue = this._disableInvalidateForValue;
-                if(!disableInvalidateForValue) {
-                    this._initModel();
-                    this._invalidate();
+                if(args.value !== args.previousValue) {
+                    var disableInvalidateForValue = this._disableInvalidateForValue;
+                    if(!disableInvalidateForValue) {
+                        this._initModel();
+                        this._invalidate();
+                    }
+                    this._disableInvalidateForValue = false;
+                    this.executeAction("onValueChanged", {
+                        value: args.value,
+                        previousValue: args.previousValue
+                    });
+                    this._disableInvalidateForValue = disableInvalidateForValue;
                 }
-                this._disableInvalidateForValue = false;
-                this.executeAction("onValueChanged", {
-                    value: args.value,
-                    previousValue: args.previousValue
-                });
-                this._disableInvalidateForValue = disableInvalidateForValue;
                 break;
             default:
                 this.callBase(args);
@@ -836,6 +841,8 @@ var FilterBuilder = Widget.inherit({
             menu: {
                 items: items,
                 dataStructure: "plain",
+                keyExpr: "id",
+                parentId: "parentId",
                 displayExpr: "caption",
                 onItemClick: (e) => {
                     if(item !== e.itemData) {

@@ -1,22 +1,38 @@
+@import (once) "./scrollView.less";
+@import (once) "./treeList.less";
+
 .dx-gantt {
     display: flex;
+    position: relative;
 
     .dx-gantt-si {
         text-align: center;
         vertical-align: middle;
     }
 
-    .dx-treelist {
-        .dx-scrollbar-vertical {
-            display: none;
+    .dx-gantt-treelist-wrapper {
+        display: inline-flex;
+
+        .dx-treelist {
+            .dx-scrollbar-vertical {
+                display: none;
+            }
+
+            .dx-treelist-headers + .dx-treelist-rowsview {
+                border-top: none;
+            }
         }
+    }
+
+    .dx-splitter-wrapper .dx-splitter-border .dx-splitter {
+        width: 2px;
     }
 
     .dx-gantt-view {
         width: 100%;
 
         .dx-scrollable-scrollbar {
-            z-index: 10000;
+            z-index: 100;
         }
     }
 }

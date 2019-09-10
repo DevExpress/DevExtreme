@@ -35,61 +35,65 @@ class WebApiFileProvider extends FileProvider {
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
     }
 
-    getItems(path) {
-        return this._getEntriesByPath(path)
-            .then(result => this._convertDataObjectsToFileItems(result.result, path));
+    getItems(pathInfo) {
+        return this._getEntriesByPath(pathInfo)
+            .then(result => this._convertDataObjectsToFileItems(result.result, pathInfo));
     }
 
     renameItem(item, name) {
         return this._executeRequest("Rename", {
-            id: item.relativeName,
+            pathInfo: item.getFullPathInfo(),
             name
         });
     }
 
-    createFolder(parentFolder, name) {
+    createFolder(parentDir, name) {
         return this._executeRequest("CreateDir", {
-            parentId: parentFolder.relativeName,
+            pathInfo: parentDir.getFullPathInfo(),
             name
+        }).done(() => {
+            if(parentDir && !parentDir.isRoot) {
+                parentDir.hasSubDirs = true;
+            }
         });
     }
 
     deleteItems(items) {
-        return items.map(item => this._executeRequest("Remove", { id: item.relativeName }));
+        return items.map(item => this._executeRequest("Remove", { pathInfo: item.getFullPathInfo() }));
     }
 
-    moveItems(items, destinationFolder) {
+    moveItems(items, destinationDirectory) {
         return items.map(item => this._executeRequest("Move", {
-            sourceId: item.relativeName,
-            destinationId: destinationFolder.relativeName + "/" + item.name
+            sourcePathInfo: item.getFullPathInfo(),
+            destinationPathInfo: destinationDirectory.getFullPathInfo()
         }));
     }
 
     copyItems(items, destinationFolder) {
         return items.map(item => this._executeRequest("Copy", {
-            sourceId: item.relativeName,
-            destinationId: destinationFolder.relativeName + "/" + item.name
+            sourcePathInfo: item.getFullPathInfo(),
+            destinationPathInfo: destinationFolder.getFullPathInfo()
         }));
     }
 
-    initiateFileUpload(uploadInfo) {
-        uploadInfo.customData.uploadId = new Guid();
-    }
+    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
+        if(chunksInfo.chunkIndex === 0) {
+            chunksInfo.customData.uploadId = new Guid();
+        }
 
-    uploadFileChunk(uploadInfo, chunk) {
         const args = {
-            destinationId: uploadInfo.destinationFolder.relativeName,
+            destinationId: destinationDirectory.relativeName,
             chunkMetadata: JSON.stringify({
-                UploadId: uploadInfo.customData.uploadId,
-                FileName: uploadInfo.file.name,
-                Index: chunk.index,
-                TotalCount: uploadInfo.totalChunkCount,
-                FileSize: uploadInfo.file.size
+                UploadId: chunksInfo.customData.uploadId,
+                FileName: fileData.name,
+                Index: chunksInfo.chunkIndex,
+                TotalCount: chunksInfo.chunkCount,
+                FileSize: fileData.size
             })
         };
 
         const formData = new window.FormData();
-        formData.append(FILE_CHUNK_BLOB_NAME, chunk.blob);
+        formData.append(FILE_CHUNK_BLOB_NAME, chunksInfo.chunkBlob);
         formData.append("arguments", JSON.stringify(args));
         formData.append("command", "UploadChunk");
 
@@ -105,36 +109,33 @@ class WebApiFileProvider extends FileProvider {
                 onabort: noop
             },
             cache: false
-        }).then(result => {
-            !result.success && deferred.reject(result) || deferred.resolve();
-        },
-        e => deferred.reject(e));
+        })
+            .done(result => {
+                !result.success && deferred.reject(result) || deferred.resolve();
+            })
+            .fail(deferred.reject);
+
         return deferred.promise();
     }
 
-    abortFileUpload(uploadInfo) {
-        return this._executeRequest("AbortUpload", { uploadId: uploadInfo.customData.uploadId });
+    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
+        return this._executeRequest("AbortUpload", { uploadId: chunksInfo.customData.uploadId });
     }
 
     _getItemsIds(items) {
         return items.map(it => it.relativeName);
     }
 
-    _getEntriesByPath(path) {
-        return this._executeRequest("GetDirContents", { parentId: path });
+    _getEntriesByPath(pathInfo) {
+        return this._executeRequest("GetDirContents", { pathInfo });
     }
 
     _executeRequest(command, args) {
-        const queryString = this._getQueryString({
-            command,
-            arguments: JSON.stringify(args)
-        });
-
         const method = command === "GetDirContents" ? "GET" : "POST";
 
         const deferred = new Deferred();
         ajax.sendRequest({
-            url: this._endpointUrl + "?" + queryString,
+            url: this._getEndpointUrl(command, args),
             method,
             dataType: "json",
             cache: false
@@ -143,6 +144,15 @@ class WebApiFileProvider extends FileProvider {
         },
         e => deferred.reject(e));
         return deferred.promise();
+    }
+
+    _getEndpointUrl(command, args) {
+        const queryString = this._getQueryString({
+            command,
+            arguments: JSON.stringify(args)
+        });
+        const separator = this._endpointUrl && this._endpointUrl.indexOf("?") > 0 ? "&" : "?";
+        return this._endpointUrl + separator + queryString;
     }
 
     _getQueryString(params) {
@@ -186,6 +196,10 @@ class WebApiFileProvider extends FileProvider {
     _hasSubDirs(dataObj) {
         const hasSubDirs = this._hasSubDirsGetter(dataObj);
         return typeof hasSubDirs === "boolean" ? hasSubDirs : true;
+    }
+
+    _getKeyExpr(options) {
+        return options.keyExpr || "key";
     }
 
 }

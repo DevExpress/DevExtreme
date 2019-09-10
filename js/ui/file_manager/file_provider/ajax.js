@@ -30,16 +30,16 @@ class AjaxFileProvider extends FileProvider {
         this._provider = null;
     }
 
-    getItems(path) {
-        return this._doActionAfterDataAcquired(() => this._provider.getItems(path));
+    getItems(pathInfo) {
+        return this._doActionAfterDataAcquired(() => this._provider.getItems(pathInfo));
     }
 
     renameItem(item, name) {
         return this._doActionAfterDataAcquired(() => this._provider.renameItem(item, name));
     }
 
-    createFolder(parentFolder, name) {
-        return this._doActionAfterDataAcquired(() => this._provider.createFolder(parentFolder, name));
+    createFolder(parentDir, name) {
+        return this._doActionAfterDataAcquired(() => this._provider.createFolder(parentDir, name));
     }
 
     deleteItems(items) {
@@ -54,20 +54,12 @@ class AjaxFileProvider extends FileProvider {
         return this._doActionAfterDataAcquired(() => this._provider.copyItems(items, destinationFolder));
     }
 
-    initiateFileUpload(uploadInfo) {
-        return this._doActionAfterDataAcquired(() => this._provider.initiateFileUpload(uploadInfo));
+    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
+        return this._doActionAfterDataAcquired(() => this._provider.uploadFileChunk(fileData, chunksInfo, destinationDirectory));
     }
 
-    uploadFileChunk(uploadInfo, chunk) {
-        return this._doActionAfterDataAcquired(() => this._provider.uploadFileChunk(uploadInfo, chunk));
-    }
-
-    finalizeFileUpload(uploadInfo) {
-        return this._doActionAfterDataAcquired(() => this._provider.finalizeFileUpload(uploadInfo));
-    }
-
-    abortFileUpload(uploadInfo) {
-        return this._doActionAfterDataAcquired(() => this._provider.abortFileUpload(uploadInfo));
+    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
+        return this._doActionAfterDataAcquired(() => this._provider.abortFileUpload(fileData, chunksInfo, destinationDirectory));
     }
 
     _doActionAfterDataAcquired(action) {

@@ -45,7 +45,7 @@ describe("LessTemplateLoader", () => {
             bootstrapVersion: 3,
             lessCompiler: lessCompiler,
             reader: () => {
-                // data/less/theme-builder-generic-light.less
+                // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
                     resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
                 });
@@ -78,7 +78,7 @@ describe("LessTemplateLoader", () => {
             reader: (filename) => {
                 let content = "";
                 switch(filename) {
-                    case "devextreme-themebuilder/data/less/theme-builder-generic-light.less":
+                    case "devextreme-themebuilder/data/less/bundles/dx.light.less":
                         content = "@base-bg: #fff;@base-font-family:'default';@base-text-color: #fff;div { color: @base-bg; background: @base-text-color; }";
                         break;
                     case "bootstrap/scss/_variables.scss":
@@ -115,7 +115,7 @@ describe("LessTemplateLoader", () => {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             reader: () => {
-                // data/less/theme-builder-generic-light.less
+                // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
                     resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
                 });
@@ -143,7 +143,7 @@ describe("LessTemplateLoader", () => {
             outColorScheme: "my-custom",
             makeSwatch: true,
             reader: () => {
-                // data/less/theme-builder-generic-light.less
+                // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
                     resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
                 });
@@ -169,7 +169,7 @@ describe("LessTemplateLoader", () => {
             outColorScheme: "my-custom",
             makeSwatch: true,
             reader: () => {
-                // data/less/theme-builder-generic-light.less
+                // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
                     resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
                     div { color: @base-bg; }
@@ -209,7 +209,7 @@ describe("LessTemplateLoader", () => {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             reader: path => {
-                assert.equal(path, "devextreme-themebuilder/data/less/theme-builder-generic-light.less");
+                assert.equal(path, "devextreme-themebuilder/data/less/bundles/dx.light.less");
                 return new Promise(resolve => {
                     resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
                 });
@@ -232,7 +232,7 @@ describe("LessTemplateLoader", () => {
             lessCompiler: lessCompiler,
             lessPath: "my/custom/path/",
             reader: path => {
-                assert.equal(path, "my/custom/path/theme-builder-generic-light.less");
+                assert.equal(path, "my/custom/path/bundles/dx.light.less");
                 return new Promise(resolve => {
                     resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;div { color: @base-bg; }");
                 });
@@ -343,7 +343,7 @@ describe("LessTemplateLoader", () => {
             outColorScheme: "my-custom",
             makeSwatch: true,
             reader: () => {
-                // data/less/theme-builder-generic-light.less
+                // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
                     resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
                     .dx-theme-marker { font-family: 'dx.generic.light'; }
@@ -585,44 +585,13 @@ describe("LessTemplateLoader", () => {
         });
     });
 
-    it("load - ignore all imports - paste imported files as is", () => {
-        const app = require('express')();
-        app.get("/emptyImport", (request, response) => response.send(""));
-        const server = app.listen(3000);
-
-        let config = {
-            isBootstrap: false,
-            lessCompiler: lessCompiler,
-            outColorScheme: "additional",
-            makeSwatch: true,
-            reader: () => {
-                // data/less/theme-builder-generic-light.less
-                return new Promise(resolve => {
-                    let testLess = "@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;@import 'http://localhost:3000/emptyImport';";
-                    resolve(testLess);
-                });
-            }
-        };
-
-        let lessTemplateLoader = new LessTemplateLoader(config);
-        lessTemplateLoader._makeInfoHeader = emptyHeader;
-        return lessTemplateLoader.load(
-            themeName,
-            colorScheme,
-            metadata,
-            []).then(data => {
-            server.close();
-            assert.equal(data.css, "\n");
-        });
-    });
-
     it("load - the result contains passed version", () => {
         const version = "1.0.0";
         const config = {
             isBootstrap: false,
             lessCompiler: lessCompiler,
             reader: () => {
-                // data/less/theme-builder-generic-light.less
+                // data/less/bundles/dx.light.less
                 return new Promise(resolve => {
                     resolve("@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;");
                 });
@@ -640,5 +609,4 @@ describe("LessTemplateLoader", () => {
             assert.equal(data.version, version);
         });
     });
-
 });

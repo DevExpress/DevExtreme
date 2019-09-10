@@ -295,7 +295,18 @@ var BaseGauge = {
         * @type_function_param1_field2 valueText:string
         * @type_function_return object
         */
-        customizeTooltip: undefined
+        customizeTooltip: undefined,
+        /**
+        * @name BaseGaugeOptions.tooltip.contentTemplate
+        * @type template|function(scaleValue, element)
+        * @type_function_param1 scaleValue:object
+        * @type_function_param1_field1 value:Number
+        * @type_function_param1_field2 valueText:string
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined
     },
     /**
     * @name BaseGaugeOptions.onTooltipShown
@@ -612,7 +623,19 @@ var dxBarGauge = {
         * @type_function_param1_field3 index:number
         * @type_function_return object
         */
-        customizeTooltip: undefined
+        customizeTooltip: undefined,
+        /**
+        * @name dxBarGaugeOptions.tooltip.contentTemplate
+        * @type template|function(scaleValue, element)
+        * @type_function_param1 scaleValue:object
+        * @type_function_param1_field1 value:Number
+        * @type_function_param1_field2 valueText:string
+        * @type_function_param1_field3 index:number
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined
     },
     /**
     * @name dxBarGaugeOptions.geometry
@@ -771,7 +794,16 @@ var dxBarGauge = {
         * @type_function_param1 items:Array<BarGaugeLegendItem>
         * @type_function_return Array<BarGaugeLegendItem>
         */
-        customizeItems: undefined
+        customizeItems: undefined,
+        /**
+        * @name dxBarGaugeOptions.legend.markerTemplate
+        * @type template|function
+        * @default undefined
+        * @type_function_param1 legendItem:BarGaugeLegendItem
+        * @type_function_param2 element:SVGGElement
+        * @type_function_return string|SVGElement|jQuery
+        */
+        markerTemplate: undefined
     },
     /**
     * @name dxBarGaugeOptions.resolveLabelOverlapping
@@ -867,21 +899,12 @@ var BarGaugeBarInfo = {
 /**
 * @name BarGaugeLegendItem
 * @type object
+* @inherits BaseLegendItem
 */
 var legendItem = {
-    /**
-    * @name BarGaugeLegendItem.text
-    * @type string
-    */
-    text: undefined,
     /**
     * @name BarGaugeLegendItem.item
     * @type BarGaugeBarInfo
     */
-    item: undefined,
-    /**
-    * @name BarGaugeLegendItem.visible
-    * @type boolean
-    */
-    visible: true
+    item: undefined
 };

@@ -1624,7 +1624,7 @@ QUnit.test("searchEnabled", function(assert) {
 });
 
 QUnit.test("cleanSearchOnOpening", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2212,7 +2212,7 @@ QUnit.test("popup height should be saved after configuration", function(assert) 
 });
 
 QUnit.test("popup height should be stretch when data items are loaded asynchronously", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2466,7 +2466,7 @@ QUnit.module("focus policy", {
 });
 
 QUnit.testInActiveWindow("T338144 - focused element should not be reset after popup is reopened if the 'searchEnabled' is false", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2597,7 +2597,7 @@ QUnit.testInActiveWindow("lookup search field focused after open popup", functio
 }),
 
 QUnit.testInActiveWindow("lookup-list should be focused after 'down' key pressing", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2617,7 +2617,7 @@ QUnit.testInActiveWindow("lookup-list should be focused after 'down' key pressin
 }),
 
 QUnit.testInActiveWindow("lookup-list keyboard navigation should work after focusing on list", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2640,7 +2640,7 @@ QUnit.testInActiveWindow("lookup-list keyboard navigation should work after focu
 }),
 
 QUnit.testInActiveWindow("lookup item should be selected after 'enter' key pressing", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2662,7 +2662,7 @@ QUnit.testInActiveWindow("lookup item should be selected after 'enter' key press
 }),
 
 QUnit.testInActiveWindow("lookup item should be selected after 'space' key pressing", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2684,7 +2684,7 @@ QUnit.testInActiveWindow("lookup item should be selected after 'space' key press
 }),
 
 QUnit.testInActiveWindow("keyboard for lookup-list should work correctly after 'searchEnabled' option changed", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2755,7 +2755,7 @@ QUnit.test("escape key press close overlay with search enabled", function(assert
 });
 
 QUnit.test("escape key press close overlay without search enabled", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2982,17 +2982,44 @@ QUnit.test("popup title collapse if empty title option (B232073)", function(asse
 });
 
 
-QUnit.module("aria accessibility");
+QUnit.module("aria accessibility", () => {
+    const checkAsserts = (expectedValues) => {
+        let { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
 
-QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
-    $("#widget").dxLookup({
-        opened: true
+        QUnit.assert.strictEqual($target.attr("role"), role, "role");
+        QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
+        QUnit.assert.strictEqual(!!$target.attr("aria-owns"), isOwns, "owns");
+        QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
+    };
+
+    if(devices.real().deviceType === "desktop") {
+        [true, false].forEach((searchEnabled) => {
+            QUnit.test(`aria role for list, searchEnabled: ${searchEnabled}`, () => {
+                let $element = $("#widget").dxLookup({
+                    opened: true,
+                    searchEnabled: searchEnabled
+                });
+                const $field = $element.find(`.${LOOKUP_FIELD_CLASS}`);
+
+                let list = $(`.${LIST_CLASS}`).dxList("instance");
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
+
+                $element.dxLookup("instance").option("searchEnabled", !searchEnabled);
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
+            });
+        });
+    }
+
+    QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
+        $("#widget").dxLookup({ opened: true });
+
+        let list = $(`.${LIST_CLASS}`).dxList("instance");
+        assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
     });
-
-    var list = $("." + LIST_CLASS).dxList("instance");
-
-    // TODO: change it when _getAriaTarget becomes an option
-    assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
 });
 
 

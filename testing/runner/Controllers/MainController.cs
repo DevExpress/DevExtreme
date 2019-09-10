@@ -62,7 +62,6 @@ namespace Runner.Controllers
             {
                 Title = suiteName,
                 ScriptVirtualPath = UIModelHelper.GetSuiteVirtualPath(catName, suiteName),
-                StyleCompilerTestServerUrl = "http://" + Request.Host.Host + ":" + Ports.Get("style-compiler") + "/test-server"
             };
 
             AssignBaseRunProps(model);
@@ -188,7 +187,6 @@ namespace Runner.Controllers
         {
             var q = Request.Query;
 
-            m.ForceCombinedStyles = q.ContainsKey("combinedStyles");
             m.IEMode = IEMode();
             m.IsContinuousIntegration = _runFlags.IsContinuousIntegration;
             m.IsIntranet = _runFlags.IsIntranet;

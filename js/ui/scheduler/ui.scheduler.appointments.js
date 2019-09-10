@@ -22,6 +22,7 @@ import messageLocalization from "../../localization/message";
 import CollectionWidget from "../collection/ui.collection_widget.edit";
 import Draggable from "../draggable";
 import { Deferred } from "../../core/utils/deferred";
+import AppointmentDragBehavior from "./appointmentDragBehavior";
 
 const APPOINTMENT_SETTINGS_NAME = "dxAppointmentSettings";
 
@@ -38,13 +39,18 @@ const COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
 const toMs = dateUtils.dateToMilliseconds;
 
 var SchedulerAppointments = CollectionWidget.inherit({
+    ctor: function(element, options) {
+        this.callBase(element, options);
+        this.dragBehavior = new AppointmentDragBehavior(this);
+    },
+
     _supportedKeys: function() {
         var parent = this.callBase();
 
         var tabHandler = function(e) {
             var appointments = this._getAccessAppointments(),
                 focusedAppointment = appointments.filter(".dx-state-focused"),
-                index = focusedAppointment.data("dxAppointmentSettings").sortedIndex,
+                index = focusedAppointment.data(APPOINTMENT_SETTINGS_NAME).sortedIndex,
                 lastIndex = appointments.length - 1;
 
             if((index > 0 && e.shiftKey) || (index < lastIndex && !e.shiftKey)) {
@@ -79,7 +85,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var appointments = this._getAccessAppointments();
 
         return appointments.filter(function(_, $item) {
-            return dataUtils.data($item, "dxAppointmentSettings").sortedIndex === sortedIndex;
+            return dataUtils.data($item, APPOINTMENT_SETTINGS_NAME).sortedIndex === sortedIndex;
         }).eq(0);
     },
 
@@ -222,10 +228,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        if(appointment.needRepaint === false) {
-            this._processRenderedAppointment(appointment);
-        }
-
         if(this._isRepaintAppointment(appointment)) {
             appointment.needRepaint = false;
             !isRepaintAll && this._clearItem(appointment);
@@ -265,29 +267,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
-    },
-
-    _processRenderedAppointment: function(item) {
-        var resourceForPainting = this.invoke("getResourceForPainting");
-
-        if(!resourceForPainting) {
-            return;
-        }
-
-        var $items = this._findItemElementByItem(item.itemData);
-
-        if(!$items.length) {
-            return;
-        }
-
-        each($items, (function(index, $item) {
-            var deferredColor = this._getAppointmentColor($item, item.settings[index].groupIndex);
-            deferredColor.done(function(color) {
-                if(color) {
-                    $item.css("backgroundColor", color);
-                }
-            });
-        }).bind(this));
     },
 
     _clearItem: function(item) {
@@ -577,7 +556,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 }
             });
 
-            this._renderDraggable($appointment, allDay);
+            this.option("allowDrag") && this.dragBehavior.addTo($appointment);
         }
     },
 
@@ -605,7 +584,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 this._$currentAppointment = $(e.element);
 
                 if(this.invoke("needRecalculateResizableArea")) {
-                    var updatedArea = this._calculateResizableArea(this._$currentAppointment.data("dxAppointmentSettings"), this._$currentAppointment.data("dxItemData"));
+                    var updatedArea = this._calculateResizableArea(this._$currentAppointment.data(APPOINTMENT_SETTINGS_NAME), this._$currentAppointment.data("dxItemData"));
 
                     e.component.option("area", updatedArea);
                     e.component._renderDragOffsets(e.event);
@@ -700,17 +679,19 @@ var SchedulerAppointments = CollectionWidget.inherit({
             result = endDate.getTime() + deltaTime,
             visibleDayDuration = (endDayHour - startDayHour) * toMs("hour");
 
-        var daysCount = Math.ceil(deltaTime / visibleDayDuration),
-            maxDate = new Date(endDate);
+        var daysCount = deltaTime > 0 ? Math.ceil(deltaTime / visibleDayDuration) : Math.floor(deltaTime / visibleDayDuration),
+            maxDate = new Date(endDate),
+            minDate = new Date(endDate);
 
+        minDate.setHours(startDayHour, 0, 0, 0);
         maxDate.setHours(endDayHour, 0, 0, 0);
 
-        if(result > maxDate.getTime()) {
+        if(result > maxDate.getTime() || result <= minDate.getTime()) {
             var tailOfCurrentDay = maxDate.getTime() - endDate.getTime(),
                 tailOfPrevDays = deltaTime - tailOfCurrentDay;
 
             var lastDay = new Date(endDate.setDate(endDate.getDate() + daysCount));
-            lastDay.setHours(startDayHour);
+            lastDay.setHours(startDayHour, 0, 0, 0);
 
             result = lastDay.getTime() + tailOfPrevDays - visibleDayDuration * (daysCount - 1);
         }
@@ -723,103 +704,42 @@ var SchedulerAppointments = CollectionWidget.inherit({
             result = startDate.getTime() - deltaTime,
             visibleDayDuration = (endDayHour - startDayHour) * toMs("hour");
 
-        var daysCount = Math.ceil(deltaTime / visibleDayDuration),
+        var daysCount = deltaTime > 0 ? Math.ceil(deltaTime / visibleDayDuration) : Math.floor(deltaTime / visibleDayDuration),
+            maxDate = new Date(startDate),
             minDate = new Date(startDate);
 
         minDate.setHours(startDayHour, 0, 0, 0);
+        maxDate.setHours(endDayHour, 0, 0, 0);
 
-        if(result < minDate.getTime()) {
+        if(result < minDate.getTime() || result >= maxDate.getTime()) {
             var tailOfCurrentDay = startDate.getTime() - minDate.getTime(),
                 tailOfPrevDays = deltaTime - tailOfCurrentDay;
 
             var firstDay = new Date(startDate.setDate(startDate.getDate() - daysCount));
-            firstDay.setHours(endDayHour);
+            firstDay.setHours(endDayHour, 0, 0, 0);
 
             result = firstDay.getTime() - tailOfPrevDays + visibleDayDuration * (daysCount - 1);
         }
         return result;
     },
 
+    _tryGetAppointmentColor: function(appointment) {
+        const settings = $(appointment).data(APPOINTMENT_SETTINGS_NAME);
+        if(!settings) {
+            return undefined;
+        }
+        return this._getAppointmentColor(appointment, settings.groupIndex);
+    },
+
     _getAppointmentColor: function($appointment, groupIndex) {
-        var res = new Deferred();
+        const res = new Deferred();
         this.notifyObserver("getAppointmentColor", {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
-            callback: function(d) {
-                d.done(function(color) {
-                    res.resolve(color);
-                });
-            }
+            callback: d => d.done(color => res.resolve(color))
         });
 
         return res.promise();
-    },
-
-    _renderDraggable: function($appointment, allDay) {
-        if(!this.option("allowDrag")) {
-            return;
-        }
-
-        var that = this,
-            $fixedContainer = this.option("fixedContainer"),
-            draggableArea,
-            correctCoordinates = function(element, isFixedContainer) {
-                var coordinates = translator.locate($(element));
-
-                that.notifyObserver("correctAppointmentCoordinates", {
-                    coordinates: coordinates,
-                    allDay: allDay,
-                    isFixedContainer: isFixedContainer,
-                    callback: function(result) {
-                        if(result) {
-                            coordinates = result;
-                        }
-                    }
-                });
-
-                translator.move($appointment, coordinates);
-            };
-
-        this.notifyObserver("getDraggableAppointmentArea", {
-            callback: function(result) {
-                if(result) {
-                    draggableArea = result;
-                }
-            }
-        });
-
-        this._createComponent($appointment, Draggable, {
-            area: draggableArea,
-            boundOffset: that._calculateBoundOffset(),
-            immediate: false,
-            onDragStart: function(args) {
-                var e = args.event;
-
-                that._skipDraggableRestriction(e);
-
-                that.notifyObserver("hideAppointmentTooltip");
-                $fixedContainer.append($appointment);
-
-                that._$currentAppointment = $(args.element);
-                that._initialSize = { width: args.width, height: args.height };
-
-                that._initialCoordinates = translator.locate(that._$currentAppointment);
-            },
-            onDrag: function(args) {
-                correctCoordinates(args.element);
-            },
-            onDragEnd: function(args) {
-                correctCoordinates(args.element, true);
-                var $container = that._getAppointmentContainer(allDay);
-                $container.append($appointment);
-                if(this._escPressed) {
-                    args.event.cancel = true;
-                    return;
-                }
-
-                that._dragEndHandler(args);
-            }
-        });
     },
 
     _calculateBoundOffset: function() {
@@ -833,27 +753,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
             }
         });
         return result;
-    },
-
-    _skipDraggableRestriction: function(e) {
-        if(this.option("rtlEnabled")) {
-            e.maxLeftOffset = null;
-        } else {
-            e.maxRightOffset = null;
-        }
-        e.maxBottomOffset = null;
-    },
-
-    _dragEndHandler: function(e) {
-        var $element = $(e.element),
-            itemData = this._getItemData($element),
-            coordinates = this._initialCoordinates;
-
-        this.notifyObserver("updateAppointmentAfterDrag", {
-            data: itemData,
-            $appointment: $element,
-            coordinates: coordinates
-        });
     },
 
     _virtualAppointments: {},
@@ -1060,6 +959,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
             size = this._initialSize,
             coords = this._initialCoordinates;
 
+        this.dragBehavior.moveBack();
+
         if($appointment) {
             if(coords) {
                 translator.move($appointment, coords);
@@ -1074,10 +975,11 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     focus: function() {
-        var $appointment = this._$currentAppointment;
-        if($appointment) {
-            this.option("focusedElement", getPublicElement($appointment));
-            eventsEngine.trigger(this.option("focusedElement"), "focus");
+        if(this._$currentAppointment) {
+            const focusedElement = getPublicElement(this._$currentAppointment);
+
+            this.option("focusedElement", focusedElement);
+            eventsEngine.trigger(focusedElement, "focus");
         }
     },
 

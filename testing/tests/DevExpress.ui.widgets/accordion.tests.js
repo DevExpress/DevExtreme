@@ -2,7 +2,7 @@ import $ from "jquery";
 import domUtils from "core/utils/dom";
 import holdEvent from "events/hold";
 import fx from "animation/fx";
-import noop from "core/utils/common";
+import { noop, deferUpdate } from "core/utils/common";
 import config from "core/config";
 import pointerMock from "../../helpers/pointerMock.js";
 import { DataSource } from "data/data_source/data_source";
@@ -34,14 +34,14 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper",
-    ACCORDION_ITEM_CLASS = "dx-accordion-item",
-    ACCORDION_ITEM_TITLE_CLASS = "dx-accordion-item-title",
-    ACCORDION_ITEM_BODY_CLASS = "dx-accordion-item-body",
-    ACCORDION_ITEM_OPENED_CLASS = "dx-accordion-item-opened",
-    ACCORDION_ITEM_CLOSED_CLASS = "dx-accordion-item-closed";
+const ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper";
+const ACCORDION_ITEM_CLASS = "dx-accordion-item";
+const ACCORDION_ITEM_TITLE_CLASS = "dx-accordion-item-title";
+const ACCORDION_ITEM_BODY_CLASS = "dx-accordion-item-body";
+const ACCORDION_ITEM_OPENED_CLASS = "dx-accordion-item-opened";
+const ACCORDION_ITEM_CLOSED_CLASS = "dx-accordion-item-closed";
 
-var moduleSetup = {
+const moduleSetup = {
     beforeEach: function() {
         fx.off = true;
         this.savedSimulatedTransitionEndDelay = fx._simulatedTransitionEndDelay;
@@ -66,6 +66,26 @@ var moduleSetup = {
 
 
 QUnit.module("widget rendering", moduleSetup);
+
+QUnit.test("Widget should be rendered without exception inside deferUpdate", function(assert) {
+    let $accordion;
+
+    deferUpdate(function() {
+        $accordion = $("<div>").appendTo("#qunit-fixture").dxAccordion({
+            items: ["Test1", "Test2"]
+        });
+    });
+
+    const $accordionItemTitles = $accordion.find(`.${ACCORDION_ITEM_TITLE_CLASS}-caption`);
+    const $accordionItemBodies = $accordion.find(`.${ACCORDION_ITEM_BODY_CLASS}`);
+
+    assert.equal($accordionItemTitles.length, 2, "two item are rendered");
+    assert.equal($accordionItemTitles.eq(0).text(), "Test1", "first title");
+    assert.equal($accordionItemTitles.eq(1).text(), "Test2", "second title");
+
+    assert.equal($accordionItemBodies.length, 1, "one item body is rendered");
+    assert.equal($accordionItemBodies.eq(0).text(), "Test1", "first body text");
+});
 
 QUnit.test("item content is hidden when item is not opened", function(assert) {
     var instance = this.$element.dxAccordion({
@@ -192,7 +212,7 @@ QUnit.test("onContentReady action should be fired after opened item was rendered
         items: this.items,
         selectedIndex: 0,
         onContentReady: function(e) {
-            assert.equal($(e.element).find(".dx-accordion-item-body").length, 1, "item is opened");
+            assert.equal($(e.element).find(`.${ACCORDION_ITEM_BODY_CLASS}`).length, 1, "item is opened");
             count++;
         }
     }).dxAccordion("instance");

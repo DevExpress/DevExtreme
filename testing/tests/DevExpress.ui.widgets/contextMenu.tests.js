@@ -59,6 +59,7 @@ const moduleConfig = {
 
     afterEach: () => {
         fx.off = false;
+        this.clock.restore();
     }
 };
 
@@ -560,96 +561,6 @@ QUnit.module("Showing and hiding context menu", moduleConfig, () => {
         d = instance.hide();
 
         assert.ok($.isFunction(d.promise), "type object is the Deferred");
-    });
-
-    // T755681
-    QUnit.test("Context menu should shown in the same position when item was added in runtime", (assert) => {
-        const menuTargetSelector = "#menuTarget";
-        let cachedEvent,
-            isItemAdded = false,
-            items = [{ text: "item 1" }];
-
-        const instance = new ContextMenu($("#simpleMenu"), {
-            items: items,
-            target: menuTargetSelector,
-            onShowing: (e) => {
-                if(!isItemAdded) {
-                    setTimeout(() => {
-                        cachedEvent = e.jQEvent;
-                        isItemAdded = true;
-                        items.push({ text: "item 2" });
-                        e.component.option("items", items);
-                    }, 0);
-                } else {
-                    assert.strictEqual(e.component.option("items").length, 2, "items.length");
-                    assert.equal(e, cachedEvent, "cached event");
-                }
-            }
-        });
-
-        var $target = $(menuTargetSelector);
-
-        return new Promise(function(resolve) {
-            instance.option("onShown", function(e) {
-                const position = e.component._overlay.option("position");
-                assert.equal(position.at, "top left", "at of overlay position");
-                assert.equal(position.my, "top left", "my of overlay position");
-                assert.equal(position.of.pageX, 120, "pageX of overlay position");
-                assert.equal(position.of.pageY, 50, "pageX of overlay position");
-                assert.equal(position.of.target, $target.get(0), "target of overlay position");
-
-                resolve();
-            });
-
-            $target.trigger($.Event("dxcontextmenu", {
-                pageX: 120,
-                pageY: 50
-            }));
-        });
-    });
-
-    QUnit.test("Context menu should clear cached event on hide", (assert) => {
-        const menuTargetSelector = "#menuTarget";
-        let onShowingHandler = sinon.spy();
-
-
-        const instance = new ContextMenu($("#simpleMenu"), {
-            items: [{ text: "item 1" }],
-            target: menuTargetSelector,
-            onShowing: onShowingHandler
-        });
-
-        $(menuTargetSelector).trigger($.Event("dxcontextmenu", {
-            pageX: 120,
-            pageY: 50
-        }));
-
-        instance.option("visible", false);
-        onShowingHandler.reset();
-        instance.option("visible", true);
-
-        assert.strictEqual(onShowingHandler.firstCall.args[0].jQEvent, undefined, "cached event was cleared");
-    });
-
-    QUnit.test("Context menu should clear cached event on repaint", (assert) => {
-        const menuTargetSelector = "#menuTarget";
-        let onShowingHandler = sinon.spy();
-
-        const instance = new ContextMenu($("#simpleMenu"), {
-            items: [{ text: "item 1" }],
-            target: menuTargetSelector,
-            onShowing: onShowingHandler
-        });
-
-        $(menuTargetSelector).trigger($.Event("dxcontextmenu", {
-            pageX: 120,
-            pageY: 50
-        }));
-
-        onShowingHandler.reset();
-        instance.repaint();
-
-        assert.strictEqual(onShowingHandler.firstCall.args[0].jQEvent, undefined, "cached event was cleared");
     });
 });
 
@@ -1359,10 +1270,8 @@ QUnit.module("Options", moduleConfig, () => {
             .keyDown("down")
             .keyDown("enter");
 
-        assert.equal($(instance.option("focusedElement")).length, 1, "focused element is set");
-
         instance.option("items", items2);
-        assert.notOk(instance.option("focusedElement"), "focused element is cleaned");
+        assert.strictEqual(instance.option("focusedElement"), null, "focused element is cleaned");
     });
 
     QUnit.test("items changed should not break keyboard navigation", (assert) => {
@@ -2153,21 +2062,21 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
         instance.show();
 
         const $itemsContainer = instance.itemsContainer();
-        const kb = keyboardMock($itemsContainer);
-        const $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        const keyboard = keyboardMock($itemsContainer);
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
-        kb.keyDown("down");
+        keyboard.keyDown("down");
         $($rootItem).trigger("dxclick");
         assert.ok($rootItem.hasClass(DX_STATE_FOCUSED_CLASS), "root item is stay focused after the click");
 
-        const $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
+        const $items = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`);
 
         $($itemsContainer).trigger({ target: $items.eq(2).get(0), type: "dxpointerenter", pointerType: "mouse" });
 
         assert.ok($items.eq(2).hasClass(DX_STATE_HOVER_CLASS), "Item 12 was hovered");
         assert.notOk($items.eq(2).hasClass(DX_STATE_FOCUSED_CLASS), "Item 12 was not focused on hover");
 
-        kb.keyDown("down");
+        keyboard.keyDown("down");
 
         assert.ok($items.eq(3).hasClass(DX_STATE_FOCUSED_CLASS), "Item 13 is focused");
     });
@@ -2220,15 +2129,80 @@ QUnit.module("Keyboard navigation", moduleConfig, () => {
 
         assert.ok(instance.itemElements().eq(3).hasClass(DX_STATE_FOCUSED_CLASS), "Item 22 is focused");
     });
+
+    // T806502
+    QUnit.test("Keyboard should be work when submenu shown in second time", (assert) => {
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: "Item 1" }, { text: "Item 2", items: [{ text: "Item 2_1" }, { text: "Item 2_2" }] }],
+            focusStateEnabled: true
+        });
+
+        instance.show();
+
+        let keyboard = keyboardMock(instance.itemsContainer());
+
+        keyboard
+            .keyDown("down")
+            .keyDown("down")
+            .keyDown("right")
+            .keyDown("down");
+
+        let focusedItem = instance.itemsContainer().find(`.${DX_STATE_FOCUSED_CLASS}`);
+
+        assert.strictEqual(focusedItem.is(instance.option("focusedElement")), true, "focusedElement");
+        assert.strictEqual(getFocusedItemText(instance), "Item 2_2", "focusedItem text");
+        assert.strictEqual(getVisibleSubmenuCount(instance), 2, "submenu.count");
+
+        instance.hide();
+        instance.show();
+
+        keyboard = keyboardMock(instance.itemsContainer());
+        keyboard
+            .keyDown("down");
+
+        focusedItem = instance.itemsContainer().find(`.${DX_STATE_FOCUSED_CLASS}`);
+        assert.strictEqual(focusedItem.is(instance.option("focusedElement")), true, "focusedElement");
+        assert.strictEqual(getFocusedItemText(instance), "Item 1", "focusedItem text");
+        assert.strictEqual(getVisibleSubmenuCount(instance), 1, "submenu.count");
+    });
+
+    QUnit.test("FocusedElement should be cleaned when context menu was hidden", (assert) => {
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: "Item 1" }, { text: "Item 2" }, { text: "Item 3" } ],
+            focusStateEnabled: true
+        });
+
+        instance.show();
+
+        let keyboard = keyboardMock(instance.itemsContainer());
+
+        keyboard
+            .keyDown("down")
+            .keyDown("down")
+            .keyDown("enter");
+
+        assert.strictEqual(instance.option("focusedElement"), null, "focusedElement is cleaned");
+
+        instance.show();
+        keyboard = keyboardMock(instance.itemsContainer());
+
+        keyboard
+            .keyDown("down");
+
+        const focusedItem = instance.itemsContainer().find(`.${DX_STATE_FOCUSED_CLASS}`);
+        assert.strictEqual(focusedItem.is(instance.option("focusedElement")), true, "focusedElement");
+        assert.strictEqual(getFocusedItemText(instance), "Item 1", "focusedItem text");
+        assert.strictEqual(getVisibleSubmenuCount(instance), 1, "submenu.count");
+    });
 });
 
 
 function getVisibleSubmenuCount(instance) {
-    return instance.itemsContainer().find("." + DX_SUBMENU_CLASS).filter(function() {
-        return $(this).css("visibility") === "visible";
+    return instance.itemsContainer().find(`.${DX_SUBMENU_CLASS}`).filter((_, item) => {
+        return $(item).css("visibility") === "visible";
     }).length;
 }
 
 function getFocusedItemText(instance) {
-    return $(instance.option("focusedElement")).children("." + DX_MENU_ITEM_CONTENT_CLASS).text();
+    return $(instance.option("focusedElement")).children(`.${DX_MENU_ITEM_CONTENT_CLASS}`).text();
 }

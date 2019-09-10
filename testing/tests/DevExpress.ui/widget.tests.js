@@ -3,8 +3,8 @@ import Widget from "ui/widget/ui.widget";
 import registerComponent from "core/component_registrator";
 import devices from "core/devices";
 import { extend } from "core/utils/extend";
-import TemplateBase from "ui/widget/ui.template_base";
-import Template from "ui/widget/template";
+import { TemplateBase } from "core/templates/template_base";
+import { Template } from "core/templates/template";
 import DataHelperMixin from "data_helper";
 import { DataSource } from "data/data_source/data_source";
 import keyboardMock from "../../helpers/keyboardMock.js";
@@ -1149,13 +1149,13 @@ QUnit.module("platform specific templates", {
     });
 
     QUnit.test("search best template", (assert) => {
-        devices.current({ platform: "win" });
+        devices.current({ platform: "android" });
         const $testContainer = $("#platformSpecificContainer").TestContainerWidget();
         assert.equal($testContainer.children().eq(0).text(), "common", "best template was chosen");
     });
 
     QUnit.test("container widget without best template", (assert) => {
-        devices.current({ platform: "win" });
+        devices.current({ platform: "android" });
         const $testContainer = $("#platformSpecificContainer2").TestContainerWidget();
         const instance = $testContainer.TestContainerWidget("instance");
 

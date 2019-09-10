@@ -44,20 +44,22 @@ QUnit.testStart(() => {
             <div style="position: fixed; right: 0; bottom: 0; width: 500px; height: 500px;">\
                 <div id="selectBoxWithoutScroll"></div>\
             </div>\
+            <div id="test-container" style="overflow-hidden"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
 });
 
-const POPUP_CLASS = "dx-selectbox-popup",
-    POPUP_CONTENT_CLASS = "dx-popup-content",
-    LIST_ITEM_CLASS = "dx-list-item",
-    LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
-    DX_DROP_DOWN_BUTTON = "dx-dropdowneditor-button",
-    STATE_FOCUSED_CLASS = "dx-state-focused",
-    TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container",
-    PLACEHOLDER_CLASS = "dx-placeholder",
-    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const POPUP_CLASS = "dx-selectbox-popup";
+const POPUP_CONTENT_CLASS = "dx-popup-content";
+const LIST_CLASS = "dx-list";
+const LIST_ITEM_CLASS = "dx-list-item";
+const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
+const DX_DROP_DOWN_BUTTON = "dx-dropdowneditor-button";
+const STATE_FOCUSED_CLASS = "dx-state-focused";
+const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
+const PLACEHOLDER_CLASS = "dx-placeholder";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 const KEY_DOWN = "ArrowDown";
 const KEY_ENTER = "Enter";
@@ -471,7 +473,7 @@ QUnit.module("functionality", moduleSetup, () => {
     });
 
     QUnit.test("list item obtained focus only after press on control key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3300,7 +3302,6 @@ QUnit.module("Scrolling", {
 });
 
 QUnit.module("Async tests", {}, () => {
-
     QUnit.testInActiveWindow("Value should be reset after on selectedItem after focusout", (assert) => {
         const done = assert.async(),
             items = [1, 2],
@@ -3509,7 +3510,7 @@ QUnit.module("regressions", moduleSetup, () => {
     });
 
     QUnit.test("press 'enter' key sets option value (T100679)", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3539,7 +3540,7 @@ QUnit.module("regressions", moduleSetup, () => {
     });
 
     QUnit.test("press 'space' key sets option value", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3569,7 +3570,7 @@ QUnit.module("regressions", moduleSetup, () => {
     });
 
     QUnit.test("press 'space' key shouldn't sets option value if SelectBox accept custom value", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3600,7 +3601,7 @@ QUnit.module("regressions", moduleSetup, () => {
     });
 
     QUnit.test("press 'space' key shouldn't sets option value if search is enabled", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -3818,6 +3819,47 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         assert.ok($list.length, "list is rendered");
         assert.strictEqual(instance.option("value"), 4, "value is correct");
         assert.strictEqual($list.find(".dx-list-item").text(), "1234", "all previous list items are loaded");
+    });
+
+    [144, 145].forEach((testHeight) => {
+        QUnit.test(`downArrow should load next page if popup container has ${testHeight % 2 ? "odd" : "even"} height`, (assert) => {
+            this.clock.restore();
+            assert.expect(1);
+            const done = assert.async();
+            const testContainer = $("#test-container").height(testHeight);
+
+            const $element = $("#selectBox").dxSelectBox({
+                    dataSource: {
+                        store: [1, 2, 3, 4, 5, 6],
+                        paginate: true,
+                        pageSize: 4
+                    },
+                    value: null,
+                    focusStateEnabled: true,
+                    opened: false,
+                    deferRendering: true,
+                    dropDownOptions: {
+                        container: testContainer
+                    }
+                }),
+                $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+                instance = $element.dxSelectBox("instance"),
+                $dropDownButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON)),
+                keyboard = keyboardMock($input);
+
+            $dropDownButton.trigger("dxclick");
+            keyboard.press("down");
+            keyboard.press("down");
+            keyboard.press("down");
+            keyboard.press("down");
+
+            setTimeout(() => {
+                const $list = $(instance.content()).find(`.${LIST_CLASS}`);
+                assert.strictEqual($list.find(`.${LIST_ITEM_CLASS}`).text(), "123456", "all list items are loaded");
+                testContainer.height("auto");
+                done();
+            }, TIME_TO_WAIT);
+        });
     });
 
     QUnit.test("value should be correctly changed via arrow keys when grouped datasource is used", (assert) => {
@@ -4393,7 +4435,7 @@ QUnit.module("keyboard navigation 'TAB' button", moduleSetup, () => {
     });
 
     QUnit.test("After highlighting item and pressing 'tab' it should be chosen", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -4477,7 +4519,7 @@ QUnit.module("keyboard navigation 'TAB' button", moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow("the 'tab' key press should focus the 'apply' button if the input is focused", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
         }
@@ -4501,6 +4543,34 @@ QUnit.module("keyboard navigation 'TAB' button", moduleSetup, () => {
 });
 
 QUnit.module("acceptCustomValue mode", moduleSetup, () => {
+    QUnit.test("All items should be displayed when widget focused out before search completion", (assert) => {
+        const items = ["aaa", "bbb"];
+        const $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            acceptCustomValue: true,
+            dataSource: items,
+            opened: true,
+            searchTimeout: 500
+        });
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        $input.focus();
+
+        keyboard.press("down")
+            .press("enter")
+            .press("end")
+            .type("Xsdx");
+
+        $input.blur();
+        pointerMock($input).start().click();
+
+        this.clock.tick(500);
+
+        const $listItems = $(`.${POPUP_CONTENT_CLASS} .${LIST_ITEM_CLASS}`);
+        assert.equal($listItems.length, items.length, "all items are displayed");
+        assert.equal($listItems.text(), items.join(''), "items are displayed correctly");
+    });
 
     QUnit.test("input value can be edited when acceptCustomValue=true", (assert) => {
         const $selectBox = $("#selectBox").dxSelectBox({
@@ -4786,4 +4856,39 @@ QUnit.module("focus policy", {
             assert.ok(false, "Exception: " + e);
         }
     });
+});
+
+QUnit.module("aria accessibility", () => {
+    const checkAsserts = (expectedValues) => {
+        const { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
+
+        QUnit.assert.strictEqual($target.attr("role"), role, "role");
+        QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
+        QUnit.assert.strictEqual(!!$target.attr("aria-owns"), isOwns, "owns");
+        QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
+    };
+
+    if(devices.real().deviceType === "desktop") {
+        [true, false].forEach((searchEnabled) => {
+            QUnit.test(`aria attributes, searchEnabled: ${searchEnabled}`, function() {
+                let $element = $("#selectBox").dxSelectBox({
+                    opened: true,
+                    searchEnabled: searchEnabled
+                });
+
+                let $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                let list = $(`.${LIST_CLASS}`).dxList("instance");
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
+                checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
+
+                $element.dxSelectBox("instance").option("searchEnabled", !searchEnabled);
+                $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
+                checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
+            });
+        });
+    }
 });

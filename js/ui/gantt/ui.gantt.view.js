@@ -8,29 +8,82 @@ export class GanttView extends Widget {
 
         this._onSelectionChanged = this._createActionByOption("onSelectionChanged");
         this._onScroll = this._createActionByOption("onScroll");
+        this._onDialogShowing = this._createActionByOption("onDialogShowing");
     }
     _initMarkup() {
         const { GanttView } = getGanttViewCore();
-        this._ganttViewCore = new GanttView(this.$element().get(0), this);
-        this._ganttViewCore.setViewType(4);
+        this._ganttViewCore = new GanttView(this.$element().get(0), this, {
+            showResources: this.option("showResources"),
+            taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition")),
+            allowSelectTask: this.option("allowSelection"),
+            areAlternateRowsEnabled: false
+        });
+        this._ganttViewCore.setViewType(3);
     }
 
-    _getTaskAreaContainer() {
+    getTaskAreaContainer() {
         return this._ganttViewCore.taskAreaContainer;
     }
-    _selectTask(id) {
+    selectTask(id) {
         if(this.lastSelectedId !== undefined) {
             this._ganttViewCore.unselectTask(parseInt(this.lastSelectedId));
         }
         this._ganttViewCore.selectTask(id);
         this.lastSelectedId = id;
     }
+    changeTaskExpanded(rowIndex, value) {
+        const model = this._ganttViewCore.viewModel;
+        model.beginUpdate();
+        model.changeTaskExpanded(rowIndex, value);
+        model.endUpdate();
+    }
+    updateView() {
+        this._ganttViewCore.updateView();
+    }
+    setWidth(value) {
+        this._ganttViewCore.setWidth(value);
+    }
+
     _update() {
         this._ganttViewCore.loadOptionsFromGanttOwner();
         this._ganttViewCore.resetAndUpdate();
     }
-    _updateView() {
-        this._ganttViewCore.updateView();
+
+    _getTaskTitlePosition(value) {
+        switch(value) {
+            case 'outside':
+                return 1;
+            case 'none':
+                return 2;
+            default:
+                return 0;
+        }
+    }
+
+    _optionChanged(args) {
+        switch(args.name) {
+            case "width":
+                super._optionChanged(args);
+                this._ganttViewCore.setWidth(args.value);
+                break;
+            case "tasks":
+            case "dependencies":
+            case "resources":
+            case "resourceAssignments":
+                this._update();
+                break;
+            case "showResources":
+                this._ganttViewCore.setShowResources(args.value);
+                break;
+            case "taskTitlePosition":
+                this._ganttViewCore.setTaskTitlePosition(this._getTaskTitlePosition(args.value));
+                break;
+            case "allowSelection":
+                this._ganttViewCore.setAllowSelection(args.value);
+                break;
+            default:
+                super._optionChanged(args);
+        }
     }
 
     // IGanttOwner
@@ -52,9 +105,6 @@ export class GanttView extends Widget {
     getGanttWorkTimeRules() {
         return {};
     }
-    getGanttViewSettings() {
-        return {};
-    }
     getExternalTaskAreaContainer(element) {
         if(!this._taskAreaContainer) {
             this._taskAreaContainer = new TaskAreaContainer(element, this);
@@ -66,5 +116,15 @@ export class GanttView extends Widget {
     }
     onGanttScroll(scrollTop) {
         this._onScroll({ scrollTop: scrollTop });
+    }
+    showDialog(name, parameters, callback) {
+        this._onDialogShowing({
+            name: name,
+            parameters: parameters,
+            callback: callback
+        });
+    }
+    getModelChangesListener() {
+        return null;
     }
 }

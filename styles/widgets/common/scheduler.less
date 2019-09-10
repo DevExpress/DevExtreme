@@ -1,3 +1,17 @@
+@import (once) "./popup.less";
+@import (once) "./popover.less";
+@import (once) "./tooltip.less";
+@import (once) "./overlay.less";
+@import (once) "./button.less";
+@import (once) "./list.less";
+@import (once) "./scrollable.less";
+@import (once) "./loadPanel.less";
+@import (once) "./form.less";
+@import (once) "./dropDownMenu.less";
+@import (once) "./tabs.less";
+@import (once) "./calendar.less";
+@import (once) "./recurrenceEditor.less";
+
 @SCHEDULER_APPOINTMENT_COLLECTOR_MARGIN: 3px;
 @SCHEDULER_APPOINTMENT_COLLECTOR_HEIGHT: 20px;
 @SCHEDULER_POPUP_SCROLLABLE_CONTENT_PADDING: 20px;
@@ -18,9 +32,12 @@
     .dx-popup-content {
         padding: 0;
 
-        .dx-list-item-content {
+        .dx-list-item {
             width: 360px;
-            padding: 5px;
+
+            .dx-list-item-content {
+                padding: 5px;
+            }
         }
     }
 
@@ -80,6 +97,12 @@
 
     .dx-empty-message {
         line-height: normal;
+    }
+
+    .dx-scheduler-work-space-month > .dx-scrollable-native {
+        .dx-scrollable-content {
+            min-height: 100%;
+        }
     }
 }
 

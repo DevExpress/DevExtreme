@@ -9,7 +9,8 @@ var ui = DevExpress.ui = require("../../../bundles/modules/ui");
 
 ui.themes = require("../../../ui/themes");
 
-ui.setTemplateEngine = require("../../../ui/set_template_engine");
+// deprecated
+ui.setTemplateEngine = require("../../../core/templates/template_engine_registry").setTemplateEngine;
 
 ui.dialog = require("../../../ui/dialog");
 ui.notify = require("../../../ui/notify");
@@ -66,6 +67,8 @@ ui.dxToast = require("../../../ui/toast");
 ui.dxToolbar = require("../../../ui/toolbar");
 ui.dxTooltip = require("../../../ui/tooltip");
 ui.dxTrackBar = require("../../../ui/track_bar");
+ui.dxDraggable = require("../../../ui/draggable");
+ui.dxSortable = require("../../../ui/sortable");
 
 /* Validation (dx.module-widgets-base.js) */
 

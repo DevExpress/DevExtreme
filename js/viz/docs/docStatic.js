@@ -158,7 +158,7 @@ var staticMethods = {
     * @module viz/palette
     * @export generateColors
     */
-   generateColors: function() { },    
+    generateColors: function() { },
     /**
     * @name vizmethods.registerPalette
     * @publicName registerPalette(paletteName, palette)
@@ -185,29 +185,34 @@ var staticMethods = {
         /**
         * @name viz.mapmethods.projection
         * @publicName projection(data)
-        * @param1 data:object
-        * @param1_field1 to:function(coordinates)
-        * @param1_field2 from:function(coordinates)
-        * @param1_field3 aspectRatio:number
+        * @param1 data:VectorMapProjectionConfig
         * @return object
         * @static
         * @namespace DevExpress.viz.map
         * @module viz/vector_map/projection
         * @export projection
+        * @hidden
         */
         /**
-        * @name viz.mapmethods.projection.get
+        * @name viz.map.projection
+        * @namespace DevExpress.viz.map
+        * @module viz/vector_map/projection
+        * @export projection
+        */
+        /**
+        * @name viz.map.projectionmethods.get
         * @publicName get(name)
-        * @param1 name:string
+        * @param1 name:Enums.VectorMapProjection|string
         * @return object
         * @namespace DevExpress.viz.map.projection
         * @static
+        * @hidden
         */
         /**
-        * @name viz.mapmethods.projection.add
+        * @name viz.map.projectionmethods.add
         * @publicName add(name, projection)
         * @param1 name:string
-        * @param2 projection:object
+        * @param2 projection:VectorMapProjectionConfig|object
         * @namespace DevExpress.viz.map.projection
         * @static
         */

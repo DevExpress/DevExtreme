@@ -1,0 +1,35 @@
+@import (once) "../base/speedDialAction.less";
+@import (once) "./overlay.generic.less";
+
+@GENERIC_MAIN_FA_BUTTON_SIZE: 48px;
+@GENERIC_MAIN_FA_BUTTON_LABEL_PADDING: 0 16px 0 8px;
+@GENERIC_FA_BUTTON_SIZE: 30px;
+@GENERIC_FA_BUTTON_SHADOW: 0 6px 12px rgba(0, 0, 0, 0.175);
+@GENERIC_FA_BUTTON_LABEL_HEIGHT: 26px;
+@GENERIC_FA_BUTTON_LABEL_PADDING: 0 10px;
+@GENERIC_FA_BUTTON_LABEL_OFFSET: 10px;
+@GENERIC_FA_BUTTON_LABEL_SHADOW: 0 1px 4px rgba(0, 0, 0, 0.15);
+
+.dx-fa-button-mixin(
+    @GENERIC_MAIN_FA_BUTTON_SIZE,
+    @GENERIC_FA_BUTTON_SIZE,
+    @GENERIC_FA_BUTTON_SHADOW,
+    @GENERIC_BASE_ICON_SIZE,
+    @GENERIC_BASE_FONT_SIZE,
+    @GENERIC_FA_BUTTON_LABEL_HEIGHT,
+    @GENERIC_FA_BUTTON_LABEL_PADDING,
+    @GENERIC_FA_BUTTON_LABEL_SHADOW,
+    @GENERIC_FA_BUTTON_LABEL_OFFSET
+);
+
+.dx-fa-button {
+    &.dx-fa-button-main {
+        .dx-overlay-content {
+            .dx-fa-button-label {
+                padding: @GENERIC_MAIN_FA_BUTTON_LABEL_PADDING;
+                font-size: @GENERIC_BASE_FONT_SIZE;
+                margin-right: 0;
+            }
+        }
+    }
+}

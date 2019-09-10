@@ -5,9 +5,37 @@ import themes from "ui/themes";
 import viewPortUtils from "core/utils/view_port";
 
 const viewPortChanged = viewPortUtils.changeCallback;
-import "style-compiler-test-server/known-css-files";
+import knownCssFiles from "/themes-test/get-css-files-list/!json";
 
 const { test, testInActiveWindow } = QUnit;
+
+function rulesFromSheet(sheet) {
+    try {
+        return sheet.rules || sheet.cssRules || [];
+    } catch(x) {
+        return [];
+    }
+}
+
+function loadCss(frame, cssFileName) {
+    const frameWindow = frame[0].contentWindow;
+    const frameDoc = frameWindow.document;
+    const defaultSheetCount = frameDoc.styleSheets.length;
+    const cssUrl = ROOT_URL + "artifacts/css/" + cssFileName;
+
+    frameDoc.write("<link rel=stylesheet href='" + cssUrl + "'>");
+
+    return () => {
+        let ourSheet;
+
+        if(frameDoc.styleSheets.length <= defaultSheetCount) {
+            return false;
+        }
+
+        ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
+        return rulesFromSheet(ourSheet).length > 0;
+    };
+}
 
 QUnit.module("Selector check", () => {
     if(document.documentMode < 9) {
@@ -16,14 +44,6 @@ QUnit.module("Selector check", () => {
 
     if(/(iPhone|iPad|iPod|android|Windows Phone 8)/i.test(navigator.userAgent)) {
         return;
-    }
-
-    function rulesFromSheet(sheet) {
-        try {
-            return sheet.rules || sheet.cssRules || [];
-        } catch(x) {
-            return [];
-        }
     }
 
     function simplifySelector(selectorText) {
@@ -101,31 +121,13 @@ QUnit.module("Selector check", () => {
         return badSelectors;
     }
 
-    $.each(window.knownCssFiles, function(i, cssFileName) {
-        const cssUrl = ROOT_URL + "artifacts/css/" + cssFileName;
-
+    $.each(knownCssFiles, function(i, cssFileName) {
         test(cssFileName, (assert) => {
-            const done = assert.async(),
-                frame = $("<iframe/>").appendTo("body"),
-                frameWindow = frame[0].contentWindow,
-                frameDoc = frameWindow.document,
-                defaultSheetCount = frameDoc.styleSheets.length;
+            const done = assert.async();
+            const frame = $("<iframe/>").appendTo("body");
 
-            frameDoc.write("<link rel=stylesheet href='" + cssUrl + "'>");
-
-            function isCssLoaded() {
-                let ourSheet;
-
-                if(frameDoc.styleSheets.length <= defaultSheetCount) {
-                    return false;
-                }
-
-                ourSheet = $.grep(frameDoc.styleSheets, function(i) { return i.href.indexOf(cssUrl) > -1; })[0];
-                return rulesFromSheet(ourSheet).length > 0;
-            }
-
-            window.waitFor(isCssLoaded).done(function() {
-                assert.deepEqual(findBadCssSelectors(frameDoc), [], "Css rule has incorrect selectors");
+            window.waitFor(loadCss(frame, cssFileName)).done(function() {
+                assert.deepEqual(findBadCssSelectors(frame[0].contentWindow.document), [], "Css rule has incorrect selectors");
                 frame.remove();
                 done();
             });
@@ -133,6 +135,43 @@ QUnit.module("Selector check", () => {
         });
     });
 
+});
+
+QUnit.module("All images are defined with data-uri and will be inlined", () => {
+    $.each(knownCssFiles, function(i, cssFileName) {
+
+        function hasUrlImageProperty(doc) {
+            const rulesWithUrl = [];
+            $.each(doc.styleSheets, function() {
+                const rules = rulesFromSheet(this);
+
+                $.each(rules, function() {
+                    if(!this.cssText) {
+                        return;
+                    }
+                    if(/url\((?!"data:image)/.test(this.cssText) &&
+                       /url\((?!"?icons)/.test(this.cssText) &&
+                       /url\((?!"?fonts)/.test(this.cssText) &&
+                       /url\((?!"?https:\/\/fonts.googleapis.com)/.test(this.cssText)) {
+                        rulesWithUrl.push(this.cssText);
+                    }
+                });
+            });
+            return rulesWithUrl;
+        }
+
+        test(cssFileName, (assert) => {
+            const done = assert.async();
+            const frame = $("<iframe/>").appendTo("body");
+
+            window.waitFor(loadCss(frame, cssFileName)).done(function() {
+                assert.deepEqual(hasUrlImageProperty(frame[0].contentWindow.document), [], "Css rule has non-encoded url, change url() to data-uri() in the less file");
+                frame.remove();
+                done();
+            });
+
+        });
+    });
 });
 
 QUnit.module("dx-theme changing", () => {
@@ -533,7 +572,6 @@ QUnit.module("misc", () => {
 
     test("themeNameFromDevice for removed mobile themes (breaking change BC4928)", (assert) => {
         assert.equal(themes.themeNameFromDevice({ platform: "android" }), "generic");
-        assert.equal(themes.themeNameFromDevice({ platform: "win" }), "generic");
     });
 });
 
@@ -599,3 +637,4 @@ QUnit.module("web font checker", () => {
         });
     });
 });
+

@@ -246,7 +246,6 @@ function themeNameFromDevice(device) {
         case "ios":
             return "ios7";
         case "android":
-        case "win":
             return "generic";
     }
 
@@ -324,6 +323,10 @@ function isIos7(themeName) {
 
 function isGeneric(themeName) {
     return isTheme("generic", themeName);
+}
+
+function isDark(themeName) {
+    return isTheme("dark", themeName);
 }
 
 function checkThemeDeprecation() {
@@ -451,6 +454,7 @@ exports.waitForThemeLoad = waitForThemeLoad;
 exports.isMaterial = isMaterial;
 exports.isIos7 = isIos7;
 exports.isGeneric = isGeneric;
+exports.isDark = isDark;
 exports.isWebFontLoaded = isWebFontLoaded;
 exports.waitWebFont = waitWebFont;
 

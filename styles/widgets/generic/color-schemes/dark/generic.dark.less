@@ -381,6 +381,9 @@
 @diagram-default-format-active-bg: darken(@base-accent, 10%);
 @diagram-danger-format-active-bg: darken(@base-danger, 10%);
 @diagram-success-format-active-bg: darken(@base-success, 10%);
+@diagram-image-icon-base-color: fade(@base-bg, 50%);
+@diagram-image-icon-accent-color: fade(@base-bg, 50%);
+@diagram-toolbox-shape-text-opacity: 0.5;
 
 // Drawer
 
@@ -1070,7 +1073,7 @@
 @datagrid-columnchooser-overlay-border-radius: @base-border-radius-large; // TODO: may be not need
 
 @datagrid-column-separator-bg: fade(@base-accent, 50%);
-@datagrid-text-stub-background-image-path: url(images/widgets/generic/color-schemes/dark/grid/text-stub.png);
+@datagrid-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/dark/grid/text-stub.png');
 
 // TreeList
 
@@ -1133,7 +1136,7 @@
 @treelist-columnchooser-overlay-border-radius: @base-border-radius-large; // TODO: may be not need
 
 @treelist-column-separator-bg: fade(@base-accent, 50%);
-@treelist-text-stub-background-image-path: url(images/widgets/generic/color-schemes/dark/grid/text-stub.png);
+@treelist-text-stub-background-image-path: data-uri('images/widgets/generic/color-schemes/dark/grid/text-stub.png');
 
 
 // dxPivotGrid
@@ -1171,14 +1174,14 @@
 @PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: fade(@base-shadow-color, 10%);
 @PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: fade(@base-shadow-color, 20%);
 
-@PIVOTGRID_AREA_ALL_IMAGE: url(images/widgets/generic/color-schemes/dark/grid/area-all.png);
-@PIVOTGRID_AREA_FILTER_IMAGE: url(images/widgets/generic/color-schemes/dark/grid/area-filter.png);
-@PIVOTGRID_AREA_COLUMN_IMAGE: url(images/widgets/generic/color-schemes/dark/grid/area-column.png);
-@PIVOTGRID_AREA_ROW_IMAGE: url(images/widgets/generic/color-schemes/dark/grid/area-row.png);
-@PIVOTGRID_AREA_DATA_IMAGE: url(images/widgets/generic/color-schemes/dark/grid/area-data.png);
+@PIVOTGRID_AREA_ALL_IMAGE: data-uri('images/widgets/generic/color-schemes/dark/grid/area-all.png');
+@PIVOTGRID_AREA_FILTER_IMAGE: data-uri('images/widgets/generic/color-schemes/dark/grid/area-filter.png');
+@PIVOTGRID_AREA_COLUMN_IMAGE: data-uri('images/widgets/generic/color-schemes/dark/grid/area-column.png');
+@PIVOTGRID_AREA_ROW_IMAGE: data-uri('images/widgets/generic/color-schemes/dark/grid/area-row.png');
+@PIVOTGRID_AREA_DATA_IMAGE: data-uri('images/widgets/generic/color-schemes/dark/grid/area-data.png');
 
-@PIVOTGRID_DIMENSION_IMAGE: url(images/widgets/generic/color-schemes/dark/grid/dimension.png);
-@PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/generic/color-schemes/dark/grid/hierarchy.png);
+@PIVOTGRID_DIMENSION_IMAGE: data-uri('images/widgets/generic/color-schemes/dark/grid/dimension.png');
+@PIVOTGRID_HIERARCHY_IMAGE: data-uri('images/widgets/generic/color-schemes/dark/grid/hierarchy.png');
 
 @PIVOTGRID_POSITION_INDICATOR_COLOR: gray;
 
@@ -1468,20 +1471,20 @@
 @form-field-mark-color: darken(@form-field-item-color, 48.5%);
 
 // Images
-@list-item-icon-toggle-delete-bg: url(images/widgets/generic/color-schemes/dark/list/delete.png);
-@scrollview-pull-down-bg: url(images/widgets/generic/color-schemes/dark/pulldown.png) 0 0 no-repeat;
-@loadindicator-image-bg: url(images/widgets/generic/color-schemes/dark/loader64.gif);
-@toast-info-icon-image-bg: url(images/widgets/generic/color-schemes/dark/toast/info.png);
-@toast-warning-icon-image-bg: url(images/widgets/generic/color-schemes/dark/toast/warning.png);
-@toast-error-icon-image-bg: url(images/widgets/generic/color-schemes/dark/toast/error.png);
-@toast-success-icon-image-bg: url(images/widgets/generic/color-schemes/dark/toast/success.png);
-@scrollbar-button-horizontal-decrement-bg: url(images/widgets/generic/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-start.png) no-repeat;
-@scrollbar-button-horizontal-increment-bg: url(images/widgets/generic/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-end.png) no-repeat;
-@scrollbar-button-vertical-decrement-bg: url(images/widgets/generic/color-schemes/dark/scrollable/scrollbar-vertical-arrow-up.png) no-repeat;
-@scrollbar-button-vertical-increment-bg: url(images/widgets/generic/color-schemes/dark/scrollable/scrollbar-vertical-arrow-down.png) no-repeat;
-@colorbox-preview-empty-bg: url(images/widgets/generic/color-schemes/dark/colorbox/nocolor.png);
+@list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/dark/list/delete.png');
+@scrollview-pull-down-bg: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') 0 0 no-repeat;
+@loadindicator-image-bg: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif');
+@toast-info-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/info.png');
+@toast-warning-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/warning.png');
+@toast-error-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/error.png');
+@toast-success-icon-image-bg: data-uri('images/widgets/generic/color-schemes/dark/toast/success.png');
+@scrollbar-button-horizontal-decrement-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-start.png') no-repeat;
+@scrollbar-button-horizontal-increment-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-horizontal-arrow-end.png') no-repeat;
+@scrollbar-button-vertical-decrement-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-vertical-arrow-up.png') no-repeat;
+@scrollbar-button-vertical-increment-bg: data-uri('images/widgets/generic/color-schemes/dark/scrollable/scrollbar-vertical-arrow-down.png') no-repeat;
+@colorbox-preview-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/colorbox/nocolor.png');
 
-@calendar-cell-empty-bg: url(images/widgets/generic/color-schemes/dark/calendar/empty-cell.png) center center no-repeat;
+@calendar-cell-empty-bg: data-uri('images/widgets/generic/color-schemes/dark/calendar/empty-cell.png') center center no-repeat;
 
 // Fieldset
 
@@ -1562,4 +1565,17 @@
 @filemanager-breadcrumbs-item-focus-color: @base-text-color;
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-text-color;
-@filemanager-file-item-select-bg: @base-accent;
+@filemanager-file-item-select-bg: lighten(@base-bg, 10%);
+@filemanager-progressbox-shadow-color: fade(darken(@base-shadow-color, 100%), 30%);
+
+// SpeedDialAction
+@speed-dial-action-bg: fade(@base-text-color, 5%);
+@speed-dial-action-color: @base-text-color;
+
+// Gantt
+@gantt-collapsable-row-bg: lighten(@base-bg, 5%);
+@gantt-selection-bg: @treelist-selection-bg;
+
+// Splitter
+@splitter-border-color: @base-border-color;
+@splitter-bg: fade(@base-accent, 50%);

@@ -5,7 +5,7 @@ import CollectionWidget from "./collection/ui.collection_widget.edit";
 import registerComponent from "../core/component_registrator";
 import { extend } from "../core/utils/extend";
 import { isDefined } from "../core/utils/type";
-import BindableTemplate from "./widget/bindable_template";
+import { BindableTemplate } from "../core/templates/bindable_template";
 
 const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + "-wrapper",
@@ -44,6 +44,7 @@ const ButtonCollection = CollectionWidget.inherit({
         this._defaultTemplates["item"] = new BindableTemplate((($container, data, model) => {
             this._prepareItemStyles($container);
             this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions(), {
+                _templateData: model,
                 template: model.template || this.option("buttonTemplate")
             }));
         }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));

@@ -84,12 +84,8 @@ var TextBox = TextEditor.inherit({
     },
 
     _toggleMaxLengthProp: function() {
-        if(this._isAndroidOrIE()) {
-            return;
-        }
-
-        var maxLength = this.option("maxLength");
-        if(maxLength > 0) {
+        var maxLength = this._getMaxLength();
+        if(maxLength && maxLength > 0) {
             this._input().attr("maxLength", maxLength);
         } else {
             this._input().removeAttr("maxLength");
@@ -130,20 +126,24 @@ var TextBox = TextEditor.inherit({
                 this._toggleMaxLengthProp();
                 this._renderMaxLengthHandlers();
                 break;
+            case "mask":
+                this.callBase(args);
+                this._toggleMaxLengthProp();
+                break;
             default:
                 this.callBase(args);
         }
     },
 
     _onKeyDownCutOffHandler: function(e) {
-        var maxLength = this.option("maxLength");
-        if(maxLength) {
+        var actualMaxLength = this._getMaxLength();
+        if(actualMaxLength) {
             var $input = $(e.target),
                 key = eventUtils.normalizeKeyName(e);
 
             this._cutOffExtraChar($input);
 
-            return ($input.val().length < maxLength
+            return ($input.val().length < actualMaxLength
                     || inArray(key, ignoreKeys) !== -1
                     || window.getSelection().toString() !== "");
         } else {
@@ -159,11 +159,16 @@ var TextBox = TextEditor.inherit({
     },
 
     _cutOffExtraChar: function($input) {
-        var maxLength = this.option("maxLength"),
+        var actualMaxLength = this._getMaxLength(),
             textInput = $input.val();
-        if(textInput.length > maxLength) {
-            $input.val(textInput.substr(0, maxLength));
+        if(actualMaxLength && textInput.length > actualMaxLength) {
+            $input.val(textInput.substr(0, actualMaxLength));
         }
+    },
+
+    _getMaxLength: function() {
+        var isMaskSpecified = !!this.option("mask");
+        return isMaskSpecified ? null : this.option("maxLength");
     },
 
     _isAndroidOrIE: function() {

@@ -3,10 +3,13 @@ var $ = require("../../core/renderer"),
     List = require("../list"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
     noop = require("../../core/utils/common").noop,
+    ensureDefined = require("../../core/utils/common").ensureDefined,
     isDate = require("../../core/utils/type").isDate,
     extend = require("../../core/utils/extend").extend,
     dateUtils = require("./ui.date_utils"),
     dateLocalization = require("../../localization/date");
+
+var DATE_FORMAT = "date";
 
 var BOUNDARY_VALUES = {
     "min": new Date(0, 0, 0, 0, 0),
@@ -48,6 +51,10 @@ var ListStrategy = DateBoxStrategy.inherit({
 
     useCurrentDateByDefault: function() {
         return true;
+    },
+
+    getDefaultDate: function() {
+        return new Date(null);
     },
 
     _getPopupWidth: function() {
@@ -198,7 +205,7 @@ var ListStrategy = DateBoxStrategy.inherit({
 
     _getBoundaryDate: function(boundary) {
         var boundaryValue = BOUNDARY_VALUES[boundary],
-            currentValue = new Date(this.dateBox.dateOption("value"));
+            currentValue = new Date(ensureDefined(this.dateBox.dateOption("value"), 0));
 
         return new Date(
             currentValue.getFullYear(),
@@ -270,6 +277,16 @@ var ListStrategy = DateBoxStrategy.inherit({
         var maxHeight = $(window).height() * 0.45;
         this.dateBox._setPopupOption("height", Math.min(popupHeight, maxHeight));
         this.dateBox._timeList && this.dateBox._timeList.updateDimensions();
+    },
+
+    getParsedText: function(text, format) {
+        var value = this.callBase(text, format);
+
+        if(value) {
+            value = dateUtils.mergeDates(value, new Date(null), DATE_FORMAT);
+        }
+
+        return value;
     }
 });
 

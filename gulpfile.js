@@ -1,13 +1,8 @@
 /* eslint-env node */
 /* eslint-disable no-console */
 
-var gulp = require('gulp');
-var os = require('os');
-var runSequence = require('run-sequence');
-
-if(os.cpus().length >= 4 && !process.env['DEVEXTREME_DOCKER_CI']) {
-    require('gulp-ll').tasks(['js-bundles-debug', 'js-bundles-prod']);
-}
+const gulp = require('gulp');
+const multiProcess = require('gulp-multi-process');
 
 gulp.task('clean', function(callback) {
     require('del').sync('artifacts');
@@ -15,6 +10,7 @@ gulp.task('clean', function(callback) {
 });
 
 require('./build/gulp/bundler-config');
+require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
 require('./build/gulp/npm');
@@ -24,48 +20,52 @@ require('./build/gulp/vendor');
 require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
-require('./build/gulp/transpile');
 
+const QUNIT_CI = Boolean(process.env['DEVEXTREME_QUNIT_CI']);
+const DOCKER_CI = Boolean(process.env['DEVEXTREME_DOCKER_CI']);
 
-function gulpDefault(callback) {
-    runSequence(
-        'clean',
-        'localization',
-        [
-            'js-bundles-debug',
-            'js-bundles-prod',
-            'vectormap',
-            'aspnet',
-            'vendor',
-            'ts'
-        ],
-        'style-compiler-themes',
-        'style-compiler-tb-assets',
-        'npm',
-        'themebuilder-npm',
-        callback);
+if(QUNIT_CI) {
+    console.warn("Using QUnit CI mode!");
 }
 
-function gulpDefault_QUnitCI(callback) {
-    runSequence(
-        'clean',
-        'localization',
-        [
-            'js-bundles-debug',
-            'vectormap',
-            'vendor'
-        ],
-        'style-compiler-themes',
-        callback);
+function createStyleCompilerBatch() {
+    const tasks = ['style-compiler-themes'];
+    if(!QUNIT_CI) {
+        tasks.push('style-compiler-tb-assets');
+    }
+    return gulp.series(tasks);
 }
 
-if(process.env['DEVEXTREME_QUNIT_CI']) {
-    console.warn("Using QUnit CI mode for gulp default!");
-    gulp.task('default', gulpDefault_QUnitCI);
-} else {
-    gulp.task('default', gulpDefault);
+function createMiscBatch() {
+    const tasks = ['vectormap', 'vendor'];
+    if(!QUNIT_CI) {
+        tasks.push('aspnet', 'ts');
+    }
+    return gulp.parallel(tasks);
 }
 
-gulp.task('dev', function(callback) {
-    runSequence('bundler-config-dev', ['js-bundles-dev', 'style-compiler-themes-dev'], callback);
-});
+function createMainBatch() {
+    const tasks = ['js-bundles-debug'];
+    if(!QUNIT_CI) {
+        tasks.push('js-bundles-prod');
+    }
+    tasks.push('style-compiler-batch', 'misc-batch');
+    return DOCKER_CI
+        ? gulp.parallel(tasks)
+        : (callback) => multiProcess(tasks, callback, true);
+}
+
+function createDefaultBatch() {
+    const tasks = [ 'clean', 'localization', createMainBatch() ];
+    if(!QUNIT_CI) {
+        tasks.push('npm', 'themebuilder-npm');
+    }
+    return gulp.series(tasks);
+}
+
+gulp.task('misc-batch', createMiscBatch());
+gulp.task('style-compiler-batch', createStyleCompilerBatch());
+
+gulp.task('default', createDefaultBatch());
+
+gulp.task('dev', gulp.parallel('bundler-config-dev', 'js-bundles-dev', 'style-compiler-themes-dev'));

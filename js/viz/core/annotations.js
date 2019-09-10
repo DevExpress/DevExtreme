@@ -1,5 +1,5 @@
 import { getDocument } from "../../core/dom_adapter";
-import { isDefined, isFunction } from "../../core/utils/type";
+import { isDefined } from "../../core/utils/type";
 import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
 import { patchFontOptions } from "./utils";
@@ -18,7 +18,7 @@ const DRAG_START_EVENT_NAME = dragEvents.start + DOT_EVENT_NS;
 const DRAG_EVENT_NAME = dragEvents.move + DOT_EVENT_NS;
 const DRAG_END_EVENT_NAME = dragEvents.end + DOT_EVENT_NS;
 
-function coreAnnotation(options, draw) {
+function coreAnnotation(options, contentTemplate) {
     return {
         type: options.type,
         name: options.name,
@@ -33,7 +33,7 @@ function coreAnnotation(options, draw) {
         offsetY: options.offsetY,
         draw: function(widget, group) {
             const annotationGroup = widget._renderer.g().append(group);
-            this.plaque = new Plaque(options, widget, annotationGroup, draw.bind(this), isDefined(options.value) || isDefined(options.argument));
+            this.plaque = new Plaque(options, widget, annotationGroup, contentTemplate, isDefined(options.value) || isDefined(options.argument));
             this.plaque.draw(widget._getAnnotationCoords(this));
 
             if(options.allowDragging) {
@@ -55,6 +55,7 @@ function coreAnnotation(options, draw) {
         },
         showTooltip(tooltip, { x, y }) {
             if(tooltip.annotation !== this) {
+                tooltip.setTemplate(this.options.tooltipTemplate);
                 if(tooltip.show(this.options, { x, y }, { target: this.options }, this.options.customizeTooltip)) {
                     tooltip.annotation = this;
                 }
@@ -65,74 +66,46 @@ function coreAnnotation(options, draw) {
     };
 }
 
-function labelAnnotation(options) {
-    return coreAnnotation(options, function(widget, group, { width, height }) {
-        const text = widget._renderer
-            .text(options.text)
-            .css(patchFontOptions(options.font))
-            .attr({ "class": options.cssClass })
-            .append(group);
+function getTemplateFunction(options, widget) {
+    let template;
+    if(options.type === "text") {
+        template = function(item, groupElement) {
+            const text = widget._renderer
+                .text(item.text)
+                .css(patchFontOptions(item.font))
+                .attr({ "class": item.cssClass })
+                .append({ element: groupElement });
 
-        if(isDefined(width) || isDefined(height)) {
-            text.setMaxSize(width, height, {
-                wordWrap: options.wordWrap,
-                textOverflow: options.textOverflow
-            });
-        }
-    });
-}
+            if(item.width > 0 || item.height > 0) {
+                text.setMaxSize(item.width, item.height, {
+                    wordWrap: item.wordWrap,
+                    textOverflow: item.textOverflow
+                });
+            }
+        };
+    } else if(options.type === "image") {
+        template = function(item, groupElement) {
+            const { width, height, url, location } = item.image || {};
+            const { width: outerWidth, height: outerHeight } = item;
+            const imageWidth = outerWidth > 0 ? Math.min(width, outerWidth) : width;
+            const imageHeight = outerHeight > 0 ? Math.min(height, outerHeight) : height;
 
-function imageAnnotation(options) {
-    const { width, height, url, location } = options.image || {};
-    return coreAnnotation(options, function(widget, group, { width: outerWidth, height: outerHeight }) {
-        const imageWidth = outerWidth > 0 ? Math.min(width, outerWidth) : width;
-        const imageHeight = outerHeight > 0 ? Math.min(height, outerHeight) : height;
-
-        widget._renderer
-            .image(0, 0, imageWidth, imageHeight, url, location || "center")
-            .append(group);
-    });
-}
-
-function customAnnotation(options) {
-    function processTemplate(template) {
-        let renderingTemplate;
-        if(isFunction(template)) {
-            renderingTemplate = {
-                render: function(options) {
-                    template(options.container, options.model);
-                }
-            };
-        } else {
-            renderingTemplate = { render() {} };
-        }
-
-        return renderingTemplate;
-    }
-    return coreAnnotation(options, function(widget, group, { width, height }) {
-        const template = processTemplate(options.template);
-        template.render({ container: group.element, model: options });
-    });
-}
-
-function createAnnotation(item, commonOptions, customizeAnnotation) {
-    let options = extend(true, {}, commonOptions, item);
-    if(customizeAnnotation && customizeAnnotation.call) {
-        options = extend(true, options, customizeAnnotation(item));
-    }
-
-    if(options.type === "image") {
-        return imageAnnotation(options);
-    } else if(options.type === "text") {
-        return labelAnnotation(options);
+            widget._renderer
+                .image(0, 0, imageWidth, imageHeight, url, location || "center")
+                .append({ element: groupElement });
+        };
     } else if(options.type === "custom") {
-        return customAnnotation(options);
+        template = options.template;
     }
+
+    return template;
 }
 
-export let createAnnotations = function(items, options = {}, customizeAnnotation) {
+export let createAnnotations = function(widget, items, commonAnnotationSettings = {}, customizeAnnotation) {
     return items.reduce((arr, item) => {
-        const annotation = createAnnotation(item, options, customizeAnnotation);
+        const options = extend(true, {}, commonAnnotationSettings, item, customizeAnnotation && customizeAnnotation.call ? customizeAnnotation(item) : {});
+        const templateFunction = getTemplateFunction(options, widget);
+        const annotation = templateFunction && coreAnnotation(options, widget._getTemplate(templateFunction));
         annotation && arr.push(annotation);
         return arr;
     }, []);
@@ -252,7 +225,8 @@ const corePlugin = {
             tooltip: new Tooltip({
                 cssClass: `${this._rootClassPrefix}-annotation-tooltip`,
                 eventTrigger: this._eventTrigger,
-                widgetRoot: this.element()
+                widgetRoot: this.element(),
+                widget: this
             }),
             hideTooltip() {
                 this.tooltip.annotation = null;
@@ -263,7 +237,8 @@ const corePlugin = {
         this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
         const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
 
-        tooltipOptions.customizeTooltip = undefined;
+        tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
+
         this._annotations.tooltip.update(tooltipOptions);
     },
     dispose() {
@@ -298,7 +273,7 @@ const corePlugin = {
             if(!items || !items.length) {
                 return;
             }
-            this._annotations.items = createAnnotations(items, this._getOption("commonAnnotationSettings"), this._getOption("customizeAnnotation"));
+            this._annotations.items = createAnnotations(this, items, this._getOption("commonAnnotationSettings"), this._getOption("customizeAnnotation"));
         },
         _getAnnotationCoords() { return {}; }
     },

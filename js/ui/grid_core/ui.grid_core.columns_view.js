@@ -13,7 +13,6 @@ import typeUtils from "../../core/utils/type";
 import iteratorUtils from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import { getDefaultAlignment } from "../../core/utils/position";
-import devices from "../../core/devices";
 import modules from "./ui.grid_core.modules";
 import { checkChanges } from "./ui.grid_core.utils";
 import columnStateMixin from "./ui.grid_core.column_state_mixin";
@@ -207,8 +206,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(columns && !isAppend) {
             $table.append(that._createColGroup(columns));
-            if(devices.real().ios) {
-                // T198380
+            if(browser.safari) {
+                // T198380, T809552
                 $table.append($("<thead>").append("<tr>"));
             }
             that.setAria("role", "presentation", $table);
@@ -524,10 +523,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var that = this,
             i,
             rows = that._getRows(options.change),
-            columnIndices = options.change && options.change.columnIndices || [];
+            columnIndices = options.change && options.change.columnIndices || [],
+            changeTypes = options.change && options.change.changeTypes || [];
 
         for(i = 0; i < rows.length; i++) {
-            that._renderRow($table, extend({ row: rows[i], columnIndices: columnIndices[i] }, options));
+            that._renderRow($table, extend({ row: rows[i], columnIndices: columnIndices[i], changeType: changeTypes[i] }, options));
         }
     },
 
@@ -542,14 +542,15 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         $row = that._createRow(options.row);
         $wrappedRow = that._wrapRowIfNeed($table, $row);
-
-        that._renderCells($row, options);
+        if(options.changeType !== "remove") {
+            that._renderCells($row, options);
+        }
         that._appendRow($table, $wrappedRow);
         var rowOptions = extend({ columns: options.columns }, options.row);
 
         that._addWatchMethod(rowOptions, options.row);
 
-        that._rowPrepared($wrappedRow, rowOptions);
+        that._rowPrepared($wrappedRow, rowOptions, options.row);
     },
 
     _renderCells: function($row, options) {

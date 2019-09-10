@@ -1059,6 +1059,42 @@ QUnit.test("Highlighting search text for boolean column with set to 'falseText' 
     assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "<span class=" + searchTextClass + ">No</span>", "highlight text in cell");
 });
 
+QUnit.test("Highlighting search text for group row if templatesRenderAsynchronously is true (T808974)", function(assert) {
+    // arrange
+    var columns = [{
+            allowCollapsing: true,
+            allowFiltering: true,
+            cssClass: "dx-command-expand",
+            groupIndex: 0,
+            command: "expand",
+            caption: "Group",
+            dataType: "string"
+        }, {
+            allowFiltering: true,
+            dataType: "string",
+            dataField: "name"
+        }],
+        rowsView = this.createRowsView([
+            { data: { key: "TestGroup", items: null }, values: ["TestGroup"], rowType: "group", groupIndex: 0 }
+        ], null, columns),
+        $testElement = $("#container"),
+        $cells;
+
+    this.options.searchPanel = {
+        highlightSearchText: true,
+        text: "Test"
+    };
+    this.options.templatesRenderAsynchronously = true;
+
+    // act
+    rowsView.render($testElement);
+    this.clock.tick();
+
+    // assert
+    $cells = $testElement.find(".dx-group-row").find("td");
+    assert.strictEqual(getNormalizeMarkup($cells.eq(1)), "Group: <span class=dx-datagrid-search-text>Test</span>Group", "highlight text in cell");
+});
+
 QUnit.test('All rows are not isSelected by default', function(assert) {
     // arrange
     var rowsView = this.createRowsView(this.items),
@@ -3774,7 +3810,12 @@ QUnit.test("Summary items are not displayed in a group row", function(assert) {
 QUnit.test("Scroll to element by focus", function(assert) {
     // arrange
     var testElement = $("#container"),
-        rowsView = this.createRowsView(this.items, null, null, null, { useKeyboard: true, columnAutoWidth: true }),
+        rowsView = this.createRowsView(this.items, null, null, null, {
+            keyboardNavigation: {
+                enabled: true
+            },
+            columnAutoWidth: true
+        }),
         isScrollTo,
         keyboardNavigationController = this.dataGrid.keyboardNavigationController;
 

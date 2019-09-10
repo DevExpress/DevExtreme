@@ -6,6 +6,8 @@ import ContextMenu from "../context_menu";
 import DiagramCommands from "./ui.diagram.commands";
 import DiagramBar from "./diagram_bar";
 import { extend } from "../../core/utils/extend";
+import messageLocalization from "../../localization/message";
+
 import "../select_box";
 import "../color_box";
 import "../check_box";
@@ -16,8 +18,8 @@ const WIDGET_COMMANDS = [
     {
         command: "options",
         icon: "preferences",
-        hint: "Show Properties",
-        text: "Properties",
+        hint: messageLocalization.format("dxDiagram-commandProperties"),
+        text: messageLocalization.format("dxDiagram-commandProperties"),
     }
 ];
 const TOOLBAR_SEPARATOR_CLASS = "dx-diagram-toolbar-separator";

@@ -208,11 +208,6 @@ QUnit.module("general", {}, () => {
     });
 
     QUnit.testInActiveWindow("input is focused after click on the 'clear' button", (assert) => {
-        if(devices.real().win) { // TODO: check test after update wp8 on farm) {
-            assert.ok(true, "if window is inactive we do not test the case");
-            return;
-        }
-
         const $element = $("#texteditor").dxTextEditor({
             showClearButton: true,
             value: "Text"
@@ -1109,65 +1104,5 @@ QUnit.module("regressions", moduleConfig, () => {
         const $placeholder = $textEditor.find("." + PLACEHOLDER_CLASS);
 
         assert.equal($placeholder.hasClass('dx-state-invisible'), true, "display none was attached as inline style");
-    });
-
-    QUnit.test("TextEditor with mask option should firing the 'onChange' event", (assert) => {
-        const handler = sinon.stub();
-
-        const $textEditor = $("#texteditor").dxTextEditor({
-            onChange: handler,
-            mask: "000000"
-        });
-
-        const $input = $textEditor.find("input");
-        const keyboard = keyboardMock($input);
-
-        caretWorkaround($input);
-
-        $input.triggerHandler("focus");
-        this.clock.tick();
-
-        keyboard.type("123").press("enter");
-        assert.equal(handler.callCount, 1, "'change' event is fired on enter after value change");
-
-        keyboard.press("enter");
-        assert.equal(handler.callCount, 1, "'change' event is not fired on enter if value is not changed");
-
-        keyboard.type("456");
-        $input.triggerHandler("blur");
-        assert.equal(handler.callCount, 2, "'change' event is fired after value change and focus out");
-
-        $input.triggerHandler("focus");
-        $input.triggerHandler("blur");
-        assert.equal(handler.callCount, 2, "'change' event is not fired after focus out without value change");
-    });
-
-
-    QUnit.test("TextEditor cannot change table column percent width (T756307)", (assert) => {
-        const markup =
-            '<table id="test-table" style="width: 280px" >\
-                <thead>\
-                    <th style="width: 50%;">head 1</th>\
-                    <th style="width: 50%;">head 2</th>\
-                </thead>\
-                <tr>\
-                    <td>\
-                        <div id="content" style="width: 100%">long content, long content, long content</div>\
-                    </td>\
-                    <td>\
-                        <div id="content-with-editor" style="width: 100%">long content, long content, long content</div>\
-                        <div id="table-texteditor"></div>\
-                    </td>\
-                </tr>\
-            <table>';
-        $("#qunit-fixture").html(markup);
-
-        $("#table-texteditor").dxTextEditor({
-            value: "val",
-            width: "30%"
-        });
-
-        assert.equal($("#content").width(), $("#content-with-editor").width(), "table columns have equal width");
-        $("#test-table").remove();
     });
 });

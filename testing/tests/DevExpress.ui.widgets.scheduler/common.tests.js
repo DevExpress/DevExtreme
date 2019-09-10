@@ -382,33 +382,26 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value", function(assert) {
-        var currentDevice = devices.current(),
-            isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "win";
+        var data = [],
+            deltaTz = getDeltaTz(5),
+            daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
 
-        if(!isWinPhone) {
-            var data = [],
-                deltaTz = getDeltaTz(5),
-                daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data,
+            timeZone: 5
+        });
 
-            this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                timeZone: 5
-            });
+        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "first" });
 
-            this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "first" });
+        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz + daylightOffset), "Start date is OK");
+        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz + daylightOffset), "End date is OK");
 
-            assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz + daylightOffset), "Start date is OK");
-            assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz + daylightOffset), "End date is OK");
+        this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
+        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
 
-            this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
-            this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
-
-            var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment"));
-            assert.equal($appointments.length, 3, "All appts are rendered");
-        } else {
-            assert.ok(true);
-        }
+        var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment"));
+        assert.equal($appointments.length, 3, "All appts are rendered");
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value, startDay and endDay hours are set", function(assert) {
@@ -438,37 +431,30 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value, negative value", function(assert) {
-        var currentDevice = devices.current(),
-            isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "win";
+        var data = [],
+            deltaTz = getDeltaTz(-7),
+            daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
 
-        if(!isWinPhone) {
-            var data = [],
-                deltaTz = getDeltaTz(-7),
-                daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data,
+            timeZone: -7
+        });
 
-            this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                timeZone: -7
-            });
+        this.instance.addAppointment({
+            startDate: new Date(2015, 1, 9, 16),
+            endDate: new Date(2015, 1, 9, 17),
+            text: "first"
+        });
 
-            this.instance.addAppointment({
-                startDate: new Date(2015, 1, 9, 16),
-                endDate: new Date(2015, 1, 9, 17),
-                text: "first"
-            });
+        assert.deepEqual(data[0].startDate, new Date(new Date(2015, 1, 9).setHours(16 - deltaTz + daylightOffset)), "Start date is OK");
+        assert.deepEqual(data[0].endDate, new Date(new Date(2015, 1, 9).setHours(17 - deltaTz + daylightOffset)), "End date is OK");
 
-            assert.deepEqual(data[0].startDate, new Date(new Date(2015, 1, 9).setHours(16 - deltaTz + daylightOffset)), "Start date is OK");
-            assert.deepEqual(data[0].endDate, new Date(new Date(2015, 1, 9).setHours(17 - deltaTz + daylightOffset)), "End date is OK");
+        this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
+        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
 
-            this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
-            this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
-
-            var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment"));
-            assert.equal($appointments.length, 3, "All appts are rendered");
-        } else {
-            assert.ok(true);
-        }
+        var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment"));
+        assert.equal($appointments.length, 3, "All appts are rendered");
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value, negative value, startDay and endDay hours are set", function(assert) {
@@ -2320,7 +2306,6 @@ QUnit.testStart(function() {
         var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)),
             initialPosition = translator.locate($appointment);
 
-
         $(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(5)).trigger(dragEvents.enter);
 
         pointerMock($appointment)
@@ -3253,137 +3238,6 @@ QUnit.testStart(function() {
         $.each(this.instance.getActions(), function(name, action) {
             assert.ok(action(), "'" + name + "' option is changed");
         });
-    });
-
-    QUnit.test("contentReady action should rise even if dataSource isn't set", function(assert) {
-        this.createInstance({
-            onContentReady: function(e) {
-                assert.ok(true, 1, "contentReady is fired");
-            }
-        });
-    });
-
-    QUnit.test("contentReady action should rise at the right time", function(assert) {
-        var done = assert.async();
-        this.clock.restore();
-
-        var dataSource = new DataSource({
-            store: new CustomStore({
-                load: function() {
-                    var d = $.Deferred();
-                    setTimeout(function() {
-                        d.resolve([{
-                            startDate: new Date(2016, 2, 15, 1).toString(),
-                            endDate: new Date(2016, 2, 15, 2).toString()
-                        }]);
-                    }, 100);
-
-                    return d.promise();
-                }
-            })
-        });
-
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            width: 800,
-            dataSource: dataSource,
-            maxAppointmentsPerCell: null,
-            onContentReady: function(e) {
-                var element = e.component,
-                    $element = $(e.component.$element()),
-                    $header = element.getHeader().$element(),
-                    $workSpace = element.getWorkSpace().$element(),
-                    $appointment = $element.find(".dx-scheduler-appointment"),
-                    appointmentPosition = translator.locate($appointment);
-
-                assert.equal($header.length, 1, "Header is rendered");
-                assert.equal($workSpace.length, 1, "Work Space is rendered");
-                assert.equal($appointment.length, 1, "Appointment is rendered");
-                assert.roughEqual(appointmentPosition.top, 100, 2.001, "Appointment top is OK");
-                assert.roughEqual(appointmentPosition.left, 299, 1.001, "Appointment left is OK");
-                done();
-            }
-        });
-    });
-
-    QUnit.test("contentReady action should rise when appointment is added", function(assert) {
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            maxAppointmentsPerCell: null,
-            width: 800,
-            dataSource: []
-        });
-
-        this.instance.option("onContentReady", function(e) {
-            var $element = $(e.component.$element()),
-                $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
-
-            assert.equal($appointment.length, 1, "Appointment is rendered");
-            assert.roughEqual(appointmentPosition.top, 100, 2.001, "Appointment top is OK");
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, "Appointment left is OK");
-        });
-
-        this.instance.addAppointment({
-            startDate: new Date(2016, 2, 15, 1).toString(),
-            endDate: new Date(2016, 2, 15, 2).toString()
-        });
-    });
-
-    QUnit.test("contentReady action should rise when appointment is updated", function(assert) {
-        var appointment = {
-            startDate: new Date(2016, 2, 15, 1).toString(),
-            endDate: new Date(2016, 2, 15, 2).toString()
-        };
-
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            maxAppointmentsPerCell: null,
-            width: 800,
-            dataSource: [appointment]
-        });
-
-        this.instance.option("onContentReady", function(e) {
-            var $element = $(e.component.$element()),
-                $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
-
-            assert.equal($appointment.length, 1, "Appointment is rendered");
-            assert.roughEqual(appointmentPosition.top, 150, 2.001, "Appointment top is OK");
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, "Appointment left is OK");
-        });
-
-        this.instance.updateAppointment(appointment, {
-            startDate: new Date(2016, 2, 15, 1, 30).toString()
-        });
-    });
-
-    QUnit.test("contentReady action should rise when appointment is deleted", function(assert) {
-        var appointment = {
-            startDate: new Date(2016, 2, 15, 1).toString(),
-            endDate: new Date(2016, 2, 15, 2).toString()
-        };
-
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            width: 800,
-            dataSource: [appointment]
-        });
-
-        this.instance.option("onContentReady", function(e) {
-            var $appointment = $(e.component.$element().find(".dx-scheduler-appointment"));
-            assert.equal($appointment.length, 0, "Appointment is not rendered");
-        });
-
-        this.instance.deleteAppointment(appointment);
     });
 
     QUnit.test("Workspace dimension changing should be called before appointment repainting, when scheduler was resized (T739866)", function(assert) {

@@ -346,7 +346,13 @@ var dxChart = {
         * @type string
         * @default undefined
         */
-        name: undefined
+        name: undefined,
+        /**
+        * @name dxChartOptions.panes.height
+        * @type number|string
+        * @default undefined
+        */
+        height: undefined
     }],
     /**
     * @name dxChartOptions.dataPrepareSettings
@@ -1354,6 +1360,12 @@ var dxChart = {
         */
         aggregationInterval: undefined,
         /**
+        * @name dxChartOptions.argumentAxis.aggregateByCategory
+        * @type boolean
+        * @default false
+        */
+        aggregateByCategory: false,
+        /**
         * @name dxChartOptions.argumentAxis.label
         * @type object
         */
@@ -2059,7 +2071,12 @@ var dxChart = {
 * @module viz/pie_chart
 * @export default
 */
-var dxPieChart = {
+var dxPieChart = {/**
+    * @name dxPieChartMethods.getInnerRadius
+    * @publicName getInnerRadius()
+    * @return number
+    */
+    getInnerRadius: function() { },
     /**
     * @name dxPieChartOptions.seriesTemplate
     * @type object
@@ -2119,7 +2136,16 @@ var dxPieChart = {
        * @type_function_param1 items:Array<PieChartLegendItem>
        * @type_function_return Array<PieChartLegendItem>
        */
-       customizeItems: undefined
+       customizeItems: undefined,
+       /**
+       * @name dxPieChartOptions.legend.markerTemplate
+       * @type template|function
+       * @default undefined
+       * @type_function_param1 legendItem:PieChartLegendItem
+       * @type_function_param2 element:SVGGElement
+       * @type_function_return string|SVGElement|jQuery
+       */
+       markerTemplate: undefined
     },
     /**
     * @name dxPieChartOptions.resolveLabelOverlapping
@@ -2203,7 +2229,16 @@ var dxPieChart = {
     * @type string
     * @default undefined
     */
-    sizeGroup: undefined
+    sizeGroup: undefined,
+    /**
+    * @name dxPieChartOptions.centerTemplate
+    * @type template|function
+    * @default undefined
+    * @type_function_param1 component:dxPieChart
+    * @type_function_param2 element:SVGGElement
+    * @type_function_return string|SVGElement|jQuery
+    */
+    centerTemplate: undefined
 };
 
 /**
@@ -3090,6 +3125,32 @@ var dxPolarChart = {
             }
         }],
         /**
+        * @name dxPolarChartOptions.valueAxis.visualRange
+        * @type VizRange | Array<number,string,Date>
+        * @fires BaseWidgetOptions.onOptionChanged
+        * @notUsedInTheme
+        */
+        visualRange: undefined,
+        /**
+         * @name dxPolarChartOptions.valueAxis.wholeRange
+         * @type VizRange | Array<number,string,Date>
+         * @default undefined
+         */
+        wholeRange: undefined,
+        /**
+        * @name dxPolarChartOptions.valueAxis.visualRangeUpdateMode
+        * @type Enums.ValueAxisVisualRangeUpdateMode
+        * @default 'auto'
+        */
+        visualRangeUpdateMode: "auto",
+        /**
+        * @name dxPolarChartOptions.valueAxis.minVisualRangeLength
+        * @inherits VizTimeInterval
+        * @default undefined
+        * @notUsedInTheme
+        */
+        minVisualRangeLength: undefined,
+        /**
         * @name dxPolarChartOptions.valueAxis.minValueMargin
         * @type number
         * @default undefined
@@ -3190,6 +3251,50 @@ var dxPolarChart = {
     * @inheritAll
     */
     series: undefined,
+    /**
+    * @name dxPolarChartOptions.onZoomStart
+    * @extends Action
+    * @type function(e)
+    * @type_function_param1 e:object
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 axis:chartAxisObject
+    * @type_function_param1_field6 range:VizRange
+    * @type_function_param1_field7 cancel:boolean
+    * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
+    * @notUsedInTheme
+    * @action
+    */
+    onZoomStart: function() { },
+    /**
+    * @name dxPolarChartOptions.onZoomEnd
+    * @extends Action
+    * @type function(e)
+    * @type_function_param1 e:object
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
+    * @type_function_param1_field6 rangeEnd:Date|Number:deprecated(range)
+    * @type_function_param1_field7 axis:chartAxisObject
+    * @type_function_param1_field8 range:VizRange
+    * @type_function_param1_field9 previousRange:VizRange
+    * @type_function_param1_field10 cancel:boolean
+    * @type_function_param1_field11 actionType:Enums.ChartZoomPanActionType
+    * @type_function_param1_field12 zoomFactor:Number
+    * @type_function_param1_field13 shift:Number
+    * @notUsedInTheme
+    * @action
+    */
+    onZoomEnd: function() { },
+    /**
+    * @name dxPolarChartMethods.resetVisualRange
+    * @publicName resetVisualRange()
+    */
+    resetVisualRange: function() { },
+    /**
+    * @name dxPolarChartMethods.getValueAxis
+    * @publicName getValueAxis()
+    * @return chartAxisObject
+    */
+    getValueAxis: function() { }
 };
 /**
 * @name BaseChart
@@ -3266,20 +3371,29 @@ var BaseChart = {
     * @type object
     */
     tooltip: {
-       /**
-       * @name BaseChartOptions.tooltip.customizeTooltip
-       * @type function(pointInfo)
-       * @type_function_param1 pointInfo:object
-       * @type_function_return object
-       * @default undefined
-       * @notUsedInTheme
-       */
+        /**
+        * @name BaseChartOptions.tooltip.customizeTooltip
+        * @type function(pointInfo)
+        * @type_function_param1 pointInfo:object
+        * @type_function_return object
+        * @default undefined
+        * @notUsedInTheme
+        */
         customizeTooltip: undefined,
+        /**
+        * @name BaseChartOptions.tooltip.contentTemplate
+        * @type template|function(pointInfo, element)
+        * @type_function_param1 pointInfo:object
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined,
         /**
         * @name BaseChartOptions.tooltip.argumentFormat
         * @extends CommonVizFormat
         */
-        argumentFormat: ''
+        argumentFormat: '',
     },
     /**
     * @name BaseChartOptions.onPointClick
@@ -3343,7 +3457,16 @@ var BaseChart = {
         * @type_function_param1 items:Array<BaseChartLegendItem>
         * @type_function_return Array<BaseChartLegendItem>
         */
-        customizeItems: undefined
+        customizeItems: undefined,
+        /**
+        * @name BaseChartOptions.legend.markerTemplate
+        * @type template|function
+        * @default undefined
+        * @type_function_param1 legendItem:BaseChartLegendItem
+        * @type_function_param2 element:SVGGElement
+        * @type_function_return string|SVGElement|jQuery
+        */
+        markerTemplate: undefined
     },
     /**
     * @name BaseChartOptions.series
@@ -3575,7 +3698,7 @@ var dxChartCommonAnnotationConfig = {
         * @name dxChartCommonAnnotationConfig.border.cornerRadius
         * @type number
         * @default 0
-        * @default 4 @for Material 
+        * @default 4 @for Material
         */
         cornerRadius: 0
     },
@@ -3678,6 +3801,15 @@ var dxChartCommonAnnotationConfig = {
     */
     text: undefined,
     /**
+    * @name dxChartCommonAnnotationConfig.template
+    * @type template|function
+    * @default undefined
+    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_param2 element:SVGGElement
+    * @type_function_return string|SVGElement|jQuery
+    */
+    template: undefined,
+    /**
     * @name dxChartCommonAnnotationConfig.description
     * @type string
     * @default undefined
@@ -3704,6 +3836,15 @@ var dxChartCommonAnnotationConfig = {
     * @notUsedInTheme
     */
     customizeTooltip: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.tooltipTemplate
+    * @type template|function(annotationItem, element)
+    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_param2 element:dxElement
+    * @type_function_return string|Node|jQuery
+    * @default undefined
+    */
+    tooltipTemplate: undefined,
     /**
     * @name dxChartCommonAnnotationConfig.wordWrap
     * @type Enums.VizWordWrap

@@ -1,8 +1,15 @@
+@import (once) "./colorView.less";
+@import (once) "./dropDownEditor.less";
+
 .dx-colorbox-input-container {
     &.dx-colorbox-color-is-not-defined {
         .dx-colorbox-color-result-preview {
             border: none;
         }
+    }
+
+    .dx-placeholder:before {
+        max-width: calc(100% - 25px);
     }
 }
 

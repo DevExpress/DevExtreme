@@ -16,6 +16,7 @@ exports.FocusController = core.ViewController.inherit((function() {
         init: function() {
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
+            this.component._optionsByReference.focusedRowKey = true;
         },
 
         optionChanged: function(args) {
@@ -446,9 +447,9 @@ module.exports = {
                     var prevRowIndex = this.option("focusedRowIndex"),
                         prevColumnIndex = this.option("focusedColumnIndex");
 
-                    this.callBase($cell, direction);
-
-                    this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
+                    if(this.callBase($cell, direction)) {
+                        this._fireFocusedCellChanged($cell, prevColumnIndex, prevRowIndex);
+                    }
                 }
             },
 

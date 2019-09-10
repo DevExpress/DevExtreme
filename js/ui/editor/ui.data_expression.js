@@ -52,16 +52,19 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
 
             /**
             * @name DataExpressionMixinOptions.valueExpr
-            * @type string|function
+             * @type string|function(item)
             * @default "this"
+             * @type_function_param1 item:object
+             * @type_function_return string
             */
             valueExpr: "this",
 
             /**
             * @name DataExpressionMixinOptions.displayExpr
             * @type string|function(item)
+             * @default undefined
             * @type_function_param1 item:object
-            * @default undefined
+             * @type_function_return string
             */
             displayExpr: undefined
         };

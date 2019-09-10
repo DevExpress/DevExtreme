@@ -142,6 +142,27 @@ QUnit.module("repaintChangesOnly", {
             this.checkContainsEmptyMessage(assert, false);
         });
 
+        QUnit.test("[{1}] -> [{0}, {1}] -> {selectedIndex: 0}", function(assert) {
+            const item1 = { text: "1a", content: "1a_" };
+            this.createTabPanel({ items: [item1] });
+
+            const item0 = { text: "0a", content: "0a_" };
+            this.tabPanel.option("items", [item0, item1]);
+            this.clock.tick(1);
+
+            assert.equal(this.tabPanel.option("selectedIndex"), 1, "selectedIndex after insert");
+
+            this.tabPanel.option("selectedIndex", 0);
+            this.clock.tick(1);
+
+            this.checkTitleRendered(assert, [item0]);
+            this.checkItemRendered(assert, [{ data: item0, index: 0 }]);
+            this.checkItemDeleted(assert, []);
+
+            this.checkContainsElements(assert, [item0.text, item0.content, item1.text, item1.content]);
+            this.checkContainsEmptyMessage(assert, false);
+        });
+
         // T731713
         QUnit.test("[{1}] -> [{1}, {2}] -> {selectedIndex:1} -> [{1}]" + testContext, function(assert) {
             const item1 = { text: "1a", content: "1a_" };
