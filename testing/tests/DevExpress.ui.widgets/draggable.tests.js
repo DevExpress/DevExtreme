@@ -19,7 +19,7 @@ QUnit.testStart(function() {
             </div>\
         </div>\
         <div id="items" style="width: 300px; height: 250px; position: relative; background: grey;">\
-            <div id="item1" class="draggable" style="width: 30px; height: 50px; background: yellow;"><div id="nested" style="width: 10px; height: 10px;"></div></div>\
+            <div id="item1" class="draggable" style="width: 30px; height: 50px; background: yellow;"></div>\
             <div id="item2" class="draggable" style="width: 30px; height: 50px; background: red;"></div>\
             <div id="item3" class="draggable" style="width: 30px; height: 50px; background: blue;"></div>\
         </div>\

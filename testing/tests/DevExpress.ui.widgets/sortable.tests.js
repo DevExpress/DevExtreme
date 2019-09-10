@@ -1,7 +1,6 @@
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
 import viewPort from "core/utils/view_port";
-import { noop } from "core/utils/common";
 
 import "common.css!";
 import "ui/sortable";
@@ -276,61 +275,103 @@ QUnit.test("The placeholder should be correct after drag and drop items", functi
 
 QUnit.module("Events", moduleConfig);
 
-var checkCallback = function(sortable, spy, assert) {
-    assert.ok(spy.calledOnce, "callback fired");
-
-    var firstCall = spy.getCall(0),
-        arg = firstCall.args[0],
-        context = firstCall.thisValue;
-
-    assert.strictEqual(context, sortable, "context equals to component");
-    assert.strictEqual(arg.component, sortable);
-    assert.strictEqual($(arg.element)[0], this.$element[0]);
-};
-
-QUnit.test("'onDragChange' callback fired", function(assert) {
+QUnit.test("onDragChange - check args when dragging an item down", function(assert) {
     // arrange
-    var callbackSpy = sinon.spy(noop),
-        options = {
-            items: ".draggable",
-            onDragChange: callbackSpy
-        },
-        sortable;
+    let items,
+        args,
+        onDragChange = sinon.spy();
 
-    sortable = this.createSortable(options);
 
-    let items = this.$element.children(),
-        $dragItemElement = items.eq(0);
+    this.createSortable({
+        items: ".draggable",
+        onDragChange: onDragChange
+    });
+
+    items = this.$element.children();
 
     // act
-    pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
+    pointerMock(items.eq(0)).start().down(15, 15).move(0, 30);
 
     // assert
-    checkCallback.call(this, sortable, callbackSpy, assert);
+    args = onDragChange.getCall(0).args;
+    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
+    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+});
+
+QUnit.test("onDragChange - check args when dragging an item up", function(assert) {
+    // arrange
+    let items,
+        args,
+        onDragChange = sinon.spy();
+
+
+    this.createSortable({
+        items: ".draggable",
+        onDragChange: onDragChange
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(2)).start().down().move(0, 30);
+
+    // assert
+    args = onDragChange.getCall(0).args;
+    assert.deepEqual($(args[0].sourceElement).get(0), items.get(2), "source element");
+    assert.strictEqual(args[0].fromIndex, 2, "fromIndex");
+    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+});
+
+QUnit.test("onDragChange - check args when dragging to last position", function(assert) {
+    // arrange
+    let items,
+        args,
+        onDragChange = sinon.spy();
+
+    this.createSortable({
+        items: ".draggable",
+        onDragChange: onDragChange
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(0)).start().down(15, 15).move(0, 90);
+
+    // assert
+    args = onDragChange.getCall(0).args;
+    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
+    assert.strictEqual(args[0].toIndex, 2, "toIndex");
 });
 
 QUnit.test("'onDragChange' option changing", function(assert) {
     // arrange
-    var callbackSpy = sinon.spy(noop),
-        options = {
-            items: ".draggable"
-        },
-        sortable;
+    let args,
+        items,
+        onDragChange = sinon.spy();
 
-    sortable = this.createSortable(options);
+    this.createSortable({
+        items: ".draggable"
+    });
+
+    items = this.$element.children();
 
     // act
-    sortable.option("onDragChange", callbackSpy);
+    this.sortableInstance.option("onDragChange", onDragChange);
 
     // arrange
-    let items = this.$element.children(),
-        $dragItemElement = items.eq(0);
+    items = this.$element.children();
 
     // act
-    pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
+    pointerMock(items.eq(0)).start().down(15, 15).move(0, 30);
 
     // assert
-    checkCallback.call(this, sortable, callbackSpy, assert);
+    args = onDragChange.getCall(0).args;
+    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
+    assert.strictEqual(args[0].toIndex, 1, "toIndex");
 });
 
 QUnit.test("'onDragChange' event - not drag item when eventArgs.cancel is true", function(assert) {

@@ -160,8 +160,13 @@ var Sortable = Draggable.inherit({
     },
 
     _updatePlaceholderPosition: function(e, itemPoint, isLastPosition) {
-        let eventArgs = { event: e },
+        let eventArgs,
             fromIndex = this._dragInfo.fromIndex;
+
+        this._dragInfo.toIndex = Math.max(fromIndex > itemPoint.index ? itemPoint.index : itemPoint.index - 1, 0);
+        eventArgs = extend(this._getEventArgs(), {
+            event: e
+        });
 
         this._getAction("onDragChange")(eventArgs);
 
@@ -178,8 +183,6 @@ var Sortable = Draggable.inherit({
         } else {
             $placeholderElement.insertBefore(itemPoint.$item);
         }
-
-        this._dragInfo.toIndex = Math.max(fromIndex > itemPoint.index ? itemPoint.index : itemPoint.index - 1, 0);
     },
 
     _moveItem: function(item) {
@@ -190,16 +193,20 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _getDragEndArgs: function() {
+    _getEventArgs: function() {
         let sourceElement = getPublicElement(this._$sourceElement),
             fromIndex = this._dragInfo && this._dragInfo.fromIndex,
             toIndex = this._dragInfo && this._dragInfo.toIndex;
 
-        return extend(this.callBase.apply(this, arguments), {
+        return {
             fromIndex: fromIndex,
             toIndex: toIndex,
             sourceElement: sourceElement
-        });
+        };
+    },
+
+    _getDragEndArgs: function() {
+        return extend(this.callBase.apply(this, arguments), this._getEventArgs());
     },
 
     _dragEndHandler: function(e) {
@@ -213,6 +220,7 @@ var Sortable = Draggable.inherit({
         this._resetPlaceholder(placeholderNeedToRemove);
         this._itemPoints = null;
         this._currentPoint = null;
+        this._dragInfo = null;
     },
 
     _optionChanged: function(args) {
