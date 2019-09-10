@@ -120,9 +120,9 @@ var Sortable = Draggable.inherit({
         }
 
         this._dragInfo = {
-            fromIndex: this._$sourceElement.index()
+            fromIndex: this._$sourceElement.index(),
+            itemPoints: this._getItemPoints(e)
         };
-        this._itemPoints = this._getItemPoints(e);
     },
 
     _dragHandler: function(e) {
@@ -136,14 +136,15 @@ var Sortable = Draggable.inherit({
     },
 
     _movePlaceholder: function(e) {
-        if(!this._itemPoints) {
+        let itemPoints = this._dragInfo && this._dragInfo.itemPoints;
+
+        if(!itemPoints) {
             return;
         }
 
         let isVertical = this.option("orientation") === "vertical",
             axisName = isVertical ? "top" : "left",
-            cursorPosition = isVertical ? e.pageY : e.pageX,
-            itemPoints = this._itemPoints;
+            cursorPosition = isVertical ? e.pageY : e.pageX;
 
         for(let i = 0; i < itemPoints.length; i++) {
             let itemPoint = itemPoints[i],
@@ -185,11 +186,11 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _moveItem: function(item) {
+    _moveItem: function($itemElement) {
         let hasPlaceholderTemplate = !!this.option("placeholderTemplate");
 
         if(hasPlaceholderTemplate && this._$placeholderElement) {
-            this._$placeholderElement.replaceWith(item);
+            this._$placeholderElement.replaceWith($itemElement);
         }
     },
 
@@ -218,8 +219,6 @@ var Sortable = Draggable.inherit({
         }
 
         this._resetPlaceholder(placeholderNeedToRemove);
-        this._itemPoints = null;
-        this._currentPoint = null;
         this._dragInfo = null;
     },
 
