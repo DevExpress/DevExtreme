@@ -135,6 +135,7 @@ describe("Builder - testing exported function", () => {
             it(`We can build bundle for every widget (${theme}, ${widgetName})`, () => {
                 return buildTheme(config).then((result) => {
                     assert.isString(result.css, `${widgetName} bundle builded`);
+                    assert.deepEqual(result.widgets, [ widgetName ]);
                 });
             });
         });

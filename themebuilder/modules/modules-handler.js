@@ -5,6 +5,8 @@ class ModulesHandler {
 
         this.widgets = widgetsList || [];
         this.widgets = this.widgets.map(w => w.toLowerCase());
+
+        this.bundledWidgets = [];
     }
 
     getWidgetFromImport(importString) {
@@ -56,11 +58,19 @@ class ModulesHandler {
         };
 
         const removeUnnecessaryWidgets = (less) => {
-            this.availableWidgets(less).forEach(widget => {
-                if(this.widgets.indexOf(widget.name) < 0) {
-                    less = less.replace(widget.import, "");
-                }
-            });
+            const availableWidgets = this.availableWidgets(less);
+
+            if(this.widgets.length > 0) {
+                availableWidgets.forEach(widget => {
+                    if(this.widgets.indexOf(widget.name) < 0) {
+                        less = less.replace(widget.import, "");
+                    } else {
+                        this.bundledWidgets.push(widget.name);
+                    }
+                });
+            } else {
+                this.bundledWidgets = availableWidgets.map(w => w.name);
+            }
 
             return less;
         };
@@ -71,7 +81,7 @@ class ModulesHandler {
                     process: (less, context) => {
                         const fileName = getFileNameFromContext(context);
 
-                        if(this.widgets.length > 0 && fileName === this.FILE_FOR_PARSING) {
+                        if(fileName === this.FILE_FOR_PARSING) {
                             less = removeUnnecessaryWidgets(less);
                         }
 

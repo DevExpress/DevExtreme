@@ -112,6 +112,7 @@ some imports
         });
 
         assert.equal(process(themesFileContent, { fileInfo: { filename: "/linux/path/theme.less" } }), expectedThemesFileContent);
+        assert.deepEqual(modulesHandler.bundledWidgets, [ "box", "button" ]);
     });
 
     it("Modules handler - lessPlugin - do not remove any widget if widgets array is empty or undefined", () => {
@@ -136,6 +137,7 @@ some imports
             });
 
             assert.equal(process(themesFileContent, { fileInfo: { filename: "/linux/path/theme.less" } }), themesFileContent);
+            assert.deepEqual(modulesHandler.bundledWidgets, [ "box", "responsivebox", "button" ]);
         });
     });
 
@@ -166,6 +168,39 @@ some imports
             });
 
             assert.equal(process(themesFileContent, { fileInfo: { filename: "/linux/path/theme.less" } }), themesFileContent);
+            assert.deepEqual(modulesHandler.bundledWidgets, [ "box", "responsivebox", "button" ]);
         });
+    });
+
+    it("Modules handler - lessPlugin - not valid widgets are ignored", () => {
+        const modulesHandler = new ModulesHandler(["box", "button", "superwidget"]);
+        const lessPlugin = modulesHandler.lessPlugin();
+        const themesFileContent = `
+some imports
+
+// tb_widgets_list
+@import (once) "./widgets/@{base-theme}/box.@{base-theme}.less";
+@import (once) "./widgets/@{base-theme}/responsiveBox.@{base-theme}.less";
+@import (once) "./widgets/@{base-theme}/button.@{base-theme}.less";
+`;
+
+        const expectedThemesFileContent = `
+some imports
+
+// tb_widgets_list
+@import (once) "./widgets/@{base-theme}/box.@{base-theme}.less";
+
+@import (once) "./widgets/@{base-theme}/button.@{base-theme}.less";
+`;
+        let process;
+
+        lessPlugin.install(null, {
+            addPreProcessor: (pluginObj) => {
+                process = pluginObj.process;
+            }
+        });
+
+        assert.equal(process(themesFileContent, { fileInfo: { filename: "/linux/path/theme.less" } }), expectedThemesFileContent);
+        assert.deepEqual(modulesHandler.bundledWidgets, [ "box", "button" ]);
     });
 });

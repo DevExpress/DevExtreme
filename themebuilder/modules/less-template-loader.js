@@ -130,6 +130,7 @@ class LessTemplateLoader {
     compileLess(less, modifyVars, metadata, widgets) {
         return new Promise((resolve, reject) => {
             const browsersList = require("../package.json").browserslist;
+            const modulesHandler = new ModulesHandler(widgets);
             let compiledMetadata = {};
             let options = {};
 
@@ -147,7 +148,7 @@ class LessTemplateLoader {
                             pluginManager.addPostProcessor(new LessFontPlugin(this.options));
                         }
                     },
-                    new ModulesHandler(widgets).lessPlugin()
+                    modulesHandler.lessPlugin()
                 ]
             };
 
@@ -164,7 +165,8 @@ class LessTemplateLoader {
                     compiledMetadata: compiledMetadata,
                     css: this._makeInfoHeader() + css,
                     swatchSelector: this.swatchSelector,
-                    version: this.version
+                    version: this.version,
+                    widgets: modulesHandler.bundledWidgets
                 });
             }, error => {
                 reject(error);
