@@ -633,10 +633,15 @@ polarAxes.linear = {
         return this._translator.translate(value, offset);
     },
 
-    _getCanvasStartEnd: function() {
+    _getCanvasStartEnd() {
+        const invert = this.getTranslator().getBusinessRange().invert;
+        const coords = [0, this.getRadius()];
+
+        invert && coords.reverse();
+
         return {
-            start: 0,
-            end: this.getRadius()
+            start: coords[0],
+            end: coords[1]
         };
     },
 

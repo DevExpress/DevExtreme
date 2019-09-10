@@ -2995,6 +2995,37 @@ QUnit.test("Try to set the visualRange less then minVisualRangeLength", function
     assert.ok(onZoomEnd.getCall(0).args[0].cancel);
 });
 
+QUnit.test("Correct canvas for inverted value axis", function(assert) {
+    this.$container.css({ width: "500px", height: "500px" });
+    var dataSource = [{
+        arg: 0,
+        val: 4
+    }, {
+        arg: 90,
+        val: 5
+    }, {
+        arg: 180,
+        val: 7
+    }, {
+        arg: 270,
+        val: 0
+    }, {
+        arg: 360,
+        val: 10
+    }];
+
+    var chart = this.createPolarChart({
+        dataSource: dataSource,
+        series: { type: "line" },
+        valueAxis: { inverted: true }
+    });
+
+    var canvas = chart.getValueAxis().getTranslator()._canvas;
+
+    assert.equal(canvas.endPadding, 0);
+    assert.roughEqual(canvas.startPadding, 10.5, 0.5);
+});
+
 QUnit.module("T576725", $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
