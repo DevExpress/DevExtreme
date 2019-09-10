@@ -2256,8 +2256,8 @@ testModule("container", moduleConfig, () => {
 
         TestOverlay.defaultOptions({
             options: {
-                container: "#customTargetContainer",
-            },
+                container: "#customTargetContainer"
+            }
         });
 
         const overlay = new TestOverlay("#overlay");
