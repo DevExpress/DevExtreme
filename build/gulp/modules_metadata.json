@@ -351,6 +351,24 @@
     }
   },
   {
+    "name": " ui/file_manager/file_provider/webapi",
+    "exports": {
+      "default": { "path": "fileProvider.WebApiFileProvider" }
+    }
+  },
+  {
+    "name": " ui/file_manager/file_provider/array",
+    "exports": {
+      "default": { "path": "fileProvider.ArrayFileProvider" }
+    }
+  },
+  {
+    "name": " ui/file_manager/file_provider/ajax",
+    "exports": {
+      "default": { "path": "fileProvider.AjaxFileProvider" }
+    }
+  },
+  {
     "name": "ui/form",
     "exports": {
       "default": { "path": "ui.dxForm", "isWidget": true }
