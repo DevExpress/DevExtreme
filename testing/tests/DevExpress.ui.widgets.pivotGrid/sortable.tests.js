@@ -84,7 +84,7 @@ QUnit.module("sortable without containers");
 QUnit.test("sortable render without parameters", function(assert) {
     var $sortable = $("#sortable").dxSortableOld({});
 
-    assert.ok($sortable.hasClass("dx-sortable"), "dx-sortable class attached");
+    assert.ok($sortable.hasClass("dx-sortable-old"), "dx-sortable-old class attached");
 });
 
 QUnit.test("vertical dragging", function(assert) {

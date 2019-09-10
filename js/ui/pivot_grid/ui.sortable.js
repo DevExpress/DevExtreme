@@ -10,7 +10,7 @@ import dragEvents from "../../events/drag";
 import { getSwatchContainer } from "../widget/swatch_container";
 
 var SORTABLE_NAMESPACE = "dxSortable",
-    SORTABLE_CLASS = "dx-sortable",
+    SORTABLE_CLASS = "dx-sortable-old",
     SCROLL_STEP = 2,
     START_SCROLL_OFFSET = 20,
     SCROLL_TIMEOUT = 10;
@@ -152,7 +152,7 @@ var Sortable = DOMComponent.inherit({
             itemRender: null,
             groupSelector: null,
             itemSelector: ".dx-sort-item",
-            itemContainerSelector: ".dx-sortable",
+            itemContainerSelector: ".dx-sortable-old",
             sourceClass: "dx-drag-source",
             dragClass: "dx-drag",
             targetClass: "dx-drag-target",
