@@ -389,6 +389,33 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             });
     });
 
+    test("upload fails when file has wrong extension", function(assert) {
+        this.controller = new FileItemsController({
+            fileProvider: this.data,
+            allowedFileExtensions: [ ".tiff" ]
+        });
+
+        const files = createUploaderFiles(2);
+        files[0].name = "Test file 1.tiff";
+
+        const done1 = assert.async();
+        const done2 = assert.async();
+        const currentDir = this.controller.getCurrentDirectory();
+
+        this.controller
+            .getDirectories(currentDir)
+            .then(() => this.controller.uploadFileChunk(files[0], { }, currentDir))
+            .then(() => {
+                done1();
+                assert.throws(() => this.controller.uploadFileChunk(files[1], { }, currentDir),
+                    error => {
+                        done2();
+                        return error.errorId === ErrorCode.WrongFileExtension;
+                    },
+                    "wrong file extension error raised");
+            });
+    });
+
     test("files with empty extensions can be allowed or denied", function(assert) {
         this.controller = new FileItemsController({
             fileProvider: this.data,

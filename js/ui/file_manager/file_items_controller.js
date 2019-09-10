@@ -230,6 +230,7 @@ export default class FileItemsController {
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
         this._securityController.validateMaxFileSize(fileData.size);
+        this._securityController.validateExtension(fileData.name);
         return when(this._fileProvider.uploadFileChunk(fileData, chunksInfo, destinationDirectory));
     }
 
