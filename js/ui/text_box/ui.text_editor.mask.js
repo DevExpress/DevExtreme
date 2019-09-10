@@ -211,8 +211,6 @@ var TextEditorMask = TextEditorBase.inherit({
         this._maskStrategy.attachEvents();
         this._parseMask();
         this._renderMaskedValue();
-
-        this._changedValue = this._input().val();
     },
 
     _suppressCaretChanging: function(callback, args) {
@@ -414,7 +412,6 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this.setForwardDirection();
         this._adjustCaret();
-        this._changedValue = this._input().val();
         this._displayMask();
         this._maskRulesChain.reset();
     },
