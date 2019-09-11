@@ -1664,6 +1664,19 @@ declare module DevExpress.fx {
     export function stop(element: Element, jumpToEnd: boolean): void;
 }
 declare module DevExpress.ui {
+    /** @name AsyncRule */
+    export interface AsyncRule {
+        /** @name AsyncRule.ignoreEmptyValue */
+        ignoreEmptyValue?: boolean;
+        /** @name AsyncRule.message */
+        message?: string;
+        /** @name AsyncRule.reevaluate */
+        reevaluate?: boolean;
+        /** @name AsyncRule.type */
+        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
+        /** @name AsyncRule.validationCallback */
+        validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any }) => Promise<any> | JQueryPromise<any>);
+    }
     /** @name ColCountResponsible */
     export interface ColCountResponsible {
         /** @name ColCountResponsible.lg */
@@ -1741,7 +1754,7 @@ declare module DevExpress.ui {
         /** @name CompareRule.reevaluate */
         reevaluate?: boolean;
         /** @name CompareRule.type */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /** @name CustomRule */
     export interface CustomRule {
@@ -1752,7 +1765,7 @@ declare module DevExpress.ui {
         /** @name CustomRule.reevaluate */
         reevaluate?: boolean;
         /** @name CustomRule.type */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /** @name CustomRule.validationCallback */
         validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any }) => boolean);
     }
@@ -1787,8 +1800,12 @@ declare module DevExpress.ui {
         readOnly?: boolean;
         /** @name Editor.Options.validationError */
         validationError?: any;
+        /** @name Editor.Options.validationErrors */
+        validationErrors?: Array<any>;
         /** @name Editor.Options.validationMessageMode */
         validationMessageMode?: 'always' | 'auto';
+        /** @name Editor.Options.validationStatus */
+        validationStatus?: 'valid' | 'invalid' | 'pending';
         /** @name Editor.Options.value */
         value?: any;
     }
@@ -1806,7 +1823,7 @@ declare module DevExpress.ui {
         /** @name EmailRule.message */
         message?: string;
         /** @name EmailRule.type */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /** @name GridBase.Options */
     export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
@@ -1901,7 +1918,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.onRowUpdating */
         onRowUpdating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /** @name GridBase.Options.onRowValidating */
-        onRowValidating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string }) => any);
+        onRowValidating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string }) => any);
         /** @name GridBase.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
         /** @name GridBase.Options.onToolbarPreparing */
@@ -2248,7 +2265,7 @@ declare module DevExpress.ui {
         /** @name GridBaseColumn.trueText */
         trueText?: string;
         /** @name GridBaseColumn.validationRules */
-        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
         /** @name GridBaseColumn.visible */
         visible?: boolean;
         /** @name GridBaseColumn.visibleIndex */
@@ -2303,7 +2320,7 @@ declare module DevExpress.ui {
         /** @name NumericRule.message */
         message?: string;
         /** @name NumericRule.type */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /** @name OneDriveFileProvider.Options */
     export interface OneDriveFileProviderOptions extends DevExpress.fileProvider.FileProviderOptions<OneDriveFileProvider> {
@@ -2321,7 +2338,7 @@ declare module DevExpress.ui {
         /** @name PatternRule.pattern */
         pattern?: RegExp | string;
         /** @name PatternRule.type */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /** @name RangeRule */
     export interface RangeRule {
@@ -2336,7 +2353,7 @@ declare module DevExpress.ui {
         /** @name RangeRule.reevaluate */
         reevaluate?: boolean;
         /** @name RangeRule.type */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /** @name RequiredRule */
     export interface RequiredRule {
@@ -2345,7 +2362,7 @@ declare module DevExpress.ui {
         /** @name RequiredRule.trim */
         trim?: boolean;
         /** @name RequiredRule.type */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /** @name SearchBoxMixin.Options */
     export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
@@ -2379,7 +2396,7 @@ declare module DevExpress.ui {
         /** @name StringLengthRule.trim */
         trim?: boolean;
         /** @name StringLengthRule.type */
-        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
+        type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /** @name Widget.Options */
     export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
@@ -3693,7 +3710,7 @@ declare module DevExpress.ui {
         /** @name dxFormSimpleItem.template */
         template?: DevExpress.core.template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxFormSimpleItem.validationRules */
-        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
         /** @name dxFormSimpleItem.visible */
         visible?: boolean;
         /** @name dxFormSimpleItem.visibleIndex */
@@ -6054,9 +6071,13 @@ declare module DevExpress.ui {
     /** @name dxValidationGroupResult */
     export interface dxValidationGroupResult {
         /** @name dxValidationGroupResult.brokenRules */
-        brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+        /** @name dxValidationGroupResult.complete */
+        complete?: Promise<dxValidationGroupResult> | JQueryPromise<dxValidationGroupResult>;
         /** @name dxValidationGroupResult.isValid */
         isValid?: boolean;
+        /** @name dxValidationGroupResult.status */
+        status?: 'valid' | 'invalid' | 'pending';
         /** @name dxValidationGroupResult.validators */
         validators?: Array<any>;
     }
@@ -6077,11 +6098,11 @@ declare module DevExpress.ui {
         /** @name dxValidator.Options.name */
         name?: string;
         /** @name dxValidator.Options.onValidated */
-        onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>, brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule }) => any);
+        onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule, status?: 'valid' | 'invalid' | 'pending' }) => any);
         /** @name dxValidator.Options.validationGroup */
         validationGroup?: string;
         /** @name dxValidator.Options.validationRules */
-        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     }
     /** @name dxValidator */
     export class dxValidator extends DOMComponent {
@@ -6097,11 +6118,19 @@ declare module DevExpress.ui {
     /** @name dxValidatorResult */
     export interface dxValidatorResult {
         /** @name dxValidatorResult.brokenRule */
-        brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule;
+        brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule;
+        /** @name dxValidatorResult.brokenRules */
+        brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
+        /** @name dxValidatorResult.complete */
+        complete?: Promise<dxValidatorResult> | JQueryPromise<dxValidatorResult>;
         /** @name dxValidatorResult.isValid */
         isValid?: boolean;
+        /** @name dxValidatorResult.pendingRules */
+        pendingRules?: Array<AsyncRule>;
+        /** @name dxValidatorResult.status */
+        status?: 'valid' | 'invalid' | 'pending';
         /** @name dxValidatorResult.validationRules */
-        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
         /** @name dxValidatorResult.value */
         value?: any;
     }
