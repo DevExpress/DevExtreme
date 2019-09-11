@@ -343,7 +343,7 @@ const DateBoxMask = DateBoxBase.inherit({
         this._caret(this._getActivePartProp("caret"));
     },
 
-    _getForcedPattern() {
+    _getRealLimitsPattern() {
         if(this._getActivePartProp("pattern")[0] === "d") {
             return "dM";
         }
@@ -351,7 +351,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _getActivePartLimits(fixateOtherDateParts) {
         const limitFunction = this._getActivePartProp("limits");
-        return limitFunction(this._maskValue, fixateOtherDateParts && this._getForcedPattern());
+        return limitFunction(this._maskValue, fixateOtherDateParts && this._getRealLimitsPattern());
     },
 
     _getActivePartValue(dateValue) {
