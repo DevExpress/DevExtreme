@@ -14,6 +14,10 @@ export const FileManagerMessages = {
                 return messageLocalization.format("dxFileManager-errorDirectoryExistsFormat", args);
             case ErrorCode.DirectoryNotFound:
                 return messageLocalization.format("dxFileManager-errorDirectoryNotFoundFormat", args);
+            case ErrorCode.WrongFileExtension:
+                return messageLocalization.format("dxFileManager-errorWrongFileExtension");
+            case ErrorCode.MaxFileSizeExceeded:
+                return messageLocalization.format("dxFileManager-errorMaxFileSizeExceeded");
         }
 
         return messageLocalization.format("dxFileManager-errorDefault");

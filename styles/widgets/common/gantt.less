@@ -29,7 +29,13 @@
     }
 
     .dx-gantt-view {
+        -webkit-user-select: none; // stylelint-disable-line property-no-vendor-prefix
+        user-select: none;
         width: 100%;
+
+        .dx-gantt-tac-hb {
+            margin-top: -1px;
+        }
 
         .dx-scrollable-scrollbar {
             z-index: 100;

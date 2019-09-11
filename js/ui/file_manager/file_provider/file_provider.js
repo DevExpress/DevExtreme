@@ -10,6 +10,7 @@ const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 * @name FileProvider
 * @type object
 * @module ui/file_manager/file_provider/file_provider
+* @namespace DevExpress.fileProvider
 * @export default
 * @hidden
 */

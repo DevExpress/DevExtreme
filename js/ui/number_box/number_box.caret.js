@@ -70,12 +70,13 @@ var getCaretWithOffset = function(caret, offset) {
 var getCaretAfterFormat = function(text, formatted, caret, format) {
     caret = getCaretWithOffset(caret, 0);
 
-    var point = number.getDecimalSeparator(),
-        pointPosition = text.indexOf(point),
-        newPointPosition = formatted.indexOf(point),
-        textParts = text.split(point),
-        formattedParts = formatted.split(point),
-        isCaretOnFloat = pointPosition !== -1 && caret.start > pointPosition;
+    var point = number.getDecimalSeparator();
+    var isSeparatorBasedText = isSeparatorBasedString(text);
+    var pointPosition = isSeparatorBasedText ? 0 : text.indexOf(point);
+    var newPointPosition = formatted.indexOf(point);
+    var textParts = isSeparatorBasedText ? text.split(text[pointPosition]) : text.split(point);
+    var formattedParts = formatted.split(point);
+    var isCaretOnFloat = pointPosition !== -1 && caret.start > pointPosition;
 
     if(isCaretOnFloat) {
         var relativeIndex = caret.start - pointPosition - 1,
@@ -91,6 +92,10 @@ var getCaretAfterFormat = function(text, formatted, caret, format) {
 
         return getCaretInBoundaries(newPositionFromBegin, formatted, format);
     }
+};
+
+var isSeparatorBasedString = function(text) {
+    return text.length === 1 && !!text.match(/^[,.][0-9]*$/g);
 };
 
 var isCaretInBoundaries = function(caret, text, format) {

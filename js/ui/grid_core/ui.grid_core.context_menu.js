@@ -42,8 +42,8 @@ var ContextMenuController = modules.ViewController.inherit({
             $element = view && view.element();
 
             if($element && ($element.is($targetElement) || $element.find($targetElement).length)) {
-                $targetCellElement = $targetElement.closest("td");
-                $targetRowElement = $targetCellElement.closest(".dx-row");
+                $targetCellElement = $targetElement.closest(".dx-row > td");
+                $targetRowElement = $targetCellElement.parent();
                 rowIndex = view.getRowIndex($targetRowElement);
                 columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
                 rowOptions = $targetRowElement.data("options");

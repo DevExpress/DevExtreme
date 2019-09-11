@@ -444,4 +444,23 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getDetailsItemName(1), "File 2.jpg", "second file is not target file");
     });
 
+    test("rename file failed for not allowed extension", function(assert) {
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxclick");
+        this.wrapper.getDetailsItemList().trigger("click");
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton("Rename").trigger("dxclick");
+        this.clock.tick(400);
+
+        this.wrapper.getDialogTextInput()
+            .val("Testpage 11.aspx")
+            .trigger("change");
+        this.wrapper.getDialogButton("Save").trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "file was not renamed");
+    });
+
 });

@@ -57,11 +57,13 @@ var Sortable = Draggable.inherit({
         this.callBase();
     },
 
-    _removePlaceholderElement: function() {
-        if(this._$placeholderElement && !this._$placeholderElement.hasClass(this._addWidgetPrefix(SOURCE_CLASS))) {
-            this._$placeholderElement.remove();
-        } else {
-            this._togglePlaceholderClass(false);
+    _resetPlaceholder: function(needToRemove) {
+        if(this._$placeholderElement) {
+            if(needToRemove) {
+                this._$placeholderElement.remove();
+            } else {
+                this._togglePlaceholderClass(false);
+            }
         }
         this._$placeholderElement = null;
     },
@@ -131,6 +133,7 @@ var Sortable = Draggable.inherit({
             let lastItem = result[result.length - 1];
 
             result.push({
+                index: result.length,
                 top: isVertical ? lastItem.top + lastItem.height : lastItem.top,
                 left: !isVertical ? lastItem.left + lastItem.width : lastItem.left,
                 isValid: this._isValidPoint($items, result.length)
@@ -147,7 +150,10 @@ var Sortable = Draggable.inherit({
             return;
         }
 
-        this._itemPoints = this._getItemPoints(e);
+        this._dragInfo = {
+            fromIndex: this._$sourceElement.index(),
+            itemPoints: this._getItemPoints(e)
+        };
     },
 
     _dragMoveHandler: function(e) {
@@ -161,14 +167,15 @@ var Sortable = Draggable.inherit({
     },
 
     _movePlaceholder: function(e) {
-        if(!this._itemPoints) {
+        let itemPoints = this._dragInfo && this._dragInfo.itemPoints;
+
+        if(!itemPoints) {
             return;
         }
 
         let isVertical = this.option("itemOrientation") === "vertical",
             axisName = isVertical ? "top" : "left",
-            cursorPosition = isVertical ? e.pageY : e.pageX,
-            itemPoints = this._itemPoints;
+            cursorPosition = isVertical ? e.pageY : e.pageX;
 
         for(let i = 0; i < itemPoints.length; i++) {
             let itemPoint = itemPoints[i],
@@ -185,7 +192,13 @@ var Sortable = Draggable.inherit({
     },
 
     _updatePlaceholderPosition: function(e, itemPoint, isLastPosition) {
-        let eventArgs = { event: e };
+        let eventArgs,
+            fromIndex = this._dragInfo.fromIndex;
+
+        this._dragInfo.toIndex = Math.max(fromIndex > itemPoint.index ? itemPoint.index : itemPoint.index - 1, 0);
+        eventArgs = extend(this._getEventArgs(), {
+            event: e
+        });
 
         this._getAction("onDragChange")(eventArgs);
 
@@ -204,19 +217,40 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _moveSourceItem: function() {
+    _moveItem: function($itemElement) {
         let hasPlaceholderTemplate = !!this.option("placeholderTemplate");
 
         if(hasPlaceholderTemplate && this._$placeholderElement) {
-            this._$placeholderElement.replaceWith(this._$sourceElement);
+            this._$placeholderElement.replaceWith($itemElement);
         }
     },
 
-    _dragEndHandler: function() {
-        this._moveSourceItem();
-        this._removePlaceholderElement();
-        this._itemPoints = null;
-        this.callBase.apply(this, arguments);
+    _getEventArgs: function() {
+        let sourceElement = getPublicElement(this._$sourceElement),
+            fromIndex = this._dragInfo && this._dragInfo.fromIndex,
+            toIndex = this._dragInfo && this._dragInfo.toIndex;
+
+        return {
+            fromIndex: fromIndex,
+            toIndex: toIndex,
+            sourceElement: sourceElement
+        };
+    },
+
+    _getDragEndArgs: function() {
+        return extend(this.callBase.apply(this, arguments), this._getEventArgs());
+    },
+
+    _dragEndHandler: function(e) {
+        let $sourceElement = this._$sourceElement,
+            placeholderNeedToRemove = this._$placeholderElement && !this._$placeholderElement.hasClass(this._addWidgetPrefix(SOURCE_CLASS));
+
+        if(this.callBase.apply(this, arguments)) {
+            this._moveItem($sourceElement);
+        }
+
+        this._resetPlaceholder(placeholderNeedToRemove);
+        this._dragInfo = null;
     },
 
     _optionChanged: function(args) {

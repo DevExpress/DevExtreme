@@ -1,6 +1,8 @@
 const { test } = QUnit;
 
 import FileItemsController from "ui/file_manager/file_items_controller";
+import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
+import { createUploaderFiles } from "../../../helpers/fileManagerHelpers.js";
 
 const moduleConfig = {
 
@@ -359,6 +361,93 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
                 done();
             });
+    });
+
+    test("upload fails when max file size exceeded", function(assert) {
+        this.controller = new FileItemsController({
+            fileProvider: this.data,
+            maxUploadFileSize: 400000
+        });
+
+        const files = createUploaderFiles(2);
+
+        const done1 = assert.async();
+        const done2 = assert.async();
+        const currentDir = this.controller.getCurrentDirectory();
+
+        this.controller
+            .getDirectories(currentDir)
+            .then(() => this.controller.uploadFileChunk(files[0], { }, currentDir))
+            .then(() => {
+                done1();
+                assert.throws(() => this.controller.uploadFileChunk(files[1], { }, currentDir),
+                    error => {
+                        done2();
+                        return error.errorId === ErrorCode.MaxFileSizeExceeded;
+                    },
+                    "max file size exceeded error raised");
+            });
+    });
+
+    test("upload fails when file has wrong extension", function(assert) {
+        this.controller = new FileItemsController({
+            fileProvider: this.data,
+            allowedFileExtensions: [ ".tiff" ]
+        });
+
+        const files = createUploaderFiles(2);
+        files[0].name = "Test file 1.tiff";
+
+        const done1 = assert.async();
+        const done2 = assert.async();
+        const currentDir = this.controller.getCurrentDirectory();
+
+        this.controller
+            .getDirectories(currentDir)
+            .then(() => this.controller.uploadFileChunk(files[0], { }, currentDir))
+            .then(() => {
+                done1();
+                assert.throws(() => this.controller.uploadFileChunk(files[1], { }, currentDir),
+                    error => {
+                        done2();
+                        return error.errorId === ErrorCode.WrongFileExtension;
+                    },
+                    "wrong file extension error raised");
+            });
+    });
+
+    test("files with empty extensions can be allowed or denied", function(assert) {
+        this.controller = new FileItemsController({
+            fileProvider: this.data,
+            allowedFileExtensions: [ ".txt" ]
+        });
+        let selectedDir = this.controller.getCurrentDirectory();
+        const done1 = assert.async();
+        this.controller
+            .getDirectoryContents(selectedDir)
+            .done(items => {
+                assert.equal(items.length, 2);
+                assert.equal(items[0].fileItem.name, "F1");
+                assert.equal(items[1].fileItem.name, "F2");
+                done1();
+            });
+
+        this.controller = new FileItemsController({
+            fileProvider: this.data,
+            allowedFileExtensions: [ ".txt", "" ]
+        });
+        selectedDir = this.controller.getCurrentDirectory();
+        const done2 = assert.async();
+        this.controller
+            .getDirectoryContents(selectedDir)
+            .done(items => {
+                assert.equal(items.length, 3);
+                assert.equal(items[0].fileItem.name, "F1");
+                assert.equal(items[1].fileItem.name, "F2");
+                assert.equal(items[2].fileItem.name, "File1");
+                done2();
+            });
+
     });
 
 });

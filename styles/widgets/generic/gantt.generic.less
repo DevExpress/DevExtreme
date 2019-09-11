@@ -60,7 +60,6 @@
     }
 
     .dx-gantt-tac {
-        margin-top: -1px;
         height: calc(100% - @GANTT_HEADER_ITEM_HEIGHT);
     }
 
@@ -186,6 +185,12 @@
 
     .dx-gantt-sel {
         background-color: @gantt-selection-bg;
+        border-top: 1px solid @treelist-selection-bg;
+        border-bottom: 1px solid @treelist-selection-bg;
+    }
+
+    .dx-gantt-tac-hb .dx-gantt-sel {
+        border: none;
     }
 
     .dx-gantt-conn-v {

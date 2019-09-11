@@ -262,6 +262,8 @@
         "dxFileManager-errorFileExistsFormat": "ファイル {0} は既に存在します。",
         "dxFileManager-errorFileNotFoundFormat": "ファイル {0} が見つかりません。",
         "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
+        "dxFileManager-errorWrongFileExtension": "TODO",
+        "dxFileManager-errorMaxFileSizeExceeded": "TODO",
         "dxFileManager-errorDefault": "特定できないエラー"
     }
 }

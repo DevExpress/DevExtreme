@@ -15,6 +15,7 @@ import { pathCombine } from "../ui.file_manager.utils";
 * @inherits FileProvider
 * @type object
 * @module ui/file_manager/file_provider/array
+* @namespace DevExpress.fileProvider
 * @export default
 */
 class ArrayFileProvider extends FileProvider {
