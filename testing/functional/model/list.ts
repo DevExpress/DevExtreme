@@ -58,10 +58,16 @@ class Item {
 class Group {
     element: Selector;
     header: Selector;
+    items: Selector;
 
     constructor (element: Selector) {
         this.element = element;
-        this.header =  this.element.find(`.${CLASS.groupHeader}`);
+        this.header =  element.find(`.${CLASS.groupHeader}`);
+        this.items = element.find(`.${CLASS.item}`);
+    }
+
+    getItem (index: number = 0): Item {
+        return new Item(this.items.nth(index));
     }
 }
 

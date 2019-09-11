@@ -75,33 +75,6 @@ test("List selection should work with keyboard arrows (T718398)", async t => {
         .expect(secondItemCheckBox.isFocused).notOk();
 });
 
-test("Grouped list can not reorder items (T727360)", async t => {
-    const list = new List('#list');
-
-    await t
-        .navigateTo(url(__dirname, './pages/t727360.html'))
-        .click(list.getGroup(1).header)
-        .click(list.getGroup(2).header)
-
-        .dragToElement(list.getItem().reorderHandle, list.getItem(1).element)
-        .expect(list.getItem().text).eql('value12')
-        .expect(list.getItem(1).text).eql('value11')
-
-        .click(list.getGroup().header)
-        .click(list.getGroup(1).header)
-
-        .dragToElement(list.getItem(3).reorderHandle, list.getItem(4).element)
-        .expect(list.getItem(3).text).eql('value22')
-        .expect(list.getItem(4).text).eql('value21')
-
-        .click(list.getGroup(1).header)
-        .click(list.getGroup(2).header)
-
-        .dragToElement(list.getItem(13).reorderHandle, list.getItem(14).element)
-        .expect(list.getItem(13).text).eql('value32')
-        .expect(list.getItem(14).text).eql('value31');
-});
-
 test("Should save focused checkbox", async t => {
     const list = new List('#list');
     const input = Selector('#input');
@@ -137,4 +110,36 @@ test("Should save focused checkbox", async t => {
         .pressKey('tab')
         .expect(selectAllCheckBox.isFocused).ok()
         .expect(secondItemCheckBox.isFocused).notOk();
+});
+
+fixture `List T727360`
+    .page(url(__dirname, './pages/T727360.html'));
+
+test("Grouped list can not reorder items (T727360)", async t => {
+    const list = new List('#list');
+    const firstGroup = list.getGroup();
+    const secondGroup = list.getGroup(1);
+    const thirdGroup = list.getGroup(2);
+
+    await t
+        .click(secondGroup.header)
+        .click(thirdGroup.header)
+
+        .dragToElement(firstGroup.getItem().reorderHandle, firstGroup.getItem(1).element)
+        .expect(firstGroup.getItem().text).eql('value12')
+        .expect(firstGroup.getItem(1).text).eql('value11')
+
+        .click(firstGroup.header)
+        .click(secondGroup.header)
+
+        .dragToElement(secondGroup.getItem().reorderHandle, secondGroup.getItem(1).element)
+        .expect(secondGroup.getItem().text).eql('value22')
+        .expect(secondGroup.getItem(1).text).eql('value21')
+
+        .click(secondGroup.header)
+        .click(thirdGroup.header)
+
+        .dragToElement(thirdGroup.getItem().reorderHandle, thirdGroup.getItem(1).element)
+        .expect(thirdGroup.getItem().text).eql('value32')
+        .expect(thirdGroup.getItem(1).text).eql('value31');
 });
