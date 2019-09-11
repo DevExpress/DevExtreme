@@ -16,6 +16,8 @@ export class GanttView extends Widget {
             showResources: this.option("showResources"),
             taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition")),
             allowSelectTask: this.option("allowSelection"),
+            editing: this.option("editing"),
+            areHorizontalBordersEnabled: this.option("showRowLines"),
             areAlternateRowsEnabled: false
         });
         this._ganttViewCore.setViewType(3);
@@ -80,6 +82,12 @@ export class GanttView extends Widget {
                 break;
             case "allowSelection":
                 this._ganttViewCore.setAllowSelection(args.value);
+                break;
+            case "editing":
+                this._ganttViewCore.setEditingSettings(args.value);
+                break;
+            case "showRowLines":
+                this._ganttViewCore.setRowLinesVisible(args.value);
                 break;
             default:
                 super._optionChanged(args);

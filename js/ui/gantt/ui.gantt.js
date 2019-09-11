@@ -61,7 +61,7 @@ class Gantt extends Widget {
             scrolling: { showScrollbar: "onHover", mode: "virtual" },
             allowColumnResizing: true,
             autoExpandAll: true,
-            showRowLines: true,
+            showRowLines: this.option("showRowLines"),
             onContentReady: (e) => { this._onTreeListContentReady(e); },
             onSelectionChanged: (e) => { this._onTreeListSelectionChanged(e); },
             onRowCollapsed: (e) => this._ganttView.changeTaskExpanded(e.key, false),
@@ -95,6 +95,8 @@ class Gantt extends Widget {
             allowSelection: this.option("allowSelection"),
             showResources: this.option("showResources"),
             taskTitlePosition: this.option("taskTitlePosition"),
+            showRowLines: this.option("showRowLines"),
+            editing: this.option("editing"),
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this),
             onDialogShowing: this._showDialog.bind(this)
@@ -149,8 +151,8 @@ class Gantt extends Widget {
         }
     }
     _getTreeListRowHeight() {
-        const $row = this._treeList._$element.find(".dx-row-lines");
-        return $row ? $row.last().outerHeight() : GANTT_DEFAULT_ROW_HEIGHT;
+        const $row = this._treeList._$element.find(".dx-data-row");
+        return $row.length ? $row.last().outerHeight() : GANTT_DEFAULT_ROW_HEIGHT;
     }
 
 
@@ -460,6 +462,78 @@ class Gantt extends Widget {
             * @default true
             */
             allowSelection: true,
+            /**
+            * @name dxGanttOptions.showRowLines
+            * @type boolean
+            * @default true
+            */
+            showRowLines: true,
+            /**
+            * @name dxGanttOptions.editing
+            * @type Object
+            */
+            editing: {
+                /**
+                * @name dxGanttOptions.editing.enabled
+                * @type boolean
+                * @default false
+                */
+                enabled: false,
+                /**
+                * @name dxGanttOptions.editing.allowTaskAdding
+                * @type boolean
+                * @default true
+                */
+                allowTaskAdding: true,
+                /**
+                * @name dxGanttOptions.editing.allowTaskDeleting
+                * @type boolean
+                * @default true
+                */
+                allowTaskDeleting: true,
+                /**
+                * @name dxGanttOptions.editing.allowTaskUpdating
+                * @type boolean
+                * @default true
+                */
+                allowTaskUpdating: true,
+                /**
+                * @name dxGanttOptions.editing.allowDependencyAdding
+                * @type boolean
+                * @default true
+                */
+                allowDependencyAdding: true,
+                /**
+                 * @name dxGanttOptions.editing.allowDependencyDeleting
+                 * @type boolean
+                 * @default true
+                 */
+                allowDependencyDeleting: true,
+                /**
+                 * @name dxGanttOptions.editing.allowDependencyUpdating
+                 * @type boolean
+                 * @default true
+                 */
+                allowDependencyUpdating: true,
+                /**
+                * @name dxGanttOptions.editing.allowResourceAdding
+                * @type boolean
+                * @default true
+                */
+                allowResourceAdding: true,
+                /**
+                * @name dxGanttOptions.editing.allowResourceDeleting
+                * @type boolean
+                * @default true
+                */
+                allowResourceDeleting: true,
+                /**
+                * @name dxGanttOptions.editing.allowResourceUpdating
+                * @type boolean
+                * @default true
+                */
+                allowResourceUpdating: true
+            }
         });
     }
 
@@ -495,6 +569,13 @@ class Gantt extends Widget {
             case "allowSelection":
                 this._setTreeListOption("selection.mode", this._getSelectionMode(args.value));
                 this._setGanttViewOption("allowSelection", args.value);
+                break;
+            case "showRowLines":
+                this._setTreeListOption("showRowLines", args.value);
+                this._setGanttViewOption("showRowLines", args.value);
+                break;
+            case "editing":
+                this._setGanttViewOption("editing", args.value);
                 break;
             default:
                 super._optionChanged(args);
