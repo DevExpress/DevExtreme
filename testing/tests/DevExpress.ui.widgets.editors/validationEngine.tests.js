@@ -1270,6 +1270,85 @@ QUnit.test("Only async rules should be broken", function(assert) {
     });
 });
 
+QUnit.test("Two async rules should be broken", function(assert) {
+    const customCallback1 = function() {
+            const d = new Deferred();
+            d.resolve({
+                isValid: false
+            });
+            return d.promise();
+        },
+        customCallback2 = function() {
+            const d = new Deferred();
+            d.reject(false);
+            return d.promise();
+        },
+        value = "Some value",
+        rules = [
+            {
+                type: "async",
+                validationCallback: customCallback1
+            },
+            {
+                type: "async",
+                validationCallback: customCallback2
+            }
+        ],
+        result = ValidationEngine.validate(value, rules),
+        done = assert.async();
+
+    assert.equal(result.pendingRules.length, 2);
+    result.complete.then((res) => {
+        assert.equal(res.brokenRules.length, 2, "Two rules should be broken");
+        done();
+    });
+});
+
+QUnit.test("Three async rules should be broken", function(assert) {
+    const customCallback1 = function() {
+            const d = new Deferred();
+            d.resolve({
+                isValid: false
+            });
+            return d.promise();
+        },
+        customCallback2 = function() {
+            const d = new Deferred();
+            d.reject();
+            return d.promise();
+        },
+        customCallback3 = function() {
+            const d = new Deferred();
+            d.reject({
+                isValid: false
+            });
+            return d.promise();
+        },
+        value = "Some value",
+        rules = [
+            {
+                type: "async",
+                validationCallback: customCallback1
+            },
+            {
+                type: "async",
+                validationCallback: customCallback2
+            },
+            {
+                type: "async",
+                validationCallback: customCallback3
+            }
+        ],
+        result = ValidationEngine.validate(value, rules),
+        done = assert.async();
+
+    assert.equal(result.pendingRules.length, 3);
+    result.complete.then((res) => {
+        assert.equal(res.brokenRules.length, 3, "Three rules should be broken");
+        done();
+    });
+});
+
 QUnit.test("One rule is reevaluated", function(assert) {
     const customCallback = sinon.spy(function() {
             const d = new Deferred();
