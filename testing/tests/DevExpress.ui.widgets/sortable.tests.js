@@ -61,7 +61,7 @@ QUnit.test("initial placeholder", function(assert) {
         $dragItemElement;
 
     this.createSortable({
-        items: ".draggable"
+        filter: ".draggable"
     });
 
     items = this.$element.children();
@@ -90,7 +90,7 @@ QUnit.test("initial placeholder when placeholderTemplate is specified", function
         });
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         placeholderTemplate: placeholderTemplate
     });
 
@@ -121,7 +121,7 @@ QUnit.test("initial placeholder when placeholderTemplate is specified", function
 QUnit.test("placeholder-class toggling", function(assert) {
     // arrange
     this.createSortable({
-        items: ".draggable"
+        filter: ".draggable"
     });
 
     let items = this.$element.children(),
@@ -149,7 +149,7 @@ QUnit.test("Change placeholder position after dragging", function(assert) {
         $dragItemElement;
 
     this.createSortable({
-        items: ".draggable"
+        filter: ".draggable"
     });
 
     items = this.$element.children();
@@ -175,7 +175,7 @@ QUnit.test("Drop when placeholderTemplate isn't specified", function(assert) {
         $dragItemElement;
 
     this.createSortable({
-        items: ".draggable"
+        filter: ".draggable"
     });
 
     items = this.$element.children();
@@ -200,7 +200,7 @@ QUnit.test("Drop when placeholderTemplate is specified", function(assert) {
         });
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         placeholderTemplate: placeholderTemplate
     });
 
@@ -220,7 +220,7 @@ QUnit.test("Drop when placeholderTemplate is specified", function(assert) {
 QUnit.test("Remove my placeholder after the drop end", function(assert) {
     // arrange
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         placeholderTemplate: function() {
             return $("<div id='myPlaceholder'/>").text("Test");
         }
@@ -248,7 +248,7 @@ QUnit.test("The placeholder should be correct after drag and drop items", functi
         $placeholder;
 
     this.createSortable({
-        items: ".draggable"
+        filter: ".draggable"
     });
 
     items = this.$element.children();
@@ -283,7 +283,7 @@ QUnit.test("onDragChange - check args when dragging an item down", function(asse
 
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         onDragChange: onDragChange
     });
 
@@ -307,7 +307,7 @@ QUnit.test("onDragChange - check args when dragging an item up", function(assert
 
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         onDragChange: onDragChange
     });
 
@@ -330,7 +330,7 @@ QUnit.test("onDragChange - check args when dragging to last position", function(
         onDragChange = sinon.spy();
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         onDragChange: onDragChange
     });
 
@@ -353,7 +353,7 @@ QUnit.test("'onDragChange' option changing", function(assert) {
         onDragChange = sinon.spy();
 
     this.createSortable({
-        items: ".draggable"
+        filter: ".draggable"
     });
 
     items = this.$element.children();
@@ -380,7 +380,7 @@ QUnit.test("'onDragChange' event - not drag item when eventArgs.cancel is true",
         $dragItemElement;
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         onDragChange: function(e) {
             e.cancel = true;
         }
@@ -407,7 +407,7 @@ QUnit.test("onDragEnd - check args when dragging an item down", function(assert)
 
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         onDragEnd: onDragEnd
     });
 
@@ -431,7 +431,7 @@ QUnit.test("onDragEnd - check args when dragging an item up", function(assert) {
 
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         onDragEnd: onDragEnd
     });
 
@@ -454,7 +454,7 @@ QUnit.test("onDragEnd - check args when dragging to last position", function(ass
         onDragEnd = sinon.spy();
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         onDragEnd: onDragEnd
     });
 
@@ -475,7 +475,7 @@ QUnit.test("onDragEnd with eventArgs.cancel is true - the draggable element shou
     let items;
 
     this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         placeholderTemplate: function() {
             return $("<div/>").text("test");
         },

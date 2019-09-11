@@ -611,7 +611,7 @@ QUnit.test("Draggable clone should be correct", function(assert) {
     var $secondAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(1),
         pointer = pointerMock($secondAppointment).start();
 
-    $secondAppointment.dxDraggable("instance").option("onDrag", function(e) {
+    $secondAppointment.dxDraggable("instance").option("onDragMove", function(e) {
         assert.deepEqual($(arguments[0].element).get(0), $secondAppointment.get(0), "draggable element is right");
     });
 

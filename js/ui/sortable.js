@@ -5,25 +5,56 @@ import Draggable from "./draggable";
 import { getPublicElement } from "../core/utils/dom";
 
 var SORTABLE = "dxSortable",
-    DEFAULT_ITEMS = "> *",
 
     SOURCE_CLASS = "source",
     PLACEHOLDER_CLASS = "placeholder";
 
+/**
+* @name dxSortable
+* @inherits DraggableBase
+* @hasTranscludedContent
+* @module ui/sortable
+* @export default
+*/
+
 var Sortable = Draggable.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            orientation: "vertical",
-            clone: true
+            clone: true,
+            /**
+             * @name dxSortableOptions.filter
+             * @type string
+             * @default "> *"
+             */
+            filter: "> *",
+            /**
+             * @name dxSortableOptions.itemOrientation
+             * @type Enums.Orientation
+             * @default "vertical"
+             */
+            itemOrientation: "vertical",
+            /**
+             * @name dxSortableOptions.placeholderTemplate
+             * @type template|function
+             * @type_function_return string|Node|jQuery
+             * @default undefined
+             */
+            placeholderTemplate: undefined,
+            /**
+             * @name dxSortableOptions.onDragChange
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             * @hidden
+             */
+            onDragChange: null
         });
     },
 
     _init: function() {
         this.callBase();
-    },
-
-    _getItemsSelector: function() {
-        return this.callBase() || DEFAULT_ITEMS;
     },
 
     _resetPlaceholder: function(needToRemove) {
@@ -81,7 +112,7 @@ var Sortable = Draggable.inherit({
 
     _getItemPoints: function(e) {
         let result,
-            isVertical = this.option("orientation") === "vertical",
+            isVertical = this.option("itemOrientation") === "vertical",
             $items = this._getItems(e);
 
         result = $items.map((item, index) => {
@@ -125,7 +156,7 @@ var Sortable = Draggable.inherit({
         };
     },
 
-    _dragHandler: function(e) {
+    _dragMoveHandler: function(e) {
         this.callBase.apply(this, arguments);
 
         if(e.cancel === true) {
@@ -142,7 +173,7 @@ var Sortable = Draggable.inherit({
             return;
         }
 
-        let isVertical = this.option("orientation") === "vertical",
+        let isVertical = this.option("itemOrientation") === "vertical",
             axisName = isVertical ? "top" : "left",
             cursorPosition = isVertical ? e.pageY : e.pageX;
 
@@ -229,7 +260,7 @@ var Sortable = Draggable.inherit({
             case "onDragChange":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
-            case "orientation":
+            case "itemOrientation":
                 break;
             default:
                 this.callBase(args);

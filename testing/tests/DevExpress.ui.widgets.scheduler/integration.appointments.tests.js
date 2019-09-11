@@ -215,7 +215,7 @@ QUnit.test("Draggable rendering option 'immediate' should be turned off", functi
     assert.notOk(immediate, "immediate option is false");
 });
 
-QUnit.test("Tasks should have right draggable area", function(assert) {
+QUnit.test("Tasks should have right draggable boundary", function(assert) {
     var tasks = [
         { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
     ];
@@ -230,9 +230,9 @@ QUnit.test("Tasks should have right draggable area", function(assert) {
     });
 
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-        draggableArea = $appointment.dxDraggable("instance").option("area");
+        draggableArea = $appointment.dxDraggable("instance").option("boundary");
 
-    assert.equal(draggableArea, this.instance.getWorkSpaceScrollableContainer(), "area is OK");
+    assert.equal(draggableArea, this.instance.getWorkSpaceScrollableContainer(), "boundary is OK");
 });
 
 QUnit.test("Tasks should be filtered by date before render", function(assert) {
