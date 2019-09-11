@@ -368,7 +368,7 @@ var ColorView = Editor.inherit({
             .addClass(COLOR_VIEW_PALETTE_HANDLE_CLASS)
             .appendTo(this._$palette);
         this._createComponent(this._$paletteHandle, Draggable, {
-            area: this._$palette,
+            boundary: this._$palette,
             allowMoveByClick: true,
             boundOffset: (function() {
                 return -this._paletteHandleHeight / 2;
@@ -437,9 +437,9 @@ var ColorView = Editor.inherit({
             .addClass(COLOR_VIEW_HUE_SCALE_HANDLE_CLASS)
             .appendTo(this._$hueScaleWrapper);
         this._createComponent(this._$hueScaleHandle, Draggable, {
-            area: this._$hueScaleWrapper,
+            boundary: this._$hueScaleWrapper,
             allowMoveByClick: true,
-            direction: "vertical",
+            dragDirection: "vertical",
             onDragMove: (function() {
                 this._updateByDrag = true;
                 this._updateColorHue(translator.locate(this._$hueScaleHandle).top + this._hueScaleHandleHeight / 2);
@@ -696,9 +696,9 @@ var ColorView = Editor.inherit({
             .addClass(COLOR_VIEW_ALPHA_CHANNEL_HANDLE_CLASS)
             .appendTo($parent);
         this._createComponent(this._$alphaChannelHandle, Draggable, {
-            area: $parent,
+            boundary: $parent,
             allowMoveByClick: true,
-            direction: "horizontal",
+            dragDirection: "horizontal",
             onDragMove: (function() {
                 this._updateByDrag = true;
                 var $alphaChannelHandle = this._$alphaChannelHandle,

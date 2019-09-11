@@ -22,16 +22,17 @@ var Sortable = Draggable.inherit({
         return extend(this.callBase(), {
             clone: true,
             /**
-             * @name dxSortableOptions.items
+             * @name dxSortableOptions.filter
+             * @type string
              * @default "> *"
              */
-            items: "> *",
+            filter: "> *",
             /**
-             * @name dxSortableOptions.orientation
+             * @name dxSortableOptions.itemOrientation
              * @type Enums.Orientation
              * @default "vertical"
              */
-            orientation: "vertical",
+            itemOrientation: "vertical",
             /**
              * @name dxSortableOptions.placeholderTemplate
              * @type template|function
@@ -46,6 +47,7 @@ var Sortable = Draggable.inherit({
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
              * @action
+             * @hidden
              */
             onDragChange: null
         });
@@ -108,7 +110,7 @@ var Sortable = Draggable.inherit({
 
     _getItemPoints: function(e) {
         let result,
-            isVertical = this.option("orientation") === "vertical",
+            isVertical = this.option("itemOrientation") === "vertical",
             $items = this._getItems(e);
 
         result = $items.map((item, index) => {
@@ -163,7 +165,7 @@ var Sortable = Draggable.inherit({
             return;
         }
 
-        let isVertical = this.option("orientation") === "vertical",
+        let isVertical = this.option("itemOrientation") === "vertical",
             axisName = isVertical ? "top" : "left",
             cursorPosition = isVertical ? e.pageY : e.pageX,
             itemPoints = this._itemPoints;
@@ -224,7 +226,7 @@ var Sortable = Draggable.inherit({
             case "onDragChange":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
-            case "orientation":
+            case "itemOrientation":
                 break;
             default:
                 this.callBase(args);

@@ -98,7 +98,7 @@ export default class AppointmentDragBehavior {
 
     addTo(appointment) {
         this.scheduler._createComponent(appointment, Draggable, {
-            area: this.getDraggableArea(),
+            boundary: this.getDraggableArea(),
             boundOffset: this.scheduler._calculateBoundOffset(),
             immediate: false,
 

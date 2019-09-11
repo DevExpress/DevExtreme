@@ -717,24 +717,22 @@ declare module DevExpress.ui {
     }
     /** @name DraggableBase.Options */
     export interface DraggableBaseOptions<T = DraggableBase> extends DOMComponentOptions<T> {
-        /** @name DraggableBase.Options.area */
-        area?: string | Element | JQuery;
+        /** @name DraggableBase.Options.boundary */
+        boundary?: string | Element | JQuery;
         /** @name DraggableBase.Options.container */
         container?: string | Element | JQuery;
-        /** @name DraggableBase.Options.direction */
-        direction?: 'both' | 'horizontal' | 'vertical';
-        /** @name DraggableBase.Options.dragTemplate */
-        dragTemplate?: DevExpress.core.template | (() => string | Element | JQuery);
+        /** @name DraggableBase.Options.dragDirection */
+        dragDirection?: 'both' | 'horizontal' | 'vertical';
         /** @name DraggableBase.Options.handle */
         handle?: string;
-        /** @name DraggableBase.Options.items */
-        items?: string;
         /** @name DraggableBase.Options.onDragEnd */
         onDragEnd?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** @name DraggableBase.Options.onDragMove */
         onDragMove?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** @name DraggableBase.Options.onDragStart */
         onDragStart?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        /** @name DraggableBase.Options.template */
+        template?: DevExpress.core.template | (() => string | Element | JQuery);
     }
     /** @name DraggableBase */
     export class DraggableBase extends DOMComponent {
@@ -4295,12 +4293,10 @@ declare module DevExpress.ui {
     }
     /** @name dxSortable.Options */
     export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
-        /** @name dxSortable.Options.items */
-        items?: string;
-        /** @name dxSortable.Options.onDragChange */
-        onDragChange?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
-        /** @name dxSortable.Options.orientation */
-        orientation?: 'horizontal' | 'vertical';
+        /** @name dxSortable.Options.filter */
+        filter?: string;
+        /** @name dxSortable.Options.itemOrientation */
+        itemOrientation?: 'horizontal' | 'vertical';
         /** @name dxSortable.Options.placeholderTemplate */
         placeholderTemplate?: DevExpress.core.template | (() => string | Element | JQuery);
     }
