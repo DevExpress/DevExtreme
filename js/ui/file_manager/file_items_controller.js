@@ -1,7 +1,6 @@
 import { FileProvider, FileManagerItem, FileManagerRootItem } from "./file_provider/file_provider";
 import ArrayFileProvider from "./file_provider/array";
 import AjaxFileProvider from "./file_provider/ajax";
-import OneDriveFileProvider from "./file_provider/onedrive";
 import WebApiFileProvider from "./file_provider/webapi";
 import { pathCombine, getPathParts, getFileExtension } from "./ui.file_manager.utils";
 import whenSome, { ErrorCode } from "./ui.file_manager.common";
@@ -56,13 +55,8 @@ export default class FileItemsController {
             return fileProvider;
         }
 
-        if(fileProvider.type) {
-            switch(fileProvider.type) {
-                case "webapi":
-                    return new WebApiFileProvider(fileProvider);
-                case "onedrive":
-                    return new OneDriveFileProvider(fileProvider);
-            }
+        if(fileProvider.type === "webapi") {
+            return new WebApiFileProvider(fileProvider);
         }
 
         return new ArrayFileProvider(fileProvider);
