@@ -108,7 +108,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
         if(dragTemplate) {
             dragTemplate = this._getTemplate(dragTemplate);
             result = $(dragTemplate.render({
-                container: getPublicElement($(container))
+                container: getPublicElement($(container)),
+                model: {
+                    sourceElement: getPublicElement($element)
+                }
             }));
         } else if(clone) {
             result = $element.clone().appendTo(container);
@@ -117,7 +120,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return result.toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0));
     },
 
-    _removeDragElement: function() {
+    _resetDragElement: function() {
         if(this._dragElementIsCloned()) {
             this._$dragElement.remove();
         } else {
@@ -270,12 +273,22 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._getAction("onDrag")({ event: e });
     },
 
+    _getDragEndArgs: function(e) {
+        return {
+            event: e
+        };
+    },
+
     _dragEndHandler: function(e) {
+        let eventArgs = this._getDragEndArgs(e);
+
+        this._getAction("onDragEnd")(eventArgs);
+
         this._toggleDragSourceClass(false);
-        this._removeDragElement();
+        this._resetDragElement();
         this._$sourceElement = null;
 
-        this._getAction("onDragEnd")({ event: e });
+        return !eventArgs.cancel;
     },
 
     _getAction: function(name) {
@@ -299,7 +312,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             case "dragTemplate":
             case "container":
             case "clone":
-                this._removeDragElement();
+                this._resetDragElement();
                 break;
             case "allowMoveByClick":
             case "direction":
@@ -307,7 +320,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             case "area":
             case "items":
             case "immediate":
-                this._removeDragElement();
+                this._resetDragElement();
                 this._detachEventHandlers();
                 this._attachEventHandlers();
                 break;
@@ -322,7 +335,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _dispose: function() {
         this.callBase();
         this._detachEventHandlers();
-        this._removeDragElement();
+        this._resetDragElement();
         this._$sourceElement = null;
     }
 });

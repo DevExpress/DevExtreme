@@ -689,7 +689,8 @@ QUnit.test("Set dragTemplate", function(assert) {
     // assert
     assert.strictEqual($("body").children("#myDragElement").length, 1, "there is a drag element");
     assert.strictEqual(dragTemplate.callCount, 1, "dragTemplate is called");
-    assert.deepEqual($(dragTemplate.getCall(0).args[0]).get(0), $(viewPort()).get(0), "dragTemplate is called");
+    assert.deepEqual($(dragTemplate.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "args[0].sourceElement");
+    assert.deepEqual($(dragTemplate.getCall(0).args[1]).get(0), $(viewPort()).get(0), "args[1] - container");
 });
 
 QUnit.test("Remove my element after the drop end", function(assert) {
@@ -731,6 +732,7 @@ QUnit.test("Remove my element when disposing", function(assert) {
     // assert
     assert.strictEqual($("body").children("#myDragElement").length, 0, "there isn't a cloned element");
 });
+
 
 QUnit.module("items", $.extend({}, moduleConfig, {
     beforeEach: function() {
