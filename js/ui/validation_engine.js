@@ -4,7 +4,7 @@ import { inArray } from "../core/utils/array";
 import { each } from "../core/utils/iterator";
 import EventsMixin from "../core/events_mixin";
 import errors from "../core/errors";
-import commonUtils from "../core/utils/common";
+import { grep } from "../core/utils/common";
 import typeUtils from "../core/utils/type";
 import numberLocalization from "../localization/number";
 import messageLocalization from "../localization/message";
@@ -16,10 +16,10 @@ class BaseRuleValidator {
         this.NAME = "base";
     }
     defaultMessage(value) {
-        return messageLocalization.getFormatter("validation-" + this.NAME)(value);
+        return messageLocalization.getFormatter(`validation-${this.NAME}`)(value);
     }
     defaultFormattedMessage(value) {
-        return messageLocalization.getFormatter("validation-" + this.NAME + "-formatted")(value);
+        return messageLocalization.getFormatter(`validation-${this.NAME}-formatted`)(value);
     }
     _isValueEmpty(value) {
         return !rulesValidators.required.validate(value, {});
@@ -623,7 +623,7 @@ const GroupConfig = Class.inherit({
     },
 
     _addPendingValidator(validator) {
-        const foundValidator = commonUtils.grep(this._pendingValidators, function(val) {
+        const foundValidator = grep(this._pendingValidators, function(val) {
             return val === validator;
         })[0];
         if(!foundValidator) {
@@ -641,7 +641,7 @@ const GroupConfig = Class.inherit({
     _orderBrokenRules(brokenRules) {
         let orderedRules = [];
         each(this.validators, function(_, validator) {
-            const foundRules = commonUtils.grep(brokenRules, function(rule) {
+            const foundRules = grep(brokenRules, function(rule) {
                 return rule.validator === validator;
             });
             if(foundRules.length) {
@@ -656,7 +656,7 @@ const GroupConfig = Class.inherit({
             return;
         }
         let brokenRules = this._validationInfo.result.brokenRules;
-        const rules = commonUtils.grep(brokenRules, function(rule) {
+        const rules = grep(brokenRules, function(rule) {
             return rule.validator !== result.validator;
         });
         if(result.brokenRules) {
@@ -758,7 +758,7 @@ const ValidationEngine = {
     * @static
     */
     getGroupConfig(group) {
-        const result = commonUtils.grep(this.groups, function(config) {
+        const result = grep(this.groups, function(config) {
             return config.group === group;
         });
         if(result.length) {
@@ -917,9 +917,8 @@ const ValidationEngine = {
         return result;
     },
 
-    _validateAsyncRules(info) {
-        const { result, value, items, name } = info,
-            asyncResults = [];
+    _validateAsyncRules({ result, value, items, name }) {
+        const asyncResults = [];
         result.pendingRules = [];
         each(items, (_, item) => {
             result.pendingRules.push(item.rule);
@@ -956,8 +955,7 @@ const ValidationEngine = {
         return result;
     },
 
-    _updateRuleConfig(info) {
-        const { rule, ruleResult, validator, name } = info;
+    _updateRuleConfig({ rule, ruleResult, validator, name }) {
         rule.isValid = ruleResult.isValid;
         if(!ruleResult.isValid) {
             if(typeUtils.isDefined(ruleResult.message) && typeUtils.isString(ruleResult.message) && ruleResult.message.length) {
@@ -972,8 +970,7 @@ const ValidationEngine = {
         }
     },
 
-    _getPatchedRuleResult(info) {
-        const { ruleResult, isValid = true } = info;
+    _getPatchedRuleResult({ ruleResult, isValid = true }) {
         let result;
         if(typeUtils.isObject(ruleResult)) {
             result = extend({}, ruleResult);
@@ -988,8 +985,7 @@ const ValidationEngine = {
         return result;
     },
 
-    _getAsyncRulesResult(info) {
-        const { values, result } = info;
+    _getAsyncRulesResult({ values, result }) {
         each(values, (index, val) => {
             if(val.isValid === false) {
                 result.isValid = val.isValid;

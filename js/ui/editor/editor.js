@@ -21,6 +21,18 @@ const READONLY_STATE_CLASS = "dx-state-readonly",
 
     VALIDATION_MESSAGE_MIN_WIDTH = 100;
 
+const getValidationErrorMessage = function(validationErrors) {
+    let validationErrorMessage = "";
+    if(validationErrors) {
+        validationErrors.forEach(function(err) {
+            if(err.message) {
+                validationErrorMessage += ((validationErrorMessage ? "<br />" : "") + err.message);
+            }
+        });
+    }
+    return validationErrorMessage;
+};
+
 /**
 * @name Editor
 * @type object
@@ -237,14 +249,7 @@ const Editor = Widget.inherit({
             this._$validationMessage = null;
         }
 
-        let validationErrorMessage = "";
-        if(validationErrors) {
-            validationErrors.forEach(function(err) {
-                if(err.message) {
-                    validationErrorMessage += ((validationErrorMessage ? "<br />" : "") + err.message);
-                }
-            });
-        }
+        let validationErrorMessage = getValidationErrorMessage(validationErrors);
 
         if(!isValid && validationErrorMessage) {
             this._$validationMessage = $("<div>").addClass(INVALID_MESSAGE)

@@ -220,10 +220,7 @@ const ValidationSummary = CollectionWidget.inherit({
         this.option("items", items);
     },
 
-    _itemValidationHandler(itemValidationResult) {
-        const isValid = itemValidationResult.isValid,
-            validator = itemValidationResult.validator,
-            brokenRules = itemValidationResult.brokenRules;
+    _itemValidationHandler({ isValid, validator, brokenRules }) {
         let items = this.option("items"),
             itemsChanged = false;
 

@@ -473,7 +473,7 @@ const TextEditorBase = Editor.inherit({
 
     _clean() {
         this._buttonCollection.clean();
-        this._pendingIndicator = null;
+        this._disposePendingIndicator();
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._$textEditorContainer = null;
@@ -781,7 +781,6 @@ const TextEditorBase = Editor.inherit({
     },
 
     _dispose: function() {
-        this._disposePendingIndicator();
         this._enterKeyAction = undefined;
         this.callBase();
     },

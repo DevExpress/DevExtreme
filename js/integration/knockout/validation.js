@@ -7,15 +7,15 @@ import { Deferred } from "../../core/utils/deferred";
 import ko from "knockout";
 
 const koDxValidator = Class.inherit({
-    ctor(target, option) {
+    ctor(target, { name, validationRules }) {
         this.target = target;
-        this.name = option.name;
+        this.name = name;
         this.isValid = ko.observable(true);
         this.validationError = ko.observable();
         this.validationErrors = ko.observable();
         this.validationStatus = ko.observable("valid");
 
-        this.validationRules = map(option.validationRules, (rule, index) => {
+        this.validationRules = map(validationRules, (rule, index) => {
             return extend({}, rule, {
                 validator: this,
                 index: index

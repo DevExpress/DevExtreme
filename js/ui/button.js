@@ -323,9 +323,8 @@ var Button = Widget.inherit({
         });
     },
 
-    _renderSubmitInput: function() {
-        const submitAction = this._createAction((args) => {
-            const e = args.event;
+    _getSubmitAction: function() {
+        return this._createAction(({ event: e }) => {
             if(this._needValidate) {
                 const validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
                 if(validationGroup) {
@@ -336,11 +335,16 @@ var Button = Widget.inherit({
                         this._waitForValidationCompleting(result.complete);
                     }
                 }
+            } else if(this._validationStatus !== "pending") {
+                this._setDisabled(false);
             }
-            this._validationStatus !== "pending" && !this._needValidate && this._setDisabled(false);
             this._validationStatus !== "valid" && e.preventDefault();
             e.stopPropagation();
         });
+    },
+
+    _renderSubmitInput: function() {
+        const submitAction = this._getSubmitAction();
         this._needValidate = true;
         this._validationStatus = "valid";
         this._$submitInput = $("<input>")

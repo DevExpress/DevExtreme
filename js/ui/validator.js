@@ -83,26 +83,22 @@ const Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions.rtlEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxValidatorMethods.beginUpdate
             * @publicName beginUpdate()
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidatorMethods.defaultOptions
             * @publicName defaultOptions(rule)
             * @hidden
-            * @inheritdoc
             */
             /**
             * @name dxValidatorMethods.endUpdate
             * @publicName endUpdate()
             * @hidden
-            * @inheritdoc
             */
         });
     },
