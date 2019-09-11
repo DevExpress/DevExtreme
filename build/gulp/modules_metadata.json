@@ -305,6 +305,12 @@
     }
   },
   {
+    "name": "ui/draggable",
+    "exports": {
+      "default": { "path": "ui.dxDraggable", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/drawer",
     "exports": {
       "default": { "path": "ui.dxDrawer", "isWidget": true }
@@ -585,6 +591,12 @@
     "name": "ui/slider",
     "exports": {
       "default": { "path": "ui.dxSlider", "isWidget": true }
+    }
+  },
+  {
+    "name": "ui/sortable",
+    "exports": {
+      "default": { "path": "ui.dxSortable", "isWidget": true }
     }
   },
   {

@@ -657,6 +657,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DragDirection
+ * @enum {'both'|'horizontal'|'vertical'}
+ */
+
+/**
  * @typedef {string} Enums.SlideOutMenuPosition
  * @enum {'inverted'|'normal'}
  */
