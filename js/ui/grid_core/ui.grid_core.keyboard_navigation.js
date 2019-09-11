@@ -174,27 +174,21 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $target = $(event.currentTarget),
             data = event.data,
             focusedViewElement = data.view && data.view.element(),
-            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS),
-            isEditingRow = $target.parent().hasClass(EDIT_ROW_CLASS);
+            $parent = $target.parent(),
+            isEditingRow = $parent.hasClass(EDIT_ROW_CLASS);
 
         if(this._isEventInCurrentGrid(event) && this._isCellValid($target, true)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
-            this._focusView(data.view, data.viewIndex);
 
+            this._focusView(data.view, data.viewIndex);
             $(focusedViewElement).removeClass(FOCUS_STATE_CLASS);
 
-            if($target.parent().hasClass(FREESPACE_ROW_CLASS)) {
-
+            if($parent.hasClass(FREESPACE_ROW_CLASS)) {
                 this._updateFocusedCellPosition($target);
-
                 this._focusedView.element().attr("tabindex", 0);
                 this._focusedView.focus();
-            } else if(!isEditingCell && !this._isMasterDetailCell($target)) {
+            } else if(!this._isMasterDetailCell($target) && !isEditingRow) {
                 this._clickTargetCellHandler(event, $target);
-            } else if(isEditingCell && !isEditingRow) {
-                this._clickTargetCellHandler(event, $target);
-
-                this._updateFocusedCellPosition($target);
             } else {
                 this._updateFocusedCellPosition($target);
             }
