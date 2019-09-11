@@ -2343,13 +2343,6 @@ declare module DevExpress.ui {
         /** @name NumericRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
-    /** @name OneDriveFileProvider.Options */
-    export interface OneDriveFileProviderOptions extends DevExpress.fileProvider.FileProviderOptions<OneDriveFileProvider> {
-    }
-    /** @name OneDriveFileProvider */
-    export class OneDriveFileProvider extends DevExpress.fileProvider.FileProvider {
-        constructor(options?: OneDriveFileProviderOptions)
-    }
     /** @name PatternRule */
     export interface PatternRule {
         /** @name PatternRule.ignoreEmptyValue */
