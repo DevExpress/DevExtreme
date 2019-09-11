@@ -227,7 +227,7 @@ QUnit.module('Context menu with rowsView', {
         that.columns = [{ dataField: "Column1" }, { dataField: "Column2" }];
 
         that.setupDataGrid = function() {
-            setupDataGridModules(that, ["contextMenu", "rows"], {
+            setupDataGridModules(that, ["contextMenu", "rows", "masterDetail"], {
                 initViews: true,
                 controllers: {
                     columns: new MockColumnsController(that.columns),
@@ -406,4 +406,45 @@ QUnit.test("Context menu with option onContextMenuPreparing for group row", func
     assert.strictEqual(contextMenuPreparingArg.row.rowType, "group", "rowType");
     assert.strictEqual(contextMenuPreparingArg.columnIndex, 1, "columnIndex");
     assert.strictEqual(contextMenuPreparingArg.column.dataField, "Column1", "dataField");
+});
+
+QUnit.test("Context menu with option onContextMenuPreparing for detail row if template contains table (T813135)", function(assert) {
+    // arrange
+    var that = this,
+        contextMenuPreparingArg,
+        $testElement = $("#secondContainer");
+
+    that.options = {
+        onContextMenuPreparing: function(options) {
+            if(options.target === "content") {
+                contextMenuPreparingArg = options;
+            }
+        },
+        masterDetail: {
+            template: function() {
+                return $("<table><tr><td>1</td><td>2</td><td class='my-cell-3'>3</td></tr></table>");
+            }
+        }
+    };
+
+    that.items = [
+        { data: { Column1: 'test1' }, values: ['test1'], rowType: 'data', dataIndex: 0 },
+        { data: { Column1: 'test1' }, values: ['test1'], rowType: 'detail', dataIndex: 0 },
+    ];
+
+    that.columns = [{ dataField: "Column1" }];
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.contextMenuView.render($testElement);
+
+    // act
+    $(".my-cell-3").trigger("contextmenu");
+
+    // assert
+    assert.ok(contextMenuPreparingArg, "onContextMenuPreparing is called");
+    assert.strictEqual(contextMenuPreparingArg.rowIndex, 1, "rowIndex");
+    assert.strictEqual(contextMenuPreparingArg.row.rowType, "detail", "rowType");
+    assert.strictEqual(contextMenuPreparingArg.columnIndex, 0, "columnIndex");
+    assert.strictEqual(contextMenuPreparingArg.column.command, "detail", "column type");
 });
