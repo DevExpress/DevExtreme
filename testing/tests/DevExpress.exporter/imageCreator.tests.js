@@ -2383,3 +2383,25 @@ QUnit.test("Custom parser can be asynchronous", function(assert) {
     deferred.then(() => i = 1);
     deferred.resolve();
 });
+
+QUnit.test("Remove canvas if rejected", function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart + testingMarkupEnd;
+    const deferred = new Deferred();
+    const imageBlob = imageCreator.getData(markup, {
+        width: 500,
+        height: 250,
+        format: "png",
+        backgroundColor: "#ff0000",
+        margin: 10,
+        customParser() {
+            return deferred;
+        }
+    }, true);
+
+    $.when(imageBlob).catch(() => {
+        assert.strictEqual(window.CanvasRenderingContext2D.prototype.fillRect.lastCall.thisValue.canvas.parentElement, null);
+    }).always(done);
+
+    deferred.reject();
+});

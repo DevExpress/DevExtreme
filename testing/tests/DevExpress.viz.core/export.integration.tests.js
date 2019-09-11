@@ -312,6 +312,25 @@ QUnit.test('Restore pointer events after export', function(assert) {
     assert.equal(widget._renderer.root.attr("pointer-events"), "all");
 });
 
+QUnit.test('Restore pointer events after export if rejected', function(assert) {
+    // arrange
+    clientExporter.export.returns(new Deferred().reject());
+    var widget = this.createWidget({
+        "export": {
+            backgroundColor: "#ff0000",
+            proxyUrl: "testProxy",
+            margin: 40
+        }
+    });
+
+    widget._renderer.root.attr({ "pointer-events": "all" });
+
+    // act
+    widget.exportTo("testName", "jpeg");
+
+    assert.equal(widget._renderer.root.attr("pointer-events"), "all");
+});
+
 QUnit.test('Disable pointer events while printing', function(assert) {
     // arrange
     var widget = this.createWidget({
@@ -331,6 +350,25 @@ QUnit.test('Disable pointer events while printing', function(assert) {
 QUnit.test('Restore pointer events after printing', function(assert) {
     // arrange
     clientExporter.export.returns(new Deferred().resolve());
+    var widget = this.createWidget({
+        "export": {
+            backgroundColor: "#ff0000",
+            proxyUrl: "testProxy",
+            margin: 40
+        }
+    });
+
+    widget._renderer.root.attr({ "pointer-events": "all" });
+
+    // act
+    widget.print();
+
+    assert.equal(widget._renderer.root.attr("pointer-events"), "all");
+});
+
+QUnit.test('Restore pointer events after printing if rejected', function(assert) {
+    // arrange
+    clientExporter.export.returns(new Deferred().reject());
     var widget = this.createWidget({
         "export": {
             backgroundColor: "#ff0000",

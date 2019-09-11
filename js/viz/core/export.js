@@ -640,7 +640,7 @@ export const plugin = {
 
             const pointerEventsValue = this._disablePointerEvents();
 
-            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format)).done(() => {
+            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format)).always(() => {
                 this._renderer.root.attr({
                     "pointer-events": pointerEventsValue
                 });
@@ -668,7 +668,7 @@ export const plugin = {
             const pointerEventsValue = this._disablePointerEvents();
 
             menu && menu.hide();
-            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format)).done(() => {
+            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format)).always(() => {
                 this._renderer.root.attr({
                     "pointer-events": pointerEventsValue
                 });

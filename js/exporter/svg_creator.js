@@ -79,22 +79,19 @@ exports.svgCreator = {
         var markup,
             that = this,
             xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>',
-            blob = new Deferred(),
             svgElem = svgUtils.getSvgElement(data),
             $svgObject = $(svgElem);
 
         markup = xmlVersion + svgUtils.getSvgMarkup($svgObject.get(0), options.backgroundColor);
 
-        that._prepareImages(svgElem).done(function() {
+        return that._prepareImages(svgElem).then(() => {
             each(that._imageArray, function(href, dataURI) {
                 const regexpString = `href=['|"]${href}['|"]`;
                 markup = markup.replace(new RegExp(regexpString, "gi"), `href="${dataURI}"`);
             });
 
-            blob.resolve(isFunction(window.Blob) ? that._getBlob(markup) : that._getBase64(markup));
+            return isFunction(window.Blob) ? that._getBlob(markup) : that._getBase64(markup);
         });
-
-        return blob;
     },
 
     _getBlob: function(markup) {
@@ -106,6 +103,6 @@ exports.svgCreator = {
     }
 };
 
-exports.getData = function(data, options, callback) {
-    return exports.svgCreator.getData(data, options).done(callback);
+exports.getData = function(data, options) {
+    return exports.svgCreator.getData(data, options);
 };

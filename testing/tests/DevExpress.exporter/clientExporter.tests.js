@@ -1,5 +1,6 @@
-var clientExporter = require("exporter"),
-    fileSaver = clientExporter.fileSaver;
+import clientExporter from "exporter";
+import { Deferred } from "core/utils/deferred";
+const fileSaver = clientExporter.fileSaver;
 
 QUnit.module("Client exporter", {
     beforeEach: function() {
@@ -10,8 +11,8 @@ QUnit.module("Client exporter", {
     }
 });
 
-function defaultGetBlob(data, options, callback) {
-    callback();
+function defaultGetBlob(data, options) {
+    return new Deferred().resolve();
 }
 
 QUnit.test("Save as", function(assert) {
@@ -20,10 +21,10 @@ QUnit.test("Save as", function(assert) {
     clientExporter.export({}, {
         fileName: "testFile",
         format: "EXCEL"
-    }, defaultGetBlob);
-
-    // assert
-    assert.equal(fileSaver.saveAs.callCount, 1, "saveAs was called");
+    }, defaultGetBlob).then(() => {
+        assert.equal(fileSaver.saveAs.callCount, 1, "saveAs was called");
+    })
+        .always(assert.async());
 });
 
 QUnit.test("onExporting", function(assert) {
@@ -78,10 +79,10 @@ QUnit.test("FileName is changed on onExporting event", function(assert) {
         fileName: "testFile",
         format: "EXCEL",
         exportingAction: exportingActionStub
-    }, defaultGetBlob);
-
-    // assert
-    assert.equal(fileSaver.saveAs.getCall(0).args[0], "Excel file name", "file name");
+    }, defaultGetBlob).then(() => {
+        // assert
+        assert.equal(fileSaver.saveAs.getCall(0).args[0], "Excel file name", "file name");
+    }).always(assert.async());
 });
 
 QUnit.test("onExported", function(assert) {
@@ -93,18 +94,18 @@ QUnit.test("onExported", function(assert) {
         fileName: "testFile",
         format: "EXCEL",
         exportedAction: exportedActionStub
-    }, defaultGetBlob);
-
-    // assert
-    assert.equal(exportedActionStub.callCount, 1, "onExported event");
+    }, defaultGetBlob).then(() => {
+        // assert
+        assert.equal(exportedActionStub.callCount, 1, "onExported event");
+    }).always(assert.async());
 });
 
 QUnit.test("onFileSaving without cancel", function(assert) {
     // arrange
     var fileSavingActionStub = sinon.spy(),
         data = "test-data",
-        getBlob = function(_0, _1, callback) {
-            callback(data);
+        getBlob = function(_0, _1) {
+            return new Deferred().resolve(data);
         };
 
     // act
@@ -112,17 +113,17 @@ QUnit.test("onFileSaving without cancel", function(assert) {
         fileName: "testFile",
         format: "EXCEL",
         fileSavingAction: fileSavingActionStub
-    }, getBlob);
-
-    // assert
-    assert.equal(fileSavingActionStub.callCount, 1, "onFileSavingCalled called");
-    assert.deepEqual(fileSavingActionStub.getCall(0).args[0], {
-        fileName: "testFile",
-        data: data,
-        format: "EXCEL",
-        cancel: false
-    }, "file saving args");
-    assert.equal(fileSaver.saveAs.callCount, 1, "fileSave called");
+    }, getBlob).then(() => {
+        // assert
+        assert.equal(fileSavingActionStub.callCount, 1, "onFileSavingCalled called");
+        assert.deepEqual(fileSavingActionStub.getCall(0).args[0], {
+            fileName: "testFile",
+            data: data,
+            format: "EXCEL",
+            cancel: false
+        }, "file saving args");
+        assert.equal(fileSaver.saveAs.callCount, 1, "fileSave called");
+    }).always(assert.async());
 });
 
 QUnit.test("onFileSaving with cancel", function(assert) {
@@ -136,11 +137,12 @@ QUnit.test("onFileSaving with cancel", function(assert) {
         fileName: "testFile",
         format: "EXCEL",
         fileSavingAction: fileSavingActionStub
-    }, defaultGetBlob);
+    }, defaultGetBlob).then(() => {
+        // assert
+        assert.equal(fileSavingActionStub.callCount, 1, "onFileSavingCalled called");
+        assert.equal(fileSaver.saveAs.callCount, 0, "fileSave not called");
+    }).always(assert.async());
 
-    // assert
-    assert.equal(fileSavingActionStub.callCount, 1, "onFileSavingCalled called");
-    assert.equal(fileSaver.saveAs.callCount, 0, "fileSave not called");
 });
 
 QUnit.test("Export to jpeg format", function(assert) {

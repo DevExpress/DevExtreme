@@ -664,7 +664,9 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin, custom
             filters: {}
         });
     }
-    return promise.then(() => canvas).always(() => domAdapter.getBody().removeChild(canvas));
+    return promise
+        .then(() => canvas)
+        .always(() => domAdapter.getBody().removeChild(canvas));
 }
 
 exports.imageCreator = {
@@ -678,27 +680,19 @@ exports.imageCreator = {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        const deferred = new Deferred();
-        getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, options.customParser).then(canvas => {
-            deferred.resolve(getStringFromCanvas(canvas, mimeType));
-        });
-        return deferred;
+        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, options.customParser).then(canvas => getStringFromCanvas(canvas, mimeType));
     },
 
     getData: function(markup, options) {
         var that = this;
 
-        const deferred = new Deferred();
-
-        exports.imageCreator.getImageData(markup, options).then(binaryData => {
+        return exports.imageCreator.getImageData(markup, options).then(binaryData => {
             const mimeType = "image/" + options.format;
             const data = isFunction(window.Blob) && !options.forceProxy ?
                 that._getBlob(binaryData, mimeType) :
                 that._getBase64(binaryData);
-            deferred.resolve(data);
+            return data;
         });
-
-        return deferred;
     },
 
     _getBlob: function(binaryData, mimeType) {
@@ -717,8 +711,8 @@ exports.imageCreator = {
     }
 };
 
-exports.getData = function(data, options, callback) {
-    return exports.imageCreator.getData(data, options).then(callback);
+exports.getData = function(data, options) {
+    return exports.imageCreator.getData(data, options);
 };
 
 exports.testFormats = function(formats) {
