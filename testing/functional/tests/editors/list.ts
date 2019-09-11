@@ -113,7 +113,7 @@ test("Should save focused checkbox", async t => {
 });
 
 fixture `List T727360`
-    .page(url(__dirname, './pages/T727360.html'));
+    .page(url(__dirname, './pages/t727360.html'));
 
 test("Grouped list can not reorder items (T727360)", async t => {
     const list = new List('#list');
