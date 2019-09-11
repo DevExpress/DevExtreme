@@ -29,8 +29,16 @@ export class RowsViewWrapper extends WrapperBase {
         return this.getVirtualRowElement().find("td").eq(columnIndex);
     }
 
+    getDataRowElement(rowIndex) {
+        return this.getElement().find(".dx-data-row").eq(rowIndex);
+    }
+
     getEditorInputElement(rowIndex, columnIndex) {
-        return this.getElement().find(".dx-data-row").eq(rowIndex).find("td").eq(columnIndex).find(".dx-texteditor-input");
+        return this.getDataRowElement(rowIndex).find("td").eq(columnIndex).find(".dx-texteditor-input");
+    }
+
+    getSelectionCheckBoxElement(rowIndex) {
+        return this.getDataRowElement(rowIndex).find(".dx-select-checkbox");
     }
 }
 
