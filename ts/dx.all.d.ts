@@ -6983,6 +6983,8 @@ declare module DevExpress.ui {
         allowSelection?: boolean;
         /** @name dxGantt.Options.dependencies */
         dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any), predecessorIdExpr?: string | ((data: any) => any), successorIdExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
+        /** @name dxGantt.Options.editing */
+        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowDependencyUpdating?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
         /** @name dxGantt.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, selectedRowKey?: any }) => any);
         /** @name dxGantt.Options.resourceAssignments */
@@ -6993,6 +6995,8 @@ declare module DevExpress.ui {
         selectedRowKey?: any;
         /** @name dxGantt.Options.showResources */
         showResources?: boolean;
+        /** @name dxGantt.Options.showRowLines */
+        showRowLines?: boolean;
         /** @name dxGantt.Options.taskTitlePosition */
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
