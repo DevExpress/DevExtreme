@@ -843,6 +843,40 @@
         opacity: @SCHEDULER_OTHER_MONTH_CELL_OPACITY;
     }
 
+    .dx-scheduler-group-flex-container {
+        flex: 0 0 100%;
+        min-height: 100%;
+        display: flex;
+
+        .dx-scheduler-group-row {
+            .flex-container(column-reverse, nowrap);
+
+            flex: 1;
+            min-width: 0;
+        }
+
+        .dx-scheduler-group-row:before {
+            display: none;
+        }
+
+        .dx-scheduler-group-header {
+            .flex-container(row, nowrap);
+
+            flex: 1 1 100%;
+            padding: 0 10px 0 5px;
+            height: auto;
+            width: 100%;
+            justify-content: flex-start;
+            align-items: flex-start;
+            text-align: left;
+
+            > div {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
     // stylelint-disable-next-line no-duplicate-selectors
     .dx-scheduler-work-space-day,
     .dx-scheduler-work-space-week,
@@ -1088,37 +1122,6 @@
                 height: 100%;
             }
         }
-
-        .dx-scheduler-group-flex-container {
-            flex: 0 0 100%;
-            min-height: 100%;
-            display: flex;
-        }
-
-        .dx-scheduler-group-row {
-            .flex-container(column-reverse, nowrap);
-
-            flex: 1;
-            min-width: 0;
-        }
-
-        .dx-scheduler-group-header {
-            .flex-container(row, nowrap);
-
-            flex: 1 1 100%;
-            padding: 0 10px 0 5px;
-            height: auto;
-            width: 100%;
-            justify-content: flex-start;
-            align-items: flex-start;
-            text-align: left;
-
-            > div {
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-
 
         .dx-scheduler-group-header-content {
             overflow: visible;
@@ -2356,21 +2359,10 @@
             }
         }
 
-        .dx-scheduler-group-row {
-            .flex-container(row, nowrap);
-
-            flex: 1;
-        }
-
-        .dx-scheduler-group-row:before {
-            display: none;
-        }
-
         .dx-scheduler-group-header {
             .flex-container(row, nowrap);
 
-            flex: 1 1 auto;
-            height: auto;
+            flex: 1 1 100%;
             text-align: center;
             border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
             padding: 0;
@@ -2402,14 +2394,7 @@
         &[dx-group-column-count='2'],
         &[dx-group-column-count='3'] {
             .dx-scheduler-group-header:last-child {
-                font-weight: normal;
                 text-align: left;
-            }
-
-            .dx-scheduler-group-header:only-child {
-                position: relative;
-                left: 75px;
-                width: 75px;
             }
         }
 
