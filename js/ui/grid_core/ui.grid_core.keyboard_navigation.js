@@ -740,6 +740,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(!args.cancel) {
                 cellPosition.rowIndex = args.newRowIndex;
                 args.isHighlighted = isHighlighted;
+            } else {
+                $event && $event.preventDefault();
             }
         }
 

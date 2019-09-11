@@ -23,10 +23,12 @@ class DataCell {
 class DataRow {
     element: Selector;
     isRemoved: Promise<boolean>;
+    isFocusedRow: Promise<boolean>;
 
     constructor(element: Selector) {
         this.element = element;
         this.isRemoved = this.element.hasClass(CLASS.rowRemoved);
+        this.isFocusedRow = this.element.hasClass(CLASS.focusedRow);
     }
 
     getDataCell(index: number): DataCell {

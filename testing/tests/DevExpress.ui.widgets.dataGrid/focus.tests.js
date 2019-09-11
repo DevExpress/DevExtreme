@@ -2428,6 +2428,51 @@ QUnit.testInActiveWindow("Setting cancel in onFocusedRowChanging event args shou
     assert.equal(this.getController("keyboardNavigation").getVisibleRowIndex(), 4, "Focused row index is 5");
 });
 
+QUnit.test("Prevent default in onFocusedRowChanging event if cancel is set", function(assert) {
+    // arrange
+    var focusedRowChangingFiresCount = 0,
+        focusedRowChangedFiresCount = 0,
+        event;
+
+    this.$element = () => $("#container");
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        onFocusedRowChanging: function(e) {
+            e.cancel = true;
+            event = e.event;
+            focusedRowChangingFiresCount++;
+        },
+        onFocusedRowChanged: function(e) {
+            focusedRowChangedFiresCount++;
+        }
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangingFiresCount, 0, "onFocusedRowChanging fires count");
+
+    // act
+    $(this.getCellElement(0, 1)).trigger(CLICK_EVENT);
+    this.clock.tick();
+
+    assert.ok(event.isDefaultPrevented(), "Event prevented");
+    assert.equal(focusedRowChangingFiresCount, 1, "onFocusedRowChanging fires count");
+    assert.equal(focusedRowChangedFiresCount, 0, "onFocusedRowChanged fires count");
+});
+
 QUnit.testInActiveWindow("Focused row events should not fire if dataGrid is in loading phase", function(assert) {
     var focusedRowChangingCount = 0,
         focusedRowChangedCount = 0,
