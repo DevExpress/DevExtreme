@@ -632,14 +632,8 @@ const GroupConfig = Class.inherit({
     },
 
     _removePendingValidator(validator) {
-        let index = -1;
-        each(this._pendingValidators, function(i, val) {
-            if(val === validator) {
-                index = i;
-                return false;
-            }
-        });
-        if(index >= 0) {
+        const index = inArray(validator, this._pendingValidators);
+        if(index >= -1) {
             this._pendingValidators.splice(index, 1);
         }
     },
@@ -658,6 +652,9 @@ const GroupConfig = Class.inherit({
     },
 
     _updateBrokenRules(result) {
+        if(!this._validationInfo.result) {
+            return;
+        }
         let brokenRules = this._validationInfo.result.brokenRules;
         const rules = commonUtils.grep(brokenRules, function(rule) {
             return rule.validator !== result.validator;
@@ -673,10 +670,17 @@ const GroupConfig = Class.inherit({
             this._addPendingValidator(result.validator);
             return;
         }
+        this._resolveIfComplete(result);
+    },
+
+    _resolveIfComplete(result) {
         this._removePendingValidator(result.validator);
         this._updateBrokenRules(result);
         if(!this._pendingValidators.length) {
             this._unsubscribeFromAllChangeEvents();
+            if(!this._validationInfo.result) {
+                return;
+            }
             this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? "valid" : "invalid";
             this._validationInfo.result.isValid = this._validationInfo.result.status === "valid";
             const res = extend({}, this._validationInfo.result, { complete: null });
@@ -695,6 +699,28 @@ const GroupConfig = Class.inherit({
             result: null,
             deferred: null
         };
+    },
+
+    _synchronizeValidationInfo() {
+        if(this._validationInfo.result) {
+            this._validationInfo.result.validators = this.validators;
+        }
+    },
+
+    removeRegisteredValidator(validator) {
+        const index = inArray(validator, this.validators);
+        if(index > -1) {
+            this.validators.splice(index, 1);
+            this._synchronizeValidationInfo();
+            this._resolveIfComplete({ validator });
+        }
+    },
+
+    registerValidator(validator) {
+        if(inArray(validator, this.validators) < 0) {
+            this.validators.push(validator);
+            this._synchronizeValidationInfo();
+        }
     },
 
     reset() {
@@ -982,9 +1008,7 @@ const ValidationEngine = {
 
     registerValidatorInGroup(group, validator) {
         const groupConfig = ValidationEngine.addGroup(group);
-        if(inArray(validator, groupConfig.validators) < 0) {
-            groupConfig.validators.push(validator);
-        }
+        groupConfig.registerValidator.call(groupConfig, validator);
     },
 
     _shouldRemoveGroup(group, validatorsInGroup) {
@@ -994,11 +1018,10 @@ const ValidationEngine = {
     },
 
     removeRegisteredValidator(group, validator) {
-        const config = ValidationEngine.getGroupConfig(group),
-            validatorsInGroup = config && config.validators;
-        const index = inArray(validator, validatorsInGroup);
-        if(index > -1) {
-            validatorsInGroup.splice(index, 1);
+        const config = ValidationEngine.getGroupConfig(group);
+        if(config) {
+            config.removeRegisteredValidator.call(config, validator);
+            const validatorsInGroup = config.validators;
             if(this._shouldRemoveGroup(group, validatorsInGroup)) {
                 this.removeGroup(group);
             }
