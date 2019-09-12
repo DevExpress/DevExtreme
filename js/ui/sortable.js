@@ -25,6 +25,7 @@ var Sortable = Draggable.inherit({
              * @name dxSortableOptions.filter
              * @type string
              * @default "> *"
+             * @hidden
              */
             filter: "> *",
             /**
