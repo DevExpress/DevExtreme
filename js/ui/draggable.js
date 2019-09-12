@@ -26,7 +26,7 @@ var DRAGGABLE = "dxDraggable",
 
     CLONE_CLASS = "clone";
 
-var currentDraggable,
+var targetDraggable,
     sourceDraggable;
 
 /**
@@ -45,6 +45,23 @@ var currentDraggable,
  */
 
 var Draggable = DOMComponentWithTemplate.inherit({
+    setupDraggingInfo: noop,
+
+    clearDragInfo: noop,
+
+    movePlaceholder: noop,
+
+    resetPlaceholder: noop,
+
+    dropItem: function() {
+        let $sourceElement = this._getSourceElement(),
+            sourceDraggable = this._getSourceDraggable();
+
+        if(sourceDraggable !== this) {
+            this.$element().append($sourceElement);
+        }
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -115,6 +132,14 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @default false
              */
             clone: false
+        });
+    },
+
+    _setOptionsByReference: function() {
+        this.callBase.apply(this, arguments);
+
+        extend(this._optionsByReference, {
+            group: true
         });
     },
 
@@ -208,6 +233,11 @@ var Draggable = DOMComponentWithTemplate.inherit({
             this._toggleDraggingClass(false);
         }
         this._$dragElement = null;
+    },
+
+    _resetSourceElement: function() {
+        this._toggleDragSourceClass(false);
+        this._$sourceElement = null;
     },
 
     _detachEventHandlers: function() {
@@ -353,7 +383,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             return;
         }
 
-        var offset = e.offset,
+        let offset = e.offset,
             startPosition = this._startPosition;
 
         this._move({
@@ -361,7 +391,15 @@ var Draggable = DOMComponentWithTemplate.inherit({
             top: startPosition.top + offset.y
         });
 
-        this._getAction("onDragMove")({ event: e });
+        let eventArgs = { event: e };
+        this._getAction("onDragMove")(eventArgs);
+
+        if(eventArgs.cancel === true) {
+            return;
+        }
+
+        let targetDraggable = this._getTargetDraggable();
+        targetDraggable.movePlaceholder(e);
     },
 
     _getDragEndArgs: function(e) {
@@ -371,25 +409,43 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragEndHandler: function(e) {
-        let eventArgs = this._getDragEndArgs(e);
+        let eventArgs = this._getDragEndArgs(e),
+            targetDraggable = this._getTargetDraggable();
 
         this._getAction("onDragEnd")(eventArgs);
 
-        this._toggleDragSourceClass(false);
-        this._resetDragElement();
-        this._$sourceElement = null;
-        this._resetCurrentDraggable();
-        this._resetSourceDraggable();
+        if(!eventArgs.cancel) {
+            targetDraggable.dropItem();
+        }
 
-        return !eventArgs.cancel;
+        this.resetPlaceholder();
+        targetDraggable.resetPlaceholder();
+        this._resetDragElement();
+        this._resetSourceElement();
+
+        this.clearDragInfo();
+        targetDraggable.clearDragInfo();
+
+        this._resetTargetDraggable();
+        this._resetSourceDraggable();
     },
 
     _dragEnterHandler: function(e) {
-        this._setCurrentDraggable();
+        // TODO remove code after fix enter/leave events
+        let sourceDraggable = this._getSourceDraggable();
+        sourceDraggable.resetPlaceholder();
+
+        this._setTargetDraggable();
+        this.setupDraggingInfo();
     },
 
     _dragLeaveHandler: function(e) {
-        this._resetCurrentDraggable();
+        let targetDraggable = this._getTargetDraggable();
+
+        targetDraggable.clearDragInfo();
+        targetDraggable.resetPlaceholder();
+
+        this._resetTargetDraggable();
     },
 
     _getAction: function(name) {
@@ -434,20 +490,20 @@ var Draggable = DOMComponentWithTemplate.inherit({
         }
     },
 
-    _getCurrentDraggable: function() {
-        return currentDraggable || this;
+    _getTargetDraggable: function() {
+        return targetDraggable || this;
     },
 
     _getSourceDraggable: function() {
         return sourceDraggable || this;
     },
 
-    _setCurrentDraggable: function() {
+    _setTargetDraggable: function() {
         let currentGroup = this.option("group"),
             sourceDraggable = this._getSourceDraggable();
 
         if(currentGroup && currentGroup === sourceDraggable.option("group")) {
-            currentDraggable = this;
+            targetDraggable = this;
         }
     },
 
@@ -459,15 +515,15 @@ var Draggable = DOMComponentWithTemplate.inherit({
         sourceDraggable = null;
     },
 
-    _resetCurrentDraggable: function() {
-        currentDraggable = null;
+    _resetTargetDraggable: function() {
+        targetDraggable = null;
     },
 
     _dispose: function() {
         this.callBase();
         this._detachEventHandlers();
         this._resetDragElement();
-        this._resetCurrentDraggable();
+        this._resetTargetDraggable();
         this._resetSourceDraggable();
         this._$sourceElement = null;
     }

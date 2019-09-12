@@ -3,6 +3,7 @@ import registerComponent from "../core/component_registrator";
 import { extend } from "../core/utils/extend";
 import Draggable from "./draggable";
 import { getPublicElement } from "../core/utils/dom";
+import translator from "../animation/translator";
 
 var SORTABLE = "dxSortable",
 
@@ -18,24 +19,29 @@ var SORTABLE = "dxSortable",
 */
 
 var Sortable = Draggable.inherit({
-    _setupDraggingInfo: function() {
-        if(this._dragInfo) {
-            return;
+    dropItem: function() {
+        let $sourceElement = this._getSourceElement(),
+            sourceDraggable = this._getSourceDraggable(),
+            hasPlaceholderTemplate = !!sourceDraggable.option("placeholderTemplate"),
+            isNotSortable = sourceDraggable.NAME !== this.NAME;
+
+        if(hasPlaceholderTemplate || isNotSortable) {
+            let dragInfo = this._dragInfo,
+                $targetItemElement = dragInfo && dragInfo.targetItemPoint && dragInfo.targetItemPoint.$item;
+
+            if(isNotSortable) {
+                translator.resetPosition($sourceElement);
+            }
+
+            this._moveItem($sourceElement, $targetItemElement, !$targetItemElement);
         }
-
-        let $sourceElement = this._getSourceElement();
-
-        this._dragInfo = {
-            fromIndex: $sourceElement.index(),
-            itemPoints: this._getItemPoints()
-        };
     },
 
-    _clearDragInfo: function() {
+    clearDragInfo: function() {
         this._dragInfo = null;
     },
 
-    _movePlaceholder: function(e) {
+    movePlaceholder: function(e) {
         let itemPoints = this._dragInfo && this._dragInfo.itemPoints;
 
         if(!itemPoints) {
@@ -58,6 +64,32 @@ var Sortable = Draggable.inherit({
                 break;
             }
         }
+    },
+
+    resetPlaceholder: function() {
+        if(this._$placeholderElement) {
+            let needToRemove = !this._$placeholderElement.hasClass(this._addWidgetPrefix(SOURCE_CLASS));
+
+            if(needToRemove) {
+                this._$placeholderElement.remove();
+            } else {
+                this._togglePlaceholderClass(false);
+            }
+        }
+        this._$placeholderElement = null;
+    },
+
+    setupDraggingInfo: function() {
+        if(this._dragInfo) {
+            return;
+        }
+
+        let $sourceElement = this._getSourceElement();
+
+        this._dragInfo = {
+            fromIndex: $sourceElement.index(),
+            itemPoints: this._getItemPoints()
+        };
     },
 
     _getDefaultOptions: function() {
@@ -99,19 +131,6 @@ var Sortable = Draggable.inherit({
         this.callBase();
     },
 
-    _resetPlaceholder: function() {
-        if(this._$placeholderElement) {
-            let needToRemove = !this._$placeholderElement.hasClass(this._addWidgetPrefix(SOURCE_CLASS));
-
-            if(needToRemove) {
-                this._$placeholderElement.remove();
-            } else {
-                this._togglePlaceholderClass(false);
-            }
-        }
-        this._$placeholderElement = null;
-    },
-
     _getPlaceholderTemplate: function() {
         let sourceDraggable = this._getSourceDraggable();
 
@@ -119,7 +138,8 @@ var Sortable = Draggable.inherit({
     },
 
     _createPlaceholder: function() {
-        let $placeholderContainer = this._getSourceElement(),
+        let sourceDraggable = this._getSourceDraggable(),
+            $placeholderContainer = this._getSourceElement(),
             placeholderTemplate = this._getPlaceholderTemplate();
 
         if(placeholderTemplate) {
@@ -128,6 +148,9 @@ var Sortable = Draggable.inherit({
             placeholderTemplate.render({
                 container: getPublicElement($placeholderContainer)
             });
+        } else if(sourceDraggable.NAME !== this.NAME) {
+            $placeholderContainer = $placeholderContainer.clone();
+            translator.resetPosition($placeholderContainer);
         }
 
         this._$placeholderElement = $placeholderContainer;
@@ -199,35 +222,7 @@ var Sortable = Draggable.inherit({
             return;
         }
 
-        this._setupDraggingInfo();
-    },
-
-    _dragMoveHandler: function(e) {
-        this.callBase.apply(this, arguments);
-
-        if(e.cancel === true) {
-            return;
-        }
-
-        let currentDraggable = this._getCurrentDraggable();
-        currentDraggable._movePlaceholder(e);
-    },
-
-    _dragEnterHandler: function() {
-        // TODO remove code after fix enter/leave events
-        let sourceDraggable = this._getSourceDraggable();
-        sourceDraggable._resetPlaceholder();
-
-        this.callBase.apply(this, arguments);
-        this._setupDraggingInfo();
-    },
-
-    _dragLeaveHandler: function() {
-        let currentDraggable = this._getCurrentDraggable();
-        currentDraggable._clearDragInfo();
-        currentDraggable._resetPlaceholder();
-
-        this.callBase.apply(this, arguments);
+        this.setupDraggingInfo();
     },
 
     _togglePlaceholder: function(value) {
@@ -267,16 +262,6 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _dropItem: function($sourceElement, sourceDraggable) {
-        let hasPlaceholderTemplate = !!sourceDraggable.option("placeholderTemplate");
-
-        if(hasPlaceholderTemplate) {
-            let $targetItemElement = this._dragInfo.targetItemPoint.$item;
-
-            this._moveItem($sourceElement, $targetItemElement, !$targetItemElement);
-        }
-    },
-
     _getEventArgs: function() {
         let sourceElement = getPublicElement(this._getSourceElement()),
             fromIndex = this._dragInfo && this._dragInfo.fromIndex,
@@ -291,22 +276,6 @@ var Sortable = Draggable.inherit({
 
     _getDragEndArgs: function() {
         return extend(this.callBase.apply(this, arguments), this._getEventArgs());
-    },
-
-    _dragEndHandler: function(e) {
-        let $sourceElement = this._getSourceElement(),
-            sourceDraggable = this._getSourceDraggable(),
-            currentDraggable = this._getCurrentDraggable();
-
-        this._resetPlaceholder();
-        currentDraggable._resetPlaceholder();
-
-        if(this.callBase.apply(this, arguments)) {
-            currentDraggable._dropItem($sourceElement, sourceDraggable);
-        }
-
-        this._clearDragInfo();
-        currentDraggable._clearDragInfo();
     },
 
     _optionChanged: function(args) {
