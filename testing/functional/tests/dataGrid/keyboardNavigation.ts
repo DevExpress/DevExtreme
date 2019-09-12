@@ -123,3 +123,28 @@ test("Cell should be focused after Enter key press if enterKeyDirection is 'none
         }
     });
 });
+
+test("Cancel in onFocusedRowChanging event should prevent change focus row with tabIndex", async t => {
+    const dataGrid = new DataGrid("#container");
+    const dataRow = dataGrid.getDataRow(0);
+    const dataCell = dataGrid.getDataCell(0, 1);
+
+    await t
+        .expect(dataRow.element.hasAttribute("tabindex")).ok()
+        .click(dataCell.element)
+        .expect(dataRow.isFocusedRow).notOk()
+        .expect(dataRow.element.focused).notOk()
+        .expect(dataRow.element.hasAttribute("tabindex")).ok();
+}).before(async () => {
+    await createWidget("dxDataGrid", {
+        height: 200,
+        width: 200,
+        keyExpr: "name",
+        dataSource: [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 }
+        ],
+        focusedRowEnabled: true,
+        onFocusedRowChanging: (e: any) => e.cancel = true
+    });
+});

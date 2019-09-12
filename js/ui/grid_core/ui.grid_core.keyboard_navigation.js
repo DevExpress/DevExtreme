@@ -748,14 +748,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
 
         if(!args.cancel && fireRowEvent && $cell) {
-            const $row = $cell.parent();
-            args = this._fireFocusedRowChanging($event, $row);
+            args = this._fireFocusedRowChanging($event, $cell.parent());
             if(!args.cancel) {
                 cellPosition.rowIndex = args.newRowIndex;
                 args.isHighlighted = isHighlighted;
-                $row.removeClass(CELL_FOCUS_DISABLED_CLASS);
             } else {
-                $row.addClass(CELL_FOCUS_DISABLED_CLASS);
+                $event && $event.preventDefault();
             }
         }
 
