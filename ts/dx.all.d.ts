@@ -1812,6 +1812,8 @@ declare module DevExpress.ui {
         container?: string | Element | JQuery;
         /** @name DraggableBase.Options.dragDirection */
         dragDirection?: 'both' | 'horizontal' | 'vertical';
+        /** @name DraggableBase.Options.group */
+        group?: any;
         /** @name DraggableBase.Options.handle */
         handle?: string;
         /** @name DraggableBase.Options.onDragEnd */
