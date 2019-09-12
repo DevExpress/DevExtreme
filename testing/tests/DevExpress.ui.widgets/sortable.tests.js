@@ -588,12 +588,12 @@ QUnit.test("Dropping item to another the sortable widget", function(assert) {
     assert.strictEqual(items2.filter("#item1").length, 1, "second list - first item of the first list was added");
 });
 
-QUnit.skip("Dragging item to another the sortable widget when placeholderTemplate is specified", function(assert) {
+QUnit.test("Dragging item to another the sortable widget when placeholderTemplate is specified", function(assert) {
     // arrange
     let items1, items2;
 
     let sortable1 = this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         group: "shared",
         placeholderTemplate: function() {
             return $("<div id='myPlaceholder'/>").text("Test");
@@ -601,7 +601,7 @@ QUnit.skip("Dragging item to another the sortable widget when placeholderTemplat
     }, $("#items"));
 
     let sortable2 = this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         group: "shared"
     }, $("#items2"));
 
@@ -613,17 +613,16 @@ QUnit.skip("Dragging item to another the sortable widget when placeholderTemplat
     items2 = sortable2.$element().children();
     assert.strictEqual(items1.length, 3, "first list - item count");
     assert.strictEqual(items2.length, 4, "second list - item count");
-    assert.strictEqual(items1.first().css("display"), "none", "first list - first item is hidden");
     assert.ok(items2.first().hasClass("dx-sortable-placeholder"), 1, "second list - first item is a placeholder");
     assert.strictEqual(items2.first().find("#myPlaceholder").length, 1, "second list - there is custom placeholder");
 });
 
-QUnit.skip("Dropping item to another the sortable widget when placeholderTemplate is specified", function(assert) {
+QUnit.test("Dropping item to another the sortable widget when placeholderTemplate is specified", function(assert) {
     // arrange
     let items1, items2;
 
     let sortable1 = this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         group: "shared",
         placeholderTemplate: function() {
             return $("<div id='myPlaceholder'/>").text("Test");
@@ -631,7 +630,7 @@ QUnit.skip("Dropping item to another the sortable widget when placeholderTemplat
     }, $("#items"));
 
     let sortable2 = this.createSortable({
-        items: ".draggable",
+        filter: ".draggable",
         group: "shared"
     }, $("#items2"));
 

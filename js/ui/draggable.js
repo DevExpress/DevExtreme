@@ -427,6 +427,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
                 break;
             case "boundOffset":
             case "handle":
+            case "group":
                 break;
             default:
                 this.callBase(args);
@@ -459,9 +460,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _resetCurrentDraggable: function() {
-        if(currentDraggable === this) {
-            currentDraggable = null;
-        }
+        currentDraggable = null;
     },
 
     _dispose: function() {
@@ -469,6 +468,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._detachEventHandlers();
         this._resetDragElement();
         this._resetCurrentDraggable();
+        this._resetSourceDraggable();
         this._$sourceElement = null;
     }
 });
