@@ -595,7 +595,7 @@ function getExportOptions(widget, exportOptions, fileName, format) {
         width: widget._canvas.width,
         height: widget._canvas.height,
         margin: exportOptions.margin,
-        customParser: exportOptions.customParser,
+        svgToCanvas: exportOptions.svgToCanvas,
         forceProxy: exportOptions.forceProxy,
         exportingAction: widget._createActionByOption("onExporting"),
         exportedAction: widget._createActionByOption("onExported"),

@@ -642,7 +642,7 @@ function drawBackground(context, width, height, backgroundColor, margin) {
     context.fillRect(-margin, -margin, width + margin * 2, height + margin * 2);
 }
 
-function getCanvasFromSvg(markup, width, height, backgroundColor, margin, customParser) {
+function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToCanvas) {
     var canvas = createCanvas(width, height, margin),
         context = canvas.getContext("2d"),
         svgElem = svgUtils.getSvgElement(markup);
@@ -655,8 +655,8 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin, custom
     }
     drawBackground(context, width, height, backgroundColor, margin);
     let promise;
-    if(customParser) {
-        promise = fromPromise(customParser(svgElem, canvas));
+    if(svgToCanvas) {
+        promise = fromPromise(svgToCanvas(svgElem, canvas));
     } else {
         promise = drawCanvasElements(svgElem.childNodes, context, {}, {
             clipPaths: {},
@@ -680,7 +680,7 @@ exports.imageCreator = {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, options.customParser).then(canvas => getStringFromCanvas(canvas, mimeType));
+        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, options.svgToCanvas).then(canvas => getStringFromCanvas(canvas, mimeType));
     },
 
     getData: function(markup, options) {

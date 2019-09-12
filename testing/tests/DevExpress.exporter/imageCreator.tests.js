@@ -2327,14 +2327,14 @@ QUnit.test("Can use custom parser", function(assert) {
     var that = this,
         done = assert.async(),
         markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd,
-        customParser = sinon.spy(),
+        svgToCanvas = sinon.spy(),
         imageBlob = imageCreator.getData(markup, {
             width: 500,
             height: 250,
             format: "png",
             backgroundColor: "#ff0000",
             margin: 10,
-            customParser: customParser
+            svgToCanvas: svgToCanvas
         }, true);
 
     $.when(imageBlob).done(() => {
@@ -2351,9 +2351,9 @@ QUnit.test("Can use custom parser", function(assert) {
             globalAlpha: 1
         }, "Background style");
 
-        assert.equal(customParser.callCount, 1);
-        assert.equal(customParser.lastCall.args[0], svgUtils.getSvgElement.lastCall.returnValue);
-        assert.equal(customParser.lastCall.args[1], window.CanvasRenderingContext2D.prototype.fillRect.lastCall.thisValue.canvas);
+        assert.equal(svgToCanvas.callCount, 1);
+        assert.equal(svgToCanvas.lastCall.args[0], svgUtils.getSvgElement.lastCall.returnValue);
+        assert.equal(svgToCanvas.lastCall.args[1], window.CanvasRenderingContext2D.prototype.fillRect.lastCall.thisValue.canvas);
     }).always(() => {
         svgUtils.getSvgElement.restore();
         done();
@@ -2370,7 +2370,7 @@ QUnit.test("Custom parser can be asynchronous", function(assert) {
         format: "png",
         backgroundColor: "#ff0000",
         margin: 10,
-        customParser() {
+        svgToCanvas() {
             return deferred;
         }
     }, true);
@@ -2394,7 +2394,7 @@ QUnit.test("Remove canvas if rejected", function(assert) {
         format: "png",
         backgroundColor: "#ff0000",
         margin: 10,
-        customParser() {
+        svgToCanvas() {
             return deferred;
         }
     }, true);
