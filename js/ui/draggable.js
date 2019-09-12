@@ -24,17 +24,91 @@ var DRAGGABLE = "dxDraggable",
 
     CLONE_CLASS = "clone";
 
+/**
+ * @name DraggableBase
+ * @inherits DOMComponent
+ * @export default
+ * @hidden
+ */
+
+/**
+ * @name dxDraggable
+ * @inherits DraggableBase
+ * @hasTranscludedContent
+ * @module ui/draggable
+ * @export default
+ */
+
 var Draggable = DOMComponentWithTemplate.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            onDragStart: noop,
-            onDrag: noop,
-            onDragEnd: noop,
+            /**
+             * @name DraggableBaseOptions.onDragStart
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             */
+            onDragStart: null,
+            /**
+             * @name DraggableBaseOptions.onDragMove
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             */
+            onDragMove: null,
+            /**
+             * @name DraggableBaseOptions.onDragEnd
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             */
+            onDragEnd: null,
             immediate: true,
-            direction: "both",
-            area: window,
+            /**
+             * @name DraggableBaseOptions.dragDirection
+             * @type Enums.DragDirection
+             * @default "both"
+             */
+            dragDirection: "both",
+            /**
+             * @name DraggableBaseOptions.boundary
+             * @type string|Node|jQuery
+             * @default window
+             */
+            boundary: window,
             boundOffset: 0,
             allowMoveByClick: false,
+            /**
+             * @name DraggableBaseOptions.container
+             * @type string|Node|jQuery
+             * @default undefined
+             */
+            container: undefined,
+            /**
+             * @name DraggableBaseOptions.template
+             * @type template|function
+             * @type_function_return string|Node|jQuery
+             * @default undefined
+             */
+            template: undefined,
+            /**
+             * @name DraggableBaseOptions.handle
+             * @type string
+             * @default ""
+             */
+            handle: "",
+            filter: "",
+            /**
+             * @name dxDraggableOptions.clone
+             * @type boolean
+             * @default false
+             */
             clone: false
         });
     },
@@ -69,7 +143,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _getItemsSelector: function() {
-        return this.option("items") || "";
+        return this.option("filter") || "";
     },
 
     _attachEventHandlers: function() {
@@ -78,10 +152,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
         }
 
         var $element = this.$element(),
-            items = this._getItemsSelector(),
+            itemsSelector = this._getItemsSelector(),
             allowMoveByClick = this.option("allowMoveByClick"),
             data = {
-                direction: this.option("direction"),
+                direction: this.option("dragDirection"),
                 immediate: this.option("immediate")
             };
 
@@ -90,8 +164,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
             eventsEngine.on($element, POINTERDOWN_EVENT_NAME, data, this._pointerDownHandler.bind(this));
         }
 
-        eventsEngine.on($element, DRAGSTART_EVENT_NAME, items, data, this._dragStartHandler.bind(this));
-        eventsEngine.on($element, DRAG_EVENT_NAME, data, this._dragHandler.bind(this));
+        eventsEngine.on($element, DRAGSTART_EVENT_NAME, itemsSelector, data, this._dragStartHandler.bind(this));
+        eventsEngine.on($element, DRAG_EVENT_NAME, data, this._dragMoveHandler.bind(this));
         eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
     },
 
@@ -103,12 +177,15 @@ var Draggable = DOMComponentWithTemplate.inherit({
         let result = $element,
             clone = this.option("clone"),
             container = this._getContainer(),
-            dragTemplate = this.option("dragTemplate");
+            template = this.option("template");
 
-        if(dragTemplate) {
-            dragTemplate = this._getTemplate(dragTemplate);
-            result = $(dragTemplate.render({
-                container: getPublicElement($(container))
+        if(template) {
+            template = this._getTemplate(template);
+            result = $(template.render({
+                container: getPublicElement($(container)),
+                model: {
+                    sourceElement: getPublicElement($element)
+                }
             }));
         } else if(clone) {
             result = $element.clone().appendTo(container);
@@ -117,7 +194,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return result.toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0));
     },
 
-    _removeDragElement: function() {
+    _resetDragElement: function() {
         if(this._dragElementIsCloned()) {
             this._$dragElement.remove();
         } else {
@@ -152,19 +229,19 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         let position = {},
             $element = this.$element(),
-            direction = this.option("direction");
+            dragDirection = this.option("dragDirection");
 
-        if(direction === "horizontal" || direction === "both") {
+        if(dragDirection === "horizontal" || dragDirection === "both") {
             position.left = e.pageX - $element.offset().left + translator.locate($element).left - $element.width() / 2;
         }
 
-        if(direction === "vertical" || direction === "both") {
+        if(dragDirection === "vertical" || dragDirection === "both") {
             position.top = e.pageY - $element.offset().top + translator.locate($element).top - $element.height() / 2;
         }
 
         this._move(position, $element);
 
-        this._getAction("onDrag")({ event: e });
+        this._getAction("onDragMove")({ event: e });
     },
 
     _isValidElement: function(event, $element) {
@@ -235,7 +312,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _getArea: function() {
-        var area = this.option("area");
+        var area = this.option("boundary");
 
         if(isFunction(area)) {
             area = area.call(this);
@@ -253,7 +330,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return $(container);
     },
 
-    _dragHandler: function(e) {
+    _dragMoveHandler: function(e) {
         if(!this._$dragElement) {
             e.cancel = true;
             return;
@@ -267,15 +344,25 @@ var Draggable = DOMComponentWithTemplate.inherit({
             top: startPosition.top + offset.y
         });
 
-        this._getAction("onDrag")({ event: e });
+        this._getAction("onDragMove")({ event: e });
+    },
+
+    _getDragEndArgs: function(e) {
+        return {
+            event: e
+        };
     },
 
     _dragEndHandler: function(e) {
+        let eventArgs = this._getDragEndArgs(e);
+
+        this._getAction("onDragEnd")(eventArgs);
+
         this._toggleDragSourceClass(false);
-        this._removeDragElement();
+        this._resetDragElement();
         this._$sourceElement = null;
 
-        this._getAction("onDragEnd")({ event: e });
+        return !eventArgs.cancel;
     },
 
     _getAction: function(name) {
@@ -292,22 +379,22 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         switch(name) {
             case "onDragStart":
-            case "onDrag":
+            case "onDragMove":
             case "onDragEnd":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
-            case "dragTemplate":
+            case "template":
             case "container":
             case "clone":
-                this._removeDragElement();
+                this._resetDragElement();
                 break;
             case "allowMoveByClick":
-            case "direction":
+            case "dragDirection":
             case "disabled":
-            case "area":
-            case "items":
+            case "boundary":
+            case "filter":
             case "immediate":
-                this._removeDragElement();
+                this._resetDragElement();
                 this._detachEventHandlers();
                 this._attachEventHandlers();
                 break;
@@ -322,7 +409,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _dispose: function() {
         this.callBase();
         this._detachEventHandlers();
-        this._removeDragElement();
+        this._resetDragElement();
         this._$sourceElement = null;
     }
 });

@@ -104,7 +104,7 @@ const DateBoxMask = DateBoxBase.inherit({
         const delta = currentValue - originalValue;
 
         this._loadMaskValue(this._initialMaskValue);
-        this._partIncrease(delta + step);
+        this._partIncrease(delta + step, true);
     },
 
     _getDefaultOptions() {
@@ -343,9 +343,15 @@ const DateBoxMask = DateBoxBase.inherit({
         this._caret(this._getActivePartProp("caret"));
     },
 
-    _getActivePartLimits() {
+    _getRealLimitsPattern() {
+        if(this._getActivePartProp("pattern")[0] === "d") {
+            return "dM";
+        }
+    },
+
+    _getActivePartLimits(lockOtherParts) {
         const limitFunction = this._getActivePartProp("limits");
-        return limitFunction(this._maskValue);
+        return limitFunction(this._maskValue, lockOtherParts && this._getRealLimitsPattern());
     },
 
     _getActivePartValue(dateValue) {
@@ -408,10 +414,10 @@ const DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _partIncrease(step) {
+    _partIncrease(step, lockOtherParts) {
         this._setNewDateIfEmpty();
 
-        const { max, min } = this._getActivePartLimits();
+        const { max, min } = this._getActivePartLimits(lockOtherParts);
 
         let limitDelta = max - min;
 

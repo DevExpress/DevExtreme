@@ -71,7 +71,7 @@ var Deferred = function() {
                 } else if(isPromise(callbackResult)) {
                     callbackResult.then(result.resolve, result.reject);
                 } else {
-                    result.resolve.apply(this, callbackResult ? [callbackResult] : arguments);
+                    result.resolve.apply(this, typeUtils.isDefined(callbackResult) ? [callbackResult] : arguments);
                 }
             });
         }.bind(this));

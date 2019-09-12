@@ -10,19 +10,20 @@ QUnit.testStart(() => {
 
 const TREELIST_SELECTOR = ".dx-treelist",
     TREELIST_WRAPPER_SELECTOR = ".dx-gantt-treelist-wrapper",
-    GANTT_VIEW = ".dx-gantt-view",
+    GANTT_VIEW_SELECTOR = ".dx-gantt-view",
     TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper",
     TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes",
     TASK_ARROW_SELECTOR = ".dx-gantt-arrow",
     TASK_TITLE_IN_SELECTOR = ".dx-gantt-titleIn",
     TASK_TITLE_OUT_SELECTOR = ".dx-gantt-titleOut",
-    TREELIST_EXPANDED = ".dx-treelist-expanded",
-    TREELIST_COLLAPSED = ".dx-treelist-collapsed",
+    TREELIST_EXPANDED_SELECTOR = ".dx-treelist-expanded",
+    TREELIST_COLLAPSED_SELECTOR = ".dx-treelist-collapsed",
     SELECTION_SELECTOR = ".dx-gantt-sel",
-    SPLITTER_WRAPPER_CLASS = ".dx-splitter-wrapper",
-    SPLITTER_CLASS = ".dx-splitter",
-    POPUP_CLASS = ".dx-popup-normal",
-    INPUT_TEXT_EDITOR_CLASS = ".dx-texteditor-input";
+    SPLITTER_WRAPPER_SELECTOR = ".dx-splitter-wrapper",
+    SPLITTER_SELECTOR = ".dx-splitter",
+    POPUP_SELECTOR = ".dx-popup-normal",
+    GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR = ".dx-gantt-hb",
+    INPUT_TEXT_EDITOR_SELECTOR = ".dx-texteditor-input";
 
 
 const tasks = [
@@ -63,8 +64,11 @@ const allSourcesOptions = {
     resources: { dataSource: resources },
     resourceAssignments: { dataSource: resourceAssignments }
 };
+const getGanttViewCore = (gantt) => {
+    return gantt._ganttView._ganttViewCore;
+};
 const showTaskEditDialog = (gantt) => {
-    const ganttCore = gantt._ganttView._ganttViewCore;
+    const ganttCore = getGanttViewCore(gantt);
     const task = ganttCore.viewModel.tasks.items[0];
     ganttCore.commandManager.showTaskEditDialog.execute(task);
 };
@@ -214,6 +218,56 @@ QUnit.module("Options", moduleConfig, () => {
         this.instance.option("allowSelection", false);
         assert.equal(this.$element.find(SELECTION_SELECTOR).length, 0);
     });
+    test("showRowLines", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        assert.ok(this.$element.find(GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR).length > 0, "ganttView has borders by default");
+        assert.equal(this.instance._treeList.option("showRowLines"), true, "treeList has borders by default");
+        this.instance.option("showRowLines", false);
+        assert.equal(this.$element.find(GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR).length, 0, "ganttView has no borders");
+        assert.equal(this.instance._treeList.option("showRowLines"), false, "treeList has no borders");
+        this.instance.option("showRowLines", true);
+        assert.ok(this.$element.find(GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR).length > 0, "ganttView has borders");
+        assert.equal(this.instance._treeList.option("showRowLines"), true, "treeList has borders");
+    });
+    test("editing", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        let coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
+        assert.equal(coreEditingSettings.enabled, false, "editing is prohibited by default");
+        assert.equal(coreEditingSettings.allowTaskAdding, true, "task adding allowed by default");
+        assert.equal(coreEditingSettings.allowTaskDeleting, true, "task deleting allowed by default");
+        assert.equal(coreEditingSettings.allowTaskUpdating, true, "task updating allowed by default");
+        assert.equal(coreEditingSettings.allowDependencyAdding, true, "dependency adding allowed by default");
+        assert.equal(coreEditingSettings.allowDependencyDeleting, true, "dependency deleting allowed by default");
+        assert.equal(coreEditingSettings.allowDependencyUpdating, true, "dependency updating allowed by default");
+        assert.equal(coreEditingSettings.allowResourceAdding, true, "resource adding allowed by default");
+        assert.equal(coreEditingSettings.allowResourceDeleting, true, "resource deleting allowed by default");
+        assert.equal(coreEditingSettings.allowResourceUpdating, true, "resource updating allowed by default");
+        this.instance.option("editing", {
+            enabled: true,
+            allowTaskAdding: false,
+            allowTaskDeleting: false,
+            allowTaskUpdating: false,
+            allowDependencyAdding: false,
+            allowDependencyDeleting: false,
+            allowDependencyUpdating: false,
+            allowResourceAdding: false,
+            allowResourceDeleting: false,
+            allowResourceUpdating: false,
+        });
+        coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
+        assert.equal(coreEditingSettings.enabled, true, "editing allowed");
+        assert.equal(coreEditingSettings.allowTaskAdding, false, "task adding is prohibited");
+        assert.equal(coreEditingSettings.allowTaskDeleting, false, "task deleting is prohibited");
+        assert.equal(coreEditingSettings.allowTaskUpdating, false, "task updating is prohibited");
+        assert.equal(coreEditingSettings.allowDependencyAdding, false, "dependency adding is prohibited");
+        assert.equal(coreEditingSettings.allowDependencyDeleting, false, "dependency deleting is prohibited");
+        assert.equal(coreEditingSettings.allowDependencyUpdating, false, "dependency updating is prohibited");
+        assert.equal(coreEditingSettings.allowResourceAdding, false, "resource adding is prohibited");
+        assert.equal(coreEditingSettings.allowResourceDeleting, false, "resource deleting is prohibited");
+        assert.equal(coreEditingSettings.allowResourceUpdating, false, "resource updating is prohibited");
+    });
 });
 
 QUnit.module("Events", moduleConfig, () => {
@@ -237,11 +291,11 @@ QUnit.module("Actions", moduleConfig, () => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
         assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
-        const expandedElement = this.$element.find(TREELIST_EXPANDED).first();
+        const expandedElement = this.$element.find(TREELIST_EXPANDED_SELECTOR).first();
         expandedElement.trigger("dxclick");
         this.clock.tick();
         assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, 1);
-        const collapsedElement = this.$element.find(TREELIST_COLLAPSED).first();
+        const collapsedElement = this.$element.find(TREELIST_COLLAPSED_SELECTOR).first();
         collapsedElement.trigger("dxclick");
         this.clock.tick();
         assert.equal(this.$element.find(TASK_WRAPPER_SELECTOR).length, tasks.length);
@@ -251,14 +305,14 @@ QUnit.module("Actions", moduleConfig, () => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
 
-        const splitterWrapper = this.$element.find(SPLITTER_WRAPPER_CLASS);
-        const splitter = this.$element.find(SPLITTER_CLASS);
+        const splitterWrapper = this.$element.find(SPLITTER_WRAPPER_SELECTOR);
+        const splitter = this.$element.find(SPLITTER_SELECTOR);
 
         const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
         const treeListWrapperLeftOffset = treeListWrapperElement.offset().left;
         const treeListWrapperTopOffset = treeListWrapperElement.offset().top;
 
-        const ganttView = this.$element.find(GANTT_VIEW);
+        const ganttView = this.$element.find(GANTT_VIEW_SELECTOR);
 
         const splitterContainerWrapperWidth = $(treeListWrapperElement).parent().width();
 
@@ -315,25 +369,25 @@ QUnit.module("Dialogs", moduleConfig, () => {
         this.clock.tick();
 
         showTaskEditDialog(this.instance);
-        assert.equal($("body").find(POPUP_CLASS).length, 1, "dialog is shown");
+        assert.equal($("body").find(POPUP_SELECTOR).length, 1, "dialog is shown");
         this.instance.repaint();
-        assert.equal($("body").find(POPUP_CLASS).length, 0, "dialog is missed after widget repainting");
+        assert.equal($("body").find(POPUP_SELECTOR).length, 0, "dialog is missed after widget repainting");
         this.clock.tick();
 
         showTaskEditDialog(this.instance);
-        assert.equal($("body").find(POPUP_CLASS).length, 1, "dialog is shown");
+        assert.equal($("body").find(POPUP_SELECTOR).length, 1, "dialog is shown");
         this.instance.dispose();
-        assert.equal($("body").find(POPUP_CLASS).length, 0, "dialog is missed after widget disposing");
+        assert.equal($("body").find(POPUP_SELECTOR).length, 0, "dialog is missed after widget disposing");
     });
     test("task editing", (assert) => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
         showTaskEditDialog(this.instance);
         this.clock.tick();
-        const $dialog = $("body").find(POPUP_CLASS);
+        const $dialog = $("body").find(POPUP_SELECTOR);
         assert.equal($dialog.length, 1, "dialog is shown");
 
-        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_CLASS);
+        const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
         assert.equal($inputs.eq(0).val(), tasks[0].title, "title text is shown");
         assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), "start task text is shown");
         assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), "end task text is shown");

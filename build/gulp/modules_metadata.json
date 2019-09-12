@@ -305,6 +305,12 @@
     }
   },
   {
+    "name": "ui/draggable",
+    "exports": {
+      "default": { "path": "ui.dxDraggable", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/drawer",
     "exports": {
       "default": { "path": "ui.dxDrawer", "isWidget": true }
@@ -351,19 +357,19 @@
     }
   },
   {
-    "name": " ui/file_manager/file_provider/webapi",
+    "name": "ui/file_manager/file_provider/webapi",
     "exports": {
       "default": { "path": "fileProvider.WebApiFileProvider" }
     }
   },
   {
-    "name": " ui/file_manager/file_provider/array",
+    "name": "ui/file_manager/file_provider/array",
     "exports": {
       "default": { "path": "fileProvider.ArrayFileProvider" }
     }
   },
   {
-    "name": " ui/file_manager/file_provider/ajax",
+    "name": "ui/file_manager/file_provider/ajax",
     "exports": {
       "default": { "path": "fileProvider.AjaxFileProvider" }
     }
@@ -585,6 +591,12 @@
     "name": "ui/slider",
     "exports": {
       "default": { "path": "ui.dxSlider", "isWidget": true }
+    }
+  },
+  {
+    "name": "ui/sortable",
+    "exports": {
+      "default": { "path": "ui.dxSortable", "isWidget": true }
     }
   },
   {

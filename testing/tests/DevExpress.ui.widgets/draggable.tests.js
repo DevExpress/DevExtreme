@@ -31,7 +31,7 @@ QUnit.testStart(function() {
 var DRAGGABLE_CLASS = "dx-draggable",
     DRAGGABLE_ACTION_TO_EVENT_MAP = {
         "onDragStart": dragEvents.start,
-        "onDrag": dragEvents.move,
+        "onDragMove": dragEvents.move,
         "onDragEnd": dragEvents.end
     };
 
@@ -40,7 +40,7 @@ var setupDraggable = function(that, $element) {
 
     that.$element = $element;
     that.createDraggable = function(options) {
-        return that.draggableInstance = that.$element.dxDraggable($.extend({ area: $("body") }, options)).dxDraggable("instance");
+        return that.draggableInstance = that.$element.dxDraggable($.extend({ boundary: $("body") }, options)).dxDraggable("instance");
     };
     that.pointer = pointerMock(that.$element).start();
 
@@ -117,7 +117,7 @@ $.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
 });
 
 QUnit.test("'disabled' option", function(assert) {
-    var instance = this.createDraggable({ direction: 'horizontal' });
+    var instance = this.createDraggable({ dragDirection: 'horizontal' });
 
     instance.option("disabled", true);
     this.pointer.down().move(100, 0).up();
@@ -129,7 +129,7 @@ QUnit.test("'disabled' option", function(assert) {
 });
 
 QUnit.test("'dx-state-disabled' class (T284305)", function(assert) {
-    var instance = this.createDraggable({ direction: 'horizontal' });
+    var instance = this.createDraggable({ dragDirection: 'horizontal' });
 
     instance.$element().addClass("dx-state-disabled");
     this.pointer.down().move(100, 0).up();
@@ -141,10 +141,10 @@ QUnit.test("'dx-state-disabled' class (T284305)", function(assert) {
 });
 
 
-QUnit.module("'direction' option", moduleConfig);
+QUnit.module("'dragDirection' option", moduleConfig);
 
 QUnit.test("'horizontal'", function(assert) {
-    this.createDraggable({ direction: 'horizontal' });
+    this.createDraggable({ dragDirection: 'horizontal' });
 
     this.pointer.down().move(100).up();
     this.checkPosition(100, 0, assert);
@@ -154,7 +154,7 @@ QUnit.test("'horizontal'", function(assert) {
 });
 
 QUnit.test("'vertical'", function(assert) {
-    this.createDraggable({ direction: 'vertical' });
+    this.createDraggable({ dragDirection: 'vertical' });
 
     this.pointer.down().move(0, 100).up();
     this.checkPosition(0, 100, assert);
@@ -172,7 +172,7 @@ QUnit.test("'both'", function(assert) {
 
 QUnit.test("changing", function(assert) {
     var draggable = this.createDraggable({ });
-    draggable.option("direction", "horizontal");
+    draggable.option("dragDirection", "horizontal");
 
     this.pointer.down().move(100).up();
     this.checkPosition(100, 0, assert);
@@ -183,7 +183,7 @@ QUnit.test("changing", function(assert) {
 
 QUnit.test("dragging-class toggling", function(assert) {
     var draggable = this.createDraggable({});
-    draggable.option("direction", "horizontal");
+    draggable.option("dragDirection", "horizontal");
 
     assert.ok(!this.$element.hasClass("dx-draggable-dragging"), "element has not appropriate class before dragging");
 
@@ -209,13 +209,13 @@ QUnit.test("source-class toggling", function(assert) {
 
 QUnit.module("bounds", moduleConfig);
 
-QUnit.test("'area' option as element", function(assert) {
+QUnit.test("'boundary' option as element", function(assert) {
     var $area = $("#area"),
         areaWidth = $area.width(),
         areaHeight = $area.height();
 
     this.createDraggable({
-        area: "#area"
+        boundary: "#area"
     });
 
     this.pointer.down().move(areaWidth + 150, areaHeight + 150).up();
@@ -223,13 +223,13 @@ QUnit.test("'area' option as element", function(assert) {
     this.checkPosition(areaWidth - this.$element.width(), areaHeight - this.$element.height(), assert);
 });
 
-QUnit.test("'area' option as window", function(assert) {
+QUnit.test("'boundary' option as window", function(assert) {
     var $area = $(window),
         areaWidth = $area.width(),
         areaHeight = $area.height();
 
     this.createDraggable({
-        area: $area
+        boundary: $area
     });
 
     this.pointer.down().move(areaWidth + 150, areaHeight + 150).up();
@@ -237,13 +237,13 @@ QUnit.test("'area' option as window", function(assert) {
     this.checkPosition(areaWidth - this.$element.width(), areaHeight - this.$element.height(), assert);
 });
 
-QUnit.test("'area' option as function", function(assert) {
+QUnit.test("'boundary' option as function", function(assert) {
     var $area = $("#area"),
         areaWidth = $area.width(),
         areaHeight = $area.height(),
         lastAreaContext = null,
         draggable = this.createDraggable({
-            area: function() {
+            boundary: function() {
                 lastAreaContext = this;
                 return $area;
             }
@@ -265,7 +265,7 @@ QUnit.test("'boundOffsets' option as plain object, pair", function(assert) {
         };
 
     this.createDraggable({
-        area: $area,
+        boundary: $area,
         boundOffset: boundOffset
     });
 
@@ -288,7 +288,7 @@ QUnit.test("'boundOffsets' option as plain object, quad", function(assert) {
         };
 
     this.createDraggable({
-        area: $area,
+        boundary: $area,
         boundOffset: boundOffset
     });
 
@@ -308,7 +308,7 @@ QUnit.test("'boundOffsets' option as function", function(assert) {
             v: -2
         },
         draggable = this.createDraggable({
-            area: $area,
+            boundary: $area,
             boundOffset: function() {
                 assert.strictEqual(this, draggable);
                 return boundOffset;
@@ -328,7 +328,7 @@ QUnit.test("'boundOffset' option as string, pair", function(assert) {
         areaHeight = $area.height();
 
     this.createDraggable({
-        area: $area,
+        boundary: $area,
         boundOffset: "1 -2"
     });
 
@@ -345,7 +345,7 @@ QUnit.test("'boundOffset' option as string, quad", function(assert) {
         areaHeight = $area.height();
 
     this.createDraggable({
-        area: $area,
+        boundary: $area,
         boundOffset: "1 2 3 4"
     });
 
@@ -393,7 +393,7 @@ QUnit.test("Dragging an element should work correctly after click when it is pos
 
     this.createDraggable({
         allowMoveByClick: true,
-        area: $items
+        boundary: $items
     });
 
     // act
@@ -416,8 +416,8 @@ QUnit.test("behaviour depends from 'area' option", function(assert) {
     var $area = $("#area");
 
     this.createDraggable({
-        "allowMoveByClick": true,
-        "area": $area
+        allowMoveByClick: true,
+        boundary: $area
     });
 
     pointerMock($area).down(100, 100);
@@ -442,7 +442,7 @@ QUnit.test("start element position on second gesture should not be equal to init
 QUnit.test("immediate drag after click should work correctly", function(assert) {
     var $area = $("#area");
     this.createDraggable({
-        area: $area,
+        boundary: $area,
         allowMoveByClick: true
     });
 
@@ -452,29 +452,29 @@ QUnit.test("immediate drag after click should work correctly", function(assert) 
     this.checkPosition(60 - this.$element.width() / 2, 60 - this.$element.height() / 2, assert);
 });
 
-QUnit.test("'onDrag' callback should be fired on area click", function(assert) {
+QUnit.test("'onDragMove' callback should be fired on area click", function(assert) {
     var $area = $("#area"),
-        onDragSpy = sinon.spy(noop);
+        onDragMoveSpy = sinon.spy(noop);
 
     this.createDraggable({
-        area: $area,
+        boundary: $area,
         allowMoveByClick: true,
-        onDrag: onDragSpy
+        onDragMove: onDragMoveSpy
     });
 
     this.pointer.down();
-    assert.ok(onDragSpy.calledOnce);
+    assert.ok(onDragMoveSpy.calledOnce);
 });
 
-QUnit.test("element position on click should be updated considering direction", function(assert) {
+QUnit.test("element position on click should be updated considering dragDirection", function(assert) {
     var $area = $("#area"),
         elementHeight = this.$element.height(),
         elementPosition = this.$element.position();
 
     this.createDraggable({
-        area: $area,
+        boundary: $area,
         allowMoveByClick: true,
-        direction: "vertical"
+        dragDirection: "vertical"
     });
 
     pointerMock($area).down(elementPosition.left + 10, elementPosition.top + elementHeight + 5);
@@ -671,16 +671,16 @@ QUnit.test("Remove element from the container when disposing", function(assert) 
 });
 
 
-QUnit.module("dragTemplate", moduleConfig);
+QUnit.module("template", moduleConfig);
 
-QUnit.test("Set dragTemplate", function(assert) {
+QUnit.test("Set template", function(assert) {
     // arrange
-    var dragTemplate = sinon.spy(function() {
+    var template = sinon.spy(function() {
         return $("<div id='myDragElement'/>").text("test");
     });
 
     this.createDraggable({
-        dragTemplate: dragTemplate
+        template: template
     });
 
     // act
@@ -688,14 +688,15 @@ QUnit.test("Set dragTemplate", function(assert) {
 
     // assert
     assert.strictEqual($("body").children("#myDragElement").length, 1, "there is a drag element");
-    assert.strictEqual(dragTemplate.callCount, 1, "dragTemplate is called");
-    assert.deepEqual($(dragTemplate.getCall(0).args[0]).get(0), $(viewPort()).get(0), "dragTemplate is called");
+    assert.strictEqual(template.callCount, 1, "template is called");
+    assert.deepEqual($(template.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "args[0].sourceElement");
+    assert.deepEqual($(template.getCall(0).args[1]).get(0), $(viewPort()).get(0), "args[1] - container");
 });
 
 QUnit.test("Remove my element after the drop end", function(assert) {
     // arrange
     this.createDraggable({
-        dragTemplate: function() {
+        template: function() {
             return $("<div id='myDragElement'/>").text("test");
         }
     });
@@ -715,7 +716,7 @@ QUnit.test("Remove my element after the drop end", function(assert) {
 QUnit.test("Remove my element when disposing", function(assert) {
     // arrange
     this.createDraggable({
-        dragTemplate: function() {
+        template: function() {
             return $("<div id='myDragElement'/>").text("test");
         }
     });
@@ -732,19 +733,20 @@ QUnit.test("Remove my element when disposing", function(assert) {
     assert.strictEqual($("body").children("#myDragElement").length, 0, "there isn't a cloned element");
 });
 
-QUnit.module("items", $.extend({}, moduleConfig, {
+
+QUnit.module("filter", $.extend({}, moduleConfig, {
     beforeEach: function() {
         setupDraggable(this, $("#items"));
     }
 }));
 
-QUnit.test("Set items", function(assert) {
+QUnit.test("Set filter", function(assert) {
     // arrange
     var items,
         $dragItemElement;
 
     this.createDraggable({
-        items: ".draggable"
+        filter: ".draggable"
     });
     items = this.$element.children();
 
@@ -773,8 +775,8 @@ QUnit.test("Set items", function(assert) {
 QUnit.test("No exceptions on area click", function(assert) {
     // arrange
     this.createDraggable({
-        items: ".draggable",
-        area: "#items"
+        filter: ".draggable",
+        boundary: "#items"
     });
 
     try {
