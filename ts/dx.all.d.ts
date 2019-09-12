@@ -5347,8 +5347,6 @@ declare module DevExpress.ui {
     }
     /** @name dxSortable.Options */
     export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
-        /** @name dxSortable.Options.filter */
-        filter?: string;
         /** @name dxSortable.Options.itemOrientation */
         itemOrientation?: 'horizontal' | 'vertical';
         /** @name dxSortable.Options.placeholderTemplate */
