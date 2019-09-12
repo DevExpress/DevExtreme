@@ -5,7 +5,8 @@ var $ = require("jquery"),
     rendererModule = require("viz/core/renderers/renderer"),
     clientExporter = require("exporter"),
     exportModule = require("viz/core/export"),
-    Deferred = require("core/utils/deferred").Deferred;
+    Deferred = require("core/utils/deferred").Deferred,
+    logger = require("core/utils/console").logger;
 
 $("#qunit-fixture").append('<div id="test-container" style="width: 200px; height: 150px;"></div>');
 
@@ -314,21 +315,27 @@ QUnit.test('Restore pointer events after export', function(assert) {
 
 QUnit.test('Restore pointer events after export if rejected', function(assert) {
     // arrange
-    clientExporter.export.returns(new Deferred().reject());
-    var widget = this.createWidget({
-        "export": {
-            backgroundColor: "#ff0000",
-            proxyUrl: "testProxy",
-            margin: 40
-        }
-    });
+    sinon.stub(logger, "error");
+    try {
+        clientExporter.export.returns(new Deferred().reject("my error"));
+        var widget = this.createWidget({
+            "export": {
+                backgroundColor: "#ff0000",
+                proxyUrl: "testProxy",
+                margin: 40
+            }
+        });
 
-    widget._renderer.root.attr({ "pointer-events": "all" });
+        widget._renderer.root.attr({ "pointer-events": "all" });
 
-    // act
-    widget.exportTo("testName", "jpeg");
+        // act
+        widget.exportTo("testName", "jpeg");
 
-    assert.equal(widget._renderer.root.attr("pointer-events"), "all");
+        assert.equal(widget._renderer.root.attr("pointer-events"), "all");
+        assert.deepEqual(logger.error.lastCall.args, ["my error"]);
+    } finally {
+        logger.error.restore();
+    }
 });
 
 QUnit.test('Disable pointer events while printing', function(assert) {

@@ -7,6 +7,7 @@ import { isDefined } from "../../core/utils/type";
 import themeModule from "../themes";
 import hoverEvent from "../../events/hover";
 import pointerEvents from "../../events/pointer";
+import { logger } from "../../core/utils/console";
 
 const imageExporter = clientExporter.image;
 const svgExporter = clientExporter.svg;
@@ -640,11 +641,13 @@ export const plugin = {
 
             const pointerEventsValue = this._disablePointerEvents();
 
-            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format)).always(() => {
-                this._renderer.root.attr({
-                    "pointer-events": pointerEventsValue
+            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format))
+                .catch(logger.error)
+                .always(() => {
+                    this._renderer.root.attr({
+                        "pointer-events": pointerEventsValue
+                    });
                 });
-            });
             menu && menu.show();
         },
         print() {
