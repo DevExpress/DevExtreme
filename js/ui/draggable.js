@@ -132,6 +132,11 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @default false
              */
             clone: false
+            /**
+             * @name DraggableBaseOptions.group
+             * @type any
+             * @default undefined
+             */
         });
     },
 
