@@ -112,3 +112,35 @@ test("Should save focused checkbox", async t => {
         .expect(selectAllCheckBox.isFocused).ok()
         .expect(secondItemCheckBox.isFocused).notOk();
 });
+
+fixture `List T727360`
+    .page(url(__dirname, './pages/t727360.html'));
+
+test("Grouped list can not reorder items (T727360)", async t => {
+    const list = new List('#list');
+    const firstGroup = list.getGroup();
+    const secondGroup = list.getGroup(1);
+    const thirdGroup = list.getGroup(2);
+
+    await t
+        .click(secondGroup.header)
+        .click(thirdGroup.header)
+
+        .dragToElement(firstGroup.getItem().reorderHandle, firstGroup.getItem(1).element)
+        .expect(firstGroup.getItem().text).eql('value12')
+        .expect(firstGroup.getItem(1).text).eql('value11')
+
+        .click(firstGroup.header)
+        .click(secondGroup.header)
+
+        .dragToElement(secondGroup.getItem().reorderHandle, secondGroup.getItem(1).element)
+        .expect(secondGroup.getItem().text).eql('value22')
+        .expect(secondGroup.getItem(1).text).eql('value21')
+
+        .click(secondGroup.header)
+        .click(thirdGroup.header)
+
+        .dragToElement(thirdGroup.getItem().reorderHandle, thirdGroup.getItem(1).element)
+        .expect(thirdGroup.getItem().text).eql('value32')
+        .expect(thirdGroup.getItem(1).text).eql('value31');
+});
