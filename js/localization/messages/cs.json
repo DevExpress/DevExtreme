@@ -25,6 +25,8 @@
         "validation-stringLength-formatted": "Délka textu {0} není správná",
         "validation-custom": "Neplatná hodnota",
         "validation-custom-formatted": "{0} je neplatných",
+        "validation-async": "Neplatná hodnota",
+        "validation-async-formatted": "{0} je neplatných",
         "validation-compare": "Hodnoty se neshodují",
         "validation-compare-formatted": "{0} se neshoduje",
         "validation-pattern": "Hodnota neodpovídá vzoru",

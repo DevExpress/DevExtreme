@@ -25,6 +25,8 @@
         "validation-stringLength-formatted": "The length of {0} is not correct",
         "validation-custom": "Value is invalid",
         "validation-custom-formatted": "{0} is invalid",
+        "validation-async": "Value is invalid",
+        "validation-async-formatted": "{0} is invalid",
         "validation-compare": "Values do not match",
         "validation-compare-formatted": "{0} does not match",
         "validation-pattern": "Value does not match pattern",

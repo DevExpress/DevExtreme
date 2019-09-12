@@ -22,6 +22,8 @@
         "validation-stringLength-formatted": "{0} の長さが正しくありません",
         "validation-custom": "値が無効です。",
         "validation-custom-formatted": "{0} が無効です。",
+        "validation-async": "値が無効です。",
+        "validation-async-formatted": "{0} が無効です。",
         "validation-compare": "値が一致しません。",
         "validation-compare-formatted": " {0} が一致しません。",
         "validation-pattern": "値がパターンと一致しません",

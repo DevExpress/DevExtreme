@@ -111,17 +111,18 @@ QUnit.testStart(function() {
         summary._groupValidationHandler({
             isValid: false,
             brokenRules: [{
-                type: "required",
+                type: "async",
                 message: message + "1-1",
-                validator: validator1
-            }, {
-                type: "length",
-                message: message + "1-2",
                 validator: validator1
             }, {
                 type: "required",
                 message: message + "2",
                 validator: validator2
+            },
+            {
+                type: "async",
+                message: message + "1-2",
+                validator: validator1
             }],
             validators: [validator1, validator2]
         });
@@ -130,9 +131,10 @@ QUnit.testStart(function() {
         var items = summary.option('items');
 
         assert.ok(items, "Items should exists");
-        assert.equal(items.length, 2, "Two messaged only should be shown (one message per validator)");
+        assert.equal(items.length, 3, "Three messaged should be shown(several per validator)");
         assert.equal(items[0].text, message + "1-1", "Message should be transformed");
-        assert.equal(items[1].text, message + "2", "Message should be transformed");
+        assert.equal(items[1].text, message + "1-2", "Message should be transformed");
+        assert.equal(items[2].text, message + "2", "Message should be transformed");
     });
 
 

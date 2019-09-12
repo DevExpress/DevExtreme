@@ -25,6 +25,8 @@
         "validation-stringLength-formatted": "La lunghezza di {0} è errata",
         "validation-custom": "Il valore non è corretto",
         "validation-custom-formatted": "{0} non è corretto",
+        "validation-async": "Il valore non è corretto",
+        "validation-async-formatted": "{0} non è corretto",
         "validation-compare": "I valori non corrispondono",
         "validation-compare-formatted": "{0} non corrisponde",
         "validation-pattern": "Il valore non è corretto",

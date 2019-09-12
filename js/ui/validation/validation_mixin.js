@@ -1,6 +1,6 @@
-var ValidationMixin = {
-    _findGroup: function() {
-        var group = this.option("validationGroup"),
+const ValidationMixin = {
+    _findGroup() {
+        let group = this.option("validationGroup"),
             $dxGroup;
 
         if(!group) {

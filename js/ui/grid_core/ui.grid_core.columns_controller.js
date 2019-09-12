@@ -184,7 +184,7 @@ module.exports = {
              */
             /**
              * @name GridBaseColumn.validationRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
              */
             /**
              * @name GridBaseColumn.calculateCellValue

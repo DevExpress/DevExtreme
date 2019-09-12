@@ -1,13 +1,16 @@
-var $ = require("jquery"),
-    Class = require("core/class"),
-    Editor = require("ui/editor/editor"),
-    DefaultAdapter = require("ui/validation/default_adapter"),
-    ValidationEngine = require("ui/validation_engine");
+import $ from "jquery";
+import Class from "core/class";
+import Editor from "ui/editor/editor";
+import DefaultAdapter from "ui/validation/default_adapter";
+import ValidationEngine from "ui/validation_engine";
+import TextEditorBase from "ui/text_box/ui.text_editor.base";
+import { Deferred } from "core/utils/deferred";
 
-require("ui/validator");
+import "ui/validator";
+import "ui/load_indicator";
 
-var Fixture = Class.inherit({
-    createValidator: function(options, element) {
+const Fixture = Class.inherit({
+    createValidator(options, element) {
         this.$element = element || this.$element || $("<div/>");
         this.stubAdapter = sinon.createStubInstance(DefaultAdapter);
         var validator = this.$element.dxValidator($.extend({
@@ -16,12 +19,15 @@ var Fixture = Class.inherit({
 
         return validator;
     },
-    createEditor: function(editorOptions) {
+    createEditor(editorOptions) {
         this.$element = $("<div/>");
         return new Editor(this.$element, $.extend({}, editorOptions));
     },
-
-    teardown: function() {
+    createTextEditor(editorOptions) {
+        this.$element = $("<div/>");
+        return new TextEditorBase(this.$element, $.extend({}, editorOptions));
+    },
+    teardown() {
         this.$element.remove();
         ValidationEngine.initGroups();
     }
@@ -222,4 +228,34 @@ QUnit.test("Reset value of custom validation rule when the required rule is defi
 
     // assert
     assert.equal(spy.callCount, 2, "The validationCallback is called after reset");
+});
+
+QUnit.test("Editor should display pending indicator after repaint", function(assert) {
+    // arrange
+    const editor = this.fixture.createTextEditor({
+            value: "test"
+        }),
+        validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [
+                {
+                    type: "async",
+                    validationCallback: function() {
+                        return new Deferred().promise();
+                    }
+                }
+            ]
+        });
+
+    validator.validate();
+    let indicator = editor.$element().find(".dx-pending-indicator").dxLoadIndicator("instance");
+
+    assert.ok(indicator, "indicator found after valiating");
+    assert.ok(indicator.option("visible"), "indicator is shown after validating");
+
+    editor.repaint();
+    indicator = editor.$element().find(".dx-pending-indicator").dxLoadIndicator("instance");
+
+    assert.ok(indicator, "indicator found after repainting");
+    assert.ok(indicator.option("visible"), "indicator is shown after repainting");
 });
