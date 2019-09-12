@@ -317,7 +317,7 @@ var SchedulerTableCreator = {
         for(i = groupCount - 1; i >= 0; i--) {
             var currentColumnLength = arr[i].length;
             for(var j = 0; j < currentColumnLength; j++) {
-                rows[i].prepend(arr[i][j].element);
+                rows[i].append(arr[i][j].element);
             }
         }
 
