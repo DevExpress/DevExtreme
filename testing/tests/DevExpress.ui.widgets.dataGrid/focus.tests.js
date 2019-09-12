@@ -2425,7 +2425,7 @@ QUnit.testInActiveWindow("Setting cancel in onFocusedRowChanging event args shou
     assert.equal(this.getController("keyboardNavigation").getVisibleRowIndex(), 4, "Focused row index is 5");
 });
 
-QUnit.testInActiveWindow("Prevent default in onFocusedRowChanging event if cancel is set", function(assert) {
+QUnit.test("Prevent default in onFocusedRowChanging event if cancel is set", function(assert) {
     // arrange
     var focusedRowChangingFiresCount = 0,
         focusedRowChangedFiresCount = 0,
