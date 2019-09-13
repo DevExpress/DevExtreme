@@ -965,6 +965,16 @@ const dxChart = AdvancedChart.inherit({
             }
         });
 
+        _each(verticalAxes, (_, v) => {
+            const position = v.getResolvedPositionOption();
+            const horizontalAxis = horizontalAxes.filter(h => h.pane = that.defaultPane && h !== that._scrollBar)[0];
+
+            if(_isDefined(position) && !v.isSpecialPosition(position) && horizontalAxis.getTranslator().to(position) !== v._axisPosition) {
+                drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
+                return false;
+            }
+        });
+
         return cleanPanesCanvases;
     },
 

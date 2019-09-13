@@ -343,9 +343,19 @@ Axis.prototype = {
         return svgElement.sharp(this._getSharpParam(), sharpDirection);
     },
 
+    getRootPositionOption(optionPath) {},
+
+    getResolvedPositionOption() {
+        return this.getRootPositionOption(this.getOptions().optionPath) || this.getOptions().position;
+    },
+
+    isSpecialPosition(position) {
+        return [BOTTOM, LEFT, RIGHT, TOP].indexOf(position) > -1;
+    },
+
     getAxisSharpDirection() {
-        const position = this._options.position;
-        return position === TOP || position === LEFT ? 1 : -1;
+        const position = this.getResolvedPositionOption();
+        return position !== BOTTOM && position !== RIGHT ? 1 : -1;
     },
 
     getSharpDirectionByCoords(coords) {
