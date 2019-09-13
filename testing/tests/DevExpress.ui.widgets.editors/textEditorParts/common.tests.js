@@ -743,9 +743,9 @@ QUnit.module("options changing", moduleConfig, () => {
 
         const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
 
-        pointerMock($clearButton).click();
+        $clearButton.click();
 
-        assert.equal(1, callCount, "onInput was called");
+        assert.equal(callCount, 1, "onInput was called");
     });
 
     QUnit.test("tap on clear button should reset value (T310102)", (assert) => {
@@ -757,6 +757,29 @@ QUnit.module("options changing", moduleConfig, () => {
         $clearButton.on("dxpointerdown", e => {
             assert.ok(!e.isDefaultPrevented());
         }).trigger(dxPointerDown);
+    });
+
+    QUnit.test("tap on clear button should not raise onValueChange event (T812448)", (assert) => {
+        const valueChangeStub = sinon.stub();
+
+        const $element = $("#texteditor").dxTextEditor({
+            showClearButton: true,
+            onValueChanged: valueChangeStub
+        });
+        const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+        const kb = this.keyboard;
+        kb.type("clear");
+        assert.equal(this.input.val(), "clear", "texteditor has correct value");
+
+        const dxPointerDown = $.Event("dxpointerdown");
+        dxPointerDown.pointerType = "touch";
+        $clearButton.on("dxpointerdown", e => {
+            assert.strictEqual(this.input.val(), "", "texteditor is empty");
+        }).trigger(dxPointerDown);
+
+        kb.type("change")
+            .change();
+        assert.ok(valueChangeStub.calledOnce, "onValueChanged was called once");
     });
 
     QUnit.test("texteditor is clear when option 'value' changed to null", (assert) => {
