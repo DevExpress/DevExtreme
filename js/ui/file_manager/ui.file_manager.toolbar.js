@@ -13,54 +13,25 @@ const FILE_MANAGER_TOOLBAR_SEPARATOR_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "
 const FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-viewmode-item";
 const FILE_MANAGER_TOOLBAR_HAS_LARGE_ICON_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-has-large-icon";
 
-const DEFAULT_TOOLBAR_FILE_ITEMS = [
-    {
-        commandName: "download",
+const DEFAULT_ITEM_CONFIGS = {
+    showDirsPanel: {
+        location: "before"
+    },
+    create: {
         location: "before",
         compactMode: {
             showText: "inMenu",
             locateInMenu: "auto"
         }
     },
-    {
-        commandName: "separator",
-        location: "before"
-    },
-    {
-        commandName: "move",
+    upload: {
         location: "before",
         compactMode: {
+            showText: "inMenu",
             locateInMenu: "auto"
         }
     },
-    {
-        commandName: "copy",
-        location: "before",
-        compactMode: {
-            locateInMenu: "auto"
-        }
-    },
-    {
-        commandName: "rename",
-        location: "before",
-        compactMode: {
-            locateInMenu: "auto"
-        }
-    },
-    {
-        commandName: "separator",
-        location: "before"
-    },
-    {
-        commandName: "delete",
-        location: "before",
-        compactMode: {
-            showText: "inMenu"
-        }
-    },
-    {
-        commandName: "refresh",
-        visible: false,
+    refresh: {
         location: "after",
         showText: "inMenu",
         cssClass: FILE_MANAGER_TOOLBAR_HAS_LARGE_ICON_CLASS,
@@ -69,56 +40,49 @@ const DEFAULT_TOOLBAR_FILE_ITEMS = [
             locateInMenu: "auto"
         }
     },
-    {
-        commandName: "clear",
+    viewMode: {
+        location: "after"
+    },
+    download: {
+        location: "before",
+        compactMode: {
+            showText: "inMenu",
+            locateInMenu: "auto"
+        }
+    },
+    move: {
+        location: "before",
+        compactMode: {
+            locateInMenu: "auto"
+        }
+    },
+    copy: {
+        location: "before",
+        compactMode: {
+            locateInMenu: "auto"
+        }
+    },
+    rename: {
+        location: "before",
+        compactMode: {
+            locateInMenu: "auto"
+        }
+    },
+    delete: {
+        location: "before",
+        compactMode: {
+            showText: "inMenu"
+        }
+    },
+    clear: {
         location: "after",
         locateInMenu: "never",
         compactMode: {
             showText: "inMenu"
         }
-    }
-];
-
-const DEFAULT_TOOLBAR_GENERAL_ITEMS = [
-    {
-        commandName: "showDirsPanel",
-        location: "before"
     },
-    {
-        commandName: "create",
-        location: "before",
-        compactMode: {
-            showText: "inMenu",
-            locateInMenu: "auto"
-        }
-    },
-    {
-        commandName: "upload",
-        location: "before",
-        compactMode: {
-            showText: "inMenu",
-            locateInMenu: "auto"
-        }
-    },
-    {
-        commandName: "refresh",
-        location: "after",
-        showText: "inMenu",
-        cssClass: FILE_MANAGER_TOOLBAR_HAS_LARGE_ICON_CLASS,
-        compactMode: {
-            showText: "inMenu",
-            locateInMenu: "auto"
-        }
-    },
-    {
-        commandName: "separator",
-        location: "after"
-    },
-    {
-        commandName: "viewMode",
-        location: "after"
-    }
-];
+    separator: { }
+};
 
 const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ "separator", "viewMode" ];
 
@@ -136,8 +100,8 @@ class FileManagerToolbar extends Widget {
 
         this._generalToolbarVisible = true;
 
-        this._generalToolbar = this._createToolbar(DEFAULT_TOOLBAR_GENERAL_ITEMS);
-        this._fileToolbar = this._createToolbar(DEFAULT_TOOLBAR_FILE_ITEMS, true);
+        this._generalToolbar = this._createToolbar(this.option("generalItems"));
+        this._fileToolbar = this._createToolbar(this.option("fileItems"), true);
 
         this.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS + " " + FILE_MANAGER_GENERAL_TOOLBAR_CLASS);
     }
@@ -160,7 +124,7 @@ class FileManagerToolbar extends Widget {
     }
 
     _createToolbar(items, hidden) {
-        const toolbarItems = this._getToolbarItems(items);
+        const toolbarItems = this._getPreparedItems(items);
         const $toolbar = $("<div>").appendTo(this.$element());
         const result = this._createComponent($toolbar, Toolbar, {
             items: toolbarItems,
@@ -170,7 +134,7 @@ class FileManagerToolbar extends Widget {
         return result;
     }
 
-    _getToolbarItems(items) {
+    _getPreparedItems(items) {
         let groupHasItems = false;
 
         return items.map(item => {
@@ -198,19 +162,28 @@ class FileManagerToolbar extends Widget {
     }
 
     _getItemConfigByCommandName(commandName) {
+        let result = {};
+
         const command = this._commandManager.getCommandByName(commandName);
         if(command) {
-            return this._createCommandItem(command);
+            result = this._createCommandItem(command);
         }
 
         switch(commandName) {
             case "separator":
-                return this._createSeparatorItem();
+                result = this._createSeparatorItem();
+                break;
             case "viewMode":
-                return this._createViewModeItem();
+                result = this._createViewModeItem();
+                break;
         }
 
-        return {};
+        const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
+        if(defaultConfig) {
+            extend(result, defaultConfig);
+        }
+
+        return result;
     }
 
     _createCommandItem(command) {
@@ -364,6 +337,8 @@ class FileManagerToolbar extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             commandManager: null,
+            generalItems: [],
+            fileItems: [],
             itemViewMode: "details"
         });
     }
@@ -374,6 +349,8 @@ class FileManagerToolbar extends Widget {
         switch(name) {
             case "commandManager":
             case "itemViewMode":
+            case "generalItems":
+            case "fileItems":
                 this.repaint();
                 break;
             default:
