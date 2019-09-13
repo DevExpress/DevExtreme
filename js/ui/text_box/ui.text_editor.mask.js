@@ -414,6 +414,8 @@ var TextEditorMask = TextEditorBase.inherit({
         this._adjustCaret();
         this._displayMask();
         this._maskRulesChain.reset();
+
+        eventsEngine.trigger(this._input(), "input");
     },
 
     _handleKey: function(key, direction) {
