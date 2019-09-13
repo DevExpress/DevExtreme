@@ -106,6 +106,14 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         return currentActions.filter((action) => action.option("visible"));
     },
 
+    _getCurrentOptions(actions) {
+        const visibleActions = speedDialMainItem._getVisibleActions(actions);
+
+        return visibleActions.length === 1 ?
+            visibleActions[0]._options :
+            this._getDefaultOptions();
+    },
+
     _clickHandler() {
         const actions = this._actionItems.filter((action) => action.option("actionVisible"));
 
@@ -252,16 +260,16 @@ exports.initAction = function(newAction) {
             }
         });
 
-        const visibleSavedActions = speedDialMainItem._getVisibleActions(savedActions);
-
         if(!isActionExist) {
-            if(visibleSavedActions.length >= speedDialMainItem.option("maxSpeedDialActionCount")) {
+            if(speedDialMainItem._getVisibleActions(savedActions).length >= speedDialMainItem.option("maxSpeedDialActionCount")) {
                 newAction.dispose();
                 errors.log("W1014");
                 return;
             }
+
             savedActions.push(newAction);
-            speedDialMainItem.option(extend(speedDialMainItem._getDefaultOptions(), {
+
+            speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
                 actions: savedActions,
                 visible: true
             }));
@@ -270,7 +278,7 @@ exports.initAction = function(newAction) {
                 actions: savedActions
             }));
         } else {
-            speedDialMainItem.option(extend(speedDialMainItem._getDefaultOptions(), {
+            speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
                 actions: savedActions,
                 visible: true
             }));

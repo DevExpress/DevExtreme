@@ -451,14 +451,19 @@ QUnit.module("add visible option", (hooks) => {
     let secondSDA;
     hooks.beforeEach(() => {
         fx.off = true;
+
+        config({
+            floatingActionButtonConfig: {
+                icon: "menu",
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
     }),
     hooks.afterEach(() => {
-        firstSDA.dispose();
-        secondSDA.dispose();
-
-        fx.off = false;
-    }),
-    test("check rendering", (assert) => {
         config({
             floatingActionButtonConfig: {
                 position: {
@@ -469,10 +474,17 @@ QUnit.module("add visible option", (hooks) => {
             }
         });
 
+        firstSDA.dispose();
+        secondSDA.dispose();
+
+        fx.off = false;
+    }),
+    test("check rendering", (assert) => {
         const clickHandler = sinon.spy();
 
         firstSDA = $("#fab-one").dxSpeedDialAction({
             icon: "edit",
+            label: "Edit row",
             visible: false,
             onClick: clickHandler
         }).dxSpeedDialAction("instance");
@@ -482,6 +494,11 @@ QUnit.module("add visible option", (hooks) => {
         assert.equal($(FAB_INVISIBLE_SELECTOR).length, 1, "one invisible action");
 
         firstSDA.option("visible", true);
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.find(".dx-icon-edit").length, 1, "action icon is applied if action visible");
+        assert.equal($fabMainContent.find(".dx-fa-button-label").text(), "Edit row", "action label is applied if action visible");
 
         secondSDA = $("#fab-two").dxSpeedDialAction({
             icon: "trash"
