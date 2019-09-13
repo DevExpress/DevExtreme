@@ -424,6 +424,12 @@ class Gantt extends Widget {
                 resourceIdExpr: "resourceId"
             },
             /**
+             * @name dxGanttOptions.treeListColumns
+             * @type Array<dxTreeListColumn,string>
+             * @default undefined
+             */
+            treeListColumns: undefined,
+            /**
             * @name dxGanttOptions.treeListWidth
             * @type number
             * @default 300
@@ -550,6 +556,9 @@ class Gantt extends Widget {
                 break;
             case "resourceAssignments":
                 this._refreshDataSource("resourceAssignments");
+                break;
+            case "treeListColumns":
+                this._setTreeListOption("columns");
                 break;
             case "treeListWidth":
                 this._setInnerElementsWidth();
