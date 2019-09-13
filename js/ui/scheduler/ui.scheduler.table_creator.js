@@ -6,7 +6,7 @@ import { getPublicElement } from "../../core/utils/dom";
 
 const ROW_SELECTOR = "tr";
 
-export const SchedulerTableCreator = {
+const SchedulerTableCreator = {
 
     VERTICAL: "vertical",
     HORIZONTAL: "horizontal",
@@ -239,7 +239,7 @@ export const SchedulerTableCreator = {
 
     },
 
-    _makeFlexGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
+    _makeFlexGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate = 1) {
 
         let cells = [],
             items = group.items,
@@ -418,3 +418,5 @@ export const SchedulerTableCreator = {
         return cells;
     }
 };
+
+module.exports = SchedulerTableCreator;
