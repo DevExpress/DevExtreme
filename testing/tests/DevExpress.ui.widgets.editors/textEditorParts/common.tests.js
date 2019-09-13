@@ -770,9 +770,10 @@ QUnit.module("options changing", moduleConfig, () => {
 
         const dxPointerDown = $.Event("dxpointerdown");
         dxPointerDown.pointerType = "touch";
-        $clearButton.on("dxpointerdown").trigger(dxPointerDown);
+        $clearButton.on("dxpointerdown", e => {
+            assert.equal(this.input.val(), "", "texteditor is empty");
+        }).trigger(dxPointerDown);
 
-        assert.equal(this.input.val(), "", "texteditor is empty");
         kb.type("change")
             .change();
         assert.equal(callCount, 1, "onValueChanged was called once");
