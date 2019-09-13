@@ -367,7 +367,7 @@ class FileManager extends Widget {
 
             toolbar: {
                 generalItems: [
-                    "showDirPanel", "create", "upload", "refresh",
+                    "showDirsPanel", "create", "upload", "refresh",
                     {
                         commandName: "separator", // TODO rename to command
                         location: "after"

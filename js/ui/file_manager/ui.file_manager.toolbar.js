@@ -81,7 +81,9 @@ const DEFAULT_ITEM_CONFIGS = {
             showText: "inMenu"
         }
     },
-    separator: { }
+    separator: {
+        location: "before"
+    }
 };
 
 const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ "separator", "viewMode" ];
@@ -152,7 +154,7 @@ class FileManagerToolbar extends Widget {
                 groupHasItems = false;
             } else {
                 preparedItem.available = this._isCommandAvailable(commandName);
-                const itemVisible = preparedItem.available && ensureDefined(preparedItem.visible, true);
+                const itemVisible = preparedItem.available;
                 preparedItem.visible = itemVisible;
                 groupHasItems = groupHasItems || itemVisible;
             }
@@ -256,7 +258,7 @@ class FileManagerToolbar extends Widget {
                 let optionsSource = null;
 
                 if(useCompactMode) {
-                    item.saved = this._getCompactModeOptions(item, item.available);
+                    item.saved = this._getCompactModeOptions(item, item.available); // TODO use private name
                     optionsSource = item.compactMode;
                 } else {
                     optionsSource = item.saved;
@@ -270,9 +272,9 @@ class FileManagerToolbar extends Widget {
         toolbar.endUpdate();
     }
 
-    _getCompactModeOptions({ visible, showText, locateInMenu }, available) {
+    _getCompactModeOptions({ showText, locateInMenu }, available) {
         return {
-            visible: available && ensureDefined(visible, true),
+            visible: available,
             showText: ensureDefined(showText, "always"),
             locateInMenu: ensureDefined(locateInMenu, "never")
         };
@@ -316,7 +318,15 @@ class FileManagerToolbar extends Widget {
     }
 
     _isCommandAvailable(commandName, fileItems) {
-        return ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(commandName) > -1 || this._commandManager.isCommandAvailable(commandName, fileItems);
+        if(commandName === "refresh") {
+            return this._generalToolbarVisible || !!this._isRefreshVisibleInFileToolbar;
+        }
+
+        if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(commandName) > -1) {
+            return true;
+        }
+
+        return this._commandManager.isCommandAvailable(commandName, fileItems);
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {
@@ -360,7 +370,7 @@ class FileManagerToolbar extends Widget {
 
     updateRefreshItem(message, status) {
         let generalToolbarOptions = null;
-        let visibleInFileToolbar = false;
+        this._isRefreshVisibleInFileToolbar = false;
 
         if(status === "default") {
             generalToolbarOptions = {
@@ -378,10 +388,10 @@ class FileManagerToolbar extends Widget {
                     icon: REFRESH_ICON_MAP[status]
                 }
             };
-            visibleInFileToolbar = true;
+            this._isRefreshVisibleInFileToolbar = true;
         }
 
-        const fileToolbarOptions = extend({ }, generalToolbarOptions, { visible: visibleInFileToolbar });
+        const fileToolbarOptions = extend({ }, generalToolbarOptions, { visible: this._isRefreshVisibleInFileToolbar });
 
         this._updateItemInToolbar(this._generalToolbar, "refresh", generalToolbarOptions);
         this._updateItemInToolbar(this._fileToolbar, "refresh", fileToolbarOptions);
