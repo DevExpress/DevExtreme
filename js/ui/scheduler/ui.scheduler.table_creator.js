@@ -1,12 +1,12 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    dataUtils = require("../../core/element_data"),
-    typeUtils = require("../../core/utils/type"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import dataUtils from "../../core/element_data";
+import typeUtils from "../../core/utils/type";
+import { getPublicElement } from "../../core/utils/dom";
 
-var ROW_SELECTOR = "tr";
+const ROW_SELECTOR = "tr";
 
-var SchedulerTableCreator = {
+export const SchedulerTableCreator = {
 
     VERTICAL: "vertical",
     HORIZONTAL: "horizontal",
@@ -240,20 +240,18 @@ var SchedulerTableCreator = {
     },
 
     _makeFlexGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
-        repeatByDate = repeatByDate || 1;
-        repeatCount = repeatCount * repeatByDate;
 
-        var cells = [],
+        let cells = [],
             items = group.items,
             itemCount = items.length;
 
-        for(var i = 0; i < repeatCount; i++) {
-            for(var j = 0; j < itemCount; j++) {
-                var $container = $("<div>"),
+        for(let i = 0; i < repeatCount * repeatByDate; i++) {
+            for(let j = 0; j < itemCount; j++) {
+                let $container = $("<div>"),
                     cell = {};
 
                 if(cellTemplate && cellTemplate.render) {
-                    var templateOptions = {
+                    let templateOptions = {
                         model: items[j],
                         container: getPublicElement($container),
                         index: i * itemCount + j
@@ -268,13 +266,7 @@ var SchedulerTableCreator = {
                     $container.text(items[j].text);
                 }
 
-                var cssClass;
-
-                if(typeUtils.isFunction(cssClasses.groupHeaderClass)) {
-                    cssClass = cssClasses.groupHeaderClass(j);
-                } else {
-                    cssClass = cssClasses.groupHeaderClass;
-                }
+                const cssClass = typeUtils.isFunction(cssClasses.groupHeaderClass) ? cssClasses.groupHeaderClass(j) : cssClasses.groupHeaderClass;
 
                 cell.element = $("<div>").addClass(cssClass).append($container);
 
@@ -285,11 +277,10 @@ var SchedulerTableCreator = {
         return cells;
     },
 
-    _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate, rowCount) {
+    _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate) {
         var cellTemplates = [],
             repeatCount = 1,
-            arr = [],
-            i;
+            cellsArray = [];
 
         var cellIterator = function(cell) {
             if(cell.template) {
@@ -297,34 +288,32 @@ var SchedulerTableCreator = {
             }
         };
 
-        for(i = 0; i < groups.length; i++) {
+        for(let i = 0; i < groups.length; i++) {
             if(i > 0) {
                 repeatCount = groups[i - 1].items.length * repeatCount;
             }
 
             var cells = this._makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
             cells.forEach(cellIterator);
-            arr.push(cells);
+            cellsArray.push(cells);
         }
 
         var rows = [],
-            groupCount = arr.length;
+            groupCount = cellsArray.length;
 
-        for(i = 0; i < groupCount; i++) {
+        for(let i = 0; i < groupCount; i++) {
             rows.push($("<div>").addClass(cssClasses.groupHeaderRowClass));
         }
 
-        for(i = groupCount - 1; i >= 0; i--) {
-            var currentColumnLength = arr[i].length;
+        for(let i = groupCount - 1; i >= 0; i--) {
+            var currentColumnLength = cellsArray[i].length;
             for(var j = 0; j < currentColumnLength; j++) {
-                rows[i].append(arr[i][j].element);
+                rows[i].append(cellsArray[i][j].element);
             }
         }
 
-        let result = $("<div>").addClass("dx-scheduler-group-flex-container").append(rows);
-
         return {
-            elements: result,
+            elements: $("<div>").addClass("dx-scheduler-group-flex-container").append(rows),
             cellTemplates: cellTemplates
         };
     },
@@ -429,5 +418,3 @@ var SchedulerTableCreator = {
         return cells;
     }
 };
-
-module.exports = SchedulerTableCreator;
