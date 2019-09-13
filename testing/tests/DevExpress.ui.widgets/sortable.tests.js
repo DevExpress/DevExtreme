@@ -52,6 +52,31 @@ QUnit.test("Element has class", function(assert) {
 
 QUnit.module("placeholder", moduleConfig);
 
+QUnit.test("initial placeholder if filter is not defined", function(assert) {
+    // arrange
+    let items,
+        $placeholder,
+        $dragItemElement;
+
+    this.createSortable({
+    });
+
+    items = this.$element.children();
+    $dragItemElement = items.eq(0);
+
+    // assert
+    assert.strictEqual(items.length, 3, "item count");
+
+    // act
+    pointerMock($dragItemElement).start().down().move(10, 0);
+
+    // assert
+    items = this.$element.children();
+    $placeholder = items.eq(0);
+    assert.strictEqual(items.length, 3, "item count");
+    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "there is a placeholder");
+});
+
 QUnit.test("initial placeholder", function(assert) {
     // arrange
     let items,

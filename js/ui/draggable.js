@@ -199,6 +199,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
             eventsEngine.on($element, POINTERDOWN_EVENT_NAME, data, this._pointerDownHandler.bind(this));
         }
 
+        if(itemsSelector[0] === ">") {
+            itemsSelector = itemsSelector.slice(1);
+        }
+
         eventsEngine.on($element, DRAGSTART_EVENT_NAME, itemsSelector, data, this._dragStartHandler.bind(this));
         eventsEngine.on($element, DRAG_EVENT_NAME, data, this._dragMoveHandler.bind(this));
         eventsEngine.on($element, DRAGEND_EVENT_NAME, data, this._dragEndHandler.bind(this));
@@ -262,8 +266,20 @@ var Draggable = DOMComponentWithTemplate.inherit({
         }
 
         let allowMoveByClick = this.option("allowMoveByClick");
+        if(allowMoveByClick) {
+            return this.$element();
+        }
 
-        return allowMoveByClick ? this.$element() : $(e.target);
+        let $target = $(e.target),
+            itemsSelector = this._getItemsSelector();
+
+        if(itemsSelector[0] === ">") {
+            var $items = this.$element().find(itemsSelector);
+            if(!$items.is($target)) {
+                $target = $target.closest($items);
+            }
+        }
+        return $target;
     },
 
     _getSourceElement: function() {
@@ -296,14 +312,25 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _isValidElement: function(event, $element) {
         let handle = this.option("handle"),
-            isHandleElement = handle && $(event.originalEvent.target).closest(handle).length;
+            $target = $(event.originalEvent && event.originalEvent.target);
 
-        return !$element.is(".dx-state-disabled, .dx-state-disabled *") && (!handle || isHandleElement);
+        if(handle && !$target.closest(handle).length) {
+            return false;
+        }
+
+        if(!$element.length) {
+            return false;
+        }
+
+        return !$element.is(".dx-state-disabled, .dx-state-disabled *");
     },
 
     _dragStartHandler: function(e) {
         let $element = this._getDraggableElement(e);
 
+        if(this._$sourceElement) {
+            return;
+        }
         if(!this._isValidElement(e, $element)) {
             e.cancel = true;
             return;
