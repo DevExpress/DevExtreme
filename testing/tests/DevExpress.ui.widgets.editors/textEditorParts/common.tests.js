@@ -755,13 +755,11 @@ QUnit.module("options changing", moduleConfig, () => {
     });
 
     QUnit.test("tap on clear button should not raise onValueChange event (T812448)", (assert) => {
-        let callCount = 0;
+        const valueChangeStub = sinon.stub();
 
         const $element = $("#texteditor").dxTextEditor({
             showClearButton: true,
-            onValueChanged: () => {
-                callCount++;
-            }
+            onValueChanged: valueChangeStub
         });
         const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
         const kb = this.keyboard;
@@ -776,7 +774,7 @@ QUnit.module("options changing", moduleConfig, () => {
 
         kb.type("change")
             .change();
-        assert.equal(callCount, 1, "onValueChanged was called once");
+        assert.equal(valueChangeStub.calledOnce, 1, "onValueChanged was called once");
     });
 
     QUnit.test("texteditor is clear when option 'value' changed to null", (assert) => {
