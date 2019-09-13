@@ -312,7 +312,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _isValidElement: function(event, $element) {
         let handle = this.option("handle"),
-            $target = $(event.originalEvent.target);
+            $target = $(event.originalEvent && event.originalEvent.target);
 
         if(handle && !$target.closest(handle).length) {
             return false;
