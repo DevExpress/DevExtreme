@@ -52,7 +52,7 @@ class Gantt extends Widget {
     _renderTreeList() {
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
             dataSource: this._tasks,
-            columns: this.option("columns"),
+            columns: this.option("treeListColumns"),
             columnResizingMode: "nextColumn",
             height: "100%",
             width: this.option("treeListWidth"),

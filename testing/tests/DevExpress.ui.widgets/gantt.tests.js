@@ -200,6 +200,25 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(resourceElements.length, resourceAssignmentsDS.length);
         assert.equal(resourceElements.first().text(), resourcesDS[0].t);
     });
+    test("treeListColumns", (assert) => {
+        const options = {
+            tasks: { dataSource: tasks },
+            treeListColumns: [
+                { dataField: "title", caption: "Subject" },
+                { dataField: "start", caption: "Start Date" }
+            ]
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        let $treeListHeaderRow = this.$element.find(".dx-header-row");
+        assert.equal($treeListHeaderRow.children().length, 2, "treeList has 2 columns");
+        assert.equal($treeListHeaderRow.children().eq(0).text(), "Subject", "first column title is checked");
+        assert.equal($treeListHeaderRow.children().eq(1).text(), "Start Date", "second column title is checked");
+        this.instance.option("treeListColumns", [{ dataField: "title", caption: "Task" }]);
+        $treeListHeaderRow = this.$element.find(".dx-header-row");
+        assert.equal($treeListHeaderRow.children().length, 1, "treeList has 1 columns");
+        assert.equal($treeListHeaderRow.children().eq(0).text(), "Task", "first column title is checked");
+    });
     test("selectedRowKey", (assert) => {
         this.createInstance(allSourcesOptions);
         this.clock.tick();
