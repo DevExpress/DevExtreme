@@ -18,6 +18,8 @@ QUnit.testStart(function() {
             <div id="item4" class="draggable" style="width: 300px; height: 30px; background: yellow;">item4</div>
             <div id="item5" class="draggable" style="width: 300px; height: 30px; background: red;">item5</div>
             <div id="item6" class="draggable" style="width: 300px; height: 30px; background: blue;">item6</div>
+        </div>
+        <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
         </div>`;
 
     $("#qunit-fixture").html(markup);
@@ -813,4 +815,67 @@ QUnit.test("Drag and drop item from sortable to draggable", function(assert) {
     assert.strictEqual(items1.filter("#item4").length, 1, "first list - item from second list");
     assert.strictEqual(items1.last().attr("id"), "item4", "first list - new item in last position");
     assert.strictEqual(items2.filter("#item4").length, 0, "second list - draggable item is removed");
+});
+
+QUnit.test("Drag and drop item to empty sortable", function(assert) {
+    // arrange
+    let items1, items2;
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items3"));
+
+    // act
+    pointerMock(sortable1.$element().children().eq(0)).start().down().move(0, 300).move(0, 10).up();
+
+    // assert
+    items1 = sortable1.$element().children();
+    items2 = sortable2.$element().children();
+    assert.strictEqual(items1.length, 2, "first list - item count");
+    assert.strictEqual(items2.length, 1, "second list - item count");
+    assert.strictEqual(items1.filter("#item1").length, 0, "first list - draggable item is removed");
+    assert.strictEqual(items2.filter("#item1").length, 1, "second list - item from first list");
+});
+
+QUnit.test("Dragging an item to another sortable and back when it is alone in the collection", function(assert) {
+    // arrange
+    let items1, items2;
+
+    $("#items3").append("<div id='item7' class='draggable' style='width: 300px; height: 30px; background: blue;'>item7</div>");
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items3"));
+
+    // act
+    let pointer = pointerMock(sortable2.$element().children().eq(0)).start({ x: 0, y: 310 }).down().move(0, -300).move(0, -10);
+
+    // assert
+    items1 = sortable1.$element().children();
+    items2 = sortable2.$element().children();
+    assert.strictEqual(items1.length, 4, "first list - item count");
+    assert.strictEqual(items1.first().attr("id"), "item7", "first list - item from second list");
+    assert.strictEqual(items2.length, 0, "second list - item count");
+
+    // act
+    pointer.move(0, 300).move(0, 10);
+
+    // assert
+    items1 = sortable1.$element().children();
+    items2 = sortable2.$element().children();
+    assert.strictEqual(items1.length, 3, "first list - item count");
+    assert.strictEqual(items2.length, 1, "second list - item count");
+    assert.strictEqual(items2.first().attr("id"), "item7", "second list - first item");
 });
