@@ -10,6 +10,7 @@ QUnit.testStart(() => {
 
 const TREELIST_SELECTOR = ".dx-treelist",
     TREELIST_WRAPPER_SELECTOR = ".dx-gantt-treelist-wrapper",
+    TREELIST_HEADER_ROW_SELECTOR = ".dx-header-row",
     GANTT_VIEW_SELECTOR = ".dx-gantt-view",
     TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper",
     TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes",
@@ -210,18 +211,27 @@ QUnit.module("Options", moduleConfig, () => {
         };
         this.createInstance(options);
         this.clock.tick();
-        let $treeListHeaderRow = this.$element.find(".dx-header-row");
+        let $treeListHeaderRow = this.$element.find(TREELIST_HEADER_ROW_SELECTOR);
         assert.equal($treeListHeaderRow.children().length, 2, "treeList has 2 columns");
         assert.equal($treeListHeaderRow.children().eq(0).text(), "Subject", "first column title is checked");
         assert.equal($treeListHeaderRow.children().eq(1).text(), "Start Date", "second column title is checked");
         this.instance.option("treeListColumns", [{ dataField: "title", caption: "Task" }]);
-        $treeListHeaderRow = this.$element.find(".dx-header-row");
+        $treeListHeaderRow = this.$element.find(TREELIST_HEADER_ROW_SELECTOR);
         assert.equal($treeListHeaderRow.children().length, 1, "treeList has 1 columns");
         assert.equal($treeListHeaderRow.children().eq(0).text(), "Task", "first column title is checked");
     });
     test("selectedRowKey", (assert) => {
-        this.createInstance(allSourcesOptions);
+        const selectedRowKey = 2;
+        const options = {
+            tasks: { dataSource: tasks },
+            selectedRowKey: selectedRowKey
+        };
+        this.createInstance(options);
         this.clock.tick();
+        const treeListSelectedRowKeys = this.instance._treeList.option("selectedRowKeys");
+        assert.equal(treeListSelectedRowKeys.length, 1, "only one treeList row is selected");
+        assert.equal(treeListSelectedRowKeys, selectedRowKey, "second treeList row is selected");
+        this.instance.option("selectedRowKey", undefined);
         assert.equal(this.$element.find(SELECTION_SELECTOR).length, 0);
         this.instance.option("selectedRowKey", 1);
         assert.equal(this.$element.find(SELECTION_SELECTOR).length, 1);

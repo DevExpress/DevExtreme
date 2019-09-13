@@ -20,18 +20,12 @@ export class GanttView extends Widget {
             areHorizontalBordersEnabled: this.option("showRowLines"),
             areAlternateRowsEnabled: false
         });
+        this._selectTask(this.option("selectedRowKey"));
         this._ganttViewCore.setViewType(3);
     }
 
     getTaskAreaContainer() {
         return this._ganttViewCore.taskAreaContainer;
-    }
-    selectTask(id) {
-        if(this.lastSelectedId !== undefined) {
-            this._ganttViewCore.unselectTask(parseInt(this.lastSelectedId));
-        }
-        this._ganttViewCore.selectTask(id);
-        this.lastSelectedId = id;
     }
     changeTaskExpanded(rowIndex, value) {
         const model = this._ganttViewCore.viewModel;
@@ -46,6 +40,13 @@ export class GanttView extends Widget {
         this._ganttViewCore.setWidth(value);
     }
 
+    _selectTask(id) {
+        if(this.lastSelectedId !== undefined) {
+            this._ganttViewCore.unselectTask(parseInt(this.lastSelectedId));
+        }
+        this._ganttViewCore.selectTask(id);
+        this.lastSelectedId = id;
+    }
     _update() {
         this._ganttViewCore.loadOptionsFromGanttOwner();
         this._ganttViewCore.resetAndUpdate();
@@ -82,6 +83,9 @@ export class GanttView extends Widget {
                 break;
             case "allowSelection":
                 this._ganttViewCore.setAllowSelection(args.value);
+                break;
+            case "selectedRowKey":
+                this._selectTask(args.value);
                 break;
             case "editing":
                 this._ganttViewCore.setEditingSettings(args.value);
