@@ -558,7 +558,7 @@ class Gantt extends Widget {
                 this._refreshDataSource("resourceAssignments");
                 break;
             case "treeListColumns":
-                this._setTreeListOption("columns");
+                this._setTreeListOption("columns", args.value);
                 break;
             case "treeListWidth":
                 this._setInnerElementsWidth();
