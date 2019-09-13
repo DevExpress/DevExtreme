@@ -211,6 +211,11 @@ var Sortable = Draggable.inherit({
                 left: !isVertical ? lastItem.left + lastItem.width : lastItem.left,
                 isValid: this._isValidPoint($items, result.length)
             });
+        } else {
+            result.push({
+                index: 0,
+                isValid: true
+            });
         }
 
         return result;
@@ -235,7 +240,7 @@ var Sortable = Draggable.inherit({
             fromIndex = this._dragInfo.fromIndex,
             sourceDraggable = this._getSourceDraggable();
 
-        this._dragInfo.toIndex = Math.max(sourceDraggable !== this || fromIndex > itemPoint.index ? itemPoint.index : itemPoint.index - 1, 0);
+        this._dragInfo.toIndex = Math.max(sourceDraggable !== this || fromIndex >= itemPoint.index ? itemPoint.index : itemPoint.index - 1, 0);
         this._dragInfo.targetItemPoint = itemPoint;
 
         eventArgs = extend(this._getEventArgs(), {
