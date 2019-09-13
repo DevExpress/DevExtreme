@@ -2372,24 +2372,24 @@ QUnit.module("keyboard navigation through tags", {
     });
 
     QUnit.testInActiveWindow("the 'focused' class should be removed from the focused tag when the widget loses focus", (assert) => {
+        this.instance.focus();
         this.keyboard
-            .focus()
             .press("left");
 
-        $(this.$input).trigger("focusout");
+        this.instance.blur();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
     QUnit.testInActiveWindow("the should be no focused tags on when the widget gets focus", (assert) => {
+        this.instance.focus();
+
         this.keyboard
-            .focus()
             .press("left");
 
-        this.$input
-            .trigger("focusout")
-            .trigger("focusin");
+        this.instance.blur();
+        this.instance.focus();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
@@ -2910,17 +2910,18 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
     QUnit.testInActiveWindow("input should be cleared after widget focus out", assert => {
         const items = [1, 2, 3];
-
         const $element = $("#tagBox").dxTagBox({
             items,
             searchEnabled: true,
             focusStateEnabled: true
         });
+        const instance = $element.dxTagBox("instance");
 
+        instance.focus();
         const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         $input.val("123");
-        $($input).trigger("focusout");
+        instance.blur();
 
         assert.equal($input.val(), "", "search value is cleared");
     });

@@ -67,34 +67,44 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _focusInHandler: function(e) {
-        this.callBase(e);
-        this.clearCaretTimeout();
-        this._caretTimeout = setTimeout(function() {
-            this._caretTimeout = null;
-            var caret = this._caret();
+        if(!this._preventNestedFocusEvent(e)) {
+            this.clearCaretTimeout();
+            this._caretTimeout = setTimeout(function() {
+                this._caretTimeout = null;
+                var caret = this._caret();
 
-            if(caret.start === caret.end && this._useMaskBehavior()) {
-                var text = this._getInputVal(),
-                    decimalSeparator = number.getDecimalSeparator(),
-                    decimalSeparatorIndex = text.indexOf(decimalSeparator);
+                if(caret.start === caret.end && this._useMaskBehavior()) {
+                    var text = this._getInputVal(),
+                        decimalSeparator = number.getDecimalSeparator(),
+                        decimalSeparatorIndex = text.indexOf(decimalSeparator);
 
-                if(decimalSeparatorIndex >= 0) {
-                    this._caret({ start: decimalSeparatorIndex, end: decimalSeparatorIndex });
-                } else {
-                    this._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
+                    if(decimalSeparatorIndex >= 0) {
+                        this._caret({ start: decimalSeparatorIndex, end: decimalSeparatorIndex });
+                    } else {
+                        this._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
+                    }
                 }
-            }
-        }.bind(this), CARET_TIMEOUT_DURATION);
-    },
-
-    _focusOutHandler: function(e) {
-        this._focusOutOccurs = true;
-        if(this._useMaskBehavior()) {
-            this._updateFormattedValue();
+            }.bind(this), CARET_TIMEOUT_DURATION);
         }
 
         this.callBase(e);
-        this._focusOutOccurs = false;
+    },
+
+    _focusOutHandler: function(e) {
+        var shouldHandleEvent = !this._preventNestedFocusEvent(e);
+
+        if(shouldHandleEvent) {
+            this._focusOutOccurs = true;
+            if(this._useMaskBehavior()) {
+                this._updateFormattedValue();
+            }
+        }
+
+        this.callBase(e);
+
+        if(shouldHandleEvent) {
+            this._focusOutOccurs = false;
+        }
     },
 
     _hasValueBeenChanged(inputValue) {
