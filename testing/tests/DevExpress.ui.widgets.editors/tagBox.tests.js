@@ -4377,9 +4377,8 @@ QUnit.module("single line mode", {
 
     QUnit.test("tags container should be scrolled to the end on focusin (T390041)", (assert) => {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
     });
 
@@ -4406,7 +4405,6 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
@@ -4415,9 +4413,8 @@ QUnit.module("single line mode", {
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on rendering");
 
-        $input
-            .focus()
-            .blur();
+        this.instance.focus();
+        this.instance.blur();
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on focus out");
     });
@@ -4426,14 +4423,13 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
             ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
             : 0;
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), expectedScrollPosition, "tags container is scrolled to the end");
     });
 
