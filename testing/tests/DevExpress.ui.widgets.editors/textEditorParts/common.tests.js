@@ -769,7 +769,7 @@ QUnit.module("options changing", moduleConfig, () => {
         const dxPointerDown = $.Event("dxpointerdown");
         dxPointerDown.pointerType = "touch";
         $clearButton.on("dxpointerdown", e => {
-            assert.equal(this.input.val(), "", "texteditor is empty");
+            assert.strictEqual(this.input.val(), "", "texteditor is empty");
         }).trigger(dxPointerDown);
 
         kb.type("change")
