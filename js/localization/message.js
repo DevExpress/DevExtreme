@@ -12,7 +12,7 @@ var PARENT_LOCALE_SEPARATOR = "-";
 
 var baseDictionary = extend(true, {}, require("./default_messages"));
 
-var parentLocales = require("./cldr-data/parentLocales");
+var parentLocales = require("./cldr-data/parent_locales");
 
 var getParentLocale = function(locale) {
     var parentLocale = parentLocales[locale];

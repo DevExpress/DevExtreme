@@ -794,5 +794,6 @@ if(Globalize && Globalize.formatDate) {
         }
     };
 
+    dateLocalization.resetInjection();
     dateLocalization.inject(globalizeDateLocalization);
 }

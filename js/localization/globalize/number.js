@@ -266,5 +266,6 @@ if(Globalize && Globalize.formatNumber) {
         }
     };
 
+    numberLocalization.resetInjection();
     numberLocalization.inject(globalizeNumberLocalization);
 }

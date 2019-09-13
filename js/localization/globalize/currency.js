@@ -1,3 +1,5 @@
+var openXmlCurrencyFormat = require("../open_xml_currency_format");
+
 require("./core");
 require("./number");
 
@@ -129,34 +131,9 @@ if(Globalize && Globalize.formatCurrency) {
         },
         getOpenXmlCurrencyFormat: function(currency) {
             var currencySymbol = this.getCurrencySymbol(currency).symbol,
-                currencyFormat = Globalize.cldr.main("numbers/currencyFormats-numberSystem-latn"),
-                i,
-                result,
-                symbol,
-                encodeSymbols;
+                accountingFormat = Globalize.cldr.main("numbers/currencyFormats-numberSystem-latn").accounting;
 
-            if(currencyFormat.accounting) {
-                encodeSymbols = {
-                    ".00": "{0}",
-                    "'": "\\'",
-                    "\\(": "\\(",
-                    "\\)": "\\)",
-                    " ": "\\ ",
-                    "\"": "&quot;",
-                    "\\¤": currencySymbol
-                };
-
-                result = currencyFormat.accounting.split(";");
-                for(i = 0; i < result.length; i++) {
-                    for(symbol in encodeSymbols) {
-                        if(Object.prototype.hasOwnProperty.call(encodeSymbols, symbol)) {
-                            result[i] = result[i].replace(new RegExp(symbol, "g"), encodeSymbols[symbol]);
-                        }
-                    }
-                }
-
-                return result.length === 2 ? result[0] + "_);" + result[1] : result[0];
-            }
+            return openXmlCurrencyFormat(currencySymbol, accountingFormat);
         }
     };
 
