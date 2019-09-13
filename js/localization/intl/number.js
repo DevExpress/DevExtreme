@@ -1,22 +1,22 @@
 /* globals Intl */
-var dxConfig = require('../../core/config');
-var locale = require('../core').locale;
-var dxVersion = require('../../core/version');
-var compareVersions = require('../../core/utils/version').compare;
-var openXmlCurrencyFormat = require("../open_xml_currency_format");
-var accountingFormats = require("../cldr-data/accounting_formats");
+import dxConfig from '../../core/config';
+import { locale } from '../core';
+import dxVersion from '../../core/version';
+import { compare as compareVersions } from '../../core/utils/version';
+import openXmlCurrencyFormat from "../open_xml_currency_format";
+import accountingFormats from "../cldr-data/accounting_formats";
 
-var detectCurrencySymbolRegex = /([^\s0]+)?(\s*)0*[.,]*0*(\s*)([^\s0]+)?/,
+const detectCurrencySymbolRegex = /([^\s0]+)?(\s*)0*[.,]*0*(\s*)([^\s0]+)?/,
     formattersCache = {},
-    getFormatter = function(format) {
-        var key = locale() + '/' + JSON.stringify(format);
+    getFormatter = format => {
+        const key = locale() + '/' + JSON.stringify(format);
         if(!formattersCache[key]) {
             formattersCache[key] = (new Intl.NumberFormat(locale(), format)).format;
         }
 
         return formattersCache[key];
     },
-    getCurrencyFormatter = function(currency) {
+    getCurrencyFormatter = currency => {
         return (new Intl.NumberFormat(locale(), { style: 'currency', currency: currency }));
     };
 
@@ -29,7 +29,7 @@ module.exports = {
         return getFormatter(this._normalizeFormatConfig(format, formatConfig))(value);
     },
     _normalizeFormatConfig: function(format, formatConfig, value) {
-        var config;
+        let config;
 
         if(format === 'decimal') {
             config = {
@@ -52,7 +52,7 @@ module.exports = {
         return config;
     },
     _getPrecisionConfig: function(precision) {
-        var config;
+        let config;
 
         if(precision === null) {
             config = {
@@ -102,8 +102,7 @@ module.exports = {
         return parseFloat(text);
     },
     _normalizeNumber: function(text, format) {
-        var isExponentialRegexp = /^[-+]?[0-9]*.?[0-9]+([eE][-+]?[0-9]+)+$/,
-            legitDecimalSeparator = '.';
+        const isExponentialRegexp = /^[-+]?[0-9]*.?[0-9]+([eE][-+]?[0-9]+)+$/, legitDecimalSeparator = '.';
 
         if(this.convertDigits) {
             text = this.convertDigits(text, true);
@@ -113,8 +112,8 @@ module.exports = {
             return text;
         }
 
-        var decimalSeparator = this._getDecimalSeparator(format);
-        var cleanUpRegexp = new RegExp('[^0-9-\\' + decimalSeparator + ']', 'g');
+        const decimalSeparator = this._getDecimalSeparator(format);
+        const cleanUpRegexp = new RegExp('[^0-9-\\' + decimalSeparator + ']', 'g');
 
         return text.replace(cleanUpRegexp, '').replace(decimalSeparator, legitDecimalSeparator);
     },
@@ -122,14 +121,11 @@ module.exports = {
         return getFormatter(format)(0.1)[1];
     },
     _getCurrencySymbolInfo: function(currency) {
-        var formatter = getCurrencyFormatter(currency);
+        const formatter = getCurrencyFormatter(currency);
         return this._extractCurrencySymbolInfo(formatter.format(0));
     },
     _extractCurrencySymbolInfo: function(currencyValueString) {
-        var match = detectCurrencySymbolRegex.exec(currencyValueString) || [],
-            position = match[1] ? 'before' : 'after',
-            symbol = match[1] || match[4] || '',
-            delimiter = match[2] || match[3] || '';
+        const match = detectCurrencySymbolRegex.exec(currencyValueString) || [], position = match[1] ? 'before' : 'after', symbol = match[1] || match[4] || '', delimiter = match[2] || match[3] || '';
 
         return {
             position: position,
@@ -145,8 +141,7 @@ module.exports = {
         };
     },
     getOpenXmlCurrencyFormat: function(currency) {
-        var currencyValue = currency || dxConfig().defaultCurrency,
-            currencySymbol = this._getCurrencySymbolInfo(currencyValue).symbol;
+        const currencyValue = currency || dxConfig().defaultCurrency, currencySymbol = this._getCurrencySymbolInfo(currencyValue).symbol;
 
         return openXmlCurrencyFormat(currencySymbol, accountingFormats[locale()]);
     }

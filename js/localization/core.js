@@ -1,10 +1,10 @@
-var dependencyInjector = require("../core/utils/dependency_injector");
+import dependencyInjector from "../core/utils/dependency_injector";
 
 module.exports = dependencyInjector({
-    locale: (function() {
-        var currentLocale = "en";
+    locale: (() => {
+        let currentLocale = "en";
 
-        return function(locale) {
+        return locale => {
             if(!locale) {
                 return currentLocale;
             }
