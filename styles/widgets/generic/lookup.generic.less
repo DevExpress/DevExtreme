@@ -107,15 +107,29 @@
     }
 }
 
-.dx-invalid.dx-lookup .dx-lookup-field:after {
+.lookup-badge-offset() {
     right: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
-    .dx-invalid-generic-badge();
 
     .dx-rtl &,
     .dx-rtl& {
         right: auto;
         left: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
     }
+}
+
+.dx-invalid.dx-lookup .dx-lookup-field:after {
+    .lookup-badge-offset();
+    .dx-invalid-generic-badge();
+}
+
+.dx-valid.dx-lookup .dx-lookup-field:after {
+    .lookup-badge-offset();
+    .dx-valid-generic-badge();
+}
+
+.dx-validation-pending.dx-lookup .dx-lookup-field .dx-pending-indicator {
+    .lookup-badge-offset();
+    .dx-pending-indicator-generic();
 }
 
 .dx-lookup-popup-search .dx-list {
