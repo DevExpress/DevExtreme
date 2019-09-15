@@ -113,27 +113,13 @@
     border-radius: 50%;
 }
 
-@keyframes valid-badge-frames {
-    from {
-        opacity: 0;
-        transform: scale(0.1);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
 .dx-valid-generic-badge() {
     .badge-settings();
 
     font-family: 'DXIcons', sans-serif;
     color: @base-success;
     content: '\f005';
-    opacity: 0;
-    transform: scale(0);
-    animation: valid-badge-frames 0.3s cubic-bezier(1, 0.008, 0.565, 1.65) 0.1s 1 forwards;
+    .validation-badge-animation();
 }
 
 .dx-pending-indicator-generic() {
