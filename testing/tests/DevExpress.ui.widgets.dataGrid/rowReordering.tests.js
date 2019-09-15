@@ -63,7 +63,11 @@ var moduleConfig = {
         $("#qunit-fixture").addClass("qunit-fixture-visible");
         this.options = {
             dataSource: generateData(10),
-            columns: ["field1", "field2", "field3"]
+            columns: ["field1", "field2", "field3"],
+            rowDragging: {
+                enabled: true,
+                allowReordering: true
+            }
         };
         this.createRowsView = createRowsView;
     },
@@ -91,11 +95,6 @@ QUnit.test("Dragging row", function(assert) {
     // arrange
     let $draggableElement,
         $testElement = $("#container");
-
-    this.options.rowDragging = {
-        enabled: true,
-        allowReordering: true
-    };
 
     let rowsView = this.createRowsView();
     rowsView.render($testElement);
@@ -157,10 +156,6 @@ QUnit.test("Dragging row when rowTemplate is specified", function(assert) {
         $testElement = $("#container");
 
     $.extend(this.options, {
-        rowDragging: {
-            enabled: true,
-            allowReordering: true
-        },
         rowTemplate: function() {
             return $("<tr class='dx-row dx-data-row my-row'><td>Test</td></tr>");
         }
@@ -184,10 +179,6 @@ QUnit.test("Dragging row when there is group column", function(assert) {
         $testElement = $("#container");
 
     $.extend(this.options, {
-        rowDragging: {
-            enabled: true,
-            allowReordering: true
-        },
         columns: [{ dataField: "field1", groupIndex: 0 }, "field2", "field3"]
     });
 
@@ -209,10 +200,6 @@ QUnit.test("Dragging row when prepared events are specified", function(assert) {
         $testElement = $("#container");
 
     $.extend(this.options, {
-        rowDragging: {
-            enabled: true,
-            allowReordering: true
-        },
         onRowPrepared: function(options) {
             $(options.rowElement).addClass("my-row");
         },
@@ -232,4 +219,40 @@ QUnit.test("Dragging row when prepared events are specified", function(assert) {
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "data row count");
     assert.ok($draggableElement.find(".dx-data-row").hasClass("my-row"), "row with custom class");
     assert.ok($draggableElement.find(".dx-data-row").children().first().hasClass("my-cell"), "cell with custom class");
+});
+
+
+QUnit.module("Handle", {
+    beforeEach: function() {
+        moduleConfig.beforeEach.apply(this, arguments);
+        this.options.rowDragging.showHandle = true;
+    },
+    afterEach: moduleConfig.afterEach
+});
+
+QUnit.test("Dragging row by the handle", function(assert) {
+    // arrange
+    let $draggableElement,
+        $testElement = $("#container");
+
+    let rowsView = this.createRowsView();
+
+    rowsView.render($testElement);
+
+    let $handleElement = rowsView.getRowElement(0).children().first();
+
+    // assert
+    assert.ok($handleElement.hasClass("dx-command-handle"), "handle");
+    assert.strictEqual($handleElement.find(".dx-datagrid-handle-icon").length, 1, "handle icon");
+
+    // act
+    pointerMock($handleElement).start().down().move(0, 70);
+
+    // assert
+    $draggableElement = $("body").children(".dx-sortable-dragging");
+    assert.strictEqual($(rowsView.getRowElement(0)).children().eq(1).text(), "test1", "first row");
+    assert.ok($(rowsView.getRowElement(1)).hasClass("dx-sortable-placeholder"), "placeholder");
+    assert.strictEqual($draggableElement.length, 1, "there is dragging element");
+    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
