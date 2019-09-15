@@ -353,7 +353,9 @@ var NumberBoxBase = TextEditor.inherit({
 
     _renderValueChangeEvent: function() {
         this.callBase();
-        eventsEngine.on(this._input(), "focusout", this._forceRefreshInputValue.bind(this));
+
+        var forceValueChangeEvent = eventUtils.addNamespace("focusout", "NumberBoxForceValueChange");
+        eventsEngine.on(this.element(), forceValueChangeEvent, this._forceRefreshInputValue.bind(this));
     },
 
     _forceRefreshInputValue: function() {
