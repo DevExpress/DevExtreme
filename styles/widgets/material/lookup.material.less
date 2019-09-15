@@ -86,6 +86,42 @@
             }
         }
     }
+
+    &.dx-valid {
+        .dx-lookup-arrow:after {
+            .dx-valid-material-badge();
+
+            right: @MATERIAL_BASE_ICON_SIZE;
+        }
+
+        &.dx-rtl,
+        .dx-rtl & {
+            .dx-lookup-arrow:after {
+                left: @MATERIAL_BASE_ICON_SIZE;
+                right: auto;
+            }
+        }
+    }
+
+    &.dx-validation-pending {
+        .dx-lookup-field-wrapper {
+            .dx-pending-indicator {
+                .dx-pending-indicator-material();
+
+                right: @MATERIAL_BASE_ICON_SIZE;
+            }
+        }
+
+        &.dx-rtl,
+        .dx-rtl & {
+            .dx-lookup-field-wrapper {
+                .dx-pending-indicator {
+                    left: @MATERIAL_BASE_ICON_SIZE;
+                    right: auto;
+                }
+            }
+        }
+    }
 }
 
 .dx-lookup-field {
