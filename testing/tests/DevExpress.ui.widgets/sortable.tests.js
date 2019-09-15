@@ -1,11 +1,8 @@
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
-import viewPort from "core/utils/view_port";
 
 import "common.css!";
 import "ui/sortable";
-
-viewPort.value($("body").css({ margin: "0px", padding: "0px", height: "600px" }).addClass("dx-viewport"));
 
 QUnit.testStart(function() {
     let markup =
@@ -52,6 +49,30 @@ QUnit.module("rendering", moduleConfig);
 
 QUnit.test("Element has class", function(assert) {
     assert.ok(this.createSortable().$element().hasClass(SORTABLE_CLASS));
+});
+
+QUnit.test("Drag template - check args", function(assert) {
+    // arrange
+    let items,
+        dragTemplate = sinon.spy(() => {
+            return $("<div>");
+        });
+
+    this.createSortable({
+        filter: ".draggable",
+        template: dragTemplate
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(0)).start().down().move(10, 0);
+
+    // assert
+    assert.strictEqual(dragTemplate.callCount, 1, "drag template is called");
+    assert.deepEqual($(dragTemplate.getCall(0).args[0].sourceElement).get(0), items.get(0), "first arg");
+    assert.strictEqual(dragTemplate.getCall(0).args[1], 0, "second arg");
+    assert.deepEqual($(dragTemplate.getCall(0).args[2]).get(0), $("body").get(0), "third arg");
 });
 
 

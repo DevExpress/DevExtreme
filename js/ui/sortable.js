@@ -234,14 +234,18 @@ var Sortable = Draggable.inherit({
         return result;
     },
 
+    _getDragTemplateArgs: function($element) {
+        return extend(this.callBase.apply(this, arguments), {
+            index: $element.index()
+        });
+    },
+
     _dragStartHandler: function(e) {
         this.callBase.apply(this, arguments);
 
-        if(e.cancel === true) {
-            return;
+        if(!e.cancel) {
+            this.setupDraggingInfo();
         }
-
-        this.setupDraggingInfo();
     },
 
     _togglePlaceholder: function(value) {
