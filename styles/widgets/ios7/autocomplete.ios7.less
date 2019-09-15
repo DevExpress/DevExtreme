@@ -24,7 +24,8 @@
     }
 }
 
-.dx-autocomplete.dx-dropdowneditor.dx-invalid {
+.dx-autocomplete.dx-dropdowneditor.dx-invalid,
+.dx-autocomplete.dx-dropdowneditor.dx-valid {
     .dx-texteditor-container {
         &:after {
             right: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
@@ -33,7 +34,8 @@
 }
 
 .dx-rtl {
-    &.dx-autocomplete.dx-dropdowneditor.dx-invalid {
+    &.dx-autocomplete.dx-dropdowneditor.dx-invalid,
+    &.dx-autocomplete.dx-dropdowneditor.dx-valid {
         .dx-texteditor-container {
             &:after {
                 left: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
@@ -41,4 +43,22 @@
             }
         }
     }
+
+    &.dx-autocomplete.dx-dropdowneditor.dx-validation-pending {
+        .dx-texteditor-container {
+            .dx-pending-indicator {
+                left: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+                right: auto;
+            }
+        }
+    }
 }
+
+.dx-autocomplete.dx-dropdowneditor.dx-validation-pending {
+    .dx-texteditor-container {
+        .dx-pending-indicator {
+            right: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+        }
+    }
+}
+
