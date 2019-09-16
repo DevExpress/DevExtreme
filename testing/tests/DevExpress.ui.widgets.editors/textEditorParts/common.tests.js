@@ -135,12 +135,12 @@ QUnit.module("general", {}, () => {
 
     QUnit.test("Marking with 'focus' CSS class", (assert) => {
         const $element = $("#texteditor").dxTextEditor();
-        const $input = $("#texteditor input");
+        const instance = $element.dxTextEditor("instance");
 
-        $input.triggerHandler("focusin");
+        instance.focus();
         assert.ok($element.hasClass(STATE_FOCUSED_CLASS), "Get 'focus' CSS class when input get focus");
 
-        $input.triggerHandler("focusout");
+        instance.blur();
         assert.ok(!$element.hasClass(STATE_FOCUSED_CLASS), "Loose 'focus' CSS class when input loose focus");
     });
 
@@ -276,13 +276,72 @@ QUnit.module("general", {}, () => {
     QUnit.test("dxTextEditor should save focus after buttons option changed", (assert) => {
         const $textEditor = $("#texteditor").dxTextEditor({ value: "text" });
         const textEditor = $textEditor.dxTextEditor("instance");
-        const $input = $textEditor.find(".dx-texteditor-input");
 
-        $input.focus();
+        textEditor.focus();
         assert.ok($textEditor.hasClass("dx-state-focused"), "input is focused");
 
         textEditor.option("buttons", [{ name: "custom", location: "after", options: { icon: "box" } }]);
         assert.ok($textEditor.hasClass("dx-state-focused"), "input is still focused");
+    });
+
+    QUnit.testInActiveWindow("dxTextEditor should save focus after inner buttons were clicked", (assert) => {
+        const focusStub = sinon.stub();
+        const blurStub = sinon.stub();
+        const clickStub = sinon.stub();
+
+        const $textEditor = $("#texteditor").dxTextEditor({
+            onFocusIn: focusStub,
+            onFocusOut: blurStub,
+            buttons: [{
+                name: "test",
+                options: {
+                    onClick: clickStub,
+                    icon: "home"
+                }
+            }]
+        });
+        const textEditor = $textEditor.dxTextEditor("instance");
+        const actionButtonElement = textEditor.getButton("test").element();
+
+        textEditor.focus();
+        assert.ok($textEditor.hasClass("dx-state-focused"), "widget have focused class");
+        assert.strictEqual(focusStub.callCount, 1, "FocusIn event has been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+        assert.strictEqual(clickStub.callCount, 0, "action button is not clicked");
+
+        $(actionButtonElement).trigger("dxclick");
+        assert.ok($textEditor.hasClass("dx-state-focused"), "input is still focused");
+        assert.strictEqual(focusStub.callCount, 1, "new FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+        assert.strictEqual(clickStub.callCount, 1, "action button is clicked");
+    });
+
+    QUnit.testInActiveWindow("dxTextEditor should save focus after inner buttons were focused", (assert) => {
+        const focusStub = sinon.stub();
+        const blurStub = sinon.stub();
+
+        const $textEditor = $("#texteditor").dxTextEditor({
+            onFocusIn: focusStub,
+            onFocusOut: blurStub,
+            buttons: [{
+                name: "test",
+                options: {
+                    icon: "home"
+                }
+            }]
+        });
+        const textEditor = $textEditor.dxTextEditor("instance");
+        const actionButton = textEditor.getButton("test");
+
+        textEditor.focus();
+        assert.ok($textEditor.hasClass("dx-state-focused"), "input is focused");
+        assert.strictEqual(focusStub.callCount, 1, "FocusIn event has been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+
+        actionButton.focus();
+        assert.ok($textEditor.hasClass("dx-state-focused"), "input is still focused");
+        assert.strictEqual(focusStub.callCount, 1, "new FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
     });
 
     QUnit.test("T220209 - the 'valueFormat' option", (assert) => {
@@ -606,7 +665,13 @@ QUnit.module("options changing", moduleConfig, () => {
         assert.equal(called, 0, "when start, testID = 0");
 
         $.each(EVENTS, (index, eventName) => {
-            input.trigger(prepareEvent(eventName));
+            if(eventName.indexOf("Focus") !== -1) {
+                const methodName = eventName === "FocusIn" ? "focus" : "blur";
+                this.instance[methodName]();
+            } else {
+                input.trigger(prepareEvent(eventName));
+            }
+
             assert.equal(called, eventName.toLowerCase(), eventName + " event handler callback trigger");
         });
     });
@@ -627,7 +692,13 @@ QUnit.module("options changing", moduleConfig, () => {
         this.element.dxTextEditor(options);
 
         $.each(EVENTS, (index, eventName) => {
-            input.trigger(prepareEvent(eventName));
+            if(eventName.indexOf("Focus") !== -1) {
+                const methodName = eventName === "FocusIn" ? "focus" : "blur";
+                this.instance[methodName]();
+            } else {
+                input.trigger(prepareEvent(eventName));
+            }
+
             assert.equal(called, eventName.toLowerCase(), eventName + " event handler callback trigger");
         });
     });
@@ -807,7 +878,8 @@ QUnit.module("options changing", moduleConfig, () => {
         textEditor.option("disabled", true);
         textEditor.option("disabled", false);
 
-        $textEditor.find("input").trigger("focusin").trigger("focusout");
+        textEditor.focus();
+        textEditor.blur();
 
         assert.equal(focusInCount, 1, "focusin fired once");
         assert.equal(focusOutCount, 1, "focusout fired once");
@@ -902,7 +974,6 @@ QUnit.module("api", moduleConfig, () => {
 
     QUnit.test("onFocusOut and other events fired after value was changed", (assert) => {
         const textEditor = this.instance;
-        const $input = this.input;
         const keyboard = this.keyboard;
         let valueOnFocusOut = "";
         let valueOnValueChange = "";
@@ -920,7 +991,7 @@ QUnit.module("api", moduleConfig, () => {
 
         const typedString = "test";
         keyboard.type(typedString);
-        $input.trigger("focusout");
+        textEditor.blur();
 
         assert.equal(valueOnFocusOut, typedString, "focusout fired after value was changed");
         assert.equal(valueOnValueChange, typedString, "valueChangeEvent fired after value was changed");

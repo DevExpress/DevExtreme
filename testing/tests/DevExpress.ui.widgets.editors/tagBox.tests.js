@@ -2372,24 +2372,24 @@ QUnit.module("keyboard navigation through tags", {
     });
 
     QUnit.testInActiveWindow("the 'focused' class should be removed from the focused tag when the widget loses focus", (assert) => {
+        this.instance.focus();
         this.keyboard
-            .focus()
             .press("left");
 
-        $(this.$input).trigger("focusout");
+        this.instance.blur();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
     QUnit.testInActiveWindow("the should be no focused tags on when the widget gets focus", (assert) => {
+        this.instance.focus();
+
         this.keyboard
-            .focus()
             .press("left");
 
-        this.$input
-            .trigger("focusout")
-            .trigger("focusin");
+        this.instance.blur();
+        this.instance.focus();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
@@ -2910,17 +2910,18 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
     QUnit.testInActiveWindow("input should be cleared after widget focus out", assert => {
         const items = [1, 2, 3];
-
         const $element = $("#tagBox").dxTagBox({
             items,
             searchEnabled: true,
             focusStateEnabled: true
         });
+        const instance = $element.dxTagBox("instance");
 
+        instance.focus();
         const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         $input.val("123");
-        $($input).trigger("focusout");
+        instance.blur();
 
         assert.equal($input.val(), "", "search value is cleared");
     });
@@ -4381,9 +4382,8 @@ QUnit.module("single line mode", {
 
     QUnit.test("tags container should be scrolled to the end on focusin (T390041)", (assert) => {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
     });
 
@@ -4410,7 +4410,6 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
@@ -4419,9 +4418,8 @@ QUnit.module("single line mode", {
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on rendering");
 
-        $input
-            .focus()
-            .blur();
+        this.instance.focus();
+        this.instance.blur();
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on focus out");
     });
@@ -4430,14 +4428,13 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
             ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
             : 0;
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), expectedScrollPosition, "tags container is scrolled to the end");
     });
 

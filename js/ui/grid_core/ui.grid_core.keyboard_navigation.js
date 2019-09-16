@@ -33,6 +33,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     DATEBOX_WIDGET_NAME = "dxDateBox",
     FOCUS_STATE_CLASS = "dx-state-focused",
+    WIDGET_CLASS = "dx-widget",
 
     FAST_EDITING_DELETE_KEY = "delete",
 
@@ -645,8 +646,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(!keyPressEvent.isDefaultPrevented()) {
                 setTimeout(function() {
                     $input.val(editorValue);
-                    eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
-                    eventsEngine.on($input, "focusout", function() {
+
+                    var $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
+                    eventsEngine.off($widgetContainer, "focusout"); // for NumberBox to save entered symbol
+                    eventsEngine.one($widgetContainer, "focusout", function() {
                         eventsEngine.trigger($input, "change");
                     });
                     eventsEngine.trigger($input, inputEvent);

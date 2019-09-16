@@ -645,9 +645,11 @@ const TagBox = SelectBox.inherit({
     },
 
     _focusInHandler: function(e) {
-        this.callBase(e);
+        if(!this._preventNestedFocusEvent(e)) {
+            this._scrollContainer("end");
+        }
 
-        this._scrollContainer("end");
+        this.callBase(e);
     },
 
     _restoreInputText: function() {
@@ -655,11 +657,12 @@ const TagBox = SelectBox.inherit({
     },
 
     _focusOutHandler: function(e) {
+        if(!this._preventNestedFocusEvent(e)) {
+            this._clearTagFocus();
+            this._scrollContainer("start");
+        }
+
         this.callBase(e);
-
-        this._clearTagFocus();
-
-        this._scrollContainer("start");
     },
 
     _getFirstPopupElement: function() {
