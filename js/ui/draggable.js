@@ -4,6 +4,8 @@ var $ = require("../core/renderer"),
     stringUtils = require("../core/utils/string"),
     registerComponent = require("../core/component_registrator"),
     translator = require("../animation/translator"),
+    Animator = require("./scroll_view/animator"),
+    browser = require("../core/utils/browser"),
     dasherize = require("../core/utils/inflector").dasherize,
     extend = require("../core/utils/extend").extend,
     DOMComponentWithTemplate = require("../core/dom_component_with_template"),
@@ -28,6 +30,129 @@ var DRAGGABLE = "dxDraggable",
 
 var targetDraggable,
     sourceDraggable;
+
+class ScrollHelper {
+    constructor(orientation, component) {
+        this._preventScroll = true;
+        this._component = component;
+
+        if(orientation === "vertical") {
+            this._scrollValue = "scrollTop";
+            this._overFlowAttr = "overflowY";
+            this._sizeAttr = "height";
+            this._scrollSizeProp = "scrollHeight";
+            this._limits = {
+                max: "top",
+                min: "bottom"
+            };
+        } else {
+            this._scrollValue = "scrollLeft";
+            this._overFlowAttr = "overflowX";
+            this._sizeAttr = "width";
+            this._scrollSizeProp = "scrollWidth";
+            this._limits = {
+                max: "left",
+                min: "right"
+            };
+        }
+    }
+
+    findScrollable(elements, mousePosition) {
+        var that = this;
+
+        if(!elements.some(element => that._trySetScrollable(element, mousePosition))) {
+            that._$scrollable = null;
+            that._scrollSpeed = 0;
+        }
+    }
+
+    _trySetScrollable(element, mousePosition) {
+        var that = this,
+            $element = $(element),
+            distanceToBorders = that._calculateDistanceToBorders($element, mousePosition),
+            sensitivity = that._component.option("scrollSensitivity"),
+            isScrollable = ($element.css(that._overFlowAttr) === "auto" || $element.hasClass("dx-scrollable-container"))
+                && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
+
+        if(isScrollable) {
+            if(sensitivity > distanceToBorders[that._limits.max]) {
+                if(!that._preventScroll) {
+                    that._scrollSpeed = -that._calculateScrollSpeed(distanceToBorders[that._limits.max]);
+                    that._$scrollable = $element;
+                }
+            } else if(sensitivity > distanceToBorders[that._limits.min]) {
+                if(!that._preventScroll) {
+                    that._scrollSpeed = that._calculateScrollSpeed(distanceToBorders[that._limits.min]);
+                    that._$scrollable = $element;
+                }
+            } else {
+                isScrollable = false;
+                that._preventScroll = false;
+            }
+        }
+
+        return isScrollable;
+    }
+
+    _calculateDistanceToBorders(area, mousePosition) {
+        var areaBoundingRect = area.get(0).getBoundingClientRect();
+
+        return {
+            left: mousePosition.x - areaBoundingRect.left,
+            top: mousePosition.y - areaBoundingRect.top,
+            right: areaBoundingRect.right - mousePosition.x,
+            bottom: areaBoundingRect.bottom - mousePosition.y
+        };
+    }
+
+    _calculateScrollSpeed(distance) {
+        var component = this._component,
+            sensitivity = component.option("scrollSensitivity"),
+            maxSpeed = component.option("scrollSpeed");
+
+        return Math.round((sensitivity - distance) / sensitivity * maxSpeed);
+    }
+
+    scrollByStep() {
+        var that = this,
+            nextScrollPosition;
+
+        if(that._$scrollable && that._scrollSpeed) {
+            if(that._$scrollable.hasClass("dx-scrollable-container")) {
+                var $scrollable = that._$scrollable.closest(".dx-scrollable"),
+                    scrollableInstance = $scrollable.data("dxScrollable") || $scrollable.data("dxScrollView");
+
+                if(scrollableInstance) {
+                    nextScrollPosition = scrollableInstance.scrollOffset();
+                    nextScrollPosition[that._limits.max] += that._scrollSpeed;
+
+                    scrollableInstance.scrollTo(nextScrollPosition);
+                }
+            } else {
+                nextScrollPosition = that._$scrollable[that._scrollValue]() + that._scrollSpeed;
+
+                that._$scrollable[that._scrollValue](nextScrollPosition);
+            }
+        }
+    }
+}
+
+var ScrollAnimator = Animator.inherit({
+
+    ctor: function(strategy) {
+        this.callBase();
+
+        this._strategy = strategy;
+    },
+
+    _step: function() {
+        var horizontalScrollHelper = this._strategy.horizontalScrollHelper,
+            verticalScrollHelper = this._strategy.verticalScrollHelper;
+
+        horizontalScrollHelper && horizontalScrollHelper.scrollByStep();
+        verticalScrollHelper && verticalScrollHelper.scrollByStep();
+    }
+});
 
 /**
  * @name DraggableBase
@@ -131,7 +256,25 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @type boolean
              * @default false
              */
-            clone: false
+            clone: false,
+            /**
+             * @name DraggableBaseOptions.autoScroll
+             * @type boolean
+             * @default true
+             */
+            autoScroll: true,
+            /**
+             * @name DraggableBaseOptions.scrollSpeed
+             * @type number
+             * @default 60
+             */
+            scrollSpeed: 60,
+            /**
+             * @name DraggableBaseOptions.scrollSensitivity
+             * @type number
+             * @default 60
+             */
+            scrollSensitivity: 60
             /**
              * @name DraggableBaseOptions.group
              * @type any
@@ -151,6 +294,11 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _init: function() {
         this.callBase();
         this._attachEventHandlers();
+
+        this._scrollAnimator = new ScrollAnimator(this);
+
+        this.horizontalScrollHelper = new ScrollHelper("horizontal", this);
+        this.verticalScrollHelper = new ScrollHelper("vertical", this);
     },
 
     _initTemplates: noop,
@@ -169,6 +317,16 @@ var Draggable = DOMComponentWithTemplate.inherit({
         }
 
         this._startPosition = translator.locate($dragElement);
+    },
+
+    _startAnimator: function() {
+        if(!this._scrollAnimator.inProgress()) {
+            this._scrollAnimator.start();
+        }
+    },
+
+    _stopAnimator: function() {
+        this._scrollAnimator.stop();
     },
 
     _addWidgetPrefix: function(className) {
@@ -337,6 +495,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
         e.maxTopOffset = startOffset.top - boundOffset.top;
         e.maxBottomOffset = areaHeight - startOffset.top - elementHeight - boundOffset.bottom;
 
+        if(this.option("autoScroll")) {
+            this._startAnimator();
+        }
+
         this._getAction("onDragStart")({ event: e });
     },
 
@@ -396,6 +558,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
             top: startPosition.top + offset.y
         });
 
+        if(this.option("autoScroll")) {
+            this._findScrollable(e);
+        }
+
         let eventArgs = { event: e };
         this._getAction("onDragMove")(eventArgs);
 
@@ -405,6 +571,26 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         let targetDraggable = this._getTargetDraggable();
         targetDraggable.movePlaceholder(e);
+    },
+
+    _findScrollable: function(e) {
+        var that = this,
+            $dragElement = that._$dragElement,
+            ownerDocument = $dragElement.get(0).ownerDocument,
+            mousePosition = {
+                x: e.pageX,
+                y: e.pageY
+            },
+            allObjects;
+
+        if(browser.msie) {
+            allObjects = ownerDocument.msElementsFromPoint(mousePosition.x, mousePosition.y);
+        } else {
+            allObjects = ownerDocument.elementsFromPoint(mousePosition.x, mousePosition.y);
+        }
+
+        that.verticalScrollHelper && that.verticalScrollHelper.findScrollable(allObjects, mousePosition);
+        that.horizontalScrollHelper && that.horizontalScrollHelper.findScrollable(allObjects, mousePosition);
     },
 
     _getDragEndArgs: function(e) {
@@ -422,6 +608,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
         if(!eventArgs.cancel) {
             targetDraggable.dropItem();
         }
+
+        this._stopAnimator();
+        this.horizontalScrollHelper = null;
+        this.verticalScrollHelper = null;
 
         this.resetPlaceholder();
         targetDraggable.resetPlaceholder();
@@ -531,6 +721,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._resetTargetDraggable();
         this._resetSourceDraggable();
         this._$sourceElement = null;
+        this._stopAnimator();
     }
 });
 

@@ -1806,6 +1806,8 @@ declare module DevExpress.ui {
     }
     /** @name DraggableBase.Options */
     export interface DraggableBaseOptions<T = DraggableBase> extends DOMComponentOptions<T> {
+        /** @name DraggableBase.Options.autoScroll */
+        autoScroll?: boolean;
         /** @name DraggableBase.Options.boundary */
         boundary?: string | Element | JQuery;
         /** @name DraggableBase.Options.container */
@@ -1822,6 +1824,10 @@ declare module DevExpress.ui {
         onDragMove?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** @name DraggableBase.Options.onDragStart */
         onDragStart?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        /** @name DraggableBase.Options.scrollSensitivity */
+        scrollSensitivity?: number;
+        /** @name DraggableBase.Options.scrollSpeed */
+        scrollSpeed?: number;
         /** @name DraggableBase.Options.template */
         template?: DevExpress.core.template | (() => string | Element | JQuery);
     }
