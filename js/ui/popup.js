@@ -808,10 +808,11 @@ var Popup = Overlay.inherit({
             case "useDefaultToolbarButtons":
             case "useFlatToolbarButtons":
                 var isPartialUpdate = args.fullName.search(".options") !== -1;
+                var isInitialize = args.fullName === "toolbarItems";
                 this._renderTitle();
                 this._renderBottom();
 
-                if(!isPartialUpdate) {
+                if(!isPartialUpdate && !isInitialize) {
                     this._renderGeometry();
                 }
                 break;

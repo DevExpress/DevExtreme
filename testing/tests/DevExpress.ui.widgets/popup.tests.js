@@ -1053,6 +1053,18 @@ QUnit.test("empty item should not be rendered in top toolbar", function(assert) 
     assert.equal($toolbarItems.length, 0, "no items are rendered inside top toolbar");
 });
 
+QUnit.test("toolBar should not update geometry when initializing", function(assert) {
+    const renderGeometrySpy = sinon.spy(this.instance, "_renderGeometry");
+
+    this.instance.option("visible", true);
+    this.instance.option("toolbarItems", [{
+        widget: "dxButton",
+        options: { text: 'Supprimer', type: 'danger' }
+    }]);
+
+    assert.ok(renderGeometrySpy.calledOnce, "renderGeometry is called only for visibility option");
+});
+
 QUnit.test("toolBar should not update geometry after partial update of its items", function(assert) {
     this.instance.option({
         visible: true,
@@ -1442,7 +1454,6 @@ QUnit.module("renderGeometry", () => {
             title: "test",
             titleTemplate: () => $("<div>").text("title template"),
             bottomTemplate: () => $("<div>").text("bottom template"),
-            toolbarItems: [{ text: "text" }],
             useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
             useFlatToolbarButtons: !options.useFlatToolbarButtons
         };
