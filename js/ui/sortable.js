@@ -113,11 +113,6 @@ var Sortable = Draggable.inherit({
              * @default "push"
              */
             dropFeedbackMode: "push",
-            /**
-             * @name dxSortableOptions.allowDropInside
-             * @type boolean
-             * @default false
-             */
             allowDropInside: false,
             /**
              * @name dxSortableOptions.onDragChange
