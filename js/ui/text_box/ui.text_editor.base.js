@@ -425,11 +425,16 @@ const TextEditorBase = Editor.inherit({
         this._renderButtonContainers();
     },
 
+    _getInputContainer() {
+        return this._$textEditorInputContainer;
+    },
+
     _renderPendingIndicator: function() {
         this.$element().addClass(TEXTEDITOR_VALIDATION_PENDING_CLASS);
-        const $indicatorElement = $("<div>")
-            .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
-            .appendTo(this._$textEditorInputContainer);
+        const $inputContainer = this._getInputContainer(),
+            $indicatorElement = $("<div>")
+                .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
+                .appendTo($inputContainer);
         this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator);
     },
 
