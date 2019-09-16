@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isObject, isString } from "../../core/utils/type";
+import { isString } from "../../core/utils/type";
 import { ensureDefined } from "../../core/utils/common";
 
 import Widget from "../widget/ui.widget";
@@ -141,13 +141,7 @@ class FileManagerToolbar extends Widget {
 
         return items.map(item => {
             const commandName = isString(item) ? item : item.commandName;
-            const config = this._getItemConfigByCommandName(commandName);
-
-            if(!isObject(item)) {
-                item = { commandName };
-            }
-
-            const preparedItem = extend(true, config, item);
+            const preparedItem = this._configureItemByCommandName(commandName, item);
 
             if(commandName === "separator") {
                 preparedItem.visible = groupHasItems;
@@ -163,7 +157,7 @@ class FileManagerToolbar extends Widget {
         });
     }
 
-    _getItemConfigByCommandName(commandName) {
+    _configureItemByCommandName(commandName, item) {
         let result = {};
 
         const command = this._commandManager.getCommandByName(commandName);
@@ -180,12 +174,24 @@ class FileManagerToolbar extends Widget {
                 break;
         }
 
-        const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
-        if(defaultConfig) {
+        if(this._isDefaultItem(commandName)) {
+            const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
             extend(result, defaultConfig);
+            extend(result, item.location ? { location: item.location } : {});
+            extend(result, item.locateInMenu ? { locateInMenu: item.locateInMenu } : {});
+            extend(result.options, item.text ? { text: item.text } : {});
+            extend(result.options, item.icon ? { icon: item.icon } : {});
+        }
+
+        if(!result.commandName) {
+            extend(result, { commandName });
         }
 
         return result;
+    }
+
+    _isDefaultItem(commandName) {
+        return !!DEFAULT_ITEM_CONFIGS[commandName];
     }
 
     _createCommandItem(command) {

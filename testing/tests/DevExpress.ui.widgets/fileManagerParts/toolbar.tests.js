@@ -200,4 +200,60 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.equal(this.wrapper.getToolbarSeparators().length, 1, "specified separator visible");
     });
 
+    test("toolbar items arrangement", function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("toolbar", {
+            generalItems: [
+                {
+                    commandName: "showDirsPanel",
+                    icon: "upload"
+                },
+                "upload",
+                {
+                    commandName: "create",
+                    locateInMenu: "always"
+                },
+                {
+                    commandName: "refresh",
+                    text: "Reinvigorate"
+                },
+                {
+                    commandName: "separator",
+                    location: "after"
+                },
+                {
+                    commandName: "viewMode",
+                    location: "before"
+                }]
+        });
+        this.clock.tick(400);
+
+        let $elements = this.wrapper.getGeneralToolbarElements();
+        assert.equal($elements.length, 5, "general toolbar has elements");
+
+        assert.ok($elements.eq(0).find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "show tree view button is rendered with new icon");
+        assert.ok($elements.eq(1).text().indexOf("Upload files") !== -1, "upload files button is rendered in new position");
+
+        const $dropDownMenuButton = this.wrapper.getDropDownMenuButton();
+        $dropDownMenuButton.trigger("dxclick");
+        this.clock.tick(400);
+        const $dropDownMenuItem = this.wrapper.getDropDownMenuItem(0);
+        assert.ok($($dropDownMenuItem).find(".dx-button-text").text().indexOf("New folder") !== -1, "create folder button is rendered in the dropDown menu");
+
+        assert.ok($elements.eq(2).val().indexOf("Details") !== -1, "view switcher is rendered in new location");
+        assert.ok($elements.eq(3).text().indexOf("Reinvigorate") !== -1, "refresh button is rendered with new text");
+
+
+        const $item = this.wrapper.findDetailsItem("File 1.txt");
+        $item.trigger("dxclick");
+        $item.trigger("click");
+        this.clock.tick(400);
+
+        let $toolbar = this.wrapper.getToolbar();
+        assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
+    });
+
 });

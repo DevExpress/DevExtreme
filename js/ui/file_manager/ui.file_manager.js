@@ -527,10 +527,11 @@ class FileManager extends Widget {
                 this.repaint();
                 break;
             case "toolbar":
-                this._toolbar.option({
-                    generalItems: args.value.generalItems, // TODO: check if null
-                    fileItems: args.value.fileItems
-                });
+                this._toolbar.option(extend(
+                    true,
+                    args.value.generalItems ? { generalItems: args.value.generalItems } : {},
+                    args.value.fileItems ? { fileItems: args.value.fileItems } : {}
+                ));
                 break;
             case "onCurrentDirectoryChanged":
                 this._onCurrentDirectoryChangedAction = this._createActionByOption("onCurrentDirectoryChanged");
