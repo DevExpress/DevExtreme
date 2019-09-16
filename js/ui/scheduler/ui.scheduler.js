@@ -2247,6 +2247,7 @@ const Scheduler = Widget.inherit({
             var startDateExpr = this._dataAccessors.expr.startDateExpr,
                 endDateExpr = this._dataAccessors.expr.endDateExpr;
 
+            formData.recurrenceRule = formData.recurrenceRule || null;
             AppointmentForm.updateFormData(this._appointmentForm, formData);
             this._appointmentForm.option("readOnly", this._editAppointmentData ? !this._editing.allowUpdating : false);
 

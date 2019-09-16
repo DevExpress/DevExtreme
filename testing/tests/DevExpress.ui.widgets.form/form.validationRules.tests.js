@@ -423,7 +423,7 @@ QUnit.testInActiveWindow("Remove RangeRule from item.validationRules", assert =>
         runRemoveRangedRuleTest({ newValidationRules, useItemOption: false, isKeepFocusSupported: true });
     });
     [undefined, null, []].forEach(newValidationRules => {
-        runRemoveRangedRuleTest({ newValidationRules, useItemOption: true, isKeepFocusSupported: false });
+        runRemoveRangedRuleTest({ newValidationRules, useItemOption: true, isKeepFocusSupported: true });
     });
 });
 
