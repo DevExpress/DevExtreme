@@ -6,7 +6,7 @@ import { getPublicElement } from "../../core/utils/dom";
 
 const ROW_SELECTOR = "tr";
 
-export class SchedulerTableCreator {
+class SchedulerTableCreator {
 
     static get VERTICAL() { return "vertical"; }
     static get HORIZONTAL() { return "horizontal"; }
@@ -418,3 +418,5 @@ export class SchedulerTableCreator {
         return cells;
     }
 }
+
+module.exports = SchedulerTableCreator;
