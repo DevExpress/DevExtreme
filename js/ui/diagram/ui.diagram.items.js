@@ -13,29 +13,47 @@ class ItemsOption extends Component {
             this._diagramWidget._hideLoadingIndicator();
         }
     }
-    insert(data, callback) {
+    insert(data, callback, errorCallback) {
         this._dataSource.store().insert(data).done(
             function(data) {
                 if(callback) {
                     callback(data);
                 }
             }
+        ).fail(
+            function(error) {
+                if(errorCallback) {
+                    errorCallback(error);
+                }
+            }
         );
     }
-    update(key, data, callback) {
+    update(key, data, callback, errorCallback) {
         this._dataSource.store().update(key, data).done(
             function(data, key) {
                 if(callback) {
                     callback(key, data);
                 }
             }
+        ).fail(
+            function(error) {
+                if(errorCallback) {
+                    errorCallback(error);
+                }
+            }
         );
     }
-    remove(key, callback) {
+    remove(key, data, callback, errorCallback) {
         this._dataSource.store().remove(key).done(
             function(key) {
                 if(callback) {
-                    callback(key);
+                    callback(key, data);
+                }
+            }
+        ).fail(
+            function(error) {
+                if(errorCallback) {
+                    errorCallback(error);
                 }
             }
         );
