@@ -69,12 +69,14 @@ class ScrollHelper {
     _trySetScrollable(element, mousePosition) {
         var that = this,
             $element = $(element),
-            distanceToBorders = that._calculateDistanceToBorders($element, mousePosition),
+            distanceToBorders,
             sensitivity = that._component.option("scrollSensitivity"),
             isScrollable = ($element.css(that._overFlowAttr) === "auto" || $element.hasClass("dx-scrollable-container"))
                 && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
 
         if(isScrollable) {
+            distanceToBorders = that._calculateDistanceToBorders($element, mousePosition);
+
             if(sensitivity > distanceToBorders[that._limits.max]) {
                 if(!that._preventScroll) {
                     that._scrollSpeed = -that._calculateScrollSpeed(distanceToBorders[that._limits.max]);
@@ -94,15 +96,22 @@ class ScrollHelper {
         return isScrollable;
     }
 
-    _calculateDistanceToBorders(area, mousePosition) {
-        var areaBoundingRect = area.get(0).getBoundingClientRect();
+    _calculateDistanceToBorders($area, mousePosition) {
+        var area = $area.get(0),
+            areaBoundingRect;
 
-        return {
-            left: mousePosition.x - areaBoundingRect.left,
-            top: mousePosition.y - areaBoundingRect.top,
-            right: areaBoundingRect.right - mousePosition.x,
-            bottom: areaBoundingRect.bottom - mousePosition.y
-        };
+        if(area) {
+            areaBoundingRect = area.getBoundingClientRect();
+
+            return {
+                left: mousePosition.x - areaBoundingRect.left,
+                top: mousePosition.y - areaBoundingRect.top,
+                right: areaBoundingRect.right - mousePosition.x,
+                bottom: areaBoundingRect.bottom - mousePosition.y
+            };
+        } else {
+            return {};
+        }
     }
 
     _calculateScrollSpeed(distance) {
@@ -134,6 +143,11 @@ class ScrollHelper {
                 that._$scrollable[that._scrollValue](nextScrollPosition);
             }
         }
+    }
+
+    reset() {
+        this._$scrollable = null;
+        this._scrollSpeed = 0;
     }
 }
 
@@ -676,6 +690,12 @@ var Draggable = DOMComponentWithTemplate.inherit({
                 this._detachEventHandlers();
                 this._attachEventHandlers();
                 break;
+            case "autoScroll":
+                this.verticalScrollHelper.reset();
+                this.horizontalScrollHelper.reset();
+                break;
+            case "scrollSensitivity":
+            case "scrollSpeed":
             case "boundOffset":
             case "handle":
             case "group":
