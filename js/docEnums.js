@@ -122,6 +122,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DropFeedbackMode
+ * @enum {'push'|'indicate'}
+ */
+
+/**
  * @typedef {string} Enums.VerticalAlignment
  * @enum {'bottom'|'center'|'top'}
  */
