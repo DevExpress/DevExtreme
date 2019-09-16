@@ -46,13 +46,12 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    create: function(componentCreator, $container, isReadOnly, formData) {
+    create: function(componentCreator, $container, isReadOnly) {
         this._appointmentForm = componentCreator($container, Form, {
             items: this._editors,
             readOnly: isReadOnly,
             showValidationSummary: true,
             scrollingEnabled: true,
-            formData: formData,
             colCount: 2,
             showColonAfterLabel: false,
             screenByWidth: () => {
@@ -65,7 +64,7 @@ const SchedulerAppointmentForm = {
         return this._appointmentForm;
     },
 
-    prepareAppointmentFormEditors: function(allDay, dataExprs, schedulerInst) {
+    prepareAppointmentFormEditors: function(dataExprs, schedulerInst) {
         var that = this;
 
         this._editors = [
@@ -87,7 +86,7 @@ const SchedulerAppointmentForm = {
                     type: "required"
                 }],
                 editorOptions: {
-                    type: allDay ? "date" : "datetime",
+                    // type: allDay ? "date" : "datetime",
                     width: "100%",
                     calendarOptions: {
                         firstDayOfWeek: schedulerInst.option("firstDayOfWeek")
@@ -130,7 +129,7 @@ const SchedulerAppointmentForm = {
                     type: "required"
                 }],
                 editorOptions: {
-                    type: allDay ? "date" : "datetime",
+                    // type: allDay ? "date" : "datetime",
                     width: "100%",
                     calendarOptions: {
                         firstDayOfWeek: schedulerInst.option("firstDayOfWeek")
