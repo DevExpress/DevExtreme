@@ -19,23 +19,18 @@ class ModulesHandler {
         const widgets = [];
         const widgetsListIndex = less.indexOf(this.SPECIAL_COMMENT);
 
-        if(widgetsListIndex < 0) {
-            return widgets;
-        }
-
-        less
-            .substr(widgetsListIndex + this.SPECIAL_COMMENT.length)
-            .split("\n")
-            .filter(item => !!item)
-            .forEach((importString) => {
-                const lastSlashIndex = importString.lastIndexOf("/");
-                const fileName = importString.substr(lastSlashIndex + 1);
-                const dotIndex = fileName.indexOf(".");
-                widgets.push({
-                    name: fileName.substr(0, dotIndex).toLowerCase(),
-                    import: importString
+        if(widgetsListIndex >= 0) {
+            less
+                .substr(widgetsListIndex + this.SPECIAL_COMMENT.length)
+                .split("\n")
+                .filter(item => !!item)
+                .forEach((importString) => {
+                    widgets.push({
+                        name: this.getWidgetFromImport(importString).toLowerCase(),
+                        import: importString
+                    });
                 });
-            });
+        }
 
         return widgets;
     }
