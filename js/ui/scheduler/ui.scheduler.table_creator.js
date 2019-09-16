@@ -6,12 +6,12 @@ import { getPublicElement } from "../../core/utils/dom";
 
 const ROW_SELECTOR = "tr";
 
-const SchedulerTableCreator = {
+export class SchedulerTableCreator {
 
-    VERTICAL: "vertical",
-    HORIZONTAL: "horizontal",
+    static get VERTICAL() { return "vertical"; }
+    static get HORIZONTAL() { return "horizontal"; }
 
-    insertAllDayRow: function(allDayElements, tableBody, index) {
+    insertAllDayRow(allDayElements, tableBody, index) {
         if(allDayElements[index]) {
             var row = allDayElements[index].find(ROW_SELECTOR);
 
@@ -22,9 +22,9 @@ const SchedulerTableCreator = {
 
             tableBody.appendChild(row.get ? row.get(0) : row);
         }
-    },
+    }
 
-    makeTable: function(options) {
+    makeTable(options) {
         var tableBody = domAdapter.createElement("tbody"),
             templateCallbacks = [],
             row,
@@ -119,9 +119,9 @@ const SchedulerTableCreator = {
         }
 
         return templateCallbacks;
-    },
+    }
 
-    makeGroupedTable: function(type, groups, cssClasses, cellCount, cellTemplate, rowCount, groupByDate) {
+    makeGroupedTable(type, groups, cssClasses, cellCount, cellTemplate, rowCount, groupByDate) {
         var rows = [];
 
         if(type === this.VERTICAL) {
@@ -131,9 +131,9 @@ const SchedulerTableCreator = {
         }
 
         return rows;
-    },
+    }
 
-    makeGroupedTableFromJSON: function(type, data, config) {
+    makeGroupedTableFromJSON(type, data, config) {
         var table,
             cellStorage = [],
             rowIndex = 0;
@@ -237,9 +237,9 @@ const SchedulerTableCreator = {
 
         return table;
 
-    },
+    }
 
-    _makeFlexGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
+    _makeFlexGroupedRowCells(group, repeatCount, cssClasses, cellTemplate, repeatByDate = 1) {
 
         let cells = [],
             items = group.items,
@@ -263,7 +263,7 @@ const SchedulerTableCreator = {
 
                     cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
                 } else {
-                    $container.text(items[j].text).title(items[j].text);
+                    $container.text(items[j].text);
                 }
 
                 const cssClass = typeUtils.isFunction(cssClasses.groupHeaderClass) ? cssClasses.groupHeaderClass(j) : cssClasses.groupHeaderClass;
@@ -275,9 +275,9 @@ const SchedulerTableCreator = {
         }
 
         return cells;
-    },
+    }
 
-    _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate) {
+    _makeVerticalGroupedRows(groups, cssClasses, cellTemplate) {
         var cellTemplates = [],
             repeatCount = 1,
             cellsArray = [];
@@ -316,9 +316,9 @@ const SchedulerTableCreator = {
             elements: $("<div>").addClass("dx-scheduler-group-flex-container").append(rows),
             cellTemplates: cellTemplates
         };
-    },
+    }
 
-    _makeHorizontalGroupedRows: function(groups, cssClasses, cellCount, cellTemplate, groupByDate) {
+    _makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate) {
         var repeatCount = 1,
             groupCount = groups.length,
             rows = [],
@@ -367,9 +367,9 @@ const SchedulerTableCreator = {
             elements: rows,
             cellTemplates: cellTemplates
         };
-    },
+    }
 
-    _makeGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
+    _makeGroupedRowCells(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
         repeatByDate = repeatByDate || 1;
         repeatCount = repeatCount * repeatByDate;
 
@@ -417,6 +417,4 @@ const SchedulerTableCreator = {
 
         return cells;
     }
-};
-
-module.exports = SchedulerTableCreator;
+}
