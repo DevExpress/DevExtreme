@@ -489,20 +489,23 @@ QUnit.module("add visible option", (hooks) => {
             onClick: clickHandler
         }).dxSpeedDialAction("instance");
 
-        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
-
         assert.equal($(FAB_INVISIBLE_SELECTOR).length, 1, "one invisible action");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            icon: "trash",
+            visible: false
+        }).dxSpeedDialAction("instance");
+
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 3, "all actions are invisible");
 
         firstSDA.option("visible", true);
 
-        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
         assert.equal($fabMainContent.find(".dx-icon-edit").length, 1, "action icon is applied if action visible");
         assert.equal($fabMainContent.find(".dx-fa-button-label").text(), "Edit row", "action label is applied if action visible");
 
-        secondSDA = $("#fab-two").dxSpeedDialAction({
-            icon: "trash"
-        }).dxSpeedDialAction("instance");
+        secondSDA.option("visible", true);
 
         $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 

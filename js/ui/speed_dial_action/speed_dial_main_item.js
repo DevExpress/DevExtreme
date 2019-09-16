@@ -111,7 +111,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
         return visibleActions.length === 1 ?
             visibleActions[0]._options :
-            this._getDefaultOptions();
+            extend(this._getDefaultOptions(), { visible: visibleActions.length !== 0 });
     },
 
     _clickHandler() {
@@ -197,8 +197,10 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     },
 
     _setPosition() {
-        this._hide();
-        this._show();
+        if(this.option("visible")) {
+            this._hide();
+            this._show();
+        }
     },
 
     _getPosition() {
@@ -270,8 +272,7 @@ exports.initAction = function(newAction) {
             savedActions.push(newAction);
 
             speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
-                actions: savedActions,
-                visible: true
+                actions: savedActions
             }));
         } else if(savedActions.length === 1) {
             speedDialMainItem.option(extend({}, savedActions[0]._options, {
@@ -279,8 +280,7 @@ exports.initAction = function(newAction) {
             }));
         } else {
             speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
-                actions: savedActions,
-                visible: true
+                actions: savedActions
             }));
         }
     }
