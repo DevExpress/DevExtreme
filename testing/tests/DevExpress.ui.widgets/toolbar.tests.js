@@ -708,73 +708,78 @@ QUnit.test("it should be possible to expand toolbar with no items in submenu", f
     assert.ok(isMenuVisible(instance), "toolbar is expanded");
 });
 
-[true, false, undefined, "not declared"].forEach((isToolbarDisabled) => {
-    [true, false, undefined, "not declared"].forEach((isButtonDisabled) => {
+QUnit.module("disabled state", () => {
+    [true, false, undefined, "not declared"].forEach((isToolbarDisabled) => {
+        [true, false, undefined, "not declared"].forEach((isButtonDisabled) => {
 
-        const checkClickHandlers = (assert, itemClickHandler, buttonClickHandler, buttonDisabled, toolbarDisabled) => {
-            assert.strictEqual(itemClickHandler.callCount, toolbarDisabled ? 0 : 1, `onItemClick ${itemClickHandler.callCount}`);
-            assert.strictEqual(buttonClickHandler.callCount, buttonDisabled || toolbarDisabled ? 0 : 1, `onButtonClick ${buttonClickHandler.callCount}`);
-        };
+            const checkClickHandlers = (assert, itemClickHandler, buttonClickHandler, buttonDisabled, toolbarDisabled) => {
+                assert.strictEqual(itemClickHandler.callCount, toolbarDisabled ? 0 : 1, `onItemClick ${itemClickHandler.callCount}`);
+                assert.strictEqual(buttonClickHandler.callCount, buttonDisabled || toolbarDisabled ? 0 : 1, `onButtonClick ${buttonClickHandler.callCount}`);
+            };
 
-        const checkDisabledState = (assert, $button, $toolbar, expectedButtonDisabled, expectedToolbarDisabled) => {
-            assert.strictEqual($button.dxButton("option", "disabled"), expectedButtonDisabled, "button.disabled");
-            assert.strictEqual($toolbar.dxToolbar("option", "disabled"), expectedToolbarDisabled, "toolbar.disabled");
-        };
+            const checkDisabledState = (assert, $button, $toolbar, expectedButtonDisabled, expectedToolbarDisabled) => {
+                assert.strictEqual($button.dxButton("option", "disabled"), expectedButtonDisabled, `button.disabled ${expectedButtonDisabled}`);
+                assert.strictEqual($toolbar.dxToolbar("option", "disabled"), expectedToolbarDisabled, `toolbar.disabled ${expectedToolbarDisabled}`);
+            };
 
-        [true, false, undefined].forEach((isToolbarDisabledNew) => {
-            [true, false, undefined].forEach((isButtonDisabledNew) => {
-                [true, false].forEach((changeDisabledOrder) => {
-                    QUnit.test(`new dxToolbar({toolbar.disabled: ${isToolbarDisabled}, button.disabled: ${isButtonDisabled})`, function(assert) {
-                        let itemClickHandler = sinon.spy();
-                        let buttonClickHandler = sinon.spy();
-                        let toolbarOptions = {
-                            onItemClick: itemClickHandler,
-                            items: [{
-                                location: 'before',
-                                widget: 'dxButton',
-                                options: {
-                                    onClick: buttonClickHandler
-                                }
-                            }]
-                        };
+            [true, false, undefined].forEach((isToolbarDisabledNew) => {
+                [true, false, undefined].forEach((isButtonDisabledNew) => {
+                    [true, false].forEach((changeDisabledOrder) => {
+                        QUnit.test(`new dxToolbar({toolbar.disabled: ${isToolbarDisabled}, button.disabled: ${isButtonDisabled})`, function(assert) {
+                            let itemClickHandler = sinon.spy();
+                            let buttonClickHandler = sinon.spy();
+                            let toolbarOptions = {
+                                onItemClick: itemClickHandler,
+                                items: [{
+                                    location: 'before',
+                                    widget: 'dxButton',
+                                    options: {
+                                        onClick: buttonClickHandler
+                                    }
+                                }]
+                            };
 
-                        if(isToolbarDisabled !== "not declared") {
-                            toolbarOptions.disabled = isToolbarDisabled;
-                        }
-                        if(isButtonDisabled !== "not declared") {
-                            toolbarOptions.items[0].options.disabled = isButtonDisabled;
-                        }
+                            if(isToolbarDisabled !== "not declared") {
+                                toolbarOptions.disabled = isToolbarDisabled;
+                            }
+                            if(isButtonDisabled !== "not declared") {
+                                toolbarOptions.items[0].options.disabled = isButtonDisabled;
+                            }
 
-                        this.$element.dxToolbar(toolbarOptions);
+                            let $element = $("#toolbar");
+                            $element.dxToolbar(toolbarOptions);
 
-                        let $button = this.$element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0);
-                        const expectedToolbarValue = isToolbarDisabled !== "not declared" ? isToolbarDisabled : false;
-                        let expectedButtonValue = isButtonDisabled !== "not declared" ? isButtonDisabled : isToolbarDisabled;
+                            let $button = $element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0);
+                            const expectedToolbarValue = isToolbarDisabled !== "not declared" ? isToolbarDisabled : false;
+                            let expectedButtonValue = isButtonDisabled !== "not declared" ? isButtonDisabled : isToolbarDisabled;
 
-                        if(expectedButtonValue === "not declared") {
-                            expectedButtonValue = false;
-                        }
+                            if(expectedButtonValue === "not declared") {
+                                expectedButtonValue = false;
+                            }
 
-                        checkDisabledState(assert, $button, this.$element, expectedButtonValue, expectedToolbarValue);
+                            checkDisabledState(assert, $button, $element, expectedButtonValue, expectedToolbarValue);
 
-                        eventsEngine.trigger($button, 'dxclick');
-                        checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedButtonValue, expectedToolbarValue);
+                            eventsEngine.trigger($button, 'dxclick');
+                            checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedButtonValue, expectedToolbarValue);
 
-                        itemClickHandler.reset();
-                        buttonClickHandler.reset();
+                            itemClickHandler.reset();
+                            buttonClickHandler.reset();
 
-                        if(changeDisabledOrder) {
-                            $button.dxButton("option", "disabled", isButtonDisabledNew);
-                            this.$element.dxToolbar("option", "disabled", isToolbarDisabledNew);
-                        } else {
-                            this.$element.dxToolbar("option", "disabled", isToolbarDisabledNew);
-                            $button.dxButton("option", "disabled", isButtonDisabledNew);
-                        }
+                            if(changeDisabledOrder) {
+                                assert.ok(true, ` new button state - ${isButtonDisabledNew} : new toolbar state - ${isToolbarDisabledNew}`);
+                                $button.dxButton("option", "disabled", isButtonDisabledNew);
+                                $element.dxToolbar("option", "disabled", isToolbarDisabledNew);
+                            } else {
+                                assert.ok(true, ` new toolbar state - ${isToolbarDisabledNew} : new button state - ${isButtonDisabledNew}`);
+                                $element.dxToolbar("option", "disabled", isToolbarDisabledNew);
+                                $button.dxButton("option", "disabled", isButtonDisabledNew);
+                            }
 
-                        checkDisabledState(assert, $button, this.$element, isButtonDisabledNew, isToolbarDisabledNew);
+                            checkDisabledState(assert, $button, $element, isButtonDisabledNew, isToolbarDisabledNew);
 
-                        eventsEngine.trigger($button, 'dxclick');
-                        checkClickHandlers(assert, itemClickHandler, buttonClickHandler, isButtonDisabledNew, isToolbarDisabledNew);
+                            eventsEngine.trigger($button, 'dxclick');
+                            checkClickHandlers(assert, itemClickHandler, buttonClickHandler, isButtonDisabledNew, isToolbarDisabledNew);
+                        });
                     });
                 });
             });
