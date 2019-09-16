@@ -5359,10 +5359,12 @@ declare module DevExpress.ui {
     }
     /** @name dxSortable.Options */
     export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
+        /** @name dxSortable.Options.allowDropInside */
+        allowDropInside?: boolean;
+        /** @name dxSortable.Options.dropFeedbackMode */
+        dropFeedbackMode?: 'push' | 'indicate';
         /** @name dxSortable.Options.itemOrientation */
         itemOrientation?: 'horizontal' | 'vertical';
-        /** @name dxSortable.Options.placeholderTemplate */
-        placeholderTemplate?: DevExpress.core.template | (() => string | Element | JQuery);
     }
     /** @name dxSortable */
     export class dxSortable extends DraggableBase {
