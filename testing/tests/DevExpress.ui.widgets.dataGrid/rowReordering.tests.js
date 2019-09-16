@@ -225,6 +225,43 @@ QUnit.test("Dragging row when prepared events are specified", function(assert) {
     assert.ok($draggableElement.find(".dx-data-row").children().first().hasClass("my-cell"), "cell with custom class");
 });
 
+QUnit.test("'rowDragging' option changing", function(assert) {
+    // arrange
+    let $testElement = $("#container");
+
+    this.options.rowDragging = {
+        enabled: false
+    };
+
+    let rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    let pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+
+    // assert
+    assert.strictEqual($(rowsView.getRowElement(0)).children().first().text(), "test0", "first row");
+    assert.notOk($(rowsView.getRowElement(1)).hasClass("dx-sortable-placeholder"), "no placeholder");
+    assert.strictEqual($("body").children(".dx-sortable-dragging").length, 0, "no dragging element");
+
+    // arrange
+    pointer.up();
+
+    this.options.rowDragging = {
+        enabled: true,
+        allowReordering: true
+    };
+    rowsView.optionChanged({ name: "rowDragging" });
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+
+    // assert
+    assert.strictEqual($(rowsView.getRowElement(0)).children().first().text(), "test1", "first row");
+    assert.ok($(rowsView.getRowElement(1)).hasClass("dx-sortable-placeholder"), "there is placeholder");
+    assert.strictEqual($("body").children(".dx-sortable-dragging").length, 1, "there is dragging element");
+});
+
 
 QUnit.module("Handle", {
     beforeEach: function() {
@@ -243,7 +280,7 @@ QUnit.test("Dragging row by the handle", function(assert) {
 
     rowsView.render($testElement);
 
-    let $handleElement = rowsView.getRowElement(0).children().first();
+    let $handleElement = $(rowsView.getRowElement(0)).children().first();
 
     // assert
     assert.ok($handleElement.hasClass("dx-command-handle"), "handle");
@@ -259,4 +296,36 @@ QUnit.test("Dragging row by the handle", function(assert) {
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
+});
+
+QUnit.test("Show handle when changing the 'rowDragging.showHandle' option", function(assert) {
+    // arrange
+    let rowsView,
+        $handleElement,
+        $testElement = $("#container");
+
+    this.options.rowDragging = {
+        enabled: false
+    };
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+    $handleElement = $(rowsView.getRowElement(0)).children().first();
+
+    // assert
+    assert.notOk($handleElement.hasClass("dx-command-handle"), "no handle");
+    assert.strictEqual($handleElement.find(".dx-datagrid-handle-icon").length, 0, "no handle icon");
+
+    // act
+    this.options.rowDragging = {
+        enabled: true,
+        showHandle: true,
+        allowReordering: true
+    };
+    rowsView.optionChanged({ name: "rowDragging" });
+
+    // assert
+    $handleElement = $(rowsView.getRowElement(0)).children().first();
+    assert.ok($handleElement.hasClass("dx-command-handle"), "there is handle");
+    assert.strictEqual($handleElement.find(".dx-datagrid-handle-icon").length, 1, "there is handle icon");
 });

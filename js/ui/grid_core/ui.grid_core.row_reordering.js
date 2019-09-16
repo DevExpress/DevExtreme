@@ -8,7 +8,10 @@ let COMMAND_HANDLE_CLASS = "dx-command-handle",
 var RowReorderingExtender = {
     init: function() {
         this.callBase.apply(this, arguments);
+        this._updateHandleColumn();
+    },
 
+    _updateHandleColumn: function() {
         let rowDragging = this.option("rowDragging"),
             columnsController = this._columnsController,
             isHandleColumnVisible = rowDragging.enabled && rowDragging.showHandle;
@@ -93,6 +96,16 @@ var RowReorderingExtender = {
         return (container, options) => {
             return $("<span>").addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
         };
+    },
+
+    optionChanged: function(args) {
+        if(args.name === "rowDragging") {
+            this._updateHandleColumn();
+            this._invalidate(true, true);
+            args.handled = true;
+        }
+
+        this.callBase.apply(this, arguments);
     }
 };
 
