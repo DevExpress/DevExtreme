@@ -419,6 +419,34 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.$input.val(), "January, 29");
         });
 
+        test("Day reducing by down arrow key should use max date for the current month", (assert) => {
+            this.instance.option({
+                value: new Date(2015, 1, 1),
+                displayFormat: "dd/MM/yyyy"
+            });
+
+            this.keyboard.press("down");
+            assert.strictEqual(this.$input.val(), "28/02/2015", "the date is correct for 'dd' date format");
+
+            this.instance.option({
+                value: new Date(2015, 1, 1),
+                displayFormat: "MMMM, d"
+            });
+            this.keyboard.press("right");
+            this.keyboard.press("down");
+            assert.strictEqual(this.$input.val(), "February, 28", "the date is correct for 'd' date format");
+        });
+
+        test("Day increasing by up arrow key should use max date for the current month", (assert) => {
+            this.instance.option({
+                value: new Date(2015, 1, 28),
+                displayFormat: "dd/MM/yyyy"
+            });
+
+            this.keyboard.press("up");
+            assert.strictEqual(this.$input.val(), "01/02/2015");
+        });
+
         test("Month changing should adjust days to limits", (assert) => {
             this.instance.option("value", new Date(2018, 2, 30));
             assert.strictEqual(this.$input.val(), "March 30 2018", "initial text is correct");
@@ -562,7 +590,7 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("1");
             assert.strictEqual(this.instance.option("text"), "January 10 2012", "text has been changed");
 
-            this.$input.trigger("focusout");
+            this.instance.blur();
             this.keyboard.type("2");
             assert.strictEqual(this.instance.option("text"), "February 10 2012", "search value and position was cleared");
             assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, "first group has been filled again");
@@ -848,7 +876,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Bluring the input after first input should update the value", (assert) => {
             this.keyboard.type("1");
-            this.$input.trigger("focusout");
+            this.instance.blur();
 
             assert.strictEqual(this.$input.val(), "January 14 2015", "text is correct");
             assert.strictEqual(this.instance.option("value").getMonth(), 0, "value is correct");

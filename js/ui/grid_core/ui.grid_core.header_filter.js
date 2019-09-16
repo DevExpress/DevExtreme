@@ -90,7 +90,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
             if(!isObject(item)) {
                 item = {};
-            } else if(item === value) {
+            } else {
                 item = extend({}, item);
             }
 
@@ -104,7 +104,6 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
             item.text = this.getHeaderItemText(displayValue, column, currentLevel, options.headerFilterOptions);
 
-            delete item.key;
             return item;
         },
 

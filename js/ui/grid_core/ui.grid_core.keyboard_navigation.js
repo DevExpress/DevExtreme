@@ -33,6 +33,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     DATEBOX_WIDGET_NAME = "dxDateBox",
     FOCUS_STATE_CLASS = "dx-state-focused",
+    WIDGET_CLASS = "dx-widget",
 
     FAST_EDITING_DELETE_KEY = "delete",
 
@@ -174,27 +175,21 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $target = $(event.currentTarget),
             data = event.data,
             focusedViewElement = data.view && data.view.element(),
-            isEditingCell = $target.hasClass(EDITOR_CELL_CLASS),
-            isEditingRow = $target.parent().hasClass(EDIT_ROW_CLASS);
+            $parent = $target.parent(),
+            isEditingRow = $parent.hasClass(EDIT_ROW_CLASS);
 
         if(this._isEventInCurrentGrid(event) && this._isCellValid($target, true)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
-            this._focusView(data.view, data.viewIndex);
 
+            this._focusView(data.view, data.viewIndex);
             $(focusedViewElement).removeClass(FOCUS_STATE_CLASS);
 
-            if($target.parent().hasClass(FREESPACE_ROW_CLASS)) {
-
+            if($parent.hasClass(FREESPACE_ROW_CLASS)) {
                 this._updateFocusedCellPosition($target);
-
                 this._focusedView.element().attr("tabindex", 0);
                 this._focusedView.focus();
-            } else if(!isEditingCell && !this._isMasterDetailCell($target)) {
+            } else if(!this._isMasterDetailCell($target) && !isEditingRow) {
                 this._clickTargetCellHandler(event, $target);
-            } else if(isEditingCell && !isEditingRow) {
-                this._clickTargetCellHandler(event, $target);
-
-                this._updateFocusedCellPosition($target);
             } else {
                 this._updateFocusedCellPosition($target);
             }
@@ -275,7 +270,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         isFocusedViewCorrect = that._focusedView && that._focusedView.name === view.name,
                         needUpdateFocus = false,
                         isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
-                        keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
+                        keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`,
+                        $focusedElement;
 
                     eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
                     eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), keyboardActionSelector, {
@@ -285,7 +281,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                     that._initKeyDownProcessor(that, $element, that._keyDownHandler);
 
-                    if(isFocusedViewCorrect) {
+                    $focusedElement = $(":focus");
+
+                    if(isFocusedViewCorrect && (!$focusedElement.length || $focusedElement.closest($element).length)) {
                         needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
                         needUpdateFocus && that._updateFocus(true);
                     }
@@ -648,8 +646,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(!keyPressEvent.isDefaultPrevented()) {
                 setTimeout(function() {
                     $input.val(editorValue);
-                    eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
-                    eventsEngine.on($input, "focusout", function() {
+
+                    var $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
+                    eventsEngine.off($widgetContainer, "focusout"); // for NumberBox to save entered symbol
+                    eventsEngine.one($widgetContainer, "focusout", function() {
                         eventsEngine.trigger($input, "change");
                     });
                     eventsEngine.trigger($input, inputEvent);
@@ -755,6 +755,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(!args.cancel) {
                 cellPosition.rowIndex = args.newRowIndex;
                 args.isHighlighted = isHighlighted;
+            } else {
+                $event && $event.preventDefault();
             }
         }
 

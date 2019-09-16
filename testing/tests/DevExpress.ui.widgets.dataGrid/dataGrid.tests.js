@@ -71,7 +71,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
-import { ColumnWrapper, FilterPanelWrapper, PagerWrapper, FilterRowWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import { ColumnWrapper, FilterPanelWrapper, PagerWrapper, FilterRowWrapper, RowsViewWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -8330,6 +8330,27 @@ QUnit.test("scrolling after ungrouping should works correctly with large amount 
     assert.ok($(dataGrid.element()).find(".dx-virtual-row").last().position().top >= dataGrid.getScrollable().scrollTop(), "second virtual row is not in viewport");
 });
 
+// T809900
+QUnit.testInActiveWindow("Focus should not return to cell from filter row after filtering", function(assert) {
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        filterRow: { visible: true },
+        dataSource: [{ field1: 1, field2: 2 }]
+    }).dxDataGrid("instance");
+
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+
+    $(".dx-datagrid-filter-row .dx-texteditor-input")
+        .eq(0)
+        .focus()
+        .val(1)
+        .trigger("change");
+
+    this.clock.tick();
+
+    assert.ok($(".dx-datagrid-filter-row .dx-texteditor-input").is(":focus"), "filter row's cell is focused");
+});
+
 // T716207
 QUnit.test("Filtering should works correctly if groupPaging is enabled and group is expanded", function(assert) {
     // arrange
@@ -16583,4 +16604,69 @@ QUnit.test("The edited cell should be closed on click inside another dataGrid", 
     assert.ok($(dataGrid1.getCellElement(0, 0)).find("input").length === 0, "hasn't input");
     assert.notOk($(dataGrid1.getCellElement(0, 0)).hasClass("dx-editor-cell"), "cell of the first grid isn't editable");
     assert.ok($(dataGrid2.getCellElement(0, 0)).find("input").length > 0, "has input");
+});
+
+QUnit.test("onFocusedRowChanging, onFocusedRowChanged event if click selection checkBox (T812681)", function(assert) {
+    // arrange
+    var rowsViewWrapper = new RowsViewWrapper("#dataGrid"),
+        focusedRowChangingFiresCount = 0,
+        focusedRowChangedFiresCount = 0,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [
+                { field1: 1, field2: 2 },
+                { field1: 11, field2: 12 },
+            ],
+            keyExpr: "field1",
+            focusedRowEnabled: true,
+            selection: { mode: "multiple" },
+            onFocusedRowChanging: () => ++focusedRowChangingFiresCount,
+            onFocusedRowChanged: () => ++focusedRowChangedFiresCount
+        });
+
+    // act
+    rowsViewWrapper.getSelectionCheckBoxElement(1).trigger("dxpointerdown");
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangingFiresCount, 1, "onFocusedRowChanging fires count");
+    assert.equal(focusedRowChangedFiresCount, 1, "onFocusedRowChanged fires count");
+    assert.equal(dataGrid.option("focusedRowKey"), 11, "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), 1, "focusedRowIndex");
+});
+
+QUnit.test("Cancel focused row if click selection checkBox (T812681)", function(assert) {
+    // arrange
+    var rowsViewWrapper = new RowsViewWrapper("#dataGrid"),
+        focusedRowChangingFiresCount = 0,
+        focusedRowChangedFiresCount = 0,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [
+                { field1: 1, field2: 2 },
+                { field1: 11, field2: 12 },
+            ],
+            keyExpr: "field1",
+            focusedRowEnabled: true,
+            selection: { mode: "multiple" },
+            onFocusedRowChanging: e => {
+                ++focusedRowChangingFiresCount;
+                e.cancel = true;
+            },
+            onFocusedRowChanged: () => ++focusedRowChangedFiresCount
+        });
+
+    // assert
+    assert.equal(dataGrid.option("focusedRowKey"), undefined, "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+
+    // act
+    rowsViewWrapper.getSelectionCheckBoxElement(1).trigger("dxpointerdown");
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangingFiresCount, 1, "onFocusedRowChanging fires count");
+    assert.equal(focusedRowChangedFiresCount, 0, "onFocusedRowChanged fires count");
+    assert.equal(dataGrid.option("focusedRowKey"), undefined, "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
 });

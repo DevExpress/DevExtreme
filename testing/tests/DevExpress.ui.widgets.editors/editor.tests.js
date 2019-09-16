@@ -6,6 +6,9 @@ import hoverEvents from "events/hover";
 
 import "common.css!";
 
+const INVALID_MESSAGE_CLASS = "dx-invalid-message";
+const INVALID_MESSAGE_CONTENT_CLASS = "dx-invalid-message-content";
+
 const Fixture = Class.inherit({
     createEditor(options) {
         this.$element = $("<div/>").appendTo("body");
@@ -304,7 +307,7 @@ QUnit.module("Validation - UI", {
         });
 
         assert.ok(editor._$validationMessage, "Tooltip should be created");
-        assert.ok(editor._$validationMessage.hasClass("dx-invalid-message"), "Tooltip should be marked with auto");
+        assert.ok(editor._$validationMessage.hasClass(INVALID_MESSAGE_CLASS), "Tooltip should be marked with auto");
         assert.ok(editor._$validationMessage.hasClass("dx-invalid-message-auto"), "Tooltip should be marked with auto");
         assert.ok(!editor._$validationMessage.hasClass("dx-invalid-message-always"), "Tooltip should not be marked with always");
         assert.equal(editor._$validationMessage.dxOverlay("instance").$content().text(), message, "Correct message should be set");
@@ -328,7 +331,7 @@ QUnit.module("Validation - UI", {
 
         // assert
         assert.ok(editor._$validationMessage, "Tooltip should be created");
-        assert.ok(editor._$validationMessage.hasClass("dx-invalid-message"), "Tooltip should be marked with auto");
+        assert.ok(editor._$validationMessage.hasClass(INVALID_MESSAGE_CLASS), "Tooltip should be marked with auto");
         assert.ok(editor._$validationMessage.hasClass("dx-invalid-message-always"), "Tooltip should be marked with always");
         assert.ok(!editor._$validationMessage.hasClass("dx-invalid-message-auto"), "Tooltip should not be marked with auto");
     });
@@ -351,7 +354,7 @@ QUnit.module("Validation - UI", {
 
         // assert
         assert.ok(editor._$validationMessage, "Tooltip should be created");
-        assert.ok(editor._$validationMessage.hasClass("dx-invalid-message"), "Tooltip should be marked with auto");
+        assert.ok(editor._$validationMessage.hasClass(INVALID_MESSAGE_CLASS), "Tooltip should be marked with auto");
         assert.ok(!editor._$validationMessage.hasClass("dx-invalid-message-auto"), "Tooltip should not be marked as auto");
         assert.ok(!editor._$validationMessage.hasClass("dx-invalid-message-always"), "Tooltip should not be marked as always");
     });
@@ -394,7 +397,7 @@ QUnit.module("Validation - UI", {
 
         // act
         editor.option({ isValid: false });
-        const $validationMessage = $element.find(".dx-overlay-content");
+        const $validationMessage = $element.find(`.${INVALID_MESSAGE_CONTENT_CLASS}`);
 
         // assert
         assert.ok($validationMessage.offset().top < $element.offset().top, "validation message was flipped");
@@ -413,7 +416,7 @@ QUnit.module("Validation - UI", {
             isValid: false
         });
 
-        const $validationMessage = $element.find(".dx-invalid-message");
+        const $validationMessage = $element.find(`.${INVALID_MESSAGE_CLASS}`);
         assert.equal($validationMessage.outerWidth(), width, "validation message width is correct");
     });
 
@@ -431,7 +434,7 @@ QUnit.module("Validation - UI", {
         });
 
         editor.option("width", width);
-        const $validationMessage = $element.find(".dx-invalid-message");
+        const $validationMessage = $element.find(`.${INVALID_MESSAGE_CLASS}`);
         assert.equal($validationMessage.outerWidth(), width, "validation message width is correct");
     });
 
@@ -447,8 +450,8 @@ QUnit.module("Validation - UI", {
             isValid: false
         });
 
-        const $validationMessage = $element.find(".dx-invalid-message");
-        const $content = $validationMessage.find(".dx-overlay-content");
+        const $validationMessage = $element.find(`.${INVALID_MESSAGE_CLASS}`);
+        const $content = $validationMessage.find(`.${INVALID_MESSAGE_CONTENT_CLASS}`);
 
         assert.ok($content.outerWidth() <= $validationMessage.outerWidth(), "validation message width is correct");
     });
@@ -464,7 +467,7 @@ QUnit.module("Validation - UI", {
             isValid: false
         });
 
-        const $content = $element.find(".dx-invalid-message .dx-overlay-content");
+        const $content = $element.find(`.${INVALID_MESSAGE_CONTENT_CLASS}`);
         assert.equal($content.css("whiteSpace"), "normal", "text is not wrapped");
     });
 
@@ -480,7 +483,7 @@ QUnit.module("Validation - UI", {
             isValid: false
         });
 
-        const $content = $element.find(".dx-invalid-message .dx-overlay-content");
+        const $content = $element.find(`.${INVALID_MESSAGE_CONTENT_CLASS}`);
         const contentWidth = $content.outerWidth();
 
         assert.equal($content.css("width", "auto").outerWidth(), contentWidth, "validation message width is correct");
@@ -498,7 +501,7 @@ QUnit.module("Validation - UI", {
             isValid: false
         });
 
-        const $content = $element.find(".dx-invalid-message .dx-overlay-content");
+        const $content = $element.find(`.${INVALID_MESSAGE_CONTENT_CLASS}`);
 
         assert.equal($content.outerWidth(), 100, "the validation message width is correct");
     });
@@ -514,7 +517,7 @@ QUnit.module("Validation - UI", {
             isValid: false
         });
 
-        assert.equal($element.find(".dx-invalid-message.dx-widget").dxOverlay("option", "propagateOutsideClick"), true, "'propagateOutsideClick' option has correct value");
+        assert.equal($element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxOverlay("option", "propagateOutsideClick"), true, "'propagateOutsideClick' option has correct value");
     });
 
     QUnit.test("Validation overlay should not inherit templates from the editor", (assert) => {
@@ -537,7 +540,7 @@ QUnit.module("Validation - UI", {
             isValid: false
         });
 
-        assert.equal($element.find(".dx-invalid-message.dx-widget #editorContentTemplate").length, 0, "overlay does not inherit templates from the editor");
+        assert.equal($element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget #editorContentTemplate`).length, 0, "overlay does not inherit templates from the editor");
     });
 
     QUnit.test("Validation overlay should be render correctly in hidden area", (assert) => {
@@ -604,7 +607,7 @@ QUnit.module("Validation overlay options", {
             isValid: false
         });
 
-        const overlay = $element.find(".dx-invalid-message.dx-widget").dxOverlay("instance");
+        const overlay = $element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxOverlay("instance");
 
         assert.equal(overlay.option("customOption"), "Test", "a custom option has been created");
         assert.equal(overlay.option("width"), 200, "a default option has been redefined");
@@ -693,8 +696,8 @@ QUnit.module("Validation overlay options", {
         });
         instance.option("isValid", false);
 
-        const overlay = instance._validationMessage;
-        assert.strictEqual($(overlay.content()).text(), "New error message");
+        const message = $(`.${INVALID_MESSAGE_CONTENT_CLASS}`).text();
+        assert.strictEqual(message, "New error message");
     });
 });
 
@@ -760,11 +763,20 @@ QUnit.module("aria accessibility", {
     });
 
     QUnit.test("invalid state", (assert) => {
-        const editor = this.fixture.createEditor({ isValid: false });
+        const editor = this.fixture.createEditor({
+            isValid: false,
+            validationError: {
+                message: "test message"
+            }
+        });
+        const messageId = $(`.${INVALID_MESSAGE_CONTENT_CLASS}`).attr("id");
 
-        assert.equal(editor.$element().attr("aria-invalid"), "true", "aria-invalid is correct");
+        assert.strictEqual(editor.$element().attr("aria-invalid"), "true", "aria-invalid is correct");
+        assert.ok(editor.$element().get(0).hasAttribute("aria-describedby"), "invalid editor should have the 'aria-describedby' attribute");
+        assert.strictEqual(editor.$element().attr("aria-describedby"), messageId, "invalid editor should be described by a message");
 
         editor.option("isValid", true);
-        assert.equal(editor.$element().attr("aria-invalid"), undefined, "aria-invalid does not exist in valid state");
+        assert.strictEqual(editor.$element().attr("aria-invalid"), undefined, "aria-invalid does not exist in valid state");
+        assert.strictEqual(editor.$element().attr("aria-describedby"), undefined, "aria-describedby does not exist in valid state");
     });
 });

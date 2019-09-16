@@ -2050,10 +2050,10 @@ Axis.prototype = {
         this.handleZooming([null, null], { start: !!isSilent, end: !!isSilent });
     },
 
-    _applyZooming(visualRange) {
+    _applyZooming(visualRange, allowPartialUpdate) {
         const that = this;
         that._resetVisualRangeOption();
-        that._setVisualRange(visualRange);
+        that._setVisualRange(visualRange, allowPartialUpdate);
 
         const viewPort = that.getViewport();
 
@@ -2178,7 +2178,7 @@ Axis.prototype = {
         };
 
         if(!zoomStartEvent.cancel) {
-            isDefined(visualRange) && that._applyZooming(visualRange);
+            isDefined(visualRange) && that._applyZooming(visualRange, preventEvents.allowPartialUpdate);
             if(!isDefined(that._storedZoomEndParams)) {
                 that._storedZoomEndParams = {
                     startRange: previousRange,
