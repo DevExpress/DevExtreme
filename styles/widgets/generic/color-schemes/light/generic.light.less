@@ -938,7 +938,7 @@
 * @name 55. Selected row background color
 * @type color
 */
-@datagrid-selection-bg: darken(@datagrid-base-background-color, 10%);
+@datagrid-selection-bg: @base-select-bg;
 
 /**
 * @name 60. Selected row border color
@@ -1188,7 +1188,8 @@
 * @name 10 Border color
 * @type color
 */
-@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color, 60%);
+
+@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color, 8%);
 
 @scheduler-cell-active-bg: fade(darken(@base-bg, 13.3%), 70%);
 @scheduler-cell-hover-bg: @base-hover-bg;
