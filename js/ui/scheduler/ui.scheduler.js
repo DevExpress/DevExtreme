@@ -2571,8 +2571,8 @@ const Scheduler = Widget.inherit({
         return this._appointmentPopup.getPopup();
     },
 
-    getAppointmentDetailsForm: function() {
-        return this._appointmentForm;
+    getAppointmentDetailsForm: function() { // TODO for tests
+        return this._appointmentPopup._appointmentForm;
     },
 
     getUpdatedAppointment: function() {
@@ -2680,8 +2680,8 @@ const Scheduler = Widget.inherit({
     },
 
     recurrenceEditorVisibilityChanged: function(visible) {
-        if(this._appointmentForm) {
-            this._appointmentForm.$element()
+        if(this._appointmentPopup._appointmentForm) {
+            this._appointmentPopup._appointmentForm.$element()
                 .find("." + RECURRENCE_EDITOR_ITEM_CLASS)
                 .toggleClass(RECURRENCE_EDITOR_OPENED_ITEM_CLASS, visible);
         }
