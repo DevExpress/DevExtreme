@@ -382,7 +382,9 @@
 
         .dx-dropdowneditor-button-visible.dx-dropdowneditor {
             &.dx-show-clear-button {
-                &.dx-invalid {
+                &.dx-invalid,
+                &.dx-valid,
+                &.dx-validation-pending {
                     .dx-texteditor-input {
                         padding-right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                     }
@@ -394,7 +396,9 @@
                 }
             }
 
-            &.dx-invalid {
+            &.dx-invalid,
+            &.dx-valid,
+            &.dx-validation-pending {
                 .dx-texteditor-input {
                     padding-right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                 }

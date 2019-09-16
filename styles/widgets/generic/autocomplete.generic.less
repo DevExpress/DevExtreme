@@ -6,15 +6,28 @@
     }
 }
 
-.dx-autocomplete.dx-invalid {
+.autocomplete-badge-offset() {
+    right: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+
+    .dx-rtl &,
+    .dx-rtl& {
+        left: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+    }
+}
+
+.dx-autocomplete.dx-invalid,
+.dx-autocomplete.dx-valid {
     .dx-texteditor-container {
         &:after {
-            right: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+            .autocomplete-badge-offset();
+        }
+    }
+}
 
-            .dx-rtl &,
-            .dx-rtl& {
-                left: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
-            }
+.dx-autocomplete.dx-validation-pending {
+    .dx-texteditor-container {
+        .dx-pending-indicator {
+            .autocomplete-badge-offset();
         }
     }
 }

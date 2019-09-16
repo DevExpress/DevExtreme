@@ -88,23 +88,50 @@
 @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING: 2px;//(@MATERIAL_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE - @MATERIAL_INVALID_BADGE_SIZE) / 2;
 @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING: @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING / 2;
 
-.dx-invalid-material-badge() {
+@MATERIAL_VALID_BADGE_FONT_SIZE: @MATERIAL_BASE_FONT_SIZE + 6px;
+
+.badge-settings() {
     pointer-events: none;
-    font-weight: 500;
-    background-color: @badge-invalid-bg;
-    color: @base-inverted-text-color;
-    content: '!';
     position: absolute;
     top: 50%;
     margin-top: -@MATERIAL_INVALID_BADGE_SIZE/2;
     width: @MATERIAL_INVALID_BADGE_SIZE;
     height: @MATERIAL_INVALID_BADGE_SIZE;
-    border-radius: 50%;
     text-align: center;
     line-height: @MATERIAL_INVALID_BADGE_SIZE + 1;
     font-size: @MATERIAL_BASE_FONT_SIZE;
 }
 
+.dx-invalid-material-badge() {
+    .badge-settings();
+
+    font-size: @MATERIAL_BASE_FONT_SIZE;
+    font-weight: 500;
+    background-color: @badge-invalid-bg;
+    color: @base-inverted-text-color;
+    content: '!';
+    border-radius: 50%;
+}
+
+.dx-valid-material-badge() {
+    .badge-settings();
+
+    font-size: @MATERIAL_VALID_BADGE_FONT_SIZE;
+    font-weight: bold;
+    font-family: 'DXIcons', sans-serif;
+    color: @base-success;
+    content: '\f005';
+    .validation-badge-animation();
+}
+
+.dx-pending-indicator-material() {
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    margin-top: -@MATERIAL_INVALID_BADGE_SIZE/2;
+    width: @MATERIAL_INVALID_BADGE_SIZE;
+    height: @MATERIAL_INVALID_BADGE_SIZE;
+}
 
 .dx-inkripple {
     position: absolute;

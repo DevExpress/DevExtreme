@@ -50,7 +50,8 @@
     font-weight: 600;
 }
 
-.dx-invalid.dx-dropdowneditor {
+.dx-invalid.dx-dropdowneditor,
+.dx-valid.dx-dropdowneditor {
     .dx-texteditor-container {
         &:after {
             right: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
@@ -86,7 +87,8 @@
     }
 }
 
-.dx-invalid {
+.dx-invalid,
+.dx-valid {
     .invalid-dropdowneditor-input-padding();
 }
 
@@ -96,7 +98,8 @@
         right: auto;
     }
 
-    &.dx-invalid.dx-dropdowneditor {
+    &.dx-invalid.dx-dropdowneditor,
+    &.dx-valid.dx-dropdowneditor {
         .dx-texteditor-container {
             &:after {
                 left: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
