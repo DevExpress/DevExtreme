@@ -2156,7 +2156,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     $button.attr("title", button.hint);
                 }
 
-                if(that.option("useKeyboard")) {
+                if(that.option("keyboardNavigation.enabled")) {
                     $button.attr("tabindex", -1);
                 }
 
