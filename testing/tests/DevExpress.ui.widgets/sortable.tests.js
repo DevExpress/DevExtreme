@@ -137,14 +137,14 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(asser
     assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
 });
 
-QUnit.test("Initial placeholder if allowDropInsideItem is true", function(assert) {
+QUnit.test("Initial placeholder if allowDropInside is true", function(assert) {
     // arrange
     let items,
         $placeholder,
         $dragItemElement;
 
     this.createSortable({
-        allowDropInsideItem: true
+        allowDropInside: true
     });
 
     items = this.$element.children();
@@ -587,7 +587,7 @@ QUnit.test("onDragEnd - check args when dragging inside item", function(assert) 
 
 
     this.createSortable({
-        allowDropInsideItem: true,
+        allowDropInside: true,
         onDragEnd: onDragEnd
     });
 

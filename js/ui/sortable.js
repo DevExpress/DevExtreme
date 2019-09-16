@@ -137,7 +137,7 @@ var Sortable = Draggable.inherit({
     },
 
     _isIndicateMode: function() {
-        return this.option("dropFeedbackMode") === "indicate" || this.option("allowDropInsideItem");
+        return this.option("dropFeedbackMode") === "indicate" || this.option("allowDropInside");
     },
 
     _createPlaceholder: function() {
@@ -214,7 +214,7 @@ var Sortable = Draggable.inherit({
                 isValid: this._isValidPoint($items, result.length)
             });
 
-            if(this.option("allowDropInsideItem")) {
+            if(this.option("allowDropInside")) {
                 let points = result;
                 result = [];
                 for(let i = 0; i < points.length; i++) {
