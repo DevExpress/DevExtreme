@@ -29,8 +29,6 @@ const DefaultAdapter = Class.inherit({
 
     applyValidationResults(params) {
         this.editor.option({
-            isValid: params.isValid,
-            validationError: params.brokenRule,
             validationErrors: params.brokenRules,
             validationStatus: params.status
         });

@@ -176,6 +176,7 @@ QUnit.test("Editor-specific validation should be kept", function(assert) {
 
     // act
     validator.validate();
+
     // assert
     assert.strictEqual(editor.option("isValid"), false, "Editor should be kept invalid");
     assert.strictEqual(validator.option("isValid"), false, "Validator should become invalid");
@@ -258,4 +259,48 @@ QUnit.test("Editor should display pending indicator after repaint", function(ass
 
     assert.ok(indicator, "indicator found after repainting");
     assert.ok(indicator.option("visible"), "indicator is shown after repainting");
+});
+
+QUnit.test("Editor - isValid and validationStatus options should be synchrnoized", function(assert) {
+    const editor = this.fixture.createEditor({});
+
+    editor.option("isValid", false);
+    assert.strictEqual(editor.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
+
+    editor.option("isValid", true);
+    assert.strictEqual(editor.option("validationStatus"), "valid", "validationStatus === 'valid'");
+
+    editor.option("validationStatus", "pending");
+    assert.ok(editor.option("isValid"), "isValid === true");
+
+    editor.option("validationStatus", "invalid");
+    assert.notOk(editor.option("isValid"), "isValid === false");
+
+    editor.option("validationStatus", "valid");
+    assert.ok(editor.option("isValid"), "isValid === true");
+});
+
+QUnit.test("Editor - validationError and validationErrors options should be synchrnoized", function(assert) {
+    const editor = this.fixture.createEditor({}),
+        err1 = { message: "1" },
+        err2 = { message: "2" };
+
+    editor.option("validationError", err1);
+    assert.strictEqual(editor.option("validationErrors[0]"), err1, "validationErrors[0] === err1");
+
+    editor.option("validationError", err2);
+    assert.strictEqual(editor.option("validationErrors[0]"), err2, "validationErrors[0] === err2");
+
+    editor.option("validationError", null);
+    assert.notOk(editor.option("validationErrors"), "validationErrors === null");
+
+
+    editor.option("validationErrors", [err1]);
+    assert.strictEqual(editor.option("validationError"), err1, "validationError === err1");
+
+    editor.option("validationErrors", [err2, err1]);
+    assert.strictEqual(editor.option("validationError"), err2, "validationError === err2");
+
+    editor.option("validationErrors", null);
+    assert.notOk(editor.option("validationError"), "validationError === null");
 });

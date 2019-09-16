@@ -10,7 +10,10 @@ import DefaultAdapter from "./validation/default_adapter";
 import registerComponent from "../core/component_registrator";
 import { Deferred } from "../core/utils/deferred";
 
-const VALIDATOR_CLASS = "dx-validator";
+const VALIDATOR_CLASS = "dx-validator",
+    VALIDATION_STATUS_VALID = "valid",
+    VALIDATION_STATUS_INVALID = "invalid",
+    VALIDATION_STATUS_PENDING = "pending";
 
 /**
 * @name dxValidator
@@ -190,8 +193,28 @@ const Validator = DOMComponent.inherit({
             case "adapter":
                 this._initAdapter();
                 break;
+            case "isValid":
+            case "validationStatus":
+                this._synchronizeValidationStatus(args);
+                break;
             default:
                 this.callBase(args);
+        }
+    },
+
+    _synchronizeValidationStatus({ name, value }) {
+        if(name === "validationStatus") {
+            const isValid = value === VALIDATION_STATUS_VALID || value === VALIDATION_STATUS_PENDING;
+            this.option("isValid") !== isValid && this.option("isValid", isValid);
+        } else if(name === "isValid") {
+            const validationStatus = this.option("validationStatus");
+            let newStatus = validationStatus;
+            if(value && validationStatus === VALIDATION_STATUS_INVALID) {
+                newStatus = VALIDATION_STATUS_VALID;
+            } else if(!value && validationStatus !== VALIDATION_STATUS_INVALID) {
+                newStatus = VALIDATION_STATUS_INVALID;
+            }
+            newStatus !== validationStatus && this.option("validationStatus", newStatus);
         }
     },
 
@@ -224,15 +247,15 @@ const Validator = DOMComponent.inherit({
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
             rules = this._getValidationRules();
         const currentResult = this._validationInfo && this._validationInfo.result;
-        if(currentResult && currentResult.status === "pending" && currentResult.value === value) {
+        if(currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
             return currentResult;
         }
         let result;
         if(bypass) {
-            result = { isValid: true };
+            result = { isValid: true, status: VALIDATION_STATUS_VALID };
         } else if(currentError && currentError.editorSpecific) {
             currentError.validator = this;
-            result = { isValid: false, brokenRule: currentError, brokenRules: [currentError] };
+            result = { isValid: false, status: VALIDATION_STATUS_INVALID, brokenRule: currentError, brokenRules: [currentError] };
         } else {
             result = ValidationEngine.validate(value, rules, name);
         }
@@ -251,7 +274,7 @@ const Validator = DOMComponent.inherit({
                 brokenRule: null,
                 brokenRules: null,
                 pendingRules: null,
-                status: "valid",
+                status: VALIDATION_STATUS_VALID,
                 complete: null
             };
         adapter.reset();
@@ -264,10 +287,10 @@ const Validator = DOMComponent.inherit({
         result.validator = this;
         adapter.applyValidationResults && adapter.applyValidationResults(result);
         this.option({
-            isValid: result.isValid
+            validationStatus: result.status
         });
         this._validationInfo.result = result;
-        if(result.status === "pending") {
+        if(result.status === VALIDATION_STATUS_PENDING) {
             result.complete.then((res) => {
                 if(res === this._validationInfo.result) {
                     this._applyValidationResult(res, adapter);
@@ -282,7 +305,7 @@ const Validator = DOMComponent.inherit({
             this.fireEvent("validating", [this._validationInfo.result]);
             return;
         }
-        if(result.status !== "pending") {
+        if(result.status !== VALIDATION_STATUS_PENDING) {
             validatedAction(result);
             if(this._validationInfo.deferred) {
                 this._validationInfo.deferred.resolve(result);

@@ -19,7 +19,11 @@ const READONLY_STATE_CLASS = "dx-state-readonly",
 
     VALIDATION_TARGET = "dx-validation-target",
 
-    VALIDATION_MESSAGE_MIN_WIDTH = 100;
+    VALIDATION_MESSAGE_MIN_WIDTH = 100,
+
+    VALIDATION_STATUS_VALID = "valid",
+    VALIDATION_STATUS_INVALID = "invalid",
+    VALIDATION_STATUS_PENDING = "pending";
 
 const getValidationErrorMessage = function(validationErrors) {
     let validationErrorMessage = "";
@@ -122,9 +126,9 @@ const Editor = Widget.inherit({
             /**
             * @name EditorOptions.validationStatus
             * @type Enums.ValidationStatus
-            * @default "valid"
+            * @default VALIDATION_STATUS_VALID
             */
-            validationStatus: "valid",
+            validationStatus: VALIDATION_STATUS_VALID,
 
             /**
              * @name EditorOptions.validationMessageMode
@@ -229,7 +233,7 @@ const Editor = Widget.inherit({
     },
 
     _renderValidationState: function() {
-        const isValid = this.option("isValid") && this.option("validationStatus") !== "invalid",
+        const isValid = this.option("isValid") && this.option("validationStatus") !== VALIDATION_STATUS_INVALID,
             validationMessageMode = this.option("validationMessageMode"),
             $element = this.$element();
         let validationErrors = this.option("validationErrors");
@@ -237,7 +241,7 @@ const Editor = Widget.inherit({
             validationErrors = [this.option("validationError")];
         }
         $element.toggleClass(INVALID_CLASS, !isValid);
-        this.setAria("invalid", !isValid || undefined);
+        this.setAria(VALIDATION_STATUS_INVALID, !isValid || undefined);
 
         if(!windowUtils.hasWindow()) {
             return;
@@ -367,8 +371,13 @@ const Editor = Widget.inherit({
                 break;
             case "isValid":
             case "validationError":
+                this._synchronizeOptions(args);
+                break;
             case "validationErrors":
             case "validationStatus":
+                this._synchronizeOptions(args);
+                this._renderValidationState();
+                break;
             case "validationBoundary":
             case "validationMessageMode":
                 this._renderValidationState();
@@ -401,6 +410,42 @@ const Editor = Widget.inherit({
                 break;
             default:
                 this.callBase(args);
+        }
+    },
+
+    _synchronizeOptions({ name, value }) {
+        if(name === "validationStatus") {
+            const isValid = value === VALIDATION_STATUS_VALID || value === VALIDATION_STATUS_PENDING;
+            this.option("isValid") !== isValid && this.option("isValid", isValid);
+            return;
+        }
+        if(name === "isValid") {
+            const validationStatus = this.option("validationStatus");
+            let newStatus = validationStatus;
+            if(value && validationStatus === VALIDATION_STATUS_INVALID) {
+                newStatus = VALIDATION_STATUS_VALID;
+            } else if(!value && validationStatus !== VALIDATION_STATUS_INVALID) {
+                newStatus = VALIDATION_STATUS_INVALID;
+            }
+            newStatus !== validationStatus && this.option("validationStatus", newStatus);
+            return;
+        }
+
+        if(name === "validationErrors") {
+            let validationError = !value || !value.length ? null : value[0];
+            this.option("validationError") !== validationError && this.option("validationError", validationError);
+            return;
+        }
+        if(name === "validationError") {
+            const validationErrors = this.option("validationErrors");
+            if(!value && validationErrors) {
+                this.option("validationErrors", null);
+            } else if(value && !validationErrors) {
+                this.option("validationErrors", [value]);
+            } else if(value && validationErrors && value !== validationErrors[0]) {
+                validationErrors[0] = value;
+                this.option("validationErrors", validationErrors.slice());
+            }
         }
     },
 

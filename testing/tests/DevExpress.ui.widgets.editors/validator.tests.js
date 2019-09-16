@@ -208,6 +208,25 @@ QUnit.test("Internal validation rules are should be reset when validation rules 
     ]);
 });
 
+QUnit.test("Validator - isValid and validationStatus options should be synchrnoized", function(assert) {
+    const validator = this.fixture.createValidator({});
+
+    validator.option("isValid", false);
+    assert.strictEqual(validator.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
+
+    validator.option("isValid", true);
+    assert.strictEqual(validator.option("validationStatus"), "valid", "validationStatus === 'valid'");
+
+    validator.option("validationStatus", "pending");
+    assert.ok(validator.option("isValid"), "isValid === true");
+
+    validator.option("validationStatus", "invalid");
+    assert.notOk(validator.option("isValid"), "isValid === false");
+
+    validator.option("validationStatus", "valid");
+    assert.ok(validator.option("isValid"), "isValid === true");
+});
+
 
 QUnit.module("Validator specific tests", {
     beforeEach: function() {
