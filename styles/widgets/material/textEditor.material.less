@@ -1,4 +1,5 @@
 @import (once) "./validation.material.less";
+@import (once) "./button.material.less";
 
 .dx-size-default() {
     @MATERIAL_TEXTEDITOR_FONT_SIZE: 16px;
@@ -18,7 +19,8 @@
 @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING: 0;
 @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE: @MATERIAL_BASE_ICON_SIZE - 2px;
 @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE: @MATERIAL_INVALID_BADGE_SIZE + 2 * @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
-
+@MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN: 5px;
+@MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT: 28px;
 
 .dx-texteditor-icon() {
     position: absolute;
@@ -316,6 +318,158 @@
     .dx-texteditor-input-container {
         &:after {
             .dx-invalid-material-badge();
+        }
+    }
+}
+
+.dx-editor-outlined,
+.dx-editor-filled {
+    .dx-texteditor-buttons-container {
+        > .dx-button {
+            margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+        }
+
+        &:first-child {
+            > .dx-button {
+                &:first-child {
+                    margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        &:last-child {
+            > .dx-button {
+                &:first-child {
+                    margin-left: 0;
+                }
+
+                &:last-child {
+                    margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                }
+            }
+
+            > .dx-dropdowneditor-button:last-child {
+                margin-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+            }
+        }
+
+        .dx-rtl& {
+            &:first-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                    }
+
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+
+                    &:first-child:last-child {
+                        margin-left: 0;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                    }
+                }
+            }
+
+            &:last-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: 0;
+                    }
+
+                    &:last-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+                }
+
+                > .dx-dropdowneditor-button:last-child {
+                    margin-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}
+
+.dx-editor-underlined {
+    .dx-texteditor-buttons-container {
+        > .dx-button.dx-button-mode-text {
+            height: @MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT;
+            margin: 1px @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN 3px;
+
+            .dx-button-content {
+                display: flex;
+                padding-top: @MATERIAL_BUTTON_VERTICAL_PADDING - 1px;
+
+                .dx-icon {
+                    align-self: center;
+                    margin-top: 1px;
+                }
+            }
+
+            &.dx-button-has-text {
+                .dx-button-content .dx-icon {
+                    margin-top: 3px;
+                }
+            }
+
+            &:not(.dx-button-has-text) {
+                min-width: @MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT;
+
+                .dx-button-content {
+                    padding: 2px;
+                }
+            }
+        }
+
+        &:first-child {
+            > .dx-button {
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
+
+        &:last-child {
+            > .dx-button {
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        .dx-rtl& {
+            &:first-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: 0;
+                    }
+                }
+            }
+
+            &:last-child {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+                }
+            }
         }
     }
 }

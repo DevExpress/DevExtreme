@@ -15,7 +15,6 @@
     @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0 4px 6px;
 }
 
-@MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT: 28px;
 @MATERIAL_BUTTON_PADDING: @MATERIAL_BUTTON_VERTICAL_PADDING @MATERIAL_BUTTON_HORIZONTAL_PADDING;
 @MATERIAL_BUTTON_ICONONLY_PADDING: @MATERIAL_BUTTON_VERTICAL_PADDING;
 @MATERIAL_BUTTON_ICON_SIZE: @MATERIAL_BASE_ICON_SIZE;
@@ -23,7 +22,6 @@
 @MATERIAL_NORMAL_BUTTON_ACTIVE_STATE_SHADOW: @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE @button-active-shadow-color;
 @MATERIAL_NORMAL_BUTTON_HOVERED_STATE_SHADOW: @MATERIAL_BUTTON_BOX_SHADOW_SIZE @button-hover-shadow-color;
 @MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: @MATERIAL_BUTTON_BOX_SHADOW_SIZE @button-focused-shadow-color;
-@MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN: 5px;
 
 .dx-button-content {
     line-height: 0;
@@ -300,158 +298,6 @@
 
     &.dx-button-success {
         .dx-button-outlined-color-styling(@button-success-bg, @button-success-bg);
-    }
-}
-
-.dx-editor-outlined,
-.dx-editor-filled {
-    .dx-texteditor-buttons-container {
-        > .dx-button {
-            margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-            margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-        }
-
-        &:first-child {
-            > .dx-button {
-                &:first-child {
-                    margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
-                }
-
-                &:last-child {
-                    margin-right: 0;
-                }
-            }
-        }
-
-        &:last-child {
-            > .dx-button {
-                &:first-child {
-                    margin-left: 0;
-                }
-
-                &:last-child {
-                    margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
-                }
-            }
-
-            > .dx-dropdowneditor-button:last-child {
-                margin-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-            }
-        }
-
-        .dx-rtl& {
-            &:first-child {
-                > .dx-button {
-                    &:first-child {
-                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
-                    }
-
-                    &:last-child {
-                        margin-left: 0;
-                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    }
-
-                    &:first-child:last-child {
-                        margin-left: 0;
-                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
-                    }
-                }
-            }
-
-            &:last-child {
-                > .dx-button {
-                    &:first-child {
-                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                        margin-right: 0;
-                    }
-
-                    &:last-child {
-                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN * 2;
-                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    }
-                }
-
-                > .dx-dropdowneditor-button:last-child {
-                    margin-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                    margin-right: 0;
-                }
-            }
-        }
-    }
-}
-
-.dx-editor-underlined {
-    .dx-texteditor-buttons-container {
-        > .dx-button.dx-button-mode-text {
-            height: @MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT;
-            margin: 1px @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN 3px;
-
-            .dx-button-content {
-                display: flex;
-                padding-top: @MATERIAL_BUTTON_VERTICAL_PADDING - 1px;
-
-                .dx-icon {
-                    align-self: center;
-                    margin-top: 1px;
-                }
-            }
-
-            &.dx-button-has-text {
-                .dx-button-content .dx-icon {
-                    margin-top: 3px;
-                }
-            }
-
-            &:not(.dx-button-has-text) {
-                min-width: @MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT;
-
-                .dx-button-content {
-                    padding: 2px;
-                }
-            }
-        }
-
-        &:first-child {
-            > .dx-button {
-                &:first-child {
-                    margin-left: 0;
-                }
-            }
-        }
-
-        &:last-child {
-            > .dx-button {
-                &:last-child {
-                    margin-right: 0;
-                }
-            }
-        }
-
-        .dx-rtl& {
-            &:first-child {
-                > .dx-button {
-                    &:first-child {
-                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                        margin-right: 0;
-                    }
-                }
-            }
-
-            &:last-child {
-                > .dx-button {
-                    &:first-child {
-                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    }
-
-                    &:last-child {
-                        margin-left: 0;
-                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
-                    }
-                }
-            }
-        }
     }
 }
 
