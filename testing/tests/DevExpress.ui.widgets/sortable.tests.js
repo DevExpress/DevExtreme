@@ -19,8 +19,13 @@ QUnit.testStart(function() {
             <div id="item5" class="draggable" style="width: 300px; height: 30px; background: red;">item5</div>
             <div id="item6" class="draggable" style="width: 300px; height: 30px; background: blue;">item6</div>
         </div>
-        <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-        </div>`;
+        <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
+        <div id="itemsHorizontal" style="width: 250px; height: 300px;">
+            <div style="width: 30px; height: 300px; float: left;">item1</div>
+            <div style="width: 30px; height: 300px; float: left;">item2</div>
+            <div style="width: 30px; height: 300px; float: left;">item3</div>
+        </div>
+        `;
 
     $("#qunit-fixture").html(markup);
 });
@@ -50,71 +55,61 @@ QUnit.test("Element has class", function(assert) {
 });
 
 
-QUnit.module("placeholder", moduleConfig);
+QUnit.module("placeholder and source", moduleConfig);
 
-QUnit.test("initial placeholder if filter is not defined", function(assert) {
+QUnit.test("Source item if filter is not defined", function(assert) {
     // arrange
-    let items,
-        $placeholder,
-        $dragItemElement;
-
     this.createSortable({
+        dropFeedbackMode: "push"
     });
 
-    items = this.$element.children();
-    $dragItemElement = items.eq(0);
+    let $items = this.$element.children();
+    let $dragItemElement = $items.eq(0);
 
     // assert
-    assert.strictEqual(items.length, 3, "item count");
+    assert.strictEqual($items.length, 3, "item count");
 
     // act
     pointerMock($dragItemElement).start().down().move(10, 0);
 
     // assert
-    items = this.$element.children();
-    $placeholder = items.eq(0);
-    assert.strictEqual(items.length, 3, "item count");
-    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "there is a placeholder");
+    $items = this.$element.children();
+    let $source = $items.eq(0);
+    assert.strictEqual($items.length, 3, "item count");
+    assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
 });
 
-QUnit.test("initial placeholder", function(assert) {
+QUnit.test("Source item", function(assert) {
     // arrange
-    let items,
-        $placeholder,
-        $dragItemElement;
-
     this.createSortable({
+        dropFeedbackMode: "push",
         filter: ".draggable"
     });
 
-    items = this.$element.children();
-    $dragItemElement = items.eq(0);
+    let $items = this.$element.children();
+    let $dragItemElement = $items.eq(0);
 
     // assert
-    assert.strictEqual(items.length, 3, "item count");
+    assert.strictEqual($items.length, 3, "item count");
 
     // act
     pointerMock($dragItemElement).start().down().move(10, 0);
 
     // assert
-    items = this.$element.children();
-    $placeholder = items.eq(0);
-    assert.strictEqual(items.length, 3, "item count");
-    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "there is a placeholder");
+    $items = this.$element.children();
+    let $source = $items.eq(0);
+    assert.strictEqual($items.length, 3, "item count");
+    assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
 });
 
-QUnit.test("initial placeholder when placeholderTemplate is specified", function(assert) {
+QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(assert) {
     // arrange
     let items,
         $placeholder,
-        $dragItemElement,
-        placeholderTemplate = sinon.spy(function() {
-            return $("<div id='myPlaceholder'/>").text("Test");
-        });
+        $dragItemElement;
 
     this.createSortable({
-        filter: ".draggable",
-        placeholderTemplate: placeholderTemplate
+        dropFeedbackMode: "indicate"
     });
 
     items = this.$element.children();
@@ -126,7 +121,7 @@ QUnit.test("initial placeholder when placeholderTemplate is specified", function
     // assert
     items = this.$element.children();
     assert.strictEqual(items.length, 3, "item count");
-    assert.strictEqual(this.$element.find("#myPlaceholder").length, 0, "there isn't a custom placeholder");
+    assert.strictEqual(this.$element.find(".dx-sortable-placeholder").length, 0, "there isn't a placeholder");
 
     pointerMock($dragItemElement).up();
 
@@ -137,14 +132,81 @@ QUnit.test("initial placeholder when placeholderTemplate is specified", function
     items = this.$element.children();
     $placeholder = items.eq(2);
     assert.strictEqual(items.length, 4, "item count");
-    assert.strictEqual($placeholder.children("#myPlaceholder").length, 1, "there is a custom placeholder");
-    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "element has right class");
+    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "element has placeholder class");
+    assert.equal($placeholder.get(0).style.height, "", "placeholder height");
+    assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
 });
 
-QUnit.test("placeholder-class toggling", function(assert) {
+QUnit.test("Initial placeholder if allowDropInsideItem is true", function(assert) {
+    // arrange
+    let items,
+        $placeholder,
+        $dragItemElement;
+
+    this.createSortable({
+        allowDropInsideItem: true
+    });
+
+    items = this.$element.children();
+    $dragItemElement = items.eq(0);
+
+    // act
+    var pointer = pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
+
+    // assert
+    items = this.$element.children();
+    $placeholder = items.eq(1);
+    assert.strictEqual(items.length, 4, "item count");
+    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "element has placeholder class");
+    assert.ok($placeholder.hasClass("dx-sortable-placeholder-inside"), "element has placeholder-inside class");
+    assert.equal($placeholder.get(0).style.height, "30px", "placeholder height");
+    assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
+
+    // act
+    pointer.move(0, 15);
+
+    // assert
+    items = this.$element.children();
+    $placeholder = items.eq(2);
+    assert.strictEqual(items.length, 4, "item count");
+    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "element has placeholder class");
+    assert.notOk($placeholder.hasClass("dx-sortable-placeholder-inside"), "element has not placeholder-inside class");
+    assert.equal($placeholder.get(0).style.height, "", "placeholder height");
+    assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
+});
+
+QUnit.test("Initial placeholder if dropFeedbackMode is indicate and itemOrientation is horiontal", function(assert) {
+    // arrange
+    let items,
+        $placeholder,
+        $dragItemElement;
+
+    this.$element = $("#itemsHorizontal");
+
+    this.createSortable({
+        dropFeedbackMode: "indicate",
+        itemOrientation: "horizontal"
+    });
+
+    items = this.$element.children();
+    $dragItemElement = items.eq(0);
+
+    // act
+    pointerMock($dragItemElement).start().down(15, 15).move(30, 0);
+
+    // assert
+    items = this.$element.children();
+    $placeholder = items.eq(2);
+    assert.strictEqual(items.length, 4, "item count");
+    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "element has placeholder class");
+    assert.equal($placeholder.get(0).style.height, "300px", "placeholder height style");
+    assert.equal($placeholder.get(0).style.width, "", "placeholder width style");
+});
+
+QUnit.test("Source classes toggling", function(assert) {
     // arrange
     this.createSortable({
-        filter: ".draggable"
+        dropFeedbackMode: "push"
     });
 
     let items = this.$element.children(),
@@ -155,24 +217,27 @@ QUnit.test("placeholder-class toggling", function(assert) {
 
     // assert
     items = this.$element.children();
-    assert.ok(items.eq(0).hasClass("dx-sortable-placeholder"), "element has right class");
+    assert.ok(items.eq(0).hasClass("dx-sortable-source"), "element has source class");
+    assert.ok(items.eq(0).hasClass("dx-sortable-source-hidden"), "element has source-hidden class");
 
     // act
     pointerMock($dragItemElement).up();
 
     // assert
     items = this.$element.children();
-    assert.ok(!items.eq(0).hasClass("dx-sortable-placeholder"), "element has not appropriate class");
+    assert.notOk(items.eq(0).hasClass("dx-sortable-source"), "element has not source class");
+    assert.notOk(items.eq(0).hasClass("dx-sortable-source-hidden"), "element has not source-hidden class");
 });
 
-QUnit.test("Change placeholder position after dragging", function(assert) {
+QUnit.test("Change source position after dragging", function(assert) {
     // arrange
     let items,
-        $placeholder,
+        $item,
         $dragItemElement;
 
     this.createSortable({
-        filter: ".draggable"
+        filter: ".draggable",
+        dropFeedbackMode: "push"
     });
 
     items = this.$element.children();
@@ -186,19 +251,20 @@ QUnit.test("Change placeholder position after dragging", function(assert) {
 
     // assert
     items = this.$element.children();
-    $placeholder = items.eq(1);
+    $item = items.eq(1);
     assert.strictEqual(items.length, 3, "item count");
-    assert.strictEqual($placeholder.attr("id"), "item1", "first item is a placeholder");
-    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "has placeholder class");
+    assert.strictEqual($item.attr("id"), "item1", "first item is a source");
+    assert.ok($item.hasClass("dx-sortable-source-hidden"), "has source-hidden class");
 });
 
-QUnit.test("Drop when placeholderTemplate isn't specified", function(assert) {
+QUnit.test("Drop when dropFeedbackMode is push", function(assert) {
     // arrange
     let items,
         $dragItemElement;
 
     this.createSortable({
-        filter: ".draggable"
+        filter: ".draggable",
+        dropFeedbackMode: "push"
     });
 
     items = this.$element.children();
@@ -214,17 +280,14 @@ QUnit.test("Drop when placeholderTemplate isn't specified", function(assert) {
     assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
 });
 
-QUnit.test("Drop when placeholderTemplate is specified", function(assert) {
+QUnit.test("Drop when dropFeedbackMode is indicate", function(assert) {
     // arrange
     let items,
-        $dragItemElement,
-        placeholderTemplate = sinon.spy(function() {
-            return $("<div id='myPlaceholder'/>").text("Test");
-        });
+        $dragItemElement;
 
     this.createSortable({
         filter: ".draggable",
-        placeholderTemplate: placeholderTemplate
+        dropFeedbackMode: "indicate"
     });
 
     items = this.$element.children();
@@ -240,13 +303,11 @@ QUnit.test("Drop when placeholderTemplate is specified", function(assert) {
     assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
 });
 
-QUnit.test("Remove my placeholder after the drop end", function(assert) {
+QUnit.test("Remove placeholder after the drop end", function(assert) {
     // arrange
     this.createSortable({
         filter: ".draggable",
-        placeholderTemplate: function() {
-            return $("<div id='myPlaceholder'/>").text("Test");
-        }
+        dropFeedbackMode: "indicate"
     });
 
     let items = this.$element.children(),
@@ -265,10 +326,10 @@ QUnit.test("Remove my placeholder after the drop end", function(assert) {
     assert.strictEqual(this.$element.children(".dx-sortable-placeholder").length, 0, "there isn't a placeholder element");
 });
 
-QUnit.test("The placeholder should be correct after drag and drop items", function(assert) {
+QUnit.test("The source item should be correct after drag and drop items", function(assert) {
     // arrange
     let items,
-        $placeholder;
+        $item;
 
     this.createSortable({
         filter: ".draggable"
@@ -280,9 +341,9 @@ QUnit.test("The placeholder should be correct after drag and drop items", functi
     pointerMock(items.eq(0)).start().down().move(10, 0);
 
     // assert
-    $placeholder = items.eq(0);
-    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "there is a placeholder");
-    assert.strictEqual($placeholder.attr("id"), "item1", "placeholder id");
+    $item = items.eq(0);
+    assert.ok($item.hasClass("dx-sortable-source"), "there is a source");
+    assert.strictEqual($item.attr("id"), "item1", "source id");
 
     // arrange
     pointerMock(items.eq(0)).up();
@@ -290,9 +351,9 @@ QUnit.test("The placeholder should be correct after drag and drop items", functi
     // act
     pointerMock(items.eq(1)).start().down().move(10, 0);
 
-    $placeholder = items.eq(1);
-    assert.ok($placeholder.hasClass("dx-sortable-placeholder"), "there is a placeholder");
-    assert.strictEqual($placeholder.attr("id"), "item2", "placeholder id");
+    $item = items.eq(1);
+    assert.ok($item.hasClass("dx-sortable-source"), "there is a source");
+    assert.strictEqual($item.attr("id"), "item2", "placeholder id");
 });
 
 
@@ -444,6 +505,7 @@ QUnit.test("onDragEnd - check args when dragging an item down", function(assert)
     assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
+    assert.strictEqual(args[0].inside, undefined, "inside is not defined");
 });
 
 QUnit.test("onDragEnd - check args when dragging an item up", function(assert) {
@@ -499,9 +561,7 @@ QUnit.test("onDragEnd with eventArgs.cancel is true - the draggable element shou
 
     this.createSortable({
         filter: ".draggable",
-        placeholderTemplate: function() {
-            return $("<div/>").text("test");
-        },
+        dropFeedbackMode: "indicate",
         onDragEnd: function(e) {
             e.cancel = true;
         }
@@ -519,6 +579,30 @@ QUnit.test("onDragEnd with eventArgs.cancel is true - the draggable element shou
     assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
 });
 
+QUnit.test("onDragEnd - check args when dragging inside item", function(assert) {
+    // arrange
+    let items,
+        args,
+        onDragEnd = sinon.spy();
+
+
+    this.createSortable({
+        allowDropInsideItem: true,
+        onDragEnd: onDragEnd
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(0)).start().down(15, 15).move(0, 30).up();
+
+    // assert
+    args = onDragEnd.getCall(0).args;
+    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
+    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+    assert.strictEqual(args[0].inside, true, "inside");
+});
 
 QUnit.module("Cross-Component Drag and Drop", {
     createComponent: function(componentName, options, $element) {
@@ -546,11 +630,13 @@ QUnit.test("Dragging item to another the sortable widget", function(assert) {
     let items1, items2;
 
     let sortable1 = this.createSortable({
+        dropFeedbackMode: "push",
         filter: ".draggable",
         group: "shared"
     }, $("#items"));
 
     let sortable2 = this.createSortable({
+        dropFeedbackMode: "push",
         filter: ".draggable",
         group: "shared"
     }, $("#items2"));
@@ -567,6 +653,36 @@ QUnit.test("Dragging item to another the sortable widget", function(assert) {
     assert.strictEqual(items2.filter("#item1").length, 1, "second list - first item of the first list was added");
 });
 
+QUnit.test("Dragging item with dropFeedbackMode push to another the sortable widget with dropFeedbackMode indicate", function(assert) {
+    // arrange
+    let items1, items2;
+
+    let sortable1 = this.createSortable({
+        dropFeedbackMode: "push",
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        dropFeedbackMode: "indicate",
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items2"));
+
+    // act
+    pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
+
+    // assert
+    items1 = sortable1.$element().children();
+    items2 = sortable2.$element().children();
+    assert.strictEqual(items1.length, 3, "first list - item count");
+    assert.strictEqual(items2.length, 4, "second list - item count");
+    assert.strictEqual(items1.filter("#item1").length, 1, "first list - first item is exists");
+    assert.strictEqual(items1.filter("#item1").is(":visible"), false, "first list - first item is not visible");
+    assert.strictEqual(items2.filter("#item1").length, 0, "second list - first item of the first list is not added");
+    assert.strictEqual(items2.eq(0).hasClass("dx-sortable-placeholder"), true, "second list - first item is placeholder");
+});
+
 QUnit.test("Dragging item to another the sortable widget when group as object", function(assert) {
     // arrange
     let items1,
@@ -574,11 +690,13 @@ QUnit.test("Dragging item to another the sortable widget when group as object", 
         group = {};
 
     let sortable1 = this.createSortable({
+        dropFeedbackMode: "push",
         filter: ".draggable",
         group: group
     }, $("#items"));
 
     let sortable2 = this.createSortable({
+        dropFeedbackMode: "push",
         filter: ".draggable",
         group: group
     }, $("#items2"));
@@ -644,21 +762,20 @@ QUnit.test("Dropping item to another the sortable widget", function(assert) {
     assert.strictEqual(items2.filter("#item1").length, 1, "second list - first item of the first list was added");
 });
 
-QUnit.test("Dragging item to another the sortable widget when placeholderTemplate is specified", function(assert) {
+QUnit.test("Dragging item to another the sortable widget with dropFeedbackMode indicate", function(assert) {
     // arrange
     let items1, items2;
 
     let sortable1 = this.createSortable({
         filter: ".draggable",
         group: "shared",
-        placeholderTemplate: function() {
-            return $("<div id='myPlaceholder'/>").text("Test");
-        }
+        dropFeedbackMode: "push",
     }, $("#items"));
 
     let sortable2 = this.createSortable({
         filter: ".draggable",
-        group: "shared"
+        group: "shared",
+        dropFeedbackMode: "indicate",
     }, $("#items2"));
 
     // act
@@ -669,25 +786,23 @@ QUnit.test("Dragging item to another the sortable widget when placeholderTemplat
     items2 = sortable2.$element().children();
     assert.strictEqual(items1.length, 3, "first list - item count");
     assert.strictEqual(items2.length, 4, "second list - item count");
-    assert.ok(items2.first().hasClass("dx-sortable-placeholder"), 1, "second list - first item is a placeholder");
-    assert.strictEqual(items2.first().find("#myPlaceholder").length, 1, "second list - there is custom placeholder");
+    assert.ok(items2.first().hasClass("dx-sortable-placeholder"), "second list - first item is a placeholder");
 });
 
-QUnit.test("Dropping item to another the sortable widget when placeholderTemplate is specified", function(assert) {
+QUnit.test("Dropping item to another the sortable widget with dropFeedbackMode indicate", function(assert) {
     // arrange
     let items1, items2;
 
     let sortable1 = this.createSortable({
         filter: ".draggable",
         group: "shared",
-        placeholderTemplate: function() {
-            return $("<div id='myPlaceholder'/>").text("Test");
-        }
+        dropFeedbackMode: "indicate"
     }, $("#items"));
 
     let sortable2 = this.createSortable({
         filter: ".draggable",
-        group: "shared"
+        group: "shared",
+        dropFeedbackMode: "indicate"
     }, $("#items2"));
 
     // act
@@ -739,14 +854,16 @@ QUnit.test("Dragging items between sortable widgets", function(assert) {
     assert.strictEqual(items2.eq(1).attr("id"), "item5", "second list - second item");
 });
 
-QUnit.test("Update item points when dragging an item to another the sortable widget", function(assert) {
+QUnit.test("Update item points when dragging an item to another the sortable widget if dropFeedbackMode is push", function(assert) {
     // arrange
     let sortable1 = this.createSortable({
+        dropFeedbackMode: "push",
         filter: ".draggable",
         group: "shared"
     }, $("#items"));
 
     let sortable2 = this.createSortable({
+        dropFeedbackMode: "push",
         filter: ".draggable",
         group: "shared"
     }, $("#items2"));
@@ -755,6 +872,7 @@ QUnit.test("Update item points when dragging an item to another the sortable wid
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
 
     // assert
+    assert.equal(sortable2._dragInfo.itemPoints.length, 4, "point count");
     assert.deepEqual(sortable2._dragInfo.itemPoints[0].top, 30, "top of the first point");
     assert.deepEqual(sortable2._dragInfo.itemPoints[0].index, 0, "index of the first point");
     assert.deepEqual(sortable2._dragInfo.itemPoints[1].top, 60, "top of the second point");
@@ -850,11 +968,13 @@ QUnit.test("Dragging an item to another sortable and back when it is alone in th
     $("#items3").append("<div id='item7' class='draggable' style='width: 300px; height: 30px; background: blue;'>item7</div>");
 
     let sortable1 = this.createSortable({
+        dropFeedbackMode: "push",
         filter: ".draggable",
         group: "shared"
     }, $("#items"));
 
     let sortable2 = this.createSortable({
+        dropFeedbackMode: "push",
         filter: ".draggable",
         group: "shared"
     }, $("#items3"));
