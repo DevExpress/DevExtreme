@@ -7,6 +7,11 @@ export class DataGridWrapper {
         this.headerPanel = new HeaderPanelWrapper(containerSelector);
         this.headers = new HeadersWrapper(containerSelector);
         this.filterRow = new FilterRowWrapper(containerSelector);
+        this.rowsView = new RowsViewWrapper(containerSelector);
+    }
+
+    isEditorCell($cell) {
+        return $cell.hasClass('dx-editor-cell');
     }
 }
 
@@ -22,11 +27,15 @@ export class RowsViewWrapper extends WrapperBase {
     }
 
     getVirtualRowElement() {
-        return this.getContainer().find(".dx-virtual-row");
+        return this.getElement().find(".dx-virtual-row");
     }
 
     getVirtualCell(columnIndex) {
         return this.getVirtualRowElement().find("td").eq(columnIndex);
+    }
+
+    getCellElement(rowIndex, columnIndex) {
+        return this.getElement().find(".dx-data-row").eq(rowIndex).find("td").eq(columnIndex);
     }
 
     getDataRowElement(rowIndex) {
@@ -34,11 +43,15 @@ export class RowsViewWrapper extends WrapperBase {
     }
 
     getEditorInputElement(rowIndex, columnIndex) {
-        return this.getDataRowElement(rowIndex).find("td").eq(columnIndex).find(".dx-texteditor-input");
+        return this.getCellElement(rowIndex, columnIndex).find(".dx-texteditor-input");
     }
 
     getSelectionCheckBoxElement(rowIndex) {
         return this.getDataRowElement(rowIndex).find(".dx-select-checkbox");
+    }
+
+    cellHasFocusedClass(rowIndex, columnIndex) {
+        return this.getCellElement(rowIndex, columnIndex).hasClass("dx-focused");
     }
 }
 
