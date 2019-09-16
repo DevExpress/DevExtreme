@@ -1495,7 +1495,7 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
 
         assert.strictEqual(form.getButton("button1").option("icon"), "icon2");
         if(device.real().deviceType === "desktop") {
-            assert.ok($("#form").find(".dx-button").is(":focus") === (setOptionWay !== "itemOption"), "final focus");
+            assert.ok($("#form").find(".dx-button").is(":focus"), "final focus");
         }
     });
 });
@@ -1984,9 +1984,11 @@ QUnit.test("'itemOption' should get a group item by the name option", function(a
     }], "has correct items");
 });
 
-QUnit.test("Changing an editor/button options of an any item does not invalidate whole form (T311892, T681241)", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
+[false, true].forEach(useItemOption => {
+    const optionWay = useItemOption ? "itemOption" : "option";
+    QUnit.test(`Changing an editor/button options without re-render Form when use the ${optionWay} method (T311892, T681241)`, function(assert) {
+        // arrange
+        const form = $("#form").dxForm({
             formData: {
                 lastName: "Kyle",
                 firstName: "John"
@@ -1994,89 +1996,176 @@ QUnit.test("Changing an editor/button options of an any item does not invalidate
             items: [
                 { dataField: "firstName", editorType: "dxTextBox", editorOption: { width: 100, height: 20 } },
                 { dataField: "lastName", editorType: "dxTextBox", editorOption: { width: 100, height: 20 } },
-                { itemType: "button", buttonOptions: { width: 100, height: 20 } }
+                { name: "button", itemType: "button", buttonOptions: { width: 100, height: 20 } }
             ]
-        }).dxForm("instance"),
-        formInvalidateSpy = sinon.spy(form, "_invalidate");
+        }).dxForm("instance");
 
-    // act
-    form.option("items[1].editorOptions", { width: 80, height: 40 });
-    form.option("items[2].buttonOptions", { width: 10, height: 20 });
+        const formInvalidateSpy = sinon.spy(form, "_invalidate");
+        const editorOptions = { width: 80, height: 40 };
+        const buttonOptions = { width: 10, height: 20 };
 
-    // assert
-    var editor = $("#form .dx-textbox").last().dxTextBox("instance"),
-        button = $("#form .dx-button").last().dxButton("instance");
+        // act
+        if(useItemOption) {
+            form.itemOption("lastName", "editorOptions", editorOptions);
+            form.itemOption("button", "buttonOptions", buttonOptions);
+        } else {
+            form.option("items[1].editorOptions", editorOptions);
+            form.option("items[2].buttonOptions", buttonOptions);
+        }
 
-    assert.deepEqual(form.option("items[1].editorOptions"), { width: 80, height: 40 }, "correct editor options");
-    assert.deepEqual(form.option("items[2].buttonOptions"), { width: 10, height: 20 }, "correct button options");
+        // assert
+        var editor = $("#form .dx-textbox").last().dxTextBox("instance"),
+            button = $("#form .dx-button").last().dxButton("instance");
 
-    assert.equal(formInvalidateSpy.callCount, 0, "Invalidate does not called");
+        assert.deepEqual(form.option("items[1].editorOptions"), { width: 80, height: 40 }, "correct editor options");
+        assert.deepEqual(form.option("items[2].buttonOptions"), { width: 10, height: 20 }, "correct button options");
 
-    assert.equal(editor.option("width"), 80, "Correct editor width");
-    assert.equal(editor.option("height"), 40, "Correct editor height");
-    assert.equal(button.option("width"), 10, "Correct button width");
-    assert.equal(button.option("height"), 20, "Correct button height");
+        assert.equal(formInvalidateSpy.callCount, 0, "Invalidate does not called");
+
+        assert.equal(editor.option("width"), 80, "Correct editor width");
+        assert.equal(editor.option("height"), 40, "Correct editor height");
+        assert.equal(button.option("width"), 10, "Correct button width");
+        assert.equal(button.option("height"), 20, "Correct button height");
+    });
+
+    QUnit.test(`Changing the editorOptions of a sub item without re-render Form when use the ${optionWay} method (T316522)`, function(assert) {
+        // arrange
+        var form = $("#form").dxForm({
+            formData: {
+                lastName: "Kyle",
+                firstName: "John"
+            },
+            items: [
+                {
+                    itemType: "group", items: [
+                        {
+                            itemType: "group", items: [
+                                {
+                                    dataField: "firstName",
+                                    editorType: "dxTextBox",
+                                    editorOptions: { width: 100, height: 20 }
+                                },
+                                {
+                                    dataField: "lastName",
+                                    editorType: "dxTextBox",
+                                    editorOptions: { width: 100, height: 20 }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }).dxForm("instance");
+
+        // act
+        const editorOptions = { width: 80, height: 40 };
+        if(useItemOption) {
+            form.itemOption("lastName", "editorOptions", editorOptions);
+        } else {
+            form.option("items[0].items[0].items[1].editorOptions", editorOptions);
+        }
+
+        // assert
+        var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+
+        assert.equal(secondEditor.option("width"), 80, "Correct width");
+        assert.equal(secondEditor.option("height"), 40, "Correct height");
+    });
+
+    QUnit.test(`The editorOptions correctly updates in case when only item name is defined and use the ${optionWay} method`, function(assert) {
+        // arrange
+        var form = $("#form").dxForm({
+            items: [
+                {
+                    itemType: "group", items: [
+                        {
+                            itemType: "group", items: [
+                                {
+                                    name: "firstName",
+                                    editorType: "dxTextBox",
+                                    editorOptions: { width: 100, height: 20 }
+                                },
+                                {
+                                    name: "lastName",
+                                    editorType: "dxTextBox",
+                                    editorOptions: { width: 100, height: 20 }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }).dxForm("instance");
+
+        var invalidateSpy = sinon.spy(form, "_invalidate");
+
+        // act
+        const editorOptions = { width: 80, height: 40 };
+        if(useItemOption) {
+            form.itemOption("lastName", "editorOptions", editorOptions);
+        } else {
+            form.option("items[0].items[0].items[1].editorOptions", editorOptions);
+        }
+
+        // assert
+        var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+
+        assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
+        assert.equal(secondEditor.option("width"), 80, "Correct width");
+        assert.equal(secondEditor.option("height"), 40, "Correct height");
+    });
 });
 
-QUnit.test("Changing editorOptions of subitem change editor options (T316522)", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
+QUnit.test("Changing the item's option via the itemOption when these options are set as object without re-render form", function(assert) {
+    const form = $("#form").dxForm({
         formData: {
-            lastName: "Kyle",
-            firstName: "John"
+            name: "Test Name"
         },
         items: [
             {
-                itemType: "group", items: [
-                    {
-                        itemType: "group", items: [
-                            { dataField: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
-                            { dataField: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
-                        ]
-                    }
-                ]
+                dataField: "name",
+                editorOption: { width: 100 },
+                cssClass: "test"
             }
         ]
     }).dxForm("instance");
 
-    // act
-    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+    const formInvalidateSpy = sinon.spy(form, "_invalidate");
 
-    // assert
-    var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+    form.itemOption("name", {
+        editorOptions: { height: 120 },
+        cssClass: "test-class"
+    });
 
-    assert.equal(secondEditor.option("width"), 80, "Correct width");
-    assert.equal(secondEditor.option("height"), 40, "Correct height");
+    assert.equal(formInvalidateSpy.callCount, 0, "Invalidate does not called");
+
+    const editor = form.getEditor("name");
+    assert.equal(editor.option("height"), 120, "height of editor options");
+
+    const $form = $("#form");
+    assert.strictEqual($form.find(".test-class").length, 1, "new cssClass of item");
+    assert.strictEqual($form.find(".test").length, 0, "old cssClass of item");
 });
 
-QUnit.test("editorOptions correctly updates in case when only item name is defined", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-        items: [
-            {
-                itemType: "group", items: [
-                    {
-                        itemType: "group", items: [
-                            { name: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
-                            { name: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
-                        ]
-                    }
-                ]
-            }
-        ]
+QUnit.test("Changing the item's option via the itemOption when these options are set as object with re-render form", function(assert) {
+    const form = $("#form").dxForm({
+        formData: {
+            name: "Test Name"
+        },
+        items: [{ dataField: "name" }]
     }).dxForm("instance");
 
-    var invalidateSpy = sinon.spy(form, "_invalidate");
+    const formInvalidateSpy = sinon.spy(form, "_invalidate");
 
-    // act
-    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+    form.itemOption("name", {
+        colSpan: 2,
+        cssClass: "test-class"
+    });
 
-    // assert
-    var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+    assert.equal(formInvalidateSpy.callCount, 1, "Invalidate does not called");
 
-    assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
-    assert.equal(secondEditor.option("width"), 80, "Correct width");
-    assert.equal(secondEditor.option("height"), 40, "Correct height");
+    assert.equal(form.option("items[0].colSpan"), 2, "colSpan of item");
+    assert.strictEqual($("#form").find(".test-class").length, 1, "cssClass of item");
 });
 
 QUnit.test("Reset editor's value", function(assert) {

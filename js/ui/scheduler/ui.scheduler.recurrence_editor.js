@@ -732,9 +732,10 @@ const RecurrenceEditor = Editor.inherit({
     _valueChangedHandler(args) {
         const value = args.component.option("value");
         const field = args.component.option("field");
+        const freqEditorValue = this._freqEditor && this._freqEditor.option("value");
         let visible = true;
 
-        if(field === "freq" && value === "never") {
+        if(field === "freq" && value === "never" || field !== "freq" && freqEditorValue === "never") {
             visible = false;
             this.option("value", "");
         } else {
