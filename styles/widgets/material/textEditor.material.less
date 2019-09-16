@@ -1,4 +1,5 @@
 @import (once) "./validation.material.less";
+@import (once) "./button.material.less";
 
 .dx-size-default() {
     @MATERIAL_TEXTEDITOR_FONT_SIZE: 16px;
@@ -18,8 +19,6 @@
 @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING: 0;
 @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE: @MATERIAL_BASE_ICON_SIZE - 2px;
 @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE: @MATERIAL_INVALID_BADGE_SIZE + 2 * @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
-@MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN: 5px;
-@MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT: 28px;
 
 .dx-texteditor-icon() {
     position: absolute;
@@ -472,7 +471,6 @@
         }
     }
 }
-
 
 .dx-rtl {
     .dx-placeholder,
