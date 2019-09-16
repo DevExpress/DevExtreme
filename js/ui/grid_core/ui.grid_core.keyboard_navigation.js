@@ -958,7 +958,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         if(column.allowEditing) {
             let isDataRow = !row || row.rowType === "data";
-            isEditingAllowed = editingOptions.allowUpdating ? isDataRow : row && row.inserted;
+            isEditingAllowed = editingOptions.allowUpdating ? isDataRow : row && row.isNewRow;
         }
 
         if(!isEditingAllowed) {
