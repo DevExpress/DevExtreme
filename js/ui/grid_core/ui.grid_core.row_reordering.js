@@ -2,8 +2,8 @@ import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import Sortable from "../sortable";
 
-let COMMAND_HANDLE_CLASS = "dx-command-handle",
-    HANDLE_ICON_CLASS = "handle-icon";
+let COMMAND_HANDLE_CLASS = "dx-command-drag",
+    HANDLE_ICON_CLASS = "drag-icon";
 
 var RowReorderingExtender = {
     init: function() {
@@ -14,11 +14,11 @@ var RowReorderingExtender = {
     _updateHandleColumn: function() {
         let rowDragging = this.option("rowDragging"),
             columnsController = this._columnsController,
-            isHandleColumnVisible = rowDragging.enabled && rowDragging.showHandle;
+            isHandleColumnVisible = rowDragging.enabled && rowDragging.showDragIcons;
 
         columnsController && columnsController.addCommandColumn({
-            type: "handle",
-            command: "handle",
+            type: "drag",
+            command: "drag",
             visibleIndex: -2,
             alignment: "center",
             cssClass: COMMAND_HANDLE_CLASS,
@@ -27,20 +27,27 @@ var RowReorderingExtender = {
             visible: isHandleColumnVisible
         });
 
-        columnsController.columnOption("type:handle", "visible", isHandleColumnVisible);
+        columnsController.columnOption("type:drag", "visible", isHandleColumnVisible);
     },
 
     _renderTable: function() {
         let that = this,
             rowDragging = that.option("rowDragging"),
+            origOnDragEndEvent = rowDragging.onDragEnd,
             $tableElement = that.callBase.apply(that, arguments);
 
         if(rowDragging && rowDragging.enabled) {
             that._sortable = that._createComponent($tableElement, Sortable, extend({
                 filter: "> tbody > .dx-data-row",
                 template: that._getDraggableRowTemplate(),
-                handle: rowDragging.showHandle && `.${COMMAND_HANDLE_CLASS}`
-            }, rowDragging));
+                handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
+                dropFeedbackMode: "indicate"
+            }, rowDragging, {
+                onDragEnd: function(e) {
+                    e.cancel = true;
+                    origOnDragEndEvent && origOnDragEndEvent.apply(this, arguments);
+                }
+            }));
         }
 
         return $tableElement;
@@ -62,7 +69,7 @@ var RowReorderingExtender = {
             },
             rowDragging: {
                 enabled: true,
-                showHandle: gridOptions.rowDragging.showHandle
+                showDragIcons: gridOptions.rowDragging.showDragIcons
             },
             loadingTimeout: undefined,
             columns: gridOptions.columns,
@@ -127,17 +134,11 @@ module.exports = {
                 */
                 enabled: false,
                 /**
-                * @name GridBaseOptions.rowDragging.allowReordering
-                * @type boolean
-                * @default false
-                */
-                allowReordering: false,
-                /**
-                * @name GridBaseOptions.rowDragging.showHandle
+                * @name GridBaseOptions.rowDragging.showDragIcons
                 * @type boolean
                 * @default true
                 */
-                showHandle: true
+                showDragIcons: true
             }
         };
     },

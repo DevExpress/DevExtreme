@@ -379,7 +379,8 @@ QUnit.test("The source item should be correct after drag and drop items", functi
 
 QUnit.test("Dragging an item to the last position when there is ignored (not draggable) item", function(assert) {
     // arrange
-    let items;
+    let pointer,
+        items;
 
     this.$element.append("<div id='item4'></div>");
     this.createSortable({
@@ -392,11 +393,52 @@ QUnit.test("Dragging an item to the last position when there is ignored (not dra
     assert.strictEqual(items.length, 4, "item count");
 
     // act
-    pointerMock(items.eq(0)).start().down().move(0, 90);
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 90);
 
     // assert
     items = this.$element.children();
-    assert.ok(items.eq(2).hasClass("dx-sortable-placeholder"), "there is a placeholder");
+    assert.ok(items.eq(2).hasClass("dx-sortable-source"), "source item");
+    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+
+    // act
+    pointer.up();
+
+    // assert
+    items = this.$element.children();
+    assert.strictEqual(items.eq(2).attr("id"), "item1", "source item");
+    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+});
+
+QUnit.test("Dragging an item to the last position when there is ignored (not draggable) item and dropFeedbackMode option is 'indicate'", function(assert) {
+    // arrange
+    let pointer,
+        items;
+
+    this.$element.append("<div id='item4'></div>");
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate"
+    });
+
+    items = this.$element.children();
+
+    // assert
+    assert.strictEqual(items.length, 4, "item count");
+
+    // act
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 90);
+
+    // assert
+    items = this.$element.children();
+    assert.ok(items.eq(3).hasClass("dx-sortable-placeholder"), "source item");
+    assert.strictEqual(items.eq(4).attr("id"), "item4", "ignored item");
+
+    // act
+    pointer.up();
+
+    // assert
+    items = this.$element.children();
+    assert.strictEqual(items.eq(2).attr("id"), "item1", "source item");
     assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
 });
 

@@ -26,14 +26,22 @@ var Sortable = Draggable.inherit({
             isSourceDraggable = sourceDraggable.NAME !== this.NAME;
 
         if(isIndicateMode || isSourceDraggable) {
-            let dragInfo = this._dragInfo;
-            let $targetItemElement = dragInfo && dragInfo.targetItemPoint && dragInfo.targetItemPoint.$item;
+            let dragInfo = this._dragInfo,
+                prevTargetItemPoint,
+                $prevTargetItemElement,
+                targetItemPoint = dragInfo && dragInfo.targetItemPoint,
+                $targetItemElement = targetItemPoint && dragInfo.targetItemPoint.$item;
+
+            if(targetItemPoint && !$targetItemElement) {
+                prevTargetItemPoint = dragInfo.itemPoints[targetItemPoint.index - 1];
+                $prevTargetItemElement = prevTargetItemPoint && prevTargetItemPoint.$item;
+            }
 
             if(isSourceDraggable) {
                 translator.resetPosition($sourceElement);
             }
 
-            this._moveItem($sourceElement, $targetItemElement);
+            this._moveItem($sourceElement, $targetItemElement, $prevTargetItemElement);
         }
     },
 

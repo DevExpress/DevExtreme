@@ -1974,7 +1974,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.rowAlternationEnabled */
         rowAlternationEnabled?: boolean;
         /** @name GridBase.Options.rowDragging */
-        rowDragging?: { allowReordering?: boolean, enabled?: boolean, showHandle?: boolean };
+        rowDragging?: GridBaseRowDragging;
         /** @name GridBase.Options.scrolling */
         scrolling?: GridBaseScrolling;
         /** @name GridBase.Options.searchPanel */
@@ -2076,6 +2076,13 @@ declare module DevExpress.ui {
         allowSelectAll?: boolean;
         /** @name GridBase.Options.selection.mode */
         mode?: 'multiple' | 'none' | 'single';
+    }
+    /** @name GridBase.Options.rowDragging */
+    export interface GridBaseRowDragging extends dxSortableOptions {
+        /** @name GridBase.Options.rowDragging.enabled */
+        enabled?: boolean;
+        /** @name GridBase.Options.rowDragging.showDragIcons */
+        showDragIcons?: boolean;
     }
     /** @name GridBase */
     export class GridBase extends Widget {
