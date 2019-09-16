@@ -25,6 +25,8 @@
     "validation-stringLength-formatted": "{0} 的长度不正确",
     "validation-custom": "值无效",
     "validation-custom-formatted": "{0} 值无效",
+    "validation-async": "值无效",
+    "validation-async-formatted": "{0} 值无效",
     "validation-compare": "值不匹配",
     "validation-compare-formatted": "{0} 不匹配",
     "validation-pattern": "值不符合该模式",

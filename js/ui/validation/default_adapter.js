@@ -1,49 +1,46 @@
-var Callbacks = require("../../core/utils/callbacks"),
-    Class = require("../../core/class");
+import Callbacks from "../../core/utils/callbacks";
+import Class from "../../core/class";
 
-var DefaultAdapter = Class.inherit({
-    ctor: function(editor, validator) {
-        var that = this;
-        that.editor = editor;
-        that.validator = validator;
-
-        that.validationRequestsCallbacks = Callbacks();
-
-        var handler = function(args) {
-            that.validationRequestsCallbacks.fire(args);
+const DefaultAdapter = Class.inherit({
+    ctor(editor, validator) {
+        this.editor = editor;
+        this.validator = validator;
+        this.validationRequestsCallbacks = Callbacks();
+        const handler = (args) => {
+            this.validationRequestsCallbacks.fire(args);
         };
-
         editor.validationRequest.add(handler);
-
         editor.on("disposing", function() {
             editor.validationRequest.remove(handler);
         });
     },
 
-    getValue: function() {
+    getValue() {
         return this.editor.option("value");
     },
 
-    getCurrentValidationError: function() {
+    getCurrentValidationError() {
         return this.editor.option("validationError");
     },
 
-    bypass: function() {
+    bypass() {
         return this.editor.option("disabled");
     },
 
-    applyValidationResults: function(params) {
+    applyValidationResults(params) {
         this.editor.option({
             isValid: params.isValid,
-            validationError: params.brokenRule
+            validationError: params.brokenRule,
+            validationErrors: params.brokenRules,
+            validationStatus: params.status
         });
     },
 
-    reset: function() {
+    reset() {
         this.editor.reset();
     },
 
-    focus: function() {
+    focus() {
         this.editor.focus();
     }
 });

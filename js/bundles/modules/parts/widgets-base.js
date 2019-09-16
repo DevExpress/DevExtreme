@@ -67,6 +67,8 @@ ui.dxToast = require("../../../ui/toast");
 ui.dxToolbar = require("../../../ui/toolbar");
 ui.dxTooltip = require("../../../ui/tooltip");
 ui.dxTrackBar = require("../../../ui/track_bar");
+ui.dxDraggable = require("../../../ui/draggable");
+ui.dxSortable = require("../../../ui/sortable");
 
 /* Validation (dx.module-widgets-base.js) */
 

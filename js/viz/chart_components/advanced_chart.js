@@ -15,12 +15,16 @@ var extend = require("../../core/utils/extend").extend,
     _noop = require("../../core/utils/common").noop,
     _extend = extend,
     vizUtils = require("../core/utils"),
+    type = require("../../core/utils/type").type,
+    convertVisualRangeObject = vizUtils.convertVisualRangeObject,
+    rangesAreEqual = vizUtils.rangesAreEqual,
     _map = vizUtils.map,
     mergeMarginOptions = vizUtils.mergeMarginOptions,
 
     FONT = "font",
     COMMON_AXIS_SETTINGS = "commonAxisSettings",
-    DEFAULT_PANE_NAME = 'default';
+    DEFAULT_PANE_NAME = 'default',
+    VISUAL_RANGE = "VISUAL_RANGE";
 
 function prepareAxis(axisOptions) {
     return _isArray(axisOptions) ? axisOptions.length === 0 ? [{}] : axisOptions : [axisOptions];
@@ -40,6 +44,32 @@ function estimateBubbleSize(size, panesCount, maxSize, rotated) {
     return Math.min(width, height) * maxSize;
 }
 
+function setAxisVisualRangeByOption(arg, axis, isDirectOption, index) {
+    let options;
+    let visualRange;
+
+    if(isDirectOption) {
+        visualRange = arg.value;
+        options = {
+            skipEventRising: true
+        };
+
+        const pathElements = arg.fullName.split(".");
+        const destElem = pathElements[pathElements.length - 1];
+        if(destElem === "endValue" || destElem === "startValue") {
+            options = {
+                allowPartialUpdate: true
+            };
+            visualRange = {
+                [destElem]: arg.value
+            };
+        }
+    } else {
+        visualRange = (_isDefined(index) ? arg.value[index] : arg.value).visualRange;
+    }
+    axis.visualRange(visualRange, options);
+}
+
 var AdvancedChart = BaseChart.inherit({
 
     _setDeprecatedOptions: function() {
@@ -51,6 +81,18 @@ var AdvancedChart = BaseChart.inherit({
     },
 
     _fontFields: [COMMON_AXIS_SETTINGS + ".label." + FONT, COMMON_AXIS_SETTINGS + ".title." + FONT],
+
+    _partialOptionChangesMap: {
+        visualRange: VISUAL_RANGE,
+        _customVisualRange: VISUAL_RANGE,
+        strips: "REFRESH_AXES",
+        constantLines: "REFRESH_AXES"
+    },
+
+    _partialOptionChangesPath: {
+        argumentAxis: ["strips", "constantLines", "visualRange", "_customVisualRange"],
+        valueAxis: ["strips", "constantLines", "visualRange", "_customVisualRange"]
+    },
 
     _initCore() {
         this._panesClipRects = {};
@@ -578,7 +620,34 @@ var AdvancedChart = BaseChart.inherit({
         return axis;
     },
 
-    _getVisualRangeSetter: _noop,
+    _applyVisualRangeByVirtualAxes(axis, range) {
+        return false;
+    },
+
+    _applyCustomVisualRangeOption(axis, range) {
+        const that = this;
+        if(axis.getOptions().optionPath) {
+            that._parseVisualRangeOption(`${axis.getOptions().optionPath}.visualRange`, range);
+        }
+    },
+
+    _getVisualRangeSetter() {
+        const chart = this;
+        return function(axis, { skipEventRising, range }) {
+            chart._applyCustomVisualRangeOption(axis, range);
+            axis.setCustomVisualRange(range);
+
+            axis.skipEventRising = skipEventRising;
+
+            if(!chart._applyVisualRangeByVirtualAxes(axis, range)) {
+                if(chart._applyingChanges) {
+                    chart._change_VISUAL_RANGE();
+                } else {
+                    chart._requestChange([VISUAL_RANGE]);
+                }
+            }
+        };
+    },
 
     _getTrackerSettings: function() {
         return _extend(this.callBase(), {
@@ -600,12 +669,6 @@ var AdvancedChart = BaseChart.inherit({
         }
         return userOptions;
     },
-
-    _legendDataField: "series",
-
-    _adjustSeriesLabels: _noop,
-
-    _correctValueAxes: _noop,
 
     refresh: function() {
         this._disposeAxes();
@@ -632,9 +695,170 @@ var AdvancedChart = BaseChart.inherit({
         return this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
     },
 
+    _parseVisualRangeOption(fullName, value) {
+        const that = this;
+        const name = fullName.split(/[.[]/)[0];
+        let index = fullName.match(/\d+/g);
+
+        index = _isDefined(index) ? parseInt(index[0]) : index;
+
+        if(fullName.indexOf("visualRange") > 0) {
+            that._setCustomVisualRange(name, index, value);
+        } else if((type(value) === "object" || _isArray(value)) && name.indexOf("Axis") > 0 && JSON.stringify(value).indexOf("visualRange") > 0) {
+            if(_isDefined(value.visualRange)) {
+                that._setCustomVisualRange(name, index, value.visualRange);
+            } else if(_isArray(value)) {
+                value.forEach((a, i) => _isDefined(a.visualRange) && that._setCustomVisualRange(name, i, a.visualRange));
+            }
+        }
+    },
+
+    _setCustomVisualRange(axesName, index, value) {
+        const that = this;
+        const options = that._options[axesName];
+
+        if(!options) {
+            return;
+        }
+
+        if(!_isDefined(index)) {
+            options._customVisualRange = value;
+        } else {
+            options[index]._customVisualRange = value;
+        }
+
+        that._axesReinitialized = true;
+    },
+
+    _raiseZoomEndHandlers() {
+        this._valueAxes.forEach(axis => axis.handleZoomEnd());
+    },
+
+    _setOptionsByReference() {
+        this.callBase();
+
+        _extend(this._optionsByReference, {
+            "valueAxis.visualRange": true
+        });
+    },
+
+    _notifyOptionChanged(option, value, previousValue) {
+        this.callBase.apply(this, arguments);
+        if(!this._optionChangedLocker) {
+            this._parseVisualRangeOption(option, value);
+        }
+    },
+
+    _notifyVisualRange() {
+        const that = this;
+
+        that._valueAxes.forEach(axis => {
+            if(axis.getOptions().optionPath) {
+                const path = `${axis.getOptions().optionPath}.visualRange`;
+                const visualRange = convertVisualRangeObject(axis.visualRange(), !_isArray(that.option(path)));
+
+                if(!axis.skipEventRising || !rangesAreEqual(visualRange, that.option(path))) {
+                    that.option(path, visualRange);
+                } else {
+                    axis.skipEventRising = null;
+                }
+            }
+        });
+    },
+
     _notify() {
+        this.callBase();
         this._axesReinitialized = false;
-    }
+
+        if(this.option("disableTwoWayBinding") !== true) { // for dashboards T732396
+            this._notifyVisualRange();
+        }
+    },
+
+    _getAxesForScaling() {
+        return this._valueAxes;
+    },
+
+    _getAxesByOptionPath(arg, isDirectOption, optionName) {
+        const that = this;
+        const sourceAxes = that._getAxesForScaling();
+        let axes = [];
+
+        if(isDirectOption) {
+            let axisPath;
+            if(arg.fullName) {
+                axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
+            }
+            axes = sourceAxes.filter(a => a.getOptions().optionPath === axisPath);
+        } else {
+            if(type(arg.value) === "object") {
+                axes = sourceAxes.filter(a => a.getOptions().optionPath === arg.name);
+            } else if(_isArray(arg.value)) {
+                arg.value.forEach((v, index) => {
+                    const axis = sourceAxes.filter(a => a.getOptions().optionPath === `${arg.name}[${index}]`)[0];
+                    _isDefined(v[optionName]) && _isDefined(axis) && (axes[index] = axis);
+                });
+            }
+        }
+
+        return axes;
+    },
+
+    _optionChanged(arg) {
+        const that = this;
+        if(!that._optionChangedLocker) {
+            const optionName = "visualRange";
+            let axes;
+            const isDirectOption = arg.fullName.indexOf(optionName) > 0 ? true :
+                (that.getPartialChangeOptionsName(arg).indexOf(optionName) > -1 ? false : undefined);
+
+            if(_isDefined(isDirectOption)) {
+                axes = that._getAxesByOptionPath(arg, isDirectOption, optionName);
+
+                if(axes) {
+                    if(axes.length > 1 || _isArray(arg.value)) {
+                        axes.forEach((a, index) => setAxisVisualRangeByOption(arg, a, isDirectOption, index));
+                    } else if(axes.length === 1) {
+                        setAxisVisualRangeByOption(arg, axes[0], isDirectOption);
+                    }
+                }
+            }
+        }
+        that.callBase(arg);
+    },
+
+    _change_VISUAL_RANGE: function() {
+        const that = this;
+
+        that._recreateSizeDependentObjects(false);
+        if(!that._changes.has("FULL_RENDER")) {
+            that._doRender({
+                force: true,
+                drawTitle: false,
+                drawLegend: false,
+                adjustAxes: this.option("adjustAxesOnZoom") || false, // T690411
+                animate: false
+            });
+            that._raiseZoomEndHandlers();
+        }
+    },
+
+    // API
+    resetVisualRange() {
+        const that = this;
+
+        that._valueAxes.forEach(axis => {
+            axis.resetVisualRange(false); // T602156
+            that._applyCustomVisualRangeOption(axis);
+        });
+        that._requestChange([VISUAL_RANGE]);
+    },
+
+    _legendDataField: "series",
+
+    _adjustSeriesLabels: _noop,
+
+    _correctValueAxes: _noop
 });
 
 exports.AdvancedChart = AdvancedChart;

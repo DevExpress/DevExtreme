@@ -16,6 +16,7 @@ const FILE_CHUNK_BLOB_NAME = "chunk";
 * @inherits FileProvider
 * @type object
 * @module ui/file_manager/file_provider/webapi
+* @namespace DevExpress.fileProvider
 * @export default
 */
 class WebApiFileProvider extends FileProvider {
@@ -76,24 +77,24 @@ class WebApiFileProvider extends FileProvider {
         }));
     }
 
-    initiateFileUpload(uploadInfo) {
-        uploadInfo.customData.uploadId = new Guid();
-    }
+    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
+        if(chunksInfo.chunkIndex === 0) {
+            chunksInfo.customData.uploadId = new Guid();
+        }
 
-    uploadFileChunk(uploadInfo, chunk) {
         const args = {
-            destinationId: uploadInfo.destinationFolder.relativeName,
+            destinationId: destinationDirectory.relativeName,
             chunkMetadata: JSON.stringify({
-                UploadId: uploadInfo.customData.uploadId,
-                FileName: uploadInfo.file.name,
-                Index: chunk.index,
-                TotalCount: uploadInfo.totalChunkCount,
-                FileSize: uploadInfo.file.size
+                UploadId: chunksInfo.customData.uploadId,
+                FileName: fileData.name,
+                Index: chunksInfo.chunkIndex,
+                TotalCount: chunksInfo.chunkCount,
+                FileSize: fileData.size
             })
         };
 
         const formData = new window.FormData();
-        formData.append(FILE_CHUNK_BLOB_NAME, chunk.blob);
+        formData.append(FILE_CHUNK_BLOB_NAME, chunksInfo.chunkBlob);
         formData.append("arguments", JSON.stringify(args));
         formData.append("command", "UploadChunk");
 
@@ -109,15 +110,17 @@ class WebApiFileProvider extends FileProvider {
                 onabort: noop
             },
             cache: false
-        }).then(result => {
-            !result.success && deferred.reject(result) || deferred.resolve();
-        },
-        e => deferred.reject(e));
+        })
+            .done(result => {
+                !result.success && deferred.reject(result) || deferred.resolve();
+            })
+            .fail(deferred.reject);
+
         return deferred.promise();
     }
 
-    abortFileUpload(uploadInfo) {
-        return this._executeRequest("AbortUpload", { uploadId: uploadInfo.customData.uploadId });
+    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
+        return this._executeRequest("AbortUpload", { uploadId: chunksInfo.customData.uploadId });
     }
 
     _getItemsIds(items) {
@@ -129,16 +132,11 @@ class WebApiFileProvider extends FileProvider {
     }
 
     _executeRequest(command, args) {
-        const queryString = this._getQueryString({
-            command,
-            arguments: JSON.stringify(args)
-        });
-
         const method = command === "GetDirContents" ? "GET" : "POST";
 
         const deferred = new Deferred();
         ajax.sendRequest({
-            url: this._endpointUrl + "?" + queryString,
+            url: this._getEndpointUrl(command, args),
             method,
             dataType: "json",
             cache: false
@@ -147,6 +145,15 @@ class WebApiFileProvider extends FileProvider {
         },
         e => deferred.reject(e));
         return deferred.promise();
+    }
+
+    _getEndpointUrl(command, args) {
+        const queryString = this._getQueryString({
+            command,
+            arguments: JSON.stringify(args)
+        });
+        const separator = this._endpointUrl && this._endpointUrl.indexOf("?") > 0 ? "&" : "?";
+        return this._endpointUrl + separator + queryString;
     }
 
     _getQueryString(params) {

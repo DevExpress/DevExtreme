@@ -975,15 +975,6 @@ module.exports = {
             max: true
         },
 
-        _setVisualRange(visualRange) {
-            const range = this.adjustRange(vizUtils.getVizRangeObject(visualRange));
-            this._viewport = range;
-        },
-
-        applyVisualRangeSetter(visualRangeSetter) {
-            this._visualRange = visualRangeSetter;
-        },
-
         adjust(alignToBounds) {
             const that = this;
             const seriesData = that._seriesData;

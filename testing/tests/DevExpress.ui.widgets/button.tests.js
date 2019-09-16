@@ -1,8 +1,10 @@
 import $ from "jquery";
 import ValidationEngine from "ui/validation_engine";
 import Validator from "ui/validator";
+import DefaultAdapter from "ui/validation/default_adapter";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import * as checkStyleHelper from "../../helpers/checkStyleHelper.js";
+import { Deferred } from "core/utils/deferred";
 
 import "ui/button";
 import "common.css!";
@@ -305,7 +307,7 @@ QUnit.module("submit behavior", {
     afterEach: () => {
         this.clock.restore();
     }
-}, {}, () => {
+}, () => {
     QUnit.test("render input with submit type", (assert) => {
         assert.ok(this.$element.find("input[type=submit]").length, 1);
     });
@@ -360,6 +362,41 @@ QUnit.module("submit behavior", {
         this.$element.dxButton({ onClick: clickHandlerSpy });
         this.clickButton();
         assert.ok(clickHandlerSpy.calledOnce);
+    });
+
+    QUnit.test("Submit button should not be enabled on pending", (assert) => {
+        try {
+            const validator = new Validator(document.createElement("div"), {
+                    adapter: sinon.createStubInstance(DefaultAdapter),
+                    validationRules: [{
+                        type: "async",
+                        validationCallback: function() {
+                            const d = new Deferred();
+                            return d.promise();
+                        }
+                    }]
+                }),
+                clickHandlerSpy = sinon.spy(e => {
+                    assert.ok(e.isDefaultPrevented(), "default is prevented");
+                }),
+                $element = this.$element.dxButton({ validationGroup: "testGroup" }),
+                buttonInstance = this.$element.dxButton("instance");
+
+
+            ValidationEngine.registerValidatorInGroup("testGroup", validator);
+
+            $element
+                .find("." + BUTTON_SUBMIT_INPUT_CLASS)
+                .on("click", clickHandlerSpy);
+
+            this.clickButton();
+
+            assert.ok(clickHandlerSpy.called);
+            assert.ok(buttonInstance.option("disabled"), "button is disabled after the click");
+            assert.strictEqual(buttonInstance._validationStatus, "pending");
+        } finally {
+            ValidationEngine.initGroups();
+        }
     });
 });
 

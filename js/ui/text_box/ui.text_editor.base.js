@@ -1,23 +1,24 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    domUtils = require("../../core/utils/dom"),
-    focused = require("../widget/selectors").focused,
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
-    themes = require("../themes"),
-    Editor = require("../editor/editor"),
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    ClearButton = require("./ui.text_editor.clear").default,
-    TextEditorButtonCollection = require("./texteditor_button_collection/index").default,
-    config = require("../../core/config"),
-    errors = require("../widget/ui.errors"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import domUtils from "../../core/utils/dom";
+import { focused } from "../widget/selectors";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import { each } from "../../core/utils/iterator";
+import themes from "../themes";
+import Editor from "../editor/editor";
+import eventUtils from "../../events/utils";
+import pointerEvents from "../../events/pointer";
+import ClearButton from "./ui.text_editor.clear";
+import TextEditorButtonCollection from "./texteditor_button_collection/index";
+import config from "../../core/config";
+import errors from "../widget/ui.errors";
+import { Deferred } from "../../core/utils/deferred";
+import LoadIndicator from "../load_indicator";
 
-var TEXTEDITOR_CLASS = "dx-texteditor",
+const TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_INPUT_CONTAINER_CLASS = "dx-texteditor-input-container",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     TEXTEDITOR_INPUT_SELECTOR = "." + TEXTEDITOR_INPUT_CLASS,
@@ -32,14 +33,17 @@ var TEXTEDITOR_CLASS = "dx-texteditor",
         TEXTEDITOR_STYLING_MODE_PREFIX + "underlined"
     ],
 
-    STATE_INVISIBLE_CLASS = "dx-state-invisible";
+    STATE_INVISIBLE_CLASS = "dx-state-invisible",
+    TEXTEDITOR_PENDING_INDICATOR_CLASS = "dx-pending-indicator",
+    TEXTEDITOR_VALIDATION_PENDING_CLASS = "dx-validation-pending",
+    TEXTEDITOR_VALID_CLASS = "dx-valid";
 
-var EVENTS_LIST = [
+const EVENTS_LIST = [
     "KeyDown", "KeyPress", "KeyUp",
     "Change", "Cut", "Copy", "Paste", "Input"
 ];
 
-var CONTROL_KEYS = [
+const CONTROL_KEYS = [
     "tab",
     "enter",
     "shift",
@@ -67,7 +71,7 @@ function checkButtonsOptionType(buttons) {
 * @inherits Editor
 * @hidden
 */
-var TextEditorBase = Editor.inherit({
+const TextEditorBase = Editor.inherit({
     ctor: function(_, options) {
         if(options) {
             checkButtonsOptionType(options.buttons);
@@ -421,6 +425,45 @@ var TextEditorBase = Editor.inherit({
         this._renderButtonContainers();
     },
 
+    _renderPendingIndicator: function() {
+        this.$element().addClass(TEXTEDITOR_VALIDATION_PENDING_CLASS);
+        const $indicatorElement = $("<div>")
+            .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
+            .appendTo(this._$textEditorInputContainer);
+        this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator);
+    },
+
+    _disposePendingIndicator: function() {
+        if(!this._pendingIndicator) {
+            return;
+        }
+        this._pendingIndicator.dispose();
+        this._pendingIndicator.$element().remove();
+        this._pendingIndicator = null;
+        this.$element().removeClass(TEXTEDITOR_VALIDATION_PENDING_CLASS);
+    },
+
+    _renderValidationState: function() {
+        this.callBase();
+        const isPending = this.option("validationStatus") === "pending",
+            $element = this.$element();
+
+        if(isPending) {
+            !this._pendingIndicator && this._renderPendingIndicator();
+            this._showValidMark = false;
+        } else {
+            if(this.option("validationStatus") === "invalid") {
+                this._showValidMark = false;
+            }
+            if(!this._showValidMark) {
+                this._showValidMark = this.option("validationStatus") === "valid" && !!this._pendingIndicator;
+            }
+            this._disposePendingIndicator();
+        }
+
+        $element.toggleClass(TEXTEDITOR_VALID_CLASS, this._showValidMark);
+    },
+
     _renderButtonContainers: function() {
         const buttons = this.option("buttons");
 
@@ -430,6 +473,7 @@ var TextEditorBase = Editor.inherit({
 
     _clean() {
         this._buttonCollection.clean();
+        this._disposePendingIndicator();
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._$textEditorContainer = null;
@@ -681,8 +725,43 @@ var TextEditorBase = Editor.inherit({
         return this._input();
     },
 
+    _focusEventTarget: function() {
+        return this.element();
+    },
+
+    _preventNestedFocusEvent: function(event) {
+        if(event.isDefaultPrevented()) {
+            return true;
+        }
+
+        var result = this._isNestedTarget(event.relatedTarget);
+
+        if(event.type === "focusin") {
+            result = result && this._isNestedTarget(event.target);
+        }
+
+        result && event.preventDefault();
+        return result;
+    },
+
+    _isNestedTarget: function(target) {
+        return !!this.$element().find(target).length;
+    },
+
     _focusClassTarget: function() {
         return this.$element();
+    },
+
+    _focusInHandler: function(event) {
+        this._preventNestedFocusEvent(event);
+
+        this.callBase.apply(this, arguments);
+    },
+
+    _focusOutHandler: function(event) {
+        this._preventNestedFocusEvent(event);
+
+        this.callBase.apply(this, arguments);
     },
 
     _toggleFocusClass: function(isFocused, $element) {

@@ -8,6 +8,7 @@ export class GanttView extends Widget {
 
         this._onSelectionChanged = this._createActionByOption("onSelectionChanged");
         this._onScroll = this._createActionByOption("onScroll");
+        this._onDialogShowing = this._createActionByOption("onDialogShowing");
     }
     _initMarkup() {
         const { GanttView } = getGanttViewCore();
@@ -15,6 +16,8 @@ export class GanttView extends Widget {
             showResources: this.option("showResources"),
             taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition")),
             allowSelectTask: this.option("allowSelection"),
+            editing: this.option("editing"),
+            areHorizontalBordersEnabled: this.option("showRowLines"),
             areAlternateRowsEnabled: false
         });
         this._ganttViewCore.setViewType(3);
@@ -80,6 +83,12 @@ export class GanttView extends Widget {
             case "allowSelection":
                 this._ganttViewCore.setAllowSelection(args.value);
                 break;
+            case "editing":
+                this._ganttViewCore.setEditingSettings(args.value);
+                break;
+            case "showRowLines":
+                this._ganttViewCore.setRowLinesVisible(args.value);
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -115,6 +124,13 @@ export class GanttView extends Widget {
     }
     onGanttScroll(scrollTop) {
         this._onScroll({ scrollTop: scrollTop });
+    }
+    showDialog(name, parameters, callback) {
+        this._onDialogShowing({
+            name: name,
+            parameters: parameters,
+            callback: callback
+        });
     }
     getModelChangesListener() {
         return null;
