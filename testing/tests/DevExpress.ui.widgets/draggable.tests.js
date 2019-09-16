@@ -830,7 +830,7 @@ QUnit.module("autoScroll", $.extend({}, moduleConfig, {
         setupDraggable(this, $("#scrollableItem"));
 
         this.originalRAF = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = (callback) => {
+        animationFrame.requestAnimationFrame = function(callback) {
             return window.setTimeout(callback, 10);
         };
 
@@ -1072,41 +1072,9 @@ QUnit.test("Horizontal scrolling should not start if on drag start cursor ", fun
 
 QUnit.test("Scrolling with scrollView", function(assert) {
     // arrange
-    var scrollView;
-
-    scrollView = $("#scrollable").dxScrollView({
-        direction: 'both'
-    }).dxScrollView("instance");
-
-    this.createDraggable({
-        scrollSensitivity: 10,
-        scrollSpeed: 20
-    });
-
-    // act, assert
-    assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, "scrollOffset");
-
-    this.pointer.down().move(240, 240);
-
-    this.pointer.move(1, 1);
-    this.clock.tick(10);
-
-    assert.deepEqual(scrollView.scrollOffset(), { top: 2, left: 2 }, "scrollOffset");
-
-    // debugger
-    this.pointer.move(-1, -1);
-    this.clock.tick(10);
-
-    assert.deepEqual(scrollView.scrollOffset(), { top: 2, left: 2 }, "scrollOffset");
-});
-
-QUnit.test("Scrolling with scrollView and useNative", function(assert) {
-    // arrange
-    var scrollView;
-
-    scrollView = $("#scrollable").dxScrollView({
+    var scrollView = $("#scrollable").dxScrollView({
         direction: 'both',
-        useNative: true
+        useNative: false
     }).dxScrollView("instance");
 
     this.createDraggable({
