@@ -1532,7 +1532,7 @@ const Scheduler = Widget.inherit({
 
         this.hideAppointmentTooltip();
 
-        this._appointmentPopup.triggerResize();
+        this.resizePopup();
         this._appointmentPopup.updatePopupFullScreenMode();
     },
 
@@ -2389,6 +2389,10 @@ const Scheduler = Widget.inherit({
         var recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData);
 
         return recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid;
+    },
+
+    resizePopup() {
+        this._appointmentPopup.triggerResize();
     },
 
     _getSingleAppointmentData: function(appointmentData, options) {
