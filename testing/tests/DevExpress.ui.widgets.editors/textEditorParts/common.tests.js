@@ -816,7 +816,7 @@ QUnit.module("options changing", moduleConfig, () => {
 
         $clearButton.click();
 
-        assert.equal(callCount, 1, "onInput was called");
+        assert.equal(callCount, 1, "onInput was called once");
     });
 
     QUnit.test("tap on clear button should reset value (T310102)", (assert) => {
