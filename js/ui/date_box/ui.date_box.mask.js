@@ -484,7 +484,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _focusOutHandler(e) {
         this.callBase(e);
-        if(this._useMaskBehavior()) {
+        if(this._useMaskBehavior() && !e.isDefaultPrevented()) {
             this._fireChangeEvent();
             this._selectFirstPart(e);
         }

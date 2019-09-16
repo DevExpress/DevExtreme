@@ -348,7 +348,7 @@ var DropDownEditor = TextBox.inherit({
         this.callBase();
 
         if(this.option("fieldTemplate")) {
-            eventsEngine.off(this._input(), "focusin focusout beforeactivate");
+            this._detachFocusEvents();
         }
     },
 

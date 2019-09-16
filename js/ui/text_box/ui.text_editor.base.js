@@ -681,8 +681,43 @@ var TextEditorBase = Editor.inherit({
         return this._input();
     },
 
+    _focusEventTarget: function() {
+        return this.element();
+    },
+
+    _preventNestedFocusEvent: function(event) {
+        if(event.isDefaultPrevented()) {
+            return true;
+        }
+
+        var result = this._isNestedTarget(event.relatedTarget);
+
+        if(event.type === "focusin") {
+            result = result && this._isNestedTarget(event.target);
+        }
+
+        result && event.preventDefault();
+        return result;
+    },
+
+    _isNestedTarget: function(target) {
+        return !!this.$element().find(target).length;
+    },
+
     _focusClassTarget: function() {
         return this.$element();
+    },
+
+    _focusInHandler: function(event) {
+        this._preventNestedFocusEvent(event);
+
+        this.callBase.apply(this, arguments);
+    },
+
+    _focusOutHandler: function(event) {
+        this._preventNestedFocusEvent(event);
+
+        this.callBase.apply(this, arguments);
     },
 
     _toggleFocusClass: function(isFocused, $element) {

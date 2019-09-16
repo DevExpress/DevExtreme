@@ -6224,6 +6224,87 @@ QUnit.module("Customize keyboard navigation", {
         this.clock.restore();
     }
 }, function() {
+    testInDesktop("Editing navigation mode - arrow keys should operate with drop down if it is expanded", function(assert) {
+        // arrange
+        var rooms = [
+            { id: 0, name: "room0" },
+            { id: 1, name: "room1" },
+            { id: 2, name: "room2" },
+            { id: 3, name: "room3" },
+            { id: 222, name: "room222" }
+        ];
+
+        this.options = {
+            editing: {
+                mode: "batch"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column",
+                editOnKeyPress: true
+            }
+        };
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date" },
+            {
+                dataField: "room",
+                dataType: "number",
+                lookup: {
+                    dataSource: rooms,
+                    valueExpr: "id",
+                    displayExpr: "name",
+                    searchExpr: "id"
+                }
+            },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // assert
+        assert.equal($(".dx-selectbox-popup").length, 0, "no drop down");
+
+        // act
+        this.focusCell(2, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick(500);
+        keyboardMock($(":focus")[0]).keyDown("downArrow");
+        this.clock.tick();
+        // assert
+        assert.equal($(".dx-selectbox-popup").length, 1, "drop down created");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        keyboardMock($(":focus")[0]).keyDown("enter");
+
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        var $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 222, phone: 666666 }, "row 1 data");
+
+        // act
+        this.triggerKeyDown("1");
+        this.clock.tick(500);
+        keyboardMock($(":focus")[0]).keyDown("downArrow");
+        this.clock.tick();
+        keyboardMock($(":focus")[0]).keyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
+    });
+
     testInDesktop("Editing by char for not editable column", function(assert) {
         // arrange
         this.options = {
@@ -8123,87 +8204,6 @@ QUnit.module("Customize keyboard navigation", {
         this.clock.tick();
 
         assert.equal($input.val(), "1", "input value has changed after timeout");
-    });
-
-    testInDesktop("Editing navigation mode - arrow keys should operate with drop down if it is expanded", function(assert) {
-        // arrange
-        var rooms = [
-            { id: 0, name: "room0" },
-            { id: 1, name: "room1" },
-            { id: 2, name: "room2" },
-            { id: 3, name: "room3" },
-            { id: 222, name: "room222" }
-        ];
-
-        this.options = {
-            editing: {
-                mode: "batch"
-            },
-            keyboardNavigation: {
-                enterKeyDirection: "column",
-                editOnKeyPress: true
-            }
-        };
-        this.columns = [
-            { dataField: "name" },
-            { dataField: "date", dataType: "date" },
-            {
-                dataField: "room",
-                dataType: "number",
-                lookup: {
-                    dataSource: rooms,
-                    valueExpr: "id",
-                    displayExpr: "name",
-                    searchExpr: "id"
-                }
-            },
-            { dataField: "phone", dataType: "number" }
-        ];
-
-        this.setupModule();
-        this.renderGridView();
-
-        // assert
-        assert.equal($(".dx-selectbox-popup").length, 0, "no drop down");
-
-        // act
-        this.focusCell(2, 1);
-        this.triggerKeyDown("2");
-        this.clock.tick(500);
-        keyboardMock($(":focus")[0]).keyDown("downArrow");
-        this.clock.tick();
-        // assert
-        assert.equal($(".dx-selectbox-popup").length, 1, "drop down created");
-        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
-        keyboardMock($(":focus")[0]).keyDown("enter");
-
-        this.triggerKeyDown("enter");
-        this.clock.tick();
-
-        var $input = $(".dx-row .dx-texteditor-container input").eq(0);
-        assert.equal($input.length, 0, "input");
-        assert.notOk(this.keyboardNavigationController._isEditing);
-        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, "focusedCellPosition");
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
-        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 222, phone: 666666 }, "row 1 data");
-
-        // act
-        this.triggerKeyDown("1");
-        this.clock.tick(500);
-        keyboardMock($(":focus")[0]).keyDown("downArrow");
-        this.clock.tick();
-        keyboardMock($(":focus")[0]).keyDown("enter");
-        this.clock.tick();
-        this.triggerKeyDown("upArrow");
-        this.clock.tick();
-
-        // arrange, assert
-        $input = $(".dx-row .dx-texteditor-container input").eq(0);
-        assert.equal($input.length, 0, "input");
-        assert.notOk(this.keyboardNavigationController._isEditing);
-        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
-        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
-        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
     });
 
     testInDesktop("Select all text if editing mode is batch", function(assert) {

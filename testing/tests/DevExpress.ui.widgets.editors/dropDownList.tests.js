@@ -204,7 +204,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("popup hides on tab", (assert) => {
-        this.$input.focusin();
+        this.instance.focus();
         assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is focused");
 
         this.instance.open();

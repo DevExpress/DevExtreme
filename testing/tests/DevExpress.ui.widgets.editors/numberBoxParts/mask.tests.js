@@ -1150,8 +1150,10 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
 
     QUnit.test("incomplete value should be reformatted on focusout after paste", (assert) => {
         this.instance.option("value", null);
+        this.instance.focus();
         this.input.val("123.");
-        this.input.trigger("focusout");
+        this.instance.blur();
+
         assert.equal(this.input.val(), "123", "input was reformatted");
     });
 

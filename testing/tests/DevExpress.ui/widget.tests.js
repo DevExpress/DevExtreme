@@ -203,6 +203,47 @@ QUnit.module("render", {}, () => {
         assert.ok(focusOutHandled, "focusOut action was fired");
     });
 
+    ["FocusIn", "FocusOut"].forEach((focusEvent) => {
+        QUnit.test(`widget should not fire the on${focusEvent} event in case the original event is prevented`, (assert) => {
+            const stubHandler = sinon.stub();
+            const optionName = `on${focusEvent}`;
+
+            const $element = $("#widget").dxWidget({
+                focusStateEnabled: true,
+                [optionName]: stubHandler
+            });
+
+            const event = $.Event(focusEvent.toLowerCase());
+
+            $element.trigger(event);
+            assert.ok(stubHandler.calledOnce, `on${focusEvent} action was fired`);
+
+            event.preventDefault();
+            $element.trigger(event);
+            assert.ok(stubHandler.calledOnce, `on${focusEvent} action wasn't fired`);
+        });
+
+        QUnit.test(`widget should not fire the on${focusEvent} event in case the original event is prevented after subscribe at runtime`, (assert) => {
+            const stubHandler = sinon.stub();
+            const dxEventName = "f" + focusEvent.substring(1);
+
+            const $element = $("#widget").dxWidget({
+                focusStateEnabled: true
+            });
+
+            $element.dxWidget("on", dxEventName, stubHandler);
+
+            const event = $.Event(focusEvent.toLowerCase());
+
+            $element.trigger(event);
+            assert.ok(stubHandler.calledOnce, `on${focusEvent} action was fired`);
+
+            event.preventDefault();
+            $element.trigger(event);
+            assert.ok(stubHandler.calledOnce, `on${focusEvent} action wasn't fired`);
+        });
+    });
+
     QUnit.test("widget has class dx-state-hover when child widget lose cursor", (assert) => {
         const parentElement = $("#jQueryContainerWidget").dxWidget();
         const parentInstance = parentElement.dxWidget("instance");

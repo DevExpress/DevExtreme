@@ -1601,17 +1601,16 @@ QUnit.module("editing", moduleSetup, () => {
             acceptCustomValue: false,
             items: ["item1", "item2"],
             value: "item1",
-            searchTimeout: 0
+            searchTimeout: 0,
+            onFocusOut: function() {
+                assert.equal($input.val(), "item1", "value was reset");
+            }
         });
 
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
         keyboardMock($input).type("test");
 
-        $($input).on("focusout", () => {
-            assert.equal($input.val(), "item1", "value was reset");
-        });
-
-        $input.triggerHandler("focusout");
+        $selectBox.dxSelectBox("blur");
     });
 
     QUnit.testInActiveWindow("input value is reset on pressing enter key when searchEnabled is true and acceptCustomValue is false", (assert) => {
@@ -1621,7 +1620,10 @@ QUnit.module("editing", moduleSetup, () => {
             items: ["item1", "item2"],
             searchTimeout: 0,
             value: "item2",
-            opened: true
+            opened: true,
+            onFocusOut: function() {
+                assert.equal($input.val(), "item1", "value was reset");
+            }
         });
 
         const $listItem = $(toSelector(LIST_ITEM_CLASS)).eq(0).trigger("dxclick");
@@ -1633,11 +1635,7 @@ QUnit.module("editing", moduleSetup, () => {
         keyboard.type("test");
         keyboard.keyDown("enter");
 
-        $($input).on("focusout", () => {
-            assert.equal($input.val(), "item1", "value was reset");
-        });
-
-        $input.triggerHandler("focusout");
+        $selectBox.dxSelectBox("blur");
     });
 
     QUnit.test("Enter key press prevent default when popup is opened or acceptCustomValue is true", (assert) => {
@@ -1753,7 +1751,10 @@ QUnit.module("editing", moduleSetup, () => {
             dataSource: dataSource,
             displayExpr: "text",
             valueExpr: "this",
-            value: dataSource[0]
+            value: dataSource[0],
+            onFocusOut: function() {
+                assert.equal($input.val(), "one", "value restored");
+            }
         });
 
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
@@ -1762,11 +1763,7 @@ QUnit.module("editing", moduleSetup, () => {
         keyboard.type("test");
         keyboard.keyDown("enter");
 
-        $($input).on("focusout", () => {
-            assert.equal($input.val(), "one", "value restored");
-        });
-
-        $input.triggerHandler("focusout");
+        $selectBox.dxSelectBox("blur");
     });
 
     QUnit.testInActiveWindow("input value should be restored on focusout if clearing is manually prevented", (assert) => {
@@ -1780,19 +1777,18 @@ QUnit.module("editing", moduleSetup, () => {
             },
             value: 1
         });
-
+        const instance = $selectBox.dxSelectBox("instance");
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        $input.focus();
+        instance.focus();
         $input.val("");
-        $input.triggerHandler("focusout");
+        instance.blur();
 
-        $input.focus();
-        $input.triggerHandler("focusout");
+        instance.focus();
+        instance.blur();
 
         assert.equal($input.val(), "1", "value have been restored");
 
-        const instance = $selectBox.dxSelectBox("instance");
         assert.equal(instance.option("selectedItem"), 1, "selectedItem have been restored");
         assert.equal(instance.option("value"), 1, "value have been restored");
     });
@@ -4776,7 +4772,7 @@ QUnit.module("focus policy", {
         this.clock.tick(TIME_TO_WAIT);
         assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), "a", "filter should not be cleared before focusout");
 
-        $input.focusout();
+        this.instance.blur();
         this.instance.option("opened", false);
         $($input).trigger($.Event("keydown", { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
@@ -4786,10 +4782,10 @@ QUnit.module("focus policy", {
     QUnit.test("input keep focus when popup is opened by click on button", (assert) => {
         const $arrow = this.$element.find(toSelector(TEXTEDITOR_BUTTONS_CONTAINER_CLASS));
 
-        this.$input.focusin();
+        this.instance.focus();
         assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is focused");
 
-        $arrow.focusin();
+        this.instance.focus();
         $($arrow).trigger("dxclick");
         assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is steel focused");
     });
@@ -4806,12 +4802,10 @@ QUnit.module("focus policy", {
             }
         });
 
-        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        $input.focusin();
+        this.instance.focus();
 
         // act
-        $input.focusout();
+        this.instance.blur();
 
         // assert
         assert.equal(focusOutCallCount, 1, "onFocusOut called once");
@@ -4855,6 +4849,62 @@ QUnit.module("focus policy", {
         } catch(e) {
             assert.ok(false, "Exception: " + e);
         }
+    });
+
+    QUnit.testInActiveWindow("dxSelectBox should save focus after inner buttons were clicked", (assert) => {
+        const focusStub = sinon.stub();
+        const blurStub = sinon.stub();
+        const clickStub = sinon.stub();
+
+        this.instance.option({
+            onFocusIn: focusStub,
+            onFocusOut: blurStub,
+            buttons: [{
+                name: "test",
+                options: {
+                    onClick: clickStub,
+                    icon: "home"
+                }
+            }]
+        });
+
+        const actionButtonElement = this.instance.getButton("test").element();
+
+        this.instance.focus();
+        assert.strictEqual(focusStub.callCount, 1, "FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+        assert.strictEqual(clickStub.callCount, 0, "action button is not clicked");
+
+        $(actionButtonElement).trigger("dxclick");
+        assert.strictEqual(focusStub.callCount, 1, "new FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+        assert.strictEqual(clickStub.callCount, 1, "action button clicked");
+    });
+
+    QUnit.testInActiveWindow("dxSelectBox should save focus after inner buttons were focused", (assert) => {
+        const focusStub = sinon.stub();
+        const blurStub = sinon.stub();
+
+        this.instance.option({
+            onFocusIn: focusStub,
+            onFocusOut: blurStub,
+            buttons: [{
+                name: "test",
+                options: {
+                    icon: "home"
+                }
+            }]
+        });
+
+        const actionButton = this.instance.getButton("test");
+
+        this.instance.focus();
+        assert.strictEqual(focusStub.callCount, 1, "FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+
+        actionButton.focus();
+        assert.strictEqual(focusStub.callCount, 1, "new FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
     });
 });
 

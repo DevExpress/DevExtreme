@@ -590,7 +590,7 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("1");
             assert.strictEqual(this.instance.option("text"), "January 10 2012", "text has been changed");
 
-            this.$input.trigger("focusout");
+            this.instance.blur();
             this.keyboard.type("2");
             assert.strictEqual(this.instance.option("text"), "February 10 2012", "search value and position was cleared");
             assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, "first group has been filled again");
@@ -876,7 +876,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Bluring the input after first input should update the value", (assert) => {
             this.keyboard.type("1");
-            this.$input.trigger("focusout");
+            this.instance.blur();
 
             assert.strictEqual(this.$input.val(), "January 14 2015", "text is correct");
             assert.strictEqual(this.instance.option("value").getMonth(), 0, "value is correct");

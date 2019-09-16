@@ -104,11 +104,12 @@ QUnit.module("common", {}, () => {
             };
 
             const element = $("#textbox").dxTextBox({ onFocusIn });
+            const instance = $("#textbox").dxTextBox("instance");
 
             inFocus = element.find(".dx-texteditor-input").is(":focus");
             assert.ok(!inFocus, "at start  input has not focused");
 
-            element.find(".dx-texteditor-input").trigger("focusin");
+            instance.focus();
             assert.ok(inFocus, "when call 'focus' method, then focus on input");
         } finally {
             executeAsyncMock.teardown();
