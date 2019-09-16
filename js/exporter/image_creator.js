@@ -642,7 +642,15 @@ function drawBackground(context, width, height, backgroundColor, margin) {
     context.fillRect(-margin, -margin, width + margin * 2, height + margin * 2);
 }
 
-function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToCanvas) {
+function convertSvgToCanvas(svg, canvas) {
+    return drawCanvasElements(svg.childNodes, canvas.getContext("2d"), {}, {
+        clipPaths: {},
+        patterns: {},
+        filters: {}
+    });
+}
+
+function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToCanvas = convertSvgToCanvas) {
     var canvas = createCanvas(width, height, margin),
         context = canvas.getContext("2d"),
         svgElem = svgUtils.getSvgElement(markup);
@@ -654,17 +662,8 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToC
         canvas.dir = svgElem.attributes.direction.textContent;
     }
     drawBackground(context, width, height, backgroundColor, margin);
-    let promise;
-    if(svgToCanvas) {
-        promise = fromPromise(svgToCanvas(svgElem, canvas));
-    } else {
-        promise = drawCanvasElements(svgElem.childNodes, context, {}, {
-            clipPaths: {},
-            patterns: {},
-            filters: {}
-        });
-    }
-    return promise
+
+    return fromPromise(svgToCanvas(svgElem, canvas))
         .then(() => canvas)
         .always(() => domAdapter.getBody().removeChild(canvas));
 }
