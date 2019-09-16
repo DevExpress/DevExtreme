@@ -1973,6 +1973,8 @@ declare module DevExpress.ui {
         repaintChangesOnly?: boolean;
         /** @name GridBase.Options.rowAlternationEnabled */
         rowAlternationEnabled?: boolean;
+        /** @name GridBase.Options.rowDragging */
+        rowDragging?: { allowReordering?: boolean, enabled?: boolean, showHandle?: boolean };
         /** @name GridBase.Options.scrolling */
         scrolling?: GridBaseScrolling;
         /** @name GridBase.Options.searchPanel */

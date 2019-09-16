@@ -146,7 +146,11 @@ QUnit.test("Draggable element (grid) - checking options", function(assert) {
             useNative: false,
             showScrollbar: false
         },
-        loadingTimeout: undefined
+        loadingTimeout: undefined,
+        rowDragging: {
+            enabled: true,
+            showHandle: undefined
+        }
     }, "options");
 });
 

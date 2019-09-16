@@ -55,6 +55,10 @@ var RowReorderingExtender = {
             pager: {
                 visible: false
             },
+            rowDragging: {
+                enabled: true,
+                showHandle: gridOptions.rowDragging.showHandle
+            },
             loadingTimeout: undefined,
             columns: gridOptions.columns,
             customizeColumns: function(columns) {
@@ -87,7 +91,7 @@ var RowReorderingExtender = {
 
     _getHandleTemplate: function() {
         return (container, options) => {
-            return $("<div>").addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
+            return $("<span>").addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
         };
     }
 };
