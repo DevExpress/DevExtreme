@@ -745,7 +745,7 @@ QUnit.module("options changing", moduleConfig, () => {
 
         pointerMock($clearButton).click();
 
-        assert.equal(1, callCount, "onInput was called");
+        assert.equal(callCount, 1, "onInput was called once");
     });
 
     QUnit.test("tap on clear button should reset value (T310102)", (assert) => {
