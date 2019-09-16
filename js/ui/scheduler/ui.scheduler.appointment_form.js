@@ -221,7 +221,7 @@ const SchedulerAppointmentForm = {
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),
                     onValueChanged: function(args) {
                         var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
-                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
+                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value); // TODO !!!!!!!!!!!
                     },
                     onContentReady: function(args) {
                         var $editorField = $(args.element).closest(".dx-field-item"),

@@ -23,7 +23,10 @@ const TOOLBAR_ITEM_BEFORE_LOCATION = "before";
 export default class AppointmentPopup {
     constructor(scheduler) {
         this.scheduler = scheduler;
+
         this._popup = null;
+        this._appointmentForm = null;
+
         this.state = {
             lastEditData: null
         };
