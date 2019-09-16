@@ -7,6 +7,8 @@ const testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink=
 const testingMarkupEnd = "</svg>";
 import browser from "core/utils/browser";
 import proxyUrlFormatter from "data/proxy_url_formatter";
+import svgUtils from "core/utils/svg";
+import { Deferred } from "core/utils/deferred";
 
 function setupCanvasStub(drawnElements, paths) {
     var prototype = window.CanvasRenderingContext2D.prototype,
@@ -781,6 +783,50 @@ QUnit.test("Arc path (relative coords)", function(assert) {
                 x: 99,
                 y: 15
             }, "Fourth component of path");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Skip unknown command", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 V8 Z" stroke-width="2" stroke="#FF0000"></path>' + testingMarkupEnd,
+        imageBlob = getData(markup);
+
+    assert.expect(9);
+    $.when(imageBlob).done(function() {
+        try {
+            assert.equal(that.drawnElements.length, 2, "Canvas elements count");
+            assert.equal(that.drawnElements[1].type, "stroke", "The second element on canvas is stroke");
+            assert.deepEqual(that.drawnElements[1].style, {
+                strokeStyle: "#ff0000",
+                strokeLinejoin: "miter",
+                lineWidth: 2,
+                globalAlpha: 1
+            }, "Style of stroke");
+
+            assert.equal(that.paths.length, 1, "One path");
+            assert.equal(that.paths[0].length, 4, "Three components on path");
+            assert.deepEqual(that.paths[0][0], {
+                action: "M",
+                x: 36,
+                y: 181
+            }, "First component of path");
+            assert.deepEqual(that.paths[0][1], {
+                action: "L",
+                x: 184,
+                y: 98
+            }, "Second component of path");
+            assert.deepEqual(that.paths[0][2], {
+                action: "L",
+                x: 331,
+                y: 280
+            }, "Third component of path");
+            assert.deepEqual(that.paths[0][3], {
+                action: "Z"
+            }, "Third component of path");
         } finally {
             done();
         }
@@ -2273,4 +2319,89 @@ QUnit.test("getElementOptions should work correctly with empty attributs element
             done();
         }
     });
+});
+
+QUnit.test("Can use custom parser", function(assert) {
+    sinon.spy(svgUtils, "getSvgElement");
+
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<rect x="50" y="50" width="200" height="200" fill="#00FF00" visibility="visible"></rect>' + testingMarkupEnd,
+        svgToCanvas = sinon.spy(),
+        imageBlob = imageCreator.getData(markup, {
+            width: 500,
+            height: 250,
+            format: "png",
+            backgroundColor: "#ff0000",
+            margin: 10,
+            svgToCanvas: svgToCanvas
+        }, true);
+
+    $.when(imageBlob).done(() => {
+        assert.equal(that.drawnElements.length, 1, "Canvas elements count");
+        assert.equal(that.drawnElements[0].type, "fillRect", "Fill rect");
+        assert.deepEqual(that.drawnElements[0].args, {
+            x: -10,
+            y: -10,
+            width: 520,
+            height: 270
+        }, "Background args");
+        assert.deepEqual(that.drawnElements[0].style, {
+            fillStyle: "#ff0000",
+            globalAlpha: 1
+        }, "Background style");
+
+        assert.equal(svgToCanvas.callCount, 1);
+        assert.equal(svgToCanvas.lastCall.args[0], svgUtils.getSvgElement.lastCall.returnValue);
+        assert.equal(svgToCanvas.lastCall.args[1], window.CanvasRenderingContext2D.prototype.fillRect.lastCall.thisValue.canvas);
+    }).always(() => {
+        svgUtils.getSvgElement.restore();
+        done();
+    });
+});
+
+QUnit.test("Custom parser can be asynchronous", function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart + testingMarkupEnd;
+    const deferred = new Deferred();
+    const imageBlob = imageCreator.getData(markup, {
+        width: 500,
+        height: 250,
+        format: "png",
+        backgroundColor: "#ff0000",
+        margin: 10,
+        svgToCanvas() {
+            return deferred;
+        }
+    }, true);
+    let i = 0;
+
+    $.when(imageBlob).done(() => {
+        assert.equal(i, 1);
+    }).always(done);
+
+    deferred.then(() => i = 1);
+    deferred.resolve();
+});
+
+QUnit.test("Remove canvas if rejected", function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart + testingMarkupEnd;
+    const deferred = new Deferred();
+    const imageBlob = imageCreator.getData(markup, {
+        width: 500,
+        height: 250,
+        format: "png",
+        backgroundColor: "#ff0000",
+        margin: 10,
+        svgToCanvas() {
+            return deferred;
+        }
+    }, true);
+
+    $.when(imageBlob).catch(() => {
+        assert.strictEqual(window.CanvasRenderingContext2D.prototype.fillRect.lastCall.thisValue.canvas.parentElement, null);
+    }).always(done);
+
+    deferred.reject();
 });

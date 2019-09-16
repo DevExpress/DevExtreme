@@ -5,7 +5,8 @@ var $ = require("jquery"),
     rendererModule = require("viz/core/renderers/renderer"),
     clientExporter = require("exporter"),
     exportModule = require("viz/core/export"),
-    Deferred = require("core/utils/deferred").Deferred;
+    Deferred = require("core/utils/deferred").Deferred,
+    logger = require("core/utils/console").logger;
 
 $("#qunit-fixture").append('<div id="test-container" style="width: 200px; height: 150px;"></div>');
 
@@ -42,11 +43,13 @@ QUnit.test('Export method. Defined options', function(assert) {
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
         fileSavingStub = sinon.spy(),
+        svgToCanvas = function() { },
         widget = this.createWidget({
             "export": {
                 backgroundColor: "#ff0000",
                 proxyUrl: "testProxy",
-                margin: 40
+                margin: 40,
+                svgToCanvas: svgToCanvas
             },
             onExporting: exportingStub,
             onExported: exportedStub,
@@ -74,6 +77,7 @@ QUnit.test('Export method. Defined options', function(assert) {
     assert.equal(firstExportCall.args[1].format, "JPEG", "format");
     assert.equal(firstExportCall.args[1].proxyUrl, "testProxy", "proxyUrl");
     assert.equal(firstExportCall.args[1].margin, 40, "margin");
+    assert.equal(firstExportCall.args[1].svgToCanvas, svgToCanvas, "svgToCanvas passed");
 
     assert.equal(exportingStub.callCount, 1, "exporting event");
     assert.equal(exportedStub.callCount, 1, "exported event");
@@ -309,6 +313,31 @@ QUnit.test('Restore pointer events after export', function(assert) {
     assert.equal(widget._renderer.root.attr("pointer-events"), "all");
 });
 
+QUnit.test('Restore pointer events after export if rejected', function(assert) {
+    // arrange
+    sinon.stub(logger, "error");
+    try {
+        clientExporter.export.returns(new Deferred().reject("my error"));
+        var widget = this.createWidget({
+            "export": {
+                backgroundColor: "#ff0000",
+                proxyUrl: "testProxy",
+                margin: 40
+            }
+        });
+
+        widget._renderer.root.attr({ "pointer-events": "all" });
+
+        // act
+        widget.exportTo("testName", "jpeg");
+
+        assert.equal(widget._renderer.root.attr("pointer-events"), "all");
+        assert.deepEqual(logger.error.lastCall.args, ["my error"]);
+    } finally {
+        logger.error.restore();
+    }
+});
+
 QUnit.test('Disable pointer events while printing', function(assert) {
     // arrange
     var widget = this.createWidget({
@@ -328,6 +357,25 @@ QUnit.test('Disable pointer events while printing', function(assert) {
 QUnit.test('Restore pointer events after printing', function(assert) {
     // arrange
     clientExporter.export.returns(new Deferred().resolve());
+    var widget = this.createWidget({
+        "export": {
+            backgroundColor: "#ff0000",
+            proxyUrl: "testProxy",
+            margin: 40
+        }
+    });
+
+    widget._renderer.root.attr({ "pointer-events": "all" });
+
+    // act
+    widget.print();
+
+    assert.equal(widget._renderer.root.attr("pointer-events"), "all");
+});
+
+QUnit.test('Restore pointer events after printing if rejected', function(assert) {
+    // arrange
+    clientExporter.export.returns(new Deferred().reject());
     var widget = this.createWidget({
         "export": {
             backgroundColor: "#ff0000",
