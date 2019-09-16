@@ -1491,34 +1491,34 @@ class Diagram extends Widget {
         }
         this._dataChangeAction();
     }
-    _raiseEdgeInsertedAction(data, callback) {
+    _raiseEdgeInsertedAction(data, callback, errorCallback) {
         if(this._edgesOption) {
-            this._edgesOption.insert(data, callback);
+            this._edgesOption.insert(data, callback, errorCallback);
         }
     }
-    _raiseEdgeUpdatedAction(key, data, callback) {
+    _raiseEdgeUpdatedAction(key, data, callback, errorCallback) {
         if(this._edgesOption) {
-            this._edgesOption.update(key, data, callback);
+            this._edgesOption.update(key, data, callback, errorCallback);
         }
     }
-    _raiseEdgeRemovedAction(key, callback) {
+    _raiseEdgeRemovedAction(key, data, callback, errorCallback) {
         if(this._edgesOption) {
-            this._edgesOption.remove(key, callback);
+            this._edgesOption.remove(key, data, callback, errorCallback);
         }
     }
-    _raiseNodeInsertedAction(data, callback) {
+    _raiseNodeInsertedAction(data, callback, errorCallback) {
         if(this._nodesOption) {
-            this._nodesOption.insert(data, callback);
+            this._nodesOption.insert(data, callback, errorCallback);
         }
     }
-    _raiseNodeUpdatedAction(key, data, callback) {
+    _raiseNodeUpdatedAction(key, data, callback, errorCallback) {
         if(this._nodesOption) {
-            this._nodesOption.update(key, data, callback);
+            this._nodesOption.update(key, data, callback, errorCallback);
         }
     }
-    _raiseNodeRemovedAction(key, callback) {
+    _raiseNodeRemovedAction(key, data, callback, errorCallback) {
         if(this._nodesOption) {
-            this._nodesOption.remove(key, callback);
+            this._nodesOption.remove(key, data, callback, errorCallback);
         }
     }
     _raiseToolboxDragStart() {

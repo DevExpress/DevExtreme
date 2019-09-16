@@ -325,7 +325,17 @@ class AsyncRuleValidator extends CustomRuleValidator {
         if(!typeUtils.isPromise(callbackResult)) {
             throw errors.Error("E0103");
         }
-        return fromPromise(callbackResult).promise();
+        return this._getWrappedPromise(fromPromise(callbackResult).promise());
+    }
+
+    _getWrappedPromise(promise) {
+        const deferred = new Deferred();
+        promise.then(function(res) {
+            deferred.resolve(res);
+        }, function(err) {
+            deferred.resolve(typeUtils.isDefined(err) ? err : false);
+        });
+        return deferred.promise();
     }
 }
 
@@ -923,19 +933,7 @@ const ValidationEngine = {
         each(items, (_, item) => {
             result.pendingRules.push(item.rule);
             const asyncResult = item.ruleValidator.validate(value, item.rule).then((res) => {
-                const ruleResult = this._getPatchedRuleResult({ ruleResult: res });
-                this._updateRuleConfig({
-                    rule: item.rule,
-                    ruleResult,
-                    validator: item.ruleValidator,
-                    name
-                });
-                return ruleResult;
-            }).catch((err) => {
-                const ruleResult = this._getPatchedRuleResult({
-                    ruleResult: err,
-                    isValid: false
-                });
+                const ruleResult = this._getPatchedRuleResult(res);
                 this._updateRuleConfig({
                     rule: item.rule,
                     ruleResult,
@@ -970,8 +968,9 @@ const ValidationEngine = {
         }
     },
 
-    _getPatchedRuleResult({ ruleResult, isValid = true }) {
+    _getPatchedRuleResult(ruleResult) {
         let result;
+        const isValid = true;
         if(typeUtils.isObject(ruleResult)) {
             result = extend({}, ruleResult);
             if(!typeUtils.isDefined(result.isValid)) {

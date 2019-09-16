@@ -525,4 +525,24 @@ describe("Cli arguments normalizer", () => {
         assert.equal(config.lessPath, "my/custom/less/");
         assert.equal(config.scssPath, "my/custom/scss/");
     });
+
+    it("build-theme: 'widgets' field is normalized", () => {
+        const config = { command: "build-theme", widgets: ["datagrid"] };
+        normalizeConfig(config);
+
+        assert.deepEqual(config, {
+            "base": false,
+            "bootstrapVersion": 0,
+            "colorScheme": "light",
+            "command": "build-theme",
+            "data": {},
+            "fileFormat": "css",
+            "isBootstrap": false,
+            "makeSwatch": false,
+            "out": "dx.generic.custom-scheme.css",
+            "outColorScheme": "custom-scheme",
+            "themeName": "generic",
+            "widgets": ["datagrid"]
+        });
+    });
 });
