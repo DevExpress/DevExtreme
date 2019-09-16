@@ -171,6 +171,8 @@ var uaParsers = {
  * @section Utils
  * @inherits EventsMixin
  * @namespace DevExpress
+ * @module core/devices
+ * @export default
  */
 var Devices = Class.inherit({
     /**
