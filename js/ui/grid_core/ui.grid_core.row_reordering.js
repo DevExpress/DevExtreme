@@ -23,20 +23,22 @@ var RowReorderingExtender = {
             alignment: "center",
             cssClass: COMMAND_HANDLE_CLASS,
             width: "auto",
-            cellTemplate: this._getHandleTemplate()
+            cellTemplate: this._getHandleTemplate(),
+            visible: isHandleColumnVisible
         });
 
         columnsController.columnOption("type:handle", "visible", isHandleColumnVisible);
     },
 
     _renderTable: function() {
-        let rowDragging = this.option("rowDragging"),
-            $tableElement = this.callBase.apply(this, arguments);
+        let that = this,
+            rowDragging = that.option("rowDragging"),
+            $tableElement = that.callBase.apply(that, arguments);
 
         if(rowDragging && rowDragging.enabled) {
-            this._sortable = this._createComponent($tableElement, Sortable, extend({
+            that._sortable = that._createComponent($tableElement, Sortable, extend({
                 filter: "> tbody > .dx-data-row",
-                template: this._getDraggableRowTemplate(),
+                template: that._getDraggableRowTemplate(),
                 handle: rowDragging.showHandle && `.${COMMAND_HANDLE_CLASS}`
             }, rowDragging));
         }

@@ -60,7 +60,7 @@ var Sortable = Draggable.inherit({
                 this._updatePlaceholderPosition(e, itemPoint);
                 break;
             } else if(centerPosition === undefined) {
-                this._updatePlaceholderPosition(e, itemPoint);
+                this._updatePlaceholderPosition(e, itemPoint, itemPoints[i - 1]);
                 break;
             }
         }
@@ -256,7 +256,7 @@ var Sortable = Draggable.inherit({
         return this.option("itemOrientation") === "vertical";
     },
 
-    _updatePlaceholderPosition: function(e, itemPoint) {
+    _updatePlaceholderPosition: function(e, itemPoint, prevItemPoint) {
         let eventArgs,
             sourceDraggable = this._getSourceDraggable(),
             dragInfo = this._dragInfo,
@@ -296,7 +296,7 @@ var Sortable = Draggable.inherit({
             this._getSourceElement().show();
         }
 
-        this._moveItem($placeholderElement || this._getSourceElement(), itemPoint.$item);
+        this._moveItem($placeholderElement || this._getSourceElement(), itemPoint.$item, prevItemPoint && prevItemPoint.$item);
 
         this._dragInfo.itemPoints = this._getItemPoints();
     },
@@ -320,9 +320,11 @@ var Sortable = Draggable.inherit({
         $placeholderElement.css({ width, height });
     },
 
-    _moveItem: function($targetItem, $item) {
-        if(!$item) {
+    _moveItem: function($targetItem, $item, $prevItem) {
+        if(!$item && !$prevItem) {
             $targetItem.appendTo(this.$element());
+        } else if($prevItem) {
+            $targetItem.insertAfter($prevItem);
         } else {
             $targetItem.insertBefore($item);
         }

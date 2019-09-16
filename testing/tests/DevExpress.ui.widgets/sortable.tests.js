@@ -377,6 +377,29 @@ QUnit.test("The source item should be correct after drag and drop items", functi
     assert.strictEqual($item.attr("id"), "item2", "placeholder id");
 });
 
+QUnit.test("Dragging an item to the last position when there is ignored (not draggable) item", function(assert) {
+    // arrange
+    let items;
+
+    this.$element.append("<div id='item4'></div>");
+    this.createSortable({
+        filter: ".draggable"
+    });
+
+    items = this.$element.children();
+
+    // assert
+    assert.strictEqual(items.length, 4, "item count");
+
+    // act
+    pointerMock(items.eq(0)).start().down().move(0, 90);
+
+    // assert
+    items = this.$element.children();
+    assert.ok(items.eq(2).hasClass("dx-sortable-placeholder"), "there is a placeholder");
+    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+});
+
 
 QUnit.module("Events", moduleConfig);
 

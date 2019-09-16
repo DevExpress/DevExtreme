@@ -262,6 +262,35 @@ QUnit.test("'rowDragging' option changing", function(assert) {
     assert.strictEqual($("body").children(".dx-sortable-dragging").length, 1, "there is dragging element");
 });
 
+QUnit.test("Dragging row to the last position - row should be before the freespace row", function(assert) {
+    // arrange
+    let pointer,
+        rowsView,
+        $trElements,
+        $testElement = $("#container");
+
+    this.options.dataSource = this.options.dataSource.slice(0, 3);
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 110);
+
+    // assert
+    $trElements = $(rowsView.element().find("tbody > .dx-row"));
+    assert.ok($trElements.eq(2).hasClass("dx-sortable-placeholder"), "placeholder");
+    assert.ok($trElements.eq(3).hasClass("dx-freespace-row"), "freespace row");
+
+    // act
+    pointer.up();
+
+    // assert
+    $trElements = $(rowsView.element().find("tbody > .dx-row"));
+    assert.strictEqual($trElements.eq(2).children().first().text(), "test0", "first row");
+    assert.ok($trElements.eq(3).hasClass("dx-freespace-row"), "freespace row");
+});
+
 
 QUnit.module("Handle", {
     beforeEach: function() {
