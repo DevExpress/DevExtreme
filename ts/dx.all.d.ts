@@ -6558,6 +6558,8 @@ declare module DevExpress.viz {
         printingEnabled?: boolean;
         /** @name BaseWidget.Options.export.proxyUrl */
         proxyUrl?: string;
+        /** @name BaseWidget.Options.export.svgToCanvas */
+        svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => Promise<void> | JQueryPromise<void>);
     }
     /** @name BaseWidget.Options.loadingIndicator */
     interface BaseWidgetLoadingIndicator {
