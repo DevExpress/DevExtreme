@@ -808,48 +808,47 @@ QUnit.test("Check default number format for [Number|Number|Date] columns", funct
     );
 });
 
-QUnit.test("Check arguments for data cells", function(assert) {
-    const configurations = [
-        {
-            dataType: "number",
-            gridCellValues: [undefined, null, 0, 1, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
-            callbackValues: [undefined, null, 0, 1, "NaN", "Infinity", "-Infinity"]
-        },
-        {
-            dataType: "string",
-            gridCellValues: [undefined, null, "", "s"],
-            callbackValues: [undefined, undefined, undefined, "s"],
-        },
-        {
-            dataType: "date",
-            gridCellValues: [undefined, null, new Date(2018, 11, 1)],
-            callbackValues: [undefined, undefined, new Date(2018, 11, 1)],
-        },
-        {
-            dataType: "datetime",
-            gridCellValues: [undefined, null, new Date(2018, 11, 1, 16, 10)],
-            callbackValues: [undefined, undefined, new Date(2018, 11, 1, 16, 10)]
-        },
-        {
-            dataType: "boolean",
-            gridCellValues: [undefined, null, false, true],
-            callbackValues: [undefined, undefined, "false", "true"]
-        },
-        {
-            dataType: "lookup",
-            gridCellValues: [undefined, null, 1],
-            callbackValues: [undefined, undefined, "name1"],
-            lookup: {
-                dataSource: {
-                    store: { type: "array", data: [{ id: 1, name: "name1" }] },
-                    key: "id"
-                },
-                valueExpr: "id",
-                displayExpr: "name"
-            }
+[
+    {
+        dataType: "number",
+        gridCellValues: [undefined, null, 0, 1, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
+        callbackValues: [undefined, null, 0, 1, "NaN", "Infinity", "-Infinity"]
+    },
+    {
+        dataType: "string",
+        gridCellValues: [undefined, null, "", "s"],
+        callbackValues: [undefined, undefined, undefined, "s"],
+    },
+    {
+        dataType: "date",
+        gridCellValues: [undefined, null, new Date(2018, 11, 1)],
+        callbackValues: [undefined, undefined, new Date(2018, 11, 1)],
+    },
+    {
+        dataType: "datetime",
+        gridCellValues: [undefined, null, new Date(2018, 11, 1, 16, 10)],
+        callbackValues: [undefined, undefined, new Date(2018, 11, 1, 16, 10)]
+    },
+    {
+        dataType: "boolean",
+        gridCellValues: [undefined, null, false, true],
+        callbackValues: [undefined, undefined, "false", "true"]
+    },
+    {
+        dataType: "lookup",
+        gridCellValues: [undefined, null, 1],
+        callbackValues: [undefined, undefined, "name1"],
+        lookup: {
+            dataSource: {
+                store: { type: "array", data: [{ id: 1, name: "name1" }] },
+                key: "id"
+            },
+            valueExpr: "id",
+            displayExpr: "name"
         }
-    ];
-    configurations.forEach(config => {
+    }
+].forEach(config => {
+    QUnit.test(`Check arguments for data cells - ${config.dataType}`, function(assert) {
         const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup },
             ds = config.gridCellValues.map(item => { return { f1: item }; });
 
