@@ -180,7 +180,10 @@ const chartEnvironment = {
                 top: 0,
                 bottom: 400
             },
-            eventTrigger: sinon.stub()
+            eventTrigger: sinon.stub(),
+            chart: {
+                getStackedPoints: sinon.spy(function() { return "points_by_stack_name"; })
+            }
         };
     },
 
@@ -277,8 +280,11 @@ QUnit.test("dxpointermove without series over when shared tooltip", function(ass
 
     assert.strictEqual(this.point.hover.callCount, 1);
 
+    assert.deepEqual(this.options.chart.getStackedPoints.getCall(0).args, [this.point]);
+    assert.deepEqual(this.point.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, "points_by_stack_name"]);
+
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip showing was calling once");
-    assert.deepEqual(this.options.tooltip.stub("show").lastCall.args, [this.point.getTooltipFormatObject(), { x: 200 + 3, y: 100 + 5 }, { target: this.point }]);
+    assert.deepEqual(this.options.tooltip.stub("show").lastCall.args, [this.point.getTooltipFormatObject.getCall(0).returnValue, { x: 200 + 3, y: 100 + 5 }, { target: this.point }]);
 
     assert.ok(this.options.crosshair.show.calledOnce, "crosshair[0] moved");
     strictEqualForAllFields(assert, this.options.crosshair.show.lastCall.args[0], { point: this.point, x: 97, y: 45 });
@@ -306,9 +312,11 @@ QUnit.test("dxpointermove without series over when shared tooltip. another serie
     assert.ok(!this.point.stub("hover").called);
     assert.ok(!series2.stub("hover").called);
 
+    assert.deepEqual(this.options.chart.getStackedPoints.getCall(0).args, [point2]);
+    assert.deepEqual(point2.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, "points_by_stack_name"]);
     assert.strictEqual(point2.hover.callCount, 1);
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip show");
-    assert.deepEqual(this.options.tooltip.stub("show").lastCall.args, [this.point.getTooltipFormatObject(), { x: 200 + 3, y: 100 + 5 }, { target: point2 }]);
+    assert.deepEqual(this.options.tooltip.stub("show").lastCall.args, [point2.getTooltipFormatObject.getCall(0).returnValue, { x: 200 + 3, y: 100 + 5 }, { target: point2 }]);
 
     assert.ok(this.options.crosshair.show.calledOnce, "crosshair[0] moved");
     strictEqualForAllFields(assert, this.options.crosshair.show.lastCall.args[0], { point: point2, x: 97, y: 45 });
@@ -342,7 +350,9 @@ QUnit.test("dxpointermove without series over when shared tooltip, series has tw
     assert.strictEqual(point2.hover.callCount, 1);
     assert.strictEqual(point1.hover.callCount, 1);
     assert.equal(this.options.tooltip.stub("show").callCount, 2, "tooltip show");
-    assert.deepEqual(this.options.tooltip.stub("show").lastCall.args, [this.point.getTooltipFormatObject(), { x: 200 + 3, y: 100 + 5 }, { target: point1 }], "tooltip show args");
+    assert.deepEqual(this.options.tooltip.stub("show").lastCall.args, [point1.getTooltipFormatObject.getCall(0).returnValue, { x: 200 + 3, y: 100 + 5 }, { target: point1 }], "tooltip show args");
+    assert.deepEqual(this.options.chart.getStackedPoints.getCall(1).args, [point1]);
+    assert.deepEqual(point1.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, "points_by_stack_name"]);
 });
 
 QUnit.test("dxpointermove on series", function(assert) {
@@ -356,6 +366,8 @@ QUnit.test("dxpointermove on series", function(assert) {
     // Assert
     assert.ok(this.series.hover.calledOnce);
 
+    assert.equal(this.options.chart.getStackedPoints.callCount, 0);
+    assert.deepEqual(this.point.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, undefined]);
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip show");
     assert.deepEqual(this.options.tooltip.stub("show").lastCall.args, [this.point.getTooltipFormatObject(), { x: 200 + 3, y: 100 + 5 }, { target: this.point }]);
 
@@ -2009,7 +2021,10 @@ QUnit.module("Root events. Pie chart", {
             },
             series: [that.series],
             renderer: that.renderer,
-            eventTrigger: sinon.stub()
+            eventTrigger: sinon.stub(),
+            chart: {
+                getStackedPoints: sinon.spy(function() { return "points_by_stack_name"; })
+            }
         };
 
         that.createTracker = function(options) {
@@ -2076,7 +2091,7 @@ QUnit.test("mouseover on point", function(assert) {
     assert.ok(!this.options.tooltip.stub("hide").called);
 });
 
-QUnit.test("mousemove on point ", function(assert) {
+QUnit.test("mousemove on point", function(assert) {
     // Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
@@ -2087,6 +2102,28 @@ QUnit.test("mousemove on point ", function(assert) {
     assert.ok(!this.series.stub("clearPointHover").called);
     assert.ok(this.options.tooltip.stub("show").calledOnce);
     assert.ok(!this.options.tooltip.stub("hide").called);
+});
+
+QUnit.test("mousemove on point. shared tooltip", function(assert) {
+    this.options.tooltip.stub("isShared").returns(true);
+    this.tracker.update(this.options);
+    // Act
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    // Assert
+    assert.strictEqual(this.series.stub("hover").callCount, 0);
+    assert.strictEqual(this.point.hover.callCount, 1);
+    assert.ok(!this.series.stub("clearPointHover").called);
+    assert.ok(this.options.tooltip.stub("show").calledOnce);
+    assert.ok(!this.options.tooltip.stub("hide").called);
+
+
+    assert.deepEqual(this.options.chart.getStackedPoints.getCall(0).args, [this.point]);
+    assert.deepEqual(this.point.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, "points_by_stack_name"]);
+
+    assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip showing was calling once");
+    assert.deepEqual(this.options.tooltip.stub("show").lastCall.args, [this.point.getTooltipFormatObject.getCall(0).returnValue, { x: 200 + 3, y: 100 + 5 }, { target: this.point }]);
 });
 
 QUnit.test("mouseout from point", function(assert) {

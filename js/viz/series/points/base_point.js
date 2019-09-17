@@ -11,8 +11,6 @@ var mixins = {},
     polarPoints = require("./polar_point"),
     _normalizeEnum = require("../../core/utils").normalizeEnum,
     extend = require("../../../core/utils/extend").extend,
-    each = require("../../../core/utils/iterator").each,
-    _each = each,
     _extend = extend,
     _isDefined = require("../../../core/utils/type").isDefined,
     _noop = require("../../../core/utils/common").noop,
@@ -466,14 +464,14 @@ Point.prototype = {
         that._options = that._styles = that.series = that._errorBar = null;
     },
 
-    getTooltipFormatObject: function(tooltip) {
+    getTooltipFormatObject: function(tooltip, stackPoints) {
         const that = this;
         const tooltipFormatObject = that._getFormatObject(tooltip);
         const sharedTooltipValuesArray = [];
         const tooltipStackPointsFormatObject = [];
 
-        if(that.stackPoints) {
-            _each(that.stackPoints, function(_, point) {
+        if(stackPoints) {
+            stackPoints.forEach(point => {
                 if(!point.isVisible()) return;
                 const formatObject = point._getFormatObject(tooltip);
                 tooltipStackPointsFormatObject.push(formatObject);
@@ -483,7 +481,7 @@ Point.prototype = {
             _extend(tooltipFormatObject, {
                 points: tooltipStackPointsFormatObject,
                 valueText: sharedTooltipValuesArray.join("\n"),
-                stackName: that.stackPoints.stackName
+                stackName: that.series.getStackName() || null
             });
         }
 
