@@ -1651,6 +1651,51 @@ QUnit.test("Appointment should be rendered correctly after changing view (T59369
     assert.notOk(this.instance.$element().find(".dx-scheduler-appointment").eq(0).data("dxItemData").settings, "Item hasn't excess settings");
 });
 
+QUnit.test("Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        editing: true,
+        views: ["workWeek"],
+        currentView: "workWeek",
+        dataSource: [{
+            text: "Test appointment",
+            priorityId: 1,
+            startDate: new Date(2015, 4, 25, 14, 30),
+            endDate: new Date(2015, 4, 25, 15, 30),
+            recurrenceRule: "FREQ=YEARLY"
+        }],
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: [
+                    { text: "Low Priority", id: 1 },
+                    { text: "High Priority", id: 2 }
+                ],
+                label: "Priority"
+            }
+        ],
+        onAppointmentUpdating: function(e) {
+            e.cancel = true;
+        },
+        width: 800
+    });
+    var $appointment = this.scheduler.appointments.getAppointment(0);
+    let oldAppointmentCoords = translator.locate($appointment);
+    $appointment.trigger(dragEvents.start);
+    this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.end);
+
+    this.scheduler.appointmentForm.clickFormDialogButton(1);
+
+    let newAppointmentCoords = translator.locate(this.scheduler.appointments.getAppointment(0));
+
+    assert.deepEqual(oldAppointmentCoords, newAppointmentCoords, "Appointment has correct coords");
+
+    this.clock.tick();
+});
+
 QUnit.test("Appointment should push correct data to the onAppointmentUpdating event on changing group by drag'n'drop ", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 4, 25),
