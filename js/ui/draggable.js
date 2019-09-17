@@ -41,18 +41,18 @@ class ScrollHelper {
             this._overFlowAttr = "overflowY";
             this._sizeAttr = "height";
             this._scrollSizeProp = "scrollHeight";
-            this._limits = {
-                max: "top",
-                min: "bottom"
+            this._limitProps = {
+                start: "top",
+                end: "bottom"
             };
         } else {
             this._scrollValue = "scrollLeft";
             this._overFlowAttr = "overflowX";
             this._sizeAttr = "width";
             this._scrollSizeProp = "scrollWidth";
-            this._limits = {
-                max: "left",
-                min: "right"
+            this._limitProps = {
+                start: "left",
+                end: "right"
             };
         }
     }
@@ -77,14 +77,14 @@ class ScrollHelper {
         if(isScrollable) {
             distanceToBorders = that._calculateDistanceToBorders($element, mousePosition);
 
-            if(sensitivity > distanceToBorders[that._limits.max]) {
+            if(sensitivity > distanceToBorders[that._limitProps.start]) {
                 if(!that._preventScroll) {
-                    that._scrollSpeed = -that._calculateScrollSpeed(distanceToBorders[that._limits.max]);
+                    that._scrollSpeed = -that._calculateScrollSpeed(distanceToBorders[that._limitProps.start]);
                     that._$scrollable = $element;
                 }
-            } else if(sensitivity > distanceToBorders[that._limits.min]) {
+            } else if(sensitivity > distanceToBorders[that._limitProps.end]) {
                 if(!that._preventScroll) {
-                    that._scrollSpeed = that._calculateScrollSpeed(distanceToBorders[that._limits.min]);
+                    that._scrollSpeed = that._calculateScrollSpeed(distanceToBorders[that._limitProps.end]);
                     that._$scrollable = $element;
                 }
             } else {
@@ -133,7 +133,7 @@ class ScrollHelper {
 
                 if(scrollableInstance) {
                     nextScrollPosition = scrollableInstance.scrollOffset();
-                    nextScrollPosition[that._limits.max] += that._scrollSpeed;
+                    nextScrollPosition[that._limitProps.start] += that._scrollSpeed;
 
                     scrollableInstance.scrollTo(nextScrollPosition);
                 }
