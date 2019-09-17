@@ -171,6 +171,7 @@ const SpeedDialItem = Overlay.inherit({
                 this._renderLabel();
                 break;
             case "visible":
+                this._currentVisible = args.previousValue;
                 args.value ?
                     this._show() :
                     this._hide();

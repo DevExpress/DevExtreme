@@ -534,4 +534,30 @@ QUnit.module("add visible option", (hooks) => {
         assert.equal($(window).height() - $fabContent.eq(0).offset().top - fabDimensions, 80, "right edit action position");
         assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions - fabOffsetY, 110, "right trash action position");
     });
+
+    test("check multiple value changes", (assert) => {
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            icon: "edit",
+            label: "Edit row"
+        }).dxSpeedDialAction("instance");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            icon: "trash",
+            visible: false
+        }).dxSpeedDialAction("instance");
+
+        firstSDA.option("visible", false);
+        firstSDA.option("visible", true);
+        firstSDA.option("visible", false);
+
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 3, "all actions are invisible");
+
+        firstSDA.option("visible", true);
+        secondSDA.option("visible", true);
+
+        firstSDA.option("visible", false);
+        secondSDA.option("visible", false);
+
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 3, "all actions are invisible");
+    });
 });

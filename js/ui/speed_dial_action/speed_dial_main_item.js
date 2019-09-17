@@ -229,8 +229,11 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._setPosition();
                 break;
             case "label":
-                this._renderLabel();
+                if(this._isVisible()) this._renderLabel();
                 this._setPosition();
+                break;
+            case "icon":
+                if(this._isVisible()) this._renderIcon();
                 break;
             default:
                 this.callBase(args);
