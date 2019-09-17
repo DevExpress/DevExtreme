@@ -286,43 +286,37 @@ class Gantt extends Widget {
                 dataSource: null,
                 /**
                 * @name dxGanttOptions.tasks.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "id"
                 */
                 keyExpr: "id",
                 /**
                 * @name dxGanttOptions.tasks.parentIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "parentId"
                 */
                 parentIdExpr: "parentId",
                 /**
                 * @name dxGanttOptions.tasks.startExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "start"
                 */
                 startExpr: "start",
                 /**
                 * @name dxGanttOptions.tasks.endExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "end"
                 */
                 endExpr: "end",
                 /**
                 * @name dxGanttOptions.tasks.progressExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "progress"
                 */
                 progressExpr: "progress",
                 /**
                 * @name dxGanttOptions.tasks.titleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "title"
                 */
                 titleExpr: "title"
@@ -341,29 +335,25 @@ class Gantt extends Widget {
                 dataSource: null,
                 /**
                 * @name dxGanttOptions.dependencies.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "id"
                 */
                 keyExpr: "id",
                 /**
                 * @name dxGanttOptions.dependencies.predecessorIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "predecessorId"
                 */
                 predecessorIdExpr: "predecessorId",
                 /**
                 * @name dxGanttOptions.dependencies.successorIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "successorId"
                 */
                 successorIdExpr: "successorId",
                 /**
                 * @name dxGanttOptions.dependencies.typeExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "type"
                 */
                 typeExpr: "type"
@@ -382,15 +372,13 @@ class Gantt extends Widget {
                 dataSource: null,
                 /**
                 * @name dxGanttOptions.resources.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "id"
                 */
                 keyExpr: "id",
                 /**
                 * @name dxGanttOptions.resources.textExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "text"
                 */
                 textExpr: "text"
@@ -409,22 +397,19 @@ class Gantt extends Widget {
                 dataSource: null,
                 /**
                 * @name dxGanttOptions.resourceAssignments.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "id"
                 */
                 keyExpr: "id",
                 /**
                 * @name dxGanttOptions.resourceAssignments.taskIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "taskId"
                 */
                 taskIdExpr: "taskId",
                 /**
                 * @name dxGanttOptions.resourceAssignments.resourceIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "resourceId"
                 */
                 resourceIdExpr: "resourceId"
