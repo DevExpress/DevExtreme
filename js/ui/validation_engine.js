@@ -553,6 +553,9 @@ const GroupConfig = Class.inherit({
     },
 
     validate() {
+        if(this._pendingValidators.length) {
+            return this._validationInfo.result;
+        }
         /**
          * @name dxValidationGroupResult
          * @type Object
