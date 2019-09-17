@@ -46,15 +46,18 @@ export class RowsViewWrapper extends WrapperBase {
         return this.getDataRowElement(rowIndex).find(".dx-select-checkbox");
     }
 
-    isRowVisible(rowIndex) {
+    isRowVisible(rowIndex, precision) {
         const $row = this.getRowElement(rowIndex);
-        return this._isInnerElementVisible($row);
+        return this._isInnerElementVisible($row, precision);
     }
 
-    _isInnerElementVisible($element) {
+    _isInnerElementVisible($element, precision = 0) {
         const rowsViewRect = this.getElement()[0].getBoundingClientRect();
         const elementRect = $element[0].getBoundingClientRect();
-        return elementRect.top > rowsViewRect.top && elementRect.bottom <= rowsViewRect.bottom;
+        const diffTop = Math.floor(elementRect.top - rowsViewRect.top) + precision;
+        const diffBottom = Math.floor(rowsViewRect.bottom - elementRect.bottom) + precision;
+
+        return diffTop >= 0 && diffBottom >= 0;
     }
 }
 
