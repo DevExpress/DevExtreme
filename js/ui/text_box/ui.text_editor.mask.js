@@ -396,7 +396,7 @@ var TextEditorMask = TextEditorBase.inherit({
         return text.replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
     },
 
-    _maskKeyHandler: function(e, tryHandleKeyCallback) {
+    _maskKeyHandler: function(e, keyHandler) {
         if(this.option("readOnly")) {
             return;
         }
@@ -406,16 +406,26 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this._handleSelection();
 
-        if(!tryHandleKeyCallback.call(this)) {
-            return;
+        const previousText = this._input().val();
+        const riseInputEvent = () => {
+            if(previousText !== this._input().val()) {
+                this._maskStrategy.runWithoutEventProcessing(
+                    () => eventsEngine.trigger(this._input(), "input")
+                );
+            }
+        };
+
+        const handled = keyHandler();
+
+        if(handled) {
+            handled.then(riseInputEvent);
+        } else {
+            this.setForwardDirection();
+            this._adjustCaret();
+            this._displayMask();
+            this._maskRulesChain.reset();
+            riseInputEvent();
         }
-
-        this.setForwardDirection();
-        this._adjustCaret();
-        this._displayMask();
-        this._maskRulesChain.reset();
-
-        eventsEngine.trigger(this._input(), "input");
     },
 
     _handleKey: function(key, direction) {
