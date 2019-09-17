@@ -77,7 +77,7 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
             .appendTo($contentWrapper);
 
-        if(this.option("propertiesPanel.visible")) {
+        if(this.option("propertiesPanel.enabled")) {
             const $drawer = $("<div>")
                 .appendTo($drawerWrapper);
             this._content = $("<div>")
@@ -129,7 +129,7 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         var toolbarWidgetCommandNames = [];
-        if(this.option("propertiesPanel.visible") && this.option("propertiesPanel.collapsible")) {
+        if(this.option("propertiesPanel.enabled") && this.option("propertiesPanel.collapsible")) {
             toolbarWidgetCommandNames.push("options");
         }
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
@@ -155,7 +155,7 @@ class Diagram extends Widget {
                 var $toolboxContainer = $(e.$element);
                 this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8,
                     { 'data-toggle': 'shape-toolbox-tooltip' },
-                    e.shapes || e.category, e.style === "texts");
+                    e.shapes || e.category, e.displayMode === "texts");
                 this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
@@ -1384,8 +1384,8 @@ class Diagram extends Widget {
                 * @type String
                 */
                 /**
-                * @name dxDiagramOptions.toolbox.groups.style
-                * @type Enums.DiagramToolboxStyle
+                * @name dxDiagramOptions.toolbox.groups.displayMode
+                * @type Enums.DiagramToolboxDisplayMode
                 */
                 /**
                 * @name dxDiagramOptions.toolbox.groups.expanded
@@ -1439,11 +1439,11 @@ class Diagram extends Widget {
             */
             propertiesPanel: {
                 /**
-                * @name dxDiagramOptions.propertiesPanel.visible
+                * @name dxDiagramOptions.propertiesPanel.enabled
                 * @type Boolean
                 * @default true
                 */
-                visible: true,
+                enabled: true,
                 /**
                 * @name dxDiagramOptions.propertiesPanel.collapsible
                 * @type Boolean
