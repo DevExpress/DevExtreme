@@ -1097,3 +1097,27 @@ QUnit.test("Scrolling with scrollView", function(assert) {
 
     assert.deepEqual(scrollView.scrollOffset(), { top: 2, left: 2 }, "scrollOffset");
 });
+
+QUnit.test("Autoscroll should work fine if element was dropped and dragged again", function(assert) {
+    // arrange
+    this.createDraggable({
+        scrollSensitivity: 10,
+        scrollSpeed: 20
+    });
+
+    // act, assert
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    this.pointer.down().move(240, 240);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    this.pointer.up().down().move(1, 1);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 4, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 4, "scrollTop");
+});

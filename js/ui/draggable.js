@@ -591,9 +591,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
         var that = this,
             $dragElement = that._$dragElement,
             ownerDocument = $dragElement.get(0).ownerDocument,
+            $window = $(window),
             mousePosition = {
-                x: e.pageX,
-                y: e.pageY
+                x: e.pageX - $window.scrollLeft(),
+                y: e.pageY - $window.scrollTop()
             },
             allObjects;
 
@@ -626,8 +627,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
         }
 
         this._stopAnimator();
-        this.horizontalScrollHelper = null;
-        this.verticalScrollHelper = null;
+        this.horizontalScrollHelper.reset();
+        this.verticalScrollHelper.reset();
 
         this.resetPlaceholder();
         targetDraggable.resetPlaceholder();
