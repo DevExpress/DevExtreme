@@ -50,9 +50,7 @@ export default class AppointmentDragBehavior {
         this.scheduler.option(FIXED_CONTAINER_PROP_NAME).append(appointment);
         this.scheduler.notifyObserver("hideAppointmentTooltip");
 
-        const containerShift = this.getContainerShift(isAllDay);
-        this.initialPosition.left += containerShift.left;
-        this.initialPosition.top += containerShift.top;
+        this.containerShift = this.getContainerShift(isAllDay);
 
         this.onDragMoveCore(appointment, { x: 0, y: 0 });
     }
@@ -63,8 +61,8 @@ export default class AppointmentDragBehavior {
 
     onDragMoveCore(appointment, mouseOffset) {
         translator.move(appointment, {
-            left: this.initialPosition.left + mouseOffset.x,
-            top: this.initialPosition.top + mouseOffset.y
+            left: this.initialPosition.left + this.containerShift.left + mouseOffset.x,
+            top: this.initialPosition.top + this.containerShift.top + mouseOffset.y
         });
     }
 
@@ -75,10 +73,6 @@ export default class AppointmentDragBehavior {
     onDragEndCore(appointment, e) {
         const container = this.scheduler._getAppointmentContainer(this.isAllDay(appointment));
         container.append(appointment);
-
-        const containerShift = this.getContainerShift(this.isAllDay(appointment));
-        this.initialPosition.left -= containerShift.left;
-        this.initialPosition.top -= containerShift.top;
 
         this.currentAppointment = appointment;
 
@@ -91,9 +85,6 @@ export default class AppointmentDragBehavior {
                 coordinates: this.initialPosition
             });
         }
-
-        this.initialPosition = {};
-        this.currentAppointment = null;
     }
 
     addTo(appointment) {
