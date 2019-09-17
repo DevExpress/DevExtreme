@@ -49,7 +49,7 @@ QUnit.module("Diagram DOM Layout", {
             this.instance);
     });
     test("should return correct size of document container if options panel is hidden", (assert) => {
-        this.instance.option("propertiesPanel.visible", false);
+        this.instance.option("propertiesPanel.enabled", false);
         this.clock.tick(10000);
         assertSizes(assert,
             this.$element.find(".dxdi-control"),
@@ -78,7 +78,7 @@ QUnit.module("Diagram DOM Layout", {
     test("should return correct size of document container if all UI is hidden", (assert) => {
         this.instance.option("toolbar.visible", false);
         this.instance.option("toolbox.visible", false);
-        this.instance.option("propertiesPanel.visible", false);
+        this.instance.option("propertiesPanel.enabled", false);
         this.clock.tick(10000);
         assertSizes(assert,
             this.$element.find(".dxdi-control"),
@@ -111,10 +111,10 @@ QUnit.module("Diagram Toolbar", moduleConfig, () => {
         let toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
         assert.equal(toolbar.option("dataSource").length, 2); // + show properties panel
 
-        this.instance.option("propertiesPanel.visible", false);
+        this.instance.option("propertiesPanel.enabled", false);
         toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
         assert.equal(toolbar.option("dataSource").length, 1);
-        this.instance.option("propertiesPanel.visible", true);
+        this.instance.option("propertiesPanel.enabled", true);
         this.instance.option("propertiesPanel.collapsible", false);
         toolbar = this.$element.find(TOOLBAR_SELECTOR).dxToolbar("instance");
         assert.equal(toolbar.option("dataSource").length, 1);
@@ -245,8 +245,8 @@ QUnit.module("Diagram Toolbox", moduleConfig, () => {
 });
 
 QUnit.module("Diagram Properties Panel", moduleConfig, () => {
-    test("should not render if propertiesPanel.visible is false", (assert) => {
-        this.instance.option("propertiesPanel.visible", false);
+    test("should not render if propertiesPanel.enabled is false", (assert) => {
+        this.instance.option("propertiesPanel.enabled", false);
         let $accordion = this.$element.find(PROPERTIES_PANEL_ACCORDION_SELECTOR);
         assert.equal($accordion.length, 0);
     });
