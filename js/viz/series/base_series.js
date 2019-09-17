@@ -547,7 +547,7 @@ Series.prototype = {
     },
 
     _setLabelGroupSettings: function(animationEnabled) {
-        var settings = { "class": "dxc-labels" };
+        var settings = { "class": "dxc-labels", "pointer-events": "none" };
         this._applyElementsClipRect(settings);
         this._applyClearingSettings(settings);
         animationEnabled && (settings.opacity = 0.001);
