@@ -18,6 +18,7 @@ var TIMELINE_CLASS = "dx-scheduler-timeline",
 
 var HORIZONTAL = "horizontal",
     DATE_TABLE_CELL_BORDER = 1,
+    DATE_TABLE_HEADER_MARGIN = 10,
     toMs = dateUtils.dateToMilliseconds;
 
 var SchedulerTimeline = SchedulerWorkSpace.inherit({
@@ -358,7 +359,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceMinHeight: function() {
         var minHeight = this._getWorkSpaceHeight(),
-            workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight() - 2 * DATE_TABLE_CELL_BORDER - 1;
+            workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight() - 2 * DATE_TABLE_CELL_BORDER - DATE_TABLE_HEADER_MARGIN;
 
         if(minHeight < workspaceContainerHeight) {
             minHeight = workspaceContainerHeight;
