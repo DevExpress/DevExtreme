@@ -33,11 +33,15 @@ export default class AppointmentPopup {
     }
 
     show(data, showButtons, processTimeZone) {
+        this.__data = data;
+        this.__processTimeZone = processTimeZone;
+
         if(!this._popup) {
             this._popup = this._createPopup();
         }
 
         this._popup.option("toolbarItems", showButtons ? this._getPopupToolbarItems() : []);
+
         this._popup.option("onShowing", () => {
             this._updateForm(data, processTimeZone);
             this.updatePopupFullScreenMode();
@@ -124,10 +128,17 @@ export default class AppointmentPopup {
             AppointmentForm.concatResources(this.scheduler._resourcesManager.getEditors());
         }
 
+        // return AppointmentForm.create(
+        //     this.scheduler._createComponent.bind(this.scheduler), // TODO
+        //     element,
+        //     this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false
+        // );
+
         return AppointmentForm.create(
-            this.scheduler._createComponent.bind(this.scheduler), // TODO
+            this.scheduler._createComponent.bind(this.scheduler),
             element,
-            this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false
+            this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false,
+            this.__data
         );
     }
 
@@ -162,7 +173,7 @@ export default class AppointmentPopup {
             recurrentEditorItem = recurrenceRuleExpr ? this._appointmentForm.itemOption(recurrenceRuleExpr) : null;
 
         if(recurrentEditorItem) {
-            var options = recurrentEditorItem.editorOptions || {};
+            const options = recurrentEditorItem.editorOptions || {};
             options.startDate = startDate;
             this._appointmentForm.itemOption(recurrenceRuleExpr, "editorOptions", options);
         }
@@ -177,7 +188,7 @@ export default class AppointmentPopup {
     }
 
     triggerResize() {
-        this._popup && domUtils.triggerResizeEvent(this.getAppointmentPopup().$element());
+        this._popup && domUtils.triggerResizeEvent(this._popup.$element());
     }
 
     updatePopupFullScreenMode() {
@@ -243,7 +254,7 @@ export default class AppointmentPopup {
                 }
             }
 
-            this.addAppointment(formData);
+            this.scheduler.addAppointment(formData);
         }
         this._enableDoneButton();
 
