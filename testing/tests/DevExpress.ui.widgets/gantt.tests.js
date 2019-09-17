@@ -215,6 +215,12 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal($treeListHeaderRow.children().length, 2, "treeList has 2 columns");
         assert.equal($treeListHeaderRow.children().eq(0).text(), "Subject", "first column title is checked");
         assert.equal($treeListHeaderRow.children().eq(1).text(), "Start Date", "second column title is checked");
+
+        this.instance.option("treeListColumns[0].visible", false);
+        $treeListHeaderRow = this.$element.find(TREELIST_HEADER_ROW_SELECTOR);
+        assert.equal($treeListHeaderRow.children().length, 1, "treeList has 1 visible columns");
+        assert.equal($treeListHeaderRow.children().eq(0).text(), "Start Date", "first visible column title is checked");
+
         this.instance.option("treeListColumns", [{ dataField: "title", caption: "Task" }]);
         $treeListHeaderRow = this.$element.find(TREELIST_HEADER_ROW_SELECTOR);
         assert.equal($treeListHeaderRow.children().length, 1, "treeList has 1 columns");
