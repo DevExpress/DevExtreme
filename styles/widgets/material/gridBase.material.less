@@ -358,6 +358,15 @@
         .dx-@{widgetName}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
             background-position-y: 49px;
         }
+
+        .dx-command-drag {
+            width: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING + @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE;
+            min-width: @MATERIAL_GRID_BASE_CELL_LAST_COLUMN_PADDING + @MATERIAL_GRID_BASE_CELL_HORIZONTAL_PADDING + @MATERIAL_BASE_ICON_SIZE;
+
+            .dx-@{widgetName}-drag-icon {
+                .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+            }
+        }
     }
 
     .dx-@{widgetName}-edit-popup .dx-error-message {
@@ -382,7 +391,9 @@
 
         .dx-dropdowneditor-button-visible.dx-dropdowneditor {
             &.dx-show-clear-button {
-                &.dx-invalid {
+                &.dx-invalid,
+                &.dx-valid,
+                &.dx-validation-pending {
                     .dx-texteditor-input {
                         padding-right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                     }
@@ -394,7 +405,9 @@
                 }
             }
 
-            &.dx-invalid {
+            &.dx-invalid,
+            &.dx-valid,
+            &.dx-validation-pending {
                 .dx-texteditor-input {
                     padding-right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                 }

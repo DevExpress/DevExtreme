@@ -27,26 +27,47 @@
     .dx-icon-sizing(@GENERIC_TEXTEDITOR_ICON_SIZE, @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
 }
 
-.validation-icon-position() {
-    &.dx-invalid {
-        .dx-texteditor-input {
-            padding-right: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
-        }
+.texteditor-input-padding() {
+    .dx-texteditor-input {
+        padding-right: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+    }
 
-        &.dx-rtl .dx-texteditor-input {
-            padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-            padding-left: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
-        }
+    &.dx-rtl .dx-texteditor-input {
+        padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
+        padding-left: @GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+    }
+}
+
+.texteditor-validation-icon-offset() {
+    right: @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+
+    .dx-rtl &,
+    .dx-rtl& {
+        left: @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+        right: auto;
+    }
+}
+
+.validation-icon-position() {
+    &.dx-invalid,
+    &.dx-valid {
+        .texteditor-input-padding();
 
         .dx-texteditor-input-container {
             &:after {
-                right: @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+                .texteditor-validation-icon-offset();
+            }
+        }
+    }
+}
 
-                .dx-rtl &,
-                .dx-rtl& {
-                    left: @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
-                    right: auto;
-                }
+.pending-indicator-position() {
+    &.dx-validation-pending {
+        .texteditor-input-padding();
+
+        .dx-texteditor-input-container {
+            .dx-pending-indicator {
+                .texteditor-validation-icon-offset();
             }
         }
     }
@@ -116,6 +137,8 @@
     }
 
     .validation-icon-position();
+
+    .pending-indicator-position();
 }
 
 .dx-show-clear-button {
@@ -298,6 +321,30 @@
                         margin-right: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
                     }
                 }
+            }
+        }
+    }
+}
+
+.dx-valid.dx-texteditor {
+    &.dx-editor-filled,
+    &.dx-editor-underlined,
+    &.dx-editor-outlined {
+        .dx-texteditor-input-container {
+            &:after {
+                .dx-valid-generic-badge();
+            }
+        }
+    }
+}
+
+.dx-validation-pending.dx-texteditor {
+    &.dx-editor-filled,
+    &.dx-editor-underlined,
+    &.dx-editor-outlined {
+        .dx-texteditor-input-container {
+            .dx-pending-indicator {
+                .dx-pending-indicator-generic();
             }
         }
     }

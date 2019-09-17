@@ -326,6 +326,7 @@ var checkGroups = function(assert, series) {
         assert.ok(series._labelsGroup);
         assert.deepEqual(series._labelsGroup._stored_settings, {
             "class": "dxc-labels",
+            "pointer-events": "none",
             "opacity": null,
             "scale": null,
             "translateY": null
@@ -346,6 +347,7 @@ var checkGroups = function(assert, series) {
         assert.ok(series._labelsGroup);
         assert.deepEqual(series._labelsGroup._stored_settings, {
             "class": "dxc-labels",
+            "pointer-events": "none",
             "opacity": null,
             "scale": null,
             "translateY": null

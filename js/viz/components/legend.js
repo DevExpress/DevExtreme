@@ -521,7 +521,16 @@ extend(legendPrototype, {
                 renderMarker(state) {
                     dataItem.marker = getAttributes(item, state, dataItem.size);
                     markerGroup.clear();
-                    template.render({ model: dataItem, container: markerGroup.element });
+                    let isRendered = false;
+                    template.render({
+                        model: dataItem, container: markerGroup.element, onRendered: () => {
+                            isRendered = true;
+                            if(isAsyncRendering) {
+                                that._widget._requestChange(["LAYOUT"]);
+                            }
+                        }
+                    });
+                    const isAsyncRendering = !isRendered && markerGroup.element.childNodes.length === 0;
                 }
             };
 

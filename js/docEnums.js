@@ -1097,7 +1097,7 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramToolboxStyle
+ * @typedef {string} Enums.DiagramToolboxDisplayMode
  * @enum {'icons'|'texts'}
  */
 

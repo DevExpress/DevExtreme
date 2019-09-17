@@ -100,7 +100,9 @@
     }
 }
 
-.dx-invalid {
+.dx-invalid,
+.dx-valid,
+.dx-validation-pending {
     .invalid-dropdowneditor-input-padding();
 }
 
@@ -114,7 +116,8 @@
     }
 }
 
-.dx-invalid.dx-dropdowneditor {
+.dx-invalid.dx-dropdowneditor,
+.dx-valid.dx-dropdowneditor {
     .dx-texteditor-buttons-container {
         &:after {
             right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;

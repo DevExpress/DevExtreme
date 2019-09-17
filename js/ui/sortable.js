@@ -116,17 +116,22 @@ var Sortable = Draggable.inherit({
             isSourceDraggable = sourceDraggable.NAME !== this.NAME;
 
         if(isIndicateMode || isSourceDraggable) {
-            if(isSourceDraggable) {
-                translator.resetPosition($sourceElement);
-            }
-
-            // TODO test
-            $sourceElement.show();
-
-            let targetItemPoint = this.option("targetItemPoint");
+            let prevTargetItemElement,
+                targetItemPoint = this.option("targetItemPoint"),
+                $targetItemElement = targetItemPoint && targetItemPoint.$item;
 
             if(targetItemPoint) {
-                this._moveItem($sourceElement, targetItemPoint.$item);
+                if(!$targetItemElement) {
+                    prevTargetItemElement = this._getItems()[targetItemPoint.index - 1];
+                }
+
+                if(isSourceDraggable) {
+                    translator.resetPosition($sourceElement);
+                }
+
+                $sourceElement.show();
+
+                this._moveItem($sourceElement, $targetItemElement, prevTargetItemElement);
             }
         }
     },
@@ -254,6 +259,12 @@ var Sortable = Draggable.inherit({
         this.option("itemPoints", this._getItemPoints());
     },
 
+    _getDragTemplateArgs: function($element) {
+        return extend(this.callBase.apply(this, arguments), {
+            index: $element.index()
+        });
+    },
+
     _togglePlaceholder: function(value) {
         this._$placeholderElement && this._$placeholderElement.toggle(value);
     },
@@ -262,7 +273,7 @@ var Sortable = Draggable.inherit({
         return this.option("itemOrientation") === "vertical";
     },
 
-    _updatePlaceholderPosition: function(e, itemPoint) {
+    _updatePlaceholderPosition: function(e, itemPoint, prevItemPoint) {
         let sourceDraggable = this._getSourceDraggable(),
             isAnotherDraggable = sourceDraggable !== this,
             fromIndex = this.option("fromIndex"),
@@ -313,9 +324,11 @@ var Sortable = Draggable.inherit({
         $placeholderElement.css({ width, height });
     },
 
-    _moveItem: function($targetItem, $item) {
-        if(!$item) {
+    _moveItem: function($targetItem, $item, prevItem) {
+        if(!$item && !prevItem) {
             $targetItem.appendTo(this.$element());
+        } else if(prevItem) {
+            $targetItem.insertAfter($(prevItem));
         } else {
             $targetItem.insertBefore($item);
         }
@@ -366,11 +379,14 @@ var Sortable = Draggable.inherit({
         let targetItemPoint = args.value;
 
         if(targetItemPoint) {
-            let $placeholderElement = this._$placeholderElement || this._createPlaceholder();
+            let $placeholderElement = this._$placeholderElement || this._createPlaceholder(),
+                prevItem = this._getItems()[targetItemPoint.index - 1];
+
             if(this._isIndicateMode()) {
                 this._updatePlaceholderSizes($placeholderElement, targetItemPoint);
             }
-            this._moveItem($placeholderElement || this._getSourceElement(), targetItemPoint.$item);
+
+            this._moveItem($placeholderElement || this._getSourceElement(), targetItemPoint.$item, prevItem);
         }
     },
     _toggleDragSourceClass: function(value) {

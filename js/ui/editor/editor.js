@@ -19,7 +19,10 @@ const READONLY_STATE_CLASS = "dx-state-readonly",
 
     VALIDATION_TARGET = "dx-validation-target",
 
-    VALIDATION_MESSAGE_MIN_WIDTH = 100;
+    VALIDATION_MESSAGE_MIN_WIDTH = 100,
+
+    VALIDATION_STATUS_VALID = "valid",
+    VALIDATION_STATUS_INVALID = "invalid";
 
 const getValidationErrorMessage = function(validationErrors) {
     let validationErrorMessage = "";
@@ -45,6 +48,11 @@ const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
         this.callBase.apply(this, arguments);
+    },
+
+    _initOptions: function(options) {
+        this.callBase.apply(this, arguments);
+        this._initValidationOptions(options);
     },
 
     _init: function() {
@@ -124,7 +132,7 @@ const Editor = Widget.inherit({
             * @type Enums.ValidationStatus
             * @default "valid"
             */
-            validationStatus: "valid",
+            validationStatus: VALIDATION_STATUS_VALID,
 
             /**
              * @name EditorOptions.validationMessageMode
@@ -229,7 +237,7 @@ const Editor = Widget.inherit({
     },
 
     _renderValidationState: function() {
-        const isValid = this.option("isValid") && this.option("validationStatus") !== "invalid",
+        const isValid = this.option("isValid") && this.option("validationStatus") !== VALIDATION_STATUS_INVALID,
             validationMessageMode = this.option("validationMessageMode"),
             $element = this.$element();
         let validationErrors = this.option("validationErrors");
@@ -237,7 +245,7 @@ const Editor = Widget.inherit({
             validationErrors = [this.option("validationError")];
         }
         $element.toggleClass(INVALID_CLASS, !isValid);
-        this.setAria("invalid", !isValid || undefined);
+        this.setAria(VALIDATION_STATUS_INVALID, !isValid || undefined);
 
         if(!windowUtils.hasWindow()) {
             return;
@@ -367,8 +375,13 @@ const Editor = Widget.inherit({
                 break;
             case "isValid":
             case "validationError":
+                this._synchronizeValidationOptions(args);
+                break;
             case "validationErrors":
             case "validationStatus":
+                this._synchronizeValidationOptions(args);
+                this._renderValidationState();
+                break;
             case "validationBoundary":
             case "validationMessageMode":
                 this._renderValidationState();

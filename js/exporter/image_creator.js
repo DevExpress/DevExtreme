@@ -9,7 +9,7 @@ import domUtils from "../core/utils/dom";
 import windowUtils from "../core/utils/window";
 const window = windowUtils.getWindow();
 import { camelize } from "../core/utils/inflector";
-import { Deferred } from "../core/utils/deferred";
+import { Deferred, fromPromise } from "../core/utils/deferred";
 
 const _math = Math;
 const PI = _math.PI;
@@ -193,6 +193,8 @@ function drawPath(context, dAttr) {
                 context.closePath();
                 i += 1;
                 break;
+            default:
+                i++;
         }
     } while(i < dArray.length);
 }
@@ -640,27 +642,30 @@ function drawBackground(context, width, height, backgroundColor, margin) {
     context.fillRect(-margin, -margin, width + margin * 2, height + margin * 2);
 }
 
-function getCanvasFromSvg(markup, width, height, backgroundColor, margin) {
-    var canvas = createCanvas(width, height, margin),
-        context = canvas.getContext("2d"),
-        svgElem = svgUtils.getSvgElement(markup);
-
-    context.translate(margin, margin);
-
-    domAdapter.getBody().appendChild(canvas); // for rtl mode
-    if(svgElem.attributes.direction) {
-        canvas.dir = svgElem.attributes.direction.textContent;
-    }
-
-    drawBackground(context, width, height, backgroundColor, margin);
-    return drawCanvasElements(svgElem.childNodes, context, {}, {
+function convertSvgToCanvas(svg, canvas) {
+    return drawCanvasElements(svg.childNodes, canvas.getContext("2d"), {}, {
         clipPaths: {},
         patterns: {},
         filters: {}
-    }).then(() => {
-        domAdapter.getBody().removeChild(canvas);
-        return canvas;
     });
+}
+
+function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToCanvas = convertSvgToCanvas) {
+    var canvas = createCanvas(width, height, margin),
+        context = canvas.getContext("2d"),
+        svgElem = svgUtils.getSvgElement(markup);
+    context.translate(margin, margin);
+
+    domAdapter.getBody().appendChild(canvas);
+    // for rtl mode
+    if(svgElem.attributes.direction) {
+        canvas.dir = svgElem.attributes.direction.textContent;
+    }
+    drawBackground(context, width, height, backgroundColor, margin);
+
+    return fromPromise(svgToCanvas(svgElem, canvas))
+        .then(() => canvas)
+        .always(() => domAdapter.getBody().removeChild(canvas));
 }
 
 exports.imageCreator = {
@@ -674,27 +679,19 @@ exports.imageCreator = {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        const deferred = new Deferred();
-        getCanvasFromSvg(markup, width, height, backgroundColor, options.margin).then(canvas => {
-            deferred.resolve(getStringFromCanvas(canvas, mimeType));
-        });
-        return deferred;
+        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, options.svgToCanvas).then(canvas => getStringFromCanvas(canvas, mimeType));
     },
 
     getData: function(markup, options) {
         var that = this;
 
-        const deferred = new Deferred();
-
-        exports.imageCreator.getImageData(markup, options).then(binaryData => {
+        return exports.imageCreator.getImageData(markup, options).then(binaryData => {
             const mimeType = "image/" + options.format;
             const data = isFunction(window.Blob) && !options.forceProxy ?
                 that._getBlob(binaryData, mimeType) :
                 that._getBase64(binaryData);
-            deferred.resolve(data);
+            return data;
         });
-
-        return deferred;
     },
 
     _getBlob: function(binaryData, mimeType) {
@@ -713,8 +710,8 @@ exports.imageCreator = {
     }
 };
 
-exports.getData = function(data, options, callback) {
-    return exports.imageCreator.getData(data, options).then(callback);
+exports.getData = function(data, options) {
+    return exports.imageCreator.getData(data, options);
 };
 
 exports.testFormats = function(formats) {

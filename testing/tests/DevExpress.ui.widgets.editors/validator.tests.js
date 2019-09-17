@@ -208,6 +208,45 @@ QUnit.test("Internal validation rules are should be reset when validation rules 
     ]);
 });
 
+QUnit.test("Validator - validation options should be synchrnoized on init", function(assert) {
+    let validator = this.fixture.createValidator({
+        isValid: false
+    });
+
+    assert.strictEqual(validator.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
+
+    this.fixture.teardown();
+    validator = this.fixture.createValidator({
+        validationStatus: "invalid"
+    });
+    assert.strictEqual(validator.option("isValid"), false, "isValid === false");
+
+    this.fixture.teardown();
+    validator = this.fixture.createValidator({
+        validationStatus: "pending"
+    });
+    assert.strictEqual(validator.option("isValid"), true, "isValid === true");
+});
+
+QUnit.test("Validator - validation options should be synchrnoized at runtime", function(assert) {
+    const validator = this.fixture.createValidator({});
+
+    validator.option("isValid", false);
+    assert.strictEqual(validator.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
+
+    validator.option("isValid", true);
+    assert.strictEqual(validator.option("validationStatus"), "valid", "validationStatus === 'valid'");
+
+    validator.option("validationStatus", "pending");
+    assert.ok(validator.option("isValid"), "isValid === true");
+
+    validator.option("validationStatus", "invalid");
+    assert.notOk(validator.option("isValid"), "isValid === false");
+
+    validator.option("validationStatus", "valid");
+    assert.ok(validator.option("isValid"), "isValid === true");
+});
+
 
 QUnit.module("Validator specific tests", {
     beforeEach: function() {

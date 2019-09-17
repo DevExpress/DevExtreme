@@ -23,7 +23,7 @@ exports.export = function(data, options, getData) {
     _isFunction(exportingAction) && exportingAction(eventArgs);
 
     if(!eventArgs.cancel) {
-        return getData(data, options, function(blob) {
+        return getData(data, options).then(blob => {
             _isFunction(exportedAction) && exportedAction();
 
             if(_isFunction(fileSavingAction)) {

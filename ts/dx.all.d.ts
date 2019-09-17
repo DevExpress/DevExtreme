@@ -1806,6 +1806,8 @@ declare module DevExpress.ui {
     }
     /** @name DraggableBase.Options */
     export interface DraggableBaseOptions<T = DraggableBase> extends DOMComponentOptions<T> {
+        /** @name DraggableBase.Options.autoScroll */
+        autoScroll?: boolean;
         /** @name DraggableBase.Options.boundary */
         boundary?: string | Element | JQuery;
         /** @name DraggableBase.Options.container */
@@ -1822,6 +1824,10 @@ declare module DevExpress.ui {
         onDragMove?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** @name DraggableBase.Options.onDragStart */
         onDragStart?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        /** @name DraggableBase.Options.scrollSensitivity */
+        scrollSensitivity?: number;
+        /** @name DraggableBase.Options.scrollSpeed */
+        scrollSpeed?: number;
         /** @name DraggableBase.Options.template */
         template?: DevExpress.core.template | (() => string | Element | JQuery);
     }
@@ -1973,6 +1979,8 @@ declare module DevExpress.ui {
         repaintChangesOnly?: boolean;
         /** @name GridBase.Options.rowAlternationEnabled */
         rowAlternationEnabled?: boolean;
+        /** @name GridBase.Options.rowDragging */
+        rowDragging?: GridBaseRowDragging;
         /** @name GridBase.Options.scrolling */
         scrolling?: GridBaseScrolling;
         /** @name GridBase.Options.searchPanel */
@@ -2323,6 +2331,13 @@ declare module DevExpress.ui {
         icon?: string;
         /** @name GridBaseColumnButton.text */
         text?: string;
+    }
+    /** @name GridBaseRowDragging */
+    export interface GridBaseRowDragging extends dxSortableOptions {
+        /** @name GridBaseRowDragging.enabled */
+        enabled?: boolean;
+        /** @name GridBaseRowDragging.showDragIcons */
+        showDragIcons?: boolean;
     }
     /** @name HierarchicalCollectionWidget.Options */
     export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
@@ -3110,7 +3125,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.pageSize */
         pageSize?: { height?: number, items?: Array<{ height?: number, text?: string, width?: number }>, width?: number };
         /** @name dxDiagram.Options.propertiesPanel */
-        propertiesPanel?: { collapsible?: boolean, groups?: Array<{ commands?: Array<'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'> }>, visible?: boolean };
+        propertiesPanel?: { collapsible?: boolean, enabled?: boolean, groups?: Array<{ commands?: Array<'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'> }> };
         /** @name dxDiagram.Options.readOnly */
         readOnly?: boolean;
         /** @name dxDiagram.Options.showGrid */
@@ -3122,7 +3137,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.toolbar */
         toolbar?: { commands?: Array<'separator' | 'export' | 'undo' | 'redo' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'autoLayout' | 'fullScreen'>, visible?: boolean };
         /** @name dxDiagram.Options.toolbox */
-        toolbox?: { groups?: Array<{ category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, expanded?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipsis' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>, style?: 'icons' | 'texts', title?: string }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>, visible?: boolean };
+        toolbox?: { groups?: Array<{ category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, displayMode?: 'icons' | 'texts', expanded?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipsis' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>, title?: string }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>, visible?: boolean };
         /** @name dxDiagram.Options.units */
         units?: 'in' | 'cm' | 'px';
         /** @name dxDiagram.Options.viewUnits */
@@ -3853,6 +3868,8 @@ declare module DevExpress.ui {
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
         tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentIdExpr?: string | ((data: any) => any), progressExpr?: string | ((data: any) => any), startExpr?: string | ((data: any) => any), titleExpr?: string | ((data: any) => any) };
+        /** @name dxGantt.Options.treeListColumns */
+        treeListColumns?: Array<dxTreeListColumn | string>;
         /** @name dxGantt.Options.treeListWidth */
         treeListWidth?: number;
     }
@@ -5358,7 +5375,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
     /** @name dxSortable.Options */
-    export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
+    export interface dxSortableOptions<T = dxSortable> extends DraggableBaseOptions<T> {
         /** @name dxSortable.Options.dropFeedbackMode */
         dropFeedbackMode?: 'push' | 'indicate';
         /** @name dxSortable.Options.itemOrientation */
@@ -6560,6 +6577,8 @@ declare module DevExpress.viz {
         printingEnabled?: boolean;
         /** @name BaseWidget.Options.export.proxyUrl */
         proxyUrl?: string;
+        /** @name BaseWidget.Options.export.svgToCanvas */
+        svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => Promise<void> | JQueryPromise<void>);
     }
     /** @name BaseWidget.Options.loadingIndicator */
     interface BaseWidgetLoadingIndicator {

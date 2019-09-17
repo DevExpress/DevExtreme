@@ -6,6 +6,9 @@ import ValidationEngine from "../../ui/validation_engine";
 import { Deferred } from "../../core/utils/deferred";
 import ko from "knockout";
 
+const VALIDATION_STATUS_VALID = "valid",
+    VALIDATION_STATUS_PENDING = "pending";
+
 const koDxValidator = Class.inherit({
     ctor(target, { name, validationRules }) {
         this.target = target;
@@ -13,7 +16,7 @@ const koDxValidator = Class.inherit({
         this.isValid = ko.observable(true);
         this.validationError = ko.observable();
         this.validationErrors = ko.observable();
-        this.validationStatus = ko.observable("valid");
+        this.validationStatus = ko.observable(VALIDATION_STATUS_VALID);
 
         this.validationRules = map(validationRules, (rule, index) => {
             return extend({}, rule, {
@@ -31,7 +34,7 @@ const koDxValidator = Class.inherit({
     validate() {
         const currentResult = this._validationInfo && this._validationInfo.result,
             value = this.target();
-        if(currentResult && currentResult.status === "pending" && currentResult.value === value) {
+        if(currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
             return currentResult;
         }
         let result = ValidationEngine.validate(value, this.validationRules, this.name);
@@ -45,7 +48,7 @@ const koDxValidator = Class.inherit({
             isValid: true,
             brokenRule: null,
             pendingRules: null,
-            status: "valid",
+            status: VALIDATION_STATUS_VALID,
             complete: null
         };
         this._applyValidationResult(result);
@@ -59,7 +62,7 @@ const koDxValidator = Class.inherit({
         this.target.dxValidator.validationError(result.brokenRule);
         this.target.dxValidator.validationErrors(result.brokenRules);
         this.target.dxValidator.validationStatus(result.status);
-        if(result.status === "pending") {
+        if(result.status === VALIDATION_STATUS_PENDING) {
             result.complete.then((res) => {
                 if(res === this._validationInfo.result) {
                     this._applyValidationResult(res);
@@ -74,7 +77,7 @@ const koDxValidator = Class.inherit({
             this.fireEvent("validating", [this._validationInfo.result]);
             return;
         }
-        if(result.status !== "pending") {
+        if(result.status !== VALIDATION_STATUS_PENDING) {
             this.fireEvent("validated", [result]);
             if(this._validationInfo.deferred) {
                 this._validationInfo.deferred.resolve(result);

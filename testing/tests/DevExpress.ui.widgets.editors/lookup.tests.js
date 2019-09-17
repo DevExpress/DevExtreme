@@ -2902,6 +2902,14 @@ QUnit.test("Validation message", function(assert) {
     assert.ok(instance);
 });
 
+QUnit.test("Pending indicator is rendered", function(assert) {
+    const $element = $("#widget").dxLookup(),
+        instance = $element.dxLookup("instance");
+
+    instance.option("validationStatus", "pending");
+    assert.ok($element.find(".dx-pending-indicator").dxLoadIndicator("instance").option("visible"));
+});
+
 QUnit.test("Lookup should select an item in the grouped list", function(assert) {
     var data = [{
         "ID": 1,

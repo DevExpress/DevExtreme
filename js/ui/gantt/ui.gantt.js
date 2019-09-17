@@ -52,11 +52,12 @@ class Gantt extends Widget {
     _renderTreeList() {
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
             dataSource: this._tasks,
-            columns: this.option("columns"),
+            columns: this.option("treeListColumns"),
             columnResizingMode: "nextColumn",
             height: "100%",
             width: this.option("treeListWidth"),
             selection: { mode: this._getSelectionMode(this.option("allowSelection")) },
+            selectedRowKeys: this._getArrayFromOneElement(this.option("selectedRowKey")),
             sorting: { mode: "none" },
             scrolling: { showScrollbar: "onHover", mode: "virtual" },
             allowColumnResizing: true,
@@ -93,6 +94,7 @@ class Gantt extends Widget {
             resources: this._resources,
             resourceAssignments: this._resourceAssignments,
             allowSelection: this.option("allowSelection"),
+            selectedRowKey: this.option("selectedRowKey"),
             showResources: this.option("showResources"),
             taskTitlePosition: this.option("taskTitlePosition"),
             showRowLines: this.option("showRowLines"),
@@ -120,12 +122,12 @@ class Gantt extends Widget {
     }
     _onTreeListSelectionChanged(e) {
         const selectedRowKey = e.currentSelectedRowKeys[0];
-        this._ganttView.selectTask(selectedRowKey);
+        this._setGanttViewOption("selectedRowKey", selectedRowKey);
         this.option("selectedRowKey", selectedRowKey);
         this._raiseSelectionChangedAction(selectedRowKey);
     }
     _onGanttViewSelectionChanged(e) {
-        this._setTreeListOption("selectedRowKeys", [e.id]);
+        this._setTreeListOption("selectedRowKeys", this._getArrayFromOneElement(e.id));
     }
     _onGanttViewScroll(e) {
         const treeListScrollable = this._treeList.getScrollable();
@@ -249,6 +251,9 @@ class Gantt extends Widget {
     }
     _getSelectionMode(allowSelection) {
         return allowSelection ? "single" : "none";
+    }
+    _getArrayFromOneElement(element) {
+        return element === undefined || element === null ? [] : [element];
     }
 
     _showDialog(e) {
@@ -424,6 +429,12 @@ class Gantt extends Widget {
                 resourceIdExpr: "resourceId"
             },
             /**
+             * @name dxGanttOptions.treeListColumns
+             * @type Array<dxTreeListColumn,string>
+             * @default undefined
+             */
+            treeListColumns: undefined,
+            /**
             * @name dxGanttOptions.treeListWidth
             * @type number
             * @default 300
@@ -551,6 +562,9 @@ class Gantt extends Widget {
             case "resourceAssignments":
                 this._refreshDataSource("resourceAssignments");
                 break;
+            case "treeListColumns":
+                this._setTreeListOption("columns", this.option(args.name));
+                break;
             case "treeListWidth":
                 this._setInnerElementsWidth();
                 break;
@@ -561,7 +575,7 @@ class Gantt extends Widget {
                 this._setGanttViewOption("taskTitlePosition", args.value);
                 break;
             case "selectedRowKey":
-                this._setTreeListOption("selectedRowKeys", [args.value]);
+                this._setTreeListOption("selectedRowKeys", this._getArrayFromOneElement(args.value));
                 break;
             case "onSelectionChanged":
                 this._createSelectionChangedAction();

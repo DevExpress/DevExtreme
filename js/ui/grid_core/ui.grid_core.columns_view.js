@@ -1070,7 +1070,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return 0;
     },
 
-    _getRowElements: function(tableElement) {
+    _getRowElementsCore: function(tableElement) {
         tableElement = tableElement || this._getTableElement();
 
         if(tableElement) {
@@ -1080,6 +1080,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
 
         return $();
+    },
+
+    _getRowElements: function(tableElement) {
+        return this._getRowElementsCore(tableElement);
     },
 
     getRowIndex: function($row) {
