@@ -13,10 +13,6 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         return [...super.getHandleEventNames(), "keyPress"];
     }
 
-    _keyDownHandler() {
-        this._keyPressHandled = false;
-    }
-
     _keyPressHandler(event) {
         if(this._keyPressHandled) {
             return;
