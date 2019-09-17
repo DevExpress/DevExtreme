@@ -218,7 +218,7 @@ QUnit.test("Draw column chooser with columns.allowHiding == false (select mode)"
     assert.ok(treeView, "column chooser has dxTreeView");
     assert.equal(items.length, 2, "treeView has 2 items");
     assert.ok(items[0].selected, "1st item selected");
-    assert.ok(items[0].disabled, "1st item disabled");
+    assert.notOk(items[0].disabled, "1st item not disabled");
     assert.notOk(items[1].selected, "2nd item not selected");
     assert.notOk(items[1].disabled, "2nd item enabled");
 });
