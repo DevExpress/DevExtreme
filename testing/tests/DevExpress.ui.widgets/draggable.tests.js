@@ -3,10 +3,12 @@ var $ = require("jquery"),
     dragEvents = require("events/drag"),
     pointerMock = require("../../helpers/pointerMock.js"),
     viewPort = require("core/utils/view_port").value,
-    GestureEmitter = require("events/gesture/emitter.gesture.js");
+    GestureEmitter = require("events/gesture/emitter.gesture.js"),
+    animationFrame = require("animation/frame");
 
 require("common.css!");
 require("ui/draggable");
+require("ui/scroll_view");
 
 QUnit.testStart(function() {
     var markup =
@@ -21,7 +23,12 @@ QUnit.testStart(function() {
             <div id="item2" class="draggable" style="width: 30px; height: 50px; background: red;"></div>\
             <div id="item3" class="draggable" style="width: 30px; height: 50px; background: blue;"></div>\
         </div>\
-        <div id="other"></div>';
+        <div id="other"></div>\
+        <div id="scrollable" style="display: none; width: 250px; height: 250px; overflow: auto; position: absolute; left: 0; top: 0;">\
+            <div id="scrollable-container" style="width: 500px; height: 500px;">\
+                <div id="scrollableItem" class="draggable" style="width: 30px; height: 50px; background: black;"></div>\
+            </div>\
+        </div>';
 
     $("#qunit-fixture").html(markup);
 });
@@ -227,6 +234,7 @@ QUnit.test("'boundary' option as window", function(assert) {
         areaHeight = $area.height();
 
     this.createDraggable({
+        autoScroll: false,
         boundary: $area
     });
 
@@ -812,4 +820,302 @@ QUnit.test("Set handle", function(assert) {
 
     // assert
     this.checkPosition(10, 60, assert);
+});
+
+QUnit.module("autoScroll", $.extend({}, moduleConfig, {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        setupDraggable(this, $("#scrollableItem"));
+
+        this.originalRAF = animationFrame.requestAnimationFrame;
+        animationFrame.requestAnimationFrame = function(callback) {
+            return window.setTimeout(callback, 10);
+        };
+
+        $("#area").hide();
+        $("#items").hide();
+        $("#other").hide();
+
+        $("#scrollable").show();
+
+        $("#scrollable").scrollTop(0);
+        $("#scrollable").scrollLeft(0);
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock.reset();
+
+        animationFrame.requestAnimationFrame = this.originalRAF;
+
+        $("#scrollable").hide();
+
+        $("#area").show();
+        $("#items").show();
+        $("#other").show();
+    }
+}));
+
+QUnit.test("Vertical scrolling", function(assert) {
+    // arrange
+    var etalonScrollTop = 0,
+        scrollSensitivity = 10,
+        scrollSpeed = 20,
+        speedIncreasePerPixel = scrollSpeed / scrollSensitivity,
+        speed = 0;
+
+    this.createDraggable({
+        scrollSensitivity: 10,
+        scrollSpeed: 20
+    });
+
+    // act, assert
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    this.pointer.down().move(0, 240);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    for(let i = 1; i < 10; i++) {
+        this.pointer.move(0, 1);
+        this.clock.tick(10);
+
+        speed += speedIncreasePerPixel;
+        etalonScrollTop += speed;
+
+        assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
+    }
+
+    this.pointer.down().move(0, 1);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
+
+    speed = 0;
+
+    this.pointer.move(0, -240);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
+
+    for(let i = 1; i < 10; i++) {
+        this.pointer.move(0, -1);
+        this.clock.tick(10);
+
+        speed += speedIncreasePerPixel;
+        etalonScrollTop -= speed;
+
+        assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
+    }
+
+    this.pointer.down().move(0, -1);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+});
+
+QUnit.test("Horizontal scrolling", function(assert) {
+    // arrange
+    var etalonScrollLeft = 0,
+        speedIncreasePerPixel = 2,
+        speed = 0;
+
+    this.createDraggable({
+        scrollSensitivity: 10,
+        scrollSpeed: 20
+    });
+
+    // act, assert
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+
+    this.pointer.down().move(240, 0);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+
+    for(let i = 1; i < 10; i++) {
+        this.pointer.move(1, 0);
+        this.clock.tick(10);
+
+        speed += speedIncreasePerPixel;
+        etalonScrollLeft += speed;
+
+        assert.equal($("#scrollable").scrollLeft(), etalonScrollLeft, "scrollLeft");
+    }
+
+    this.pointer.down().move(1, 0);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), etalonScrollLeft, "scrollLeft");
+
+    speed = 0;
+
+    this.pointer.move(-240, 0);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), etalonScrollLeft, "scrollLeft");
+
+    for(let i = 1; i < 10; i++) {
+        this.pointer.move(-1, 0);
+        this.clock.tick(10);
+
+        speed += speedIncreasePerPixel;
+        etalonScrollLeft -= speed;
+
+        assert.equal($("#scrollable").scrollLeft(), etalonScrollLeft, "scrollLeft");
+    }
+
+    this.pointer.down().move(-1, 0);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+});
+
+QUnit.test("Horizontal and vertical scrolling", function(assert) {
+    // arrange
+    var etalonScrollValue = 0,
+        speedIncreasePerPixel = 2,
+        speed = 2;
+
+    this.createDraggable({
+        scrollSensitivity: 10,
+        scrollSpeed: 20
+    });
+
+    // act, assert
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    this.pointer.down().move(240, 240);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    for(let i = 1; i < 10; i++) {
+        this.pointer.move(1, 1);
+        this.clock.tick(10);
+
+        etalonScrollValue += speed;
+        speed += speedIncreasePerPixel;
+
+        assert.equal($("#scrollable").scrollLeft(), etalonScrollValue, "scrollLeft");
+        assert.equal($("#scrollable").scrollTop(), etalonScrollValue, "scrollTop");
+    }
+
+    this.pointer.move(1, 1);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), etalonScrollValue, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), etalonScrollValue, "scrollTop");
+
+    speed = 0;
+
+    this.pointer.move(-240, -240);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), etalonScrollValue, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), etalonScrollValue, "scrollTop");
+
+    for(let i = 1; i < 10; i++) {
+        this.pointer.move(-1, -1);
+        this.clock.tick(10);
+
+        speed += speedIncreasePerPixel;
+        etalonScrollValue -= speed;
+
+        assert.equal($("#scrollable").scrollLeft(), etalonScrollValue, "scrollLeft");
+        assert.equal($("#scrollable").scrollTop(), etalonScrollValue, "scrollTop");
+    }
+
+    this.pointer.move(-1, -1);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+});
+
+QUnit.test("Vertical scrolling should not start if on drag start cursor ", function(assert) {
+    this.createDraggable({
+        scrollSensitivity: 10,
+        scrollSpeed: 20
+    });
+
+    $("#scrollableItem").offset({
+        top: 200,
+        left: 0
+    });
+
+    this.pointer.down().move(0, 245);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+});
+
+QUnit.test("Horizontal scrolling should not start if on drag start cursor ", function(assert) {
+    this.createDraggable({
+        scrollSensitivity: 10,
+        scrollSpeed: 20
+    });
+
+    $("#scrollableItem").offset({
+        top: 0,
+        left: 200
+    });
+
+    this.pointer.down().move(245, 0);
+
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+});
+
+QUnit.test("Scrolling with scrollView", function(assert) {
+    // arrange
+    var scrollView = $("#scrollable").dxScrollView({
+        direction: 'both',
+        useNative: false
+    }).dxScrollView("instance");
+
+    this.createDraggable({
+        scrollSensitivity: 10,
+        scrollSpeed: 20
+    });
+
+    // act, assert
+    assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, "scrollOffset");
+
+    this.pointer.down().move(240, 240);
+
+    this.pointer.move(1, 1);
+    this.clock.tick(10);
+
+    assert.deepEqual(scrollView.scrollOffset(), { top: 2, left: 2 }, "scrollOffset");
+
+    this.pointer.move(-1, -1);
+    this.clock.tick(10);
+
+    assert.deepEqual(scrollView.scrollOffset(), { top: 2, left: 2 }, "scrollOffset");
+});
+
+QUnit.test("Autoscroll should work fine if element was dropped and dragged again", function(assert) {
+    // arrange
+    this.createDraggable({
+        scrollSensitivity: 10,
+        scrollSpeed: 20
+    });
+
+    // act, assert
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    this.pointer.down().move(240, 240);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    this.pointer.up().down().move(1, 1);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 4, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 4, "scrollTop");
 });
