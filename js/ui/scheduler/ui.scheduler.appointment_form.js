@@ -46,13 +46,14 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    create: function(componentCreator, $container, isReadOnly) {
+    create: function(componentCreator, $container, isReadOnly, formData) {
         this._appointmentForm = componentCreator($container, Form, {
             items: this._editors,
             readOnly: isReadOnly,
             showValidationSummary: true,
             scrollingEnabled: true,
             colCount: 2,
+            formData: formData,
             showColonAfterLabel: false,
             screenByWidth: () => {
                 const formWidth = $container.parent().outerWidth();
