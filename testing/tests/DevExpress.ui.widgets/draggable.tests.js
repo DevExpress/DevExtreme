@@ -8,8 +8,6 @@ var $ = require("jquery"),
 require("common.css!");
 require("ui/draggable");
 
-viewPort($("body").css({ margin: "0px", padding: "0px", height: "600px" }));
-
 QUnit.testStart(function() {
     var markup =
         '<div id="area" style="width: 300px; height: 250px; position: relative; background: green;">\

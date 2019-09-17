@@ -214,6 +214,17 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return this._$dragElement && this._$dragElement.hasClass(this._addWidgetPrefix(CLONE_CLASS));
     },
 
+    _getDragTemplateArgs: function($element) {
+        let container = this._getContainer();
+
+        return {
+            container: getPublicElement($(container)),
+            model: {
+                sourceElement: getPublicElement($element)
+            }
+        };
+    },
+
     _createDragElement: function($element) {
         let result = $element,
             clone = this.option("clone"),
@@ -222,12 +233,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         if(template) {
             template = this._getTemplate(template);
-            result = $(template.render({
-                container: getPublicElement($(container)),
-                model: {
-                    sourceElement: getPublicElement($element)
-                }
-            }));
+            result = $(template.render(this._getDragTemplateArgs($element)));
         } else if(clone) {
             result = $element.clone().appendTo(container);
         }

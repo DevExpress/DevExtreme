@@ -1,11 +1,8 @@
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
-import viewPort from "core/utils/view_port";
 
 import "common.css!";
 import "ui/sortable";
-
-viewPort.value($("body").css({ margin: "0px", padding: "0px", height: "600px" }).addClass("dx-viewport"));
 
 QUnit.testStart(function() {
     let markup =
@@ -52,6 +49,30 @@ QUnit.module("rendering", moduleConfig);
 
 QUnit.test("Element has class", function(assert) {
     assert.ok(this.createSortable().$element().hasClass(SORTABLE_CLASS));
+});
+
+QUnit.test("Drag template - check args", function(assert) {
+    // arrange
+    let items,
+        dragTemplate = sinon.spy(() => {
+            return $("<div>");
+        });
+
+    this.createSortable({
+        filter: ".draggable",
+        template: dragTemplate
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(0)).start().down().move(10, 0);
+
+    // assert
+    assert.strictEqual(dragTemplate.callCount, 1, "drag template is called");
+    assert.deepEqual($(dragTemplate.getCall(0).args[0].sourceElement).get(0), items.get(0), "first arg");
+    assert.strictEqual(dragTemplate.getCall(0).args[1], 0, "second arg");
+    assert.deepEqual($(dragTemplate.getCall(0).args[2]).get(0), $("body").get(0), "third arg");
 });
 
 
@@ -354,6 +375,71 @@ QUnit.test("The source item should be correct after drag and drop items", functi
     $item = items.eq(1);
     assert.ok($item.hasClass("dx-sortable-source"), "there is a source");
     assert.strictEqual($item.attr("id"), "item2", "placeholder id");
+});
+
+QUnit.test("Dragging an item to the last position when there is ignored (not draggable) item", function(assert) {
+    // arrange
+    let pointer,
+        items;
+
+    this.$element.append("<div id='item4'></div>");
+    this.createSortable({
+        filter: ".draggable"
+    });
+
+    items = this.$element.children();
+
+    // assert
+    assert.strictEqual(items.length, 4, "item count");
+
+    // act
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 90);
+
+    // assert
+    items = this.$element.children();
+    assert.ok(items.eq(2).hasClass("dx-sortable-source"), "source item");
+    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+
+    // act
+    pointer.up();
+
+    // assert
+    items = this.$element.children();
+    assert.strictEqual(items.eq(2).attr("id"), "item1", "source item");
+    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+});
+
+QUnit.test("Dragging an item to the last position when there is ignored (not draggable) item and dropFeedbackMode option is 'indicate'", function(assert) {
+    // arrange
+    let pointer,
+        items;
+
+    this.$element.append("<div id='item4'></div>");
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate"
+    });
+
+    items = this.$element.children();
+
+    // assert
+    assert.strictEqual(items.length, 4, "item count");
+
+    // act
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 90);
+
+    // assert
+    items = this.$element.children();
+    assert.ok(items.eq(3).hasClass("dx-sortable-placeholder"), "source item");
+    assert.strictEqual(items.eq(4).attr("id"), "item4", "ignored item");
+
+    // act
+    pointer.up();
+
+    // assert
+    items = this.$element.children();
+    assert.strictEqual(items.eq(2).attr("id"), "item1", "source item");
+    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
 });
 
 
