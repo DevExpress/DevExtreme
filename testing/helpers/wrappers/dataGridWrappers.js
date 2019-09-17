@@ -7,6 +7,7 @@ export class DataGridWrapper {
         this.headerPanel = new HeaderPanelWrapper(containerSelector);
         this.headers = new HeadersWrapper(containerSelector);
         this.filterRow = new FilterRowWrapper(containerSelector);
+        this.rowsView = new RowsViewWrapper(containerSelector);
     }
 }
 
@@ -29,6 +30,10 @@ export class RowsViewWrapper extends WrapperBase {
         return this.getVirtualRowElement().find("td").eq(columnIndex);
     }
 
+    getRowElement(rowIndex) {
+        return this.getElement().find(".dx-row").eq(rowIndex);
+    }
+
     getDataRowElement(rowIndex) {
         return this.getElement().find(".dx-data-row").eq(rowIndex);
     }
@@ -39,6 +44,17 @@ export class RowsViewWrapper extends WrapperBase {
 
     getSelectionCheckBoxElement(rowIndex) {
         return this.getDataRowElement(rowIndex).find(".dx-select-checkbox");
+    }
+
+    isRowVisible(rowIndex) {
+        const $row = this.getRowElement(rowIndex);
+        return this._isInnerElementVisible($row);
+    }
+
+    _isInnerElementVisible($element) {
+        const rowsViewRect = this.getElement()[0].getBoundingClientRect();
+        const elementRect = $element[0].getBoundingClientRect();
+        return elementRect.top > rowsViewRect.top && elementRect.bottom <= rowsViewRect.bottom;
     }
 }
 
