@@ -214,7 +214,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     _optionChanged(args) {
         switch(args.name) {
             case "actions":
-                this._renderIcon();
+                if(this._isVisible()) this._renderIcon();
                 this._renderCloseIcon();
                 this._renderClick();
                 this._renderActions();
