@@ -2534,7 +2534,9 @@ const Scheduler = Widget.inherit({
             this._editAppointmentData = targetAppointment;
 
         } else {
-            this._updateAppointment(targetAppointment, updatedAppointment);
+            this._updateAppointment(targetAppointment, updatedAppointment, function() {
+                this._appointments.moveAppointmentBack();
+            });
         }
     },
 

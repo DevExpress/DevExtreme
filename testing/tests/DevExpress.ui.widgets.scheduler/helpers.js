@@ -125,6 +125,8 @@ export class SchedulerTestWrapper {
             setSubject: (value) => this.appointmentForm.getEditor("text").option("value", value),
 
             hasFormSingleColumn: () => this.appointmentPopup.getPopup().find(".dx-responsivebox").hasClass("dx-responsivebox-screen-xs"),
+            getRecurrentAppointmentFormDialogButtons: () => $(".dx-dialog-buttons .dx-button"),
+            clickFormDialogButton: (index = 0) => this.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(index).trigger("dxclick"),
         };
 
         this.workSpace = {
