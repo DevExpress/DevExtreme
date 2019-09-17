@@ -23,9 +23,9 @@ const VALIDATOR_CLASS = "dx-validator",
 * @export default
 */
 const Validator = DOMComponent.inherit({
-    ctor(_, options) {
-        this._initialValidationConfig = options;
+    _initOptions: function(options) {
         this.callBase.apply(this, arguments);
+        this._initValidationOptions(options);
     },
 
     _getDefaultOptions() {
@@ -113,7 +113,6 @@ const Validator = DOMComponent.inherit({
 
     _init() {
         this.callBase();
-        this._initValidationOptions();
         this._initGroupRegistration();
         this.focused = Callbacks();
         this._initAdapter();

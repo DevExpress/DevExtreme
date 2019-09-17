@@ -45,10 +45,14 @@ const getValidationErrorMessage = function(validationErrors) {
 * @hidden
 */
 const Editor = Widget.inherit({
-    ctor: function(_, options) {
+    ctor: function() {
         this.showValidationMessageTimeout = null;
-        this._initialValidationConfig = options;
         this.callBase.apply(this, arguments);
+    },
+
+    _initOptions: function(options) {
+        this.callBase.apply(this, arguments);
+        this._initValidationOptions(options);
     },
 
     _init: function() {
@@ -61,7 +65,6 @@ const Editor = Widget.inherit({
         if($element) {
             dataUtils.data($element[0], VALIDATION_TARGET, this);
         }
-        this._initValidationOptions();
     },
 
     _getDefaultOptions: function() {
@@ -127,7 +130,7 @@ const Editor = Widget.inherit({
             /**
             * @name EditorOptions.validationStatus
             * @type Enums.ValidationStatus
-            * @default VALIDATION_STATUS_VALID
+            * @default "valid"
             */
             validationStatus: VALIDATION_STATUS_VALID,
 

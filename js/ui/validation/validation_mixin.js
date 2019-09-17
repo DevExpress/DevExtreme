@@ -1,5 +1,3 @@
-import { inArray } from "../../core/utils/array";
-
 const VALIDATION_STATUS_VALID = "valid",
     VALIDATION_STATUS_INVALID = "invalid",
     VALIDATION_STATUS_PENDING = "pending";
@@ -23,16 +21,14 @@ const ValidationMixin = {
         return group;
     },
 
-    _initValidationOptions() {
-        if(this._initialValidationConfig) {
+    _initValidationOptions(options) {
+        if(options) {
             const syncOptions = ["isValid", "validationStatus", "validationError", "validationErrors"];
-            for(let prop in this._initialValidationConfig) {
-                const index = inArray(prop, syncOptions);
-                if(index >= 0) {
-                    this._synchronizeValidationOptions({ name: prop, value: this._initialValidationConfig[prop] });
+            syncOptions.forEach((prop) => {
+                if(prop in options) {
+                    this._synchronizeValidationOptions({ name: prop, value: options[prop] });
                 }
-            }
-            delete this._initialValidationConfig;
+            });
         }
     },
 
