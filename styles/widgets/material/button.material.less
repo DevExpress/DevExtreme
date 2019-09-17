@@ -5,6 +5,7 @@
     @MATERIAL_BUTTON_MIN_WIDTH: 64px;
     @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0 1px 3px;
     @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0 4px 6px;
+    @MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT: 28px;
 }
 .dx-size-compact() {
     @MATERIAL_BUTTON_HORIZONTAL_PADDING: 16px;
@@ -13,8 +14,8 @@
     @MATERIAL_BUTTON_MIN_WIDTH: 48px;
     @MATERIAL_BUTTON_BOX_SHADOW_SIZE: 0 1px 3px;
     @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE: 0 4px 6px;
+    @MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT: 22px;
 }
-
 
 @MATERIAL_BUTTON_PADDING: @MATERIAL_BUTTON_VERTICAL_PADDING @MATERIAL_BUTTON_HORIZONTAL_PADDING;
 @MATERIAL_BUTTON_ICONONLY_PADDING: @MATERIAL_BUTTON_VERTICAL_PADDING;
@@ -383,9 +384,33 @@
 
 .dx-editor-underlined {
     .dx-texteditor-buttons-container {
-        > .dx-button {
-            height: 29px;
-            margin: 0 @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN 3px;
+        > .dx-button.dx-button-mode-text {
+            height: @MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT;
+            margin: 1px @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN 3px;
+
+            .dx-button-content {
+                display: flex;
+                padding-top: @MATERIAL_BUTTON_VERTICAL_PADDING - 1px;
+
+                .dx-icon {
+                    align-self: center;
+                    margin-top: 1px;
+                }
+            }
+
+            &.dx-button-has-text {
+                .dx-button-content .dx-icon {
+                    margin-top: 3px;
+                }
+            }
+
+            &:not(.dx-button-has-text) {
+                min-width: @MATERIAL_UNDERLINED_EDITOR_BUTTON_HEIGHT;
+
+                .dx-button-content {
+                    padding: 2px;
+                }
+            }
         }
 
         &:first-child {
