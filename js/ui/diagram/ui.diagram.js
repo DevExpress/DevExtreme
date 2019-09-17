@@ -155,7 +155,7 @@ class Diagram extends Widget {
                 var $toolboxContainer = $(e.$element);
                 this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8,
                     { 'data-toggle': 'shape-toolbox-tooltip' },
-                    e.shapes || e.category, e.style === "texts");
+                    e.shapes || e.category, e.displayMode === "texts");
                 this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
@@ -1384,8 +1384,8 @@ class Diagram extends Widget {
                 * @type String
                 */
                 /**
-                * @name dxDiagramOptions.toolbox.groups.style
-                * @type Enums.DiagramToolboxStyle
+                * @name dxDiagramOptions.toolbox.groups.displayMode
+                * @type Enums.DiagramToolboxDisplayMode
                 */
                 /**
                 * @name dxDiagramOptions.toolbox.groups.expanded
