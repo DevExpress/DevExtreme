@@ -2380,8 +2380,10 @@ QUnit.test("Custom parser can be asynchronous", function(assert) {
         assert.equal(i, 1);
     }).always(done);
 
-    deferred.then(() => i = 1);
-    deferred.resolve();
+    setTimeout(function() {
+        i = 1;
+        deferred.resolve();
+    });
 });
 
 QUnit.test("Remove canvas if rejected", function(assert) {
@@ -2399,7 +2401,7 @@ QUnit.test("Remove canvas if rejected", function(assert) {
         }
     }, true);
 
-    $.when(imageBlob).catch(() => {
+    $.when(imageBlob).fail(() => {
         assert.strictEqual(window.CanvasRenderingContext2D.prototype.fillRect.lastCall.thisValue.canvas.parentElement, null);
     }).always(done);
 
