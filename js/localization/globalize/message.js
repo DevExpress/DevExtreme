@@ -1,22 +1,22 @@
-import "./core";
+require("./core");
 
-import Globalize from "globalize";
-import messageLocalization from "../message";
-import coreLocalization from "../core";
+var Globalize = require("globalize"),
+    messageLocalization = require("../message"),
+    coreLocalization = require("../core");
 
-import "globalize/message";
+require("globalize/message");
 
 if(Globalize && Globalize.formatMessage) {
 
-    const DEFAULT_LOCALE = "en";
+    var DEFAULT_LOCALE = "en";
 
-    const originalLoadMessages = Globalize.loadMessages;
+    var originalLoadMessages = Globalize.loadMessages;
 
-    Globalize.loadMessages = messages => {
+    Globalize.loadMessages = function(messages) {
         messageLocalization.load(messages);
     };
 
-    const globalizeMessageLocalization = {
+    var globalizeMessageLocalization = {
         ctor: function() {
             this.load(this._dictionary);
         },
@@ -31,8 +31,8 @@ if(Globalize && Globalize.formatMessage) {
         },
 
         getFormatter: function(key, locale) {
-            const currentLocale = locale || coreLocalization.locale();
-            let formatter = this._getFormatterBase(key, locale);
+            var currentLocale = locale || coreLocalization.locale(),
+                formatter = this._getFormatterBase(key, locale);
 
             if(!formatter) {
                 formatter = this._formatterByGlobalize(key, locale);
@@ -46,8 +46,8 @@ if(Globalize && Globalize.formatMessage) {
         },
 
         _formatterByGlobalize: function(key, locale) {
-            const currentGlobalize = !locale || locale === coreLocalization.locale() ? Globalize : new Globalize(locale);
-            let result;
+            var currentGlobalize = !locale || locale === coreLocalization.locale() ? Globalize : new Globalize(locale),
+                result;
 
             if(this._messageLoaded(key, locale)) {
                 result = currentGlobalize.messageFormatter(key);
@@ -57,13 +57,14 @@ if(Globalize && Globalize.formatMessage) {
         },
 
         _messageLoaded: function(key, locale) {
-            const currentCldr = locale ? new Globalize(locale).cldr : Globalize.locale(), value = currentCldr.get(["globalize-messages/{bundle}", key]);
+            var currentCldr = locale ? new Globalize(locale).cldr : Globalize.locale(),
+                value = currentCldr.get(["globalize-messages/{bundle}", key]);
 
             return !!value;
         },
 
         _loadSingle: function(key, value, locale) {
-            const data = {};
+            var data = {};
 
             data[locale] = {};
             data[locale][key] = value;

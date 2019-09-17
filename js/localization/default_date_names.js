@@ -1,19 +1,19 @@
-import iteratorUtils from "../core/utils/iterator";
+var iteratorUtils = require("../core/utils/iterator");
 
-const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const PERIODS = ["AM", "PM"];
-const QUARTERS = ["Q1", "Q2", "Q3", "Q4"];
+var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    PERIODS = ["AM", "PM"],
+    QUARTERS = ["Q1", "Q2", "Q3", "Q4"];
 
 // TODO: optimize
-const cutCaptions = (captions, format) => {
-    const lengthByFormat = {
+var cutCaptions = function(captions, format) {
+    var lengthByFormat = {
         abbreviated: 3,
         short: 2,
         narrow: 1
     };
 
-    return iteratorUtils.map(captions, caption => {
+    return iteratorUtils.map(captions, function(caption) {
         return caption.substr(0, lengthByFormat[format]);
     });
 };

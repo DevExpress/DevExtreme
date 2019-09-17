@@ -6,7 +6,6 @@
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
-    var isIntlTest = Model.ScriptVirtualPath.Contains("intl.tests");
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -32,11 +31,6 @@
         }
         if(isServerSideTest) {
             yield return Url.Content("~/testing/helpers/ssrEmulator.js");
-        }
-
-        yield return Url.Content("~/testing/helpers/noIntl.js");
-        if(isIntlTest) {
-            yield return Url.Content("~/node_modules/intl/index.js");
         }
     }
 }
@@ -149,7 +143,6 @@
     <script>
         (function() {
             jQuery.noConflict();
-            window.Intl = undefined;
 
             var cacheBuster = '@Url.CacheBuster()';
             if(cacheBuster.length) {
@@ -225,6 +218,7 @@
         })();
     </script>
 </head>
+
 <a class="up" href="@Url.Action("Index")"></a>
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>

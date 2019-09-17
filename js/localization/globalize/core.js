@@ -1,8 +1,8 @@
-import Globalize from "globalize";
-import coreLocalization from "../core";
+var Globalize = require("globalize"),
+    coreLocalization = require("../core");
 
 if(Globalize && Globalize.load) {
-    const likelySubtags = {
+    var likelySubtags = {
         "supplemental": {
             "version": {
                 "_cldrVersion": "28",

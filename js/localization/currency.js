@@ -1,12 +1,13 @@
-import { extend } from "../core/utils/extend";
+var extend = require("../core/utils/extend").extend,
+    numberLocalization = require("./number");
 
-module.exports = {
+numberLocalization.inject({
     _formatNumberCore: function(value, format, formatConfig) {
         if(format === "currency") {
             formatConfig.precision = formatConfig.precision || 0;
 
-            let result = this.format(value, extend({}, formatConfig, { type: "fixedpoint" }));
-            const currencyPart = this.getCurrencySymbol().symbol.replace("$", "$$$$");
+            var result = this.format(value, extend({}, formatConfig, { type: "fixedpoint" })),
+                currencyPart = this.getCurrencySymbol().symbol.replace("$", "$$$$");
 
             result = result.replace(/^(\D*)(\d.*)/, "$1" + currencyPart + "$2");
 
@@ -21,4 +22,4 @@ module.exports = {
     getOpenXmlCurrencyFormat: function() {
         return "$#,##0{0}_);\\($#,##0{0}\\)";
     }
-};
+});
