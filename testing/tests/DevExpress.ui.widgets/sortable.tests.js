@@ -505,7 +505,7 @@ QUnit.test("onDragEnd - check args when dragging an item down", function(assert)
     assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(args[0].inside, undefined, "inside is not defined");
+    assert.strictEqual(args[0].inside, false, "inside is false");
 });
 
 QUnit.test("onDragEnd - check args when dragging an item up", function(assert) {
@@ -872,13 +872,16 @@ QUnit.test("Update item points when dragging an item to another the sortable wid
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
 
     // assert
-    assert.equal(sortable2._dragInfo.itemPoints.length, 4, "point count");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[0].top, 30, "top of the first point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[0].index, 0, "index of the first point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[1].top, 60, "top of the second point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[1].index, 1, "index of the second point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[2].top, 90, "top of the third point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[2].index, 2, "index of the third point");
+    var itemPoints = sortable2.option("itemPoints");
+    assert.equal(itemPoints.length, 5, "point count");
+    assert.deepEqual(itemPoints[0].top, 0, "top of the first point");
+    assert.deepEqual(itemPoints[0].index, 0, "index of the first point");
+    assert.deepEqual(itemPoints[1].top, 30, "top of the first point");
+    assert.deepEqual(itemPoints[1].index, 1, "index of the first point");
+    assert.deepEqual(itemPoints[2].top, 60, "top of the second point");
+    assert.deepEqual(itemPoints[2].index, 2, "index of the second point");
+    assert.deepEqual(itemPoints[3].top, 90, "top of the third point");
+    assert.deepEqual(itemPoints[3].index, 3, "index of the third point");
 });
 
 QUnit.test("Drag and drop item from draggable to sortable", function(assert) {
