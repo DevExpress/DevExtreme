@@ -1,21 +1,20 @@
-var $ = require("../core/renderer"),
-    dependencyInjector = require("../core/utils/dependency_injector"),
-    extend = require("../core/utils/extend").extend,
-    each = require("../core/utils/iterator").each,
-    stringFormat = require("../core/utils/string").format,
-    humanize = require("../core/utils/inflector").humanize,
-    coreLocalization = require("./core");
+import $ from "../core/renderer";
+import dependencyInjector from "../core/utils/dependency_injector";
+import { extend } from "../core/utils/extend";
+import { each } from "../core/utils/iterator";
+import { format as stringFormat } from "../core/utils/string";
+import { humanize } from "../core/utils/inflector";
+import coreLocalization from "./core";
+import defaultMessages from "./default_messages";
 
-require("./core");
+const PARENT_LOCALE_SEPARATOR = "-";
 
-var PARENT_LOCALE_SEPARATOR = "-";
+const baseDictionary = extend(true, {}, defaultMessages);
 
-var baseDictionary = extend(true, {}, require("./default_messages"));
+import parentLocales from "./cldr-data/parent_locales";
 
-var parentLocales = require("./cldr-data/parentLocales");
-
-var getParentLocale = function(locale) {
-    var parentLocale = parentLocales[locale];
+const getParentLocale = locale => {
+    const parentLocale = parentLocales[locale];
 
     if(parentLocale) {
         return parentLocale !== "root" && parentLocale;
@@ -24,13 +23,13 @@ var getParentLocale = function(locale) {
     return locale.substr(0, locale.lastIndexOf(PARENT_LOCALE_SEPARATOR));
 };
 
-var getDataByLocale = function(localeData, locale) {
+const getDataByLocale = (localeData, locale) => {
     return localeData[locale] || {};
 };
 
-var getValueByClosestLocale = function(localeData, locale, key) {
-    var value = getDataByLocale(localeData, locale)[key],
-        isRootLocale;
+const getValueByClosestLocale = (localeData, locale, key) => {
+    let value = getDataByLocale(localeData, locale)[key];
+    let isRootLocale;
 
     while(!value && !isRootLocale) {
         locale = getParentLocale(locale);
@@ -45,9 +44,9 @@ var getValueByClosestLocale = function(localeData, locale, key) {
     return value;
 };
 
-var newMessages = {};
+const newMessages = {};
 
-var messageLocalization = dependencyInjector({
+const messageLocalization = dependencyInjector({
     _dictionary: baseDictionary,
 
     load: function(messages) {
@@ -61,13 +60,13 @@ var messageLocalization = dependencyInjector({
     },
 
     localizeString: function(text) {
-        var that = this,
-            regex = new RegExp("(^|[^a-zA-Z_0-9" + that._localizablePrefix + "-]+)(" + that._localizablePrefix + "{1,2})([a-zA-Z_0-9-]+)", "g"),
-            escapeString = that._localizablePrefix + that._localizablePrefix;
+        const that = this;
+        const regex = new RegExp("(^|[^a-zA-Z_0-9" + that._localizablePrefix + "-]+)(" + that._localizablePrefix + "{1,2})([a-zA-Z_0-9-]+)", "g");
+        const escapeString = that._localizablePrefix + that._localizablePrefix;
 
-        return text.replace(regex, function(str, prefix, escape, localizationKey) {
-            var defaultResult = that._localizablePrefix + localizationKey,
-                result;
+        return text.replace(regex, (str, prefix, escape, localizationKey) => {
+            const defaultResult = that._localizablePrefix + localizationKey;
+            let result;
 
             if(escape !== escapeString) {
                 result = that.format(localizationKey);
@@ -86,9 +85,9 @@ var messageLocalization = dependencyInjector({
     },
 
     localizeNode: function(node) {
-        var that = this;
+        const that = this;
 
-        $(node).each(function(index, nodeItem) {
+        $(node).each((index, nodeItem) => {
             if(!nodeItem.nodeType) {
                 return;
             }
@@ -97,9 +96,9 @@ var messageLocalization = dependencyInjector({
                 nodeItem.nodeValue = that.localizeString(nodeItem.nodeValue);
             } else {
                 if(!$(nodeItem).is("iframe")) { // T199912
-                    each(nodeItem.attributes || [], function(index, attr) {
+                    each(nodeItem.attributes || [], (index, attr) => {
                         if(typeof attr.value === "string") {
-                            var localizedValue = that.localizeString(attr.value);
+                            const localizedValue = that.localizeString(attr.value);
 
                             if(attr.value !== localizedValue) {
                                 attr.value = localizedValue;
@@ -107,7 +106,7 @@ var messageLocalization = dependencyInjector({
                         }
                     });
 
-                    $(nodeItem).contents().each(function(index, node) {
+                    $(nodeItem).contents().each((index, node) => {
                         that.localizeNode(node);
                     });
                 }
@@ -131,11 +130,11 @@ var messageLocalization = dependencyInjector({
     },
 
     _getFormatterBase: function(key, locale) {
-        var message = getValueByClosestLocale(this._dictionary, locale || coreLocalization.locale(), key);
+        const message = getValueByClosestLocale(this._dictionary, locale || coreLocalization.locale(), key);
 
         if(message) {
             return function() {
-                var args = arguments.length === 1 && Array.isArray(arguments[0]) ? arguments[0].slice(0) : Array.prototype.slice.call(arguments, 0);
+                const args = arguments.length === 1 && Array.isArray(arguments[0]) ? arguments[0].slice(0) : Array.prototype.slice.call(arguments, 0);
                 args.unshift(message);
                 return stringFormat.apply(this, args);
             };
@@ -143,8 +142,8 @@ var messageLocalization = dependencyInjector({
     },
 
     format: function(key) {
-        var formatter = this.getFormatter(key);
-        var values = Array.prototype.slice.call(arguments, 1);
+        const formatter = this.getFormatter(key);
+        const values = Array.prototype.slice.call(arguments, 1);
 
         return formatter && formatter.apply(this, values) || "";
     }
