@@ -5,12 +5,11 @@ import { each } from "../core/utils/iterator";
 import { format as stringFormat } from "../core/utils/string";
 import { humanize } from "../core/utils/inflector";
 import coreLocalization from "./core";
-
-require("./core");
+import defaultMessages from "./default_messages";
 
 const PARENT_LOCALE_SEPARATOR = "-";
 
-const baseDictionary = extend(true, {}, require("./default_messages"));
+const baseDictionary = extend(true, {}, defaultMessages);
 
 import parentLocales from "./cldr-data/parent_locales";
 
@@ -29,7 +28,8 @@ const getDataByLocale = (localeData, locale) => {
 };
 
 const getValueByClosestLocale = (localeData, locale, key) => {
-    let value = getDataByLocale(localeData, locale)[key], isRootLocale;
+    let value = getDataByLocale(localeData, locale)[key];
+    let isRootLocale;
 
     while(!value && !isRootLocale) {
         locale = getParentLocale(locale);
@@ -60,7 +60,9 @@ const messageLocalization = dependencyInjector({
     },
 
     localizeString: function(text) {
-        const that = this, regex = new RegExp("(^|[^a-zA-Z_0-9" + that._localizablePrefix + "-]+)(" + that._localizablePrefix + "{1,2})([a-zA-Z_0-9-]+)", "g"), escapeString = that._localizablePrefix + that._localizablePrefix;
+        const that = this;
+        const regex = new RegExp("(^|[^a-zA-Z_0-9" + that._localizablePrefix + "-]+)(" + that._localizablePrefix + "{1,2})([a-zA-Z_0-9-]+)", "g");
+        const escapeString = that._localizablePrefix + that._localizablePrefix;
 
         return text.replace(regex, (str, prefix, escape, localizationKey) => {
             const defaultResult = that._localizablePrefix + localizationKey;

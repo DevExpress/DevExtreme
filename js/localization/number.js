@@ -11,7 +11,8 @@ import currencyLocalization from './currency';
 import intlNumberLocalization from "./intl/number";
 
 const hasIntl = typeof Intl !== "undefined";
-const MAX_LARGE_NUMBER_POWER = 4, DECIMAL_BASE = 10;
+const MAX_LARGE_NUMBER_POWER = 4;
+const DECIMAL_BASE = 10;
 
 const NUMERIC_FORMATS = ["currency", "fixedpoint", "exponential", "percent", "decimal"];
 
@@ -60,7 +61,8 @@ const numberLocalization = dependencyInjector({
     },
 
     _calculateNumberPower: function(value, base, minPower, maxPower) {
-        let number = Math.abs(value), power = 0;
+        let number = Math.abs(value);
+        let power = 0;
 
         if(number > 1) {
             while(number && number >= base && (maxPower === undefined || power < maxPower)) {
@@ -113,7 +115,9 @@ const numberLocalization = dependencyInjector({
     },
 
     _formatNumberExponential: function(value, formatConfig) {
-        let power = this._calculateNumberPower(value, DECIMAL_BASE), number = this._getNumberByPower(value, power, DECIMAL_BASE), powString;
+        let power = this._calculateNumberPower(value, DECIMAL_BASE);
+        let number = this._getNumberByPower(value, power, DECIMAL_BASE);
+        let powString;
 
         if(formatConfig.precision === undefined) {
             formatConfig.precision = 1;
@@ -223,7 +227,10 @@ const numberLocalization = dependencyInjector({
             return value;
         }
 
-        const fromFirstDigit = toStandard ? digits[1] : "0", toFirstDigit = toStandard ? "0" : digits[1], fromLastDigit = toStandard ? digits[0] : "9", regExp = new RegExp("[" + fromFirstDigit + "-" + fromLastDigit + "]", "g");
+        const fromFirstDigit = toStandard ? digits[1] : "0";
+        const toFirstDigit = toStandard ? "0" : digits[1];
+        const fromLastDigit = toStandard ? digits[0] : "9";
+        const regExp = new RegExp("[" + fromFirstDigit + "-" + fromLastDigit + "]", "g");
 
         return value.replace(regExp, char => {
             return String.fromCharCode(char.charCodeAt(0) + (toFirstDigit.charCodeAt(0) - fromFirstDigit.charCodeAt(0)));
@@ -238,7 +245,10 @@ const numberLocalization = dependencyInjector({
             return 1;
         }
 
-        const separators = this._getSeparators(), regExp = new RegExp("[0-9" + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + "]+", "g"), negativeEtalon = this.format(-1, format).replace(regExp, "1"), cleanedText = text.replace(regExp, "1");
+        const separators = this._getSeparators();
+        const regExp = new RegExp("[0-9" + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + "]+", "g");
+        const negativeEtalon = this.format(-1, format).replace(regExp, "1");
+        const cleanedText = text.replace(regExp, "1");
 
         return cleanedText === negativeEtalon ? -1 : 1;
     },
@@ -288,12 +298,12 @@ const numberLocalization = dependencyInjector({
             errors.log("W0011");
         }
 
-        const decimalSeparator = this.getDecimalSeparator(),
-            regExp = new RegExp("[^0-9" + escapeRegExp(decimalSeparator) + "]", "g"),
-            cleanedText = text
-                .replace(regExp, "")
-                .replace(decimalSeparator, ".")
-                .replace(/\.$/g, "");
+        const decimalSeparator = this.getDecimalSeparator();
+        const regExp = new RegExp("[^0-9" + escapeRegExp(decimalSeparator) + "]", "g");
+        const cleanedText = text
+            .replace(regExp, "")
+            .replace(decimalSeparator, ".")
+            .replace(/\.$/g, "");
 
         if(cleanedText === "." || cleanedText === "") {
             return null;

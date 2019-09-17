@@ -9,10 +9,9 @@ import defaultDateNames from "./default_date_names";
 import numberLocalization from "./number";
 import errors from "../core/errors";
 import intlDateLocalization from "./intl/date";
+import "./core";
 
 const hasIntl = typeof Intl !== "undefined";
-
-require("./core");
 
 const FORMATS_TO_PATTERN_MAP = {
     "shortdate": "M/d/y",
@@ -63,7 +62,8 @@ const dateLocalization = dependencyInjector({
         return this._expandPattern(format).indexOf("EEEE") !== -1;
     },
     getFormatParts: function(format) {
-        const pattern = this._getPatternByFormat(format) || format, result = [];
+        const pattern = this._getPatternByFormat(format) || format;
+        const result = [];
 
         iteratorUtils.each(pattern.split(/\W+/), (_, formatPart) => {
             iteratorUtils.each(possiblePartPatterns, (partName, possiblePatterns) => {
@@ -92,7 +92,10 @@ const dateLocalization = dependencyInjector({
     },
 
     is24HourFormat: function(format) {
-        const amTime = new Date(2017, 0, 20, 11, 0, 0, 0), pmTime = new Date(2017, 0, 20, 23, 0, 0, 0), amTimeFormatted = this.format(amTime, format), pmTimeFormatted = this.format(pmTime, format);
+        const amTime = new Date(2017, 0, 20, 11, 0, 0, 0);
+        const pmTime = new Date(2017, 0, 20, 23, 0, 0, 0);
+        const amTimeFormatted = this.format(amTime, format);
+        const pmTimeFormatted = this.format(pmTime, format);
 
         for(let i = 0; i < amTimeFormatted.length; i++) {
             if(amTimeFormatted[i] !== pmTimeFormatted[i]) {
