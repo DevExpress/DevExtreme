@@ -5,7 +5,7 @@ import Sortable from "../sortable";
 let COMMAND_HANDLE_CLASS = "dx-command-drag",
     HANDLE_ICON_CLASS = "drag-icon";
 
-var RowReorderingExtender = {
+var RowDraggingExtender = {
     init: function() {
         this.callBase.apply(this, arguments);
         this._updateHandleColumn();
@@ -124,17 +124,22 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.rowDragging
-             * @type object
+             * @type GridBaseRowDragging
+             */
+            /**
+             * @name GridBaseRowDragging
+             * @inherits dxSortable.Options
+             * @type Object
              */
             rowDragging: {
                 /**
-                * @name GridBaseOptions.rowDragging.enabled
+                * @name GridBaseRowDragging.enabled
                 * @type boolean
                 * @default false
                 */
                 enabled: false,
                 /**
-                * @name GridBaseOptions.rowDragging.showDragIcons
+                * @name GridBaseRowDragging.showDragIcons
                 * @type boolean
                 * @default true
                 */
@@ -144,7 +149,7 @@ module.exports = {
     },
     extenders: {
         views: {
-            rowsView: RowReorderingExtender
+            rowsView: RowDraggingExtender
         }
     }
 };

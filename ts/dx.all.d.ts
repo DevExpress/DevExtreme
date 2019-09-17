@@ -2077,13 +2077,6 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.selection.mode */
         mode?: 'multiple' | 'none' | 'single';
     }
-    /** @name GridBase.Options.rowDragging */
-    export interface GridBaseRowDragging extends dxSortableOptions {
-        /** @name GridBase.Options.rowDragging.enabled */
-        enabled?: boolean;
-        /** @name GridBase.Options.rowDragging.showDragIcons */
-        showDragIcons?: boolean;
-    }
     /** @name GridBase */
     export class GridBase extends Widget {
         constructor(element: Element, options?: GridBaseOptions)
@@ -2332,6 +2325,13 @@ declare module DevExpress.ui {
         icon?: string;
         /** @name GridBaseColumnButton.text */
         text?: string;
+    }
+    /** @name GridBaseRowDragging */
+    export interface GridBaseRowDragging extends dxSortableOptions {
+        /** @name GridBaseRowDragging.enabled */
+        enabled?: boolean;
+        /** @name GridBaseRowDragging.showDragIcons */
+        showDragIcons?: boolean;
     }
     /** @name HierarchicalCollectionWidget.Options */
     export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
@@ -5367,7 +5367,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
     /** @name dxSortable.Options */
-    export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
+    export interface dxSortableOptions<T = dxSortable> extends DraggableBaseOptions<T> {
         /** @name dxSortable.Options.dropFeedbackMode */
         dropFeedbackMode?: 'push' | 'indicate';
         /** @name dxSortable.Options.itemOrientation */

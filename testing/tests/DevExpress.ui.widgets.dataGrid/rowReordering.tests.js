@@ -46,7 +46,7 @@ function createRowsView() {
         }
     };
 
-    setupDataGridModules(mockDataGrid, ["data", "columns", "rows", "rowReordering" ], {
+    setupDataGridModules(mockDataGrid, ["data", "columns", "rows", "rowDragging" ], {
         initViews: true
     });
 
