@@ -135,12 +135,13 @@ QUnit.test("hideAppointmentPopup should hide a popup and save changes", function
     assert.equal($(".dx-scheduler-appointment").length, 1, "appointment is created");
 });
 
-QUnit.test("showAppointmentPopup should render a popup form only once", function(assert) {
+QUnit.test("showAppointmentPopup should render a popup form only once", function(assert) { // TODO
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 1" });
 
     var $form = $(".dx-scheduler-appointment-popup").find(".dx-form");
     assert.equal($form.length, 1, "Form was rendered");
 
+    this.instance.hideAppointmentPopup();
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 2" });
 
     assert.equal($form.find(".dx-textbox").eq(0).dxTextBox("instance").option("text"), "appointment 2", "Form data is correct");
@@ -800,9 +801,10 @@ QUnit.test("Done button custom configuration should be correct", function(assert
     this.instance.option({ dataSource: data });
     this.instance.option({
         onAppointmentFormOpening: function(e) {
-            var buttons = e.component._popup.option('toolbarItems');
+            const popup = e.component.getAppointmentPopup();
+            const buttons = popup.option('toolbarItems');
             buttons[0].options = { text: 'Text 1' };
-            e.component._popup.option('toolbarItems', buttons);
+            popup.option('toolbarItems', buttons);
         },
         onAppointmentAdding: function(e) {
             e.cancel = true;

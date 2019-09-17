@@ -248,7 +248,7 @@ export default class AppointmentPopup {
                 this.scheduler.updateAppointment(oldData, recData);
                 delete this.scheduler._updatedRecAppointment;
 
-                if(typeof this._getTimezoneOffsetByOption() === "number") {
+                if(typeof this.scheduler._getTimezoneOffsetByOption() === "number") {
                     this.scheduler.fire("setField", "startDate", formData, convert.call(this, formData, "startDate"));
                     this.scheduler.fire("setField", "endDate", formData, convert.call(this, formData, "endDate"));
                 }
