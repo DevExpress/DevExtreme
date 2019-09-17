@@ -98,6 +98,7 @@ class Gantt extends Widget {
             showResources: this.option("showResources"),
             taskTitlePosition: this.option("taskTitlePosition"),
             showRowLines: this.option("showRowLines"),
+            scaleType: this.option("scaleType"),
             editing: this.option("editing"),
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this),
@@ -480,6 +481,12 @@ class Gantt extends Widget {
             */
             showRowLines: true,
             /**
+            * @name dxGanttOptions.scaleType
+            * @type Enums.GanttScaleType
+            * @default "auto"
+            */
+            scaleType: "auto",
+            /**
             * @name dxGanttOptions.editing
             * @type Object
             */
@@ -588,8 +595,11 @@ class Gantt extends Widget {
                 this._setTreeListOption("showRowLines", args.value);
                 this._setGanttViewOption("showRowLines", args.value);
                 break;
+            case "scaleType":
+                this._setGanttViewOption("scaleType", args.value);
+                break;
             case "editing":
-                this._setGanttViewOption("editing", args.value);
+                this._setGanttViewOption("editing", this.option(args.name));
                 break;
             default:
                 super._optionChanged(args);

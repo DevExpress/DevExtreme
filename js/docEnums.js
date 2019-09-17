@@ -1132,6 +1132,11 @@
  */
 
 /**
+ * @typedef {string} Enums.GanttScaleType
+ * @enum {'auto'|'minutes'|'hours'|'days'|'weeks'|'months'}
+ */
+
+/**
  * @typedef {string} Enums.LegendMarkerState
  * @enum {'normal'|'hovered'|'selected'}
  */

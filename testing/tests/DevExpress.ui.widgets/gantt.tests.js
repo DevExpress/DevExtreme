@@ -302,6 +302,32 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(coreEditingSettings.allowResourceAdding, false, "resource adding is prohibited");
         assert.equal(coreEditingSettings.allowResourceDeleting, false, "resource deleting is prohibited");
         assert.equal(coreEditingSettings.allowResourceUpdating, false, "resource updating is prohibited");
+        this.instance.option("editing.enabled", false);
+        coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
+        assert.equal(coreEditingSettings.enabled, false, "editing is prohibited");
+    });
+    test("scaleType", (assert) => {
+        const getFirstHeaderTitle = () => {
+            return this.$element.find(".dx-gantt-tsa").eq(1).find(".dx-gantt-si").first().text();
+        };
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        assert.equal(getFirstHeaderTitle(), "January", "is months scale type (auto)");
+        this.instance.option("scaleType", "minutes");
+        assert.equal(getFirstHeaderTitle(), "10", "is minutes scale type");
+        this.instance.option("scaleType", "hours");
+        assert.equal(getFirstHeaderTitle(), "12:00 AM", "is hours scale type");
+        this.instance.option("scaleType", "days");
+        assert.equal(getFirstHeaderTitle(), "Sun, 17 Feb", "is days scale type");
+        this.instance.option("scaleType", "weeks");
+        assert.equal(getFirstHeaderTitle(), "Sun, 17 Feb - Sat, 23 Feb", "is weeks scale type");
+        this.instance.option("scaleType", "months");
+        assert.equal(getFirstHeaderTitle(), "January", "is months scale type");
+
+        this.instance.option("tasks.dataSource", [{ "id": 0, "title": "t", "start": "2019-02-21", "end": "2019-02-26" }]);
+        assert.equal(getFirstHeaderTitle(), "January", "is still months scale type");
+        this.instance.option("scaleType", "auto");
+        assert.equal(getFirstHeaderTitle(), "Sun, 17 Feb", "is days scale type (auto)");
     });
 });
 
