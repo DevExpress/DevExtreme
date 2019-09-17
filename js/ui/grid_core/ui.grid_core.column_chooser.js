@@ -38,7 +38,7 @@ var COLUMN_CHOOSER_CLASS = "column-chooser",
                     allowHiding: column.allowHiding,
                     expanded: true,
                     id: column.index,
-                    disabled: column.allowHiding === false,
+                    disabled: false,
                     parentId: isDefined(column.ownerBand) ? column.ownerBand : null
                 };
 
