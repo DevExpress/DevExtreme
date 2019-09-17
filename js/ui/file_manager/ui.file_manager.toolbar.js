@@ -147,7 +147,7 @@ class FileManagerToolbar extends Widget {
                 preparedItem.visible = groupHasItems;
                 groupHasItems = false;
             } else {
-                preparedItem.available = this._isCommandAvailable(commandName);
+                preparedItem.available = this._isCommandAvailable(preparedItem);
                 const itemVisible = preparedItem.available;
                 preparedItem.visible = itemVisible;
                 groupHasItems = groupHasItems || itemVisible;
@@ -181,6 +181,11 @@ class FileManagerToolbar extends Widget {
             extend(result, item.locateInMenu ? { locateInMenu: item.locateInMenu } : {});
             extend(result.options, item.text ? { text: item.text } : {});
             extend(result.options, item.icon ? { icon: item.icon } : {});
+        } else {
+            extend(result, item);
+            if(!result.widget) {
+                result.widget = "dxButton";
+            }
         }
 
         if(!result.commandName) {
@@ -300,7 +305,7 @@ class FileManagerToolbar extends Widget {
                 showItem = groupHasItems;
                 groupHasItems = false;
             } else {
-                item.available = this._isCommandAvailable(item.commandName, fileItems);
+                item.available = this._isCommandAvailable(item, fileItems);
                 showItem = item.available;
                 groupHasItems = groupHasItems || showItem;
             }
@@ -323,16 +328,20 @@ class FileManagerToolbar extends Widget {
         this._commandManager.executeCommand(command);
     }
 
-    _isCommandAvailable(commandName, fileItems) {
-        if(commandName === "refresh") {
-            return this._generalToolbarVisible || !!this._isRefreshVisibleInFileToolbar;
-        }
+    _isCommandAvailable(command, fileItems) {
+        if(this._isDefaultItem(command.commandName)) {
+            if(command.commandName === "refresh") {
+                return this._generalToolbarVisible || !!this._isRefreshVisibleInFileToolbar;
+            }
 
-        if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(commandName) > -1) {
-            return true;
-        }
+            if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(command.commandName) > -1) {
+                return true;
+            }
 
-        return this._commandManager.isCommandAvailable(commandName, fileItems);
+            return this._commandManager.isCommandAvailable(command.commandName, fileItems);
+        } else {
+            return command.visible;
+        }
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {

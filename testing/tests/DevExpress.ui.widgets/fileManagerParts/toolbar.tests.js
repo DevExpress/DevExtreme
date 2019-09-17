@@ -200,7 +200,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.equal(this.wrapper.getToolbarSeparators().length, 1, "specified separator visible");
     });
 
-    test("toolbar items arrangement", function(assert) {
+    test("toolbar default items rearrangement and modification", function(assert) {
         createFileManager(false);
         this.clock.tick(400);
 
@@ -254,6 +254,119 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         let $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
+    });
+
+    test("toolbar custom items render and modification", function(assert) {
+        let actionLog = [];
+        const log = function(logString) {
+            actionLog.push(logString);
+        };
+        const readLog = function(logStringIndex) {
+            if(!logStringIndex) {
+                logStringIndex = actionLog.length - 1;
+            }
+            return actionLog[logStringIndex];
+        };
+        const clearLog = function() {
+            actionLog = [];
+        };
+        function SayMeow() {
+            log("Meow!");
+        }
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("toolbar", {
+            generalItems: [
+                "showDirsPanel", "create", "upload", "refresh",
+                {
+                    commandName: "separator",
+                    location: "after"
+                },
+                "viewMode",
+                {
+                    commandName: "meow",
+                    location: "after",
+                    locateInMenu: "never",
+                    visible: true,
+                    onClick: SayMeow,
+                    options:
+                        {
+                            text: "Cat"
+                        }
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        let $elements = this.wrapper.getGeneralToolbarElements();
+        assert.equal($elements.length, 6, "general toolbar has elements");
+
+        let $catButton = $elements.eq(5);
+        assert.ok($catButton.text().indexOf("Cat") !== -1, "cat button is rendered at correct place");
+
+        $catButton.trigger("dxclick");
+        assert.equal(readLog(), "Meow!", "cat button has correct action");
+
+        clearLog();
+        fileManagerInstance.option("toolbar", {
+            generalItems: [
+                "showDirsPanel", "create", "upload", "refresh",
+                {
+                    commandName: "separator",
+                    location: "after"
+                },
+                "viewMode",
+                {
+                    commandName: "meow",
+                    locateInMenu: "always",
+                    visible: true,
+                    disabled: true,
+                    onClick: SayMeow,
+                    options:
+                        {
+                            text: "Cat"
+                        }
+                },
+                {
+                    commandName: "newCommand",
+                    location: "after",
+                    locateInMenu: "never",
+                    visible: false,
+                    options:
+                        {
+                            text: "Some new command",
+                            icon: "upload"
+                        }
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        $elements = this.wrapper.getGeneralToolbarElements();
+        assert.equal($elements.length, 7, "general toolbar has elements");
+        const $visibleElements = this.wrapper.getToolbarElements();
+        assert.equal($visibleElements.length, 3, "general toolbar has visible elements");
+
+        const $dropDownMenuButton = this.wrapper.getDropDownMenuButton();
+        $dropDownMenuButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        const dropDownMenuItem = this.wrapper.getDropDownMenuItem(0);
+        $catButton = $(dropDownMenuItem).find(".dx-button");
+        assert.ok($catButton.find(".dx-button-text").text().indexOf("Cat") !== -1, "cat button is rendered in the dropDown menu");
+
+        $catButton.trigger("dxclick");
+        assert.equal(readLog(), undefined, "cat button has no action due to its disabled state");
+
+        const $newCommandButton = $elements.eq(5);
+        assert.ok($newCommandButton.text().indexOf("Some new command") !== -1, "new command button is placed correctly");
+        assert.ok($newCommandButton.find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "new command button has new icon");
+
+        assert.ok($visibleElements.eq(0).text().indexOf("Some new command") === -1);
+        assert.ok($visibleElements.eq(1).text().indexOf("Some new command") === -1);
+        assert.ok($visibleElements.eq(2).val().indexOf("Some new command") === -1, "new command button is hidden");
     });
 
 });

@@ -35,7 +35,8 @@ export const Consts = {
     UPLOAD_ICON_CLASS: "dx-icon-upload",
     DROPDOWN_MENU_BUTTON_CLASS: "dx-dropdownmenu-button",
     DROPDOWN_MENU_LIST_CLASS: "dx-dropdownmenu-list",
-    DROPDOWN_MENU_CONTENT_CLASS: "dx-scrollview-content"
+    DROPDOWN_MENU_CONTENT_CLASS: "dx-scrollview-content",
+    DROPDOWN_MENU_LIST_ITEM_CLASS: "dx-list-item"
 };
 const showMoreButtonText = "\u22EE";
 
@@ -121,7 +122,7 @@ export class FileManagerWrapper {
     }
 
     getDropDownMenuItem(childIndex) {
-        return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS}`).children()[childIndex];
+        return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
     }
 
     getCustomThumbnails() {
