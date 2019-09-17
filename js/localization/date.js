@@ -1,19 +1,17 @@
-import dependencyInjector from "../core/utils/dependency_injector";
-import { isString } from "../core/utils/type";
-import iteratorUtils from "../core/utils/iterator";
-import { inArray } from "../core/utils/array";
-import { getFormatter as getLDMLDateFormatter } from "./ldml/date.formatter";
-import { getFormat as getLDMLDateFormat } from "./ldml/date.format";
-import { getParser as getLDMLDateParser } from "./ldml/date.parser";
-import defaultDateNames from "./default_date_names";
-import numberLocalization from "./number";
-import errors from "../core/errors";
-import intlDateLocalization from "./intl/date";
-import "./core";
+var dependencyInjector = require("../core/utils/dependency_injector"),
+    isString = require("../core/utils/type").isString,
+    iteratorUtils = require("../core/utils/iterator"),
+    inArray = require("../core/utils/array").inArray,
+    getLDMLDateFormatter = require("./ldml/date.formatter").getFormatter,
+    getLDMLDateFormat = require("./ldml/date.format").getFormat,
+    getLDMLDateParser = require("./ldml/date.parser").getParser,
+    defaultDateNames = require("./default_date_names"),
+    numberLocalization = require("./number"),
+    errors = require("../core/errors");
 
-const hasIntl = typeof Intl !== "undefined";
+require("./core");
 
-const FORMATS_TO_PATTERN_MAP = {
+var FORMATS_TO_PATTERN_MAP = {
     "shortdate": "M/d/y",
     "shorttime": "h:mm a",
     "longdate": "EEEE, MMMM d, y",
@@ -37,7 +35,7 @@ const FORMATS_TO_PATTERN_MAP = {
     "datetime-local": "yyyy-MM-ddTHH':'mm':'ss"
 };
 
-const possiblePartPatterns = {
+var possiblePartPatterns = {
     year: ["y", "yy", "yyyy"],
     day: ["d", "dd"],
     month: ["M", "MM", "MMM", "MMMM"],
@@ -47,7 +45,7 @@ const possiblePartPatterns = {
     milliseconds: ["S", "SS", "SSS"]
 };
 
-const dateLocalization = dependencyInjector({
+var dateLocalization = dependencyInjector({
     _getPatternByFormat: function(format) {
         return FORMATS_TO_PATTERN_MAP[format.toLowerCase()];
     },
@@ -62,11 +60,11 @@ const dateLocalization = dependencyInjector({
         return this._expandPattern(format).indexOf("EEEE") !== -1;
     },
     getFormatParts: function(format) {
-        const pattern = this._getPatternByFormat(format) || format;
-        const result = [];
+        var pattern = this._getPatternByFormat(format) || format,
+            result = [];
 
-        iteratorUtils.each(pattern.split(/\W+/), (_, formatPart) => {
-            iteratorUtils.each(possiblePartPatterns, (partName, possiblePatterns) => {
+        iteratorUtils.each(pattern.split(/\W+/), function(_, formatPart) {
+            iteratorUtils.each(possiblePartPatterns, function(partName, possiblePatterns) {
                 if(inArray(formatPart, possiblePatterns) > -1) {
                     result.push(partName);
                 }
@@ -92,12 +90,12 @@ const dateLocalization = dependencyInjector({
     },
 
     is24HourFormat: function(format) {
-        const amTime = new Date(2017, 0, 20, 11, 0, 0, 0);
-        const pmTime = new Date(2017, 0, 20, 23, 0, 0, 0);
-        const amTimeFormatted = this.format(amTime, format);
-        const pmTimeFormatted = this.format(pmTime, format);
+        var amTime = new Date(2017, 0, 20, 11, 0, 0, 0),
+            pmTime = new Date(2017, 0, 20, 23, 0, 0, 0),
+            amTimeFormatted = this.format(amTime, format),
+            pmTimeFormatted = this.format(pmTime, format);
 
-        for(let i = 0; i < amTimeFormatted.length; i++) {
+        for(var i = 0; i < amTimeFormatted.length; i++) {
             if(amTimeFormatted[i] !== pmTimeFormatted[i]) {
                 return !isNaN(parseInt(amTimeFormatted[i]));
             }
@@ -113,7 +111,7 @@ const dateLocalization = dependencyInjector({
             return date;
         }
 
-        let formatter;
+        var formatter;
 
         if(typeof (format) === "function") {
             formatter = format;
@@ -136,10 +134,10 @@ const dateLocalization = dependencyInjector({
     },
 
     parse: function(text, format) {
-        const that = this;
-        let result;
-        let ldmlFormat;
-        let formatter;
+        var that = this,
+            result,
+            ldmlFormat,
+            formatter;
 
         if(!text) {
             return;
@@ -156,8 +154,8 @@ const dateLocalization = dependencyInjector({
         if(typeof format === "string" && !FORMATS_TO_PATTERN_MAP[format.toLowerCase()]) {
             ldmlFormat = format;
         } else {
-            formatter = value => {
-                const text = that.format(value, format);
+            formatter = function(value) {
+                var text = that.format(value, format);
                 return numberLocalization.convertDigits(text, true);
             };
             try {
@@ -184,9 +182,5 @@ const dateLocalization = dependencyInjector({
         return 0;
     }
 });
-
-if(hasIntl) {
-    dateLocalization.inject(intlDateLocalization);
-}
 
 module.exports = dateLocalization;

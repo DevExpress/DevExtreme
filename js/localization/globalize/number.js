@@ -1,12 +1,14 @@
-import "./core";
-import Globalize from "globalize";
-import numberLocalization from "../number";
-import errors from "../../core/errors";
-import "globalize/number";
+require("./core");
+
+var Globalize = require("globalize"),
+    numberLocalization = require("../number"),
+    errors = require("../../core/errors");
+
+require("globalize/number");
 
 if(Globalize && Globalize.formatNumber) {
 
-    const enNumbers = {
+    var enNumbers = {
         "main": {
             "en": {
                 "identity": {
@@ -161,10 +163,11 @@ if(Globalize && Globalize.formatNumber) {
         Globalize.locale("en");
     }
 
-    const formattersCache = {};
+    var formattersCache = {};
 
-    const getFormatter = format => {
-        let formatter, formatCacheKey;
+    var getFormatter = function(format) {
+        var formatter,
+            formatCacheKey;
 
         if(typeof format === "object") {
             formatCacheKey = Globalize.locale().locale + ":" + JSON.stringify(format);
@@ -179,7 +182,7 @@ if(Globalize && Globalize.formatNumber) {
         return formatter;
     };
 
-    const globalizeNumberLocalization = {
+    var globalizeNumberLocalization = {
         _formatNumberCore: function(value, format, formatConfig) {
             if(format === 'exponential') {
                 return this.callBase.apply(this, arguments);
@@ -188,7 +191,7 @@ if(Globalize && Globalize.formatNumber) {
             return getFormatter(this._normalizeFormatConfig(format, formatConfig, value))(value);
         },
         _normalizeFormatConfig: function(format, formatConfig, value) {
-            let config;
+            var config;
 
             if(format === "decimal") {
                 config = {
@@ -209,7 +212,7 @@ if(Globalize && Globalize.formatNumber) {
         },
 
         _getPrecisionConfig: function(precision) {
-            let config;
+            var config;
 
             if(precision === null) {
                 config = {
@@ -253,7 +256,7 @@ if(Globalize && Globalize.formatNumber) {
                 errors.log("W0011");
             }
 
-            let result = Globalize.parseNumber(text);
+            var result = Globalize.parseNumber(text);
 
             if(isNaN(result)) {
                 result = this.callBase.apply(this, arguments);
@@ -263,6 +266,5 @@ if(Globalize && Globalize.formatNumber) {
         }
     };
 
-    numberLocalization.resetInjection();
     numberLocalization.inject(globalizeNumberLocalization);
 }
