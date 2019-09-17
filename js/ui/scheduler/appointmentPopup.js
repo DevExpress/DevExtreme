@@ -230,7 +230,7 @@ export default class AppointmentPopup {
             recData = this.scheduler._updatedRecAppointment;
 
         const convert = (obj, dateFieldName) => {
-            const date = new Date(this.fire("getField", dateFieldName, obj));
+            const date = new Date(this.scheduler.fire("getField", dateFieldName, obj));
             const tzDiff = this.scheduler._getTimezoneOffsetByOption() * toMs("hour") + this.scheduler.fire("getClientTimezoneOffset", date);
 
             return new Date(date.getTime() + tzDiff);
