@@ -2026,7 +2026,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     icon = button.icon || icon;
                     iconType = iconUtils.getImageSourceType(icon);
 
-                    if(iconType === "image") {
+                    if(iconType === "image" || iconType === "svg") {
                         $button = iconUtils.getImageContainer(icon).addClass(button.cssClass);
                     } else {
                         $button.addClass("dx-icon" + (iconType === "dxIcon" ? "-" : " ") + icon).attr("title", button.text);
