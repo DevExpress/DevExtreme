@@ -3834,15 +3834,17 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.allowSelection */
         allowSelection?: boolean;
         /** @name dxGantt.Options.dependencies */
-        dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any), predecessorIdExpr?: string | ((data: any) => any), successorIdExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any) };
+        dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, predecessorIdExpr?: string | Function, successorIdExpr?: string | Function, typeExpr?: string | Function };
         /** @name dxGantt.Options.editing */
         editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowDependencyUpdating?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
         /** @name dxGantt.Options.onSelectionChanged */
         onSelectionChanged?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, selectedRowKey?: any }) => any);
         /** @name dxGantt.Options.resourceAssignments */
-        resourceAssignments?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any), resourceIdExpr?: string | ((data: any) => any), taskIdExpr?: string | ((data: any) => any) };
+        resourceAssignments?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, resourceIdExpr?: string | Function, taskIdExpr?: string | Function };
         /** @name dxGantt.Options.resources */
-        resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any) };
+        resources?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, textExpr?: string | Function };
+        /** @name dxGantt.Options.scaleType */
+        scaleType?: 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
         /** @name dxGantt.Options.selectedRowKey */
         selectedRowKey?: any;
         /** @name dxGantt.Options.showResources */
@@ -3852,7 +3854,7 @@ declare module DevExpress.ui {
         /** @name dxGantt.Options.taskTitlePosition */
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
-        tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), parentIdExpr?: string | ((data: any) => any), progressExpr?: string | ((data: any) => any), startExpr?: string | ((data: any) => any), titleExpr?: string | ((data: any) => any) };
+        tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
         /** @name dxGantt.Options.treeListColumns */
         treeListColumns?: Array<dxTreeListColumn | string>;
         /** @name dxGantt.Options.treeListWidth */
