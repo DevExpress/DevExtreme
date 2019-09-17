@@ -3119,7 +3119,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.Options.pageSize */
         pageSize?: { height?: number, items?: Array<{ height?: number, text?: string, width?: number }>, width?: number };
         /** @name dxDiagram.Options.propertiesPanel */
-        propertiesPanel?: { collapsible?: boolean, groups?: Array<{ commands?: Array<'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'> }>, visible?: boolean };
+        propertiesPanel?: { collapsible?: boolean, enabled?: boolean, groups?: Array<{ commands?: Array<'zoomLevel' | 'autoZoom' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'> }> };
         /** @name dxDiagram.Options.readOnly */
         readOnly?: boolean;
         /** @name dxDiagram.Options.showGrid */
