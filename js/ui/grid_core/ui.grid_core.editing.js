@@ -1500,11 +1500,21 @@ var EditingController = modules.ViewController.inherit((function() {
          * @return Promise<void>
          */
         saveEditData: function() {
-            let d = new Deferred();
+            const deferred = new Deferred();
             when(...this._deferreds).done(() => {
-                this._saveEditDataInner().done(d.resolve).fail(d.reject);
-            }).fail(d.reject);
-            return d;
+                if(this._saving) {
+                    this._afterSaveEditData();
+                    return deferred.resolve();
+                }
+                this._beforeSaveEditData().done(cancel => {
+                    if(cancel) {
+                        this._afterSaveEditData();
+                        return deferred.resolve();
+                    }
+                    this._saveEditDataInner().done(deferred.resolve).fail(deferred.reject);
+                });
+            }).fail(deferred.reject);
+            return deferred.promise();
         },
         _saveEditDataInner: function() {
             var that = this,
@@ -1523,11 +1533,6 @@ var EditingController = modules.ViewController.inherit((function() {
                     that._editRowIndex = -1;
                 }
             };
-
-            if(that._beforeSaveEditData() || that._saving) {
-                that._afterSaveEditData();
-                return result.resolve().promise();
-            }
 
             editData = that._editData.slice(0);
 
