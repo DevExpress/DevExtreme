@@ -22,8 +22,7 @@ const READONLY_STATE_CLASS = "dx-state-readonly",
     VALIDATION_MESSAGE_MIN_WIDTH = 100,
 
     VALIDATION_STATUS_VALID = "valid",
-    VALIDATION_STATUS_INVALID = "invalid",
-    VALIDATION_STATUS_PENDING = "pending";
+    VALIDATION_STATUS_INVALID = "invalid";
 
 const getValidationErrorMessage = function(validationErrors) {
     let validationErrorMessage = "";
@@ -46,8 +45,9 @@ const getValidationErrorMessage = function(validationErrors) {
 * @hidden
 */
 const Editor = Widget.inherit({
-    ctor: function() {
+    ctor: function(_, options) {
         this.showValidationMessageTimeout = null;
+        this._initialValidationConfig = options;
         this.callBase.apply(this, arguments);
     },
 
@@ -61,6 +61,7 @@ const Editor = Widget.inherit({
         if($element) {
             dataUtils.data($element[0], VALIDATION_TARGET, this);
         }
+        this._initValidationOptions();
     },
 
     _getDefaultOptions: function() {
@@ -371,11 +372,11 @@ const Editor = Widget.inherit({
                 break;
             case "isValid":
             case "validationError":
-                this._synchronizeOptions(args);
+                this._synchronizeValidationOptions(args);
                 break;
             case "validationErrors":
             case "validationStatus":
-                this._synchronizeOptions(args);
+                this._synchronizeValidationOptions(args);
                 this._renderValidationState();
                 break;
             case "validationBoundary":
@@ -410,42 +411,6 @@ const Editor = Widget.inherit({
                 break;
             default:
                 this.callBase(args);
-        }
-    },
-
-    _synchronizeOptions({ name, value }) {
-        if(name === "validationStatus") {
-            const isValid = value === VALIDATION_STATUS_VALID || value === VALIDATION_STATUS_PENDING;
-            this.option("isValid") !== isValid && this.option("isValid", isValid);
-            return;
-        }
-        if(name === "isValid") {
-            const validationStatus = this.option("validationStatus");
-            let newStatus = validationStatus;
-            if(value && validationStatus === VALIDATION_STATUS_INVALID) {
-                newStatus = VALIDATION_STATUS_VALID;
-            } else if(!value && validationStatus !== VALIDATION_STATUS_INVALID) {
-                newStatus = VALIDATION_STATUS_INVALID;
-            }
-            newStatus !== validationStatus && this.option("validationStatus", newStatus);
-            return;
-        }
-
-        if(name === "validationErrors") {
-            let validationError = !value || !value.length ? null : value[0];
-            this.option("validationError") !== validationError && this.option("validationError", validationError);
-            return;
-        }
-        if(name === "validationError") {
-            const validationErrors = this.option("validationErrors");
-            if(!value && validationErrors) {
-                this.option("validationErrors", null);
-            } else if(value && !validationErrors) {
-                this.option("validationErrors", [value]);
-            } else if(value && validationErrors && value !== validationErrors[0]) {
-                validationErrors[0] = value;
-                this.option("validationErrors", validationErrors.slice());
-            }
         }
     },
 

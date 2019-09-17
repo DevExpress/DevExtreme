@@ -23,6 +23,11 @@ const VALIDATOR_CLASS = "dx-validator",
 * @export default
 */
 const Validator = DOMComponent.inherit({
+    ctor(_, options) {
+        this._initialValidationConfig = options;
+        this.callBase.apply(this, arguments);
+    },
+
     _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
@@ -108,6 +113,7 @@ const Validator = DOMComponent.inherit({
 
     _init() {
         this.callBase();
+        this._initValidationOptions();
         this._initGroupRegistration();
         this.focused = Callbacks();
         this._initAdapter();
@@ -195,26 +201,10 @@ const Validator = DOMComponent.inherit({
                 break;
             case "isValid":
             case "validationStatus":
-                this._synchronizeValidationStatus(args);
+                this._synchronizeValidationOptions(args);
                 break;
             default:
                 this.callBase(args);
-        }
-    },
-
-    _synchronizeValidationStatus({ name, value }) {
-        if(name === "validationStatus") {
-            const isValid = value === VALIDATION_STATUS_VALID || value === VALIDATION_STATUS_PENDING;
-            this.option("isValid") !== isValid && this.option("isValid", isValid);
-        } else if(name === "isValid") {
-            const validationStatus = this.option("validationStatus");
-            let newStatus = validationStatus;
-            if(value && validationStatus === VALIDATION_STATUS_INVALID) {
-                newStatus = VALIDATION_STATUS_VALID;
-            } else if(!value && validationStatus !== VALIDATION_STATUS_INVALID) {
-                newStatus = VALIDATION_STATUS_INVALID;
-            }
-            newStatus !== validationStatus && this.option("validationStatus", newStatus);
         }
     },
 

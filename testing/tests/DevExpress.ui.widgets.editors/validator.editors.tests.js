@@ -261,8 +261,44 @@ QUnit.test("Editor should display pending indicator after repaint", function(ass
     assert.ok(indicator.option("visible"), "indicator is shown after repainting");
 });
 
-QUnit.test("Editor - isValid and validationStatus options should be synchrnoized", function(assert) {
-    const editor = this.fixture.createEditor({});
+QUnit.test("Editor - validation options should be synchrnoized on init", function(assert) {
+    const err1 = { message: "1" },
+        err2 = { message: "2" };
+    let editor = this.fixture.createEditor({
+        isValid: false,
+        validationError: err1
+    });
+
+    assert.strictEqual(editor.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
+    assert.strictEqual(editor.option("validationErrors[0]"), err1, "validationErrors[0] === err1");
+
+    this.fixture.teardown();
+    editor = this.fixture.createEditor({
+        isValid: false,
+        validationErrors: [err2, err1]
+    });
+    assert.strictEqual(editor.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
+    assert.strictEqual(editor.option("validationError"), err2, "validationError === err2");
+
+    this.fixture.teardown();
+    editor = this.fixture.createEditor({
+        isValid: false,
+        validationErrors: [err2, err1]
+    });
+    assert.strictEqual(editor.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
+    assert.strictEqual(editor.option("validationError"), err2, "validationError === err2");
+
+    this.fixture.teardown();
+    editor = this.fixture.createEditor({
+        validationStatus: "invalid"
+    });
+    assert.strictEqual(editor.option("isValid"), false, "isValid === false");
+});
+
+QUnit.test("Editor - validation options should be synchrnoized at runtime", function(assert) {
+    const editor = this.fixture.createEditor({}),
+        err1 = { message: "1" },
+        err2 = { message: "2" };
 
     editor.option("isValid", false);
     assert.strictEqual(editor.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
@@ -278,12 +314,7 @@ QUnit.test("Editor - isValid and validationStatus options should be synchrnoized
 
     editor.option("validationStatus", "valid");
     assert.ok(editor.option("isValid"), "isValid === true");
-});
 
-QUnit.test("Editor - validationError and validationErrors options should be synchrnoized", function(assert) {
-    const editor = this.fixture.createEditor({}),
-        err1 = { message: "1" },
-        err2 = { message: "2" };
 
     editor.option("validationError", err1);
     assert.strictEqual(editor.option("validationErrors[0]"), err1, "validationErrors[0] === err1");
@@ -293,7 +324,6 @@ QUnit.test("Editor - validationError and validationErrors options should be sync
 
     editor.option("validationError", null);
     assert.notOk(editor.option("validationErrors"), "validationErrors === null");
-
 
     editor.option("validationErrors", [err1]);
     assert.strictEqual(editor.option("validationError"), err1, "validationError === err1");
