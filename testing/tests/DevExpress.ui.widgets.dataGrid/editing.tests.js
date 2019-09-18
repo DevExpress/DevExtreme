@@ -7231,6 +7231,40 @@ QUnit.test("Add a custom link for the 'buttons' command column", function(assert
     assert.strictEqual($linkElements.eq(1).text(), "My link", "text of the custom link");
 });
 
+// T814768
+QUnit.test("Button with svg icon in command column", function(assert) {
+    // arrange
+    var that = this,
+        $commandElement,
+        $svgIcon,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true
+    };
+
+    that.options.columns.push({
+        type: "buttons",
+        buttons: ["edit", {
+            hint: "Clone",
+            icon: "<svg height='20' width='20'><circle cx='10' cy='10' r='100' stroke='black' stroke-width='3' fill='red' /></svg>"
+        }]
+    });
+
+    that.columnsController.reset();
+
+    // act
+    that.rowsView.render($testElement);
+
+    // assert
+    $commandElement = $(".dx-command-edit-with-icons").eq(0);
+    $svgIcon = $commandElement.find(".dx-svg-icon");
+
+    assert.ok($svgIcon.length, "svg icon");
+    assert.ok($svgIcon.find("circle").length, "svg icon content");
+});
+
 QUnit.test("Add a custom icon for the 'buttons' command column", function(assert) {
     // arrange
     var that = this,
