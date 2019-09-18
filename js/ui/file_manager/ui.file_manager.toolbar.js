@@ -177,6 +177,11 @@ class FileManagerToolbar extends Widget {
         if(this._isDefaultItem(commandName)) {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
             extend(result, defaultConfig);
+            extend(result, item.visibilityMode ? { visibilityMode: item.visibilityMode } : {});
+            if(result.visibilityMode) {
+                extend(result, item.visible ? { visible: item.visible } : {});
+                extend(result, item.disabled ? { disabled: item.disabled } : {});
+            }
             extend(result, item.location ? { location: item.location } : {});
             extend(result, item.locateInMenu ? { locateInMenu: item.locateInMenu } : {});
             extend(result.options, item.text ? { text: item.text } : {});
@@ -330,6 +335,9 @@ class FileManagerToolbar extends Widget {
 
     _isCommandAvailable(command, fileItems) {
         if(this._isDefaultItem(command.commandName)) {
+            if(command.visibilityMode === "manual") {
+                return command.visible;
+            }
             if(command.commandName === "refresh") {
                 return this._generalToolbarVisible || !!this._isRefreshVisibleInFileToolbar;
             }

@@ -200,7 +200,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.equal(this.wrapper.getToolbarSeparators().length, 1, "specified separator visible");
     });
 
-    test("toolbar default items rearrangement and modification", function(assert) {
+    test("default items rearrangement and modification", function(assert) {
         createFileManager(false);
         this.clock.tick(400);
 
@@ -256,7 +256,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
     });
 
-    test("toolbar custom items render and modification", function(assert) {
+    test("custom items render and modification", function(assert) {
         let actionLog = [];
         const log = function(logString) {
             actionLog.push(logString);
@@ -367,6 +367,43 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($visibleElements.eq(0).text().indexOf("Some new command") === -1);
         assert.ok($visibleElements.eq(1).text().indexOf("Some new command") === -1);
         assert.ok($visibleElements.eq(2).val().indexOf("Some new command") === -1, "new command button is hidden");
+    });
+
+    test("default items manual visibility management", function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("toolbar", {
+            generalItems: [
+                "showDirsPanel", "create", "upload", "separator",
+                {
+                    commandName: "move",
+                    visibilityMode: "manual",
+                    visible: true,
+                    disabled: true
+                }, "refresh",
+                {
+                    commandName: "separator",
+                    location: "after"
+                },
+                "viewMode"
+            ]
+        });
+        this.clock.tick(400);
+
+        let $elements = this.wrapper.getToolbarElements();
+        assert.equal($elements.length, 4, "general toolbar has elements");
+
+        assert.ok($elements.eq(2).text().indexOf("Move") !== -1, "move is rendered in new position");
+
+        const $item = this.wrapper.findDetailsItem("File 1.txt");
+        $item.trigger("dxclick");
+        $item.trigger("click");
+        this.clock.tick(400);
+
+        let $toolbar = this.wrapper.getToolbar();
+        assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
     });
 
 });
