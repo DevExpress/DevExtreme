@@ -6318,6 +6318,8 @@ declare module DevExpress.viz {
         contentTemplate?: DevExpress.core.template | ((pointInfo: any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseChart.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((pointInfo: any) => any);
+        /** @name BaseChart.Options.tooltip.shared */
+        shared?: boolean;
     }
     /** @name BaseChart */
     export class BaseChart extends BaseWidget {
@@ -7532,8 +7534,6 @@ declare module DevExpress.viz {
     export interface dxChartTooltip extends BaseChartTooltip {
         /** @name dxChart.Options.tooltip.location */
         location?: 'center' | 'edge';
-        /** @name dxChart.Options.tooltip.shared */
-        shared?: boolean;
     }
     /** @name dxChart.Options.valueAxis */
     export interface dxChartValueAxis extends dxChartCommonAxisSettings {
