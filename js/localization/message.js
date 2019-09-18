@@ -7,41 +7,10 @@ import { humanize } from "../core/utils/inflector";
 import coreLocalization from "./core";
 import defaultMessages from "./default_messages";
 
-const PARENT_LOCALE_SEPARATOR = "-";
-
 const baseDictionary = extend(true, {}, defaultMessages);
-
-import parentLocales from "./cldr-data/parent_locales";
-
-const getParentLocale = locale => {
-    const parentLocale = parentLocales[locale];
-
-    if(parentLocale) {
-        return parentLocale !== "root" && parentLocale;
-    }
-
-    return locale.substr(0, locale.lastIndexOf(PARENT_LOCALE_SEPARATOR));
-};
 
 const getDataByLocale = (localeData, locale) => {
     return localeData[locale] || {};
-};
-
-const getValueByClosestLocale = (localeData, locale, key) => {
-    let value = getDataByLocale(localeData, locale)[key];
-    let isRootLocale;
-
-    while(!value && !isRootLocale) {
-        locale = getParentLocale(locale);
-
-        if(locale) {
-            value = getDataByLocale(localeData, locale)[key];
-        } else {
-            isRootLocale = true;
-        }
-    }
-
-    return value;
 };
 
 const newMessages = {};
@@ -78,10 +47,6 @@ const messageLocalization = dependencyInjector({
 
             return prefix + (result || defaultResult);
         });
-    },
-
-    _messageLoaded: function(key, locale) {
-        return getValueByClosestLocale(this._dictionary, locale || coreLocalization.locale(), key) !== undefined;
     },
 
     localizeNode: function(node) {
@@ -130,7 +95,7 @@ const messageLocalization = dependencyInjector({
     },
 
     _getFormatterBase: function(key, locale) {
-        const message = getValueByClosestLocale(this._dictionary, locale || coreLocalization.locale(), key);
+        const message = coreLocalization.getValueByClosestLocale((locale) => getDataByLocale(this._dictionary, locale)[key]);
 
         if(message) {
             return function() {
