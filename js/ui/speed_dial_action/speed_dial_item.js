@@ -40,9 +40,9 @@ const SpeedDialItem = Overlay.inherit({
 
     _render() {
         this.$element().addClass(FAB_CLASS);
-        this.callBase();
         this._renderIcon();
         this._renderLabel();
+        this.callBase();
         this.option("useInkRipple") && this._renderInkRipple();
         this._renderClick();
     },
@@ -169,6 +169,12 @@ const SpeedDialItem = Overlay.inherit({
                 break;
             case "label":
                 this._renderLabel();
+                break;
+            case "visible":
+                this._currentVisible = args.previousValue;
+                args.value ?
+                    this._show() :
+                    this._hide();
                 break;
             case "useInkRipple":
                 this._render();

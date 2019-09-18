@@ -21,6 +21,7 @@ const FAB_SELECTOR = ".dx-fa-button";
 const FAB_MAIN_SELECTOR = ".dx-fa-button-main";
 const FAB_LABEL_SELECTOR = ".dx-fa-button-label";
 const FAB_CONTENT_REVERSE_CLASS = "dx-fa-button-content-reverse";
+const FAB_INVISIBLE_SELECTOR = ".dx-fa-button.dx-state-invisible";
 
 QUnit.module("create one action", () => {
     test("check rendering", (assert) => {
@@ -75,6 +76,10 @@ QUnit.module("create multiple actions", (hooks) => {
     let firstInstance;
     let secondInstance;
 
+    hooks.afterEach(() => {
+        fx.off = false;
+    });
+
     hooks.beforeEach(() => {
         const firstElement = $("#fab-one").dxSpeedDialAction({
             icon: "arrowdown",
@@ -86,6 +91,8 @@ QUnit.module("create multiple actions", (hooks) => {
         });
         firstInstance = firstElement.dxSpeedDialAction("instance");
         secondInstance = secondElement.dxSpeedDialAction("instance");
+
+        fx.off = true;
     }),
 
     test("check rendering", (assert) => {
@@ -106,9 +113,6 @@ QUnit.module("create multiple actions", (hooks) => {
         assert.equal($fabContent.eq(1).find(".dx-icon-arrowdown").length, 1, "first action with arrowdown icon");
         assert.equal($fabContent.eq(2).find(".dx-icon-arrowup").length, 1, "second action with arrowup icon");
 
-        assert.equal(firstInstance.option("position").offset.y, -56, "right fist action position");
-        assert.equal(secondInstance.option("position").offset.y, -96, "right second action position");
-
         firstInstance.option("icon", "find");
         secondInstance.option("icon", "filter");
 
@@ -117,6 +121,14 @@ QUnit.module("create multiple actions", (hooks) => {
 
         assert.equal($fabContent.eq(1).find(".dx-icon-find").length, 1, "first action icon changed on icon find");
         assert.equal($fabContent.eq(2).find(".dx-icon-filter").length, 1, "second action icon changed on icon filter");
+
+        const fabDimensions = 30;
+        const fabOffsetY = 10;
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "right first action position");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions - fabOffsetY, 110, "right second action position");
 
         secondInstance.dispose();
 
@@ -349,56 +361,6 @@ QUnit.module("check action buttons click args", (hooks) => {
     });
 });
 
-QUnit.module("add visible option", (hooks) => {
-    let firstSDA;
-    let secondSDA;
-
-    hooks.beforeEach(() => {
-        firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
-        secondSDA = $("#fab-two").dxSpeedDialAction().dxSpeedDialAction("instance");
-    }),
-
-    hooks.afterEach(() => {
-        firstSDA.dispose();
-        secondSDA.dispose();
-    }),
-
-    test("check rendering", (assert) => {
-        firstSDA.option("visible", false);
-        secondSDA.option("visible", false);
-        assert.equal($(FAB_SELECTOR).length, 0, "invisible if change visible option to false");
-
-        firstSDA.option("icon", "edit");
-        assert.equal($(FAB_SELECTOR).length, 0, "invisible if change icon option when visible is false");
-
-        firstSDA.option("visible", true);
-        assert.equal($(FAB_SELECTOR).length, 1, "create one action if second is invisible");
-
-        secondSDA.option("visible", true);
-        assert.equal($(FAB_SELECTOR).length, 3, "create two actions if second is visible");
-    });
-
-    test("check position", (assert) => {
-        config({
-            floatingActionButtonConfig: {
-                position: "left top"
-            }
-        });
-
-        firstSDA.option("visible", false);
-        secondSDA.option("visible", false);
-
-        firstSDA.option("visible", true);
-        secondSDA.option("visible", true);
-
-        const $fabMainElement = $(FAB_MAIN_SELECTOR);
-        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
-
-        assert.equal($fabMainContent.offset().top, 0, "correct position top");
-        assert.equal($fabMainContent.offset().left, 0, "correct position left");
-    });
-});
-
 QUnit.module("add label option", (hooks) => {
     let firstSDA;
     let secondSDA;
@@ -484,4 +446,118 @@ QUnit.module("add label option", (hooks) => {
     });
 });
 
+QUnit.module("add visible option", (hooks) => {
+    let firstSDA;
+    let secondSDA;
+    hooks.beforeEach(() => {
+        fx.off = true;
 
+        config({
+            floatingActionButtonConfig: {
+                icon: "menu",
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+    }),
+    hooks.afterEach(() => {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+
+        firstSDA.dispose();
+        secondSDA.dispose();
+
+        fx.off = false;
+    }),
+    test("check rendering", (assert) => {
+        const clickHandler = sinon.spy();
+
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            icon: "edit",
+            label: "Edit row",
+            visible: false,
+            onClick: clickHandler
+        }).dxSpeedDialAction("instance");
+
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 1, "one invisible action");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            icon: "trash",
+            visible: false
+        }).dxSpeedDialAction("instance");
+
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 3, "all actions are invisible");
+
+        firstSDA.option("visible", true);
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.find(".dx-icon-edit").length, 1, "action icon is applied if action visible");
+        assert.equal($fabMainContent.find(".dx-fa-button-label").text(), "Edit row", "action label is applied if action visible");
+
+        secondSDA.option("visible", true);
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(FAB_SELECTOR).not(FAB_MAIN_SELECTOR).length, 2, "two visible actions");
+
+        secondSDA.option("visible", false);
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.ok(clickHandler.calledOnce, "Handler should be called");
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 2, "only FAB visible");
+        assert.ok($(FAB_MAIN_SELECTOR).find(".dx-icon-edit"), "FAB has action icon if second SDA invisible");
+
+        secondSDA.option("visible", true);
+
+        assert.ok($(FAB_MAIN_SELECTOR).find(".dx-icon-add"), "FAB return default icon if second SDA visible");
+
+        const $fabContent = $(FAB_SELECTOR).not(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        const fabDimensions = 30;
+        const fabOffsetY = 10;
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(window).height() - $fabContent.eq(0).offset().top - fabDimensions, 80, "right edit action position");
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions - fabOffsetY, 110, "right trash action position");
+    });
+
+    test("check multiple value changes", (assert) => {
+        firstSDA = $("#fab-one").dxSpeedDialAction({
+            icon: "edit",
+            label: "Edit row"
+        }).dxSpeedDialAction("instance");
+
+        secondSDA = $("#fab-two").dxSpeedDialAction({
+            icon: "trash",
+            visible: false
+        }).dxSpeedDialAction("instance");
+
+        firstSDA.option("visible", false);
+        firstSDA.option("visible", true);
+        firstSDA.option("visible", false);
+
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 3, "all actions are invisible");
+
+        firstSDA.option("visible", true);
+        secondSDA.option("visible", true);
+
+        firstSDA.option("visible", false);
+        secondSDA.option("visible", false);
+
+        assert.equal($(FAB_INVISIBLE_SELECTOR).length, 3, "all actions are invisible");
+    });
+});
