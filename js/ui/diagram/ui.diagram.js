@@ -35,7 +35,6 @@ const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + "-loading-indicator";
 const DIAGRAM_DEFAULT_UNIT = "in";
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
 const DIAGRAM_DEFAULT_AUTOZOOM = "disabled";
-const DIAGRAM_DEFAULT_PAGE_SIZE = { width: 5.827, height: 8.268 };
 const DIAGRAM_DEFAULT_PAGE_ORIENTATION = "portrait";
 const DIAGRAM_DEFAULT_PAGE_COLOR = "white";
 
@@ -315,8 +314,7 @@ class Diagram extends Widget {
             if(this.option("pageSize.items")) {
                 this._updatePageSizeItemsState();
             }
-            if(this.option("pageSize").width !== DIAGRAM_DEFAULT_PAGE_SIZE.width ||
-               this.option("pageSize").height !== DIAGRAM_DEFAULT_PAGE_SIZE.height) {
+            if(this.option("pageSize.width") && this.option("pageSize.height")) {
                 this._updatePageSizeState();
             }
         }
@@ -326,12 +324,24 @@ class Diagram extends Widget {
         if(this.option("pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
             this._updatePageColorState();
         }
-        this._updateViewUnitsState();
-        this._updateShowGridState();
-        this._updateSnapToGridState();
-        this._updateGridSizeItemsState();
-        this._updateGridSizeState();
-        this._updateZoomLevelItemsState();
+        if(this.option("viewUnits") !== DIAGRAM_DEFAULT_UNIT) {
+            this._updateViewUnitsState();
+        }
+        if(!this.option("showGrid")) {
+            this._updateShowGridState();
+        }
+        if(!this.option("snapToGrid")) {
+            this._updateSnapToGridState();
+        }
+        if(this.option("gridSize")) {
+            if(this.option("gridSize.items")) {
+                this._updateGridSizeItemsState();
+            }
+            this._updateGridSizeState();
+        }
+        if(this.option("zoomLevel.items")) {
+            this._updateZoomLevelItemsState();
+        }
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -930,19 +940,15 @@ class Diagram extends Widget {
             /**
             * @name dxDiagramOptions.gridSize
             * @type Number|Object
-            * @default 0.125
             */
             /**
             * @name dxDiagramOptions.gridSize.value
             * @type Number
-            * @default undefined
             */
             /**
             * @name dxDiagramOptions.gridSize.items
             * @type Array<Number>
-            * @default undefined
             */
-            gridSize: 0.125,
 
             /**
             * @name dxDiagramOptions.units
@@ -964,17 +970,14 @@ class Diagram extends Widget {
             /**
             * @name dxDiagramOptions.pageSize.width
             * @type Number
-            * @default 5.827
             */
             /**
             * @name dxDiagramOptions.pageSize.height
             * @type Number
-            * @default 8.268
             */
             /**
             * @name dxDiagramOptions.pageSize.items
             * @type Array<Object>
-            * @default undefined
             */
             /**
             * @name dxDiagramOptions.pageSize.items.width
@@ -988,7 +991,6 @@ class Diagram extends Widget {
             * @name dxDiagramOptions.pageSize.items.text
             * @type String
             */
-            pageSize: { width: DIAGRAM_DEFAULT_PAGE_SIZE.width, height: DIAGRAM_DEFAULT_PAGE_SIZE.height },
             /**
             * @name dxDiagramOptions.pageOrientation
             * @type Enums.DiagramPageOrientation
