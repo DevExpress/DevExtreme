@@ -257,30 +257,3 @@ QUnit.test("group should be validated positively with a new validator (async)", 
     ValidationEngine.registerValidatorInGroup(group, validator2);
 });
 
-QUnit.test("the group.validate method should return the same result object on pending (async)", function(assert) {
-    const $container = $("#dxValidationGroup"),
-        group = this.fixture.createGroup($container),
-        $validator = $("<div>").dxValidator({
-            adapter: sinon.createStubInstance(DefaultAdapter)
-        }),
-        validator = $validator.dxValidator("instance");
-
-    validator.validate = sinon.stub();
-    validator.validate.returns({
-        value: "",
-        brokenRules: null,
-        isValid: true,
-        validationRules: [],
-        pendingRules: [],
-        status: "pending",
-        complete: new Deferred().promise()
-    });
-
-    // act
-    $validator.appendTo($container);
-    domUtils.triggerShownEvent($container);
-    const result1 = ValidationEngine.validateGroup(group),
-        result2 = ValidationEngine.validateGroup(group);
-
-    assert.strictEqual(result1, result2, "result1 === result2");
-});

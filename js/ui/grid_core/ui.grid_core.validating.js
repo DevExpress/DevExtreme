@@ -99,10 +99,9 @@ const ValidatingController = modules.Controller.inherit((function() {
 
                     if(editData.type && editData.type !== "remove") {
                         validationResult = this.validateGroup(editData);
-                        if(validationResult.complete) {
-                            completeList.push(validationResult.complete);
-                        }
-                        when(validationResult.complete || validationResult).done(validationResult => {
+                        completeList.push(validationResult);
+
+                        validationResult.done(validationResult => {
                             if(!validationResult.isValid) {
                                 each(validationResult.brokenRules, function() {
                                     var value = this.validator.option("adapter").getValue();
@@ -472,7 +471,6 @@ module.exports = {
                                 case EDIT_MODE_CELL:
                                     if(!isFullValid) {
                                         this._focusEditingCell();
-                                        result.resolve(true);
                                     }
                                     break;
                                 case EDIT_MODE_BATCH:
@@ -480,14 +478,10 @@ module.exports = {
                                         this._editRowIndex = -1;
                                         this._editColumnIndex = -1;
                                         this.getController("data").updateItems();
-                                        result.resolve(true);
                                     }
                                     break;
-                                case EDIT_MODE_ROW:
-                                case EDIT_MODE_POPUP:
-                                    result.resolve(!isFullValid);
-                                    break;
                             }
+                            result.resolve(!isFullValid);
                         });
                     }
                     return result.promise ? result.promise() : result;

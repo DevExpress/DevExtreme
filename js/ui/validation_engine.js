@@ -553,9 +553,6 @@ const GroupConfig = Class.inherit({
     },
 
     validate() {
-        if(this._pendingValidators.length) {
-            return this._validationInfo.result;
-        }
         /**
          * @name dxValidationGroupResult
          * @type Object
@@ -587,6 +584,7 @@ const GroupConfig = Class.inherit({
              */
             complete: null
         };
+        this._unsubscribeFromAllChangeEvents();
         this._pendingValidators = [];
         this._resetValidationInfo();
         each(this.validators, (_, validator) => {
@@ -635,8 +633,8 @@ const GroupConfig = Class.inherit({
         }
         if(!this._validationInfo.deferred) {
             this._validationInfo.deferred = new Deferred();
+            this._validationInfo.result.complete = this._validationInfo.deferred.promise();
         }
-        this._validationInfo.result.complete = this._validationInfo.deferred.promise();
     },
 
     _addPendingValidator(validator) {
