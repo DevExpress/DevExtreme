@@ -115,12 +115,12 @@ QUnit.module("Markup", moduleConfig, () => {
 });
 
 QUnit.module("Options", moduleConfig, () => {
-    test("treeListWidth", (assert) => {
+    test("taskListWidth", (assert) => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
         assert.equal(treeListWrapperElement.width(), 300, "300px");
-        this.instance.option("treeListWidth", 500);
+        this.instance.option("taskListWidth", 500);
         assert.equal(treeListWrapperElement.width(), 500, "500px");
     });
     test("showResources", (assert) => {
@@ -201,10 +201,10 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(resourceElements.length, resourceAssignmentsDS.length);
         assert.equal(resourceElements.first().text(), resourcesDS[0].t);
     });
-    test("treeListColumns", (assert) => {
+    test("columns", (assert) => {
         const options = {
             tasks: { dataSource: tasks },
-            treeListColumns: [
+            columns: [
                 { dataField: "title", caption: "Subject" },
                 { dataField: "start", caption: "Start Date" }
             ]
@@ -216,12 +216,12 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal($treeListHeaderRow.children().eq(0).text(), "Subject", "first column title is checked");
         assert.equal($treeListHeaderRow.children().eq(1).text(), "Start Date", "second column title is checked");
 
-        this.instance.option("treeListColumns[0].visible", false);
+        this.instance.option("columns[0].visible", false);
         $treeListHeaderRow = this.$element.find(TREELIST_HEADER_ROW_SELECTOR);
         assert.equal($treeListHeaderRow.children().length, 1, "treeList has 1 visible columns");
         assert.equal($treeListHeaderRow.children().eq(0).text(), "Start Date", "first visible column title is checked");
 
-        this.instance.option("treeListColumns", [{ dataField: "title", caption: "Task" }]);
+        this.instance.option("columns", [{ dataField: "title", caption: "Task" }]);
         $treeListHeaderRow = this.$element.find(TREELIST_HEADER_ROW_SELECTOR);
         assert.equal($treeListHeaderRow.children().length, 1, "treeList has 1 columns");
         assert.equal($treeListHeaderRow.children().eq(0).text(), "Task", "first column title is checked");

@@ -3833,6 +3833,8 @@ declare module DevExpress.ui {
     export interface dxGanttOptions extends WidgetOptions<dxGantt> {
         /** @name dxGantt.Options.allowSelection */
         allowSelection?: boolean;
+        /** @name dxGantt.Options.columns */
+        columns?: Array<dxTreeListColumn | string>;
         /** @name dxGantt.Options.dependencies */
         dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, predecessorIdExpr?: string | Function, successorIdExpr?: string | Function, typeExpr?: string | Function };
         /** @name dxGantt.Options.editing */
@@ -3851,14 +3853,12 @@ declare module DevExpress.ui {
         showResources?: boolean;
         /** @name dxGantt.Options.showRowLines */
         showRowLines?: boolean;
+        /** @name dxGantt.Options.taskListWidth */
+        taskListWidth?: number;
         /** @name dxGantt.Options.taskTitlePosition */
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /** @name dxGantt.Options.tasks */
         tasks?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
-        /** @name dxGantt.Options.treeListColumns */
-        treeListColumns?: Array<dxTreeListColumn | string>;
-        /** @name dxGantt.Options.treeListWidth */
-        treeListWidth?: number;
     }
     /** @name dxGantt */
     export class dxGantt extends Widget {
