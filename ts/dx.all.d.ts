@@ -1796,7 +1796,7 @@ declare module DevExpress.ui {
         /** @name DataExpressionMixin.Options.value */
         value?: any;
         /** @name DataExpressionMixin.Options.valueExpr */
-        valueExpr?: string | ((item: any) => string);
+        valueExpr?: string | ((item: any) => string | number | boolean);
     }
     /** @name DataExpressionMixin */
     export class DataExpressionMixin {
@@ -3599,7 +3599,7 @@ declare module DevExpress.ui {
         /** @name dxFilterBuilderField.format */
         format?: format;
         /** @name dxFilterBuilderField.lookup */
-        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string) };
+        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string | number | boolean) };
         /** @name dxFilterBuilderField.name */
         name?: string;
         /** @name dxFilterBuilderField.trueText */

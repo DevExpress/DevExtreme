@@ -227,7 +227,7 @@ var FilterBuilder = Widget.inherit({
              * @type string|function(data)
              * @default undefined
              * @type_function_param1 data:object
-             * @type_function_return string
+             * @type_function_return string|number|boolean
              */
 
             /**
