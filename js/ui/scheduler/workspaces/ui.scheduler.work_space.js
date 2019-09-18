@@ -635,7 +635,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._$dateTable = $("<table>");
 
-        this._$groupTable = $("<table>").addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
+        this._$groupTable = $("<div>").addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
     },
 
     _initAllDayPanelElements: function() {

@@ -25,7 +25,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     _init: function() {
         this.callBase();
         this.$element().addClass(TIMELINE_CLASS);
-        this._$sidebarTable = $("<table>")
+        this._$sidebarTable = $("<div>")
             .addClass(GROUP_TABLE_CLASS);
     },
     _getCellFromNextRow: function(direction, isMultiSelection) {
