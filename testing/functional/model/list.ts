@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import Widget from './internal/widget';
 
 const CLASS = {
     checkbox: 'dx-checkbox',
@@ -71,13 +71,15 @@ class Group {
     }
 }
 
-export default class List {
-    element: Selector;
+export default class List extends Widget {
     items: Selector;
     selectAll: Item;
 
+    name: string = 'dxList';
+
     constructor (id: string|Selector) {
-        this.element = typeof id === 'string' ? Selector(id) : id;
+        super(id);
+
         this.selectAll = new Item(this.element.find(`.${CLASS.selectAllItem}`));
         this.items = this.element.find(`.${CLASS.item}`);
     }

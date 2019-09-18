@@ -125,26 +125,13 @@ QUnit.module("Timeline markup", moduleConfig, () => {
         ]);
 
         let $groupTable = $element.find(".dx-scheduler-sidebar-scrollable .dx-scheduler-group-table"),
-            $groupRows = $groupTable.find(".dx-scheduler-group-row"),
-            $firstRowCells = $groupRows.eq(0).find(".dx-scheduler-group-header"),
-            $secondRowCells = $groupRows.eq(1).find(".dx-scheduler-group-header"),
-            $thirdRowCells = $groupRows.eq(2).find(".dx-scheduler-group-header"),
-            $fourthRowCells = $groupRows.eq(3).find(".dx-scheduler-group-header");
+            $groupColumns = $groupTable.find(".dx-scheduler-group-row"),
+            $firstColumnCells = $groupColumns.eq(0).find(".dx-scheduler-group-header"),
+            $secondColumnCells = $groupColumns.eq(1).find(".dx-scheduler-group-header");
 
-        assert.equal($groupRows.length, 4, "Row count is OK");
-        assert.equal($firstRowCells.length, 2, "Cell count is OK");
-        assert.equal($firstRowCells.eq(0).attr("rowspan"), 2, "Rowspan is OK");
-        assert.equal($firstRowCells.eq(1).attr("rowspan"), 1, "Rowspan is OK");
-
-        assert.equal($secondRowCells.length, 1, "Cell count is OK");
-        assert.equal($secondRowCells.eq(0).attr("rowspan"), 1, "Rowspan is OK");
-
-        assert.equal($thirdRowCells.length, 2, "Cell count is OK");
-        assert.equal($thirdRowCells.eq(0).attr("rowspan"), 2, "Rowspan is OK");
-        assert.equal($thirdRowCells.eq(1).attr("rowspan"), 1, "Rowspan is OK");
-
-        assert.equal($fourthRowCells.length, 1, "Cell count is OK");
-        assert.equal($fourthRowCells.eq(0).attr("rowspan"), 1, "Rowspan is OK");
+        assert.equal($groupColumns.length, 2, "Column count is OK");
+        assert.equal($firstColumnCells.length, 2, "Cell count is OK");
+        assert.equal($secondColumnCells.length, 4, "Cell count is OK");
     });
 
     QUnit.test("Timeline should have the right 'dx-group-column-count' attr depend on group count", (assert) => {

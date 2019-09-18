@@ -105,10 +105,7 @@ export default class BaseMaskStrategy {
         var caret = this.editorCaret();
         var selectedText = this.editorInput().val().substring(caret.start, caret.end);
 
-        this.editor._maskKeyHandler(event, function() {
-            getClipboardText(event, selectedText);
-            return true;
-        });
+        this.editor._maskKeyHandler(event, () => getClipboardText(event, selectedText));
     }
 
     _dropHandler() {
@@ -122,33 +119,42 @@ export default class BaseMaskStrategy {
         clearTimeout(this._dragTimer);
     }
 
+    _keyDownHandler() {
+        this._keyPressHandled = false;
+    }
+
     _pasteHandler(event) {
+        const { editor } = this;
         this._keyPressHandled = true;
         var caret = this.editorCaret();
 
-        this.editor._maskKeyHandler(event, function() {
+        editor._maskKeyHandler(event, () => {
             var pastingText = getClipboardText(event);
-            var restText = this._maskRulesChain.text().substring(caret.end);
-
-            var accepted = this._handleChain({ text: pastingText, start: caret.start, length: pastingText.length });
+            var restText = editor._maskRulesChain.text().substring(caret.end);
+            var accepted = editor._handleChain({ text: pastingText, start: caret.start, length: pastingText.length });
             var newCaret = caret.start + accepted;
 
-            this._handleChain({ text: restText, start: newCaret, length: restText.length });
-
-            this._caret({ start: newCaret, end: newCaret });
-
-            return true;
+            editor._handleChain({ text: restText, start: newCaret, length: restText.length });
+            editor._caret({ start: newCaret, end: newCaret });
         });
+    }
+
+    runWithoutEventProcessing(action) {
+        const keyPressHandled = this._keyPressHandled;
+
+        this._keyPressHandled = true;
+        action();
+        this._keyPressHandled = keyPressHandled;
     }
 
     _backspaceHandler() { }
 
     _delHandler(event) {
+        const { editor } = this;
+
         this._keyPressHandled = true;
-        this.editor._maskKeyHandler(event, function() {
-            !this._hasSelection() && this._handleKey(EMPTY_CHAR);
-            return true;
-        });
+        editor._maskKeyHandler(event, () =>
+            !editor._hasSelection() && editor._handleKey(EMPTY_CHAR));
     }
 
     clean() {

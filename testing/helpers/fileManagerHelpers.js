@@ -31,7 +31,12 @@ export const Consts = {
     MENU_ITEM_CLASS: "dx-menu-item",
     SELECTION_CLASS: "dx-selection",
     SPLITTER_CLASS: "dx-splitter",
-    DISABLED_STATE_CLASS: "dx-state-disabled"
+    DISABLED_STATE_CLASS: "dx-state-disabled",
+    UPLOAD_ICON_CLASS: "dx-icon-upload",
+    DROPDOWN_MENU_BUTTON_CLASS: "dx-dropdownmenu-button",
+    DROPDOWN_MENU_LIST_CLASS: "dx-dropdownmenu-list",
+    DROPDOWN_MENU_CONTENT_CLASS: "dx-scrollview-content",
+    DROPDOWN_MENU_LIST_ITEM_CLASS: "dx-list-item"
 };
 const showMoreButtonText = "\u22EE";
 
@@ -99,12 +104,25 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.TOOLBAR_CLASS} .${Consts.SELECT_BOX_CLASS}:visible input[type='hidden']`);
     }
 
+    getGeneralToolbarElements() {
+        const _$generalToolbar = this.getToolbar().children().first();
+        return _$generalToolbar.find(`.${Consts.BUTTON_CLASS}, .${Consts.SELECT_BOX_CLASS}:visible input[type='hidden']`);
+    }
+
     getToolbarButton(text) {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('${text}')`);
     }
 
     getToolbarSeparators() {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
+    }
+
+    getToolbarDropDownMenuButton() {
+        return this._$element.find(`.${Consts.DROPDOWN_MENU_BUTTON_CLASS}`);
+    }
+
+    getToolbarDropDownMenuItem(childIndex) {
+        return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
     }
 
     getCustomThumbnails() {

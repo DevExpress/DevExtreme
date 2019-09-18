@@ -167,7 +167,13 @@ export class SchedulerTestWrapper {
             getScrollPosition: () => {
                 const element = this.workSpace.getDataTableScrollableContainer();
                 return { left: element.scrollLeft(), top: element.scrollTop() };
-            }
+            },
+            groups: {
+                getGroupsContainer: () => $(".dx-scheduler-group-flex-container"),
+                getGroup: (index = 0) => $(".dx-scheduler-group-row").eq(index),
+                getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find(".dx-scheduler-group-header"),
+                getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
+            },
         };
 
         this.navigator = {

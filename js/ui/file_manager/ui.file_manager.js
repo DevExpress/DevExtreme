@@ -85,6 +85,8 @@ class FileManager extends Widget {
         const $toolbar = $("<div>").appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
             commandManager: this._commandManager,
+            generalItems: this.option("toolbar.generalItems"),
+            fileItems: this.option("toolbar.fileItems"),
             itemViewMode: this.option("itemView").mode
         });
 
@@ -363,6 +365,21 @@ class FileManager extends Widget {
             */
             selectionMode: "multiple", // "single"
 
+            toolbar: {
+                generalItems: [
+                    "showDirsPanel", "create", "upload", "refresh",
+                    {
+                        commandName: "separator",
+                        location: "after"
+                    },
+                    "viewMode"
+                ],
+
+                fileItems: [
+                    "move", "copy", "rename", "separator", "delete", "refresh", "clear"
+                ]
+            },
+
             /**
             * @name dxFileManagerOptions.itemView
             * @type object
@@ -508,6 +525,13 @@ class FileManager extends Widget {
             case "permissions":
             case "upload":
                 this.repaint();
+                break;
+            case "toolbar":
+                this._toolbar.option(extend(
+                    true,
+                    args.value.generalItems ? { generalItems: args.value.generalItems } : {},
+                    args.value.fileItems ? { fileItems: args.value.fileItems } : {}
+                ));
                 break;
             case "onCurrentDirectoryChanged":
                 this._onCurrentDirectoryChangedAction = this._createActionByOption("onCurrentDirectoryChanged");

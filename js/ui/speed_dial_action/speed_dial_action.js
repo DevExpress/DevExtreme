@@ -96,12 +96,8 @@ const SpeedDialAction = Widget.inherit({
             case "onClick":
             case "icon":
             case "label":
-                initAction(this);
-                break;
             case "visible":
-                args.value ?
-                    initAction(this) :
-                    disposeAction(this._options.id);
+                initAction(this);
                 break;
             case "animation":
             case "id":
