@@ -128,8 +128,7 @@ module.exports = {
              */
             /**
              * @name GridBaseRowDragging
-             * @inherits dxSortable.Options
-             * @type Object
+             * @type dxSortableOptions
              */
             rowDragging: {
                 /**
