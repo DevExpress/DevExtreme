@@ -2333,7 +2333,7 @@ declare module DevExpress.ui {
         text?: string;
     }
     /** @name GridBaseRowDragging */
-    export interface GridBaseRowDragging extends dxSortableOptions {
+    export interface GridBaseRowDragging {
         /** @name GridBaseRowDragging.enabled */
         enabled?: boolean;
         /** @name GridBaseRowDragging.showDragIcons */
@@ -5375,7 +5375,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
     /** @name dxSortable.Options */
-    export interface dxSortableOptions<T = dxSortable> extends DraggableBaseOptions<T> {
+    export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
         /** @name dxSortable.Options.dropFeedbackMode */
         dropFeedbackMode?: 'push' | 'indicate';
         /** @name dxSortable.Options.itemOrientation */
