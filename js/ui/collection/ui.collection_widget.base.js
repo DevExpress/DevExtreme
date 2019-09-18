@@ -542,7 +542,7 @@ var CollectionWidget = Widget.inherit({
 
         const isDisabling = property === 'disabled' && value;
 
-        if(isDisabling && $item.eq(this.option('focusedElement'))) {
+        if(isDisabling && $item.is(this.option('focusedElement'))) {
             this.option('focusedElement', null);
         }
     },
