@@ -1230,3 +1230,45 @@ QUnit.test("set cursorOffset as function when clone is true", function(assert) {
     assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "source element");
     assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "drag element");
 });
+
+QUnit.test("cursorOffset should be correct when the 'y' coordinate is zero", function(assert) {
+    // arrange
+    let $dragElement;
+
+    this.createDraggable({
+        cursorOffset: {
+            x: 20,
+            y: 0
+        },
+        clone: true
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.strictEqual($dragElement.length, 1, "there is a drag element");
+    assert.deepEqual($dragElement.offset(), { left: 30, top: 10 }, "drag element offset");
+});
+
+QUnit.test("cursorOffset should be correct when the 'x' coordinate is zero", function(assert) {
+    // arrange
+    let $dragElement;
+
+    this.createDraggable({
+        cursorOffset: {
+            x: 0,
+            y: 20
+        },
+        clone: true
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.strictEqual($dragElement.length, 1, "there is a drag element");
+    assert.deepEqual($dragElement.offset(), { left: 10, top: 30 }, "drag element offset");
+});
