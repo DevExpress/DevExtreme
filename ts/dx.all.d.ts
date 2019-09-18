@@ -5376,6 +5376,8 @@ declare module DevExpress.ui {
     }
     /** @name dxSortable.Options */
     export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
+        /** @name dxSortable.Options.allowDropInsideItem */
+        allowDropInsideItem?: boolean;
         /** @name dxSortable.Options.dropFeedbackMode */
         dropFeedbackMode?: 'push' | 'indicate';
         /** @name dxSortable.Options.itemOrientation */

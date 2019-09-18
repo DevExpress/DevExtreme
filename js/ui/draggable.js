@@ -184,15 +184,15 @@ var ScrollAnimator = Animator.inherit({
  */
 
 var Draggable = DOMComponentWithTemplate.inherit({
-    setupDraggingInfo: noop,
+    reset: noop,
 
-    clearDragInfo: noop,
+    dragMove: noop,
 
-    movePlaceholder: noop,
+    dragEnter: noop,
 
-    resetPlaceholder: noop,
+    dragLeave: noop,
 
-    dropItem: function() {
+    dragEnd: function() {
         let $sourceElement = this._getSourceElement(),
             sourceDraggable = this._getSourceDraggable();
 
@@ -617,7 +617,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         }
 
         let targetDraggable = this._getTargetDraggable();
-        targetDraggable.movePlaceholder(e);
+        targetDraggable.dragMove(e);
     },
 
     _findScrollable: function(e) {
@@ -660,41 +660,36 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._getAction("onDragEnd")(eventArgs);
 
         if(!eventArgs.cancel) {
-            targetDraggable.dropItem();
+            targetDraggable.dragEnd(eventArgs);
         }
 
+        this.reset();
+        targetDraggable.reset();
         this._stopAnimator();
         this.horizontalScrollHelper.reset();
         this.verticalScrollHelper.reset();
 
-        this.resetPlaceholder();
-        targetDraggable.resetPlaceholder();
         this._resetDragElement();
         this._resetSourceElement();
-
-        this.clearDragInfo();
-        targetDraggable.clearDragInfo();
 
         this._resetTargetDraggable();
         this._resetSourceDraggable();
     },
 
     _dragEnterHandler: function(e) {
-        // TODO remove code after fix enter/leave events
-        let sourceDraggable = this._getSourceDraggable();
-        sourceDraggable.resetPlaceholder();
-
         this._setTargetDraggable();
-        this.setupDraggingInfo();
+
+        let sourceDraggable = this._getSourceDraggable();
+        sourceDraggable.dragEnter(e);
     },
 
     _dragLeaveHandler: function(e) {
-        let targetDraggable = this._getTargetDraggable();
-
-        targetDraggable.clearDragInfo();
-        targetDraggable.resetPlaceholder();
-
         this._resetTargetDraggable();
+
+        this.reset();
+
+        let sourceDraggable = this._getSourceDraggable();
+        sourceDraggable.dragLeave(e);
     },
 
     _getAction: function(name) {
