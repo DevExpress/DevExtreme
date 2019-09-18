@@ -231,6 +231,10 @@ export default class AppointmentPopup {
             oldData = this.scheduler._editAppointmentData,
             recData = this.scheduler._updatedRecAppointment;
 
+        if(formData.recurrenceRule === null) { // TODO
+            delete formData.recurrenceRule;
+        }
+
         const convert = (obj, dateFieldName) => {
             const date = new Date(this.scheduler.fire("getField", dateFieldName, obj));
             const tzDiff = this.scheduler._getTimezoneOffsetByOption() * toMs("hour") + this.scheduler.fire("getClientTimezoneOffset", date);
