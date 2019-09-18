@@ -3205,6 +3205,18 @@ var dxPolarChart = {
         endOnTick: false
     },
     /**
+    * @name dxPolarChartOptions.tooltip
+    * @type object
+    **/
+    tooltip: {
+        /**
+        * @name dxPolarChartOptions.tooltip.shared
+        * @type boolean
+        * @default false
+        */
+        shared: false
+    },
+    /**
     * @name dxPolarChartOptions.onSeriesHoverChanged
     * @extends Action
     * @type function(e)
