@@ -6318,6 +6318,8 @@ declare module DevExpress.viz {
         contentTemplate?: DevExpress.core.template | ((pointInfo: any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name BaseChart.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((pointInfo: any) => any);
+        /** @name BaseChart.Options.tooltip.shared */
+        shared?: boolean;
     }
     /** @name BaseChart */
     export class BaseChart extends BaseWidget {
@@ -7532,8 +7534,6 @@ declare module DevExpress.viz {
     export interface dxChartTooltip extends BaseChartTooltip {
         /** @name dxChart.Options.tooltip.location */
         location?: 'center' | 'edge';
-        /** @name dxChart.Options.tooltip.shared */
-        shared?: boolean;
     }
     /** @name dxChart.Options.valueAxis */
     export interface dxChartValueAxis extends dxChartCommonAxisSettings {
@@ -8952,8 +8952,6 @@ declare module DevExpress.viz {
         seriesSelectionMode?: 'multiple' | 'single';
         /** @name dxPolarChart.Options.seriesTemplate */
         seriesTemplate?: { customizeSeries?: ((seriesName: any) => PolarChartSeries), nameField?: string };
-        /** @name dxPolarChart.Options.tooltip */
-        tooltip?: dxPolarChartTooltip;
         /** @name dxPolarChart.Options.useSpiderWeb */
         useSpiderWeb?: boolean;
         /** @name dxPolarChart.Options.valueAxis */
@@ -9179,11 +9177,6 @@ declare module DevExpress.viz {
         customizeText?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
         /** @name dxPolarChart.Options.legend.hoverMode */
         hoverMode?: 'excludePoints' | 'includePoints' | 'none';
-    }
-    /** @name dxPolarChart.Options.tooltip */
-    export interface dxPolarChartTooltip extends BaseChartTooltip {
-        /** @name dxPolarChart.Options.tooltip.shared */
-        shared?: boolean;
     }
     /** @name dxPolarChart.Options.valueAxis */
     export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
