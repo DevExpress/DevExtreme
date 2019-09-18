@@ -648,7 +648,7 @@ const GroupConfig = Class.inherit({
 
     _removePendingValidator(validator) {
         const index = inArray(validator, this._pendingValidators);
-        if(index >= -1) {
+        if(index >= 0) {
             this._pendingValidators.splice(index, 1);
         }
     },
