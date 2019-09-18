@@ -1,11 +1,23 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isObject, isString } from "../../core/utils/type";
+import { isString } from "../../core/utils/type";
 
 import Widget from "../widget/ui.widget";
 import ContextMenu from "../context_menu/ui.context_menu";
 
 const FILEMANAGER_CONTEXT_MEMU_CLASS = "dx-filemanager-context-menu";
+
+const DEFAULT_CONTEXT_MENU_ITEMS = {
+    create: {},
+    upload: {},
+    rename: {},
+    move: {},
+    copy: {},
+    delete: {},
+    refresh: {
+        beginGroup: true
+    }
+};
 
 class FileManagerContextMenu extends Widget {
 
@@ -61,16 +73,67 @@ class FileManagerContextMenu extends Widget {
 
         const result = [];
 
-        this.option("items").forEach(srcItem => {
+        this.option("items").map(srcItem => {
             const commandName = isString(srcItem) ? srcItem : srcItem.commandName;
-            if(this._commandManager.isCommandAvailable(commandName, fileItems)) {
-                let item = this._createMenuItemByCommandName(commandName);
-                if(isObject(srcItem)) {
-                    item = extend(true, item, srcItem);
-                }
-                result.push(item);
-            }
+            let item = this._configureItemByCommandName(commandName, srcItem);
+            // if(this._isCommandAvailable(item, fileItems)) {
+            //     if(isObject(srcItem)) {
+            //         item = extend(true, item, srcItem);
+            //     }
+            // }
+            result.push(item);
         });
+
+        return result;
+    }
+
+    _isCommandAvailable(command, fileItems) {
+        if(!this._isDefaultItem(command.commandName)) {
+            return command.visible;
+        }
+        if(command.visibilityMode === "manual") {
+            return command.visible;
+        }
+        return this._commandManager.isCommandAvailable(command.commandName, fileItems);
+    }
+
+    _isDefaultItem(commandName) {
+        return !!DEFAULT_CONTEXT_MENU_ITEMS[commandName];
+    }
+
+    _extendAttributes(targetObject, sourceObject, objectKeysArray) {
+        objectKeysArray.forEach(objectKey => {
+            extend(targetObject, sourceObject[objectKey]
+                ? { [objectKey]: sourceObject[objectKey] }
+                : {});
+        });
+    }
+
+    _configureItemByCommandName(commandName, item) {
+        let result = {};
+
+        if(this._isDefaultItem(commandName)) {
+            result = this._createMenuItemByCommandName(commandName);
+        }
+
+        if(this._isDefaultItem(commandName)) {
+            const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
+            extend(result, defaultConfig);
+            this._extendAttributes(result, item, ["visibilityMode", "location", "locateInMenu", "text", "icon"]);
+            if(result.visibilityMode === "manual") {
+                this._extendAttributes(result, item, ["visible", "disabled"]);
+            }
+            this._extendAttributes(result.options, item, ["text", "icon"]);
+        } else {
+            extend(result, item);
+            if(!result.widget) {
+                result.widget = "dxButton";
+            }
+        }
+
+        if(!result.commandName) {
+            extend(result, { commandName });
+        }
 
         return result;
     }
