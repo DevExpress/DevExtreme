@@ -117,11 +117,11 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.TOOLBAR_SEPARATOR_ITEM}:visible`);
     }
 
-    getDropDownMenuButton() {
+    getToolbarDropDownMenuButton() {
         return this._$element.find(`.${Consts.DROPDOWN_MENU_BUTTON_CLASS}`);
     }
 
-    getDropDownMenuItem(childIndex) {
+    getToolbarDropDownMenuItem(childIndex) {
         return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
     }
 

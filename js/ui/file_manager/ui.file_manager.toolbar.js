@@ -177,15 +177,11 @@ class FileManagerToolbar extends Widget {
         if(this._isDefaultItem(commandName)) {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
             extend(result, defaultConfig);
-            extend(result, item.visibilityMode ? { visibilityMode: item.visibilityMode } : {});
-            if(result.visibilityMode) {
-                extend(result, item.visible ? { visible: item.visible } : {});
-                extend(result, item.disabled ? { disabled: item.disabled } : {});
+            this._extendAttributes(result, item, ["visibilityMode", "location", "locateInMenu", "text", "icon"]);
+            if(result.visibilityMode === "manual") {
+                this._extendAttributes(result, item, ["visible", "disabled"]);
             }
-            extend(result, item.location ? { location: item.location } : {});
-            extend(result, item.locateInMenu ? { locateInMenu: item.locateInMenu } : {});
-            extend(result.options, item.text ? { text: item.text } : {});
-            extend(result.options, item.icon ? { icon: item.icon } : {});
+            this._extendAttributes(result.options, item, ["text", "icon"]);
         } else {
             extend(result, item);
             if(!result.widget) {
@@ -198,6 +194,14 @@ class FileManagerToolbar extends Widget {
         }
 
         return result;
+    }
+
+    _extendAttributes(targetObject, sourceObject, objectKeysArray) {
+        objectKeysArray.forEach(objectKey => {
+            extend(targetObject, sourceObject[objectKey]
+                ? { [objectKey]: sourceObject[objectKey] }
+                : {});
+        });
     }
 
     _isDefaultItem(commandName) {

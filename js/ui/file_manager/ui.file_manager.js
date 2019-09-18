@@ -369,7 +369,7 @@ class FileManager extends Widget {
                 generalItems: [
                     "showDirsPanel", "create", "upload", "refresh",
                     {
-                        commandName: "separator", // TODO rename to command
+                        commandName: "separator",
                         location: "after"
                     },
                     "viewMode"

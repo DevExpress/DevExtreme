@@ -237,11 +237,11 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($elements.eq(0).find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "show tree view button is rendered with new icon");
         assert.ok($elements.eq(1).text().indexOf("Upload files") !== -1, "upload files button is rendered in new position");
 
-        const $dropDownMenuButton = this.wrapper.getDropDownMenuButton();
-        $dropDownMenuButton.trigger("dxclick");
+        const $toolbarDropDownMenuButton = this.wrapper.getToolbarDropDownMenuButton();
+        $toolbarDropDownMenuButton.trigger("dxclick");
         this.clock.tick(400);
-        const $dropDownMenuItem = this.wrapper.getDropDownMenuItem(0);
-        assert.ok($($dropDownMenuItem).find(".dx-button-text").text().indexOf("New folder") !== -1, "create folder button is rendered in the dropDown menu");
+        const toolbarDropDownMenuItem = this.wrapper.getToolbarDropDownMenuItem(0);
+        assert.ok($(toolbarDropDownMenuItem).find(".dx-button-text").text().indexOf("New folder") !== -1, "create folder button is rendered in the dropDown menu");
 
         assert.ok($elements.eq(2).val().indexOf("Details") !== -1, "view switcher is rendered in new location");
         assert.ok($elements.eq(3).text().indexOf("Reinvigorate") !== -1, "refresh button is rendered with new text");
@@ -257,22 +257,8 @@ QUnit.module("Toolbar", moduleConfig, () => {
     });
 
     test("custom items render and modification", function(assert) {
-        let actionLog = [];
-        const log = function(logString) {
-            actionLog.push(logString);
-        };
-        const readLog = function(logStringIndex) {
-            if(!logStringIndex) {
-                logStringIndex = actionLog.length - 1;
-            }
-            return actionLog[logStringIndex];
-        };
-        const clearLog = function() {
-            actionLog = [];
-        };
-        function SayMeow() {
-            log("Meow!");
-        }
+        const testClick = sinon.spy();
+
         createFileManager(false);
         this.clock.tick(400);
 
@@ -286,14 +272,15 @@ QUnit.module("Toolbar", moduleConfig, () => {
                 },
                 "viewMode",
                 {
-                    commandName: "meow",
+                    ID: 42,
+                    commandName: "commandName",
                     location: "after",
                     locateInMenu: "never",
                     visible: true,
-                    onClick: SayMeow,
+                    onClick: testClick,
                     options:
                         {
-                            text: "Cat"
+                            text: "newButton"
                         }
                 }
             ]
@@ -303,13 +290,13 @@ QUnit.module("Toolbar", moduleConfig, () => {
         let $elements = this.wrapper.getGeneralToolbarElements();
         assert.equal($elements.length, 6, "general toolbar has elements");
 
-        let $catButton = $elements.eq(5);
-        assert.ok($catButton.text().indexOf("Cat") !== -1, "cat button is rendered at correct place");
+        let $newButton = $elements.eq(5);
+        assert.ok($newButton.text().indexOf("newButton") !== -1, "newButton is rendered at correct place");
 
-        $catButton.trigger("dxclick");
-        assert.equal(readLog(), "Meow!", "cat button has correct action");
+        $newButton.trigger("dxclick");
+        assert.equal(testClick.callCount, 1, "newButton has correct action");
+        assert.equal(testClick.args[0][0].itemData.ID, 42, "custom attribute is available from onClick fuction");
 
-        clearLog();
         fileManagerInstance.option("toolbar", {
             generalItems: [
                 "showDirsPanel", "create", "upload", "refresh",
@@ -319,14 +306,14 @@ QUnit.module("Toolbar", moduleConfig, () => {
                 },
                 "viewMode",
                 {
-                    commandName: "meow",
+                    commandName: "commandName",
                     locateInMenu: "always",
                     visible: true,
                     disabled: true,
-                    onClick: SayMeow,
+                    onClick: testClick,
                     options:
                         {
-                            text: "Cat"
+                            text: "newButton"
                         }
                 },
                 {
@@ -349,16 +336,16 @@ QUnit.module("Toolbar", moduleConfig, () => {
         const $visibleElements = this.wrapper.getToolbarElements();
         assert.equal($visibleElements.length, 3, "general toolbar has visible elements");
 
-        const $dropDownMenuButton = this.wrapper.getDropDownMenuButton();
-        $dropDownMenuButton.trigger("dxclick");
+        const $toolbarDropDownMenuButton = this.wrapper.getToolbarDropDownMenuButton();
+        $toolbarDropDownMenuButton.trigger("dxclick");
         this.clock.tick(400);
 
-        const dropDownMenuItem = this.wrapper.getDropDownMenuItem(0);
-        $catButton = $(dropDownMenuItem).find(".dx-button");
-        assert.ok($catButton.find(".dx-button-text").text().indexOf("Cat") !== -1, "cat button is rendered in the dropDown menu");
+        const toolbarDropDownMenuItem = this.wrapper.getToolbarDropDownMenuItem(0);
+        $newButton = $(toolbarDropDownMenuItem).find(".dx-button");
+        assert.ok($newButton.find(".dx-button-text").text().indexOf("newButton") !== -1, "newButton is rendered in the dropDown menu");
 
-        $catButton.trigger("dxclick");
-        assert.equal(readLog(), undefined, "cat button has no action due to its disabled state");
+        $newButton.trigger("dxclick");
+        assert.equal(testClick.callCount, 1, "newButton has no action due to its disabled state");
 
         const $newCommandButton = $elements.eq(5);
         assert.ok($newCommandButton.text().indexOf("Some new command") !== -1, "new command button is placed correctly");
