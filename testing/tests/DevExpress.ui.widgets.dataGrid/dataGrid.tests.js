@@ -3632,7 +3632,7 @@ QUnit.test("Enable rows hover, row position and focused row", function(assert) {
     assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
 });
 
-QUnit.testInActiveWindow("Focused row should be visible if page size has height more than scrollable container", function(assert) {
+QUnit.test("Focused row should be visible if page size has height more than scrollable container", function(assert) {
     // arrange
     var data = [
             { name: "Alex", phone: "111111", room: 6 },
@@ -3656,7 +3656,7 @@ QUnit.testInActiveWindow("Focused row should be visible if page size has height 
 
     // assert
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(4), "Navigation row is visible");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(4, 1), "Navigation row is visible");
 });
 
 QUnit.test("Focused row should be visible in virtual scrolling mode", function(assert) {
@@ -3684,7 +3684,7 @@ QUnit.test("Focused row should be visible in virtual scrolling mode", function(a
 
     // assert
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(4), "Navigation row is visible");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(4, 1), "Navigation row is visible");
 });
 
 QUnit.test("Test skipFocusedRowNavigation option using navigateToRow", function(assert) {
@@ -3783,7 +3783,7 @@ QUnit.test("Focused row should be visible if it's on the first page and page hei
 
     // assert
     assert.ok(rowsView.getRow(3).hasClass("dx-row-focused"), "Focused row");
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(3), "Navigation row is visible");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(3, 1), "Navigation row is visible");
 });
 
 QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual", function(assert) {
@@ -4130,7 +4130,7 @@ QUnit.test("Focused row should be visible in infinite scrolling mode", function(
 
     // assert
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(4), "Navigation row is visible");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(4, 1), "Navigation row is visible");
 });
 
 QUnit.test("The navigateToRow method should not affect horizontal scrolling", function(assert) {
@@ -4167,7 +4167,7 @@ QUnit.test("The navigateToRow method should not affect horizontal scrolling", fu
 
     // assert
     assert.equal(dataGrid.pageIndex(), 2, "Page index");
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(1), "Navigation row is visible");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(1, 1), "Navigation row is visible");
     assert.equal(rowsView.getScrollable().scrollLeft(), 0, "Scroll left");
 });
 
@@ -4200,7 +4200,7 @@ QUnit.test("Test navigateToRow method if virtual scrolling", function(assert) {
     // assert
     assert.equal(dataGrid.pageIndex(), 2, "Page index");
     assert.equal(keyboardController.getVisibleRowIndex(), -1, "Visible row index");
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(5), "Navigation row is visible");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(5, 1), "Navigation row is visible");
 });
 
 QUnit.test("Test navigateToRow method if paging", function(assert) {
@@ -4229,7 +4229,7 @@ QUnit.test("Test navigateToRow method if paging", function(assert) {
     // assert
     assert.equal(dataGrid.pageIndex(), 2, "Page index");
     assert.equal(keyboardController.getVisibleRowIndex(), -1, "Visible row index");
-    assert.ok(dataGridWrapper.rowsView.isRowVisible(1), "Navigation row is visible");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(1, 1), "Navigation row is visible");
 });
 
 QUnit.test("Paging should not raise the exception if OData and a group row was focused", function(assert) {
