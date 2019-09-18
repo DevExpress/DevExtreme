@@ -407,7 +407,7 @@ var TextEditorMask = TextEditorBase.inherit({
         this._handleSelection();
 
         const previousText = this._input().val();
-        const riseInputEvent = () => {
+        const raiseInputEvent = () => {
             if(previousText !== this._input().val()) {
                 this._maskStrategy.runWithoutEventProcessing(
                     () => eventsEngine.trigger(this._input(), "input")
@@ -418,13 +418,13 @@ var TextEditorMask = TextEditorBase.inherit({
         const handled = keyHandler();
 
         if(handled) {
-            handled.then(riseInputEvent);
+            handled.then(raiseInputEvent);
         } else {
             this.setForwardDirection();
             this._adjustCaret();
             this._displayMask();
             this._maskRulesChain.reset();
-            riseInputEvent();
+            raiseInputEvent();
         }
     },
 
