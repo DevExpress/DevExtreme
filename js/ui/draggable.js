@@ -634,7 +634,11 @@ var Draggable = DOMComponentWithTemplate.inherit({
         if(browser.msie) {
             let msElements = ownerDocument.msElementsFromPoint(mousePosition.x, mousePosition.y);
 
-            allObjects = Array.prototype.slice.call(msElements);
+            if(msElements) {
+                allObjects = Array.prototype.slice.call(msElements);
+            } else {
+                allObjects = [];
+            }
         } else {
             allObjects = ownerDocument.elementsFromPoint(mousePosition.x, mousePosition.y);
         }
