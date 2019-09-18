@@ -732,22 +732,6 @@ QUnit.test("It should be possible to render endDateTimeZone editor on appt form"
     assert.equal(endDateTimezoneEditor.option("observer"), this.instance, "Observer is defined");
 });
 
-QUnit.test("Scheduler appointment popup should has right content when appointmentPopupTemplate is used", function(assert) {
-    var task = { startDate: new Date(2015, 1, 10), endDate: new Date(2015, 1, 13), text: "caption" };
-
-    this.instance.option("appointmentPopupTemplate", function() {
-        assert.deepEqual(arguments[0], task, "passed appointment data is right");
-        return $("<div>").addClass("new-scheduler-popup-template");
-    });
-
-    this.instance.showAppointmentPopup(task);
-
-    var $popup = $(".new-scheduler-popup-template");
-
-    assert.equal($popup.length, 1, "popup with template was shown");
-});
-
-
 QUnit.test("Validate works always before done click", function(assert) {
     var data = new DataSource({
         store: this.tasks
