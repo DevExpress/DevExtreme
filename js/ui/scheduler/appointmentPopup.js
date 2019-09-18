@@ -164,6 +164,8 @@ export default class AppointmentPopup {
         var startDateExpr = this.scheduler._dataAccessors.expr.startDateExpr,
             endDateExpr = this.scheduler._dataAccessors.expr.endDateExpr;
 
+        formData.recurrenceRule = formData.recurrenceRule || null;
+
         AppointmentForm.updateFormData(this._appointmentForm, formData);
         this._appointmentForm.option("readOnly", this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false);
 
