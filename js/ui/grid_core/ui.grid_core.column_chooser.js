@@ -23,6 +23,9 @@ var COLUMN_CHOOSER_CLASS = "column-chooser",
     COLUMN_CHOOSER_ICON_NAME = "column-chooser",
     COLUMN_CHOOSER_ITEM_CLASS = "dx-column-chooser-item",
 
+    TREEVIEW_NODE_SELECTOR = ".dx-treeview-node",
+    CHECKBOX_SELECTOR = ".dx-checkbox",
+
     CLICK_TIMEOUT = 300,
 
     processItems = function(that, chooserColumns) {
@@ -39,6 +42,7 @@ var COLUMN_CHOOSER_CLASS = "column-chooser",
                     expanded: true,
                     id: column.index,
                     disabled: false,
+                    disableCheckBox: column.allowHiding === false,
                     parentId: isDefined(column.ownerBand) ? column.ownerBand : null
                 };
 
@@ -199,7 +203,25 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 showCheckBoxesMode: "none",
                 rootValue: null,
                 searchEnabled: columnChooser.allowSearch,
-                searchTimeout: columnChooser.searchTimeout
+                searchTimeout: columnChooser.searchTimeout,
+                onItemRendered: function(e) {
+                    if(e.itemData.disableCheckBox) {
+                        let $treeViewNode = $(e.itemElement.closest(TREEVIEW_NODE_SELECTOR)),
+                            checkBoxInstance,
+                            $checkBox;
+
+                        if($treeViewNode.length) {
+
+                            $checkBox = $treeViewNode.find(CHECKBOX_SELECTOR);
+
+                            if($checkBox.length) {
+                                checkBoxInstance = $checkBox.data("dxCheckBox");
+
+                                checkBoxInstance && checkBoxInstance.option("disabled", true);
+                            }
+                        }
+                    }
+                }
             };
 
         scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
