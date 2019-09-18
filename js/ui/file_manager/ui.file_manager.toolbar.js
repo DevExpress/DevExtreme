@@ -177,7 +177,7 @@ class FileManagerToolbar extends Widget {
         if(this._isDefaultItem(commandName)) {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
             extend(result, defaultConfig);
-            this._extendAttributes(result, item, ["visibilityMode", "location", "locateInMenu", "text", "icon"]);
+            this._extendAttributes(result, item, ["visibilityMode", "location", "locateInMenu"]);
             if(result.visibilityMode === "manual") {
                 this._extendAttributes(result, item, ["visible", "disabled"]);
             }
