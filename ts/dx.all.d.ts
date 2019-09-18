@@ -1812,6 +1812,8 @@ declare module DevExpress.ui {
         boundary?: string | Element | JQuery;
         /** @name DraggableBase.Options.container */
         container?: string | Element | JQuery;
+        /** @name DraggableBase.Options.cursorOffset */
+        cursorOffset?: string | { x?: number, y?: number };
         /** @name DraggableBase.Options.dragDirection */
         dragDirection?: 'both' | 'horizontal' | 'vertical';
         /** @name DraggableBase.Options.group */

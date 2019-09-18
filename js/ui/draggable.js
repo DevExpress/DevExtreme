@@ -16,7 +16,8 @@ var $ = require("../core/renderer"),
     positionUtils = require("../animation/position"),
     isFunction = require("../core/utils/type").isFunction,
     noop = require("../core/utils/common").noop,
-    viewPortUtils = require("../core/utils/view_port");
+    viewPortUtils = require("../core/utils/view_port"),
+    commonUtils = require("../core/utils/common");
 
 var DRAGGABLE = "dxDraggable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE),
@@ -294,6 +295,20 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @type any
              * @default undefined
              */
+            /**
+             * @name DraggableBaseOptions.cursorOffset
+             * @type string|object
+             */
+            /**
+             * @name DraggableBaseOptions.cursorOffset.x
+             * @type number
+             * @default 0
+             */
+            /**
+             * @name DraggableBaseOptions.cursorOffset.y
+             * @type number
+             * @default 0
+             */
         });
     },
 
@@ -317,17 +332,38 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _initTemplates: noop,
 
+    _normalizeCursorOffset: function(offset, $sourceElement, $dragElement) {
+        if(isFunction(offset)) {
+            offset = offset.call(this, {
+                sourceElement: $sourceElement,
+                dragElement: $dragElement
+            });
+        }
+
+        let result = commonUtils.pairToObject(offset);
+
+        return {
+            left: result.h,
+            top: result.v
+        };
+    },
+
     _initPosition: function($element, $dragElement) {
         let elementOffset,
             dragElementOffset,
-            isCloned = this._dragElementIsCloned();
+            isCloned = this._dragElementIsCloned(),
+            cursorOffset = this.option("cursorOffset"),
+            normalizedCursorOffset = this._normalizeCursorOffset(cursorOffset, $element, $dragElement);
 
         if(isCloned) {
-            elementOffset = $element.offset(),
+            elementOffset = $element.offset();
             dragElementOffset = $dragElement.offset();
-            elementOffset.top -= dragElementOffset.top;
-            elementOffset.left -= dragElementOffset.left;
-            this._move(elementOffset, $dragElement);
+            elementOffset.top -= dragElementOffset.top - normalizedCursorOffset.top;
+            elementOffset.left -= dragElementOffset.left - normalizedCursorOffset.left;
+        }
+
+        if(elementOffset || cursorOffset) {
+            this._move(elementOffset || normalizedCursorOffset, $dragElement);
         }
 
         this._startPosition = translator.locate($dragElement);
