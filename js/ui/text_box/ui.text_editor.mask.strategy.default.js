@@ -1,5 +1,6 @@
 import BaseMaskStrategy from "./ui.text_editor.mask.strategy.base";
 import { getChar } from "../../events/utils";
+import Promise from "../../core/polyfills/promise";
 
 const BACKSPACE_INPUT_TYPE = "deleteContentBackward";
 const EMPTY_CHAR = " ";
@@ -13,10 +14,6 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         return [...super.getHandleEventNames(), "keyPress"];
     }
 
-    _keyDownHandler() {
-        this._keyPressHandled = false;
-    }
-
     _keyPressHandler(event) {
         if(this._keyPressHandled) {
             return;
@@ -28,10 +25,9 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
             return;
         }
 
-        this.editor._maskKeyHandler(event, function() {
-            this._handleKey(getChar(event));
-            return true;
-        });
+        const { editor } = this;
+
+        editor._maskKeyHandler(event, () => editor._handleKey(getChar(event)));
     }
 
     _inputHandler(event) {
@@ -60,48 +56,49 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
         this._inputHandlerTimer = setTimeout((function() {
             this._caret({ start: caret.start, end: caret.start });
 
-            this._maskKeyHandler(event, function() {
-                this._handleKey(char);
-                return true;
-            });
+            this._maskKeyHandler(event, () => this._handleKey(char));
         }).bind(this.editor));
     }
 
     _backspaceHandler(event) {
+        const { editor } = this;
         this._keyPressHandled = true;
 
         const afterBackspaceHandler = (needAdjustCaret, callBack) => {
             if(needAdjustCaret) {
-                this.editor._direction(this.DIRECTION.FORWARD);
-                this.editor._adjustCaret();
+                editor._direction(this.DIRECTION.FORWARD);
+                editor._adjustCaret();
             }
             const currentCaret = this.editorCaret();
-            clearTimeout(this._backspaceHandlerTimeout);
-            this._backspaceHandlerTimeout = setTimeout(function() {
-                callBack(currentCaret);
+
+            return new Promise((resolve) => {
+                clearTimeout(this._backspaceHandlerTimeout);
+                this._backspaceHandlerTimeout = setTimeout(function() {
+                    callBack(currentCaret);
+                    resolve();
+                });
             });
         };
 
-        this.editor._maskKeyHandler(event, () => {
-            if(this.editor._hasSelection()) {
-                afterBackspaceHandler(true, (currentCaret) => {
-                    this.editor._displayMask(currentCaret);
-                    this.editor._maskRulesChain.reset();
+        editor._maskKeyHandler(event, () => {
+            if(editor._hasSelection()) {
+                return afterBackspaceHandler(true, (currentCaret) => {
+                    editor._displayMask(currentCaret);
+                    editor._maskRulesChain.reset();
                 });
-                return;
             }
 
-            if(this.editor._tryMoveCaretBackward()) {
-                afterBackspaceHandler(false, (currentCaret) => {
+            if(editor._tryMoveCaretBackward()) {
+                return afterBackspaceHandler(false, (currentCaret) => {
                     this.editorCaret(currentCaret);
                 });
-                return;
             }
 
-            this.editor._handleKey(EMPTY_CHAR, this.DIRECTION.BACKWARD);
-            afterBackspaceHandler(true, (currentCaret) => {
-                this.editor._displayMask(currentCaret);
-                this.editor._maskRulesChain.reset();
+            editor._handleKey(EMPTY_CHAR, this.DIRECTION.BACKWARD);
+
+            return afterBackspaceHandler(true, (currentCaret) => {
+                editor._displayMask(currentCaret);
+                editor._maskRulesChain.reset();
             });
         });
     }

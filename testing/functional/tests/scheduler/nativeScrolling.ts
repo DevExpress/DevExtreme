@@ -31,8 +31,8 @@ test("ScrollToTime works correctly with timelineDay and timelineWeek view (T7499
     for(let view of views) {
         const { name, initValue, expectedValue } = view;
 
-        await scheduler.setOption("currentView", name);
-        await scheduler.enableNativeScroll();
+        await scheduler.option("currentView", name);
+        await scheduler.option("useNative", true);
 
         await t
             .expect(scheduler.workSpaceScroll.left).eql(initValue, `Work space has init scroll position in ${name} view`)

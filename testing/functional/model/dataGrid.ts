@@ -1,4 +1,5 @@
-import { Selector, ClientFunction } from "testcafe";
+import { ClientFunction } from "testcafe";
+import Widget from "./internal/widget";
 
 const CLASS = {
     dataRow: 'dx-data-row',
@@ -36,13 +37,15 @@ class DataRow {
     }
 }
 
-export default class DataGrid {
-    element: Selector;
+export default class DataGrid extends Widget {
     dataRows: Selector;
     getGridInstance: ClientFunction<any>;
 
+    name: string = 'dxDataGrid';
+
     constructor(id: string) {
-        this.element = Selector(id);
+        super(id);
+
         this.dataRows = this.element.find(`.${CLASS.dataRow}`);
 
         const dataGrid =  this.element;

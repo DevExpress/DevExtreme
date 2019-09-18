@@ -1,4 +1,5 @@
-import { Selector, ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
+import Widget from './internal/widget';
 
 const CLASS = {
     appointment: 'dx-scheduler-appointment',
@@ -45,8 +46,7 @@ class Appointment {
     }
 }
 
-export default class Scheduler {
-    element: Selector;
+export default class Scheduler extends Widget {
     dateTableCells: Selector;
     dateTableRows: Selector;
     dateTableScrollable: Selector;
@@ -55,8 +55,11 @@ export default class Scheduler {
     tooltip: Selector;
     workSpaceScroll: { left: Promise<number>, top: Promise<number> };
 
+    name: string = 'dxScheduler';
+
     constructor(id: string) {
-        this.element = Selector(id);
+        super(id);
+
         this.dateTableCells = this.element.find(`.${CLASS.dateTableCell}`);
         this.dateTableRows = this.element.find(`.${CLASS.dateTableRow}`);
         this.dateTableScrollable =  this.element.find(`.${CLASS.dateTableScrollable}`);
@@ -75,24 +78,6 @@ export default class Scheduler {
             left: workSpaceScroll.scrollLeft,
             top: workSpaceScroll.scrollTop
         };
-    }
-
-    enableNativeScroll(): Promise<void> {
-        const dateTableScrollable: any = this.dateTableScrollable;
-
-        return (ClientFunction(
-            () => $(dateTableScrollable())['dxScrollable']('instance').option('useNative', true),
-            { dependencies: { dateTableScrollable } }
-        ))();
-    }
-
-    setOption(name: string, value: string): Promise<void> {
-        const scheduler: any = this.element;
-
-        return (ClientFunction(
-            () => $(scheduler())['dxScheduler']('instance').option(name, value),
-            { dependencies: { name, value, scheduler } }
-        ))();
     }
 
     getDateTableCell(rowIndex: number = 0, cellIndex: number = 0): Selector {

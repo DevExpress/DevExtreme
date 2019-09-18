@@ -15,10 +15,6 @@ class AndroidMaskStrategy extends BaseMaskStrategy {
         this._prevCaret = this.editorCaret();
     }
 
-    _keyDownHandler() {
-        this._keyPressHandled = false;
-    }
-
     _inputHandler({ originalEvent }) {
         if(!originalEvent) {
             return;
