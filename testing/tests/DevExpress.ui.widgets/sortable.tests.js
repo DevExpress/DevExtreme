@@ -158,14 +158,14 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(asser
     assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
 });
 
-QUnit.test("Initial placeholder if allowDropInside is true", function(assert) {
+QUnit.test("Initial placeholder if allowDropInsideItem is true", function(assert) {
     // arrange
     let items,
         $placeholder,
         $dragItemElement;
 
     this.createSortable({
-        allowDropInside: true
+        allowDropInsideItem: true
     });
 
     items = this.$element.children();
@@ -591,7 +591,7 @@ QUnit.test("onDragEnd - check args when dragging an item down", function(assert)
     assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(args[0].inside, false, "inside is false");
+    assert.strictEqual(args[0].dropInsideItem, false, "dropInsideItem is false");
 });
 
 QUnit.test("onDragEnd - check args when dragging an item up", function(assert) {
@@ -673,7 +673,7 @@ QUnit.test("onDragEnd - check args when dragging inside item", function(assert) 
 
 
     this.createSortable({
-        allowDropInside: true,
+        allowDropInsideItem: true,
         onDragEnd: onDragEnd
     });
 
@@ -687,7 +687,7 @@ QUnit.test("onDragEnd - check args when dragging inside item", function(assert) 
     assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(args[0].inside, true, "inside");
+    assert.strictEqual(args[0].dropInsideItem, true, "dropInsideItem");
 });
 
 QUnit.module("Cross-Component Drag and Drop", {

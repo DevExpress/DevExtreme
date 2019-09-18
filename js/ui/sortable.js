@@ -48,7 +48,12 @@ var Sortable = Draggable.inherit({
              * @default "push"
              */
             dropFeedbackMode: "push",
-            allowDropInside: false,
+            /**
+             * @name dxSortableOptions.allowDropInsideItem
+             * @type boolean
+             * @default false
+             */
+            allowDropInsideItem: false,
             /**
              * @name dxSortableOptions.onDragChange
              * @type function(e)
@@ -61,7 +66,7 @@ var Sortable = Draggable.inherit({
             onDragChange: null,
             fromIndex: null,
             toIndex: null,
-            inside: false,
+            dropInsideItem: false,
             itemPoints: null,
             targetItemPoint: null
         });
@@ -71,7 +76,7 @@ var Sortable = Draggable.inherit({
         this.option({
             targetItemPoint: null,
             toIndex: null,
-            inside: false,
+            dropInsideItem: false,
             fromIndex: null
         });
 
@@ -162,7 +167,7 @@ var Sortable = Draggable.inherit({
     },
 
     _isIndicateMode: function() {
-        return this.option("dropFeedbackMode") === "indicate" || this.option("allowDropInside");
+        return this.option("dropFeedbackMode") === "indicate" || this.option("allowDropInsideItem");
     },
 
     _createPlaceholder: function() {
@@ -190,7 +195,7 @@ var Sortable = Draggable.inherit({
         return this.$element().find(itemsSelector).not("." + this._addWidgetPrefix(PLACEHOLDER_CLASS)).toArray();
     },
 
-    _isValidPoint: function($items, itemPointIndex, inside) {
+    _isValidPoint: function($items, itemPointIndex, dropInsideItem) {
         if(!this._isIndicateMode()) {
             return true;
         }
@@ -198,7 +203,7 @@ var Sortable = Draggable.inherit({
         let $draggableItem = this._getDraggableElement(),
             draggableItemIndex = $items.indexOf($draggableItem.get(0));
 
-        return draggableItemIndex === -1 || itemPointIndex !== draggableItemIndex && (inside || itemPointIndex !== (draggableItemIndex + 1));
+        return draggableItemIndex === -1 || itemPointIndex !== draggableItemIndex && (dropInsideItem || itemPointIndex !== (draggableItemIndex + 1));
     },
 
     _getItemPoints: function() {
@@ -230,14 +235,14 @@ var Sortable = Draggable.inherit({
                 isValid: this._isValidPoint($items, result.length)
             });
 
-            if(this.option("allowDropInside")) {
+            if(this.option("allowDropInsideItem")) {
                 let points = result;
                 result = [];
                 for(let i = 0; i < points.length; i++) {
                     result.push(points[i]);
                     if(points[i + 1]) {
                         result.push(extend({}, points[i], {
-                            inside: true,
+                            dropInsideItem: true,
                             top: Math.floor((points[i].top + points[i + 1].top) / 2),
                             left: Math.floor((points[i].left + points[i + 1].left) / 2),
                             isValid: this._isValidPoint($items, i, true)
@@ -273,16 +278,16 @@ var Sortable = Draggable.inherit({
         return this.option("itemOrientation") === "vertical";
     },
 
-    _updatePlaceholderPosition: function(e, itemPoint, prevItemPoint) {
+    _updatePlaceholderPosition: function(e, itemPoint) {
         let sourceDraggable = this._getSourceDraggable(),
             isAnotherDraggable = sourceDraggable !== this,
             fromIndex = this.option("fromIndex"),
-            toIndex = Math.max(isAnotherDraggable || fromIndex >= itemPoint.index || itemPoint.inside ? itemPoint.index : itemPoint.index - 1, 0);
+            toIndex = Math.max(isAnotherDraggable || fromIndex >= itemPoint.index || itemPoint.dropInsideItem ? itemPoint.index : itemPoint.index - 1, 0);
 
         let eventArgs = extend(this._getEventArgs(), {
             event: e,
             toIndex,
-            inside: itemPoint.inside
+            dropInsideItem: itemPoint.dropInsideItem
         });
 
         this._getAction("onDragChange")(eventArgs);
@@ -291,7 +296,7 @@ var Sortable = Draggable.inherit({
             this.option({
                 targetItemPoint: null,
                 toIndex: null,
-                inside: false
+                dropInsideItem: false
             });
             return;
         }
@@ -299,25 +304,25 @@ var Sortable = Draggable.inherit({
         this.option({
             targetItemPoint: itemPoint,
             toIndex: eventArgs.toIndex,
-            inside: eventArgs.inside
+            dropInsideItem: eventArgs.dropInsideItem
         });
 
         this._updateItemPoints();
     },
 
     _updatePlaceholderSizes: function($placeholderElement, itemPoint) {
-        var isDragInside = Boolean(itemPoint.inside),
+        var dropInsideItem = Boolean(itemPoint.dropInsideItem),
             $item = itemPoint.$item || this._getSourceElement(),
             isVertical = this._isVerticalOrientation(),
             width = "",
             height = "";
 
-        $placeholderElement.toggleClass(this._addWidgetPrefix("placeholder-inside"), isDragInside);
+        $placeholderElement.toggleClass(this._addWidgetPrefix("placeholder-inside"), dropInsideItem);
 
-        if(isVertical || isDragInside) {
+        if(isVertical || dropInsideItem) {
             width = $item.outerWidth();
         }
-        if(!isVertical || isDragInside) {
+        if(!isVertical || dropInsideItem) {
             height = $item.outerHeight();
         }
 
@@ -340,7 +345,7 @@ var Sortable = Draggable.inherit({
         return {
             fromIndex: this.option("fromIndex"),
             toIndex: this.option("toIndex"),
-            inside: this.option("inside"),
+            dropInsideItem: this.option("dropInsideItem"),
             sourceElement: sourceElement
         };
     },
@@ -359,11 +364,11 @@ var Sortable = Draggable.inherit({
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
             case "itemOrientation":
-            case "allowDropInside":
+            case "allowDropInsideItem":
             case "dropFeedbackMode":
             case "itemPoints":
             case "fromIndex":
-            case "inside":
+            case "dropInsideItem":
                 break;
             case "targetItemPoint":
                 this._optionChangedTargetItemPoint(args);
