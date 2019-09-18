@@ -1,4 +1,5 @@
-var noop = require("../../core/utils/common").noop,
+var $ = require("../../core/renderer"),
+    noop = require("../../core/utils/common").noop,
     windowUtils = require("../../core/utils/window"),
     domAdapter = require("../../core/dom_adapter"),
     typeUtils = require("../../core/utils/type"),
@@ -19,6 +20,9 @@ var noop = require("../../core/utils/common").noop,
     rendererModule = require("./renderers/renderer"),
 
     _Layout = require("./layout"),
+
+    devices = require("../../core/devices"),
+    eventsEngine = require("../../events/core/events_engine"),
 
     OPTION_RTL_ENABLED = "rtlEnabled",
 
@@ -177,6 +181,7 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         linkTarget && linkTarget.enableLinks().virtualLink("core").virtualLink("peripheral");
         that._renderVisibilityChange();
         that._attachVisibilityChangeHandlers();
+        that._toggleParentsScrollSubscription(this._isVisible());
         that._initEventTrigger();
         that._incidentOccurred = createIncidentOccurred(that.NAME, that._eventTrigger);
         that._layout = new _Layout();
@@ -352,15 +357,37 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
     render: function() {
         this._requestChange(["CONTAINER_SIZE"]);
-        this._onRender();
+
+        const visible = this._isVisible();
+        this._toggleParentsScrollSubscription(visible);
+        !visible && this._stopCurrentHandling();
     },
 
-    // This is actually added only to make tooltip pluggable. This is bad but much better than entire tooltip in BaseWidget.
-    _onRender: noop,
+    _toggleParentsScrollSubscription: function(subscribe) {
+        var $parents = $(this._renderer.root.element).parents(),
+            scrollEvents = "scroll.viz_widgets";
+
+        if(devices.real().platform === "generic") {
+            $parents = $parents.add(windowUtils.getWindow());
+        }
+
+        this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
+            || (function() { this._stopCurrentHandling(); }).bind(this);
+
+        eventsEngine.off($().add(this._$prevRootParents), scrollEvents, this._proxiedTargetParentsScrollHandler);
+
+        if(subscribe) {
+            eventsEngine.on($parents, scrollEvents, this._proxiedTargetParentsScrollHandler);
+            this._$prevRootParents = $parents;
+        }
+    },
+
+    _stopCurrentHandling: noop,
 
     _dispose: function() {
         var that = this;
         that.callBase.apply(that, arguments);
+        that._toggleParentsScrollSubscription(false);
         that._removeResizeHandler();
         that._layout.dispose();
         that._eventTrigger.dispose();
@@ -530,17 +557,22 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         if(that._optionChangedLocker) {
             return;
         }
-        let partialChange;
-        if(arg.fullName) {
-            partialChange = arg.fullName.slice(arg.fullName.indexOf(".") + 1, arg.fullName.length);
+
+        const partialChanges = that.getPartialChangeOptionsName(arg);
+        let changes = [];
+
+        if(partialChanges.length > 0) {
+            partialChanges.forEach(pc => changes.push(that._partialOptionChangesMap[pc]));
+        } else {
+            changes.push(that._optionChangesMap[arg.name]);
         }
 
-        const change = that._partialOptionChangesMap[partialChange] || that._optionChangesMap[arg.name];
+        changes = changes.filter(c => !!c);
 
         if(that._eventTrigger.change(arg.name)) {
             that._change(["EVENTS"]);
-        } else if(change) {
-            that._change([change]);
+        } else if(changes.length > 0) {
+            that._change(changes);
         } else {
             that.callBase.apply(that, arguments);
         }
@@ -560,6 +592,51 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     },
 
     _partialOptionChangesMap: { },
+
+    _partialOptionChangesPath: { },
+
+    getPartialChangeOptionsName: function(changedOption) {
+        const that = this;
+        const fullName = changedOption.fullName;
+        const sections = fullName.split(/[.]/);
+        const name = changedOption.name;
+        const value = changedOption.value;
+        const options = this._partialOptionChangesPath[name];
+        let partialChangeOptionsName = [];
+
+        if(options) {
+            if(options === true) {
+                partialChangeOptionsName.push(name);
+            } else {
+                options.forEach(op => {
+                    fullName.indexOf(op) >= 0 && partialChangeOptionsName.push(op);
+                });
+                if(sections.length === 1) {
+                    if(typeUtils.type(value) === "object") {
+                        that._addOptionsNameForPartialUpdate(value, options, partialChangeOptionsName);
+                    } else if(typeUtils.type(value) === "array") {
+                        if(value.length > 0 && value.every(item => that._checkOptionsForPartialUpdate(item, options))) {
+                            value.forEach(item => that._addOptionsNameForPartialUpdate(item, options, partialChangeOptionsName));
+                        }
+                    }
+                }
+            }
+        }
+
+        return partialChangeOptionsName.filter((value, index, self) => self.indexOf(value) === index);
+    },
+
+    _checkOptionsForPartialUpdate: function(optionObject, options) {
+        return !Object.keys(optionObject).some((key) => options.indexOf(key) === -1);
+    },
+
+    _addOptionsNameForPartialUpdate: function(optionObject, options, partialChangeOptionsName) {
+        const optionKeys = Object.keys(optionObject);
+
+        if(this._checkOptionsForPartialUpdate(optionObject, options)) {
+            optionKeys.forEach((key) => options.indexOf(key) > -1 && partialChangeOptionsName.push(key));
+        }
+    },
 
     _visibilityChanged: function() {
         this.render();

@@ -32,11 +32,18 @@ const moduleConfig = {
 };
 
 QUnit.module("format: api value changing", moduleConfig, () => {
-    QUnit.test("number type of input should be converted to tel on mobile device", assert => {
+    QUnit.test("number type of input should be converted to tel on mobile device when inputMode is unsupported", assert => {
         const realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "mobile" });
+        const realBrowser = browser;
         const $element = $("<div>").appendTo("body");
 
         try {
+            browser.chrome = true;
+            browser.version = "50.0";
+            browser.chrome = false;
+            browser.safari = false;
+            browser.msie = false;
+
             const instance = $element.dxNumberBox({
                 useMaskBehavior: true,
                 format: "#",
@@ -48,6 +55,10 @@ QUnit.module("format: api value changing", moduleConfig, () => {
             instance.option("mode", "number");
             assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
         } finally {
+            browser.chrome = realBrowser.chrome;
+            browser.safari = realBrowser.safari;
+            browser.msie = realBrowser.msie;
+            browser.version = realBrowser.version;
             realDeviceMock.restore();
             $element.remove();
         }
@@ -367,6 +378,19 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
         assert.equal(this.input.val(), "<<123.4>>", "value is correct");
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret is good");
     });
+
+    QUnit.test("NumberBox should keep selected range after the ValueChange event", (assert) => {
+        this.instance.option({
+            format: "#0.#;<<#0.#>>",
+            value: 123.4
+        });
+
+        this.keyboard.caret({ start: 1, end: 2 }).press("-").change();
+        this.clock.tick();
+
+        assert.equal(this.input.val(), "<<123.4>>", "value is correct");
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret preserved");
+    });
 });
 
 QUnit.module("format: fixed point format", moduleConfig, () => {
@@ -511,6 +535,18 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
 
         assert.equal(this.instance.option("value"), "3.4");
     });
+
+    QUnit.test("precision should correctly round the value", (assert) => {
+        this.instance.option({
+            format: {
+                type: "fixedPoint",
+                precision: 2
+            },
+            value: 4.645
+        });
+
+        assert.strictEqual(this.instance.option("text"), "4.65");
+    });
 });
 
 QUnit.module("format: minimum and maximum", moduleConfig, () => {
@@ -527,6 +563,24 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
 
         this.keyboard.change();
         assert.equal(this.input.val(), "20.0", "value is fitted after the change event");
+    });
+
+    QUnit.test("value removing should be possible when min is specified and stubs are in the format", (assert) => {
+        this.instance.option({
+            format: "#,##0 d",
+            min: 5,
+            value: 6,
+            max: 10
+        });
+
+        this.keyboard
+            .caret(1)
+            .press("backspace")
+            .type("7")
+            .press("enter");
+
+        assert.strictEqual(this.input.val(), "7 d", "text is correct");
+        assert.strictEqual(this.instance.option("value"), 7, "value is correct");
     });
 
     QUnit.test("changing min limit should lead to value change in masked numberbox", (assert) => {
@@ -568,6 +622,22 @@ QUnit.module("format: minimum and maximum", moduleConfig, () => {
         this.keyboard.caret(15).type("5");
 
         assert.equal(this.input.val(), "999999999999999", "input was prevented");
+    });
+
+    QUnit.test("trailing zeros should not affect 15 digits limit", (assert) => {
+        this.instance.option("format", "#,##0.000000");
+        this.instance.option("value", 222222222.120000);
+        this.keyboard.caret(12).type("8");
+
+        assert.equal(this.input.val(), "222,222,222.812000", "input was not prevented");
+    });
+
+    QUnit.test("leading zeros should not affect 15 digits limit", (assert) => {
+        this.instance.option("format", "000000000000000#.00");
+        this.instance.option("value", 1);
+        this.keyboard.caret(12).type("8");
+
+        assert.equal(this.input.val(), "000000000008001.00", "input was not prevented");
     });
 
     QUnit.test("negative integer should not be longer than 15 digit", (assert) => {
@@ -905,6 +975,66 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
         assert.equal(this.input.val(), "$ 0.0005 kg", "walue has been reformatted");
     });
 
+    QUnit.test("paste of value should call valueChanged event on keyup", (assert) => {
+        const valueChangedStub = sinon.stub();
+        const originalIE = browser.msie;
+        const $element = $("<div>").appendTo("body");
+
+        try {
+            browser.msie = false;
+
+            $element.dxNumberBox({
+                valueChangeEvent: "keyup",
+                format: "#,##0.00",
+                value: null,
+                onValueChanged: valueChangedStub
+            });
+
+            const $input = $element.find("." + INPUT_CLASS);
+            const kb = keyboardMock($input);
+
+            $input.val("1.00");
+            kb.input("1.00", "insertFromPaste");
+            kb.keyUp("v");
+
+            assert.ok(valueChangedStub.calledOnce, "valueChanged event was called");
+        } finally {
+            browser.msie = originalIE;
+        }
+    });
+
+
+    QUnit.test("paste of value should call valueChanged event on keyup in IE", (assert) => {
+        const valueChangedStub = sinon.stub();
+        const originalIE = browser.msie;
+        const originalVersion = browser.version;
+        const $element = $("<div>").appendTo("body");
+
+        try {
+            browser.msie = true;
+            browser.version = "11.0";
+
+            $element.dxNumberBox({
+                valueChangeEvent: "keyup",
+                format: "#,##0.00",
+                value: null,
+                onValueChanged: valueChangedStub
+            });
+
+            const $input = $element.find("." + INPUT_CLASS);
+            const kb = keyboardMock($input);
+            kb.paste("1.00");
+            $input.val("1.00");
+            kb.input("1.00", null);
+            kb.keyUp("v");
+
+            assert.ok(valueChangedStub.calledOnce, "valueChanged event was called");
+        } finally {
+            browser.msie = originalIE;
+            browser.version = originalVersion;
+        }
+    });
+
     QUnit.test("incomplete values should be limited by max precision", (assert) => {
         this.instance.option({
             format: "$ #0.### kg",
@@ -1020,8 +1150,10 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
 
     QUnit.test("incomplete value should be reformatted on focusout after paste", (assert) => {
         this.instance.option("value", null);
+        this.instance.focus();
         this.input.val("123.");
-        this.input.trigger("focusout");
+        this.instance.blur();
+
         assert.equal(this.input.val(), "123", "input was reformatted");
     });
 
@@ -1384,6 +1516,25 @@ QUnit.module("format: removing", moduleConfig, () => {
         }
     });
 
+    [",", "."].forEach((separator) => {
+        QUnit.test(`caret should be moved to the float part by "${separator}"`, (assert) => {
+            this.instance.option({
+                format: {
+                    type: 'fixedPoint',
+                    precision: 2
+                },
+                value: 0
+            });
+
+            this.keyboard
+                .caret({ start: 0, end: 4 })
+                .type(`${separator}45`)
+                .change();
+
+            assert.strictEqual(this.instance.option("value"), 0.45, "Value is correct");
+        });
+    });
+
     QUnit.test("should parse float numbers with the ',' separator", (assert) => {
         const oldDecimalSeparator = config().decimalSeparator;
         const input = this.input;
@@ -1665,7 +1816,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         assert.equal(this.keyboard.caret().start, 4, "caret should not move");
     });
 
-    QUnit.testInActiveWindow("caret should be at start boundary on focusin", (assert) => {
+    QUnit.testInActiveWindow("caret should be before decimal separator on focusin", (assert) => {
         this.instance.option({
             format: "$ #0.## kg",
             value: 1.23
@@ -1678,7 +1829,7 @@ QUnit.module("format: caret boundaries", moduleConfig, () => {
         }
 
         this.clock.tick(CARET_TIMEOUT_DURATION);
-        assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is just before decimal separator");
     });
 
     QUnit.testInActiveWindow("caret should not change position on focus after fast double click for IE", (assert) => {

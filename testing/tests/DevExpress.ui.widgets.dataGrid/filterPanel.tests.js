@@ -225,10 +225,14 @@ QUnit.module("Filter Panel", {
         });
     });
 
-    // T663205
+    // T663205, T813868
     QUnit.test("from anyof build-in operation and lookup", function(assert) {
         // arrange
         var filter = ["field", "anyof", [1, 2]];
+        var lookupDataSource = [
+            { key: 1, text: "Text 1" },
+            { key: 2, text: "Text 2" }
+        ];
         this.initFilterPanelView({
             filterValue: filter,
             headerFilter: {
@@ -237,20 +241,18 @@ QUnit.module("Filter Panel", {
             columns: [{
                 dataField: "field",
                 lookup: {
-                    dataSource: [
-                        { id: 1, text: "Text 1" },
-                        { id: 2, text: "Text 2" }
-                    ],
-                    valueExpr: "id",
+                    dataSource: lookupDataSource,
+                    valueExpr: "key",
                     displayExpr: "text"
                 }
             }]
         });
 
         // act
-        assert.expect(1);
+        assert.expect(2);
         this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
             assert.equal(result, "[Field] Is any of('Text 1', 'Text 2')");
+            assert.deepEqual(lookupDataSource[0], { key: 1, text: "Text 1" }, "lookup dataSource item is not changed");
         });
     });
 

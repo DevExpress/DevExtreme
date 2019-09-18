@@ -14,6 +14,7 @@ import { normalizeDataSourceOptions } from "../../data/data_source/data_source";
 import dateLocalization from "../../localization/date";
 import { isWrapped } from "../../core/utils/variable_wrapper";
 import { Deferred } from "../../core/utils/deferred";
+import { restoreFocus } from "../shared/accessibility";
 
 var DATE_INTERVAL_FORMATS = {
     'month': function(value) {
@@ -89,7 +90,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
             if(!isObject(item)) {
                 item = {};
-            } else if(item === value) {
+            } else {
                 item = extend({}, item);
             }
 
@@ -103,7 +104,6 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
             item.text = this.getHeaderItemText(displayValue, column, currentLevel, options.headerFilterOptions);
 
-            delete item.key;
             return item;
         },
 
@@ -269,10 +269,13 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 column = options.column;
 
             if(column) {
-                var groupInterval = filterUtils.getGroupInterval(column);
+                var groupInterval = filterUtils.getGroupInterval(column),
+                    dataSource = that._dataController.dataSource(),
+                    remoteFiltering = dataSource && dataSource.remoteOperations().filtering;
 
                 extend(options, column, {
                     type: groupInterval && groupInterval.length > 1 ? "tree" : "list",
+                    remoteFiltering: remoteFiltering,
                     onShowing: function(e) {
                         var dxResizableInstance = e.component.overlayContent().dxResizable("instance");
 
@@ -286,7 +289,8 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
                             columnsController.columnOption(options.dataField, "headerFilter", headerFilterByColumn, true);
                         });
-                    }
+                    },
+                    onHidden: () => restoreFocus(this)
                 });
 
                 options.dataSource = that.getDataSource(options);
@@ -331,9 +335,7 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
 
         if(indicatorName === "headerFilter") {
             eventsEngine.on($indicator, clickEvent.name, that.createAction(function(e) {
-                var event = e.event;
-
-                event.stopPropagation();
+                e.event.stopPropagation();
                 that.getController("headerFilter").showHeaderFilterMenu(column.index, false);
             }));
         }

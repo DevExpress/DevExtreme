@@ -10,43 +10,92 @@ const FILE_MANAGER_TOOLBAR_CLASS = "dx-filemanager-toolbar";
 const FILE_MANAGER_GENERAL_TOOLBAR_CLASS = "dx-filemanager-general-toolbar";
 const FILE_MANAGER_FILE_TOOLBAR_CLASS = "dx-filemanager-file-toolbar";
 const FILE_MANAGER_TOOLBAR_SEPARATOR_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-separator-item";
+const FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-viewmode-item";
 
 const DEFAULT_TOOLBAR_FILE_ITEMS = [
     {
         commandName: "download",
-        location: "before"
+        location: "before",
+        compactMode: {
+            showText: "inMenu",
+            locateInMenu: "auto"
+        }
     },
     {
-        commandName: "delete",
+        commandName: "separator",
         location: "before"
     },
     {
         commandName: "move",
-        location: "before"
+        location: "before",
+        compactMode: {
+            locateInMenu: "auto"
+        }
     },
     {
         commandName: "copy",
-        location: "before"
+        location: "before",
+        compactMode: {
+            locateInMenu: "auto"
+        }
     },
     {
         commandName: "rename",
+        location: "before",
+        compactMode: {
+            locateInMenu: "auto"
+        }
+    },
+    {
+        commandName: "separator",
         location: "before"
+    },
+    {
+        commandName: "delete",
+        location: "before",
+        compactMode: {
+            showText: "inMenu"
+        }
+    },
+    {
+        commandName: "clear",
+        location: "after",
+        locateInMenu: "never",
+        compactMode: {
+            showText: "inMenu"
+        }
     }
 ];
 
 const DEFAULT_TOOLBAR_GENERAL_ITEMS = [
     {
-        commandName: "create",
+        commandName: "showDirsPanel",
         location: "before"
     },
     {
+        commandName: "create",
+        location: "before",
+        compactMode: {
+            showText: "inMenu",
+            locateInMenu: "auto"
+        }
+    },
+    {
         commandName: "upload",
-        location: "before"
+        location: "before",
+        compactMode: {
+            showText: "inMenu",
+            locateInMenu: "auto"
+        }
     },
     {
         commandName: "refresh",
         location: "after",
-        showText: "inMenu"
+        showText: "inMenu",
+        compactMode: {
+            showText: "inMenu",
+            locateInMenu: "auto"
+        }
     },
     {
         commandName: "separator",
@@ -67,25 +116,43 @@ class FileManagerToolbar extends Widget {
 
         this._generalToolbarVisible = true;
 
-        const generalToolbarItems = this._getGeneralToolbarDefaultItems();
-        this._generalToolbar = this._createToolbar(generalToolbarItems);
-
-        const fileToolbarItems = this._getFileToolbarDefaultItems();
-        this._fileToolbar = this._createToolbar(fileToolbarItems, true);
+        this._generalToolbar = this._createToolbar(DEFAULT_TOOLBAR_GENERAL_ITEMS);
+        this._fileToolbar = this._createToolbar(DEFAULT_TOOLBAR_FILE_ITEMS, true);
 
         this.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS + " " + FILE_MANAGER_GENERAL_TOOLBAR_CLASS);
     }
 
+    _render() {
+        super._render();
+        const toolbar = this._getVisibleToolbar();
+        this._checkCompactMode(toolbar);
+    }
+
+    _dimensionChanged(dimension) {
+        if(!dimension || dimension !== "height") {
+            const toolbar = this._getVisibleToolbar();
+            this._checkCompactMode(toolbar);
+        }
+    }
+
+    _getVisibleToolbar() {
+        return this._generalToolbarVisible ? this._generalToolbar : this._fileToolbar;
+    }
+
     _createToolbar(items, hidden) {
         const toolbarItems = this._getToolbarItems(items);
-        const $generalToolbar = $("<div>").appendTo(this.$element());
-        return this._createComponent($generalToolbar, Toolbar, {
+        const $toolbar = $("<div>").appendTo(this.$element());
+        const result = this._createComponent($toolbar, Toolbar, {
             items: toolbarItems,
             visible: !hidden
         });
+        result.compactMode = false;
+        return result;
     }
 
     _getToolbarItems(items) {
+        let groupHasItems = false;
+
         return items.map(item => {
             const commandName = isString(item) ? item : item.commandName;
             const config = this._getItemConfigByCommandName(commandName);
@@ -94,7 +161,19 @@ class FileManagerToolbar extends Widget {
                 item = { commandName };
             }
 
-            return extend(true, config, item);
+            const preparedItem = extend(true, config, item);
+
+            if(commandName === "separator") {
+                preparedItem.visible = groupHasItems;
+                groupHasItems = false;
+            } else {
+                preparedItem.available = this._isCommandAvailable(commandName);
+                const itemVisible = preparedItem.available && ensureDefined(preparedItem.visible, true);
+                preparedItem.visible = itemVisible;
+                groupHasItems = groupHasItems || itemVisible;
+            }
+
+            return preparedItem;
         });
     }
 
@@ -119,6 +198,7 @@ class FileManagerToolbar extends Widget {
             widget: "dxButton",
             options: {
                 text: command.text,
+                commandText: command.text,
                 icon: command.icon,
                 stylingMode: "text",
                 onClick: e => this._executeCommand(command)
@@ -140,9 +220,10 @@ class FileManagerToolbar extends Widget {
             return { name, text };
         });
 
-        const selectedIndex = this.option("itemListViewMode") === "thumbnails" ? 0 : 1;
+        const selectedIndex = this.option("itemViewMode") === "thumbnails" ? 0 : 1;
 
         return {
+            cssClass: FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS,
             widget: "dxSelectBox",
             options: {
                 items: commandItems,
@@ -154,42 +235,101 @@ class FileManagerToolbar extends Widget {
         };
     }
 
-    _getFileToolbarDefaultItems() {
-        return DEFAULT_TOOLBAR_FILE_ITEMS;
-    }
-
-    _getGeneralToolbarDefaultItems() {
-        var result = [ ];
-        for(let i = 0; i < DEFAULT_TOOLBAR_GENERAL_ITEMS.length; i++) {
-            var item = DEFAULT_TOOLBAR_GENERAL_ITEMS[i];
-            if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(item.commandName) > -1 || this._commandManager.isCommandAvailable(item.commandName)) {
-                result.push(item);
-            }
+    _checkCompactMode(toolbar) {
+        if(toolbar.compactMode) {
+            this._toggleCompactMode(toolbar, false);
         }
-        return result;
+
+        const toolbarWidth = toolbar.$element().width();
+        const itemsWidth = toolbar._getItemsWidth();
+        const useCompactMode = toolbarWidth < itemsWidth;
+
+        if(toolbar.compactMode !== useCompactMode) {
+            if(!toolbar.compactMode) {
+                this._toggleCompactMode(toolbar, useCompactMode);
+            }
+            toolbar.compactMode = useCompactMode;
+        } else if(toolbar.compactMode) {
+            this._toggleCompactMode(toolbar, true);
+        }
     }
 
-    _updateFileToolbar(fileItems) {
-        const items = this._fileToolbar.option("items");
-        items.forEach(({ visible, commandName }, index) => {
-            const itemVisible = ensureDefined(visible, true);
+    _toggleCompactMode(toolbar, useCompactMode) {
+        toolbar.beginUpdate();
 
-            const showItem = this._commandManager.isCommandAvailable(commandName, fileItems);
-            if(showItem !== itemVisible) {
-                const optionName = `items[${index}].visible`;
-                this._fileToolbar.option(optionName, showItem);
+        const items = toolbar.option("items");
+        items.forEach((item, index) => {
+            if(item.compactMode) {
+                let optionsSource = null;
+
+                if(useCompactMode) {
+                    item.saved = this._getCompactModeOptions(item, item.available);
+                    optionsSource = item.compactMode;
+                } else {
+                    optionsSource = item.saved;
+                }
+
+                const options = this._getCompactModeOptions(optionsSource, item.available);
+                toolbar.option(`items[${index}]`, options);
             }
         });
+
+        toolbar.endUpdate();
+    }
+
+    _getCompactModeOptions({ visible, showText, locateInMenu }, available) {
+        return {
+            visible: available && ensureDefined(visible, true),
+            showText: ensureDefined(showText, "always"),
+            locateInMenu: ensureDefined(locateInMenu, "never")
+        };
+    }
+
+    _ensureAvailableCommandsVisible(toolbar, fileItems) {
+        toolbar.beginUpdate();
+
+        let groupHasItems = false;
+        const items = toolbar.option("items");
+
+        items.forEach((item, index) => {
+            const itemVisible = item.available;
+
+            let showItem = false;
+            if(item.commandName === "separator") {
+                showItem = groupHasItems;
+                groupHasItems = false;
+            } else {
+                item.available = this._isCommandAvailable(item.commandName, fileItems);
+                showItem = item.available;
+                groupHasItems = groupHasItems || showItem;
+            }
+
+            if(showItem !== itemVisible) {
+                const optionName = `items[${index}].visible`;
+                toolbar.option(optionName, showItem);
+            }
+        });
+
+        toolbar.endUpdate();
+    }
+
+    _fileToolbarHasEffectiveItems(fileItems) {
+        const items = this._fileToolbar.option("items");
+        return items.some(({ commandName }) => commandName !== "clear" && this._commandManager.isCommandAvailable(commandName, fileItems));
     }
 
     _executeCommand(command) {
         this._commandManager.executeCommand(command);
     }
 
+    _isCommandAvailable(commandName, fileItems) {
+        return ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(commandName) > -1 || this._commandManager.isCommandAvailable(commandName, fileItems);
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             commandManager: null,
-            itemListViewMode: "details"
+            itemViewMode: "details"
         });
     }
 
@@ -198,7 +338,7 @@ class FileManagerToolbar extends Widget {
 
         switch(name) {
             case "commandManager":
-            case "itemListViewMode":
+            case "itemViewMode":
                 this.repaint();
                 break;
             default:
@@ -209,9 +349,7 @@ class FileManagerToolbar extends Widget {
     update(fileItems) {
         fileItems = ensureDefined(fileItems, []);
 
-        this._updateFileToolbar(fileItems);
-
-        const showGeneralToolbar = fileItems.length === 0 || !this._fileToolbar.option("items").some(i => ensureDefined(i.visible, true));
+        const showGeneralToolbar = fileItems.length === 0 || !this._fileToolbarHasEffectiveItems(fileItems);
         if(this._generalToolbarVisible !== showGeneralToolbar) {
             this._generalToolbar.option("visible", showGeneralToolbar);
             this._fileToolbar.option("visible", !showGeneralToolbar);
@@ -220,6 +358,10 @@ class FileManagerToolbar extends Widget {
             this.$element().toggleClass(FILE_MANAGER_GENERAL_TOOLBAR_CLASS, showGeneralToolbar);
             this.$element().toggleClass(FILE_MANAGER_FILE_TOOLBAR_CLASS, !showGeneralToolbar);
         }
+
+        const toolbar = this._getVisibleToolbar();
+        this._ensureAvailableCommandsVisible(toolbar, fileItems);
+        this._checkCompactMode(toolbar);
     }
 
 }

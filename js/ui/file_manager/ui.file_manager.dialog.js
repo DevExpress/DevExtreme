@@ -5,17 +5,26 @@ import Widget from "../widget/ui.widget";
 import Popup from "../popup";
 
 const FILE_MANAGER_DIALOG_CONTENT = "dx-filemanager-dialog";
+const FILE_MANAGER_DIALOG_POPUP = "dx-filemanager-dialog-popup";
 
 class FileManagerDialogBase extends Widget {
 
     _initMarkup() {
+        super._initMarkup();
+
         this._createOnClosedAction();
 
         const options = this._getDialogOptions();
 
-        this._popup = this._createComponent(this.$element(), Popup, {
-            width: options.width,
-            height: options.height,
+        const $popup = $("<div>")
+            .addClass(FILE_MANAGER_DIALOG_POPUP)
+            .appendTo(this.$element());
+
+        if(options.popupCssClass) {
+            $popup.addClass(options.popupCssClass);
+        }
+
+        this._popup = this._createComponent($popup, Popup, {
             showTitle: true,
             title: options.title,
             visible: false,
@@ -32,7 +41,8 @@ class FileManagerDialogBase extends Widget {
                     }
                 }
             ],
-            onHidden: this._onPopupHidden.bind(this)
+            onHidden: this._onPopupHidden.bind(this),
+            onShown: this._onPopupShown.bind(this)
         });
     }
 
@@ -43,10 +53,10 @@ class FileManagerDialogBase extends Widget {
 
     _getDialogOptions() {
         return {
-            width: 340,
-            height: 200,
             title: "Title",
-            buttonText: "ButtonText"
+            buttonText: "ButtonText",
+            contentCssClass: "",
+            popupCssClass: ""
         };
     }
 
@@ -55,7 +65,7 @@ class FileManagerDialogBase extends Widget {
             .appendTo(element)
             .addClass(FILE_MANAGER_DIALOG_CONTENT);
 
-        const cssClass = this._getCssClass();
+        const cssClass = this._getDialogOptions().contentCssClass;
         if(cssClass) {
             this._$contentElement.addClass(cssClass);
         }
@@ -63,10 +73,6 @@ class FileManagerDialogBase extends Widget {
 
     _getDialogResult() {
         return null;
-    }
-
-    _getCssClass() {
-        return "";
     }
 
     _onButtonClick() {
@@ -79,6 +85,9 @@ class FileManagerDialogBase extends Widget {
 
     _onPopupHidden() {
         this._onClosedAction({ dialogResult: this._dialogResult });
+    }
+
+    _onPopupShown() {
     }
 
     _createOnClosedAction() {

@@ -1,9 +1,9 @@
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    DataSource = require("data/data_source/data_source").DataSource;
+import $ from "jquery";
+import devices from "core/devices";
+import { DataSource } from "data/data_source/data_source";
 
-require("viz/chart");
-require("viz/polar_chart");
+import "viz/chart";
+import "viz/polar_chart";
 
 QUnit.testStart(function() {
     var markup =
@@ -203,6 +203,20 @@ QUnit.test("useSpiderWeb option changing", function(assert) {
 
     assert.ok(polar.getAllSeries()[0].getOptions().spiderWidget);
     assert.ok(initialSeries === polar.getAllSeries()[0]);
+});
+
+// T738245
+QUnit.test("Legend's title as string", function(assert) {
+    const drawn = sinon.spy();
+    $("#chart").dxChart({
+        series: {},
+        onDrawn: drawn,
+        legend: {
+            title: "123"
+        }
+    });
+
+    assert.strictEqual(drawn.callCount, 1);
 });
 
 QUnit.module("series API", {

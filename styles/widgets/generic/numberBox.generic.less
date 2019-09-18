@@ -20,17 +20,20 @@
 
 .dx-numberbox-spin-up-icon {
     .dx-icon-spinup;
+
     color: @numberbox-spin-icon-color;
 }
 
 .dx-numberbox-spin-down-icon {
     .dx-icon-spindown;
+
     color: @numberbox-spin-icon-color;
 }
 
 .dx-numberbox-spin-up-icon,
 .dx-numberbox-spin-down-icon {
     .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
+
     border-radius: @numberbox-spin-icon-border-radius;
 }
 
@@ -47,7 +50,7 @@
     &.dx-numberbox-spin-button {
         .dx-numberbox-spin-down-icon,
         .dx-numberbox-spin-up-icon {
-            border: 1px solid @numberbox-spin-hover-border-color;
+            box-shadow: 0 0 0 1px @numberbox-spin-hover-border-color inset;
             background-color: @numberbox-spin-hover-bg;
         }
     }
@@ -66,13 +69,11 @@
 .dx-numberbox-spin-touch-friendly {
     .dx-numberbox-spin-container {
         width: @GENERIC_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
-    }
-
-    .dx-numberbox-spin-container {
         border-left: none;
     }
 
-    .dx-numberbox-spin-up-icon,.dx-numberbox-spin-down-icon{
+    .dx-numberbox-spin-up-icon,
+    .dx-numberbox-spin-down-icon {
         background-position: center;
     }
 }

@@ -1744,7 +1744,7 @@ QUnit.test("getHeadersRowHeight with band columns", function(assert) {
     // assert
     $headerRowElements = this.columnHeadersView._getRowElements();
     assert.equal($headerRowElements.length, 2, "count row");
-    assert.equal(this.columnHeadersView.getHeadersRowHeight(), $($headerRowElements).toArray().reduce((sum, row) => sum + $(row).height(), 0), "height of the headers");
+    assert.roughEqual(this.columnHeadersView.getHeadersRowHeight(), $($headerRowElements).toArray().reduce((sum, row) => sum + $(row).height(), 0), 1, "height of the headers");
 });
 
 QUnit.test("Header with headerFilter - alignment cell content", function(assert) {
@@ -2055,6 +2055,23 @@ QUnit.test("Get context menu items with grouping operations (showWhenGrouped col
 
     assert.strictEqual(items[2].text, "Ungroup All", "text menu item 3");
     assert.strictEqual(items[2].value, "ungroupAll", "value menu item 3");
+});
+
+QUnit.test("Grouped column caption should displayed when the showWhenGrouped option is enabled (T752775)", function(assert) {
+    // arrange
+    var that = this,
+        $groupedColumnElement,
+        columnHeadersView = that.columnHeadersView,
+        $testElement = $('#container');
+
+    $.extend(this.columns, [{ caption: 'Column 1', showWhenGrouped: true, groupIndex: 0 }, { caption: 'Column 2' }, { caption: 'Column 3' }]);
+
+    // act
+    columnHeadersView.render($testElement);
+
+    // assert
+    $groupedColumnElement = $(columnHeadersView.getCellElement(0, 0));
+    assert.strictEqual($groupedColumnElement.text(), "Column 1", "caption for grouped column displayed");
 });
 
 QUnit.test("Get context menu items with grouping operations (grouped panel item)", function(assert) {

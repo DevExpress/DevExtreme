@@ -135,7 +135,6 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             columnChooserOptions = that.option("columnChooser"),
             themeName = themes.current(),
             isGenericTheme = themes.isGeneric(themeName),
-            isAndroid5Theme = themes.isAndroid5(themeName),
             isMaterial = themes.isMaterial(themeName),
             dxPopupOptions = {
                 visible: false,
@@ -144,7 +143,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 dragEnabled: true,
                 resizeEnabled: true,
                 toolbarItems: [
-                    { text: columnChooserOptions.title, toolbar: "top", location: isGenericTheme || isAndroid5Theme || isMaterial ? "before" : "center" }
+                    { text: columnChooserOptions.title, toolbar: "top", location: isGenericTheme || isMaterial ? "before" : "center" }
                 ],
                 position: that.getController("columnChooser").getPosition(),
                 width: columnChooserOptions.width,
@@ -202,11 +201,11 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 searchTimeout: columnChooser.searchTimeout
             };
 
+        scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
+        scrollTop = scrollableInstance && scrollableInstance.scrollTop();
 
-        if(isSelectMode) {
-            scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
-            scrollTop = scrollableInstance && scrollableInstance.scrollTop();
-            !this._columnsController.isBandColumnsUsed() && $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
+        if(isSelectMode && !this._columnsController.isBandColumnsUsed()) {
+            $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
         }
 
         treeViewConfig.onContentReady = function(e) {

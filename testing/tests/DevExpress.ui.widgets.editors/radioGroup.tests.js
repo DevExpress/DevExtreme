@@ -3,6 +3,7 @@ import devices from "core/devices";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import { DataSource } from "data/data_source/data_source";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import "ui/radio_group";
 
@@ -89,6 +90,18 @@ module("nested radio group", moduleConfig, () => {
 
         const firstNestedItemElement2 = $(nestedRadioGroup2.itemElements()).first();
         assert.notOk(firstNestedItemElement2.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of second nested radio group is not changed");
+    });
+
+    QUnit.test("item template can return default template name", (assert) => {
+        const instance = $("#radioGroup").dxRadioGroup({
+            items: [1, 2, 3],
+            itemTemplate: function() {
+                return "item";
+            }
+        }).dxRadioGroup("instance");
+
+        assert.strictEqual(instance.itemElements().eq(0).text(), "1", "Default item template was rendered");
+        assert.strictEqual(instance.itemElements().eq(1).text(), "2", "Default item template was rendered");
     });
 });
 
@@ -440,6 +453,15 @@ module("keyboard navigation", moduleConfig, () => {
         assert.ok($items.eq(1).attr('tabindex') === undefined, "items of radio group hasn't tabindex");
     });
 });
+
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests({
+        createWidget: ($element, options) => $element.dxRadioGroup(
+            $.extend({
+                items: [{ text: "text" }]
+            }, options)).dxRadioGroup("instance"),
+        checkInitialize: true });
+}
 
 module("focus policy", moduleConfig, () => {
     test("focused-state set up on radio group after focusing on any item", assert => {

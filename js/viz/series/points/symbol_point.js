@@ -171,9 +171,10 @@ module.exports = {
 
     correctValue: function(correction) {
         var that = this;
+        const axis = that.series.getValueAxis();
         if(that.hasValue()) {
-            that.value = that.properValue = that.initialValue + correction;
-            that.minValue = correction;
+            that.value = that.properValue = axis.validateUnit(that.initialValue.valueOf() + correction.valueOf());
+            that.minValue = axis.validateUnit(correction);
         }
     },
 
@@ -684,11 +685,11 @@ module.exports = {
     },
 
     getMinValue: function(noErrorBar) {
-        var errorBarOptions = this._options.errorBars;
+        const errorBarOptions = this._options.errorBars;
         if(errorBarOptions && !noErrorBar) {
-            var displayMode = errorBarOptions.displayMode,
-                lowValue = displayMode === "high" ? this.value : this.lowError,
-                highValue = displayMode === "low" ? this.value : this.highError;
+            const displayMode = errorBarOptions.displayMode;
+            const lowValue = displayMode !== "high" && _isDefined(this.lowError) ? this.lowError : this.value;
+            const highValue = displayMode !== "low" && _isDefined(this.highError) ? this.highError : this.value;
 
             return lowValue < highValue ? lowValue : highValue;
         } else {
@@ -697,11 +698,11 @@ module.exports = {
     },
 
     getMaxValue: function(noErrorBar) {
-        var errorBarOptions = this._options.errorBars;
+        const errorBarOptions = this._options.errorBars;
         if(errorBarOptions && !noErrorBar) {
-            var displayMode = errorBarOptions.displayMode,
-                lowValue = displayMode === "high" ? this.value : this.lowError,
-                highValue = displayMode === "low" ? this.value : this.highError;
+            const displayMode = errorBarOptions.displayMode;
+            const lowValue = displayMode !== "high" && _isDefined(this.lowError) ? this.lowError : this.value;
+            const highValue = displayMode !== "low" && _isDefined(this.highError) ? this.highError : this.value;
 
             return lowValue > highValue ? lowValue : highValue;
         } else {

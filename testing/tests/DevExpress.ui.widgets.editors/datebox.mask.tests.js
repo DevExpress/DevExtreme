@@ -339,6 +339,21 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(handler.callCount, 1, "registerKeyHandler works");
         });
 
+        test("original keyboard handlers should work after 'registerKeyHandler'", (assert) => {
+            this.instance.option("pickerType", "calendar");
+            this.instance.registerKeyHandler("space", sinon.stub());
+            this.instance.open();
+
+            this.keyboard.press("up");
+
+            assert.strictEqual(this.$input.val(), "October 10 2012", "text was not changed");
+
+            const $content = $(this.instance.content());
+            const $contouredDate = $content.find(".dx-calendar-contoured-date");
+            const $selectedDate = $content.find(".dx-calendar-selected-date");
+            assert.notOk($contouredDate.is($selectedDate), "Contoured date isn't a selected");
+        });
+
         test("Right and left arrows should move the selection", (assert) => {
             this.keyboard.press("right");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");
@@ -379,6 +394,57 @@ if(devices.real().deviceType === "desktop") {
                 assert.strictEqual(this.$input.val(), group.down, "group '" + group.pattern + "' decreased");
                 assert.ok(this.keyboard.event.isDefaultPrevented(), "event should be prevented to save text selection after the press");
             }.bind(this));
+        });
+
+        test("Hours switching should not switch am/pm", (assert) => {
+            this.instance.option("displayFormat", "h a");
+            this.instance.option("value", new Date(2012, 3, 4, 23, 55, 0));
+
+            assert.strictEqual(this.$input.val(), "11 PM", "initial value is correct");
+
+            this.keyboard.press("up");
+            assert.strictEqual(this.$input.val(), "12 PM", "am/pm was not switched");
+        });
+
+        test("Moving through the february should not break day value", (assert) => {
+            this.instance.option({
+                value: new Date(2015, 0, 29),
+                displayFormat: "MMMM, dd"
+            });
+
+            this.keyboard.press("up").press("up");
+            assert.strictEqual(this.$input.val(), "March, 29");
+
+            this.keyboard.press("down").press("down");
+            assert.strictEqual(this.$input.val(), "January, 29");
+        });
+
+        test("Day reducing by down arrow key should use max date for the current month", (assert) => {
+            this.instance.option({
+                value: new Date(2015, 1, 1),
+                displayFormat: "dd/MM/yyyy"
+            });
+
+            this.keyboard.press("down");
+            assert.strictEqual(this.$input.val(), "28/02/2015", "the date is correct for 'dd' date format");
+
+            this.instance.option({
+                value: new Date(2015, 1, 1),
+                displayFormat: "MMMM, d"
+            });
+            this.keyboard.press("right");
+            this.keyboard.press("down");
+            assert.strictEqual(this.$input.val(), "February, 28", "the date is correct for 'd' date format");
+        });
+
+        test("Day increasing by up arrow key should use max date for the current month", (assert) => {
+            this.instance.option({
+                value: new Date(2015, 1, 28),
+                displayFormat: "dd/MM/yyyy"
+            });
+
+            this.keyboard.press("up");
+            assert.strictEqual(this.$input.val(), "01/02/2015");
         });
 
         test("Month changing should adjust days to limits", (assert) => {
@@ -458,6 +524,12 @@ if(devices.real().deviceType === "desktop") {
             assert.strictEqual(this.instance.option("text"), "10, 2044", "text is correct");
         });
 
+        test("search value should be cleared if number was entered after the letter", (assert) => {
+            this.instance.option("displayFormat", "dd-MMM-yyyy");
+            this.keyboard.type("11m12y2015");
+            assert.strictEqual(this.instance.option("text"), "11-Dec-2015", "date is correct");
+        });
+
         test("search value should be cleared after part is reverted when all text is selected", (assert) => {
             this.instance.option("displayFormat", "yyyy");
 
@@ -518,7 +590,7 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("1");
             assert.strictEqual(this.instance.option("text"), "January 10 2012", "text has been changed");
 
-            this.$input.trigger("focusout");
+            this.instance.blur();
             this.keyboard.type("2");
             assert.strictEqual(this.instance.option("text"), "February 10 2012", "search value and position was cleared");
             assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, "first group has been filled again");
@@ -606,6 +678,19 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.paste("November 10 2018");
             assert.strictEqual(this.$input.val(), "November 10 2018", "pasting correct value is allowed");
         });
+
+        test("exception should not be thrown when the widget disposed on valueChange", (assert) => {
+            this.instance.option({
+                value: new Date(2019, 11, 31),
+                onValueChanged: function(e) {
+                    e.component.dispose();
+                }
+            });
+
+            this.keyboard.type("1");
+            this.$input.trigger("focusout");
+            assert.strictEqual(this.$input.val(), "January 31 2019", "value is correct");
+        });
     });
 
 
@@ -680,6 +765,19 @@ if(devices.real().deviceType === "desktop") {
             this.clock.tick(1);
             this.keyboard.type("d");
             assert.strictEqual(this.$input.val(), "December", "revert incorrect chars");
+        });
+
+        test("Month by char step over February", (assert) => {
+            this.instance.option({
+                value: new Date(2015, 0, 29),
+                displayFormat: "MMMM, dd"
+            });
+
+            this.keyboard.type("march");
+            assert.strictEqual(this.$input.val(), "March, 29", "move forward, text is correct");
+
+            this.keyboard.type("january");
+            assert.strictEqual(this.$input.val(), "January, 29", "move backward, text is correct");
         });
 
         test("Short month", (assert) => {
@@ -778,7 +876,7 @@ if(devices.real().deviceType === "desktop") {
 
         test("Bluring the input after first input should update the value", (assert) => {
             this.keyboard.type("1");
-            this.$input.trigger("focusout");
+            this.instance.blur();
 
             assert.strictEqual(this.$input.val(), "January 14 2015", "text is correct");
             assert.strictEqual(this.instance.option("value").getMonth(), 0, "value is correct");

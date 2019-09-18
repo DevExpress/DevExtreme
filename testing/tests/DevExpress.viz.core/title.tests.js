@@ -43,37 +43,37 @@ var environment = {
 QUnit.module("Clip Rect", environment);
 
 QUnit.test("Clip rect, placeholderSize is specify, top position", function(assert) {
-    this.createTitle().draw().shift();
+    this.createTitle().draw(100).shift();
 
     assert.ok(this.renderer.clipRect.calledOnce);
     assert.ok(this.renderer.clipRect.returnValues[0].attr.calledOnce);
     assert.deepEqual(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0], {
         x: 1,
-        y: 24,
-        width: 40,
-        height: 5
+        y: 2,
+        width: 100,
+        height: 27
     });
 });
 
 QUnit.test("Clip rect, placeholderSize is specify, shifted", function(assert) {
     this.options.placeholderSize = 10;
-    this.createTitle().draw().shift(50, 60);
+    this.createTitle().draw(100).shift(50, 60);
 
     assert.ok(this.renderer.clipRect.returnValues[0].attr.calledOnce);
     assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].x, 1);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].y, 24);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].width, 40);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].height, 10);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].y, 2);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].width, 100);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].height, 32);
 });
 
 QUnit.test("Clip rect, placeholderSize is not specify, shifted", function(assert) {
-    this.createTitle().draw().shift(50, 60);
+    this.createTitle().draw(100).shift(50, 60);
 
     assert.ok(this.renderer.clipRect.returnValues[0].attr.calledOnce);
     assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].x, 1);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].y, 24);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].width, 40);
-    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].height, 5);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].y, 2);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].width, 100);
+    assert.equal(this.renderer.clipRect.returnValues[0].attr.firstCall.args[0].height, 27);
 });
 
 QUnit.module("Alignment options parsing", environment);
@@ -102,8 +102,8 @@ QUnit.test("TopLeft alignments", function(assert) {
     assert.strictEqual(options.verticalAlignment, "top");
     assert.strictEqual(options.horizontalAlignment, "left");
 
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { align: "left" });
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], { align: "left" });
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "left");
+    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0].align, "left");
 });
 
 QUnit.test("TopCenter alignments", function(assert) {
@@ -114,8 +114,8 @@ QUnit.test("TopCenter alignments", function(assert) {
     assert.strictEqual(options.verticalAlignment, "top");
     assert.strictEqual(options.horizontalAlignment, "center");
 
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { align: "center" });
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "center");
+    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0].align, "center");
 });
 
 QUnit.test("BottomRight alignments", function(assert) {
@@ -126,8 +126,8 @@ QUnit.test("BottomRight alignments", function(assert) {
     assert.strictEqual(options.verticalAlignment, "bottom");
     assert.strictEqual(options.horizontalAlignment, "right");
 
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { align: "right" });
-    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], { align: "right" });
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "right");
+    assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0].align, "right");
 });
 
 QUnit.module("margin options parsing", environment);
@@ -224,8 +224,10 @@ QUnit.test("Update", function(assert) {
         verticalAlignment: "top",
         margin: 20,
         text: "title",
+        cssClass: "title_class",
         subtitle: {
-            text: "subtitle"
+            text: "subtitle",
+            cssClass: "subtitle_class"
         }
     });
 
@@ -239,6 +241,10 @@ QUnit.test("Update", function(assert) {
         right: 20
     });
     assert.equal(title.DEBUG_getOptions().subtitle.text, "subtitle");
+    assert.strictEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(4).args[0].align, "left");
+    assert.strictEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(4).args[0]["class"], "title_class");
+    assert.strictEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(2).args[0].align, "left");
+    assert.strictEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(2).args[0]["class"], "subtitle_class");
 });
 
 QUnit.test("Update to empty text", function(assert) {
@@ -262,7 +268,6 @@ QUnit.test("Update to empty text", function(assert) {
 
     assert.ok(title);
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
-    assert.strictEqual(title.getLayoutOptions(), null);
 });
 
 QUnit.test("Update to empty subtitle text", function(assert) {
@@ -312,17 +317,17 @@ QUnit.test("Drawing with subtitle", function(assert) {
     this.createTitle().draw();
 
     const titleElement = this.renderer.text.getCall(0).returnValue;
-    assert.deepEqual(titleElement.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(titleElement.attr.getCall(0).args[0].align, "center");
     assert.deepEqual(titleElement.attr.getCall(1).args[0], { text: "A", y: 0 });
     assert.deepEqual(titleElement.attr.getCall(2).args[0], { text: "test" });
     assert.deepEqual(titleElement.attr.getCall(3).args[0], { y: -12 });
 
     const subtitleElement = this.renderer.text.getCall(1).returnValue;
-    assert.deepEqual(subtitleElement.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(subtitleElement.attr.getCall(0).args[0].align, "center");
     assert.deepEqual(subtitleElement.attr.getCall(1).args[0], { text: "subtitle", y: 0 });
     assert.deepEqual(subtitleElement.move.lastCall.args, [0, 8]);
 
-    assert.ok(subtitleElement.move.lastCall.calledAfter(titleElement.setMaxWidth.lastCall));
+    assert.ok(subtitleElement.move.lastCall.calledAfter(titleElement.setMaxSize.lastCall));
 });
 
 QUnit.test("Second Update", function(assert) {
@@ -340,7 +345,7 @@ QUnit.test("Second Draw", function(assert) {
 QUnit.test("Draw with size", function(assert) {
     assert.ok(this.createTitle().draw({ width: 50, height: 20 }));
 
-    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], { align: "center" });
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "center");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], { text: "A", y: 0 });
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(2).args[0], { text: this.options.text });
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(1).args[0], { text: this.options.subtitle.text, y: 0 });
@@ -378,13 +383,47 @@ QUnit.test("Length of title greater than canvas width", function(assert) {
     this.renderer.bBoxTemplate = { height: 10, width: 900 };
     this.options.text = "test big title";
     this.options.subtitle.text = "test subtitle";
+    this.options.wordWrap = "titleWordWrap";
+    this.options.textOverflow = "titleTextOverflow";
+
+    this.options.subtitle.wordWrap = "subtitleWordWrap";
+    this.options.subtitle.textOverflow = "subtitleTextOverflow";
+
+    this.options.placeholderSize = 90;
 
     this.options.margin = { left: 10, right: 20 };
 
     this.createTitle().draw(this.canvas.width, this.canvas.height);
 
-    assert.equal(this.renderer.text.getCall(0).returnValue.setMaxWidth.lastCall.args[0], 770);
-    assert.equal(this.renderer.text.getCall(1).returnValue.setMaxWidth.lastCall.args[0], 770);
+    const titleSetMaxSizeArgs = this.renderer.text.getCall(0).returnValue.setMaxSize.lastCall.args;
+    assert.equal(titleSetMaxSizeArgs[0], 770);
+    assert.equal(titleSetMaxSizeArgs[1], 90);
+    assert.deepEqual(titleSetMaxSizeArgs[2].wordWrap, "titleWordWrap");
+    assert.deepEqual(titleSetMaxSizeArgs[2].textOverflow, "titleTextOverflow");
+
+    const subtitleSetMaxSizeArgs = this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args;
+    assert.equal(subtitleSetMaxSizeArgs[0], 770);
+    assert.equal(subtitleSetMaxSizeArgs[1], 90 - 10);
+    assert.deepEqual(subtitleSetMaxSizeArgs[2].wordWrap, "subtitleWordWrap");
+    assert.deepEqual(subtitleSetMaxSizeArgs[2].textOverflow, "subtitleTextOverflow");
+});
+
+QUnit.test("Length of title greater than canvas width without placeholderSize", function(assert) {
+    this.renderer.bBoxTemplate = { height: 10, width: 900 };
+    this.options.text = "test big title";
+    this.options.subtitle.text = "test subtitle";
+
+    this.options.placeholderSize = undefined;
+
+    this.options.margin = { left: 10, right: 20 };
+
+    this.createTitle().draw(this.canvas.width, this.canvas.height);
+
+    const titleSetMaxSizeArgs = this.renderer.text.getCall(0).returnValue.setMaxSize.lastCall.args;
+    assert.equal(titleSetMaxSizeArgs[1], undefined);
+
+    const subtitleSetMaxSizeArgs = this.renderer.text.getCall(1).returnValue.setMaxSize.lastCall.args;
+    assert.equal(subtitleSetMaxSizeArgs[1], undefined);
 });
 
 QUnit.test("Set title if text has big size", function(assert) {
@@ -464,11 +503,24 @@ QUnit.test("Get options rect with placeholder", function(assert) {
 });
 
 QUnit.test("Get options rect if nothing drawn", function(assert) {
-    this.options = { subtitle: {} };
+    this.options = { subtitle: {}, placeholderSize: 10 };
 
     var box = this.createTitle().getLayoutOptions();
 
-    assert.strictEqual(box, null, "layout options should be null");
+    assert.deepEqual(box, {
+        cutLayoutSide: "top",
+        cutSide: "vertical",
+        height: 10,
+        horizontalAlignment: "center",
+        position: {
+            horizontal: "center",
+            vertical: "top"
+        },
+        verticalAlignment: "top",
+        width: 0,
+        x: 0,
+        y: 0
+    }, "layout options should be null");
 });
 
 QUnit.test("shift title", function(assert) {
@@ -522,6 +574,15 @@ QUnit.test("freeSpace", function(assert) {
     this.title.freeSpace();
 
     this.rendererElementsIsDispose(assert);
+});
+
+QUnit.test("getCorrectedLayoutOptions", function(assert) {
+    this.title.update(this.options);
+
+    const correctedLayout = this.title.getCorrectedLayoutOptions();
+    const layoutOptions = this.title.getLayoutOptions();
+
+    assert.deepEqual(correctedLayout, $.extend({}, layoutOptions, { y: -22, height: 22 }));
 });
 
 QUnit.module("Size changing notification", environment);

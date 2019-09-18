@@ -2,6 +2,7 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     window = windowUtils.getWindow(),
     navigator = windowUtils.getNavigator(),
+    browser = require("../../core/utils/browser"),
     eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     inArray = require("../../core/utils/array").inArray,
@@ -71,9 +72,9 @@ var TextBox = TextEditor.inherit({
     },
 
     _renderMaxLengthHandlers: function() {
-        if(this._isAndroid()) {
-            eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), this._onKeyDownAndroidHandler.bind(this));
-            eventsEngine.on(this._input(), eventUtils.addNamespace("change", this.NAME), this._onChangeAndroidHandler.bind(this));
+        if(this._isAndroidOrIE()) {
+            eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), this._onKeyDownCutOffHandler.bind(this));
+            eventsEngine.on(this._input(), eventUtils.addNamespace("change", this.NAME), this._onChangeCutOffHandler.bind(this));
         }
     },
 
@@ -83,12 +84,8 @@ var TextBox = TextEditor.inherit({
     },
 
     _toggleMaxLengthProp: function() {
-        if(this._isAndroid()) {
-            return;
-        }
-
-        var maxLength = this.option("maxLength");
-        if(maxLength > 0) {
+        var maxLength = this._getMaxLength();
+        if(maxLength && maxLength > 0) {
             this._input().attr("maxLength", maxLength);
         } else {
             this._input().removeAttr("maxLength");
@@ -129,20 +126,24 @@ var TextBox = TextEditor.inherit({
                 this._toggleMaxLengthProp();
                 this._renderMaxLengthHandlers();
                 break;
+            case "mask":
+                this.callBase(args);
+                this._toggleMaxLengthProp();
+                break;
             default:
                 this.callBase(args);
         }
     },
 
-    _onKeyDownAndroidHandler: function(e) {
-        var maxLength = this.option("maxLength");
-        if(maxLength) {
+    _onKeyDownCutOffHandler: function(e) {
+        var actualMaxLength = this._getMaxLength();
+        if(actualMaxLength) {
             var $input = $(e.target),
                 key = eventUtils.normalizeKeyName(e);
 
             this._cutOffExtraChar($input);
 
-            return ($input.val().length < maxLength
+            return ($input.val().length < actualMaxLength
                     || inArray(key, ignoreKeys) !== -1
                     || window.getSelection().toString() !== "");
         } else {
@@ -150,7 +151,7 @@ var TextBox = TextEditor.inherit({
         }
     },
 
-    _onChangeAndroidHandler: function(e) {
+    _onChangeCutOffHandler: function(e) {
         var $input = $(e.target);
         if(this.option("maxLength")) {
             this._cutOffExtraChar($input);
@@ -158,17 +159,22 @@ var TextBox = TextEditor.inherit({
     },
 
     _cutOffExtraChar: function($input) {
-        var maxLength = this.option("maxLength"),
+        var actualMaxLength = this._getMaxLength(),
             textInput = $input.val();
-        if(textInput.length > maxLength) {
-            $input.val(textInput.substr(0, maxLength));
+        if(actualMaxLength && textInput.length > actualMaxLength) {
+            $input.val(textInput.substr(0, actualMaxLength));
         }
     },
 
-    _isAndroid: function() {
+    _getMaxLength: function() {
+        var isMaskSpecified = !!this.option("mask");
+        return isMaskSpecified ? null : this.option("maxLength");
+    },
+
+    _isAndroidOrIE: function() {
         var realDevice = devices.real();
         var version = realDevice.version.join(".");
-        return realDevice.platform === "android" && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
+        return browser.msie || realDevice.platform === "android" && version && /^(2\.|4\.1)/.test(version) && !/chrome/i.test(ua);
     }
 });
 

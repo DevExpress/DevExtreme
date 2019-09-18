@@ -1171,3 +1171,67 @@ QUnit.test("Export with 'PivotGrid.dataSource.fields.wordWrapEnabled: true'", fu
         { worksheet }
     );
 });
+
+[false, true].forEach(customizeYearGroupField => {
+    QUnit.test(`Export [string x date x number], customizeYearGroupField: ${customizeYearGroupField}`, function(assert) {
+        const worksheet = helper.WORKSHEET_HEADER_XML +
+            '<sheetPr/><dimension ref="A1:C1"/>' +
+            '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="3" topLeftCell="B4" /></sheetView></sheetViews>' +
+            '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+            '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
+            '<sheetData>' +
+            '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
+            '<c r="A1" t="s" /><c r="B1" t="s"><v>0</v></c><c r="C1" t="s" /><c r="D1" t="s"><v>1</v></c>' +
+            '</row>' +
+            '<row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
+            '<c r="A2" t="n" /><c r="B2" t="s"><v>2</v></c><c r="C2" t="s"><v>3</v></c><c r="D2" t="s" />' +
+            '</row>' +
+            '<row r="3" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
+            '<c r="A3" t="n" /><c r="B3" t="s"><v>4</v></c><c r="C3" t="s" /><c r="D3" t="s" />' +
+            '</row>' +
+            '<row r="4" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
+            '<c r="A4" t="s"><v>5</v></c><c r="B4" t="n"><v>1</v></c><c r="C4" t="n"><v>1</v></c><c r="D4" t="n"><v>1</v></c>' +
+            '</row>' +
+            '</sheetData>' +
+            '<mergeCells count="4"><mergeCell ref="A1:A3" /><mergeCell ref="B1:C1" /><mergeCell ref="D1:D3" /><mergeCell ref="C2:C3" /></mergeCells>' +
+            '</worksheet>';
+        const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="6" uniqueCount="6">' +
+            '<si><t>2019</t></si>' +
+            '<si><t>2019 Total</t></si>' +
+            '<si><t>Q1</t></si>' +
+            '<si><t>Q1 Total</t></si>' +
+            '<si><t>February</t></si>' +
+            '<si><t>A</t></si>' +
+            '</sst>';
+        const dataSourceFields = [
+            { area: 'row', dataField: 'row1', dataType: 'string' },
+            { area: 'column', dataField: 'col1', dataType: 'date' },
+            { area: 'data', summaryType: 'count', dataType: 'number' }
+        ];
+
+        if(customizeYearGroupField) {
+            dataSourceFields.push({ groupName: 'col1', groupInterval: 'year', dataType: 'date', dataField: 'col1' });
+        }
+
+        helper.runGeneralTest(
+            assert,
+            {
+                showColumnGrandTotals: false,
+                showRowGrandTotals: false,
+                dataSource: {
+                    fields: dataSourceFields,
+                    store: [
+                        { row1: 'A', col1: new Date(2019, 1, 21) },
+                    ]
+                },
+                onInitialized: (e) => {
+                    e.component.getDataSource().expandAll('col1');
+                },
+                export: {
+                    enabled: true
+                }
+            },
+            { worksheet, sharedStrings }
+        );
+    });
+});

@@ -1,10 +1,10 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { when } from "../../core/utils/deferred";
-import iconUtils from "../../core/utils/icon";
 import eventsEngine from "../../events/core/events_engine";
 import { addNamespace } from "../../events/utils";
 import { name as contextMenuEventName } from "../../events/contextmenu";
+import { getDisplayFileSize } from "./ui.file_manager.utils.js";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
 
@@ -40,10 +40,10 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         const controllerClass = multipleSelection ? MultipleSelectionController : SingleSelectionController;
         this._selectionController = new controllerClass(controllerOptions);
 
-        this._$itemListContainer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS);
+        this._$itemViewContainer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS);
 
         this._$viewPort = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS);
-        this._$viewPort.append(this._$itemListContainer);
+        this._$viewPort.append(this._$itemViewContainer);
 
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
         this.$element().append(this._$viewPort);
@@ -166,17 +166,20 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenu(e) {
+        e.preventDefault();
         this._onClick(e);
 
-        this._ensureContextMenu();
-        const item = this._getFocusedItem();
-        this._contextMenu.option("dataSource", this._createContextMenuItems(item));
-        this._displayContextMenu(e.target, e.offsetX, e.offsetY);
+        const items = this.getSelectedItems();
+        this._showContextMenu(items, e.target, e);
     }
 
     _selectItemByItemElement($item, e) {
         const index = $item.data("index");
         this._selectItemByIndex(index, false, e);
+    }
+
+    _getItemThumbnailCssClass() {
+        return FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS;
     }
 
     _getItemSelector() {
@@ -237,7 +240,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         const itemHeight = $item.outerHeight(true);
 
-        const viewPortWidth = this._$itemListContainer.innerWidth();
+        const viewPortWidth = this._$itemViewContainer.innerWidth();
         const viewPortHeight = this._$viewPort.innerHeight();
         const viewPortScrollTop = this._$viewPort.scrollTop();
         const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
@@ -322,7 +325,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
     }
 
     _renderItems(items) {
-        this._$itemListContainer.empty();
+        this._$itemViewContainer.empty();
 
         for(let i = 0; i < items.length; i++) {
             const item = items[i];
@@ -343,9 +346,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         const $itemContent = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
 
-        const $itemThumbnail = iconUtils.getImageContainer(this._getItemThumbnail(item))
-            .addClass(FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS);
-
+        const $itemThumbnail = this._getItemThumbnailContainer(item);
         eventsEngine.on($itemThumbnail, "dragstart", this._disableDragging);
 
         const $itemSpacer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);
@@ -356,13 +357,22 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         $item.append($itemContent);
         $itemContent.append($itemThumbnail, $itemSpacer, $itemName);
-        this._$itemListContainer.append($item);
+        this._$itemViewContainer.append($item);
 
         item._state.$element = $item;
     }
 
     _getTooltipText(item) {
-        return item.tooltipText || `${item.name}\r\nSize: ${item.length}\r\nDate modified: ${item.lastWriteTime}`;
+        if(item.tooltipText) {
+            return item.tooltipText;
+        }
+
+        let text = `${item.name}\r\n`;
+        if(!item.isDirectory) {
+            text += `Size: ${getDisplayFileSize(item.size)}\r\n`;
+        }
+        text += `Date Modified: ${item.dateModified}`;
+        return text;
     }
 
     _getUniqueId() {

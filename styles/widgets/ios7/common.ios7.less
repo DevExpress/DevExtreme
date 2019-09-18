@@ -20,9 +20,10 @@
     }
 }
 
-.disabled-widget(@opacity: @IOS7_DISABLED_OPACITY) {
+.disabled-widget(@opacity: @IOS7_DISABLED_OPACITY) { // stylelint-disable-line selector-class-pattern
     opacity: @opacity;
     .user-select(none);
+
     zoom: 1;
     cursor: default;
 }

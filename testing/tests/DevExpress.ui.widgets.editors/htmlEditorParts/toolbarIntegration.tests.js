@@ -4,6 +4,7 @@ import "ui/html_editor";
 import fx from "animation/fx";
 
 import keyboardMock from "../../../helpers/keyboardMock.js";
+import { checkLink } from "./utils.js";
 
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
@@ -87,7 +88,7 @@ QUnit.module("Toolbar integration", {
 
     test("Apply simple format with selection", (assert) => {
         const done = assert.async();
-        const expected = "<strong>te</strong>st";
+        const expected = "<p><strong>te</strong>st</p>";
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["bold"] },
@@ -108,7 +109,7 @@ QUnit.module("Toolbar integration", {
     test("Apply format via color dialog located in the adaptive menu", (assert) => {
         const done = assert.async();
         const toolbarClickStub = sinon.stub();
-        const expected = '<span style="color: rgb(250, 250, 250);">te</span>st';
+        const expected = '<p><span style="color: rgb(250, 250, 250);">te</span>st</p>';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: [{ formatName: "color", locateInMenu: "always" }] },
@@ -121,7 +122,7 @@ QUnit.module("Toolbar integration", {
 
         instance.setSelection(0, 2);
 
-        $(`.${TOOLBAR_CLASS}`).on("dxclick", toolbarClickStub);
+        $(`.${TOOLBAR_WRAPPER_CLASS}`).on("dxclick", toolbarClickStub);
         $("#htmlEditor")
             .find(`.dx-dropdownmenu-button`)
             .trigger("dxclick");
@@ -141,12 +142,14 @@ QUnit.module("Toolbar integration", {
 
     test("Add a link via dialog", (assert) => {
         const done = assert.async();
-        const expected = '<a href="http://test.com" target="_blank">te</a>st';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["link"] },
-            onValueChanged: (e) => {
-                assert.equal(e.value, expected, "link has been added");
+            onValueChanged: ({ value }) => {
+                checkLink(assert, {
+                    href: "http://test.test",
+                    content: "te"
+                }, value);
                 done();
             }
         }).dxHtmlEditor("instance");
@@ -166,7 +169,7 @@ QUnit.module("Toolbar integration", {
 
         $inputs
             .first()
-            .val("http://test.com")
+            .val("http://test.test")
             .change();
 
         $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
@@ -381,5 +384,323 @@ QUnit.module("Toolbar integration", {
             .type(ORANGE_PIXEL)
             .change()
             .press("enter");
+    });
+
+    test("link should be correctly set to an image", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+        const link = "http://test.test";
+        const instance = $container.dxHtmlEditor({
+            toolbar: { items: ["link"] },
+            value: `<img src=${BLACK_PIXEL}>`,
+            onValueChanged: ({ value }) => {
+                checkLink(assert, {
+                    href: link,
+                    content: `<img src="${BLACK_PIXEL}">`
+                }, value);
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        instance.focus();
+        instance.setSelection(0, 1);
+
+        const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+        $linkFormatButton.trigger("dxclick");
+
+        const $urlInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
+        const $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
+
+        $urlInput
+            .val(link)
+            .change();
+
+        $okDialogButton.trigger("dxclick");
+    });
+
+    test("link should be correctly added for a third", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+        let $urlInput;
+        let $okDialogButton;
+
+        const prepareLink = () => {
+            instance.focus();
+
+            instance.setSelection(0, 4);
+
+            let $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+            $linkFormatButton.trigger("dxclick");
+
+            $urlInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
+            $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
+        };
+
+        const valueChangeSpy = sinon.spy(({ value }) => {
+            if(valueChangeSpy.calledOnce) {
+                setTimeout(() => {
+                    prepareLink();
+                    $urlInput
+                        .val("http://test2.test")
+                        .change();
+
+                    $okDialogButton.trigger("dxclick");
+                });
+            } else if(valueChangeSpy.calledTwice) {
+                setTimeout(() => {
+                    prepareLink();
+                    $urlInput
+                        .val("http://test3.test")
+                        .change();
+
+                    $okDialogButton.trigger("dxclick");
+                });
+            } else {
+                checkLink(assert, {
+                    href: "http://test3.test",
+                    content: "test"
+                }, value);
+                done();
+            }
+        });
+
+        const instance = $container.dxHtmlEditor({
+            toolbar: { items: ["link"] },
+            value: "<p>test</p>",
+            onValueChanged: valueChangeSpy
+        }).dxHtmlEditor("instance");
+
+        prepareLink();
+        $urlInput
+            .val("http://test1.test")
+            .change();
+
+        $okDialogButton.trigger("dxclick");
+        this.clock.tick();
+        this.clock.tick();
+    });
+
+    test("Add a link with empty text", (assert) => {
+        const done = assert.async();
+        const instance = $("#htmlEditor").dxHtmlEditor({
+            value: "<p>test</p>",
+            toolbar: { items: ["link"] },
+            onValueChanged: ({ value }) => {
+                checkLink(assert, {
+                    href: "http://test.test",
+                    content: "http://test.test",
+                    afterLink: "test"
+                }, value);
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        instance.setSelection(0, 0);
+
+        $("#htmlEditor")
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        const $inputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
+
+        $inputs
+            .first()
+            .val("http://test.test")
+            .change();
+
+        $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
+            .first()
+            .trigger("dxclick");
+    });
+
+    test("Add a link and text without selection", (assert) => {
+        const done = assert.async();
+        const instance = $("#htmlEditor").dxHtmlEditor({
+            value: "<p>test</p>",
+            toolbar: { items: ["link"] },
+            onValueChanged: ({ value }) => {
+                checkLink(assert, {
+                    href: "http://test.test",
+                    content: "123",
+                    afterLink: "test"
+                }, value);
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        instance.setSelection(0, 0);
+
+        $("#htmlEditor")
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        const $inputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
+
+        $inputs
+            .first()
+            .val("http://test.test")
+            .change();
+
+        $inputs
+            .last()
+            .val("123")
+            .change();
+
+        $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
+            .first()
+            .trigger("dxclick");
+    });
+
+    test("Add a link with empty text and selected range", (assert) => {
+        const done = assert.async();
+        const instance = $("#htmlEditor").dxHtmlEditor({
+            value: "<p>test</p>",
+            toolbar: { items: ["link"] },
+            onValueChanged: ({ value }) => {
+                checkLink(assert, {
+                    href: "http://test.test",
+                    content: "http://test.test",
+                    afterLink: "st"
+                }, value);
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        instance.setSelection(0, 2);
+
+        $("#htmlEditor")
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        const $inputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
+
+        $inputs
+            .first()
+            .val("http://test.test")
+            .change();
+
+        $inputs
+            .last()
+            .val("")
+            .change();
+
+        $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
+            .first()
+            .trigger("dxclick");
+    });
+
+    test("format image and text", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+        const link = "http://test.test";
+        const instance = $container.dxHtmlEditor({
+            toolbar: { items: ["link"] },
+            value: `<img src=${BLACK_PIXEL}>12`,
+            onValueChanged: ({ value }) => {
+                checkLink(assert, {
+                    href: link,
+                    content: `<img src="${BLACK_PIXEL}">12`
+                }, value);
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        instance.focus();
+        instance.setSelection(0, 3);
+
+        const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+        $linkFormatButton.trigger("dxclick");
+
+        const $urlInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).first();
+        const $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
+
+        $urlInput
+            .val(link)
+            .change();
+
+        $okDialogButton.trigger("dxclick");
+    });
+
+    test("replace the text of the existed link", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+        const link = "http://test.test";
+        const instance = $container.dxHtmlEditor({
+            toolbar: { items: ["link"] },
+            value: `<a href="${link}" target="_blank">test</a>`,
+            onValueChanged: ({ value }) => {
+                checkLink(assert, {
+                    href: link,
+                    content: "123"
+                }, value);
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        instance.focus();
+        instance.setSelection(0, 4);
+
+        const $linkFormatButton = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).eq(0);
+        $linkFormatButton.trigger("dxclick");
+
+        const $textInput = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`).last();
+        const $okDialogButton = $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`).first();
+
+        $textInput
+            .val("123")
+            .change();
+
+        $okDialogButton.trigger("dxclick");
+    });
+
+    test("history buttons are inactive after processing transcluded content", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor").html("<p>test</p>");
+
+        $container.dxHtmlEditor({
+            toolbar: { items: ["undo", "redo"] },
+            onContentReady: () => {
+                const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), "Undo button is disabled");
+                assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), "Redo button is disabled");
+
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        this.clock.tick();
+    });
+
+    test("history buttons are inactive when editor has initial value", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+
+        $container.dxHtmlEditor({
+            toolbar: { items: ["undo", "redo"] },
+            value: "<p>test</p>",
+            onContentReady: () => {
+                const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), "Undo button is disabled");
+                assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), "Redo button is disabled");
+
+                done();
+            }
+        }).dxHtmlEditor("instance");
+    });
+
+    test("history buttons are inactive when editor hasn't initial value", (assert) => {
+        const done = assert.async();
+        const $container = $("#htmlEditor");
+
+        $container.dxHtmlEditor({
+            toolbar: { items: ["undo", "redo"] },
+            onContentReady: () => {
+                const $toolbarButtons = $container.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+                assert.ok($toolbarButtons.eq(0).hasClass(STATE_DISABLED_CLASS), "Undo button is disabled");
+                assert.ok($toolbarButtons.eq(1).hasClass(STATE_DISABLED_CLASS), "Redo button is disabled");
+
+                done();
+            }
+        }).dxHtmlEditor("instance");
     });
 });

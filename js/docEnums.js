@@ -56,12 +56,8 @@
 
 /**
  * @typedef {string} Enums.VizTheme
- * @enum {'android5.light'|'generic.dark'|'generic.light'|'generic.contrast'|'ios7.default'|'win10.black'|'win10.white'|'win8.black'|'win8.white'|'generic.carmine'|'generic.darkmoon'|'generic.darkviolet'|'generic.greenmist'|'generic.softblue'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'}
- * @member 'win8.black' @deprecated 'generic.dark'
- * @member 'win8.white' @deprecated 'generic.light'
- * @member 'win10.black' @deprecated 'generic.dark'
- * @member 'win10.white' @deprecated 'generic.light'
- * @member 'android5.light' @deprecated 'material.blue.light'
+ * @enum {'generic.dark'|'generic.light'|'generic.contrast'|'ios7.default'|'generic.carmine'|'generic.darkmoon'|'generic.darkviolet'|'generic.greenmist'|'generic.softblue'|'material.blue.light'|'material.lime.light'|'material.orange.light'|'material.purple.light'|'material.teal.light'}
+ * @member 'ios7.default' @deprecated 'generic.light'
  */
 
 /**
@@ -72,7 +68,7 @@
 
 /**
  * @typedef {string} Enums.VizWordWrap
- * @enum {'normal'|'break-word'|'none'}
+ * @enum {'normal'|'breakWord'|'none'}
  */
 
 /**
@@ -212,7 +208,7 @@
 
 /**
  * @typedef {string} Enums.AnnotationType
- * @enum {'label'|'image'}
+ * @enum {'text'|'image'}
  */
 
 /**
@@ -602,7 +598,7 @@
 
 /**
  * @typedef {string} Enums.ToolbarItemWidget
- * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'|'dxButtonGroup'}
+ * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'|'dxButtonGroup'|'dxDropDownButton'}
  */
 
 /**
@@ -836,8 +832,23 @@
  */
 
 /**
- * @typedef {string} Enums.ActionButtonLocation
+ * @typedef {string} Enums.TextEditorButtonLocation
  * @enum {'after'|'before'}
+ */
+
+/**
+ * @typedef {string} Enums.TextBoxButtonName
+ * @enum {'clear'}
+ */
+
+/**
+ * @typedef {string} Enums.NumberBoxButtonName
+ * @enum {'clear'|'spins'}
+ */
+
+/**
+ * @typedef {string} Enums.DropDownEditorButtonName
+ * @enum {'clear'|'dropDown'}
  */
 
 /**
@@ -971,6 +982,16 @@
  */
 
 /**
+ * @typedef {string} Enums.HtmlEditorToolbarItem
+ * @enum {'background'|'bold'|'color'|'italic'|'link'|'image'|'strike'|'subscript'|'superscript'|'underline'|'blockquote'|'header'|'increaseIndent'|'decreaseIndent'|'orderedList'|'bulletList'|'alignLeft'|'alignCenter'|'alignRight'|'alignJustify'|'codeBlock'|'variable'|'separator'|'undo'|'redo'|'clear'}
+ */
+
+/**
+ * @typedef {string} Enums.HtmlEditorFormat
+ * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'size'|'strike'|'script'|'underline'|'blockquote'|'header'|'indent'|'list'|'align'|'code-block'}
+ */
+
+/**
  * @typedef {string} Enums.EditorStylingMode
  * @enum {'outlined'|'underlined'|'filled'}
  */
@@ -1003,4 +1024,25 @@
 /**
  * @typedef {string} Enums.GridStartEditAction
  * @enum {'click'|'dblClick'}
+ */
+
+/**
+ * @typedef {string} Enums.FileManagerSelectionMode
+ * @enum {'multiple'|'single'}
+ */
+
+
+/**
+ * @typedef {string} Enums.FileManagerItemViewMode
+ * @enum {'details'|'thumbnails'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramAutoLayout
+ * @enum {'tree'|'sugiyama'}
+ */
+
+/**
+ * @typedef {string} Enums.DiagramConnectionPointSide
+ * @enum {'north'|'east'|'south'|'west'}
  */

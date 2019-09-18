@@ -4,6 +4,8 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     rendererModule = require("viz/core/renderers/renderer"),
     baseSparkline = require("viz/sparklines/base_sparkline"),
+    eventsEngine = require("events/core/events_engine"),
+    devices = require("core/devices"),
     DEFAULT_EVENTS_DELAY = 100;
 
 require("viz/sparkline");
@@ -163,23 +165,52 @@ QUnit.test('Mouseout after mouseover', function(assert) {
     that.trigger('mouseover', tracker);
 });
 
-QUnit.test('Hide tooltip on mousewheel without delay', function(assert) {
-    assert.expect(1);
-    var sparkline = this.createSparkline({
+QUnit.test('Hide tooltip on scroll without delay', function(assert) {
+    var originalPlatform = devices.real().platform;
+
+    try {
+        devices.real({ platform: "generic" });
+        assert.expect(2);
+        var sparkline = this.createSparkline({
+                dataSource: [4, 8, 6, 9, 5],
+                tooltip: {
+                    enabled: true
+                },
+                onTooltipHidden: function() {
+                    assert.ok(true);
+                }
+            }),
+            tracker = sparkline._tooltipTracker,
+            that = this;
+
+        sparkline._DEBUG_hideTooltipTimeoutSet = 0;
+        sparkline._DEBUG_hideCallback = function() {
+            assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 0, 'Hide timeout set 1 time');
+        };
+        that.trigger('mouseover', tracker);
+        eventsEngine.trigger(sparkline.$element(), "scroll");
+    } finally {
+        devices.real({ platform: originalPlatform });
+    }
+});
+
+QUnit.test("Should not crash on parent scroll if tooltip was not shown", function(assert) {
+    var originalPlatform = devices.real().platform;
+
+    try {
+        devices.real({ platform: "generic" });
+        assert.expect(0);
+        var sparkline = this.createSparkline({
             dataSource: [4, 8, 6, 9, 5],
             tooltip: {
                 enabled: true
             }
-        }),
-        tracker = sparkline._tooltipTracker,
-        that = this;
+        });
 
-    sparkline._DEBUG_hideTooltipTimeoutSet = 0;
-    sparkline._DEBUG_hideCallback = function() {
-        assert.equal(sparkline._DEBUG_hideTooltipTimeoutSet, 0, 'Hide timeout set 1 time');
-    };
-    that.trigger('mouseover', tracker);
-    that.trigger('dxmousewheel', tracker);
+        eventsEngine.trigger(sparkline.$element(), "scroll");
+    } finally {
+        devices.real({ platform: originalPlatform });
+    }
 });
 
 QUnit.test('B252494 - Tooltip exception', function(assert) {

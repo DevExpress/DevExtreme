@@ -13,6 +13,7 @@ ui.setTemplateEngine = require("../../../ui/set_template_engine");
 
 ui.dialog = require("../../../ui/dialog");
 ui.notify = require("../../../ui/notify");
+ui.repaintFloatingActionButton = require("../../../ui/speed_dial_action/repaint_floating_action_button");
 
 /* Base widgets (dx.module-widgets-base.js) */
 
@@ -53,6 +54,7 @@ ui.dxResponsiveBox = require("../../../ui/responsive_box");
 ui.dxScrollView = require("../../../ui/scroll_view");
 ui.dxSelectBox = require("../../../ui/select_box");
 ui.dxSlider = require("../../../ui/slider");
+ui.dxSpeedDialAction = require("../../../ui/speed_dial_action");
 ui.dxSwitch = require("../../../ui/switch");
 ui.dxTabPanel = require("../../../ui/tab_panel");
 ui.dxTabs = require("../../../ui/tabs");

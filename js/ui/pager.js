@@ -13,7 +13,8 @@ var $ = require("../core/renderer"),
     Widget = require("./widget/ui.widget"),
     SelectBox = require("./select_box"),
     NumberBox = require("./number_box"),
-    eventUtils = require("../events/utils");
+    eventUtils = require("../events/utils"),
+    accessibility = require("./shared/accessibility");
 
 var PAGES_LIMITER = 4,
     PAGER_CLASS = 'dx-pager',
@@ -210,12 +211,6 @@ var Pager = Widget.inherit({
         page.select(true);
         that.selectedPage = page;
 
-        if(!that.option("useLegacyKeyboardNavigation")) {
-            let tabIndex = that.option("tabindex") || 0;
-            that.selectedPage.element().attr("tabindex", tabIndex);
-            that._updatePagesTabIndices.apply(that);
-        }
-
         if(nextPage && nextPage.value() - value > 1) {
             if(page.index !== 0) {
                 prevPage.value(value + 1);
@@ -281,6 +276,19 @@ var Pager = Widget.inherit({
         }
     },
 
+    _wrapClickAction: function(action) {
+        return (e) => {
+            if(e.type === "dxpointerup") {
+                this._pointerUpHappened = true;
+            } else if(this._pointerUpHappened) {
+                this._pointerUpHappened = false;
+                return;
+            }
+
+            action({ event: e });
+        };
+    },
+
     _renderPages: function(pages) {
         var that = this,
             $separator,
@@ -299,14 +307,11 @@ var Pager = Widget.inherit({
             page;
 
         if(pagesLength > 1) {
-            that._pageClickHandler = function(e) {
-                clickPagesIndexAction({ event: e });
-            };
-            that._pageKeyDownHandler = function(e) {
-                that._processKeyDown(e, clickPagesIndexAction);
-            };
+            that._pageClickHandler = this._wrapClickAction(clickPagesIndexAction);
+
             eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), PAGER_PAGE_CLASS_SELECTOR, that._pageClickHandler);
-            eventsEngine.on(that._$pagesChooser, "keydown", PAGER_PAGE_CLASS_SELECTOR, that._pageKeyDownHandler);
+
+            accessibility.registerKeyboardAction("pager", that, that._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, clickPagesIndexAction);
         }
 
         for(var i = 0; i < pagesLength; i++) {
@@ -318,6 +323,8 @@ var Pager = Widget.inherit({
                 "role": "button",
                 "label": "Page " + page.value()
             }, page.element());
+
+            accessibility.setTabIndex(that, page.element());
 
             if(pages[i + 1] && pages[i + 1].value() - page.value() > 1) {
                 $separator = $("<div>").text(". . .").addClass(PAGER_PAGE_SEPARATOR_CLASS);
@@ -370,7 +377,8 @@ var Pager = Widget.inherit({
         eventsEngine.on($pageCount, eventUtils.addNamespace(clickEvent.name, that.Name + "PagesCount"), function(e) {
             clickAction({ event: e });
         });
-        eventsEngine.on($pageCount, "keydown", e => this._processKeyDown(e, clickAction));
+
+        accessibility.registerKeyboardAction("pager", that, $pageCount, undefined, clickAction);
 
         $pageCount.appendTo($container);
 
@@ -420,14 +428,6 @@ var Pager = Widget.inherit({
         that._updatePagesChooserWidth();
     },
 
-    _processKeyDown: function(event, action) {
-        var keyName = eventUtils.normalizeKeyName(event);
-
-        if(keyName === "enter" || keyName === "space") {
-            action({ event: event });
-        }
-    },
-
     _renderPageSizes: function() {
         var that = this,
             i,
@@ -455,7 +455,8 @@ var Pager = Widget.inherit({
         eventsEngine.on(that._$pagesSizeChooser, eventUtils.addNamespace(clickEvent.name, that.Name + "PageSize"), PAGER_PAGE_SIZE_CLASS_SELECTOR, function(e) {
             clickPagesSizeAction({ event: e });
         });
-        eventsEngine.on(that._$pagesSizeChooser, "keydown", PAGER_PAGE_SIZE_CLASS_SELECTOR, e => this._processKeyDown(e, clickPagesSizeAction));
+
+        accessibility.registerKeyboardAction("pager", that, that._$pagesSizeChooser, PAGER_PAGE_SIZE_CLASS_SELECTOR, clickPagesSizeAction);
 
         for(i = 0; i < pagesSizesLength; i++) {
             $pageSize = $('<div>')
@@ -466,6 +467,8 @@ var Pager = Widget.inherit({
                 "role": "button",
                 "label": "Display " + pageSizes[i] + " items on page"
             }, $pageSize);
+
+            accessibility.setTabIndex(that, $pageSize);
 
             if(currentPageSize === pageSizes[i]) {
                 $pageSize.addClass(PAGER_SELECTION_CLASS);
@@ -548,24 +551,16 @@ var Pager = Widget.inherit({
         if(that.option("showNavigationButtons") || that.option("lightModeEnabled")) {
             $button = $("<div>").addClass(PAGER_NAVIGATE_BUTTON);
 
-            var pointerUpHappened = false;
+            eventsEngine.on($button, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), that._wrapClickAction(clickAction));
 
-            eventsEngine.on($button, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), function(e) {
-                if(e.type === "dxpointerup") {
-                    pointerUpHappened = true;
-                } else if(pointerUpHappened) {
-                    pointerUpHappened = false;
-                    return;
-                }
-
-                clickAction({ event: e });
-            });
-            eventsEngine.on($button, "keydown", e => this._processKeyDown(e, clickAction));
+            accessibility.registerKeyboardAction("pager", that, $button, undefined, clickAction);
 
             that.setAria({
                 "role": "button",
                 "label": direction === "prev" ? "Previous page" : " Next page"
             }, $button);
+
+            accessibility.setTabIndex(that, $button);
 
             if(that.option("rtlEnabled")) {
                 $button.addClass(direction === "prev" ? PAGER_NEXT_BUTTON_CLASS : PAGER_PREV_BUTTON_CLASS);
@@ -584,6 +579,8 @@ var Pager = Widget.inherit({
         this._toggleVisibility(this.option("visible"));
         this._updatePageSizes(true);
         this._updatePages(true);
+
+        accessibility.restoreFocus(this);
     },
 
     _initMarkup: function() {
@@ -703,7 +700,8 @@ var Pager = Widget.inherit({
     _clean: function() {
         if(this._$pagesChooser) {
             eventsEngine.off(this._$pagesChooser, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], this.Name + "Pages"), PAGER_PAGE_CLASS_SELECTOR, this._pageClickHandler);
-            eventsEngine.off(this._$pagesChooser, "keydown", PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
+
+            accessibility.registerKeyboardAction("pager", this, this._$pagesChooser, PAGER_PAGE_CLASS_SELECTOR, this._pageKeyDownHandler);
         }
 
         this.callBase();

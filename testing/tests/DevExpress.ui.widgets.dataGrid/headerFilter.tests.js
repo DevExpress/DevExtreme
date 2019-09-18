@@ -422,6 +422,8 @@ QUnit.test("Show header filter", function(assert) {
     assert.ok($popupContent.find(".dx-empty-message").length, "no data");
     // T291384
     assert.strictEqual(that.headerFilterView.getPopupContainer().option("position.collision"), "flip fit");
+    // T756320
+    assert.strictEqual(that.headerFilterView.getPopupContainer().option("closeOnTargetScroll"), false, "closeOnTargetScroll should be false");
 });
 
 // T435785
@@ -1819,6 +1821,44 @@ QUnit.test("Check select all state after filtering if column dataType is date", 
     assert.notEqual(column.filterType, "exclude", "filterType is correct");
 });
 
+QUnit.test("Check select all state after filtering if column dataType is date and search is by month", function(assert) {
+    // arrange
+    var that = this,
+        treeView,
+        $selectAll,
+        selectAll,
+        column,
+        testElement = $("#container"),
+        $popupContent;
+
+    that.options.headerFilter.allowSearch = true;
+    that.columns[0].dataType = "date";
+    that.items = [{ Test1: new Date(1986, 2, 1), Test2: "test2" }, { Test1: new Date(1986, 3, 1), Test2: "test4" }];
+
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
+    treeView = $popupContent.find(".dx-treeview").dxTreeView("instance");
+
+    // act
+    treeView.option("searchValue", "March");
+
+    $selectAll = treeView.$element().find(".dx-treeview-select-all-item");
+    $($selectAll).trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // apply filter
+
+    selectAll = $selectAll.dxCheckBox("instance");
+    column = that.columnsController.getVisibleColumns()[0];
+
+    // assert
+    assert.equal(selectAll.option("value"), undefined, "select all has correct state"); // should be true after treeview fix
+    assert.deepEqual(column.filterValues, ["1986/3"], "filterValue is correct");
+    assert.notEqual(column.filterType, "exclude", "filterType is correct");
+});
+
 QUnit.test("Check filtering in column lookup with simple types", function(assert) {
     // arrange
     var that = this,
@@ -2081,7 +2121,7 @@ QUnit.testInActiveWindow("No scroll on opening the header filter when the popup 
         $popupContent = that.headerFilterView.getPopupContainer().$content();
         assert.strictEqual($testElement.parent().scrollTop(), 0, "scrollTop");
         assert.ok($popupContent.is(":visible"), "visible popup");
-        assert.ok($popupContent.find(".dx-checkbox").first().hasClass("dx-state-focused"));
+        assert.ok($popupContent.find(".dx-list-select-all").first().hasClass("dx-state-focused"));
     } finally {
         fx.off = false;
         viewPortUtils.value(viewPort);
@@ -2570,6 +2610,30 @@ QUnit.test("Header Filter when grid with CustomStore when remoteOperations false
     assert.strictEqual($popupContent.find(".dx-list-item").eq(1).text(), "value13", "item 2 text");
     // T317818
     assert.strictEqual(loadArgs.length, 1, "load count");
+});
+
+// T801018
+QUnit.test("Header filter with search bar if remote filtering and local grouping", function(assert) {
+    // arrange
+    var that = this,
+        testElement = $("#container");
+
+    that.options.headerFilter.allowSearch = true;
+    that.options.remoteOperations = { sorting: true, filtering: true, paging: true };
+
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+
+    // act
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    // assert
+    var $popupContent = that.headerFilterView.getPopupContainer().$content(),
+        list = $popupContent.find(".dx-list").dxList("instance");
+
+    assert.ok(list.option("searchEnabled"), "list with search bar");
+    assert.equal(list.option("searchExpr"), "Test1", "searchExpr is correct");
 });
 
 QUnit.test("Header Filter when grid with CustomStore when remote grouping and remote summary", function(assert) {

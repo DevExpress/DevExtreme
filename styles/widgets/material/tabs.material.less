@@ -34,12 +34,12 @@
     background-color: @tabs-tab-bg;
     position: absolute;
     height: @MATERIAL_TAB_HEIGHT;
-
     border-radius: 0;
     box-shadow: none;
 
     &.dx-button.dx-tabs-nav-button.dx-button-has-icon:not(.dx-button-has-text) {
         .dx-button-flat-color-styling(@base-icon-color);
+
         border-radius: 0;
     }
 
@@ -75,6 +75,7 @@
         color: @tabs-tab-icon-color;
         vertical-align: middle;
         .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
+
         margin: 0 auto;
     }
 
@@ -97,7 +98,8 @@
     }
 }
 
-.dx-tab-content, .dx-tab-text {
+.dx-tab-content,
+.dx-tab-text {
     vertical-align: middle;
     text-transform: uppercase;
     line-height: @MATERIAL_TAB_TEXT_LINE_HEIGHT;
@@ -110,6 +112,6 @@
     }
 
     .dx-tab-content {
-        opacity: .3;
+        opacity: 0.3;
     }
 }

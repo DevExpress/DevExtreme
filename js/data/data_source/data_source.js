@@ -172,6 +172,22 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
     return mapRecursive(items, groupInfo ? dataUtils.normalizeSortingInfo(groupInfo).length : 0);
 }
 
+function normalizeLoadResult(data, extra) {
+    if(data && !Array.isArray(data) && data.data) {
+        extra = data;
+        data = data.data;
+    }
+
+    if(!Array.isArray(data)) {
+        data = [data];
+    }
+
+    return {
+        data,
+        extra
+    };
+}
+
 var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods.ctor
@@ -858,6 +874,14 @@ var DataSource = Class.inherit({
                 groupLevel = Array.isArray(group) ? group.length : 1;
             }
 
+            if(this._mapFunc) {
+                dataSourceChanges.forEach((item) => {
+                    if(item.type === "insert") {
+                        item.data = this._mapFunc(item.data);
+                    }
+                });
+            }
+
             arrayUtils.applyBatch(this.store(), items, dataSourceChanges, groupLevel, true);
             this._fireChanged([{ changes: changes }]);
         }
@@ -975,21 +999,7 @@ var DataSource = Class.inherit({
 
         function handleSuccess(data, extra) {
             function processResult() {
-                var loadResult;
-
-                if(data && !Array.isArray(data) && data.data) {
-                    extra = data;
-                    data = data.data;
-                }
-
-                if(!Array.isArray(data)) {
-                    data = [data];
-                }
-
-                loadResult = extend({
-                    data: data,
-                    extra: extra
-                }, loadOptions);
+                var loadResult = extend(normalizeLoadResult(data, extra), loadOptions);
 
                 that.fireEvent("customizeLoadResult", [loadResult]);
                 when(loadResult.data).done(function(data) {
@@ -1084,3 +1094,4 @@ var DataSource = Class.inherit({
 
 exports.DataSource = DataSource;
 exports.normalizeDataSourceOptions = normalizeDataSourceOptions;
+exports.normalizeLoadResult = normalizeLoadResult;

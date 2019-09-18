@@ -7,27 +7,36 @@
     @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 12px;
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 3px;
     @MATERIAL_TAGBOX_TAG_MARGIN: 8px;
-    @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: 12px 12px 4px 12px;
+    @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: 4px 12px 12px 12px;
+    @MATERIAL_TAGBOX_TAG_HEIGHT: 32px;
 }
 .dx-size-compact() {
     @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT: 8px;
     @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT: 32px;
-    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 4px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 4px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
+    @MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 5px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 5px @MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
     @MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: 4px;
     @MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 24px;
     @MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 12px;
     @MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 3px;
     @MATERIAL_TAGBOX_TAG_MARGIN: 5px;
-    @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: 8px 8px 2px 8px;
+    @MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: 2px 8px 7px 8px;
+    @MATERIAL_TAGBOX_TAG_HEIGHT: 26px;
 }
+
 .dx-tagbox {
     .dx-texteditor-input-container {
         height: 100%;
     }
 
-    &.dx-editor-filled, &.dx-editor-outlined {
+    .dx-texteditor-input {
+        height: @MATERIAL_TAGBOX_TAG_HEIGHT;
+    }
+
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
         .dx-texteditor-input {
             padding: 0;
+            margin-top: @MATERIAL_TAGBOX_TAG_MARGIN;
         }
 
         .dx-tag-container {
@@ -39,11 +48,16 @@
 
 .dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {
     .dx-tag-container {
-        margin-top: 1px;
+        margin-top: -@MATERIAL_TAGBOX_TAG_MARGIN;
+
+        &:after {
+            margin-top: -@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE / 2 + @MATERIAL_TAGBOX_TAG_MARGIN / 2;
+        }
     }
 
     .dx-texteditor-input {
         padding-left: 0;
+        margin-top: @MATERIAL_TAGBOX_TAG_MARGIN;
 
         .dx-rtl &,
         .dx-rtl& {
@@ -54,14 +68,16 @@
         }
     }
 
-    &.dx-state-focused, &.dx-state-active {
+    &.dx-state-focused,
+    &.dx-state-active {
         &:before {
             border-top: 0;
             border-bottom: 0;
         }
     }
 
-    &.dx-state-hover, & {
+    &.dx-state-hover,
+    & {
         &:after {
             border-bottom: 0;
         }
@@ -69,12 +85,6 @@
 }
 
 .dx-tagbox-single-line {
-    &.dx-dropdowneditor-button-visible {
-        .dx-texteditor-container {
-            width: calc(~"100% - "@MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE);
-        }
-    }
-
     .dx-tag-container {
         padding-right: 0;
     }
@@ -117,7 +127,7 @@
 }
 
 .dx-tag {
-    margin: 0 @MATERIAL_TAGBOX_TAG_MARGIN @MATERIAL_TAGBOX_TAG_MARGIN 0;
+    margin: @MATERIAL_TAGBOX_TAG_MARGIN @MATERIAL_TAGBOX_TAG_MARGIN 0 0;
 
     &:hover {
         .dx-tag-content {
@@ -136,7 +146,6 @@
 
 .dx-tagbox.dx-invalid {
     .dx-texteditor-container {
-
         &:after {
             right: @MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
 
@@ -167,6 +176,6 @@
     }
 
     .dx-tag-remove-button {
-        left: 4px!important;
+        left: 4px !important; // stylelint-disable-line declaration-no-important
     }
 }

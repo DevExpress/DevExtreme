@@ -59,6 +59,10 @@ function sortAxes(axes, onlyAxisToNotify) {
     return axes;
 }
 
+function isNotEmptyAxisBusinessRange(axis) {
+    return !axis.getTranslator().getBusinessRange().isEmpty();
+}
+
 module.exports = {
     name: "zoom_and_pan",
     init: function() {
@@ -69,10 +73,8 @@ module.exports = {
             if(e.originalEvent) {
                 cancelEvent(e.originalEvent);
             }
-            try {
+            if(e.cancelable !== false) {
                 e.cancel = true;
-            } catch(e) {
-                return;
             }
         }
 
@@ -87,16 +89,21 @@ module.exports = {
                 axes = axes.concat(actionData.valueAxes);
             }
 
-            axes.some(axis => {
-                return axis.getTranslator().getBusinessRange().isEmpty()
-                    || axis.handleZooming(null, { end: true }, e, actionField).isPrevented;
-            }) && cancelEvent(e);
+            axes.reduce((isPrevented, axis) => {
+                if(isPrevented) {
+                    return isPrevented;
+                }
+                if(isNotEmptyAxisBusinessRange(axis)) {
+                    return axis.handleZooming(null, { end: true }, e, actionField).isPrevented;
+                }
+                return isPrevented;
+            }, false) && cancelEvent(e);
         }
 
         function axesViewportChanging(zoomAndPan, actionField, e, offsetCalc, centerCalc) {
             function zoomAxes(axes, criteria, coordField, e, actionData) {
                 let zoom = { zoomed: false };
-                criteria && axes.forEach(axis => {
+                criteria && axes.filter(isNotEmptyAxisBusinessRange).forEach(axis => {
                     const options = axis.getOptions();
                     const viewport = axis.visualRange();
                     const scale = axis.getTranslator().getEventScale(e);
@@ -195,9 +202,10 @@ module.exports = {
                     axes = axes.concat(actionData.valueAxes);
                 }
 
-                axes.forEach(axis => {
+                axes.filter(isNotEmptyAxisBusinessRange).forEach(axis => {
                     axis.handleZooming(null, { start: true }, e, actionField);
                 });
+                zoomStarted = zoomStarted && axes.length;
             }
             zoomStarted && chart._requestChange(["VISUAL_RANGE"]);
         }
@@ -250,9 +258,12 @@ module.exports = {
         }
 
         function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            chart._tracker.stopCurrentHandling();
+            if(e.cancelable !== false) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            chart._stopCurrentHandling();
         }
 
         const zoomAndPan = {
@@ -266,6 +277,7 @@ module.exports = {
 
                 let action;
 
+                e._cancelPreventDefault = true;
                 if(isTouch) {
                     if(options.allowTouchGestures && wantPan) {
                         const cancelPanning = !zoomAndPan.panningVisualRangeEnabled() || zoomAndPan.skipEvent;
@@ -284,13 +296,13 @@ module.exports = {
                 const actionData = prepareActionData(calcCenterForDrag(e), action);
                 if(actionData.cancel) {
                     zoomAndPan.skipEvent = false;
-                    e.cancel = true;
+                    if(e.cancelable !== false) {
+                        e.cancel = true;
+                    }
                     return;
                 }
 
                 zoomAndPan.actionData = actionData;
-
-                preventDefaults(e);
 
                 if(action === "zoom") {
                     actionData.startCoords = getPointerCoord(actionData.curAxisRect, e);
@@ -304,6 +316,7 @@ module.exports = {
                 const options = zoomAndPan.options;
                 const actionData = zoomAndPan.actionData;
                 const isTouch = e.pointerType === "touch";
+                e._cancelPreventDefault = true;
 
                 if(!actionData || isTouch && !zoomAndPan.panningVisualRangeEnabled()) {
                     return;
@@ -337,18 +350,16 @@ module.exports = {
 
                     actionData.rect.attr(rect);
                 } else if(actionData.action === "pan") {
-                    const viewportChanged = axesViewportChanging(zoomAndPan, "pan", e, calcOffsetForDrag, e => e.offset);
-
-                    if(isTouch) {
-                        zoomAndPan.defineTouchBehavior(!viewportChanged, e);
-                        if(!viewportChanged && zoomAndPan.panningVisualRangeEnabled()) {
-                            cancelEvent(e);
-                            zoomAndPan.skipEvent = true;
-                            zoomAndPan.actionData = null;
-                        }
-                    } else {
-                        preventDefaults(e);
+                    axesViewportChanging(zoomAndPan, "pan", e, calcOffsetForDrag, e => e.offset);
+                    const deltaOffsetY = Math.abs(e.offset.y - actionData.offset.y);
+                    const deltaOffsetX = Math.abs(e.offset.x - actionData.offset.x);
+                    if(isTouch &&
+                        (deltaOffsetY > MIN_DRAG_DELTA && deltaOffsetY > Math.abs(actionData.offset.x)
+                        || deltaOffsetX > MIN_DRAG_DELTA && deltaOffsetX > Math.abs(actionData.offset.y))
+                    ) {
+                        return;
                     }
+                    preventDefaults(e);
                 }
             },
             dragEndHandler: function(e) {
@@ -357,7 +368,9 @@ module.exports = {
                 const actionData = zoomAndPan.actionData;
                 const isTouch = e.pointerType === "touch";
 
-                if(!actionData || isTouch && !zoomAndPan.panningVisualRangeEnabled()) {
+                const panIsEmpty = actionData && actionData.action === "pan" && !actionData.fallback && actionData.offset.x === 0 && actionData.offset.y === 0;
+
+                if(!actionData || isTouch && !zoomAndPan.panningVisualRangeEnabled() || panIsEmpty) {
                     return;
                 }
 
@@ -401,8 +414,6 @@ module.exports = {
                 zoomAndPan.actionData = null;
             },
             pinchStartHandler: function(e) {
-                preventDefaults(e);
-
                 const actionData = prepareActionData(calcCenterForPinch(e), "zoom");
                 actionData.isNative = !zoomAndPan.panningVisualRangeEnabled();
                 if(actionData.cancel) {
@@ -413,10 +424,6 @@ module.exports = {
                 startAxesViewportChanging(zoomAndPan, "zoom", e);
             },
             pinchHandler: function(e) {
-                if(zoomAndPan.actionData && zoomAndPan.actionData.isNative && e.deltaScale <= 1) {
-                    zoomAndPan.defineTouchBehavior(true, e);
-                    zoomAndPan.actionData = null;
-                }
                 if(!zoomAndPan.actionData) {
                     return;
                 }
@@ -424,13 +431,12 @@ module.exports = {
                     (e, actionData, coordField, scale) => calcCenterForPinch(e)[coordField] - actionData.center[coordField] + (actionData.center[coordField] - actionData.center[coordField] * scale),
                     calcCenterForPinch);
                 zoomAndPan.defineTouchBehavior(!viewportChanged, e);
+                !viewportChanged && (zoomAndPan.actionData = null);
             },
             pinchEndHandler: function(e) {
                 if(!zoomAndPan.actionData) {
                     return;
                 }
-
-                !zoomAndPan.actionData.isNative && preventDefaults(e);
                 finishAxesViewportChanging(zoomAndPan, "zoom", e,
                     (e, actionData, coordField, scale) => actionData.center[coordField] - actionData.startCenter[coordField] + (actionData.startCenter[coordField] - actionData.startCenter[coordField] * scale));
                 zoomAndPan.actionData = null;
@@ -520,17 +526,15 @@ module.exports = {
                 if(options.allowTouchGestures) {
                     if(options.argumentAxis.zoom || options.valueAxis.zoom) {
                         renderer.root
-                            .on(PINCH_START_EVENT_NAME, { immediate: true }, zoomAndPan.pinchStartHandler)
-                            .on(PINCH_EVENT_NAME, zoomAndPan.pinchHandler)
+                            .on(PINCH_START_EVENT_NAME, { passive: false }, zoomAndPan.pinchStartHandler)
+                            .on(PINCH_EVENT_NAME, { passive: false }, zoomAndPan.pinchHandler)
                             .on(PINCH_END_EVENT_NAME, zoomAndPan.pinchEndHandler);
                     }
-
-                    zoomAndPan.setTouchAction(false);
                 }
 
                 renderer.root
-                    .on(DRAG_START_EVENT_NAME, { immediate: true }, zoomAndPan.dragStartHandler)
-                    .on(DRAG_EVENT_NAME, zoomAndPan.dragHandler)
+                    .on(DRAG_START_EVENT_NAME, { immediate: true, passive: false }, zoomAndPan.dragStartHandler)
+                    .on(DRAG_EVENT_NAME, { immediate: true, passive: false }, zoomAndPan.dragHandler)
                     .on(DRAG_END_EVENT_NAME, zoomAndPan.dragEndHandler);
 
 
@@ -558,30 +562,10 @@ module.exports = {
             },
 
             defineTouchBehavior: function(isDefault, e) {
-                zoomAndPan.setTouchAction(isDefault);
                 zoomAndPan.actionData && (zoomAndPan.actionData.isNative = isDefault);
                 if(!isDefault) {
                     preventDefaults(e);
                 }
-            },
-
-            setTouchAction: function(isDefault) {
-                const options = zoomAndPan.options;
-                if(!options.allowTouchGestures) {
-                    return;
-                }
-
-                let touchAction = isDefault ? "" : "none";
-                if(!isDefault) {
-                    if(!options.argumentAxis.zoom && !options.valueAxis.zoom) {
-                        touchAction = "pinch-zoom";
-                    }
-
-                    if(!options.argumentAxis.pan && !options.valueAxis.pan) {
-                        touchAction = "pan-x pan-y";
-                    }
-                }
-                renderer.root.css({ "touch-action": touchAction, "-ms-touch-action": touchAction });
             },
 
             panningVisualRangeEnabled: function(targetAxes) {

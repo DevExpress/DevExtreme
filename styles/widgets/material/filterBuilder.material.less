@@ -17,23 +17,23 @@
 }
 
 
-
 .dx-filterbuilder {
     .dx-filterbuilder-action-icon {
         font-size: 21px;
     }
 
     .dx-filterbuilder-group {
-         .dx-filterbuilder-group-item {
+        .dx-filterbuilder-group-item {
             .dx-filterbuilder-action.dx-filterbuilder-action-icon {
                 padding: @MATERIAL_FILTERBUILDER_ICON_PADDING;
                 vertical-align: middle;
             }
-         }
+        }
     }
 
     .dx-filterbuilder-item-value {
-        .dx-editor-filled, .dx-editor-outlined {
+        .dx-editor-filled,
+        .dx-editor-outlined {
             .dx-texteditor-input {
                 padding: @MATERIAL_FILTERBUILDER_FILLED_EDITOR_PADDING;
             }
@@ -51,7 +51,6 @@
 }
 
 .dx-filterbuilder-overlay {
-
     &.dx-popup-wrapper > .dx-overlay-content {
         box-shadow: @dropdown-widgets-shadow;
     }
@@ -67,6 +66,7 @@
             }
         }
     }
+
     .dx-treeview-node {
         > .dx-treeview-item {
             padding-left: @MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING * 2;

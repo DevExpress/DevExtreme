@@ -799,7 +799,7 @@ module.exports = {
                             }
                         }
                         if(showValidationMessage && $cell && column && validationResult.brokenRule.message) {
-                            that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment, revertTooltip);
+                            that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment || "left", revertTooltip);
                         }
 
                         !hideBorder && that._rowsView.element() && that._rowsView.updateFreeSpaceRowHeight();
@@ -835,7 +835,13 @@ module.exports = {
                 _formItemPrepared: function(cellOptions, $container) {
                     this.callBase.apply(this, arguments);
                     deferUpdate(() => {
-                        this.getController("validating").createValidator(cellOptions, $container.find(".dx-widget").first());
+                        var $editor = $container.find(".dx-widget").first(),
+                            isEditorDisposed = $editor.length && !$editor.children().length;
+
+                        // T736360
+                        if(!isEditorDisposed) {
+                            this.getController("validating").createValidator(cellOptions, $editor);
+                        }
                     });
                 },
                 _cellPrepared: function($cell, parameters) {

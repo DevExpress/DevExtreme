@@ -18,7 +18,7 @@ import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import { DataSource } from "data/data_source/data_source";
-
+import { ColumnWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 fx.off = true;
 
@@ -484,6 +484,34 @@ QUnit.test("Click on selectCheckBox shouldn't render editor, editing & selection
     assert.notOk($("#treeList").find(".dx-texteditor").length, "Editing textEditor wasn't rendered");
 });
 
+// T742147
+QUnit.test("Selection checkbox should be rendered if first column is lookup", function(assert) {
+    var treeList = createTreeList({
+        columns: [{
+            dataField: "nameId",
+            lookup: {
+                dataSource: [{ id: 1, name: "Name 1" }],
+                valueExpr: "id",
+                displayExpr: "name"
+            }
+        }, "age"],
+        selection: {
+            mode: 'multiple'
+        },
+        dataSource: [
+            { id: 1, parentId: 0, nameId: 1, age: 19 }
+        ]
+    });
+
+    // act
+    this.clock.tick();
+
+    // assert
+    var $firstDataCell = $(treeList.getCellElement(0, 0));
+    assert.equal($firstDataCell.find(".dx-select-checkbox.dx-checkbox").length, 1, "first cell contains select checkbox");
+    assert.equal($firstDataCell.find(".dx-treelist-text-content").text(), "Name 1", "first cell text");
+});
+
 QUnit.test("Filter row should not contains selection checkboxes", function(assert) {
     createTreeList({
         columns: ["name", "age"],
@@ -541,6 +569,48 @@ QUnit.test("Aria accessibility", function(assert) {
     assert.equal($dataRows.eq(1).attr("aria-level"), "1", "second data row - value of 'aria-level' attribute");
     assert.equal($dataRows.eq(2).attr("aria-expanded"), undefined, "third data row hasn't the 'aria-expanded' attribute");
     assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
+});
+
+QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
+    // arrange
+    var wrapper = new ColumnWrapper(".dx-treelist"),
+        clock = sinon.useFakeTimers(),
+        treeList = createTreeList({
+            dataSource: [
+                { id: 0, parentId: -1, c0: "c0" },
+                { id: 1, parentId: 0, c0: "c1" }
+            ],
+            columns: [
+                {
+                    type: "buttons",
+                    buttons: ["add", "edit", "delete", "save", "cancel"]
+                },
+                "id"
+            ],
+            editing: {
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: true
+            }
+        });
+
+    clock.tick();
+
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    // act
+    treeList.editRow(0);
+    // assert
+    wrapper.getCommandButtons().each((_, button) => {
+        var ariaLabel = $(button).attr("aria-label");
+        assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
+    });
+
+    clock.restore();
 });
 
 // T632028
@@ -601,6 +671,30 @@ QUnit.test("filterBulider is working in TreeList", function(assert) {
 
     // assert
     assert.equal(handlerInit.called, 1);
+});
+
+// T812031
+QUnit.test("Change filterPanel.visible to false", function(assert) {
+    // arrange
+    // act
+    var treeList = createTreeList({
+        dataSource: [],
+        filterPanel: {
+            visible: true
+        },
+        columns: [{ dataField: "field" }]
+    });
+
+    this.clock.tick();
+
+    // assert
+    assert.ok(treeList.$element().find(".dx-treelist-filter-panel").is(":visible"), "filter panel is visible");
+
+    // act
+    treeList.option("filterPanel.visible", false);
+
+    // assert
+    assert.notOk(treeList.$element().find(".dx-treelist-filter-panel").is(":visible"), "filter panel is hidden");
 });
 
 QUnit.test("TreeList with paging", function(assert) {
@@ -937,6 +1031,70 @@ QUnit.test("Expand row if repaintChangesOnly is true", function(assert) {
     assert.strictEqual($(treeList.getRowElement(0)).find(".dx-treelist-expanded").length, 1, "first row has expanded icon");
 });
 
+// T742885
+QUnit.test("Expand node after filtering when it has many children and they are selected", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+
+    try {
+        var treeList = createTreeList({
+            loadingTimeout: 30,
+            height: 200,
+            dataSource: {
+                store: {
+                    type: "array",
+                    data: [{
+                        field1: "test1",
+                        items: [{
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }, {
+                            field1: "test2"
+                        }]
+                    }]
+                },
+                pageSize: 2
+            },
+            scrolling: {
+                mode: "virtual"
+            },
+            selection: {
+                mode: "multiple"
+            },
+            itemsExpr: "items",
+            dataStructure: "tree",
+            columns: [{ dataField: "field1", dataType: "string", filterValues: ["test2"] }],
+            onContentReady: function(e) {
+                e.component.selectRows([2, 3, 4, 5, 6, 7, 8, 9]);
+            }
+        });
+
+        clock.tick(500);
+
+        // act
+        treeList.collapseRow(1);
+        clock.tick(100);
+
+        // assert
+        var items = treeList.getVisibleRows();
+        assert.strictEqual(items.length, 1, "row count");
+        assert.notOk(treeList.isRowExpanded(1), "first node is collapsed");
+    } finally {
+        clock.restore();
+    }
+});
+
 QUnit.module("Focused Row", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -963,6 +1121,8 @@ QUnit.test("TreeList with focusedRowEnabled and focusedRowIndex 0", function(ass
 QUnit.test("TreeList with focusedRowKey", function(assert) {
     // arrange, act
     var treeList = createTreeList({
+        height: 100,
+        keyExpr: "id",
         dataSource: generateData(10),
         paging: {
             pageSize: 4
@@ -982,6 +1142,8 @@ QUnit.test("TreeList with focusedRowKey", function(assert) {
 QUnit.test("TreeList with remoteOperations and focusedRowKey", function(assert) {
     // arrange, act
     var treeList = createTreeList({
+        height: 100,
+        keyExpr: "id",
         dataSource: generateData(10),
         remoteOperations: true,
         paging: {
@@ -1106,4 +1268,190 @@ QUnit.test("dataSource change with columns should force one loading only", funct
     // assert
     assert.equal(loadingSpy.callCount, 1, "loading called once");
     assert.equal(treeList.getVisibleRows().length, 3, "visible row count");
+});
+
+QUnit.test("Should not generate exception when selection mode is multiple and focusedRowKey is set for the nested node (T735585)", function(assert) {
+    var options = {
+        dataSource: [
+            { id: 0, parentId: -1, c0: "C0_0", c1: "c1_0" },
+            { id: 1, parentId: 0, c0: "C0_0", c1: "c1_0" }
+        ],
+        keyExpr: "id",
+        parentIdExpr: "parentId",
+        selection: { mode: "single" },
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        expandedRowKeys: [1],
+        onFocusedRowChanged: e => {
+            if(e.row && e.row.data) {
+                e.component.selectRows([e.row.key], true);
+            }
+        }
+    };
+
+    try {
+        // act
+        createTreeList(options);
+        this.clock.tick();
+
+        // arrange
+        options.selection.mode = "multiple";
+
+        // act
+        createTreeList(options);
+        this.clock.tick();
+    } catch(e) {
+        // assert
+        assert.ok(false, e.message);
+    }
+
+    // assert
+    assert.ok(true, "No exceptions");
+});
+
+QUnit.module("Scroll", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+// T757537
+QUnit.test("TreeList should not hang when scrolling", function(assert) {
+    // arrange
+    var scrollable,
+        contentReadySpy = sinon.spy(),
+        treeList = createTreeList({
+            dataSource: [
+                { id: 1, parentId: 0 },
+                { id: 2, parentId: 0 },
+                { id: 3, parentId: 0 },
+                { id: 4, parentId: 0 },
+                { id: 5, parentId: 0 },
+                { id: 6, parentId: 0 },
+                { id: 7, parentId: 0 },
+                { id: 8, parentId: 0 },
+                { id: 9, parentId: 0 },
+                { id: 10, parentId: 0 },
+                { id: 11, parentId: 0 },
+                { id: 12, parentId: 0 },
+                { id: 13, parentId: 0 },
+                { id: 14, parentId: 0 },
+                { id: 15, parentId: 0 }
+            ],
+            paging: {
+                pageSize: 5
+            },
+            height: 200,
+            columnAutoWidth: true,
+            scrolling: {
+                useNative: false
+            },
+            onContentReady: contentReadySpy
+        }),
+        done = assert.async();
+
+    this.clock.tick(100);
+    this.clock.restore();
+    scrollable = treeList.getScrollable();
+    contentReadySpy.reset();
+
+    // act
+    scrollable.scrollTo({ y: 200 });
+    scrollable.scrollTo({ y: 500 });
+
+    setTimeout(function() {
+        // assert
+        assert.strictEqual(treeList.pageIndex(), 2, "page index");
+        assert.strictEqual(contentReadySpy.callCount, 3, "onContentReady");
+        done();
+    }, 1000);
+});
+
+// T806141
+QUnit.test("TreeList should correctly load data when filtering is remote and sorting is applied", function(assert) {
+    // arrange
+    var loadSpy = sinon.spy(),
+        data = [{ id: 0, parentId: "", hasItems: true }, { id: 1, parentId: 0, hasItems: false }],
+        treeList = createTreeList({
+            dataSource: {
+                load: function(options) {
+                    loadSpy(options);
+                    if(options.filter && options.filter[2] !== "") {
+                        return $.Deferred().resolve([data[1]]);
+                    }
+                    return $.Deferred().resolve([data[0]]);
+                }
+            },
+            remoteOperations: {
+                filtering: true
+            },
+            keyExpr: "id",
+            parentIdExpr: "parentId",
+            hasItemsExpr: "hasItems",
+            rootValue: "",
+            showBorders: true,
+            columns: [
+                { dataField: "id", sortOrder: "asc" }
+            ]
+        });
+
+    this.clock.tick(100);
+
+    // act
+    $("#treeList").find(".dx-treelist-collapsed").trigger("dxclick");
+    this.clock.tick(100);
+    this.clock.restore();
+
+    // assert
+    assert.equal(loadSpy.callCount, 2, "load call count");
+
+    assert.deepEqual(loadSpy.args[0][0].filter, ["parentId", "=", ""], "first load arguments");
+    assert.deepEqual(loadSpy.args[1][0].filter, ["parentId", "=", 0], "second load arguments");
+
+    assert.equal($(treeList.getCellElement(0, 0)).text(), "0", "first row first cell");
+    assert.equal($(treeList.getCellElement(1, 0)).text(), "1", "second row first cell");
+
+    loadSpy.reset();
+});
+
+// T806547
+QUnit.test("TreeList should correctly switch dx-row-alt class for fixed column after expand if repaintChangesOnly = true", function(assert) {
+    // arrange
+    var $row,
+        treeList = createTreeList({
+            rowAlternationEnabled: true,
+            autoExpandAll: false,
+            repaintChangesOnly: true,
+            columns: [{
+                dataField: "id",
+                fixed: true
+            }, "field"],
+            dataSource: [{
+                id: 1,
+                parentId: 0,
+                field: "data"
+            }, {
+                id: 2,
+                parentId: 1,
+                field: "data"
+            }, {
+                id: 3,
+                parentId: 0,
+                field: "data"
+            }]
+        });
+
+    this.clock.tick(100);
+
+    // act
+    treeList.expandRow(1);
+    this.clock.tick();
+    $row = $(treeList.getRowElement(2));
+
+    // assert
+    assert.notOk($row.eq(0).hasClass("dx-row-alt"), "unfixed table row element");
+    assert.notOk($row.eq(1).hasClass("dx-row-alt"), "fixed table row element");
 });

@@ -9,6 +9,25 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
+QUnit.module("Render", function(hook) {
+    hook.beforeEach(function() {
+        this.rangeSelector = $("#container").dxRangeSelector({
+            scale: {
+                startValue: 1,
+                endValue: 11
+            }
+        }).dxRangeSelector("instance");
+    });
+
+    QUnit.test("Check scale sharp", function(assert) {
+        var lastTickIndex = this.rangeSelector._axis._axis._majorTicks.length - 1;
+        assert.equal(this.rangeSelector._axis._axis._axisElement._settings.sharp, "v");
+        assert.equal(this.rangeSelector._axis._axis._axisElement._settings.sharpDirection, 1);
+        assert.equal(this.rangeSelector._axis._axis._majorTicks[lastTickIndex].mark._settings.sharp, "h");
+        assert.equal(this.rangeSelector._axis._axis._majorTicks[lastTickIndex].mark._settings.sharpDirection, 1);
+    });
+});
+
 QUnit.module("Value", function(hook) {
     hook.beforeEach(function() {
         this.rangeSelector = $("#container").dxRangeSelector({
@@ -46,6 +65,15 @@ QUnit.module("Value", function(hook) {
         this.rangeSelector.setValue([]);
 
         assert.equal(incidentOccurred.callCount, 0);
+    });
+
+    QUnit.test("Set value with event", function(assert) {
+        var valueChanged = sinon.spy();
+        this.rangeSelector.on("valueChanged", valueChanged);
+
+        this.rangeSelector.setValue([1, 2], { isEvent: true });
+
+        assert.deepEqual(valueChanged.lastCall.args[0].event, { isEvent: true });
     });
 
     QUnit.test("range when value and scale are changed", function(assert) {
@@ -328,57 +356,52 @@ QUnit.module("onValueChanged event", function(assert) {
     });
 
     QUnit.test("Triggered on widget update after widget has been created with empty data", function(assert) {
-        var count = 0;
+        var valueChanged = sinon.spy();
         $("#container").dxRangeSelector({
-            onValueChanged: function() {
-                ++count;
-            }
+            onValueChanged: valueChanged
         });
 
         $("#container").dxRangeSelector({
             scale: { startValue: 1, endValue: 2 }
         });
 
-        assert.strictEqual(count, 1);
+        assert.strictEqual(valueChanged.callCount, 1);
     });
 
 
     QUnit.test("Triggered only once on axis' date marker click", function(assert) {
-        var count = 0;
+        var valueChanged = sinon.spy();
         $("#container").width(600).dxRangeSelector({
             scale: {
                 startValue: new Date(2011, 1, 1),
                 endValue: new Date(2011, 6, 1)
             },
-            onValueChanged: function() {
-                ++count;
-            }
+            onValueChanged: valueChanged
         });
 
-        $("#container .dxrs-range-selector-elements path:nth-last-child(3)").trigger("dxpointerdown");
+        $("#container .dxrs-range-selector-elements path:nth-last-child(3)").trigger("dxpointerdown", { eventArgs: true });
 
-        assert.strictEqual(count, 1);
+        assert.strictEqual(valueChanged.callCount, 1);
+        assert.strictEqual(valueChanged.lastCall.args[0].event.type, "dxpointerdown");
     });
 
     QUnit.test("Triggered with value and previousValue", function(assert) {
-        var value, previousValue;
+        var valueChanged = sinon.spy();
         $("#container").width(600).dxRangeSelector({
             scale: {
                 startValue: 1,
                 endValue: 11
             },
-            onValueChanged: function(e) {
-                value = e.value;
-                previousValue = e.previousValue;
-            }
+            onValueChanged: valueChanged
         });
 
         $("#container").dxRangeSelector({
             value: [4, 5]
         });
 
-        assert.deepEqual(value, [4, 5], "value");
-        assert.deepEqual(previousValue, [1, 11], "previousValue");
+        assert.deepEqual(valueChanged.lastCall.args[0].value, [4, 5], "value");
+        assert.deepEqual(valueChanged.lastCall.args[0].previousValue, [1, 11], "previousValue");
+        assert.strictEqual(valueChanged.lastCall.args[0].event, undefined);
     });
 
     QUnit.test("onValueChanged not raised on start when dataSource and value are used ", function(assert) {
@@ -503,6 +526,32 @@ QUnit.test("Range selector with aggregation when dataSource is set after widget 
     assert.deepEqual(rangeSelector.getValue(), [50, 90]);
 });
 
+QUnit.test("Range selector with stacked series", function(assert) {
+    var rangeSelector = $("#container").dxRangeSelector({
+        dataSource: [{
+            arg: 0.5,
+            val1: 1,
+            val2: 2
+        }, {
+            arg: 2.5,
+            val1: 2,
+            val2: 1
+        }],
+
+        chart: {
+            series: [{
+                type: "stackedbar",
+                valueField: "val1"
+            }, {
+                type: "stackedbar",
+                valueField: "val2"
+            }]
+        }
+    }).dxRangeSelector("instance");
+
+    assert.deepEqual(rangeSelector.getValue(), [0.5, 2.5]);
+});
+
 QUnit.module("selectedRangeUpdateMode", {
     createRangeSelector: function(options) {
         return $("#container").dxRangeSelector(options).dxRangeSelector("instance");
@@ -601,6 +650,26 @@ QUnit.test("Keep mode", function(assert) {
     rangeSelector.option("dataSource", dataSource);
 
     assert.deepEqual(rangeSelector.getValue(), [5, 7]);
+});
+
+QUnit.test("There is no error when date scale and bar series", function(assert) {
+    var rangeSelector = this.createRangeSelector({
+        scale: {
+            valueType: 'datetime',
+            type: 'discrete'
+        },
+        dataSource: [{
+            arg: "2017-01-01",
+            value: 4
+        }],
+        chart: {
+            series: {
+                type: "bar"
+            }
+        }
+    });
+
+    assert.ok(rangeSelector);
 });
 
 // T696409

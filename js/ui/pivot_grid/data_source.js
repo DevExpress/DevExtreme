@@ -1,34 +1,32 @@
-var DataSourceModule = require("../../data/data_source/data_source"),
-    Store = require("../../data/abstract_store"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    iteratorUtils = require("../../core/utils/iterator"),
-    isDefined = typeUtils.isDefined,
-    each = iteratorUtils.each,
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    Class = require("../../core/class"),
-    EventsMixin = require("../../core/events_mixin"),
-    inflector = require("../../core/utils/inflector"),
-    normalizeIndexes = require("../../core/utils/array").normalizeIndexes,
-    localStore = require("./local_store"),
-    RemoteStore = require("./remote_store"),
-    xmlaStore = require("./xmla_store/xmla_store"),
-    summaryDisplayModes = require("./ui.pivot_grid.summary_display_modes"),
-    pivotGridUtils = require("./ui.pivot_grid.utils"),
-    foreachTree = pivotGridUtils.foreachTree,
-    foreachTreeAsync = pivotGridUtils.foreachTreeAsync,
-    findField = pivotGridUtils.findField,
-    formatValue = pivotGridUtils.formatValue,
-    getCompareFunction = pivotGridUtils.getCompareFunction,
-    createPath = pivotGridUtils.createPath,
-    foreachDataLevel = pivotGridUtils.foreachDataLevel,
-    setFieldProperty = pivotGridUtils.setFieldProperty,
+import { normalizeDataSourceOptions } from "../../data/data_source/data_source";
+import Store from "../../data/abstract_store";
+import { executeAsync } from "../../core/utils/common";
+import { isFunction, isNumeric, isDefined, isString, isPlainObject } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import { each, map } from "../../core/utils/iterator";
+import { when, Deferred } from "../../core/utils/deferred";
+import Class from "../../core/class";
+import EventsMixin from "../../core/events_mixin";
+import { titleize } from "../../core/utils/inflector";
+import { normalizeIndexes } from "../../core/utils/array";
+import { LocalStore } from "./local_store";
+import RemoteStore from "./remote_store";
+import { XmlaStore } from "./xmla_store/xmla_store";
+import { applyDisplaySummaryMode, createMockSummaryCell, applyRunningTotal } from "./ui.pivot_grid.summary_display_modes";
+import {
+    foreachTree,
+    foreachTreeAsync,
+    findField,
+    formatValue,
+    getCompareFunction,
+    createPath,
+    foreachDataLevel,
+    setFieldProperty,
+    getFieldsDataType
+} from "./ui.pivot_grid.utils";
 
-    DESCRIPTION_NAME_BY_AREA = {
+var DESCRIPTION_NAME_BY_AREA = {
         row: "rows",
         column: "columns",
         data: "values",
@@ -60,7 +58,7 @@ function createCaption(field) {
     var caption = field.dataField || field.groupName || "",
         summaryType = (field.summaryType || "").toLowerCase();
 
-    if(typeUtils.isString(field.groupInterval)) {
+    if(isString(field.groupInterval)) {
         caption += "_" + field.groupInterval;
     }
 
@@ -73,14 +71,14 @@ function createCaption(field) {
         summaryType = "";
     }
 
-    return inflector.titleize(caption) + summaryType;
+    return titleize(caption) + summaryType;
 }
 
 function resetFieldState(field, properties) {
     var initialProperties = field._initProperties || {};
 
-    iteratorUtils.each(properties, function(_, prop) {
-        if(initialProperties.hasOwnProperty(prop)) {
+    each(properties, function(_, prop) {
+        if(Object.prototype.hasOwnProperty.call(initialProperties, prop)) {
             field[prop] = initialProperties[prop];
         }
     });
@@ -153,9 +151,13 @@ module.exports = Class.inherit((function() {
         if(headerItem.children && headerItem.children.length === children.length) {
             for(var i = 0; i < children.length; i++) {
                 var child = children[i];
-                if(child.index !== undefined && headerItem.children[i].index === undefined) {
-                    child.index = applyingItemIndexesToCurrent[child.index] = emptyIndex++;
-                    headerItem.children[i] = child;
+                if(child.index !== undefined) {
+                    if(headerItem.children[i].index === undefined) {
+                        child.index = applyingItemIndexesToCurrent[child.index] = emptyIndex++;
+                        headerItem.children[i] = child;
+                    } else {
+                        applyingItemIndexesToCurrent[child.index] = headerItem.children[i].index;
+                    }
                 }
             }
         } else {
@@ -193,12 +195,14 @@ module.exports = Class.inherit((function() {
                     if(headerItem && headerItem.index >= 0) {
                         applyingItemIndexesToCurrent[newItem.index] = headerItem.index;
                     } else if(emptyIndex) {
-                        headerItem = findHeaderItem(headerItems, createPath(newItems.slice(1)));
+                        var path = createPath(newItems.slice(1));
+                        headerItem = findHeaderItem(headerItems, path);
 
-                        var parentItems = headerItem && headerItem.children || headerItems;
-
-                        parentItems[index] = newItem;
-                        newItem.index = applyingItemIndexesToCurrent[newItem.index] = emptyIndex++;
+                        var parentItems = path.length ? headerItem && headerItem.children : headerItems;
+                        if(parentItems) {
+                            parentItems[index] = newItem;
+                            newItem.index = applyingItemIndexesToCurrent[newItem.index] = emptyIndex++;
+                        }
                     }
                 }
             })).done(function() {
@@ -246,9 +250,9 @@ module.exports = Class.inherit((function() {
     };
 
     function createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
-        var StoreConstructor = (dataSourceOptions.remoteOperations || dataSourceOptions.paginate) ? RemoteStore : localStore.LocalStore;
+        var StoreConstructor = (dataSourceOptions.remoteOperations || dataSourceOptions.paginate) ? RemoteStore : LocalStore;
 
-        return new StoreConstructor(extend(DataSourceModule.normalizeDataSourceOptions(dataSourceOptions), {
+        return new StoreConstructor(extend(normalizeDataSourceOptions(dataSourceOptions), {
             onChanged: null,
             onLoadingChanged: null,
             onProgressChanged: notifyProgress
@@ -259,7 +263,7 @@ module.exports = Class.inherit((function() {
         var store,
             storeOptions;
 
-        if(typeUtils.isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
+        if(isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
             store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
         } else {
             // TODO remove
@@ -270,8 +274,8 @@ module.exports = Class.inherit((function() {
             storeOptions = dataSourceOptions.store;
 
             if(storeOptions.type === "xmla") {
-                store = new xmlaStore.XmlaStore(storeOptions);
-            } else if((typeUtils.isPlainObject(storeOptions) && storeOptions.type) || (storeOptions instanceof Store) || Array.isArray(storeOptions)) {
+                store = new XmlaStore(storeOptions);
+            } else if((isPlainObject(storeOptions) && storeOptions.type) || (storeOptions instanceof Store) || Array.isArray(storeOptions)) {
                 store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
             } else if(storeOptions instanceof Class) {
                 store = storeOptions;
@@ -394,7 +398,7 @@ module.exports = Class.inherit((function() {
 
     function getFieldsByGroup(fields, groupingField) {
         return fields.filter(field => {
-            return field.groupName === groupingField.groupName && typeUtils.isNumeric(field.groupIndex) && field.visible !== false;
+            return field.groupName === groupingField.groupName && isNumeric(field.groupIndex) && field.visible !== false;
         }).map(function(field) {
             return extend(field, {
                 areaIndex: groupingField.areaIndex,
@@ -437,7 +441,7 @@ module.exports = Class.inherit((function() {
             fieldsDictionary = {},
             removedFields = {},
             mergedGroups = [],
-            dataTypes = pivotGridUtils.getFieldsDataType(fields);
+            dataTypes = getFieldsDataType(fields);
 
         if(storeFields) {
             each(storeFields, function(_, field) {
@@ -501,7 +505,7 @@ module.exports = Class.inherit((function() {
             foreachTree(items, function(items) {
                 var item = items[0],
                     itemPath = createPath(items).join("."),
-                    textPath = iteratorUtils.map(items, function(item) { return item.text; }).reverse().join(".");
+                    textPath = map(items, function(item) { return item.text; }).reverse().join(".");
 
                 if(pathValue === itemPath || (item.key && textPath === pathValue)) {
                     index = items[0].index;
@@ -693,7 +697,7 @@ module.exports = Class.inherit((function() {
                 ],
                 (function(_, eventName) {
                     var optionName = "on" + eventName[0].toUpperCase() + eventName.slice(1);
-                    if(options.hasOwnProperty(optionName)) {
+                    if(Object.prototype.hasOwnProperty.call(options, optionName)) {
                         this.on(eventName, options[optionName]);
                     }
                 }).bind(this)
@@ -1029,7 +1033,7 @@ module.exports = Class.inherit((function() {
         field: function(id, options) {
             var that = this,
                 fields = that._fields,
-                field = fields && fields[typeUtils.isNumeric(id) ? id : findField(fields, id)],
+                field = fields && fields[isNumeric(id) ? id : findField(fields, id)],
                 levels;
 
             if(field && options) {
@@ -1154,7 +1158,7 @@ module.exports = Class.inherit((function() {
                 }
             }
             if(that.store()) {
-                that._delayedLoadTask = commonUtils.executeAsync(loadTask);
+                that._delayedLoadTask = executeAsync(loadTask);
             } else {
                 loadTask();
             }
@@ -1196,11 +1200,11 @@ module.exports = Class.inherit((function() {
                     dimension = descriptions[descriptionName],
                     groupName = field.groupName;
 
-                if(groupName && !typeUtils.isNumeric(field.groupIndex)) {
+                if(groupName && !isNumeric(field.groupIndex)) {
                     field.levels = getFieldsByGroup(fields, field);
                 }
 
-                if(!dimension || groupName && typeUtils.isNumeric(field.groupIndex) || (field.visible === false && (field.area !== "data" && field.area !== "filter"))) {
+                if(!dimension || groupName && isNumeric(field.groupIndex) || (field.visible === false && (field.area !== "data" && field.area !== "filter"))) {
                     return;
                 }
 
@@ -1221,8 +1225,8 @@ module.exports = Class.inherit((function() {
             var indices = {};
             each(descriptions.values, function(_, field) {
                 var expression = field.calculateSummaryValue;
-                if(typeUtils.isFunction(expression)) {
-                    var summaryCell = summaryDisplayModes.createMockSummaryCell(descriptions, fields, indices);
+                if(isFunction(expression)) {
+                    var summaryCell = createMockSummaryCell(descriptions, fields, indices);
                     expression(summaryCell);
                 }
             });
@@ -1324,21 +1328,73 @@ module.exports = Class.inherit((function() {
             }
         },
 
+        _hasPagingValues: function(options, area, oppositeIndex) {
+            var takeField = area + "Take",
+                skipField = area + "Skip",
+                values = this._data.values,
+                items = this._data[area + "s"],
+                oppositeArea = area === "row" ? "column" : "row",
+                indices = [];
+
+            if(options.path && options.area === area) {
+                let headerItem = findHeaderItem(items, options.path);
+                items = headerItem && headerItem.children;
+                if(!items) {
+                    return false;
+                }
+            }
+            if(options.oppositePath && options.area === oppositeArea) {
+                let headerItem = findHeaderItem(items, options.oppositePath);
+                items = headerItem && headerItem.children;
+                if(!items) {
+                    return false;
+                }
+            }
+
+
+            for(let i = options[skipField]; i < options[skipField] + options[takeField]; i++) {
+                if(items[i]) {
+                    indices.push(items[i].index);
+                }
+            }
+
+            return indices.every(index => {
+                if(index !== undefined) {
+                    if(area === "row") {
+                        return (values[index] || [])[oppositeIndex];
+                    } else {
+                        return (values[oppositeIndex] || [])[index];
+                    }
+                }
+            });
+        },
+
         _processPagingCacheByArea: function(options, pageSize, area) {
             var takeField = area + "Take",
                 skipField = area + "Skip",
-                items = this._data[area + "s"];
+                items = this._data[area + "s"],
+                oppositeArea = area === "row" ? "column" : "row",
+                item;
 
             if(options[takeField]) {
-                if(options.path) {
-                    var headerItem = findHeaderItem(items, options.path);
+                if(options.path && options.area === area) {
+                    let headerItem = findHeaderItem(items, options.path);
                     items = headerItem && headerItem.children || [];
                 }
+                if(options.oppositePath && options.area === oppositeArea) {
+                    let headerItem = findHeaderItem(items, options.oppositePath);
+                    items = headerItem && headerItem.children || [];
+                }
+
                 do {
-                    var item = items[options[skipField]];
+                    item = items[options[skipField]];
                     if(item && item.index !== undefined) {
-                        options[skipField]++;
-                        options[takeField]--;
+                        if(this._hasPagingValues(options, oppositeArea, item.index)) {
+                            options[skipField]++;
+                            options[takeField]--;
+                        } else {
+                            break;
+                        }
                     }
                 } while(item && item.index !== undefined && options[takeField]);
 
@@ -1399,7 +1455,9 @@ module.exports = Class.inherit((function() {
                     that._processPagingCache(storeLoadOptions);
                 }
 
-                storeLoadOptions = storeLoadOptions.filter(options => options.rowTake !== 0);
+                storeLoadOptions = storeLoadOptions.filter(options => {
+                    return !(options.rows.length && options.rowTake === 0) && !(options.columns.length && options.columnTake === 0);
+                });
 
                 if(!storeLoadOptions.length) {
                     that._update(deferred);
@@ -1415,7 +1473,7 @@ module.exports = Class.inherit((function() {
                             isLast = i === results.length - 1;
 
                         if(options.path) {
-                            that.applyPartialDataSource(options.area, options.path, data, isLast ? deferred : false);
+                            that.applyPartialDataSource(options.area, options.path, data, isLast ? deferred : false, options.oppositePath);
                         } else if(paginate && !reload && isDataExists(that._data)) {
                             that.mergePartialDataSource(data, isLast ? deferred : false);
                         } else {
@@ -1439,7 +1497,7 @@ module.exports = Class.inherit((function() {
         },
 
         paginate: function() {
-            return this._paginate;
+            return this._paginate && this._store && this._store.supportPaging();
         },
 
         isEmpty: function() {
@@ -1458,12 +1516,12 @@ module.exports = Class.inherit((function() {
             when(formatHeaders(descriptions, loadedData), updateCache(loadedData.rows), updateCache(loadedData.columns)).done(function() {
                 if(expressionsUsed) {
                     that._sort(descriptions, loadedData, expressionsUsed);
-                    !that.isEmpty() && summaryDisplayModes.applyDisplaySummaryMode(descriptions, loadedData);
+                    !that.isEmpty() && applyDisplaySummaryMode(descriptions, loadedData);
                 }
 
                 that._sort(descriptions, loadedData);
 
-                !that.isEmpty() && isRunningTotalUsed(dataFields) && summaryDisplayModes.applyRunningTotal(descriptions, loadedData);
+                !that.isEmpty() && isRunningTotalUsed(dataFields) && applyRunningTotal(descriptions, loadedData);
 
                 that._data = loadedData;
                 deferred !== false && when(deferred).done(function() {
@@ -1624,11 +1682,13 @@ module.exports = Class.inherit((function() {
             }
         },
 
-        applyPartialDataSource: function(area, path, dataSource, deferred) {
+        applyPartialDataSource: function(area, path, dataSource, deferred, oppositePath) {
             var that = this,
                 loadedData = that._data,
                 headerItems = area === 'column' ? loadedData.columns : loadedData.rows,
                 headerItem,
+                oppositeHeaderItems = area === 'column' ? loadedData.rows : loadedData.columns,
+                oppositeHeaderItem,
                 newRowItemIndexesToCurrent,
                 newColumnItemIndexesToCurrent;
 
@@ -1636,13 +1696,22 @@ module.exports = Class.inherit((function() {
                 dataSource.rows = dataSource.rows || [];
                 dataSource.columns = dataSource.columns || [];
                 headerItem = findHeaderItem(headerItems, path);
+                oppositeHeaderItem = oppositePath && findHeaderItem(oppositeHeaderItems, oppositePath);
                 if(headerItem) {
                     if(area === 'column') {
                         newColumnItemIndexesToCurrent = updateHeaderItemChildren(headerItems, headerItem, dataSource.columns, loadedData.grandTotalColumnIndex);
-                        newRowItemIndexesToCurrent = updateHeaderItems(loadedData.rows, dataSource.rows, loadedData.grandTotalRowIndex);
+                        if(oppositeHeaderItem) {
+                            newRowItemIndexesToCurrent = updateHeaderItemChildren(oppositeHeaderItems, oppositeHeaderItem, dataSource.rows, loadedData.grandTotalRowIndex);
+                        } else {
+                            newRowItemIndexesToCurrent = updateHeaderItems(loadedData.rows, dataSource.rows, loadedData.grandTotalRowIndex);
+                        }
                     } else {
                         newRowItemIndexesToCurrent = updateHeaderItemChildren(headerItems, headerItem, dataSource.rows, loadedData.grandTotalRowIndex);
-                        newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns, loadedData.grandTotalColumnIndex);
+                        if(oppositeHeaderItem) {
+                            newColumnItemIndexesToCurrent = updateHeaderItemChildren(oppositeHeaderItems, oppositeHeaderItem, dataSource.columns, loadedData.grandTotalColumnIndex);
+                        } else {
+                            newColumnItemIndexesToCurrent = updateHeaderItems(loadedData.columns, dataSource.columns, loadedData.grandTotalColumnIndex);
+                        }
                     }
                     when(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent).done(function(newRowItemIndexesToCurrent, newColumnItemIndexesToCurrent) {
                         if(area === "row" && newRowItemIndexesToCurrent.length || area === "column" && newColumnItemIndexesToCurrent.length) {

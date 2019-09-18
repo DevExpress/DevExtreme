@@ -83,7 +83,7 @@ function findAndKillSmallValue(rollingStocks) {
 
     smallestObject = rollingStocks.reduce(function(prev, rollingStock, index) {
         if(!rollingStock) return prev;
-        var value = rollingStock.getLabels()[0].getData().value;
+        var value = rollingStock.value();
         return value < prev.value ? {
             value: value,
             rollingStock: rollingStock,
@@ -121,7 +121,7 @@ function checkStackOverlap(rollingStocks) {
     return overlap;
 }
 
-function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction) {
+function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction, customSorting = () => 0) {
     var rollingStocks = [],
         stubCanvas = {
             start: isRotated ? canvas.left : canvas.top,
@@ -143,17 +143,18 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     } else {
         var rollingStocksTmp = rollingStocks.slice();
         rollingStocks.sort(function(a, b) {
-            return (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
+            return customSorting(a, b) || (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
         });
     }
 
-    if(!checkStackOverlap(rollingStocks)) return;
+    if(!checkStackOverlap(rollingStocks)) return false;
     checkHeightRollingStock(rollingStocks, stubCanvas);
 
     prepareOverlapStacks(rollingStocks);
 
     rollingStocks.reverse();
     moveRollingStock(rollingStocks, stubCanvas);
+    return true;
 }
 
 function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides) {
@@ -272,6 +273,9 @@ RollingStock.prototype = {
     },
     getLabels: function() {
         return this.labels;
+    },
+    value() {
+        return this.labels[0].getData().value;
     },
     getInitialPosition: function() {
         return this._initialPosition;
@@ -438,9 +442,9 @@ var BaseChart = BaseWidget.inherit({
 
         that._stripsGroup = renderer.g().attr({ "class": "dxc-strips-group" }).linkOn(root, "strips"); // TODO: Must be created in the same place where used (advanced chart)
         that._gridGroup = renderer.g().attr({ "class": "dxc-grids-group" }).linkOn(root, "grids"); // TODO: Must be created in the same place where used (advanced chart)
+        that._panesBorderGroup = renderer.g().attr({ "class": "dxc-border" }).linkOn(root, "border"); // TODO: Must be created in the same place where used (chart)
         that._axesGroup = renderer.g().attr({ "class": "dxc-axes-group" }).linkOn(root, "axes"); // TODO: Must be created in the same place where used (advanced chart)
         that._labelAxesGroup = renderer.g().attr({ "class": "dxc-strips-labels-group" }).linkOn(root, "strips-labels"); // TODO: Must be created in the same place where used (advanced chart)
-        that._panesBorderGroup = renderer.g().attr({ "class": "dxc-border" }).linkOn(root, "border"); // TODO: Must be created in the same place where used (chart)
         that._constantLinesGroup.under = createConstantLinesGroup();
         that._seriesGroup = renderer.g().attr({ "class": "dxc-series-group" }).linkOn(root, "series");
         that._constantLinesGroup.above = createConstantLinesGroup();
@@ -675,7 +679,8 @@ var BaseChart = BaseWidget.inherit({
         const layoutTargets = that._getLayoutTargets();
 
         this._layoutAxes((needSpace) => {
-            const canvas = that._renderAxes(drawOptions, preparedOptions);
+            const axisDrawOptions = needSpace ? extend({}, drawOptions, { animate: false }) : drawOptions;
+            const canvas = that._renderAxes(axisDrawOptions, preparedOptions);
             that._shrinkAxes(needSpace, canvas);
         });
 
@@ -751,9 +756,11 @@ var BaseChart = BaseWidget.inherit({
                 that._getLegendCallBack(singleSeries)
             );
         }
-        that._adjustSeriesLabels(resolveLabelOverlapping === "shift");
-        if(resolveLabelOverlapping !== "none") {
-            that._resolveLabelOverlapping(resolveLabelOverlapping);
+
+        if(resolveLabelOverlapping === "none") {
+            that._adjustSeriesLabels(false);
+        } else {
+            that._locateLabels(resolveLabelOverlapping);
         }
 
         that._renderTrackers(isLegendInside);
@@ -765,6 +772,10 @@ var BaseChart = BaseWidget.inherit({
 
         that._drawn();
         that._renderCompleteHandler();
+    },
+
+    _locateLabels(resolveLabelOverlapping) {
+        this._resolveLabelOverlapping(resolveLabelOverlapping);
     },
 
     _renderExtraElements() {},
@@ -787,7 +798,7 @@ var BaseChart = BaseWidget.inherit({
                 func = this._resolveLabelOverlappingShift;
                 break;
         }
-        typeUtils.isFunction(func) && func.call(this);
+        return typeUtils.isFunction(func) && func.call(this);
     },
 
     _getVisibleSeries: function() {
@@ -1021,7 +1032,7 @@ var BaseChart = BaseWidget.inherit({
         scrollBar: "SCROLL_BAR"
     },
 
-    _optionChangesOrder: ["ROTATED", "PALETTE", "REFRESH_SERIES_REINIT", "AXES_AND_PANES", "INIT", "REINIT", "DATA_SOURCE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "FORCE_DATA_INIT", "CORRECT_AXIS"],
+    _optionChangesOrder: ["ROTATED", "PALETTE", "REFRESH_SERIES_REINIT", "AXES_AND_PANES", "INIT", "REINIT", "DATA_SOURCE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "FORCE_DATA_INIT", "REFRESH_AXES", "CORRECT_AXIS"],
 
     _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES",
         "FORCE_RENDER", "VISUAL_RANGE", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT", "REFRESH", "FULL_RENDER"],
@@ -1075,6 +1086,18 @@ var BaseChart = BaseWidget.inherit({
 
     _change_REFRESH_SERIES_REINIT: function() {
         this._refreshSeries("INIT");
+    },
+
+    _change_REFRESH_AXES() {
+        const that = this;
+
+        _setCanvasValues(that._canvas);
+        that._reinitAxes();
+
+        that._requestChange([
+            "CORRECT_AXIS",
+            "FULL_RENDER"
+        ]);
     },
 
     _change_SCROLL_BAR: function() {
@@ -1272,7 +1295,7 @@ var BaseChart = BaseWidget.inherit({
         const incidentOccurred = that._incidentOccurred;
         let seriesThemes = that._populateSeriesOptions(data);
         let particularSeries;
-        let changedStateSeriesCount = 0;
+        let disposeSeriesFamilies = false;
 
         that.needToPopulateSeries = false;
 
@@ -1284,7 +1307,7 @@ var BaseChart = BaseWidget.inherit({
                 seriesBasis.push({ series: curSeries, options: theme });
             } else {
                 seriesBasis.push({ options: theme });
-                changedStateSeriesCount++;
+                disposeSeriesFamilies = true;
             }
         });
 
@@ -1293,13 +1316,14 @@ var BaseChart = BaseWidget.inherit({
         _reverseEach(that.series, (index, series) => {
             if(!seriesBasis.some(s => series === s.series)) {
                 that._disposeSeries(index);
-                changedStateSeriesCount++;
+                disposeSeriesFamilies = true;
             }
         });
 
-        that.series = [];
+        !disposeSeriesFamilies && (disposeSeriesFamilies = seriesBasis.some(sb => sb.series.name !== seriesThemes[sb.series.index].name));
 
-        changedStateSeriesCount > 0 && that._disposeSeriesFamilies();
+        that.series = [];
+        disposeSeriesFamilies && that._disposeSeriesFamilies();
         that._themeManager.resetPalette();
         const eventPipe = function(data) {
             that.series.forEach(function(currentSeries) {
@@ -1404,6 +1428,10 @@ var BaseChart = BaseWidget.inherit({
 
     _change_INIT() {
         this._reinit();
+    },
+
+    _stopCurrentHandling: function() {
+        this._tracker.stopCurrentHandling();
     }
 });
 

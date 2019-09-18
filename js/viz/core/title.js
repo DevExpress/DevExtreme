@@ -11,9 +11,8 @@ function hasText(text) {
     return !!(text && String(text).length > 0);
 }
 
-function processTitleLength(elem, text, width, options) {
-    const changed = elem.attr({ text: text }).setMaxWidth(width, options);
-    if(changed) {
+function processTitleLength(elem, text, width, options, placeholderSize) {
+    if(elem.attr({ text }).setMaxSize(width, placeholderSize, options).textChanged) {
         elem.setTitle(text);
     }
 }
@@ -43,7 +42,7 @@ function checkRect(rect, boundingRect) {
 }
 function Title(params) {
     this._params = params;
-    this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.root || params.renderer.root, { name: "title", after: "peripheral" });
+    this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.root || params.renderer.root, "title");
     this._hasText = false;
 }
 
@@ -68,22 +67,26 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
     },
 
     _updateStructure: function() {
-        var that = this,
-            renderer = that._params.renderer,
-            group = that._group,
-            alignObj = { align: that._options.horizontalAlignment };
+        const that = this;
+        const renderer = that._params.renderer;
+        const group = that._group;
+        const options = that._options;
+        const align = options.horizontalAlignment;
 
         // Looks like the following "laziness" is only to avoid unnecessary DOM content creation -
         // for example when widget is created without "title" option.
         if(!that._titleElement) {
-            that._titleElement = renderer.text().attr(alignObj).append(group);
-            that._subtitleElement = renderer.text().attr(alignObj);
+            that._titleElement = renderer.text().append(group);
+            that._subtitleElement = renderer.text();
             that._clipRect = renderer.clipRect();
             group.attr({ "clip-path": that._clipRect.id });
         }
 
+        that._titleElement.attr({ align, "class": options.cssClass });
+        that._subtitleElement.attr({ align, "class": options.subtitle.cssClass });
+
         group.linkAppend();
-        hasText(that._options.subtitle.text) ? that._subtitleElement.append(group) : that._subtitleElement.remove();
+        hasText(options.subtitle.text) ? that._subtitleElement.append(group) : that._subtitleElement.remove();
     },
 
     _updateTexts: function() {
@@ -143,31 +146,33 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             options = extend(true, {}, themeOptions, processTitleOptions(userOptions)),
             _hasText = hasText(options.text),
             isLayoutChanged = _hasText || _hasText !== that._hasText;
+
+        that._baseLineCorrection = 0;
+
+        that._updateOptions(options);
+        that._boundingRect = {};
         if(_hasText) {
-            that._updateOptions(options);
             that._updateStructure();
             that._updateTexts();
-            that._boundingRect = {};
-            that._updateBoundingRect();
-            that._updateBoundingRectAlignment();
         } else {
             that._group.linkRemove();
-            that._boundingRect = null;
         }
+        that._updateBoundingRect();
+        that._updateBoundingRectAlignment();
         that._hasText = _hasText;
         return isLayoutChanged;
     },
 
     draw: function(width, height) {
-        var that = this,
-            layoutOptions;
+        var that = this;
 
-        that._group.linkAppend();
-        that._correctTitleLength(width);
-        layoutOptions = that.getLayoutOptions();
+        if(that._hasText) {
+            that._group.linkAppend();
+            that._correctTitleLength(width);
 
-        if(layoutOptions.height > height) {
-            this.freeSpace();
+            if(that._group.getBBox().height > height) {
+                this.freeSpace();
+            }
         }
 
         return that;
@@ -175,7 +180,6 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     probeDraw: function(width, height) {
         this.draw(width, height);
-
         return this;
     },
 
@@ -185,38 +189,33 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         const margin = options.margin;
         const maxWidth = width - margin.left - margin.right;
 
+        let placeholderSize = options.placeholderSize;
 
-        processTitleLength(that._titleElement, options.text, maxWidth, options);
+        processTitleLength(that._titleElement, options.text, maxWidth, options, placeholderSize);
         if(that._subtitleElement) {
-            processTitleLength(that._subtitleElement, options.subtitle.text, maxWidth, options.subtitle);
+            if(_Number(placeholderSize) > 0) {
+                placeholderSize -= that._titleElement.getBBox().height;
+            }
+            processTitleLength(that._subtitleElement, options.subtitle.text, maxWidth, options.subtitle, placeholderSize);
             that._shiftSubtitle();
         }
 
         that._updateBoundingRect();
+
+        const { x, y, height } = this.getCorrectedLayoutOptions();
+        this._clipRect.attr({ x, y, width, height });
     },
 
     getLayoutOptions: function() {
         return this._boundingRect || null;
     },
 
-    getTrueSize: function() {
-        return this._group ? this._group.getBBox() : null;
-    },
-
     shift: function(x, y) {
         var that = this,
             box = that.getLayoutOptions();
-
         that._group.move(x - box.x, y - box.y);
-        that._setClipRectSettings();
 
         return that;
-    },
-
-    _setClipRectSettings: function() {
-        var bBox = this.getLayoutOptions();
-
-        this._clipRect.attr({ x: bBox.x, y: bBox.y, width: bBox.width, height: bBox.height });
     },
 
     _updateBoundingRect: function() {
@@ -226,12 +225,14 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             boundingRect = that._boundingRect,
             box;
 
-        box = that._group.getBBox();
+        box = that._hasText ? that._group.getBBox() : { width: 0, height: 0, x: 0, y: 0, isEmpty: true };
 
-        box.height += margin.top + margin.bottom - that._baseLineCorrection;
-        box.width += margin.left + margin.right;
-        box.x -= margin.left;
-        box.y += that._baseLineCorrection - margin.top;
+        if(!box.isEmpty) {
+            box.height += margin.top + margin.bottom - that._baseLineCorrection;
+            box.width += margin.left + margin.right;
+            box.x -= margin.left;
+            box.y += that._baseLineCorrection - margin.top;
+        }
 
         if(options.placeholderSize > 0) {
             box.height = options.placeholderSize;
@@ -243,9 +244,22 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         boundingRect.y = box.y;
     },
 
+    getCorrectedLayoutOptions() {
+        const srcBox = this.getLayoutOptions();
+        const correction = this._baseLineCorrection;
+
+        return extend({}, srcBox, {
+            y: srcBox.y - correction,
+            height: srcBox.height + correction
+        });
+    },
+
     // BaseWidget_layout_implementation
     layoutOptions: function() {
-        return this._boundingRect && {
+        if(!this._hasText) {
+            return null;
+        }
+        return {
             horizontalAlignment: this._boundingRect.horizontalAlignment,
             verticalAlignment: this._boundingRect.verticalAlignment,
             priority: 0
@@ -279,7 +293,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     changeLink: function(root) {
         this._group.linkRemove();
-        this._group.linkOn(root, { name: "title", after: "peripheral" });
+        this._group.linkOn(root, "title");
     }
     // BaseWidget_layout_implementation
 });

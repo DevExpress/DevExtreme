@@ -47,14 +47,14 @@
 
 .dx-dropdowneditor-input-wrapper {
     .dx-texteditor {
-        &:before, &:after {
+        &:before,
+        &:after {
             content: none;
         }
 
         &.dx-state-hover,
         &.dx-state-focused,
-        &.dx-state-active
-        &.dx-state-disabled,
+        &.dx-state-active &.dx-state-disabled,
         &.dx-state-readonly,
         &.dx-state-readonly.dx-state-hover,
         & {
@@ -82,7 +82,8 @@
             }
         }
 
-        &.dx-editor-filled, &.dx-editor-outlined {
+        &.dx-editor-filled,
+        &.dx-editor-outlined {
             .dx-texteditor-input {
                 padding-right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }

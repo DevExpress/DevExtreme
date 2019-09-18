@@ -49,14 +49,14 @@ var EditorFactoryMixin = (function() {
             onValueChanged: function(e) {
 
                 var needDelayedUpdate = options.parentType === "filterRow" || options.parentType === "searchPanel",
-                    isKeyUpEvent = e.event && e.event.type === "keyup",
+                    isInputOrKeyUpEvent = e.event && (e.event.type === "input" || e.event.type === "keyup"),
                     updateValue = function(e, notFireEvent) {
                         options && options.setValue(e.value, notFireEvent);
                     };
 
                 clearTimeout(data.valueChangeTimeout);
 
-                if(isKeyUpEvent && needDelayedUpdate) {
+                if(isInputOrKeyUpEvent && needDelayedUpdate) {
                     sharedData.valueChangeTimeout = data.valueChangeTimeout = setTimeout(function() {
                         updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
                     }, typeUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
@@ -69,7 +69,7 @@ var EditorFactoryMixin = (function() {
                     eventsEngine.trigger($(e.component._input()), "change");
                 }
             },
-            valueChangeEvent: "change" + (options.parentType === "filterRow" ? " keyup" : "")
+            valueChangeEvent: "change" + (options.parentType === "filterRow" ? " keyup input" : "")
         }, options);
     };
 
@@ -102,8 +102,12 @@ var EditorFactoryMixin = (function() {
                 return typeUtils.isDefined(value) ? value.toString() : "";
             };
 
-        config.value = toString(options.value);
-        config.valueChangeEvent += (isSearching ? " keyup search" : "");
+        if(options.editorType && options.editorType !== "dxTextBox") {
+            config.value = options.value;
+        } else {
+            config.value = toString(options.value);
+        }
+        config.valueChangeEvent += (isSearching ? " keyup input search" : "");
         config.mode = config.mode || (isSearching ? "search" : "text");
 
         options.editorName = "dxTextBox";
@@ -228,6 +232,14 @@ var EditorFactoryMixin = (function() {
 
             if(options.editorName === "dxTextBox") {
                 $editorElement.dxTextBox("instance").registerKeyHandler("enter", noop);
+            }
+
+            if(options.editorName === "dxTextArea") {
+                $editorElement.dxTextArea("instance").registerKeyHandler("enter", function(event) {
+                    if(normalizeKeyName(event) === "enter" && !event.ctrlKey && !event.shiftKey) {
+                        event.stopPropagation();
+                    }
+                });
             }
         }
     };

@@ -28,7 +28,7 @@
     }
 
     .dx-@{widgetName}-important-margin {
-        margin-right: 5px !important;
+        margin-right: 5px !important; // stylelint-disable-line declaration-no-important
     }
 
     // for Foundation Responsive Framework
@@ -49,6 +49,7 @@
 
             .dx-@{widgetName}-table {
                 position: relative;
+
                 td {
                     pointer-events: auto;
                 }
@@ -58,8 +59,12 @@
                         visibility: hidden;
                         background-color: transparent;
                         pointer-events: none;
-                        border-bottom-color: transparent; // T672281
                     }
+                }
+
+                // T745266
+                .dx-header-row td.dx-pointer-events-none {
+                    border-bottom-color: transparent; // T672281
                 }
 
                 &.dx-@{widgetName}-table-fixed .dx-row td.dx-pointer-events-none {
@@ -106,26 +111,6 @@
             }
         }
 
-        @-webkit-keyframes dx-loadpanel-opacity {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes dx-loadpanel-opacity {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
         .dx-link {
             text-decoration: underline;
             cursor: pointer;
@@ -140,8 +125,10 @@
                 visibility: hidden;
             }
 
-            .dx-sort, .dx-header-filter {
-                &.dx-sort, &.dx-header-filter {
+            .dx-sort,
+            .dx-header-filter {
+                &.dx-sort,
+                &.dx-header-filter {
                     display: inline-block;
                 }
 
@@ -158,7 +145,8 @@
         }
 
         .dx-row {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 padding: @GRID_CELL_PADDING;
             }
         }
@@ -188,12 +176,12 @@
             }
 
             .dx-popup-content {
-                padding: 0px 20px 20px 20px;
+                padding: 0 20px 20px 20px;
 
                 .dx-column-chooser-item {
                     opacity: 0.5;
                     margin-bottom: 10px;
-                    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.2);
+                    box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.2);
 
                     &.dx-@{widgetName}-drag-action {
                         opacity: 1;
@@ -206,14 +194,14 @@
 
         &.dx-@{widgetName}-column-chooser-mode-drag {
             .dx-treeview-node-container:first-child > .dx-treeview-node-is-leaf {
-                padding: 0px;
+                padding: 0;
             }
         }
 
         &.dx-@{widgetName}-column-chooser-mode-select {
             .dx-@{widgetName}-column-chooser-plain {
                 .dx-treeview-node {
-                    padding-left: 0px;
+                    padding-left: 0;
 
                     .dx-checkbox {
                         left: 4px;
@@ -240,7 +228,7 @@
         box-sizing: content-box;
 
         &.dx-drag-command-cell {
-            padding: 0px;
+            padding: 0;
         }
     }
 
@@ -276,7 +264,8 @@
         visibility: hidden;
     }
 
-    .dx-@{widgetName}-action, .dx-@{widgetName}-drag-action {
+    .dx-@{widgetName}-action,
+    .dx-@{widgetName}-drag-action {
         cursor: pointer;
     }
 
@@ -296,7 +285,6 @@
 
     .dx-@{widgetName}-text-content {
         overflow: hidden;
-        -o-text-overflow: ellipsis;
         text-overflow: ellipsis;
     }
 
@@ -305,13 +293,9 @@
         width: 100%;
     }
 
-    .dx-hidden {
-        display: none;
-    }
-
     input.dx-hidden {
-        display: inline-block !important;
-        width: 0 !important;
+        display: inline-block !important; // stylelint-disable-line declaration-no-important
+        width: 0 !important; // stylelint-disable-line declaration-no-important
     }
 
     .dx-hidden-cell {
@@ -319,7 +303,8 @@
     }
 
     .dx-row {
-        & > td, & > tr > td {
+        & > td,
+        & > tr > td {
             border: none;
         }
     }
@@ -342,7 +327,7 @@
 
         .dx-@{widgetName}-best-fit {
             .dx-column-indicators {
-                float: none !important;
+                float: none !important; // stylelint-disable-line declaration-no-important
 
                 & > span {
                     width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH;
@@ -370,7 +355,7 @@
 
         &:not(.dx-@{widgetName}-table-fixed) {
             .dx-column-indicators {
-                float: none !important;
+                float: none !important; // stylelint-disable-line declaration-no-important
 
                 & > span {
                     width: @GRID_COLUMN_HEADER_INDICATOR_WIDTH;
@@ -395,11 +380,12 @@
         }
 
         .dx-row {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 vertical-align: top;
 
                 &:first-child {
-                    border-left: 0px;
+                    border-left: 0;
                 }
 
                 &.dx-@{widgetName}-group-space {
@@ -411,34 +397,34 @@
                     }
                 }
             }
-        }
 
-        .dx-row {
             .dx-editor-container {
                 overflow: hidden;
             }
 
-            .dx-cell-modified, .dx-@{widgetName}-invalid {
+            .dx-cell-modified,
+            .dx-@{widgetName}-invalid {
                 &:not(.dx-field-item-content) {
                     padding: 0;
                 }
             }
 
-                .dx-@{widgetName}-invalid .dx-invalid-message.dx-overlay {
-                    position: static;
+            .dx-@{widgetName}-invalid .dx-invalid-message.dx-overlay {
+                position: static;
 
-                    .dx-overlay-content {
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
+                .dx-overlay-content {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
+            }
 
             .dx-editor-cell {
                 max-width: 0;
                 padding: 0;
                 vertical-align: middle;
 
-                .dx-texteditor, .dx-texteditor-container {
+                .dx-texteditor,
+                .dx-texteditor-container {
                     border: 0;
                     margin: 0;
                 }
@@ -477,12 +463,16 @@
                 max-width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
                 .user-select(none);
             }
+
+            .dx-command-adaptive {
+                padding: 0;
+                vertical-align: middle;
+            }
         }
 
         .dx-filter-range-content {
             padding: @GRID_CELL_PADDING @GRID_CELL_PADDING @GRID_CELL_PADDING @GRID_TEXTEDITOR_INPUT_PADDING;
             overflow: hidden;
-            -o-text-overflow: ellipsis;
             text-overflow: ellipsis;
             cursor: pointer;
         }
@@ -512,7 +502,7 @@
         }
 
         &.dx-hidden {
-            display: block !important;
+            display: block !important; // stylelint-disable-line declaration-no-important
 
             &::after {
                 display: none;
@@ -565,13 +555,15 @@
             }
         }
 
-        .dx-text-content-alignment-left, .dx-text-content-alignment-right {
+        .dx-text-content-alignment-left,
+        .dx-text-content-alignment-right {
             display: inline-block;
             max-width: 100%;
         }
 
-        .dx-sort-indicator, .dx-header-filter-indicator {
-            max-width: calc(~"100% - "@GRID_COLUMN_HEADER_INDICATOR_WIDTH + @GRID_TEXT_CONTENT_MARGIN);
+        .dx-sort-indicator,
+        .dx-header-filter-indicator {
+            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH + @GRID_TEXT_CONTENT_MARGIN));
 
             &.dx-text-content-alignment-left {
                 margin-right: @GRID_TEXT_CONTENT_MARGIN;
@@ -582,22 +574,22 @@
             }
 
             &.dx-text-content-alignment-left.dx-text-content-alignment-right {
-                max-width: calc(~"100% - "@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN*2);
+                max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN*2));
             }
         }
 
         .dx-sort-indicator.dx-header-filter-indicator {
-            max-width: calc(~"100% - "@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN);
+            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*2 + @GRID_TEXT_CONTENT_MARGIN));
         }
 
         .dx-sort-indicator.dx-header-filter-indicator.dx-text-content-alignment-left.dx-text-content-alignment-right {
-            max-width: calc(~"100% - "@GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + @GRID_TEXT_CONTENT_MARGIN*2);
+            max-width: calc(100% - round(@GRID_COLUMN_HEADER_INDICATOR_WIDTH*4 + @GRID_TEXT_CONTENT_MARGIN*2));
         }
     }
 
     .dx-@{widgetName}-filter-range-overlay {
         .dx-editor-container .dx-texteditor {
-            border-width: 0px;
+            border-width: 0;
 
             &.dx-state-focused:after {
                 content: " ";
@@ -607,7 +599,7 @@
                 left: -1px;
                 right: -1px;
                 z-index: 1;
-                pointer-events:none;
+                pointer-events: none;
             }
         }
 
@@ -616,7 +608,7 @@
         }
 
         .dx-editor-container.dx-highlight-outline {
-            padding: 0px;
+            padding: 0;
         }
     }
 
@@ -632,7 +624,9 @@
                 .dx-menu {
                     display: block;
                 }
-                .dx-texteditor-input, .dx-placeholder:before {
+
+                .dx-texteditor-input,
+                .dx-placeholder:before {
                     padding-left: @GRID_TEXTEDITOR_INPUT_PADDING;
                 }
             }
@@ -684,8 +678,9 @@
             }
         }
 
-        & > td:first-child .dx-menu, & > .dx-first-cell .dx-menu {
-            margin-left: 0px;
+        & > td:first-child .dx-menu,
+        & > .dx-first-cell .dx-menu {
+            margin-left: 0;
         }
 
         .dx-menu-horizontal .dx-overlay-content ul .dx-menu-item {
@@ -731,7 +726,8 @@
 
     .dx-state-disabled {
         cursor: pointer;
-        .dx-menu-item{
+
+        .dx-menu-item {
             cursor: default;
         }
     }
@@ -769,6 +765,7 @@
             &.dx-scrollable .dx-scrollable-content {
                 z-index: 2;
             }
+
             .dx-scrollable-scrollbar {
                 z-index: 3;
             }
@@ -783,43 +780,49 @@
         }
 
 
-        &:focus{
+        &:focus {
             outline: 0;
         }
 
         .dx-row {
-            & > td, & > tr > td {
+            & > td,
+            & > tr > td {
                 overflow: hidden;
-                -o-text-overflow: ellipsis;
                 text-overflow: ellipsis;
             }
         }
 
         .dx-row.dx-row-lines:first-child {
             border-top: none;
-            & > td, & > tr > td {
+
+            & > td,
+            & > tr > td {
                 border-top: none;
             }
         }
 
-        .dx-data-row > td:focus{
+        .dx-data-row > td:focus {
             outline: 0;
         }
 
-        .dx-selection, .dx-selection.dx-row:hover {
-            & > td, & > tr > td {
+        .dx-selection,
+        .dx-selection.dx-row:hover {
+            & > td,
+            & > tr > td {
                 .dx-link {
                     color: inherit;
                 }
             }
         }
 
-        .dx-@{widgetName}-table .dx-freespace-row, .dx-@{widgetName}-table .dx-virtual-row {
-            border-top: 0px;
-            border-bottom: 0px;
+        .dx-@{widgetName}-table .dx-freespace-row,
+        .dx-@{widgetName}-table .dx-virtual-row {
+            border-top: 0;
+            border-bottom: 0;
+
             & > td {
-                padding-top: 0px;
-                padding-bottom: 0px;
+                padding-top: 0;
+                padding-bottom: 0;
             }
         }
 
@@ -838,7 +841,7 @@
         .dx-row > .dx-master-detail-cell {
             padding: @GRID_MASTERDETAIL_PADDING;
 
-            &:focus{
+            &:focus {
                 outline: 0;
             }
         }
@@ -846,13 +849,6 @@
         .dx-data-row.dx-edit-row {
             .dx-cell-modified .dx-highlight-outline:after {
                 border-color: transparent;
-            }
-        }
-
-        .dx-command-adaptive {
-            &.dx-command-adaptive-hidden {
-                padding-left: 0;
-                padding-right: 0;
             }
         }
     }
@@ -876,7 +872,7 @@
     }
 
     .dx-@{widgetName}-hidden-column > * {
-        display: none !important;
+        display: none !important; // stylelint-disable-line declaration-no-important
     }
 
     .dx-@{widgetName}-total-footer {
@@ -888,19 +884,20 @@
         }
     }
 
-    .dx-@{widgetName}-summary-item{
+    .dx-@{widgetName}-summary-item {
         font-weight: bold;
     }
 
     .dx-@{widgetName}-export-menu {
         .dx-menu-item {
-            .dx-checkbox{
+            .dx-checkbox {
                 margin-left: 0;
 
                 .dx-checkbox-icon {
                     width: 16px;
                     height: 16px;
                 }
+
                 .dx-checkbox-text {
                     white-space: nowrap;
                     word-break: normal;
@@ -924,11 +921,13 @@
                     padding: 0;
                 }
             }
+
             .dx-popover-arrow {
                 width: 0;
                 height: 0;
             }
         }
+
         .dx-revert-button {
             margin: 0;
         }
@@ -949,8 +948,8 @@
 
         .dx-empty-message {
             text-align: center;
-            left: 0px;
-            right: 0px;
+            left: 0;
+            right: 0;
             bottom: 50%;
             position: absolute;
         }
@@ -1002,8 +1001,10 @@
             }
         }
 
-        .dx-@{widgetName}-headers, .dx-@{widgetName}-total-footer {
+        .dx-@{widgetName}-headers,
+        .dx-@{widgetName}-total-footer {
             direction: ltr;
+
             .dx-@{widgetName}-table {
                 direction: rtl;
             }
@@ -1012,7 +1013,8 @@
         .dx-@{widgetName}-filter-row {
             .dx-editor-cell .dx-editor-with-menu {
                 .dx-texteditor {
-                    .dx-texteditor-input, .dx-placeholder:before {
+                    .dx-texteditor-input,
+                    .dx-placeholder:before {
                         padding-right: @GRID_TEXTEDITOR_INPUT_PADDING;
                     }
                 }
@@ -1026,7 +1028,7 @@
             }
 
             & > td:first-child .dx-menu {
-                margin-left: 0px;
+                margin-left: 0;
             }
 
             .dx-menu-horizontal .dx-overlay-content ul .dx-menu-item {
@@ -1074,6 +1076,7 @@
         .dx-@{widgetName}-filter-panel-text {
             .dx-overflow();
         }
+
         .dx-@{widgetName}-filter-panel-text:hover,
         .dx-@{widgetName}-filter-panel-clear-filter:hover {
             text-decoration: underline;
@@ -1086,9 +1089,8 @@
 
         .dx-icon-filter {
             margin: auto;
-            padding-right: 7px;
+            margin-right: 7px;
             cursor: pointer;
         }
     }
-
 }

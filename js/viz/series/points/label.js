@@ -1,15 +1,17 @@
-var _format = require("../../../format_helper").format,
-    vizUtils = require("../../core/utils"),
-    each = require("../../../core/utils/iterator").each,
-    extend = require("../../../core/utils/extend").extend,
-    _degreesToRadians = vizUtils.degreesToRadians,
-    _patchFontOptions = vizUtils.patchFontOptions,
-    _math = Math,
+import { format as _format } from "../../../format_helper";
+import {
+    degreesToRadians as _degreesToRadians,
+    patchFontOptions as _patchFontOptions,
+    getCosAndSin as _getCosAndSin,
+    rotateBBox as _rotateBBox
+} from "../../core/utils";
+import { each } from "../../../core/utils/iterator";
+import { extend } from "../../../core/utils/extend";
+
+const _math = Math,
     _round = _math.round,
     _floor = _math.floor,
     _abs = _math.abs,
-    _getCosAndSin = vizUtils.getCosAndSin,
-    _rotateBBox = vizUtils.rotateBBox,
 
     CONNECTOR_LENGTH = 12,
     LABEL_BACKGROUND_PADDING_X = 8,
@@ -283,6 +285,7 @@ function Label(renderSettings) {
     this._container = renderSettings.labelsGroup;
     this._point = renderSettings.point;
     this._strategy = renderSettings.strategy;
+    this._rowCount = 1;
 }
 
 Label.prototype = {
@@ -383,7 +386,7 @@ Label.prototype = {
                 disposeItem(that, "_connector");
             }
 
-            that._text.attr({ text: text, align: options.textAlignment });
+            that._text.attr({ text: text, align: options.textAlignment, "class": options.cssClass });
             that._updateBackground(that._text.getBBox());
             that._setVisibility("visible", true);
             that._drawn = true;
@@ -428,6 +431,12 @@ Label.prototype = {
         that._bBox = bBox;
     },
 
+    getFigureCenter() {
+        const figure = this._figure;
+        const strategy = this._strategy || selectStrategy(figure);
+        return strategy.getFigureCenter(figure);
+    },
+
     _getConnectorPoints: function() {
         var that = this,
             figure = that._figure,
@@ -441,7 +450,7 @@ Label.prototype = {
 
         if(!strategy.isLabelInside(bBox, figure, options.position !== "inside")) {
             isHorizontal = strategy.isHorizontal(bBox, figure);
-            var figureCenter = strategy.getFigureCenter(figure);
+            var figureCenter = that.getFigureCenter();
             points = strategy.prepareLabelPoints(bBox, rotatedBBox, isHorizontal, -options.rotationAngle || 0, figureCenter);
             labelPoint = getClosestCoord(figureCenter, points);
             points = strategy.findFigurePoint(figure, labelPoint, isHorizontal);
@@ -452,9 +461,21 @@ Label.prototype = {
 
     // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
     fit: function(maxWidth) {
-        var padding = this._background ? 2 * LABEL_BACKGROUND_PADDING_X : 0;
-        this._text && this._text.applyEllipsis(maxWidth - padding);
+        const padding = this._background ? 2 * LABEL_BACKGROUND_PADDING_X : 0;
+        let rowCountChanged = false;
+        if(this._text) {
+            let { rowCount, textIsEmpty } = this._text.setMaxSize(maxWidth - padding, undefined, this._options);
+            if(rowCount === 0) {
+                rowCount = 1;
+            }
+            if(rowCount !== this._rowCount) {
+                rowCountChanged = true;
+                this._rowCount = rowCount;
+            }
+            textIsEmpty && disposeItem(this, "_background");
+        }
         this._updateBackground(this._text.getBBox());
+        return rowCountChanged;
     },
 
     resetEllipsis: function() {
@@ -469,6 +490,10 @@ Label.prototype = {
 
     hideInsideLabel: function(coords) {
         return this._point.hideInsideLabel(this, coords);
+    },
+
+    getPoint() {
+        return this._point;
     },
 
     // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)

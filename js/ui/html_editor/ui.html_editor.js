@@ -1,3 +1,5 @@
+/* global Node */
+
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isDefined, isFunction } from "../../core/utils/type";
@@ -7,15 +9,19 @@ import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 import Errors from "../widget/ui.errors";
+import Callbacks from "../../core/utils/callbacks";
+import { Deferred } from "../../core/utils/deferred";
 
 import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
 import ConverterController from "./converterController";
 import getWordMatcher from "./matchers/wordLists";
+import getTextDecorationMatcher from "./matchers/textDecoration";
 import FormDialog from "./ui/formDialog";
 
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
+const QUILL_CLIPBOARD_CLASS = "ql-clipboard";
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 const HTML_EDITOR_CONTENT_CLASS = "dx-htmleditor-content";
 
@@ -31,7 +37,6 @@ const HtmlEditor = Editor.inherit({
              * @name dxHtmlEditorOptions.focusStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             focusStateEnabled: true,
 
@@ -55,7 +60,6 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
 
             /**
@@ -113,7 +117,7 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxHtmlEditorToolbar.items
-            * @type Array<dxHtmlEditorToolbarItem,string>
+            * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
             */
 
             /**
@@ -122,7 +126,7 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatName
-            * @type string
+            * @type Enums.HtmlEditorToolbarItem|string
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatValues
@@ -131,7 +135,6 @@ const HtmlEditor = Editor.inherit({
             /**
             * @name dxHtmlEditorToolbarItem.location
             * @default "before"
-            * @inheritdoc
             */
 
             /**
@@ -228,6 +231,12 @@ const HtmlEditor = Editor.inherit({
         });
     },
 
+    _init: function() {
+        this.callBase();
+        this._cleanCallback = Callbacks();
+        this._contentInitializedCallback = Callbacks();
+    },
+
     _getAnonymousTemplateName: function() {
         return ANONYMOUS_TEMPLATE_NAME;
     },
@@ -242,16 +251,28 @@ const HtmlEditor = Editor.inherit({
         return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
     },
 
-    _focusInHandler: function() {
+    _focusInHandler: function({ relatedTarget }) {
+        if(this._shouldSkipFocusEvent(relatedTarget)) {
+            return;
+        }
+
         this._toggleFocusClass(true, this.$element());
 
         this.callBase.apply(this, arguments);
     },
 
-    _focusOutHandler: function() {
+    _focusOutHandler: function({ relatedTarget }) {
+        if(this._shouldSkipFocusEvent(relatedTarget)) {
+            return;
+        }
+
         this._toggleFocusClass(false, this.$element());
 
         this.callBase.apply(this, arguments);
+    },
+
+    _shouldSkipFocusEvent: function(relatedTarget) {
+        return $(relatedTarget).hasClass(QUILL_CLIPBOARD_CLASS);
     },
 
     _initMarkup: function() {
@@ -317,13 +338,20 @@ const HtmlEditor = Editor.inherit({
     },
 
     _render: function() {
-        if(!this._quillRegistrator) {
-            this._quillRegistrator = new QuillRegistrator();
-        }
-
         this._prepareConverters();
 
         this.callBase();
+    },
+
+    _prepareQuillRegistrator: function() {
+        if(!this._quillRegistrator) {
+            this._quillRegistrator = new QuillRegistrator();
+        }
+    },
+
+    _getRegistrator: function() {
+        this._prepareQuillRegistrator();
+        return this._quillRegistrator;
     },
 
     _prepareConverters: function() {
@@ -341,9 +369,15 @@ const HtmlEditor = Editor.inherit({
     },
 
     _renderContentImpl: function() {
+        this._contentRenderedDeferred = new Deferred();
+
+        const renderContentPromise = this._contentRenderedDeferred.promise();
+
         this.callBase();
         this._renderHtmlEditor();
         this._renderFormDialog();
+
+        return renderContentPromise;
     },
 
     _renderHtmlEditor: function() {
@@ -354,7 +388,7 @@ const HtmlEditor = Editor.inherit({
             customizeModules(modulesConfig);
         }
 
-        this._quillInstance = this._quillRegistrator.createEditor(this._$htmlContainer[0], {
+        this._quillInstance = this._getRegistrator().createEditor(this._$htmlContainer[0], {
             placeholder: this.option("placeholder"),
             readOnly: this.option("readOnly") || this.option("disabled"),
             modules: modulesConfig,
@@ -367,8 +401,21 @@ const HtmlEditor = Editor.inherit({
 
         if(this._hasTranscludedContent()) {
             this._updateContentTask = executeAsync(() => {
-                this._updateHtmlContent(this._deltaConverter.toHtml());
+                this._applyTranscludedContent();
             });
+        } else {
+            this._finalizeContentRendering();
+        }
+    },
+
+    _applyTranscludedContent: function() {
+        const markup = this._deltaConverter.toHtml();
+        const newDelta = this._quillInstance.clipboard.convert(markup);
+
+        if(newDelta.ops.length) {
+            this._quillInstance.setContents(newDelta);
+        } else {
+            this._finalizeContentRendering();
         }
     },
 
@@ -377,7 +424,8 @@ const HtmlEditor = Editor.inherit({
     },
 
     _getModulesConfig: function() {
-        const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
+        const quill = this._getRegistrator().getQuill();
+        const wordListMatcher = getWordMatcher(quill);
         let modulesConfig = extend({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
@@ -389,7 +437,8 @@ const HtmlEditor = Editor.inherit({
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
-                    ['p.MsoListParagraphCxSpLast', wordListMatcher]
+                    ['p.MsoListParagraphCxSpLast', wordListMatcher],
+                    [Node.ELEMENT_NODE, getTextDecorationMatcher(quill)]
                 ]
             }
         }, this._getCustomModules());
@@ -420,7 +469,7 @@ const HtmlEditor = Editor.inherit({
 
     _getCustomModules: function() {
         const modules = {};
-        const moduleNames = this._quillRegistrator.getRegisteredModuleNames();
+        const moduleNames = this._getRegistrator().getRegisteredModuleNames();
 
         moduleNames.forEach(modulePath => {
             modules[modulePath] = this._getBaseModuleConfig();
@@ -431,13 +480,22 @@ const HtmlEditor = Editor.inherit({
 
     _textChangeHandler: function(newDelta, oldDelta, source) {
         const htmlMarkup = this._deltaConverter.toHtml();
-
-
         const value = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
 
         if(this.option("value") !== value) {
             this._isEditorUpdating = true;
             this.option("value", value);
+        }
+
+        this._finalizeContentRendering();
+    },
+
+    _finalizeContentRendering: function() {
+        if(this._contentRenderedDeferred) {
+            this.clearHistory();
+            this._contentInitializedCallback.fire();
+            this._contentRenderedDeferred.resolve();
+            this._contentRenderedDeferred = undefined;
         }
     },
 
@@ -542,13 +600,13 @@ const HtmlEditor = Editor.inherit({
 
     _clean: function() {
         if(this._quillInstance) {
-            const toolbar = this._quillInstance.getModule("toolbar");
-
             this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
-            toolbar && toolbar.clean();
+            this._cleanCallback.fire();
         }
 
         this._abortUpdateContentTask();
+        this._cleanCallback.empty();
+        this._contentInitializedCallback.empty();
         this.callBase();
     },
 
@@ -571,13 +629,21 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    addCleanCallback(callback) {
+        this._cleanCallback.add(callback);
+    },
+
+    addContentInitializedCallback(callback) {
+        this._contentInitializedCallback.add(callback);
+    },
+
     /**
     * @name dxHtmlEditorMethods.register
     * @publicName register(components)
     * @param1 modules:Object
     */
     register: function(components) {
-        this._quillRegistrator.registerModules(components);
+        this._getRegistrator().registerModules(components);
 
         this.repaint();
     },
@@ -589,7 +655,7 @@ const HtmlEditor = Editor.inherit({
     * @return Object
     */
     get: function(modulePath) {
-        return this._quillRegistrator.getQuill().import(modulePath);
+        return this._getRegistrator().getQuill().import(modulePath);
     },
 
     /**
@@ -623,7 +689,7 @@ const HtmlEditor = Editor.inherit({
     /**
     * @name dxHtmlEditorMethods.format
     * @publicName format(formatName, formatValue)
-    * @param1 formatName:string
+    * @param1 formatName:Enums.HtmlEditorFormat|string
     * @param2 formatValue:any
     */
     format: function(formatName, formatValue) {
@@ -635,7 +701,7 @@ const HtmlEditor = Editor.inherit({
     * @publicName formatText(index, length, formatName, formatValue)
     * @param1 index:number
     * @param2 length:number
-    * @param3 formatName:string
+    * @param3 formatName:Enums.HtmlEditorFormat|string
     * @param4 formatValue:any
     */
     /**
@@ -654,7 +720,7 @@ const HtmlEditor = Editor.inherit({
     * @publicName formatLine(index, length, formatName, formatValue)
     * @param1 index:number
     * @param2 length:number
-    * @param3 formatName:string
+    * @param3 formatName:Enums.HtmlEditorFormat|string
     * @param4 formatValue:any
     */
     /**

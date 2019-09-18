@@ -55,7 +55,8 @@
     list-style-type: none;
     position: relative;
     .user-select(none);
-    user-drag: none;
+
+    -webkit-user-drag: none;
 
     a {
         text-decoration: none;
@@ -102,7 +103,6 @@
 
 .dx-rtl {
     .dx-treeview-node-container {
-
         &:first-child {
             > .dx-treeview-node {
                 padding-left: 0;
@@ -132,5 +132,3 @@
         .flip-horizontally();
     }
 }
-
-

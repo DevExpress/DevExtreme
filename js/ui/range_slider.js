@@ -123,7 +123,6 @@ var RangeSlider = Slider.inherit({
             * @name dxRangeSliderOptions.value
             * @type Array<number>
             * @default [40, 60]
-            * @inheritdoc
             */
             value: [40, 60],
 
@@ -147,14 +146,12 @@ var RangeSlider = Slider.inherit({
             * @extends Action
             * @type_function_param1_field4 start:number
             * @type_function_param1_field5 end:number
-            * @type_function_param1_field6 value:array
-            * @inheritdoc
+            * @type_function_param1_field6 value:array<number>
             */
 
             /**
             * @name dxRangeSliderOptions.name
             * @hidden
-            * @inheritdoc
             */
         });
     },

@@ -21,7 +21,10 @@ var noop = require("../../core/utils/common").noop,
     INSIDE = "inside";
 
 exports.pie = _extend({}, barSeries, {
-    _setGroupsSettings: chartScatterSeries._setGroupsSettings,
+    _setGroupsSettings: function() {
+        chartScatterSeries._setGroupsSettings.apply(this, arguments);
+        this._labelsGroup.attr({ "pointer-events": null });
+    },
 
     _createErrorBarGroup: _noop,
 
@@ -37,21 +40,20 @@ exports.pie = _extend({}, barSeries, {
     _getOldPoint: function(data, oldPointsByArgument, index) {
         var point = (this._points || [])[index];
         if(point) {
-            oldPointsByArgument[point.argument] = oldPointsByArgument[point.argument].filter(function(p) {
-                return p !== point;
-            });
+            oldPointsByArgument[point.argument.valueOf()] = oldPointsByArgument[point.argument.valueOf()].filter(p => p !== point);
         }
         return point;
     },
 
     adjustLabels: function(moveLabelsFromCenter) {
-        (this._points || []).forEach(function(point) {
-            if(point._label.isVisible()) {
-                point.setLabelTrackerData();
-                point.setLabelEllipsis(moveLabelsFromCenter);
-                point.updateLabelCoord(moveLabelsFromCenter);
+        return (this._points || []).reduce((r, p) => {
+            if(p._label.isVisible()) {
+                p.setLabelTrackerData();
+                r = p.applyWordWrap(moveLabelsFromCenter) || r;
+                p.updateLabelCoord(moveLabelsFromCenter);
+                return r;
             }
-        });
+        }, false);
     },
 
     _applyElementsClipRect: _noop,
@@ -100,8 +102,7 @@ exports.pie = _extend({}, barSeries, {
     _createGroups: chartScatterSeries._createGroups,
 
     _setMarkerGroupSettings: function() {
-        var that = this;
-        that._markersGroup.attr({ "class": "dxc-markers" });
+        this._markersGroup.attr({ "class": "dxc-markers" });
     },
 
     _getMainColor(data, point) {

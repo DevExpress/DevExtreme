@@ -1,9 +1,13 @@
 import $ from "jquery";
 
 import PopupModule from "ui/html_editor/modules/popup";
+import windowUtils from "core/utils/window";
 
 const POPUP_CLASS = "dx-popup";
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
+const SUGGESTION_LIST_WRAPPER_CLASS = "dx-suggestion-list-wrapper";
+
+const MIN_HEIGHT = 100;
 
 const moduleConfig = {
     beforeEach: () => {
@@ -50,7 +54,9 @@ QUnit.module("Popup module", moduleConfig, () => {
         popupModule.showPopup();
         this.clock.tick();
         const $suggestionList = $(`.${SUGGESTION_LIST_CLASS}`);
+        const $suggestionListWrapper = $suggestionList.closest(`.${SUGGESTION_LIST_WRAPPER_CLASS}`);
 
+        assert.strictEqual($suggestionListWrapper.length, 1, "Suggestion list is wrapped by element with specific class");
         assert.ok($suggestionList.is(":visible"), "list is visible");
         assert.strictEqual($suggestionList.length, 1, "one list");
         assert.ok(insertEmbedContent.notCalled, "ok");
@@ -67,5 +73,21 @@ QUnit.module("Popup module", moduleConfig, () => {
         popupModule.savePosition(5);
 
         assert.strictEqual(popupModule.getPosition(), 5, "correct position");
+    });
+
+    test("Max height should be a half of the window height", (assert) => {
+        const windowStub = sinon.stub(windowUtils, "getWindow").returns($("<div>").height(240));
+        const popupModule = new PopupModule({}, this.options);
+
+        assert.strictEqual(popupModule.maxHeight, 120, "max height is a half of the window height");
+        windowStub.restore();
+    });
+
+    test("Max height shouldn't less than a predefined threshold", (assert) => {
+        const windowStub = sinon.stub(windowUtils, "getWindow").returns($("<div>").height(80));
+        const popupModule = new PopupModule({}, this.options);
+
+        assert.strictEqual(popupModule.maxHeight, MIN_HEIGHT, "Max height cannot be less than a threshold");
+        windowStub.restore();
     });
 });

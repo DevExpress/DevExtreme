@@ -1,12 +1,22 @@
+import { getDocument } from "../../core/dom_adapter";
 import { isDefined } from "../../core/utils/type";
 import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
-import { events } from "../components/consts";
 import { patchFontOptions } from "./utils";
 import { Plaque } from "./plaque";
+import pointerEvents from "../../events/pointer";
+import dragEvents from "../../events/drag";
+import { addNamespace } from "../../events/utils";
+import eventsEngine from "../../events/core/events_engine";
 
-const MOVE_EVENT = events["mousemove"] + ".annotations";
-const ANNOTATION_DATA = "annotation-data";
+const EVENT_NS = "annotations";
+const DOT_EVENT_NS = "." + EVENT_NS;
+const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
+const POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, EVENT_NS);
+
+const DRAG_START_EVENT_NAME = dragEvents.start + DOT_EVENT_NS;
+const DRAG_EVENT_NAME = dragEvents.move + DOT_EVENT_NS;
+const DRAG_END_EVENT_NAME = dragEvents.end + DOT_EVENT_NS;
 
 function coreAnnotation(options, draw) {
     return {
@@ -19,69 +29,87 @@ function coreAnnotation(options, draw) {
         axis: options.axis,
         series: options.series,
         options: options,
+        offsetX: options.offsetX,
+        offsetY: options.offsetY,
         draw: function(widget, group) {
-            this.coords = widget._getAnnotationCoords(this);
-            const { x, y } = this.coords;
+            const annotationGroup = widget._renderer.g().append(group);
+            this.plaque = new Plaque(options, widget, annotationGroup, draw.bind(this), isDefined(options.value) || isDefined(options.argument));
+            this.plaque.draw(widget._getAnnotationCoords(this));
 
-            if(isDefined(x) && isDefined(y)) {
-                const annotationGroup = widget._renderer.g().append(group);
-
-                const plaque = new Plaque(options, widget, annotationGroup, draw.bind(this));
-
-                plaque.move(x, y);
-                applyClipPath(annotationGroup, widget, this._pane);
+            if(options.allowDragging) {
+                annotationGroup
+                    .on(DRAG_START_EVENT_NAME, { immediate: true }, e => {
+                        this._dragOffsetX = this.plaque.x - e.pageX;
+                        this._dragOffsetY = this.plaque.y - e.pageY;
+                    })
+                    .on(DRAG_EVENT_NAME, e => {
+                        this.plaque.move(e.pageX + this._dragOffsetX, e.pageY + this._dragOffsetY);
+                    }).on(DRAG_END_EVENT_NAME, e => {
+                        this.offsetX = (this.offsetX || 0) + e.offset.x;
+                        this.offsetY = (this.offsetY || 0) + e.offset.y;
+                    });
             }
         },
-        getTooltipFormatObject() {
-            return extend({}, this.options);
+        hitTest(x, y) {
+            return this.plaque.hitTest(x, y);
         },
-        getTooltipParams() {
-            const { x, y } = this.coords;
-            return { x, y };
+        showTooltip(tooltip, { x, y }) {
+            if(tooltip.annotation !== this) {
+                if(tooltip.show(this.options, { x, y }, { target: this.options }, this.options.customizeTooltip)) {
+                    tooltip.annotation = this;
+                }
+            } else {
+                tooltip.move(x, y);
+            }
         }
     };
 }
 
-function applyClipPath(elem, widget, pane) {
-    isDefined(pane) && elem.attr({ "clip-path": widget._getElementsClipRectID(pane) });
-}
-
 function labelAnnotation(options) {
-    return coreAnnotation(options, function(widget, group) {
-        widget._renderer
+    return coreAnnotation(options, function(widget, group, { width, height }) {
+        const text = widget._renderer
             .text(options.text)
-            .data({ [ANNOTATION_DATA]: this })
             .css(patchFontOptions(options.font))
+            .attr({ "class": options.cssClass })
             .append(group);
+
+        if(isDefined(width) || isDefined(height)) {
+            text.setMaxSize(width, height, {
+                wordWrap: options.wordWrap,
+                textOverflow: options.textOverflow
+            });
+        }
     });
 }
 
 function imageAnnotation(options) {
     const { width, height, url, location } = options.image || {};
-    return coreAnnotation(options, function(widget, group) {
+    return coreAnnotation(options, function(widget, group, { width: outerWidth, height: outerHeight }) {
+        const imageWidth = outerWidth > 0 ? Math.min(width, outerWidth) : width;
+        const imageHeight = outerHeight > 0 ? Math.min(height, outerHeight) : height;
+
         widget._renderer
-            .image(0, 0, width, height, url, location || "center")
-            .data({ [ANNOTATION_DATA]: this })
+            .image(0, 0, imageWidth, imageHeight, url, location || "center")
             .append(group);
     });
 }
 
-function createAnnotation(item, commonOptions) {
+function createAnnotation(item, commonOptions, customizeAnnotation) {
     let options = extend(true, {}, commonOptions, item);
-    if(options.customizeAnnotation && options.customizeAnnotation.call) {
-        options = extend(true, options, options.customizeAnnotation(item));
+    if(customizeAnnotation && customizeAnnotation.call) {
+        options = extend(true, options, customizeAnnotation(item));
     }
 
     if(options.type === "image") {
         return imageAnnotation(options);
-    } else if(options.type === "label") {
+    } else if(options.type === "text") {
         return labelAnnotation(options);
     }
 }
 
-export let createAnnotations = function(items, options) {
+export let createAnnotations = function(items, options = {}, customizeAnnotation) {
     return items.reduce((arr, item) => {
-        const annotation = createAnnotation(item, options);
+        const annotation = createAnnotation(item, options, customizeAnnotation);
         annotation && arr.push(annotation);
         return arr;
     }, []);
@@ -105,98 +133,138 @@ const chartPlugin = {
     dispose() {},
     members: {
         _getAnnotationCoords(annotation) {
-            let coords = { x: annotation.x, y: annotation.y };
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY
+            };
             const argCoordName = this._options.rotated ? "y" : "x";
             const valCoordName = this._options.rotated ? "x" : "y";
-            const argument = annotation.argument;
-            const value = annotation.value;
             const argAxis = this.getArgumentAxis();
+            const argument = argAxis.validateUnit(annotation.argument);
             let axis = this.getValueAxis(annotation.axis);
             let series;
+            let pane = isDefined(axis) ? axis.pane : undefined;
 
-            annotation._pane = annotation.axis && isDefined(axis) ? axis.pane : undefined;
             if(annotation.series) {
                 series = this.series.filter(s => s.name === annotation.series)[0];
                 axis = series && series.getValueAxis();
-                isDefined(axis) && (annotation._pane = axis.pane);
+                isDefined(axis) && (pane = axis.pane);
             }
 
-            if(!isDefined(coords[argCoordName]) && isDefined(argument)) {
-                coords[argCoordName] = argAxis.getTranslator().translate(argument);
-                !isDefined(annotation._pane) && (annotation._pane = argAxis.pane);
+            if(isDefined(argument)) {
+                if(series) {
+                    const center = series.getPointCenterByArg(argument);
+                    center && (coords[argCoordName] = center[argCoordName]);
+                } else {
+                    coords[argCoordName] = argAxis.getTranslator().translate(argument);
+                }
+                !isDefined(pane) && (pane = argAxis.pane);
             }
 
-            if(!isDefined(coords[valCoordName]) && isDefined(value)) {
+            const value = axis && axis.validateUnit(annotation.value);
+            if(isDefined(value)) {
                 coords[valCoordName] = axis && axis.getTranslator().translate(value);
-                !isDefined(annotation._pane) && isDefined(axis) && (annotation._pane = axis.pane);
+                !isDefined(pane) && isDefined(axis) && (pane = axis.pane);
             }
 
-            if(isDefined(coords[argCoordName]) && !isDefined(coords[valCoordName]) && !isDefined(value)) {
+            coords.canvas = this._getCanvasForPane(pane);
+
+            if(isDefined(coords[argCoordName]) && !isDefined(value)) {
                 if(!isDefined(axis) && !isDefined(series)) {
                     coords[valCoordName] = argAxis.getAxisPosition();
                 } else if(isDefined(axis) && !isDefined(series)) {
                     coords[valCoordName] = this._argumentAxes.filter(a => a.pane === axis.pane)[0].getAxisPosition();
-                } else if(isDefined(series)) {
-                    if(series.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
-                        coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
-                    }
-                    if(!isDefined(coords[valCoordName])) {
-                        coords[valCoordName] = this._argumentAxes.filter(a => a.pane === axis.pane)[0].getAxisPosition();
-                    }
+                } else if(isDefined(series) && series.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
+                    coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
                 }
             }
 
-            if(!isDefined(coords[argCoordName]) && !isDefined(argument) && isDefined(coords[valCoordName])) {
+            if(!isDefined(argument) && isDefined(coords[valCoordName])) {
                 if(isDefined(axis) && !isDefined(series)) {
                     coords[argCoordName] = axis.getAxisPosition();
                 } else if(isDefined(series)) {
                     if(series.checkSeriesViewportCoord(axis, coords[valCoordName])) {
                         coords[argCoordName] = series.getSeriesPairCoord(coords[valCoordName], false);
                     }
-                    if(!isDefined(coords[argCoordName])) {
-                        coords[argCoordName] = axis.getAxisPosition();
-                    }
                 }
             }
             return coords;
         },
-        _onMouseMove({ target }) {
-            const annotation = target[ANNOTATION_DATA];
+        _annotationsPointerEventHandler(event) {
+            const originalEvent = event.originalEvent || {};
+            const touch = (originalEvent.touches && originalEvent.touches[0]) || {};
+            const rootOffset = this._renderer.getRootOffset();
+            const coords = {
+                x: touch.pageX || originalEvent.pageX || event.pageX,
+                y: touch.pageY || originalEvent.pageY || event.pageY
+            };
+
+            const annotation = this._annotations.items.filter(a => a.hitTest(coords.x - rootOffset.left, coords.y - rootOffset.top))[0];
 
             if(!annotation || !annotation.options.tooltipEnabled) {
-                this._annotations.tooltip.hide();
+                this._annotations.hideTooltip();
                 return;
             }
 
             this.hideTooltip();
             this.clearHover();
 
-            const tooltipFormatObject = annotation.getTooltipFormatObject(this._annotations.tooltip);
-            const coords = annotation.getTooltipParams(this._annotations.tooltip.getLocation()),
-                rootOffset = this._renderer.getRootOffset();
-            coords.x += rootOffset.left;
-            coords.y += rootOffset.top;
-            this._annotations.tooltip.show(tooltipFormatObject, coords, { target: annotation }, annotation.options.customizeTooltip);
+            if(annotation.options.allowDragging && event.type === pointerEvents.down) {
+                this._annotations._hideToolTipForDrag = true;
+            }
+
+            if(!this._annotations._hideToolTipForDrag) {
+                annotation.showTooltip(this._annotations.tooltip, coords);
+                event.stopPropagation();
+            }
         }
     }
 };
 const corePlugin = {
     name: "annotations_core",
     init() {
-        this._annotations = { items: [] };
+        this._annotations = {
+            items: [],
+            _hideToolTipForDrag: false,
+            tooltip: new Tooltip({
+                cssClass: `${this._rootClassPrefix}-annotation-tooltip`,
+                eventTrigger: this._eventTrigger,
+                widgetRoot: this.element()
+            }),
+            hideTooltip() {
+                this.tooltip.annotation = null;
+                this.tooltip.hide();
+            }
+        };
+
+        this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
+        const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
+
+        tooltipOptions.customizeTooltip = undefined;
+        this._annotations.tooltip.update(tooltipOptions);
     },
     dispose() {
         this._annotationsGroup.linkRemove().linkOff();
-        this._renderer.root.off(MOVE_EVENT);
+        eventsEngine.off(getDocument(), DOT_EVENT_NS);
+        this._annotationsGroup.off(DOT_EVENT_NS);
         this._annotations.tooltip && this._annotations.tooltip.dispose();
     },
     extenders: {
         _createHtmlStructure() {
             this._annotationsGroup = this._renderer.g().attr({ "class": `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, "annotations").linkAppend();
+            eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
+            eventsEngine.on(getDocument(), POINTER_UP_EVENT_NAME, (event) => {
+                this._annotations._hideToolTipForDrag = false;
+                this._annotationsPointerEventHandler(event);
+            });
+            this._annotationsGroup.on(POINTER_ACTION, this._annotationsPointerEventHandler.bind(this));
         },
         _renderExtraElements() {
             this._annotationsGroup.clear();
             this._annotations.items.forEach(item => item.draw(this, this._annotationsGroup));
+        },
+        _stopCurrentHandling() {
+            this._annotations.hideTooltip();
         }
     },
     members: {
@@ -204,24 +272,10 @@ const corePlugin = {
             this._annotations.items = [];
 
             const items = this._getOption("annotations");
-            const options = this._getOption("commonAnnotationSettings") || {};
-
             if(!items || !items.length) {
                 return;
             }
-
-            this._annotations.tooltip = new Tooltip({
-                cssClass: `${this._rootClassPrefix}-annotation-tooltip`,
-                eventTrigger: this._eventTrigger,
-                widgetRoot: this.element(),
-            });
-
-            this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
-            const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"));
-            this._annotations.tooltip.update(tooltipOptions);
-
-            this._annotations.items = createAnnotations(items, options);
-            this._renderer.root.on(MOVE_EVENT, this._onMouseMove.bind(this));
+            this._annotations.items = createAnnotations(items, this._getOption("commonAnnotationSettings"), this._getOption("customizeAnnotation"));
         },
         _getAnnotationCoords() { return {}; }
     },

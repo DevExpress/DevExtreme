@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { DataSource } from "data/data_source/data_source";
 import { isRenderer } from "core/utils/type";
+import { createTextElementHiddenCopy } from "core/utils/dom";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import browser from "core/utils/browser";
 import config from "core/config";
@@ -41,9 +42,7 @@ const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template";
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template";
 const FOCUSED_CLASS = "dx-state-focused";
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
-const KEY_TAB = "Tab";
 const KEY_ENTER = "Enter";
-const KEY_ESC = "Escape";
 const KEY_DOWN = "ArrowDown";
 const KEY_SPACE = " ";
 
@@ -367,8 +366,8 @@ QUnit.module("tags", moduleSetup, () => {
 
         const renderTagsStub = sinon.stub(tagBox, "_renderTags");
 
-        $($tagBox.find("input")).trigger("focusin");
-        $($tagBox.find("input")).trigger("focusout");
+        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger("focusin");
+        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger("focusout");
 
         assert.equal(renderTagsStub.callCount, 0, "tags weren't rerendered");
     });
@@ -380,7 +379,7 @@ QUnit.module("tags", moduleSetup, () => {
         });
 
         this.clock.tick(TIME_TO_WAIT);
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         $($input).trigger("dxclick");
         $($input).trigger("blur");
 
@@ -527,6 +526,55 @@ QUnit.module("tags", moduleSetup, () => {
 
         assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "tags are cleared");
         assert.equal($input.val(), "", "input is also cleared");
+    });
+
+    QUnit.test("Tag should have empty text if display value is empty", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: "", value: 1 }, { name: "two", value: 2 }],
+            displayExpr: "name",
+            valueExpr: "value",
+            value: [1]
+        });
+
+        const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+        assert.equal($tag.text(), "", "tag has empty text");
+    });
+
+    QUnit.test("Tag should have correct text if display value is '0'", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: 0, value: 1 }, { name: "two", value: 2 }],
+            displayExpr: "name",
+            valueExpr: "value",
+            value: [1]
+        });
+
+        const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+        assert.equal($tag.text(), 0, "tag has correct text");
+    });
+
+    QUnit.test("Tag should have correct text if display value is 'null'", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            items: [{ name: null, value: 1 }, { name: "two", value: 2 }],
+            displayExpr: "name",
+            valueExpr: "value",
+            value: [1]
+        });
+
+        const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+        assert.equal($tag.text(), "", "tag has correct text");
+    });
+
+    QUnit.test("onValueChanged has dxclick event on remove button click", assert => {
+        const $element = $("#tagBox").dxTagBox({
+            value: ["123"],
+            onValueChanged: function(e) {
+                assert.equal(e.event.type, "dxclick", "correct event type");
+                assert.deepEqual(e.event.target, $removeButton.get(0), "correct target element");
+            }
+        });
+
+        const $removeButton = $element.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).last();
+        $($removeButton).trigger("dxclick");
     });
 });
 
@@ -885,7 +933,7 @@ QUnit.module("the 'onValueChanged' option", moduleSetup, () => {
             onValueChanged: spy
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
         keyboardMock($input).press('backspace');
         assert.notOk(spy.called, "onValueChanged is not fired");
@@ -1494,9 +1542,9 @@ QUnit.module("showSelectionControls", moduleSetup, () => {
             opened: true
         });
 
-        $($tagBox.find("input")).trigger("focusin");
+        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger("focusin");
         $(".dx-list-item").first().trigger("dxclick");
-        $($tagBox.find("input")).trigger("focusout");
+        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger("focusout");
 
         assert.equal($tagBox.find(".dx-tag").length, 1, "tag is present");
     });
@@ -1900,75 +1948,6 @@ QUnit.module("keyboard navigation", {
         const $applyButton = this.instance._popup._wrapper().find(".dx-button.dx-popup-done");
         assert.ok($applyButton.hasClass("dx-state-focused"), "the apply button is focused");
     });
-
-    QUnit.testInActiveWindow("the 'select all' checkbox should be focused on the 'tab' key press if the input is focused and showSelectionControls if true (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        keyboardMock(this.$element.find("input"))
-            .focus()
-            .press("tab");
-
-        const $selectAllCheckbox = this.instance._popup._wrapper().find(".dx-list-select-all-checkbox");
-        assert.ok($selectAllCheckbox.hasClass("dx-state-focused"), "the select all checkbox is focused");
-    });
-
-    QUnit.testInActiveWindow("the input should be focused on the 'shift+tab' key press if the select all checkbox is focused (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        const $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
-
-        $selectAllCheckbox
-            .focus()
-            .trigger($.Event("keydown", {
-                key: KEY_TAB,
-                shiftKey: true
-            }));
-
-        assert.ok(this.$element.hasClass("dx-state-focused"), "widget is focused");
-    });
-
-    QUnit.testInActiveWindow("popup should be closed on the 'esc' key press if the select all checkbox is focused", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        const $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
-
-        $selectAllCheckbox
-            .focus()
-            .trigger($.Event("keydown", {
-                key: KEY_ESC,
-                shiftKey: true
-            }));
-
-        assert.ok(this.$element.hasClass("dx-state-focused"), "widget is focused");
-        assert.notOk(this.instance.option("opened"), "popup is closed");
-    });
 });
 
 QUnit.module("keyboard navigation through tags", {
@@ -1983,7 +1962,7 @@ QUnit.module("keyboard navigation through tags", {
 
         this._init = () => {
             this.instance = this.$element.dxTagBox("instance");
-            this.$input = this.$element.find("input");
+            this.$input = this.$element.find(`.${TEXTBOX_CLASS}`);
             this.keyboard = keyboardMock(this.$input, true);
 
             this.getTags = () => {
@@ -2393,24 +2372,24 @@ QUnit.module("keyboard navigation through tags", {
     });
 
     QUnit.testInActiveWindow("the 'focused' class should be removed from the focused tag when the widget loses focus", (assert) => {
+        this.instance.focus();
         this.keyboard
-            .focus()
             .press("left");
 
-        $(this.$input).trigger("focusout");
+        this.instance.blur();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
     QUnit.testInActiveWindow("the should be no focused tags on when the widget gets focus", (assert) => {
+        this.instance.focus();
+
         this.keyboard
-            .focus()
             .press("left");
 
-        this.$input
-            .trigger("focusout")
-            .trigger("focusin");
+        this.instance.blur();
+        this.instance.focus();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
@@ -2526,7 +2505,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         keyboardMock($input).type("te");
 
         this.clock.tick(TIME_TO_WAIT);
@@ -2545,7 +2524,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
 
         this.clock.tick();
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         keyboardMock($input).type("Lon");
 
         this.clock.tick(TIME_TO_WAIT);
@@ -2565,7 +2544,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             width: 1000
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const inputLeft = $input.offset().left;
 
         $tagBox.dxTagBox("option", "value", ["Moscow"]);
@@ -2579,12 +2558,32 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: true
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const inputWidth = $input.width();
 
-        keyboardMock($input).type("te");
+        keyboardMock($input).type("test text");
 
         assert.ok($input.width() > inputWidth, "input size increase");
+    });
+
+    QUnit.test("width of input is enougth for all content", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            searchEnabled: true,
+            width: 300
+        });
+        const text = "wwwwwwwwwwwwww";
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+
+        $input.css("padding", "0 10px");
+
+        keyboardMock($input).type(text);
+        const inputWidth = $input.width();
+
+        var inputCopy = createTextElementHiddenCopy($input, text);
+        inputCopy.appendTo("#qunit-fixture");
+
+        assert.ok(inputWidth >= inputCopy.width(), "correctWidth");
+        inputCopy.remove();
     });
 
     QUnit.test("size of input is reset after selecting item", assert => {
@@ -2592,11 +2591,12 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: true,
             items: ["test1", "test2"]
         });
-        const $input = $tagBox.find("input");
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const initInputWidth = $input.width();
 
         $tagBox.dxTagBox("option", "value", ["test1"]);
-        assert.roughEqual($tagBox.find("input").width(), initInputWidth, 0.1, "input width is not changed after selecting item");
+        assert.roughEqual($tagBox.find(`.${TEXTBOX_CLASS}`).width(), initInputWidth, 0.1, "input width is not changed after selecting item");
     });
 
     QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", assert => {
@@ -2604,9 +2604,10 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: false,
             editEnabled: false
         });
-        const $input = $tagBox.find("input");
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         // NOTE: width should be 0.1 because of T393423
-        assert.roughEqual($input.width(), 0.1, 0.1, "input has correct width");
+        assert.roughEqual($input.width(), 0.1, 0.101, "input has correct width");
     });
 
     QUnit.test("no placeholder when textbox is not empty", assert => {
@@ -2615,7 +2616,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             placeholder: "placeholder"
         });
 
-        keyboardMock($tagBox.find("input")).type("test");
+        keyboardMock($tagBox.find(`.${TEXTBOX_CLASS}`)).type("test");
 
         const $placeholder = $tagBox.find(".dx-placeholder");
 
@@ -2631,7 +2632,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox("instance");
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -2652,7 +2653,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             opened: true
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         keyboardMock($input).type("3");
 
         this.clock.tick(TIME_TO_WAIT);
@@ -2699,7 +2700,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
         const tagBox = $tagBox.dxTagBox("instance");
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         keyboardMock($input).type("3");
 
         this.clock.tick(TIME_TO_WAIT);
@@ -2721,7 +2722,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         const tagBox = $tagBox.dxTagBox("instance");
 
         const $removeTag = $tagBox.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS);
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
         const pointer = pointerMock($removeTag).start().down();
         $($input).trigger("blur");
@@ -2773,7 +2774,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.press("backspace");
@@ -2808,7 +2809,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
         assert.equal(loadedCount, 1, "data source loaded data");
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.press("backspace");
@@ -2827,7 +2828,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchTimeout: 0
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type("It");
@@ -2847,7 +2848,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchTimeout: 0
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const searchValue = "123";
 
         $input.val(searchValue);
@@ -2864,7 +2865,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             opened: true
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
         $input.val("one");
         $(".dx-list-item").eq(0).trigger("dxclick");
@@ -2881,7 +2882,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             opened: true
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
         $input.val("one");
         $(".dx-list-item").eq(0).trigger("dxclick");
@@ -2898,7 +2899,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: true
         });
 
-        const $input = $element.find("input");
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
         const searchValue = "123";
 
         $input.val(searchValue);
@@ -2909,17 +2910,18 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
     QUnit.testInActiveWindow("input should be cleared after widget focus out", assert => {
         const items = [1, 2, 3];
-
         const $element = $("#tagBox").dxTagBox({
             items,
             searchEnabled: true,
             focusStateEnabled: true
         });
+        const instance = $element.dxTagBox("instance");
 
-        const $input = $element.find("input");
+        instance.focus();
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         $input.val("123");
-        $($input).trigger("focusout");
+        instance.blur();
 
         assert.equal($input.val(), "", "search value is cleared");
     });
@@ -2932,7 +2934,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             acceptCustomValue: true
         });
 
-        const $input = $element.find("input");
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
         keyboardMock($input).type("1");
 
         $($input).trigger("change");
@@ -2952,7 +2954,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             deferRendering: true
         });
 
-        const $input = $element.find("input");
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         $input.focus();
 
@@ -2978,7 +2980,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         const instance = $element.dxTagBox("instance");
         const handlerStub = sinon.stub(instance._popup, "repaint");
 
-        const $input = $element.find("input");
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
         $input.focus();
 
         keyboardMock($input).type("American Samo");
@@ -2995,11 +2997,12 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchMode: "startswith"
         });
         const $input = $element.find(".dx-texteditor-input");
+        const inputWidth = $input.width();
 
         keyboardMock($input)
             .type("a");
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal(parseInt($input.attr("size")), items[0].length + 2, "input size is changed for substitution");
+        assert.ok($input.width() > inputWidth, "input size is changed for substitution");
     });
 
     QUnit.test("filter should be reset after the search value clearing (T385456)", assert => {
@@ -3013,7 +3016,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
 
         const instance = $element.dxTagBox("instance");
-        const $input = $element.find("input");
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         keyboardMock($input, true)
             .type(items[0][0])
@@ -3044,6 +3047,30 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
     });
 
+    QUnit.test("filtering operation should pass 'expand' parameter to the dataSource", (assert) => {
+        const done = assert.async();
+
+        ajaxMock.setup({
+            url: "odata4.org",
+            callback: ({ data }) => {
+                assert.deepEqual(data, {
+                    $filter: "this eq '1'",
+                    $expand: "Orders"
+                });
+                ajaxMock.clear();
+                done();
+            }
+        });
+
+        $("#tagBox").dxTagBox({
+            value: ["1"],
+            dataSource: new DataSource({
+                store: new ODataStore({ version: 4, url: "odata4.org" }),
+                expand: ["Orders"]
+            })
+        });
+    });
+
     QUnit.testInActiveWindow("input should be focused after click on field (searchEnabled is true or acceptCustomValue is true)", (assert) => {
         const items = ["111", "222", "333"];
 
@@ -3054,7 +3081,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             showDropDownButton: true
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const $dropDownButton = $tagBox.find(".dx-dropdowneditor-button");
         $dropDownButton.click();
 
@@ -3075,7 +3102,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         });
 
         const instance = $element.dxTagBox("instance");
-        const $input = $element.find("input");
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         keyboardMock($input).type("1");
         $input.trigger("focusout");
@@ -3096,7 +3123,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             selectAllMode: "allPages"
         });
 
-        const $input = $element.find("input");
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         const keyboard = keyboardMock($input);
         keyboard.type("1");
@@ -3134,6 +3161,55 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
         assert.deepEqual(instance.option("value"), ["test1", "test2"], "Correct value");
     });
+
+    QUnit.test("load tags data should not raise an error after widget has been disposed", (assert) => {
+        assert.expect(1);
+
+        const $container = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: (loadOptions) => {
+                    const d = $.Deferred();
+
+                    setTimeout(function() {
+                        const data = loadOptions && loadOptions.searchValue ?
+                            ["test1"] :
+                            ["test1", "test2", "test3"];
+
+                        d.resolve(data);
+                    }, TIME_TO_WAIT);
+
+                    return d.promise();
+                }
+            },
+            searchEnabled: true,
+            searchTimeout: 0,
+            onValueChanged: function({ component, value }) {
+                if(value.length === 2) {
+                    let isOK = true;
+
+                    try {
+                        component.dispose();
+                    } catch(e) {
+                        isOK = false;
+                    }
+
+                    assert.ok(isOK, "there is no exception");
+                }
+            },
+            value: ["test2"]
+        });
+        const instance = $container.dxTagBox("instance");
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboardMock(instance._input()).type("te");
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $listItems = $(`.${LIST_ITEM_CLASS}`);
+
+        $listItems.first().trigger("dxclick");
+        this.clock.tick(TIME_TO_WAIT);
+    });
 });
 
 QUnit.module("popup position and size", moduleSetup, () => {
@@ -3150,7 +3226,7 @@ QUnit.module("popup position and size", moduleSetup, () => {
         const instance = $element.dxTagBox("instance");
         const height = instance._popup._$popupContent.height();
 
-        const $input = $element.find("input");
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
         $input.focus();
 
         keyboardMock($input).type("American Samo");
@@ -3198,7 +3274,7 @@ QUnit.module("popup position and size", moduleSetup, () => {
             }
         });
 
-        $($tagBox.find("input")).trigger("dxclick");
+        $($tagBox.find(`.${TEXTBOX_CLASS}`)).trigger("dxclick");
         this.clock.tick(TIME_TO_WAIT);
 
         const $popup = $(".dx-popup-content");
@@ -3237,7 +3313,7 @@ QUnit.module("popup position and size", moduleSetup, () => {
         });
         this.clock.tick(2000);
 
-        const $input = $element.find("input");
+        const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         const keyboard = keyboardMock($input);
         keyboard.type("Z");
@@ -3247,6 +3323,30 @@ QUnit.module("popup position and size", moduleSetup, () => {
         this.clock.tick(4100);
 
         assert.equal($(".dx-list-item").length, 1, "search was completed");
+    });
+
+    QUnit.test("load selected item data via custom store", (assert) => {
+        let testPassed = true;
+        try {
+            const $tagBox = $("#tagBox").dxTagBox({
+                dataSource: {
+                    load() {
+                        return new $.Deferred().resolve({ data: [{ id: 2, name: "test" }], totalCount: 1 }).promise();
+                    },
+                    key: "id"
+                },
+                valueExpr: "id",
+                displayExpr: "name",
+                value: [2]
+            });
+            const tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+
+            assert.strictEqual(tagText, "test", "correct display value");
+        } catch(e) {
+            testPassed = false;
+        }
+
+        assert.ok(testPassed, "There is no errors during test");
     });
 });
 
@@ -3259,7 +3359,7 @@ QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
         const keyboard = keyboardMock($input);
         keyboard.type("test");
@@ -3281,7 +3381,7 @@ QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {
             acceptCustomValue: true
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input);
         keyboard.press("enter");
 
@@ -3293,7 +3393,7 @@ QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {
             acceptCustomValue: true
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
         keyboardMock($input)
             .type("custom")
@@ -3307,7 +3407,7 @@ QUnit.module("the 'acceptCustomValue' option", moduleSetup, () => {
             acceptCustomValue: true,
             items: [1, 2, 3]
         });
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const tagBoxInstance = $tagBox.dxTagBox("instance");
 
         keyboardMock($input)
@@ -3862,7 +3962,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
             opened: true
         });
 
-        const $input = this.$element.find("input");
+        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 
         keyboardMock($input)
             .focus()
@@ -3885,7 +3985,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
             opened: true
         });
 
-        const $input = this.$element.find("input");
+        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 
         keyboardMock($input)
             .focus()
@@ -4051,7 +4151,7 @@ QUnit.module("applyValueMode = 'useButtons'", {
         });
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type("aaa");
@@ -4269,7 +4369,7 @@ QUnit.module("single line mode", {
 
     QUnit.testInActiveWindow("tag container should be scrolled to the start after rendering and focusout (T390041)", (assert) => {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find("input");
+        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 
         assert.equal($container.scrollLeft(), 0, "scroll position is correct on rendering");
 
@@ -4282,9 +4382,8 @@ QUnit.module("single line mode", {
 
     QUnit.test("tags container should be scrolled to the end on focusin (T390041)", (assert) => {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find("input");
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
     });
 
@@ -4311,7 +4410,6 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find("input");
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
@@ -4320,9 +4418,8 @@ QUnit.module("single line mode", {
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on rendering");
 
-        $input
-            .focus()
-            .blur();
+        this.instance.focus();
+        this.instance.blur();
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on focus out");
     });
@@ -4331,14 +4428,13 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find("input");
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
             ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
             : 0;
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), expectedScrollPosition, "tags container is scrolled to the end");
     });
 
@@ -4388,7 +4484,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
 
         this._init = () => {
             this.instance = this.$element.dxTagBox("instance");
-            this.keyboard = keyboardMock(this.$element.find("input"));
+            this.keyboard = keyboardMock(this.$element.find(`.${TEXTBOX_CLASS}`));
             this.getFocusedTag = () => {
                 return this.$element.find("." + TAGBOX_TAG_CLASS + "." + FOCUSED_CLASS);
             };
@@ -4639,7 +4735,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
             opened: true,
             searchEnabled: true
         });
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type("4");
@@ -4680,7 +4776,7 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         });
 
         const tagBox = $tagBox.dxTagBox("instance");
-        const kb = keyboardMock($tagBox.find("input"));
+        const kb = keyboardMock($tagBox.find(`.${TEXTBOX_CLASS}`));
 
         tagBox.open();
         assert.notOk(load.called, "load has not been called");
@@ -4688,6 +4784,61 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         kb.type("Item");
         this.clock.tick(0);
         assert.ok(load.called, "load has been called after the search only");
+    });
+
+    QUnit.test("map function should correctly applies to the widget datasource with the default value", (assert) => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            dataSource: new DataSource({
+                store: [
+                    { ID: 1, Name: "Test1" },
+                    { ID: 2, Name: "Test2" }
+                ],
+                map: (item) => {
+                    item.Name += " changed";
+                    return item;
+                }
+            }),
+            displayExpr: "Name",
+            valueExpr: "ID",
+            value: [1]
+        });
+
+        const tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+        assert.strictEqual(tagText, "Test1 changed", "Tag text contains an updated data");
+    });
+
+    QUnit.test("TagBox should correctly handle disposing on data loading", (assert) => {
+        assert.expect(1);
+
+        try {
+            const ds = new CustomStore({
+                load: function() {
+                    const deferred = $.Deferred();
+
+                    setTimeout(function() {
+                        deferred.resolve([2]);
+                    }, 1000);
+
+                    return deferred.promise();
+                }
+            });
+
+            const tagBox = $("#tagBox").dxTagBox({
+                dataSource: ds,
+                value: [2],
+                onInitializing: function() {
+                    this.beginUpdate();
+                }
+            }).dxTagBox("instance");
+
+            tagBox.endUpdate();
+            tagBox.dispose();
+            this.clock.tick(1000);
+        } catch(e) {
+            assert.ok(false, "TagBox raise the error");
+        }
+
+        assert.ok(true, "TagBox rendered");
     });
 });
 
@@ -5167,7 +5318,7 @@ QUnit.module("regression", {
 
         $(tagBox._$list.find(".dx-list-item").eq(0)).trigger("dxclick");
 
-        const $input = tagBox.$element().find("input");
+        const $input = tagBox.$element().find(`.${TEXTBOX_CLASS}`);
         const kb = keyboardMock($input);
 
         kb.type("4");
@@ -5182,9 +5333,9 @@ QUnit.module("regression", {
 
     QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first time as removing the item", (assert) => {
         const items = [
-            { id: 1, text: "Item 1" },
-            { id: 2, text: "Item 2" },
-            { id: 3, text: "Item 3" }
+            { id: 1, name: "Item 1" },
+            { id: 2, name: "Item 2" },
+            { id: 3, name: "Item 3" }
         ];
 
         const tagBox = $("#tagBox").dxTagBox({
@@ -5262,7 +5413,7 @@ QUnit.module("regression", {
             grouped: true
         });
 
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type("3");
@@ -5277,7 +5428,7 @@ QUnit.module("regression", {
 
     QUnit.testInActiveWindow("focusout event should remove focus class from the widget", assert => {
         const $tagBox = $("#tagBox").dxTagBox({});
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
         $input.focus();
         assert.ok($tagBox.hasClass(FOCUSED_CLASS), "focused class was applied");
@@ -5296,7 +5447,7 @@ QUnit.module("regression", {
 
         const instance = $tagBox.dxTagBox("instance");
         const $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = $tagBox.find("input");
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const kb = keyboardMock($input);
 
         kb.type("111");

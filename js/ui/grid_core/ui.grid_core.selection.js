@@ -93,17 +93,21 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
     return {
         init: function() {
+            this._dataController = this.getController("data");
+            this._selectionMode = this.option(SELECTION_MODE);
+            this._isSelectionWithCheckboxes = false;
+
+            this._selection = this._createSelection();
+            this._updateSelectColumn();
+            this.createAction("onSelectionChanged", { excludeValidators: ["disabled", "readOnly"] });
+        },
+
+        _getSelectionConfig: function() {
             var that = this,
-                dataController = that.getController("data"),
+                dataController = that._dataController,
                 selectionOptions = that.option("selection") || {};
 
-            that._dataController = dataController;
-
-            that._selectionMode = that.option(SELECTION_MODE);
-
-            that._isSelectionWithCheckboxes = false;
-
-            that._selection = that._createSelection({
+            return {
                 selectedKeys: that.option("selectedRowKeys"),
                 mode: that._selectionMode,
                 deferred: selectionOptions.deferred,
@@ -140,10 +144,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     return dataController.totalCount();
                 },
                 onSelectionChanged: that._updateSelectedItems.bind(this)
-            });
-
-            that._updateSelectColumn();
-            that.createAction("onSelectionChanged", { excludeValidators: ["disabled", "readOnly"] });
+            };
         },
 
         _updateSelectColumn: function() {
@@ -166,7 +167,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             columnsController.columnOption("command:select", "visible", isSelectColumnVisible);
         },
 
-        _createSelection: function(options) {
+        _createSelection: function() {
+            let options = this._getSelectionConfig();
+
             return new Selection(options);
         },
 
@@ -301,8 +304,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     args.handled = true;
                     break;
                 case "selectedRowKeys":
-                    if(Array.isArray(args.value) && !that._selectedItemsInternalChange && that.component.getDataSource()) {
-                        that.selectRows(args.value);
+                    var value = args.value || [];
+                    if(Array.isArray(value) && !that._selectedItemsInternalChange && (that.component.getDataSource() || !value.length)) {
+                        that.selectRows(value);
                     }
                     args.handled = true;
                     break;
@@ -456,7 +460,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             if(this.isSelectionWithCheckboxes()) {
                 keys.control = true;
             }
-            return this._selection.changeItemSelection(itemIndex, keys);
+            return this._selection.changeItemSelection(this._dataController.getRowIndexDelta() + itemIndex, keys);
         },
 
         focusedItemIndex: function(itemIndex) {
@@ -740,7 +744,7 @@ module.exports = {
                         editorOptions: {
                             visible: that.option("selection.allowSelectAll") || selectionController.isSelectAll() !== false
                         },
-                        tabIndex: -1,
+                        tabIndex: that.option("useLegacyKeyboardNavigation") ? -1 : (that.option("tabIndex") || 0),
                         setValue: function(value, e) {
                             var allowSelectAll = that.option("selection.allowSelectAll");
                             e.component.option("visible", allowSelectAll || e.component.option("value") !== false);
@@ -795,6 +799,7 @@ module.exports = {
                     this.getController("editorFactory").createEditor(groupElement, extend({}, options.column, {
                         parentType: "dataRow",
                         dataType: "boolean",
+                        lookup: null,
                         value: options.value,
                         tabIndex: -1,
                         setValue: function(value, e) {
@@ -842,11 +847,13 @@ module.exports = {
                                     // T108078
                                     if(change.items[index]) {
                                         $row = that._getRowElements($(tableElement)).eq(index);
-                                        isSelected = change.items[index].isSelected;
-                                        $row
-                                            .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
-                                            .find("." + SELECT_CHECKBOX_CLASS).dxCheckBox("option", "value", isSelected);
-                                        that.setAria("selected", isSelected, $row);
+                                        if($row.length) {
+                                            isSelected = change.items[index].isSelected;
+                                            $row
+                                                .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
+                                                .find("." + SELECT_CHECKBOX_CLASS).dxCheckBox("option", "value", isSelected);
+                                            that.setAria("selected", isSelected, $row);
+                                        }
                                     }
                                 });
                             });

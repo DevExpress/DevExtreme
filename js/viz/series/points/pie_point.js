@@ -200,13 +200,14 @@ module.exports = _extend({}, symbolPoint, {
         return { x: x, y: y };
     },
 
-    setLabelEllipsis: function(moveLabelsFromCenter) {
+    applyWordWrap: function(moveLabelsFromCenter) {
         var that = this,
             label = that._label,
             box = label.getBoundingRect(),
             visibleArea = that._getVisibleArea(),
             position = label.getLayoutOptions().position,
-            width = box.width;
+            width = box.width,
+            rowCountChanged = false;
 
         if(position === "columns" && that.series.index > 0) {
             width = visibleArea.maxX - that.centerX - that.radiusLabels;
@@ -224,8 +225,9 @@ module.exports = _extend({}, symbolPoint, {
             }
         }
         if(width < box.width) {
-            label.fit(width);
+            rowCountChanged = label.fit(width);
         }
+        return rowCountChanged;
     },
 
     setLabelTrackerData: function() {

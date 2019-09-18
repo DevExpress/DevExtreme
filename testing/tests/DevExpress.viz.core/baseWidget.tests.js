@@ -12,7 +12,6 @@ var $ = require("jquery"),
     rendererModule = require("viz/core/renderers/renderer"),
     dxBaseWidgetTester,
     StubThemeManager,
-    StubTooltip,
     StubTitle,
     vizMocks = require("../../helpers/vizMocks.js");
 
@@ -28,7 +27,6 @@ QUnit.testStart(function() {
 
 QUnit.begin(function() {
     StubThemeManager = vizMocks.stubClass(BaseThemeManager);
-    StubTooltip = vizMocks.Tooltip;
     StubTitle = vizMocks.Title;
     dxBaseWidgetTester = BaseWidget.inherit({
         NAME: 'dxBaseWidgetTester',
@@ -59,7 +57,6 @@ QUnit.begin(function() {
 var environment = {
     beforeEach: function() {
         this.themeManager = new StubThemeManager();
-        this.tooltip = new StubTooltip();
         this.title = new StubTitle();
         this.loadingIndicator = new vizMocks.LoadingIndicator();
         this.clock = sinon.useFakeTimers();
@@ -652,17 +649,6 @@ QUnit.test('container is not visible', function(assert) {
         width: 200, height: 150,
         left: 0, top: 0, right: 0, bottom: 0
     }, 'canvas');
-});
-
-// T279734
-QUnit.test("call render after hide container", function(assert) {
-    this.createWidget();
-    this.$container.hide();
-    var spy = sinon.spy(this.widget, "_onRender");
-
-    this.widget.render();
-
-    assert.equal(spy.callCount, 1);
 });
 
 QUnit.test('width is 0', function(assert) {

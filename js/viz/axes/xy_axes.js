@@ -323,10 +323,6 @@ module.exports = {
         },
 
         _updateAxisElementPosition: function() {
-            if(!this._axisElement) {
-                return;
-            }
-
             var axisCoord = this._axisPosition,
                 canvas = this._getCanvasStartEnd();
 
@@ -346,10 +342,10 @@ module.exports = {
             that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
         },
 
-        _getTickMarkPoints: function(coords, length, tickOptions) {
+        _getTickMarkPoints(coords, length, tickOptions) {
             const isHorizontal = this._isHorizontal;
             const options = this._options;
-            var tickStartCoord;
+            let tickStartCoord;
 
             if(isDefined(options.tickOrientation)) {
                 tickStartCoord = TICKS_CORRECTIONS[options.tickOrientation] * length;
@@ -358,7 +354,7 @@ module.exports = {
                 if(options.position === "left" || options.position === "top") {
                     shift = -shift;
                 }
-                tickStartCoord = shift - length / 2;
+                tickStartCoord = shift + this.getTickStartPositionShift(length);
             }
             return [
                 coords.x + (isHorizontal ? 0 : tickStartCoord),
@@ -366,6 +362,14 @@ module.exports = {
                 coords.x + (isHorizontal ? 0 : tickStartCoord + length),
                 coords.y + (isHorizontal ? tickStartCoord + length : 0)
             ];
+        },
+
+        getTickStartPositionShift(length) {
+            const options = this._options;
+            return (length % 2 === 1 ?
+                (options.width % 2 === 0 && (options.position === "left" || options.position === "top") ||
+                options.width % 2 === 1 && (options.position === "right" || options.position === "bottom") ? Math.floor(-length / 2) : -Math.floor(length / 2)) :
+                (-length / 2 + (options.width % 2 === 0 ? 0 : (options.position === "bottom" || options.position === "right" ? -1 : 1))));
         },
 
         _getTitleCoords: function() {
@@ -391,14 +395,13 @@ module.exports = {
         _drawTitleText: function(group, coords) {
             var options = this._options,
                 titleOptions = options.title,
-                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment };
+                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment, "class": titleOptions.cssClass };
 
             if(!titleOptions.text || !group) {
                 return;
             }
 
             coords = coords || this._getTitleCoords();
-
             if(!this._isHorizontal) {
                 attrs.rotate = options.position === LEFT ? 270 : 90;
             }
@@ -407,6 +410,8 @@ module.exports = {
                 .css(vizUtils.patchFontOptions(titleOptions.font))
                 .attr(attrs)
                 .append(group);
+
+            this._checkTitleOverflow(text);
 
             return text;
         },
@@ -426,6 +431,9 @@ module.exports = {
 
         _measureTitle: function() {
             if(this._title) {
+                if(this._title.bBox && !this._title.originalSize) {
+                    this._title.originalSize = this._title.bBox;
+                }
                 this._title.bBox = this._title.element.getBBox();
             }
         },
@@ -924,19 +932,25 @@ module.exports = {
             title.element.attr(params);
         },
 
-        _checkTitleOverflow: function() {
-            if(!this._title) {
+        _checkTitleOverflow: function(titleElement) {
+            if(!this._title && !titleElement) {
                 return;
             }
 
             var canvasLength = this._getScreenDelta(),
-                title = this._title,
+                title = titleElement ? { bBox: titleElement.getBBox(), element: titleElement } : this._title,
+                titleOptions = this._options.title,
                 boxTitle = title.bBox;
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
-                title.element.applyEllipsis(canvasLength) && title.element.setTitle(this._options.title.text);
+                title.element.setMaxSize(canvasLength, undefined, {
+                    wordWrap: titleOptions.wordWrap || "none",
+                    textOverflow: titleOptions.textOverflow || "ellipsis"
+                });
+                this._wrapped = (titleOptions.wordWrap && titleOptions.wordWrap !== "none");
             } else {
-                title.element.restoreText();
+                const moreThanOriginalSize = title.originalSize && canvasLength > (this._isHorizontal ? title.originalSize.width : title.originalSize.height);
+                !this._wrapped && moreThanOriginalSize && title.element.restoreText();
             }
         },
 
@@ -961,9 +975,14 @@ module.exports = {
             max: true
         },
 
-        _setVisualRange(visualRange) {
+        _setVisualRange(visualRange, allowPartialUpdate) {
             const range = this.adjustRange(vizUtils.getVizRangeObject(visualRange));
-            this._viewport = range;
+            if(allowPartialUpdate) {
+                isDefined(range.startValue) && (this._viewport.startValue = range.startValue);
+                isDefined(range.endValue) && (this._viewport.endValue = range.endValue);
+            } else {
+                this._viewport = range;
+            }
         },
 
         applyVisualRangeSetter(visualRangeSetter) {
@@ -1001,6 +1020,9 @@ module.exports = {
             }, that._series, that.isArgumentAxis);
         },
 
+        hasWrap() {
+            return this._wrapped;
+        },
         getAxisPosition() {
             return this._axisPosition;
         },
@@ -1044,16 +1066,11 @@ module.exports = {
         _getTranslatedValue: function(value, offset) {
             var pos1 = this._translator.translate(value, offset, this._options.type === "semidiscrete" && this._options.tickInterval),
                 pos2 = this._axisPosition,
-                isHorizontal = this._isHorizontal,
-                centerCorrection = this._getAxisPositionCorrection();
+                isHorizontal = this._isHorizontal;
             return {
-                x: isHorizontal ? pos1 : pos2 + centerCorrection,
-                y: isHorizontal ? pos2 + centerCorrection : pos1
+                x: isHorizontal ? pos1 : pos2,
+                y: isHorizontal ? pos2 : pos1
             };
-        },
-
-        _getAxisPositionCorrection() {
-            return this._options.width % 2 === 1 ? 0.5 : 0;
         },
 
         areCoordsOutsideAxis: function(coords) {

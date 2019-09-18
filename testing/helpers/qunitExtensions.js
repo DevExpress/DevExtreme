@@ -151,10 +151,7 @@
     window.includeThemesLinks = function() {
         jQuery("head")
             .append('<link rel="dx-theme" data-theme="generic.light" href="' + SystemJS.normalizeSync('generic_light.css') + '" />')
-            .append('<link rel="dx-theme" data-theme="android5.light" href="' + SystemJS.normalizeSync('android5_light.css') + '" />')
             .append('<link rel="dx-theme" data-theme="ios7.default" href="' + SystemJS.normalizeSync('ios7_default.css') + '" />')
-            .append('<link rel="dx-theme" data-theme="win8.black" href="' + SystemJS.normalizeSync('win8_black.css') + '" />')
-            .append('<link rel="dx-theme" data-theme="win10.black" href="' + SystemJS.normalizeSync('win10_black.css') + '" />')
             .append('<link rel="dx-theme" data-theme="material.blue.light" href="' + SystemJS.normalizeSync('material_blue_light.css') + '" />');
     };
 

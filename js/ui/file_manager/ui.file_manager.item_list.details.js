@@ -1,21 +1,27 @@
 import $ from "../../core/renderer";
-import { getImageContainer } from "../../core/utils/icon";
+import typeUtils from "../../core/utils/type";
 
-import Button from "../button";
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
+import FileManagerFileActionsButton from "./ui.file_manager.file_actions_button";
+import { getDisplayFileSize } from "./ui.file_manager.utils.js";
 
 const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
 const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
-const FILE_MANAGER_FILE_ACTIONS_BUTTON = "dx-filemanager-file-actions-button";
+const FILE_MANAGER_DETAILS_ITEM_NAME_CLASS = "dx-filemanager-details-item-name";
+const FILE_MANAGER_DETAILS_ITEM_NAME_WRAPPER_CLASS = "dx-filemanager-details-item-name-wrapper";
 const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
+const PREDEFINED_COLUMN_NAMES = [ "name", "isDirectory", "size", "thumbnail", "dateModified" ];
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _initMarkup() {
         this._createFilesView();
+
+        this._contextMenu.option("onContextMenuHidden", () => this._onContextMenuHidden());
+
         super._initMarkup();
     }
 
@@ -31,31 +37,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             scrolling: {
                 mode: "virtual"
             },
-            columns: [
-                {
-                    dataField: "thumbnail",
-                    caption: "",
-                    width: 64,
-                    alignment: "center",
-                    cellTemplate: this._createThumbnailColumnCell.bind(this)
-                },
-                {
-                    dataField: "name",
-                    minWidth: 200,
-                    width: "65%",
-                    cellTemplate: this._createNameColumnCell.bind(this)
-                },
-                {
-                    dataField: "lastWriteTime",
-                    minWidth: 200,
-                    width: "25%"
-                },
-                {
-                    dataField: "length",
-                    minWidth: 100,
-                    width: "10%"
-                }
-            ],
+            showColumnLines: false,
+            showRowLines: false,
+            columnHidingEnabled: true,
+            columns: this._createColumns(),
             onRowPrepared: this._onRowPrepared.bind(this),
             onContextMenuPreparing: this._onContextMenuPreparing.bind(this),
             onSelectionChanged: this._raiseSelectionChanged.bind(this)
@@ -81,14 +66,64 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         });
     }
 
-    _onShowFileItemActionButtonClick(e) {
-        this._ensureContextMenu();
+    _createColumns() {
+        let columns = [
+            {
+                dataField: "thumbnail",
+                caption: "",
+                width: 64,
+                alignment: "center",
+                cellTemplate: this._createThumbnailColumnCell.bind(this)
+            },
+            {
+                dataField: "name",
+                cellTemplate: this._createNameColumnCell.bind(this)
+            },
+            {
+                dataField: "dateModified",
+                caption: "Date Modified",
+                width: 110,
+                hidingPriority: 1,
+            },
+            {
+                dataField: "size",
+                caption: "File Size",
+                width: 90,
+                alignment: "right",
+                hidingPriority: 0,
+                calculateCellValue: this._calculateSizeColumnCellValue.bind(this)
+            }
+        ];
+        const customizeDetailColumns = this.option("customizeDetailColumns");
+        if(typeUtils.isFunction(customizeDetailColumns)) {
+            columns = customizeDetailColumns(columns);
+            for(let i = 0; i < columns.length; i++) {
+                if(PREDEFINED_COLUMN_NAMES.indexOf(columns[i].dataField) < 0) {
+                    columns[i].dataField = "dataItem." + columns[i].dataField;
+                }
+            }
+        }
+        return columns;
+    }
 
-        const $row = e.component.$element().closest(this._getItemSelector());
+    _onFileItemActionButtonClick({ component, element, event }) {
+        event.stopPropagation();
+        const $row = component.$element().closest(this._getItemSelector());
         const item = $row.data("item");
         this._ensureItemSelected(item);
-        this._contextMenu.option("dataSource", this._createContextMenuItems(item));
-        this._displayContextMenu(e.element, e.event.offsetX, e.event.offsetY);
+        this._showContextMenu(this.getSelectedItems(), element);
+        this._activeFileActionsButton = component;
+        this._activeFileActionsButton.setActive(true);
+    }
+
+    _onContextMenuHidden() {
+        if(this._activeFileActionsButton) {
+            this._activeFileActionsButton.setActive(false);
+        }
+    }
+
+    _getItemThumbnailCssClass() {
+        return FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS;
     }
 
     _getItemSelector() {
@@ -108,33 +143,41 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _onContextMenuPreparing(e) {
-        if(e.row.rowType !== 'data') {
-            return;
+        let fileItems = null;
+
+        if(e.row && e.row.rowType === "data") {
+            const item = e.row.data;
+            this._ensureItemSelected(item);
+            fileItems = this.getSelectedItems();
         }
 
-        const item = e.row.data;
-        this._ensureItemSelected(item);
-        e.items = this._createContextMenuItems(item);
+        e.items = this._contextMenu.createContextMenuItems(fileItems);
     }
 
     _createThumbnailColumnCell(container, cellInfo) {
-        const thumbnail = this._getItemThumbnail(cellInfo.data);
-        getImageContainer(thumbnail)
-            .addClass(FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS)
-            .appendTo(container);
+        this._getItemThumbnailContainer(cellInfo.data).appendTo(container);
     }
 
     _createNameColumnCell(container, cellInfo) {
-        const button = this._createComponent($("<div>"), Button, {
-            text: "&vellip;",
-            onClick: this._onShowFileItemActionButtonClick.bind(this),
-            template(e) {
-                return $("<i>").html("&vellip;");
-            }
-        });
-        button.$element().addClass(`${FILE_MANAGER_FILE_ACTIONS_BUTTON} dx-command-select`);
+        const $button = $("<div>");
 
-        $(container).append(cellInfo.data.name, button.$element());
+        const $name = $("<span>")
+            .text(cellInfo.data.name)
+            .addClass(FILE_MANAGER_DETAILS_ITEM_NAME_CLASS);
+
+        const $wrapper = $("<div>")
+            .append($name, $button)
+            .addClass(FILE_MANAGER_DETAILS_ITEM_NAME_WRAPPER_CLASS);
+
+        $(container).append($wrapper);
+
+        this._createComponent($button, FileManagerFileActionsButton, {
+            onClick: e => this._onFileItemActionButtonClick(e)
+        });
+    }
+
+    _calculateSizeColumnCellValue(rowData) {
+        return rowData.isDirectory ? "" : getDisplayFileSize(rowData.size);
     }
 
     _ensureItemSelected(item) {

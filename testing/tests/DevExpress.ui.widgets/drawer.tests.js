@@ -6,6 +6,8 @@ import config from "core/config";
 import typeUtils from "core/utils/type";
 import { animation } from "ui/drawer/ui.drawer.rendering.strategy";
 import Overlay from "ui/overlay";
+import Button from "ui/button";
+import domUtils from "core/utils/dom";
 
 import "common.css!";
 import "ui/drawer";
@@ -66,6 +68,9 @@ QUnit.testStart(() => {
     <div id="drawer">\
         <div id="content">Test Content</div>\
     </div>\
+    <div id="drawerWithContent">\
+        <div id="content"><div id="button"></div></div>\
+    </div>\
     <div id="outerDrawer">\
         <div id="innerDrawer"></div>\
     </div>\
@@ -102,9 +107,33 @@ QUnit.test("defaults", assert => {
 
 QUnit.test("drawer should preserve content", assert => {
     const $content = $("#drawer #content"),
-        $element = $("#drawer").dxDrawer({});
+        $element = $("#drawer").dxDrawer();
 
     assert.equal($content[0], $element.find("#content")[0]);
+});
+
+QUnit.test("drawer shouldn't lose its content after repaint (T731771)", assert => {
+    let $button = $("#button").dxButton();
+
+    const $element = $("#drawerWithContent").dxDrawer();
+    const instance = $element.dxDrawer("instance");
+
+    instance.repaint();
+
+    $button = $element.find(".dx-button");
+
+    const buttonInstance = $button.dxButton("instance");
+
+    assert.ok(buttonInstance instanceof Button, "button into drawer content wasn't clean after repaint");
+});
+
+QUnit.test("drawer tabIndex should be removed after _clean", assert => {
+    const $element = $("#drawer").dxDrawer();
+    const instance = $element.dxDrawer("instance");
+
+    instance._clean();
+
+    assert.equal($element.attr("tabIndex"), undefined, "tabIndex was removed");
 });
 
 QUnit.test("subscribe on toggle function should fired at the end of animation", assert => {
@@ -123,6 +152,53 @@ QUnit.test("subscribe on toggle function should fired at the end of animation", 
     });
 
     assert.equal(count, 0, "callback not fired at animation start");
+});
+
+QUnit.test("dxresize event should be fired for content at the end of animation", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: false
+    });
+
+    const instance = $element.dxDrawer("instance");
+    var triggerFunction = domUtils.triggerResizeEvent;
+    assert.expect(2);
+
+    try {
+        fx.off = true;
+        domUtils.triggerResizeEvent = ($element) => {
+            assert.ok(true, "event was triggered");
+            assert.equal($element, instance.viewContent(), "Event was triggered for right element");
+        };
+
+        instance.toggle();
+
+    } finally {
+        fx.off = false;
+        domUtils.triggerResizeEvent = triggerFunction;
+    }
+});
+
+QUnit.test("dxresize event should be fired if there is no any animation", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        position: "right"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    var triggerFunction = domUtils.triggerResizeEvent;
+    assert.expect(2);
+
+    try {
+        domUtils.triggerResizeEvent = function($element) {
+            assert.ok(true, "event was triggered");
+            assert.equal($element, instance.viewContent(), "Event was triggered for right element");
+        };
+
+        instance.option("position", "left");
+
+    } finally {
+        domUtils.triggerResizeEvent = triggerFunction;
+    }
 });
 
 QUnit.test("incomplete animation should be stopped after toggling visibility", assert => {
@@ -1453,13 +1529,7 @@ QUnit.module("Overlap mode", {
                 openedStateMode: "overlap",
                 contentTemplate: 'contentTemplate',
                 width: 800,
-                template: function($content) {
-                    let $div = $("<div/>");
-                    $div.css("height", 200);
-                    $div.css("width", 300);
-
-                    return $div;
-                }
+                template: $content => $("<div/>").css({ height: 200, width: 300 })
             }, options)).dxDrawer("instance");
         };
 
@@ -1476,42 +1546,46 @@ QUnit.module("Overlap mode", {
         assert.ok($(this.instance.content()).hasClass("dx-overlay"), "Panel content is an overlay");
     });
 
-    QUnit.test("drawer panel overlay should have right config depending on position option", assert => {
-        this.createInstance({
-            template: function($content) {
-                let $wrapper = $("<div/>");
-                let $div = $("<div/>");
+    [true, false].forEach((shading) => {
+        [true, false].forEach((isOpened) => {
+            [0, 100, null, undefined].forEach((minSize) => {
+                QUnit.test(`overlay configuration: opened- ${isOpened}, shading- ${shading}, minSize-${minSize}`, assert => {
+                    this.createInstance({
+                        shading: shading,
+                        opened: isOpened,
+                        minSize: minSize,
+                        template: ($content) => {
+                            let $div = $("<div/>").css({ height: 200, width: 300 });
+                            return $("<div/>").append($div);
+                        }
+                    });
+                    let overlay = this.instance.getOverlay();
 
-                $div.css("height", 200);
-                $div.css("width", 300);
+                    assert.equal(overlay.option("shading"), false, "overlay.shading");
+                    assert.ok(overlay.option("container").hasClass("dx-drawer-wrapper"));
 
-                $wrapper.append($div);
-                return $wrapper;
-            }
+                    assert.equal(overlay.option("width"), isOpened ? 300 : minSize || 0);
+
+                    assert.equal(overlay.option("position").my, "top left");
+                    assert.equal(overlay.option("position").at, "top left");
+
+                    this.instance.option("position", "right");
+                    overlay = this.instance.getOverlay();
+                    assert.equal(overlay.option("position").my, "top right");
+                    assert.equal(overlay.option("position").at, "top right");
+
+                    this.instance.option("position", "top");
+                    overlay = this.instance.getOverlay();
+                    assert.equal(overlay.option("position").my, "top");
+                    assert.equal(overlay.option("position").at, "top");
+
+                    this.instance.option("position", "bottom");
+                    overlay = this.instance.getOverlay();
+                    assert.equal(overlay.option("position").my, "bottom");
+                    assert.equal(overlay.option("position").at, "bottom");
+                });
+            });
         });
-        let overlay = this.instance.getOverlay();
-
-        assert.equal(overlay.option("shading"), false, "Overlay has no shading");
-        assert.ok(overlay.option("container").hasClass("dx-drawer-wrapper"));
-        assert.equal(overlay.option("width"), 300);
-
-        assert.equal(overlay.option("position").my, "top left");
-        assert.equal(overlay.option("position").at, "top left");
-
-        this.instance.option("position", "right");
-        overlay = this.instance.getOverlay();
-        assert.equal(overlay.option("position").my, "top right");
-        assert.equal(overlay.option("position").at, "top right");
-
-        this.instance.option("position", "top");
-        overlay = this.instance.getOverlay();
-        assert.equal(overlay.option("position").my, "top");
-        assert.equal(overlay.option("position").at, "top");
-
-        this.instance.option("position", "bottom");
-        overlay = this.instance.getOverlay();
-        assert.equal(overlay.option("position").my, "bottom");
-        assert.equal(overlay.option("position").at, "bottom");
     });
 
     QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, expand", assert => {

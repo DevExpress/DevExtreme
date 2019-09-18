@@ -199,6 +199,7 @@ QUnit.test("Draw(true) -> draw(false) -> show - correct label position (containe
 });
 
 QUnit.test("Draw(true) - draw label", function(assert) {
+    this.options.cssClass = "label_class";
     var label = this.createLabel().draw(true);
 
     assert.ok(label._group);
@@ -211,7 +212,7 @@ QUnit.test("Draw(true) - draw label", function(assert) {
 
     assert.deepEqual(this.renderer.text.lastCall.args, ["", 0, 0], "text args");
 
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.firstCall.args, [{ text: "15", align: "left" }], "text attr");
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.firstCall.args, [{ text: "15", align: "left", "class": "label_class" }], "text attr");
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
     assert.equal(label._point.correctLabelPosition.callCount, 1);
     assert.equal(label._point.correctLabelPosition.lastCall.args[0], label);
@@ -1308,7 +1309,7 @@ QUnit.test("fit without background", function(assert) {
 
     var text = this.renderer.text.getCall(0).returnValue;
 
-    assert.equal(text.applyEllipsis.args[0], 15, "Max width param");
+    assert.equal(text.setMaxSize.args[0][0], 15, "Max width param");
 });
 
 QUnit.test("fit with background", function(assert) {
@@ -1322,8 +1323,57 @@ QUnit.test("fit with background", function(assert) {
     var text = this.renderer.text.getCall(0).returnValue,
         background = this.renderer.rect.getCall(0).returnValue;
 
-    assert.equal(text.applyEllipsis.args[0], 15, "Max width param");
+    assert.equal(text.setMaxSize.args[0][0], 15, "Max width param");
     assert.strictEqual(background.attr.called, true, "New background rect");
+});
+
+QUnit.test("Label's fit. Count of rows changed", function(assert) {
+    this.options.background = { fill: "red" };
+    const label = this.createAndDrawLabel();
+
+    this.renderer.text.lastCall.returnValue.setMaxSize = function() {
+        return { rowCount: 2 };
+    };
+    label.shift(-7, -2);
+
+    assert.strictEqual(label.fit(31), true);
+});
+
+QUnit.test("Label's fit. Count of rows not changed", function(assert) {
+    this.options.background = { fill: "red" };
+    const label = this.createAndDrawLabel();
+
+    this.renderer.text.lastCall.returnValue.setMaxSize = function() {
+        return { rowCount: 1 };
+    };
+    label.shift(-7, -2);
+    label.fit(31);
+    assert.strictEqual(label.fit(31), false);
+});
+
+QUnit.test("Label's fit. rowCount = 0 ", function(assert) {
+    this.options.background = { fill: "red" };
+    const label = this.createAndDrawLabel();
+
+    this.renderer.text.lastCall.returnValue.setMaxSize = function() {
+        return { rowCount: 0 };
+    };
+    label.shift(-7, -2);
+    assert.strictEqual(label.fit(31), false);
+});
+
+QUnit.test("Hide background when text is empty", function(assert) {
+    this.options.background = { fill: "red" };
+    const label = this.createAndDrawLabel();
+    const background = this.renderer.rect.getCall(0).returnValue;
+
+    this.renderer.text.lastCall.returnValue.setMaxSize = function() {
+        return { textIsEmpty: true };
+    };
+    label.shift(-7, -2);
+    label.fit(31);
+
+    assert.strictEqual(background.dispose.callCount, 1);
 });
 
 QUnit.test("resetEllipsis", function(assert) {

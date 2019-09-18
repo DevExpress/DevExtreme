@@ -74,7 +74,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             totalCount: function() {
-                return options.totalCount;
+                return options.totalCount || 0;
             },
 
             pageIndex: function(index) {
@@ -212,9 +212,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getCombinedFilter: commonUtils.noop,
+
             getRowIndexByKey: function() {
                 return -1;
             },
+
+            loadingOperationTypes: function() {
+                return {};
+            },
+
             skipProcessingPagingChange: commonUtils.noop,
             changed: $.Callbacks(),
             loadingChanged: $.Callbacks(),
@@ -882,7 +888,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     attrValue = attrValue.toString();
                 }
 
-                domUtils.toggleAttr(option.target, attrName, attrValue);
+                option.target.attr(attrName, attrValue);
             };
 
             if(!$.isPlainObject(arguments[0])) {
@@ -1000,6 +1006,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         that._suppressDeprecatedWarnings = commonUtils.noop;
 
         that._resumeDeprecatedWarnings = commonUtils.noop;
+
+        that._optionsByReference = {};
 
         that.dispose = function() {
             $.each(that._controllers, function() {

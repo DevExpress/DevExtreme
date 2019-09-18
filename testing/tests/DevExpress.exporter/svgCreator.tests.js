@@ -1,6 +1,7 @@
 var $ = require("jquery"),
     isFunction = require("core/utils/type").isFunction,
-    svgCreator = require("exporter").svg.creator,
+    exporter = require("exporter").svg,
+    svgCreator = exporter.creator,
     svgUtils = require("core/utils/svg");
 
 function setupCanvasStub() {
@@ -48,7 +49,7 @@ QUnit.test("getData", function(assert) {
     var done = assert.async(),
         versionXML = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>",
         testingMarkup = "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"dxc dxc-chart\" style=\"line-height: normal; overflow: hidden; display: block; -ms-user-select: none; -ms-touch-action: pan-x pan-y pinch-zoom; touch-action: pan-x pan-y pinch-zoom; -moz-user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\" fill=\"none\" stroke=\"none\" stroke-width=\"0\" width=\"500\" height=\"250\" version=\"1.1\"><path stroke=\"#ff0000\" stroke-width=\"2\" d=\"M 36 181 L 184 98 L 331 280\" /></svg>",
-        deferred = svgCreator.getData(testingMarkup, {});
+        deferred = exporter.getData(testingMarkup, {});
 
     assert.expect(3);
     $.when(deferred).done(function(blob) {

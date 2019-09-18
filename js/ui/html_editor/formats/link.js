@@ -21,13 +21,21 @@ class ExtLink extends Link {
         return node;
     }
 
-    formats() {
-        const href = ExtLink.formats(this.domNode);
-
+    static formats(domNode) {
         return {
-            link: href,
-            target: this.domNode.getAttribute("target")
+            href: domNode.getAttribute("href"),
+            target: domNode.getAttribute("target")
         };
+    }
+
+    formats() {
+        const formats = super.formats();
+        const { href, target } = ExtLink.formats(this.domNode);
+
+        formats.link = href;
+        formats.target = target;
+
+        return formats;
     }
 
     format(name, value) {
@@ -36,9 +44,9 @@ class ExtLink extends Link {
                 this.domNode.innerText = value.text;
             }
             if(value.target) {
-                this.domNode.removeAttribute("target");
-            } else {
                 this.domNode.setAttribute("target", "_blank");
+            } else {
+                this.domNode.removeAttribute("target");
             }
             this.domNode.setAttribute("href", value.href);
         } else {

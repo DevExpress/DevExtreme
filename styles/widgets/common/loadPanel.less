@@ -4,7 +4,8 @@
     background: #fefefe;
     text-align: center;
     .user-select(none);
-    user-drag: none;
+
+    -webkit-user-drag: none;
     border-radius: 5px;
 
     &:before {
@@ -29,4 +30,14 @@
     box-shadow: none;
     border: none;
     background: none;
+}
+
+@keyframes dx-loadpanel-opacity {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

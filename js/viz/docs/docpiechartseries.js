@@ -406,7 +406,19 @@ var commonPieChartSeries = {
             * @default undefined
             */
             color: undefined
-        }
+        },
+        /**
+        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow
+        * @default 'ellipsis'
+        * @type Enums.VizTextOverflow
+        */
+        textOverflow: 'ellipsis',
+        /**
+        * @name dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap
+        * @default 'normal'
+        * @type Enums.VizWordWrap
+        */
+        wordWrap: 'normal'
     }
 };
 
@@ -414,7 +426,6 @@ var commonPieChartSeries = {
 * @name dxPieChartSeriesTypes.DoughnutSeries
 * @type object
 * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
-* @hidePropertyOf
 */
 var doughnutSeries = {
 
@@ -424,7 +435,6 @@ var doughnutSeries = {
 * @name dxPieChartSeriesTypes.PieSeries
 * @type object
 * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
-* @hidePropertyOf
 */
 var pieSeries = {
 

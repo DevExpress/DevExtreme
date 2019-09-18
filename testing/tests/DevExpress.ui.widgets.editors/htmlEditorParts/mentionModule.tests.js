@@ -6,6 +6,7 @@ import Mentions from "ui/html_editor/modules/mentions";
 import { noop } from "core/utils/common";
 import devices from "core/devices";
 import browser from "core/utils/browser";
+import { Event as dxEvent } from "events";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const LIST_ITEM_CLASS = "dx-list-item";
@@ -59,6 +60,7 @@ const moduleConfig = {
             getFormat: noop,
             on: noop,
             deleteText: (index, length) => { this.log.push({ operation: "deleteText", index, length }); },
+            insertText: (index, text, source) => { this.log.push({ operation: "insertText", index, text, source }); },
             keyboard: {
                 addBinding: ({ key }, handler) => {
 
@@ -79,6 +81,7 @@ const moduleConfig = {
                 dataSource: ["Alex", "John", "Freddy", "Sam"]
             }],
             editorInstance: {
+                addCleanCallback: noop,
                 $element: () => {
                     return this.$element;
                 },
@@ -126,27 +129,30 @@ QUnit.module("Mention format", () => {
     test("Create an element by data", (assert) => {
         const data = {
             value: "John Smith",
-            marker: "@"
+            marker: "@",
+            id: "JohnSm"
         };
         const element = MentionFormat.create(data);
 
         assert.strictEqual(element.dataset.marker, "@", "correct marker");
         assert.strictEqual(element.dataset.mentionValue, "John Smith", "correct value");
+        assert.strictEqual(element.dataset.id, "JohnSm", "correct id");
         assert.strictEqual(element.innerText, "@John Smith", "correct inner text");
     });
 
     test("Get data from element", (assert) => {
-        const markup = "<span class='dx-mention' data-marker=@ data-mention-value='John Smith'><span>@</span>John Smith</span>";
+        const markup = "<span class='dx-mention' data-marker=@ data-mention-value='John Smith' data-id='JohnSm'><span>@</span>John Smith</span>";
         const element = $(markup).get(0);
         const data = MentionFormat.value(element);
 
-        assert.deepEqual(data, { value: "John Smith", marker: "@" }, "Correct data");
+        assert.deepEqual(data, { value: "John Smith", marker: "@", id: "JohnSm" }, "Correct data");
     });
 
     test("Change default marker", (assert) => {
         const data = {
             value: "John Smith",
-            marker: "#"
+            marker: "#",
+            id: "JohnSm"
         };
 
         const element = MentionFormat.create(data);
@@ -156,18 +162,22 @@ QUnit.module("Mention format", () => {
     test("Change default content renderer", (assert) => {
         const data = {
             value: "John Smith",
-            marker: "@"
+            marker: "@",
+            id: "JohnSm"
         };
 
-        MentionFormat.setContentRender((node, mentionData) => {
-            node.innerText = "test";
-            assert.deepEqual(mentionData, data);
+        MentionFormat.addTemplate("@", {
+            render: ({ container, model: mentionData }) => {
+                container.innerText = "test";
+                assert.deepEqual(mentionData, data);
+            }
         });
+
         let element = MentionFormat.create(data);
 
         assert.strictEqual(element.innerText, "test");
 
-        MentionFormat.restoreContentRender();
+        MentionFormat.removeTemplate("@");
         element = MentionFormat.create(data);
 
         assert.strictEqual(element.innerText, "@John Smith");
@@ -185,7 +195,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
 
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[1], {
+        assert.deepEqual(this.log[2], {
             format: "mention",
             position: 0,
             value: {
@@ -205,7 +215,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
 
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[1], {
+        assert.deepEqual(this.log[2], {
             format: "mention",
             position: 0,
             value: {
@@ -225,7 +235,12 @@ QUnit.module("Mentions module", moduleConfig, () => {
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
         assert.deepEqual(this.log, [{
-            index: 0, // go to start of typing and remove the marker
+            index: 0, // insert space after the mention
+            text: " ",
+            operation: "insertText",
+            source: "silent"
+        }, {
+            index: 1, // remove the marker
             length: 1,
             operation: "deleteText"
         }, {
@@ -237,7 +252,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
                 value: "Alex manager"
             }
         }, {
-            index: 1, // restore selection
+            index: 2, // restore selection
             operation: "setSelection"
         }]);
     });
@@ -264,6 +279,20 @@ QUnit.module("Mentions module", moduleConfig, () => {
 
         assert.ok(mentionRequestSpy.calledTwice, "trigger mention request");
         assert.ok(showPopupSpy.calledOnce, "Show popup with suggestion list");
+    });
+
+    test("Should appear after type a marker that replaces a selected text (T730303)", (assert) => {
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
+        const showPopupSpy = sinon.spy(mention._popup, "show");
+
+        const replaceAllDelta = { ops: [{ insert: "@" }, { delete: 2 }] };
+        const replaceLastWordDelta = { ops: [{ retain: 5 }, { insert: "@" }, { delete: 1 }] };
+
+        mention.onTextChange(replaceLastWordDelta, {}, "user");
+        assert.ok(showPopupSpy.calledOnce);
+
+        mention.onTextChange(replaceAllDelta, {}, "user");
+        assert.ok(showPopupSpy.calledTwice);
     });
 
     test("display expression should be used in the suggestion list", (assert) => {
@@ -304,7 +333,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         $items.first().trigger("dxclick");
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[1], {
+        assert.deepEqual(this.log[2], {
             format: "mention",
             position: 0,
             value: {
@@ -323,7 +352,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
         $items.first().trigger("dxclick");
         this.clock.tick(POPUP_HIDING_TIMEOUT);
 
-        assert.deepEqual(this.log[4], {
+        assert.deepEqual(this.log[6], {
             format: "mention",
             position: 0,
             value: {
@@ -445,7 +474,7 @@ QUnit.module("Mentions module", moduleConfig, () => {
             this.$element.trigger($.Event("keydown", { key, which: code }));
             this.clock.tick();
 
-            assert.deepEqual(this.log[1], {
+            assert.deepEqual(this.log[2], {
                 format: "mention",
                 position: 0,
                 value: {
@@ -501,5 +530,43 @@ QUnit.module("Mentions module", moduleConfig, () => {
         mention.onTextChange({ ops: [{ insert: "@", retain: 1 }] }, {}, "user");
         assert.ok($list.is(":visible"));
         assert.deepEqual(this.log[2], { operation: "getContents", index: 0, length: 1 });
+    });
+
+    test("popup position config", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+        mention.savePosition(0);
+        const { collision, offset, of: positionTarget } = mention._popupPosition;
+
+        assert.deepEqual(collision, {
+            x: "flipfit",
+            y: "flip"
+        }, "Check popup position collision resolve strategy");
+        assert.ok(positionTarget instanceof dxEvent, "mention positioned by event's pageX and pageY");
+        assert.notOk(Object.prototype.hasOwnProperty.call(offset, "h"), "it hasn't a horizontal offset");
+        assert.ok(Object.prototype.hasOwnProperty.call(offset, "v"), "it has a vertical offset");
+    });
+
+    test("popup shouldn't close on target scroll", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+        this.clock.tick();
+
+        $("#qunit-fixture").triggerHandler("scroll");
+
+        assert.ok(mention._popup.option("visible"), "popup is visible after scrolling");
+    });
+
+    test("popup should update position after search", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+        const popupRepaintSpy = sinon.spy(mention._popup, "repaint");
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+        this.clock.tick();
+        mention.onTextChange({ ops: [{ insert: "A" }] }, {}, "user");
+        this.clock.tick(POPUP_HIDING_TIMEOUT);
+
+        assert.ok(popupRepaintSpy.calledOnce, "popup has been repainted after search");
     });
 });

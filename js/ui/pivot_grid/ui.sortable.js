@@ -1,14 +1,13 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    eventUtils = require("../../events/utils"),
-    addNamespace = eventUtils.addNamespace,
-    registerComponent = require("../../core/component_registrator"),
-    DOMComponent = require("../../core/dom_component"),
-    dragEvents = require("../../events/drag"),
-    getSwatchContainer = require("../widget/swatch_container").getSwatchContainer;
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import { addNamespace } from "../../events/utils";
+import registerComponent from "../../core/component_registrator";
+import DOMComponent from "../../core/dom_component";
+import dragEvents from "../../events/drag";
+import { getSwatchContainer } from "../widget/swatch_container";
 
 var SORTABLE_NAMESPACE = "dxSortable",
     SORTABLE_CLASS = "dx-sortable",

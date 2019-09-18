@@ -4,6 +4,7 @@ import translator2DModule from "viz/translators/translator2d";
 import tickGeneratorModule from "viz/axes/tick_generator";
 import rangeModule from "viz/translators/range";
 import { Axis } from "viz/axes/base_axis";
+import { extend } from "core/utils/extend";
 
 var TranslatorStubCtor = new vizMocks.ObjectPool(translator2DModule.Translator2D),
     RangeStubCtor = new vizMocks.ObjectPool(rangeModule.Range);
@@ -85,7 +86,10 @@ var environment = {
         this.range.max = 100;
 
         this.translator = new TranslatorStubCtor();
-        this.translator.getBusinessRange.returns(new RangeStubCtor());
+
+        var br = new RangeStubCtor();
+        br.isEmpty.returns(true);
+        this.translator.getBusinessRange.returns(br);
 
         sinon.stub(translator2DModule, "Translator2D", function() {
             return that.translator;
@@ -600,6 +604,15 @@ QUnit.test("draw, not visible", function(assert) {
     assert.equal(this.renderer.stub("circle").callCount, 0);
 });
 
+QUnit.test("draw ticks. Shift = 10", function(assert) {
+    this.createDrawnAxis({ visible: true, tick: { visible: true, length: 20, shift: 10 } });
+
+    assert.equal(this.renderer.path.callCount, 4);
+    for(var i = 0; i < this.renderer.path.callCount; i++) {
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(1).args[0], { points: [40, 50, 60, 50], opacity: 1 });
+    }
+});
+
 QUnit.test("draw ticks. Orientation = center", function(assert) {
     this.createDrawnAxis({ visible: true, tick: { visible: true, length: 20 } });
 
@@ -611,7 +624,7 @@ QUnit.test("draw ticks. Orientation = center", function(assert) {
 
         assert.equal(this.renderer.path.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.axesContainerGroup.children[0].children[1], "Created element attached to the group");
         assert.ok(this.renderer.path.getCall(i).returnValue.sharp.calledOnce);
-        assert.deepEqual(this.renderer.path.getCall(i).returnValue.sharp.lastCall.args, [true]);
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.sharp.lastCall.args, [true, 0]);
     }
 });
 
@@ -672,7 +685,7 @@ QUnit.test("draw labels", function(assert) {
     for(var i = 0; i < this.renderer.text.callCount; i++) {
         assert.deepEqual(this.renderer.text.getCall(i).args, ["" + i * 2000]);
 
-        assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(0).args[0], { opacity: 1, align: "center" });
+        assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(0).args[0], { opacity: 1, align: "center", "class": undefined });
         assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(1).args, [{
             x: Math.round(20 + axis.getRadius() * Math.cos(33 * Math.PI / 180)),
             y: Math.round(50 + axis.getRadius() * Math.sin(33 * Math.PI / 180))
@@ -692,6 +705,26 @@ QUnit.test("adjust labels", function(assert) {
         assert.equal(Math.round(text.returnValues[0].attr.lastCall.args[0].x), 47);
         assert.equal(Math.round(text.returnValues[0].attr.lastCall.args[0].y), 118);
     }
+});
+
+QUnit.test("adjust labels on updateSize", function(assert) {
+    this.options.label.visible = true;
+    this.options.visible = true;
+    const axis = this.createDrawnAxis();
+    const texts = this.renderer.text.getCalls().map(call => {
+        const text = call.returnValue;
+        text.attr.reset();
+        return text;
+    });
+
+    this.renderer.bBoxTemplate = { x: 30, y: 50, width: 40, height: 10 };
+
+    axis.updateSize(this.canvas);
+
+    texts.forEach(text => {
+        assert.equal(Math.round(text.attr.lastCall.args[0].x), 57);
+        assert.equal(Math.round(text.attr.lastCall.args[0].y), 70);
+    });
 });
 
 QUnit.test("draw labels, is not visible", function(assert) {
@@ -753,6 +786,26 @@ QUnit.test("Update grid on second draw", function(assert) {
     assert.deepEqual(grid.rotate.lastCall.args, [33, 465, 200]);
 });
 
+// T734840
+QUnit.test("Do not rotated grid for Linear polar axis", function(assert) {
+    this.generatedTicks = [500];
+    this.renderSettings.drawingType = "linear";
+
+    const axis = this.createDrawnAxis({ rotationAngle: 90, grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: "ignore" } });
+    const grid = this.renderer.circle.lastCall.returnValue;
+
+    axis.draw({
+        left: 10,
+        right: 80,
+        top: 0,
+        bottom: 0,
+        height: 400,
+        width: 1000
+    });
+
+    assert.strictEqual(grid.rotate.callCount, undefined);
+});
+
 QUnit.test("create strips", function(assert) {
     this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "red" }] });
     assert.ok(this.renderer.arc.called);
@@ -783,13 +836,14 @@ QUnit.test("create strips with label, option 'startAngle' > 0", function(assert)
 });
 
 QUnit.test("adjusted strip labels", function(assert) {
-    this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "green", label: { text: "strip label" } }], label: { visible: false } });
+    this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "green", label: { text: "strip label", cssClass: "strip_class" } }], label: { visible: false } });
 
     assert.ok(this.renderer.arc.called);
     assert.ok(this.renderer.text.called);
 
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.firstCall.args, [{
-        align: "center"
+        align: "center",
+        "class": "strip_class"
     }]);
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.lastCall.args, [{
         translateY: 46
@@ -836,12 +890,25 @@ QUnit.test("create constant lines with label, option 'startAngle' > 0", function
     assert.deepEqual(this.renderer.text.getCall(0).args, ["10", 25, 59]);
 });
 
+QUnit.test("Update constant line", function(assert) {
+    this.options.startAngle = 50;
+    const updateCanvas = extend({}, this.canvas);
+    this.canvas.width = 300;
+    const axis = this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true } }], label: { visible: false } });
+    axis.updateSize(updateCanvas);
+
+    assert.deepEqual(this.renderer.path.getCall(0).returnValue.attr.lastCall.args, [{ points: [20, 50, 40, 50] }]);
+    assert.deepEqual(this.renderer.path.getCall(0).returnValue.rotate.lastCall.args, [60, 20, 50]);
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.lastCall.args, [{ x: 25, y: 59 }]);
+});
+
 QUnit.test("adjust constant line labels", function(assert) {
-    this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true } }], label: { visible: false } });
+    this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true, cssClass: "constant_line_label" } }], label: { visible: false } });
 
     assert.ok(this.renderer.text.called);
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.firstCall.args, [{
-        align: "center"
+        align: "center",
+        "class": "constant_line_label"
     }]);
 });
 
@@ -1046,7 +1113,7 @@ QUnit.test("draw ticks", function(assert) {
         assert.deepEqual(this.renderer.path.getCall(i).returnValue.attr.getCall(1).args[0], { points: [10, 50, 30, 50], opacity: 1 });
 
         assert.equal(this.renderer.path.getCall(i).returnValue.append.firstCall.args[0], this.renderSettings.axesContainerGroup.children[0].children[1], "Created elements attached to the group");
-        assert.deepEqual(this.renderer.path.getCall(i).returnValue.sharp.lastCall.args, [true], "sharped");
+        assert.deepEqual(this.renderer.path.getCall(i).returnValue.sharp.lastCall.args, [true, 0], "sharped");
     }
 });
 
@@ -1184,6 +1251,58 @@ QUnit.test("Update grid on second draw", function(assert) {
         r: 0,
         opacity: 1
     });
+});
+
+QUnit.test("Update grid on second draw. Remove grid element if its value out of range", function(assert) {
+    this.generatedTicks = [500];
+
+    const axis = this.createDrawnAxis({ grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: "ignore" } });
+
+    const grid = this.renderer.circle.lastCall.returnValue;
+    grid.stub("remove").reset();
+
+    axis.getTranslator().translate.withArgs(500, 0).returns(500);
+
+    axis.draw({
+        left: 10,
+        right: 80,
+        top: 0,
+        bottom: 0,
+        height: 100,
+        width: 100
+    });
+
+    assert.deepEqual(grid.remove.callCount, 1);
+});
+
+
+QUnit.test("Update grid on second draw. Remove grid element if its value out of range", function(assert) {
+    this.generatedTicks = [500];
+    this.renderSettings.drawingType = "linearSpider";
+    const axis = this.createSimpleAxis({ grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: "ignore" } });
+
+    axis.setSpiderTicks([{ coords: { angle: -90 } }]);
+    axis.draw({
+        left: 10,
+        right: 80,
+        top: 0,
+        bottom: 0,
+        height: 100,
+        width: 100
+    });
+    const grid = this.renderer.path.lastCall.returnValue;
+    grid.stub("remove").reset();
+    axis.getTranslator().translate.withArgs(500, 0).returns(500);
+    axis.updateSize({
+        left: 10,
+        right: 80,
+        top: 0,
+        bottom: 0,
+        height: 100,
+        width: 100
+    });
+
+    assert.ok(grid.remove.callCount, 1);
 });
 
 QUnit.test("draw spider grid", function(assert) {
@@ -1683,6 +1802,61 @@ QUnit.test("frequent tisks", function(assert) {
     assert.equal(text.getCall(9).returnValue.stub("remove").called, true, "text is removed");
 });
 
+QUnit.test("Check bounded ticks overlapping on updateSize - remove overlapped lavels if hide mode", function(assert) {
+    this.generatedTicks = [1, 2];
+    let bBoxes = [
+        { x: 0, y: 10, width: 10, height: 5 },
+        { x: 20, y: 10, width: 10, height: 5 },
+    ];
+    this.renderer.bBoxTemplate = function() {
+        return bBoxes.shift();
+    };
+
+    const axis = this.createDrawnAxis();
+
+    var text = this.renderer.text;
+
+    text.getCalls().forEach(c => c.returnValue.stub("remove").reset());
+    bBoxes = [
+        { x: 0, y: 10, width: 10, height: 5 },
+        { x: 5, y: 10, width: 10, height: 5 },
+    ];
+    axis.updateSize(this.canvas);
+
+    assert.equal(text.callCount, 2);
+    assert.equal(text.getCall(0).returnValue.remove.callCount, 0, "0 text is not removed");
+    assert.equal(text.getCall(1).returnValue.remove.callCount, 1, "1 text is removed");
+});
+
+QUnit.test("Check bounded ticks overlapping on updateSize - do not remove overlapped lavels if hide node", function(assert) {
+    this.generatedTicks = [1, 2];
+    let bBoxes = [
+        { x: 0, y: 10, width: 10, height: 5 },
+        { x: 20, y: 10, width: 10, height: 5 },
+    ];
+    this.renderer.bBoxTemplate = function() {
+        return bBoxes.shift();
+    };
+
+    const axis = this.createDrawnAxis({
+        visible: true,
+        label: { overlappingBehavior: "none" }
+    });
+
+    var text = this.renderer.text;
+
+    text.getCalls().forEach(c => c.returnValue.stub("remove").reset());
+    bBoxes = [
+        { x: 0, y: 10, width: 10, height: 5 },
+        { x: 5, y: 10, width: 10, height: 5 },
+    ];
+    axis.updateSize(this.canvas);
+
+    assert.equal(text.callCount, 2);
+    assert.equal(text.getCall(0).returnValue.remove.callCount, 0, "0 text is not removed");
+    assert.equal(text.getCall(1).returnValue.remove.callCount, 0, "1 text is not removed");
+});
+
 QUnit.module("Label overlapping, linear axis", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
@@ -1948,9 +2122,7 @@ QUnit.module("Circular polar axis. Set business range", {
         this.axis.validate();
     },
 
-    afterEach() {
-        environment.afterEach.call(this);
-    }
+    afterEach: environment.afterEach
 });
 
 QUnit.test("Set business range when period is set", function(assert) {
@@ -2230,4 +2402,209 @@ QUnit.test("Do not apply margins two times", function(assert) {
     const tickGeneratorOptions = this.tickGenerator.lastCall.returnValue.lastCall.args[0];
     assert.equal(tickGeneratorOptions.min, -10);
     assert.equal(tickGeneratorOptions.max, 120);
+});
+
+
+QUnit.module("Get margins", $.extend(true, {}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        this.renderSettings.axisType = "polarAxes";
+        this.renderSettings.drawingType = "circular";
+        this.renderer.bBoxTemplate = { x: 0, y: 0, width: 0, height: 0, isEmpty: true };
+
+    },
+    afterEach: function() {
+        environment.afterEach.call(this);
+    },
+
+    setLabelBoxes(boxes) {
+        let i = 0;
+        this.renderer.bBoxTemplate = () => boxes[i++];
+    }
+}));
+
+QUnit.test("Without labels - returns canvas margins", function(assert) {
+    // arrange
+    const axis = this.createSimpleAxis({
+        label: {
+            visible: false
+        }
+    });
+    this.canvas = {
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+        width: 600,
+        height: 606
+    };
+    axis.draw(this.canvas);
+    // act
+    const margins = axis.getMargins();
+    // assert
+    assert.strictEqual(margins.bottom, 0, "bottom");
+    assert.strictEqual(margins.left, 0, "left");
+    assert.strictEqual(margins.right, 0, "right");
+    assert.strictEqual(margins.top, 0, "right");
+});
+
+QUnit.test("With labels - calculate margins from labels", function(assert) {
+    this.generatedTicks = [1, 2, 3, 4];
+    // arrange
+    const axis = this.createSimpleAxis({
+        label: {
+            visible: true
+        }
+    });
+
+    this.canvas = {
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+        width: 600,
+        height: 600
+    };
+    axis.draw(this.canvas);
+    this.setLabelBoxes([
+        { x: -10, width: 5, y: 10, height: 5 },
+        { x: 20, width: 5, y: 594, height: 20 },
+        { x: 594, width: 15, y: 10, height: 5 },
+        { x: 40, width: 5, y: -20, height: 5 }
+    ]);
+    // act
+    const margins = axis.getMargins();
+    // assert
+    assert.strictEqual(margins.bottom, 14, "bottom");
+    assert.strictEqual(margins.left, 10, "left");
+    assert.strictEqual(margins.right, 9, "right");
+    assert.strictEqual(margins.top, 20, "right");
+});
+
+QUnit.test("Without labels and with ticks - take into account length and shift", function(assert) {
+    this.generatedTicks = [1, 2, 3, 4];
+    // arrange
+    const axis = this.createSimpleAxis({
+        label: {
+            visible: false
+        },
+        tick: {
+            visible: true,
+            length: 12,
+            shift: 5
+        }
+    });
+
+    this.canvas = {
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+        width: 600,
+        height: 600
+    };
+    axis.draw(this.canvas);
+    // act
+    const margins = axis.getMargins();
+    // assert
+    assert.strictEqual(margins.bottom, 11, "bottom");
+    assert.strictEqual(margins.left, 11, "left");
+    assert.strictEqual(margins.right, 11, "right");
+    assert.strictEqual(margins.top, 11, "right");
+});
+
+
+QUnit.test("Without labels and with inside ticks - do not take into ticks", function(assert) {
+    this.generatedTicks = [1, 2, 3, 4];
+    // arrange
+    const axis = this.createSimpleAxis({
+        label: {
+            visible: false
+        },
+        tick: {
+            visible: true,
+            length: 12,
+            shift: -8
+        }
+    });
+
+    this.canvas = {
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+        width: 600,
+        height: 600
+    };
+    axis.draw(this.canvas);
+    // act
+    const margins = axis.getMargins();
+    // assert
+    assert.strictEqual(margins.bottom, 0, "bottom");
+    assert.strictEqual(margins.left, 0, "left");
+    assert.strictEqual(margins.right, 0, "right");
+    assert.strictEqual(margins.top, 0, "right");
+});
+
+
+QUnit.module("Circular axis. UpdateSize", $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.apply(this, arguments);
+        this.generatedTicks = [0];
+        this.translator.translate.returns(-90);
+
+        this.canvas = {
+            originalLeft: 5,
+            left: 20,
+            originalTop: 5,
+            top: 20,
+            originalBottom: 5,
+            bottom: 20,
+            right: 20,
+            originalRight: 5,
+            width: 200,
+            height: 200
+        };
+
+        this.options.startAngle = 0;
+        this.options.endAngle = 90;
+
+        this.renderSettings.axisType = "polarAxes";
+        this.renderSettings.drawingType = "circular";
+        this.options.min = 0;
+        this.options.max = 5000;
+        this.options.label = {
+            overlappingBehavior: "ignore",
+            visible: true,
+            alignment: "center"
+        };
+    },
+
+    act(bBox) {
+        const axis = this.createDrawnAxis();
+
+        this.renderer.bBoxTemplate = bBox;
+
+        axis.updateSize(this.canvas);
+        const { x, y } = this.renderer.text.lastCall.returnValue.attr.lastCall.args[0];
+        return [x, y];
+    }
+}));
+
+QUnit.test("adjust labels on updateSize - do not go out from left bound", function(assert) {
+    assert.deepEqual(this.act({ x: -15, y: 50, width: 40, height: 10 }), [40, 145]);
+});
+
+QUnit.test("adjust labels on updateSize - do not go out from right bound", function(assert) {
+    assert.deepEqual(this.act({ x: 155, y: 50, width: 110, height: 10 }), [-50, 145]);
+});
+
+QUnit.test("adjust labels on updateSize - do not go out from bottom bound", function(assert) {
+    this.translator.translate.returns(180);
+    assert.deepEqual(this.act({ x: 50, y: 180, width: 40, height: 30 }), [100, 165]);
+});
+
+QUnit.test("adjust labels on updateSize - do not go out from top bound", function(assert) {
+    this.translator.translate.returns(0);
+    assert.deepEqual(this.act({ x: 50, y: -100, width: 40, height: 60 }), [100, 125]);
 });

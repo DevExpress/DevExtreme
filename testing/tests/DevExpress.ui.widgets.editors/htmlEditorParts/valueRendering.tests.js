@@ -3,6 +3,8 @@ import $ from "jquery";
 import "ui/html_editor";
 import "ui/html_editor/converters/markdown";
 
+import { checkLink } from "./utils.js";
+
 const CONTENT_CLASS = "dx-htmleditor-content";
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 
@@ -173,10 +175,88 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         assert.equal(instance.option("value"), expectedMarkup);
         assert.equal(markup, expectedMarkup);
     });
+
+    test("editor should respect attributes of the list item", (assert) => {
+        const done = assert.async();
+        const expectedMarkup = '<ul><li style="text-align: center;">test</li></ul>';
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "<ul><li>test</li></ul>",
+                onValueChanged: (e) => {
+                    assert.equal(e.value, expectedMarkup, "value is OK");
+                    done();
+                }
+            })
+            .dxHtmlEditor("instance");
+
+        this.clock.tick();
+
+        assert.expect(1);
+        instance.setSelection(0, 4);
+        instance.format("align", "center");
+        this.clock.tick();
+    });
+
+    test("editor should respect attributes of the single formatted line", (assert) => {
+        const done = assert.async();
+        const expectedMarkup = '<p style="text-align: center;">test</p>';
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "test",
+                onValueChanged: (e) => {
+                    assert.equal(e.value, expectedMarkup, "value is OK");
+                    done();
+                }
+            })
+            .dxHtmlEditor("instance");
+
+        this.clock.tick();
+
+        assert.expect(1);
+        instance.setSelection(1, 0);
+        instance.format("align", "center");
+        this.clock.tick();
+    });
+
+    test("editor should have an empty string value when all content has been removed", (assert) => {
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "test"
+            }).dxHtmlEditor("instance");
+
+        instance.delete(0, 4);
+        assert.equal(instance.option("value"), "", "value is empty line");
+    });
+
+    test("editor should trigger the 'valueChanged' event after formatting a link", (assert) => {
+        assert.expect(1);
+
+        const done = assert.async();
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "<a href='www.test.test'>test</a>",
+                onValueChanged: ({ value }) => {
+                    const hasColor = /style=(".*?"|'.*?'|[^"'][^\s]*)/.test(value);
+
+                    assert.ok(hasColor, "link has a color");
+                    done();
+                }
+            }).dxHtmlEditor("instance");
+
+        instance.setSelection(0, 4);
+        instance.format("color", "red");
+    });
 });
 
 
-QUnit.module("Value as Markdown markup", () => {
+QUnit.module("Value as Markdown markup", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: () => {
+        this.clock.restore();
+    }
+}, () => {
     test("render default value", (assert) => {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 value: "Hi!\nIt's a **test**!",
@@ -235,7 +315,7 @@ QUnit.module("Custom blots rendering", {
 }, () => {
     test("render image", (assert) => {
         const testTag = /<img([\w\W]+?)/;
-        const testSrc = /src="http:\/\/test.com\/test.jpg"/g;
+        const testSrc = /src="http:\/\/test.test\/test.jpg"/g;
         const testAlt = /alt="altering"/g;
         const testWidth = /width="100"/g;
         const testHeight = /height="100"/g;
@@ -252,7 +332,7 @@ QUnit.module("Custom blots rendering", {
             })
             .dxHtmlEditor("instance");
 
-        instance.insertEmbed(0, "extendedImage", { src: "http://test.com/test.jpg", width: 100, height: 100, alt: "altering" });
+        instance.insertEmbed(0, "extendedImage", { src: "http://test.test/test.jpg", width: 100, height: 100, alt: "altering" });
         this.clock.tick();
     });
 
@@ -260,18 +340,22 @@ QUnit.module("Custom blots rendering", {
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 value: "test",
-                onValueChanged: (e) => {
-                    assert.equal(e.value, '<a href="http://test.com" target="_blank">test</a>test', "markup contains an image");
+                onValueChanged: ({ value }) => {
+                    checkLink(assert, {
+                        href: "http://test.test",
+                        content: "test",
+                        afterLink: "test"
+                    }, value);
                 }
             })
             .dxHtmlEditor("instance");
 
         instance.setSelection(0, 0);
-        instance.insertText(0, "test", "link", { href: "http://test.com", target: true });
+        instance.insertText(0, "test", "link", { href: "http://test.test", target: true });
     });
 
     test("render variable", (assert) => {
-        const expected = '<span class="dx-variable" data-var-start-esc-char="#" data-var-end-esc-char="#" data-var-value="Test"><span contenteditable="false">#Test#</span></span>';
+        const expected = '<p><span class="dx-variable" data-var-start-esc-char="#" data-var-end-esc-char="#" data-var-value="Test"><span contenteditable="false">#Test#</span></span></p>';
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 onValueChanged: (e) => {

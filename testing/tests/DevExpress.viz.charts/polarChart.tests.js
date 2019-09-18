@@ -99,7 +99,7 @@ function createStubAxis() {
     stubAxis.getOptions = function() {
         return this._options;
     };
-    stubAxis.measureLabels.returns({ width: 20, height: 10 });
+    stubAxis.getMargins.returns({ left: 20, right: 20, top: 10, bottom: 10 });
     stubAxis.getSpiderTicks.returns([]);
     return stubAxis;
 }
@@ -159,9 +159,11 @@ var stubSeries = [createSeries(), createSeries()],
             that.createAxis = sinon.stub(axisModule, "Axis", function() {
                 resetStub(stubAxes[axesIndex]);
 
-                stubAxes[axesIndex].measureLabels.returns({
-                    width: 50,
-                    height: 70
+                stubAxes[axesIndex].getMargins.returns({
+                    left: 50,
+                    right: 50,
+                    top: 70,
+                    bottom: 70
                 });
 
                 return stubAxes[axesIndex++];
@@ -424,6 +426,20 @@ QUnit.test("draw Axes", function(assert) {
 
     assert.equal(chart._argumentAxes[0].draw.callCount, 1);
     assert.deepEqual(chart._argumentAxes[0].draw.getCall(0).args, [{
+        bottom: 0,
+        height: 400,
+        left: 0,
+        right: 0,
+        top: 0,
+        width: 1000,
+        originalTop: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0
+    }]);
+
+    assert.equal(chart.getArgumentAxis().updateSize.callCount, 1);
+    assert.deepEqual(chart.getArgumentAxis().updateSize.getCall(0).args, [{
         bottom: 70,
         height: 400,
         left: 50,
@@ -449,35 +465,29 @@ QUnit.test("draw Axes", function(assert) {
         originalLeft: 0,
         originalRight: 0
     }]);
-
-    assert.deepEqual(chart._argumentAxes[0].measureLabels.getCall(0).args[0], {
-        bottom: 0,
-        height: 400,
-        left: 0,
-        right: 0,
-        top: 0,
-        width: 1000,
-        originalTop: 0,
-        originalBottom: 0,
-        originalLeft: 0,
-        originalRight: 0
-    });
-
-    assert.strictEqual(chart._argumentAxes[0].measureLabels.getCall(0).args[1], true);
 });
 
 QUnit.test("Adaptive layout", function(assert) {
     stubLayoutManager.needMoreSpaceForPanesCanvas.returns({ width: 10 });
     stubThemeManager.getOptions.withArgs("adaptiveLayout").returns({ width: 1000, keepLabels: false });
+
+
+    stubAxes[0].getMargins.onCall(1).returns({ left: 2, right: 2, top: 2, bottom: 2 });
+    stubAxes[0].getMargins.onCall(2).returns({ left: 2, right: 2, top: 2, bottom: 2 });
+    stubAxes[0].getCanvas.returns({ stubAxisCanvas: true });
+
     var chart = this.createSimplePolarChart();
 
+    assert.deepEqual(stubLayoutManager.needMoreSpaceForPanesCanvas.getCall(0).args[0], [{ canvas: stubAxes[0].getCanvas() }]);
+
+    assert.equal(stubAxes[0].getMargins.callCount, 3);
     assert.equal(chart._argumentAxes[0].hideOuterElements.callCount, 1);
     assert.deepEqual(chart._argumentAxes[0].updateSize.getCall(0).args, [{
-        bottom: 0,
+        bottom: 70,
         height: 400,
-        left: 0,
-        right: 0,
-        top: 0,
+        left: 50,
+        right: 50,
+        top: 70,
         width: 1000,
         originalTop: 0,
         originalBottom: 0,
@@ -485,11 +495,23 @@ QUnit.test("Adaptive layout", function(assert) {
         originalRight: 0
     }]);
     assert.deepEqual(chart._valueAxes[0].updateSize.getCall(0).args, [{
-        bottom: 0,
+        bottom: 2,
         height: 400,
-        left: 0,
-        right: 0,
-        top: 0,
+        left: 2,
+        right: 2,
+        top: 2,
+        width: 1000,
+        originalTop: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0
+    }]);
+    assert.deepEqual(chart.getArgumentAxis().updateSize.lastCall.args, [{
+        bottom: 2,
+        height: 400,
+        left: 2,
+        right: 2,
+        top: 2,
         width: 1000,
         originalTop: 0,
         originalBottom: 0,

@@ -436,10 +436,9 @@ var AdvancedChart = BaseChart.inherit({
         });
 
         if(!updatedAxis || updatedAxis && series.length) {
-            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._axesReinitialized));
+            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._axesReinitialized, undefined, that._groupsData.categories));
         }
 
-        that._axesReinitialized = false;
         that._populateMarginOptions();
     },
 
@@ -570,7 +569,7 @@ var AdvancedChart = BaseChart.inherit({
         const that = this;
         const cleanPanesCanvases = drawAxes();
 
-        const needSpace = that.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
+        const needSpace = that.checkForMoreSpaceForPanesCanvas();
 
         if(needSpace) {
             const size = this._layout.backward(this._rect, this._rect, [needSpace.width, needSpace.height]);
@@ -580,6 +579,14 @@ var AdvancedChart = BaseChart.inherit({
 
             drawAxes(needSpace, cleanPanesCanvases);
         }
+    },
+
+    checkForMoreSpaceForPanesCanvas() {
+        return this.layoutManager.needMoreSpaceForPanesCanvas(this._getLayoutTargets(), this._isRotated());
+    },
+
+    _notify() {
+        this._axesReinitialized = false;
     }
 });
 

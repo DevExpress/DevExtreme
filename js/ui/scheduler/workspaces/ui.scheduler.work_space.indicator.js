@@ -1,12 +1,13 @@
-var $ = require("../../../core/renderer"),
-    SchedulerWorkSpace = require("./ui.scheduler.work_space"),
-    registerComponent = require("../../../core/component_registrator"),
-    dateUtils = require("../../../core/utils/date"),
-    extend = require("../../../core/utils/extend").extend,
-    windowUtils = require("../../../core/utils/window"),
-    toMs = dateUtils.dateToMilliseconds;
+import $ from "../../../core/renderer";
+import SchedulerWorkSpace from "./ui.scheduler.work_space";
+import registerComponent from "../../../core/component_registrator";
+import dateUtils from "../../../core/utils/date";
+import { extend } from "../../../core/utils/extend";
+import windowUtils from "../../../core/utils/window";
 
-var SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
+const toMs = dateUtils.dateToMilliseconds;
+
+const SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
     TIME_PANEL_CURRENT_TIME_CELL_CLASS = "dx-scheduler-time-panel-current-time-cell",
     HEADER_CURRENT_TIME_CELL_CLASS = "dx-scheduler-header-panel-current-time-cell";
 
@@ -116,12 +117,14 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _getIndicatorDuration: function() {
-        var today = this._getToday(),
+        let today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate);
+        let timeDiff = today.getTime() - firstViewDate.getTime();
+        if(this.option('type') === 'workWeek') {
+            timeDiff = timeDiff - (this._getWeekendsCount(Math.round(timeDiff / toMs("day"))) * toMs("day"));
+        }
 
-        var timeDiff = today.getTime() - firstViewDate.getTime() + 1;
-
-        return Math.ceil(timeDiff / toMs("day"));
+        return Math.ceil((timeDiff + 1) / toMs("day"));
     },
 
     getIndicationHeight: function() {

@@ -29,6 +29,7 @@
     }
 })(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml) {
     var templateCompiler = createTemplateCompiler();
+    var pendingCreateComponentRoutines = [ ];
 
     function createTemplateCompiler() {
         var OPEN_TAG = "<%",
@@ -79,13 +80,19 @@
     }
 
     function createTemplateEngine() {
-
         return {
             compile: function(element) {
                 return templateCompiler(extractTemplateMarkup(element));
             },
             render: function(template, data) {
-                return template(data, encodeHtml);
+                var html = template(data, encodeHtml);
+
+                var dxMvcExtensionsObj = window["MVCx"];
+                if(dxMvcExtensionsObj && !dxMvcExtensionsObj.isDXScriptInitializedOnLoad) {
+                    html = html.replace(/(<script[^>]+)id="dxss_.+?"/g, "$1");
+                }
+
+                return html;
             }
         };
     }
@@ -119,17 +126,20 @@
     }
 
     function createComponent(name, options, id, validatorOptions) {
-        var render = function(_, container) {
-            var selector = "#" + id.replace(/[^\w-]/g, "\\$&"),
-                $component = $(selector, container)[name](options);
+        var selector = "#" + id.replace(/[^\w-]/g, "\\$&");
+        pendingCreateComponentRoutines.push(function() {
+            var $component = $(selector)[name](options);
             if($.isPlainObject(validatorOptions)) {
                 $component.dxValidator(validatorOptions);
             }
-            templateRendered.remove(render);
-        };
-
-        templateRendered.add(render);
+        });
     }
+
+    templateRendered.add(function() {
+        var snapshot = pendingCreateComponentRoutines.slice();
+        pendingCreateComponentRoutines = [ ];
+        snapshot.forEach(function(func) { func(); });
+    });
 
     return {
         createComponent: createComponent,

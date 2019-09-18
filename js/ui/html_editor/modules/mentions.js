@@ -3,11 +3,13 @@ import { compileGetter } from "../../../core/utils/data";
 import { isString } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
 import { getPublicElement } from "../../../core/utils/dom";
+import { Event as dxEvent } from "../../../events";
 
 import PopupModule from "./popup";
 import Mention from "../formats/mention";
 
 const USER_ACTION = "user";
+const SILENT_ACTION = "silent";
 const DEFAULT_MARKER = "@";
 
 const KEY_CODES = {
@@ -55,16 +57,24 @@ class MentionModule extends PopupModule {
     constructor(quill, options) {
         super(quill, options);
         this._mentions = {};
+        this.editorInstance = options.editorInstance;
 
         options.mentions.forEach((item) => {
-            if(!item.marker) {
-                item.marker = DEFAULT_MARKER;
+            let { marker, template } = item;
+            if(!marker) {
+                item.marker = marker = DEFAULT_MARKER;
             }
 
-            this._mentions[item.marker] = extend({}, this._getDefaultOptions(), item);
+            if(template) {
+                const preparedTemplate = this.editorInstance._getTemplate(template);
+                preparedTemplate && Mention.addTemplate(marker, preparedTemplate);
+            }
+
+            this._mentions[marker] = extend({}, this._getDefaultOptions(), item);
         });
 
         this._attachKeyboardHandlers();
+        this.editorInstance.addCleanCallback(this.clean.bind(this));
         this.quill.on("text-change", this.onTextChange.bind(this));
     }
 
@@ -181,6 +191,7 @@ class MentionModule extends PopupModule {
             itemTemplate: this.options.itemTemplate,
             onContentReady: () => {
                 if(this._hasSearch) {
+                    this._popup.repaint();
                     this._focusFirstElement();
                     this._hasSearch = false;
                 }
@@ -202,10 +213,34 @@ class MentionModule extends PopupModule {
         };
 
         setTimeout(function() {
-            this.quill.deleteText(startIndex, textLength, "silent");
+            this.quill.insertText(startIndex, ' ', SILENT_ACTION);
+            this.quill.deleteText(startIndex + 1, textLength, SILENT_ACTION);
             this.quill.insertEmbed(startIndex, "mention", value);
-            this.quill.setSelection(startIndex + 1);
+            this.quill.setSelection(startIndex + 2);
         }.bind(this));
+    }
+
+    _getLastInsertOperation(ops) {
+        const lastOperation = ops[ops.length - 1];
+        const isLastOperationInsert = 'insert' in lastOperation;
+
+        if(isLastOperationInsert) {
+            return lastOperation;
+        }
+
+        const isLastOperationDelete = 'delete' in lastOperation;
+
+        if(isLastOperationDelete && ops.length >= 2) {
+            const penultOperation = ops[ops.length - 2];
+            const isPenultOperationInsert = 'insert' in penultOperation;
+            const isSelectionReplacing = isLastOperationDelete && isPenultOperationInsert;
+
+            if(isSelectionReplacing) {
+                return penultOperation;
+            }
+        }
+
+        return null;
     }
 
     onTextChange(newDelta, oldDelta, source) {
@@ -215,7 +250,12 @@ class MentionModule extends PopupModule {
             if(this._isMentionActive) {
                 this._processSearchValue(lastOperation) && this._filterList(this._searchValue);
             } else {
-                this.checkMentionRequest(lastOperation, newDelta.ops);
+                const { ops } = newDelta;
+                const lastInsertOperation = this._getLastInsertOperation(ops);
+
+                if(lastInsertOperation) {
+                    this.checkMentionRequest(lastInsertOperation, ops);
+                }
             }
         }
     }
@@ -247,31 +287,11 @@ class MentionModule extends PopupModule {
         this._activeMentionConfig = this._mentions[insert];
 
         if(this._activeMentionConfig) {
-            this._updateMentionTemplate(this._activeMentionConfig);
             this._updateList(this._activeMentionConfig);
             this.savePosition(caret.index);
             this._popup.option("position", this._popupPosition);
             this._searchValue = "";
             this._popup.show();
-        }
-    }
-
-    _updateMentionTemplate({ template }) {
-        let preparedTemplate;
-
-        if(template) {
-            preparedTemplate = this.options.editorInstance._getTemplate(template);
-        }
-
-        if(preparedTemplate) {
-            Mention.setContentRender(function(node, data) {
-                preparedTemplate.render({
-                    model: data,
-                    container: node
-                });
-            });
-        } else {
-            Mention.restoreContentRender();
         }
     }
 
@@ -342,13 +362,16 @@ class MentionModule extends PopupModule {
 
     get _popupPosition() {
         const position = this.getPosition();
-        const mentionBounds = this.quill.getBounds(position ? position - 1 : position);
-
+        const { left: mentionLeft, top: mentionTop, height: mentionHeight } = this.quill.getBounds(position ? position - 1 : position);
+        const { left: leftOffset, top: topOffset } = $(this.quill.root).offset();
+        const positionEvent = dxEvent("positionEvent", {
+            pageX: leftOffset + mentionLeft,
+            pageY: topOffset + mentionTop
+        });
         return {
-            of: this.quill.root,
+            of: positionEvent,
             offset: {
-                h: mentionBounds.left,
-                v: mentionBounds.bottom
+                v: mentionHeight
             },
             my: "top left",
             at: "top left",
@@ -361,6 +384,7 @@ class MentionModule extends PopupModule {
 
     _getPopupConfig() {
         return extend(super._getPopupConfig(), {
+            closeOnTargetScroll: false,
             onShown: () => {
                 this._isMentionActive = true;
                 this._hasSearch = false;
@@ -378,6 +402,14 @@ class MentionModule extends PopupModule {
 
     get _activeListItems() {
         return this._list.itemElements().filter(`:not(.${DISABLED_STATE_CLASS})`);
+    }
+
+    clean() {
+        Object.keys(this._mentions).forEach((marker) => {
+            if(this._mentions[marker].template) {
+                Mention.removeTemplate(marker);
+            }
+        });
     }
 }
 

@@ -14,7 +14,6 @@ import messageLocalization from "localization/message";
 import pointerMock from "../../helpers/pointerMock.js";
 import renderer from "core/renderer";
 import support from "core/utils/support";
-import themes from "ui/themes";
 import typeUtils from "core/utils/type";
 import uiDateUtils from "ui/date_box/ui.date_utils";
 import { noop } from "core/utils/common";
@@ -58,6 +57,7 @@ const DATEBOX_ADAPTIVITY_MODE_CLASS = "dx-datebox-adaptivity-mode";
 const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 const STATE_FOCUSED_CLASS = "dx-state-focused";
 const BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
+const TODAY_CELL_CLASS = "dx-calendar-today";
 const widgetName = "dxDateBox";
 
 const getShortDate = date => {
@@ -165,20 +165,30 @@ QUnit.module("datebox tests", moduleConfig, () => {
             pickerType: "calendar"
         });
 
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.ok(!$input.prop("readOnly"), "correct readOnly value");
     });
 
-    QUnit.test("readonly property should not be applied to the native picker", assert => {
-        const $dateBox = $("#dateBox").dxDateBox({
-            pickerType: "native",
-            acceptCustomValue: false
+    QUnit.test("readonly property should not be applied to the native picker on real ios", assert => {
+        const deviceStub = sinon.stub(devices, "real").returns({
+            deviceType: "mobile",
+            version: [],
+            platform: "ios"
         });
 
-        const $input = $dateBox.find(".dx-texteditor-input");
+        try {
+            const $dateBox = $("#dateBox").dxDateBox({
+                pickerType: "native",
+                acceptCustomValue: false
+            });
 
-        assert.ok(!$input.prop("readOnly"), "correct readOnly value");
+            const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            assert.ok(!$input.prop("readOnly"), "correct readOnly value");
+        } finally {
+            deviceStub.restore();
+        }
     });
 
     QUnit.test("T204179 - dxDateBox should not render dropDownButton only for generic device when pickerType is 'native'", assert => {
@@ -236,7 +246,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
             focusStateEnabled: true
         });
         const instance = $dateBox.dxDateBox("instance");
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $clearButton = $dateBox.find(".dx-clear-button-area");
 
         $($input.val("asd")).trigger("change");
@@ -265,7 +275,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
         assert.ok(onValueChanged.getCall(1).args[0].event, "event was saved");
     });
 
-    QUnit.test("out of range value should be marked as invalid on init", assert => {
+    QUnit.test("out of range value should not be marked as invalid on init", assert => {
         const $dateBox = $("#widthRootStyle").dxDateBox({
             value: new Date(2015, 3, 20),
             min: new Date(2014, 3, 20),
@@ -274,7 +284,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
 
         const dateBox = $dateBox.dxDateBox("instance");
 
-        assert.notOk(dateBox.option("isValid"), "widget is invalid");
+        assert.ok(dateBox.option("isValid"), "widget is valid on init");
     });
 
     QUnit.test("it shouild be impossible to set out of range time to dxDateBox using ui (T394206)", assert => {
@@ -433,7 +443,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
         const instance = $dateBox.dxDateBox("instance");
         const expectedDisplayValue = dateLocalization.format(new Date(2016, 0, 1), format);
 
-        const $input = $dateBox.find("input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val("");
         $input.val("1/01/2016");
@@ -630,7 +640,7 @@ QUnit.module("focus policy", {}, () => {
         });
 
         const instance = $dateBox.dxDateBox("instance");
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         const keyboard = keyboardMock($input);
 
@@ -654,7 +664,7 @@ QUnit.module("focus policy", {}, () => {
         const $dateBox = $("#dateBox").dxDateBox({ type: "datetime", useMaskBehavior: true });
         const dateBox = $dateBox.dxDateBox("instance");
         const initText = dateBox.option("text");
-        const input = $(".dx-texteditor-input", $dateBox).get(0);
+        const input = $(`.${TEXTEDITOR_INPUT_CLASS}`, $dateBox).get(0);
         const mouse = pointerMock(input).start();
 
         mouse.wheel(10);
@@ -891,7 +901,7 @@ QUnit.module("merging dates", moduleConfig, () => {
         assert.deepEqual(this.instance.option("value"), date);
     });
 
-    QUnit.test("if value isn't specified then current day is default for an editor with type 'time'", (assert) => {
+    QUnit.test("if value isn't specified then Unix Epoch is default for an editor with type 'time'", (assert) => {
         this.instance.option({
             type: "time",
             pickerType: "list",
@@ -903,11 +913,11 @@ QUnit.module("merging dates", moduleConfig, () => {
             .trigger("change");
 
         const value = this.instance.option("value");
-        const now = new Date();
+        const defaultDate = new Date(null);
 
-        assert.equal(value.getFullYear(), now.getFullYear(), "correct year");
-        assert.equal(value.getMonth(), now.getMonth(), "correct month");
-        assert.equal(value.getDate(), now.getDate(), "correct date");
+        assert.equal(value.getFullYear(), defaultDate.getFullYear(), "correct year");
+        assert.equal(value.getMonth(), defaultDate.getMonth(), "correct month");
+        assert.equal(value.getDate(), defaultDate.getDate(), "correct date");
     });
 
     QUnit.test("mergeDates must merge seconds when type is 'time'", (assert) => {
@@ -1355,13 +1365,14 @@ QUnit.module("widget sizing render", {}, () => {
             width: undefined
         }).dxDateBox("instance");
 
-        const initialWidth = $element.outerWidth();
+        const { width: initialWidth } = $element.get(0).getBoundingClientRect();
 
         $parent.css("transform", "scale(0.5)");
         component.repaint();
         $parent.css("transform", "scale(1)");
+        const { width: actualWidth } = component.$element().get(0).getBoundingClientRect();
 
-        assert.equal(component.$element().outerWidth(), initialWidth, "component has correct width");
+        assert.strictEqual(actualWidth, initialWidth, "component has correct width");
     });
 
     QUnit.test("component width calculation should consider buttons containers element", assert => {
@@ -1373,11 +1384,14 @@ QUnit.module("widget sizing render", {}, () => {
             width: undefined,
             showDropDownButton: false
         }).dxDateBox("instance");
-        const initialWidth = $element.outerWidth();
+        const { width: initialWidth } = $element.get(0).getBoundingClientRect();
         const instance = $element.dxDateBox("instance");
 
         instance.option("showDropDownButton", true);
-        assert.strictEqual(component.$element().outerWidth(), initialWidth + $(`.${BUTTONS_CONTAINER_CLASS}`).width());
+        const { width: actualWidth } = component.$element().get(0).getBoundingClientRect();
+        const { width: buttonWidth } = $(`.${BUTTONS_CONTAINER_CLASS}`).get(0).getBoundingClientRect();
+
+        assert.strictEqual(actualWidth, initialWidth + buttonWidth);
     });
 
     QUnit.test("change width", assert => {
@@ -1391,6 +1405,57 @@ QUnit.module("widget sizing render", {}, () => {
         instance.option("width", customWidth);
 
         assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
+    });
+
+    QUnit.test("it should update widget size after toggle the 'readOnly' option", (assert) => {
+        if(devices.current().platform !== "generic") {
+            assert.ok(true, "automatic size fitting working with generic devices only");
+            return;
+        }
+
+        const $element = $("#dateBox");
+        const instance = $element.dxDateBox({
+            pickerType: "calendar",
+            readOnly: true,
+            displayFormat: "shortDate"
+        }).dxDateBox("instance");
+
+        const initialWidth = $element.outerWidth();
+
+        instance.option({
+            readOnly: false,
+            value: new Date()
+        });
+
+        const actualWidth = $element.outerWidth();
+
+        assert.notEqual(actualWidth, initialWidth, "width has been changed");
+        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
+    });
+
+    QUnit.test("it should update widget size after the 'buttons' option changed (T809858)", (assert) => {
+        if(devices.current().platform !== "generic") {
+            assert.ok(true, "automatic size fitting working with generic devices only");
+            return;
+        }
+
+        const $element = $("#dateBox");
+        const instance = $element.dxDateBox({
+            pickerType: "calendar",
+            displayFormat: "shortDate"
+        }).dxDateBox("instance");
+
+        const initialWidth = $element.outerWidth();
+
+        instance.option("buttons", [{
+            name: "test",
+            options: { text: "after" }
+        }]);
+
+        const actualWidth = $element.outerWidth();
+
+        assert.notEqual(actualWidth, initialWidth, "width has been changed");
+        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
     });
 });
 
@@ -2270,7 +2335,7 @@ QUnit.module("datebox w/ calendar", {
         });
 
         const dateBox = this.fixture.dateBox;
-        const $input = $(dateBox.$element().find(".dx-texteditor-input"));
+        const $input = $(dateBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`));
         const kb = keyboardMock($input);
         const inputValue = "1/5/2015";
 
@@ -2298,7 +2363,7 @@ QUnit.module("datebox w/ calendar", {
         });
 
         const dateBox = this.fixture.dateBox;
-        const $input = $(dateBox.$element().find(".dx-texteditor-input"));
+        const $input = $(dateBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`));
         const kb = keyboardMock($input);
 
         clearInput($input, kb);
@@ -2318,7 +2383,7 @@ QUnit.module("datebox w/ calendar", {
         });
 
         const dateBox = this.fixture.dateBox;
-        const $input = $(dateBox.$element().find(".dx-texteditor-input"));
+        const $input = $(dateBox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`));
         const kb = keyboardMock($input);
 
         dateBox.open();
@@ -2467,7 +2532,7 @@ QUnit.module("datebox w/ calendar", {
 
         const dateBox = this.fixture.dateBox;
         const $element = $(dateBox.$element());
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const kb = keyboardMock($input);
 
         kb
@@ -2512,29 +2577,6 @@ QUnit.module("datebox w/ calendar", {
         assert.equal($calendarViews.eq(0).position().left, 0, "main view is at 0");
         assert.equal($calendarViews.eq(1).position().left, -viewWidth, "before view is at the left");
         assert.equal($calendarViews.eq(2).position().left, viewWidth, "after view is at the right");
-    });
-
-    QUnit.test("List picker popup should be positioned correctly for Android devices", assert => {
-        const origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = () => {
-            return true;
-        };
-
-        const $dateBox = $("#dateBox").dxDateBox({
-            type: "time",
-            pickerType: "list",
-            opened: true
-        });
-
-        const popup = $dateBox.find(".dx-popup").dxPopup("instance");
-        const position = popup.option("position");
-
-        assert.equal(position.at, "left bottom", "correct postion.at property");
-        assert.equal(position.my, "left top", "correct postion.my property");
-        assert.equal(position.offset.v, -10, "correct postion.offset.v property");
-        assert.equal(position.offset.h, -16, "correct postion.offset.h property");
-
-        themes.isAndroid5 = origIsAndroid5;
     });
 
     QUnit.test("Popup with calendar strategy should be use 'flipfit flip' strategy", assert => {
@@ -2934,6 +2976,24 @@ QUnit.module("datebox with time component", {
         assert.equal(dateBox.option("value").getMilliseconds(), 0, "milliseconds has zero value");
     });
 
+    QUnit.test("Submit value should not be changed when apply button clicked and an invalid value is selected", assert => {
+        const dateBox = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            opened: true,
+            min: new Date("2015/1/25 13:00:00"),
+            value: new Date("2015/1/25 13:00:00")
+        }).dxDateBox("instance");
+        const $submitElement = $("#dateBox").find("input[type=hidden]");
+        const $hourDownButton = $(dateBox.content()).find(".dx-numberbox-spin-down").first();
+
+        $hourDownButton.trigger("dxpointerdown");
+        $(".dx-popup-done.dx-button").first().trigger("dxclick");
+
+        assert.notOk(dateBox.option("isValid"), "editor is invalid");
+        assert.equal($submitElement.val(), "2015-01-25T13:00:00", "submit element has correct value");
+    });
+
     QUnit.test("Reset seconds and milliseconds when DateBox has no value for time view", assert => {
         const dateBox = $("#dateBox").dxDateBox({
             pickerType: "list",
@@ -2990,6 +3050,21 @@ QUnit.module("datebox with time component", {
         assert.ok(minuteEditor.hasClass("dx-editor-underlined"));
         assert.ok(amPmEditor.hasClass("dx-editor-underlined"));
     });
+
+    QUnit.test("datebox with the 'datetime' type should have an 'event' parameter of the ValueChanged event", assert => {
+        $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            onValueChanged: ({ event }) => {
+                assert.ok(event, "event field is exist");
+                assert.strictEqual(event.type, "dxclick", "it's a 'dxclick' event");
+            },
+            opened: true
+        });
+
+        $(`.${TODAY_CELL_CLASS}`).trigger("dxclick");
+        $(".dx-popup-done.dx-button").trigger("dxclick");
+    });
 });
 
 QUnit.module("datebox w/ time list", {
@@ -3040,30 +3115,6 @@ QUnit.module("datebox w/ time list", {
         this.dateBox.option("width", "153px");
         this.dateBox.option("opened", true);
         assert.equal(this.$dateBox.outerWidth(), popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
-    });
-
-    QUnit.test("width option test for Android theme", (assert) => {
-        const origIsAndroid5 = themes.isAndroid5;
-        themes.isAndroid5 = () => {
-            return true;
-        };
-
-        const extraWidth = 32;
-
-        this.dateBox.option("opened", false);
-        this.dateBox.option("width", "auto");
-        this.dateBox.option("opened", true);
-
-        const popup = this.$dateBox.find(".dx-popup").dxPopup("instance");
-
-        assert.equal(this.$dateBox.outerWidth() + extraWidth, popup.option("width"), "timebox popup has equal width with timebox with option width 'auto'");
-
-        this.dateBox.option("opened", false);
-        this.dateBox.option("width", "153px");
-        this.dateBox.option("opened", true);
-        assert.equal(this.$dateBox.outerWidth() + extraWidth, popup.option("width"), "timebox popup has equal width with timebox with option width in pixels");
-
-        themes.isAndroid5 = origIsAndroid5;
     });
 
     QUnit.test("list should contain correct values if min/max does not specified", (assert) => {
@@ -3186,12 +3237,50 @@ QUnit.module("datebox w/ time list", {
 
     QUnit.test("list should have items if the 'min' option is specified (T395529)", (assert) => {
         this.dateBox.option({
-            min: new Date(2016, 5, 20),
+            min: new Date(new Date(null).setHours(15)),
             opened: true
         });
 
         const list = $(".dx-list").dxList("instance");
         assert.ok(list.option("items").length > 0, "list is not empty");
+    });
+
+    QUnit.test("selected date should be in 1970 when it was set from the null value", (assert) => {
+        this.dateBox.option({
+            opened: true,
+            value: null
+        });
+
+        const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+        $item.trigger("dxclick");
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), new Date(null).getFullYear(), "year is correct");
+    });
+
+    QUnit.test("selected date should be in value year when value is specified", (assert) => {
+        this.dateBox.option({
+            opened: true,
+            value: new Date(2018, 5, 6, 14, 12)
+        });
+
+        const $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+        $item.trigger("dxclick");
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), 2018, "year is correct");
+    });
+
+    QUnit.test("selected date should be in 1970 when it was set from user's input", (assert) => {
+        this.dateBox.option({
+            value: null,
+            displayFormat: "HH:mm"
+        });
+
+        keyboardMock(this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`))
+            .focus()
+            .type("11:11")
+            .change();
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), new Date(null).getFullYear(), "year is correct");
     });
 
     QUnit.test("the value's date part should not be changed if editing input's text by keyboard (T395685)", (assert) => {
@@ -3391,6 +3480,17 @@ QUnit.module("datebox w/ time list", {
         assert.equal(value.getHours(), 13, "Correct hours");
         assert.equal(value.getMinutes(), 0, "Correct minutes");
     });
+
+    QUnit.test("items are rendered when value is 'undefined' (T805931)", (assert) => {
+        this.dateBox.option({
+            value: undefined
+        });
+
+        this.dateBox.option("opened", true);
+
+        const $timeListItems = $(".dx-list .dx-list-item");
+        assert.ok($timeListItems.length > 0);
+    });
 });
 
 QUnit.module("keyboard navigation", {
@@ -3410,7 +3510,7 @@ QUnit.module("keyboard navigation", {
             })
             .dxDateBox("instance");
 
-        this.$input = this.$dateBox.find(".dx-texteditor-input");
+        this.$input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         this.keyboard = keyboardMock(this.$input);
     },
     afterEach: () => {
@@ -3418,7 +3518,7 @@ QUnit.module("keyboard navigation", {
     }
 }, () => {
     QUnit.testInActiveWindow("popup hides on tab", (assert) => {
-        this.$input.focusin();
+        this.dateBox.focus();
         assert.ok(this.$dateBox.hasClass(STATE_FOCUSED_CLASS), "element is focused");
         this.dateBox.option("opened", true);
         this.keyboard.keyDown("tab");
@@ -3494,7 +3594,7 @@ QUnit.module("keyboard navigation", {
             })
             .dxDateBox("instance");
 
-        const $input = this.$dateBox.find(".dx-texteditor-input");
+        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $($input).trigger($.Event("keydown", { key: "ArrowUp" }));
         $($input).trigger($.Event("keydown", { key: "ArrowDown" }));
@@ -3520,7 +3620,7 @@ QUnit.module("keyboard navigation", {
                 opened: true
             });
 
-            const $input = $dateBox.find(".dx-texteditor-input");
+            const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const kb = keyboardMock($input);
 
             $input.focusin();
@@ -3545,7 +3645,7 @@ QUnit.module("keyboard navigation", {
                 onValueChanged: valueChanged
             }).dxDateBox("instance");
 
-        const $input = this.$dateBox.find(".dx-texteditor-input");
+        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focusin();
 
@@ -3572,7 +3672,7 @@ QUnit.module("keyboard navigation", {
             opened: true
         });
 
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         try {
@@ -3628,8 +3728,8 @@ QUnit.module("aria accessibility", {}, () => {
                 pickerType: "calendar"
             });
 
-            const keyboard = keyboardMock($element.find("." + TEXTEDITOR_INPUT_CLASS));
-            const $input = $element.find(".dx-texteditor-input");
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
 
             keyboard.keyDown("right");
 
@@ -3653,8 +3753,8 @@ QUnit.module("aria accessibility", {}, () => {
                 opened: true
             });
 
-            const keyboard = keyboardMock($element.find("." + TEXTEDITOR_INPUT_CLASS));
-            const $input = $element.find(".dx-texteditor-input");
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const keyboard = keyboardMock($input);
 
             keyboard.keyDown("down");
 
@@ -3782,6 +3882,26 @@ QUnit.module("datebox validation", {}, () => {
             .change();
 
         assert.ok(dateBox.option("isValid"), "widget is valid");
+    });
+
+    QUnit.test("required validator should not block valuechange in datetime strategy", (assert) => {
+        const $dateBox = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            opened: true,
+            value: null
+        }).dxValidator({
+            validationRules: [{
+                type: "required"
+            }]
+        });
+        const dateBox = $dateBox.dxDateBox("instance");
+        const $done = $(dateBox.content()).parent().find(".dx-popup-done.dx-button");
+
+        $done.trigger("dxclick");
+
+        assert.ok(dateBox.option("isValid"), "widget is valid");
+        assert.ok(dateBox.option("value"), "value is not empty");
     });
 
     QUnit.test("widget is still valid after drop down is opened", assert => {
@@ -3926,7 +4046,7 @@ QUnit.module("datebox validation", {}, () => {
             },
         });
 
-        const $input = $dateBox.find("input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val("");
         $($input).trigger("change");
@@ -3974,7 +4094,7 @@ QUnit.module("datebox validation", {}, () => {
         });
         const dateBox = $dateBox.dxDateBox("instance");
 
-        const $input = $dateBox.find(".dx-texteditor-input");
+        const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -4027,6 +4147,45 @@ QUnit.module("datebox validation", {}, () => {
 
         dateBox.option("value", new Date(2015, 6, 10));
         dateBox.option("min", new Date(2015, 6, 5));
+
+        assert.ok(dateBox.option("isValid"), "datebox is valid");
+    });
+
+    QUnit.test("dxDateBox should become invalid if min/max options changed", assert => {
+        const dateBox = $("#dateBox").dxDateBox({
+            min: new Date(2015, 6, 14),
+            value: new Date(2015, 6, 18),
+            max: new Date(2015, 6, 20),
+            pickerType: "calendar"
+        }).dxDateBox("instance");
+
+        dateBox.option("min", new Date(2015, 6, 19));
+        assert.notOk(dateBox.option("isValid"), "datebox is invalid");
+
+        dateBox.option("min", new Date(2015, 6, 14));
+        assert.ok(dateBox.option("isValid"), "datebox is valid");
+
+        dateBox.option("max", new Date(2015, 6, 17));
+        assert.notOk(dateBox.option("isValid"), "datebox is invalid");
+
+        dateBox.option("max", new Date(2015, 6, 20));
+        assert.ok(dateBox.option("isValid"), "datebox is valid");
+    });
+
+    QUnit.test("required validator should not be triggered when another validation rule has been changed", (assert) => {
+        const dateBox = $("#dateBox").dxDateBox({
+            min: new Date(2015, 6, 14),
+            value: null,
+            max: new Date(2015, 6, 20),
+            pickerType: "calendar"
+        }).dxValidator({
+            validationRules: [{ type: "required", message: "Date is required" }]
+        }).dxDateBox("instance");
+
+        dateBox.option({
+            min: new Date(2015, 6, 13),
+            max: new Date(2015, 6, 21)
+        });
 
         assert.ok(dateBox.option("isValid"), "datebox is valid");
     });
@@ -4227,7 +4386,7 @@ QUnit.module("DateBox number and string value support", {
                 mode: "text"
             });
 
-            const $input = $("#dateBox").find(".dx-texteditor-input");
+            const $input = $("#dateBox").find(`.${TEXTEDITOR_INPUT_CLASS}`);
             assert.equal($input.val(), "1/11/2016", "text is correct");
 
             $($input.val("1/12/2016")).trigger("change");
@@ -4253,7 +4412,7 @@ QUnit.module("DateBox number and string value support", {
                 return dateSerialization.serializeDate(new Date(Date.UTC(year, month, day)), "M/d/y");
             };
 
-            const $input = $("#dateBox").find(".dx-texteditor-input");
+            const $input = $("#dateBox").find(`.${TEXTEDITOR_INPUT_CLASS}`);
             assert.equal($input.val(), serializeUTCDate(2016, 0, 11), "text is correct");
 
             $($input.val(serializeUTCDate(2016, 0, 12))).trigger("change");
@@ -4274,7 +4433,7 @@ QUnit.module("DateBox number and string value support", {
                 mode: "text"
             });
 
-            const $input = $("#dateBox").find(".dx-texteditor-input");
+            const $input = $("#dateBox").find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             $($input.val("1/12/21016")).trigger("change");
 
@@ -4294,7 +4453,7 @@ QUnit.module("DateBox number and string value support", {
                 mode: "text"
             });
 
-            const $input = $("#dateBox").find(".dx-texteditor-input");
+            const $input = $("#dateBox").find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             $($input.val("1/12/21016")).trigger("change");
 
@@ -4346,57 +4505,4 @@ QUnit.module("DateBox number and string value support", {
         });
     });
 
-    QUnit.test("T678838: DateBox doesn't switch format when time is changed", assert => {
-        const $dateBox = $("#dateBox").dxDateBox({
-            value: new Date(2018, 6, 6, 2),
-            type: "datetime",
-            pickerType: "calendar"
-        });
-
-        const instance = $dateBox.dxDateBox("instance");
-        instance.open();
-
-        const $inputs = $("." + DATEBOX_WRAPPER_CLASS + " ." + TEXTEDITOR_INPUT_CLASS);
-        const $hoursInput = $inputs.eq(0);
-        const $formatInput = $inputs.eq(2);
-
-        assert.equal($formatInput.val(), "AM", "format value is correct");
-
-        $hoursInput
-            .val(16)
-            .trigger("change");
-
-        assert.equal(parseInt($hoursInput.val()), 4, "hour input value is correct formated after set hour in 24 format");
-        assert.equal($formatInput.val(), "PM", "format value is changed");
-
-        $("." + DATEBOX_WRAPPER_CLASS)
-            .find(".dx-button.dx-popup-done")
-            .trigger("dxclick");
-
-        assert.equal(instance.option("value").valueOf(), (new Date(2018, 6, 6, 16)).valueOf(), "DateBox value is correct");
-    });
-
-    QUnit.test("date value should be formatted after change AM/PM format", assert => {
-        const TIMEVIEW_FORMAT12_AM = -1;
-        const TIMEVIEW_FORMAT12_PM = 1;
-
-        const $dateBox = $("#dateBox").dxDateBox({
-            value: new Date(2018, 6, 6, 16),
-            type: "datetime",
-            pickerType: "calendar"
-        });
-
-        const instance = $dateBox.dxDateBox("instance");
-        instance.open();
-
-        const formatSelectBox = $(".dx-timeview-format12").dxSelectBox("instance");
-        assert.equal(formatSelectBox.option("value"), TIMEVIEW_FORMAT12_PM, "correct value on init");
-
-        formatSelectBox.option("value", TIMEVIEW_FORMAT12_AM);
-        $("." + DATEBOX_WRAPPER_CLASS)
-            .find(".dx-button.dx-popup-done")
-            .trigger("dxclick");
-
-        assert.equal(instance.option("value").valueOf(), (new Date(2018, 6, 6, 4)).valueOf(), "DateBox value is formatted");
-    });
 });

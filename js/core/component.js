@@ -140,7 +140,7 @@ var Component = Class.inherit({
         extend(true, this._options, rulesOptions);
 
         for(var fieldName in this._optionsByReference) {
-            if(rulesOptions.hasOwnProperty(fieldName)) {
+            if(Object.prototype.hasOwnProperty.call(rulesOptions, fieldName)) {
                 this._options[fieldName] = rulesOptions[fieldName];
             }
         }
@@ -501,7 +501,7 @@ var Component = Class.inherit({
 
     isOptionDeprecated: function(name) {
         var deprecatedOptions = this._getDeprecatedOptions();
-        return deprecatedOptions.hasOwnProperty(name);
+        return Object.prototype.hasOwnProperty.call(deprecatedOptions, name);
     },
 
     _setOptionSilent: function(name, value) {

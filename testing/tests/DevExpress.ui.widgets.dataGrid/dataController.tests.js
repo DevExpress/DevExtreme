@@ -736,6 +736,33 @@ QUnit.test("Operation filter should generates correctly when sorting, remoteOper
     assert.equal(JSON.stringify(filter), '[["name","<","Dan"],"or",[["name","=","Dan"],"and",["name","<","Dan"]]]', "Operation filter");
 });
 
+// T755462
+QUnit.test("Check the filter generator for the boolean field", function(assert) {
+    // act, assert
+    var filter = this.dataController._generateBooleanFilter("isRoom", true, { desc: false });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",true]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", false, { desc: false });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","=",null]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", true, { desc: true });
+    assert.strictEqual(JSON.stringify(filter), undefined, "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", false, { desc: true });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","=",true]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", null, { desc: true });
+    assert.strictEqual(JSON.stringify(filter), '["isRoom","<>",null]', "filter");
+
+    // act, assert
+    filter = this.dataController._generateBooleanFilter("isRoom", null, { desc: false });
+    assert.strictEqual(JSON.stringify(filter), undefined, "filter");
+});
+
 QUnit.test("Get page index by simple key", function(assert) {
     // arrange
     var count = 0,
@@ -1385,8 +1412,12 @@ QUnit.test("Get row index if group by two columns and simple key and remote oper
         ++foundRowCount;
         assert.equal(globalRowIndex, 24, "Alice");
     });
+    dataController.getGlobalRowIndexByKey(["internal"]).done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, -1, "[internal]");
+    });
 
-    assert.equal(foundRowCount, 9, "Found row count");
+    assert.equal(foundRowCount, 10, "Found row count");
 });
 
 QUnit.test("Get row index if group by two columns and simple key and OData", function(assert) {
@@ -2902,6 +2933,30 @@ QUnit.test("change pageIndex to greater then pageCount", function(assert) {
     assert.equal(this.dataController.pageIndex(), 1);
 });
 
+// T746935
+QUnit.test("dataSource should not be reloaded when pageIndex is normalized after grouping", function(assert) {
+    this.applyOptions({
+        columns: ["name", "group"]
+    });
+
+    var loadingSpy = sinon.spy();
+    this.dataSource.store().on("loading", loadingSpy);
+
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.pageIndex(1);
+    this.dataSource.load();
+
+    // act
+    this.dataSource.group([{ selector: "group" }]);
+    this.dataSource.load();
+
+    // assert
+    assert.equal(loadingSpy.callCount, 1, "dataSource is loaded once");
+    assert.equal(this.dataController.items().length, 1, "item count");
+    assert.equal(this.dataController.items()[0].rowType, "group", "first row type");
+    assert.equal(this.dataController.pageIndex(), 0, "pageIndex");
+});
+
 QUnit.test("Change pageSize", function(assert) {
     // arrange
     var countCallPageChanged = 0;
@@ -3341,10 +3396,22 @@ QUnit.test("change sorting in onContentReady", function(assert) {
 
     // arrange
     assert.equal(that.dataController.items()[0].key, 999, "sorting is applied");
-    assert.equal(countCallChanged, 3, "count call changed of the dataController");
-    assert.equal(countCallDataSourceChanged, 3, "count call changed of the dataSource");
+    assert.equal(countCallChanged, 4, "count call changed of the dataController");
+    assert.equal(countCallDataSourceChanged, 4, "count call changed of the dataSource");
 });
 
+// T717716
+QUnit.test("rows should not be recreated on pageIndex event", function(assert) {
+    var rows = this.getVisibleRows(),
+        firstRow = rows[0];
+
+    // act
+    this.dataController.dataSource().changed.fire({ changeType: "pageIndex" });
+
+    // assert
+    assert.strictEqual(this.getVisibleRows(), rows, "rows are not changed");
+    assert.strictEqual(this.getVisibleRows()[0], firstRow, "first row is not changed");
+});
 
 var setupVirtualRenderingModule = function() {
     var array = [];
@@ -3388,19 +3455,6 @@ var setupVirtualRenderingModule = function() {
         that.changedArgs.push(e);
     });
 };
-
-// T717716
-QUnit.test("rows should not be recreated on pageIndex event", function(assert) {
-    var rows = this.getVisibleRows(),
-        firstRow = rows[0];
-
-    // act
-    this.dataController.dataSource().changed.fire({ changeType: "pageIndex" });
-
-    // assert
-    assert.strictEqual(this.getVisibleRows(), rows, "rows are not changed");
-    assert.strictEqual(this.getVisibleRows()[0], firstRow, "first row is not changed");
-});
 
 var teardownVirtualRenderingModule = function() {
     this.dispose();
@@ -3551,6 +3605,31 @@ QUnit.test("scroll to far", function(assert) {
         changeType: "append",
         items: this.dataController.items().slice(10, 15)
     }]);
+});
+
+// T730143
+QUnit.test("scroll to end if data if grouped and remoteOperations are enabled (sorting, filtering, paging)", function(assert) {
+    this.pageSize(200);
+    this.columnOption("value", "groupIndex", 0);
+    this.option("remoteOperations", {
+        sorting: true,
+        filtering: true,
+        paging: true
+    });
+    this.dataController._refreshDataSource();
+    this.clock.tick();
+
+    // act
+    this.dataController.setViewportPosition(100000);
+    this.clock.tick();
+
+    // assert
+    var itemCount = this.dataController.items().length;
+    assert.strictEqual(itemCount, 19);
+    assert.deepEqual(this.dataController.items()[itemCount - 2].key, ["value99"]);
+    assert.strictEqual(this.dataController.items()[itemCount - 1].key, 99);
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.itemsCount(), 100);
 });
 
 QUnit.test("scroll to previous render page", function(assert) {
@@ -11297,8 +11376,8 @@ QUnit.test("Visible item after expanded/collapsed", function(assert) {
 
         // assert
         assert.ok(change.items[1].visible, "visible master detail");
-        assert.ok(!change.items[1].hasOwnProperty("rowType"), "not have property rowType");
-        assert.ok(!change.items[1].hasOwnProperty("key"), "not have property key");
+        assert.ok(!Object.prototype.hasOwnProperty.call(change.items[1], "rowType"), "not have property rowType");
+        assert.ok(!Object.prototype.hasOwnProperty.call(change.items[1], "key"), "not have property key");
     });
 
     // act
@@ -12848,6 +12927,28 @@ QUnit.test("assign loaded dataSource", function(assert) {
     assert.equal(this.dataController.items().length, 3, "items count");
     assert.equal(this.dataController.totalCount(), 5, "total count");
     assert.equal(this.dataController.pageCount(), 2, "page count");
+});
+
+// T752955
+QUnit.test("There are no exceptions when disposing of the shared dataSource", function(assert) {
+    // arrange
+    this.setupDataGridModules({
+        dataSource: this.dataSource
+    });
+
+    this.clock.tick();
+
+    try {
+        // act
+        this.dataSource.dispose();
+        this.dataController.dataSource().dispose(true);
+
+        // assert
+        assert.ok(true, "No exception");
+    } catch(e) {
+        // assert
+        assert.ok(false, "exception");
+    }
 });
 
 QUnit.module("Exporting", {

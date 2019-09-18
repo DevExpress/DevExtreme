@@ -1,4 +1,4 @@
-require("ui/pivot_grid/ui.pivot_grid");
+import "ui/pivot_grid/ui.pivot_grid";
 
 QUnit.module("PivotGrid markup tests");
 
@@ -7,14 +7,15 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var $ = require("jquery"),
-    windowUtils = require("core/utils/window"),
-    createPivotGrid = function(options, assert) {
-        var pivotGridElement = $("#pivotGrid").dxPivotGrid(options);
-        // assert
-        assert.ok(pivotGridElement);
-        return pivotGridElement.dxPivotGrid('instance');
-    };
+import $ from "jquery";
+import windowUtils from "core/utils/window";
+
+var createPivotGrid = function(options, assert) {
+    var pivotGridElement = $("#pivotGrid").dxPivotGrid(options);
+    // assert
+    assert.ok(pivotGridElement);
+    return pivotGridElement.dxPivotGrid('instance');
+};
 
 QUnit.test("Init markup with sizes", function(assert) {
     // arrange

@@ -1,10 +1,10 @@
-var $ = require("jquery"),
-    translator = require("animation/translator"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    domUtils = require("core/utils/dom");
+import $ from "jquery";
+import translator from "animation/translator";
+import pointerMock from "../../helpers/pointerMock.js";
+import domUtils from "core/utils/dom";
 
-require("common.css!");
-require("ui/resizable");
+import "common.css!";
+import "ui/resizable";
 
 QUnit.testStart(function() {
     var markup =
@@ -775,6 +775,41 @@ QUnit.test("Area can be a window", function(assert) {
 
     pointerMock($resizable.find("." + RESIZABLE_HANDLE_BOTTOM_CLASS)).start().down().move(0, 20).dragEnd();
     assert.equal($resizable.offset().top + $resizable.outerHeight(), resizableBottom + 20);
+});
+
+QUnit.test("resizing with 'window' area that have a scroll offset", function(assert) {
+    const scrollY = 1500;
+    const scrollX = 2500;
+    const $resizable = $("#resizable")
+        .offset({ left: scrollX + 150, top: scrollY + 150 })
+        .css("border", "8px solid red");
+    const $fixtureElement = $("<div>")
+        .height(3000)
+        .width(3000)
+        .appendTo("body");
+
+    $(window)
+        .scrollTop(scrollY)
+        .scrollLeft(scrollX);
+
+    $resizable.dxResizable({
+        area: $(window)
+    });
+
+    pointerMock($resizable.find(`.${RESIZABLE_HANDLE_LEFT_CLASS}`))
+        .start({ x: scrollX, y: scrollY })
+        .down()
+        .move(-20, 0)
+        .dragEnd();
+    assert.strictEqual($resizable.outerWidth(), 70, "width changed correctly");
+
+    pointerMock($resizable.find(`.${RESIZABLE_HANDLE_TOP_CLASS}`))
+        .start({ x: scrollX, y: scrollY })
+        .down()
+        .move(0, -20)
+        .dragEnd();
+    assert.strictEqual($resizable.outerHeight(), 70, "height changed correctly");
+    $fixtureElement.remove();
 });
 
 

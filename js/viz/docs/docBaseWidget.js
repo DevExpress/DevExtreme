@@ -535,7 +535,13 @@ var BaseWidget = {
             * @default 2
             */
             blur: 2
-        }
+        },
+        /**
+        * @name BaseWidgetOptions.tooltip.cornerRadius
+        * @type number
+        * @default 0
+        * @default 4 @for Material
+        */
     },
     /**
     * @name BaseWidgetOptions.loadingIndicator
@@ -666,12 +672,14 @@ var VizRange = {
     * @name VizRange.startValue
     * @type number|date|string
     * @default undefined
+    * @fires BaseWidgetOptions.onOptionChanged
     */
     startValue: undefined,
     /**
     * @name VizRange.endValue
     * @type number|date|string
     * @default undefined
+    * @fires BaseWidgetOptions.onOptionChanged
     */
     endValue: undefined,
     /**
@@ -896,6 +904,12 @@ var BaseLegend = {
     */
     title: {
         /**
+        * @name BaseLegend.title.horizontalAlignment
+        * @type Enums.HorizontalAlignment
+        * @default undefined
+        */
+        horizontalAlignment: undefined,
+        /**
         * @name BaseLegend.title.verticalAlignment
         * @type Enums.VerticalEdge
         * @default 'top'
@@ -921,9 +935,21 @@ var BaseLegend = {
             /**
             * @name BaseLegend.title.margin.bottom
             * @type number
-            * @default 14
+            * @default 9
             */
-            bottom: 14
+            bottom: 9,
+            /**
+            * @name BaseLegend.title.margin.left
+            * @type number
+            * @default 0
+            */
+            left: 0,
+            /**
+            * @name BaseLegend.title.margin.right
+            * @type number
+            * @default 0
+            */
+            right: 0
         },
         /**
         * @name BaseLegend.title.font

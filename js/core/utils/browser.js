@@ -23,11 +23,22 @@ var browserFromUA = function(ua) {
         browserName = matches[1],
         browserVersion = matches[2];
 
-    if(browserName === "webkit" && ua.indexOf("chrome") < 0 && safari.exec(ua)) {
-        browserName = "safari";
+    if(browserName === "webkit") {
         result["webkit"] = true;
-        browserVersion = /Version\/([0-9.]+)/i.exec(ua);
-        browserVersion = browserVersion && browserVersion[1];
+
+        if(ua.indexOf("chrome") >= 0 || ua.indexOf("crios") >= 0) {
+            browserName = "chrome";
+            browserVersion = /(?:Chrome|CriOS)\/(\d+\.\d+)/i.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
+        } else if(ua.indexOf("fxios") >= 0) {
+            browserName = "mozilla";
+            browserVersion = /FxiOS\/(\d+\.\d+)/i.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
+        } else if(safari.exec(ua)) {
+            browserName = "safari";
+            browserVersion = /Version\/([0-9.]+)/i.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
+        }
     }
 
     if(browserName === "trident" || browserName === "edge") {

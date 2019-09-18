@@ -135,6 +135,8 @@ function getLabelOptions(labelOptions, defaultColor, defaultTextAlignment) {
         verticalOffset: opt.verticalOffset,
         background: backgroundAttr,
         connector: connectorAttr,
+        wordWrap: labelOptions.wordWrap,
+        textOverflow: labelOptions.textOverflow
     };
 }
 

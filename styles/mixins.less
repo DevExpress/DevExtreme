@@ -1,3 +1,5 @@
+// stylelint-disable selector-class-pattern
+
 .dx-clearfix-mixin() {
     &:before,
     &:after {
@@ -70,6 +72,7 @@
     border: none;
     color: transparent;
     text-shadow: 0 0 0 gray;
+
     &:focus {
         outline: none;
     }
@@ -79,15 +82,13 @@
     & > .dx-scrollable,
     & > .dx-treeview,
     & > .dx-treeview > .dx-scrollable {
-        display: -webkit-flex;
         display: flex;
         flex-grow: 1;
         flex-direction: column;
         height: 0;
 
         & > .dx-scrollable-wrapper {
-            display: -webkit-flex;
-            display:  flex;
+            display: flex;
             flex-grow: 1;
             flex-direction: column;
             height: 0;

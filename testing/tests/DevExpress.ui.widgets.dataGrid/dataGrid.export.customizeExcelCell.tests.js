@@ -941,8 +941,8 @@ QUnit.test("Check arguments for groupping", function(assert) {
             getExpectedArgs: (grid) => [
                 { value: "F2", gridCell: { rowType: "header", column: grid.columnOption(1) } },
                 { value: "F3", gridCell: { rowType: "header", column: grid.columnOption(2) } },
-                { value: "F1: " + ds[0].f1, gridCell: { rowType: "group", column: grid.columnOption(0), value: ds[0].f1 } },
-                { value: undefined, gridCell: undefined },
+                { value: "F1: " + ds[0].f1, gridCell: { rowType: "group", groupIndex: 0, column: grid.columnOption(0), value: ds[0].f1 } },
+                { value: undefined, gridCell: { rowType: "group", groupIndex: 0, column: grid.columnOption(2), value: undefined } },
                 { value: ds[0].f2, gridCell: { rowType: "data", column: grid.columnOption(1), data: ds[0], value: ds[0].f2 } },
                 { value: ds[0].f3, gridCell: { rowType: "data", column: grid.columnOption(2), data: ds[0], value: ds[0].f3 } }
             ]
@@ -964,8 +964,8 @@ QUnit.test("Check arguments for groupping with null", function(assert) {
         {
             getExpectedArgs: (grid) => [
                 { value: "F2" }, { value: "F3" },
-                { value: "F1: ", gridCell: { rowType: "group", column: grid.columnOption(0), value: ds[0].f1 } },
-                { value: undefined },
+                { value: "F1: ", gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(0), value: ds[0].f1 } },
+                { value: undefined, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(2) } },
                 { value: ds[0].f2 }, { value: ds[0].f3 }
             ]
         }
@@ -988,12 +988,42 @@ QUnit.test("Check arguments for groupping 2 level", function(assert) {
             getExpectedArgs: (grid) => [
                 { value: "F3", gridCell: { rowType: "header", column: grid.columnOption(2) } },
                 { value: "F4", gridCell: { rowType: "header", column: grid.columnOption(3) } },
-                { value: "F1: " + ds[0].f1, gridCell: { rowType: "group", column: grid.columnOption(0), value: ds[0].f1 } },
-                { value: undefined, gridCell: undefined },
-                { value: "F2: " + ds[0].f2, gridCell: { rowType: "group", column: grid.columnOption(1), value: ds[0].f2 } },
-                { value: undefined, gridCell: undefined },
+                { value: "F1: " + ds[0].f1, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(0), value: ds[0].f1 } },
+                { value: undefined, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(3), value: undefined } },
+                { value: "F2: " + ds[0].f2, gridCell: { groupIndex: 1, rowType: "group", column: grid.columnOption(1), value: ds[0].f2 } },
+                { value: undefined, gridCell: { groupIndex: 1, rowType: "group", column: grid.columnOption(3), value: undefined } },
                 { value: ds[0].f3, gridCell: { rowType: "data", column: grid.columnOption(2), data: ds[0], value: ds[0].f3 } },
                 { value: ds[0].f4, gridCell: { rowType: "data", column: grid.columnOption(3), data: ds[0], value: ds[0].f4 } }
+            ]
+        }
+    );
+});
+
+QUnit.test("Check arguments for groupping 3 level & 2 column", function(assert) {
+    const ds = [{ f1: 1001, f2: 1002, f3: 1003, f4: 1004, f5: 1005 }];
+    helper.runGeneralTest(assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", groupIndex: 0 },
+                { dataField: "f2", dataType: "number", groupIndex: 1 },
+                { dataField: "f3", dataType: "number", groupIndex: 2 },
+                { dataField: "f4", dataType: "number" },
+                { dataField: "f5", dataType: "number" }
+            ],
+            dataSource: ds
+        },
+        {
+            getExpectedArgs: (grid) => [
+                { value: "F4", gridCell: { rowType: "header", column: grid.columnOption(3) } },
+                { value: "F5", gridCell: { rowType: "header", column: grid.columnOption(4) } },
+                { value: "F1: " + ds[0].f1, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(0), value: ds[0].f1 } },
+                { value: undefined, gridCell: { groupIndex: 0, rowType: "group", column: grid.columnOption(4), value: undefined } },
+                { value: "F2: " + ds[0].f2, gridCell: { groupIndex: 1, rowType: "group", column: grid.columnOption(1), value: ds[0].f2 } },
+                { value: undefined, gridCell: { groupIndex: 1, rowType: "group", column: grid.columnOption(4), value: undefined } },
+                { value: "F3: " + ds[0].f3, gridCell: { groupIndex: 2, rowType: "group", column: grid.columnOption(2), value: ds[0].f3 } },
+                { value: undefined, gridCell: { groupIndex: 2, rowType: "group", column: grid.columnOption(4), value: undefined } },
+                { value: ds[0].f4, gridCell: { rowType: "data", column: grid.columnOption(3), data: ds[0], value: ds[0].f4 } },
+                { value: ds[0].f5, gridCell: { rowType: "data", column: grid.columnOption(4), data: ds[0], value: ds[0].f5 } }
             ]
         }
     );
@@ -1015,7 +1045,7 @@ QUnit.test("Check arguments for group summary", function(assert) {
         {
             getExpectedArgs: (grid) => [
                 { value: "F2", gridCell: { rowType: "header", column: grid.columnOption(1) } },
-                { value: `F1: ${ds[0].f1 } (Max of F2 is ${ds[0].f2})`, gridCell: { rowType: "group", column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
+                { value: `F1: ${ds[0].f1 } (Max of F2 is ${ds[0].f2})`, gridCell: { rowType: "group", groupIndex: 0, column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
                 { value: ds[0].f2, gridCell: { rowType: "data", column: grid.columnOption(1), data: ds[0], value: ds[0].f2 } }
             ]
         }
@@ -1038,7 +1068,7 @@ QUnit.test("Check arguments for group summary with null", function(assert) {
         {
             getExpectedArgs: (grid) => [
                 { value: "F2" },
-                { value: `F1: ${ds[0].f1 } (Max of F2 is )`, gridCell: { rowType: "group", column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
+                { value: `F1: ${ds[0].f1 } (Max of F2 is )`, gridCell: { rowType: "group", groupIndex: 0, column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
                 { value: ds[0].f2 }
             ]
         }
@@ -1066,8 +1096,8 @@ QUnit.test("Check arguments for group summary with alignByColumn", function(asse
             getExpectedArgs: (grid) => [
                 { value: "F2", gridCell: { column: grid.columnOption(1), rowType: "header" } },
                 { value: "F3", gridCell: { column: grid.columnOption(2), rowType: "header" } },
-                { value: `F1: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "group", value: ds[0].f1 } },
-                { value: `Max: ${ds[0].f3} \n Count: 1`, gridCell: { column: grid.columnOption(2), rowType: "group", groupSummaryItems: [{ name: 1, value: ds[0].f3 }, { name: 2, value: 1 }] } },
+                { value: `F1: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "group", groupIndex: 0, value: ds[0].f1 } },
+                { value: `Max: ${ds[0].f3} \n Count: 1`, gridCell: { column: grid.columnOption(2), rowType: "group", groupIndex: 0, groupSummaryItems: [{ name: 1, value: ds[0].f3 }, { name: 2, value: 1 }] } },
                 { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
                 { value: ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[0], value: ds[0].f3 } }
             ]
@@ -1101,22 +1131,22 @@ QUnit.test("Check arguments for group summary with showInGroupFooter", function(
                 { value: "F2", gridCell: { column: grid.columnOption(1), rowType: "header" } },
                 { value: "F3", gridCell: { column: grid.columnOption(2), rowType: "header" } },
                 { value: "F4", gridCell: { column: grid.columnOption(3), rowType: "header" } },
-                { value: "F1: " + ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "group", value: ds[0].f1 } },
-                { value: undefined, gridCell: undefined },
-                { value: undefined, gridCell: undefined },
+                { value: "F1: " + ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "group", groupIndex: 0, value: ds[0].f1 } },
+                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: "group", groupIndex: 0, value: undefined } },
+                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: "group", groupIndex: 0, value: undefined } },
                 { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
                 { value: ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[0], value: ds[0].f3 } },
                 { value: ds[0].f4, gridCell: { column: grid.columnOption(3), rowType: "data", data: ds[0], value: ds[0].f4 } },
-                { value: undefined, gridCell: undefined },
+                { value: undefined, gridCell: { column: grid.columnOption(1), rowType: "groupFooter", groupIndex: undefined, value: undefined } },
                 { value: "Max: " + ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: "groupFooter", value: ds[0].f3 } },
                 { value: "Max: " + ds[0].f4, gridCell: { column: grid.columnOption(3), rowType: "groupFooter", value: ds[0].f4 } },
-                { value: "F1: " + ds[1].f1, gridCell: { column: grid.columnOption(0), rowType: "group", value: ds[1].f1 } },
-                { value: undefined, gridCell: undefined },
-                { value: undefined, gridCell: undefined },
+                { value: "F1: " + ds[1].f1, gridCell: { column: grid.columnOption(0), rowType: "group", groupIndex: 0, value: ds[1].f1 } },
+                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: "group", groupIndex: 0, value: undefined } },
+                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: "group", groupIndex: 0, value: undefined } },
                 { value: ds[1].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[1], value: ds[1].f2 } },
                 { value: ds[1].f3, gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[1], value: ds[1].f3 } },
                 { value: ds[1].f4, gridCell: { column: grid.columnOption(3), rowType: "data", data: ds[1], value: ds[1].f4 } },
-                { value: undefined, gridCell: undefined },
+                { value: undefined, gridCell: { column: grid.columnOption(1), rowType: "groupFooter", groupIndex: undefined, value: undefined } },
                 { value: "Max: " + ds[1].f3, gridCell: { column: grid.columnOption(2), rowType: "groupFooter", value: ds[1].f3 } },
                 { value: "Max: " + ds[1].f4, gridCell: { column: grid.columnOption(3), rowType: "groupFooter", value: ds[1].f4 } },
             ]
@@ -1143,7 +1173,7 @@ QUnit.test("Check arguments for total summary", function(assert) {
                 { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: ds[0].f1 } },
                 { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
                 { value: `Max: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalSummaryItemName: 1 } },
-                { value: undefined, gridCell: undefined }
+                { value: undefined, gridCell: { column: grid.columnOption(1), rowType: "totalFooter", value: undefined, totalSummaryItemName: undefined } }
             ]
         }
     );
@@ -1193,7 +1223,7 @@ QUnit.test("Check arguments for total summary with showInColumn", function(asser
             getExpectedArgs: (grid) => [
                 { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: ds[0].f1 } },
                 { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
-                { value: undefined, gridCell: undefined },
+                { value: undefined, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: undefined } },
                 { value: `Max of F1 is ${ds[0].f1}`, gridCell: { column: grid.columnOption(1), rowType: "totalFooter", value: ds[0].f1 } }
             ]
         }
@@ -1226,8 +1256,8 @@ QUnit.test("Check arguments for total summary with null/undefined", function(ass
                 { value: null }, { value: undefined }, { value: null }, { value: undefined },
                 { value: "Max: ", gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalSummaryItemName: 1 } },
                 { value: "Max: ", gridCell: { column: grid.columnOption(1), rowType: "totalFooter", value: ds[0].f2, totalSummaryItemName: 2 } },
-                { value: undefined, gridCell: undefined },
-                { value: undefined, gridCell: undefined }
+                { value: undefined, gridCell: { column: grid.columnOption(2), rowType: "totalFooter", value: undefined } },
+                { value: undefined, gridCell: { column: grid.columnOption(3), rowType: "totalFooter", value: undefined } }
             ]
         }
     );

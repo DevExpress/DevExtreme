@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     devices = require("../../core/devices"),
+    browser = require("../../core/utils/browser"),
     TextEditor = require("../text_box/ui.text_editor"),
     eventUtils = require("../../events/utils"),
     SpinButtons = require("./number_box.spins").default,
@@ -16,6 +17,8 @@ var math = Math;
 
 var WIDGET_CLASS = "dx-numberbox";
 var FIREFOX_CONTROL_KEYS = ["tab", "del", "backspace", "leftArrow", "rightArrow", "home", "end", "enter"];
+
+var FORCE_VALUECHANGE_EVENT_NAMESPACE = "NumberBoxForceValueChange";
 
 var NumberBoxBase = TextEditor.inherit({
 
@@ -93,54 +96,64 @@ var NumberBoxBase = TextEditor.inherit({
              * @type string
              * @default "Value must be a number"
              */
-            invalidValueMessage: messageLocalization.format("dxNumberBox-invalidValueMessage")
+            invalidValueMessage: messageLocalization.format("dxNumberBox-invalidValueMessage"),
+
+            /**
+            * @name dxNumberBoxOptions.buttons
+            * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
+            * @default undefined
+            */
+            buttons: void 0,
 
             /**
              * @name dxNumberBoxOptions.mask
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskChar
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskRules
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.maskInvalidMessage
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.useMaskedValue
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.showMaskMode
              * @hidden
-             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions.spellcheck
              * @hidden
-             * @inheritdoc
              */
         });
     },
 
     _getDefaultButtons: function() {
         return this.callBase().concat([{ name: "spins", Ctor: SpinButtons }]);
+    },
+
+    _isSupportInputMode: function() {
+        var version = parseFloat(browser.version);
+
+        return (
+            browser.chrome && version >= 66
+            || browser.safari && version >= 12
+            || browser.msie && version >= 75
+        );
     },
 
     _defaultOptionsRules: function() {
@@ -155,8 +168,8 @@ var NumberBoxBase = TextEditor.inherit({
             },
             {
                 device: function() {
-                    return devices.real().platform !== "generic";
-                },
+                    return devices.real().platform !== "generic" && !this._isSupportInputMode();
+                }.bind(this),
                 options: {
                     /**
                      * @name dxNumberBoxOptions.mode
@@ -175,6 +188,11 @@ var NumberBoxBase = TextEditor.inherit({
         this.callBase();
     },
 
+    _applyInputAttributes: function($input, customAttributes) {
+        $input.attr("inputmode", "decimal");
+        this.callBase($input, customAttributes);
+    },
+
     _renderContentImpl: function() {
         this.option("isValid") && this._validateValue(this.option("value"));
         this.setAria("role", "spinbutton");
@@ -188,7 +206,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _setSubmitValue: function(value) {
-        this._$submitElement.val(commonUtils.applyServerDecimalSeparator(value));
+        this._getSubmitElement().val(commonUtils.applyServerDecimalSeparator(value));
     },
 
     _getSubmitElement: function() {
@@ -228,9 +246,7 @@ var NumberBoxBase = TextEditor.inherit({
             this._toggleEmptinessEventHandler();
         }
 
-        var value = this.option("value");
-
-        this.setAria("valuenow", value);
+        this.setAria("valuenow", commonUtils.ensureDefined(this.option("value"), ""));
         this.option("text", this._input().val());
         this._updateButtons();
 
@@ -259,8 +275,8 @@ var NumberBoxBase = TextEditor.inherit({
         });
 
         this.setAria({
-            "valuemin": this.option("min") || "undefined",
-            "valuemax": this.option("max") || "undefined"
+            "valuemin": commonUtils.ensureDefined(this.option("min"), ""),
+            "valuemax": commonUtils.ensureDefined(this.option("max"), "")
         });
     },
 
@@ -284,8 +300,12 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _spinValueChange: function(sign, dxEvent) {
-        var value = parseFloat(this._normalizeInputValue()) || 0,
-            step = parseFloat(this.option("step"));
+        var step = parseFloat(this.option("step"));
+        if(step === 0) {
+            return;
+        }
+
+        var value = parseFloat(this._normalizeInputValue()) || 0;
 
         value = this._correctRounding(value, step * sign);
 
@@ -335,7 +355,10 @@ var NumberBoxBase = TextEditor.inherit({
 
     _renderValueChangeEvent: function() {
         this.callBase();
-        eventsEngine.on(this._input(), "focusout", this._forceRefreshInputValue.bind(this));
+
+        var forceValueChangeEvent = eventUtils.addNamespace("focusout", FORCE_VALUECHANGE_EVENT_NAMESPACE);
+        eventsEngine.off(this.element(), forceValueChangeEvent);
+        eventsEngine.on(this.element(), forceValueChangeEvent, this._forceRefreshInputValue.bind(this));
     },
 
     _forceRefreshInputValue: function() {

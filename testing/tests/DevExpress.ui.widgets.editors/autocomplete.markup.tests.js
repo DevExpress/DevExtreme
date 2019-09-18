@@ -1,9 +1,10 @@
-var $ = require("jquery");
+import $ from "jquery";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
-require("ui/autocomplete");
+import "ui/autocomplete";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="qunit-fixture" class="dx-viewport">\
             <div id="widget"></div>\
             <div id="widthRootStyle" style="width: 300px;"></div>\
@@ -12,8 +13,9 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var WIDGET_CLASS = "dx-autocomplete",
-    TEXTEDITOR_CLASS = "dx-texteditor";
+const WIDGET_CLASS = "dx-autocomplete";
+const TEXTEDITOR_CLASS = "dx-texteditor";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 
 QUnit.module("dxAutocomplete", {
@@ -69,7 +71,7 @@ QUnit.test("input should be empty when value is empty", function(assert) {
         value: ""
     });
 
-    var $input = $autocomplete.find("input");
+    var $input = $autocomplete.find("." + TEXTEDITOR_INPUT_CLASS);
     assert.equal($input.val(), "", "input is empty");
 });
 
@@ -113,11 +115,31 @@ QUnit.test("change width", function(assert) {
 });
 
 
-QUnit.module("aria accessibility");
+QUnit.module("aria accessibility", {}, () => {
+    QUnit.test("aria-autocomplete property", function(assert) {
+        var $element = $("#widget").dxAutocomplete(),
+            $input = $element.find("." + TEXTEDITOR_INPUT_CLASS + ":first");
 
-QUnit.test("aria-autocomplete property", function(assert) {
-    var $element = $("#widget").dxAutocomplete(),
-        $input = $element.find("input:first");
+        assert.equal($input.attr("aria-autocomplete"), "inline");
+    });
 
-    assert.equal($input.attr("aria-autocomplete"), "inline");
+    QUnit.test("aria role should not change to listbox after it's second rendering (T290859)", assert => {
+        assert.expect(2);
+
+        const $element = $("#widget").dxAutocomplete({
+            searchEnabled: true,
+            searchTimeout: 0,
+            opened: true,
+            items: ["item1", "item2", "item3"]
+        });
+
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        assert.equal($input.attr("role"), "combobox", "aria role");
+
+        const keyboard = keyboardMock($input);
+        $input.focusin();
+        keyboard.type("it");
+
+        assert.equal($input.attr("role"), "combobox", "role was not changed");
+    });
 });

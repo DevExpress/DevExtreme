@@ -12,7 +12,6 @@ import browser from "core/utils/browser";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
 import "../../../testing/content/orders.js";
-import "bundles/dx.web";
 
 function createDataSource(options) {
     var dataSource = new DataSource(options);
@@ -146,25 +145,42 @@ QUnit.test("Create XmlaStore", function(assert) {
     xmlaStore.XmlaStore.restore();
 });
 
-QUnit.test("Create XmlaStore by Instance", function(assert) {
+QUnit.test("Create XmlaStore with paginate", function(assert) {
 
-    sinon.spy(DevExpress.data, "XmlaStore");
+    sinon.spy(xmlaStore, "XmlaStore");
 
     var dataSource = createDataSource({
-        store: new DevExpress.data.XmlaStore({
+        paginate: true,
+        store: {
+            type: "xmla",
+            url: ""
+        }
+    });
+    assert.ok(dataSource.store() instanceof XmlaStore);
+    assert.ok(dataSource.paginate());
+
+    xmlaStore.XmlaStore.restore();
+});
+
+QUnit.test("Create XmlaStore by Instance", function(assert) {
+
+    sinon.spy(xmlaStore, "XmlaStore");
+
+    var dataSource = createDataSource({
+        store: new xmlaStore.XmlaStore({
             type: "xmla",
             url: ""
         })
     });
-    assert.ok(dataSource.store() instanceof DevExpress.data.XmlaStore);
-    assert.ok(DevExpress.data.XmlaStore.calledOnce);
-    assert.ok(DevExpress.data.XmlaStore.calledWithNew);
-    assert.deepEqual(DevExpress.data.XmlaStore.lastCall.args, [{
+    assert.ok(dataSource.store() instanceof xmlaStore.XmlaStore);
+    assert.ok(xmlaStore.XmlaStore.calledOnce);
+    assert.ok(xmlaStore.XmlaStore.calledWithNew);
+    assert.deepEqual(xmlaStore.XmlaStore.lastCall.args, [{
         type: "xmla",
         url: ""
     }]);
 
-    DevExpress.data.XmlaStore.restore();
+    xmlaStore.XmlaStore.restore();
 });
 
 QUnit.test("Create LocalStore when store with type", function(assert) {
@@ -246,7 +262,7 @@ QUnit.test("Create store with load function and paginate", function(assert) {
         }
     });
 
-    assert.ok(dataSource.paginate(), "paginate");
+    assert.notOk(dataSource.paginate(), "no paginate");
     assert.ok(dataSource.store() instanceof RemoteStore, "PivotGrid store type is remote");
     assert.ok(dataSource.store()._dataSource.store() instanceof CustomStore, "inner store type is custom");
 });

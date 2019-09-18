@@ -59,7 +59,6 @@ var Switch = Editor.inherit({
             * @name dxSwitchOptions.hoverStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             hoverStateEnabled: true,
 
@@ -67,7 +66,6 @@ var Switch = Editor.inherit({
             * @name dxSwitchOptions.activeStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -99,7 +97,6 @@ var Switch = Editor.inherit({
             * @name dxSwitchOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
         });
     },
@@ -117,17 +114,8 @@ var Switch = Editor.inherit({
                     * @name dxSwitchOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    useInkRipple: true
                 }
             },
             {
@@ -451,7 +439,7 @@ var Switch = Editor.inherit({
         this._renderPosition(val, 0);
 
         this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, val);
-        this._$submitElement.val(val);
+        this._getSubmitElement().val(val);
         this.setAria({
             "pressed": val,
             "label": val ? this.option("switchedOnText") : this.option("switchedOffText")

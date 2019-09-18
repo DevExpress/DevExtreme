@@ -10,26 +10,14 @@ const { testStart, module, test } = QUnit;
 testStart(() => {
     const markup = `
         <div id="box"></div>
-        <div id="boxWithInnerBox">
-            <div data-options="dxTemplate: { name: 'testTemplate'}">
-                test
-            </div>
-        </div>
-        <div id="nestedBox">
-            <div data-options="dxItem: {baseSize: 272, ratio: 0, box: {direction: 'col'}}">
-                <div data-options="dxItem: {baseSize: 'auto', ratio: 0}">
-                    <h2>Box1</h2>
-                </div>
-            </div>
-        </div>
         <div id="boxWithScrollable">
             <div data-options="dxItem: { ratio: 1 }">
-                <div id="isScrollable">
+                <div id="scrollable">
                     <div style="height: 200px;"></div>
                 </div>
             </div>
-        </div>`;
-
+        </div>
+    `;
     $("#qunit-fixture").html(markup);
 });
 
@@ -48,16 +36,25 @@ const relativeOffset = ($element, $relativeElement) => {
     };
 };
 
+const createBox = (...parameters) => {
+    if(parameters.length > 2) {
+        return;
+    }
+
+    const selector = parameters.length === 1 ? "#box" : parameters[0];
+    const options = parameters.length === 1 ? parameters[0] : parameters[1];
+    return $(selector).dxBox(options);
+};
+const getBoxInstance = $element => $($element).dxBox("instance");
+
 module("Scrollable integration", () => {
     test("Scrollable placed in dxBox stretch correctly", assert => {
-        const $box = $("#boxWithScrollable");
-
-        $box.dxBox({
+        const $box = createBox("#boxWithScrollable", {
             height: 100,
             direction: "col"
         });
 
-        const $scrollable = $box.find("#isScrollable").dxScrollable();
+        const $scrollable = $box.find("#scrollable").dxScrollable();
 
         assert.equal($scrollable.height(), 100, "Scrollable height is correct");
     });
@@ -66,7 +63,7 @@ module("Scrollable integration", () => {
 module("layouting", () => {
     test("direction column", assert => {
         const size = 100;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "col",
             items: [{ ratio: 1 }, { ratio: 1 }],
             width: size,
@@ -109,7 +106,7 @@ module("layouting", () => {
 
     test("direction row", assert => {
         const size = 100;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "row",
             items: [{ ratio: 1 }, { ratio: 1 }],
             width: size,
@@ -157,7 +154,7 @@ module("layouting", () => {
     test("align for column direction", assert => {
         const baseSize = 40;
         const boxSize = baseSize * 5;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "col",
             align: 'start',
             items: [{ baseSize: baseSize }, { baseSize: baseSize }],
@@ -172,7 +169,7 @@ module("layouting", () => {
         const $secondItem = $boxItems.eq(1);
         assert.equal(relativeOffset($secondItem).top, baseSize, "second item positioned correctly for align: start");
 
-        const box = $box.dxBox("instance");
+        const box = getBoxInstance($box);
         box.option("align", "end");
 
         assert.equal(relativeOffset($firstItem).top, boxSize - 2 * baseSize, "first item positioned correctly for align: end");
@@ -197,7 +194,7 @@ module("layouting", () => {
     test("align for row direction", assert => {
         const baseSize = 40;
         const boxSize = baseSize * 5;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "row",
             align: 'start',
             items: [{ baseSize: baseSize }, { baseSize: baseSize }],
@@ -212,7 +209,7 @@ module("layouting", () => {
         const $secondItem = $boxItems.eq(1);
         assert.equal(relativeOffset($secondItem).left, baseSize, "second item positioned correctly for align: start");
 
-        const box = $box.dxBox("instance");
+        const box = getBoxInstance($box);
 
         box.option("align", "end");
         assert.equal(relativeOffset($firstItem).left, boxSize - 2 * baseSize, "first item positioned correctly for align: end");
@@ -234,13 +231,13 @@ module("layouting", () => {
     test("crossAlign for column direction", assert => {
         const size = 50;
         const boxSize = 2 * size;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "col",
             crossAlign: "start",
             items: [{ html: "<div style='width: " + size + "px'></div>" }],
             width: boxSize
         });
-        const box = $box.dxBox("instance");
+        const box = getBoxInstance($box);
 
         const $item = $box.find("." + BOX_ITEM_CLASS).eq(0);
         assert.equal(relativeOffset($item).left, 0, "item positioned for crossAlign: start");
@@ -263,13 +260,13 @@ module("layouting", () => {
     test("crossAlign for row direction", assert => {
         const size = 50;
         const boxSize = 2 * size;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "row",
             crossAlign: "start",
             items: [{ html: "<div style='height: " + size + "px'></div>" }],
             height: boxSize
         });
-        const box = $box.dxBox("instance");
+        const box = getBoxInstance($box);
 
         const $item = $box.find("." + BOX_ITEM_CLASS).eq(0);
         assert.equal(relativeOffset($item).top, 0, "item positioned for crossAlign: start");
@@ -294,7 +291,7 @@ module("layouting", () => {
         const secondItemDimension = { baseSize: "40%" };
 
         const boxSize = 300;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "row",
             items: [firstItemDimension, secondItemDimension],
             width: boxSize
@@ -313,7 +310,7 @@ module("layouting", () => {
         const secondItemDimension = { ratio: 0, baseSize: "auto" };
 
         const boxSize = 300;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "row",
             items: [firstItemDimension, secondItemDimension],
             width: boxSize,
@@ -337,7 +334,7 @@ module("layouting", () => {
         const boxSize = 300;
         let itemWidth = 50;
 
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "row",
             items: [firstItemDimension, secondItemDimension],
             width: boxSize,
@@ -359,7 +356,7 @@ module("layouting", () => {
         const firstItemDimension = { ratio: 1, baseSize: 100 };
         const secondItemDimension = { ratio: 3, baseSize: 20 };
         const boxSize = 300;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "row",
             items: [firstItemDimension, secondItemDimension],
             width: boxSize
@@ -382,7 +379,7 @@ module("layouting", () => {
         const secondItemDimension = { ratio: 3, baseSize: 40 };
         const thirdItemDimension = { ratio: 3 };
         const boxSize = 100;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "row",
             items: [firstItemDimension, secondItemDimension, thirdItemDimension],
             width: boxSize
@@ -393,9 +390,9 @@ module("layouting", () => {
         const $secondItem = $items.eq(1);
         const $thirdItem = $items.eq(2);
 
-        const totalBaseSize = firstItemDimension.baseSize + secondItemDimension.baseSize,
-            firstItemWidth = boxSize * firstItemDimension.baseSize / totalBaseSize,
-            secondItemWidth = boxSize * secondItemDimension.baseSize / totalBaseSize;
+        const totalBaseSize = firstItemDimension.baseSize + secondItemDimension.baseSize;
+        const firstItemWidth = boxSize * firstItemDimension.baseSize / totalBaseSize;
+        const secondItemWidth = boxSize * secondItemDimension.baseSize / totalBaseSize;
 
         assert.equal($firstItem.width(), firstItemWidth, "first item has correct size");
         assert.equal($secondItem.width(), secondItemWidth, "second item has correct size");
@@ -407,7 +404,7 @@ module("layouting", () => {
         const minSize = 80;
         const maxSize = 5;
 
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             items: [
                 { baseSize: 0, ratio: 1, minSize: minSize },
                 { ratio: 1, maxSize: maxSize },
@@ -437,7 +434,7 @@ module("layouting", () => {
     test("rendering after visibility changing", assert => {
         const clock = sinon.useFakeTimers();
         try {
-            const $box = $("#box").dxBox({
+            const $box = createBox({
                 direction: "row",
                 items: [{ ratio: 1, baseSize: 0 }, { ratio: 1, baseSize: 0 }],
                 visible: false,
@@ -462,10 +459,11 @@ module("layouting", () => {
     });
 
     test("shrink", assert => {
-        const boxSize = 100,
-            itemBaseSize = 100,
-            shrinkRatio1 = 1,
-            shrinkRatio2 = 3;
+        const boxSize = 100;
+        const itemBaseSize = 100;
+        const shrinkRatio1 = 1;
+        const shrinkRatio2 = 3;
+
         const $box = $("#box").height(boxSize).dxBox({
             direction: "col",
             items: [{ baseSize: boxSize, shrink: shrinkRatio1 }, { baseSize: boxSize, shrink: shrinkRatio2 }]
@@ -478,11 +476,11 @@ module("layouting", () => {
     });
 
     test("shrink may be set to 0", assert => {
-        const boxSize = 100,
-            firstItemSize = 75,
-            secondItemSize = 100,
-            firstItemShrink = 0,
-            secondItemShrink = 1;
+        const boxSize = 100;
+        const firstItemSize = 75;
+        const secondItemSize = 100;
+        const firstItemShrink = 0;
+        const secondItemShrink = 1;
 
         const $box = $("#box").height(boxSize).dxBox({
             direction: "col",
@@ -501,7 +499,7 @@ module("fallback strategy", () => {
         const baseSize1 = 100;
         const baseSize2 = 200;
 
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             _layoutStrategy: "fallback",
             direction: "col",
             items: [{ baseSize: baseSize1, ratio: 2 }, { baseSize: baseSize2, ratio: 1 }],
@@ -552,7 +550,7 @@ module("layouting in RTL (fallback strategy)", () => {
     test("align for row direction", assert => {
         const baseSize = 40;
         const boxSize = baseSize * 5;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "row",
             align: 'start',
             items: [{ baseSize: baseSize }, { baseSize: baseSize }],
@@ -569,7 +567,7 @@ module("layouting in RTL (fallback strategy)", () => {
         const $secondItem = $boxItems.eq(1);
         assert.equal(relativeOffset($secondItem).left, boxSize - 2 * baseSize, "second item positioned correctly for align: start");
 
-        const box = $box.dxBox("instance");
+        const box = getBoxInstance($box);
         box.option("align", "end");
 
         assert.equal(relativeOffset($firstItem).left, baseSize, "first item positioned correctly for align: end");
@@ -593,7 +591,7 @@ module("layouting in RTL (fallback strategy)", () => {
     test("crossAlign for column direction", assert => {
         const size = 50;
         const boxSize = 2 * size;
-        const $box = $("#box").dxBox({
+        const $box = createBox({
             direction: "col",
             crossAlign: "start",
             items: [{ html: "<div style='width: " + size + "px'></div>" }],
@@ -601,7 +599,7 @@ module("layouting in RTL (fallback strategy)", () => {
             rtlEnabled: true,
             _layoutStrategy: "fallback"
         });
-        const box = $box.dxBox("instance");
+        const box = getBoxInstance($box);
 
         const $item = $box.find("." + BOX_ITEM_CLASS).eq(0);
         assert.equal(relativeOffset($item).left, size, "item positioned for crossAlign: start");

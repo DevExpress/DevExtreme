@@ -1141,6 +1141,7 @@ module.exports = {
                         }
                     }
 
+                    var hasAddedBands = false;
                     for(i = 0; i < columnsUserState.length; i++) {
                         columnUserState = columnsUserState[i];
                         if(columnUserState.added && findUserStateColumn(columns, columnUserState) < 0) {
@@ -1148,10 +1149,14 @@ module.exports = {
                             applyFieldsState(column, columnUserState);
                             resultColumns.push(column);
                             if(columnUserState.added.columns) {
-                                updateColumnIndexes(that);
-                                resultColumns = createColumnsFromOptions(that, resultColumns);
+                                hasAddedBands = true;
                             }
                         }
+                    }
+
+                    if(hasAddedBands) {
+                        updateColumnIndexes(that);
+                        resultColumns = createColumnsFromOptions(that, resultColumns);
                     }
 
                     assignColumns(that, resultColumns);
@@ -1244,9 +1249,14 @@ module.exports = {
                     fullOptionName = options.fullOptionName;
 
                 if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
+                    var oldSkipProcessingColumnsChange = that._skipProcessingColumnsChange;
                     that._skipProcessingColumnsChange = true;
+                    var columnOptions = that.component.option(fullOptionName);
+                    if(isPlainObject(columnOptions)) {
+                        columnOptions[optionName] = value;
+                    }
                     that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
-                    that._skipProcessingColumnsChange = false;
+                    that._skipProcessingColumnsChange = oldSkipProcessingColumnsChange;
                 }
             };
 
@@ -1574,16 +1584,15 @@ module.exports = {
                             break;
                         case "columns":
                             args.handled = true;
-                            if(!this._skipProcessingColumnsChange) {
-                                if(args.name === args.fullName) {
-                                    this._columnsUserState = null;
-                                    this._ignoreColumnOptionNames = null;
-                                    this.init();
-                                } else {
-                                    this._columnOptionChanged(args);
-                                }
+                            if(args.name === args.fullName) {
+                                this._columnsUserState = null;
+                                this._ignoreColumnOptionNames = null;
+                                this.init();
                             } else {
-                                this._updateRequireResize(args);
+                                if(this.option(args.fullName) === undefined || this.option(args.fullName) === args.value) {
+                                    this._columnOptionChanged(args);
+                                    this._updateRequireResize(args);
+                                }
                             }
                             break;
                         case "commonColumnSettings":
@@ -1602,7 +1611,9 @@ module.exports = {
                         case "columnMinWidth":
                         case "columnWidth":
                             args.handled = true;
-                            this.reinit();
+                            if(!(args.fullName && args.fullName.indexOf("editing.popup") === 0)) {
+                                this.reinit();
+                            }
                             break;
                         case "rtlEnabled":
                             this.reinit();
@@ -2530,8 +2541,8 @@ module.exports = {
 
                     filter = extend([], filter);
 
-                    columnIndex = filter.columnIndex || columnIndex;
-                    filterValue = filter.filterValue || filterValue;
+                    columnIndex = filter.columnIndex !== undefined ? filter.columnIndex : columnIndex;
+                    filterValue = filter.filterValue !== undefined ? filter.filterValue : filterValue;
 
                     if(isString(filter[0])) {
                         column = that.columnOption(filter[0]);
@@ -2783,13 +2794,13 @@ module.exports = {
                     that._ignoreColumnOptionNames = ignoreColumnOptionNames;
                     that._hasUserState = !!state;
 
+                    updateColumnChanges(that, "filtering");
+                    that.init();
+
                     if(dataSource) {
                         dataSource.sort(null);
                         dataSource.group(null);
                     }
-
-                    updateColumnChanges(that, "filtering");
-                    that.init();
                 },
                 _createCalculatedColumnOptions: function(columnOptions, bandColumn) {
                     var calculatedColumnOptions = {},
@@ -2860,7 +2871,8 @@ module.exports = {
                         }
                         if(isFunction(result)) {
                             result = [result, "=", true];
-                        } else if(result) {
+                        }
+                        if(result) {
                             result.columnIndex = this.index;
                             result.filterValue = filterValue;
                         }

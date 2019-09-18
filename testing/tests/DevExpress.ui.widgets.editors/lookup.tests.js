@@ -68,6 +68,8 @@ var OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     LOOKUP_SEARCH_WRAPPER_CLASS = "dx-lookup-search-wrapper",
     LOOKUP_FIELD_CLASS = "dx-lookup-field",
 
+    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
+
     FOCUSED_CLASS = "dx-state-focused";
 
 var toSelector = function(val) {
@@ -1419,6 +1421,30 @@ QUnit.test("onValueChanged argument should contains an event property after sele
     assert.strictEqual(event.type, "dxclick");
 });
 
+QUnit.test("Lookup should catch delayed data", function(assert) {
+    const items = [{
+        "ID": 1,
+        "Name": "John"
+    }, {
+        "ID": 2,
+        "Name": "Olivia"
+    }];
+
+    this.element.dxLookup({
+        dataSource: [],
+        displayExpr: 'Name',
+        valueExpr: "ID",
+        value: 1,
+        title: "Select employee"
+    });
+
+    setTimeout(() => {
+        $("#lookup").dxLookup("instance").option("dataSource", items);
+    }, 100);
+    this.clock.tick(100);
+
+    assert.equal(this.$field.text(), "John", "display field work in text");
+});
 
 QUnit.module("hidden input");
 
@@ -2142,7 +2168,7 @@ QUnit.test("popup does not close when filtering datasource has item equal select
     $lookup.dxLookup("option", "opened", true);
 
     var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
-    keyboardMock($popupContent.find("input")).type("y");
+    keyboardMock($popupContent.find("." + TEXTEDITOR_INPUT_CLASS)).type("y");
 
     assert.ok($lookup.dxLookup("option", "opened"), "lookup stays opened");
 });
@@ -2400,7 +2426,7 @@ QUnit.test("Popup height should be decrease after a loading of new page and sear
 
     var listHeight = $list.outerHeight();
 
-    var $input = $(".dx-lookup-search").find("input");
+    var $input = $(".dx-lookup-search").find("." + TEXTEDITOR_INPUT_CLASS);
     var keyboard = keyboardMock($input);
 
     keyboard.type("a");
@@ -2478,7 +2504,7 @@ QUnit.testInActiveWindow("lookup search get focus on opening", function(assert) 
         }),
         instance = $element.dxLookup("instance");
 
-    $element.find("." + LOOKUP_FIELD_CLASS).focusin();
+    instance.focus();
     assert.ok($element.hasClass(FOCUSED_CLASS), "'focus' method focus field with closed overlay");
 
     instance.option("opened", true);
@@ -2754,7 +2780,7 @@ QUnit.test("T320459 - the 'space' key press should prevent default behavior whil
             opened: true,
             focusStateEnabled: true
         }).dxLookup("instance"),
-        $popupInput = $($(lookup.content()).find("input")),
+        $popupInput = $($(lookup.content()).find("." + TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($popupInput),
         event;
 
@@ -2830,7 +2856,7 @@ QUnit.test("search should be execute after paste", function(assert) {
             searchMode: "contains"
         });
 
-        var $input = $(toSelector(POPUP_CONTENT_CLASS) + " input");
+        var $input = $(toSelector(POPUP_CONTENT_CLASS) + " " + toSelector(TEXTEDITOR_INPUT_CLASS));
         $($input.val("o")).trigger("input");
         clock.tick();
         assert.equal($(".dx-list-item").length, 2, "filters execute on input event");
@@ -2956,17 +2982,44 @@ QUnit.test("popup title collapse if empty title option (B232073)", function(asse
 });
 
 
-QUnit.module("aria accessibility");
+QUnit.module("aria accessibility", () => {
+    const checkAsserts = (expectedValues) => {
+        let { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
 
-QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
-    $("#widget").dxLookup({
-        opened: true
+        QUnit.assert.strictEqual($target.attr("role"), role, "role");
+        QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
+        QUnit.assert.strictEqual(!!$target.attr("aria-owns"), isOwns, "owns");
+        QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
+    };
+
+    if(devices.real().deviceType === "desktop") {
+        [true, false].forEach((searchEnabled) => {
+            QUnit.test(`aria role for list, searchEnabled: ${searchEnabled}`, () => {
+                let $element = $("#widget").dxLookup({
+                    opened: true,
+                    searchEnabled: searchEnabled
+                });
+                const $field = $element.find(`.${LOOKUP_FIELD_CLASS}`);
+
+                let list = $(`.${LIST_CLASS}`).dxList("instance");
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
+
+                $element.dxLookup("instance").option("searchEnabled", !searchEnabled);
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
+            });
+        });
+    }
+
+    QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
+        $("#widget").dxLookup({ opened: true });
+
+        let list = $(`.${LIST_CLASS}`).dxList("instance");
+        assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
     });
-
-    var list = $("." + LIST_CLASS).dxList("instance");
-
-    // TODO: change it when _getAriaTarget becomes an option
-    assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
 });
 
 
@@ -3021,13 +3074,21 @@ QUnit.test("Check popup position offset for Material theme", function(assert) {
 
     try {
 
-        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], value: "blue" }).dxLookup("instance");
+        var lookup = $lookup.dxLookup({ dataSource: ["blue", "orange", "lime", "purple", "red", "green", "yellow"], value: "blue" }).dxLookup("instance");
 
         $(lookup.field()).trigger("dxclick");
 
         var $popup = $(".dx-popup-wrapper");
 
         assert.roughEqual($popup.find(".dx-overlay-content").position().top, -3.5, 1, "offset of the lookup if first item is selected");
+
+        lookup._list.scrollTo(100);
+
+        lookup.close();
+
+        $(lookup.field()).trigger("dxclick");
+
+        assert.roughEqual($popup.find(".dx-overlay-content").position().top, -3.5, 1, "offset of the lookup after scrolling and without item selecting");
 
         lookup.close();
 

@@ -1,10 +1,10 @@
-var $ = require("jquery"),
-    DataProvider = require("ui/pivot_grid/ui.pivot_grid.export").DataProvider,
-    clientExporter = require("exporter"),
-    dateLocalization = require("localization/date"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js");
+import $ from "jquery";
+import { DataProvider } from "ui/pivot_grid/ui.pivot_grid.export";
+import clientExporter from "exporter";
+import dateLocalization from "localization/date";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
-require("ui/pivot_grid/ui.pivot_grid");
+import "ui/pivot_grid/ui.pivot_grid";
 
 QUnit.testStart(function() {
     var markup =

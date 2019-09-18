@@ -94,7 +94,6 @@ var SlideOutView = Widget.inherit({
             /**
             * @name dxSlideOutViewOptions.contentOffset
             * @hidden
-            * @inheritdoc
             */
             contentOffset: 45
 
@@ -107,19 +106,16 @@ var SlideOutView = Widget.inherit({
             /**
             * @name dxSlideOutViewOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutViewOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutViewOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
         });
     },
@@ -449,14 +445,12 @@ var SlideOutView = Widget.inherit({
     * @name dxSlideOutViewMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxSlideOutViewMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 }).include(AsyncTemplateMixin);
 

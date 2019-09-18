@@ -8,6 +8,11 @@ import ArrayStore from "data/array_store";
 import CustomStore from "data/custom_store";
 import dblclickEvent from "events/dblclick";
 import TreeView from "ui/tree_view";
+import eventsEngine from "events/core/events_engine";
+import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
+
+const { module, test, assert } = QUnit;
+const createInstance = (options) => new TreeViewTestWrapper(options);
 
 import "common.css!";
 import "generic_light.css!";
@@ -1421,4 +1426,64 @@ QUnit.test("expand should work with createChildren", function(assert) {
     $expander.trigger("dxclick");
 
     assert.notOk($expander.hasClass("dx-treeview-toggle-item-visibility-opened"), "node is collapsed");
+});
+
+module("Loadindicator", () => {
+    [true, false].forEach(selectNodesRecursive => {
+        ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
+            let config = `virtualModeEnabled: true, selectNodesRecursive: ${selectNodesRecursive}, showCheckBoxesMode: ${showCheckBoxesMode}`;
+
+            const checkAsserts = (treeView, contentReadyHandler, expectedArgs) => {
+                const $node = treeView.getNodes().eq(0);
+                const { toggleItemVisibilityCount, contentReadyCount } = expectedArgs;
+
+                assert.equal(contentReadyHandler.callCount, contentReadyCount, "contentReady.callCount");
+
+                const $loadIndicator = treeView.getNodeLoadIndicator($node);
+                assert.equal($loadIndicator.length, 1, "loadIndicator count");
+                assert.equal(treeView.hasInvisibleClass($loadIndicator), contentReadyCount ? true : false, "loadIndicator has invisible class");
+
+                const $toggleItem = treeView.getToggleItemVisibility($node);
+                assert.equal($toggleItem.length, toggleItemVisibilityCount, "toggle item count");
+                assert.equal($toggleItem.css('display') === 'none', contentReadyCount ? false : true, "toggle item is hidden");
+            };
+
+            test(`Loadindicator: ${config}`, () => {
+                const clock = sinon.useFakeTimers();
+
+                try {
+                    const items = $.extend(true, [], data2);
+                    let contentReadyHandler = sinon.spy();
+
+                    const treeView = createInstance({
+                        dataSource: makeSlowDataSource(items),
+                        dataStructure: "plain",
+                        virtualModeEnabled: true,
+                        selectNodesRecursive: selectNodesRecursive,
+                        showCheckBoxesMode: showCheckBoxesMode,
+                        onContentReady: contentReadyHandler
+                    });
+
+                    clock.tick(400);
+
+                    let $toggleItem = treeView.getToggleItemVisibility(treeView.getNodes().eq(0));
+                    contentReadyHandler.reset();
+
+                    eventsEngine.trigger($toggleItem, "dxclick");
+                    eventsEngine.trigger($toggleItem, "dxclick");
+                    eventsEngine.trigger($toggleItem, "dxclick");
+                    eventsEngine.trigger($toggleItem, "dxclick");
+
+                    checkAsserts(treeView, contentReadyHandler, { toggleItemVisibilityCount: 1, contentReadyCount: 0 });
+                    treeView.checkSelected([], items);
+
+                    clock.tick(400);
+                    checkAsserts(treeView, contentReadyHandler, { toggleItemVisibilityCount: 4, contentReadyCount: 1 });
+                    treeView.checkSelected([], items);
+                } finally {
+                    clock.restore();
+                }
+            });
+        });
+    });
 });

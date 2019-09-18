@@ -20,7 +20,7 @@
     font-size: @MATERIAL_FORM_GROUP_CAPTION_FONT_SIZE;
 }
 
-.dx-form-group-with-caption {
+.dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
     .dx-form-group-content {
         padding-bottom: @MATERIAL_FORM_GROUP_CONTENT_PADDING_BOTTOM;
         padding-top: @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_PADDING;
@@ -28,8 +28,8 @@
     }
 }
 
-.dx-form > .dx-scrollable-wrapper > .dx-scrollable-container { 
-    margin-left: -10px; 
+.dx-form > .dx-scrollable-wrapper > .dx-scrollable-container {
+    margin-left: -10px;
     padding-left: 10px;
 }
 
@@ -51,13 +51,17 @@
 }
 
 .dx-field-item-content {
+    .dx-switch {
+        vertical-align: middle;
+    }
+
     .dx-label-v-align & {
         .dx-textarea {
             margin-top: 6px;
         }
 
         .dx-invalid-message > .dx-overlay-content {
-            transform: translate(0px, 0px) !important;
+            transform: translate(0, 0) !important; // stylelint-disable-line declaration-no-important
         }
     }
 }

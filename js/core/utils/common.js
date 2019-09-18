@@ -216,7 +216,10 @@ const isArraysEqualByValue = function(array1, array2, deep) {
 
 const isObjectsEqualByValue = function(object1, object2, deep) {
     for(const propertyName in object1) {
-        if(object1.hasOwnProperty(propertyName) && !equalByValue(object1[propertyName], object2[propertyName], deep + 1)) {
+        if(
+            Object.prototype.hasOwnProperty.call(object1, propertyName) &&
+            !equalByValue(object1[propertyName], object2[propertyName], deep + 1)
+        ) {
             return false;
         }
     }
@@ -230,10 +233,10 @@ const isObjectsEqualByValue = function(object1, object2, deep) {
     return true;
 };
 
-const pairToObject = function(raw) {
+const pairToObject = function(raw, preventRound) {
     const pair = splitPair(raw);
-    let h = parseInt(pair && pair[0], 10);
-    let v = parseInt(pair && pair[1], 10);
+    let h = preventRound ? parseFloat(pair && pair[0]) : parseInt(pair && pair[0], 10);
+    let v = preventRound ? parseFloat(pair && pair[1]) : parseInt(pair && pair[1], 10);
 
     if(!isFinite(h)) {
         h = 0;

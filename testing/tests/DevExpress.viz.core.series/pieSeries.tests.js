@@ -3,7 +3,8 @@ import * as vizMocks from "../../helpers/vizMocks.js";
 import { noop } from "core/utils/common";
 import pointModule from "viz/series/points/base_point";
 import labelModule from "viz/series/points/label";
-import { Series } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
@@ -107,6 +108,7 @@ var checkTwoGroups = function(assert, series) {
     assert.equal(renderer.stub("g").getCall(0).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-series");
     assert.equal(renderer.stub("g").getCall(1).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-markers");
     assert.equal(renderer.stub("g").getCall(2).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-labels");
+    assert.equal(renderer.stub("g").getCall(2).returnValue._stored_settings["pointer-events"], null);
 
     assert.equal(series._markersGroup.stub("append").lastCall.args[0], parentGroup);
     assert.equal(series._labelsGroup.stub("append").lastCall.args[0], labelsGroup);
@@ -202,6 +204,32 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(this.createPoint.secondCall.returnValue.update.lastCall.args[0].argument, 3);
         assert.ok(!this.createPoint.secondCall.returnValue.dispose.called);
 
+        assert.ok(this.createPoint.thirdCall.returnValue.dispose.called);
+    });
+
+    // T808347
+    QUnit.test("Update points by index. datetime argument", function(assert) {
+        var series = createSeries({
+            type: seriesType,
+            point: { visible: false }
+
+        });
+        // act
+        series.updateData([{ arg: new Date(1000), val: 10 }, { arg: new Date(2000), val: 10 }, { arg: new Date(3000), val: 4 }]);
+        series.createPoints();
+        series.draw(false);
+        series.updateData([{ arg: new Date(2000), val: 10 }, { arg: new Date(3000), val: 10 }]);
+        series.createPoints();
+        series.draw(false);
+        // assert
+
+        assert.equal(this.createPoint.callCount, 3);
+
+        assert.deepEqual(this.createPoint.firstCall.returnValue.update.lastCall.args[0].argument, new Date(2000));
+        assert.ok(!this.createPoint.firstCall.returnValue.dispose.called);
+
+        assert.deepEqual(this.createPoint.secondCall.returnValue.update.lastCall.args[0].argument, new Date(3000));
+        assert.ok(!this.createPoint.secondCall.returnValue.dispose.called);
         assert.ok(this.createPoint.thirdCall.returnValue.dispose.called);
     });
 
@@ -1935,8 +1963,8 @@ var checkTwoGroups = function(assert, series) {
 
         // assert
         $.each(series.getPoints(), function(i, point) {
-            assert.ok(point.setLabelEllipsis.called, "label ellipsis, point " + i);
-            assert.deepEqual(point.setLabelEllipsis.lastCall.args, [true], "move labels from center");
+            assert.ok(point.applyWordWrap.called, "label ellipsis, point " + i);
+            assert.deepEqual(point.applyWordWrap.lastCall.args, [true], "move labels from center");
             assert.ok(point.setLabelTrackerData.called, "label tracker data, point " + i);
             assert.ok(point.updateLabelCoord.called, "label coords, point " + i);
             assert.deepEqual(point.updateLabelCoord.lastCall.args, [true], "move labels from center");
@@ -1961,7 +1989,7 @@ var checkTwoGroups = function(assert, series) {
 
         // assert
         $.each(series.getPoints(), function(i, point) {
-            assert.ok(!point.setLabelEllipsis.called, "label ellipsis, point " + i);
+            assert.ok(!point.applyWordWrap.called, "label ellipsis, point " + i);
             assert.ok(!point.setLabelTrackerData.called, "label tracker data, point " + i);
             assert.ok(!point.updateLabelCoord.called, "label coords, point " + i);
         });
@@ -1984,9 +2012,47 @@ var checkTwoGroups = function(assert, series) {
 
         // arrange
         $.each(series.getPoints(), function(i, point) {
-            assert.ok(point.setLabelEllipsis.called, "label ellipsis, point " + i);
+            assert.ok(point.applyWordWrap.called, "label ellipsis, point " + i);
             assert.ok(point.setLabelTrackerData.called, "label tracker data, point " + i);
             assert.ok(point.updateLabelCoord.called, "label coords, point " + i);
         });
+    });
+
+    QUnit.test("All points with ellipsis", function(assert) {
+        // arrange
+        mockPoints.forEach(p => {
+            p.applyWordWrap = sinon.spy(a => true);
+        });
+        var series = createSeries();
+
+        series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 },
+        series.updateData(this.data);
+        series.createPoints();
+        series.correctPosition({ centerX: 200, centerY: 300, radiusOuter: 25, radiusInner: 0 }, {});
+
+        // act
+        series.draw();
+        var labelsWithEllipsis = series.adjustLabels(true);
+
+        assert.strictEqual(labelsWithEllipsis, true);
+    });
+
+    QUnit.test("Not all points with ellipsis", function(assert) {
+        // arrange
+        mockPoints.forEach(p => {
+            p.applyWordWrap = sinon.spy(a => false);
+        });
+        var series = createSeries();
+
+        series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 },
+        series.updateData(this.data);
+        series.createPoints();
+        series.correctPosition({ centerX: 200, centerY: 300, radiusOuter: 25, radiusInner: 0 }, {});
+
+        // act
+        series.draw();
+        var labelsWithEllipsis = series.adjustLabels(true);
+
+        assert.strictEqual(labelsWithEllipsis, false);
     });
 })();
