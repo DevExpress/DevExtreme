@@ -7,19 +7,6 @@ import ContextMenu from "../context_menu/ui.context_menu";
 
 const FILEMANAGER_CONTEXT_MEMU_CLASS = "dx-filemanager-context-menu";
 
-const DEFAULT_CONTEXT_MENU_ITEMS = [
-    "create",
-    "upload",
-    "rename",
-    "move",
-    "copy",
-    "delete",
-    {
-        commandName: "refresh",
-        beginGroup: true
-    }
-];
-
 class FileManagerContextMenu extends Widget {
 
     _initMarkup() {
@@ -74,7 +61,7 @@ class FileManagerContextMenu extends Widget {
 
         const result = [];
 
-        DEFAULT_CONTEXT_MENU_ITEMS.forEach(srcItem => {
+        this.option("items").forEach(srcItem => {
             const commandName = isString(srcItem) ? srcItem : srcItem.commandName;
             if(this._commandManager.isCommandAvailable(commandName, fileItems)) {
                 let item = this._createMenuItemByCommandName(commandName);

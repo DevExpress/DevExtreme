@@ -217,3 +217,38 @@ QUnit.module("Raise context menu", moduleConfig, () => {
     });
 
 });
+
+QUnit.module("Cutomize context menu", moduleConfig, () => {
+
+    test("default items rearrangement and modification", function(assert) {
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("contextMenu", {
+            items: [
+                "move", "create", "rename", "upload", "rename", "copy", "delete",
+                {
+                    commandName: "refresh",
+                    beginGroup: true
+                }
+            ]
+        });
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxclick");
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItems();
+        assert.equal($items.length, 8, "context menu is shown");
+
+        assert.ok($items.eq(0).text().indexOf("Move") > -1, "move item shown");
+        assert.ok($items.eq(1).text().indexOf("New folder") > -1, "create folder item shown");
+        assert.ok($items.eq(2).text().indexOf("Rename") > -1, "rename item shown");
+        assert.ok($items.eq(3).text().indexOf("Upload files") > -1, "upload files item shown");
+
+        assert.ok($items.eq(4).text().indexOf("Rename") > -1, "rename item shown");
+        assert.ok($items.eq(5).text().indexOf("Copy") > -1, "copy item shown");
+        assert.ok($items.eq(6).text().indexOf("Delete") > -1, "delete item shown");
+        assert.ok($items.eq(7).text().indexOf("Refresh") > -1, "refresh files item shown");
+    });
+
+});
