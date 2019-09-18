@@ -28,13 +28,19 @@ export default class AppointmentPopup {
         this._appointmentForm = null;
 
         this.state = {
-            lastEditData: null
+            lastEditData: null,
+            appointment: {
+                data: null,
+                processTimeZone: false
+            }
         };
     }
 
     show(data, showButtons, processTimeZone) {
-        this.__data = data;
-        this.__processTimeZone = processTimeZone;
+        this.state.appointment = {
+            data: data,
+            processTimeZone: processTimeZone
+        };
 
         if(!this._popup) {
             this._popup = this._createPopup();
@@ -70,9 +76,7 @@ export default class AppointmentPopup {
     dispose() {
         if(this._$popup) {
             this._popup.$element().remove();
-            this._$popup = undefined;
-            // this._popup;
-            // this._appointmentForm;
+            this._$popup = null;
         }
     }
 
@@ -128,17 +132,13 @@ export default class AppointmentPopup {
             AppointmentForm.concatResources(this.scheduler._resourcesManager.getEditors());
         }
 
-        // return AppointmentForm.create(
-        //     this.scheduler._createComponent.bind(this.scheduler), // TODO
-        //     element,
-        //     this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false
-        // );
+        const isReadOnly = this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false;
 
         return AppointmentForm.create(
             this.scheduler._createComponent.bind(this.scheduler),
             element,
-            this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false,
-            this.__data
+            isReadOnly,
+            this.state.appointment.data
         );
     }
 

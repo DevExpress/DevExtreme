@@ -2563,8 +2563,8 @@ const Scheduler = Widget.inherit({
         this._fireContentReadyAction();
     },
 
-    _showAppointmentPopup: function(data, showButtons, processTimeZone) { // TODO rename args
-        this._appointmentPopup.show(data, showButtons, processTimeZone);
+    _showAppointmentPopup: function(data, visibleButtons, isProcessTimeZone) {
+        this._appointmentPopup.show(data, visibleButtons, isProcessTimeZone);
     },
 
     getAppointmentPopup: function() {
