@@ -76,12 +76,9 @@ class FileManagerContextMenu extends Widget {
         this.option("items").map(srcItem => {
             const commandName = isString(srcItem) ? srcItem : srcItem.commandName;
             let item = this._configureItemByCommandName(commandName, srcItem);
-            // if(this._isCommandAvailable(item, fileItems)) {
-            //     if(isObject(srcItem)) {
-            //         item = extend(true, item, srcItem);
-            //     }
-            // }
-            result.push(item);
+            if(this._isCommandAvailable(item, fileItems)) {
+                result.push(item);
+            }
         });
 
         return result;
