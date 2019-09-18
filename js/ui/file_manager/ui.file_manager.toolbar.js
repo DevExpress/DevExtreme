@@ -338,22 +338,21 @@ class FileManagerToolbar extends Widget {
     }
 
     _isCommandAvailable(command, fileItems) {
-        if(this._isDefaultItem(command.commandName)) {
-            if(command.visibilityMode === "manual") {
-                return command.visible;
-            }
-            if(command.commandName === "refresh") {
-                return this._generalToolbarVisible || !!this._isRefreshVisibleInFileToolbar;
-            }
-
-            if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(command.commandName) > -1) {
-                return true;
-            }
-
-            return this._commandManager.isCommandAvailable(command.commandName, fileItems);
-        } else {
+        if(!this._isDefaultItem(command.commandName)) {
             return command.visible;
         }
+        if(command.visibilityMode === "manual") {
+            return command.visible;
+        }
+        if(command.commandName === "refresh") {
+            return this._generalToolbarVisible || !!this._isRefreshVisibleInFileToolbar;
+        }
+
+        if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(command.commandName) > -1) {
+            return true;
+        }
+
+        return this._commandManager.isCommandAvailable(command.commandName, fileItems);
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {
