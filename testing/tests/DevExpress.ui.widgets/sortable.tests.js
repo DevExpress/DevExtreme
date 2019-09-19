@@ -690,6 +690,67 @@ QUnit.test("onDragEnd - check args when dragging inside item", function(assert) 
     assert.strictEqual(args[0].dropInsideItem, true, "dropInsideItem");
 });
 
+QUnit.test("onPlaceholderPrepared - check args when dragging", function(assert) {
+    // arrange
+    let items,
+        args,
+        onPlaceholderPrepared = sinon.spy();
+
+
+    this.createSortable({
+        filter: ".draggable",
+        onPlaceholderPrepared: onPlaceholderPrepared,
+        dropFeedbackMode: "indicate"
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(0)).start().down(15, 15).move(0, 30);
+
+    // assert
+    items = this.$element.children();
+    args = onPlaceholderPrepared.getCall(0).args;
+    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].placeholderElement).get(0), items.get(2), "placeholder element");
+    assert.deepEqual($(args[0].dragElement).get(0), $("body").children(".dx-sortable-dragging").get(0), "dragging element");
+    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
+    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+});
+
+QUnit.test("'onPlaceholderPrepared' option changing", function(assert) {
+    // arrange
+    let args,
+        items,
+        onPlaceholderPrepared = sinon.spy();
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate"
+    });
+
+    items = this.$element.children();
+
+    // act
+    this.sortableInstance.option("onPlaceholderPrepared", onPlaceholderPrepared);
+
+    // arrange
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(0)).start().down(15, 15).move(0, 30);
+
+    // assert
+    items = this.$element.children();
+    args = onPlaceholderPrepared.getCall(0).args;
+    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].placeholderElement).get(0), items.get(2), "placeholder element");
+    assert.deepEqual($(args[0].dragElement).get(0), $("body").children(".dx-sortable-dragging").get(0), "dragging element");
+    assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
+    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+});
+
+
 QUnit.module("Cross-Component Drag and Drop", {
     createComponent: function(componentName, options, $element) {
         let instance = $element[componentName](options)[componentName]("instance");

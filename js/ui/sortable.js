@@ -157,6 +157,15 @@ var Sortable = Draggable.inherit({
         }
     },
 
+            /**
+             * @name dxSortableOptions.onPlaceholderPrepared
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             * @hidden
+             */
     _isIndicateMode: function() {
         return this.option("dropFeedbackMode") === "indicate" || this.option("allowDropInsideItem");
     },
@@ -303,6 +312,11 @@ var Sortable = Draggable.inherit({
             dropInsideItem: itemPoint.dropInsideItem,
             toIndex: itemPoint.index
         });
+        this._getAction("onPlaceholderPrepared")(extend(this._getEventArgs(), {
+            event: e,
+            placeholderElement: getPublicElement($placeholderElement),
+            dragElement: getPublicElement(sourceDraggable._$dragElement)
+        }));
 
         this._updateItemPoints();
     },
@@ -359,6 +373,7 @@ var Sortable = Draggable.inherit({
 
         switch(name) {
             case "onDragChange":
+            case "onPlaceholderPrepared":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
             case "itemOrientation":
