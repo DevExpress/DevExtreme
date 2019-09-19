@@ -649,7 +649,9 @@ if(Globalize && Globalize.formatDate) {
 
     const globalizeDateLocalization = {
         _getPatternByFormat: function(format) {
-            const that = this, lowerFormat = format.toLowerCase(), globalizeFormat = FORMATS_TO_GLOBALIZE_MAP[lowerFormat];
+            const that = this;
+            const lowerFormat = format.toLowerCase();
+            const globalizeFormat = FORMATS_TO_GLOBALIZE_MAP[lowerFormat];
 
             if(lowerFormat === "datetime-local") {
                 return "yyyy-MM-ddTHH':'mm':'ss";
@@ -703,7 +705,8 @@ if(Globalize && Globalize.formatDate) {
                 return date;
             }
 
-            let formatter, formatCacheKey;
+            let formatter;
+            let formatCacheKey;
 
             if(typeof (format) === "function") {
                 return format(date);

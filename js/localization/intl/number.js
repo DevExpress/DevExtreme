@@ -6,19 +6,19 @@ import { compare as compareVersions } from '../../core/utils/version';
 import openXmlCurrencyFormat from "../open_xml_currency_format";
 import accountingFormats from "../cldr-data/accounting_formats";
 
-const detectCurrencySymbolRegex = /([^\s0]+)?(\s*)0*[.,]*0*(\s*)([^\s0]+)?/,
-    formattersCache = {},
-    getFormatter = format => {
-        const key = locale() + '/' + JSON.stringify(format);
-        if(!formattersCache[key]) {
-            formattersCache[key] = (new Intl.NumberFormat(locale(), format)).format;
-        }
+const detectCurrencySymbolRegex = /([^\s0]+)?(\s*)0*[.,]*0*(\s*)([^\s0]+)?/;
+const formattersCache = {};
+const getFormatter = format => {
+    const key = locale() + '/' + JSON.stringify(format);
+    if(!formattersCache[key]) {
+        formattersCache[key] = (new Intl.NumberFormat(locale(), format)).format;
+    }
 
-        return formattersCache[key];
-    },
-    getCurrencyFormatter = currency => {
-        return (new Intl.NumberFormat(locale(), { style: 'currency', currency: currency }));
-    };
+    return formattersCache[key];
+};
+const getCurrencyFormatter = currency => {
+    return (new Intl.NumberFormat(locale(), { style: 'currency', currency: currency }));
+};
 
 module.exports = {
     _formatNumberCore: function(value, format, formatConfig) {
@@ -102,7 +102,8 @@ module.exports = {
         return parseFloat(text);
     },
     _normalizeNumber: function(text, format) {
-        const isExponentialRegexp = /^[-+]?[0-9]*.?[0-9]+([eE][-+]?[0-9]+)+$/, legitDecimalSeparator = '.';
+        const isExponentialRegexp = /^[-+]?[0-9]*.?[0-9]+([eE][-+]?[0-9]+)+$/;
+        const legitDecimalSeparator = '.';
 
         if(this.convertDigits) {
             text = this.convertDigits(text, true);
@@ -125,7 +126,8 @@ module.exports = {
         return this._extractCurrencySymbolInfo(formatter.format(0));
     },
     _extractCurrencySymbolInfo: function(currencyValueString) {
-        const match = detectCurrencySymbolRegex.exec(currencyValueString) || [], position = match[1] ? 'before' : 'after', symbol = match[1] || match[4] || '', delimiter = match[2] || match[3] || '';
+        const match = detectCurrencySymbolRegex.exec(currencyValueString) || []; const position = match[1] ? 'before' : 'after'; const symbol = match[1] || match[4] || '';
+        const delimiter = match[2] || match[3] || '';
 
         return {
             position: position,
@@ -141,7 +143,8 @@ module.exports = {
         };
     },
     getOpenXmlCurrencyFormat: function(currency) {
-        const currencyValue = currency || dxConfig().defaultCurrency, currencySymbol = this._getCurrencySymbolInfo(currencyValue).symbol;
+        const currencyValue = currency || dxConfig().defaultCurrency;
+        const currencySymbol = this._getCurrencySymbolInfo(currencyValue).symbol;
 
         return openXmlCurrencyFormat(currencySymbol, accountingFormats[locale()]);
     }
