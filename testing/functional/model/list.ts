@@ -3,6 +3,7 @@ import Widget from './internal/widget';
 const CLASS = {
     checkbox: 'dx-checkbox',
     checkboxChecked: 'dx-checkbox-checked',
+    disabled: 'dx-state-disabled',
     focused: 'dx-state-focused',
     group: 'dx-list-group',
     groupHeader: 'dx-list-group-header',
@@ -10,6 +11,7 @@ const CLASS = {
     radioButton: 'dx-radiobutton',
     radioButtonChecked: 'dx-radiobutton-checked',
     reorderHandle: 'dx-list-reorder-handle',
+    search: 'dx-list-search',
     selectAllItem: 'dx-list-select-all'
 };
 
@@ -40,6 +42,7 @@ class RadioButton {
 class Item {
     element: Selector;
     checkBox: CheckBox;
+    isDisabled:  Promise<boolean>;
     isFocused: Promise<boolean>;
     radioButton: RadioButton;
     reorderHandle: Selector;
@@ -48,6 +51,7 @@ class Item {
     constructor (element: Selector) {
         this.element = element;
         this.checkBox = new CheckBox(element);
+        this.isDisabled = element.hasClass(CLASS.disabled);
         this.isFocused = element.hasClass(CLASS.focused);
         this.radioButton = new RadioButton(element);
         this.reorderHandle = element.find(`.${CLASS.reorderHandle}`);
@@ -73,6 +77,7 @@ class Group {
 
 export default class List extends Widget {
     items: Selector;
+    searchInput: Selector;
     selectAll: Item;
 
     name: string = 'dxList';
@@ -80,8 +85,9 @@ export default class List extends Widget {
     constructor (id: string|Selector) {
         super(id);
 
-        this.selectAll = new Item(this.element.find(`.${CLASS.selectAllItem}`));
         this.items = this.element.find(`.${CLASS.item}`);
+        this.searchInput = this.element.find(`.${CLASS.search} input`);
+        this.selectAll = new Item(this.element.find(`.${CLASS.selectAllItem}`));
     }
 
     getItem (index: number = 0): Item {
