@@ -458,7 +458,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         if(column.allowEditing) {
             let isDataRow = !row || row.rowType === "data";
-            isEditingAllowed = editingOptions.allowUpdating ? isDataRow : row && row.inserted;
+            isEditingAllowed = editingOptions.allowUpdating ? isDataRow : row && row.isNewRow;
         }
 
         if(!isEditingAllowed) {
@@ -608,7 +608,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._focusEditFormCell($cell);
             setTimeout(this._editingController.saveEditData.bind(this._editingController));
         } else {
-            eventsEngine.trigger($(target), "blur");
+            eventsEngine.trigger($(target), "change");
 
             this._editingController.closeEditCell();
 

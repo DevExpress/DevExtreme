@@ -18,7 +18,10 @@ import {
     focusCell,
     callViewsRenderCompleted } from "../../../helpers/grid/keyboardNavigationHelper.js";
 
-var device = devices.real();
+import { DataGridWrapper } from "../../../helpers/wrappers/dataGridWrappers.js";
+
+var device = devices.real(),
+    dataGridWrapper = new DataGridWrapper("#container");
 
 function setupModules(that, modulesOptions) {
     var defaultSetCellValue = function(data, value) {
@@ -2042,8 +2045,44 @@ QUnit.module("Keyboard keys", {
         assert.equal(this.editingController._editColumnIndex, 2, "edit column index");
     });
 
-    // T202754
-    QUnit.testInActiveWindow("Enter after edit cell by enter when default prevented", function(assert) {
+    QUnit.testInActiveWindow("Edit cell should not lose focus after enter key", function(assert) {
+        let inputBlurFired = false,
+            inputChangeFired = false,
+            $input;
+
+        // arrange
+        setupModules(this);
+
+        // act
+        this.options.editing = { allowUpdating: true, mode: "batch" };
+        this.gridView.render($("#container"));
+
+        this.focusFirstCell();
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // arrange
+        $input = dataGridWrapper.rowsView.getEditorInputElement(0, 0);
+
+        // assert
+        assert.ok($input.is(":focus"), "input is focused");
+
+        // arrange
+        $input.on("blur", () => inputBlurFired = true);
+        $input.on("change", () => inputChangeFired = true);
+
+        // act
+        this.triggerKeyDown("enter", false, false, $input);
+        this.clock.tick();
+
+        // assert
+        assert.notOk(inputBlurFired);
+        assert.ok(inputChangeFired);
+    });
+
+    QUnit.testInActiveWindow("Enter after edit cell by enter when default prevented (T202754)", function(assert) {
         // arrange
         setupModules(this);
 
@@ -2894,7 +2933,7 @@ QUnit.module("Keyboard keys", {
         // arrange
         setupModules(this);
         this.options.editing = { allowUpdating: false, mode: "cell" };
-        this.dataControllerOptions.items[0].inserted = true;
+        this.dataControllerOptions.items[0].isNewRow = true;
         this.gridView.render($("#container"));
 
         // act

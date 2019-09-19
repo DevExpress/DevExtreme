@@ -2,6 +2,7 @@ import sharedTests from "./sharedParts/localization.shared.js";
 import dateLocalization from "localization/date";
 import numberLocalization from "localization/number";
 import { locale } from "localization/core";
+import config from "core/config";
 
 if(Intl.__disableRegExpRestore) {
     Intl.__disableRegExpRestore();
@@ -611,6 +612,24 @@ QUnit.module("Intl localization", {
             };
             assert.equal(dateLocalization.firstDayOfWeekIndex(), expectedValues[localeId]);
         });
+    });
+
+    QUnit.module("getCurrencySymbol");
+
+    QUnit.test("getCurrencySymbol and config.defaultCurrency", assert => {
+        var originalConfig = config();
+
+        try {
+            assert.equal(numberLocalization.getCurrencySymbol().symbol, "$");
+
+            config({
+                defaultCurrency: "EUR"
+            });
+
+            assert.equal(numberLocalization.getCurrencySymbol().symbol, "€");
+        } finally {
+            config(originalConfig);
+        }
     });
 
     QUnit.module("date - browser specific behavior");

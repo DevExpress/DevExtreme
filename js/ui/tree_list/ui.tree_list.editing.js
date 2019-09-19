@@ -53,7 +53,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
                 row = options.row;
 
             if(button.name === "add") {
-                return this.allowAdding(options) && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.inserted);
+                return this.allowAdding(options) && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.isNewRow);
             }
 
             return result;

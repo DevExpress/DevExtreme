@@ -18,10 +18,10 @@ export class GanttView extends Widget {
             allowSelectTask: this.option("allowSelection"),
             editing: this.option("editing"),
             areHorizontalBordersEnabled: this.option("showRowLines"),
-            areAlternateRowsEnabled: false
+            areAlternateRowsEnabled: false,
+            viewType: this._getViewTypeByScaleType(this.option("scaleType"))
         });
         this._selectTask(this.option("selectedRowKey"));
-        this._ganttViewCore.setViewType(3);
     }
 
     getTaskAreaContainer() {
@@ -54,12 +54,28 @@ export class GanttView extends Widget {
 
     _getTaskTitlePosition(value) {
         switch(value) {
-            case 'outside':
+            case "outside":
                 return 1;
-            case 'none':
+            case "none":
                 return 2;
             default:
                 return 0;
+        }
+    }
+    _getViewTypeByScaleType(scaleType) {
+        switch(scaleType) {
+            case "minutes":
+                return 0;
+            case "hours":
+                return 1;
+            case "days":
+                return 3;
+            case "weeks":
+                return 4;
+            case "months":
+                return 5;
+            default:
+                return undefined;
         }
     }
 
@@ -92,6 +108,9 @@ export class GanttView extends Widget {
                 break;
             case "showRowLines":
                 this._ganttViewCore.setRowLinesVisible(args.value);
+                break;
+            case "scaleType":
+                this._ganttViewCore.setViewType(this._getViewTypeByScaleType(args.value));
                 break;
             default:
                 super._optionChanged(args);

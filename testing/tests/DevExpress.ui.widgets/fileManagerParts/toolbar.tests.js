@@ -292,6 +292,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         let $newButton = $elements.eq(5);
         assert.ok($newButton.text().indexOf("newButton") !== -1, "newButton is rendered at correct place");
+        assert.ok($newButton.hasClass("dx-button-mode-text"), "newButton has default stylingMode");
 
         $newButton.trigger("dxclick");
         assert.equal(testClick.callCount, 1, "newButton has correct action");

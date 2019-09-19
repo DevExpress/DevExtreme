@@ -301,47 +301,6 @@ var AdvancedChart = BaseChart.inherit({
         axes.splice(index, 1);
     },
 
-    _prepareStackPoints: function(singleSeries, stackPoints) {
-        var points = singleSeries.getPoints(),
-            stackName = singleSeries.getStackName();
-
-        _each(points, function(_, point) {
-            var argument = point.argument;
-
-            if(!stackPoints[argument]) {
-                stackPoints[argument] = {};
-                stackPoints[argument][null] = [];
-            }
-            if(stackName && !_isArray(stackPoints[argument][stackName])) {
-                stackPoints[argument][stackName] = [];
-                _each(stackPoints[argument][null], function(_, point) {
-                    if(!point.stackName) {
-                        stackPoints[argument][stackName].push(point);
-                    }
-                });
-            }
-
-            if(stackName) {
-                stackPoints[argument][stackName].push(point);
-                stackPoints[argument][null].push(point);
-            } else {
-                _each(stackPoints[argument], function(_, stack) {
-                    stack.push(point);
-                });
-            }
-
-            point.stackPoints = stackPoints[argument][stackName];
-            point.stackName = stackName;
-        });
-    },
-
-    _resetStackPoints: function(singleSeries) {
-        _each(singleSeries.getPoints(), function(_, point) {
-            point.stackPoints = null;
-            point.stackName = null;
-        });
-    },
-
     _disposeAxes: function() {
         var that = this,
             disposeObjectsInArray = that._disposeObjectsInArray;

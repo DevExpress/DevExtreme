@@ -2,15 +2,18 @@ import dependencyInjector from "../core/utils/dependency_injector";
 import { isString } from "../core/utils/type";
 import iteratorUtils from "../core/utils/iterator";
 import { inArray } from "../core/utils/array";
+import errors from "../core/errors";
 import { getFormatter as getLDMLDateFormatter } from "./ldml/date.formatter";
 import { getFormat as getLDMLDateFormat } from "./ldml/date.format";
 import { getParser as getLDMLDateParser } from "./ldml/date.parser";
 import defaultDateNames from "./default_date_names";
+import firstDayOfWeekData from "./cldr-data/first_day_of_week_data";
+import { getValueByClosestLocale } from "./core";
 import numberLocalization from "./number";
-import errors from "../core/errors";
 import intlDateLocalization from "./intl/date";
 import "./core";
 
+const DEFAULT_DAY_OF_WEEK_INDEX = 0;
 const hasIntl = typeof Intl !== "undefined";
 
 const FORMATS_TO_PATTERN_MAP = {
@@ -181,7 +184,9 @@ const dateLocalization = dependencyInjector({
     },
 
     firstDayOfWeekIndex: function() {
-        return 0;
+        const index = getValueByClosestLocale((locale) => firstDayOfWeekData[locale]);
+
+        return index === undefined ? DEFAULT_DAY_OF_WEEK_INDEX : index;
     }
 });
 

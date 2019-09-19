@@ -210,4 +210,4 @@ gulp.task('npm-ts-modules-check', gulp.series('npm-ts-modules-generator', functi
 
 gulp.task('npm-check', gulp.series('npm-ts-modules-check'));
 
-gulp.task('npm', gulp.series('npm-sources', 'npm-check'));
+gulp.task('npm', gulp.series('npm-sources', 'npm-check', 'npm-less'));
