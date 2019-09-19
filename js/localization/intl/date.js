@@ -1,8 +1,6 @@
 /* globals Intl */
 import { extend } from "../../core/utils/extend";
-
 import { locale } from "../core";
-import firstDayOfWeekData from "../cldr-data/first_day_of_week_data";
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
 
@@ -11,7 +9,8 @@ const getIntlFormatter = format => {
         // NOTE: Intl in some browsers formates dates with timezone offset which was at the moment for this date.
         // But the method "new Date" creates date using current offset. So, we decided to format dates in the UTC timezone.
         if(!format.timeZoneName) {
-            const utcDate = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()), utcFormat = extend({ timeZone: "UTC" }, format);
+            const utcDate = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
+            const utcFormat = extend({ timeZone: "UTC" }, format);
 
             return formatDateTime(utcDate, utcFormat);
         }
@@ -321,11 +320,5 @@ module.exports = {
             .filter(part => { return part.index > -1; })
             .sort((a, b) => { return a.index - b.index; })
             .map(part => { return part.name; });
-    },
-
-    firstDayOfWeekIndex: function() {
-        const index = firstDayOfWeekData[locale()];
-
-        return index === undefined ? 1 : index;
     }
 };

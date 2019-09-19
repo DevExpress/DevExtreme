@@ -12,6 +12,9 @@ var Cldr = require('cldrjs');
 var locales = require('cldr-core/availableLocales.json').availableLocales.full;
 var weekData = require('cldr-core/supplemental/weekData.json');
 var likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
+var parentLocales = require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
+
+var getParentLocale = require('../../js/localization/parentLocale.js');
 
 var firstDayOfWeekData = function() {
     var DAY_INDEXES = {
@@ -23,17 +26,22 @@ var firstDayOfWeekData = function() {
         "fri": 5,
         "sat": 6
     };
-    var DEFAULT_DAY_INDEX = 1;
+    var DEFAULT_DAY_OF_WEEK_INDEX = 0;
 
     var result = {};
 
     Cldr.load(weekData, likelySubtags);
 
-    locales.forEach(function(locale) {
+    var getFirstIndex = (locale) => {
         var firstDay = new Cldr(locale).supplemental.weekData.firstDay();
-        var firstDayIndex = DAY_INDEXES[firstDay];
+        return DAY_INDEXES[firstDay];
+    };
 
-        if(firstDayIndex !== DEFAULT_DAY_INDEX) {
+    locales.forEach(function(locale) {
+        var firstDayIndex = getFirstIndex(locale);
+
+        var parentLocale = getParentLocale(parentLocales, locale);
+        if(firstDayIndex !== DEFAULT_DAY_OF_WEEK_INDEX && (!parentLocale || firstDayIndex !== getFirstIndex(parentLocale))) {
             result[locale] = firstDayIndex;
         }
     });
@@ -100,7 +108,7 @@ gulp.task('localization-generated-sources', gulp.parallel([
         destination: 'js/localization'
     },
     {
-        data: require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale,
+        data: parentLocales,
         filename: 'parent_locales.js',
         destination: 'js/localization/cldr-data'
     },
