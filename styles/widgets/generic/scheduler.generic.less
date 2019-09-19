@@ -227,7 +227,8 @@
 
 .dx-scheduler-header {
     background-color: @scheduler-header-bg;
-    border: @SCHEDULER_BASE_BORDER;
+    border-top: @SCHEDULER_BASE_BORDER;
+    border-bottom: @SCHEDULER_BASE_BORDER;
     height: @GENERIC_SCHEDULER_HEADER_HEIGHT;
 }
 
@@ -298,6 +299,8 @@
 
         &.dx-tab-selected:after {
             height: @GENERIC_SCHEDULER_HEADER_HEIGHT;
+            border-left: @SCHEDULER_BASE_BORDER;
+            border-right: @SCHEDULER_BASE_BORDER;
         }
     }
 }
