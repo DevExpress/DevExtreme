@@ -469,7 +469,6 @@ module.exports = function() {
             localization.locale("ru");
             assert.equal(dateLocalization.firstDayOfWeekIndex(), 1);
 
-
             localization.locale("en-US");
             assert.equal(dateLocalization.firstDayOfWeekIndex(), 0);
         } finally {
