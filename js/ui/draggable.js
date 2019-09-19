@@ -14,9 +14,10 @@ var $ = require("../core/renderer"),
     pointerEvents = require("../events/pointer"),
     dragEvents = require("../events/drag"),
     positionUtils = require("../animation/position"),
-    isFunction = require("../core/utils/type").isFunction,
+    typeUtils = require("../core/utils/type"),
     noop = require("../core/utils/common").noop,
-    viewPortUtils = require("../core/utils/view_port");
+    viewPortUtils = require("../core/utils/view_port"),
+    commonUtils = require("../core/utils/common");
 
 var DRAGGABLE = "dxDraggable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE),
@@ -294,6 +295,20 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @type any
              * @default undefined
              */
+            /**
+             * @name DraggableBaseOptions.cursorOffset
+             * @type string|object
+             */
+            /**
+             * @name DraggableBaseOptions.cursorOffset.x
+             * @type number
+             * @default 0
+             */
+            /**
+             * @name DraggableBaseOptions.cursorOffset.y
+             * @type number
+             * @default 0
+             */
         });
     },
 
@@ -317,17 +332,45 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     _initTemplates: noop,
 
+    _normalizeCursorOffset: function(offset, $sourceElement, $dragElement) {
+        if(typeUtils.isFunction(offset)) {
+            offset = offset.call(this, {
+                sourceElement: $sourceElement,
+                dragElement: $dragElement
+            });
+        }
+
+        if(typeUtils.isObject(offset)) {
+            offset = {
+                h: offset.x,
+                v: offset.y
+            };
+        }
+
+        let result = commonUtils.pairToObject(offset);
+
+        return {
+            left: result.h,
+            top: result.v
+        };
+    },
+
     _initPosition: function($element, $dragElement) {
         let elementOffset,
             dragElementOffset,
-            isCloned = this._dragElementIsCloned();
+            isCloned = this._dragElementIsCloned(),
+            cursorOffset = this.option("cursorOffset"),
+            normalizedCursorOffset = this._normalizeCursorOffset(cursorOffset, $element, $dragElement);
 
         if(isCloned) {
-            elementOffset = $element.offset(),
+            elementOffset = $element.offset();
             dragElementOffset = $dragElement.offset();
-            elementOffset.top -= dragElementOffset.top;
-            elementOffset.left -= dragElementOffset.left;
-            this._move(elementOffset, $dragElement);
+            elementOffset.top -= dragElementOffset.top - normalizedCursorOffset.top;
+            elementOffset.left -= dragElementOffset.left - normalizedCursorOffset.left;
+        }
+
+        if(elementOffset || cursorOffset) {
+            this._move(elementOffset || normalizedCursorOffset, $dragElement);
         }
 
         this._startPosition = translator.locate($dragElement);
@@ -519,10 +562,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._$sourceElement = $element;
         let $dragElement = this._$dragElement = this._createDragElement($element);
 
-        this._initPosition($element, $dragElement);
-
         this._toggleDraggingClass(true);
         this._toggleDragSourceClass(true);
+        this._initPosition($element, $dragElement);
 
         var $area = this._getArea(),
             areaOffset = this._getAreaOffset($area),
@@ -565,7 +607,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _getBoundOffset: function() {
         var boundOffset = this.option("boundOffset");
 
-        if(isFunction(boundOffset)) {
+        if(typeUtils.isFunction(boundOffset)) {
             boundOffset = boundOffset.call(this);
         }
 
@@ -575,7 +617,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _getArea: function() {
         var area = this.option("boundary");
 
-        if(isFunction(area)) {
+        if(typeUtils.isFunction(area)) {
             area = area.call(this);
         }
         return $(area);

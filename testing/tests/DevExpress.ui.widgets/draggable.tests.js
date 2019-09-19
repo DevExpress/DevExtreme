@@ -1119,3 +1119,156 @@ QUnit.test("Autoscroll should work fine if element was dropped and dragged again
     assert.equal($("#scrollable").scrollLeft(), 4, "scrollLeft");
     assert.equal($("#scrollable").scrollTop(), 4, "scrollTop");
 });
+
+QUnit.module("cursorOffset", moduleConfig);
+
+QUnit.test("set cursorOffset as string", function(assert) {
+    // arrange
+    this.createDraggable({
+        cursorOffset: "20 20"
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    assert.strictEqual(this.$element.length, 1, "there is a drag element");
+    assert.deepEqual(this.$element.offset(), { left: 30, top: 30 }, "drag element offset");
+});
+
+QUnit.test("set cursorOffset as object", function(assert) {
+    // arrange
+    this.createDraggable({
+        cursorOffset: {
+            x: 20,
+            y: 20
+        }
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    assert.strictEqual(this.$element.length, 1, "there is a drag element");
+    assert.deepEqual(this.$element.offset(), { left: 30, top: 30 }, "drag element offset");
+});
+
+QUnit.test("set cursorOffset as function", function(assert) {
+    // arrange
+    let cursorOffsetSpy = sinon.spy(() => { return { x: 20, y: 20 }; });
+
+    this.createDraggable({
+        cursorOffset: cursorOffsetSpy
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    assert.strictEqual(this.$element.length, 1, "there is a drag element");
+    assert.deepEqual(this.$element.offset(), { left: 30, top: 30 }, "drag element offset");
+    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "source element");
+    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].dragElement).get(0), this.$element.get(0), "drag element");
+});
+
+QUnit.test("set cursorOffset as string when clone is true", function(assert) {
+    // arrange
+    let $dragElement;
+
+    this.createDraggable({
+        cursorOffset: "20 20",
+        clone: true
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.strictEqual($dragElement.length, 1, "there is a drag element");
+    assert.deepEqual($dragElement.offset(), { left: 30, top: 30 }, "drag element offset");
+});
+
+QUnit.test("set cursorOffset as object clone is true", function(assert) {
+    // arrange
+    let $dragElement;
+
+    this.createDraggable({
+        cursorOffset: {
+            x: 20,
+            y: 20
+        },
+        clone: true
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.strictEqual($dragElement.length, 1, "there is a drag element");
+    assert.deepEqual($dragElement.offset(), { left: 30, top: 30 }, "drag element offset");
+});
+
+QUnit.test("set cursorOffset as function when clone is true", function(assert) {
+    // arrange
+    let $dragElement,
+        cursorOffsetSpy = sinon.spy(() => { return { x: 20, y: 20 }; });
+
+    this.createDraggable({
+        cursorOffset: cursorOffsetSpy,
+        clone: true
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.strictEqual($dragElement.length, 1, "there is a drag element");
+    assert.deepEqual($dragElement.offset(), { left: 30, top: 30 }, "drag element offset");
+    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "source element");
+    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "drag element");
+});
+
+QUnit.test("cursorOffset should be correct when the 'y' coordinate is zero", function(assert) {
+    // arrange
+    let $dragElement;
+
+    this.createDraggable({
+        cursorOffset: {
+            x: 20,
+            y: 0
+        },
+        clone: true
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.strictEqual($dragElement.length, 1, "there is a drag element");
+    assert.deepEqual($dragElement.offset(), { left: 30, top: 10 }, "drag element offset");
+});
+
+QUnit.test("cursorOffset should be correct when the 'x' coordinate is zero", function(assert) {
+    // arrange
+    let $dragElement;
+
+    this.createDraggable({
+        cursorOffset: {
+            x: 0,
+            y: 20
+        },
+        clone: true
+    });
+
+    // act
+    this.pointer.down().move(10, 10);
+
+    // assert
+    $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.strictEqual($dragElement.length, 1, "there is a drag element");
+    assert.deepEqual($dragElement.offset(), { left: 10, top: 30 }, "drag element offset");
+});
