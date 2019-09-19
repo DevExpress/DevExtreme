@@ -56,6 +56,16 @@ var Sortable = Draggable.inherit({
              * @hidden
              */
             onDragChange: null,
+            /**
+             * @name dxSortableOptions.onPlaceholderPrepared
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @action
+             * @hidden
+             */
+            onPlaceholderPrepared: null,
             fromIndex: null,
             toIndex: null,
             dropInsideItem: false,
@@ -157,15 +167,6 @@ var Sortable = Draggable.inherit({
         }
     },
 
-            /**
-             * @name dxSortableOptions.onPlaceholderPrepared
-             * @type function(e)
-             * @extends Action
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @action
-             * @hidden
-             */
     _isIndicateMode: function() {
         return this.option("dropFeedbackMode") === "indicate" || this.option("allowDropInsideItem");
     },
@@ -290,7 +291,8 @@ var Sortable = Draggable.inherit({
     },
 
     _updatePlaceholderPosition: function(e, itemPoint) {
-        let toIndex = this._normalizeToIndex(itemPoint.index, itemPoint.dropInsideItem);
+        let sourceDraggable = this._getSourceDraggable(),
+            toIndex = this._normalizeToIndex(itemPoint.index, itemPoint.dropInsideItem);
 
         let eventArgs = extend(this._getEventArgs(), {
             event: e,
@@ -314,7 +316,7 @@ var Sortable = Draggable.inherit({
         });
         this._getAction("onPlaceholderPrepared")(extend(this._getEventArgs(), {
             event: e,
-            placeholderElement: getPublicElement($placeholderElement),
+            placeholderElement: getPublicElement(this._$placeholderElement),
             dragElement: getPublicElement(sourceDraggable._$dragElement)
         }));
 
