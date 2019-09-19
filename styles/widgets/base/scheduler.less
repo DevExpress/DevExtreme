@@ -864,7 +864,7 @@
             .flex-container(row, nowrap);
 
             flex: 1 1 100%;
-            padding: 0 10px 0 5px;
+            padding: 0 5px;
             height: auto;
             width: 100%;
             justify-content: flex-start;
@@ -875,6 +875,9 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
+
+            border: none;
+            border-top: @SCHEDULER_BASE_BORDER;
         }
     }
 
@@ -2356,45 +2359,6 @@
             tbody {
                 height: 100%;
                 .flex-container(column, nowrap);
-            }
-        }
-
-        .dx-scheduler-group-header {
-            .flex-container(row, nowrap);
-
-            flex: 1 1 100%;
-            text-align: center;
-            border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
-            padding: 0;
-            overflow: hidden;
-            width: 100%;
-            border-right: none;
-
-            &[rowspan='2'],
-            &[rowspan='3'] {
-                border-bottom: none;
-
-                .dx-scheduler-group-header-content div {
-                    margin-top: 200%;
-                }
-            }
-        }
-
-        .dx-scheduler-group-header-content {
-            padding-top: @SCHEDULER_VERTICAL_GROUP_HEADER_CONTENT_TOP_OFFSET;
-            overflow: visible;
-            flex-grow: 1;
-
-            div {
-                white-space: normal;
-                line-height: normal;
-            }
-        }
-
-        &[dx-group-column-count='2'],
-        &[dx-group-column-count='3'] {
-            .dx-scheduler-group-header:last-child {
-                text-align: left;
             }
         }
 
