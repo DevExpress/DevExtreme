@@ -164,7 +164,7 @@ export default class AppointmentPopup {
         var startDateExpr = this.scheduler._dataAccessors.expr.startDateExpr,
             endDateExpr = this.scheduler._dataAccessors.expr.endDateExpr;
 
-        formData.recurrenceRule = formData.recurrenceRule || null;
+        formData.recurrenceRule = formData.recurrenceRule || ""; // TODO: plug for recurrent editor
 
         AppointmentForm.updateFormData(this._appointmentForm, formData);
         this._appointmentForm.option("readOnly", this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false);
@@ -231,7 +231,7 @@ export default class AppointmentPopup {
             oldData = this.scheduler._editAppointmentData,
             recData = this.scheduler._updatedRecAppointment;
 
-        if(formData.recurrenceRule === null) { // TODO
+        if(this.state.appointment.data.recurrenceRule === undefined && formData.recurrenceRule === "") { // TODO: plug for recurrent editor
             delete formData.recurrenceRule;
         }
 
