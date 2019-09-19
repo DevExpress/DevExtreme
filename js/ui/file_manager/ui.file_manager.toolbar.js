@@ -193,6 +193,20 @@ class FileManagerToolbar extends Widget {
             extend(result, { commandName });
         }
 
+        if(result.widget === "dxButton" && !result.options.stylingMode) {
+            if(!result.options) {
+                result.options = {};
+            }
+            result.options.stylingMode = "text";
+        }
+
+        if(result.widget === "dxSelectBox" && !result.options.stylingMode) {
+            if(!result.options) {
+                result.options = {};
+            }
+            result.options.stylingMode = "filled";
+        }
+
         return result;
     }
 
