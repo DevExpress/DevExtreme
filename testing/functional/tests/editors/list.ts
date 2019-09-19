@@ -144,3 +144,26 @@ test("Grouped list can not reorder items (T727360)", async t => {
         .expect(thirdGroup.getItem().text).eql('value32')
         .expect(thirdGroup.getItem(1).text).eql('value31');
 });
+
+fixture `List T815151`
+    .page(url(__dirname, './pages/t815151.html'));
+
+test("Disabled item should not have focus (T815151)", async t => {
+    const list = new List('#list');
+    const { searchInput } = list;
+    const firstItem = list.getItem();
+    const secondItem = list.getItem(1);
+    const disableFirstItem = Selector('#disable');
+
+    await t
+        .click(firstItem.element)
+        .expect(firstItem.isFocused).ok()
+
+        .click(disableFirstItem)
+        .expect(firstItem.isDisabled).ok()
+
+        .click(searchInput)
+        .pressKey('tab')
+        .expect(firstItem.isFocused).notOk()
+        .expect(secondItem.isFocused).ok();
+});
