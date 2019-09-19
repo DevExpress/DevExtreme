@@ -121,7 +121,11 @@ const ValidatingController = modules.Controller.inherit((function() {
                     }
                 });
             } else if(this._currentCellValidator) {
-                isValid = this.validateGroup(this._currentCellValidator._findGroup()).isValid;
+                const validationResult = this.validateGroup(this._currentCellValidator._findGroup());
+                completeList.push(validationResult);
+                validationResult.done(validationResult => {
+                    isValid = validationResult.isValid;
+                });
             }
 
             this._isValidationInProgress = false;
@@ -155,13 +159,12 @@ const ValidatingController = modules.Controller.inherit((function() {
             if(FORM_BASED_MODES.indexOf(editMode) === -1) {
                 this.setDisableApplyValidationResults(true);
                 if(ValidationEngine.getGroupConfig(editData)) {
-                    if(editData.isValid === undefined) {
-                        editData.isValid = true;
-                    }
-                    let validationResult = ValidationEngine.validateGroup(editData);
+                    const validationResult = ValidationEngine.validateGroup(editData);
                     when(validationResult.complete || validationResult).done(validationResult => {
                         editData.isValid = validationResult.isValid;
                     });
+                } else {
+                    editData.isValid = true;
                 }
                 this.setDisableApplyValidationResults(false);
             } else {
@@ -547,15 +550,14 @@ module.exports = {
                     if(!skipValidation) {
                         validator = $cell.data("dxValidator");
                         if(validator) {
-                            var validationResult = validator.validate();
-                            if(validationResult.complete) {
-                                when(validationResult.complete).done(validationResult => {
-                                    isValid = validationResult.isValid;
-                                    callBase.call(this, $cell);
-                                });
-                            } else {
+                            const validationResult = validator.validate();
+                            when(validationResult.complete || validationResult).done(validationResult => {
                                 isValid = validationResult.isValid;
-                            }
+                                if(isValid) {
+                                    callBase.call(this, $cell);
+                                }
+                            });
+                            return;
                         }
                     }
 

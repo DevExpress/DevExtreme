@@ -1504,12 +1504,14 @@ var EditingController = modules.ViewController.inherit((function() {
             when(...this._deferreds).done(() => {
                 if(this._saving) {
                     this._afterSaveEditData();
-                    return deferred.resolve();
+                    deferred.resolve();
+                    return;
                 }
-                this._beforeSaveEditData().done(cancel => {
+                when(this._beforeSaveEditData()).done(cancel => {
                     if(cancel) {
                         this._afterSaveEditData();
-                        return deferred.resolve();
+                        deferred.resolve();
+                        return;
                     }
                     this._saveEditDataInner().done(deferred.resolve).fail(deferred.reject);
                 });
