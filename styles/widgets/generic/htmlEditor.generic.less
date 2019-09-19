@@ -15,6 +15,10 @@
 }
 
 .dx-htmleditor-content {
+    &.ql-blank::before { // stylelint-disable-line selector-class-pattern
+        color: @texteditor-placeholder-color;
+    }
+
     pre {
         color: fade(@base-text-color, 80%);
     }
