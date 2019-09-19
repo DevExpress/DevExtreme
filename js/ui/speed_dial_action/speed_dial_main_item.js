@@ -104,6 +104,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
     _clickHandler() {
         const actions = this._actionItems;
+        const shading = this._getDefaultOptions().shading;
+
         actions.forEach(action => {
             action.toggle();
 
@@ -111,6 +113,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 action._$wrapper.css("position", this._$wrapper.css("position"));
             }
         });
+
+        this.option("shading", actions[0].option("visible") && shading);
 
         this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
         this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
