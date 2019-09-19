@@ -31,7 +31,8 @@ import fx from "animation/fx";
 
 var device = devices.real();
 
-var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation");
+var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation"),
+    dataGridWrapper = new DataGridWrapper("#container");
 
 function testInDesktop(name, testFunc) {
     if(device.deviceType === "desktop") {
@@ -3032,6 +3033,43 @@ QUnit.testInActiveWindow("Edit cell after enter key", function(assert) {
     // assert
     assert.equal(this.editingController._editRowIndex, 0, "edit row index");
     assert.equal(this.editingController._editColumnIndex, 2, "edit column index");
+});
+
+QUnit.testInActiveWindow("Edit cell should not lose focus after enter key", function(assert) {
+    let inputBlurFired = false,
+        inputChangeFired = false,
+        $input;
+
+    // arrange
+    setupModules(this);
+
+    // act
+    this.options.editing = { allowUpdating: true, mode: "batch" };
+    this.gridView.render($("#container"));
+
+    this.focusFirstCell();
+
+    // act
+    this.triggerKeyDown("enter");
+    this.clock.tick();
+
+    // arrange
+    $input = dataGridWrapper.rowsView.getEditorInputElement(0, 0);
+
+    // assert
+    assert.ok($input.is(":focus"), "input is focused");
+
+    // arrange
+    $input.on("blur", () => inputBlurFired = true);
+    $input.on("change", () => inputChangeFired = true);
+
+    // act
+    this.triggerKeyDown("enter", false, false, $input);
+    this.clock.tick();
+
+    // assert
+    assert.notOk(inputBlurFired);
+    assert.ok(inputChangeFired);
 });
 
 // T202754
@@ -9674,8 +9712,6 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("View selector", function(assert) {
-        var dataGridWrapper = new DataGridWrapper("#container");
-
         this.options = {
             headerFilter: { visible: true },
             filterRow: { visible: true },
