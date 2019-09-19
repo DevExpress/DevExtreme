@@ -3665,7 +3665,7 @@ QUnit.test("Edit row. Re-render adaptive detail after re-inserting row", functio
             allowAdding: true
         },
         onRowPrepared: function(e) {
-            if(e.inserted) {
+            if(e.isNewRow) {
                 args.push(e);
             }
         }

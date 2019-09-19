@@ -690,7 +690,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         if(editMode === EDIT_MODE_POPUP) {
                             item.visible = false;
                         }
-                        item.inserted = true;
+                        item.isNewRow = true;
                         item.key = key;
                         item.data = data;
                         break;
@@ -844,7 +844,7 @@ var EditingController = modules.ViewController.inherit((function() {
         _beforeEditCell: function(rowIndex, columnIndex, item) {
             var that = this;
 
-            if(getEditMode(that) === EDIT_MODE_CELL && !item.inserted && that.hasChanges()) {
+            if(getEditMode(that) === EDIT_MODE_CELL && !item.isNewRow && that.hasChanges()) {
                 var d = new Deferred();
                 that.saveEditData().always(function() {
                     d.resolve(that.hasChanges());
@@ -881,7 +881,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 return true;
             }
 
-            if(!item.inserted) {
+            if(!item.isNewRow) {
                 params.key = item.key;
             }
 
@@ -891,7 +891,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that.init();
             that._pageIndex = dataController.pageIndex();
-            that._editRowIndex = (items[0].inserted ? rowIndex - 1 : rowIndex) + that._dataController.getRowIndexOffset();
+            that._editRowIndex = (items[0].isNewRow ? rowIndex - 1 : rowIndex) + that._dataController.getRowIndexOffset();
             that._addEditData({
                 data: {},
                 key: item.key,
@@ -1064,7 +1064,7 @@ var EditingController = modules.ViewController.inherit((function() {
         _prepareEditCell: function(params, item, editColumnIndex, editRowIndex) {
             var that = this;
 
-            if(!item.inserted) {
+            if(!item.isNewRow) {
                 params.key = item.key;
             }
 
@@ -1733,7 +1733,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 editMode = getEditMode(that),
                 isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue,
                 showEditorAlways = options.column.showEditorAlways,
-                isUpdateInCellMode = editMode === EDIT_MODE_CELL && options.row && !options.row.inserted,
+                isUpdateInCellMode = editMode === EDIT_MODE_CELL && options.row && !options.row.isNewRow,
                 focusPreviousEditingCell = showEditorAlways && !forceUpdateRow && isUpdateInCellMode && that.hasEditData() && !that.isEditCell(options.rowIndex, options.columnIndex);
 
             if(focusPreviousEditingCell) {
@@ -1989,7 +1989,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     if(column.showEditorAlways && !isRowMode) {
                         editingStartOptions = {
                             cancel: false,
-                            key: options.row.inserted ? undefined : options.row.key,
+                            key: options.row.isNewRow ? undefined : options.row.key,
                             data: options.row.data,
                             column: column
                         };
@@ -2523,7 +2523,7 @@ module.exports = {
                 _processItem: function(item, options) {
                     item = this.callBase(item, options);
 
-                    if(item.inserted) {
+                    if(item.isNewRow) {
                         options.dataIndex--;
                         delete item.dataIndex;
                     }
@@ -2538,7 +2538,7 @@ module.exports = {
                     var editingController = this.getController("editing"),
                         isRowEditMode = editingController.isRowEditMode();
 
-                    if(oldItem.inserted !== newItem.inserted || oldItem.removed !== newItem.removed || (isRowEditMode && oldItem.isEditing !== newItem.isEditing)) {
+                    if(oldItem.isNewRow !== newItem.isNewRow || oldItem.removed !== newItem.removed || (isRowEditMode && oldItem.isEditing !== newItem.isEditing)) {
                         return;
                     }
 
@@ -2666,7 +2666,7 @@ module.exports = {
                         editingController = this._editingController;
                         isEditRow = editingController.isEditRow(row.rowIndex);
                         isRowRemoved = !!row.removed;
-                        isRowInserted = !!row.inserted;
+                        isRowInserted = !!row.isNewRow;
                         isRowModified = !!row.modified;
 
                         if(getEditMode(this) === EDIT_MODE_BATCH) {
@@ -2710,7 +2710,7 @@ module.exports = {
                         $targetElement = $(e.event.target),
                         columnIndex = that._getColumnIndexByElement($targetElement),
                         row = that._dataController.items()[e.rowIndex],
-                        allowUpdating = editingController.allowUpdating({ row: row }, eventName) || row && row.inserted,
+                        allowUpdating = editingController.allowUpdating({ row: row }, eventName) || row && row.isNewRow,
                         column = that._columnsController.getVisibleColumns()[columnIndex],
                         allowEditing = column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex)),
                         startEditAction = that.option("editing.startEditAction") || "click";
@@ -2757,7 +2757,7 @@ module.exports = {
                         this._editCellPrepared($cell);
                     }
 
-                    var modifiedValues = parameters.row && (parameters.row.inserted ? parameters.row.values : parameters.row.modifiedValues);
+                    var modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
 
                     if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
                         editingController.showHighlighting($cell);

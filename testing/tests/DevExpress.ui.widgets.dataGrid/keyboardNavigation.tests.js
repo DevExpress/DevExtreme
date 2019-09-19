@@ -3882,7 +3882,7 @@ QUnit.testInActiveWindow("Focus next editor after tab key for inserted row when 
     // arrange
     setupModules(this);
     this.options.editing = { allowUpdating: false, mode: "cell" };
-    this.dataControllerOptions.items[0].inserted = true;
+    this.dataControllerOptions.items[0].isNewRow = true;
     this.gridView.render($("#container"));
 
     // act

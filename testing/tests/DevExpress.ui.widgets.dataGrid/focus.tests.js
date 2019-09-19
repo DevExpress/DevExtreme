@@ -2877,7 +2877,7 @@ QUnit.testInActiveWindow("onFocusedCellChanged event the inserted row (T743086)"
         },
         onFocusedCellChanged: function(e) {
             ++focusedCellChangedCount;
-            assert.ok(e.row.inserted, "Inserted row");
+            assert.ok(e.row.isNewRow, "Inserted row");
             assert.equal(e.row.rowType, "data", "Row type");
             assert.deepEqual(e.row.data, { }, "Row data");
         }
