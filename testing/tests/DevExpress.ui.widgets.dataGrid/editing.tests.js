@@ -6234,8 +6234,8 @@ QUnit.test("Batch mode - Correct insert row index for a new row when a previous 
 
     // assert
     var items = this.dataController.items();
-    assert.ok(items[0].inserted, "first row is inserted");
-    assert.ok(items[1].inserted, "second row is inserted");
+    assert.ok(items[0].isNewRow, "first row is inserted");
+    assert.ok(items[1].isNewRow, "second row is inserted");
 });
 
 QUnit.test("Restore a height of rowsView when editing is canceled with empty data", function(assert) {
@@ -6505,7 +6505,7 @@ QUnit.test("Add row when data items are an instance of the class and one of the 
     // assert
     items = that.dataController.items();
     assert.strictEqual(items.length, 2, "item count");
-    assert.ok(items[0].inserted, "item is inserted");
+    assert.ok(items[0].isNewRow, "item is inserted");
     assert.ok(items[0].data instanceof Employee, "item is an instance of the Employee class");
     assert.strictEqual(items[0].data.isYoung, false, "field value");
 });
@@ -11956,7 +11956,7 @@ QUnit.test("Uploading items when virtual scrolling after insert row", function(a
     items = this.dataController.items();
     assert.equal(this.dataController.pageIndex(), 0, "page index");
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 });
 
 // T258714
@@ -12002,7 +12002,7 @@ QUnit.test("Change page index when virtual scrolling after insert row", function
     assert.strictEqual(changeType, "pageIndex", "change type");
     assert.equal(this.dataController.pageIndex(), 1, "page index");
     assert.equal(items.length, 17, "items count");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 });
 
 // T258714
@@ -12033,7 +12033,7 @@ QUnit.test("Uploading items when infinite scrolling after insert row", function(
     items = this.dataController.items();
     // assert.equal(this.dataController.pageIndex(), 1, "page index");
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 });
 
 // T258714
@@ -12073,7 +12073,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
     // assert
     items = this.dataController.items();
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[4].inserted, "insert item");
+    assert.ok(items[4].isNewRow, "insert item");
 
     // act
     this.rowsView.scrollTo({ y: 0 });
@@ -12083,7 +12083,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
     items = this.dataController.items();
     assert.equal(this.dataController.pageIndex(), 0, "page index");
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 });
 
 // T258714
@@ -12116,7 +12116,7 @@ QUnit.test("Edit row after the virtual scrolling when there is inserted row", fu
     items = this.dataController.items();
     // assert.equal(this.dataController.pageIndex(), 1, "page index");
     assert.equal(items.length, 13, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 
     // act
     this.editCell(5, 0);
@@ -12305,7 +12305,7 @@ QUnit.test("Position of the inserted row if masterDetail is used", function(asse
     // assert
     items = this.dataController.items();
     assert.equal(items.length, 14, "count items");
-    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 4, "insert item");
+    assert.equal(items.filter(function(item) { return item.isNewRow; })[0].rowIndex, 4, "insert item");
 });
 
 // T538954
@@ -12340,7 +12340,7 @@ QUnit.test("Position of the inserted row if top visible row is master detail", f
     // assert
     items = this.dataController.items();
     assert.equal(items.length, 12, "count items");
-    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 10, "insert item");
+    assert.equal(items.filter(function(item) { return item.isNewRow; })[0].rowIndex, 10, "insert item");
 });
 
 // T601854
@@ -12396,7 +12396,7 @@ QUnit.test("Position of the inserted row if top visible row is adaptive detail",
     // assert
     items = this.dataController.items();
     assert.equal(items.length, 12, "count items");
-    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 8, "insert item");
+    assert.equal(items.filter(function(item) { return item.isNewRow; })[0].rowIndex, 8, "insert item");
 });
 
 // T343567
@@ -12502,7 +12502,7 @@ QUnit.test("Save inserted data with set onRowValidating and infinite scrolling",
     // assert
     items = that.dataController.items();
     assert.equal(items.length, 17, "count items");
-    assert.ok(items[0].inserted, "inserted item");
+    assert.ok(items[0].isNewRow, "inserted item");
 });
 
 // T258714
@@ -12535,7 +12535,7 @@ QUnit.test("Edit row after the infinite scrolling when there is inserted row", f
     items = this.dataController.items();
     // assert.equal(this.dataController.pageIndex(), 1, "page index");
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 
     // act
     this.editCell(5, 0);
@@ -12576,7 +12576,7 @@ QUnit.test("Position of the inserted row if grouping is used", function(assert) 
 
     // assert
     var item3 = this.dataController.items()[2];
-    assert.ok(item3.inserted, "Item3 is inserted");
+    assert.ok(item3.isNewRow, "Item3 is inserted");
     assert.deepEqual(item3.data, {}, "Item3 is empty");
 });
 

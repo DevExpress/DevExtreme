@@ -10847,7 +10847,7 @@ QUnit.test("add row after scrolling if rowRendringMode is virtual", function(ass
 
     // assert
     assert.strictEqual(dataGrid.getVisibleRows()[0].key, 6, "first visible row key");
-    assert.ok(dataGrid.getVisibleRows()[5].inserted, "inserted row exists");
+    assert.ok(dataGrid.getVisibleRows()[5].isNewRow, "inserted row exists");
     assert.deepEqual(dataGrid.getVisibleRows()[5].values, [undefined, undefined], "inserted row values");
 });
 
@@ -12482,7 +12482,7 @@ QUnit.test("Create new row when grouping and group summary (T644293)", function(
 
     // assert
     assert.equal($insertedRow.rowType, "data", "inserted row has the 'data' type");
-    assert.equal($insertedRow.inserted, true, "inserted row is presents and has 0 index");
+    assert.equal($insertedRow.isNewRow, true, "inserted row is presents and has 0 index");
 });
 
 QUnit.testInActiveWindow("focus method for cell with editor must focus this editor (T404427)", function(assert) {
