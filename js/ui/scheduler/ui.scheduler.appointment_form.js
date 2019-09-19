@@ -278,6 +278,7 @@ const SchedulerAppointmentForm = {
 
     updateFormData: function(appointmentForm, formData) {
         appointmentForm._lockDateShiftFlag = true;
+        appointmentForm.resetValues();
         appointmentForm.option("formData", formData);
         appointmentForm._lockDateShiftFlag = false;
     }
