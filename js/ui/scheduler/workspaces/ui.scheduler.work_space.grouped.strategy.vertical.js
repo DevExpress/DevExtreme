@@ -2,7 +2,8 @@ var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 
 var VERTICAL_GROUPED_ATTR = "dx-group-column-count";
 
-var DATE_HEADER_OFFSET = 10;
+var DATE_HEADER_OFFSET = 10,
+    WORK_SPACE_BORDER = 1;
 
 var VerticalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDayRow) {
@@ -102,7 +103,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
 
     getWorkSpaceMinWidth: function() {
         var minWidth = this._workSpace._getWorkSpaceWidth(),
-            workspaceContainerWidth = this._workSpace.$element().get(0).getBoundingClientRect().width - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth();
+            workspaceContainerWidth = this._workSpace.$element().get(0).getBoundingClientRect().width - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth() - 2 * WORK_SPACE_BORDER;
 
         if(minWidth < workspaceContainerWidth) {
             minWidth = workspaceContainerWidth;

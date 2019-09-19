@@ -1922,12 +1922,6 @@ var dxChart = {
     **/
     tooltip: {
         /**
-        * @name dxChartOptions.tooltip.shared
-        * @type boolean
-        * @default false
-        */
-        shared: false,
-        /**
         * @name dxChartOptions.tooltip.location
         * @type Enums.ChartTooltipLocation
         * @default 'center'
@@ -3394,6 +3388,12 @@ var BaseChart = {
         * @extends CommonVizFormat
         */
         argumentFormat: '',
+        /**
+        * @name BaseChartOptions.tooltip.shared
+        * @type boolean
+        * @default false
+        */
+        shared: false
     },
     /**
     * @name BaseChartOptions.onPointClick

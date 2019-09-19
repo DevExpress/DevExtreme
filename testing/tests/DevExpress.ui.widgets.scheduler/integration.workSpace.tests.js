@@ -29,8 +29,6 @@ import "ui/scheduler/ui.scheduler";
 
 import { dateToMilliseconds as toMs } from "core/utils/date";
 
-const DATE_TABLE_CELL_BORDER = 1;
-
 QUnit.module("Integration: Work space", {
     beforeEach: function() {
         fx.off = true;
@@ -1033,8 +1031,8 @@ QUnit.test("resourceCellTemplate should work correct in timeline view", function
         }
     });
 
-    var $cell1 = this.instance.$element().find(".dx-scheduler-group-header-content").eq(0),
-        $cell2 = this.instance.$element().find(".dx-scheduler-group-header-content").eq(1);
+    var $cell1 = this.scheduler.workSpace.groups.getGroupHeader(0).find("div").eq(0),
+        $cell2 = this.scheduler.workSpace.groups.getGroupHeader(1);
 
     assert.ok($cell1.hasClass("custom-group-cell-class"), "first cell has right class");
     assert.notOk($cell2.hasClass("custom-group-cell-class"), "second cell has no class");
@@ -1702,11 +1700,10 @@ QUnit.test("Group header should contain group header content with right height, 
         endDayHour: 12,
         height: 600
     });
-    var header = this.instance.$element().find(".dx-scheduler-group-header"),
-        $headerContents = header.find(".dx-scheduler-group-header-content"),
-        cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(1).outerHeight();
+    var $headerContent = this.scheduler.workSpace.groups.getGroupHeader(0).outerHeight(),
+        cellHeight = this.scheduler.workSpace.getCell(1).outerHeight();
 
-    assert.roughEqual($headerContents.eq(0).outerHeight(), 7 * cellHeight - 2 * DATE_TABLE_CELL_BORDER, 1, "Group header content has right height");
+    assert.roughEqual($headerContent, 7 * cellHeight, 1, "Group header content has right height");
 });
 
 QUnit.test("WorkSpace should be refreshed after groups changed", function(assert) {

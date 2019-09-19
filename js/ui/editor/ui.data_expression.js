@@ -55,7 +55,7 @@ var DataExpressionMixin = extend({}, DataHelperMixin, {
              * @type string|function(item)
             * @default "this"
              * @type_function_param1 item:object
-             * @type_function_return string
+             * @type_function_return string|number|boolean
             */
             valueExpr: "this",
 

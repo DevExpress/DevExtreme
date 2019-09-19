@@ -38,12 +38,12 @@ class DiagramLeftPanel extends DiagramPanel {
                 category,
                 title: title || category,
                 expanded: toolboxGroups[i].expanded,
-                style: toolboxGroups[i].style,
+                displayMode: toolboxGroups[i].displayMode,
                 shapes: toolboxGroups[i].shapes,
                 onTemplate: (widget, $element, data) => {
                     this._onShapeCategoryRenderedAction({
                         category: data.category,
-                        style: data.style,
+                        displayMode: data.displayMode,
                         shapes: data.shapes,
                         $element
                     });

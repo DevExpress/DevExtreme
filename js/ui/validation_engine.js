@@ -11,6 +11,10 @@ import messageLocalization from "../localization/message";
 import Promise from "../core/polyfills/promise";
 import { fromPromise, Deferred } from "../core/utils/deferred";
 
+const VALIDATION_STATUS_VALID = "valid",
+    VALIDATION_STATUS_INVALID = "invalid",
+    VALIDATION_STATUS_PENDING = "pending";
+
 class BaseRuleValidator {
     constructor() {
         this.NAME = "base";
@@ -573,7 +577,7 @@ const GroupConfig = Class.inherit({
              * @name dxValidationGroupResult.status
              * @type Enums.ValidationStatus
              */
-            status: "valid",
+            status: VALIDATION_STATUS_VALID,
             /**
              * @name dxValidationGroupResult.complete
              * @type Promise<dxValidationGroupResult>
@@ -589,15 +593,15 @@ const GroupConfig = Class.inherit({
                 result.brokenRules = result.brokenRules.concat(validatorResult.brokenRules);
             }
             result.validators.push(validator);
-            if(validatorResult.status === "pending") {
+            if(validatorResult.status === VALIDATION_STATUS_PENDING) {
                 this._addPendingValidator(validator);
             }
             this._subscribeToChangeEvents(validator);
         });
         if(this._pendingValidators.length) {
-            result.status = "pending";
+            result.status = VALIDATION_STATUS_PENDING;
         } else {
-            result.status = result.isValid ? "valid" : "invalid";
+            result.status = result.isValid ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID;
             this._unsubscribeFromAllChangeEvents();
             this._raiseValidatedEvent(result);
         }
@@ -623,7 +627,7 @@ const GroupConfig = Class.inherit({
 
     _updateValidationInfo(result) {
         this._validationInfo.result = result;
-        if(result.status !== "pending") {
+        if(result.status !== VALIDATION_STATUS_PENDING) {
             return;
         }
         if(!this._validationInfo.deferred) {
@@ -676,7 +680,7 @@ const GroupConfig = Class.inherit({
     },
 
     _onValidatorStatusChanged(result) {
-        if(result.status === "pending") {
+        if(result.status === VALIDATION_STATUS_PENDING) {
             this._addPendingValidator(result.validator);
             return;
         }
@@ -691,8 +695,8 @@ const GroupConfig = Class.inherit({
             if(!this._validationInfo.result) {
                 return;
             }
-            this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? "valid" : "invalid";
-            this._validationInfo.result.isValid = this._validationInfo.result.status === "valid";
+            this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID;
+            this._validationInfo.result.isValid = this._validationInfo.result.status === VALIDATION_STATUS_VALID;
             const res = extend({}, this._validationInfo.result, { complete: null });
             this._raiseValidatedEvent(res);
             this._validationInfo.deferred && this._validationInfo.deferred.resolve(res);
@@ -863,7 +867,7 @@ const ValidationEngine = {
              * @name dxValidatorResult.status
              * @type Enums.ValidationStatus
              */
-            status: "valid",
+            status: VALIDATION_STATUS_VALID,
             /**
              * @name dxValidatorResult.complete
              * @type Promise<dxValidatorResult>
@@ -923,7 +927,7 @@ const ValidationEngine = {
                 name
             });
         }
-        result.status = result.pendingRules ? "pending" : (result.isValid ? "valid" : "invalid");
+        result.status = result.pendingRules ? VALIDATION_STATUS_PENDING : (result.isValid ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID);
         return result;
     },
 
@@ -997,7 +1001,7 @@ const ValidationEngine = {
         });
         result.pendingRules = null;
         result.complete = null;
-        result.status = result.isValid ? "valid" : "invalid";
+        result.status = result.isValid ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID;
         return result;
     },
 

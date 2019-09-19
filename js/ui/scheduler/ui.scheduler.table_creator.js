@@ -1,12 +1,12 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    dataUtils = require("../../core/element_data"),
-    typeUtils = require("../../core/utils/type"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import dataUtils from "../../core/element_data";
+import typeUtils from "../../core/utils/type";
+import { getPublicElement } from "../../core/utils/dom";
 
-var ROW_SELECTOR = "tr";
+const ROW_SELECTOR = "tr";
 
-var SchedulerTableCreator = {
+const SchedulerTableCreator = {
 
     VERTICAL: "vertical",
     HORIZONTAL: "horizontal",
@@ -239,11 +239,48 @@ var SchedulerTableCreator = {
 
     },
 
-    _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate, rowCount) {
+    _makeFlexGroupedRowCells: function(group, repeatCount, cssClasses, cellTemplate, repeatByDate = 1) {
+
+        let cells = [],
+            items = group.items,
+            itemCount = items.length;
+
+        for(let i = 0; i < repeatCount * repeatByDate; i++) {
+            for(let j = 0; j < itemCount; j++) {
+                let $container = $("<div>"),
+                    cell = {};
+
+                if(cellTemplate && cellTemplate.render) {
+                    let templateOptions = {
+                        model: items[j],
+                        container: getPublicElement($container),
+                        index: i * itemCount + j
+                    };
+
+                    if(group.data) {
+                        templateOptions.model.data = group.data[j];
+                    }
+
+                    cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
+                } else {
+                    $container.text(items[j].text);
+                }
+
+                const cssClass = typeUtils.isFunction(cssClasses.groupHeaderClass) ? cssClasses.groupHeaderClass(j) : cssClasses.groupHeaderClass;
+
+                cell.element = $("<div>").addClass(cssClass).append($container);
+
+                cells.push(cell);
+            }
+        }
+
+        return cells;
+    },
+
+    _makeVerticalGroupedRows: function(groups, cssClasses, cellTemplate) {
         var cellTemplates = [],
             repeatCount = 1,
-            arr = [],
-            i;
+            cellsArray = [];
 
         var cellIterator = function(cell) {
             if(cell.template) {
@@ -251,39 +288,32 @@ var SchedulerTableCreator = {
             }
         };
 
-        for(i = 0; i < groups.length; i++) {
+        for(let i = 0; i < groups.length; i++) {
             if(i > 0) {
                 repeatCount = groups[i - 1].items.length * repeatCount;
             }
 
-            var cells = this._makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
+            var cells = this._makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
             cells.forEach(cellIterator);
-
-            arr.push(cells);
+            cellsArray.push(cells);
         }
 
         var rows = [],
-            groupCount = arr.length,
-            maxCellCount = arr[groupCount - 1].length;
+            groupCount = cellsArray.length;
 
-        for(i = 0; i < maxCellCount; i++) {
-            rows.push($("<tr>").addClass(cssClasses.groupHeaderRowClass));
+        for(let i = 0; i < groupCount; i++) {
+            rows.push($("<div>").addClass(cssClasses.groupHeaderRowClass));
         }
 
-        for(i = groupCount - 1; i >= 0; i--) {
-            var currentColumnLength = arr[i].length,
-                rowspan = maxCellCount / currentColumnLength;
-
+        for(let i = groupCount - 1; i >= 0; i--) {
+            var currentColumnLength = cellsArray[i].length;
             for(var j = 0; j < currentColumnLength; j++) {
-                var currentRowIndex = j * rowspan,
-                    row = rows[currentRowIndex];
-
-                row.prepend(arr[i][j].element.attr("rowSpan", rowspan));
+                rows[i].append(cellsArray[i][j].element);
             }
         }
 
         return {
-            elements: rows,
+            elements: $("<div>").addClass("dx-scheduler-group-flex-container").append(rows),
             cellTemplates: cellTemplates
         };
     },

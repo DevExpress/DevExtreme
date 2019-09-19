@@ -26,7 +26,6 @@ var commonUtils = require("../../core/utils/common"),
     _map = vizUtils.map,
     _each = iteratorModule.each,
     _reverseEach = iteratorModule.reverseEach,
-    _extend = extend,
     _isArray = Array.isArray,
     _isDefined = typeUtils.isDefined,
     _setCanvasValues = vizUtils.setCanvasValues,
@@ -577,7 +576,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _getTrackerSettings: function() {
-        return this._getSelectionModes();
+        return extend({ chart: this }, this._getSelectionModes());
     },
 
     _getSelectionModes: function() {
@@ -942,9 +941,9 @@ var BaseChart = BaseWidget.inherit({
             }
             const opacityStyle = { opacity: opacity };
             legendData.states = {
-                hover: _extend({}, style.hover, opacityStyle),
-                selection: _extend({}, style.selection, opacityStyle),
-                normal: _extend({}, style.normal, opacityStyle)
+                hover: extend({}, style.hover, opacityStyle),
+                selection: extend({}, style.selection, opacityStyle),
+                normal: extend({}, style.normal, opacityStyle)
             };
 
             return legendData;
@@ -1041,7 +1040,7 @@ var BaseChart = BaseWidget.inherit({
     _optionChangesOrder: ["ROTATED", "PALETTE", "REFRESH_SERIES_REINIT", "AXES_AND_PANES", "INIT", "REINIT", "DATA_SOURCE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "FORCE_DATA_INIT", "REFRESH_AXES", "CORRECT_AXIS"],
 
     _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES",
-        "FORCE_RENDER", "VISUAL_RANGE", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT", "REFRESH", "FULL_RENDER"],
+        "FORCE_RENDER", "VISUAL_RANGE", "SCROLL_BAR", "REINIT", "REFRESH", "FULL_RENDER"],
 
     _change_ANIMATION: function() {
         this._renderer.updateAnimationOptions(this._getAnimationOptions());
@@ -1109,10 +1108,6 @@ var BaseChart = BaseWidget.inherit({
     _change_SCROLL_BAR: function() {
         this._createScrollBar();
         this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
-    },
-
-    _change_CHART_TOOLTIP: function() {
-        this._organizeStackPoints();
     },
 
     _change_REINIT: function() {
@@ -1218,20 +1213,6 @@ var BaseChart = BaseWidget.inherit({
         });
 
         that._handleSeriesDataUpdated();
-
-        that._organizeStackPoints();
-    },
-
-    _organizeStackPoints: function() {
-        var that = this,
-            themeManager = that._themeManager,
-            sharedTooltip = themeManager.getOptions("tooltip").shared,
-            stackPoints = {};
-
-        _each(that.series || [], function(_, singleSeries) {
-            that._resetStackPoints(singleSeries);
-            sharedTooltip && that._prepareStackPoints(singleSeries, stackPoints);
-        });
     },
 
     _renderCompleteHandler: function() {
@@ -1273,7 +1254,7 @@ var BaseChart = BaseWidget.inherit({
         };
 
         for(let i = 0; i < allSeriesOptions.length; i++) {
-            particularSeriesOptions = _extend(true, {}, allSeriesOptions[i], extraOptions);
+            particularSeriesOptions = extend(true, {}, allSeriesOptions[i], extraOptions);
 
             if(!particularSeriesOptions.name) {
                 particularSeriesOptions.name = "Series " + (i + 1).toString();
@@ -1348,7 +1329,7 @@ var BaseChart = BaseWidget.inherit({
                 particularSeries = basis.series;
                 particularSeries.updateOptions(seriesTheme, renderSettings);
             } else {
-                particularSeries = new seriesModule.Series(_extend({
+                particularSeries = new seriesModule.Series(extend({
                     renderer: that._renderer,
                     seriesGroup: that._seriesGroup,
                     labelsGroup: that._labelsGroup,
@@ -1366,6 +1347,16 @@ var BaseChart = BaseWidget.inherit({
         });
 
         return that.series;
+    },
+
+    getStackedPoints: function(point) {
+        const stackName = point.series.getStackName();
+        return this._getVisibleSeries().reduce((stackPoints, series) => {
+            if((!_isDefined(series.getStackName()) && !_isDefined(stackName)) || stackName === series.getStackName()) {
+                stackPoints = stackPoints.concat(series.getPointsByArg(point.argument));
+            }
+            return stackPoints;
+        }, []);
     },
 
     // API
@@ -1469,11 +1460,4 @@ var _change_TITLE = BaseChart.prototype._change_TITLE;
 BaseChart.prototype._change_TITLE = function() {
     _change_TITLE.apply(this, arguments);
     this._change(["FORCE_RENDER"]);
-};
-
-// These are charts specifics on using tooltip.
-var _change_TOOLTIP = BaseChart.prototype._change_TOOLTIP;
-BaseChart.prototype._change_TOOLTIP = function() {
-    _change_TOOLTIP.apply(this, arguments);
-    this._change(["CHART_TOOLTIP"]);
 };

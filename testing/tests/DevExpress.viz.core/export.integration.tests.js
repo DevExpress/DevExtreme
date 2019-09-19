@@ -358,6 +358,7 @@ QUnit.test('Disable pointer events while printing', function(assert) {
 QUnit.test('Restore pointer events after printing', function(assert) {
     // arrange
     clientExporter.export.returns(new Deferred().resolve());
+    var done = assert.async();
     var widget = this.createWidget({
         "export": {
             backgroundColor: "#ff0000",
@@ -369,9 +370,10 @@ QUnit.test('Restore pointer events after printing', function(assert) {
     widget._renderer.root.attr({ "pointer-events": "all" });
 
     // act
-    widget.print();
-
-    assert.equal(widget._renderer.root.attr("pointer-events"), "all");
+    widget.print().then(() => {
+        assert.equal(widget._renderer.root.attr("pointer-events"), "all");
+        done();
+    });
 });
 
 QUnit.test('Restore pointer events after printing if rejected', function(assert) {

@@ -1,11 +1,8 @@
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
-import viewPort from "core/utils/view_port";
 
 import "common.css!";
 import "ui/sortable";
-
-viewPort.value($("body").css({ margin: "0px", padding: "0px", height: "600px" }).addClass("dx-viewport"));
 
 QUnit.testStart(function() {
     let markup =
@@ -52,6 +49,30 @@ QUnit.module("rendering", moduleConfig);
 
 QUnit.test("Element has class", function(assert) {
     assert.ok(this.createSortable().$element().hasClass(SORTABLE_CLASS));
+});
+
+QUnit.test("Drag template - check args", function(assert) {
+    // arrange
+    let items,
+        dragTemplate = sinon.spy(() => {
+            return $("<div>");
+        });
+
+    this.createSortable({
+        filter: ".draggable",
+        template: dragTemplate
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(0)).start().down().move(10, 0);
+
+    // assert
+    assert.strictEqual(dragTemplate.callCount, 1, "drag template is called");
+    assert.deepEqual($(dragTemplate.getCall(0).args[0].sourceElement).get(0), items.get(0), "first arg");
+    assert.strictEqual(dragTemplate.getCall(0).args[1], 0, "second arg");
+    assert.deepEqual($(dragTemplate.getCall(0).args[2]).get(0), $("body").get(0), "third arg");
 });
 
 
@@ -137,14 +158,14 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(asser
     assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");
 });
 
-QUnit.test("Initial placeholder if allowDropInside is true", function(assert) {
+QUnit.test("Initial placeholder if allowDropInsideItem is true", function(assert) {
     // arrange
     let items,
         $placeholder,
         $dragItemElement;
 
     this.createSortable({
-        allowDropInside: true
+        allowDropInsideItem: true
     });
 
     items = this.$element.children();
@@ -356,6 +377,71 @@ QUnit.test("The source item should be correct after drag and drop items", functi
     assert.strictEqual($item.attr("id"), "item2", "placeholder id");
 });
 
+QUnit.test("Dragging an item to the last position when there is ignored (not draggable) item", function(assert) {
+    // arrange
+    let pointer,
+        items;
+
+    this.$element.append("<div id='item4'></div>");
+    this.createSortable({
+        filter: ".draggable"
+    });
+
+    items = this.$element.children();
+
+    // assert
+    assert.strictEqual(items.length, 4, "item count");
+
+    // act
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 90);
+
+    // assert
+    items = this.$element.children();
+    assert.ok(items.eq(2).hasClass("dx-sortable-source"), "source item");
+    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+
+    // act
+    pointer.up();
+
+    // assert
+    items = this.$element.children();
+    assert.strictEqual(items.eq(2).attr("id"), "item1", "source item");
+    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+});
+
+QUnit.test("Dragging an item to the last position when there is ignored (not draggable) item and dropFeedbackMode option is 'indicate'", function(assert) {
+    // arrange
+    let pointer,
+        items;
+
+    this.$element.append("<div id='item4'></div>");
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate"
+    });
+
+    items = this.$element.children();
+
+    // assert
+    assert.strictEqual(items.length, 4, "item count");
+
+    // act
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 90);
+
+    // assert
+    items = this.$element.children();
+    assert.ok(items.eq(3).hasClass("dx-sortable-placeholder"), "source item");
+    assert.strictEqual(items.eq(4).attr("id"), "item4", "ignored item");
+
+    // act
+    pointer.up();
+
+    // assert
+    items = this.$element.children();
+    assert.strictEqual(items.eq(2).attr("id"), "item1", "source item");
+    assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
+});
+
 
 QUnit.module("Events", moduleConfig);
 
@@ -505,7 +591,7 @@ QUnit.test("onDragEnd - check args when dragging an item down", function(assert)
     assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(args[0].inside, undefined, "inside is not defined");
+    assert.strictEqual(args[0].dropInsideItem, false, "dropInsideItem is false");
 });
 
 QUnit.test("onDragEnd - check args when dragging an item up", function(assert) {
@@ -587,7 +673,7 @@ QUnit.test("onDragEnd - check args when dragging inside item", function(assert) 
 
 
     this.createSortable({
-        allowDropInside: true,
+        allowDropInsideItem: true,
         onDragEnd: onDragEnd
     });
 
@@ -601,7 +687,7 @@ QUnit.test("onDragEnd - check args when dragging inside item", function(assert) 
     assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
-    assert.strictEqual(args[0].inside, true, "inside");
+    assert.strictEqual(args[0].dropInsideItem, true, "dropInsideItem");
 });
 
 QUnit.module("Cross-Component Drag and Drop", {
@@ -872,13 +958,16 @@ QUnit.test("Update item points when dragging an item to another the sortable wid
     pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
 
     // assert
-    assert.equal(sortable2._dragInfo.itemPoints.length, 4, "point count");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[0].top, 30, "top of the first point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[0].index, 0, "index of the first point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[1].top, 60, "top of the second point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[1].index, 1, "index of the second point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[2].top, 90, "top of the third point");
-    assert.deepEqual(sortable2._dragInfo.itemPoints[2].index, 2, "index of the third point");
+    var itemPoints = sortable2.option("itemPoints");
+    assert.equal(itemPoints.length, 5, "point count");
+    assert.deepEqual(itemPoints[0].top, 0, "top of the first point");
+    assert.deepEqual(itemPoints[0].index, 0, "index of the first point");
+    assert.deepEqual(itemPoints[1].top, 30, "top of the first point");
+    assert.deepEqual(itemPoints[1].index, 1, "index of the first point");
+    assert.deepEqual(itemPoints[2].top, 60, "top of the second point");
+    assert.deepEqual(itemPoints[2].index, 2, "index of the second point");
+    assert.deepEqual(itemPoints[3].top, 90, "top of the third point");
+    assert.deepEqual(itemPoints[3].index, 3, "index of the third point");
 });
 
 QUnit.test("Drag and drop item from draggable to sortable", function(assert) {

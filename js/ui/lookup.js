@@ -656,6 +656,10 @@ var Lookup = DropDownList.inherit({
         this.option("useInkRipple") && this._renderInkRipple();
     },
 
+    _getInputContainer() {
+        return this._$fieldWrapper;
+    },
+
     _renderInkRipple: function() {
         this._inkRipple = inkRipple.render();
     },

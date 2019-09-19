@@ -141,6 +141,8 @@ export class SchedulerTestWrapper {
             setSubject: (value) => this.appointmentForm.getEditor("text").option("value", value),
 
             hasFormSingleColumn: () => this.appointmentPopup.getPopup().find(".dx-responsivebox").hasClass("dx-responsivebox-screen-xs"),
+            getRecurrentAppointmentFormDialogButtons: () => $(".dx-dialog-buttons .dx-button"),
+            clickFormDialogButton: (index = 0) => this.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(index).trigger("dxclick"),
         };
 
         this.workSpace = {
@@ -165,7 +167,13 @@ export class SchedulerTestWrapper {
             getScrollPosition: () => {
                 const element = this.workSpace.getDataTableScrollableContainer();
                 return { left: element.scrollLeft(), top: element.scrollTop() };
-            }
+            },
+            groups: {
+                getGroupsContainer: () => $(".dx-scheduler-group-flex-container"),
+                getGroup: (index = 0) => $(".dx-scheduler-group-row").eq(index),
+                getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find(".dx-scheduler-group-header"),
+                getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
+            },
         };
 
         this.navigator = {
