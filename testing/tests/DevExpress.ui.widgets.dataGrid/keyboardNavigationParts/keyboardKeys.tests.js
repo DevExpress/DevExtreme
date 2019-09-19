@@ -2894,7 +2894,7 @@ QUnit.module("Keyboard keys", {
         // arrange
         setupModules(this);
         this.options.editing = { allowUpdating: false, mode: "cell" };
-        this.dataControllerOptions.items[0].inserted = true;
+        this.dataControllerOptions.items[0].isNewRow = true;
         this.gridView.render($("#container"));
 
         // act
