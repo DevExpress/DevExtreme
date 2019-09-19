@@ -65,7 +65,8 @@ if(Globalize && Globalize.formatCurrency) {
     const formattersCache = {};
 
     const getFormatter = (currency, format) => {
-        let formatter, formatCacheKey;
+        let formatter;
+        let formatCacheKey;
 
         if(typeof format === "object") {
             formatCacheKey = Globalize.locale().locale + ":" + currency + ":" + JSON.stringify(format);
@@ -127,7 +128,8 @@ if(Globalize && Globalize.formatCurrency) {
             return Globalize.cldr.main("numbers/currencies/" + currency);
         },
         getOpenXmlCurrencyFormat: function(currency) {
-            const currencySymbol = this.getCurrencySymbol(currency).symbol, accountingFormat = Globalize.cldr.main("numbers/currencyFormats-numberSystem-latn").accounting;
+            const currencySymbol = this.getCurrencySymbol(currency).symbol;
+            const accountingFormat = Globalize.cldr.main("numbers/currencyFormats-numberSystem-latn").accounting;
 
             return openXmlCurrencyFormat(currencySymbol, accountingFormat);
         }

@@ -164,7 +164,8 @@ if(Globalize && Globalize.formatNumber) {
     const formattersCache = {};
 
     const getFormatter = format => {
-        let formatter, formatCacheKey;
+        let formatter;
+        let formatCacheKey;
 
         if(typeof format === "object") {
             formatCacheKey = Globalize.locale().locale + ":" + JSON.stringify(format);
