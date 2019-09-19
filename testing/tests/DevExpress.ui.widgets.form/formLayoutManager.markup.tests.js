@@ -2981,6 +2981,31 @@ QUnit.module("Accessibility", () => {
         // assert
         assert.equal(itemDescribedBy, helpTextID, "Help text id and input's describedby attributes are equal");
     });
+
+    test("Check aria-labelledby attribute for dxRadioGroup (T813296)", (assert) => {
+        const editorTypes = ["dxTextBox", "dxSelectBox", "dxRadioGroup", "dxCalendar", "dxTextArea"];
+        const editorClasses = editorTypes.map(editorType => `dx-${editorType.toLowerCase().substr(2)}`);
+
+        let items = editorTypes.map((editorType, index) => { return { dataField: `test${index}`, editorType: editorType }; });
+
+        const $testContainer = $("#container").dxLayoutManager({
+            items: items
+        });
+
+        editorClasses.forEach((editorClassName) => {
+            const $editor = $testContainer.find(`.${editorClassName}`).eq(0);
+            const $label = $editor.closest(`.${internals.FIELD_ITEM_CLASS}`).children().first();
+
+            if(editorClassName === "dx-radiogroup") {
+                assert.ok($editor.eq(0).attr("aria-labelledby"), "aria-labeladby attribute");
+                assert.ok($label.attr("id"), "label id attribute");
+                assert.strictEqual($editor.eq(0).attr("aria-labelledby"), $label.attr("id"), "attributes aria-labelledby and labelID are equal");
+            } else {
+                assert.equal($editor.eq(0).attr("aria-labelledby"), null, "aria-labeladby attribute");
+                assert.equal($label.attr("id"), null, "label id attribute");
+            }
+        });
+    });
 });
 
 QUnit.module("Layout manager responsibility", {
