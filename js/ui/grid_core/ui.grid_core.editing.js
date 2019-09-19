@@ -1501,16 +1501,19 @@ var EditingController = modules.ViewController.inherit((function() {
          */
         saveEditData: function() {
             const deferred = new Deferred();
+            const afterSaveEditData = () => {
+                when(this._afterSaveEditData()).done(function() {
+                    deferred.resolve();
+                });
+            };
             when(...this._deferreds).done(() => {
                 if(this._saving) {
-                    this._afterSaveEditData();
-                    deferred.resolve();
+                    afterSaveEditData();
                     return;
                 }
                 when(this._beforeSaveEditData()).done(cancel => {
                     if(cancel) {
-                        this._afterSaveEditData();
-                        deferred.resolve();
+                        afterSaveEditData();
                         return;
                     }
                     this._saveEditDataInner().done(deferred.resolve).fail(deferred.reject);
@@ -1519,45 +1522,49 @@ var EditingController = modules.ViewController.inherit((function() {
             return deferred.promise();
         },
         _saveEditDataInner: function() {
-            var that = this,
-                editData,
-                results = [],
+            const results = [],
                 deferreds = [],
                 changes = [],
-                dataController = that._dataController,
+                dataController = this._dataController,
                 dataSource = dataController.dataSource(),
-                editMode = getEditMode(that),
+                editMode = getEditMode(this),
                 result = new Deferred();
 
-            var resetEditIndices = function(that) {
+            const resetEditIndices = () => {
                 if(editMode !== EDIT_MODE_CELL) {
-                    that._editColumnIndex = -1;
-                    that._editRowIndex = -1;
+                    this._editColumnIndex = -1;
+                    this._editRowIndex = -1;
                 }
             };
 
-            editData = that._editData.slice(0);
+            const afterSaveEditData = (error) => {
+                when(this._afterSaveEditData()).done(function() {
+                    result.resolve(error);
+                });
+            };
 
-            if(!that._saveEditDataCore(deferreds, results, changes) && editMode === EDIT_MODE_CELL) {
-                that._focusEditingCell();
+            const editData = this._editData.slice(0);
+
+            if(!this._saveEditDataCore(deferreds, results, changes) && editMode === EDIT_MODE_CELL) {
+                this._focusEditingCell();
             }
 
             if(deferreds.length) {
-                that._saving = true;
+                this._saving = true;
 
                 dataSource && dataSource.beginLoading();
 
-                when.apply($, deferreds).done(function() {
-                    if(that._processSaveEditDataResult(results)) {
-                        resetEditIndices(that);
+                when.apply($, deferreds).done(() => {
+                    if(this._processSaveEditDataResult(results)) {
+                        resetEditIndices();
 
-                        if(editMode === EDIT_MODE_POPUP && that._editPopup) {
-                            that._editPopup.hide();
+                        if(editMode === EDIT_MODE_POPUP && this._editPopup) {
+                            this._editPopup.hide();
                         }
 
                         dataSource && dataSource.endLoading();
 
-                        var refreshMode = that.option("editing.refreshMode"),
+                        const refreshMode = this.option("editing.refreshMode"),
                             isFullRefresh = refreshMode !== "reshape" && refreshMode !== "repaint";
 
                         if(!isFullRefresh) {
@@ -1568,14 +1575,13 @@ var EditingController = modules.ViewController.inherit((function() {
                             selection: isFullRefresh,
                             reload: isFullRefresh,
                             load: refreshMode === "reshape",
-                            changesOnly: that.option("repaintChangesOnly")
-                        })).always(function() {
-                            that._fireSaveEditDataEvents(editData);
-                            that._afterSaveEditData();
-                        }).done(function() {
-                            result.resolve();
-                        }).fail(function(error) {
-                            result.resolve(error);
+                            changesOnly: this.option("repaintChangesOnly")
+                        })).always(() => {
+                            this._fireSaveEditDataEvents(editData);
+                        }).done(() => {
+                            afterSaveEditData();
+                        }).fail((error) => {
+                            afterSaveEditData(error);
                         });
                     } else {
                         dataSource && dataSource.endLoading();
@@ -1586,25 +1592,25 @@ var EditingController = modules.ViewController.inherit((function() {
                     result.resolve(error);
                 });
 
-                return result.always(function() {
-                    that._focusEditingCell();
-                    that._saving = false;
+                return result.always(() => {
+                    this._focusEditingCell();
+                    this._saving = false;
                 }).promise();
             }
 
-            if(isRowEditMode(that)) {
-                if(!that.hasChanges()) {
-                    that.cancelEditData();
+            if(isRowEditMode(this)) {
+                if(!this.hasChanges()) {
+                    this.cancelEditData();
                 }
             } else if(CELL_BASED_MODES.indexOf(editMode) !== -1) {
-                resetEditIndices(that);
+                resetEditIndices();
                 dataController.updateItems();
             } else {
-                that._focusEditingCell();
+                this._focusEditingCell();
             }
 
-            that._afterSaveEditData();
-            return result.resolve().promise();
+            afterSaveEditData();
+            return result.promise();
         },
 
         isSaving: function() {
