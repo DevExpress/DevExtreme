@@ -73,10 +73,10 @@ class FileManagerContextMenu extends Widget {
 
         const result = [];
 
-        this.option("items").map(srcItem => {
+        this.option("items").forEach(srcItem => {
             const commandName = isString(srcItem) ? srcItem : srcItem.commandName;
-            let item = this._configureItemByCommandName(commandName, srcItem);
-            if(this._isCommandAvailable(item, fileItems)) {
+            const item = this._configureItemByCommandName(commandName, srcItem);
+            if(this._isContextMenuItemAvailable(item, fileItems)) {
                 result.push(item);
             }
         });
@@ -84,14 +84,14 @@ class FileManagerContextMenu extends Widget {
         return result;
     }
 
-    _isCommandAvailable(command, fileItems) {
-        if(!this._isDefaultItem(command.commandName)) {
-            return command.visible;
+    _isContextMenuItemAvailable(item, fileItems) {
+        if(!this._isDefaultItem(item.commandName)) {
+            return item.visible;
         }
-        if(command.visibilityMode === "manual") {
-            return command.visible;
+        if(item.visibilityMode === "manual") {
+            return item.visible;
         }
-        return this._commandManager.isCommandAvailable(command.commandName, fileItems);
+        return this._commandManager.isCommandAvailable(item.commandName, fileItems);
     }
 
     _isDefaultItem(commandName) {
@@ -107,28 +107,19 @@ class FileManagerContextMenu extends Widget {
     }
 
     _configureItemByCommandName(commandName, item) {
-        let result = {};
-
-        if(this._isDefaultItem(commandName)) {
-            result = this._createMenuItemByCommandName(commandName);
+        if(!this._isDefaultItem(commandName)) {
+            return item;
         }
 
-        if(this._isDefaultItem(commandName)) {
-            const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
-            extend(result, defaultConfig);
-            this._extendAttributes(result, item, ["visibilityMode", "location", "locateInMenu", "text", "icon"]);
-            if(result.visibilityMode === "manual") {
-                this._extendAttributes(result, item, ["visible", "disabled"]);
-            }
-            this._extendAttributes(result.options, item, ["text", "icon"]);
-        } else {
-            extend(result, item);
-            if(!result.widget) {
-                result.widget = "dxButton";
-            }
+        let result = this._createMenuItemByCommandName(commandName);
+        const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
+        extend(result, defaultConfig);
+        this._extendAttributes(result, item, ["visibilityMode", "beginGroup", "text", "icon"]);
+        if(result.visibilityMode === "manual") {
+            this._extendAttributes(result, item, ["visible", "disabled"]);
         }
 
-        if(!result.commandName) {
+        if(commandName && !result.commandName) {
             extend(result, { commandName });
         }
 

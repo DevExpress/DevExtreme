@@ -269,9 +269,9 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("contextMenu", {
             items: [
+                "create",
                 {
                     ID: 42,
-                    commandName: "newCommand",
                     text: "New commnand text",
                     icon: "upload",
                     visible: true,
@@ -285,19 +285,19 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
         this.clock.tick(400);
 
         let $items = this.wrapper.getContextMenuItems();
-        assert.equal($items.length, 1, "all of items are visible");
+        assert.equal($items.length, 2, "all of items are visible");
 
-        assert.ok($items.eq(0).text().indexOf("New commnand text") > -1, "newCommand item is rendered correctly");
-        assert.ok($items.eq(0).find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "newCommand item is rendered with new icon");
+        assert.ok($items.eq(1).text().indexOf("New commnand text") > -1, "newCommand item is rendered correctly");
+        assert.ok($items.eq(1).find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "newCommand item is rendered with new icon");
 
-        $items.eq(0).trigger("dxclick");
+        $items.eq(1).trigger("dxclick");
         assert.equal(testClick.callCount, 1, "newCommand has correct action");
         assert.equal(testClick.args[0][0].itemData.ID, 42, "custom attribute is available from onClick fuction");
 
         fileManagerInstance.option("contextMenu", {
             items: [
+                "create",
                 {
-                    commandName: "newCommand",
                     text: "New commnand text",
                     visible: true,
                     disabled: true,
@@ -311,9 +311,9 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
         this.clock.tick(400);
 
         $items = this.wrapper.getContextMenuItems();
-        assert.equal($items.length, 1, "all of items are visible");
+        assert.equal($items.length, 2, "all of items are visible");
 
-        $items.eq(0).trigger("dxclick");
+        $items.eq(1).trigger("dxclick");
         assert.equal(testClick.callCount, 1, "newCommand has no action due to its disabled state");
     });
 
