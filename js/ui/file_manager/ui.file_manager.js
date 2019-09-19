@@ -181,7 +181,8 @@ class FileManager extends Widget {
     _createContextMenu() {
         const $contextMenu = $("<div>").appendTo(this._$wrapper);
         return this._createComponent($contextMenu, FileManagerContextMenu, {
-            commandManager: this._commandManager
+            commandManager: this._commandManager,
+            items: this.option("contextMenu.items")
         });
     }
 
@@ -380,6 +381,12 @@ class FileManager extends Widget {
                 ]
             },
 
+            contextMenu: {
+                items: [
+                    "create", "upload", "rename", "move", "copy", "delete", "refresh"
+                ]
+            },
+
             /**
             * @name dxFileManagerOptions.itemView
             * @type object
@@ -532,6 +539,10 @@ class FileManager extends Widget {
                     args.value.generalItems ? { generalItems: args.value.generalItems } : {},
                     args.value.fileItems ? { fileItems: args.value.fileItems } : {}
                 ));
+                break;
+            case "contextMenu":
+                this._itemView.option("contextMenu", this._createContextMenu());
+                this._filesTreeView.option("contextMenu", this._createContextMenu());
                 break;
             case "onCurrentDirectoryChanged":
                 this._onCurrentDirectoryChangedAction = this._createActionByOption("onCurrentDirectoryChanged");
