@@ -375,12 +375,12 @@ class FileManager extends Widget {
                     },
                     "viewMode"
                 ],
-                
+
                 fileItems: [
                     "move", "copy", "rename", "separator", "delete", "refresh", "clear"
                 ]
             },
-            
+
             contextMenu: {
                 items: [
                     "create", "upload", "rename", "move", "copy", "delete", "refresh"
