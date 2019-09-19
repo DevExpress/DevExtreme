@@ -1826,6 +1826,8 @@ declare module DevExpress.ui {
         onDragMove?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** @name DraggableBase.Options.onDragStart */
         onDragStart?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        /** @name DraggableBase.Options.onDrop */
+        onDrop?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, dragElement?: DevExpress.core.dxElement, sourceElement?: DevExpress.core.dxElement, sourceComponent?: dxDraggable }) => any);
         /** @name DraggableBase.Options.scrollSensitivity */
         scrollSensitivity?: number;
         /** @name DraggableBase.Options.scrollSpeed */

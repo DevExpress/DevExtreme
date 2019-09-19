@@ -10,6 +10,8 @@ require("common.css!");
 require("ui/draggable");
 require("ui/scroll_view");
 
+$("body").css("height", "800px");
+
 QUnit.testStart(function() {
     var markup =
         '<div id="area" style="width: 300px; height: 250px; position: relative; background: green;">\
@@ -44,8 +46,8 @@ var setupDraggable = function(that, $element) {
     $("#qunit-fixture").addClass("qunit-fixture-visible");
 
     that.$element = $element;
-    that.createDraggable = function(options) {
-        return that.draggableInstance = that.$element.dxDraggable($.extend({ boundary: $("body") }, options)).dxDraggable("instance");
+    that.createDraggable = function(options, $element) {
+        return that.draggableInstance = ($element || that.$element).dxDraggable($.extend({ boundary: $("body") }, options)).dxDraggable("instance");
     };
     that.pointer = pointerMock(that.$element).start();
 
@@ -83,7 +85,7 @@ QUnit.test("'immediate' option", function(assert) {
     }
 });
 
-QUnit.module("callbacks", moduleConfig);
+QUnit.module("Events", moduleConfig);
 
 $.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
     var checkCallback = function(draggable, spy, assert) {
@@ -143,6 +145,80 @@ QUnit.test("'dx-state-disabled' class (T284305)", function(assert) {
     instance.$element().removeClass("dx-state-disabled");
     this.pointer.down().move(100, 0).up();
     this.checkPosition(100, 0, assert);
+});
+
+QUnit.test("onDrop - check args", function(assert) {
+    // arrange
+    let onDropSpy = sinon.spy();
+
+    let draggable1 = this.createDraggable({
+        group: "shared"
+    });
+
+    let draggable2 = this.createDraggable({
+        onDrop: onDropSpy,
+        group: "shared"
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 300).up();
+
+    // assert
+    assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
+    assert.deepEqual($(onDropSpy.getCall(0).args[0].dragElement).get(0), this.$element.get(0), "dragElement");
+    assert.deepEqual($(onDropSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "sourceElement");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].component, draggable2, "component");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].sourceComponent, draggable1, "sourceComponent");
+    assert.strictEqual($(draggable2.element()).children("#draggable").length, 1, "dropped item");
+});
+
+QUnit.test("onDrop - check args when clone is true", function(assert) {
+    // arrange
+    let onDropSpy = sinon.spy();
+
+    let draggable1 = this.createDraggable({
+        group: "shared",
+        clone: true
+    });
+
+    let draggable2 = this.createDraggable({
+        group: "shared",
+        onDrop: onDropSpy
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 400);
+    let $dragElement = $("body").children(".dx-draggable-dragging");
+    this.pointer.up();
+
+    // assert
+    assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
+    assert.deepEqual($(onDropSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "dragElement");
+    assert.deepEqual($(onDropSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "sourceElement");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].component, draggable2, "component");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].sourceComponent, draggable1, "sourceComponent");
+    assert.strictEqual($(draggable2.element()).children("#draggable").length, 1, "dropped item");
+});
+
+QUnit.test("onDrop - not drop item when eventArgs.cancel is true", function(assert) {
+    // arrange
+    let onDropSpy = sinon.spy((e) => { e.cancel = true; });
+
+    this.createDraggable({
+        group: "shared"
+    });
+
+    let draggable2 = this.createDraggable({
+        group: "shared",
+        onDrop: onDropSpy
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 400).up();
+
+    // assert
+    assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
+    assert.strictEqual($(draggable2.element()).children("#draggable").length, 0, "item isn't droped");
 });
 
 

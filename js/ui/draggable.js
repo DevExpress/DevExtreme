@@ -231,6 +231,18 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @action
              */
             onDragEnd: null,
+            /**
+             * @name DraggableBaseOptions.onDrop
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 dragElement:dxElement
+             * @type_function_param1_field6 sourceElement:dxElement
+             * @type_function_param1_field7 sourceComponent:dxDraggable
+             * @action
+             */
+            onDrop: null,
             immediate: true,
             /**
              * @name DraggableBaseOptions.dragDirection
@@ -695,14 +707,28 @@ var Draggable = DOMComponentWithTemplate.inherit({
         };
     },
 
+    _getDropArgs: function(e) {
+        return {
+            event: e,
+            sourceComponent: this,
+            sourceElement: this._$sourceElement,
+            dragElement: this._$dragElement
+        };
+    },
+
     _dragEndHandler: function(e) {
-        let eventArgs = this._getDragEndArgs(e),
+        let dragEndEventArgs = this._getDragEndArgs(e),
+            dropEventArgs = this._getDropArgs(e),
             targetDraggable = this._getTargetDraggable();
 
-        this._getAction("onDragEnd")(eventArgs);
+        this._getAction("onDragEnd")(dragEndEventArgs);
 
-        if(!eventArgs.cancel) {
-            targetDraggable.dragEnd(eventArgs);
+        if(targetDraggable !== this) {
+            targetDraggable._getAction("onDrop")(dropEventArgs);
+        }
+
+        if(!dragEndEventArgs.cancel && !dropEventArgs.cancel) {
+            targetDraggable.dragEnd(dragEndEventArgs);
         }
 
         this.reset();
@@ -750,6 +776,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             case "onDragStart":
             case "onDragMove":
             case "onDragEnd":
+            case "onDrop":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
             case "template":
