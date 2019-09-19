@@ -185,9 +185,10 @@ module.exports = {
             * @type_function_param1_field11 rowType:string
             * @type_function_param1_field12 isSelected:boolean
             * @type_function_param1_field13 isExpanded:boolean
-            * @type_function_param1_field14 groupIndex:number
-            * @type_function_param1_field15 rowElement:dxElement
-            * @type_function_param1_field16 handled:boolean
+            * @type_function_param1_field14 isNewRow:boolean
+            * @type_function_param1_field15 groupIndex:number
+            * @type_function_param1_field16 rowElement:dxElement
+            * @type_function_param1_field17 handled:boolean
             * @extends Action
             * @action
             */
@@ -205,10 +206,11 @@ module.exports = {
             * @type_function_param1_field11 rowType:string
             * @type_function_param1_field12 isSelected:boolean
             * @type_function_param1_field13 isExpanded:boolean
-            * @type_function_param1_field14 rowElement:dxElement
-            * @type_function_param1_field15 handled:boolean
-            * @type_function_param1_field16 node:dxTreeListNode
-            * @type_function_param1_field17 level:number
+            * @type_function_param1_field14 isNewRow:boolean
+            * @type_function_param1_field15 rowElement:dxElement
+            * @type_function_param1_field16 handled:boolean
+            * @type_function_param1_field17 node:dxTreeListNode
+            * @type_function_param1_field18 level:number
             * @extends Action
             * @action
             */
@@ -265,8 +267,9 @@ module.exports = {
             * @type_function_param1_field10 rowType:string
             * @type_function_param1_field11 isSelected:boolean
             * @type_function_param1_field12 isExpanded:boolean
-            * @type_function_param1_field13 groupIndex:number
-            * @type_function_param1_field14 rowElement:dxElement
+            * @type_function_param1_field13 isNewRow:boolean
+            * @type_function_param1_field14 groupIndex:number
+            * @type_function_param1_field15 rowElement:dxElement
             * @extends Action
             * @action
             */
@@ -283,7 +286,8 @@ module.exports = {
             * @type_function_param1_field10 rowType:string
             * @type_function_param1_field11 isSelected:boolean
             * @type_function_param1_field12 isExpanded:boolean
-            * @type_function_param1_field13 rowElement:dxElement
+            * @type_function_param1_field13 isNewRow:boolean
+            * @type_function_param1_field14 rowElement:dxElement
             * @extends Action
             * @action
             */
@@ -384,9 +388,10 @@ module.exports = {
              * @type_function_param1_field13 row:dxDataGridRowObject
              * @type_function_param1_field14 isSelected:boolean
              * @type_function_param1_field15 isExpanded:boolean
-             * @type_function_param1_field16 cellElement:dxElement
-             * @type_function_param1_field17 watch:function
-             * @type_function_param1_field18 oldValue:any
+             * @type_function_param1_field16 isNewRow:boolean
+             * @type_function_param1_field17 cellElement:dxElement
+             * @type_function_param1_field18 watch:function
+             * @type_function_param1_field19 oldValue:any
              * @extends Action
              * @action
              */
@@ -406,9 +411,10 @@ module.exports = {
              * @type_function_param1_field13 row:dxTreeListRowObject
              * @type_function_param1_field14 isSelected:boolean
              * @type_function_param1_field15 isExpanded:boolean
-             * @type_function_param1_field16 cellElement:dxElement
-             * @type_function_param1_field17 watch:function
-             * @type_function_param1_field18 oldValue:any
+             * @type_function_param1_field16 isNewRow:boolean
+             * @type_function_param1_field17 cellElement:dxElement
+             * @type_function_param1_field18 watch:function
+             * @type_function_param1_field19 oldValue:any
              * @extends Action
              * @action
              */
@@ -425,7 +431,8 @@ module.exports = {
              * @type_function_param1_field10 groupIndex:number
              * @type_function_param1_field11 isSelected:boolean
              * @type_function_param1_field12 isExpanded:boolean
-             * @type_function_param1_field13 rowElement:dxElement
+             * @type_function_param1_field13 isNewRow:boolean
+             * @type_function_param1_field14 rowElement:dxElement
              * @extends Action
              * @action
              */
@@ -441,9 +448,10 @@ module.exports = {
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 isSelected:boolean
              * @type_function_param1_field11 isExpanded:boolean
-             * @type_function_param1_field12 rowElement:dxElement
-             * @type_function_param1_field13 node:dxTreeListNode
-             * @type_function_param1_field14 level:number
+             * @type_function_param1_field12 isNewRow:boolean
+             * @type_function_param1_field13 rowElement:dxElement
+             * @type_function_param1_field14 node:dxTreeListNode
+             * @type_function_param1_field15 level:number
              * @extends Action
              * @action
              */
@@ -608,7 +616,7 @@ module.exports = {
                         row = dataController.getVisibleRows()[arg.rowIndex],
                         watch = this.option("integrationOptions.watchMethod");
 
-                    if(!arg.data || arg.rowType !== "data" || arg.inserted || !this.option("twoWayBindingEnabled") || !watch || !row) return;
+                    if(!arg.data || arg.rowType !== "data" || arg.isNewRow || !this.option("twoWayBindingEnabled") || !watch || !row) return;
 
                     var dispose = watch(
                         () => {
@@ -1569,6 +1577,15 @@ module.exports = {
  */
 /**
  * @name dxTreeListRowObject.isExpanded
+ * @type boolean
+ */
+
+/**
+ * @name dxDataGridRowObject.isNewRow
+ * @type boolean
+ */
+/**
+ * @name dxTreeListRowObject.isNewRow
  * @type boolean
  */
 

@@ -175,7 +175,7 @@ module.exports = {
                             result.push(item);
                             expandIndex = gridCoreUtils.getIndexByKey(item.key, that._expandedItems);
 
-                            if(item.rowType === "data" && (item.isExpanded || expandIndex >= 0) && !item.inserted) {
+                            if(item.rowType === "data" && (item.isExpanded || expandIndex >= 0) && !item.isNewRow) {
                                 result.push({
                                     visible: item.isExpanded,
                                     rowType: "detail",

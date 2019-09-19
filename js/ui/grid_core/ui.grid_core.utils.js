@@ -432,7 +432,7 @@ module.exports = (function() {
                     var rowsView,
                         $container = $(container);
 
-                    if(isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.inserted) {
+                    if(isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.isNewRow) {
                         rowsView = options.component.getView("rowsView");
                         $container
                             .addClass(DATAGRID_EXPAND_CLASS)

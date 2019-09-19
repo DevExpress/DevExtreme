@@ -800,7 +800,7 @@ module.exports = {
                             return false;
                         }
 
-                        if(item1.modified !== item2.modified || item1.inserted !== item2.inserted || item1.removed !== item2.removed) {
+                        if(item1.modified !== item2.modified || item1.isNewRow !== item2.isNewRow || item1.removed !== item2.removed) {
                             return false;
                         }
 
