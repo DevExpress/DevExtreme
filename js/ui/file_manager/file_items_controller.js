@@ -2,6 +2,7 @@ import { FileProvider, FileManagerItem, FileManagerRootItem } from "./file_provi
 import ArrayFileProvider from "./file_provider/array";
 import AjaxFileProvider from "./file_provider/ajax";
 import WebApiFileProvider from "./file_provider/webapi";
+import CustomFileProvider from "./file_provider/custom";
 import { pathCombine, getPathParts, getFileExtension } from "./ui.file_manager.utils";
 import whenSome, { ErrorCode } from "./ui.file_manager.common";
 
@@ -55,8 +56,11 @@ export default class FileItemsController {
             return fileProvider;
         }
 
-        if(fileProvider.type === "webapi") {
-            return new WebApiFileProvider(fileProvider);
+        switch(fileProvider.type) {
+            case "webapi":
+                return new WebApiFileProvider(fileProvider);
+            case "custom":
+                return new CustomFileProvider(fileProvider);
         }
 
         return new ArrayFileProvider(fileProvider);
