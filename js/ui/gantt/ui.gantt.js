@@ -52,10 +52,10 @@ class Gantt extends Widget {
     _renderTreeList() {
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
             dataSource: this._tasks,
-            columns: this.option("treeListColumns"),
+            columns: this.option("columns"),
             columnResizingMode: "nextColumn",
             height: "100%",
-            width: this.option("treeListWidth"),
+            width: this.option("taskListWidth"),
             selection: { mode: this._getSelectionMode(this.option("allowSelection")) },
             selectedRowKeys: this._getArrayFromOneElement(this.option("selectedRowKey")),
             sorting: { mode: "none" },
@@ -78,7 +78,7 @@ class Gantt extends Widget {
             onApplyPanelSize: this._onApplyPanelSize.bind(this)
         });
         this._setInnerElementsWidth();
-        this._splitter.option("initialLeftPanelWidth", this.option("treeListWidth"));
+        this._splitter.option("initialLeftPanelWidth", this.option("taskListWidth"));
     }
 
     _initGanttView() {
@@ -98,6 +98,7 @@ class Gantt extends Widget {
             showResources: this.option("showResources"),
             taskTitlePosition: this.option("taskTitlePosition"),
             showRowLines: this.option("showRowLines"),
+            scaleType: this.option("scaleType"),
             editing: this.option("editing"),
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this),
@@ -182,8 +183,8 @@ class Gantt extends Widget {
 
     _getPanelsWidthByOption() {
         return {
-            leftPanelWidth: this.option("treeListWidth"),
-            rightPanelWidth: this._$element.width() - this.option("treeListWidth")
+            leftPanelWidth: this.option("taskListWidth"),
+            rightPanelWidth: this._$element.width() - this.option("taskListWidth")
         };
     }
 
@@ -285,43 +286,37 @@ class Gantt extends Widget {
                 dataSource: null,
                 /**
                 * @name dxGanttOptions.tasks.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "id"
                 */
                 keyExpr: "id",
                 /**
                 * @name dxGanttOptions.tasks.parentIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "parentId"
                 */
                 parentIdExpr: "parentId",
                 /**
                 * @name dxGanttOptions.tasks.startExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "start"
                 */
                 startExpr: "start",
                 /**
                 * @name dxGanttOptions.tasks.endExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "end"
                 */
                 endExpr: "end",
                 /**
                 * @name dxGanttOptions.tasks.progressExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "progress"
                 */
                 progressExpr: "progress",
                 /**
                 * @name dxGanttOptions.tasks.titleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "title"
                 */
                 titleExpr: "title"
@@ -340,29 +335,25 @@ class Gantt extends Widget {
                 dataSource: null,
                 /**
                 * @name dxGanttOptions.dependencies.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "id"
                 */
                 keyExpr: "id",
                 /**
                 * @name dxGanttOptions.dependencies.predecessorIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "predecessorId"
                 */
                 predecessorIdExpr: "predecessorId",
                 /**
                 * @name dxGanttOptions.dependencies.successorIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "successorId"
                 */
                 successorIdExpr: "successorId",
                 /**
                 * @name dxGanttOptions.dependencies.typeExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "type"
                 */
                 typeExpr: "type"
@@ -381,15 +372,13 @@ class Gantt extends Widget {
                 dataSource: null,
                 /**
                 * @name dxGanttOptions.resources.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "id"
                 */
                 keyExpr: "id",
                 /**
                 * @name dxGanttOptions.resources.textExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "text"
                 */
                 textExpr: "text"
@@ -408,38 +397,35 @@ class Gantt extends Widget {
                 dataSource: null,
                 /**
                 * @name dxGanttOptions.resourceAssignments.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "id"
                 */
                 keyExpr: "id",
                 /**
                 * @name dxGanttOptions.resourceAssignments.taskIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "taskId"
                 */
                 taskIdExpr: "taskId",
                 /**
                 * @name dxGanttOptions.resourceAssignments.resourceIdExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
+                * @type string|function
                 * @default "resourceId"
                 */
                 resourceIdExpr: "resourceId"
             },
             /**
-             * @name dxGanttOptions.treeListColumns
+             * @name dxGanttOptions.columns
              * @type Array<dxTreeListColumn,string>
              * @default undefined
              */
-            treeListColumns: undefined,
+            columns: undefined,
             /**
-            * @name dxGanttOptions.treeListWidth
+            * @name dxGanttOptions.taskListWidth
             * @type number
             * @default 300
             */
-            treeListWidth: 300,
+            taskListWidth: 300,
             /**
             * @name dxGanttOptions.showResources
             * @type boolean
@@ -479,6 +465,12 @@ class Gantt extends Widget {
             * @default true
             */
             showRowLines: true,
+            /**
+            * @name dxGanttOptions.scaleType
+            * @type Enums.GanttScaleType
+            * @default "auto"
+            */
+            scaleType: "auto",
             /**
             * @name dxGanttOptions.editing
             * @type Object
@@ -562,10 +554,10 @@ class Gantt extends Widget {
             case "resourceAssignments":
                 this._refreshDataSource("resourceAssignments");
                 break;
-            case "treeListColumns":
+            case "columns":
                 this._setTreeListOption("columns", this.option(args.name));
                 break;
-            case "treeListWidth":
+            case "taskListWidth":
                 this._setInnerElementsWidth();
                 break;
             case "showResources":
@@ -588,8 +580,11 @@ class Gantt extends Widget {
                 this._setTreeListOption("showRowLines", args.value);
                 this._setGanttViewOption("showRowLines", args.value);
                 break;
+            case "scaleType":
+                this._setGanttViewOption("scaleType", args.value);
+                break;
             case "editing":
-                this._setGanttViewOption("editing", args.value);
+                this._setGanttViewOption("editing", this.option(args.name));
                 break;
             default:
                 super._optionChanged(args);

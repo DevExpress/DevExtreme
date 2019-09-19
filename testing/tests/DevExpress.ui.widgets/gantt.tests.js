@@ -115,12 +115,12 @@ QUnit.module("Markup", moduleConfig, () => {
 });
 
 QUnit.module("Options", moduleConfig, () => {
-    test("treeListWidth", (assert) => {
+    test("taskListWidth", (assert) => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const treeListWrapperElement = this.$element.find(TREELIST_WRAPPER_SELECTOR);
         assert.equal(treeListWrapperElement.width(), 300, "300px");
-        this.instance.option("treeListWidth", 500);
+        this.instance.option("taskListWidth", 500);
         assert.equal(treeListWrapperElement.width(), 500, "500px");
     });
     test("showResources", (assert) => {
@@ -201,10 +201,10 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(resourceElements.length, resourceAssignmentsDS.length);
         assert.equal(resourceElements.first().text(), resourcesDS[0].t);
     });
-    test("treeListColumns", (assert) => {
+    test("columns", (assert) => {
         const options = {
             tasks: { dataSource: tasks },
-            treeListColumns: [
+            columns: [
                 { dataField: "title", caption: "Subject" },
                 { dataField: "start", caption: "Start Date" }
             ]
@@ -216,12 +216,12 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal($treeListHeaderRow.children().eq(0).text(), "Subject", "first column title is checked");
         assert.equal($treeListHeaderRow.children().eq(1).text(), "Start Date", "second column title is checked");
 
-        this.instance.option("treeListColumns[0].visible", false);
+        this.instance.option("columns[0].visible", false);
         $treeListHeaderRow = this.$element.find(TREELIST_HEADER_ROW_SELECTOR);
         assert.equal($treeListHeaderRow.children().length, 1, "treeList has 1 visible columns");
         assert.equal($treeListHeaderRow.children().eq(0).text(), "Start Date", "first visible column title is checked");
 
-        this.instance.option("treeListColumns", [{ dataField: "title", caption: "Task" }]);
+        this.instance.option("columns", [{ dataField: "title", caption: "Task" }]);
         $treeListHeaderRow = this.$element.find(TREELIST_HEADER_ROW_SELECTOR);
         assert.equal($treeListHeaderRow.children().length, 1, "treeList has 1 columns");
         assert.equal($treeListHeaderRow.children().eq(0).text(), "Task", "first column title is checked");
@@ -302,6 +302,32 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(coreEditingSettings.allowResourceAdding, false, "resource adding is prohibited");
         assert.equal(coreEditingSettings.allowResourceDeleting, false, "resource deleting is prohibited");
         assert.equal(coreEditingSettings.allowResourceUpdating, false, "resource updating is prohibited");
+        this.instance.option("editing.enabled", false);
+        coreEditingSettings = getGanttViewCore(this.instance).settings.editing;
+        assert.equal(coreEditingSettings.enabled, false, "editing is prohibited");
+    });
+    test("scaleType", (assert) => {
+        const getFirstHeaderTitle = () => {
+            return this.$element.find(".dx-gantt-tsa").eq(1).find(".dx-gantt-si").first().text();
+        };
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        assert.equal(getFirstHeaderTitle(), "January", "is months scale type (auto)");
+        this.instance.option("scaleType", "minutes");
+        assert.equal(getFirstHeaderTitle(), "10", "is minutes scale type");
+        this.instance.option("scaleType", "hours");
+        assert.equal(getFirstHeaderTitle(), "12:00 AM", "is hours scale type");
+        this.instance.option("scaleType", "days");
+        assert.equal(getFirstHeaderTitle(), "Sun, 17 Feb", "is days scale type");
+        this.instance.option("scaleType", "weeks");
+        assert.equal(getFirstHeaderTitle(), "Sun, 17 Feb - Sat, 23 Feb", "is weeks scale type");
+        this.instance.option("scaleType", "months");
+        assert.equal(getFirstHeaderTitle(), "January", "is months scale type");
+
+        this.instance.option("tasks.dataSource", [{ "id": 0, "title": "t", "start": "2019-02-21", "end": "2019-02-26" }]);
+        assert.equal(getFirstHeaderTitle(), "January", "is still months scale type");
+        this.instance.option("scaleType", "auto");
+        assert.equal(getFirstHeaderTitle(), "Sun, 17 Feb", "is days scale type (auto)");
     });
 });
 
