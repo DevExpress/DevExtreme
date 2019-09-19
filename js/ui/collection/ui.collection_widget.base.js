@@ -539,6 +539,12 @@ var CollectionWidget = Widget.inherit({
         if(!this.constructor.ItemClass.getInstance($item).setDataField(property, value)) {
             this._refreshItem($item, item);
         }
+
+        const isDisabling = property === 'disabled' && value;
+
+        if(isDisabling && $item.is(this.option('focusedElement'))) {
+            this.option('focusedElement', null);
+        }
     },
 
     _refreshItem: function($item) {
