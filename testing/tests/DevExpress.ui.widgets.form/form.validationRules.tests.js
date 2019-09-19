@@ -353,7 +353,9 @@ QUnit.test("Validate the form without validation rules for an any simple items",
 
     assert.propEqual(form.validate(), {
         brokenRules: [],
+        complete: null,
         isValid: true,
+        status: "valid",
         validators: []
     }, "validation result");
     assert.equal(errorStub.getCalls().length, 0, "errors are not written to the console");
@@ -423,7 +425,7 @@ QUnit.testInActiveWindow("Remove RangeRule from item.validationRules", assert =>
         runRemoveRangedRuleTest({ newValidationRules, useItemOption: false, isKeepFocusSupported: true });
     });
     [undefined, null, []].forEach(newValidationRules => {
-        runRemoveRangedRuleTest({ newValidationRules, useItemOption: true, isKeepFocusSupported: false });
+        runRemoveRangedRuleTest({ newValidationRules, useItemOption: true, isKeepFocusSupported: true });
     });
 });
 

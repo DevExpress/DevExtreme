@@ -1922,12 +1922,6 @@ var dxChart = {
     **/
     tooltip: {
         /**
-        * @name dxChartOptions.tooltip.shared
-        * @type boolean
-        * @default false
-        */
-        shared: false,
-        /**
         * @name dxChartOptions.tooltip.location
         * @type Enums.ChartTooltipLocation
         * @default 'center'
@@ -3125,6 +3119,32 @@ var dxPolarChart = {
             }
         }],
         /**
+        * @name dxPolarChartOptions.valueAxis.visualRange
+        * @type VizRange | Array<number,string,Date>
+        * @fires BaseWidgetOptions.onOptionChanged
+        * @notUsedInTheme
+        */
+        visualRange: undefined,
+        /**
+         * @name dxPolarChartOptions.valueAxis.wholeRange
+         * @type VizRange | Array<number,string,Date>
+         * @default undefined
+         */
+        wholeRange: undefined,
+        /**
+        * @name dxPolarChartOptions.valueAxis.visualRangeUpdateMode
+        * @type Enums.ValueAxisVisualRangeUpdateMode
+        * @default 'auto'
+        */
+        visualRangeUpdateMode: "auto",
+        /**
+        * @name dxPolarChartOptions.valueAxis.minVisualRangeLength
+        * @inherits VizTimeInterval
+        * @default undefined
+        * @notUsedInTheme
+        */
+        minVisualRangeLength: undefined,
+        /**
         * @name dxPolarChartOptions.valueAxis.minValueMargin
         * @type number
         * @default undefined
@@ -3225,6 +3245,50 @@ var dxPolarChart = {
     * @inheritAll
     */
     series: undefined,
+    /**
+    * @name dxPolarChartOptions.onZoomStart
+    * @extends Action
+    * @type function(e)
+    * @type_function_param1 e:object
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 axis:chartAxisObject
+    * @type_function_param1_field6 range:VizRange
+    * @type_function_param1_field7 cancel:boolean
+    * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
+    * @notUsedInTheme
+    * @action
+    */
+    onZoomStart: function() { },
+    /**
+    * @name dxPolarChartOptions.onZoomEnd
+    * @extends Action
+    * @type function(e)
+    * @type_function_param1 e:object
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
+    * @type_function_param1_field6 rangeEnd:Date|Number:deprecated(range)
+    * @type_function_param1_field7 axis:chartAxisObject
+    * @type_function_param1_field8 range:VizRange
+    * @type_function_param1_field9 previousRange:VizRange
+    * @type_function_param1_field10 cancel:boolean
+    * @type_function_param1_field11 actionType:Enums.ChartZoomPanActionType
+    * @type_function_param1_field12 zoomFactor:Number
+    * @type_function_param1_field13 shift:Number
+    * @notUsedInTheme
+    * @action
+    */
+    onZoomEnd: function() { },
+    /**
+    * @name dxPolarChartMethods.resetVisualRange
+    * @publicName resetVisualRange()
+    */
+    resetVisualRange: function() { },
+    /**
+    * @name dxPolarChartMethods.getValueAxis
+    * @publicName getValueAxis()
+    * @return chartAxisObject
+    */
+    getValueAxis: function() { }
 };
 /**
 * @name BaseChart
@@ -3301,20 +3365,35 @@ var BaseChart = {
     * @type object
     */
     tooltip: {
-       /**
-       * @name BaseChartOptions.tooltip.customizeTooltip
-       * @type function(pointInfo)
-       * @type_function_param1 pointInfo:object
-       * @type_function_return object
-       * @default undefined
-       * @notUsedInTheme
-       */
+        /**
+        * @name BaseChartOptions.tooltip.customizeTooltip
+        * @type function(pointInfo)
+        * @type_function_param1 pointInfo:object
+        * @type_function_return object
+        * @default undefined
+        * @notUsedInTheme
+        */
         customizeTooltip: undefined,
+        /**
+        * @name BaseChartOptions.tooltip.contentTemplate
+        * @type template|function(pointInfo, element)
+        * @type_function_param1 pointInfo:object
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined,
         /**
         * @name BaseChartOptions.tooltip.argumentFormat
         * @extends CommonVizFormat
         */
-        argumentFormat: ''
+        argumentFormat: '',
+        /**
+        * @name BaseChartOptions.tooltip.shared
+        * @type boolean
+        * @default false
+        */
+        shared: false
     },
     /**
     * @name BaseChartOptions.onPointClick
@@ -3757,6 +3836,15 @@ var dxChartCommonAnnotationConfig = {
     * @notUsedInTheme
     */
     customizeTooltip: undefined,
+    /**
+    * @name dxChartCommonAnnotationConfig.tooltipTemplate
+    * @type template|function(annotationItem, element)
+    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_param2 element:dxElement
+    * @type_function_return string|Node|jQuery
+    * @default undefined
+    */
+    tooltipTemplate: undefined,
     /**
     * @name dxChartCommonAnnotationConfig.wordWrap
     * @type Enums.VizWordWrap

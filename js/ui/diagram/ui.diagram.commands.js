@@ -287,10 +287,14 @@ const DiagramCommands = {
                     getValue: (v) => JSON.parse(v),
                     setValue: (v) => JSON.stringify(v)
                 },
-                pageLandscape: {
+                pageOrientation: {
                     command: DiagramCommand.PageLandscape,
-                    text: messageLocalization.format("dxDiagram-commandPageLandscape"),
-                    widget: "dxCheckBox"
+                    text: messageLocalization.format("dxDiagram-commandPageOrientation"),
+                    widget: "dxSelectBox",
+                    items: [
+                        { value: true, title: messageLocalization.format("dxDiagram-commandPageOrientationLandscape") },
+                        { value: false, title: messageLocalization.format("dxDiagram-commandPageOrientationPortrait") }
+                    ]
                 },
                 pageColor: {
                     command: DiagramCommand.PageColor,
@@ -332,7 +336,7 @@ const DiagramCommands = {
     getDefaultPropertyPanelCommandGroups: function() {
         return [
             { commands: ["units"] },
-            { commands: ["pageSize", "pageLandscape", "pageColor"] },
+            { commands: ["pageSize", "pageOrientation", "pageColor"] },
             { commands: ["showGrid", "snapToGrid", "gridSize"] },
             { commands: ["zoomLevel", "autoZoom", "simpleView"] },
         ];

@@ -84,7 +84,9 @@ var baseTrackerPrototype = {
             .on(addNamespace(holdEvent.name, EVENT_NS), { timeout: 300 }, _noop);
     },
 
-    update: function() {},
+    update: function(options) {
+        this._chart = options.chart;
+    },
 
     updateSeries(series, resetDecorations) {
         const that = this;
@@ -195,7 +197,7 @@ var baseTrackerPrototype = {
             eventData;
 
         if(point && point.getOptions()) {
-            tooltipFormatObject = point.getTooltipFormatObject(that._tooltip);
+            tooltipFormatObject = point.getTooltipFormatObject(that._tooltip, that._tooltip.isShared() && that._chart.getStackedPoints(point));
             if(!isDefined(tooltipFormatObject.valueText) && !tooltipFormatObject.points || !point.isVisible()) {
                 return;
             }
@@ -479,7 +481,6 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         baseTrackerPrototype.update.call(this, options);
         that._argumentAxis = options.argumentAxis || {};
         that._axisHoverEnabled = that._argumentAxis && _normalizeEnum(that._argumentAxis.getOptions().hoverMode) === ALL_ARGUMENT_POINTS_MODE;
-        that._chart = options.chart;
         that._rotated = options.rotated;
         that._crosshair = options.crosshair;
         that._stickyHovering = options.stickyHovering;

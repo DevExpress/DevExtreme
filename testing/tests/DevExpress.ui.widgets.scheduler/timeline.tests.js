@@ -179,20 +179,6 @@ QUnit.test("Sidebar should be visible in grouped mode", function(assert) {
     assert.equal($sidebar.css("display"), "block", "Sidebar is visible");
 });
 
-QUnit.test("Fixed appointments container should have correct left", function(assert) {
-    var $element = this.instance.$element();
-
-    this.instance.option("groups", [
-        { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] },
-        { name: "two", items: [{ id: 1, text: "c" }, { id: 2, text: "d" }] }
-    ]);
-
-    var $fixedAppt = $element.find(".dx-scheduler-fixed-appointments"),
-        $sidebar = $element.find(".dx-scheduler-sidebar-scrollable");
-
-    assert.equal($fixedAppt.position().left, $sidebar.outerWidth(true), "Container position is correct");
-});
-
 QUnit.test("Group table cells should have correct height", function(assert) {
     var $element = this.instance.$element();
 
@@ -458,7 +444,7 @@ QUnit.test("Group table cells should have correct height, groupOrientation = hor
         $groupHeader = $groupRows.eq(0).find(".dx-scheduler-group-header").eq(0),
         groupHeaderHeight = $groupHeader.get(0).getBoundingClientRect().height;
 
-    assert.roughEqual(40, groupHeaderHeight, 1.1, "Cell height is OK");
+    assert.roughEqual(30, groupHeaderHeight, 1.1, "Cell height is OK");
 });
 
 QUnit.test("the 'getCoordinatesByDate' method should return right coordinates for grouped timeline, groupOrientation = horizontal", function(assert) {

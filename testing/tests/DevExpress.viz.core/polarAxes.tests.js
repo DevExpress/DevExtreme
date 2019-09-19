@@ -2346,7 +2346,7 @@ QUnit.module("Linear axis. Margins", $.extend({}, environment, {
     }
 }));
 
-QUnit.test("Apply margings to business range", function(assert) {
+QUnit.test("Apply margings to canvas", function(assert) {
     this.generatedTicks = [];
     const axis = this.createAxis({
         valueMarginsEnabled: true,
@@ -2361,14 +2361,14 @@ QUnit.test("Apply margings to business range", function(assert) {
 
     axis.draw(this.canvas);
 
-    const { min, max, minVisible, maxVisible } = this.axis.getTranslator().getBusinessRange();
+    const { startPadding, startPoint, endPadding, endPoint } = this.axis.getTranslator()._canvasOptions;
 
-    assert.equal(min, -10);
-    assert.equal(max, 120);
-    assert.equal(minVisible, -10);
-    assert.equal(maxVisible, 120);
+    assert.roughEqual(startPadding, 1.54, 0.1, "start padding");
+    assert.roughEqual(startPoint, 1.54, 0.1, "start point");
+    assert.roughEqual(endPadding, 3.08, 0.1, "end padding");
+    assert.roughEqual(endPoint, 16.92, 0.1, "end point");
 
-    assert.equal(axis.getTranslator().canvasLength, 20);
+    assert.roughEqual(axis.getTranslator().canvasLength, 16.92 - 1.54, 0.1, "canvas lehght");
 });
 
 QUnit.test("Do not apply margins two times", function(assert) {
@@ -2392,12 +2392,12 @@ QUnit.test("Do not apply margins two times", function(assert) {
 
     const { min, max, minVisible, maxVisible } = this.axis.getTranslator().getBusinessRange();
 
-    assert.equal(min, -10);
-    assert.equal(max, 120);
-    assert.equal(minVisible, -10);
-    assert.equal(maxVisible, 120);
+    assert.equal(min, 0);
+    assert.equal(max, 100);
+    assert.equal(minVisible, 0);
+    assert.equal(maxVisible, 100);
 
-    assert.equal(axis.getTranslator().canvasLength, 20);
+    assert.roughEqual(axis.getTranslator().canvasLength, 16.92 - 1.54, 0.1, "canvas lehght");
 
     const tickGeneratorOptions = this.tickGenerator.lastCall.returnValue.lastCall.args[0];
     assert.equal(tickGeneratorOptions.min, -10);

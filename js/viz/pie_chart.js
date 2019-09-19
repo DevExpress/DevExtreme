@@ -323,10 +323,6 @@ var dxPieChart = BaseChart.inherit({
         return this.series.reduce((r, s) => s.adjustLabels(moveLabelsFromCenter) || r, false);
     },
 
-    _prepareStackPoints: _noop,
-
-    _resetStackPoints: _noop,
-
     _applyExtraSettings: _noop,
 
     _resolveLabelOverlappingShift: function() {

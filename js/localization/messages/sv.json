@@ -25,6 +25,8 @@
         "validation-stringLength-formatted": "Längden på  {0} är inte korrekt",
         "validation-custom": "Ogiltigt värde",
         "validation-custom-formatted": "{0} är ogiltigt",
+        "validation-async": "Ogiltigt värde",
+        "validation-async-formatted": "{0} är ogiltigt",
         "validation-compare": "Värdena matchar inte",
         "validation-compare-formatted": "{0} matchar inte",
         "validation-pattern": "Värdet matchar inte mönster",

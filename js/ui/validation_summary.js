@@ -1,13 +1,13 @@
-var registerComponent = require("../core/component_registrator"),
-    eventsEngine = require("../events/core/events_engine"),
-    grep = require("../core/utils/common").grep,
-    extend = require("../core/utils/extend").extend,
-    iteratorUtils = require("../core/utils/iterator"),
-    ValidationMixin = require("./validation/validation_mixin"),
-    ValidationEngine = require("./validation_engine"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit");
+import registerComponent from "../core/component_registrator";
+import eventsEngine from "../events/core/events_engine";
+import { grep } from "../core/utils/common";
+import { extend } from "../core/utils/extend";
+import iteratorUtils from "../core/utils/iterator";
+import ValidationMixin from "./validation/validation_mixin";
+import ValidationEngine from "./validation_engine";
+import CollectionWidget from "./collection/ui.collection_widget.edit";
 
-var VALIDATION_SUMMARY_CLASS = "dx-validationsummary",
+const VALIDATION_SUMMARY_CLASS = "dx-validationsummary",
     ITEM_CLASS = VALIDATION_SUMMARY_CLASS + "-item",
     ITEM_DATA_KEY = VALIDATION_SUMMARY_CLASS + "-item-data";
 
@@ -17,8 +17,8 @@ var VALIDATION_SUMMARY_CLASS = "dx-validationsummary",
 * @module ui/validation_summary
 * @export default
 */
-var ValidationSummary = CollectionWidget.inherit({
-    _getDefaultOptions: function() {
+const ValidationSummary = CollectionWidget.inherit({
+    _getDefaultOptions() {
         return extend(this.callBase(), {
             /**
             * @name dxValidationSummaryOptions.focusStateEnabled
@@ -143,7 +143,7 @@ var ValidationSummary = CollectionWidget.inherit({
         });
     },
 
-    _setOptionsByReference: function() {
+    _setOptionsByReference() {
         this.callBase();
 
         extend(this._optionsByReference, {
@@ -151,13 +151,13 @@ var ValidationSummary = CollectionWidget.inherit({
         });
     },
 
-    _init: function() {
+    _init() {
         this.callBase();
         this._initGroupRegistration();
     },
 
-    _initGroupRegistration: function() {
-        var group = this._findGroup(),
+    _initGroupRegistration() {
+        const group = this._findGroup(),
             groupConfig = ValidationEngine.addGroup(group);
 
         this._unsubscribeGroup();
@@ -169,43 +169,43 @@ var ValidationSummary = CollectionWidget.inherit({
         groupConfig.on("validated", this.groupSubscription);
     },
 
-    _unsubscribeGroup: function() {
-        var groupConfig = ValidationEngine.getGroupConfig(this._validationGroup);
+    _unsubscribeGroup() {
+        const groupConfig = ValidationEngine.getGroupConfig(this._validationGroup);
         groupConfig && groupConfig.off("validated", this.groupSubscription);
     },
 
-    _getOrderedItems: function(validators, items) {
-        var orderedItems = [];
+    _getOrderedItems(validators, items) {
+        let orderedItems = [];
 
         iteratorUtils.each(validators, function(_, validator) {
-            var firstItem = grep(items, function(item) {
+            const foundItems = grep(items, function(item) {
                 if(item.validator === validator) {
                     return true;
                 }
-            })[0];
+            });
 
-            if(firstItem) {
-                orderedItems.push(firstItem);
+            if(foundItems.length) {
+                orderedItems = orderedItems.concat(foundItems);
             }
         });
 
         return orderedItems;
     },
 
-    _groupValidationHandler: function(params) {
-        var that = this,
-            items = that._getOrderedItems(params.validators, iteratorUtils.map(params.brokenRules, function(rule) {
-                return {
-                    text: rule.message,
-                    validator: rule.validator
-                };
-            }));
+    _groupValidationHandler(params) {
+        const items = this._getOrderedItems(params.validators, iteratorUtils.map(params.brokenRules, function(rule) {
+            return {
+                text: rule.message,
+                validator: rule.validator,
+                index: rule.index
+            };
+        }));
 
-        that.validators = params.validators;
+        this.validators = params.validators;
 
-        iteratorUtils.each(that.validators, function(_, validator) {
+        iteratorUtils.each(this.validators, (_, validator) => {
             if(validator._validationSummary !== this) {
-                var handler = that._itemValidationHandler.bind(that),
+                let handler = this._itemValidationHandler.bind(this),
                     disposingHandler = function() {
                         validator.off("validated", handler);
                         validator._validationSummary = null;
@@ -217,53 +217,58 @@ var ValidationSummary = CollectionWidget.inherit({
             }
         });
 
-        that.option("items", items);
-    },
-
-    _itemValidationHandler: function(itemValidationResult) {
-        var items = this.option("items"),
-            isValid = itemValidationResult.isValid,
-            elementIndex,
-            replacementFound = false,
-            newMessage = itemValidationResult.brokenRule && itemValidationResult.brokenRule.message,
-            validator = itemValidationResult.validator;
-
-        iteratorUtils.each(items, function(index, item) {
-            if(item.validator === validator) {
-                if(isValid) {
-                    elementIndex = index;
-                } else {
-                    item.text = newMessage;
-                }
-
-                replacementFound = true;
-                return false;
-            }
-        });
-
-        if(isValid ^ replacementFound) {
-            return;
-        }
-
-        if(isValid) {
-            items.splice(elementIndex, 1);
-        } else {
-            items.push({
-                text: newMessage,
-                validator: validator
-            });
-        }
-
-        items = this._getOrderedItems(this.validators, items);
         this.option("items", items);
     },
 
-    _initMarkup: function() {
+    _itemValidationHandler({ isValid, validator, brokenRules }) {
+        let items = this.option("items"),
+            itemsChanged = false;
+
+        let itemIndex = 0;
+        while(itemIndex < items.length) {
+            const item = items[itemIndex];
+            if(item.validator === validator) {
+                const foundRule = grep(brokenRules || [], function(rule) {
+                    return rule.index === item.index;
+                })[0];
+                if(isValid || !foundRule) {
+                    items.splice(itemIndex, 1);
+                    itemsChanged = true;
+                    continue;
+                }
+                if(foundRule.message !== item.text) {
+                    item.text = foundRule.message;
+                    itemsChanged = true;
+                }
+            }
+            itemIndex++;
+        }
+        iteratorUtils.each(brokenRules, function(_, rule) {
+            const foundItem = grep(items, function(item) {
+                return item.validator === validator && item.index === rule.index;
+            })[0];
+            if(!foundItem) {
+                items.push({
+                    text: rule.message,
+                    validator: validator,
+                    index: rule.index
+                });
+                itemsChanged = true;
+            }
+        });
+
+        if(itemsChanged) {
+            items = this._getOrderedItems(this.validators, items);
+            this.option("items", items);
+        }
+    },
+
+    _initMarkup() {
         this.$element().addClass(VALIDATION_SUMMARY_CLASS);
         this.callBase();
     },
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
             case "validationGroup":
                 this._initGroupRegistration();
@@ -273,21 +278,21 @@ var ValidationSummary = CollectionWidget.inherit({
         }
     },
 
-    _itemClass: function() {
+    _itemClass() {
         return ITEM_CLASS;
     },
 
-    _itemDataKey: function() {
+    _itemDataKey() {
         return ITEM_DATA_KEY;
     },
 
-    _postprocessRenderItem: function(params) {
+    _postprocessRenderItem(params) {
         eventsEngine.on(params.itemElement, "click", function() {
             params.itemData.validator && params.itemData.validator.focus && params.itemData.validator.focus();
         });
     },
 
-    _dispose: function() {
+    _dispose() {
         this.callBase();
         this._unsubscribeGroup();
     }

@@ -61,7 +61,7 @@ QUnit.module("focus policy", {
     }
 }, () => {
     QUnit.test("focus removed from list on type some text", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -128,7 +128,7 @@ QUnit.module("focus policy", {
     });
 
     QUnit.test("setFocusPolicy should correctly renew subscription", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -204,7 +204,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("popup hides on tab", (assert) => {
-        this.$input.focusin();
+        this.instance.focus();
         assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is focused");
 
         this.instance.open();

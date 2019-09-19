@@ -26,7 +26,7 @@ QUnit.test("PDF 'main page' populated with correct size in pt", function(assert)
     var done = assert.async();
 
     // act
-    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
         // assert
         assert.ok(data.indexOf("/MediaBox[0 0 465.08 315.15]/") !== -1);
     }).done(done);
@@ -37,7 +37,7 @@ QUnit.test("PDF 'content stream' populated with correct size in pt", function(as
     var done = assert.async();
 
     // act
-    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
         // assert
         assert.ok(data.indexOf("q 465.08 0 0 315.15 0.00 0.00 cm /I0 Do Q") !== -1);
         done();
@@ -49,7 +49,7 @@ QUnit.test("PDF 'info' has correct date and dx version", function(assert) {
     var done = assert.async();
 
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2 }).then(function(data) {
         // assert
         assert.ok(data.indexOf("/CreationDate _test_date_/Producer(DevExtreme " + version + ")") !== -1);
         done();
@@ -60,7 +60,7 @@ QUnit.test("PDF 'image' populated with correct size in px, length and image stri
     // arrange
     var done = assert.async();
     // act
-    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
         // assert
         assert.ok(data.indexOf("/Image/Width 620.1/Height 420.2/") !== -1);
         assert.ok(data.indexOf("/Length 26>>stream\r\n_test_image_markup_string_\r\n") !== -1);
@@ -73,7 +73,7 @@ QUnit.test("PDF 'image' does not contain artifacts. T443241", function(assert) {
     var done = assert.async();
     this.imageDataSample = "$`";
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2 }).then(function(data) {
         // assert
         assert.ok(data.indexOf("<</Type/XObject/Subtype/Image/Width") === data.lastIndexOf("<</Type/XObject/Subtype/Image/Width"));
         done();
@@ -84,7 +84,7 @@ QUnit.test("PDF 'startxref' populated with correct offset", function(assert) {
     // arrange
     var done = assert.async();
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2 }).then(function(data) {
         // assert
         var match = data.match(/startxref\r\n(\d+)\r\n/);
         assert.ok(match);
@@ -98,7 +98,7 @@ QUnit.test("PDF 'xref' populated with correct blocks offset", function(assert) {
     // arrange
     var done = assert.async();
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2 }).then(function(data) {
         // assert
         var match = data.match(/xref\r\n0 8\r\n0000000000 65535 f\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\n0000000(\d\d\d) 00000 n\r\ntrailer/);
 
@@ -146,7 +146,7 @@ QUnit.test("pass correct options to imageCreator", function(assert) {
     // arrange
     var done = assert.async();
     // act
-    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
         // assert
         assert.deepEqual(imageCreator.getImageData.lastCall.args, ["image_markup", { width: 600.1, height: 400.2, margin: 10, format: "JPEG" }]);
         done();
@@ -162,7 +162,7 @@ QUnit.test("getData returns Blob when it is supported by Browser", function(asse
     // arrange
     var done = assert.async();
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2 }).then(function(data) {
         // assert
         assert.equal(window.Blob.callCount, 1);
         assert.equal(window.Blob.calledWithNew(), true);
@@ -183,7 +183,7 @@ QUnit.test("getData returns Base64 when Blob is not supported by Browser", funct
     // arrange
     var done = assert.async();
     // act
-    getData("image_markup", { width: 600.1, height: 400.2 }, function(data) {
+    getData("image_markup", { width: 600.1, height: 400.2 }).then(function(data) {
         // assert
         assert.equal(window.btoa.callCount, 1);
         assert.deepEqual(window.btoa.lastCall.args, ["_composed_string_"]);

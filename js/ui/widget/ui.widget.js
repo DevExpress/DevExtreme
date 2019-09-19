@@ -371,7 +371,7 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     _detachFocusEvents: function() {
-        var $element = this._focusTarget(),
+        var $element = this._focusEventTarget(),
             namespace = this.NAME + FOCUS_NAMESPACE,
             focusEvents = eventUtils.addNamespace("focusin", namespace);
 
@@ -389,14 +389,14 @@ var Widget = DOMComponentWithTemplate.inherit({
             focusInEvent = eventUtils.addNamespace("focusin", namespace),
             focusOutEvent = eventUtils.addNamespace("focusout", namespace);
 
-        var $focusTarget = this._focusTarget();
+        var $focusTarget = this._focusEventTarget();
         eventsEngine.on($focusTarget, focusInEvent, this._focusInHandler.bind(this));
         eventsEngine.on($focusTarget, focusOutEvent, this._focusOutHandler.bind(this));
 
         if(domAdapter.hasDocumentProperty("onbeforeactivate")) {
             var beforeActivateEvent = eventUtils.addNamespace("beforeactivate", namespace);
 
-            eventsEngine.on(this._focusTarget(), beforeActivateEvent, function(e) {
+            eventsEngine.on(this._focusEventTarget(), beforeActivateEvent, function(e) {
                 if(!$(e.target).is(selectors.focusable)) {
                     e.preventDefault();
                 }
@@ -409,7 +409,15 @@ var Widget = DOMComponentWithTemplate.inherit({
         this._attachFocusEvents();
     },
 
+    _focusEventTarget: function() {
+        return this._focusTarget();
+    },
+
     _focusInHandler: function(e) {
+        if(e.isDefaultPrevented()) {
+            return;
+        }
+
         var that = this;
 
         that._createActionByOption("onFocusIn", {
@@ -421,6 +429,10 @@ var Widget = DOMComponentWithTemplate.inherit({
     },
 
     _focusOutHandler: function(e) {
+        if(e.isDefaultPrevented()) {
+            return;
+        }
+
         var that = this;
 
         that._createActionByOption("onFocusOut", {

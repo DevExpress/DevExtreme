@@ -198,7 +198,8 @@ QUnit.test("Draw column chooser with columns.allowHiding == false (select mode)"
         columnChooserView = this.columnChooserView,
         $columnChooser,
         items,
-        treeView;
+        treeView,
+        $checkBoxElements;
 
     this.options.columnChooser.mode = "select";
     $.extend(this.columns, [{ caption: "Column 1", index: 0, visible: true, allowHiding: false }, { caption: "Column 2", index: 1, visible: false }]);
@@ -214,13 +215,19 @@ QUnit.test("Draw column chooser with columns.allowHiding == false (select mode)"
     treeView = $columnChooser.find(".dx-treeview").dxTreeView("instance");
 
     items = treeView.option("items");
+    $checkBoxElements = columnChooserView._popupContainer.$content().find(".dx-checkbox");
+
     assert.ok($columnChooser.length, "have wrapper column chooser");
     assert.ok(treeView, "column chooser has dxTreeView");
     assert.equal(items.length, 2, "treeView has 2 items");
+
     assert.ok(items[0].selected, "1st item selected");
-    assert.ok(items[0].disabled, "1st item disabled");
+    assert.notOk(items[0].disabled, "1st item enabled");
+    assert.ok($checkBoxElements.eq(0).hasClass("dx-state-disabled"), "1st item's checkbox disabled");
+
     assert.notOk(items[1].selected, "2nd item not selected");
-    assert.notOk(items[1].disabled, "2nd item enabled");
+    assert.notOk(items[1].disabled, "2st item enabled");
+    assert.notOk($checkBoxElements.eq(1).hasClass("dx-state-disabled"), "2nd item's checkbox enabled");
 });
 
 QUnit.test("Hide column chooser when is visible true", function(assert) {

@@ -1,5 +1,6 @@
 const LessPluginAutoPrefix = require("less-plugin-autoprefix");
 const getBundleName = require("./bundle-resolver");
+const ModulesHandler = require("./modules-handler");
 
 const BOOTSTRAP_SCSS_PATH = "bootstrap/scss/";
 const THEMEBUILDER_LESS_PATH = "devextreme-themebuilder/data/less/";
@@ -107,7 +108,7 @@ class LessTemplateLoader {
         this.version = version;
     }
 
-    load(theme, colorScheme, metadata, modifiedItems) {
+    load(theme, colorScheme, metadata, modifiedItems, widgets) {
         return this._loadLess(theme, colorScheme).then(less => {
             const modifyVars = {};
             const metadataVariables = {};
@@ -122,13 +123,14 @@ class LessTemplateLoader {
                 metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
             }));
 
-            return this.compileLess(less, modifyVars, metadataVariables);
+            return this.compileLess(less, modifyVars, metadataVariables, widgets);
         });
     }
 
-    compileLess(less, modifyVars, metadata) {
+    compileLess(less, modifyVars, metadata, widgets) {
         return new Promise((resolve, reject) => {
             const browsersList = require("../package.json").browserslist;
+            const modulesHandler = new ModulesHandler(widgets);
             let compiledMetadata = {};
             let options = {};
 
@@ -145,7 +147,8 @@ class LessTemplateLoader {
                         install: (_, pluginManager) => {
                             pluginManager.addPostProcessor(new LessFontPlugin(this.options));
                         }
-                    }
+                    },
+                    modulesHandler.lessPlugin()
                 ]
             };
 
@@ -162,7 +165,8 @@ class LessTemplateLoader {
                     compiledMetadata: compiledMetadata,
                     css: this._makeInfoHeader() + css,
                     swatchSelector: this.swatchSelector,
-                    version: this.version
+                    version: this.version,
+                    widgets: modulesHandler.bundledWidgets
                 });
             }, error => {
                 reject(error);

@@ -1910,10 +1910,13 @@ testModule("close on target scroll", moduleConfig, () => {
     });
 
     test("overlay should be hidden on window scroll event on desktop", (assert) => {
-        const originalPlatform = devices.real().platform;
+        const originalDevice = {
+            platform: devices.real().platform,
+            deviceType: devices.real().deviceType
+        };
 
         try {
-            devices.real({ platform: "generic" });
+            devices.real({ platform: "generic", deviceType: "desktop" });
 
             const $overlay = $("#overlay").dxOverlay({
                 closeOnTargetScroll: true
@@ -1927,15 +1930,18 @@ testModule("close on target scroll", moduleConfig, () => {
             $(window).triggerHandler("scroll");
             assert.strictEqual($content.is(":visible"), false, "Overlay should be hidden after scroll event on window");
         } finally {
-            devices.real({ platform: originalPlatform });
+            devices.real(originalDevice);
         }
     });
 
     test("overlay should not be hidden on window scroll event on mobile devices", (assert) => {
-        const originalPlatform = devices.real().platform;
+        const originalDevice = {
+            platform: devices.real().platform,
+            deviceType: devices.real().deviceType
+        };
 
         try {
-            devices.real({ platform: "ios" });
+            devices.real({ platform: "ios", deviceType: "phone" });
 
             const $overlay = $("#overlay").dxOverlay({
                 closeOnTargetScroll: true
@@ -1949,7 +1955,7 @@ testModule("close on target scroll", moduleConfig, () => {
             $(window).triggerHandler("scroll");
             assert.strictEqual($content.is(":visible"), true, "Overlay should not be hidden after scroll event on window");
         } finally {
-            devices.real({ platform: originalPlatform });
+            devices.real(originalDevice);
         }
     });
 
@@ -2249,6 +2255,20 @@ testModule("container", moduleConfig, () => {
         } finally {
             viewPort(origViewport);
         }
+    });
+
+    test("T811495 - content should be inside container if it is provided by defaultOptions", (assert) => {
+        class TestOverlay extends Overlay {}
+
+        TestOverlay.defaultOptions({
+            options: {
+                container: "#customTargetContainer"
+            }
+        });
+
+        const overlay = new TestOverlay("#overlay");
+        overlay.show();
+        assert.strictEqual($("#customTargetContainer").children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
     });
 });
 

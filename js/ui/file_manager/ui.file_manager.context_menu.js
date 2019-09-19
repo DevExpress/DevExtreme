@@ -1,24 +1,23 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isObject, isString } from "../../core/utils/type";
+import { isString } from "../../core/utils/type";
 
 import Widget from "../widget/ui.widget";
 import ContextMenu from "../context_menu/ui.context_menu";
 
 const FILEMANAGER_CONTEXT_MEMU_CLASS = "dx-filemanager-context-menu";
 
-const DEFAULT_CONTEXT_MENU_ITEMS = [
-    "create",
-    "upload",
-    "rename",
-    "move",
-    "copy",
-    "delete",
-    {
-        commandName: "refresh",
+const DEFAULT_CONTEXT_MENU_ITEMS = {
+    create: {},
+    upload: {},
+    rename: {},
+    move: {},
+    copy: {},
+    delete: {},
+    refresh: {
         beginGroup: true
     }
-];
+};
 
 class FileManagerContextMenu extends Widget {
 
@@ -74,16 +73,55 @@ class FileManagerContextMenu extends Widget {
 
         const result = [];
 
-        DEFAULT_CONTEXT_MENU_ITEMS.forEach(srcItem => {
+        this.option("items").forEach(srcItem => {
             const commandName = isString(srcItem) ? srcItem : srcItem.commandName;
-            if(this._commandManager.isCommandAvailable(commandName, fileItems)) {
-                let item = this._createMenuItemByCommandName(commandName);
-                if(isObject(srcItem)) {
-                    item = extend(true, item, srcItem);
-                }
+            const item = this._configureItemByCommandName(commandName, srcItem);
+            if(this._isContextMenuItemAvailable(item, fileItems)) {
                 result.push(item);
             }
         });
+
+        return result;
+    }
+
+    _isContextMenuItemAvailable(item, fileItems) {
+        if(!this._isDefaultItem(item.commandName)) {
+            return item.visible;
+        }
+        if(item.visibilityMode === "manual") {
+            return item.visible;
+        }
+        return this._commandManager.isCommandAvailable(item.commandName, fileItems);
+    }
+
+    _isDefaultItem(commandName) {
+        return !!DEFAULT_CONTEXT_MENU_ITEMS[commandName];
+    }
+
+    _extendAttributes(targetObject, sourceObject, objectKeysArray) {
+        objectKeysArray.forEach(objectKey => {
+            extend(targetObject, sourceObject[objectKey]
+                ? { [objectKey]: sourceObject[objectKey] }
+                : {});
+        });
+    }
+
+    _configureItemByCommandName(commandName, item) {
+        if(!this._isDefaultItem(commandName)) {
+            return item;
+        }
+
+        let result = this._createMenuItemByCommandName(commandName);
+        const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
+        extend(result, defaultConfig);
+        this._extendAttributes(result, item, ["visibilityMode", "beginGroup", "text", "icon"]);
+        if(result.visibilityMode === "manual") {
+            this._extendAttributes(result, item, ["visible", "disabled"]);
+        }
+
+        if(commandName && !result.commandName) {
+            extend(result, { commandName });
+        }
 
         return result;
     }

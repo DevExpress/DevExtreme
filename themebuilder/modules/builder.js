@@ -13,7 +13,7 @@ const processTheme = (config, metadata, version) => {
 
         return lessTemplateLoader.analyzeBootstrapTheme(config.themeName, config.colorScheme, metadata, bootstrapMetadata, config.data, config.bootstrapVersion);
     } else {
-        return lessTemplateLoader.load(config.themeName, config.colorScheme, metadata, config.items);
+        return lessTemplateLoader.load(config.themeName, config.colorScheme, metadata, config.items, config.widgets);
     }
 };
 

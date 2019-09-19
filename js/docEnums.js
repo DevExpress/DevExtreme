@@ -122,6 +122,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DropFeedbackMode
+ * @enum {'push'|'indicate'}
+ */
+
+/**
  * @typedef {string} Enums.VerticalAlignment
  * @enum {'bottom'|'center'|'top'}
  */
@@ -259,6 +264,11 @@
 /**
  * @typedef {string} Enums.VisualRangeUpdateMode
  * @enum {'auto'|'keep'|'reset'|'shift'}
+ */
+
+/**
+ * @typedef {string} Enums.ValueAxisVisualRangeUpdateMode
+ * @enum {'auto'|'keep'|'reset'}
  */
 
 /**
@@ -652,6 +662,11 @@
  */
 
 /**
+ * @typedef {string} Enums.DragDirection
+ * @enum {'both'|'horizontal'|'vertical'}
+ */
+
+/**
  * @typedef {string} Enums.SlideOutMenuPosition
  * @enum {'inverted'|'normal'}
  */
@@ -823,7 +838,7 @@
 
 /**
  * @typedef {string} Enums.ValidationRuleType
- * @enum {'required'|'numeric'|'range'|'stringLength'|'custom'|'compare'|'pattern'|'email'}
+ * @enum {'required'|'numeric'|'range'|'stringLength'|'custom'|'compare'|'pattern'|'email'|'async'}
  */
 
 /**
@@ -1082,7 +1097,7 @@
  */
 
 /**
- * @typedef {string} Enums.DiagramToolboxStyle
+ * @typedef {string} Enums.DiagramToolboxDisplayMode
  * @enum {'icons'|'texts'}
  */
 
@@ -1098,7 +1113,7 @@
 
 /**
  * @typedef {string} Enums.DiagramPropertiesPanelCommand
- * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageLandscape'|'pageColor'}
+ * @enum {'zoomLevel'|'autoZoom'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'}
  */
 
 /**
@@ -1117,6 +1132,16 @@
  */
 
 /**
+ * @typedef {string} Enums.GanttScaleType
+ * @enum {'auto'|'minutes'|'hours'|'days'|'weeks'|'months'}
+ */
+
+/**
  * @typedef {string} Enums.LegendMarkerState
  * @enum {'normal'|'hovered'|'selected'}
+ */
+
+/**
+ * @typedef {string} Enums.ValidationStatus
+ * @enum {'valid'|'invalid'|'pending'}
  */

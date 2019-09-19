@@ -343,7 +343,7 @@ var environment = {
 
         var updateArg0 = tracker.stub("update").lastCall.args[0];
         assert.equal(updateArg0.argumentAxis, undefined, "argumentAxis");
-        assert.equal(updateArg0.chart, undefined, "chart");
+        assert.equal(updateArg0.chart, chart, "chart");
         assert.equal(updateArg0.rotated, undefined, "rotated");
         assert.equal(updateArg0.zoomingMode, undefined, "zoomingMode");
         assert.equal(updateArg0.scrollingMode, undefined, "scrolling mode");

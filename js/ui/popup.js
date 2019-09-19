@@ -295,7 +295,7 @@ var Popup = Overlay.inherit({
             },
             {
                 device: function(device) {
-                    return devices.real().platform === "generic" && device.platform === "generic";
+                    return devices.real().deviceType === "desktop" && device.platform === "generic";
                 },
                 options: {
                     /**
@@ -808,10 +808,12 @@ var Popup = Overlay.inherit({
             case "useDefaultToolbarButtons":
             case "useFlatToolbarButtons":
                 var isPartialUpdate = args.fullName.search(".options") !== -1;
+                var isToolbarItemsChange = args.fullName.match(/^toolbarItems(\[\d+\])?$/);
+
                 this._renderTitle();
                 this._renderBottom();
 
-                if(!isPartialUpdate) {
+                if(!isPartialUpdate && !isToolbarItemsChange) {
                     this._renderGeometry();
                 }
                 break;

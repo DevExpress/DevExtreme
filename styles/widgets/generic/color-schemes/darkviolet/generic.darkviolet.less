@@ -1315,7 +1315,7 @@
 @menu-item-selected-color: @base-text-color;
 @menu-item-focused-bg: @base-focus-bg;
 @menu-item-focused-selected-bg: fade(@base-focus-bg, 70%);
-@menu-container-shadow-color: fade(@base-shadow-color, 15%);
+@menu-container-shadow-color: fade(darken(@base-shadow-color, 100%), 17.5%);
 
 // Calendar
 
@@ -1587,3 +1587,7 @@
 // Gantt
 @gantt-collapsable-row-bg: lighten(@base-bg, 4%);
 @gantt-selection-bg: fade(@treelist-selection-bg, 30%);
+
+// Splitter
+@splitter-border-color: @base-border-color;
+@splitter-bg: fade(@base-accent, 50%);

@@ -460,7 +460,8 @@ var Overlay = Widget.inherit({
 
     _initOptions: function(options) {
         this._initTarget(options.target);
-        this._initContainer(options.container);
+        var container = options.container === undefined ? this.option("container") : options.container;
+        this._initContainer(container);
         this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
         this.callBase(options);
@@ -930,7 +931,7 @@ var Overlay = Widget.inherit({
             $parents = getElement(target).parents(),
             scrollEvent = eventUtils.addNamespace("scroll", this.NAME);
 
-        if(devices.real().platform === "generic") {
+        if(devices.real().deviceType === "desktop") {
             $parents = $parents.add(window);
         }
 

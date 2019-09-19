@@ -1,3 +1,26 @@
+@import (once) "./form.generic.less";
+@import (once) "./button.generic.less";
+@import (once) "./treeView.generic.less";
+@import (once) "./popup.generic.less";
+@import (once) "./contextMenu.generic.less";
+@import (once) "./scrollable.generic.less";
+@import (once) "./scrollView.generic.less";
+@import (once) "./filterBuilder.generic.less";
+@import (once) "./checkBox.generic.less";
+@import (once) "./overlay.generic.less";
+@import (once) "./menu.generic.less";
+@import (once) "./list.generic.less";
+@import (once) "./toolbar.generic.less";
+@import (once) "./pager.generic.less";
+@import (once) "./loadIndicator.generic.less";
+@import (once) "./loadPanel.generic.less";
+@import (once) "./validation.generic.less";
+@import (once) "./tooltip.generic.less";
+@import (once) "./textBox.generic.less";
+@import (once) "./numberBox.generic.less";
+@import (once) "./selectBox.generic.less";
+@import (once) "./dateBox.generic.less";
+
 .dx-size-default() {
     @GENERIC_GRID_BASE_CELL_PADDING: 7px;
     @GENERIC_GRID_BASE_TEXTEDITOR_INPUT_PADDING: 32px;
@@ -8,6 +31,7 @@
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 10px;
     @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 10px;
     @GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 70px;
+    @GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH: 36px;
     @GENERIC_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 85px;
     @GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: 30px;
     @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE: 12px;
@@ -27,6 +51,7 @@
     @GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN: 5px;
     @GENERIC_GRID_BASE_GROUPPANEL_ITEM_MARGIN: 5px;
     @GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH: 55px;
+    @GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH: 32px;
     @GENERIC_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 70px;
     @GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: 15px;
     @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE: 10px;
@@ -180,6 +205,15 @@
 
         .dx-@{widgetName}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
             background-position-y: 34px;
+        }
+
+        .dx-command-drag {
+            width: @GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH;
+            min-width: @GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH;
+
+            .dx-@{widgetName}-drag-icon {
+                .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
+            }
         }
     }
 
@@ -767,8 +801,8 @@
             }
         }
 
-        .dx-selection.dx-row,
-        .dx-selection.dx-row:hover {
+        .dx-selection.dx-row:not(.dx-row-focused),
+        .dx-selection.dx-row:not(.dx-row-focused):hover {
             & > td,
             & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-bg}";
@@ -789,7 +823,7 @@
                 }
             }
 
-            &:not(.dx-row-lines):not(.dx-row-focused) {
+            &:not(.dx-row-lines) {
                 & > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";

@@ -444,7 +444,7 @@ var ListBase = CollectionWidget.inherit({
             },
             {
                 device: function(device) {
-                    return !support.nativeScrolling && !devices.isSimulator() && devices.real().platform === "generic" && device.platform === "generic";
+                    return !support.nativeScrolling && !devices.isSimulator() && devices.real().deviceType === "desktop" && device.platform === "generic";
                 },
                 options: {
                     /**

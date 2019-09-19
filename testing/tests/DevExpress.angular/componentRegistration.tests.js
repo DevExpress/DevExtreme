@@ -7,6 +7,7 @@ import angular from "angular";
 import registerComponent from "core/component_registrator";
 import DOMComponent from "core/dom_component";
 import Widget from "ui/widget/ui.widget";
+import ComponentWithTemplate from "core/dom_component_with_template";
 import { NgTemplate } from "integration/angular/template";
 import CollectionWidget from "ui/collection/ui.collection_widget.edit";
 
@@ -1685,7 +1686,7 @@ QUnit.test("retrieving default NG template for collection widgets created with a
 });
 
 QUnit.test("creates anonymous template from its contents", function(assert) {
-    const TestContainer = Widget.inherit({
+    const TestContainer = ComponentWithTemplate.inherit({
         _getDefaultOptions() {
             return $.extend(this.callBase(), {
                 items: null

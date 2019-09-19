@@ -48,6 +48,8 @@ class FileManager extends Widget {
             currentPath: this.option("currentPath"),
             rootText: this.option("rootFolderName"),
             fileProvider: this.option("fileProvider"),
+            allowedFileExtensions: this.option("allowedFileExtensions"),
+            maxUploadFileSize: this.option("upload").maxFileSize,
             onSelectedDirectoryChanged: this._onSelectedDirectoryChanged.bind(this)
         });
         this._commandManager = new FileManagerCommandManager(this.option("permissions"));
@@ -83,6 +85,8 @@ class FileManager extends Widget {
         const $toolbar = $("<div>").appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
             commandManager: this._commandManager,
+            generalItems: this.option("toolbar.generalItems"),
+            fileItems: this.option("toolbar.fileItems"),
             itemViewMode: this.option("itemView").mode
         });
 
@@ -177,7 +181,8 @@ class FileManager extends Widget {
     _createContextMenu() {
         const $contextMenu = $("<div>").appendTo(this._$wrapper);
         return this._createComponent($contextMenu, FileManagerContextMenu, {
-            commandManager: this._commandManager
+            commandManager: this._commandManager,
+            items: this.option("contextMenu.items")
         });
     }
 
@@ -361,6 +366,27 @@ class FileManager extends Widget {
             */
             selectionMode: "multiple", // "single"
 
+            toolbar: {
+                generalItems: [
+                    "showDirsPanel", "create", "upload", "refresh",
+                    {
+                        commandName: "separator",
+                        location: "after"
+                    },
+                    "viewMode"
+                ],
+
+                fileItems: [
+                    "move", "copy", "rename", "separator", "delete", "refresh", "clear"
+                ]
+            },
+
+            contextMenu: {
+                items: [
+                    "create", "upload", "rename", "move", "copy", "delete", "refresh"
+                ]
+            },
+
             /**
             * @name dxFileManagerOptions.itemView
             * @type object
@@ -425,6 +451,26 @@ class FileManager extends Widget {
             onSelectedFileOpened: null,
 
             /**
+            * @name dxFileManagerOptions.allowedFileExtensions
+            * @type Array<string>
+            * @default [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".svg", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv", ""]
+            */
+            allowedFileExtensions: [".txt", ".rtf", ".doc", ".docx", ".odt", ".xls", ".xlsx", ".ods", ".ppt", ".pptx", ".odp", ".pdf", ".xml", ".png", ".svg", ".gif", ".jpg", ".jpeg", ".ico", ".bmp", ".avi", ".mpeg", ".mkv", ""],
+
+            /**
+            * @name dxFileManagerOptions.upload
+            * @type object
+            */
+            upload: {
+                /**
+                * @name dxFileManagerOptions.upload.maxFileSize
+                * @type number
+                * @default 0
+                */
+                maxFileSize: 0
+            },
+
+            /**
              * @name dxFileManagerOptions.permissions
              * @type object
              */
@@ -482,8 +528,21 @@ class FileManager extends Widget {
             case "customizeThumbnail":
             case "customizeDetailColumns":
             case "rootFolderName":
+            case "allowedFileExtensions":
             case "permissions":
+            case "upload":
                 this.repaint();
+                break;
+            case "toolbar":
+                this._toolbar.option(extend(
+                    true,
+                    args.value.generalItems ? { generalItems: args.value.generalItems } : {},
+                    args.value.fileItems ? { fileItems: args.value.fileItems } : {}
+                ));
+                break;
+            case "contextMenu":
+                this._itemView.option("contextMenu", this._createContextMenu());
+                this._filesTreeView.option("contextMenu", this._createContextMenu());
                 break;
             case "onCurrentDirectoryChanged":
                 this._onCurrentDirectoryChangedAction = this._createActionByOption("onCurrentDirectoryChanged");

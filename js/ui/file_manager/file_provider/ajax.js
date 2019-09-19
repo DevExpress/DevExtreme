@@ -10,6 +10,7 @@ import ArrayFileProvider from "./array";
 * @inherits FileProvider
 * @type object
 * @module ui/file_manager/file_provider/ajax
+* @namespace DevExpress.fileProvider
 * @export default
 */
 class AjaxFileProvider extends FileProvider {
@@ -54,20 +55,12 @@ class AjaxFileProvider extends FileProvider {
         return this._doActionAfterDataAcquired(() => this._provider.copyItems(items, destinationFolder));
     }
 
-    initiateFileUpload(uploadInfo) {
-        return this._doActionAfterDataAcquired(() => this._provider.initiateFileUpload(uploadInfo));
+    uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
+        return this._doActionAfterDataAcquired(() => this._provider.uploadFileChunk(fileData, chunksInfo, destinationDirectory));
     }
 
-    uploadFileChunk(uploadInfo, chunk) {
-        return this._doActionAfterDataAcquired(() => this._provider.uploadFileChunk(uploadInfo, chunk));
-    }
-
-    finalizeFileUpload(uploadInfo) {
-        return this._doActionAfterDataAcquired(() => this._provider.finalizeFileUpload(uploadInfo));
-    }
-
-    abortFileUpload(uploadInfo) {
-        return this._doActionAfterDataAcquired(() => this._provider.abortFileUpload(uploadInfo));
+    abortFileUpload(fileData, chunksInfo, destinationDirectory) {
+        return this._doActionAfterDataAcquired(() => this._provider.abortFileUpload(fileData, chunksInfo, destinationDirectory));
     }
 
     _doActionAfterDataAcquired(action) {

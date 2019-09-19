@@ -35,7 +35,6 @@ const DIAGRAM_LOADING_INDICATOR_CLASS = DIAGRAM_CLASS + "-loading-indicator";
 const DIAGRAM_DEFAULT_UNIT = "in";
 const DIAGRAM_DEFAULT_ZOOMLEVEL = 1;
 const DIAGRAM_DEFAULT_AUTOZOOM = "disabled";
-const DIAGRAM_DEFAULT_PAGE_SIZE = { width: 5.827, height: 8.268 };
 const DIAGRAM_DEFAULT_PAGE_ORIENTATION = "portrait";
 const DIAGRAM_DEFAULT_PAGE_COLOR = "white";
 
@@ -77,7 +76,7 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_DRAWER_WRAPPER_CLASS)
             .appendTo($contentWrapper);
 
-        if(this.option("propertiesPanel.visible")) {
+        if(this.option("propertiesPanel.enabled")) {
             const $drawer = $("<div>")
                 .appendTo($drawerWrapper);
             this._content = $("<div>")
@@ -129,7 +128,7 @@ class Diagram extends Widget {
             .addClass(DIAGRAM_TOOLBAR_WRAPPER_CLASS)
             .appendTo(this.$element());
         var toolbarWidgetCommandNames = [];
-        if(this.option("propertiesPanel.visible") && this.option("propertiesPanel.collapsible")) {
+        if(this.option("propertiesPanel.enabled") && this.option("propertiesPanel.collapsible")) {
             toolbarWidgetCommandNames.push("options");
         }
         this._toolbarInstance = this._createComponent($toolbarWrapper, DiagramToolbar, {
@@ -155,7 +154,7 @@ class Diagram extends Widget {
                 var $toolboxContainer = $(e.$element);
                 this._diagramInstance.createToolbox($toolboxContainer[0], 40, 8,
                     { 'data-toggle': 'shape-toolbox-tooltip' },
-                    e.shapes || e.category, e.style === "texts");
+                    e.shapes || e.category, e.displayMode === "texts");
                 this._createTooltips($parent, $toolboxContainer.find('[data-toggle="shape-toolbox-tooltip"]'));
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
@@ -315,8 +314,7 @@ class Diagram extends Widget {
             if(this.option("pageSize.items")) {
                 this._updatePageSizeItemsState();
             }
-            if(this.option("pageSize").width !== DIAGRAM_DEFAULT_PAGE_SIZE.width ||
-               this.option("pageSize").height !== DIAGRAM_DEFAULT_PAGE_SIZE.height) {
+            if(this.option("pageSize.width") && this.option("pageSize.height")) {
                 this._updatePageSizeState();
             }
         }
@@ -326,12 +324,24 @@ class Diagram extends Widget {
         if(this.option("pageColor") !== DIAGRAM_DEFAULT_PAGE_COLOR) {
             this._updatePageColorState();
         }
-        this._updateViewUnitsState();
-        this._updateShowGridState();
-        this._updateSnapToGridState();
-        this._updateGridSizeItemsState();
-        this._updateGridSizeState();
-        this._updateZoomLevelItemsState();
+        if(this.option("viewUnits") !== DIAGRAM_DEFAULT_UNIT) {
+            this._updateViewUnitsState();
+        }
+        if(!this.option("showGrid")) {
+            this._updateShowGridState();
+        }
+        if(!this.option("snapToGrid")) {
+            this._updateSnapToGridState();
+        }
+        if(this.option("gridSize")) {
+            if(this.option("gridSize.items")) {
+                this._updateGridSizeItemsState();
+            }
+            this._updateGridSizeState();
+        }
+        if(this.option("zoomLevel.items")) {
+            this._updateZoomLevelItemsState();
+        }
 
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
@@ -439,7 +449,12 @@ class Diagram extends Widget {
                 getParentKey: this._createOptionGetter("nodes.parentKeyExpr"),
                 setParentKey: this._createOptionSetter("nodes.parentKeyExpr"),
                 getItems: this._createOptionGetter("nodes.itemsExpr"),
-                setItems: this._createOptionSetter("nodes.itemsExpr")
+                setItems: this._createOptionSetter("nodes.itemsExpr"),
+
+                getContainerKey: this._createOptionGetter("nodes.containerKeyExpr"),
+                setContainerKey: this._createOptionSetter("nodes.containerKeyExpr"),
+                getChildren: this._createOptionGetter("nodes.childrenExpr"),
+                setChildren: this._createOptionSetter("nodes.childrenExpr")
             },
             edgeDataImporter: {
                 getKey: this._createOptionGetter("edges.keyExpr"),
@@ -930,19 +945,15 @@ class Diagram extends Widget {
             /**
             * @name dxDiagramOptions.gridSize
             * @type Number|Object
-            * @default 0.125
             */
             /**
             * @name dxDiagramOptions.gridSize.value
             * @type Number
-            * @default undefined
             */
             /**
             * @name dxDiagramOptions.gridSize.items
             * @type Array<Number>
-            * @default undefined
             */
-            gridSize: 0.125,
 
             /**
             * @name dxDiagramOptions.units
@@ -964,17 +975,14 @@ class Diagram extends Widget {
             /**
             * @name dxDiagramOptions.pageSize.width
             * @type Number
-            * @default 5.827
             */
             /**
             * @name dxDiagramOptions.pageSize.height
             * @type Number
-            * @default 8.268
             */
             /**
             * @name dxDiagramOptions.pageSize.items
             * @type Array<Object>
-            * @default undefined
             */
             /**
             * @name dxDiagramOptions.pageSize.items.width
@@ -988,7 +996,6 @@ class Diagram extends Widget {
             * @name dxDiagramOptions.pageSize.items.text
             * @type String
             */
-            pageSize: { width: DIAGRAM_DEFAULT_PAGE_SIZE.width, height: DIAGRAM_DEFAULT_PAGE_SIZE.height },
             /**
             * @name dxDiagramOptions.pageOrientation
             * @type Enums.DiagramPageOrientation
@@ -1120,6 +1127,20 @@ class Diagram extends Widget {
                 * @default undefined
                 */
                 heightExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.containerKeyExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default undefined
+                */
+                containerKeyExpr: undefined,
+                /**
+                * @name dxDiagramOptions.nodes.childrenExpr
+                * @type string|function(data)
+                * @type_function_param1 data:object
+                * @default "children"
+                */
+                childrenExpr: "children",
                 /**
                  * @name dxDiagramOptions.nodes.autoLayout
                  * @type Enums.DiagramDataLayoutType|Object
@@ -1384,8 +1405,8 @@ class Diagram extends Widget {
                 * @type String
                 */
                 /**
-                * @name dxDiagramOptions.toolbox.groups.style
-                * @type Enums.DiagramToolboxStyle
+                * @name dxDiagramOptions.toolbox.groups.displayMode
+                * @type Enums.DiagramToolboxDisplayMode
                 */
                 /**
                 * @name dxDiagramOptions.toolbox.groups.expanded
@@ -1439,11 +1460,11 @@ class Diagram extends Widget {
             */
             propertiesPanel: {
                 /**
-                * @name dxDiagramOptions.propertiesPanel.visible
+                * @name dxDiagramOptions.propertiesPanel.enabled
                 * @type Boolean
                 * @default true
                 */
-                visible: true,
+                enabled: true,
                 /**
                 * @name dxDiagramOptions.propertiesPanel.collapsible
                 * @type Boolean
@@ -1491,34 +1512,34 @@ class Diagram extends Widget {
         }
         this._dataChangeAction();
     }
-    _raiseEdgeInsertedAction(data, callback) {
+    _raiseEdgeInsertedAction(data, callback, errorCallback) {
         if(this._edgesOption) {
-            this._edgesOption.insert(data, callback);
+            this._edgesOption.insert(data, callback, errorCallback);
         }
     }
-    _raiseEdgeUpdatedAction(key, data, callback) {
+    _raiseEdgeUpdatedAction(key, data, callback, errorCallback) {
         if(this._edgesOption) {
-            this._edgesOption.update(key, data, callback);
+            this._edgesOption.update(key, data, callback, errorCallback);
         }
     }
-    _raiseEdgeRemovedAction(key, callback) {
+    _raiseEdgeRemovedAction(key, data, callback, errorCallback) {
         if(this._edgesOption) {
-            this._edgesOption.remove(key, callback);
+            this._edgesOption.remove(key, data, callback, errorCallback);
         }
     }
-    _raiseNodeInsertedAction(data, callback) {
+    _raiseNodeInsertedAction(data, callback, errorCallback) {
         if(this._nodesOption) {
-            this._nodesOption.insert(data, callback);
+            this._nodesOption.insert(data, callback, errorCallback);
         }
     }
-    _raiseNodeUpdatedAction(key, data, callback) {
+    _raiseNodeUpdatedAction(key, data, callback, errorCallback) {
         if(this._nodesOption) {
-            this._nodesOption.update(key, data, callback);
+            this._nodesOption.update(key, data, callback, errorCallback);
         }
     }
-    _raiseNodeRemovedAction(key, callback) {
+    _raiseNodeRemovedAction(key, data, callback, errorCallback) {
         if(this._nodesOption) {
-            this._nodesOption.remove(key, callback);
+            this._nodesOption.remove(key, data, callback, errorCallback);
         }
     }
     _raiseToolboxDragStart() {

@@ -108,4 +108,21 @@ QUnit.module("Adaptivity", moduleConfig, () => {
         assert.ok($dialog.get(0).offsetHeight <= dialogHeight, "dialog height decreased");
     });
 
+    test("splitter should be disabled on small screens", function(assert) {
+        $("#fileManager").css("width", "100%");
+        this.wrapper.getInstance().repaint();
+
+        assert.ok(this.wrapper.getSplitter().length, "Splitter was rendered");
+        assert.notOk(this.wrapper.isSplitterActive(), "Splitter is disabled");
+
+        this.currentWidth = 900;
+        resizeCallbacks.fire();
+        this.clock.tick(400);
+        assert.ok(this.wrapper.isSplitterActive(), "Splitter is active");
+
+        const oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        this.wrapper.moveSplitter(100);
+        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, "Left panel has correct size");
+    });
+
 });

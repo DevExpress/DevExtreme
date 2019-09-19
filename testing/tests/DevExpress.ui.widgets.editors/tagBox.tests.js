@@ -1681,7 +1681,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("Value should be correct when not last item is focused and the 'tab' key pressed", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
         }
@@ -1788,7 +1788,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("tagBox selects item on enter key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1809,7 +1809,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("tagBox selects item on space key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1830,7 +1830,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("tagBox didn't selects item on space key if it acceptCustomValue", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1852,7 +1852,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("tagBox didn't selects item on space key if search is enabled", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1874,7 +1874,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("the 'enter' key should not add/remove tags if the editor is closed (T378292)", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1896,7 +1896,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("onValueChanged shouldn't be fired on the 'tab' key press", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1914,7 +1914,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.test("value shouldn't be changed on 'tab' if there is a focused item in the drop down list", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -1931,7 +1931,7 @@ QUnit.module("keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("the 'apply' button should be focused on the 'tab' key press if the input is focused and showSelectionControls if false (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "desktop specific test");
             return;
         }
@@ -2372,24 +2372,24 @@ QUnit.module("keyboard navigation through tags", {
     });
 
     QUnit.testInActiveWindow("the 'focused' class should be removed from the focused tag when the widget loses focus", (assert) => {
+        this.instance.focus();
         this.keyboard
-            .focus()
             .press("left");
 
-        $(this.$input).trigger("focusout");
+        this.instance.blur();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
     QUnit.testInActiveWindow("the should be no focused tags on when the widget gets focus", (assert) => {
+        this.instance.focus();
+
         this.keyboard
-            .focus()
             .press("left");
 
-        this.$input
-            .trigger("focusout")
-            .trigger("focusin");
+        this.instance.blur();
+        this.instance.focus();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
@@ -2668,7 +2668,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
     });
 
     QUnit.test("list item obtained focus only after press on control key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -2732,7 +2732,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
     });
 
     QUnit.test("tagBox set focused class with searchEnabled after press 'delete' key", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
@@ -2910,17 +2910,18 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
     QUnit.testInActiveWindow("input should be cleared after widget focus out", assert => {
         const items = [1, 2, 3];
-
         const $element = $("#tagBox").dxTagBox({
             items,
             searchEnabled: true,
             focusStateEnabled: true
         });
+        const instance = $element.dxTagBox("instance");
 
+        instance.focus();
         const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         $input.val("123");
-        $($input).trigger("focusout");
+        instance.blur();
 
         assert.equal($input.val(), "", "search value is cleared");
     });
@@ -4376,9 +4377,8 @@ QUnit.module("single line mode", {
 
     QUnit.test("tags container should be scrolled to the end on focusin (T390041)", (assert) => {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
     });
 
@@ -4405,7 +4405,6 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
@@ -4414,9 +4413,8 @@ QUnit.module("single line mode", {
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on rendering");
 
-        $input
-            .focus()
-            .blur();
+        this.instance.focus();
+        this.instance.blur();
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on focus out");
     });
@@ -4425,14 +4423,13 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
             ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
             : 0;
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), expectedScrollPosition, "tags container is scrolled to the end");
     });
 
@@ -4593,7 +4590,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
     });
 
     QUnit.test("the focused tag should be visible during keyboard navigation to the right in the RTL mode", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test is not relevant for mobile devices");
             return;
         }
@@ -4627,7 +4624,7 @@ QUnit.module("keyboard navigation through tags in single line mode", {
     });
 
     QUnit.test("the focused tag should be visible during keyboard navigation to the left in the RTL mode", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test is not relevant for mobile devices");
             return;
         }
@@ -5383,7 +5380,7 @@ QUnit.module("regression", {
     });
 
     QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T516798)", (assert) => {
-        if(devices.real().platform !== "generic") {
+        if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }

@@ -1,6 +1,6 @@
 import $ from "../core/renderer";
 import eventsEngine from "../events/core/events_engine";
-import { noop } from "../core/utils/common";
+import { noop, ensureDefined } from "../core/utils/common";
 import windowUtils from "../core/utils/window";
 import registerComponent from "../core/component_registrator";
 import { extend } from "../core/utils/extend";
@@ -162,8 +162,6 @@ var TextArea = TextBox.inherit({
         if(this._allowScroll(delta)) {
             e.isScrollingEvent = true;
             e.stopPropagation();
-        } else {
-            return false;
         }
 
         this._eventY = currentEventY;
@@ -260,7 +258,11 @@ var TextArea = TextBox.inherit({
         }
 
         if(maxHeight !== undefined) {
-            inputHeight = Math.min(inputHeight, maxHeight - heightDifference);
+            var adjustedMaxHeight = maxHeight - heightDifference;
+            var needScroll = inputHeight > adjustedMaxHeight;
+
+            inputHeight = Math.min(inputHeight, adjustedMaxHeight);
+            this._updateInputAutoResizeAppearance($input, !needScroll);
         }
 
         $input.css("height", inputHeight);
@@ -286,16 +288,18 @@ var TextArea = TextBox.inherit({
         }
     },
 
-    _updateInputAutoResizeAppearance: function($input) {
+    _updateInputAutoResizeAppearance: function($input, isAutoResizeEnabled) {
         if($input) {
-            $input.toggleClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE, this.option("autoResizeEnabled"));
+            var autoResizeEnabled = ensureDefined(isAutoResizeEnabled, this.option("autoResizeEnabled"));
+
+            $input.toggleClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE, autoResizeEnabled);
         }
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
             case "autoResizeEnabled":
-                this._updateInputAutoResizeAppearance(this._input());
+                this._updateInputAutoResizeAppearance(this._input(), args.value);
                 this._refreshEvents();
                 this._updateInputHeight();
                 break;

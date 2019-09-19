@@ -66,22 +66,16 @@ class FileManagerEditingControl extends Widget {
         return this._createComponent($fileUploader, this._getFileUploaderComponent(), {
             getController: this._getFileUploaderController.bind(this),
             onUploadSessionStarted: e => this._onUploadSessionStarted(e),
-            onUploadProgress: e => this._onUploadProgress(e),
-            onFilesUploaded: result => {},
-            onErrorOccurred: () => {}
+            onUploadProgress: e => this._onUploadProgress(e)
         });
     }
 
     _getFileUploaderController() {
+        const uploadDirectory = this._uploadDirectoryInfo && this._uploadDirectoryInfo.fileItem;
         return {
             chunkSize: this._controller.getFileUploadChunkSize(),
-            initiateUpload: state => {
-                state.destinationFolder = this._uploadDirectoryInfo.fileItem;
-                return this._controller.initiateFileUpload(state);
-            },
-            uploadChunk: (state, chunk) => this._controller.uploadFileChunk(state, chunk),
-            finalizeUpload: state => this._controller.finalizeFileUpload(state),
-            abortUpload: state => this._controller.abortFileUpload(state)
+            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
+            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, uploadDirectory)
         };
     }
 

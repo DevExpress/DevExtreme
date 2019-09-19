@@ -1,10 +1,13 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    Class = require("core/class"),
-    DefaultAdapter = require("ui/validation/default_adapter"),
-    ValidationEngine = require("ui/validation_engine");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import Class from "core/class";
+import DefaultAdapter from "ui/validation/default_adapter";
+import ValidationEngine from "ui/validation_engine";
+import { Deferred } from "core/utils/deferred";
+import { isPromise } from "core/utils/type";
+import Promise from "core/polyfills/promise";
 
-require("ui/validator");
+import "ui/validator";
 
 var Fixture = Class.inherit({
     createValidator: function(options, element) {
@@ -194,6 +197,7 @@ QUnit.test("Internal validation rules are should be reset when validation rules 
 
     assert.deepEqual(validator._getValidationRules(), [
         {
+            index: 0,
             isValid: undefined,
             message: "Value is invalid",
             type: "custom",
@@ -202,6 +206,45 @@ QUnit.test("Internal validation rules are should be reset when validation rules 
             value: undefined
         }
     ]);
+});
+
+QUnit.test("Validator - validation options should be synchrnoized on init", function(assert) {
+    let validator = this.fixture.createValidator({
+        isValid: false
+    });
+
+    assert.strictEqual(validator.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
+
+    this.fixture.teardown();
+    validator = this.fixture.createValidator({
+        validationStatus: "invalid"
+    });
+    assert.strictEqual(validator.option("isValid"), false, "isValid === false");
+
+    this.fixture.teardown();
+    validator = this.fixture.createValidator({
+        validationStatus: "pending"
+    });
+    assert.strictEqual(validator.option("isValid"), true, "isValid === true");
+});
+
+QUnit.test("Validator - validation options should be synchrnoized at runtime", function(assert) {
+    const validator = this.fixture.createValidator({});
+
+    validator.option("isValid", false);
+    assert.strictEqual(validator.option("validationStatus"), "invalid", "validationStatus === 'invalid'");
+
+    validator.option("isValid", true);
+    assert.strictEqual(validator.option("validationStatus"), "valid", "validationStatus === 'valid'");
+
+    validator.option("validationStatus", "pending");
+    assert.ok(validator.option("isValid"), "isValid === true");
+
+    validator.option("validationStatus", "invalid");
+    assert.notOk(validator.option("isValid"), "isValid === false");
+
+    validator.option("validationStatus", "valid");
+    assert.ok(validator.option("isValid"), "isValid === true");
 });
 
 
@@ -383,7 +426,7 @@ QUnit.module("Events", {
 QUnit.test("Validated event should fire", function(assert) {
     var value = "",
         name = "Login",
-        expectedFailedValidationRule = { type: 'required', isValid: false, message: "Login is required", validator: {}, value: value },
+        expectedFailedValidationRule = { index: 0, type: 'required', isValid: false, message: "Login is required", validator: {}, value: value },
         handler = sinon.stub();
 
 
@@ -405,6 +448,7 @@ QUnit.test("Validated event should fire", function(assert) {
     assert.equal(params.name, name, "Name of Validator should be passed");
     assert.strictEqual(params.isValid, false, "isValid was passed");
     assert.deepEqual(params.validationRules, [{
+        index: 0,
         isValid: false,
         message: "Login is required",
         type: "required",
@@ -570,6 +614,85 @@ QUnit.test("Validation happens on firing callback, result are applied through cu
     assert.ok(adapter.getValue.calledOnce, "Value should be requested");
     assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
     assert.ok(adapter.applyValidationResults.calledOnce, "ApplyValidationResults function should be called");
+});
+
+QUnit.test("Validator should not be re-validated on pending with the same value", function(assert) {
+    const adapter = {
+            getValue: sinon.stub(),
+            applyValidationResults: sinon.stub()
+        },
+        validatedHandler = sinon.stub(),
+        validator = this.fixture.createValidator({
+            adapter: adapter,
+            validationRules: [{
+                type: "async",
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(function() {
+                        d.resolve(true);
+                    }, 1000);
+                    return d.promise();
+                }
+            }],
+            onValidated: validatedHandler
+        }),
+        done = assert.async();
+    adapter.getValue.returns("123");
+    const result1 = validator.validate(),
+        result2 = validator.validate();
+
+    assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
+    assert.strictEqual(result1, result2, "The result should be the same");
+    assert.ok(isPromise(result1.complete), "result1.complete is a Promise object");
+    assert.strictEqual(result1.complete, result2.complete, "result1.complete === result2.complete");
+    result1.complete.then(function(res) {
+        assert.strictEqual(result1, res, "result1 === res");
+        assert.strictEqual(res.status, "valid", "res.status === 'valid'");
+        assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
+        done();
+    });
+});
+
+QUnit.test("Validator should resolve result.complete with the last value", function(assert) {
+    const adapter = {
+            getValue: sinon.stub(),
+            applyValidationResults: sinon.stub()
+        },
+        validatedHandler = sinon.stub(),
+        validator = this.fixture.createValidator({
+            adapter: adapter,
+            validationRules: [{
+                type: "async",
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(function() {
+                        d.resolve(true);
+                    }, 1000);
+                    return d.promise();
+                }
+            }],
+            onValidated: validatedHandler
+        }),
+        done = assert.async();
+    adapter.getValue.returns("123");
+    const result1 = validator.validate();
+    adapter.getValue.returns("1234");
+    const result2 = validator.validate();
+
+    assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
+    assert.notOk(result1 === result2, "Results should be different");
+    assert.ok(isPromise(result1.complete), "result1.complete is a Promise object");
+    assert.ok(isPromise(result2.complete), "result2.complete is a Promise object");
+    assert.strictEqual(result1.complete, result2.complete, "result1.complete === result2.complete");
+    Promise.all([result1.complete, result2.complete]).then(function(values) {
+        assert.ok(values.length === 2, "Results should be resolved twice");
+        assert.notOk(values[0] === result1, "The first result should not equal resolved result");
+        assert.strictEqual(result2, values[1], "The second result should equal resolved result");
+        assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
+        assert.strictEqual(values[0], values[1], "Resolved results should be the same");
+        assert.strictEqual(values[0].value, values[1].value, "Values of resolved results should be the same");
+        done();
+    });
 });
 
 QUnit.test("Validation happens on firing callback when validationRequestsCallbacks is array", function(assert) {

@@ -485,7 +485,7 @@ var Lookup = DropDownList.inherit({
             },
             {
                 device: function(device) {
-                    return !devices.isSimulator() && devices.real().platform === "generic" && device.platform === "generic";
+                    return !devices.isSimulator() && devices.real().deviceType === "desktop" && device.platform === "generic";
                 },
                 options: {
                     /**
@@ -654,6 +654,10 @@ var Lookup = DropDownList.inherit({
             .appendTo(this.$element());
 
         this.option("useInkRipple") && this._renderInkRipple();
+    },
+
+    _getInputContainer() {
+        return this._$fieldWrapper;
     },
 
     _renderInkRipple: function() {

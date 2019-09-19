@@ -295,7 +295,18 @@ var BaseGauge = {
         * @type_function_param1_field2 valueText:string
         * @type_function_return object
         */
-        customizeTooltip: undefined
+        customizeTooltip: undefined,
+        /**
+        * @name BaseGaugeOptions.tooltip.contentTemplate
+        * @type template|function(scaleValue, element)
+        * @type_function_param1 scaleValue:object
+        * @type_function_param1_field1 value:Number
+        * @type_function_param1_field2 valueText:string
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined
     },
     /**
     * @name BaseGaugeOptions.onTooltipShown
@@ -612,7 +623,19 @@ var dxBarGauge = {
         * @type_function_param1_field3 index:number
         * @type_function_return object
         */
-        customizeTooltip: undefined
+        customizeTooltip: undefined,
+        /**
+        * @name dxBarGaugeOptions.tooltip.contentTemplate
+        * @type template|function(scaleValue, element)
+        * @type_function_param1 scaleValue:object
+        * @type_function_param1_field1 value:Number
+        * @type_function_param1_field2 valueText:string
+        * @type_function_param1_field3 index:number
+        * @type_function_param2 element:dxElement
+        * @type_function_return string|Node|jQuery
+        * @default undefined
+        */
+        contentTemplate: undefined
     },
     /**
     * @name dxBarGaugeOptions.geometry

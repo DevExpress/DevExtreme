@@ -8,6 +8,7 @@ export class GanttView extends Widget {
 
         this._onSelectionChanged = this._createActionByOption("onSelectionChanged");
         this._onScroll = this._createActionByOption("onScroll");
+        this._onDialogShowing = this._createActionByOption("onDialogShowing");
     }
     _initMarkup() {
         const { GanttView } = getGanttViewCore();
@@ -15,20 +16,16 @@ export class GanttView extends Widget {
             showResources: this.option("showResources"),
             taskTitlePosition: this._getTaskTitlePosition(this.option("taskTitlePosition")),
             allowSelectTask: this.option("allowSelection"),
-            areAlternateRowsEnabled: false
+            editing: this.option("editing"),
+            areHorizontalBordersEnabled: this.option("showRowLines"),
+            areAlternateRowsEnabled: false,
+            viewType: this._getViewTypeByScaleType(this.option("scaleType"))
         });
-        this._ganttViewCore.setViewType(3);
+        this._selectTask(this.option("selectedRowKey"));
     }
 
     getTaskAreaContainer() {
         return this._ganttViewCore.taskAreaContainer;
-    }
-    selectTask(id) {
-        if(this.lastSelectedId !== undefined) {
-            this._ganttViewCore.unselectTask(parseInt(this.lastSelectedId));
-        }
-        this._ganttViewCore.selectTask(id);
-        this.lastSelectedId = id;
     }
     changeTaskExpanded(rowIndex, value) {
         const model = this._ganttViewCore.viewModel;
@@ -43,6 +40,13 @@ export class GanttView extends Widget {
         this._ganttViewCore.setWidth(value);
     }
 
+    _selectTask(id) {
+        if(this.lastSelectedId !== undefined) {
+            this._ganttViewCore.unselectTask(parseInt(this.lastSelectedId));
+        }
+        this._ganttViewCore.selectTask(id);
+        this.lastSelectedId = id;
+    }
     _update() {
         this._ganttViewCore.loadOptionsFromGanttOwner();
         this._ganttViewCore.resetAndUpdate();
@@ -50,17 +54,37 @@ export class GanttView extends Widget {
 
     _getTaskTitlePosition(value) {
         switch(value) {
-            case 'outside':
+            case "outside":
                 return 1;
-            case 'none':
+            case "none":
                 return 2;
             default:
                 return 0;
         }
     }
+    _getViewTypeByScaleType(scaleType) {
+        switch(scaleType) {
+            case "minutes":
+                return 0;
+            case "hours":
+                return 1;
+            case "days":
+                return 3;
+            case "weeks":
+                return 4;
+            case "months":
+                return 5;
+            default:
+                return undefined;
+        }
+    }
 
     _optionChanged(args) {
         switch(args.name) {
+            case "width":
+                super._optionChanged(args);
+                this._ganttViewCore.setWidth(args.value);
+                break;
             case "tasks":
             case "dependencies":
             case "resources":
@@ -75,6 +99,18 @@ export class GanttView extends Widget {
                 break;
             case "allowSelection":
                 this._ganttViewCore.setAllowSelection(args.value);
+                break;
+            case "selectedRowKey":
+                this._selectTask(args.value);
+                break;
+            case "editing":
+                this._ganttViewCore.setEditingSettings(args.value);
+                break;
+            case "showRowLines":
+                this._ganttViewCore.setRowLinesVisible(args.value);
+                break;
+            case "scaleType":
+                this._ganttViewCore.setViewType(this._getViewTypeByScaleType(args.value));
                 break;
             default:
                 super._optionChanged(args);
@@ -111,6 +147,13 @@ export class GanttView extends Widget {
     }
     onGanttScroll(scrollTop) {
         this._onScroll({ scrollTop: scrollTop });
+    }
+    showDialog(name, parameters, callback) {
+        this._onDialogShowing({
+            name: name,
+            parameters: parameters,
+            callback: callback
+        });
     }
     getModelChangesListener() {
         return null;

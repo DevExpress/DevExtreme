@@ -1,3 +1,7 @@
+@import (once) "./textBox.generic.less";
+@import (once) "./dropDownButton.generic.less";
+@import (once) "./popup.generic.less";
+
 @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE: @GENERIC_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE;
 @GENERIC_DROPDOWNEDITOR_BUTTON_OFFSET: @GENERIC_BASE_BORDER_WIDTH;
 
@@ -13,12 +17,15 @@
     @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
     @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
 
+
 @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET:
     @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
     @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE +
     @GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
 
+
 @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE: @GENERIC_INVALID_BADGE_SIZE + @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+
 
 .dx-dropdowneditor-button-icon() {
     width: @GENERIC_DROPDOWNEDITOR_BUTTON_SIZE;
@@ -107,7 +114,9 @@
     }
 }
 
-.dx-invalid {
+.dx-invalid,
+.dx-valid,
+.dx-validation-pending {
     .invalid-dropdowneditor-input-padding();
 }
 
@@ -140,7 +149,7 @@
     }
 }
 
-.dx-invalid.dx-dropdowneditor {
+.texteditor-container-offset() {
     .dx-texteditor-container {
         &:after {
             right: @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
@@ -166,6 +175,10 @@
             }
         }
     }
+}
+
+.dx-invalid.dx-dropdowneditor {
+    .texteditor-container-offset();
 
     &.dx-editor-filled {
         .dx-dropdowneditor-icon {
@@ -182,4 +195,8 @@
             }
         }
     }
+}
+
+.dx-valid.dx-dropdowneditor {
+    .texteditor-container-offset();
 }

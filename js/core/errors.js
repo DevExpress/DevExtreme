@@ -138,6 +138,11 @@ module.exports = errorUtils({
     E0102: "Misconfigured comparison validation rule is detected",
 
     /**
+    * @name ErrorsCore.E0103
+    */
+    E0103: "validationCallback of an asynchronous rule should return jQuery or a native promise",
+
+    /**
     * @name ErrorsCore.E0110
     */
     E0110: "Unknown validation group is detected",

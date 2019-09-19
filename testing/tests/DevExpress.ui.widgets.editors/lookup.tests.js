@@ -1624,7 +1624,7 @@ QUnit.test("searchEnabled", function(assert) {
 });
 
 QUnit.test("cleanSearchOnOpening", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2212,7 +2212,7 @@ QUnit.test("popup height should be saved after configuration", function(assert) 
 });
 
 QUnit.test("popup height should be stretch when data items are loaded asynchronously", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2466,7 +2466,7 @@ QUnit.module("focus policy", {
 });
 
 QUnit.testInActiveWindow("T338144 - focused element should not be reset after popup is reopened if the 'searchEnabled' is false", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2504,7 +2504,7 @@ QUnit.testInActiveWindow("lookup search get focus on opening", function(assert) 
         }),
         instance = $element.dxLookup("instance");
 
-    $element.find("." + LOOKUP_FIELD_CLASS).focusin();
+    instance.focus();
     assert.ok($element.hasClass(FOCUSED_CLASS), "'focus' method focus field with closed overlay");
 
     instance.option("opened", true);
@@ -2597,7 +2597,7 @@ QUnit.testInActiveWindow("lookup search field focused after open popup", functio
 }),
 
 QUnit.testInActiveWindow("lookup-list should be focused after 'down' key pressing", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2617,7 +2617,7 @@ QUnit.testInActiveWindow("lookup-list should be focused after 'down' key pressin
 }),
 
 QUnit.testInActiveWindow("lookup-list keyboard navigation should work after focusing on list", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2640,7 +2640,7 @@ QUnit.testInActiveWindow("lookup-list keyboard navigation should work after focu
 }),
 
 QUnit.testInActiveWindow("lookup item should be selected after 'enter' key pressing", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2662,7 +2662,7 @@ QUnit.testInActiveWindow("lookup item should be selected after 'enter' key press
 }),
 
 QUnit.testInActiveWindow("lookup item should be selected after 'space' key pressing", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2684,7 +2684,7 @@ QUnit.testInActiveWindow("lookup item should be selected after 'space' key press
 }),
 
 QUnit.testInActiveWindow("keyboard for lookup-list should work correctly after 'searchEnabled' option changed", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2755,7 +2755,7 @@ QUnit.test("escape key press close overlay with search enabled", function(assert
 });
 
 QUnit.test("escape key press close overlay without search enabled", function(assert) {
-    if(devices.real().platform !== "generic") {
+    if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
@@ -2900,6 +2900,14 @@ QUnit.test("Validation message", function(assert) {
     });
 
     assert.ok(instance);
+});
+
+QUnit.test("Pending indicator is rendered", function(assert) {
+    const $element = $("#widget").dxLookup(),
+        instance = $element.dxLookup("instance");
+
+    instance.option("validationStatus", "pending");
+    assert.ok($element.find(".dx-pending-indicator").dxLoadIndicator("instance").option("visible"));
 });
 
 QUnit.test("Lookup should select an item in the grouped list", function(assert) {

@@ -16,9 +16,9 @@ const VALIDATION_SUMMARY_CLASS = "dx-validationsummary";
  * @module ui/validation_group
  * @export default
  */
-const ValidationGroup = DOMComponent.inherit({
-    _getDefaultOptions: function() {
-        return this.callBase();
+class ValidationGroup extends DOMComponent {
+    _getDefaultOptions() {
+        return super._getDefaultOptions();
 
         /**
         * @name dxValidationGroupOptions.rtlEnabled
@@ -40,53 +40,48 @@ const ValidationGroup = DOMComponent.inherit({
         * @publicName endUpdate()
         * @hidden
         */
-    },
+    }
 
-    _init: function() {
-        this.callBase();
+    _init() {
+        super._init();
         ValidationEngine.addGroup(this);
-    },
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         const $element = this.$element();
         $element.addClass(VALIDATION_ENGINE_CLASS);
-
         $element.find(`.${VALIDATOR_CLASS}`).each(function(_, validatorContainer) {
             Validator.getInstance($(validatorContainer))._initGroupRegistration();
         });
-
-
         $element.find(`.${VALIDATION_SUMMARY_CLASS}`).each(function(_, summaryContainer) {
             ValidationSummary.getInstance($(summaryContainer))._initGroupRegistration();
         });
-
-        this.callBase();
-    },
+        super._initMarkup();
+    }
 
     /**
      * @name dxValidationGroupMethods.validate
      * @publicName validate()
      * @return dxValidationGroupResult
      */
-    validate: function() {
+    validate() {
         return ValidationEngine.validateGroup(this);
-    },
+    }
 
     /**
      * @name dxValidationGroupMethods.reset
      * @publicName reset()
      */
-    reset: function() {
+    reset() {
         return ValidationEngine.resetGroup(this);
-    },
+    }
 
-    _dispose: function() {
+    _dispose() {
         ValidationEngine.removeGroup(this);
         this.$element().removeClass(VALIDATION_ENGINE_CLASS);
-
-        this.callBase();
+        super._dispose();
     }
-});
+}
 
 registerComponent("dxValidationGroup", ValidationGroup);
 

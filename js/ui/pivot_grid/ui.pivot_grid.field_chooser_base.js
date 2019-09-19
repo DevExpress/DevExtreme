@@ -197,7 +197,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             groupSelector: ".dx-area-fields",
             groupFilter: function() {
                 var dataSource = that._dataSource,
-                    $sortable = $(this).closest(".dx-sortable"),
+                    $sortable = $(this).closest(".dx-sortable-old"),
                     pivotGrid = $sortable.data("dxPivotGrid"),
                     pivotGridFieldChooser = $sortable.data("dxPivotGridFieldChooser");
 

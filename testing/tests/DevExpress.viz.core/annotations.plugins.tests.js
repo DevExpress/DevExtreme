@@ -730,12 +730,13 @@ const environment = {
 };
 
 QUnit.module("Tooltip", environment, function() {
-    QUnit.test("Create - use chart toltip options, but remove customize callback", function(assert) {
+    QUnit.test("Create - use chart toltip options, but remove customize callback and contentTemplate", function(assert) {
         this.createChart({
             tooltip: {
                 enabled: false,
                 otherCommonOption: "option",
-                customizeTooltip() { return "my tooltip"; }
+                customizeTooltip() { return "my tooltip"; },
+                contentTemplate: a => a
             }
         });
 
@@ -746,6 +747,7 @@ QUnit.module("Tooltip", environment, function() {
         assert.strictEqual(this.tooltip.update.getCall(0).args[0].enabled, false);
         assert.strictEqual(this.tooltip.update.getCall(0).args[0].otherCommonOption, "option");
         assert.strictEqual(this.tooltip.update.getCall(0).args[0].customizeTooltip, undefined);
+        assert.strictEqual(this.tooltip.update.getCall(0).args[0].contentTemplate, undefined);
     });
 
     QUnit.test("Show on pointer down", function(assert) {
@@ -823,6 +825,27 @@ QUnit.module("Tooltip", environment, function() {
 
         assert.equal(tooltip.move.callCount, 1);
         assert.deepEqual(tooltip.move.getCall(0).args, [73, 73]);
+    });
+
+    QUnit.test("set content template for tooltip", function(assert) {
+        const tooltipTemplate = sinon.spy();
+        const chart = this.createChart({
+            commonAnnotationSettings: {
+                tooltipTemplate
+            }
+        });
+
+        const pointer = pointerMock(chart._annotationsGroup.element).start();
+
+        chart.hideTooltip = sinon.spy();
+        chart.clearHover = sinon.spy();
+
+        pointer.start({ x: 70, y: 70 }).move().move(3, 3);
+
+        const tooltip = this.tooltip;
+        assert.equal(tooltip.setTemplate.callCount, 1);
+        assert.ok(tooltip.setTemplate.lastCall.calledBefore(tooltip.show.lastCall));
+        assert.equal(tooltip.show.callCount, 1);
     });
 
     QUnit.test("Do not move tooltip if it was not shown", function(assert) {

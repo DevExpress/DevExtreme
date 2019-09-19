@@ -691,19 +691,13 @@ ExcelCreator.JSZip = JSZip;
 
 exports.ExcelCreator = ExcelCreator;
 
-exports.getData = function(data, options, callback) {
+exports.getData = function(data, options) {
     // TODO: Looks like there is no need to export ExcelCreator any more?
     var excelCreator = new exports.ExcelCreator(data, options);
 
     excelCreator._checkZipState();
 
-    excelCreator.ready().done(function() {
-        if(excelCreator._zip.generateAsync) {
-            excelCreator.getData(typeUtils.isFunction(window.Blob)).then(callback);
-        } else {
-            callback(excelCreator.getData(typeUtils.isFunction(window.Blob)));
-        }
-    });
+    return excelCreator.ready().then(() => excelCreator.getData(typeUtils.isFunction(window.Blob)));
 };
 
 ///#DEBUG
