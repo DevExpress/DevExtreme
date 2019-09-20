@@ -736,10 +736,6 @@ var CollectionWidget = Widget.inherit({
         return ITEM_INDEX_KEY;
     },
 
-    _itemElements: function() {
-        return this._itemContainer().children(this._itemSelector());
-    },
-
     _initMarkup: function() {
         this.callBase();
         this.onFocusedItemChanged = this._createActionByOption("onFocusedItemChanged");

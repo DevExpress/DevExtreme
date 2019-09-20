@@ -92,6 +92,10 @@ class RadioCollection extends CollectionWidget {
         });
     }
 
+    _itemElements() {
+        return this._itemContainer().children(this._itemSelector());
+    }
+
     itemElements() {
         const elements = super.itemElements();
 
