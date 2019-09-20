@@ -61,6 +61,49 @@ QUnit.module("Real DataController and ColumnsController", {
         this.clock.restore();
     }
 }, function() {
+    QUnit.testInActiveWindow("Must navigate after click by expand column of master detail", function(assert) {
+        // arrange
+        var keyboardController,
+            rowsView,
+            $expandCell;
+
+        this.options = {
+            masterDetail: {
+                enabled: true,
+                template: commonUtils.noop
+            },
+            paging: {
+                pageSize: 2,
+                enabled: true
+            }
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        keyboardController = this.getController("keyboardNavigation");
+        rowsView = this.gridView.getView("rowsView");
+        $expandCell = $(rowsView.element().find("td").first());
+
+        // act
+        $expandCell.trigger(CLICK_EVENT);
+        this.clock.tick();
+        this.triggerKeyDown("rightArrow");
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(keyboardController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, "focusedCellPosition is a first column");
+        assert.equal($(rowsView.getCellElement(0, 0)).attr("tabIndex"), undefined, "expand cell hasn't tab index");
+        assert.equal($(rowsView.getCellElement(0, 1)).attr("tabIndex"), 0, "cell(0, 1) has tab index");
+        assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-cell-focus-disabled"), "expand cell has no 'dx-cell-focus-disabled' class");
+        assert.ok(!$(rowsView.getCellElement(0, 1)).hasClass("dx-cell-focus-disabled"), "cell(0, 1) has no 'dx-cell-focus-disabled' class");
+        assert.strictEqual(rowsView.element().attr("tabIndex"), undefined, "rowsView has no tabIndex");
+        assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-focused"), "expand cell is not focused");
+        assert.ok($(rowsView.getCellElement(0, 1)).hasClass("dx-focused"), "cell(0, 1) is focused");
+        assert.ok(this.gridView.component.editorFactoryController.focus(), "has overlay focus");
+    });
+
     QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert) {
         // arrange
         let $cell;
@@ -192,45 +235,6 @@ QUnit.module("Real DataController and ColumnsController", {
         assert.deepEqual(navigationController._focusedCellPosition, { rowIndex: 1, columnIndex: 1 });
         assert.ok(gridWrapper.rowsView.cellHasFocusedClass(1, 1));
         assert.ok($(":focus").hasClass("input2"));
-    });
-
-    QUnit.testInActiveWindow("Must navigate after click by expand column of master detail", function(assert) {
-        // arrange
-        this.options = {
-            keyboardNavigation: {
-                enabled: true
-            },
-            masterDetail: { enabled: true, template: commonUtils.noop },
-            paging: { pageSize: 2, enabled: true }
-        };
-
-        this.setupModule();
-
-        // act
-        this.gridView.render($("#container"));
-
-        var keyboardNavigationController = this.gridView.component.keyboardNavigationController;
-
-        this.clock.tick();
-
-        var rowsView = this.gridView.getView("rowsView");
-
-        var $expandCell = $(rowsView.element().find("td").first());
-        $expandCell.trigger(pointerEvents.up);
-        this.clock.tick();
-        this.triggerKeyDown("rightArrow");
-        this.clock.tick();
-
-        // assert
-        assert.deepEqual(keyboardNavigationController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, "focusedCellPosition is a first column");
-        assert.equal($(rowsView.getCellElement(0, 0)).attr("tabIndex"), undefined, "expand cell hasn't tab index");
-        assert.equal($(rowsView.getCellElement(0, 1)).attr("tabIndex"), 0, "cell(0, 1) has tab index");
-        assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-cell-focus-disabled"), "expand cell has no 'dx-cell-focus-disabled' class");
-        assert.ok(!$(rowsView.getCellElement(0, 1)).hasClass("dx-cell-focus-disabled"), "cell(0, 1) has no 'dx-cell-focus-disabled' class");
-        assert.strictEqual(rowsView.element().attr("tabIndex"), undefined, "rowsView has no tabIndex");
-        assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-focused"), "expand cell is not focused");
-        assert.ok($(rowsView.getCellElement(0, 1)).hasClass("dx-focused"), "cell(0, 1) is focused");
-        assert.ok(this.gridView.component.editorFactoryController.focus(), "has overlay focus");
     });
 
     // T802790
