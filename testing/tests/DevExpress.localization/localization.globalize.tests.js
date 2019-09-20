@@ -48,7 +48,18 @@ define(function(require, exports, module) {
 
     var NBSP = String.fromCharCode(160);
 
-    require("./localization.base.tests.js");
+    var sharedTests = require("./sharedParts/localization.shared.js");
+
+    QUnit.module("Globalize common", null, function() {
+
+        QUnit.test("engine", assert => {
+            assert.equal(numberLocalization.engine(), "globalize");
+            assert.equal(dateLocalization.engine(), "globalize");
+            assert.equal(messageLocalization.engine(), "globalize");
+        });
+
+        sharedTests();
+    });
 
     QUnit.module("Localization date (ru)", {
         beforeEach: function() {

@@ -181,6 +181,10 @@ if(Globalize && Globalize.formatNumber) {
     };
 
     const globalizeNumberLocalization = {
+        engine: function() {
+            return "globalize";
+        },
+
         _formatNumberCore: function(value, format, formatConfig) {
             if(format === 'exponential') {
                 return this.callBase.apply(this, arguments);
