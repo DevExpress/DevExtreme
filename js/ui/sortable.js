@@ -62,11 +62,11 @@ var Sortable = Draggable.inherit({
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 sourceComponent:dxSortable|dxDraggable
-             * @type_function_param1_field6 fromIndex:number
-             * @type_function_param1_field7 toIndex:number
-             * @type_function_param1_field8 sourceElement:dxElement
-             * @type_function_param1_field9 dragElement:dxElement
+             * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field7 fromIndex:number
+             * @type_function_param1_field8 toIndex:number
+             * @type_function_param1_field9 itemElement:dxElement
              * @action
              */
             onAdd: null,
@@ -76,14 +76,26 @@ var Sortable = Draggable.inherit({
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 targetComponent:dxSortable|dxDraggable
-             * @type_function_param1_field6 fromIndex:number
-             * @type_function_param1_field7 toIndex:number
-             * @type_function_param1_field8 sourceElement:dxElement
-             * @type_function_param1_field9 dragElement:dxElement
+             * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field7 fromIndex:number
+             * @type_function_param1_field8 toIndex:number
+             * @type_function_param1_field9 itemElement:dxElement
              * @action
              */
             onRemove: null,
+            /**
+             * @name dxSortableOptions.onReorder
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 fromIndex:number
+             * @type_function_param1_field6 toIndex:number
+             * @type_function_param1_field7 itemElement:dxElement
+             * @action
+             */
+            onReorder: null,
             /**
              * @name dxSortableOptions.onPlaceholderPrepared
              * @type function(e)
@@ -171,6 +183,11 @@ var Sortable = Draggable.inherit({
                 !cancelAdd && this._moveItem($sourceElement, toIndex, cancelRemove);
             } else if(cancelAdd || cancelRemove) {
                 this._revertItemToInitialPosition($sourceElement, cancelRemove);
+                return;
+            }
+
+            if(sourceDraggable === this) {
+                this._fireReorderEvent(sourceEvent);
             }
         }
     },
@@ -424,7 +441,7 @@ var Sortable = Draggable.inherit({
             fromIndex: this.option("fromIndex"),
             toIndex: this._normalizeToIndex(this.option("toIndex"), dropInsideItem),
             dropInsideItem: dropInsideItem,
-            sourceElement: sourceElement
+            itemElement: sourceElement
         };
     },
 
@@ -442,6 +459,7 @@ var Sortable = Draggable.inherit({
             case "onPlaceholderPrepared":
             case "onAdd":
             case "onRemove":
+            case "onReorder":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
             case "itemOrientation":
@@ -501,20 +519,19 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _getAddOrRemoveEventArgs: function(e, eventName) {
+    _getSortableEventArgs: function(e, eventName) {
         let that = this,
             sourceDraggable = that._getSourceDraggable();
 
         return extend(true, {}, e, {
             toIndex: that.option("toIndex"),
-            sourceComponent: eventName === "onAdd" ? sourceDraggable : undefined,
-            targetComponent: eventName === "onRemove" ? that : undefined,
-            dragElement: getPublicElement(sourceDraggable._$dragElement)
+            fromComponent: eventName !== "onReorder" ? sourceDraggable : undefined,
+            toComponent: eventName !== "onReorder" ? that : undefined
         });
     },
 
     _fireAddEvent: function(sourceEvent) {
-        let args = this._getAddOrRemoveEventArgs(sourceEvent, "onAdd");
+        let args = this._getSortableEventArgs(sourceEvent, "onAdd");
 
         this._getAction("onAdd")(args);
 
@@ -523,11 +540,17 @@ var Sortable = Draggable.inherit({
 
     _fireRemoveEvent: function(sourceEvent) {
         let sourceDraggable = this._getSourceDraggable(),
-            args = this._getAddOrRemoveEventArgs(sourceEvent, "onRemove");
+            args = this._getSortableEventArgs(sourceEvent, "onRemove");
 
         sourceDraggable._getAction("onRemove")(args);
 
         return args.cancel;
+    },
+
+    _fireReorderEvent: function(sourceEvent) {
+        let args = this._getSortableEventArgs(sourceEvent, "onReorder");
+
+        this._getAction("onReorder")(args);
     }
 });
 

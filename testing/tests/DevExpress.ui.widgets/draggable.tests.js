@@ -165,10 +165,9 @@ QUnit.test("onDrop - check args", function(assert) {
 
     // assert
     assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
-    assert.deepEqual($(onDropSpy.getCall(0).args[0].dragElement).get(0), this.$element.get(0), "dragElement");
-    assert.deepEqual($(onDropSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "sourceElement");
-    assert.strictEqual(onDropSpy.getCall(0).args[0].component, draggable2, "component");
-    assert.strictEqual(onDropSpy.getCall(0).args[0].sourceComponent, draggable1, "sourceComponent");
+    assert.deepEqual($(onDropSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].toComponent, draggable2, "component");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].fromComponent, draggable1, "sourceComponent");
     assert.strictEqual($(draggable2.element()).children("#draggable").length, 1, "dropped item");
 });
 
@@ -187,16 +186,13 @@ QUnit.test("onDrop - check args when clone is true", function(assert) {
     }, $("#items"));
 
     // act
-    this.pointer.down().move(0, 400);
-    let $dragElement = $("body").children(".dx-draggable-dragging");
-    this.pointer.up();
+    this.pointer.down().move(0, 400).up();
 
     // assert
     assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
-    assert.deepEqual($(onDropSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "dragElement");
-    assert.deepEqual($(onDropSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "sourceElement");
-    assert.strictEqual(onDropSpy.getCall(0).args[0].component, draggable2, "component");
-    assert.strictEqual(onDropSpy.getCall(0).args[0].sourceComponent, draggable1, "sourceComponent");
+    assert.deepEqual($(onDropSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].toComponent, draggable2, "component");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].fromComponent, draggable1, "sourceComponent");
     assert.strictEqual($(draggable2.element()).children("#draggable").length, 1, "dropped item");
 });
 
@@ -771,7 +767,7 @@ QUnit.test("Set template", function(assert) {
     // assert
     assert.strictEqual($("body").children("#myDragElement").length, 1, "there is a drag element");
     assert.strictEqual(template.callCount, 1, "template is called");
-    assert.deepEqual($(template.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "args[0].sourceElement");
+    assert.deepEqual($(template.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "args[0].itemElement");
     assert.deepEqual($(template.getCall(0).args[1]).get(0), $(viewPort()).get(0), "args[1] - container");
 });
 
@@ -1243,7 +1239,7 @@ QUnit.test("set cursorOffset as function", function(assert) {
     // assert
     assert.strictEqual(this.$element.length, 1, "there is a drag element");
     assert.deepEqual(this.$element.offset(), { left: 30, top: 30 }, "drag element offset");
-    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "source element");
+    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "item element");
     assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].dragElement).get(0), this.$element.get(0), "drag element");
 });
 
@@ -1303,7 +1299,7 @@ QUnit.test("set cursorOffset as function when clone is true", function(assert) {
     $dragElement = $("body").children(".dx-draggable-dragging");
     assert.strictEqual($dragElement.length, 1, "there is a drag element");
     assert.deepEqual($dragElement.offset(), { left: 30, top: 30 }, "drag element offset");
-    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "source element");
+    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "item element");
     assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "drag element");
 });
 

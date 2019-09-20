@@ -237,9 +237,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 dragElement:dxElement
-             * @type_function_param1_field6 sourceElement:dxElement
-             * @type_function_param1_field7 sourceComponent:dxDraggable
+             * @type_function_param1_field5 itemElement:dxElement
+             * @type_function_param1_field6 fromComponent:dxDraggable
+             * @type_function_param1_field7 toComponent:dxDraggable
              * @action
              */
             onDrop: null,
@@ -347,7 +347,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _normalizeCursorOffset: function(offset, $sourceElement, $dragElement) {
         if(typeUtils.isFunction(offset)) {
             offset = offset.call(this, {
-                sourceElement: $sourceElement,
+                itemElement: $sourceElement,
                 dragElement: $dragElement
             });
         }
@@ -447,7 +447,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return {
             container: getPublicElement($(container)),
             model: {
-                sourceElement: getPublicElement($element)
+                itemElement: getPublicElement($element)
             }
         };
     },
@@ -709,11 +709,13 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _getDropArgs: function(e) {
+        let targetDraggable = this._getTargetDraggable();
+
         return {
             event: e,
-            sourceComponent: this,
-            sourceElement: this._$sourceElement,
-            dragElement: this._$dragElement
+            fromComponent: this,
+            toComponent: targetDraggable,
+            itemElement: this._$sourceElement
         };
     },
 

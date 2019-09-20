@@ -91,7 +91,7 @@ QUnit.test("Drag template - check args", function(assert) {
 
     // assert
     assert.strictEqual(dragTemplate.callCount, 1, "drag template is called");
-    assert.deepEqual($(dragTemplate.getCall(0).args[0].sourceElement).get(0), items.get(0), "first arg");
+    assert.deepEqual($(dragTemplate.getCall(0).args[0].itemElement).get(0), items.get(0), "first arg");
     assert.strictEqual(dragTemplate.getCall(0).args[1], 0, "second arg");
     assert.deepEqual($(dragTemplate.getCall(0).args[2]).get(0), $("body").get(0), "third arg");
 });
@@ -484,7 +484,7 @@ QUnit.test("onDragChange - check args when dragging an item down", function(asse
 
     // assert
     args = onDragChange.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
 });
@@ -507,7 +507,7 @@ QUnit.test("onDragChange - check args when dragging an item up", function(assert
 
     // assert
     args = onDragChange.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(2), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(2), "source element");
     assert.strictEqual(args[0].fromIndex, 2, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
 });
@@ -530,7 +530,7 @@ QUnit.test("onDragChange - check args when dragging to last position", function(
 
     // assert
     args = onDragChange.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 2, "toIndex");
 });
@@ -558,7 +558,7 @@ QUnit.test("'onDragChange' option changing", function(assert) {
 
     // assert
     args = onDragChange.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
 });
@@ -607,7 +607,7 @@ QUnit.test("onDragEnd - check args when dragging an item down", function(assert)
 
     // assert
     args = onDragEnd.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
     assert.strictEqual(args[0].dropInsideItem, false, "dropInsideItem is false");
@@ -632,7 +632,7 @@ QUnit.test("onDragEnd - check args when dragging an item up", function(assert) {
 
     // assert
     args = onDragEnd.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(2), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(2), "source element");
     assert.strictEqual(args[0].fromIndex, 2, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
 });
@@ -655,7 +655,7 @@ QUnit.test("onDragEnd - check args when dragging to last position", function(ass
 
     // assert
     args = onDragEnd.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 2, "toIndex");
 });
@@ -703,7 +703,7 @@ QUnit.test("onDragEnd - check args when dragging inside item", function(assert) 
 
     // assert
     args = onDragEnd.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
     assert.strictEqual(args[0].dropInsideItem, true, "dropInsideItem");
@@ -730,7 +730,7 @@ QUnit.test("onPlaceholderPrepared - check args when dragging", function(assert) 
     // assert
     items = this.$element.children();
     args = onPlaceholderPrepared.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
     assert.deepEqual($(args[0].placeholderElement).get(0), items.get(2), "placeholder element");
     assert.deepEqual($(args[0].dragElement).get(0), $("body").children(".dx-sortable-dragging").get(0), "dragging element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
@@ -762,7 +762,7 @@ QUnit.test("'onPlaceholderPrepared' option changing", function(assert) {
     // assert
     items = this.$element.children();
     args = onPlaceholderPrepared.getCall(0).args;
-    assert.deepEqual($(args[0].sourceElement).get(0), items.get(0), "source element");
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(0), "source element");
     assert.deepEqual($(args[0].placeholderElement).get(0), items.get(2), "placeholder element");
     assert.deepEqual($(args[0].dragElement).get(0), $("body").children(".dx-sortable-dragging").get(0), "dragging element");
     assert.strictEqual(args[0].fromIndex, 0, "fromIndex");
@@ -785,20 +785,16 @@ QUnit.test("onAdd - check args", function(assert) {
     }, $("#items2"));
 
     // act
-    let $sourceElement = sortable1.$element().children().eq(1),
-        pointer = pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0),
-        $dragElement = $("body").children(".dx-sortable-dragging");
-
-    pointer.up();
+    let $sourceElement = sortable1.$element().children().eq(1);
+    pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0).up();
 
     // assert
     assert.strictEqual(onAddSpy.callCount, 1, "onAdd is called");
-    assert.deepEqual(onAddSpy.getCall(0).args[0].sourceComponent, sortable1, "sourceComponent");
-    assert.deepEqual(onAddSpy.getCall(0).args[0].component, sortable2, "component");
+    assert.deepEqual(onAddSpy.getCall(0).args[0].fromComponent, sortable1, "sourceComponent");
+    assert.deepEqual(onAddSpy.getCall(0).args[0].toComponent, sortable2, "component");
     assert.strictEqual(onAddSpy.getCall(0).args[0].fromIndex, 1, "fromIndex");
     assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 2, "toIndex");
-    assert.strictEqual($(onAddSpy.getCall(0).args[0].sourceElement).get(0), $sourceElement.get(0), "sourceElement");
-    assert.strictEqual($(onAddSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "dragElement");
+    assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), "itemElement");
     assert.strictEqual($(sortable2.element()).children("#item2").length, 1, "item is added");
 });
 
@@ -841,20 +837,16 @@ QUnit.test("onRemove - check args", function(assert) {
     }, $("#items2"));
 
     // act
-    let $sourceElement = sortable1.$element().children().eq(1),
-        pointer = pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0),
-        $dragElement = $("body").children(".dx-sortable-dragging");
-
-    pointer.up();
+    let $sourceElement = sortable1.$element().children().eq(1);
+    pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0).up();
 
     // assert
     assert.strictEqual(onRemoveSpy.callCount, 1, "onRemove is called");
-    assert.deepEqual(onRemoveSpy.getCall(0).args[0].targetComponent, sortable2, "targetComponent");
-    assert.deepEqual(onRemoveSpy.getCall(0).args[0].component, sortable1, "component");
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].toComponent, sortable2, "targetComponent");
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].fromComponent, sortable1, "component");
     assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromIndex, 1, "fromIndex");
     assert.strictEqual(onRemoveSpy.getCall(0).args[0].toIndex, 2, "toIndex");
-    assert.strictEqual($(onRemoveSpy.getCall(0).args[0].sourceElement).get(0), $sourceElement.get(0), "sourceElement");
-    assert.strictEqual($(onRemoveSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "dragElement");
+    assert.strictEqual($(onRemoveSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), "itemElement");
     assert.strictEqual($(sortable1.element()).children("#item2").length, 0, "item is removed");
 });
 
@@ -881,6 +873,26 @@ QUnit.test("onRemove - not add item when eventArgs.cancel is true", function(ass
     assert.strictEqual($(sortable1.element()).children("#item1").length, 1, "item isn't removed");
     assert.strictEqual($(sortable1.element()).children("#item1").attr("class"), "draggable", "source item hasn't dx-sortable-source class");
     assert.strictEqual($(sortable2.element()).children("#item1").attr("class"), "draggable", "cloned source item hasn't dx-sortable-source class");
+});
+
+QUnit.test("onReorder - check args", function(assert) {
+    // arrange
+    let onReorderSpy = sinon.spy();
+
+    let sortable = this.createSortable({
+        filter: ".draggable",
+        onReorder: onReorderSpy
+    }, $("#items"));
+
+    // act
+    let $sourceElement = sortable.$element().children().eq(0);
+    pointerMock($sourceElement).start().down().move(0, 25).move(0, 5).up();
+
+    // assert
+    assert.strictEqual(onReorderSpy.callCount, 1, "onRemove is called");
+    assert.strictEqual(onReorderSpy.getCall(0).args[0].fromIndex, 0, "fromIndex");
+    assert.strictEqual(onReorderSpy.getCall(0).args[0].toIndex, 1, "toIndex");
+    assert.strictEqual($(onReorderSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), "itemElement");
 });
 
 

@@ -1827,7 +1827,7 @@ declare module DevExpress.ui {
         /** @name DraggableBase.Options.onDragStart */
         onDragStart?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** @name DraggableBase.Options.onDrop */
-        onDrop?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, dragElement?: DevExpress.core.dxElement, sourceElement?: DevExpress.core.dxElement, sourceComponent?: dxDraggable }) => any);
+        onDrop?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, itemElement?: DevExpress.core.dxElement, fromComponent?: dxDraggable, toComponent?: dxDraggable }) => any);
         /** @name DraggableBase.Options.scrollSensitivity */
         scrollSensitivity?: number;
         /** @name DraggableBase.Options.scrollSpeed */
@@ -5391,9 +5391,11 @@ declare module DevExpress.ui {
         /** @name dxSortable.Options.itemOrientation */
         itemOrientation?: 'horizontal' | 'vertical';
         /** @name dxSortable.Options.onAdd */
-        onAdd?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, sourceComponent?: dxSortable | dxDraggable, fromIndex?: number, toIndex?: number, sourceElement?: DevExpress.core.dxElement, dragElement?: DevExpress.core.dxElement }) => any);
+        onAdd?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromIndex?: number, toIndex?: number, itemElement?: DevExpress.core.dxElement }) => any);
         /** @name dxSortable.Options.onRemove */
-        onRemove?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, targetComponent?: dxSortable | dxDraggable, fromIndex?: number, toIndex?: number, sourceElement?: DevExpress.core.dxElement, dragElement?: DevExpress.core.dxElement }) => any);
+        onRemove?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromIndex?: number, toIndex?: number, itemElement?: DevExpress.core.dxElement }) => any);
+        /** @name dxSortable.Options.onReorder */
+        onReorder?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, fromIndex?: number, toIndex?: number, itemElement?: DevExpress.core.dxElement }) => any);
     }
     /** @name dxSortable */
     export class dxSortable extends DraggableBase {
