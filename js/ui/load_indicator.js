@@ -36,13 +36,11 @@ var LoadIndicator = Widget.inherit({
             /**
             * @name dxLoadIndicatorOptions.disabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxLoadIndicatorOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -50,26 +48,22 @@ var LoadIndicator = Widget.inherit({
              * @name dxLoadIndicatorOptions.hoverStateEnabled
              * @default false
              * @hidden
-            * @inheritdoc
             */
             hoverStateEnabled: false,
 
             /**
             * @name dxLoadIndicatorOptions.focusStateEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxLoadIndicatorOptions.accessKey
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxLoadIndicatorOptions.tabIndex
             * @hidden
-            * @inheritdoc
             */
 
             _animatingSegmentCount: 1,
@@ -94,14 +88,6 @@ var LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isWin8(themeName) || themes.isWin10(themeName);
-                },
-                options: {
-                    _animatingSegmentCount: 5
-                }
-            },
-            {
-                device: function() {
                     return themes.isIos7(themeName);
                 },
                 options: {
@@ -110,7 +96,7 @@ var LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial(themeName) || themes.isAndroid5(themeName);
+                    return themes.isMaterial(themeName);
                 },
                 options: {
                     _animatingSegmentCount: 2,
@@ -251,14 +237,12 @@ var LoadIndicator = Widget.inherit({
     * @name dxLoadIndicatorMethods.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @inheritdoc
     */
 
     /**
     * @name dxLoadIndicatorMethods.focus
     * @publicName focus()
     * @hidden
-    * @inheritdoc
     */
 });
 

@@ -2,6 +2,9 @@
 @IOS7_SCHEDULER_NAVIGATOR_HEIGHT: @IOS7_SCHEDULER_HEADER_HEIGHT * 0.5;
 @IOS7_SCHEDULER_SWITCHER_LABEL_OFFSET: 60px;
 
+@SCHEDULER_RECURRENCE_BORDER_COLOR: @IOS7_BORDER;
+@SCHEDULER_RECURRENCE_REPEAT_ON_WEEK_PADDING: 7px;
+
 .scheduler-mixin(100px);
 
 .dx-scheduler-header {
@@ -41,6 +44,7 @@
 
     .dx-tabs-nav-button {
         height: @IOS7_SCHEDULER_HEADER_HEIGHT;
+
         .dx-button-content {
             height: 100%;
         }
@@ -51,6 +55,7 @@
             height: @IOS7_SCHEDULER_HEADER_HEIGHT;
         }
     }
+
     .dx-tabs-scrollable,
     .dx-tabs-wrapper {
         height: @IOS7_SCHEDULER_HEADER_HEIGHT;

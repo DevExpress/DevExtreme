@@ -3,7 +3,9 @@ import vizMocks from "../../helpers/vizMocks.js";
 import commonUtils from "core/utils/common";
 import typeUtils from "core/utils/type";
 import pointModule from "viz/series/points/base_point";
-import { Series, mixins } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
+const mixins = SeriesModule.mixins;
 import { insertMockFactory, MockTranslator, MockAxis, restoreMockFactory } from "../../helpers/chartMocks.js";
 
 const originalPoint = pointModule.Point;

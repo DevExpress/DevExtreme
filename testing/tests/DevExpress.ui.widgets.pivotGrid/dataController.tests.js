@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    Class = require("core/class"),
-    DataController = require("ui/pivot_grid/ui.pivot_grid.data_controller").DataController,
-    virtualScrolling = require("ui/grid_core/ui.grid_core.virtual_scrolling_core"),
-    stateStoring = require("ui/grid_core/ui.grid_core.state_storing_core"),
-    pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
-    PivotGridDataSource = require("ui/pivot_grid/data_source"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js");
+import $ from "jquery";
+import Class from "core/class";
+import { DataController } from "ui/pivot_grid/ui.pivot_grid.data_controller";
+import virtualScrolling from "ui/grid_core/ui.grid_core.virtual_scrolling_core";
+import stateStoring from "ui/grid_core/ui.grid_core.state_storing_core";
+import pivotGridUtils from "ui/pivot_grid/ui.pivot_grid.utils";
+import PivotGridDataSource from "ui/pivot_grid/data_source";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
 var moduleConfig = {
     beforeEach: function() {
@@ -1935,6 +1935,70 @@ QUnit.test("Apply partial dataController with empty data. Update rows", function
         ['1', '2', '3', '6', '12'],
         ['2', '3', '4', '9', '18'],
         ['3', '5', '7', '15', '30']
+    ]);
+});
+
+// T737140
+QUnit.test("Apply partial dataController by rows after column collapsing", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "row" }, { area: "row" },
+                { area: "column" }, { area: "column" },
+                { caption: 'Sum', format: 'fixedPoint', area: "data" }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [
+                { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
+                { value: 'C', index: 3 }
+            ],
+            values: [
+                [1, 2, 3, 6, 12],
+                [2, 3, 4, 9, 18],
+                [3, 5, 7, 15, 30]
+            ]
+        }
+    });
+
+    dataController.collapseHeaderItem('column', ['A']);
+
+    dataController.applyPartialDataSource('row', ['Piter'], {
+        columns: [
+            { value: 'A', index: 2, children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }] },
+            { value: 'C', index: 3 }
+        ],
+        rows: [
+            { value: "T1", index: 0 }
+        ],
+        values: [
+            [1, 2, 3, 6, 12]
+        ]
+    });
+
+    assert.deepEqual(prepareLoadedData(dataController.getData().rows), [
+        { value: 'Vasya', index: 0 },
+        { value: 'Piter', index: 1, children: [{
+            value: "T1",
+            index: 3
+        }] }
+    ]);
+
+    assert.deepEqual(prepareLoadedData(dataController.getData().columns), [
+        { value: 'A', index: 2 },
+        { value: 'C', index: 3 }
+    ]);
+
+    var cells = [];
+    $.each(dataController.getCellsInfo(), function() {
+        cells.push($.map(this, function(cell) {
+            return cell && cell.text;
+        }));
+    });
+    assert.deepEqual(cells, [
+        ['3', '6', '12'],
+        ['3', '6', '12'],
+        ['4', '9', '18'],
+        ['7', '15', '30']
     ]);
 });
 
@@ -5638,6 +5702,49 @@ QUnit.test("Can get changingTime. after load columnsScrollController", function(
     clock.restore();
 });
 
+QUnit.test("changingDuration if paginate", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        dataController = new DataController(this.getOptions({
+            dataSource: {
+                paginate: true,
+                fields: [
+                    { area: "column" },
+                    { area: "column" },
+                    { area: "data", caption: 'Sum', format: 'fixedPoint' }
+                ],
+                columns: this.data
+            }
+        }));
+
+    dataController._dataSource.paginate = function() {
+        return true;
+    };
+
+    dataController.changed.add(function() {
+        clock.tick(377);
+    });
+
+    var columnsScrollController = this.VirtualScrollController.firstCall.returnValue,
+        columnsDataAdapter = this.VirtualScrollController.firstCall.args[1],
+        rowsDataAdapter = this.VirtualScrollController.secondCall.args[1];
+
+    columnsScrollController.handleDataChanged.returns("handleChangedResult");
+
+    var loadResult = columnsDataAdapter.load(),
+        handleDataChangedArg = columnsScrollController.handleDataChanged.lastCall.args[0];
+
+    // act
+    handleDataChangedArg();
+
+    assert.ok(columnsScrollController);
+    assert.strictEqual(loadResult, "handleChangedResult");
+    assert.strictEqual(columnsDataAdapter.changingDuration(), 300);
+    assert.strictEqual(rowsDataAdapter.changingDuration(), 300);
+
+    // teardown
+    clock.restore();
+});
+
 QUnit.test("Can get changingTime. after load rowsScrollController", function(assert) {
     var clock = sinon.useFakeTimers(),
         dataController = new DataController(this.getOptions({
@@ -5891,19 +5998,19 @@ QUnit.module("Remote paging", {
                     items.push({
                         value: value,
                         text: value,
-                        index: i + 1
+                        index: i - skip + 1
                     });
                 }
             }
             return items;
         };
 
-        var createValues = function(rowCount, columnCount) {
+        var createValues = function(loadOptions, columnCount) {
             var result = [];
-            for(var rowIndex = 0; rowIndex < rowCount + 1; rowIndex++) {
+            for(var rowIndex = loadOptions.rowSkip; rowIndex < loadOptions.rowSkip + loadOptions.rowTake + 1; rowIndex++) {
                 var row = [];
                 result.push(row);
-                for(var columnIndex = 0; columnIndex < columnCount + 1; columnIndex++) {
+                for(var columnIndex = loadOptions.columnSkip; columnIndex < loadOptions.columnSkip + loadOptions.columnTake + 1; columnIndex++) {
                     row.push([ rowIndex * 10 + columnIndex ]);
                 }
             }
@@ -5921,6 +6028,9 @@ QUnit.module("Remote paging", {
             getFields: function() {
                 return $.Deferred().resolve([]);
             },
+            supportPaging: function() {
+                return true;
+            },
             load: function(loadOptions) {
                 that.loadArgs.push(loadOptions);
                 var rowCount = loadOptions.rows.length ? this._rowCount : 0;
@@ -5929,7 +6039,7 @@ QUnit.module("Remote paging", {
                 return $.Deferred().resolve({
                     rows: createItems(rowCount, "row ", loadOptions.rowSkip, loadOptions.rowTake, rowCount && loadOptions.rows[0].sortOrder === "desc"),
                     columns: createItems(columnCount, "column ", loadOptions.columnSkip, loadOptions.columnTake, columnCount && loadOptions.columns[0].sortOrder === "desc"),
-                    values: createValues(rowCount, columnCount),
+                    values: createValues(loadOptions),
                     grandTotalRowIndex: 0,
                     grandTotalColumnIndex: 0
                 });
@@ -6027,6 +6137,40 @@ QUnit.test("first load", function(assert) {
     ]);
 });
 
+QUnit.test("expanded field option should be ignored", function(assert) {
+    var dataController = this.setup({
+        paginate: true,
+        store: new this.MockStore({
+            rowCount: 10,
+            columnCount: 10
+        }),
+        pageSize: 4,
+        fields: [
+            { area: "row", expanded: true }, { area: "row" },
+            { area: "column", expanded: true }, { area: "column" },
+            { area: "data" }
+        ]
+    });
+
+    assert.strictEqual(this.loadArgs.length, 1, "one load");
+    assert.strictEqual(this.loadArgs[0].rows.length, 2, "load args rows");
+    assert.strictEqual(this.loadArgs[0].columns.length, 2, "load args columns");
+    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
+    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+
+    assert.deepEqual(dataController.getColumnsInfo(), [[
+        { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true, expanded: false },
+        { dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', isLast: true, expanded: false }
+    ]]);
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true, expanded: false }],
+        [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true, expanded: false }]
+    ]);
+});
+
 QUnit.test("load after scroll", function(assert) {
     var dataController = this.setup();
 
@@ -6039,8 +6183,8 @@ QUnit.test("load after scroll", function(assert) {
     assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
     assert.strictEqual(this.loadArgs[0].rowSkip, 4, "load args rowSkip");
     assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 2, "load args columnSkip");
-    assert.strictEqual(this.loadArgs[0].columnTake, 0, "load args columnTake");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[0].columnTake, 4, "load args columnTake");
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
@@ -6054,6 +6198,31 @@ QUnit.test("load after scroll", function(assert) {
         [{ dataSourceIndex: 4, text: 'row 6', path: ['row 6'], type: 'D', isLast: true }],
         [{ dataSourceIndex: 5, text: 'row 7', path: ['row 7'], type: 'D', isLast: true }],
         [{ dataSourceIndex: 6, text: 'row 8', path: ['row 8'], type: 'D', isLast: true }],
+    ]);
+});
+
+QUnit.test("load from cache after scroll and return scroll", function(assert) {
+    var dataController = this.setup();
+
+    dataController.setViewportPosition(0, 0);
+    dataController.setViewportPosition(0, 8 * 20);
+
+    this.loadArgs = [];
+    dataController.setViewportPosition(0, 0);
+
+    assert.strictEqual(this.loadArgs.length, 0, "no load");
+
+    assert.deepEqual(dataController.getColumnsInfo(), [[
+        { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
+        { dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', isLast: true },
+        { dataSourceIndex: 3, text: 'column 3', path: ['column 3'], type: 'D', isLast: true },
+        { dataSourceIndex: 4, text: 'column 4', path: ['column 4'], type: 'D', isLast: true },
+    ]]);
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 3, text: 'row 3', path: ['row 3'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 4, text: 'row 4', path: ['row 4'], type: 'D', isLast: true }]
     ]);
 });
 
@@ -6097,8 +6266,8 @@ QUnit.test("expand row", function(assert) {
     assert.strictEqual(this.loadArgs[0].rows.length, 2, "load args rows");
     assert.strictEqual(this.loadArgs[0].columns.length, 0, "load args columns");
     assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
-    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
     assert.strictEqual(this.loadArgs[0].rowTake, 4, "load args rowTake");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
     assert.strictEqual(this.loadArgs[0].columnTake, 4, "load args columnTake");
 
     assert.deepEqual(dataController.getRowsInfo(), [
@@ -6129,7 +6298,7 @@ QUnit.test("reload after expand row", function(assert) {
         };
     }), [
         { path: undefined, area: undefined, rowSkip: 0, rowTake: 2, columnSkip: 0, columnTake: 2 },
-        { path: ["row 1"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: undefined, columnTake: undefined }
+        { path: ["row 1"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 2 }
     ], "load options");
 
     assert.deepEqual(dataController.getRowsInfo(), [
@@ -6183,6 +6352,149 @@ QUnit.test("collapse row", function(assert) {
     ]);
 });
 
+QUnit.test("expand several rows and columns", function(assert) {
+    var dataController = this.setup({
+        paginate: true,
+        store: new this.MockStore({
+            rowCount: 10,
+            columnCount: 10
+        }),
+        pageSize: 4,
+        fields: [
+            { area: "row" }, { area: "row" }, { area: "row" },
+            { area: "column" }, { area: "column" }, { area: "column" },
+            { area: "data" }
+        ]
+    });
+
+    dataController.expandHeaderItem('column', ['column 1']);
+    dataController.expandHeaderItem('column', ['column 1', 'column 2']);
+    dataController.expandHeaderItem('row', ['row 1']);
+
+    this.loadArgs = [];
+    dataController.expandHeaderItem('row', ['row 1', 'row 2']);
+
+    assert.deepEqual(this.loadArgs.map(function(options) {
+        return {
+            path: options.path,
+            oppositePath: options.oppositePath,
+            area: options.area,
+            rowSkip: options.rowSkip,
+            rowTake: options.rowTake,
+            columnSkip: options.columnSkip,
+            columnTake: options.columnTake
+        };
+    }), [
+        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: undefined },
+        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: ["column 1"] },
+        { path: ["row 1", "row 2"], area: "row", rowSkip: 0, rowTake: 4, columnSkip: 0, columnTake: 4, oppositePath: ["column 1", "column 2"] },
+    ], "load options");
+
+    assert.deepEqual(dataController.getColumnsInfo(), [
+        [
+            {
+                "colspan": 2,
+                "dataSourceIndex": 1,
+                "expanded": true,
+                "path": [
+                    "column 1"
+                ],
+                "text": "column 1",
+                "type": "D"
+            }
+        ],
+        [
+            {
+                "dataSourceIndex": 4,
+                "expanded": false,
+                "isLast": true,
+                "path": [
+                    "column 1",
+                    "column 1"
+                ],
+                "rowspan": 2,
+                "text": "column 1",
+                "type": "D"
+            },
+            {
+                "colspan": 1,
+                "dataSourceIndex": 5,
+                "expanded": true,
+                "path": [
+                    "column 1",
+                    "column 2"
+                ],
+                "text": "column 2",
+                "type": "D"
+            }
+        ],
+        [
+            {
+                "dataSourceIndex": 9,
+                "isLast": true,
+                "path": [
+                    "column 1",
+                    "column 2",
+                    "column 1"
+                ],
+                "text": "column 1",
+                "type": "D"
+            }
+        ]
+    ], "columns");
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [
+            {
+                "dataSourceIndex": 1,
+                "expanded": true,
+                "path": [
+                    "row 1"
+                ],
+                "rowspan": 2,
+                "text": "row 1",
+                "type": "D"
+            },
+            {
+                "colspan": 2,
+                "dataSourceIndex": 6,
+                "expanded": false,
+                "isLast": true,
+                "path": [
+                    "row 1",
+                    "row 1"
+                ],
+                "text": "row 1",
+                "type": "D"
+            }
+        ],
+        [
+            {
+                "dataSourceIndex": 7,
+                "expanded": true,
+                "path": [
+                    "row 1",
+                    "row 2"
+                ],
+                "rowspan": 1,
+                "text": "row 2",
+                "type": "D"
+            },
+            {
+                "dataSourceIndex": 11,
+                "isLast": true,
+                "path": [
+                    "row 1",
+                    "row 2",
+                    "row 1"
+                ],
+                "text": "row 1",
+                "type": "D"
+            }
+        ]
+    ], "rows");
+});
+
 QUnit.test("scroll after expand row", function(assert) {
     var dataController = this.setup(this.createDataSource(2, 0));
 
@@ -6213,6 +6525,77 @@ QUnit.test("scroll after expand row", function(assert) {
     ], "rows info");
 
     assert.strictEqual(changedSpy.callCount, 3, "changed call count");
+});
+
+QUnit.test("scroll by columns after expand column", function(assert) {
+    var dataController = this.setup(this.createDataSource(0, 2));
+
+    dataController.expandHeaderItem('column', ['column 2']);
+
+    this.loadArgs = [];
+    var changedSpy = sinon.spy();
+    dataController.changed.add(changedSpy);
+
+    dataController.setViewportPosition(4 * 20, 0);
+
+    assert.deepEqual(this.loadArgs.map(function(options) {
+        return {
+            path: options.path,
+            columnSkip: options.columnSkip,
+            columnTake: options.columnTake
+        };
+    }), [{ path: ["column 2"], columnSkip: 4, columnTake: 4 }], "load options");
+
+    assert.deepEqual(dataController.getColumnsInfo(), [
+        [{ dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', expanded: true, colspan: 4 }],
+        [
+            { dataSourceIndex: 7, text: 'column 4', path: ['column 2', 'column 4'], type: 'D', isLast: true },
+            { dataSourceIndex: 8, text: 'column 5', path: ['column 2', 'column 5'], type: 'D', isLast: true },
+            { dataSourceIndex: 9, text: 'column 6', path: ['column 2', 'column 6'], type: 'D', isLast: true },
+            { dataSourceIndex: 10, text: 'column 7', path: ['column 2', 'column 7'], type: 'D', isLast: true }
+        ]
+    ], "rows info");
+
+    assert.strictEqual(changedSpy.callCount, 3, "changed call count");
+});
+
+QUnit.test("scroll by rows after expand column", function(assert) {
+    var dataController = this.setup(this.createDataSource(1, 2));
+
+    dataController.expandHeaderItem('column', ['column 2']);
+
+    this.loadArgs = [];
+    var changedSpy = sinon.spy();
+    dataController.changed.add(changedSpy);
+
+    dataController.setViewportPosition(0, 4 * 20);
+
+    assert.deepEqual(this.loadArgs.map(function(options) {
+        return {
+            path: options.path,
+            columnSkip: options.columnSkip,
+            columnTake: options.columnTake,
+            rowSkip: options.rowSkip,
+            rowTake: options.rowTake
+        };
+    }), [
+        { path: undefined, columnSkip: 0, columnTake: 4, rowSkip: 4, rowTake: 4 },
+        { path: ["column 2"], columnSkip: 0, columnTake: 4, rowSkip: 4, rowTake: 4 }
+    ], "load options");
+
+    assert.deepEqual(dataController.getColumnsInfo(), [
+        [
+            { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', expanded: false, rowspan: 2, isLast: true },
+            { dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', expanded: true, colspan: 3 }
+        ],
+        [
+            { dataSourceIndex: 4, text: 'column 1', path: ['column 2', 'column 1'], type: 'D', isLast: true },
+            { dataSourceIndex: 5, text: 'column 2', path: ['column 2', 'column 2'], type: 'D', isLast: true },
+            { dataSourceIndex: 6, text: 'column 3', path: ['column 2', 'column 3'], type: 'D', isLast: true }
+        ]
+    ], "rows info");
+
+    assert.strictEqual(changedSpy.callCount, 4, "changed call count");
 });
 
 QUnit.test("scroll to end of expanded row", function(assert) {
@@ -6250,7 +6633,7 @@ QUnit.test("scroll to end of expanded row", function(assert) {
     assert.strictEqual(changedSpy.callCount, 3, "changed call count");
 });
 
-QUnit.test("load with CustomStore", function(assert) {
+QUnit.skip("load with CustomStore", function(assert) {
     var that = this;
 
     var dataController = that.setup({

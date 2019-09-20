@@ -34,7 +34,7 @@ module.exports = SelectionStrategy.inherit({
             if(!filter) {
                 this._setOption("selectionFilter", isDeselect ? [] : null);
             } else {
-                this._addSelectionFilter(isDeselect, filter, false);
+                this._addSelectionFilter(isDeselect, filter, isSelectAll);
             }
 
         } else {
@@ -98,13 +98,13 @@ module.exports = SelectionStrategy.inherit({
     addSelectedItem: function(key) {
         var filter = this._processSelectedItem(key);
 
-        this._addSelectionFilter(false, filter, true);
+        this._addSelectionFilter(false, filter);
     },
 
     removeSelectedItem: function(key) {
         var filter = this._processSelectedItem(key);
 
-        this._addSelectionFilter(true, filter, true);
+        this._addSelectionFilter(true, filter);
     },
 
     validate: function() {
@@ -153,7 +153,7 @@ module.exports = SelectionStrategy.inherit({
         return filter;
     },
 
-    _addSelectionFilter: function(isDeselect, filter, isUnique) {
+    _addSelectionFilter: function(isDeselect, filter, isSelectAll) {
         var that = this,
             needAddFilter = true,
             currentFilter = isDeselect ? ["!", filter] : filter,
@@ -163,7 +163,7 @@ module.exports = SelectionStrategy.inherit({
         selectionFilter = that._denormalizeFilter(selectionFilter);
 
         if(selectionFilter && selectionFilter.length) {
-            that._removeSameFilter(selectionFilter, filter, isDeselect);
+            that._removeSameFilter(selectionFilter, filter, isDeselect, isSelectAll);
             var lastOperation = that._removeSameFilter(selectionFilter, filter, !isDeselect);
 
             if(lastOperation && (lastOperation !== "or" && isDeselect || lastOperation !== "and" && !isDeselect)) {
@@ -192,7 +192,23 @@ module.exports = SelectionStrategy.inherit({
         return filter;
     },
 
-    _removeSameFilter: function(selectionFilter, filter, inverted) {
+    _removeFilterByIndex: function(filter, filterIndex, isSelectAll) {
+        var lastRemoveOperation;
+
+        if(filterIndex > 0) {
+            lastRemoveOperation = filter.splice(filterIndex - 1, 2)[0];
+        } else {
+            lastRemoveOperation = filter.splice(filterIndex, 2)[1] || "undefined";
+        }
+
+        if(isSelectAll && lastRemoveOperation === "and") {
+            filter.splice(0, filter.length);
+        }
+
+        return lastRemoveOperation;
+    },
+
+    _removeSameFilter: function(selectionFilter, filter, inverted, isSelectAll) {
         filter = inverted ? ["!", filter] : filter;
 
         var filterIndex = this._findSubFilter(selectionFilter, filter);
@@ -203,16 +219,15 @@ module.exports = SelectionStrategy.inherit({
         }
 
         if(filterIndex >= 0) {
-            if(filterIndex > 0) {
-                return selectionFilter.splice(filterIndex - 1, 2)[0];
-            } else {
-                return selectionFilter.splice(filterIndex, 2)[1] || "undefined";
-            }
+            return this._removeFilterByIndex(selectionFilter, filterIndex, isSelectAll);
         } else {
             for(var i = 0; i < selectionFilter.length; i++) {
-                var lastRemoveOperation = Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2 && this._removeSameFilter(selectionFilter[i], filter);
+                var lastRemoveOperation = Array.isArray(selectionFilter[i]) && selectionFilter[i].length > 2 && this._removeSameFilter(selectionFilter[i], filter, false, isSelectAll);
+
                 if(lastRemoveOperation) {
-                    if(selectionFilter[i].length === 1) {
+                    if(!selectionFilter[i].length) {
+                        this._removeFilterByIndex(selectionFilter, i, isSelectAll);
+                    } else if(selectionFilter[i].length === 1) {
                         selectionFilter[i] = selectionFilter[i][0];
                     }
                     return lastRemoveOperation;

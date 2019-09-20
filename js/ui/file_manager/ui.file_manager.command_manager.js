@@ -3,9 +3,9 @@ import { isString } from "../../core/utils/type";
 
 export class FileManagerCommandManager {
 
-    constructor(editingSettings) {
+    constructor(permissions) {
         this._actions = {};
-        this._editingSettings = editingSettings || {};
+        this._permissions = permissions || {};
 
         this._initCommands();
     }
@@ -16,30 +16,30 @@ export class FileManagerCommandManager {
                 name: "create",
                 text: "New folder",
                 icon: "plus",
-                enabled: this._editingSettings.allowCreate,
+                enabled: this._permissions.create,
                 noFileItemRequired: true
             },
             {
                 name: "rename",
                 text: "Rename",
-                enabled: this._editingSettings.allowRename,
+                enabled: this._permissions.rename,
                 isSingleFileItemCommand: true
             },
             {
                 name: "move",
                 text: "Move",
-                enabled: this._editingSettings.allowMove
+                enabled: this._permissions.move
             },
             {
                 name: "copy",
                 text: "Copy",
-                enabled: this._editingSettings.allowCopy
+                enabled: this._permissions.copy
             },
             {
                 name: "delete",
                 text: "Delete",
-                icon: "remove",
-                enabled: this._editingSettings.allowRemove,
+                icon: "trash",
+                enabled: this._permissions.remove,
             },
             {
                 name: "download",
@@ -51,7 +51,7 @@ export class FileManagerCommandManager {
                 name: "upload",
                 text: "Upload files",
                 icon: "upload",
-                enabled: this._editingSettings.allowUpload,
+                enabled: this._permissions.upload,
                 noFileItemRequired: true
             },
             {
@@ -65,14 +65,24 @@ export class FileManagerCommandManager {
                 name: "thumbnails",
                 text: "Thumbnails View",
                 enabled: true,
-                displayInToolbarOnly: true,
                 noFileItemRequired: true
             },
             {
                 name: "details",
                 text: "Details View",
                 enabled: true,
-                displayInToolbarOnly: true,
+                noFileItemRequired: true
+            },
+            {
+                name: "clear",
+                text: "Clear selection",
+                icon: "remove",
+                enabled: true
+            },
+            {
+                name: "showDirsPanel",
+                icon: "menu",
+                enabled: false,
                 noFileItemRequired: true
             }
         ];
@@ -85,17 +95,19 @@ export class FileManagerCommandManager {
         this._actions = extend(this._actions, actions);
     }
 
-    executeCommand(command) {
+    executeCommand(command, arg) {
         const commandName = isString(command) ? command : command.name;
         const action = this._actions[commandName];
         if(action) {
-            action();
+            action(arg);
         }
     }
 
-    getCommands(forToolbar, items) {
-        return this._commands
-            .filter(c => (!c.displayInToolbarOnly || forToolbar) && (!items || this.isCommandAvailable(c.name, items)));
+    setCommandEnabled(commandName, enabled) {
+        const command = this.getCommandByName(commandName);
+        if(command) {
+            command.enabled = enabled;
+        }
     }
 
     getCommandByName(name) {
@@ -107,7 +119,16 @@ export class FileManagerCommandManager {
         if(!command || !command.enabled) {
             return false;
         }
-        return command.noFileItemRequired || items.length > 0 && (!command.isSingleFileItemCommand || items.length === 1);
+
+        if(command.noFileItemRequired) {
+            return true;
+        }
+
+        const itemsLength = items && items.length || 0;
+        if(itemsLength === 0 || items.some(item => item.isRoot() || item.isParentFolder)) {
+            return false;
+        }
+        return !command.isSingleFileItemCommand || itemsLength === 1;
     }
 
 }

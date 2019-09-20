@@ -856,13 +856,15 @@ QUnit.test("Marker", function(assert) {
     point.height = 33;
     point.width = 44;
     point.inVisibleArea = true;
+    point.minY = 300;
+    point.defaultY = 300;
 
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
 
     assert.equal(this.renderer.stub("rect").callCount, 1);
-    assert.deepEqual(this.renderer.stub("rect").firstCall.args, [11, 22, 44, 33]);
+    assert.deepEqual(this.renderer.stub("rect").firstCall.args, [11, 22, 44, 32]);
     assert.equal(point.graphic, this.renderer.stub("rect").firstCall.returnValue);
 
     assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], { rx: 0, ry: 0 });
@@ -871,6 +873,59 @@ QUnit.test("Marker", function(assert) {
     assert.equal(point.graphic.stub("append").firstCall.args[0], this.group);
 
     assert.deepEqual(point.graphic.data.lastCall.args, [{ 'chart-data-point': point }]);
+});
+
+QUnit.test("Marker. Rotated chart", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    point.x = 11;
+    point.y = 22;
+    point.height = 33;
+    point.width = 44;
+    point.inVisibleArea = true;
+    point.minX = 300;
+    point.defaultX = 300;
+    this.options.rotated = true;
+
+    point.draw(this.renderer, this.groups);
+
+    assert.ok(point.graphic);
+    assert.deepEqual(this.renderer.stub("rect").firstCall.args, [12, 22, 43, 33]);
+});
+
+QUnit.test("Marker. Axis is invisible", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    this.series.getArgumentAxis()._options = { visible: false };
+    point.x = 11;
+    point.y = 22;
+    point.height = 33;
+    point.width = 44;
+    point.inVisibleArea = true;
+    point.minX = 300;
+    point.defaultX = 300;
+
+    point.draw(this.renderer, this.groups);
+
+    assert.ok(point.graphic);
+    assert.deepEqual(this.renderer.stub("rect").firstCall.args, [11, 22, 44, 33]);
+});
+
+QUnit.test("Marker. Range bar on axis", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    point.x = 11;
+    point.y = 22;
+    point.height = 33;
+    point.width = 44;
+    point.inVisibleArea = true;
+    point.minX = 300;
+    point.defaultX = 200;
+
+    point.draw(this.renderer, this.groups);
+
+    assert.ok(point.graphic);
+    assert.deepEqual(this.renderer.stub("rect").firstCall.args, [11, 22, 44, 33]);
 });
 
 QUnit.test("draw errorBar", function(assert) {
@@ -1127,6 +1182,56 @@ QUnit.test("get coords marker", function(assert) {
     point.draw(this.renderer, this.groups);
 
     assert.deepEqual(point.getMarkerCoords(), { height: 55, width: 66, x: 10, y: 20 });
+});
+
+QUnit.test("get coords marker (trimmed)", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    this.series.getArgumentAxis().getOptions = function() { return { visible: true, width: 4 }; };
+    point.x = 10;
+    point.y = 245;
+    point.height = 55;
+    point.width = 66;
+    point.minY = 300;
+    point.defaultY = 300;
+    point.inVisibleArea = true;
+    point.draw(this.renderer, this.groups);
+
+    assert.deepEqual(point.getMarkerCoords(), { height: 53, width: 66, x: 10, y: 245 });
+});
+
+QUnit.test("get coords marker (axis shifted)", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    this.series.getArgumentAxis().getOptions = function() { return { visible: true, width: 4 }; };
+    this.series.getArgumentAxis().getAxisShift = function() { return 10; };
+    point.x = 10;
+    point.y = 245;
+    point.height = 55;
+    point.width = 66;
+    point.minY = 300;
+    point.defaultY = 300;
+    point.inVisibleArea = true;
+    point.draw(this.renderer, this.groups);
+
+    assert.deepEqual(point.getMarkerCoords(), { height: 55, width: 66, x: 10, y: 245 });
+});
+
+QUnit.test("get coords marker (too small)", function(assert) {
+    var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
+
+    this.series.getArgumentAxis().getOptions = function() { return { visible: true, width: 4 }; };
+    this.options.rotated = true;
+    point.x = 300;
+    point.y = 20;
+    point.height = 55;
+    point.width = 2;
+    point.minX = 300;
+    point.defaultX = 300;
+    point.inVisibleArea = true;
+    point.draw(this.renderer, this.groups);
+
+    assert.deepEqual(point.getMarkerCoords(), { height: 55, width: 0, x: 302, y: 20 });
 });
 
 QUnit.module("Tooltip", {
@@ -2283,6 +2388,15 @@ QUnit.test("coordsIn", function(assert) {
     assert.ok(point.coordsIn(210, 600), "bottom side");
     assert.ok(!point.coordsIn(210, 601), "bottom side out");
 
+});
+
+QUnit.test("getCenterCoord", function(assert) {
+    const point = createPoint(this.series, { argument: 1, value: 5 }, this.opt);
+
+    point.correctCoordinates({ width: 20 });
+    point.translate();
+
+    assert.deepEqual(point.getCenterCoord(), { x: 120, y: 577.5 });
 });
 
 QUnit.module("get point radius", {

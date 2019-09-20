@@ -3,7 +3,6 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     DropDownList = require("./drop_down_editor/ui.drop_down_list"),
-    themes = require("./themes"),
     Deferred = require("../core/utils/deferred").Deferred;
 
 var AUTOCOMPLETE_CLASS = "dx-autocomplete",
@@ -28,7 +27,7 @@ var Autocomplete = DropDownList.inherit({
             upArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(item && !item.prev().length) {
+                if(item && !this._calcNextItem(-1)) {
                     this._clearFocusedItem();
                     return false;
                 }
@@ -37,7 +36,7 @@ var Autocomplete = DropDownList.inherit({
             downArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                if(item && !item.next().length) {
+                if(item && !this._calcNextItem(1)) {
                     this._clearFocusedItem();
                     return false;
                 }
@@ -85,7 +84,6 @@ var Autocomplete = DropDownList.inherit({
 
             /**
              * @name dxAutocompleteOptions.showDropDownButton
-             * @inheritdoc
              * @default false
              */
             showDropDownButton: false,
@@ -100,39 +98,18 @@ var Autocomplete = DropDownList.inherit({
             /**
             * @name dxAutocompleteOptions.acceptCustomValue
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions.searchEnabled
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions.showDataBeforeSearch
             * @hidden
-            * @inheritdoc
             */
         });
-    },
-
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return themes.isAndroid5();
-                },
-                options: {
-                    popupPosition: {
-                        offset: {
-                            h: -16,
-                            v: -8
-                        }
-                    }
-                }
-            }
-        ]);
     },
 
     /**

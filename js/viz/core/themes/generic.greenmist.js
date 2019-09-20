@@ -70,11 +70,20 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: TEXT_COLOR
+                color: BORDER_COLOR
             }
         },
         commonAxisSettings: {
             breakStyle: { color: "#c1c1c1" }
+        },
+        commonAnnotationSettings: {
+            color: "#fff",
+            border: {
+                color: BORDER_COLOR
+            },
+            font: {
+                color: TITLE_COLOR
+            }
         }
     },
     funnel: {

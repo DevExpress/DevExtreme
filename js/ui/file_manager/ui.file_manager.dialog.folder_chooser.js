@@ -5,6 +5,7 @@ import FileManagerDialogBase from "./ui.file_manager.dialog.js";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 
 const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = "dx-filemanager-dialog-folder-chooser";
+const FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP = "dx-filemanager-dialog-folder-chooser-popup";
 
 class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
@@ -17,10 +18,10 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
     _getDialogOptions() {
         return extend(super._getDialogOptions(), {
-            width: 400,
-            height: "80%",
             title: "Select Destination Folder",
-            buttonText: "Select"
+            buttonText: "Select",
+            contentCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER,
+            popupCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP
         });
     }
 
@@ -36,10 +37,6 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
     _getDialogResult() {
         return { folder: this._filesTreeView.getCurrentFolder() };
-    }
-
-    _getCssClass() {
-        return FILE_MANAGER_DIALOG_FOLDER_CHOOSER;
     }
 
     _getDefaultOptions() {

@@ -28,12 +28,10 @@ var NavBar = Tabs.inherit({
             /**
             * @name dxNavBarOptions.showNavButtons
             * @hidden
-            * @inheritdoc
             */
 
             /**
             * @name dxNavBarOptions.scrollByContent
-            * @inheritdoc
             */
         });
     },

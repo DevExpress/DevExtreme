@@ -1,35 +1,40 @@
 import "ui/file_manager";
 import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
 
-import WebAPIFileProvider from "ui/file_manager/file_provider/file_provider.webapi";
+import WebApiFileProvider from "ui/file_manager/file_provider/webapi";
 import ajaxMock from "../../../helpers/ajaxMock.js";
 import { when } from "core/utils/deferred";
+import { deserializeDate } from "core/utils/date_serialization";
 
 const { test } = QUnit;
 
-const createFileManagerItem = (parentPath, name, isFolder, lastWriteTimeString, length) => {
-    const result = new FileManagerItem(parentPath, name, isFolder);
-    result.lastWriteTime = lastWriteTimeString; // TODO make conversion to 'Date' type
-    result.length = length;
-    return result;
+const createFileManagerItem = (parentPath, dataObj) => {
+    let item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
+    item.dateModified = deserializeDate(dataObj.dateModified);
+    item.size = dataObj.size;
+    item.dataItem = dataObj;
+    if(dataObj.isDirectory) {
+        item.hasSubDirs = true;
+    }
+    return item;
 };
 
 const FOLDER_COUNT = 3;
 
 const itemData = [
-    { id: "Root\\Files\\Documents", name: "Documents", lastWriteTime: "2019-02-14T07:44:15.4265625Z", isFolder: true, size: 0 },
-    { id: "Root\\Files\\Images", name: "Images", lastWriteTime: "2019-02-14T07:44:15.4885105Z", isFolder: true, size: 0 },
-    { id: "Root\\Files\\Music", name: "Music", lastWriteTime: "2019-02-14T07:44:15.4964648Z", isFolder: true, size: 0 },
-    { id: "Root\\Files\\Description.rtf", name: "Description.rtf", lastWriteTime: "2017-02-09T09:38:46.3772529Z", isFolder: false, size: 1 },
-    { id: "Root\\Files\\Article.txt", name: "Article.txt", lastWriteTime: "2017-02-09T09:38:46.3772529Z", isFolder: false, size: 1 }
+    { id: "Root\\Files\\Documents", name: "Documents", dateModified: "2019-02-14T07:44:15.4265625Z", isDirectory: true, size: 0 },
+    { id: "Root\\Files\\Images", name: "Images", dateModified: "2019-02-14T07:44:15.4885105Z", isDirectory: true, size: 0 },
+    { id: "Root\\Files\\Music", name: "Music", dateModified: "2019-02-14T07:44:15.4964648Z", isDirectory: true, size: 0 },
+    { id: "Root\\Files\\Description.rtf", name: "Description.rtf", dateModified: "2017-02-09T09:38:46.3772529Z", isDirectory: false, size: 1 },
+    { id: "Root\\Files\\Article.txt", name: "Article.txt", dateModified: "2017-02-09T09:38:46.3772529Z", isDirectory: false, size: 1 }
 ];
 
 const fileManagerItems = [
-    createFileManagerItem("Root/Files", "Documents", true, "2019-02-14T07:44:15.4265625Z", 0),
-    createFileManagerItem("Root/Files", "Images", true, "2019-02-14T07:44:15.4885105Z", 0),
-    createFileManagerItem("Root/Files", "Music", true, "2019-02-14T07:44:15.4964648Z", 0),
-    createFileManagerItem("Root/Files", "Description.rtf", false, "2017-02-09T09:38:46.3772529Z", 1),
-    createFileManagerItem("Root/Files", "Article.txt", false, "2017-02-09T09:38:46.3772529Z", 1)
+    createFileManagerItem("Root/Files", itemData[0]),
+    createFileManagerItem("Root/Files", itemData[1]),
+    createFileManagerItem("Root/Files", itemData[2]),
+    createFileManagerItem("Root/Files", itemData[3]),
+    createFileManagerItem("Root/Files", itemData[4])
 ];
 
 const fileManagerFolders = fileManagerItems.slice(0, FOLDER_COUNT);
@@ -37,15 +42,15 @@ const fileManagerFiles = fileManagerItems.slice(FOLDER_COUNT);
 
 const moduleConfig = {
 
-    beforeEach: () => {
+    beforeEach: function() {
         this.options = {
-            loadUrl: "/api/endpoint"
+            endpointUrl: "/api/endpoint"
         };
 
-        this.provider = new WebAPIFileProvider(this.options);
+        this.provider = new WebApiFileProvider(this.options);
     },
 
-    afterEach: () => {
+    afterEach: function() {
         ajaxMock.clear();
     }
 
@@ -53,15 +58,16 @@ const moduleConfig = {
 
 QUnit.module("Web API Provider", moduleConfig, () => {
 
-    test("get folders test", (assert) => {
+    test("get folders test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
+            url: this.options.endpointUrl + "?command=GetDirContents&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
             responseText: {
                 result: itemData,
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "GET")
         });
 
         this.provider.getFolders("Root/Files")
@@ -71,15 +77,16 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("get files test", (assert) => {
+    test("get files test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=GetDirContent&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
+            url: this.options.endpointUrl + "?command=GetDirContents&arguments=%7B%22parentId%22%3A%22Root%2FFiles%22%7D",
             responseText: {
                 success: true,
                 result: itemData
-            }
+            },
+            callback: request => assert.equal(request.method, "GET")
         });
 
         this.provider.getFiles("Root/Files")
@@ -89,14 +96,15 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("create folder test", (assert) => {
+    test("create folder test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=CreateDir&arguments=%7B%22parentId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
+            url: this.options.endpointUrl + "?command=CreateDir&arguments=%7B%22parentId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const parentFolder = new FileManagerItem("Root/Files", "Documents");
@@ -107,14 +115,15 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("rename item test", (assert) => {
+    test("rename item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=Rename&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
+            url: this.options.endpointUrl + "?command=Rename&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%2C%22name%22%3A%22Test%201%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
@@ -125,14 +134,15 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("delete item test", (assert) => {
+    test("delete item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=Remove&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%7D",
+            url: this.options.endpointUrl + "?command=Remove&arguments=%7B%22id%22%3A%22Root%2FFiles%2FDocuments%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
@@ -144,14 +154,15 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("move item test", (assert) => {
+    test("move item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=Move&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%2FDocuments%22%7D",
+            url: this.options.endpointUrl + "?command=Move&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%2FDocuments%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
@@ -164,14 +175,15 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
-    test("copy item test", (assert) => {
+    test("copy item test", function(assert) {
         const done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.loadUrl + "?command=Copy&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%22%7D",
+            url: this.options.endpointUrl + "?command=Copy&arguments=%7B%22sourceId%22%3A%22Root%2FFiles%2FDocuments%22%2C%22destinationId%22%3A%22Root%2FFiles%2FImages%2FDocuments%22%7D",
             responseText: {
                 success: true
-            }
+            },
+            callback: request => assert.equal(request.method, "POST")
         });
 
         const item = new FileManagerItem("Root/Files", "Documents");
@@ -182,6 +194,18 @@ QUnit.module("Web API Provider", moduleConfig, () => {
                 assert.ok(result.success, "item copied");
                 done();
             });
+    });
+
+    test("generation end point", function(assert) {
+        let provider = new WebApiFileProvider({
+            endpointUrl: "myEndpoint"
+        });
+        assert.ok(provider._getEndpointUrl("myCommand", { }).indexOf("myEndpoint?command=myCommand") !== -1);
+
+        provider = new WebApiFileProvider({
+            endpointUrl: "myEndpoint?param1=value"
+        });
+        assert.ok(provider._getEndpointUrl("myCommand", { }).indexOf("myEndpoint?param1=value&command=myCommand") !== -1);
     });
 
 });

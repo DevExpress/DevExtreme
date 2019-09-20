@@ -21,6 +21,9 @@ var $ = require("jquery"),
     insertMockFactory = chartMocks.insertMockFactory,
     restoreMockFactory = chartMocks.restoreMockFactory;
 
+var eventsEngine = require("events/core/events_engine"),
+    devices = require("core/devices");
+
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
 var dataSourceTemplate = [
@@ -360,6 +363,20 @@ var environment = {
         assert.deepEqual(tracker.stub("updateSeries").lastCall.args[0], [], "updateSeries args");
     });
 
+    QUnit.test("Should not crash on parent scroll (test chain executor)", function(assert) {
+        var originalPlatform = devices.real().platform;
+
+        try {
+            devices.real({ platform: "generic" });
+            createPieChart.call(this, {});
+
+            eventsEngine.trigger($("#qunit-fixture"), "scroll");
+            assert.expect(1);
+        } finally {
+            devices.real({ platform: originalPlatform });
+        }
+    });
+
     QUnit.module("Creation series for tracker", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
@@ -445,7 +462,6 @@ var environment = {
     QUnit.test("Pie dxChart with single series request default type, dataSource", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        stubSeries.adjustLabels = sinon.stub();
         chartMocks.seriesMockData.series.push(stubSeries);
         sinon.spy(stubSeries, "arrangePoints");
         // act
@@ -471,7 +487,6 @@ var environment = {
     QUnit.test("Pie dxChart with single series request default type, data in series", function(assert) {
         // arrange
         var stubSeries = new MockSeries({});
-        stubSeries.adjustLabels = sinon.stub();
         chartMocks.seriesMockData.series.push(stubSeries);
         // act
         var chart = this.createPieChart({
@@ -1929,11 +1944,9 @@ var environment = {
     QUnit.test("Adjust labels only before overlapping resolve, without moving from center (T586419)", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
                 { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
-            series = pie.getAllSeries()[0],
-            points = series.getVisiblePoints();
+            series = pie.getAllSeries()[0];
 
         assert.equal(series.adjustLabels.callCount, 1);
-        assert.ok(series.adjustLabels.getCall(0).calledBefore(points[1].getLabels()[0].draw.withArgs(false).lastCall));
         assert.deepEqual(series.adjustLabels.getCall(0).args, [false], "Do not move from center (T586419)");
     });
 
@@ -2037,33 +2050,26 @@ var environment = {
             points = series.getVisiblePoints();
 
         // assert
-        assert.equal(series.adjustLabels.callCount, 2);
-
+        assert.equal(series.adjustLabels.callCount, 5);
         assert.ok(series.adjustLabels.getCall(0).calledBefore(points[1].getLabels()[0].shift.lastCall));
         assert.deepEqual(series.adjustLabels.getCall(0).args, [true], "Move from center (T586419)");
-
-        assert.ok(series.adjustLabels.getCall(1).calledAfter(points[1].getLabels()[0].shift.lastCall));
         assert.deepEqual(series.adjustLabels.getCall(1).args, [true], "Move from center (T586419)");
     });
 
     QUnit.test("Do not Adjust labels after resolve overlapping in columns position", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
                 { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "columns"),
-            series = pie.getAllSeries()[0],
-            points = series.getVisiblePoints();
+            series = pie.getAllSeries()[0];
 
-        assert.equal(series.adjustLabels.callCount, 1);
-        assert.ok(!series.adjustLabels.lastCall.calledAfter(points[1].getLabels()[0].shift.lastCall));
+        assert.equal(series.adjustLabels.callCount, 5);
     });
 
     QUnit.test("Do not Adjust labels after resolve overlapping in inside position", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
                 { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "inside"),
-            series = pie.getAllSeries()[0],
-            points = series.getVisiblePoints();
+            series = pie.getAllSeries()[0];
 
-        assert.equal(series.adjustLabels.callCount, 1);
-        assert.ok(!series.adjustLabels.lastCall.calledAfter(points[1].getLabels()[0].shift.lastCall));
+        assert.equal(series.adjustLabels.callCount, 5);
     });
 
     QUnit.module("resolveLabelOverlapping. shift. multipie", $.extend({}, overlappingEnvironment, {

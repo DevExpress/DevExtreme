@@ -1,8 +1,8 @@
-var $ = require("../../core/renderer"),
-    windowUtils = require("../../core/utils/window"),
+var windowUtils = require("../../core/utils/window"),
     window = windowUtils.getWindow(),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
+    dom = require("../../core/utils/dom"),
     each = require("../../core/utils/iterator").each,
     compareVersions = require("../../core/utils/version").compare,
     extend = require("../../core/utils/extend").extend,
@@ -222,8 +222,9 @@ var DateBox = DropDownEditor.inherit({
              * @type dxCalendarOptions
              * @default {}
              */
-            calendarOptions: {}
+            calendarOptions: {},
 
+            useHiddenSubmitElement: true
         });
     },
 
@@ -383,13 +384,8 @@ var DateBox = DropDownEditor.inherit({
 
     _initMarkup: function() {
         this.$element().addClass(DATEBOX_CLASS);
-        this._renderSubmitElement();
 
         this.callBase();
-
-        if(this.option("isValid")) {
-            this._validateValue(this.dateOption("value"));
-        }
 
         this._refreshFormatClass();
         this._refreshPickerTypeClass();
@@ -428,16 +424,6 @@ var DateBox = DropDownEditor.inherit({
         $element.addClass(DATEBOX_CLASS + "-" + this._pickerType);
     },
 
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
-    },
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
-    },
-
     _updateSize: function() {
         var $element = this.$element(),
             widthOption = this.option("width"),
@@ -461,19 +447,7 @@ var DateBox = DropDownEditor.inherit({
         var IE_ROUNDING_ERROR = 10;
         var NATIVE_BUTTONS_WIDTH = 48;
         var $input = this._input();
-        var $longestValueElement = $("<div>").text(value).css({
-            "fontStyle": $input.css("fontStyle"),
-            "fontVariant": $input.css("fontVariant"),
-            "fontWeight": $input.css("fontWeight"),
-            "fontSize": $input.css("fontSize"),
-            "fontFamily": $input.css("fontFamily"),
-            "letterSpacing": $input.css("letterSpacing"),
-            "border": $input.css("border"),
-            "visibility": "hidden",
-            "whiteSpace": "nowrap",
-            "position": "absolute",
-            "float": "left"
-        });
+        var $longestValueElement = dom.createTextElementHiddenCopy($input, value);
 
         $longestValueElement.appendTo(this.$element());
         var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
@@ -558,7 +532,18 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _readOnlyPropValue: function() {
-        return this.callBase() && !this._isNativeType() || this._pickerType === PICKER_TYPE.rollers;
+        if(this._pickerType === PICKER_TYPE.rollers) {
+            return true;
+        }
+
+        var platform = devices.real().platform,
+            isCustomValueDisabled = this._isNativeType() && (platform === "ios" || platform === "android");
+
+        if(isCustomValueDisabled) {
+            return this.option("readOnly");
+        }
+
+        return this.callBase();
     },
 
     _isClearButtonVisible: function() {
@@ -566,17 +551,21 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        var value = this.dateOption("value"),
-            dateSerializationFormat = this.option("dateSerializationFormat");
+        var value = this.dateOption("value");
 
         this.option("text", this._getDisplayedText(value));
+        this._strategy.renderValue();
 
+        return this.callBase();
+    },
+
+    _setSubmitValue: function() {
+        var value = this.dateOption("value");
+        var dateSerializationFormat = this.option("dateSerializationFormat");
         var submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option("type")];
         var submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
-        this._$submitElement.val(submitValue);
 
-        this._strategy.renderValue();
-        return this.callBase();
+        this._getSubmitElement().val(submitValue);
     },
 
     _getDisplayedText: function(value) {
@@ -632,7 +621,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getDateByDefault: function() {
-        return this._strategy.useCurrentDateByDefault() && new Date();
+        return this._strategy.useCurrentDateByDefault() && this._strategy.getDefaultDate();
     },
 
     _getParsedDate: function(text) {
@@ -744,8 +733,11 @@ var DateBox = DropDownEditor.inherit({
         this._refresh();
     },
 
-    _applyButtonHandler: function() {
-        this.dateValue(this._strategy.getValue());
+    _applyButtonHandler: function(e) {
+        var value = this._strategy.getValue();
+        if(this._validateValue(value)) {
+            this.dateValue(value, e.event);
+        }
         this.callBase();
     },
 
@@ -761,6 +753,7 @@ var DateBox = DropDownEditor.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "showClearButton":
+            case "buttons":
                 this.callBase.apply(this, arguments);
                 this._updateSize();
                 break;
@@ -782,7 +775,7 @@ var DateBox = DropDownEditor.inherit({
                 break;
             case "min":
             case "max":
-                this._validateValue(this.dateOption("value"));
+                this._applyInternalValidation(this.dateOption("value"));
                 this._invalidate();
                 break;
             case "dateSerializationFormat":
@@ -818,6 +811,10 @@ var DateBox = DropDownEditor.inherit({
                 this._updateSize();
                 break;
             case "showDropDownButton":
+                this._updateSize();
+                break;
+            case "readOnly":
+                this.callBase.apply(this, arguments);
                 this._updateSize();
                 break;
             case "invalidDateMessage":

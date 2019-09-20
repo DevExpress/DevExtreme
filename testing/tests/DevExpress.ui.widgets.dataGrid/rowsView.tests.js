@@ -1059,6 +1059,42 @@ QUnit.test("Highlighting search text for boolean column with set to 'falseText' 
     assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "<span class=" + searchTextClass + ">No</span>", "highlight text in cell");
 });
 
+QUnit.test("Highlighting search text for group row if templatesRenderAsynchronously is true (T808974)", function(assert) {
+    // arrange
+    var columns = [{
+            allowCollapsing: true,
+            allowFiltering: true,
+            cssClass: "dx-command-expand",
+            groupIndex: 0,
+            command: "expand",
+            caption: "Group",
+            dataType: "string"
+        }, {
+            allowFiltering: true,
+            dataType: "string",
+            dataField: "name"
+        }],
+        rowsView = this.createRowsView([
+            { data: { key: "TestGroup", items: null }, values: ["TestGroup"], rowType: "group", groupIndex: 0 }
+        ], null, columns),
+        $testElement = $("#container"),
+        $cells;
+
+    this.options.searchPanel = {
+        highlightSearchText: true,
+        text: "Test"
+    };
+    this.options.templatesRenderAsynchronously = true;
+
+    // act
+    rowsView.render($testElement);
+    this.clock.tick();
+
+    // assert
+    $cells = $testElement.find(".dx-group-row").find("td");
+    assert.strictEqual(getNormalizeMarkup($cells.eq(1)), "Group: <span class=dx-datagrid-search-text>Test</span>Group", "highlight text in cell");
+});
+
 QUnit.test('All rows are not isSelected by default', function(assert) {
     // arrange
     var rowsView = this.createRowsView(this.items),
@@ -1328,7 +1364,7 @@ QUnit.test('Render rows after "refresh" from data controller', function(assert) 
 });
 
 QUnit.test('Custom function template for column', function(assert) {
-    var rows = [{ values: [true] }, { values: [false] }, { values: [true] }],
+    var rows = [{ values: [true], rowType: "data" }, { values: [false], rowType: "data" }, { values: [true], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: function(container, options) {
@@ -1359,7 +1395,7 @@ QUnit.test('Custom function template for column', function(assert) {
 
 // T116631
 QUnit.test('Click in cellTemplate should be not prevented', function(assert) {
-    var rows = [{ values: [1] }, { values: [2] }, { values: [3] }],
+    var rows = [{ values: [1], rowType: "data" }, { values: [2], rowType: "data" }, { values: [3], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: function(container, options) {
@@ -1419,7 +1455,7 @@ QUnit.test('Custom function template options for lookup column', function(assert
 
 
 QUnit.test('Custom extern column template with allowRenderToDetachedContainer', function(assert) {
-    var rows = [{ values: ['1'] }, { values: ['2'] }, { values: ['3'] }],
+    var rows = [{ values: ['1'], rowType: "data" }, { values: ['2'], rowType: "data" }, { values: ['3'], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: 'testTemplate'
@@ -1447,7 +1483,7 @@ QUnit.test('Custom extern column template with allowRenderToDetachedContainer', 
 });
 
 QUnit.test('Custom extern column template without allowRenderToDetachedContainer', function(assert) {
-    var rows = [{ values: ['1'] }, { values: ['2'] }, { values: ['3'] }],
+    var rows = [{ values: ['1'], rowType: "data" }, { values: ['2'], rowType: "data" }, { values: ['3'], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: 'testTemplate'
@@ -1488,7 +1524,7 @@ QUnit.test('Custom extern column template without allowRenderToDetachedContainer
 });
 
 QUnit.test('Custom extern column template without allowRenderToDetachedContainer and detached root rowsView element', function(assert) {
-    var rows = [{ values: ['1'] }, { values: ['2'] }, { values: ['3'] }],
+    var rows = [{ values: ['1'], rowType: "data" }, { values: ['2'], rowType: "data" }, { values: ['3'], rowType: "data" }],
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: 'testTemplate'
@@ -4478,6 +4514,76 @@ QUnit.test('click expand/collapse group', function(assert) {
     assert.deepEqual(values, ['Alex'], 'changeRowExpand path');
 });
 
+QUnit.test('click expand/collapse group row if expandMode is rowClick', function(assert) {
+    var rowClickArgs;
+    this.options.columns = [{ dataField: 'name', groupIndex: 0, allowCollapsing: true }, 'age'];
+    this.options.onRowClick = function(e) {
+        rowClickArgs = e;
+    };
+    this.options.grouping = {
+        expandMode: "rowClick"
+    };
+
+    this.setupDataGridModules();
+    // arrange
+    var that = this,
+        values,
+        testElement = $('#container');
+
+    that.dataController.changeRowExpand = function(path) {
+        values = path;
+    };
+
+    that.rowsView.render(testElement);
+
+    // assert
+    var $groupRow = testElement.find('.' + "dx-group-row").first();
+    assert.ok($groupRow.length, 'group cell exist');
+
+    // act
+    $($groupRow).trigger("dxclick");
+
+    // assert
+    assert.ok(rowClickArgs, 'rowClick called');
+    assert.ok(rowClickArgs.handled, 'rowClick handled by grid');
+    assert.deepEqual(values, ['Alex'], 'changeRowExpand path');
+});
+
+// T734376
+QUnit.test('click expand/collapse group row if expandMode is rowClick and allowCollapsing is false', function(assert) {
+    var rowClickArgs;
+    this.options.columns = [{ dataField: 'name', groupIndex: 0, allowCollapsing: false }, 'age'];
+    this.options.onRowClick = function(e) {
+        rowClickArgs = e;
+    };
+    this.options.grouping = {
+        expandMode: "rowClick"
+    };
+
+    this.setupDataGridModules();
+    // arrange
+    var that = this,
+        expandPath,
+        testElement = $('#container');
+
+    that.dataController.changeRowExpand = function(path) {
+        expandPath = path;
+    };
+
+    that.rowsView.render(testElement);
+
+    // assert
+    var $groupRow = testElement.find('.' + "dx-group-row").first();
+    assert.ok($groupRow.length, 'group cell exist');
+
+    // act
+    $($groupRow).trigger("dxclick");
+
+    // assert
+    assert.ok(rowClickArgs, 'rowClick is called');
+    assert.strictEqual(expandPath, undefined, 'changeRowExpand is not called');
+});
+
 // B254492
 QUnit.test('free space row height when dataGrid without height and pageCount = 1', function(assert) {
     this.setupDataGridModules();
@@ -5411,6 +5517,7 @@ QUnit.module('Virtual scrolling', {
             rowsView._dataController._itemSizes = {};
             rowsView._dataController.getVirtualContentSize = x.getVirtualContentSize;
             rowsView._dataController.getContentOffset = x.getContentOffset;
+            rowsView._dataController.getItemOffset = x.getItemOffset;
             rowsView._dataController.getItemSize = x.getItemSize;
             rowsView._dataController.getItemSizes = x.getItemSizes;
             rowsView._dataController.viewportItemSize = x.viewportItemSize;
@@ -6761,7 +6868,7 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
 
 // T606944
 QUnit.test("The vertical scrollbar should not be shown when there is a horizontal scrollbar", function(assert) {
-    if(browser.msie && browser.version === "18.17763") {
+    if(browser.msie && browser.version === "18.18362") {
         assert.ok(true);
         return;
     }

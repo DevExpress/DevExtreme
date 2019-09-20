@@ -1,6 +1,7 @@
 import $ from "jquery";
 import vizMocks from "../../helpers/vizMocks.js";
-import { Series } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
 
 function getOriginalData(data) {
     return $.map(data, function(item) {
@@ -229,6 +230,26 @@ QUnit.test("Data with valueErrorBar. invalid mode", function(assert) {
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.val.min, 1, "Min arg should be correct");
     assert.strictEqual(rangeData.val.max, 27, "Max arg should be correct");
+    assert.strictEqual(rangeData.val.interval, undefined, "Min interval arg should be correct");
+    assert.strictEqual(rangeData.val.categories, undefined, "Categories arg should be undefined");
+});
+
+QUnit.test("Data with valueErrorBar - some items do not have errorbar data (T808399)", function(assert) {
+    var data = getOriginalData([
+            { arg: 2, val: 10, highError: 8, lowError: 11 },
+            { arg: 5, val: 1 },
+            { arg: 13, val: 10, highError: 9, lowError: 12 }
+        ]),
+        rangeData,
+        series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "auto", highValueField: "highError", lowValueField: "lowError" } });
+    series.updateData(data);
+    series.createPoints();
+
+    rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.val.min, 1, "Min arg should be correct");
+    assert.strictEqual(rangeData.val.max, 12, "Max arg should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min interval arg should be correct");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories arg should be undefined");
 });
@@ -2696,6 +2717,42 @@ QUnit.test("Add interval if checkInterval in marginOptions", function(assert) {
 
     assert.equal(rangeData.min, 20, "min Visible Y");
     assert.equal(rangeData.max, 50, "max Visible Y");
+});
+
+QUnit.test("No errors when there is no axis viewport", function(assert) {
+    const data = [
+        { arg: new Date(1), val: 10 },
+        { arg: new Date(2), val: 20 },
+        { arg: new Date(3), val: 30 },
+        { arg: new Date(4), val: 40 },
+        { arg: new Date(5), val: 50 },
+        { arg: new Date(6), val: 60 }];
+
+    this.argumentAxis.getTranslator = function() {
+        return {
+            getBusinessRange() {
+                return {
+                    interval: 1,
+                    dataType: "datetime"
+                };
+            }
+        };
+    };
+    this.argumentAxis.getMarginOptions = () => { return { checkInterval: true }; };
+    this.argumentAxis.visualRange = () => { };
+
+    this.defaultOptions.showZero = false;
+    const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
+
+    series.updateData(data);
+    series.createPoints();
+
+    this.zoom(new Date(3), new Date(4));
+
+    const rangeData = series.getViewport();
+
+    assert.equal(rangeData.min, 10, "min Visible Y");
+    assert.equal(rangeData.max, 60, "max Visible Y");
 });
 
 QUnit.module("Get points in viewport", {

@@ -2,12 +2,14 @@ var $ = require("../../core/renderer"),
     window = require("../../core/utils/window").getWindow(),
     List = require("../list"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
-    themes = require("../themes"),
     noop = require("../../core/utils/common").noop,
+    ensureDefined = require("../../core/utils/common").ensureDefined,
     isDate = require("../../core/utils/type").isDate,
     extend = require("../../core/utils/extend").extend,
     dateUtils = require("./ui.date_utils"),
     dateLocalization = require("../../localization/date");
+
+var DATE_FORMAT = "date";
 
 var BOUNDARY_VALUES = {
     "min": new Date(0, 0, 0, 0, 0),
@@ -42,36 +44,21 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     popupConfig: function(popupConfig) {
-        var result = extend(popupConfig, {
+        return extend(popupConfig, {
             width: this._getPopupWidth()
         });
-
-        if(themes.isAndroid5()) {
-            extend(true, result, {
-                position: {
-                    offset: {
-                        h: -16,
-                        v: -10
-                    }
-                }
-            });
-        }
-
-        return result;
     },
 
     useCurrentDateByDefault: function() {
         return true;
     },
 
+    getDefaultDate: function() {
+        return new Date(null);
+    },
+
     _getPopupWidth: function() {
-        var result = this.dateBox.$element().outerWidth();
-
-        if(themes.isAndroid5()) {
-            result += 32;
-        }
-
-        return result;
+        return this.dateBox.$element().outerWidth();
     },
 
     popupShowingHandler: function() {
@@ -218,7 +205,7 @@ var ListStrategy = DateBoxStrategy.inherit({
 
     _getBoundaryDate: function(boundary) {
         var boundaryValue = BOUNDARY_VALUES[boundary],
-            currentValue = this.dateBox.dateOption("value") || new Date();
+            currentValue = new Date(ensureDefined(this.dateBox.dateOption("value"), 0));
 
         return new Date(
             currentValue.getFullYear(),
@@ -290,6 +277,16 @@ var ListStrategy = DateBoxStrategy.inherit({
         var maxHeight = $(window).height() * 0.45;
         this.dateBox._setPopupOption("height", Math.min(popupHeight, maxHeight));
         this.dateBox._timeList && this.dateBox._timeList.updateDimensions();
+    },
+
+    getParsedText: function(text, format) {
+        var value = this.callBase(text, format);
+
+        if(value) {
+            value = dateUtils.mergeDates(value, new Date(null), DATE_FORMAT);
+        }
+
+        return value;
     }
 });
 

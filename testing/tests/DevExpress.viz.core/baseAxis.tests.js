@@ -735,7 +735,9 @@ QUnit.test("Get visual range after setBusinessRange. Discrete", function(assert)
 });
 
 QUnit.test("Trigger zoom events", function(assert) {
-    this.updateOptions();
+    this.updateOptions({
+        type: "continuous"
+    });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -760,7 +762,8 @@ QUnit.test("Trigger zoom events", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
@@ -824,7 +827,7 @@ QUnit.test("Can cancel zooming on zoom end", function(assert) {
 });
 
 QUnit.test("Can prevent zoomStart", function(assert) {
-    this.updateOptions();
+    this.updateOptions({ type: "continuous" });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -841,12 +844,13 @@ QUnit.test("Can prevent zoomStart", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
 QUnit.test("Can prevent zoomEnd", function(assert) {
-    this.updateOptions();
+    this.updateOptions({ type: "continuous" });
 
     this.axis.setBusinessRange({
         min: 0,
@@ -864,7 +868,8 @@ QUnit.test("Can prevent zoomEnd", function(assert) {
         startRange: {
             startValue: 0,
             endValue: 50
-        }
+        },
+        type: "continuous"
     });
 });
 
@@ -913,6 +918,30 @@ QUnit.test("visualRange option is defined", function(assert) {
 
     assert.equal(this.axis.visualRange().startValue, 10, "visualRange[0] should be correct");
     assert.equal(this.axis.visualRange().endValue, 20, "visualRange[1] should be correct");
+});
+
+QUnit.test("visualRange option is defined. Set start edge", function(assert) {
+    this.updateOptions({
+        visualRange: [0, 50]
+    });
+    this.axis.validate();
+
+    this.axis.visualRange({ startValue: 10 }, { allowPartialUpdate: true });
+
+    assert.equal(this.axis.visualRange().startValue, 10, "visualRange[0] should be correct");
+    assert.equal(this.axis.visualRange().endValue, 50, "visualRange[1] should be correct");
+});
+
+QUnit.test("visualRange option is defined. Set end edge", function(assert) {
+    this.updateOptions({
+        visualRange: [0, 50]
+    });
+    this.axis.validate();
+
+    this.axis.visualRange({ endValue: 40 }, { allowPartialUpdate: true });
+
+    assert.equal(this.axis.visualRange().startValue, 0, "visualRange[0] should be correct");
+    assert.equal(this.axis.visualRange().endValue, 40, "visualRange[1] should be correct");
 });
 
 QUnit.test("min and max for discrete axis", function(assert) {
@@ -1596,6 +1625,57 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
     axis.draw(this.canvas);
 
     assert.equal(axis.getTranslator().getBusinessRange().interval, 2 * 1000 * 3600 * 24, "interval");
+});
+
+QUnit.test("T746896. Pass correct range to tick generator after syncroniztion", function(assert) {
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: false
+    });
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({
+        size: 10
+    });
+
+    axis.draw(this.canvas);
+
+    axis.getTranslator().updateBusinessRange({
+        min: 50,
+        max: 250
+    });
+
+    this.tickGeneratorSpy.reset();
+
+    axis.createTicks(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].min, 100);
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].max, 200);
+});
+
+QUnit.test("Pass correct range to tick generator. Discrete axis", function(assert) {
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: true,
+        type: "discrete"
+    });
+
+    axis.setBusinessRange({
+        categories: ["1", "2", "3"]
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.setMarginOptions({
+        size: 40
+    });
+
+    axis.draw(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].min, undefined);
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0].max, undefined);
 });
 
 QUnit.test("margins calculation. Work week calculation: interval > work week", function(assert) {
@@ -3517,16 +3597,17 @@ QUnit.test("Sort datetime categories", function(assert) {
     assert.deepEqual(businessRange.categories, [new Date(2017, 1, 2), new Date(2017, 2, 2), new Date(2017, 6, 2), new Date(2017, 8, 2)]);
 });
 
-QUnit.test("Argument axis categories sorting. Categories option - sort by option", function(assert) {
+// T810801
+QUnit.test("Argument axis categories sorting. Categories option - sort validated categories", function(assert) {
     this.updateOptions({ type: "discrete", valueType: "numeric", categories: [4, 3, 2, 1, 0] });
     this.axis.validate();
 
     this.axis.setBusinessRange({
         categories: [2, 3, 5, 1]
-    });
+    }, false, undefined, [1, 2, 3, 4, 0]);
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.deepEqual(businessRange.categories, [4, 3, 2, 1, 0, 5]);
+    assert.deepEqual(businessRange.categories, [1, 2, 3, 4, 0, 5]);
 });
 
 QUnit.test("Set logarithm base for logarithmic axis", function(assert) {
@@ -3725,6 +3806,18 @@ QUnit.test("Value axis categories sorting. String - do not sort by default", fun
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.deepEqual(businessRange.categories, ["2", "4", "3", "1"]);
+});
+
+QUnit.test("Value axis categories sorting. Categories option - sort by option", function(assert) {
+    this.updateOptions({ type: "discrete", valueType: "numeric", categories: [4, 3, 2, 1, 0] });
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        categories: [2, 3, 5, 1]
+    }, undefined, [1, 2, 3, 4, 0]);
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+    assert.deepEqual(businessRange.categories, [4, 3, 2, 1, 0, 5]);
 });
 
 QUnit.test("Value axis categories sorting. categoriesSortingMethod = false, numeric - do not sort", function(assert) {

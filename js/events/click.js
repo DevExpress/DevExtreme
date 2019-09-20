@@ -98,10 +98,14 @@ var ClickEmitter = Emitter.inherit({
 
     var clickHandler = function(e) {
         var originalEvent = e.originalEvent,
-            eventAlreadyFired = lastFiredEvent !== originalEvent,
+            eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED,
             leftButton = !e.which || e.which === 1;
 
-        if(leftButton && !prevented && isNativeClickEvent(e.target) && eventAlreadyFired) {
+        if(leftButton && !prevented && isNativeClickEvent(e.target) && !eventAlreadyFired) {
+            if(originalEvent) {
+                originalEvent.DXCLICK_FIRED = true;
+            }
+
             lastFiredEvent = originalEvent;
             eventUtils.fireEvent({
                 type: CLICK_EVENT_NAME,
@@ -189,7 +193,7 @@ var ClickEmitter = Emitter.inherit({
 
 
 /**
-  * @name ui events.dxclick
+  * @name UI Events.dxclick
   * @type eventType
   * @type_function_param1 event:event
   * @module events/click

@@ -53,7 +53,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
                 row = options.row;
 
             if(button.name === "add") {
-                return this.allowAdding(options) && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.inserted);
+                return this.allowAdding(options) && row.rowIndex !== this._getVisibleEditRowIndex() && !(row.removed || row.isNewRow);
             }
 
             return result;
@@ -135,6 +135,13 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
 
         _needToCloseEditableCell: function($targetElement) {
             return this.callBase.apply(this, arguments) || $targetElement.closest("." + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length && this.isEditing();
+        },
+
+        getButtonLocalizationNames() {
+            var names = this.callBase.apply(this);
+            names.add = "dxTreeList-editingAddRowToNode";
+
+            return names;
         }
     };
 })());

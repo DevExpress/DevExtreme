@@ -70,7 +70,6 @@ var Button = Widget.inherit({
              * @name dxButtonOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -177,7 +176,6 @@ var Button = Widget.inherit({
                     * @name dxButtonOptions.focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -185,7 +183,7 @@ var Button = Widget.inherit({
             {
                 device: function() {
                     var themeName = themes.current();
-                    return themes.isMaterial(themeName) || themes.isAndroid5(themeName);
+                    return themes.isMaterial(themeName);
                 },
                 options: {
                     useInkRipple: true
@@ -347,7 +345,7 @@ var Button = Widget.inherit({
     _renderClick: function() {
         var that = this,
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            actionConfig = { };
+            actionConfig = { excludeValidators: ["readOnly"] };
 
         if(this.option("useSubmitBehavior")) {
             actionConfig.afterExecute = function(e) {
@@ -384,7 +382,7 @@ var Button = Widget.inherit({
         var ariaLabel = text || icon || "";
         ariaLabel = ariaLabel.toString().trim();
 
-        this.setAria("label", ariaLabel);
+        this.setAria("label", ariaLabel.length ? ariaLabel : null);
     },
 
     _renderType: function() {

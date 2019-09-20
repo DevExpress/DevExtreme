@@ -39,14 +39,23 @@
 }
 
 .dx-tagbox-single-line {
-    &.dx-dropdowneditor-button-visible {
-        .dx-texteditor-container {
-            width: calc(~"100% - "@GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE);
-        }
-    }
-
     .dx-tag-container {
         padding-right: 0;
+    }
+}
+
+.dx-tagbox:not(.dx-tagbox-single-line) {
+    .dx-texteditor-input {
+        height: auto;
+    }
+}
+
+.dx-tag-container.dx-texteditor-input-container {
+    padding-bottom: @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
+
+    .dx-texteditor-input {
+        padding-bottom: @GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING - @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
+        min-height: @GENERIC_TEXTEDITOR_INPUT_HEIGHT - @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
     }
 }
 
@@ -63,7 +72,8 @@
     width: @GENERIC_TAGBOX_REMOVE_BUTTON_WIDTH;
     height: 100%;
 
-    &:before, &:after {
+    &:before,
+    &:after {
         right: 4px + @GENERIC_TAGBOX_REMOVE_BUTTON_RIGHT;
         margin-top: -5px;
         width: 3px;
@@ -79,7 +89,8 @@
     }
 
     &:active {
-        &:before, &:after {
+        &:before,
+        &:after {
             background: @tagbox-tag-button-remove-active-bg;
         }
     }
@@ -92,12 +103,14 @@
     }
 
     .dx-tag-remove-button {
-        &:before, &:after {
+        &:before,
+        &:after {
             background-color: @tagbox-tag-focused-button-remove-bg;
         }
 
         &:active {
-            &:before, &:after {
+            &:before,
+            &:after {
                 background: @tagbox-tag-button-remove-active-bg;
             }
         }
@@ -106,7 +119,6 @@
 
 .dx-tagbox.dx-invalid {
     .dx-texteditor-container {
-
         &:after {
             right: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
 

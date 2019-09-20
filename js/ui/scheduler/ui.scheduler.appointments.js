@@ -147,7 +147,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allowResize: true,
             allowAllDayResize: true,
             onAppointmentDblClick: null,
-            _appointmentGroupButtonOffset: 0
+            _collectorOffset: 0
         });
     },
 
@@ -199,7 +199,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _isRepaintAll: function(appointments) {
         if(this.invoke("isCurrentViewAgenda")) {
-            return false;
+            return true;
         }
         for(let i = 0; i < appointments.length; i++) {
             const appointment = appointments[i];
@@ -222,10 +222,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        if(appointment.needRepaint === false) {
-            this._processRenderedAppointment(appointment);
-        }
-
         if(this._isRepaintAppointment(appointment)) {
             appointment.needRepaint = false;
             !isRepaintAll && this._clearItem(appointment);
@@ -237,8 +233,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _repaintAppointments: function(appointments) {
         const isRepaintAll = this._isRepaintAll(appointments);
 
-        const allDayFragment = $(domAdapter.createDocumentFragment());
-        const commonFragment = $(domAdapter.createDocumentFragment());
+        const allDayFragment = $(this._getAppointmentContainer(true));
+        const commonFragment = $(this._getAppointmentContainer(false));
 
         if(isRepaintAll) {
             this._getAppointmentContainer(true).html("");
@@ -265,29 +261,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
-    },
-
-    _processRenderedAppointment: function(item) {
-        var resourceForPainting = this.invoke("getResourceForPainting");
-
-        if(!resourceForPainting) {
-            return;
-        }
-
-        var $items = this._findItemElementByItem(item.itemData);
-
-        if(!$items.length) {
-            return;
-        }
-
-        each($items, (function(index, $item) {
-            var deferredColor = this._getAppointmentColor($item, item.settings[index].groupIndex);
-            deferredColor.done(function(color) {
-                if(color) {
-                    $item.css("backgroundColor", color);
-                }
-            });
-        }).bind(this));
     },
 
     _clearItem: function(item) {
@@ -649,7 +622,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var $element = $(e.element),
             itemData = this._getItemData($element),
             startDate = this.invoke("getStartDate", itemData, true),
-            endDate = this.invoke("getEndDate", itemData);
+            endDate = this.invoke("getEndDate", itemData, true);
 
         var dateRange = this._getDateRange(e, startDate, endDate);
 
@@ -700,17 +673,19 @@ var SchedulerAppointments = CollectionWidget.inherit({
             result = endDate.getTime() + deltaTime,
             visibleDayDuration = (endDayHour - startDayHour) * toMs("hour");
 
-        var daysCount = Math.ceil(deltaTime / visibleDayDuration),
-            maxDate = new Date(endDate);
+        var daysCount = deltaTime > 0 ? Math.ceil(deltaTime / visibleDayDuration) : Math.floor(deltaTime / visibleDayDuration),
+            maxDate = new Date(endDate),
+            minDate = new Date(endDate);
 
+        minDate.setHours(startDayHour, 0, 0, 0);
         maxDate.setHours(endDayHour, 0, 0, 0);
 
-        if(result > maxDate.getTime()) {
+        if(result > maxDate.getTime() || result <= minDate.getTime()) {
             var tailOfCurrentDay = maxDate.getTime() - endDate.getTime(),
                 tailOfPrevDays = deltaTime - tailOfCurrentDay;
 
             var lastDay = new Date(endDate.setDate(endDate.getDate() + daysCount));
-            lastDay.setHours(startDayHour);
+            lastDay.setHours(startDayHour, 0, 0, 0);
 
             result = lastDay.getTime() + tailOfPrevDays - visibleDayDuration * (daysCount - 1);
         }
@@ -723,33 +698,39 @@ var SchedulerAppointments = CollectionWidget.inherit({
             result = startDate.getTime() - deltaTime,
             visibleDayDuration = (endDayHour - startDayHour) * toMs("hour");
 
-        var daysCount = Math.ceil(deltaTime / visibleDayDuration),
+        var daysCount = deltaTime > 0 ? Math.ceil(deltaTime / visibleDayDuration) : Math.floor(deltaTime / visibleDayDuration),
+            maxDate = new Date(startDate),
             minDate = new Date(startDate);
 
         minDate.setHours(startDayHour, 0, 0, 0);
+        maxDate.setHours(endDayHour, 0, 0, 0);
 
-        if(result < minDate.getTime()) {
+        if(result < minDate.getTime() || result >= maxDate.getTime()) {
             var tailOfCurrentDay = startDate.getTime() - minDate.getTime(),
                 tailOfPrevDays = deltaTime - tailOfCurrentDay;
 
             var firstDay = new Date(startDate.setDate(startDate.getDate() - daysCount));
-            firstDay.setHours(endDayHour);
+            firstDay.setHours(endDayHour, 0, 0, 0);
 
             result = firstDay.getTime() - tailOfPrevDays + visibleDayDuration * (daysCount - 1);
         }
         return result;
     },
 
+    _tryGetAppointmentColor: function(appointment) {
+        const settings = $(appointment).data(APPOINTMENT_SETTINGS_NAME);
+        if(!settings) {
+            return undefined;
+        }
+        return this._getAppointmentColor(appointment, settings.groupIndex);
+    },
+
     _getAppointmentColor: function($appointment, groupIndex) {
-        var res = new Deferred();
+        const res = new Deferred();
         this.notifyObserver("getAppointmentColor", {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
-            callback: function(d) {
-                d.done(function(color) {
-                    res.resolve(color);
-                });
-            }
+            callback: d => d.done(color => res.resolve(color))
         });
 
         return res.promise();
@@ -894,7 +875,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.$element(),
                 left = virtualCoordinates.left;
 
-            var buttonWidth = this.invoke("getCompactAppointmentGroupMaxWidth", virtualGroup.isAllDay),
+            var buttonWidth = this.invoke("getDropDownAppointmentWidth", virtualGroup.isAllDay),
+                buttonHeight = this.invoke("getDropDownAppointmentHeight"),
                 rtlOffset = 0;
 
             if(this.option("rtlEnabled")) {
@@ -910,11 +892,17 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
-                buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
+                width: buttonWidth - this.option("_collectorOffset"),
+                height: buttonHeight,
                 onAppointmentClick: this.option("onItemClick"),
-                isCompact: !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments")
+                isCompact: this.invoke("isAdaptive") || this._isGroupCompact(virtualGroup),
+                applyOffset: this._isGroupCompact(virtualGroup)
             });
         }).bind(this));
+    },
+
+    _isGroupCompact: function(virtualGroup) {
+        return !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments");
     },
 
     _sortAppointmentsByStartDate: function(appointments) {

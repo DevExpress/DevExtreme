@@ -39,7 +39,7 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
         let hours = date.getHours(),
             current = hours >= 12;
 
-        if(current === value) {
+        if(current === !!(parseInt(value))) {
             return;
         }
 
@@ -53,6 +53,10 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
         }
 
         date.setDate(value);
+    },
+    h: (date, value) => {
+        const isPM = date.getHours() >= 12;
+        date.setHours((+value % 12) + (isPM ? 12 : 0));
     },
     M: monthSetter,
     L: monthSetter,
@@ -106,7 +110,7 @@ const renderDateParts = (text, regExpInfo) => {
     return sections;
 };
 
-const getLimits = (pattern, date) => {
+const getLimits = (pattern, date, forcedPattern) => {
     const limits = {
         y: { min: 0, max: 9999 },
         M: { min: 1, max: 12 },
@@ -125,7 +129,7 @@ const getLimits = (pattern, date) => {
         a: { min: 0, max: 1 }
     };
 
-    return limits[pattern] || limits["getAmPm"];
+    return limits[forcedPattern || pattern] || limits["getAmPm"];
 };
 
 const getDatePartIndexByPosition = (dateParts, position) => {

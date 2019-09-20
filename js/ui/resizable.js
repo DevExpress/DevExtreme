@@ -135,17 +135,17 @@ var Resizable = DOMComponent.inherit({
             * @type_function_param1_field7 height:number
             * @action
             */
-            onResizeEnd: null
+            onResizeEnd: null,
             /**
              * @name dxResizableOptions.width
              * @fires dxResizableOptions.onResize
-             * @inheritdoc
              */
             /**
              * @name dxResizableOptions.height
              * @fires dxResizableOptions.onResize
-             * @inheritdoc
              */
+
+            roundStepValue: true
         });
     },
 
@@ -263,12 +263,14 @@ var Resizable = DOMComponent.inherit({
             handleWidth = $handle.outerWidth(),
             handleHeight = $handle.outerHeight(),
             handleOffset = $handle.offset(),
-            areaOffset = area.offset;
+            areaOffset = area.offset,
+            scrollOffset = this._getAreaScrollOffset();
 
-        e.maxLeftOffset = handleOffset.left - areaOffset.left;
-        e.maxRightOffset = areaOffset.left + area.width - handleOffset.left - handleWidth;
-        e.maxTopOffset = handleOffset.top - areaOffset.top;
-        e.maxBottomOffset = areaOffset.top + area.height - handleOffset.top - handleHeight;
+
+        e.maxLeftOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
+        e.maxRightOffset = areaOffset.left + area.width - handleOffset.left - handleWidth + scrollOffset.scrollX;
+        e.maxTopOffset = handleOffset.top - areaOffset.top - scrollOffset.scrollY;
+        e.maxBottomOffset = areaOffset.top + area.height - handleOffset.top - handleHeight + scrollOffset.scrollY;
     },
 
     _getBorderWidth: function($element, direction) {
@@ -312,7 +314,7 @@ var Resizable = DOMComponent.inherit({
 
     _getOffset: function(e) {
         var offset = e.offset,
-            steps = commonUtils.pairToObject(this.option("step")),
+            steps = commonUtils.pairToObject(this.option("step"), !this.option("roundStepValue")),
             sides = this._getMovingSides(e),
             strictPrecision = this.option("stepPrecision") === "strict";
 
@@ -395,6 +397,21 @@ var Resizable = DOMComponent.inherit({
         }
 
         return this._getAreaFromElement(area);
+    },
+
+    _getAreaScrollOffset: function() {
+        var area = this.option("area");
+        var isElement = !isFunction(area) && !isPlainObject(area);
+        var scrollOffset = { scrollY: 0, scrollX: 0 };
+        if(isElement) {
+            var areaElement = $(area)[0];
+            if(typeUtils.isWindow(areaElement)) {
+                scrollOffset.scrollX = areaElement.pageXOffset;
+                scrollOffset.scrollY = areaElement.pageYOffset;
+            }
+        }
+
+        return scrollOffset;
     },
 
     _getAreaFromObject: function(area) {
@@ -487,6 +504,7 @@ var Resizable = DOMComponent.inherit({
             case "area":
             case "stepPrecision":
             case "step":
+            case "roundStepValue":
                 break;
             default:
                 this.callBase(args);

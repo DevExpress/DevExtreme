@@ -216,6 +216,7 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when no scroll"
 
     $.map(that.columns, function(column) {
         column.width = 50;
+        column.visibleWidth = 50;
         return column;
     });
 
@@ -334,6 +335,7 @@ QUnit.test("RowsView - set column width for fixed table when no scroll", functio
 
     $.map(that.columns, function(column) {
         column.width = 50;
+        column.visibleWidth = 50;
         return column;
     });
 
@@ -527,6 +529,7 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     assert.equal($table.find("tbody > .dx-group-row").find("td").length, 2, "count cell in group row");
     assert.strictEqual($table.find("tbody > .dx-group-row").find("td").first().html(), "<div class=\"dx-datagrid-group-opened\"></div>", "text first cell in group row");
     assert.strictEqual($table.find("tbody > .dx-group-row").find("td").last().text(), "Column 4: test4", "text second cell in group row");
+    assert.notEqual($table.find("tbody > .dx-group-row").find("td").last().css("pointer-events"), "none", "pointer-events is auto for second cell in group row"); // T747718
     assert.equal($table.find("tbody > .dx-group-row").find("td").last().attr("colspan"), 4, "colspan a second cell in group row");
     // data row
     assert.equal($table.find("tbody > .dx-data-row").length, 2, "has data rows in main table");
@@ -542,7 +545,9 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     assert.equal($fixTable.find("tbody > .dx-group-row").length, 1, "has group row in fixed table");
     assert.equal($fixTable.find("tbody > .dx-group-row").find("td").length, 2, "count cell in group row");
     assert.ok($fixTable.find("tbody > .dx-group-row").find("td").first().hasClass("dx-datagrid-expand"), "has expand column in group row");
+    assert.notEqual($fixTable.find("tbody > .dx-group-row").find("td").first().css("pointer-events"), "none", "pointer-events is auto for first cell in group row"); // T747718
     assert.strictEqual($fixTable.find("tbody > .dx-group-row").find("td").last().text(), "Column 4: test4", "text second cell in group row");
+    assert.strictEqual($fixTable.find("tbody > .dx-group-row").find("td").last().css("pointer-events"), "none", "pointer-events is none for second cell in group row"); // T747718
     assert.equal($fixTable.find("tbody > .dx-group-row").find("td").last().attr("colspan"), 4, "colspan a second cell in group row");
     // data row
     assert.equal($fixTable.find("tbody > .dx-data-row").length, 2, "has data rows in fixed table");
@@ -3143,4 +3148,38 @@ QUnit.test("The cells option of row should be correct when there are fixed colum
     assert.strictEqual(cells[0].column.dataField, "field1", "first cell");
     assert.deepEqual($(cells[0].cellElement)[0], cellElements[0], "first cell element");
     assert.strictEqual(cells[1].column.command, "transparent", "transparent cell");
+});
+
+// T737955
+QUnit.test("The vertical position of the fixed table should be correct after scrolling when scrolling.useNative is true", function(assert) {
+    // arrange
+    var that = this,
+        scrollable,
+        $fixedTableElement,
+        $testElement = $("#container").width(400);
+
+    that.options.scrolling = {
+        useNative: true
+    };
+    that.options.columns = [
+        { dataField: "field1", fixed: true, width: 200 },
+        { dataField: "field2", width: 200 },
+        { dataField: "field3", width: 200 },
+        { dataField: "field4", width: 200 }
+    ];
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.rowsView.height(400);
+    that.rowsView.resize();
+
+    scrollable = that.rowsView.getScrollable();
+
+    // act
+    scrollable.scrollTo({ x: 10 });
+    $(scrollable._container()).trigger("scroll");
+
+    // assert
+    $fixedTableElement = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    assert.strictEqual(translator.getTranslate($fixedTableElement).y, 0, "scroll top");
 });

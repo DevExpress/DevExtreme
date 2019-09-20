@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace StyleCompiler
 {
@@ -55,12 +56,20 @@ namespace StyleCompiler
             return Regex.Match(path, "(\\.(eot|woff|woff2|ttf)(\\?#\\w*)?['\"]?)$").Success;
         }
 
+        static string GetEncodedUrl(byte[] fileContent, string mime)
+        {
+             if (mime == "image/svg+xml") {
+                var content = HttpUtility.UrlEncode(fileContent).Replace("+", "%20");
+                return $@"""data:{mime};charset=UTF-8,{content}""";
+            } else {
+                var content = Convert.ToBase64String(fileContent);
+                return $"data:{mime};base64,{content}";
+            }
+        }
+
         static string GenerateDataUrl(string path)
         {
-            return "data:"
-                + Utils.GetMime(path)
-                + ";base64,"
-                + Convert.ToBase64String(File.ReadAllBytes(path));
+            return GetEncodedUrl(File.ReadAllBytes(path), Utils.GetMime(path));
         }
 
     }

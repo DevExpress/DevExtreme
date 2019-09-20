@@ -8,24 +8,38 @@ export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
 
 function run_lint {
-    npm i eslint eslint-plugin-spellcheck
+    npm i eslint eslint-plugin-spellcheck stylelint stylelint-config-standard npm-run-all
     npm run lint
 }
 
 function run_ts {
+    target=./ts/dx.all.d.ts
+    cp $target $target.current
+
     npm i
-    npx gulp ts-check npm-dts-check
+    npm run update-ts
+
+    if ! diff $target.current $target -U 5 > $target.diff; then
+        echo "FAIL: $target is outdated:"
+        cat $target.diff | sed "1,2d"
+        exit 1
+    else
+        echo "TS is up-to-date"
+    fi
+
+    npx gulp ts-compilation-check ts-jquery-check npm-ts-modules-check
 }
 
 function run_test {
     export DEVEXTREME_QUNIT_CI=true
-    
+
     local port=`node -e "console.log(require('./ports.json').qunit)"`
-    local url="http://localhost:$port/run?notimers=true&nojquery=true"
+    local url="http://localhost:$port/run?notimers=true"
     local runner_pid
     local runner_result=0
 
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
+    [ -z "$JQUERY"  ] && url="$url&nojquery=true"
 
     if [ "$HEADLESS" != "true" ]; then
         Xvfb :99 -ac -screen 0 1200x600x24 &
@@ -35,14 +49,13 @@ function run_test {
     npm i
     npm run build
 
-    # See https://github.com/DevExpress/DevExtreme/pull/1251
-    chmod 755 $(find dotnet_packages -type d)
-
     dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
     while ! httping -qc1 $url; do
         sleep 1
     done
+
+    echo "URL: $url"
 
     case "$BROWSER" in
 
@@ -60,6 +73,7 @@ function run_test {
             if [ "$HEADLESS" == "true" ]; then
                 google-chrome-stable \
                     --no-sandbox \
+                    --disable-dev-shm-usage \
                     --disable-gpu \
                     --user-data-dir=/tmp/chrome \
                     --headless \
@@ -69,6 +83,7 @@ function run_test {
             else
                 dbus-launch --exit-with-session google-chrome-stable \
                     --no-sandbox \
+                    --disable-dev-shm-usage \
                     --disable-gpu \
                     --user-data-dir=/tmp/chrome \
                     --no-first-run \
@@ -87,12 +102,22 @@ function run_test {
 function run_test_themebuilder {
     dotnet build build/build-dotnet.sln
     npm i
+    npm run build-themes
     npm run build-themebuilder-assets
     cd themebuilder
     npm i
     npm run test
 }
 
+function run_test_functional {
+    npm i
+    npm run build
+
+    local args="--browsers chrome:headless";
+    [ "$COMPONENT" ] && args="$args --componentFolder $COMPONENT";
+
+    npm run test-functional -- $args
+}
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
@@ -101,6 +126,7 @@ case "$TARGET" in
     "ts") run_ts ;;
     "test") run_test ;;
     "test_themebuilder") run_test_themebuilder ;;
+    "test_functional") run_test_functional ;;
 
     *)
         echo "Unknown target"

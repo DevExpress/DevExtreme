@@ -10,6 +10,7 @@ import messageLocalization from "../../localization/message";
 import Editor from "../editor/editor";
 import Overlay from "../overlay";
 import Menu from "../menu";
+import { selectView } from "../shared/accessibility";
 
 var OPERATION_ICONS = {
     "=": "filter-operation-equals",
@@ -347,6 +348,10 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
             if(row.rowType === "filter") {
                 $row.addClass(this.addWidgetPrefix(FILTER_ROW_CLASS));
+
+                if(!this.option("useLegacyKeyboardNavigation")) {
+                    eventsEngine.on($row, "keydown", event => selectView("filterRow", this, event));
+                }
             }
 
             return $row;
@@ -473,7 +478,12 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
         _updateFilterOperationChooser: function($menu, column, $editorContainer) {
             var that = this,
-                isCellWasFocused;
+                isCellWasFocused,
+                restoreFocus = function() {
+                    var menu = Menu.getInstance($menu);
+                    menu && menu.option("focusedElement", null);
+                    isCellWasFocused && that._focusEditor($editorContainer);
+                };
 
             that._createComponent($menu, Menu, {
                 integrationOptions: {},
@@ -533,11 +543,15 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     that.getController("editorFactory").loseFocus();
                 },
                 onSubmenuHiding: function() {
-                    var menu = Menu.getInstance($menu);
-
                     eventsEngine.trigger($menu, "blur");
-                    menu && menu.option("focusedElement", null);
-                    isCellWasFocused && that._focusEditor($editorContainer);
+                    restoreFocus();
+                },
+                onContentReady: function(e) {
+                    eventsEngine.on($menu, "blur", () => {
+                        var menu = e.component;
+                        menu._hideSubmenu(menu._visibleSubmenu);
+                        restoreFocus();
+                    });
                 },
                 rtlEnabled: that.option("rtlEnabled")
             });

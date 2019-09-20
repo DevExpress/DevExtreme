@@ -268,10 +268,6 @@ QUnit.test("getOptions", function(assert) {
 
 QUnit.module("draw legend", environment);
 
-QUnit.test('draw without set options', function(assert) {
-    assert.ok(this.createLegend({}, null, null).draw());
-});
-
 QUnit.test("visible = false", function(assert) {
     this.options.visible = false;
     this.createSimpleLegend();
@@ -886,11 +882,12 @@ QUnit.test("item size > legend canvas", function(assert) {
 QUnit.module("Label align", environment);
 
 QUnit.test("text align. right", function(assert) {
+    this.options.cssClass = "legend_class";
     this.createSimpleLegend().draw(200, 200);
     this.checkItems(assert, [
-        { id: 0, label: { align: "left" } },
-        { id: 0, label: { align: "left" } },
-        { id: 0, label: { align: "left" } }
+        { id: 0, label: { align: "left", "class": "legend_class" } },
+        { id: 0, label: { align: "left", "class": "legend_class" } },
+        { id: 0, label: { align: "left", "class": "legend_class" } }
     ]);
 });
 
@@ -1652,6 +1649,13 @@ QUnit.test("layoutOptions", function(assert) {
     assert.equal(options.priority, 1);
 });
 
+QUnit.test("layoutOptions is null if legend is not visible", function(assert) {
+    this.options.visible = false;
+    var options = this.createSimpleLegend().layoutOptions();
+
+    assert.strictEqual(options, null);
+});
+
 QUnit.test("measure", function(assert) {
     assert.deepEqual(this.createSimpleLegend().measure(100, 200), [36, 26]);
 });
@@ -1846,6 +1850,20 @@ QUnit.test('Erasing', function(assert) {
     this.createAndDrawLegend().erase();
 
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
+});
+
+// T808328
+QUnit.test('Erase legend on update options', function(assert) {
+    this.createAndDrawLegend();
+    this.options.title = {
+        text: "title"
+    };
+    const titleGroup = this.renderer.g.firstCall.returnValue;
+    titleGroup.linkRemove.reset();
+    this.legend.update(this.options);
+
+    assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
+    assert.ok(this.renderer.g.getCall(1).returnValue.remove.lastCall.calledAfter(titleGroup.linkRemove.lastCall), [], 'group is removed');
 });
 
 QUnit.test('Check groups order', function(assert) {
@@ -2085,15 +2103,20 @@ var titleEnvironment = $.extend({}, environment, {
         environment.beforeEach.apply(that, arguments);
 
         var titleConstructor = module.Title;
-        that.titleLayout = { height: 10, width: 20, x: 4, y: 5 };
+
+        that.titleLayout = { height: 17, width: 20, x: 4, y: 5 };
         module.Title = function(params) {
             that.title = new titleConstructor(params);
 
             that.title.getLayoutOptions = sinon.stub();
-            that.title.getLayoutOptions.returns(that.titleLayout);
-
-            that.title.getTrueSize = sinon.stub();
-            that.title.getTrueSize.returns(that.titleLayout);
+            that.title.getLayoutOptions.returns((function() {
+                if(that.options.title) {
+                    var margin = that.options.title.margin || { left: 0, right: 0 };
+                    that.titleLayout.x -= margin.left;
+                    that.titleLayout.width += margin.left + margin.right;
+                }
+                return that.titleLayout;
+            })());
 
             that.title.shift = sinon.spy();
 
@@ -2157,7 +2180,7 @@ QUnit.test("Simple title; legend options by default", function(assert) {
 
     this.checkTitle(assert, {
         expectedOffset: {
-            x: 4,
+            x: 0,
             y: 0
         }
     });
@@ -2172,9 +2195,9 @@ QUnit.test("Simple title; legend options by default", function(assert) {
             text: "First"
         },
         tracker: {
-            left: 0,
+            left: -4,
             top: -4,
-            right: 49,
+            right: 45,
             bottom: 18
         }
     }]);
@@ -2193,7 +2216,7 @@ QUnit.test("Simple title with subtitle; legend options by default", function(ass
 
     this.checkTitle(assert, {
         expectedOffset: {
-            x: 4,
+            x: 0,
             y: 0
         }
     });
@@ -2208,9 +2231,9 @@ QUnit.test("Simple title with subtitle; legend options by default", function(ass
             text: "First"
         },
         tracker: {
-            left: 0,
+            left: -4,
             top: -4,
-            right: 49,
+            right: 45,
             bottom: 18
         }
     }]);
@@ -2237,9 +2260,9 @@ QUnit.test("Title width more than markers width; legend horizontalAlignment = 'c
     assert.deepEqual(markersGroup.attr.lastCall.args[0], { translateX: 5, translateY: 17 }, "markers must moved");
 
     this.checkTrackers(assert, {
-        left: 5,
+        left: 1,
         top: 13,
-        right: 33,
+        right: 29,
         bottom: 49
     }, 0);
 });
@@ -2264,8 +2287,10 @@ QUnit.test("Title width less than markers width; legend horizontalAlignment = 'c
     var markersGroup = this.findMarkersGroup();
     assert.deepEqual(markersGroup.attr.callCount, 2, "attr function just calling for set class name and set Y position");
     assert.deepEqual(markersGroup.attr.lastCall.args[0], { translateX: 0, translateY: 17 }, "markers must move under title");
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [9, 8], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.firstCall.args, [0, 0], "title must have moved");
+    assert.deepEqual(this.title.shift.lastCall.args, [5, -5], "title must have moved");
+    assert.strictEqual(this.title.getOptions().horizontalAlignment, "center");
 });
 
 QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment = 'bottom'; margins not zero", function(assert) {
@@ -2273,15 +2298,15 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment
         text: "Simple title",
         verticalAlignment: "bottom",
         margin: {
-            left: 0,
-            right: 0,
+            left: 3,
+            right: 3,
             top: 3,
             bottom: 4
         }
     };
 
     this.options.horizontalAlignment = "center";
-    this.titleLayout.width = 18;
+    this.titleLayout.width = 12;
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
@@ -2289,8 +2314,8 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment
 
     var markersGroup = this.findMarkersGroup();
     assert.deepEqual(markersGroup.attr.callCount, 1, "attr function just calling for set class name");
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [5, 18], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [1, 5], "title must have moved");
 });
 
 QUnit.test("Shift simple title; horizontalAlignment = 'right' verticalAlignment = 'top'; margins not zero", function(assert) {
@@ -2309,9 +2334,9 @@ QUnit.test("Shift simple title; horizontalAlignment = 'right' verticalAlignment 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
     legend.shift(0, 0);
-
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [4, 8], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [0, -5], "title must have moved");
+    assert.strictEqual(this.title.getOptions().horizontalAlignment, "left");
 });
 
 QUnit.test("Shift simple title; horizontalAlignment = 'center'; border exist", function(assert) {
@@ -2334,8 +2359,8 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center'; border exist", f
     legend.draw(200, 200);
     legend.shift(0, 0);
 
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [1, 8], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [-3, -5], "title must have moved");
 });
 
 QUnit.test("Shift simple title; horizontalAlignment = 'center'; legend position 'inside'", function(assert) {
@@ -2359,6 +2384,115 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center'; legend position 
     legend.draw(200, 200);
     legend.shift(0, 0);
 
-    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
-    assert.deepEqual(this.title.shift.firstCall.args, [1, 8], "title must have moved");
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [-3, -5], "title must have moved");
+});
+
+QUnit.test("Shift simple title; itemTextPosition = 'left'", function(assert) {
+    this.options.title = { text: "Simple title" };
+
+    this.options.itemTextPosition = "left";
+    this.titleLayout.width = 16;
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.strictEqual(this.title.getOptions().horizontalAlignment, "right");
+    assert.deepEqual(this.title.shift.lastCall.args, [4, 2], "title must have moved");
+});
+
+QUnit.test("Shift simple title; horizontalAlignment = 'right'", function(assert) {
+    this.options.title = { text: "Simple title" };
+
+    this.options.horizontalAlignment = "right";
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], "title must have moved");
+});
+
+QUnit.test("Shift simple title; itemTextPosition = 'top'", function(assert) {
+    this.options.title = { text: "Simple title" };
+
+    this.options.itemTextPosition = "top";
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], "title must have moved");
+});
+
+QUnit.test("Shift simple title; itemTextPosition = 'bottom'", function(assert) {
+    this.options.title = { text: "Simple title" };
+
+    this.options.itemTextPosition = "bottom";
+    this.titleLayout.width = 16;
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.deepEqual(this.title.shift.lastCall.args, [2, 2], "title must have moved");
+});
+
+QUnit.test("Shift simple title; horizontalAlignment = 'right' verticalAlignment = 'top' title.horizontalAlignment = 'center'; margins not zero", function(assert) {
+    this.options.title = {
+        text: "Simple title",
+        horizontalAlignment: "center",
+        margin: {
+            left: 5,
+            right: 0
+        }
+    };
+
+    this.options.horizontalAlignment = "right";
+    this.titleLayout.width = 10;
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [2.5, 2], "title must have moved");
+});
+
+QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment = 'bottom' title.horizontalAlignment = 'right'; margins not zero", function(assert) {
+    this.options.title = {
+        text: "Simple title",
+        horizontalAlignment: "right",
+        margin: {
+            left: 0,
+            right: 5
+        }
+    };
+
+    this.options.horizontalAlignment = "center";
+    this.options.verticalAlignment = "bottom";
+    this.titleLayout.width = 10;
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [5, 2], "title must have moved");
+});
+
+QUnit.test("Shift simple title; horizontalAlignment = 'left' verticalAlignment = 'top' title.horizontalAlignment = 'left'; margins not zero", function(assert) {
+    this.options.title = {
+        text: "Simple title",
+        horizontalAlignment: "right",
+        margin: {
+            left: 10,
+            right: 10
+        }
+    };
+
+    this.options.horizontalAlignment = "left";
+    this.titleLayout.width = 20;
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+    assert.equal(this.title.shift.callCount, 2, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.lastCall.args, [0, 2], "title must have moved");
+    assert.equal(this.legend._boundingRect.width, 56, "boundingRect must be expanded");
 });

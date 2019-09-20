@@ -5,7 +5,7 @@ define(function(require) {
 
     var $ = require("jquery");
 
-    require("/artifacts/js/dx.mobile.debug.js");
+    require("/artifacts/js/dx.all.debug.js");
 
 
     QUnit.module("jquery integration");

@@ -43,7 +43,7 @@ function createGridView(options, userOptions) {
         showColumnHeaders: true
     }, userOptions);
 
-    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail'],
+    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail', 'selection'],
         {
             initViews: true,
             controllers: {
@@ -75,6 +75,9 @@ function createGridView(options, userOptions) {
                 })
             };
             this.createGridView = createGridView;
+        },
+        afterEach: function() {
+            this.dispose();
         }
     });
 
@@ -1023,6 +1026,7 @@ function createGridView(options, userOptions) {
             this.clock = sinon.useFakeTimers();
         },
         afterEach: function() {
+            this.dispose();
             this.clock.restore();
         }
     });
@@ -1768,7 +1772,7 @@ function createGridView(options, userOptions) {
         });
 
         // assert
-        assert.roughEqual(colWidths, totalWidths, 0.1, "synchronize widths by columns");
+        assert.roughEqual(colWidths, totalWidths, 1.101, "synchronize widths by columns");
     });
 
     QUnit.test("Disable the bestFit mode before correctColumnWidths", function(assert) {
@@ -1998,6 +2002,107 @@ function createGridView(options, userOptions) {
         assert.strictEqual($colElements.get(2).style.width, "100px", "width of the group column");
         assert.strictEqual($colElements.get(3).style.width, "100px", "width of the group column");
     });
+
+    // T729862
+    QUnit.test("Expand column width should be correct when the grouping and summary options are changed dynamically", function(assert) {
+        // arrange
+        var $colElements,
+            $testElement = $('<div />').appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3" }],
+                columns: [
+                    { dataField: "field1" },
+                    { dataField: "field2" },
+                    { dataField: "field3" }
+                ],
+                summary: {
+                    totalItems: [{
+                        column: "field1",
+                        summaryType: "count"
+                    }],
+                    texts: {
+                        count: "Count={0}"
+                    }
+                }
+            });
+
+        gridView.render($testElement);
+        gridView.update();
+
+        // act
+        this.dataController.beginUpdate();
+        this.columnsController.beginUpdate();
+
+        this.option("summary", []);
+        this.dataController.optionChanged({ name: "summary", fullName: "summary", value: [] });
+        this.columnOption("field1", "groupIndex", 0);
+
+        this.columnsController.endUpdate();
+        this.dataController.endUpdate();
+
+        // assert
+        $colElements = $testElement.find(".dx-datagrid-rowsview").find("col");
+        assert.strictEqual($colElements.get(0).style.width, "30px", "width of the expand column");
+    });
+
+    // T734245
+    QUnit.test("Group columns with summary should have the correct width when there are fixed columns and custom button column", function(assert) {
+        // arrange
+        var $colElements,
+            $fixedGroupRowElement,
+            $testElement = $('<div />').appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3", field4: "test4" }],
+                columnFixing: { enabled: true },
+                selection: { mode: "multiple", showCheckBoxesMode: "always" },
+                grouping: { autoExpandAll: true },
+                columns: [
+                    {
+                        fixedPosition: "left",
+                        caption: "More Info",
+                        type: "buttons",
+                        alignment: "center",
+                        allowResizing: false,
+                        width: 45,
+                        buttons: [{
+                            text: "Get information",
+                            icon: "comment",
+                        }]
+                    },
+                    { dataField: "field1", groupIndex: 0 },
+                    { dataField: "field2", groupIndex: 1 },
+                    { dataField: "field3" },
+                    { dataField: "field4" }
+                ],
+                summary: {
+                    groupItems: [{
+                        column: "field2",
+                        summaryType: "count",
+                        showInGroupFooter: false,
+                        alignByColumn: true
+                    }],
+                    texts: {
+                        count: "Count={0}"
+                    }
+                }
+            });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        $colElements = $testElement.find(".dx-datagrid-rowsview").find("col");
+        assert.strictEqual($colElements.get(0).style.width, "70px", "width of the select column");
+        assert.strictEqual($colElements.get(1).style.width, "30px", "width of the expand column");
+        assert.strictEqual($colElements.get(2).style.width, "30px", "width of the expand column");
+        assert.strictEqual($colElements.get(3).style.width, "45px", "width of the button column");
+
+        $fixedGroupRowElement = $(this.getRowElement(0)[1]);
+        assert.strictEqual($fixedGroupRowElement.children().length, 3, "cell count in the group row on the first level");
+    });
 }());
 
 // Fixed columns///
@@ -2013,6 +2118,9 @@ function createGridView(options, userOptions) {
                 })
             };
             this.createGridView = createGridView;
+        },
+        afterEach: function() {
+            this.dispose();
         }
     });
 
@@ -2169,5 +2277,72 @@ function createGridView(options, userOptions) {
         // assert
         assert.ok($testElement.find(".dx-master-detail-row").length > 0, "has master detail");
         assert.strictEqual(fixedColumnWidth, $(this.getCellElement(0, 1)).width(), "fixed column width isn't changed");
+    });
+
+    // T800761
+    QUnit.test("Fixed column widths should be correct when there is a horizontal scrolling", function(assert) {
+        // arrange
+        var $colElements,
+            $testElement = $('<div />').width(400).appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                columnAutoWidth: false,
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3", field4: "test4" }],
+                columnFixing: { enabled: true },
+                editing: {
+                    mode: "row",
+                    allowUpdating: true,
+                    allowDeleting: true,
+                },
+                columns: [
+                    { dataField: "field1", fixed: true, width: 200 },
+                    { dataField: "field2", width: 250 },
+                    { dataField: "field3", width: 250 },
+                    { dataField: "field4" }
+                ]
+            });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        $colElements = gridView.getView("rowsView").element().find(".dx-datagrid-content-fixed").find("col");
+        assert.strictEqual($colElements.length, 5, "col count");
+        assert.strictEqual($colElements.get(0).style.width, "200px", "width of the first cell");
+        assert.strictEqual($colElements.get(1).style.width, "auto", "width of the second cell");
+        assert.strictEqual($colElements.get(2).style.width, "auto", "width of the third cell");
+        assert.strictEqual($colElements.get(3).style.width, "auto", "width of the fourth cell");
+        assert.strictEqual($colElements.get(4).style.width, "100px", "width of the fifth cell");
+    });
+
+    // T800761
+    QUnit.test("The fixed column should have the correct width when it has width is 'auto' and columnAutoWidth is enabled", function(assert) {
+        // arrange
+        var $headerElement,
+            $testElement = $('<div />').width(400).appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                columnAutoWidth: true,
+                loadingTimeout: undefined,
+                dataSource: [{ field1: "test1", field2: "test2" }],
+                columns: [
+                    {
+                        dataField: "field1",
+                        headerCellTemplate: function(container) {
+                            $(container).css("width", "200px");
+                        },
+                        fixed: true,
+                        width: "auto"
+                    }, "field2"
+                ]
+            });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        $headerElement = $(gridView.getView("columnHeadersView").getCellElement(0, 0));
+        assert.strictEqual($headerElement.outerWidth(), 215, "width of the first header"); // width = 200(content width) + 14(padding) + 1(border)
     });
 }());

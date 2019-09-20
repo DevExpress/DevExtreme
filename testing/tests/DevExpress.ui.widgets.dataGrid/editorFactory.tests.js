@@ -85,6 +85,25 @@ QUnit.test('Text editor', function(assert) {
     assert.equal(value, 'B', 'value after change');
 });
 
+// T749989
+QUnit.test('Editor should not convert value to string if editorType is defined and not equal to dxTextBox', function(assert) {
+    // arrange
+    var $container = $('#container'),
+        value = [];
+
+    // act
+    this.editorFactoryController.createEditor($container, {
+        editorType: 'dxSelectBox',
+        parentType: 'dataRow',
+        value: value
+    });
+    var editor = $container.dxSelectBox('instance');
+
+    // assert
+    assert.ok(editor, 'editor created');
+    assert.strictEqual(editor.option('value'), value, 'editor value was not converted to string');
+});
+
 QUnit.test('Text editor enter in ios (T344096)', function(assert) {
     if(!browser.webkit) {
         assert.ok(true, "Not webkit browser");
@@ -1243,6 +1262,44 @@ QUnit.test('Create lookup editor with RTL when filtering', function(assert) {
     assert.ok(editor.option("rtlEnabled"), "selectbox created with correct 'rtlEnabled' option");
 });
 
+QUnit.test("dxTextArea editor inserts new line by Enter and ends edit by Ctrl + Enter ", function(assert) {
+    // arrange
+    var $container = $('#container'),
+        value = 'Some text',
+        event;
+
+    // act
+    this.editorFactoryController.createEditor($container, {
+        editorType: 'dxTextArea',
+        parentType: 'dataRow',
+        value: value,
+        setValue: function(newValue) {
+            value = newValue;
+        }
+    });
+
+    // act
+    event = $.Event("keydown", { key: "enter" });
+    $($container.find("textarea")).trigger(event);
+
+    // assert
+    assert.ok(event.isPropagationStopped(), 'enter propagation is stopped');
+
+    // act
+    event = $.Event("keydown", { key: "enter", ctrlKey: true });
+    $($container.find("textarea")).trigger(event);
+
+    // assert
+    assert.ok(!event.isPropagationStopped(), 'enter + ctrl propagation is not stopped');
+
+    // act
+    event = $.Event("keydown", { key: "enter", shiftKey: true });
+    $($container.find("textarea")).trigger(event);
+
+    // assert
+    assert.ok(!event.isPropagationStopped(), 'enter + shift propagation is not stopped');
+});
+
 QUnit.module("Focus", {
     beforeEach: function() {
         var that = this;
@@ -1488,6 +1545,7 @@ QUnit.testInActiveWindow("Focus on a filtering cell after editing cell in 'batch
 
     // act
     $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("focus");
+    $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("dxpointerdown");
     $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("dxclick");
     that.clock.tick();
 

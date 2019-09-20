@@ -4,6 +4,7 @@ import { Deferred, when } from "../../core/utils/deferred";
 import { isFunction } from "../../core/utils/type";
 import { noop } from "../../core/utils/common";
 import { each } from "../../core/utils/iterator";
+import messageLocalization from "../../localization/message";
 
 import Widget from "../widget/ui.widget";
 
@@ -11,6 +12,7 @@ import whenSome from "./ui.file_manager.common";
 import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
 import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_chooser";
 import FileManagerFileUploader from "./ui.file_manager.file_uploader";
+import { FileManagerMessages } from "./ui.file_manager.messages";
 
 class FileManagerEditingControl extends Widget {
 
@@ -22,27 +24,25 @@ class FileManagerEditingControl extends Widget {
         this._initActions();
 
         this._renameItemDialog = this._createEnterNameDialog("Rename", "Save");
-        this._createFolderDialog = this._createEnterNameDialog("Folder", "Create");
-        this._chooseFolderDialog = this._createComponent($("<div>"), FileManagerFolderChooserDialog, {
+        this._createFolderDialog = this._createEnterNameDialog("New folder", "Create");
+
+        const $chooseFolderDialog = $("<div>").appendTo(this.$element());
+        this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
             provider: this._provider,
             getItems: this._model.getFolders,
             onClosed: this._onDialogClosed.bind(this)
         });
+
         this._confirmationDialog = this._createConfirmationDialog();
 
         this._fileUploader = this._createFileUploader();
-
-        this.$element()
-            .append(this._renameItemDialog.$element())
-            .append(this._createFolderDialog.$element())
-            .append(this._chooseFolderDialog.$element())
-            .append(this._fileUploader.$element());
 
         this._createEditActions();
     }
 
     _createFileUploader() {
-        return this._createComponent($("<div>"), FileManagerFileUploader, {
+        const $fileUploader = $("<div>").appendTo(this.$element());
+        return this._createComponent($fileUploader, FileManagerFileUploader, {
             getController: this._getFileUploaderController.bind(this),
             onFilesUploaded: result => this._raiseOnSuccess("Files uploaded", true),
             onErrorOccurred: ({ info }) => {
@@ -53,7 +53,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _getFileUploaderController() {
-        const destinationFolder = this._model.getCurrentFolder();
+        const destinationFolder = this._uploadFolder;
         const that = this;
         return {
             chunkSize: this._provider.getFileUploadChunkSize(),
@@ -78,7 +78,8 @@ class FileManagerEditingControl extends Widget {
     }
 
     _createEnterNameDialog(title, buttonText) {
-        return this._createComponent($("<div>"), FileManagerNameEditorDialog, {
+        const $dialog = $("<div>").appendTo(this.$element());
+        return this._createComponent($dialog, FileManagerNameEditorDialog, {
             title: title,
             buttonText: buttonText,
             onClosed: this._onDialogClosed.bind(this)
@@ -102,39 +103,35 @@ class FileManagerEditingControl extends Widget {
                 useCurrentFolder: true,
                 affectsAllItems: true,
                 dialog: this._createFolderDialog,
+                getDialogArgument: () => messageLocalization.format("dxFileManager-newFolderName"),
                 action: ([item], { name }) => this._provider.createFolder(item, name),
-                getSuccessMessage: items => "Folder created",
-                getErrorMessage: ([{ name }], info) => `Create folder operation failed for the ${name} parent folder`
+                getSuccessMessage: items => "Folder created"
             },
 
             rename: {
                 dialog: this._renameItemDialog,
                 getDialogArgument: ([{ name }]) => name,
                 action: ([item], { name }) => this._provider.renameItem(item, name),
-                getSuccessMessage: items => "Items deleted",
-                getErrorMessage: ([{ name }], info) => `Rename operation failed for the ${name} item`,
+                getSuccessMessage: items => "Item renamed"
             },
 
             delete: {
                 dialog: this._confirmationDialog,
                 getDialogArgument: ([{ name }]) => name,
                 action: (items, arg) => this._provider.deleteItems(items),
-                getSuccessMessage: items => "Item renamed",
-                getErrorMessage: (items, { index }) => `Delete operation failed for the ${items[index].name} item`
+                getSuccessMessage: items => "Items deleted"
             },
 
             move: {
                 dialog: this._chooseFolderDialog,
                 action: (items, arg) => this._provider.moveItems(items, arg.folder),
-                getSuccessMessage: items => "Items moved",
-                getErrorMessage: (items, info) => `Move operation failed for the ${items[info.index].name} item`
+                getSuccessMessage: items => "Items moved"
             },
 
             copy: {
                 dialog: this._chooseFolderDialog,
                 action: (items, arg) => this._provider.copyItems(items, arg.folder),
-                getSuccessMessage: items => "Items copied",
-                getErrorMessage: (items, info) => `Copy operation failed for the ${items[info.index].name} item`
+                getSuccessMessage: items => "Items copied"
             },
 
             upload: this._tryUpload.bind(this),
@@ -147,42 +144,54 @@ class FileManagerEditingControl extends Widget {
         const result = {};
 
         each(this._editActions, (name, action) => {
-            if(this._editActions.hasOwnProperty(name)) {
-                result[name] = () => this._executeAction(name);
+            if(Object.prototype.hasOwnProperty.call(this._editActions, name)) {
+                result[name] = arg => this._executeAction(name, arg);
             }
         });
 
         return result;
     }
 
-    _executeAction(actionName) {
+    _executeAction(actionName, arg) {
         const action = this._editActions[actionName];
         if(!action) {
             return;
         }
 
         if(isFunction(action)) {
-            action();
+            action(arg);
         } else {
-            this._tryEditAction(action);
+            this._tryEditAction(action, arg);
         }
     }
 
-    _tryEditAction(action) {
-        const items = action.useCurrentFolder ? [ this._model.getCurrentFolder() ] : this._model.getMultipleSelectedItems();
-        const onlyFiles = !action.affectsAllItems && items.every(item => !item.isFolder);
+    _tryEditAction(action, arg) {
+        let items = arg;
+        if(!items || items.length === 0) {
+            items = action.useCurrentFolder ? [ this._model.getCurrentFolder() ] : this._model.getMultipleSelectedItems();
+        }
+        const onlyFiles = !action.affectsAllItems && items.every(item => !item.isDirectory);
         const dialogArgumentGetter = action.getDialogArgument || noop;
 
         this._showDialog(action.dialog, dialogArgumentGetter(items))
             .then(dialogResult => action.action(items, dialogResult))
             .then(result => {
-                whenSome(result,
+                whenSome(
+                    result,
                     () => this._raiseOnSuccess(action.getSuccessMessage(items), onlyFiles),
-                    info => this._raiseOnError(action.getErrorMessage(items, info), info.error));
-            });
+                    info => this._onFileProviderError(info, items)
+                );
+            },
+            info => this._onFileProviderError(info, items));
     }
 
-    _tryUpload() {
+    _onFileProviderError(errorInfo, fileItems) {
+        const fileItem = fileItems[errorInfo.index];
+        this._raiseOnError(errorInfo.errorId, fileItem);
+    }
+
+    _tryUpload(destinationFolder) {
+        this._uploadFolder = destinationFolder && destinationFolder[0] || this._model.getCurrentFolder();
         this._fileUploader.tryUpload();
     }
 
@@ -244,11 +253,10 @@ class FileManagerEditingControl extends Widget {
         this._actions.onSuccess({ message, updatedOnlyFiles });
     }
 
-    _raiseOnError(errorTitle, errorDetails) {
-        this._actions.onError({
-            title: errorTitle,
-            details: errorDetails
-        });
+    _raiseOnError(errorId, fileItem) {
+        const fileItemName = fileItem ? fileItem.name : null;
+        const message = FileManagerMessages.get(errorId, fileItemName);
+        this._actions.onError({ message });
     }
 
 }

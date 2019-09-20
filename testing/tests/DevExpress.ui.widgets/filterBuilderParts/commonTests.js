@@ -684,6 +684,133 @@ QUnit.module("Filter value", function() {
         assert.deepEqual(instance.option("value"), ["Field", "=", "Test2"]);
         assert.notOk(container.find("input").length, "hasn't input");
     });
+
+    // T750946
+    QUnit.test("Two fields with the same dataField", function(assert) {
+        var container = $("#container");
+
+        var filterBuilder = container.dxFilterBuilder({
+            value: [
+                ["field1", "<>", "K&S Music"]
+            ],
+            fields: [{
+                dataField: "State",
+                caption: "field 1",
+                name: "field1"
+            }, {
+                dataField: "State",
+                caption: "field 2",
+                name: "field2"
+            }]
+        }).dxFilterBuilder("instance");
+
+        // act, assert
+        $("." + FILTER_BUILDER_ITEM_FIELD_CLASS).trigger("dxclick");
+
+        assert.equal($("." + TREE_VIEW_ITEM_CLASS).length, 2, "treeview items count");
+        assert.equal($("." + FILTER_BUILDER_ITEM_FIELD_CLASS).text(), "field 1", "initial field was set correctly");
+
+        $("." + TREE_VIEW_ITEM_CLASS).eq(1).trigger("dxclick");
+        assert.equal($("." + FILTER_BUILDER_ITEM_FIELD_CLASS).text(), "field 2", "field was changed correctly");
+
+        assert.equal($("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Contains", "operation was changed correctly");
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        var valueInput = container.find("input");
+        valueInput.val("K&S Music");
+        valueInput.find("input").trigger("change");
+
+        clickByOutside();
+        assert.deepEqual(filterBuilder.option("value"), ["field2", "contains", "K&S Music"], "expression is correct");
+    });
+
+    // T812261
+    QUnit.test("hierarchical fields", function(assert) {
+        var container = $("#container"),
+            $fields;
+
+        container.dxFilterBuilder({
+            value: [
+                ["id", "=", "1"]
+            ],
+            allowHierarchicalFields: true,
+            fields: [{
+                dataField: "id",
+            }, {
+                dataField: "address.state",
+            }, {
+                dataField: "address.city",
+            }]
+        }).dxFilterBuilder("instance");
+
+        // act, assert
+        $("." + FILTER_BUILDER_ITEM_FIELD_CLASS).trigger("dxclick");
+
+        $fields = $("." + TREE_VIEW_ITEM_CLASS);
+
+        assert.equal($fields.length, 2, "treeview items count");
+        assert.equal($(".dx-treeview-toggle-item-visibility").length, 1, "");
+
+        assert.equal($fields.eq(0).text(), "Id");
+        assert.equal($fields.eq(1).text(), "Address");
+
+        $(".dx-treeview-toggle-item-visibility").trigger("dxclick");
+
+        $fields = $("." + TREE_VIEW_ITEM_CLASS);
+
+        assert.equal($fields.length, 4, "treeview items count");
+
+        assert.equal($fields.eq(0).text(), "Id");
+        assert.equal($fields.eq(1).text(), "Address");
+        assert.equal($fields.eq(2).text(), "State");
+        assert.equal($fields.eq(3).text(), "City");
+    });
+
+    // T812261, T750946
+    QUnit.test("hierarchical fields with two fields with the same dataField", function(assert) {
+        var container = $("#container"),
+            $fields;
+
+        container.dxFilterBuilder({
+            value: [
+                ["id", "=", "1"]
+            ],
+            allowHierarchicalFields: true,
+            fields: [{
+                dataField: "id",
+            }, {
+                dataField: "address.same",
+                caption: "State",
+                name: "State"
+            }, {
+                dataField: "address.same",
+                caption: "City",
+                name: "City"
+            }]
+        }).dxFilterBuilder("instance");
+
+        // act, assert
+        $("." + FILTER_BUILDER_ITEM_FIELD_CLASS).trigger("dxclick");
+
+        $fields = $("." + TREE_VIEW_ITEM_CLASS);
+
+        assert.equal($fields.length, 2, "treeview items count");
+        assert.equal($(".dx-treeview-toggle-item-visibility").length, 1, "");
+
+        assert.equal($fields.eq(0).text(), "Id");
+        assert.equal($fields.eq(1).text(), "Address");
+
+        $(".dx-treeview-toggle-item-visibility").trigger("dxclick");
+
+        $fields = $("." + TREE_VIEW_ITEM_CLASS);
+
+        assert.equal($fields.length, 4, "treeview items count");
+
+        assert.equal($fields.eq(0).text(), "Id");
+        assert.equal($fields.eq(1).text(), "Address");
+        assert.equal($fields.eq(2).text(), "State");
+        assert.equal($fields.eq(3).text(), "City");
+    });
 });
 
 QUnit.module("Create editor", function() {
@@ -1040,6 +1167,40 @@ QUnit.module("on value changed", function() {
         // remove condition
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
         assert.equal(getFilterBuilderItems(container).length, 1);
+    });
+
+    // T804262
+    QUnit.test("Deleting of condition doesn't cause group deleting in controlled mode (React)", function(assert) {
+        var container = $("#container"),
+            value = [
+                ["Name", "=", "John"],
+                "or",
+                [
+                    ["Name", "=", "Fed"],
+                    "and",
+                    ["Price", ">", 2000]
+                ]
+            ],
+            fields = [{
+                dataField: "Name"
+            }, {
+                dataField: "Price",
+                dataType: "number"
+            }];
+
+        container.dxFilterBuilder({
+            value: value,
+            fields: fields,
+            onValueChanged: function(e) {
+                e.component.option("value", e.value);
+            }
+        });
+
+        // act
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(3), 0);
+
+        // assert
+        assert.equal(getFilterBuilderGroups(container).length, 2, "Group is not deleted");
     });
 
     QUnit.test("add/remove not valid conditions", function(assert) {

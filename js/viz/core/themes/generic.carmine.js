@@ -70,11 +70,20 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: TEXT_COLOR
+                color: BORDER_COLOR
             }
         },
         commonAxisSettings: {
             breakStyle: { color: "#c1c5c7" }
+        },
+        commonAnnotationSettings: {
+            font: {
+                color: TITLE_COLOR
+            },
+            border: {
+                color: BORDER_COLOR
+            },
+            color: BACKGROUND_COLOR
         }
     },
     rangeSelector: {

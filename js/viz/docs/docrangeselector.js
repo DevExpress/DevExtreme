@@ -561,7 +561,6 @@ var dxRangeSelector = {
     /**
     * @name dxRangeSelectorOptions.tooltip
     * @hidden
-    * @inheritdoc
     */
     tooltip: undefined,
     /**
@@ -708,14 +707,14 @@ var dxRangeSelector = {
         * @name dxRangeSelectorOptions.chart.barGroupPadding
         * @type number
         * @default 0.3
-        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
         */
         barGroupPadding: 0.3,
         /**
         * @name dxRangeSelectorOptions.chart.barGroupWidth
         * @type number
         * @default undefined
-        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeriesSeries
+        * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries
         */
         barGroupWidth: undefined,
         /**
@@ -734,7 +733,21 @@ var dxRangeSelector = {
         * @type Enums.VizPaletteExtensionMode
         * @default 'blend'
         */
-        paletteExtensionMode: 'blend'
+        paletteExtensionMode: 'blend',
+        /**
+        * @name dxRangeSelectorOptions.chart.minBubbleSize
+        * @default 12
+        * @type number
+        * @propertyOf dxChartSeriesTypes.BubbleSeries
+        */
+        minBubbleSize: 12,
+        /**
+        * @name dxRangeSelectorOptions.chart.maxBubbleSize
+        * @default 0.2
+        * @type number
+        * @propertyOf dxChartSeriesTypes.BubbleSeries
+        */
+        maxBubbleSize: 0.2
     },
     /**
     * @name dxRangeSelectorOptions.dataSource
@@ -754,6 +767,7 @@ var dxRangeSelector = {
     * @type_function_param1 e:object
     * @type_function_param1_field4 value:Array<number,string,Date>
     * @type_function_param1_field5 previousValue:Array<number,string,Date>
+    * @type_function_param1_field6 event:event
     * @default null
     * @notUsedInTheme
     * @action

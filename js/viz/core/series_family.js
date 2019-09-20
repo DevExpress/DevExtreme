@@ -146,16 +146,21 @@ function getStackSumByArg(stackKeepers, stackName, argument) {
     return positiveStackValue + negativeStackValue;
 }
 
-function getSeriesStackIndexCallback(rotated) {
-    if(!rotated) {
+function getSeriesStackIndexCallback(inverted) {
+    if(!inverted) {
         return function(index) { return index; };
     } else {
         return function(index, stackCount) { return stackCount - index - 1; };
     }
 }
 
+function isInverted(series) {
+    return series[0] && series[0].getArgumentAxis().getTranslator().isInverted();
+}
+
 function adjustBarSeriesDimensions() {
-    adjustBarSeriesDimensionsCore(getVisibleSeries(this), this._options, getSeriesStackIndexCallback(this.rotated));
+    const series = getVisibleSeries(this);
+    adjustBarSeriesDimensionsCore(series, this._options, getSeriesStackIndexCallback(isInverted(series)));
 }
 
 function adjustStackedSeriesValues() {
@@ -182,7 +187,7 @@ function adjustStackedSeriesValues() {
         singleSeries.holes = extend(true, {}, holesStack);
 
         singleSeries.getPoints().forEach(function(point, index, points) {
-            var value = point.initialValue,
+            var value = point.initialValue && point.initialValue.valueOf(),
                 argument = point.argument.valueOf(),
                 stacks = (value >= 0) ? stackKeepers.positive : stackKeepers.negative,
                 isNotBarSeries = singleSeries.type !== "bar",
@@ -209,12 +214,12 @@ function adjustStackedSeriesValues() {
                 if(!hole && prevPoint && prevPoint.hasValue()) {
                     argument = prevPoint.argument.valueOf();
                     prevPoint._skipSetRightHole = true;
-                    holesStack.right[argument] = (holesStack.right[argument] || 0) + (prevPoint.value - (isFinite(prevPoint.minValue) ? prevPoint.minValue : 0));
+                    holesStack.right[argument] = (holesStack.right[argument] || 0) + (prevPoint.value.valueOf() - (isFinite(prevPoint.minValue) ? prevPoint.minValue.valueOf() : 0));
                 }
                 hole = true;
             } else if(hole) {
                 hole = false;
-                holesStack.left[argument] = (holesStack.left[argument] || 0) + (point.value - (isFinite(point.minValue) ? point.minValue : 0));
+                holesStack.left[argument] = (holesStack.left[argument] || 0) + (point.value.valueOf() - (isFinite(point.minValue) ? point.minValue.valueOf() : 0));
                 point._skipSetLeftHole = true;
             }
         });
@@ -263,7 +268,7 @@ function updateStackedSeriesValues() {
             if(!point.hasValue()) {
                 return;
             }
-            var value = point.initialValue,
+            var value = point.initialValue && point.initialValue.valueOf(),
                 argument = point.argument.valueOf(),
                 updateValue,
                 valueType,
@@ -323,7 +328,8 @@ function updateBarSeriesValues() {
 }
 
 function adjustCandlestickSeriesDimensions() {
-    adjustBarSeriesDimensionsCore(getVisibleSeries(this), { barWidth: null, equalBarWidth: true, barGroupPadding: 0.3 }, getSeriesStackIndexCallback(this.rotated));
+    const series = getVisibleSeries(this);
+    adjustBarSeriesDimensionsCore(series, { barWidth: null, equalBarWidth: true, barGroupPadding: 0.3 }, getSeriesStackIndexCallback(isInverted(series)));
 }
 
 function adjustBubbleSeriesDimensions() {
@@ -381,7 +387,6 @@ function SeriesFamily(options) {
 
     that.type = _normalizeEnum(options.type);
     that.pane = options.pane;
-    that.rotated = options.rotated;
     that.series = [];
 
     that.updateOptions(options);

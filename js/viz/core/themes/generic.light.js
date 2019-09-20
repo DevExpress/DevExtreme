@@ -110,6 +110,7 @@ registerTheme({
         arrowLength: 10,
         paddingLeftRight: 18,
         paddingTopBottom: 15,
+        textAlignment: "center",
         shared: false,
         location: CENTER,
         shadow: {
@@ -144,7 +145,7 @@ registerTheme({
             backgroundColor: WHITE,
             margin: {
                 left: 0,
-                bottom: 14,
+                bottom: 9,
                 right: 0,
                 top: 0
             },
@@ -652,7 +653,7 @@ registerTheme({
                 overlappingBehavior: "hide",
                 indentFromAxis: 10,
                 wordWrap: "normal",
-                overflow: "none"
+                textOverflow: "none"
             },
             title: {
                 font: {
@@ -708,34 +709,6 @@ registerTheme({
             },
             constantLines: []
         },
-        commonAnnotationSettings: {
-            font: {
-                color: "#333333"
-            },
-            tooltipEnabled: true,
-            border: {
-                width: 1,
-                color: "#dddddd",
-                dashStyle: SOLID,
-                visible: true
-            },
-            color: WHITE,
-            opacity: 0.9,
-            arrowLength: 14,
-            arrowWidth: 14,
-            paddingLeftRight: 10,
-            paddingTopBottom: 10,
-            shadow: {
-                opacity: 0.15,
-                offsetX: 0,
-                offsetY: 1,
-                blur: 4,
-                color: BLACK
-            },
-            image: {
-                location: "full"
-            }
-        },
         argumentAxis: {
             endOnTick: false,
             workWeek: [1, 2, 3, 4, 5]
@@ -750,7 +723,7 @@ registerTheme({
         commonPaneSettings: {
             backgroundColor: NONE,
             border: {
-                color: SECONDARY_TITLE_COLOR,
+                color: LIGHT_GREY,
                 width: 1,
                 visible: false,
                 top: true,
@@ -785,6 +758,38 @@ registerTheme({
             panKey: "shift",
             allowMouseWheel: true,
             allowTouchGestures: true
+        },
+        commonAnnotationSettings: {
+            font: {
+                color: "#333333"
+            },
+            tooltipEnabled: true,
+            border: {
+                width: 1,
+                color: "#dddddd",
+                dashStyle: SOLID,
+                visible: true
+            },
+            color: WHITE,
+            opacity: 0.9,
+            arrowLength: 14,
+            arrowWidth: 14,
+            paddingLeftRight: 10,
+            paddingTopBottom: 10,
+            shadow: {
+                opacity: 0.15,
+                offsetX: 0,
+                offsetY: 1,
+                blur: 4,
+                color: BLACK
+            },
+            image: {
+                width: 30,
+                height: 30
+            },
+            wordWrap: "normal",
+            textOverflow: "ellipsis",
+            allowDragging: false
         }
     },
     pie: {
@@ -887,6 +892,10 @@ registerTheme({
                         width: 2
                     }
                 }
+            },
+            label: {
+                textOverflow: "ellipsis",
+                wordWrap: "normal"
             }
         },
         legend: {
@@ -1500,8 +1509,8 @@ registerTheme({
             }
         },
         adaptiveLayout: {
-            width: 170,
-            height: 170,
+            width: 80,
+            height: 80,
             keepLabels: true
         },
         equalBarWidth: true,
@@ -1614,6 +1623,8 @@ registerTheme({
         neckHeight: 0,
         resolveLabelOverlapping: "shift",
         label: {
+            textOverflow: "ellipsis",
+            wordWrap: "normal",
             visible: true,
             horizontalAlignment: RIGHT,
             horizontalOffset: 0,
@@ -1733,3 +1744,6 @@ registerTheme({
     }
 });
 
+registerTheme({
+    name: "generic.light.compact"
+}, "generic.light");

@@ -9,6 +9,7 @@ import messageLocalization from "../../localization/message";
 import { when, Deferred } from "../../core/utils/deferred";
 import domAdapter from "../../core/dom_adapter";
 import browser from "../../core/utils/browser";
+import accessibility from "../shared/accessibility";
 
 var TABLE_CLASS = "table",
     BORDERS_CLASS = "borders",
@@ -66,7 +67,7 @@ var calculateFreeWidthWithCurrentMinWidth = function(that, columnIndex, currentM
 };
 
 var restoreFocus = function(focusedElement, selectionRange) {
-    focusedElement.focus();
+    accessibility.hiddenFocus(focusedElement);
     gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
 };
 
@@ -91,7 +92,9 @@ var ResizingController = modules.ViewController.inherit({
                 } else if(changeType === "update" && e.changeTypes) {
                     if((items.length > 1 || e.changeTypes[0] !== "insert") &&
                         !(items.length === 0 && e.changeTypes[0] === "remove") && !e.needUpdateDimensions) {
-                        that._rowsView.resize();
+                        commonUtils.deferUpdate(function() {
+                            that._rowsView.resize();
+                        });
                     } else {
                         resizeDeferred = that.resize();
                     }
@@ -151,20 +154,26 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _toggleBestFitModeForView: function(view, className, isBestFit) {
-        if(!view) return;
-        var $rowsTable = this._rowsView._getTableElement(),
-            $viewTable = view._getTableElement(),
-            $tableBody;
+        if(!view || !view.isVisible()) return;
 
-        if($viewTable) {
-            if(isBestFit) {
-                $tableBody = $viewTable.children("tbody").appendTo($rowsTable);
-            } else {
-                $tableBody = $rowsTable.children("." + className).appendTo($viewTable);
+        var $rowsTables = this._rowsView.getTableElements(),
+            $viewTables = view.getTableElements();
+
+        each($rowsTables, (index, tableElement) => {
+            var $tableBody,
+                $rowsTable = $(tableElement),
+                $viewTable = $viewTables.eq(index);
+
+            if($viewTable && $viewTable.length) {
+                if(isBestFit) {
+                    $tableBody = $viewTable.children("tbody").appendTo($rowsTable);
+                } else {
+                    $tableBody = $rowsTable.children("." + className).appendTo($viewTable);
+                }
+                $tableBody.toggleClass(className, isBestFit);
+                $tableBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
             }
-            $tableBody.toggleClass(className, isBestFit);
-            $tableBody.toggleClass(this.addWidgetPrefix("best-fit"), isBestFit);
-        }
+        });
     },
 
     _toggleBestFitMode: function(isBestFit) {
@@ -248,7 +257,6 @@ var ResizingController = modules.ViewController.inherit({
 
         if(needBestFit) {
             focusedElement = domAdapter.getActiveElement();
-            isFocusOutsideWindow = focusedElement && focusedElement.getBoundingClientRect().bottom < 0;
             selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
             that._toggleBestFitMode(true);
             resetBestFitMode = true;
@@ -280,11 +288,14 @@ var ResizingController = modules.ViewController.inherit({
             if(resetBestFitMode) {
                 that._toggleBestFitMode(false);
                 resetBestFitMode = false;
-                if(focusedElement && !isFocusOutsideWindow && focusedElement !== domAdapter.getActiveElement()) {
-                    if(browser.msie) {
-                        setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
-                    } else {
-                        restoreFocus(focusedElement, selectionRange);
+                if(focusedElement && focusedElement !== domAdapter.getActiveElement()) {
+                    isFocusOutsideWindow = focusedElement.getBoundingClientRect().bottom < 0;
+                    if(!isFocusOutsideWindow) {
+                        if(browser.msie) {
+                            setTimeout(function() { restoreFocus(focusedElement, selectionRange); });
+                        } else {
+                            restoreFocus(focusedElement, selectionRange);
+                        }
                     }
                 }
             }
@@ -452,7 +463,7 @@ var ResizingController = modules.ViewController.inherit({
             }
         }
 
-        return Math.round(result);
+        return result;
     },
 
     updateSize: function($rootElement) {
@@ -510,6 +521,9 @@ var ResizingController = modules.ViewController.inherit({
                 if(that._dataController.isLoaded()) {
                     that._synchronizeColumns();
                 }
+                // IE11
+                that._resetGroupElementHeight();
+
                 commonUtils.deferUpdate(function() {
                     commonUtils.deferRender(function() {
                         commonUtils.deferUpdate(function() {
@@ -521,6 +535,14 @@ var ResizingController = modules.ViewController.inherit({
         });
 
         return result.promise();
+    },
+    _resetGroupElementHeight: function() {
+        let groupElement = this.component.$element().children().get(0),
+            scrollable = this._rowsView.getScrollable();
+
+        if(groupElement && groupElement.style.height && (!scrollable || !scrollable.scrollTop())) {
+            groupElement.style.height = "";
+        }
     },
     _checkSize: function(checkSize) {
         var $rootElement = this.component.$element();
@@ -542,17 +564,15 @@ var ResizingController = modules.ViewController.inherit({
         });
     },
     _setScrollerSpacing: function(hasHeight) {
-        var that = this,
-            scrollable = that._rowsView.getScrollable();
-
-        if(!scrollable && hasHeight) { // T722415
+        if(this.option("scrolling.useNative") === true) {
+            // T722415, T758955
             commonUtils.deferRender(() => {
                 commonUtils.deferUpdate(() => {
-                    that._setScrollerSpacingCore(hasHeight);
+                    this._setScrollerSpacingCore(hasHeight);
                 });
             });
         } else {
-            that._setScrollerSpacingCore(hasHeight);
+            this._setScrollerSpacingCore(hasHeight);
         }
     },
     _updateDimensionsCore: function() {

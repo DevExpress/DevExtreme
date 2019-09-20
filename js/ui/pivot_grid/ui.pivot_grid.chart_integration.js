@@ -1,9 +1,9 @@
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
-    pivotUtils = require("./ui.pivot_grid.utils"),
-    each = require("../../core/utils/iterator").each,
-    foreachTree = pivotUtils.foreachTree,
-    FORMAT_DICTIONARY = {
+import $ from "../../core/renderer";
+import { extend } from "../../core/utils/extend";
+import { foreachTree, formatValue, createPath } from "./ui.pivot_grid.utils";
+import { each } from "../../core/utils/iterator";
+
+var FORMAT_DICTIONARY = {
         number: "numeric",
         date: "datetime"
     },
@@ -14,7 +14,7 @@ function getFormattedValue(path, fields) {
         lastFieldIndex = fields.length - 1;
 
     each(path, function(i, item) {
-        value.push(item.text || pivotUtils.formatValue(item.value, fields[lastFieldIndex - i]));
+        value.push(item.text || formatValue(item.value, fields[lastFieldIndex - i]));
     });
 
     return value.reverse();
@@ -134,7 +134,7 @@ function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) 
 
             rowVisibility = rowLevel === rowMembers.length;
 
-            rowPath = pivotUtils.createPath(rowMembers);
+            rowPath = createPath(rowMembers);
             rowPathFormatted = getFormattedValue(rowMembers, rowFields);
 
             if(rowPath.length === 0) {
@@ -147,7 +147,7 @@ function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) 
                 columnMembers = columnMembers.slice(0, columnMembers.length - 1);
                 columnVisibility = columnLevel === columnMembers.length;
 
-                columnPath = pivotUtils.createPath(columnMembers);
+                columnPath = createPath(columnMembers);
                 columnPathFormatted = getFormattedValue(columnMembers, columnFields);
 
                 if(columnPath.length === 0) {

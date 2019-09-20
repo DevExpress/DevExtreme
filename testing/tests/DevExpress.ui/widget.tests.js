@@ -12,6 +12,7 @@ import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import dataUtils from "core/element_data";
 import { deferUpdate } from "core/utils/common";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import "common.css!";
 
@@ -200,6 +201,47 @@ QUnit.module("render", {}, () => {
         $container.addClass("dx-state-disabled");
         $element.focusout();
         assert.ok(focusOutHandled, "focusOut action was fired");
+    });
+
+    ["FocusIn", "FocusOut"].forEach((focusEvent) => {
+        QUnit.test(`widget should not fire the on${focusEvent} event in case the original event is prevented`, (assert) => {
+            const stubHandler = sinon.stub();
+            const optionName = `on${focusEvent}`;
+
+            const $element = $("#widget").dxWidget({
+                focusStateEnabled: true,
+                [optionName]: stubHandler
+            });
+
+            const event = $.Event(focusEvent.toLowerCase());
+
+            $element.trigger(event);
+            assert.ok(stubHandler.calledOnce, `on${focusEvent} action was fired`);
+
+            event.preventDefault();
+            $element.trigger(event);
+            assert.ok(stubHandler.calledOnce, `on${focusEvent} action wasn't fired`);
+        });
+
+        QUnit.test(`widget should not fire the on${focusEvent} event in case the original event is prevented after subscribe at runtime`, (assert) => {
+            const stubHandler = sinon.stub();
+            const dxEventName = "f" + focusEvent.substring(1);
+
+            const $element = $("#widget").dxWidget({
+                focusStateEnabled: true
+            });
+
+            $element.dxWidget("on", dxEventName, stubHandler);
+
+            const event = $.Event(focusEvent.toLowerCase());
+
+            $element.trigger(event);
+            assert.ok(stubHandler.calledOnce, `on${focusEvent} action was fired`);
+
+            event.preventDefault();
+            $element.trigger(event);
+            assert.ok(stubHandler.calledOnce, `on${focusEvent} action wasn't fired`);
+        });
     });
 
     QUnit.test("widget has class dx-state-hover when child widget lose cursor", (assert) => {
@@ -1362,7 +1404,38 @@ QUnit.module("keyboard navigation", {}, () => {
 
         assert.equal(handler.callCount, 1, "new handler fired");
     });
+
+    QUnit.test("Call 'repaint' from 'onContentReady'", (assert) => {
+        const keyHandler = sinon.stub();
+        let firstCall = true;
+
+        const $element = $("#widget").dxWidget({
+            focusStateEnabled: true,
+            onContentReady: function() {
+                if(firstCall) {
+                    firstCall = false;
+                    this.repaint();
+                }
+            }
+        });
+        const widget = $("#widget").dxWidget("instance");
+        widget.registerKeyHandler("A", keyHandler);
+
+        keyboardMock($element).press("A");
+
+        assert.strictEqual(keyHandler.callCount, 1, "keyHandler.callCount");
+        assert.strictEqual(keyHandler.getCall(0).args[0].type, "keydown", "keyHandler.type");
+    });
 });
+
+if(devices.current().deviceType === "desktop") {
+    registerKeyHandlerTestHelper.runTests({
+        createWidget: ($element, options) => $element.dxWidget($.extend({
+            focusStateEnabled: true
+        }, options)).dxWidget("instance"),
+        checkInitialize: true
+    });
+}
 
 QUnit.module("isReady", {}, () => {
     QUnit.test("widget is ready after rendering", (assert) => {

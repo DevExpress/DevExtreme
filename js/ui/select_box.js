@@ -10,12 +10,11 @@ var $ = require("../core/renderer"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     Deferred = deferredUtils.Deferred,
     errors = require("../core/errors"),
+    domAdapter = require("../core/dom_adapter"),
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
-    dataQuery = require("../data/query"),
-    DropDownList = require("./drop_down_editor/ui.drop_down_list"),
-    themes = require("./themes");
+    DropDownList = require("./drop_down_editor/ui.drop_down_list");
 
 var DISABLED_STATE_SELECTOR = ".dx-state-disabled",
     SELECTBOX_CLASS = "dx-selectbox",
@@ -226,56 +225,21 @@ var SelectBox = DropDownList.inherit({
 
             /**
              * @name dxSelectBoxOptions.openOnFieldClick
-             * @inheritdoc
              * @default true
              */
             openOnFieldClick: true,
 
             /**
              * @name dxSelectBoxOptions.showDropDownButton
-             * @inheritdoc
              */
             showDropDownButton: true,
 
             displayCustomValue: false,
 
             _isAdaptablePopupPosition: false,
-            useInkRipple: false
+            useInkRipple: false,
+            useHiddenSubmitElement: true
         });
-    },
-
-    _defaultOptionsRules: function() {
-        var themeName = themes.current();
-
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return themes.isWin8(themeName);
-                },
-                options: {
-                    _isAdaptablePopupPosition: true,
-                    popupPosition: {
-                        at: "left top",
-                        offset: { h: 0, v: 0 }
-                    }
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5(themeName);
-                },
-                options: {
-                    _isAdaptablePopupPosition: true,
-                    popupPosition: {
-                        offset: {
-                            h: -16,
-                            v: -8
-                        }
-                    },
-                    useInkRipple: true
-                }
-            }
-        ]);
     },
 
     _init: function() {
@@ -284,19 +248,12 @@ var SelectBox = DropDownList.inherit({
     },
 
     _initMarkup: function() {
-        this._renderSubmitElement();
         this.$element().addClass(SELECTBOX_CLASS);
         this._renderTooltip();
         this.option("useInkRipple") && this._renderInkRipple();
 
         this.callBase();
         this._$container.addClass(SELECTBOX_CONTAINER_CLASS);
-    },
-
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
     },
 
     _renderInkRipple: function() {
@@ -409,17 +366,6 @@ var SelectBox = DropDownList.inherit({
         return new Deferred().resolve();
     },
 
-    _setSubmitValue: function() {
-        var value = this.option("value"),
-            submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
-
-        this._$submitElement.val(submitValue);
-    },
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
-    },
-
     _renderInputValue: function() {
         return this.callBase().always(function() {
             this._renderInputValueAsync();
@@ -439,10 +385,11 @@ var SelectBox = DropDownList.inherit({
         return new Deferred().resolve();
     },
 
-    _fitIntoRange: function(value, start, end) {
-        if(value > end) return start;
-        if(value < start) return end;
-        return value;
+    _setNextItem: function(step) {
+        var item = this._calcNextItem(step),
+            value = this._valueGetter(item);
+
+        this._setValue(value);
     },
 
     _setNextValue: function(step) {
@@ -451,39 +398,19 @@ var SelectBox = DropDownList.inherit({
             : this._dataSource.load();
 
         dataSourceIsLoaded.done((function() {
-            var item = this._calcNextItem(step),
-                value = this._valueGetter(item);
+            var selectedIndex = this._getSelectedIndex(),
+                isLastPage = this._dataSource.isLastPage(),
+                isLastItem = selectedIndex === this._items().length - 1;
 
-            this._setValue(value);
-        }).bind(this));
-    },
-
-    _calcNextItem: function(step) {
-        var items = this._items();
-        var nextIndex = this._fitIntoRange(this._getSelectedIndex() + step, 0, items.length - 1);
-        return items[nextIndex];
-    },
-
-    _items: function() {
-        var items = this._getPlainItems(!this._list && this._dataSource.items());
-
-        var availableItems = new dataQuery(items).filter("disabled", "<>", true).toArray();
-
-        return availableItems;
-    },
-
-    _getSelectedIndex: function() {
-        var items = this._items();
-        var selectedItem = this.option("selectedItem");
-        var result = -1;
-        each(items, (function(index, item) {
-            if(this._isValueEquals(item, selectedItem)) {
-                result = index;
-                return false;
+            if(!isLastPage && isLastItem && step > 0) {
+                if(!this._popup) {
+                    this._createPopup();
+                }
+                this._list._loadNextPage().done(this._setNextItem.bind(this, step));
+            } else {
+                this._setNextItem(step);
             }
         }).bind(this));
-
-        return result;
     },
 
     _setSelectedItem: function(item) {
@@ -617,6 +544,10 @@ var SelectBox = DropDownList.inherit({
     },
 
     _restoreInputText: function() {
+        if(this.option("readOnly")) {
+            return;
+        }
+
         this._loadItemDeferred && this._loadItemDeferred.always((function() {
             var initialSelectedItem = this.option("selectedItem");
 
@@ -646,9 +577,12 @@ var SelectBox = DropDownList.inherit({
     },
 
     _focusOutHandler: function(e) {
-        this.callBase(e);
+        if(!this._preventNestedFocusEvent(e)) {
+            this._clearSearchTimer();
+            this._restoreInputText();
+        }
 
-        this._restoreInputText();
+        this.callBase(e);
     },
 
     _clearTextValue: function() {
@@ -657,6 +591,11 @@ var SelectBox = DropDownList.inherit({
 
     _shouldOpenPopup: function() {
         return this._needPassDataSourceToList();
+    },
+
+    _isFocused: function() {
+        var activeElement = domAdapter.getActiveElement();
+        return this.callBase() && $(activeElement).closest(this._input()).length > 0;
     },
 
     _renderValueChangeEvent: function() {

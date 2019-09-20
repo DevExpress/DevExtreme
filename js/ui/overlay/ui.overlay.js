@@ -53,6 +53,8 @@ var OVERLAY_CLASS = "dx-overlay",
 
     DISABLED_STATE_CLASS = "dx-state-disabled",
 
+    PREVENT_SAFARI_SCROLLING_CLASS = "dx-prevent-safari-scrolling",
+
     TAB_KEY = "tab",
 
     POSITION_ALIASES = {
@@ -151,7 +153,6 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions.activeStateEnabled
             * @hidden
-            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -461,7 +462,8 @@ var Overlay = Widget.inherit({
 
     _initOptions: function(options) {
         this._initTarget(options.target);
-        this._initContainer(options.container);
+        var container = options.container === undefined ? this.option("container") : options.container;
+        this._initContainer(container);
         this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
         this.callBase(options);
@@ -634,6 +636,7 @@ var Overlay = Widget.inherit({
         });
 
         if(this._parentHidden) {
+            this._isHidden = true;
             return deferred.resolve();
         }
 
@@ -664,6 +667,7 @@ var Overlay = Widget.inherit({
                     completeShowAnimation.apply(this, arguments);
                     that._showAnimationProcessing = false;
                     that._actions.onShown();
+                    that._toggleSafariScrolling(false);
                     deferred.resolve();
                 }, function() {
                     startShowAnimation.apply(this, arguments);
@@ -714,6 +718,8 @@ var Overlay = Widget.inherit({
 
         this._actions.onHiding(hidingArgs);
 
+        that._toggleSafariScrolling(true);
+
         if(hidingArgs.cancel) {
             this._isHidingActionCanceled = true;
             this.option("visible", true);
@@ -746,7 +752,11 @@ var Overlay = Widget.inherit({
 
     _forceFocusLost: function() {
         var activeElement = domAdapter.getActiveElement();
-        activeElement && this._$content.find(activeElement).length && activeElement.blur();
+        var shouldResetActiveElement = !!this._$content.find(activeElement).length;
+
+        if(shouldResetActiveElement) {
+            domUtils.resetActiveElement();
+        }
     },
 
     _animate: function(animation, completeCallback, startCallback) {
@@ -953,8 +963,14 @@ var Overlay = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._$content.appendTo(this.$element());
+        this._appendContentToElement();
         this._renderVisibilityAnimate(this.option("visible"));
+    },
+
+    _appendContentToElement: function() {
+        if(!this._$content.parent().is(this.$element())) {
+            this._$content.appendTo(this.$element());
+        }
     },
 
     _renderContent: function() {
@@ -971,6 +987,8 @@ var Overlay = Widget.inherit({
         }
 
         this._contentAlreadyRendered = true;
+        this._appendContentToElement();
+
         this.callBase();
     },
 
@@ -1002,9 +1020,6 @@ var Overlay = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        const $element = this.$element();
-        this._$content.appendTo($element);
-
         const whenContentRendered = new Deferred();
 
         const contentTemplateOption = this.option("contentTemplate"),
@@ -1222,30 +1237,48 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _renderGeometry: function() {
+    _renderGeometry: function(isDimensionChanged) {
         if(this.option("visible") && windowUtils.hasWindow()) {
-            this._renderGeometryImpl();
+            this._renderGeometryImpl(isDimensionChanged);
         }
     },
 
-    _renderGeometryImpl: function() {
+    _renderGeometryImpl: function(isDimensionChanged) {
         this._stopAnimation();
-
         this._normalizePosition();
-        this._fixHeightAfterSafariAddressBarResizing();
         this._renderShading();
+        this._fixHeightAfterSafariAddressBarResizing();
         this._renderDimensions();
         var resultPosition = this._renderPosition();
 
         this._actions.onPositioned({ position: resultPosition });
     },
 
+    _fixWrapperPosition: function() {
+        this._$wrapper.css("position", this._useFixedPosition() ? "fixed" : "absolute");
+    },
+
+    _useFixedPosition: function() {
+        var $container = this._getContainer();
+        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined);
+    },
+
+    _toggleSafariScrolling: function(scrollingEnabled) {
+        if(iOS && this._useFixedPosition()) {
+            var body = domAdapter.getBody();
+            if(scrollingEnabled) {
+                $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
+                window.scrollTo(0, this._bodyScrollTop);
+                this._bodyScrollTop = undefined;
+            } else if(this.option("visible")) {
+                this._bodyScrollTop = window.pageYOffset;
+                $(body).addClass(PREVENT_SAFARI_SCROLLING_CLASS);
+            }
+        }
+    },
+
     _renderShading: function() {
-        var $wrapper = this._$wrapper,
-            $container = this._getContainer();
-
-        $wrapper.css("position", this._isWindow($container) && !iOS ? "fixed" : "absolute");
-
+        this._fixWrapperPosition();
         this._renderShadingDimensions();
         this._renderShadingPosition();
     },
@@ -1377,7 +1410,7 @@ var Overlay = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        this._renderGeometry();
+        this._renderGeometry(true);
     },
 
     _clean: function() {
@@ -1407,6 +1440,7 @@ var Overlay = Widget.inherit({
         this._toggleSubscriptions(false);
         this._updateZIndexStackPosition(false);
         this._toggleTabTerminator(false);
+        this._toggleSafariScrolling(true);
 
         this._actions = null;
 
@@ -1565,6 +1599,7 @@ var Overlay = Widget.inherit({
     */
     repaint: function() {
         this._renderGeometry();
+        domUtils.triggerResizeEvent(this._$content);
     }
 });
 

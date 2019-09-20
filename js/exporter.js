@@ -2,12 +2,12 @@ var fileSaver = require("./exporter/file_saver").fileSaver,
     excelCreator = require("./exporter/excel_creator"),
     imageCreator = require("./exporter/image_creator"),
     svgCreator = require("./exporter/svg_creator"),
-    exportDataGrid = require("./exporter/exceljs/exportDataGrid"),
-    _isFunction = require("./core/utils/type").isFunction;
+    _isFunction = require("./core/utils/type").isFunction,
+    Deferred = require("./core/utils/deferred").Deferred;
 
 exports.export = function(data, options, getData) {
     if(!data) {
-        return;
+        return new Deferred().resolve();
     }
 
     // TODO: Can the following actions be not defined? (since they are provided by a widget not by a user)
@@ -23,7 +23,7 @@ exports.export = function(data, options, getData) {
     _isFunction(exportingAction) && exportingAction(eventArgs);
 
     if(!eventArgs.cancel) {
-        getData(data, options, function(blob) {
+        return getData(data, options, function(blob) {
             _isFunction(exportedAction) && exportedAction();
 
             if(_isFunction(fileSavingAction)) {
@@ -36,9 +36,10 @@ exports.export = function(data, options, getData) {
             }
         });
     }
+
+    return new Deferred().resolve();
 };
 
-exports.excelJS = exportDataGrid;
 exports.fileSaver = fileSaver;
 exports.excel = {
     creator: excelCreator.ExcelCreator,

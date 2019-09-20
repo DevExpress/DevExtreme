@@ -637,12 +637,8 @@ QUnit.test("Next page index via navigate button", function(assert) {
 
 QUnit.test("Focus selected page", function(assert) {
     var $pager = $("#container").dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }),
-        event = document.createEvent('Event');
+        $pages = $pager.find(".dx-pages > .dx-page");
 
-    event.initEvent('focus', true, true);
-    $pager.find(".dx-pages .dx-selection")[0].dispatchEvent(event);
-
-    let $pages = $pager.find(".dx-pages > .dx-page");
     for(let i = 0; i < $pages.length; ++i) {
         assert.equal($($pages[i]).attr("tabindex"), 0, "page tabindex");
     }
@@ -726,6 +722,19 @@ QUnit.test("Pointer up and click on navigate button", function(assert) {
 
     // assert
     assert.deepEqual(nextPageCalls, ["next", "next"]);
+});
+
+// T804551
+QUnit.test("Pointer up and click on page button", function(assert) {
+    var $pager = $("#container").dxPager({ pageCount: 20 }),
+        instance = $pager.dxPager("instance");
+
+    // act
+    $pager.find(".dx-page").eq(4).trigger("dxpointerup");
+    $pager.find(".dx-page").eq(4).trigger("dxclick");
+
+    // assert
+    assert.equal(instance.option("pageIndex"), 5, "pageIndex is correct");
 });
 
 QUnit.test("Prev button is disabled when first page is chosen ", function(assert) {

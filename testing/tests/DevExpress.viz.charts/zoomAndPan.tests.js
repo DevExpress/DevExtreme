@@ -242,6 +242,59 @@ QUnit.test("Argument and value", function(assert) {
     assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
 });
 
+QUnit.test("Argument and value. Multiple axis chart with empty axis", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            argumentAxis: {
+                visualRange: {
+                    startValue: 3,
+                    endValue: 7
+                }
+            },
+            valueAxis: [{
+                visualRange: {
+                    startValue: 2,
+                    endValue: 4
+                }
+            }, {
+                name: "axis2"
+            }],
+            zoomAndPan: {
+                valueAxis: "pan",
+                argumentAxis: "pan"
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const valueAxis = chart.getValueAxis();
+
+    // act
+    this.pointer.start({ x: 150, y: 100 }).dragStart().drag(50, 200).dragEnd();
+
+    assert.equal(onZoomStart.callCount, 2);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
+
+    assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis);
+    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 2, endValue: 4 });
+
+    assert.equal(onZoomEnd.callCount, 2);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -1);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1);
+
+    assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis);
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 4 });
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 3, endValue: 5 });
+    assert.equal(onZoomEnd.getCall(1).args[0].shift, 1);
+    assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
+});
+
 QUnit.test("Argument and value. Rotated", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
@@ -543,6 +596,24 @@ QUnit.test("Allow zoom-out by minVisualRangeLength option", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxmousewheel");
     assert.roughEqual(onZoomEnd.getCall(0).args[0].shift, 0.02, 0.005);
     assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 0.9);
+});
+
+QUnit.test("T741577. Reset initial whole range after dataSource is changed", function(assert) {
+    const chart = this.createChart({
+        zoomAndPan: {
+            valueAxis: "zoom",
+            allowMouseWheel: true
+        }
+    });
+
+    chart.option("dataSource", [{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).wheel(-10);
+    assert.deepEqual(chart.getValueAxis().visualRange(), {
+        startValue: 1,
+        endValue: 2
+    });
 });
 
 QUnit.test("Zoom-in argument axis", function(assert) {
@@ -1719,20 +1790,7 @@ QUnit.test("Reject pinch zoom-in both axes by default minVisualRangeLength optio
     assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis);
     assert.deepEqual(onZoomStart.getCall(1).args[0].range, valVisualRange);
 
-    assert.equal(onZoomEnd.callCount, 2);
-    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, argVisualRange);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, argVisualRange);
-    assert.equal(onZoomEnd.getCall(0).args[0].actionType, "zoom");
-    assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxpinchend");
-    assert.equal(onZoomEnd.getCall(0).args[0].shift, 0);
-    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1);
-
-    assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis);
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, valVisualRange);
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, valVisualRange);
-    assert.equal(onZoomEnd.getCall(1).args[0].shift, 0);
-    assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
+    assert.equal(onZoomEnd.callCount, 0);
 });
 
 QUnit.test("Pinch zoom-in both axes", function(assert) {
@@ -2461,40 +2519,6 @@ QUnit.test("Pinch zoom. Big chart rendering time on start and small time in the 
 
 QUnit.module("Misc", environment);
 
-QUnit.test("Check css touch-action rule combinations", function(assert) {
-    const chart = this.createChart();
-    const checkRule = (function(val, arg, expected) {
-        chart.option({
-            zoomAndPan: {
-                argumentAxis: val,
-                valueAxis: arg
-            }
-        });
-        const style = chart._renderer.root.element.getAttribute("style").replace(/:\s/g, ":");
-        const taExpected = `touch-action:${expected};`;
-        const msTaExpected = `-ms-touch-action:${expected};`;
-
-        if(!expected) {
-            assert.ok(style.indexOf("touch-action") === -1);
-        } else {
-            assert.ok(style.indexOf(taExpected) !== -1 || style.indexOf(msTaExpected) !== -1, expected);
-        }
-    }).bind(this);
-
-    checkRule("none", "none", "");
-
-    checkRule("zoom", "pan", "none");
-    checkRule("pan", "zoom", "none");
-
-    checkRule("zoom", "none", "pan-x pan-y");
-    checkRule("none", "zoom", "pan-x pan-y");
-
-    checkRule("pan", "none", "pinch-zoom");
-    checkRule("none", "pan", "pinch-zoom");
-
-    checkRule("none", "none", "");
-});
-
 QUnit.test("Do nothing if no actions allowed", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
@@ -2664,11 +2688,9 @@ QUnit.test("Pan - do nothing", function(assert) {
     });
 
     // act
-    const e = this.pointer.start({ x: 100, y: 250, cancelable: true }).dragStart().lastEvent();
+    this.pointer.start({ x: 100, y: 250, cancelable: true }).dragStart().drag(400, 240).dragEnd();
 
     // assert
-    assert.strictEqual(e.cancel, true);
-    assert.strictEqual(e.originalEvent.cancel, true);
     assert.equal(onZoomStart.callCount, 0);
     assert.equal(onZoomEnd.callCount, 0);
 });
@@ -2741,13 +2763,13 @@ QUnit.test("On pan", function(assert) {
 
     // act
     const $root = $(chart._renderer.root.element);
-    $root.trigger(new $.Event("dxdragstart", { pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger(new $.Event("dxdragstart", { pageX: 100, pageY: 250, preventDefault: preventDefault }));
     $root.trigger(new $.Event("dxdrag", { offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event("dxdragend", { preventDefault: preventDefault, stopPropagation: stopPropagation }));
 
-    assert.equal(preventDefault.callCount, 3);
-    assert.equal(stopPropagation.callCount, 3);
-    assert.equal(this.trackerStopHandling.callCount, 3);
+    assert.equal(preventDefault.callCount, 2);
+    assert.equal(stopPropagation.callCount, 2);
+    assert.equal(this.trackerStopHandling.callCount, 2);
 });
 
 QUnit.test("Pan action in pane without zoom if another pane has a zoom", function(assert) {
@@ -2801,9 +2823,7 @@ QUnit.test("Pan action in pane without zoom if another pane has a zoom", functio
 });
 
 QUnit.test("Default behavior - no prevent. On panning by drag (goes to the edge)", function(assert) {
-    const preventDefault = sinon.spy(),
-        stopPropagation = sinon.spy(),
-        onZoomStart = sinon.spy(),
+    const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
@@ -2823,16 +2843,87 @@ QUnit.test("Default behavior - no prevent. On panning by drag (goes to the edge)
     // act
     const $root = $(chart._renderer.root.element);
 
-    $root.trigger(new $.Event("dxdragstart", { pointerType: "touch", pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
-    $root.trigger(new $.Event("dxdrag", { pointerType: "touch", offset: { x: -100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
-    $root.trigger(new $.Event("dxdragend", { pointerType: "touch", preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger(new $.Event("dxdragstart", { pointerType: "touch", pageX: 100, pageY: 250 }));
+    $root.trigger(new $.Event("dxdrag", { pointerType: "touch", offset: { x: -100, y: 50 } }));
+    $root.trigger(new $.Event("dxdragend", { pointerType: "touch" }));
 
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomEnd.callCount, 0);
-    assert.equal(preventDefault.callCount, 1);
-    assert.equal(stopPropagation.callCount, 1);
-    assert.equal(this.trackerStopHandling.callCount, 1);
     assert.equal($root[0].style.touchAction, "");
+});
+
+QUnit.test("Do not cancel panning if pan took place early. Pan X", function(assert) {
+    const preventDefault = sinon.spy(),
+        stopPropagation = sinon.spy(),
+        onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            argumentAxis: {
+                visualRange: {
+                    startValue: 3,
+                    endValue: 10
+                }
+            },
+            zoomAndPan: {
+                argumentAxis: "pan",
+                valueAxis: "none",
+                allowTouchGestures: true
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    // act
+    const $root = $(chart._renderer.root.element);
+
+    $root.trigger(new $.Event("dxdragstart", { pointerType: "touch", pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger(new $.Event("dxdrag", { pointerType: "touch", offset: { x: 10, y: 0 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger(new $.Event("dxdrag", { pointerType: "touch", offset: { x: 10, y: 10 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger(new $.Event("dxdragend", { pointerType: "touch", preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.equal(onZoomEnd.callCount, 1);
+});
+
+
+QUnit.test("Do not cancel panning if pan took place early. Pan Y", function(assert) {
+    const preventDefault = sinon.spy(),
+        stopPropagation = sinon.spy(),
+        onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            argumentAxis: {
+                visualRange: {
+                    startValue: 3,
+                    endValue: 10
+                }
+            },
+
+            valueAxis: {
+                visualRange: {
+                    startValue: 1,
+                    endValue: 2
+                }
+            },
+            zoomAndPan: {
+                argumentAxis: "none",
+                valueAxis: "pan",
+                allowTouchGestures: true
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    // act
+    const $root = $(chart._renderer.root.element);
+
+    $root.trigger(new $.Event("dxdragstart", { pointerType: "touch", pageX: 100, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger(new $.Event("dxdrag", { pointerType: "touch", offset: { x: 0, y: 10 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger(new $.Event("dxdrag", { pointerType: "touch", offset: { x: 10, y: 10 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger(new $.Event("dxdragend", { pointerType: "touch", preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.equal(onZoomEnd.callCount, 1);
 });
 
 QUnit.test("On panning by drag (goes from the edge)", function(assert) {
@@ -2858,16 +2949,15 @@ QUnit.test("On panning by drag (goes from the edge)", function(assert) {
     // act
     const $root = $(chart._renderer.root.element);
 
-    $root.trigger(new $.Event("dxdragstart", { pointerType: "touch", pageX: 200, pageY: 250, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger(new $.Event("dxdragstart", { pointerType: "touch", pageX: 200, pageY: 250 }));
     $root.trigger(new $.Event("dxdrag", { pointerType: "touch", offset: { x: 100, y: 50 }, preventDefault: preventDefault, stopPropagation: stopPropagation }));
     $root.trigger(new $.Event("dxdragend", { pointerType: "touch", preventDefault: preventDefault, stopPropagation: stopPropagation }));
 
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomEnd.callCount, 1);
-    assert.equal(preventDefault.callCount, 3);
-    assert.equal(stopPropagation.callCount, 3);
-    assert.equal(this.trackerStopHandling.callCount, 3);
-    assert.ok($root[0].attributes.style.textContent.indexOf("pinch-zoom") > 0);
+    assert.equal(preventDefault.callCount, 2);
+    assert.equal(stopPropagation.callCount, 2);
+    assert.equal(this.trackerStopHandling.callCount, 2);
 });
 
 // T249548
@@ -2919,7 +3009,6 @@ QUnit.test("Default behavior - no prevent. On mouse wheel", function(assert) {
     assert.equal(preventDefault.callCount, 0);
     assert.equal(stopPropagation.callCount, 0);
     assert.equal(this.trackerStopHandling.callCount, 0);
-    assert.equal($root[0].style.touchAction, "pan-x pan-y");
 });
 
 QUnit.test("On pinch zoom", function(assert) {
@@ -2941,13 +3030,13 @@ QUnit.test("On pinch zoom", function(assert) {
 
     // act
     const $root = $(chart._renderer.root.element);
-    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
-    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [], preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
 
-    assert.equal(preventDefault.callCount, 3);
-    assert.equal(stopPropagation.callCount, 3);
-    assert.equal(this.trackerStopHandling.callCount, 3);
+    assert.equal(preventDefault.callCount, 1);
+    assert.equal(stopPropagation.callCount, 1);
+    assert.equal(this.trackerStopHandling.callCount, 1);
 });
 
 QUnit.test("Prevent default behavior for pinch-in zoom", function(assert) {
@@ -2975,14 +3064,13 @@ QUnit.test("Prevent default behavior for pinch-in zoom", function(assert) {
 
     // act
     const $root = $(chart._renderer.root.element);
-    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }] }));
     $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
-    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [], preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
 
-    assert.equal(preventDefault.callCount, 3);
-    assert.equal(stopPropagation.callCount, 3);
-    assert.equal(this.trackerStopHandling.callCount, 3);
-    assert.equal($root[0].style.touchAction, "none");
+    assert.equal(preventDefault.callCount, 1);
+    assert.equal(stopPropagation.callCount, 1);
+    assert.equal(this.trackerStopHandling.callCount, 1);
 });
 
 QUnit.test("Default behavior - no prevent. On pinch-out zoom", function(assert) {
@@ -2993,7 +3081,7 @@ QUnit.test("Default behavior - no prevent. On pinch-out zoom", function(assert) 
         chart = this.createChart({
             argumentAxis: {
                 visualRange: {
-                    startValue: 0.01,
+                    startValue: 1,
                     endValue: 9.99
                 }
             },
@@ -3012,11 +3100,40 @@ QUnit.test("Default behavior - no prevent. On pinch-out zoom", function(assert) 
     $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [], preventDefault: preventDefault, stopPropagation: stopPropagation }));
 
     assert.equal(onZoomStart.callCount, 1);
-    assert.equal(onZoomEnd.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 1);
     assert.equal(preventDefault.callCount, 1);
     assert.equal(stopPropagation.callCount, 1);
     assert.equal(this.trackerStopHandling.callCount, 1);
-    assert.equal($root[0].style.touchAction, "");
+});
+
+QUnit.test("Default behavior - prevent. On pinch-out zoom when zoomed out to whole range", function(assert) {
+    const preventDefault = sinon.spy(),
+        stopPropagation = sinon.spy(),
+        onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            argumentAxis: {
+                visualRange: {
+                    startValue: 0,
+                    endValue: 10
+                }
+            },
+            zoomAndPan: {
+                argumentAxis: "zoom",
+                allowTouchGestures: true
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    // act
+    const $root = $(chart._renderer.root.element);
+    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 100, pageY: 100 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 0, pageY: 0 }, { pointerId: 2, pageX: 50, pageY: 50 }], preventDefault: preventDefault, stopPropagation: stopPropagation }));
+    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [], preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.equal(onZoomEnd.callCount, 0);
 });
 
 QUnit.test("Default behavior - no prevent. On panning by drag (full visualRange)", function(assert) {
@@ -3058,7 +3175,6 @@ QUnit.test("Default behavior - no prevent. On panning by drag (full visualRange)
     assert.equal(preventDefault.callCount, 0);
     assert.equal(stopPropagation.callCount, 0);
     assert.equal(this.trackerStopHandling.callCount, 0);
-    assert.equal($root[0].style.touchAction, "none");
 });
 
 QUnit.test("On ScrollBar", function(assert) {

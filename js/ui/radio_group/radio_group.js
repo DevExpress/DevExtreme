@@ -3,8 +3,6 @@ import { extend } from "../../core/utils/extend";
 import devices from "../../core/devices";
 import inkRipple from "../widget/utils.ink_ripple";
 import registerComponent from "../../core/component_registrator";
-import themes from "../themes";
-import ChildDefaultTemplate from "../widget/child_default_template";
 import CollectionWidget from "../collection/ui.collection_widget.edit";
 import DataExpressionMixin from "../editor/ui.data_expression";
 import Editor from "../editor/editor";
@@ -130,13 +128,9 @@ class RadioGroup extends Editor {
                 * @name dxRadioGroupOptions.focusStateEnabled
                 * @type boolean
                 * @default true @for desktop
-                * @inheritdoc
                 */
                 focusStateEnabled: true
             }
-        }, {
-            device: () => themes.isAndroid5(),
-            options: { useInkRipple: true }
         }]);
     }
 
@@ -145,7 +139,7 @@ class RadioGroup extends Editor {
     }
 
     _focusTarget() {
-        return this.$element().parent();
+        return this.$element();
     }
 
     _getAriaTarget() {
@@ -161,7 +155,6 @@ class RadioGroup extends Editor {
              * @name dxRadioGroupOptions.hoverStateEnabled
              * @type boolean
              * @default true
-             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -169,7 +162,6 @@ class RadioGroup extends Editor {
             * @name dxRadioGroupOptions.activeStateEnabled
             * @type boolean
             * @default true
-            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -185,14 +177,12 @@ class RadioGroup extends Editor {
             /**
             * @name dxRadioGroupOptions.value
             * @ref
-            * @inheritdoc
             */
 
             /**
             * @name dxRadioGroupOptions.name
             * @type string
             * @hidden false
-            * @inheritdoc
             */
         }));
     }
@@ -219,11 +209,6 @@ class RadioGroup extends Editor {
         this._renderRadios();
         this.option("useInkRipple") && this._renderInkRipple();
         super._initMarkup();
-    }
-
-    _initTemplates() {
-        super._initTemplates();
-        this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
     }
 
     _itemClickHandler({ itemElement, event, itemData }) {
@@ -285,9 +270,6 @@ class RadioGroup extends Editor {
         this._updateItemsSize();
     }
 
-    _renderFocusState() {
-    }
-
     _renderInkRipple() {
         this._inkRipple = inkRipple.render({
             waveSizeCoefficient: 3.3,
@@ -312,7 +294,7 @@ class RadioGroup extends Editor {
             accessKey: this.option("accessKey"),
             dataSource: this._dataSource,
             focusStateEnabled: this.option("focusStateEnabled"),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            itemTemplate: this.option("itemTemplate"),
             keyExpr: this._getCollectionKeyExpr(),
             noDataText: "",
             onContentReady: () => this._fireContentReadyAction(true),

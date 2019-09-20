@@ -185,9 +185,10 @@ module.exports = {
             * @type_function_param1_field11 rowType:string
             * @type_function_param1_field12 isSelected:boolean
             * @type_function_param1_field13 isExpanded:boolean
-            * @type_function_param1_field14 groupIndex:number
-            * @type_function_param1_field15 rowElement:dxElement
-            * @type_function_param1_field16 handled:boolean
+            * @type_function_param1_field14 isNewRow:boolean
+            * @type_function_param1_field15 groupIndex:number
+            * @type_function_param1_field16 rowElement:dxElement
+            * @type_function_param1_field17 handled:boolean
             * @extends Action
             * @action
             */
@@ -205,8 +206,11 @@ module.exports = {
             * @type_function_param1_field11 rowType:string
             * @type_function_param1_field12 isSelected:boolean
             * @type_function_param1_field13 isExpanded:boolean
-            * @type_function_param1_field14 rowElement:dxElement
-            * @type_function_param1_field15 handled:boolean
+            * @type_function_param1_field14 isNewRow:boolean
+            * @type_function_param1_field15 rowElement:dxElement
+            * @type_function_param1_field16 handled:boolean
+            * @type_function_param1_field17 node:dxTreeListNode
+            * @type_function_param1_field18 level:number
             * @extends Action
             * @action
             */
@@ -263,8 +267,9 @@ module.exports = {
             * @type_function_param1_field10 rowType:string
             * @type_function_param1_field11 isSelected:boolean
             * @type_function_param1_field12 isExpanded:boolean
-            * @type_function_param1_field13 groupIndex:number
-            * @type_function_param1_field14 rowElement:dxElement
+            * @type_function_param1_field13 isNewRow:boolean
+            * @type_function_param1_field14 groupIndex:number
+            * @type_function_param1_field15 rowElement:dxElement
             * @extends Action
             * @action
             */
@@ -281,7 +286,8 @@ module.exports = {
             * @type_function_param1_field10 rowType:string
             * @type_function_param1_field11 isSelected:boolean
             * @type_function_param1_field12 isExpanded:boolean
-            * @type_function_param1_field13 rowElement:dxElement
+            * @type_function_param1_field13 isNewRow:boolean
+            * @type_function_param1_field14 rowElement:dxElement
             * @extends Action
             * @action
             */
@@ -382,9 +388,10 @@ module.exports = {
              * @type_function_param1_field13 row:dxDataGridRowObject
              * @type_function_param1_field14 isSelected:boolean
              * @type_function_param1_field15 isExpanded:boolean
-             * @type_function_param1_field16 cellElement:dxElement
-             * @type_function_param1_field17 watch:function
-             * @type_function_param1_field18 oldValue:any
+             * @type_function_param1_field16 isNewRow:boolean
+             * @type_function_param1_field17 cellElement:dxElement
+             * @type_function_param1_field18 watch:function
+             * @type_function_param1_field19 oldValue:any
              * @extends Action
              * @action
              */
@@ -404,9 +411,10 @@ module.exports = {
              * @type_function_param1_field13 row:dxTreeListRowObject
              * @type_function_param1_field14 isSelected:boolean
              * @type_function_param1_field15 isExpanded:boolean
-             * @type_function_param1_field16 cellElement:dxElement
-             * @type_function_param1_field17 watch:function
-             * @type_function_param1_field18 oldValue:any
+             * @type_function_param1_field16 isNewRow:boolean
+             * @type_function_param1_field17 cellElement:dxElement
+             * @type_function_param1_field18 watch:function
+             * @type_function_param1_field19 oldValue:any
              * @extends Action
              * @action
              */
@@ -423,7 +431,8 @@ module.exports = {
              * @type_function_param1_field10 groupIndex:number
              * @type_function_param1_field11 isSelected:boolean
              * @type_function_param1_field12 isExpanded:boolean
-             * @type_function_param1_field13 rowElement:dxElement
+             * @type_function_param1_field13 isNewRow:boolean
+             * @type_function_param1_field14 rowElement:dxElement
              * @extends Action
              * @action
              */
@@ -439,7 +448,10 @@ module.exports = {
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 isSelected:boolean
              * @type_function_param1_field11 isExpanded:boolean
-             * @type_function_param1_field12 rowElement:dxElement
+             * @type_function_param1_field12 isNewRow:boolean
+             * @type_function_param1_field13 rowElement:dxElement
+             * @type_function_param1_field14 node:dxTreeListNode
+             * @type_function_param1_field15 level:number
              * @extends Action
              * @action
              */
@@ -527,8 +539,10 @@ module.exports = {
 
                     if(options.rowType === "group" && isDefined(column.groupIndex) && !column.showWhenGrouped && !column.command) {
                         template = column.groupCellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultGroupTemplate(column) };
+                    } else if((options.rowType === "data" || column.command) && column.cellTemplate) {
+                        template = column.cellTemplate;
                     } else {
-                        template = column.cellTemplate || { allowRenderToDetachedContainer: true, render: that._getDefaultTemplate(column) };
+                        template = { allowRenderToDetachedContainer: true, render: that._getDefaultTemplate(column) };
                     }
 
                     return template;
@@ -564,20 +578,20 @@ module.exports = {
                     return $row;
                 },
 
-                _rowPrepared: function($row, row) {
-                    if(row.rowType === "data") {
+                _rowPrepared: function($row, rowOptions, row) {
+                    if(rowOptions.rowType === "data") {
                         if(this.option("rowAlternationEnabled")) {
                             var getRowAlt = () => {
                                 return row.dataIndex % 2 === 1;
                             };
                             getRowAlt() && $row.addClass(ROW_ALTERNATION_CLASS);
-                            row.watch && row.watch(getRowAlt, value => {
+                            rowOptions.watch && rowOptions.watch(getRowAlt, value => {
                                 $row.toggleClass(ROW_ALTERNATION_CLASS, value);
                             });
                         }
 
-                        this._setAriaRowIndex(row, $row);
-                        row.watch && row.watch(() => row.rowIndex, () => this._setAriaRowIndex(row, $row));
+                        this._setAriaRowIndex(rowOptions, $row);
+                        rowOptions.watch && rowOptions.watch(() => rowOptions.rowIndex, () => this._setAriaRowIndex(rowOptions, $row));
                     }
 
                     this.callBase.apply(this, arguments);
@@ -599,16 +613,17 @@ module.exports = {
                 _afterRowPrepared: function(e) {
                     var arg = e.args[0],
                         dataController = this._dataController,
+                        row = dataController.getVisibleRows()[arg.rowIndex],
                         watch = this.option("integrationOptions.watchMethod");
 
-                    if(!arg.data || arg.rowType !== "data" || arg.inserted || !this.option("twoWayBindingEnabled") || !watch) return;
+                    if(!arg.data || arg.rowType !== "data" || arg.isNewRow || !this.option("twoWayBindingEnabled") || !watch || !row) return;
 
                     var dispose = watch(
                         () => {
                             return dataController.generateDataValues(arg.data, arg.columns);
                         },
                         () => {
-                            dataController.repaintRows([arg.rowIndex], this.option("repaintChangesOnly"));
+                            dataController.repaintRows([row.rowIndex], this.option("repaintChangesOnly"));
                         },
                         {
                             deep: true,
@@ -1133,21 +1148,22 @@ module.exports = {
 
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
-                        itemCount = that._dataController.items().length,
+                        dataController = that._dataController,
+                        itemCount = dataController.items().length,
                         contentElement = that._findContentElement(),
                         freeSpaceRowElements = that._getFreeSpaceRowElements($table),
                         freeSpaceRowCount,
                         scrollingMode;
 
-                    if(freeSpaceRowElements && contentElement) {
+                    if(freeSpaceRowElements && contentElement && dataController.totalCount() >= 0) {
                         var isFreeSpaceRowVisible = false;
 
                         if(itemCount > 0) {
                             if(!that._hasHeight) {
-                                freeSpaceRowCount = that._dataController.pageSize() - itemCount;
+                                freeSpaceRowCount = dataController.pageSize() - itemCount;
                                 scrollingMode = that.option("scrolling.mode");
 
-                                if(freeSpaceRowCount > 0 && that._dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
+                                if(freeSpaceRowCount > 0 && dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
                                     styleUtils.setHeight(freeSpaceRowElements, freeSpaceRowCount * that._rowHeight);
                                     isFreeSpaceRowVisible = true;
                                 }
@@ -1406,7 +1422,7 @@ module.exports = {
                     return $cells;
                 },
 
-                getTopVisibleItemIndex: function() {
+                getTopVisibleItemIndex: function(isFloor) {
                     var that = this,
                         itemIndex = 0,
                         prevOffsetTop = 0,
@@ -1428,8 +1444,10 @@ module.exports = {
                             if(rowElement.length) {
                                 offsetTop = rowElement.offset().top - contentElementOffsetTop;
                                 if(offsetTop > scrollPosition) {
-                                    if(scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop) && itemIndex) {
-                                        itemIndex--;
+                                    if(itemIndex) {
+                                        if(isFloor || scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop)) {
+                                            itemIndex--;
+                                        }
                                     }
                                     break;
                                 }
@@ -1478,7 +1496,7 @@ module.exports = {
                             break;
                         case "loadPanel":
                             that._tableElement = null;
-                            that._invalidate(true, true);
+                            that._invalidate(true, args.fullName !== "loadPanel.enabled");
                             args.handled = true;
                             break;
                         case "noDataText":
@@ -1490,6 +1508,7 @@ module.exports = {
 
                 dispose: function() {
                     clearTimeout(this._hideLoadingTimeoutID);
+                    this._scrollable && this._scrollable.dispose();
                 },
 
                 setScrollerSpacing: function() { }
@@ -1558,6 +1577,15 @@ module.exports = {
  */
 /**
  * @name dxTreeListRowObject.isExpanded
+ * @type boolean
+ */
+
+/**
+ * @name dxDataGridRowObject.isNewRow
+ * @type boolean
+ */
+/**
+ * @name dxTreeListRowObject.isNewRow
  * @type boolean
  */
 

@@ -5,7 +5,7 @@ import messageLocalization from "../../localization/message";
 import { isDefined } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
-import { normalizeKeyName } from "../../events/utils";
+import { registerKeyboardAction } from "./ui.grid_core.accessibility";
 
 var CELL_CONTENT_CLASS = "text-content",
     HEADERS_CLASS = "headers",
@@ -88,78 +88,19 @@ module.exports = {
                     return this.option("useLegacyKeyboardNavigation");
                 },
 
-                _processKeyDown: function(event) {
-                    var args = {
-                            handled: false,
-                            event: event
-                        },
-                        $target = $(event.target),
-                        keyName = normalizeKeyName(event),
-                        blurHandler = e => {
-                            this._lastActionElement = e.relatedTarget;
-                            eventsEngine.off($target, "blur", blurHandler);
-                        },
-                        keyboardController = this.getController("keyboardNavigation");
-
-                    keyboardController && keyboardController.executeAction("onKeyDown", args);
-                    if(args.handled) {
-                        return;
-                    }
-
-                    switch(keyName) {
-                        case "enter":
-                        case "space":
-                            this._handleActionKeyDown(event);
-                            break;
-
-                        case "tab":
-                            eventsEngine.on($target, "blur", blurHandler);
-                            break;
-
-                        default:
-                            break;
-                    }
-                },
-
-                _handleActionKeyDown: function(event) {
-                    var $target = $(event.target);
-
-                    this._lastActionElement = event.target;
-
-                    if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-                        let headerFilterController = this.getController("headerFilter"),
-                            $column = $target.closest("td"),
-                            columnIndex = this.getCellIndex($column);
-                        if(columnIndex >= 0) {
-                            headerFilterController.showHeaderFilterMenu(columnIndex, false);
-                        }
-                    } else {
-                        let $row = $target.closest(ROW_CLASS_SELECTOR);
-                        this._processHeaderAction(event, $row);
-                    }
-
-                    event.preventDefault();
-                },
-
                 _getDefaultTemplate: function(column) {
-                    var that = this,
-                        template;
+                    var that = this;
 
-                    if(column.command) {
-                        template = function($container, options) {
-                            var column = options.column;
+                    return function($container, options) {
+                        var $content = column.command ? $container : createCellContent(that, $container, options),
+                            caption = column.command !== 'expand' && column.caption;
 
+                        if(caption) {
+                            $content.text(caption);
+                        } else if(column.command) {
                             $container.html("&nbsp;");
-                            $container.addClass(column.cssClass);
-                        };
-                    } else {
-                        template = function($container, options) {
-                            var $content = createCellContent(that, $container, options);
-                            $content.text(column.caption);
-                        };
-                    }
-
-                    return template;
+                        }
+                    };
                 },
 
                 _getHeaderTemplate: function(column) {
@@ -201,7 +142,9 @@ module.exports = {
                     if(options.row.rowType === "header") {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
                         if(!this._isLegacyKeyboardNavigation()) {
-                            $cell.attr("tabindex", this.option("tabindex") || 0);
+                            if(options.column && !options.column.type) {
+                                $cell.attr("tabindex", this.option("tabindex") || 0);
+                            }
                         }
                     }
 
@@ -227,11 +170,32 @@ module.exports = {
                     if(row.rowType === "header") {
                         $row.addClass(HEADER_ROW_CLASS);
                         if(!this._isLegacyKeyboardNavigation()) {
-                            eventsEngine.on($row, "keydown", "td", this.createAction(e => this._processKeyDown(e.event)));
+                            registerKeyboardAction("columnHeaders", this, $row, "td", this._handleActionKeyDown.bind(this));
                         }
                     }
 
                     return $row;
+                },
+
+                _handleActionKeyDown: function(args) {
+                    var event = args.event,
+                        $target = $(event.target);
+
+                    this._lastActionElement = event.target;
+
+                    if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
+                        let headerFilterController = this.getController("headerFilter"),
+                            $column = $target.closest("td"),
+                            columnIndex = this.getColumnIndexByElement($column);
+                        if(columnIndex >= 0) {
+                            headerFilterController.showHeaderFilterMenu(columnIndex, false);
+                        }
+                    } else {
+                        let $row = $target.closest(ROW_CLASS_SELECTOR);
+                        this._processHeaderAction(event, $row);
+                    }
+
+                    event.preventDefault();
                 },
 
                 _renderCore: function() {
@@ -256,25 +220,6 @@ module.exports = {
                     }
 
                     that.callBase.apply(that, arguments);
-
-                    if(!that._isLegacyKeyboardNavigation()) {
-                        that._restoreLastFocusedElement();
-                    }
-                },
-
-                _restoreLastFocusedElement: function() {
-                    var $table = this.element(),
-                        $headerCells = $table.find(`tr.${HEADER_ROW_CLASS} > td`);
-
-                    if($headerCells.length > 1) {
-                        let $firstCell = $headerCells.first();
-                        eventsEngine.on($firstCell, "focus", e => {
-                            if(this._lastActionElement && e.currentTarget !== this._lastActionElement) {
-                                $(this._lastActionElement).trigger("focus");
-                                this._lastActionElement = null;
-                            }
-                        });
-                    }
                 },
 
                 _renderRows: function() {
@@ -431,13 +376,13 @@ module.exports = {
                     }
                 },
 
-                getCellIndex: function($cell) {
-                    let cellIndex = this.callBase($cell),
+                getColumnIndexByElement: function($cell) {
+                    let cellIndex = this.getCellIndex($cell),
                         $row = $cell.closest(".dx-row"),
                         rowIndex = $row[0].rowIndex,
                         column = this.getColumns(rowIndex)[cellIndex];
 
-                    return column ? this._columnsController.getVisibleIndex(column.index) : -1;
+                    return column ? column.index : -1;
                 },
 
                 getVisibleColumnIndex: function(columnIndex, rowIndex) {

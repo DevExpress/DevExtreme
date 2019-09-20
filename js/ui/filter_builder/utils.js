@@ -41,7 +41,8 @@ var DEFAULT_DATA_TYPE = "string",
         "format",
         "lookup",
         "trueText",
-        "calculateFilterExpression"
+        "calculateFilterExpression",
+        "name"
     ];
 
 function getFormattedValueText(field, value) {
@@ -275,6 +276,9 @@ function addItem(item, group) {
 
 function getField(dataField, fields) {
     for(var i = 0; i < fields.length; i++) {
+        if(fields[i].name === dataField) {
+            return fields[i];
+        }
         if(fields[i].dataField.toLowerCase() === dataField.toLowerCase()) {
             return fields[i];
         }
@@ -385,6 +389,8 @@ function getConditionFilterExpression(condition, fields, customOperations, targe
 
     if(customOperation && customOperation.calculateFilterExpression) {
         return customOperation.calculateFilterExpression.apply(customOperation, [filterExpression[2], field, target]);
+    } else if(field.createFilterExpression) {
+        return field.createFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     } else if(field.calculateFilterExpression) {
         return field.calculateFilterExpression.apply(field, [filterExpression[2], filterExpression[1], target]);
     } else {
@@ -554,6 +560,7 @@ function pushItemAndCheckParent(originalItems, plainItems, item) {
         item.parentId = getParentIdFromItemDataField(dataField);
         if(!itemExists(plainItems, item.parentId) && !itemExists(originalItems, item.parentId)) {
             pushItemAndCheckParent(originalItems, plainItems, {
+                id: item.parentId,
                 dataType: "object",
                 dataField: item.parentId,
                 caption: generateCaptionByDataField(item.parentId, true),
@@ -588,6 +595,7 @@ function getItems(fields, allowHierarchicalFields) {
 
     for(var i = 0; i < fields.length; i++) {
         var item = extend(true, { caption: generateCaptionByDataField(fields[i].dataField, allowHierarchicalFields) }, fields[i]);
+        item.id = item.name || item.dataField;
 
         if(allowHierarchicalFields) {
             pushItemAndCheckParent(fields, items, item);

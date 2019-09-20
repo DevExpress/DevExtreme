@@ -11,6 +11,7 @@
         "Back": "戻る",
         "OK": "OK",
         "dxCollectionWidget-noDataText": "表示するデータがありません。",
+        "dxDropDownEditor-selectLabel": "選択",
         "validation-required": "必須",
         "validation-required-formatted": "{0} は必須です。",
         "validation-numeric": "数値を指定してください。",
@@ -168,15 +169,15 @@
         "dxScheduler-editorLabelStartDate": "開始時刻",
         "dxScheduler-editorLabelEndDate": "終了時刻",
         "dxScheduler-editorLabelDescription": "説明",
-        "dxScheduler-editorLabelRecurrence": "リピート",
+        "dxScheduler-editorLabelRecurrence": "繰り返し",
         "dxScheduler-openAppointment": "オープンの予定",
         "dxScheduler-recurrenceNever": "無効",
         "dxScheduler-recurrenceDaily": "日間毎日",
         "dxScheduler-recurrenceWeekly": "毎週",
         "dxScheduler-recurrenceMonthly": "毎月",
         "dxScheduler-recurrenceYearly": "毎年",
-        "dxScheduler-recurrenceRepeatEvery": "リピートの頻度",
-        "dxScheduler-recurrenceRepeatOn": "リピートの頻度",
+        "dxScheduler-recurrenceRepeatEvery": "間隔:",
+        "dxScheduler-recurrenceRepeatOn": "この日に繰り返す",
         "dxScheduler-recurrenceEnd": "リピートの終了日",
         "dxScheduler-recurrenceAfter": "次の発生回数後に終了",
         "dxScheduler-recurrenceOn": "リピート解除の日付",
@@ -252,6 +253,13 @@
         "dxHtmlEditor-dialogImageWidthField": "幅 (px)",
         "dxHtmlEditor-dialogImageHeightField": "高さ (px)",
         "dxHtmlEditor-heading": "見出し",
-        "dxHtmlEditor-normalText": "標準テキスト"
+        "dxHtmlEditor-normalText": "標準テキスト",
+
+        "dxFileManager-newFolderName": "無題のフォルダ",
+        "dxFileManager-errorNoAccess": "アクセスが拒否されました。操作を完了できません。",
+        "dxFileManager-errorDirectoryExistsFormat": "ディレクトリ {0} は既に存在します。",
+        "dxFileManager-errorFileExistsFormat": "ファイル {0} は既に存在します。",
+        "dxFileManager-errorFileNotFoundFormat": "ファイル {0} が見つかりません。",
+        "dxFileManager-errorDefault": "特定できないエラー"
     }
 }

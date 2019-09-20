@@ -115,6 +115,7 @@ registerDecorator(
             var itemIndex = this._list.getFlatIndexByItemElement($itemElement);
             this._startIndex = itemIndex;
             this._lastIndex = itemIndex;
+            this._dragRange = this._getDragRange(itemIndex);
 
             this._cacheScrollData();
 
@@ -338,9 +339,39 @@ registerDecorator(
             }
         },
 
+        _getDragRange(draggableIndex) {
+            const items = this._list.itemElements();
+
+            if(!this._groupedEnabled) {
+                return {
+                    maxIndex: items.length - 1,
+                    minIndex: 0
+                };
+            }
+
+            const oneGroupItems = (item1, item2) => item1.parent().is(item2.parent());
+            const draggableElement = items.eq(draggableIndex);
+            let startGroupIndex = null;
+            let endGroupIndex = null;
+
+            each(items, i => {
+                const inGroup = oneGroupItems(items.eq(i), draggableElement);
+
+                if(startGroupIndex === null && inGroup) {
+                    startGroupIndex = i;
+                } else if(endGroupIndex === null && startGroupIndex !== null && !inGroup) {
+                    endGroupIndex = i;
+                }
+            });
+
+            return {
+                maxIndex: endGroupIndex || items.length - 1,
+                minIndex: startGroupIndex
+            };
+        },
+
         _findItemIndexByPosition: function(position) {
-            var minIndex = 0;
-            var maxIndex = this._itemPositions.length - 1;
+            let { minIndex, maxIndex } = this._dragRange;
             var currentIndex;
             var currentPosition;
 

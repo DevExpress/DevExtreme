@@ -10,6 +10,7 @@
 
     .dx-icon {
         .dx-icon-sizing(28px);
+
         margin: 4px;
     }
 }
@@ -18,7 +19,7 @@
     width: 100%;
     border: 0;
     text-align: center;
-    transition: opacity .15s linear;
+    transition: opacity 0.15s linear;
 }
 
 .dx-button-text {
@@ -63,13 +64,14 @@
 
 .dx-state-active {
     &.dx-button .dx-button-content {
-        opacity: .35;
+        opacity: 0.35;
         transition: opacity 0s;
     }
 }
 
 .dx-state-disabled {
-    &.dx-button, .dx-button {
+    &.dx-button,
+    .dx-button {
         .dx-button-disabled;
     }
 }

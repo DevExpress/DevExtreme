@@ -11,6 +11,7 @@
         "Back": "Назад",
         "OK": "OK",
         "dxCollectionWidget-noDataText": "Нет данных для отображения",
+        "dxDropDownEditor-selectLabel": "Выбрать",
         "validation-required": "Поле необходимо заполнить",
         "validation-required-formatted": "Необходимо заполнить: {0}",
         "validation-numeric": "Значение должно быть числом",
@@ -251,6 +252,13 @@
         "dxHtmlEditor-dialogImageWidthField": "Ширина (px)",
         "dxHtmlEditor-dialogImageHeightField": "Высота (px)",
         "dxHtmlEditor-heading": "Заголовок",
-        "dxHtmlEditor-normalText": "Обычный текст"
+        "dxHtmlEditor-normalText": "Обычный текст",
+
+        "dxFileManager-newFolder": "Без названия",
+        "dxFileManager-errorNoAccess": "Доступ запрещён. Операция не может быть завершена.",
+        "dxFileManager-errorDirectoryExistsFormat": "Каталог {0} уже существует.",
+        "dxFileManager-errorFileExistsFormat": "Файл {0} уже существует.",
+        "dxFileManager-errorFileNotFoundFormat": "Файл {0} не найден.",
+        "dxFileManager-errorDefault": "Неизвестная ошибка"
     }
 }

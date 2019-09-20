@@ -21,7 +21,8 @@ import SchedulerTimezones from "ui/scheduler/timezones/ui.scheduler.timezones";
 import dataUtils from "core/element_data";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import themes from "ui/themes";
-import { appointmentsHelper } from "./helpers.js";
+import { SchedulerTestWrapper } from "./helpers.js";
+import resizeCallbacks from "core/utils/resize_callbacks";
 
 import "ui/scheduler/ui.scheduler";
 import "common.css!";
@@ -37,6 +38,8 @@ QUnit.testStart(function() {
             this.clock = sinon.useFakeTimers();
 
             this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
+
             this.checkDateTime = function(assert, actualDate, expectedDate, messagePrefix) {
                 assert.equal(actualDate.getHours(), expectedDate.getHours(), messagePrefix + "Hours're OK");
                 assert.equal(actualDate.getMinutes(), expectedDate.getMinutes(), messagePrefix + "Minutes're OK");
@@ -1287,6 +1290,7 @@ QUnit.testStart(function() {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+                this.scheduler = new SchedulerTestWrapper(this.instance);
             };
             this.clock = sinon.useFakeTimers();
         },
@@ -1853,15 +1857,6 @@ QUnit.testStart(function() {
         assert.ok(repaintStub.calledOnce, "Sheduler was repainted");
     });
 
-    QUnit.test("Appointment popup should have right defaultOptionsRules", function(assert) {
-        this.createInstance();
-        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
-
-        var popupDefaultOptions = this.instance.getAppointmentPopup().option("defaultOptionsRules")[0].options;
-
-        assert.deepEqual(popupDefaultOptions, { fullScreen: true }, "Popup has right default");
-    });
-
     QUnit.test("Filter options should be updated when dataSource is changed", function(assert) {
         this.createInstance({
             currentDate: new Date(2016, 2, 15),
@@ -1906,9 +1901,9 @@ QUnit.testStart(function() {
         });
 
         var keyboard = keyboardMock(this.instance.getWorkSpace().$element()),
-            cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
+            cell = this.scheduler.workSpace.getCell(7);
 
-        pointerMock(cells.eq(7)).start().click();
+        pointerMock(cell).start().click();
         keyboard.keyDown("down", { shiftKey: true });
 
         assert.deepEqual(this.instance.option("selectedCellData"), [{
@@ -1922,7 +1917,35 @@ QUnit.testStart(function() {
         }], "correct cell data");
 
         this.instance.option("currentView", "month");
-        assert.deepEqual(this.instance.option("selectedCellData"), []);
+        assert.deepEqual(this.instance.option("selectedCellData"), [], "selectedCellData was cleared");
+    });
+
+    QUnit.test("selectedCellData option should be updated after currentDate changing", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2018, 4, 10),
+            views: ["week", "month"],
+            currentView: "week",
+            focusStateEnabled: true
+        });
+
+        var keyboard = keyboardMock(this.instance.getWorkSpace().$element()),
+            cell = this.scheduler.workSpace.getCell(7);
+
+        pointerMock(cell).start().click();
+        keyboard.keyDown("down", { shiftKey: true });
+
+        assert.deepEqual(this.instance.option("selectedCellData"), [{
+            startDate: new Date(2018, 4, 6, 0, 30),
+            endDate: new Date(2018, 4, 6, 1),
+            allDay: false
+        }, {
+            startDate: new Date(2018, 4, 6, 1),
+            endDate: new Date(2018, 4, 6, 1, 30),
+            allDay: false
+        }], "correct cell data");
+
+        this.instance.option("currentDate", new Date(2018, 5, 10));
+        assert.deepEqual(this.instance.option("selectedCellData"), [], "selectedCellData was cleared");
     });
 
     QUnit.test("Multiple reloading should be avoided after some options changing (T656320)", function(assert) {
@@ -1944,6 +1967,24 @@ QUnit.testStart(function() {
         this.instance.option("endDayHour", 18);
         this.instance.endUpdate();
         assert.equal(counter, 2, "Data source was reloaded one more time after some options changing");
+    });
+
+    QUnit.test("Multiple reloading should be avoided after repaint (T737181)", function(assert) {
+        var counter = 0;
+
+        this.createInstance();
+
+        this.instance.option("dataSource", new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    counter++;
+                    return [];
+                }
+            })
+        }));
+        assert.equal(counter, 1, "Data source was reloaded after dataSource option changing");
+        this.instance.repaint();
+        assert.equal(counter, 1, "Data source wasn't reloaded after repaint");
     });
 
     QUnit.test("Multiple reloading should be avoided after some currentView options changing (T656320)", function(assert) {
@@ -2152,7 +2193,7 @@ QUnit.testStart(function() {
             dataSource: new DataSource({ store: oldData })
         });
 
-        this.instance.updateAppointment(oldData[0], newData);
+        this.instance.updateAppointment($.extend({}, oldData[0]), newData);
         this.clock.tick();
 
         var args = updatingSpy.getCall(0).args[0];
@@ -2352,7 +2393,7 @@ QUnit.testStart(function() {
         var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-right").eq(0)).start();
         pointer.dragStart().drag(cellWidth * 2, 0).dragEnd();
 
-        assert.equal(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, "Width is OK");
+        assert.roughEqual(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, 1, "Width is OK");
     });
 
     QUnit.test("Appointment should have initial size if 'cancel' flag is defined as true during update operation (if appointment takes few days)", function(assert) {
@@ -3214,135 +3255,26 @@ QUnit.testStart(function() {
         });
     });
 
-    QUnit.test("contentReady action should rise even if dataSource isn't set", function(assert) {
-        this.createInstance({
-            onContentReady: function(e) {
-                assert.ok(true, 1, "contentReady is fired");
-            }
-        });
-    });
-
-    QUnit.test("contentReady action should rise at the right time", function(assert) {
-        var done = assert.async();
-        this.clock.restore();
-
-        var dataSource = new DataSource({
-            store: new CustomStore({
-                load: function() {
-                    var d = $.Deferred();
-                    setTimeout(function() {
-                        d.resolve([{
-                            startDate: new Date(2016, 2, 15, 1).toString(),
-                            endDate: new Date(2016, 2, 15, 2).toString()
-                        }]);
-                    }, 100);
-
-                    return d.promise();
-                }
-            })
-        });
-
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            width: 800,
-            dataSource: dataSource,
-            maxAppointmentsPerCell: null,
-            onContentReady: function(e) {
-                var element = e.component,
-                    $element = $(e.component.$element()),
-                    $header = element.getHeader().$element(),
-                    $workSpace = element.getWorkSpace().$element(),
-                    $appointment = $element.find(".dx-scheduler-appointment"),
-                    appointmentPosition = translator.locate($appointment);
-
-                assert.equal($header.length, 1, "Header is rendered");
-                assert.equal($workSpace.length, 1, "Work Space is rendered");
-                assert.equal($appointment.length, 1, "Appointment is rendered");
-                assert.roughEqual(appointmentPosition.top, 100, 2.001, "Appointment top is OK");
-                assert.roughEqual(appointmentPosition.left, 299, 1.001, "Appointment left is OK");
-                done();
-            }
-        });
-    });
-
-    QUnit.test("contentReady action should rise when appointment is added", function(assert) {
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            maxAppointmentsPerCell: null,
-            width: 800,
-            dataSource: []
-        });
-
-        this.instance.option("onContentReady", function(e) {
-            var $element = $(e.component.$element()),
-                $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
-
-            assert.equal($appointment.length, 1, "Appointment is rendered");
-            assert.roughEqual(appointmentPosition.top, 100, 2.001, "Appointment top is OK");
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, "Appointment left is OK");
-        });
-
-        this.instance.addAppointment({
-            startDate: new Date(2016, 2, 15, 1).toString(),
-            endDate: new Date(2016, 2, 15, 2).toString()
-        });
-    });
-
-    QUnit.test("contentReady action should rise when appointment is updated", function(assert) {
-        var appointment = {
+    QUnit.test("Workspace dimension changing should be called before appointment repainting, when scheduler was resized (T739866)", function(assert) {
+        let appointment = {
             startDate: new Date(2016, 2, 15, 1).toString(),
             endDate: new Date(2016, 2, 15, 2).toString()
         };
 
         this.createInstance({
             currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            maxAppointmentsPerCell: null,
+            views: ["day"],
+            currentView: "day",
             width: 800,
             dataSource: [appointment]
         });
 
-        this.instance.option("onContentReady", function(e) {
-            var $element = $(e.component.$element()),
-                $appointment = $element.find(".dx-scheduler-appointment"),
-                appointmentPosition = translator.locate($appointment);
+        let workspaceSpy = sinon.spy(this.instance._workSpace, "_dimensionChanged");
+        let appointmentsSpy = sinon.spy(this.instance._appointments, "_repaintAppointments");
 
-            assert.equal($appointment.length, 1, "Appointment is rendered");
-            assert.roughEqual(appointmentPosition.top, 150, 2.001, "Appointment top is OK");
-            assert.roughEqual(appointmentPosition.left, 299, 1.001, "Appointment left is OK");
-        });
+        resizeCallbacks.fire();
 
-        this.instance.updateAppointment(appointment, {
-            startDate: new Date(2016, 2, 15, 1, 30).toString()
-        });
-    });
-
-    QUnit.test("contentReady action should rise when appointment is deleted", function(assert) {
-        var appointment = {
-            startDate: new Date(2016, 2, 15, 1).toString(),
-            endDate: new Date(2016, 2, 15, 2).toString()
-        };
-
-        this.createInstance({
-            currentDate: new Date(2016, 2, 15),
-            views: ["week"],
-            currentView: "week",
-            width: 800,
-            dataSource: [appointment]
-        });
-
-        this.instance.option("onContentReady", function(e) {
-            var $appointment = $(e.component.$element().find(".dx-scheduler-appointment"));
-            assert.equal($appointment.length, 0, "Appointment is not rendered");
-        });
-
-        this.instance.deleteAppointment(appointment);
+        assert.ok(appointmentsSpy.calledAfter(workspaceSpy), "workSpace dimension changing was called before appointments repainting");
     });
 })("Events");
 
@@ -3351,6 +3283,7 @@ QUnit.testStart(function() {
         beforeEach: function() {
             this.createInstance = function(options) {
                 this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+                this.scheduler = new SchedulerTestWrapper(this.instance);
             };
             this.clock = sinon.useFakeTimers();
             fx.off = true;
@@ -3435,13 +3368,13 @@ QUnit.testStart(function() {
             focusStateEnabled: false
         });
 
-        appointmentsHelper.compact.click();
+        this.scheduler.appointments.compact.click();
         assert.notOk(this.instance._appointmentTooltip.list.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
 
         this.instance._appointmentTooltip.hide();
 
         this.instance.option("focusStateEnabled", true);
-        appointmentsHelper.compact.click();
+        this.scheduler.appointments.compact.click();
         assert.ok(this.instance._appointmentTooltip.list.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
     });
 
@@ -3472,7 +3405,7 @@ QUnit.testStart(function() {
         var $workSpace = this.instance.getWorkSpace().$element(),
             keyboard = keyboardMock($workSpace);
 
-        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments")).trigger("dxclick");
+        $(this.instance.$element().find(".dx-scheduler-appointment-collector")).trigger("dxclick");
 
         keyboard.keyDown("down");
         keyboard.keyDown("up");
@@ -3784,6 +3717,18 @@ QUnit.testStart(function() {
         assert.ok(this.instance.$element().hasClass("dx-scheduler-small"), "Scheduler has 'dx-scheduler-small' css class");
     });
 
+    QUnit.test("Scheduler should have adaptive css class depend on adaptivityEnabled option", function(assert) {
+        this.createInstance({
+            width: 300,
+            adaptivityEnabled: true
+        });
+
+        assert.ok(this.instance.$element().hasClass("dx-scheduler-adaptive"), "Scheduler has 'dx-scheduler-adaptive' css class");
+
+        this.instance.option("adaptivityEnabled", false);
+
+        assert.notOk(this.instance.$element().hasClass("dx-scheduler-adaptive"), "Scheduler hasn't 'dx-scheduler-adaptive' css class");
+    });
 
     QUnit.test("Scheduler should have a small css class", function(assert) {
         this.createInstance({
@@ -4143,7 +4088,7 @@ QUnit.testStart(function() {
             currentView: "month"
         });
 
-        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0)).trigger("dxclick");
+        $(this.instance.$element().find(".dx-scheduler-appointment-collector").eq(0)).trigger("dxclick");
 
         assert.equal(countCallTemplate1, 0, "count call first template");
         assert.notEqual(countCallTemplate2, 0, "count call second template");
@@ -4183,7 +4128,7 @@ QUnit.testStart(function() {
             currentView: "month"
         });
 
-        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0)).trigger("dxclick");
+        $(this.instance.$element().find(".dx-scheduler-appointment-collector").eq(0)).trigger("dxclick");
 
         assert.equal(countCallTemplate1, 0, "count call first template");
         assert.notEqual(countCallTemplate2, 0, "count call second template");
@@ -4295,7 +4240,7 @@ QUnit.testStart(function() {
         assert.equal(header.option("_dropDownButtonIcon"), "chevrondown", "header has correct _dropDownButtonIcon");
     });
 
-    QUnit.test("_appointmentGroupButtonOffset option should be passed to SchedulerAppointments depending on the view", function(assert) {
+    QUnit.test("_collectorOffset option should be passed to SchedulerAppointments depending on the view", function(assert) {
         this.createInstance({
             currentView: "month",
             showCurrentTimeIndicator: false
@@ -4303,10 +4248,27 @@ QUnit.testStart(function() {
 
         var appointments = this.instance.getAppointmentsInstance();
 
-        assert.equal(appointments.option("_appointmentGroupButtonOffset"), 20, "SchedulerAppointments has correct _appointmentGroupButtonOffset");
+        assert.equal(appointments.option("_collectorOffset"), 20, "SchedulerAppointments has correct _collectorOffset");
 
         this.instance.option("currentView", "week");
-        assert.equal(appointments.option("_appointmentGroupButtonOffset"), 0, "SchedulerAppointments has correct _appointmentGroupButtonOffset");
+        assert.equal(appointments.option("_collectorOffset"), 0, "SchedulerAppointments has correct _collectorOffset");
+    });
+
+    QUnit.test("Real _collectorOffset option should be passed to SchedulerAppointments depending on the adaptivityEnabled", function(assert) {
+        this.createInstance({
+            currentView: "month",
+            showCurrentTimeIndicator: false,
+            adaptivityEnabled: false
+        });
+
+        var appointments = this.instance.getAppointmentsInstance();
+
+        assert.equal(appointments.option("_collectorOffset"), 20, "SchedulerAppointments has correct _collectorOffset");
+
+        this.instance.option("adaptivityEnabled", true);
+        appointments = this.instance.getAppointmentsInstance();
+
+        assert.equal(appointments.option("_collectorOffset"), 0, "SchedulerAppointments has correct _collectorOffset");
     });
 
 })("View with configuration");

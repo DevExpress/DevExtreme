@@ -2890,6 +2890,7 @@ QUnit.test("Edit batch. Close edit mode and cancel editing when click out the da
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     this.clock.tick();
     editor.option("value", 102);
+    $(document).trigger("dxpointerdown");
     $(document).trigger("dxclick");
     this.clock.tick();
     $itemsContent = $(".dx-field-item-content");
@@ -2993,6 +2994,7 @@ QUnit.test("Edit batch. Form's item is marked as modified", function(assert) {
     this.clock.tick();
     editor = $(".dx-texteditor").first().dxTextBox("instance");
     editor.option("value", "Test");
+    $(document).trigger("dxpointerdown");
     $(document).trigger("dxclick");
     this.clock.tick();
     $itemsContent = $(".dx-field-item-content");
@@ -3048,6 +3050,7 @@ QUnit.test("Edit batch. Form's item is marked as modified for other adaptive row
     this.clock.tick();
     editor = $(".dx-texteditor").first().dxTextBox("instance");
     editor.option("value", "test");
+    $(document.body).trigger("dxpointerdown");
     $(document.body).trigger("dxclick");
     this.clock.tick();
     this.adaptiveColumnsController.collapseAdaptiveDetailRow(dataSource[0]);
@@ -3242,6 +3245,7 @@ QUnit.test("Edit batch. Show modified state in a cell when cell is edited inside
 
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     editor.option("value", 102);
+    $(document).trigger("dxpointerdown");
     $(document).trigger("dxclick");
     this.clock.tick();
     $(".dx-datagrid").width(1000);
@@ -3571,6 +3575,7 @@ QUnit.test("Create new row is the cell mode. Save new values", function(assert) 
 
     // act
     editors.first().dxTextBox("instance").option("value", "12test");
+    $(document).trigger("dxpointerdown");
     $(document).trigger("dxclick");
     this.clock.tick();
 
@@ -3660,7 +3665,7 @@ QUnit.test("Edit row. Re-render adaptive detail after re-inserting row", functio
             allowAdding: true
         },
         onRowPrepared: function(e) {
-            if(e.inserted) {
+            if(e.isNewRow) {
                 args.push(e);
             }
         }
@@ -3823,6 +3828,7 @@ QUnit.module("Validation", {
 
         editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
         editor.option("value", "");
+        $(document).trigger("dxpointerdown");
         $(document).trigger("dxclick");
         this.clock.tick();
 
@@ -3924,6 +3930,7 @@ QUnit.module("Validation", {
 
         editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
         editor.option("value", "");
+        $(document).trigger("dxpointerdown");
         $(document).trigger("dxclick");
         this.clock.tick();
 
@@ -3991,6 +3998,7 @@ QUnit.module("Validation", {
 
         editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
         editor.option("value", "");
+        $(document).trigger("dxpointerdown");
         $(document).trigger("dxclick");
         this.clock.tick();
 

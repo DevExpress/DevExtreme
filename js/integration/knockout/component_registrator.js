@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     KoTemplate = require("./template"),
     Editor = require("../../ui/editor/editor"),
     Locker = require("../../core/utils/locker"),
+    getClosestNodeWithContext = require("./utils").getClosestNodeWithContext,
     config = require("../../core/config");
 
 var LOCKS_DATA_KEY = "dxKoLocks",
@@ -56,7 +57,8 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                     },
                     modelByElement: function($element) {
                         if($element.length) {
-                            return ko.dataFor($element.get(0));
+                            const node = getClosestNodeWithContext($element.get(0));
+                            return ko.dataFor(node);
                         }
                     },
                     nestedComponentOptions: function(component) {
@@ -201,7 +203,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
 
             var unwrapModel = function(model, propertyPath) {
                 for(var propertyName in model) {
-                    if(model.hasOwnProperty(propertyName)) {
+                    if(Object.prototype.hasOwnProperty.call(model, propertyName)) {
                         unwrapModelValue(model, propertyName, propertyPath ? [propertyPath, propertyName].join(".") : propertyName);
                     }
                 }

@@ -63,8 +63,9 @@ registerTheme({
         location: "edge",
         color: "#616161",
         font: {
-            color: "#fff"
-        }
+            color: WHITE
+        },
+        cornerRadius: 4
     },
 
     chart: {
@@ -77,6 +78,23 @@ registerTheme({
                     size: 11
                 }
             }
+        },
+        commonAnnotationSettings: {
+            font: {
+                color: WHITE
+            },
+            border: {
+                color: "#616161"
+            },
+            color: "#616161",
+            arrowLength: 14,
+            arrowWidth: 0,
+            shadow: {
+                opacity: 0.08,
+                offsetY: 4,
+                blur: 8
+            },
+            cornerRadius: 4
         }
     },
 
@@ -160,11 +178,6 @@ registerTheme({
     },
 
     chart: {
-        commonPaneSettings: {
-            border: {
-                color: LIGHT_LABEL_COLOR
-            }
-        },
         scrollBar: {
             color: "#bfbfbf",
             opacity: 0.7
@@ -247,7 +260,7 @@ registerTheme({
     chart: {
         commonPaneSettings: {
             border: {
-                color: DARK_LABEL_COLOR
+                color: LABEL_BORDER_COLOR
             }
         },
         commonAxisSettings: {
@@ -259,6 +272,12 @@ registerTheme({
             dragBoxStyle: {
                 color: WHITE
             }
+        },
+        commonAnnotationSettings: {
+            border: {
+                color: "#000"
+            },
+            color: "#000"
         }
     },
     gauge: {
@@ -450,7 +469,7 @@ var materialAccents = {
 };
 
 for(var accent in materialAccents) {
-    if(materialAccents.hasOwnProperty(accent)) {
+    if(Object.prototype.hasOwnProperty.call(materialAccents, accent)) {
         var color = materialAccents[accent];
         registerMaterialColorScheme(accent, "light", color);
         registerMaterialColorScheme(accent, "dark", color);

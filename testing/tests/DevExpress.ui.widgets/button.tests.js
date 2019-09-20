@@ -2,9 +2,11 @@ import $ from "jquery";
 import ValidationEngine from "ui/validation_engine";
 import Validator from "ui/validator";
 import keyboardMock from "../../helpers/keyboardMock.js";
+import * as checkStyleHelper from "../../helpers/checkStyleHelper.js";
 
 import "ui/button";
 import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(() => {
     const markup =
@@ -91,6 +93,18 @@ QUnit.module("options changed callbacks", {
     QUnit.test("disabled", (assert) => {
         this.instance.option("disabled", true);
         assert.ok(this.element.hasClass("dx-state-disabled"));
+    });
+
+    QUnit.test("readOnly validator should be excluded for the click action", (assert) => {
+        const clickHandler = sinon.spy();
+
+        this.instance.option({
+            onClick: clickHandler
+        });
+
+        this.element.addClass("dx-state-readonly");
+        this.element.trigger("dxclick");
+        assert.strictEqual(clickHandler.callCount, 1, "click handler was executed");
     });
 
     QUnit.test("T325811 - 'text' option change should not lead to widget clearing", (assert) => {
@@ -336,5 +350,51 @@ QUnit.module("submit behavior", {
         this.$element.dxButton({ onClick: clickHandlerSpy });
         this.clickButton();
         assert.ok(clickHandlerSpy.calledOnce);
+    });
+});
+
+QUnit.module("templates", () => {
+    checkStyleHelper.testInChromeOnDesktopActiveWindow("parent styles when button is not focused", function(assert) {
+        const $template = $("<div>").text("test1");
+        $("#button").dxButton({
+            template: function() { return $template; }
+        });
+        $("#input1").focus();
+
+        assert.equal(checkStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+        assert.equal(checkStyleHelper.getBackgroundColor($template[0]), "rgb(255, 255, 255)", "backgroundColor");
+        assert.equal(checkStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+        assert.equal(checkStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+        assert.equal(checkStyleHelper.getWhiteSpace($template[0].parentNode), "normal", "whiteSpace");
+    });
+
+    checkStyleHelper.testInChromeOnDesktopActiveWindow("parent styles when button is focused, text is not empty", function(assert) {
+        const $template = $("<div>").text("test1");
+        const $button = $("#button").dxButton({
+            text: "not empty",
+            template: function() { return $template; }
+        });
+        $button.dxButton("instance").focus();
+
+        assert.strictEqual(checkStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+        assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), "rgb(217, 217, 217)", "backgroundColor");
+        assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), "hidden", "overflowX");
+        assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), "ellipsis", "textOverflow");
+        assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), "nowrap", "whiteSpace");
+    });
+
+    checkStyleHelper.testInChromeOnDesktopActiveWindow("parent styles when button is focused, text is empty", function(assert) {
+        const $template = $("<div>").text("test1");
+        const $button = $("#button").dxButton({
+            text: null,
+            template: function() { return $template; }
+        });
+        $button.dxButton("instance").focus();
+
+        assert.strictEqual(checkStyleHelper.getColor($template[0]), "rgb(51, 51, 51)", "color");
+        assert.strictEqual(checkStyleHelper.getBackgroundColor($template[0]), "rgb(217, 217, 217)", "backgroundColor");
+        assert.strictEqual(checkStyleHelper.getOverflowX($template[0].parentNode), "visible", "overflowX");
+        assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), "clip", "textOverflow");
+        assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), "normal", "whiteSpace");
     });
 });

@@ -118,6 +118,15 @@ registerTheme({
                 color: WHITE,
                 opacity: 0.7
             }
+        },
+        commonAnnotationSettings: {
+            font: {
+                color: WHITE
+            },
+            border: {
+                color: WHITE
+            },
+            color: BLACK
         }
     },
     pie: {
@@ -327,3 +336,7 @@ registerTheme({
         }
     }
 }, "generic.light");
+
+registerTheme({
+    name: "generic.contrast.compact"
+}, "generic.contrast");

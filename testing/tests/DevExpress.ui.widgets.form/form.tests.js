@@ -1,23 +1,27 @@
 import $ from "jquery";
 import resizeCallbacks from "core/utils/resize_callbacks";
 import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
-import keyboardMock from "../../helpers/keyboardMock.js";
 import typeUtils from "core/utils/type";
 import browser from "core/utils/browser";
 import domUtils from "core/utils/dom";
 import { __internals as internals } from "ui/form/ui.form";
 import themes from "ui/themes";
 import device from "core/devices";
+import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+import domAdapter from "core/dom_adapter";
 
 import "ui/text_area";
 
 import "common.css!";
 import "generic_light.css!";
 
-var INVALID_CLASS = "dx-invalid";
+const INVALID_CLASS = "dx-invalid";
+const FORM_GROUP_CONTENT_CLASS = "dx-form-group-content";
+const MULTIVIEW_ITEM_CONTENT_CLASS = "dx-multiview-item-content";
+const FORM_LAYOUT_MANAGER_CLASS = "dx-layout-manager";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="form"></div>\
         <div id="form2"></div>';
 
@@ -25,37 +29,22 @@ QUnit.testStart(function() {
 });
 
 QUnit.module("Form");
-QUnit.test("Check that registerKeyHandler proxy works well", function(assert) {
-    // arrange, act
-    var $formContainer = $("#form").dxForm({
-            items:
-            [
-                {
-                    dataField: "name",
-                    editorType: "dxTextBox"
-                },
-                {
-                    dataField: "age",
-                    editorType: "dxNumberBox"
-                }
-            ]
-        }),
-        $inputs = $formContainer.find(".dx-texteditor-input"),
-        counter = 0,
-        handler = function() { counter++; };
 
-    $formContainer.dxForm("instance").registerKeyHandler("tab", handler);
+if(device.current().deviceType === "desktop") {
+    const items = [
+        { dataField: "name", editorType: "dxTextBox" },
+        { dataField: "age", editorType: "dxNumberBox" }
+    ];
 
-    keyboardMock($inputs.eq(0)).keyDown("tab");
-
-    // assert
-    assert.equal(counter, 1, "Custom key handler for the first editor");
-
-    keyboardMock($inputs.eq(1)).keyDown("tab");
-
-    // assert
-    assert.equal(counter, 2, "Custom key handler for the second editor");
-});
+    items.forEach((item) => {
+        registerKeyHandlerTestHelper.runTests({
+            createWidget: ($element) => $element.dxForm({ items: items }).dxForm("instance"),
+            keyPressTargetElement: (widget) => widget.getEditor(item.dataField).$element().find(".dx-texteditor-input"),
+            checkInitialize: false,
+            testNamePrefix: `Form -> ${item.editorType}:`
+        });
+    });
+}
 
 QUnit.testInActiveWindow("Form's inputs saves value on refresh", function(assert) {
     // arrange, act
@@ -253,7 +242,14 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
     assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 
     assert.deepEqual(values[0], { dataField: "name", value: "" }, "value of name dataField");
-    assert.deepEqual(values[3], { dataField: "room", value: null }, "value of room dataField");
+    assert.deepEqual(values[1], { dataField: "room", value: null }, "value of room dataField");
+
+    values = [];
+    form.option("formData", {});
+
+    assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
+    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
+    assert.equal(values.length, 0, "onFieldDataChanged event is not called if the empty object is set to formData a second time");
 });
 
 QUnit.test("Reset editor's value when the formData option is null", function(assert) {
@@ -370,14 +366,27 @@ QUnit.test("Hide helper text when validation message shows for material theme", 
         ]
     }).dxForm("instance");
 
+    var lastName = form.getEditor("lastName"),
+        firstName = form.getEditor("name");
+
+    var isFieldWrapperInvalid = function(editor) {
+        return editor.$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS);
+    };
+
+    lastName.focus();
     form.validate();
-    form.getEditor("lastName").focus();
 
-    assert.ok(form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "invalid css class");
+    triggerKeyUp(lastName.$element(), "Enter");
+    assert.ok(isFieldWrapperInvalid(lastName), "invalid css class");
 
-    form.getEditor("name").focus();
-    assert.ok(!form.getEditor("lastName").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
-    assert.ok(!form.getEditor("name").$element().parents(".dx-field-item-content-wrapper").hasClass(INVALID_CLASS), "not invalid css class");
+    firstName.focus();
+
+    lastName.focus();
+    assert.ok(isFieldWrapperInvalid(lastName), "invalid css class");
+
+    firstName.focus();
+    assert.ok(!isFieldWrapperInvalid(lastName), "not invalid css class");
+    assert.ok(!isFieldWrapperInvalid(firstName), "not invalid css class");
 
     themes.isMaterial = origIsMaterial;
 
@@ -1486,7 +1495,7 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
 
         assert.strictEqual(form.getButton("button1").option("icon"), "icon2");
         if(device.real().deviceType === "desktop") {
-            assert.ok($("#form").find(".dx-button").is(":focus") === (setOptionWay !== "itemOption"), "final focus");
+            assert.ok($("#form").find(".dx-button").is(":focus"), "final focus");
         }
     });
 });
@@ -1975,9 +1984,11 @@ QUnit.test("'itemOption' should get a group item by the name option", function(a
     }], "has correct items");
 });
 
-QUnit.test("Changing an editor/button options of an any item does not invalidate whole form (T311892, T681241)", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
+[false, true].forEach(useItemOption => {
+    const optionWay = useItemOption ? "itemOption" : "option";
+    QUnit.test(`Changing an editor/button options without re-render Form when use the ${optionWay} method (T311892, T681241)`, function(assert) {
+        // arrange
+        const form = $("#form").dxForm({
             formData: {
                 lastName: "Kyle",
                 firstName: "John"
@@ -1985,89 +1996,176 @@ QUnit.test("Changing an editor/button options of an any item does not invalidate
             items: [
                 { dataField: "firstName", editorType: "dxTextBox", editorOption: { width: 100, height: 20 } },
                 { dataField: "lastName", editorType: "dxTextBox", editorOption: { width: 100, height: 20 } },
-                { itemType: "button", buttonOptions: { width: 100, height: 20 } }
+                { name: "button", itemType: "button", buttonOptions: { width: 100, height: 20 } }
             ]
-        }).dxForm("instance"),
-        formInvalidateSpy = sinon.spy(form, "_invalidate");
+        }).dxForm("instance");
 
-    // act
-    form.option("items[1].editorOptions", { width: 80, height: 40 });
-    form.option("items[2].buttonOptions", { width: 10, height: 20 });
+        const formInvalidateSpy = sinon.spy(form, "_invalidate");
+        const editorOptions = { width: 80, height: 40 };
+        const buttonOptions = { width: 10, height: 20 };
 
-    // assert
-    var editor = $("#form .dx-textbox").last().dxTextBox("instance"),
-        button = $("#form .dx-button").last().dxButton("instance");
+        // act
+        if(useItemOption) {
+            form.itemOption("lastName", "editorOptions", editorOptions);
+            form.itemOption("button", "buttonOptions", buttonOptions);
+        } else {
+            form.option("items[1].editorOptions", editorOptions);
+            form.option("items[2].buttonOptions", buttonOptions);
+        }
 
-    assert.deepEqual(form.option("items[1].editorOptions"), { width: 80, height: 40 }, "correct editor options");
-    assert.deepEqual(form.option("items[2].buttonOptions"), { width: 10, height: 20 }, "correct button options");
+        // assert
+        var editor = $("#form .dx-textbox").last().dxTextBox("instance"),
+            button = $("#form .dx-button").last().dxButton("instance");
 
-    assert.equal(formInvalidateSpy.callCount, 0, "Invalidate does not called");
+        assert.deepEqual(form.option("items[1].editorOptions"), { width: 80, height: 40 }, "correct editor options");
+        assert.deepEqual(form.option("items[2].buttonOptions"), { width: 10, height: 20 }, "correct button options");
 
-    assert.equal(editor.option("width"), 80, "Correct editor width");
-    assert.equal(editor.option("height"), 40, "Correct editor height");
-    assert.equal(button.option("width"), 10, "Correct button width");
-    assert.equal(button.option("height"), 20, "Correct button height");
+        assert.equal(formInvalidateSpy.callCount, 0, "Invalidate does not called");
+
+        assert.equal(editor.option("width"), 80, "Correct editor width");
+        assert.equal(editor.option("height"), 40, "Correct editor height");
+        assert.equal(button.option("width"), 10, "Correct button width");
+        assert.equal(button.option("height"), 20, "Correct button height");
+    });
+
+    QUnit.test(`Changing the editorOptions of a sub item without re-render Form when use the ${optionWay} method (T316522)`, function(assert) {
+        // arrange
+        var form = $("#form").dxForm({
+            formData: {
+                lastName: "Kyle",
+                firstName: "John"
+            },
+            items: [
+                {
+                    itemType: "group", items: [
+                        {
+                            itemType: "group", items: [
+                                {
+                                    dataField: "firstName",
+                                    editorType: "dxTextBox",
+                                    editorOptions: { width: 100, height: 20 }
+                                },
+                                {
+                                    dataField: "lastName",
+                                    editorType: "dxTextBox",
+                                    editorOptions: { width: 100, height: 20 }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }).dxForm("instance");
+
+        // act
+        const editorOptions = { width: 80, height: 40 };
+        if(useItemOption) {
+            form.itemOption("lastName", "editorOptions", editorOptions);
+        } else {
+            form.option("items[0].items[0].items[1].editorOptions", editorOptions);
+        }
+
+        // assert
+        var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+
+        assert.equal(secondEditor.option("width"), 80, "Correct width");
+        assert.equal(secondEditor.option("height"), 40, "Correct height");
+    });
+
+    QUnit.test(`The editorOptions correctly updates in case when only item name is defined and use the ${optionWay} method`, function(assert) {
+        // arrange
+        var form = $("#form").dxForm({
+            items: [
+                {
+                    itemType: "group", items: [
+                        {
+                            itemType: "group", items: [
+                                {
+                                    name: "firstName",
+                                    editorType: "dxTextBox",
+                                    editorOptions: { width: 100, height: 20 }
+                                },
+                                {
+                                    name: "lastName",
+                                    editorType: "dxTextBox",
+                                    editorOptions: { width: 100, height: 20 }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }).dxForm("instance");
+
+        var invalidateSpy = sinon.spy(form, "_invalidate");
+
+        // act
+        const editorOptions = { width: 80, height: 40 };
+        if(useItemOption) {
+            form.itemOption("lastName", "editorOptions", editorOptions);
+        } else {
+            form.option("items[0].items[0].items[1].editorOptions", editorOptions);
+        }
+
+        // assert
+        var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+
+        assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
+        assert.equal(secondEditor.option("width"), 80, "Correct width");
+        assert.equal(secondEditor.option("height"), 40, "Correct height");
+    });
 });
 
-QUnit.test("Changing editorOptions of subitem change editor options (T316522)", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
+QUnit.test("Changing the item's option via the itemOption when these options are set as object without re-render form", function(assert) {
+    const form = $("#form").dxForm({
         formData: {
-            lastName: "Kyle",
-            firstName: "John"
+            name: "Test Name"
         },
         items: [
             {
-                itemType: "group", items: [
-                    {
-                        itemType: "group", items: [
-                            { dataField: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
-                            { dataField: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
-                        ]
-                    }
-                ]
+                dataField: "name",
+                editorOption: { width: 100 },
+                cssClass: "test"
             }
         ]
     }).dxForm("instance");
 
-    // act
-    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+    const formInvalidateSpy = sinon.spy(form, "_invalidate");
 
-    // assert
-    var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+    form.itemOption("name", {
+        editorOptions: { height: 120 },
+        cssClass: "test-class"
+    });
 
-    assert.equal(secondEditor.option("width"), 80, "Correct width");
-    assert.equal(secondEditor.option("height"), 40, "Correct height");
+    assert.equal(formInvalidateSpy.callCount, 0, "Invalidate does not called");
+
+    const editor = form.getEditor("name");
+    assert.equal(editor.option("height"), 120, "height of editor options");
+
+    const $form = $("#form");
+    assert.strictEqual($form.find(".test-class").length, 1, "new cssClass of item");
+    assert.strictEqual($form.find(".test").length, 0, "old cssClass of item");
 });
 
-QUnit.test("editorOptions correctly updates in case when only item name is defined", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-        items: [
-            {
-                itemType: "group", items: [
-                    {
-                        itemType: "group", items: [
-                            { name: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
-                            { name: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
-                        ]
-                    }
-                ]
-            }
-        ]
+QUnit.test("Changing the item's option via the itemOption when these options are set as object with re-render form", function(assert) {
+    const form = $("#form").dxForm({
+        formData: {
+            name: "Test Name"
+        },
+        items: [{ dataField: "name" }]
     }).dxForm("instance");
 
-    var invalidateSpy = sinon.spy(form, "_invalidate");
+    const formInvalidateSpy = sinon.spy(form, "_invalidate");
 
-    // act
-    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+    form.itemOption("name", {
+        colSpan: 2,
+        cssClass: "test-class"
+    });
 
-    // assert
-    var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+    assert.equal(formInvalidateSpy.callCount, 1, "Invalidate does not called");
 
-    assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
-    assert.equal(secondEditor.option("width"), 80, "Correct width");
-    assert.equal(secondEditor.option("height"), 40, "Correct height");
+    assert.equal(form.option("items[0].colSpan"), 2, "colSpan of item");
+    assert.strictEqual($("#form").find(".test-class").length, 1, "cssClass of item");
 });
 
 QUnit.test("Reset editor's value", function(assert) {
@@ -2090,6 +2188,54 @@ QUnit.test("Reset editor's value", function(assert) {
     assert.strictEqual(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
     assert.strictEqual(form.getEditor("room").option("value"), null, "editor for the room dataField");
     assert.strictEqual(form.getEditor("isDeveloper").option("value"), false, "editor for the isDeveloper dataField");
+});
+
+const formatTestValue = value => Array.isArray(value) ? "[]" : value;
+
+[undefined, null, []].forEach(groupItems => {
+    QUnit.test(`Change group items from [1] -> ${formatTestValue(groupItems)}`, function(assert) {
+        const form = $("#form").dxForm({
+            formData: {
+                field: "Test"
+            },
+            items: [{
+                itemType: "group",
+                name: "TestGroup",
+                items: ["field"]
+            }]
+        }).dxForm("instance");
+
+        form.itemOption("TestGroup", "items", groupItems);
+
+        const $layoutManager = $(`.${FORM_GROUP_CONTENT_CLASS} > .${FORM_LAYOUT_MANAGER_CLASS}`);
+        assert.equal($layoutManager.length, 1, "layout manager is rendered");
+        assert.notOk($layoutManager.children().length, "layout manager content is empty");
+        assert.notOk(form.getEditor("field"), "editor is not created");
+    });
+});
+
+[undefined, null, []].forEach(tabbedItems => {
+    QUnit.test(`Change tabbed items from [1] -> ${formatTestValue(tabbedItems)}`, function(assert) {
+        const form = $("#form").dxForm({
+            formData: {
+                field: "Test"
+            },
+            items: [{
+                itemType: "tabbed",
+                tabs: [{
+                    name: "TestTabbedItem",
+                    items: ["field"]
+                }]
+            }]
+        }).dxForm("instance");
+
+        form.itemOption("TestTabbedItem", "items", tabbedItems);
+
+        const $layoutManager = $(`.${MULTIVIEW_ITEM_CONTENT_CLASS} > .${FORM_LAYOUT_MANAGER_CLASS}`);
+        assert.equal($layoutManager.length, 1, "layout manager is rendered");
+        assert.notOk($layoutManager.children().length, "layout manager content is empty");
+        assert.notOk(form.getEditor("field"), "editor is not created");
+    });
 });
 
 QUnit.module("Adaptivity");
@@ -2169,6 +2315,56 @@ QUnit.test("Column count may depend on screen factor", function(assert) {
 
     // assert
     assert.equal($form.find(".dx-first-col.dx-last-col").length, 4, "only one column exists");
+});
+
+QUnit.test("Column count ignores hide/show scroller when rerendering if screen factor changed", function(assert) {
+    var originalGetDocumentElement = domAdapter.getDocumentElement;
+    try {
+        var largeScreenWidth = 1200,
+            mediumScreenWidth = 1199,
+            width = largeScreenWidth,
+            height = 300,
+            scrollerWidth = 17;
+
+        domAdapter.getDocumentElement = function() {
+            return {
+                clientWidth: width,
+                clientHeight: height
+            };
+        };
+
+        var $form = $("#form");
+
+        $form.dxForm({
+            labelLocation: "left",
+            colCountByScreen: {
+                lg: 2,
+                md: 1
+            },
+            items: [
+                {
+                    name: "f1", editorType: "dxTextBox",
+                    editorOptions: {
+                        onDisposing: function() {
+                            width = mediumScreenWidth + scrollerWidth;
+                        }
+                    }
+                },
+                "f2"
+            ]
+        });
+
+        assert.equal($form.find(".dx-col-0").length, 1, "(.dx-col-0).length initial");
+        assert.equal($form.find(".dx-col-1").length, 1, "(.dx-col-1).length initial");
+
+        width = mediumScreenWidth;
+        resizeCallbacks.fire();
+
+        assert.equal($form.find(".dx-col-0").length, 2, "(.dx-col-0).length current");
+        assert.equal($form.find(".dx-col-1").length, 0, "(.dx-col-1).length current");
+    } finally {
+        domAdapter.getDocumentElement = originalGetDocumentElement;
+    }
 });
 
 QUnit.test("Form should repaint once when screen factor changed", function(assert) {

@@ -12,6 +12,7 @@ var $ = require("../core/renderer"),
     viewPortUtils = require("../core/utils/view_port"),
     themeReadyCallback = require("./themes_callback"),
     viewPort = viewPortUtils.value,
+    Promise = require("../core/polyfills/promise"),
     viewPortChanged = viewPortUtils.changeCallback;
 
 var DX_LINK_SELECTOR = "link[rel=dx-theme]",
@@ -240,18 +241,13 @@ function current(options) {
 
 function themeNameFromDevice(device) {
     var themeName = device.platform;
-    var majorVersion = device.version && device.version[0];
 
     switch(themeName) {
         case "ios":
-            themeName += "7";
-            break;
+            return "ios7";
         case "android":
-            themeName += "5";
-            break;
         case "win":
-            themeName += (majorVersion && majorVersion === 8) ? "8" : "10";
-            break;
+            return "generic";
     }
 
     return themeName;
@@ -322,10 +318,6 @@ function isMaterial(themeName) {
     return isTheme("material", themeName);
 }
 
-function isAndroid5(themeName) {
-    return isTheme("android5", themeName);
-}
-
 function isIos7(themeName) {
     return isTheme("ios7", themeName);
 }
@@ -334,26 +326,59 @@ function isGeneric(themeName) {
     return isTheme("generic", themeName);
 }
 
-function isWin8(themeName) {
-    return isTheme("win8", themeName);
-}
-
-function isWin10(themeName) {
-    return isTheme("win10", themeName);
-}
-
 function checkThemeDeprecation() {
-    if(isWin8()) {
-        errors.log("W0010", "The 'win8' theme", "16.1", "Use the 'generic' theme instead.");
+    if(isIos7()) {
+        errors.log("W0010", "The 'ios7' theme", "19.1", "Use the 'generic' theme instead.");
     }
+}
 
-    if(isWin10()) {
-        errors.log("W0010", "The 'win10' theme", "17.2", "Use the 'generic' theme instead.");
-    }
+function isWebFontLoaded(text, fontWeight) {
+    const testedFont = "Roboto, RobotoFallback, Arial";
+    const etalonFont = "Arial";
 
-    if(isAndroid5()) {
-        errors.log("W0010", "The 'android5' theme", "18.1", "Use the 'material' theme instead.");
-    }
+    const document = domAdapter.getDocument();
+    const testElement = document.createElement("span");
+
+    testElement.style.position = "absolute";
+    testElement.style.top = "-9999px";
+    testElement.style.left = "-9999px";
+    testElement.style.visibility = "hidden";
+    testElement.style.fontFamily = etalonFont;
+    testElement.style.fontSize = "250px";
+    testElement.style.fontWeight = fontWeight;
+    testElement.innerHTML = text;
+
+    document.body.appendChild(testElement);
+
+    const etalonFontWidth = testElement.offsetWidth;
+    testElement.style.fontFamily = testedFont;
+    const testedFontWidth = testElement.offsetWidth;
+
+    testElement.parentNode.removeChild(testElement);
+
+    return etalonFontWidth !== testedFontWidth;
+}
+
+function waitWebFont(text, fontWeight) {
+    const interval = 15;
+    const timeout = 2000;
+
+    return new Promise(resolve => {
+        const check = () => {
+            if(isWebFontLoaded(text, fontWeight)) {
+                clear();
+            }
+        };
+
+        const clear = () => {
+            clearInterval(intervalId);
+            clearTimeout(timeoutId);
+            resolve();
+        };
+
+        const intervalId = setInterval(check, interval);
+        const timeoutId = setTimeout(clear, timeout);
+    });
 }
 
 var initDeferred = new Deferred();
@@ -424,11 +449,10 @@ exports.detachCssClasses = detachCssClasses;
 exports.themeNameFromDevice = themeNameFromDevice;
 exports.waitForThemeLoad = waitForThemeLoad;
 exports.isMaterial = isMaterial;
-exports.isAndroid5 = isAndroid5;
 exports.isIos7 = isIos7;
 exports.isGeneric = isGeneric;
-exports.isWin8 = isWin8;
-exports.isWin10 = isWin10;
+exports.isWebFontLoaded = isWebFontLoaded;
+exports.waitWebFont = waitWebFont;
 
 
 exports.resetTheme = function() {

@@ -20,8 +20,6 @@ exports.stock = _extend({}, scatterSeries, {
 
     _getOptionsForPoint: barSeries._getOptionsForPoint,
 
-    getErrorBarRangeCorrector: _noop,
-
     _createErrorBarGroup: _noop,
 
     areErrorBarsVisible: _noop,
@@ -117,7 +115,7 @@ exports.stock = _extend({}, scatterSeries, {
 
             let isReduction = false;
 
-            if(reductionValue !== null) {
+            if(_isDefined(reductionValue)) {
                 if(_isDefined(prevLevelValue)) {
                     isReduction = reductionValue < prevLevelValue;
                 }
@@ -126,10 +124,10 @@ exports.stock = _extend({}, scatterSeries, {
 
             return {
                 argument: data[argumentField],
-                highValue: data[highValueField],
-                lowValue: data[lowValueField],
-                closeValue: data[closeValueField],
-                openValue: data[openValueField],
+                highValue: this._processEmptyValue(data[highValueField]),
+                lowValue: this._processEmptyValue(data[lowValueField]),
+                closeValue: this._processEmptyValue(data[closeValueField]),
+                openValue: this._processEmptyValue(data[openValueField]),
                 reductionValue: reductionValue,
                 tag: data[that.getTagField()],
                 isReduction: isReduction,
@@ -255,7 +253,7 @@ exports.stock = _extend({}, scatterSeries, {
     },
 
     getSeriesPairCoord(coord, isArgument) {
-        let oppositeCoord;
+        let oppositeCoord = null;
         const points = this.getVisiblePoints();
 
         for(let i = 0; i < points.length; i++) {
@@ -263,7 +261,7 @@ exports.stock = _extend({}, scatterSeries, {
             let tmpCoord;
 
             if(isArgument) {
-                tmpCoord = Math.abs(p.vx - coord) <= p.width / 2 ? (p.openY + p.closeY) / 2 : undefined;
+                tmpCoord = p.vx === coord ? (p.openY + p.closeY) / 2 : undefined;
             } else {
                 const coords = [Math.min(p.lowY, p.highY), Math.max(p.lowY, p.highY)];
                 tmpCoord = coord >= coords[0] && coord <= coords[1] ? p.vx : undefined;
@@ -276,6 +274,10 @@ exports.stock = _extend({}, scatterSeries, {
         }
 
         return oppositeCoord;
+    },
+
+    usePointsToDefineAutoHiding() {
+        return false;
     }
 });
 

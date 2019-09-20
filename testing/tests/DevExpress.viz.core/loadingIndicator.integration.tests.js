@@ -47,12 +47,12 @@ QUnit.test("Show when container is not visible", function(assert) {
 
 QUnit.test("Notification callback / true", function(assert) {
     var widget = this.createWidget(),
-        spy = widget._hideTooltip = sinon.spy();
+        spy = widget._stopCurrentHandling = sinon.spy();
 
     module.LoadingIndicator.lastCall.args[0].notify(true);
 
     assert.strictEqual(widget.option("loadingIndicator.show"), true, "option state");
-    assert.deepEqual(spy.lastCall.args, [], "tooltip is hidden");
+    assert.deepEqual(spy.lastCall.args, [], "current handlings are stopped");
 });
 
 QUnit.test("Notification callback / false", function(assert) {
@@ -103,6 +103,18 @@ QUnit.test("Hidden when theme is changed", function(assert) {
 
     widget.option("theme", "test-theme");
 
+    assert.deepEqual(this.loadingIndicator.scheduleHiding.lastCall.args, [], "schedule");
+    assert.deepEqual(this.loadingIndicator.fulfillHiding.lastCall.args, [], "fulfilled");
+});
+
+QUnit.test("Hidden when option is set to the same value", function(assert) {
+    var widget = this.createWidget({
+        theme: "test-theme"
+    });
+    widget.showLoadingIndicator();
+    this.loadingIndicator.scheduleHiding.reset();
+    this.loadingIndicator.fulfillHiding.reset();
+    widget.option("theme", "test-theme");
     assert.deepEqual(this.loadingIndicator.scheduleHiding.lastCall.args, [], "schedule");
     assert.deepEqual(this.loadingIndicator.fulfillHiding.lastCall.args, [], "fulfilled");
 });

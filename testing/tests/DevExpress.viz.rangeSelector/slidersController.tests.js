@@ -27,8 +27,8 @@ var environment = {
                 }
             },
             trackersGroup: this.trackersGroup,
-            updateSelectedRange: function(arg) {
-                notifications.push([arg.startValue, arg.endValue]);
+            updateSelectedRange: function(value, prevValue, e) {
+                notifications.push([value.startValue, value.endValue, e]);
             }
         });
     },
@@ -60,8 +60,8 @@ var environment = {
         this.translator.update({ min: 10, max: 30, invert: true }, { left: 1000, width: 3000 }, { isHorizontal: true });
     },
 
-    setRange: function(start, end) {
-        this.controller.setSelectedRange({ startValue: start, endValue: end });
+    setRange: function(start, end, e) {
+        this.controller.setSelectedRange({ startValue: start, endValue: end }, e);
     },
 
     areaTracker: function() {
@@ -503,10 +503,10 @@ QUnit.test("notification", function(assert) {
     this.update();
     this.setRange(0, 1);
 
-    this.setRange(16, 19);
-    this.setRange(25, 20);
+    this.setRange(16, 19, { firstEvent: true });
+    this.setRange(25, 20, { secondEvent: true });
 
-    assert.deepEqual(this.notifications, [[16, 19], [20, 25]]);
+    assert.deepEqual(this.notifications, [[16, 19, { firstEvent: true }], [20, 25, { secondEvent: true }]]);
 });
 
 QUnit.test("'minRange' is ignored", function(assert) {
@@ -809,10 +809,10 @@ QUnit.test("Common", function(assert) {
     this.update();
     this.setRange(11, 14);
 
-    this.controller.moveSelectedArea(2100);
+    this.controller.moveSelectedArea(2100, { isEvent: true });
 
     this.check(assert, [19.5, 22.5], [1950, 2250]);
-    assert.deepEqual(this.notifications, [[19.5, 22.5]], "notification");
+    assert.deepEqual(this.notifications, [[19.5, 22.5, { isEvent: true }]], "notification");
 });
 
 QUnit.test("Categories 1", function(assert) {
@@ -820,10 +820,10 @@ QUnit.test("Categories 1", function(assert) {
     this.update();
     this.setRange("b", "c");
 
-    this.controller.moveSelectedArea(2100);
+    this.controller.moveSelectedArea(2100, { isEvent: true });
 
     this.check(assert, ["c", "d"], [1800, 2600]);
-    assert.deepEqual(this.notifications, [["c", "d"]], "notification");
+    assert.deepEqual(this.notifications, [["c", "d", { isEvent: true }]], "notification");
 });
 
 QUnit.test("Categories 2", function(assert) {
@@ -831,10 +831,10 @@ QUnit.test("Categories 2", function(assert) {
     this.update();
     this.setRange("b", "c");
 
-    this.controller.moveSelectedArea(1500);
+    this.controller.moveSelectedArea(1500, { isEvent: true });
 
     this.check(assert, ["a", "b"], [1000, 1800]);
-    assert.deepEqual(this.notifications, [["a", "b"]], "notification");
+    assert.deepEqual(this.notifications, [["a", "b", { isEvent: true }]], "notification");
 });
 
 QUnit.test("Docking", function(assert) {
@@ -844,10 +844,10 @@ QUnit.test("Docking", function(assert) {
     });
     this.setRange(11, 14);
 
-    this.controller.moveSelectedArea(2100);
+    this.controller.moveSelectedArea(2100, { isEvent: true });
 
     this.check(assert, [20, 22], [2000, 2200]);
-    assert.deepEqual(this.notifications, [[20, 22]], "notification");
+    assert.deepEqual(this.notifications, [[20, 22, { isEvent: true }]], "notification");
 });
 
 QUnit.test("Docking with DateTime (irregular scale, from small range to big)", function(assert) {
@@ -858,10 +858,10 @@ QUnit.test("Docking with DateTime (irregular scale, from small range to big)", f
     });
     this.setRange(new Date(2011, 1, 1), new Date(2011, 2, 1));
 
-    this.controller.moveSelectedArea(1400);
+    this.controller.moveSelectedArea(1400, { isEvent: true });
 
     this.check(assert, [new Date(2011, 2, 1), new Date(2011, 3, 1)], [1388, 1592]);
-    assert.deepEqual(this.notifications, [[new Date(2011, 2, 1), new Date(2011, 3, 1)]], "notification");
+    assert.deepEqual(this.notifications, [[new Date(2011, 2, 1), new Date(2011, 3, 1), { isEvent: true }]], "notification");
 });
 
 QUnit.test("Docking with DateTime (irregular scale, from big range to small)", function(assert) {
@@ -891,10 +891,10 @@ QUnit.test("Docking with DateTime (irregular scale, from big range to small)", f
     });
     this.setRange(new Date(2011, 0, 1), new Date(2011, 0, 2));
 
-    this.controller.moveSelectedArea(1800);
+    this.controller.moveSelectedArea(1800, { isEvent: true });
 
     this.check(assert, [new Date(2011, 0, 4), new Date(2011, 0, 5)], [1667, 1889]);
-    assert.deepEqual(this.notifications, [[new Date(2011, 0, 4), new Date(2011, 0, 5)]], "notification");
+    assert.deepEqual(this.notifications, [[new Date(2011, 0, 4), new Date(2011, 0, 5), { isEvent: true }]], "notification");
 });
 
 QUnit.test("Close to start", function(assert) {
@@ -924,11 +924,11 @@ QUnit.test("Common", function(assert) {
     var handler = this.controller.beginSelectedAreaMoving(1200);
     handler(1300);
     handler(1500);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkMoves(assert, [[1200, 1600], [1400, 1800]]);
     this.check(assert, [14, 18], [1400, 1800]);
-    assert.deepEqual(this.notifications, [[14, 18]], "notification");
+    assert.deepEqual(this.notifications, [[14, 18, { isEvent: true }]], "notification");
 });
 
 QUnit.test("Docking", function(assert) {
@@ -941,11 +941,11 @@ QUnit.test("Docking", function(assert) {
     var handler = this.controller.beginSelectedAreaMoving(1200);
     handler(1340);
     handler(1560);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkMoves(assert, [[1240, 1640], [1460, 1860]]);
     this.check(assert, [14, 18], [1400, 1800]);
-    assert.deepEqual(this.notifications, [[14, 18]], "notification");
+    assert.deepEqual(this.notifications, [[14, 18, { isEvent: true }]], "notification");
 });
 
 QUnit.test("Docking with DateTime (irregular scale, from small range to big)", function(assert) {
@@ -959,11 +959,11 @@ QUnit.test("Docking with DateTime (irregular scale, from small range to big)", f
     var handler = this.controller.beginSelectedAreaMoving(1300);
     handler(1350);
     handler(1400);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkMoves(assert, [[1254, 1438], [1304, 1488]]);
     this.check(assert, [new Date(2011, 2, 1), new Date(2011, 3, 1)], [1388, 1592]);
-    assert.deepEqual(this.notifications, [[new Date(2011, 2, 1), new Date(2011, 3, 1)]], "notification");
+    assert.deepEqual(this.notifications, [[new Date(2011, 2, 1), new Date(2011, 3, 1), { isEvent: true }]], "notification");
 });
 
 QUnit.test("Docking with DateTime (irregular scale, from big range to small)", function(assert) {
@@ -977,11 +977,11 @@ QUnit.test("Docking with DateTime (irregular scale, from big range to small)", f
     var handler = this.controller.beginSelectedAreaMoving(1100);
     handler(1155);
     handler(1210);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkMoves(assert, [[1055, 1259], [1110, 1314]]);
     this.check(assert, [new Date(2011, 1, 1), new Date(2011, 2, 1)], [1204, 1388]);
-    assert.deepEqual(this.notifications, [[new Date(2011, 1, 1), new Date(2011, 2, 1)]], "notification");
+    assert.deepEqual(this.notifications, [[new Date(2011, 1, 1), new Date(2011, 2, 1), { isEvent: true }]], "notification");
 });
 
 QUnit.test("Categories", function(assert) {
@@ -992,11 +992,11 @@ QUnit.test("Categories", function(assert) {
     var handler = this.controller.beginSelectedAreaMoving(1200);
     handler(1300);
     handler(1500);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkMoves(assert, [[1500, 2300], [1700, 2500]]);
     this.check(assert, ["c", "d"], [1800, 2600]);
-    assert.deepEqual(this.notifications, [["c", "d"]], "notification");
+    assert.deepEqual(this.notifications, [["c", "d", { isEvent: true }]], "notification");
 });
 
 QUnit.test("Notifications on moving, callValueChanged", function(assert) {
@@ -1007,11 +1007,11 @@ QUnit.test("Notifications on moving, callValueChanged", function(assert) {
     this.setRange(11, 15);
 
     var handler = this.controller.beginSelectedAreaMoving(1200);
-    handler(1340);
-    handler(1560);
+    handler(1340, { firstEvent: true });
+    handler(1560, { secondEvent: true });
     handler.complete();
 
-    assert.deepEqual(this.notifications, [[12, 16], [14, 18]], "notifications");
+    assert.deepEqual(this.notifications, [[12, 16, { firstEvent: true }], [14, 18, { secondEvent: true }]], "notifications");
 });
 
 QUnit.test("Close to start", function(assert) {
@@ -1047,11 +1047,11 @@ QUnit.test("Common", function(assert) {
     var handler = this.controller.beginSliderMoving(1, 1600);
     handler(1800);
     handler(1900);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkSliderMoves(assert, 1, [1700, 1800]);
     this.check(assert, [11, 18], [1100, 1800]);
-    assert.deepEqual(this.notifications, [[11, 18]], "notification");
+    assert.deepEqual(this.notifications, [[11, 18, { isEvent: true }]], "notification");
 });
 
 QUnit.test("Docking", function(assert) {
@@ -1064,11 +1064,11 @@ QUnit.test("Docking", function(assert) {
     var handler = this.controller.beginSliderMoving(0, 1000);
     handler(900);
     handler(1250);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkSliderMoves(assert, 0, [1000, 1350]);
     this.check(assert, [14, 15], [1400, 1500]);
-    assert.deepEqual(this.notifications, [[14, 15]], "notification");
+    assert.deepEqual(this.notifications, [[14, 15, { isEvent: true }]], "notification");
 });
 
 QUnit.test("Categories", function(assert) {
@@ -1079,11 +1079,11 @@ QUnit.test("Categories", function(assert) {
     var handler = this.controller.beginSliderMoving(1, 2300);
     handler(1900);
     handler(2500);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkSliderMoves(assert, 1, [1800, 2400]);
     this.check(assert, ["b", "d"], [1400, 2600]);
-    assert.deepEqual(this.notifications, [["b", "d"]], "notification");
+    assert.deepEqual(this.notifications, [["b", "d", { isEvent: true }]], "notification");
 });
 
 QUnit.test("Categories and snapping to axis ticks", function(assert) {
@@ -1111,13 +1111,13 @@ QUnit.test("Notifications on moving, callValueChanged option", function(assert) 
     this.setRange(11, 15);
 
     var handler = this.controller.beginSliderMoving(1, 1600);
-    handler(1700);
-    handler(2150);
+    handler(1700, { firstEvent: true });
+    handler(2150, { secondEvent: true });
     handler.complete();
 
     this.checkSliderMoves(assert, 1, [1600, 2050]);
     this.check(assert, [11, 20], [1100, 2000]);
-    assert.deepEqual(this.notifications, [[11, 16], [11, 20]], "notification");
+    assert.deepEqual(this.notifications, [[11, 16, { firstEvent: true }], [11, 20, { secondEvent: true }]], "notification");
 });
 
 QUnit.test("Swapping", function(assert) {
@@ -1211,14 +1211,14 @@ QUnit.test("Left slider", function(assert) {
 
     var handler = this.controller.placeSliderAndBeginMoving(2100, 1900);
     handler(1800);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkSliderAnimated(assert, 1, 2100);
     assert.deepEqual(this.sliderRoot(0).stopAnimation.lastCall.args, [], "slider 0 animation is stopped");
     assert.deepEqual(this.shutter().stopAnimation.lastCall.args, [], "shutter animation is stopped");
     this.checkSliderMoves(assert, 0, [1800]);
     this.check(assert, [18, 21], [1800, 2100]);
-    assert.deepEqual(this.notifications, [[18, 21]], "notification");
+    assert.deepEqual(this.notifications, [[18, 21, { isEvent: true }]], "notification");
 });
 
 QUnit.test("Right slider", function(assert) {
@@ -1227,14 +1227,14 @@ QUnit.test("Right slider", function(assert) {
 
     var handler = this.controller.placeSliderAndBeginMoving(1900, 2100);
     handler(2300);
-    handler.complete();
+    handler.complete({ isEvent: true });
 
     this.checkSliderAnimated(assert, 0, 1900);
     assert.deepEqual(this.sliderRoot(1).stopAnimation.lastCall.args, [], "slider 1 animation is stopped");
     assert.deepEqual(this.shutter().stopAnimation.lastCall.args, [], "shutter animation is stopped");
     this.checkSliderMoves(assert, 1, [2300]);
     this.check(assert, [19, 23], [1900, 2300]);
-    assert.deepEqual(this.notifications, [[19, 23]], "notification");
+    assert.deepEqual(this.notifications, [[19, 23, { isEvent: true }]], "notification");
 });
 
 QUnit.test("Docking", function(assert) {
@@ -1279,12 +1279,12 @@ QUnit.test("Notifications on moving, callValueChanged option", function(assert) 
     });
     this.setRange(11, 13);
 
-    var handler = this.controller.placeSliderAndBeginMoving(1450, 2150);
-    handler(1550);
+    var handler = this.controller.placeSliderAndBeginMoving(1450, 2150, { firstEvent: true });
+    handler(1550, { secondEvent: true });
     handler.complete();
 
     this.check(assert, [14, 16], [1400, 1600]);
-    assert.deepEqual(this.notifications, [[14, 22], [14, 16]]);
+    assert.deepEqual(this.notifications, [[14, 22, { firstEvent: true }], [14, 16, { secondEvent: true }]]);
 });
 
 QUnit.test("Inverted scale", function(assert) {

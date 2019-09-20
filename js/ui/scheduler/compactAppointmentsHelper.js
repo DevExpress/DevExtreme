@@ -5,11 +5,12 @@ import messageLocalization from "../../localization/message";
 import FunctionTemplate from "../widget/function_template";
 import deferredUtils from "../../core/utils/deferred";
 
-const DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
-    COMPACT_DROPDOWN_APPOINTMENTS_CLASS = DROPDOWN_APPOINTMENTS_CLASS + "-compact",
-    DROPDOWN_APPOINTMENTS_CONTENT_CLASS = "dx-scheduler-dropdown-appointments-content";
+const APPOINTMENT_COLLECTOR_CLASS = "dx-scheduler-appointment-collector",
+    COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + "-compact",
+    APPOINTMENT_COLLECTOR_CONTENT_CLASS = APPOINTMENT_COLLECTOR_CLASS + "-content";
 
-const WEEK_VIEW_BUTTON_OFFSET = 5;
+const WEEK_VIEW_COLLECTOR_OFFSET = 5;
+const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
 
 export class CompactAppointmentsHelper {
     constructor(instance) {
@@ -18,9 +19,10 @@ export class CompactAppointmentsHelper {
     }
 
     render(options) {
-        const { $container, buttonWidth, items, isCompact, coordinates, buttonColor } = options;
+        const { $container, width, height, items, isCompact, applyOffset, coordinates, buttonColor } = options;
+
         const template = this._createTemplate(items.data.length, isCompact);
-        const button = this._createCompactButton($container, buttonWidth, template, items, isCompact, coordinates);
+        const button = this._createCompactButton($container, width, height, template, items, isCompact, applyOffset, coordinates);
         const $button = button.$element();
 
         this._makeBackgroundColor($button, items.colors, buttonColor);
@@ -54,8 +56,12 @@ export class CompactAppointmentsHelper {
         this.instance.showAppointmentTooltipCore($button, $button.data("items"));
     }
 
-    _getButtonOffset(width) {
-        return this.instance.fire("getCellWidth") - width - WEEK_VIEW_BUTTON_OFFSET;
+    _getCollectorOffset(width) {
+        return this.instance.fire("getCellWidth") - width - this._getCollectorRightOffset();
+    }
+
+    _getCollectorRightOffset() {
+        return this.instance.getRenderingStrategyInstance()._isCompactTheme() ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET : WEEK_VIEW_COLLECTOR_OFFSET;
     }
 
     _makeBackgroundDarker(button) {
@@ -95,24 +101,25 @@ export class CompactAppointmentsHelper {
         });
     }
 
-    _createCompactButton($container, width, template, items, isCompact, coordinates) {
-        const $button = this._createCompactButtonElement($container, width, isCompact, coordinates);
+    _createCompactButton($container, width, height, template, items, isCompact, applyOffset, coordinates) {
+        const $button = this._createCompactButtonElement($container, width, isCompact, applyOffset, coordinates);
 
         return this.instance._createComponent($button, Button, {
             type: 'default',
             width: width,
+            height: height,
             onClick: (e) => this._onButtonClick(e),
             template: this._renderTemplate(template, items, isCompact)
         });
     }
 
-    _createCompactButtonElement($container, width, isCompact, coordinates) {
+    _createCompactButtonElement($container, width, isCompact, applyOffset, coordinates) {
         const result = $("<div>")
-            .addClass(DROPDOWN_APPOINTMENTS_CLASS)
-            .toggleClass(COMPACT_DROPDOWN_APPOINTMENTS_CLASS, isCompact)
+            .addClass(APPOINTMENT_COLLECTOR_CLASS)
+            .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
 
-        const offset = isCompact ? this._getButtonOffset(width) : 0;
+        const offset = applyOffset ? this._getCollectorOffset(width) : 0;
         this._setPosition(result, { top: coordinates.top, left: coordinates.left + offset });
 
         return result;
@@ -146,6 +153,6 @@ export class CompactAppointmentsHelper {
 
         return element
             .append($("<span>").text(text))
-            .addClass(DROPDOWN_APPOINTMENTS_CONTENT_CLASS);
+            .addClass(APPOINTMENT_COLLECTOR_CONTENT_CLASS);
     }
 }

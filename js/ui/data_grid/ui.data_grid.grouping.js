@@ -8,13 +8,16 @@ import { isDefined, isString } from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import devices from "../../core/devices";
 import { when, Deferred } from "../../core/utils/deferred";
+import { registerKeyboardAction } from "../grid_core/ui.grid_core.accessibility";
+import { setTabIndex, restoreFocus } from "../shared/accessibility";
 
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
     DATAGRID_GROUP_PANEL_ITEM_CLASS = "dx-group-panel-item",
     DATAGRID_GROUP_PANEL_LABEL_CLASS = "dx-toolbar-label",
     DATAGRID_EXPAND_CLASS = "dx-datagrid-expand",
-    DATAGRID_GROUP_ROW_CLASS = "dx-group-row";
+    DATAGRID_GROUP_ROW_CLASS = "dx-group-row",
+    HEADER_FILTER_CLASS_SELECTOR = ".dx-header-filter";
 
 var GroupingDataSourceAdapterExtender = (function() {
     return {
@@ -85,6 +88,8 @@ var GroupingDataSourceAdapterExtender = (function() {
                         groupInfo.isExpanded = isExpand;
                     }
                 }, false, true);
+
+                that.resetPagesCache();
             }
             return true;
         },
@@ -382,7 +387,9 @@ var GroupingHeaderPanelExtender = (function() {
             var that = this,
                 isRendered = false,
                 groupPanelRenderedCallback = function(e) {
-                    that._updateGroupPanelContent($(e.itemElement).find("." + DATAGRID_GROUP_PANEL_CLASS));
+                    var $groupPanel = $(e.itemElement).find("." + DATAGRID_GROUP_PANEL_CLASS);
+                    that._updateGroupPanelContent($groupPanel);
+                    registerKeyboardAction("groupPanel", that, $groupPanel, undefined, that._handleActionKeyDown.bind(that));
                     isRendered && that.renderCompleted.fire();
                     isRendered = true;
                 };
@@ -401,6 +408,22 @@ var GroupingHeaderPanelExtender = (function() {
             }
 
             return items;
+        },
+
+        _handleActionKeyDown: function(args) {
+            var event = args.event,
+                $target = $(event.target),
+                groupColumnIndex = $target.closest(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`).index(),
+                column = this._columnsController.getGroupColumns()[groupColumnIndex],
+                columnIndex = column && column.index;
+
+            if($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
+                this.getController("headerFilter").showHeaderFilterMenu(columnIndex, true);
+            } else {
+                this._processGroupItemAction(columnIndex);
+            }
+
+            event.preventDefault();
         },
 
         _isGroupPanelVisible: function() {
@@ -426,15 +449,21 @@ var GroupingHeaderPanelExtender = (function() {
             each(groupColumns, function(index, groupColumn) {
                 that._createGroupPanelItem($groupPanel, groupColumn);
             });
+
+            restoreFocus(this);
         },
 
         _createGroupPanelItem: function($rootElement, groupColumn) {
-            return $("<div>")
+            var $groupPanelItem = $("<div>")
                 .addClass(groupColumn.cssClass)
                 .addClass(DATAGRID_GROUP_PANEL_ITEM_CLASS)
                 .data("columnData", groupColumn)
                 .appendTo($rootElement)
                 .text(groupColumn.caption);
+
+            setTabIndex(this, $groupPanelItem);
+
+            return $groupPanelItem;
         },
 
         _columnOptionChanged: function(e) {
@@ -591,9 +620,10 @@ var GroupingRowsViewExtender = (function() {
 
         _changeGroupRowState: function(e) {
             var dataController = this.getController("data"),
-                row = dataController.items()[e.rowIndex];
+                row = dataController.items()[e.rowIndex],
+                allowCollapsing = this._columnsController.columnOption("groupIndex:" + row.groupIndex, "allowCollapsing");
 
-            if(row.rowType !== "detail") {
+            if(row.rowType === "data" || row.rowType === "group" && allowCollapsing !== false) {
                 dataController.changeRowExpand(row.key);
                 e.event.preventDefault();
                 e.handled = true;

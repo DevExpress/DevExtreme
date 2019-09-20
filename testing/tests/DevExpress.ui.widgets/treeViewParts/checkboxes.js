@@ -1,6 +1,6 @@
 /* global DATA, data2, internals, initTree */
 
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.module("Checkboxes");
 

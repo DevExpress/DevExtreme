@@ -64,7 +64,7 @@ module.exports = {
 
         var resultUrl = proxyUrl;
         for(var proxyUrlPart in urlMapping) {
-            if(urlMapping.hasOwnProperty(proxyUrlPart)) {
+            if(Object.prototype.hasOwnProperty.call(urlMapping, proxyUrlPart)) {
                 if(proxyUrl.indexOf(proxyUrlPart) >= 0) {
                     resultUrl = proxyUrl.replace(proxyUrlPart, urlMapping[proxyUrlPart]);
                     break;

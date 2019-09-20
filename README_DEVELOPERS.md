@@ -31,11 +31,20 @@ After installation, the following NPM scripts are available:
 
 Build results are stored in the "artifacts" directory.
 
+## API Declarations
+
+We use [JSDoc](https://en.wikipedia.org/wiki/JSDoc)-like syntax to declare the DevExtreme public API. The API declarations are then used to generate the API reference, the TypeScript declaration file (dx.all.d.ts), and integrate with 3rd party frameworks ([Angular](https://github.com/devexpress/devextreme-angular), [React](https://github.com/devexpress/devextreme-react), [Vue](https://github.com/devexpress/devextreme-vue), and [ASP.NET](https://js.devexpress.com/Overview/Mvc/)).
+
+To modify API declarations, use the following NPM scripts:
+
+- `npm run validate-declarations` - Checks if DevExtreme API declarations are valid.
+- `npm run update-ts` - Updates TypeScript declarations according to API declarations. You should commit the updated dx.all.d.ts file. The CI checks if TypeScript declarations correspond to the declared API and notifies you if dx.all.d.ts is not up to date.
+
 ## Tests and CI
 
 We conduct extensive in-house testing of DevExtreme on different browsers, mobile devices, functional tests for demos, etc. However, we only share some of them on GitHub: linters and automated tests for Google Chrome.
 
-Tests are in the [testing](testing) directory, and you can execute them are described below:
+Tests are in the [testing](testing) directory, and you can execute them as described below:
 
 ### Locally in Browser
 

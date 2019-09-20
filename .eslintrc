@@ -53,6 +53,7 @@
         "no-unused-vars": ["error", { "args": "none" }],
         "no-extend-native": "error",
         "no-alert": "error",
+        "no-console": "error",
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],
         "semi-spacing": "error",
@@ -141,11 +142,13 @@
                     "microsoft",
                     "moz",        // Vendor prefix
                     "mozilla",
+                    "mvc",
                     "firefox",
                     "msie",
                     "odata",      // OData
                     "rtl",        // Right-to-Left
                     "scss",
+                    "semver",     // The semantic versioner for npm
                     "sinon",      // JS library
                     "tspan",      // SVG element
                     "tspans",
@@ -157,6 +160,7 @@
                     "xmla",       // XML for Analysis
                     "ldml",       // LOCALE DATA MARKUP LANGUAGE
 
+                    "API",
                     "accessor",
                     "accessors",
                     "acos",
@@ -294,6 +298,7 @@
                     "getters",
                     "gregorian",
                     "guid",
+                    "gte",
                     "hideable",
                     "historyless",
                     "hor",
@@ -428,6 +433,7 @@
                     "subtags",
                     "subvalue",
                     "subvalues",
+                    "sugiyama",
                     "svg",
                     "swipeable",
                     "synchronizable",

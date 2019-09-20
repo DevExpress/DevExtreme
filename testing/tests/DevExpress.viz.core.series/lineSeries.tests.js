@@ -3,7 +3,8 @@ import * as vizMocks from "../../helpers/vizMocks.js";
 import { noop } from "core/utils/common";
 import vizUtils from "viz/core/utils";
 import pointModule from "viz/series/points/base_point";
-import { Series } from "viz/series/base_series";
+import SeriesModule from "viz/series/base_series";
+const Series = SeriesModule.Series;
 import { insertMockFactory, MockAxis, restoreMockFactory } from "../../helpers/chartMocks.js";
 import objectUtils from "core/utils/object";
 
@@ -132,6 +133,7 @@ var checkThreeGroups = function(assert, series) {
     assert.equal(renderer.stub("g").getCall(1).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-elements");
     assert.equal(renderer.stub("g").getCall(2).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-markers");
     assert.equal(renderer.stub("g").getCall(3).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-labels");
+    assert.equal(renderer.stub("g").getCall(3).returnValue._stored_settings["pointer-events"], "none");
 
     assert.equal(series._elementsGroup.stub("append").lastCall.args[0], parentGroup);
     assert.equal(series._markersGroup.stub("append").lastCall.args[0], parentGroup);
@@ -170,9 +172,15 @@ function setDiscreteType(series) {
         beforeEach: environment.beforeEach,
         afterEach: environment.afterEach,
         createSeries: function(options) {
+            const argAxis = new MockAxis({ renderer: this.renderer });
+            argAxis.getTranslator = sinon.spy(()=> {
+                return {
+                    translate: sinon.spy(() => "translation_result")
+                };
+            });
             return createSeries(options, {
                 renderer: this.renderer,
-                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                argumentAxis: argAxis,
                 valueAxis: new MockAxis({ renderer: this.renderer })
             });
         }
@@ -180,6 +188,24 @@ function setDiscreteType(series) {
 
     var checkGroups = checkThreeGroups,
         seriesType = "line";
+
+    QUnit.test("getPointCenterByArg", function(assert) {
+        // arrange
+        const series = this.createSeries({
+            type: seriesType
+        });
+
+        series.updateData([{ arg: 1, val: 2 }, { arg: 2, val: 1 }]);
+        series.createPoints();
+
+        // act
+        const centerCoord = series.getPointCenterByArg(1.5);
+
+        // assert
+        assert.strictEqual(series.getArgumentAxis().getTranslator.firstCall.returnValue.translate.firstCall.args[0], 1.5);
+        assert.strictEqual(series.getArgumentAxis().getTranslator.firstCall.returnValue.translate.firstCall.returnValue, "translation_result");
+        assert.deepEqual(centerCoord, { x: "translation_result", y: "translation_result" });
+    });
 
     QUnit.test("Draw without data", function(assert) {
         var series = this.createSeries({

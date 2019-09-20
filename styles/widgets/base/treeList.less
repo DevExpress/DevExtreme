@@ -1,14 +1,19 @@
 .dx-treelist-borders {
-    > .dx-treelist-headers, > .dx-treelist-rowsview, > .dx-treelist-total-footer {
+    > .dx-treelist-headers,
+    > .dx-treelist-rowsview,
+    > .dx-treelist-total-footer {
         border-left: @treelist-border;
         border-right: @treelist-border;
     }
 
-    > .dx-treelist-rowsview, > .dx-treelist-total-footer {
+    > .dx-treelist-rowsview,
+    > .dx-treelist-total-footer {
         border-bottom: @treelist-border;
     }
 
-    > .dx-treelist-pager, > .dx-treelist-headers, > .dx-treelist-filter-panel {
+    > .dx-treelist-pager,
+    > .dx-treelist-headers,
+    > .dx-treelist-filter-panel {
         border-top: @treelist-border;
     }
 
@@ -31,6 +36,7 @@
         &:first-child {
             border-left: none;
         }
+
         &:last-child {
             border-right: none;
         }
@@ -47,6 +53,28 @@
 
     .dx-sort-down {
         .dx-icon-sortdown;
+    }
+
+    .dx-treelist-headers {
+        .dx-header-row > td,
+        .dx-header-filter {
+            outline: none;
+        }
+
+        &.dx-state-focused .dx-header-row {
+            td:focus,
+            td .dx-header-filter:focus {
+                outline: 2px solid @treelist-focused-border-color;
+            }
+
+            td:focus {
+                outline-offset: -2px;
+            }
+
+            td .dx-header-filter:focus {
+                outline-offset: 2px;
+            }
+        }
     }
 
     .dx-header-filter {
@@ -73,7 +101,11 @@
         }
     }
 
-    .dx-treelist-rowsview .dx-data-row, .dx-treelist-rowsview .dx-freespace-row, .dx-treelist-headers .dx-row {
+    .dx-treelist-rowsview .dx-data-row,
+    .dx-treelist-rowsview .dx-freespace-row,
+    .dx-datagrid-rowsview .dx-virtual-row,
+    .dx-datagrid-rowsview .dx-header-row,
+    .dx-treelist-headers .dx-row {
         td.dx-pointer-events-none {
             border-left: 2px solid @treelist-border-color;
             border-right: 2px solid @treelist-border-color;
@@ -85,6 +117,18 @@
             &.dx-last-cell {
                 border-right: none;
             }
+        }
+    }
+
+    .dx-treelist-rowsview.dx-state-focused .dx-data-row {
+        & > td.dx-command-edit > a.dx-link:focus {
+            outline: 2px solid @datagrid-focused-border-color;
+            outline-offset: 2px;
+        }
+
+        &.dx-row-focused > td.dx-command-edit > a.dx-link:focus {
+            outline-color: @base-focus-color;
+            outline-offset: 0;
         }
     }
 
@@ -129,10 +173,25 @@
 .dx-treelist-filter-panel {
     color: @treelist-base-color;
     border-top: @treelist-border;
+
+    .dx-icon-filter,
+    .dx-treelist-filter-panel-text,
+    .dx-treelist-filter-panel-clear-filter {
+        outline: none;
+    }
+
+    &.dx-state-focused {
+        .dx-icon-filter:focus,
+        .dx-treelist-filter-panel-text:focus,
+        .dx-treelist-filter-panel-clear-filter:focus {
+            outline: 2px solid @treelist-focused-border-color;
+        }
+    }
 }
 
 .dx-treelist-form-buttons-container {
     float: right;
+
     .dx-button {
         margin-left: 10px;
         margin-top: 10px;
@@ -157,6 +216,7 @@
 
 .dx-treelist-edit-popup .dx-error-message {
     .dx-treelist-error-message();
+
     color: @treelist-row-error-color;
     margin-bottom: 20px;
 }
@@ -177,7 +237,11 @@
     }
 
     .dx-treelist-container {
-        .dx-treelist-rowsview .dx-data-row, .dx-treelist-rowsview .dx-freespace-row, .dx-treelist-headers .dx-row {
+        .dx-treelist-rowsview .dx-data-row,
+        .dx-treelist-rowsview .dx-freespace-row,
+        .dx-datagrid-rowsview .dx-virtual-row,
+        .dx-datagrid-rowsview .dx-header-row,
+        .dx-treelist-headers .dx-row {
             td.dx-pointer-events-none {
                 border-left: 2px solid @treelist-border-color;
                 border-right: 2px solid @treelist-border-color;
@@ -204,8 +268,10 @@
             }
         }
     }
+
     .dx-treelist-form-buttons-container {
         float: left;
+
         .dx-button {
             margin-left: 0;
             margin-right: 10px;
@@ -213,14 +279,15 @@
     }
 }
 
-.dx-treelist-cell-updated-animation  {
+.dx-treelist-cell-updated-animation {
     animation: dx-treelist-highlight-change 1s;
 }
 
-@keyframes dx-treelist-highlight-change  {
+@keyframes dx-treelist-highlight-change {
     from {
         background-color: fade(@treelist-base-color, 8%);
     }
+
     50% {
         background-color: fade(@treelist-base-color, 8%);
     }

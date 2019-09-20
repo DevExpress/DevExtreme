@@ -17,11 +17,6 @@ var SCROLL_INIT_EVENT = "dxscrollinit",
     SCROLL_CANCEL_EVENT = "dxscrollcancel";
 
 
-var isWheelEvent = function(e) {
-    return e.type === "dxmousewheel";
-};
-
-
 var Locker = Class.inherit((function() {
 
     var NAMESPACED_SCROLL_EVENT = eventUtils.addNamespace("scroll", "dxScrollEmitter");
@@ -121,7 +116,7 @@ var WheelLocker = TimeoutLocker.inherit((function() {
         },
 
         _checkDirectionChanged: function(e) {
-            if(!isWheelEvent(e)) {
+            if(!eventUtils.isDxMouseWheelEvent(e)) {
                 this._lastWheelDirection = null;
                 return;
             }
@@ -234,14 +229,14 @@ var ScrollEmitter = GestureEmitter.inherit((function() {
 
         _init: function(e) {
             this._wheelLocker.check(e, function() {
-                if(isWheelEvent(e)) {
+                if(eventUtils.isDxMouseWheelEvent(e)) {
                     this._accept(e);
                 }
             }.bind(this));
 
             this._pointerLocker.check(e, function() {
                 var skipCheck = this.isNative && eventUtils.isMouseEvent(e);
-                if(!isWheelEvent(e) && !skipCheck) {
+                if(!eventUtils.isDxMouseWheelEvent(e) && !skipCheck) {
                     this._accept(e);
                 }
             }.bind(this));
@@ -284,7 +279,7 @@ var ScrollEmitter = GestureEmitter.inherit((function() {
             var endEventDelta = eventUtils.eventDelta(this._prevEventData, eventUtils.eventData(e));
             var velocity = { x: 0, y: 0 };
 
-            if(!isWheelEvent(e) && endEventDelta.time < INERTIA_TIMEOUT) {
+            if(!eventUtils.isDxMouseWheelEvent(e) && endEventDelta.time < INERTIA_TIMEOUT) {
                 var eventDelta = eventUtils.eventDelta(this._savedEventData, this._prevEventData),
                     velocityMultiplier = FRAME_DURATION / eventDelta.time;
 

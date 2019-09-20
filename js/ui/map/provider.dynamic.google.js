@@ -13,8 +13,9 @@ var $ = require("../../core/renderer"),
     ajax = require("../../core/utils/ajax"),
     isDefined = require("../../core/utils/type").isDefined;
 
-var GOOGLE_MAP_READY = "_googleScriptReady",
-    GOOGLE_URL = "https://maps.googleapis.com/maps/api/js?callback=" + GOOGLE_MAP_READY;
+var GOOGLE_MAP_READY = "_googleScriptReady";
+var GOOGLE_URL = "https://maps.googleapis.com/maps/api/js?callback=" + GOOGLE_MAP_READY;
+var INFO_WINDOW_CLASS = "gm-style-iw";
 
 var CustomMarker;
 
@@ -271,9 +272,10 @@ var GoogleProvider = DynamicProvider.inherit({
         return Promise.resolve();
     },
 
-    isEventsCanceled: function() {
+    isEventsCanceled: function(e) {
         var gestureHandling = this._map && this._map.get("gestureHandling");
-        if(devices.real().deviceType !== "desktop" && gestureHandling === "cooperative") {
+        var isInfoWindowContent = $(e.target).closest(`.${INFO_WINDOW_CLASS}`).length > 0;
+        if(isInfoWindowContent || devices.real().deviceType !== "desktop" && gestureHandling === "cooperative") {
             return false;
         }
         return this.callBase();

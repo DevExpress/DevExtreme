@@ -1,15 +1,16 @@
-require("common.css!");
-require("generic_light.css!");
-require("ui/scheduler/ui.scheduler.subscribes");
-require("ui/scheduler/ui.scheduler");
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler.subscribes";
+import "ui/scheduler/ui.scheduler";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    fx = require("animation/fx"),
-    recurrenceUtils = require("ui/scheduler/utils.recurrence"),
-    dateUtils = require("core/utils/date"),
-    config = require("core/config");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import fx from "animation/fx";
+import recurrenceUtils from "ui/scheduler/utils.recurrence";
+import dateUtils from "core/utils/date";
+import config from "core/config";
 
+import { SchedulerTestWrapper } from './helpers.js';
 
 function getTimezoneDifference(date, timeZone) {
     return date.getTimezoneOffset() * dateUtils.dateToMilliseconds("minute") + timeZone * dateUtils.dateToMilliseconds("hour");
@@ -21,6 +22,7 @@ QUnit.testStart(function() {
 
 QUnit.module("Subscribes", {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
         };
@@ -28,6 +30,7 @@ QUnit.module("Subscribes", {
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 });
 
@@ -139,7 +142,7 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
         headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
 
     assert.roughEqual(updatedCoordinates.top, coordinates.top + allDayPanelHeight + headerPanelHeight, 2, "new top is correct");
-    assert.equal(updatedCoordinates.left, 0, "new left is correct");
+    assert.roughEqual(updatedCoordinates.left, 0, 2, "new left is correct");
 });
 
 QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinates during drag, allDay = true ", function(assert) {
@@ -165,7 +168,7 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
     });
 
     assert.roughEqual(updatedCoordinates.top, coordinates.top + headerPanelHeight, 2, "new top is correct");
-    assert.equal(updatedCoordinates.left, 0, "new left is correct");
+    assert.roughEqual(updatedCoordinates.left, 0, 2, "new left is correct");
 });
 
 QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinates during drag, RTL mode ", function(assert) {
@@ -191,7 +194,7 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
     var headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
 
     assert.roughEqual(updatedCoordinates.top, coordinates.top + headerPanelHeight, 2, "new top is correct");
-    assert.equal(updatedCoordinates.left, coordinates.left, "new left is correct");
+    assert.roughEqual(updatedCoordinates.left, coordinates.left, 2, "new left is correct");
 
 });
 
@@ -547,26 +550,6 @@ QUnit.test("'resizePopup' should trigger dxresize event for appointment popup", 
     this.instance.fire("resizePopup");
 
     assert.ok(resizeHandler.called, "event has been triggered");
-});
-
-QUnit.test("'resizePopup' should trigger setPopupMaxHeight for appointment popup", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 1, 1),
-        currentView: "day",
-        dataSource: []
-    });
-
-    var setPopupMaxHeight = sinon.stub(this.instance, "_setPopupContentMaxHeight");
-
-    this.instance.fire("showAddAppointmentPopup", {
-        startDate: new Date(2015, 1, 1),
-        endDate: new Date(2015, 1, 1, 1),
-        allDay: true
-    });
-
-    this.instance.fire("resizePopup");
-
-    assert.ok(setPopupMaxHeight.called, "event has been triggered");
 });
 
 QUnit.test("'appointmentFocused' should fire restoreScrollTop", function(assert) {
@@ -1232,6 +1215,49 @@ QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordanc
     assert.equal(countPerCell, "unlimited", "overlappingMode is OK");
 });
 
+QUnit.test("'isAdaptive' subscribe should work correctly", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        adaptivityEnabled: true
+    });
+
+    assert.ok(this.instance.fire("isAdaptive"), "Scheduler is adaptive");
+
+    this.instance.option("adaptivityEnabled", false);
+
+    this.clock.tick(300);
+    assert.notOk(this.instance.fire("isAdaptive"), "Scheduler isn't adaptive");
+});
+
+QUnit.test("'getDropDownAppointmentWidth' and 'getDropDownAppointmentHeight' subscribes should work correctly", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        adaptivityEnabled: true
+    });
+    this.clock.tick(300);
+
+    let width = this.instance.fire("getDropDownAppointmentWidth");
+    let height = this.instance.fire("getDropDownAppointmentHeight");
+
+    assert.equal(height, 28, "Returned height is ok");
+    assert.equal(width, 28, "Returned width is ok");
+});
+
+QUnit.test("'supportCompactDropDownAppointments' should return true for some views", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["motnh", "week"],
+        currentView: "week"
+    });
+    this.clock.tick(300);
+
+    assert.ok(this.instance.fire("supportCompactDropDownAppointments"));
+
+    this.instance.option("currentView", "month");
+
+    assert.notOk(this.instance.fire("supportCompactDropDownAppointments"));
+});
+
 QUnit.module("Agenda", {
     beforeEach: function() {
         this.createInstance = function(options) {
@@ -1481,6 +1507,7 @@ QUnit.module("Grouping By Date", {
     beforeEach: function() {
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.scheduler = new SchedulerTestWrapper(this.instance);
         };
         fx.off = true;
     },
@@ -2019,4 +2046,48 @@ QUnit.test("'getResizableStep' should return correct step, groupByDate = true, M
         cellWidth = $cell.get(0).getBoundingClientRect().width;
 
     assert.roughEqual(this.instance.fire("getResizableStep"), cellWidth * 3, 3, "Step is OK");
+});
+
+QUnit.test("Appointment is rendered in allDay panel if endDate is out of view, groupByDate = true (T742932)", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+
+    this.createInstance({
+        currentView: "day",
+        dataSource: [
+            {
+                text: "Website Re-Design Plan",
+                priorityId: 2,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 23, 11, 30)
+            }],
+        views: [{
+            type: "day",
+            name: "Day"
+        }],
+        width: 800,
+        groupByDate: true,
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 16,
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: "Priority"
+            }
+        ],
+    });
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, "Appointment is rendered");
 });

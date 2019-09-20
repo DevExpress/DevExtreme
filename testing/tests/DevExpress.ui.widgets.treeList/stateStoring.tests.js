@@ -140,5 +140,5 @@ QUnit.test("The expandRowKeys state should not persist when autoExpandAll is ena
     });
 
     // assert
-    assert.notOk(state.hasOwnProperty("expandedRowKeys"), "state doesn't have expandedRowKeys");
+    assert.notOk(Object.prototype.hasOwnProperty.call(state, "expandedRowKeys"), "state doesn't have expandedRowKeys");
 });

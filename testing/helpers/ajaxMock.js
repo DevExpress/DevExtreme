@@ -1,5 +1,6 @@
 var ajax = require("core/utils/ajax");
 var extend = require("core/utils/extend").extend;
+var typeUtils = require("core/utils/type");
 var $ = require("jquery");
 var originSendRequest = ajax.sendRequest;
 var urlMap = {};
@@ -28,7 +29,7 @@ exports.setup = function(options) {
         var mockOptions = findUrlOptions(request.url);
         var jQueryTextStatus = mockOptions.jQueryTextStatus;
 
-        response.status = mockOptions.status || 200;
+        response.status = typeUtils.isDefined(mockOptions.status) ? mockOptions.status : 200;
         response.statusText = mockOptions.statusText || "200 OK";
         response.responseText = mockOptions.responseText;
 
@@ -37,7 +38,7 @@ exports.setup = function(options) {
         }
 
         timers.push(setTimeout(function() {
-            if(response.status === 404 || jQueryTextStatus === "parsererror") {
+            if(response.status === 0 || response.status === 404 || jQueryTextStatus === "parsererror") {
                 response.error = jQueryTextStatus ? {} : { message: response.statusText };
                 deferred.rejectWith(response, [ response, jQueryTextStatus || "error", mockOptions]);
             } else {

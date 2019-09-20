@@ -23,6 +23,9 @@ var COLUMN_CHOOSER_CLASS = "column-chooser",
     COLUMN_CHOOSER_ICON_NAME = "column-chooser",
     COLUMN_CHOOSER_ITEM_CLASS = "dx-column-chooser-item",
 
+    TREEVIEW_NODE_SELECTOR = ".dx-treeview-node",
+    CHECKBOX_SELECTOR = ".dx-checkbox",
+
     CLICK_TIMEOUT = 300,
 
     processItems = function(that, chooserColumns) {
@@ -38,7 +41,8 @@ var COLUMN_CHOOSER_CLASS = "column-chooser",
                     allowHiding: column.allowHiding,
                     expanded: true,
                     id: column.index,
-                    disabled: column.allowHiding === false,
+                    disabled: false,
+                    disableCheckBox: column.allowHiding === false,
                     parentId: isDefined(column.ownerBand) ? column.ownerBand : null
                 };
 
@@ -135,7 +139,6 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             columnChooserOptions = that.option("columnChooser"),
             themeName = themes.current(),
             isGenericTheme = themes.isGeneric(themeName),
-            isAndroid5Theme = themes.isAndroid5(themeName),
             isMaterial = themes.isMaterial(themeName),
             dxPopupOptions = {
                 visible: false,
@@ -144,7 +147,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 dragEnabled: true,
                 resizeEnabled: true,
                 toolbarItems: [
-                    { text: columnChooserOptions.title, toolbar: "top", location: isGenericTheme || isAndroid5Theme || isMaterial ? "before" : "center" }
+                    { text: columnChooserOptions.title, toolbar: "top", location: isGenericTheme || isMaterial ? "before" : "center" }
                 ],
                 position: that.getController("columnChooser").getPosition(),
                 width: columnChooserOptions.width,
@@ -199,14 +202,32 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 showCheckBoxesMode: "none",
                 rootValue: null,
                 searchEnabled: columnChooser.allowSearch,
-                searchTimeout: columnChooser.searchTimeout
+                searchTimeout: columnChooser.searchTimeout,
+                onItemRendered: function(e) {
+                    if(e.itemData.disableCheckBox) {
+                        let $treeViewNode = $(e.itemElement).closest(TREEVIEW_NODE_SELECTOR),
+                            checkBoxInstance,
+                            $checkBox;
+
+                        if($treeViewNode.length) {
+
+                            $checkBox = $treeViewNode.find(CHECKBOX_SELECTOR);
+
+                            if($checkBox.length) {
+                                checkBoxInstance = $checkBox.data("dxCheckBox");
+
+                                checkBoxInstance && checkBoxInstance.option("disabled", true);
+                            }
+                        }
+                    }
+                }
             };
 
+        scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
+        scrollTop = scrollableInstance && scrollableInstance.scrollTop();
 
-        if(isSelectMode) {
-            scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
-            scrollTop = scrollableInstance && scrollableInstance.scrollTop();
-            !this._columnsController.isBandColumnsUsed() && $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
+        if(isSelectMode && !this._columnsController.isBandColumnsUsed()) {
+            $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
         }
 
         treeViewConfig.onContentReady = function(e) {

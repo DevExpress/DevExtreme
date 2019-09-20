@@ -2,6 +2,7 @@
     font-family: "dx.material@{MATERIAL_COLOR_POSTFIX}@{MATERIAL_SIZE_POSTFIX}";
 }
 
+// stylelint-disable declaration-no-important
 .dx-theme-accent-as-text-color {
     color: @base-accent !important;
 }
@@ -53,6 +54,7 @@
 .dx-theme-border-color {
     border-color: @base-border-color !important;
 }
+// stylelint-enable declaration-no-important
 
 .dx-base-typography() {
     color: @typography-color;
@@ -61,15 +63,17 @@
     font-family: @base-font-family;
     line-height: @MATERIAL_BASE_LINE_HEIGHT;
 
-    input, textarea {
+    input,
+    textarea {
         font-family: @base-font-family;
         line-height: @MATERIAL_BASE_LINE_HEIGHT;
     }
 }
 
-.disabled-widget(@opacity: @texteditor-disabled-opacity) {
+.disabled-widget(@opacity: @texteditor-disabled-opacity) { // stylelint-disable-line selector-class-pattern
     opacity: @opacity;
     .user-select(none);
+
     zoom: 1;
     cursor: default;
 }
@@ -88,7 +92,7 @@
     pointer-events: none;
     font-weight: 500;
     background-color: @badge-invalid-bg;
-    color: @base-selected-text-color;
+    color: @base-inverted-text-color;
     content: '!';
     position: absolute;
     top: 50%;
@@ -130,4 +134,46 @@
     transition: transform 0.1s linear, opacity 0.1s linear;
     transform: scale(1.01);
     opacity: 0;
+}
+
+.dx-dropdownlist-list-appearance() {
+    height: 100%;
+
+    &.dx-popup-wrapper .dx-overlay-content {
+        box-shadow: @dropdown-widgets-shadow;
+        border-top-width: 0;
+        border-bottom-width: 1px;
+
+        &.dx-dropdowneditor-overlay-flipped {
+            border-top-width: 1px;
+            border-bottom-width: 0;
+        }
+    }
+
+    .dx-popup-content {
+        height: 100%;
+        padding: 1px;
+    }
+
+    .dx-list {
+        height: 100%;
+        min-height: 33px;
+
+        &:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+            padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING @MATERIAL_LIST_ITEM_HORIZONTAL_PADDING - 1px;
+        }
+    }
+
+    .dx-list-select-all {
+        padding: @MATERIAL_LIST_ITEM_VERTICAL_PADDING + 2px 0 @MATERIAL_LIST_ITEM_VERTICAL_PADDING - 2px;
+    }
+
+    .dx-list-item,
+    .dx-empty-message {
+        border-top: 0;
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
 }

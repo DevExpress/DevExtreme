@@ -44,20 +44,22 @@ QUnit.testStart(() => {
             <div style="position: fixed; right: 0; bottom: 0; width: 500px; height: 500px;">\
                 <div id="selectBoxWithoutScroll"></div>\
             </div>\
+            <div id="test-container" style="overflow-hidden"></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
 });
 
-const POPUP_CLASS = "dx-selectbox-popup",
-    POPUP_CONTENT_CLASS = "dx-popup-content",
-    LIST_ITEM_CLASS = "dx-list-item",
-    LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
-    DX_DROP_DOWN_BUTTON = "dx-dropdowneditor-button",
-    STATE_FOCUSED_CLASS = "dx-state-focused",
-    TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container",
-    PLACEHOLDER_CLASS = "dx-placeholder",
-    TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const POPUP_CLASS = "dx-selectbox-popup";
+const POPUP_CONTENT_CLASS = "dx-popup-content";
+const LIST_CLASS = "dx-list";
+const LIST_ITEM_CLASS = "dx-list-item";
+const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
+const DX_DROP_DOWN_BUTTON = "dx-dropdowneditor-button";
+const STATE_FOCUSED_CLASS = "dx-state-focused";
+const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
+const PLACEHOLDER_CLASS = "dx-placeholder";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
 const KEY_DOWN = "ArrowDown";
 const KEY_ENTER = "Enter";
@@ -1305,6 +1307,26 @@ QUnit.module("widget options", moduleSetup, () => {
         assert.equal($input.val(), "", "input text has been cleared");
     });
 
+    QUnit.testInActiveWindow("don't rise valueChange event on focusout in readonly state with searchEnabled", (assert) => {
+        const valueChangedMock = sinon.spy();
+        const $element = $("#selectBox").dxSelectBox({
+                items: [1, 2, 3],
+                searchEnabled: true,
+                readOnly: true,
+                onValueChanged: valueChangedMock,
+                value: 4
+            }),
+            element = $element.dxSelectBox("instance"),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        $input.trigger("focusin");
+        $input.trigger("blur");
+
+        assert.equal(element.option("value"), 4, "value should not be changed");
+        assert.equal($input.val(), "", "non-exist value should not be displayed");
+        assert.notOk(valueChangedMock.called, "valueChange event should not be rised");
+    });
+
     QUnit.testInActiveWindow("allowClearing option on init", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
                 items: [1, 2, 3],
@@ -1579,17 +1601,16 @@ QUnit.module("editing", moduleSetup, () => {
             acceptCustomValue: false,
             items: ["item1", "item2"],
             value: "item1",
-            searchTimeout: 0
+            searchTimeout: 0,
+            onFocusOut: function() {
+                assert.equal($input.val(), "item1", "value was reset");
+            }
         });
 
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
         keyboardMock($input).type("test");
 
-        $($input).on("focusout", () => {
-            assert.equal($input.val(), "item1", "value was reset");
-        });
-
-        $input.triggerHandler("focusout");
+        $selectBox.dxSelectBox("blur");
     });
 
     QUnit.testInActiveWindow("input value is reset on pressing enter key when searchEnabled is true and acceptCustomValue is false", (assert) => {
@@ -1599,7 +1620,10 @@ QUnit.module("editing", moduleSetup, () => {
             items: ["item1", "item2"],
             searchTimeout: 0,
             value: "item2",
-            opened: true
+            opened: true,
+            onFocusOut: function() {
+                assert.equal($input.val(), "item1", "value was reset");
+            }
         });
 
         const $listItem = $(toSelector(LIST_ITEM_CLASS)).eq(0).trigger("dxclick");
@@ -1611,11 +1635,7 @@ QUnit.module("editing", moduleSetup, () => {
         keyboard.type("test");
         keyboard.keyDown("enter");
 
-        $($input).on("focusout", () => {
-            assert.equal($input.val(), "item1", "value was reset");
-        });
-
-        $input.triggerHandler("focusout");
+        $selectBox.dxSelectBox("blur");
     });
 
     QUnit.test("Enter key press prevent default when popup is opened or acceptCustomValue is true", (assert) => {
@@ -1731,7 +1751,10 @@ QUnit.module("editing", moduleSetup, () => {
             dataSource: dataSource,
             displayExpr: "text",
             valueExpr: "this",
-            value: dataSource[0]
+            value: dataSource[0],
+            onFocusOut: function() {
+                assert.equal($input.val(), "one", "value restored");
+            }
         });
 
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
@@ -1740,11 +1763,7 @@ QUnit.module("editing", moduleSetup, () => {
         keyboard.type("test");
         keyboard.keyDown("enter");
 
-        $($input).on("focusout", () => {
-            assert.equal($input.val(), "one", "value restored");
-        });
-
-        $input.triggerHandler("focusout");
+        $selectBox.dxSelectBox("blur");
     });
 
     QUnit.testInActiveWindow("input value should be restored on focusout if clearing is manually prevented", (assert) => {
@@ -1758,19 +1777,18 @@ QUnit.module("editing", moduleSetup, () => {
             },
             value: 1
         });
-
+        const instance = $selectBox.dxSelectBox("instance");
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        $input.focus();
+        instance.focus();
         $input.val("");
-        $input.triggerHandler("focusout");
+        instance.blur();
 
-        $input.focus();
-        $input.triggerHandler("focusout");
+        instance.focus();
+        instance.blur();
 
         assert.equal($input.val(), "1", "value have been restored");
 
-        const instance = $selectBox.dxSelectBox("instance");
         assert.equal(instance.option("selectedItem"), 1, "selectedItem have been restored");
         assert.equal(instance.option("value"), 1, "value have been restored");
     });
@@ -3280,7 +3298,6 @@ QUnit.module("Scrolling", {
 });
 
 QUnit.module("Async tests", {}, () => {
-
     QUnit.testInActiveWindow("Value should be reset after on selectedItem after focusout", (assert) => {
         const done = assert.async(),
             items = [1, 2],
@@ -3772,6 +3789,75 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         assert.strictEqual(instance.option("value"), 4, "downArrow");
     });
 
+    QUnit.test("downArrow should load next page", (assert) => {
+        const $element = $("#selectBox").dxSelectBox({
+                dataSource: {
+                    store: [1, 2, 3, 4, 5, 6],
+                    paginate: true,
+                    pageSize: 2
+                },
+                value: null,
+                focusStateEnabled: true,
+                opened: false,
+                deferRendering: true
+            }),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+            instance = $element.dxSelectBox("instance"),
+            keyboard = keyboardMock($input);
+
+        keyboard.press("down");
+        keyboard.press("down");
+        keyboard.press("down");
+        keyboard.press("down");
+
+        const $list = $(instance.content()).find(".dx-list");
+
+        assert.ok($list.length, "list is rendered");
+        assert.strictEqual(instance.option("value"), 4, "value is correct");
+        assert.strictEqual($list.find(".dx-list-item").text(), "1234", "all previous list items are loaded");
+    });
+
+    [144, 145].forEach((testHeight) => {
+        QUnit.test(`downArrow should load next page if popup container has ${testHeight % 2 ? "odd" : "even"} height`, (assert) => {
+            this.clock.restore();
+            assert.expect(1);
+            const done = assert.async();
+            const testContainer = $("#test-container").height(testHeight);
+
+            const $element = $("#selectBox").dxSelectBox({
+                    dataSource: {
+                        store: [1, 2, 3, 4, 5, 6],
+                        paginate: true,
+                        pageSize: 4
+                    },
+                    value: null,
+                    focusStateEnabled: true,
+                    opened: false,
+                    deferRendering: true,
+                    dropDownOptions: {
+                        container: testContainer
+                    }
+                }),
+                $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+                instance = $element.dxSelectBox("instance"),
+                $dropDownButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON)),
+                keyboard = keyboardMock($input);
+
+            $dropDownButton.trigger("dxclick");
+            keyboard.press("down");
+            keyboard.press("down");
+            keyboard.press("down");
+            keyboard.press("down");
+
+            setTimeout(() => {
+                const $list = $(instance.content()).find(`.${LIST_CLASS}`);
+                assert.strictEqual($list.find(`.${LIST_ITEM_CLASS}`).text(), "123456", "all list items are loaded");
+                testContainer.height("auto");
+                done();
+            }, TIME_TO_WAIT);
+        });
+    });
+
     QUnit.test("value should be correctly changed via arrow keys when grouped datasource is used", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
             dataSource: new DataSource({
@@ -4124,6 +4210,23 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         assert.equal($input.val(), 1, "chosen value is correct");
     });
 
+    QUnit.test("Down key should not loop if dataSource is loading", (assert) => {
+        const ds = new DataSource(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+        const $element = $("#selectBox").dxSelectBox({
+            dataSource: ds,
+            pageSize: 5,
+            opened: true,
+            value: "9"
+        });
+
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        ds.beginLoading();
+        keyboardMock($input)
+            .keyDown("down");
+
+        assert.equal($input.val(), "9", "chosen value is correct");
+    });
+
     QUnit.testInActiveWindow("value should be reset to the previous one on the 'tab' press if popup is closed", (assert) => {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "not actual");
@@ -4436,6 +4539,34 @@ QUnit.module("keyboard navigation 'TAB' button", moduleSetup, () => {
 });
 
 QUnit.module("acceptCustomValue mode", moduleSetup, () => {
+    QUnit.test("All items should be displayed when widget focused out before search completion", (assert) => {
+        const items = ["aaa", "bbb"];
+        const $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            acceptCustomValue: true,
+            dataSource: items,
+            opened: true,
+            searchTimeout: 500
+        });
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        $input.focus();
+
+        keyboard.press("down")
+            .press("enter")
+            .press("end")
+            .type("Xsdx");
+
+        $input.blur();
+        pointerMock($input).start().click();
+
+        this.clock.tick(500);
+
+        const $listItems = $(`.${POPUP_CONTENT_CLASS} .${LIST_ITEM_CLASS}`);
+        assert.equal($listItems.length, items.length, "all items are displayed");
+        assert.equal($listItems.text(), items.join(''), "items are displayed correctly");
+    });
 
     QUnit.test("input value can be edited when acceptCustomValue=true", (assert) => {
         const $selectBox = $("#selectBox").dxSelectBox({
@@ -4489,6 +4620,22 @@ QUnit.module("acceptCustomValue mode", moduleSetup, () => {
             .change();
 
         assert.equal($selectBox.dxSelectBox("option", "value"), "0", "0 value was be set");
+    });
+
+    QUnit.test("press on tab should close popup after custom value input if search is enabled", (assert) => {
+        const $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            acceptCustomValue: true,
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+        const instance = $selectBox.dxSelectBox("instance");
+
+        keyboard
+            .type("test")
+            .press("tab");
+
+        assert.notOk(instance.option("opened"), "popup is closed");
     });
 
     QUnit.test("custom value should be added on enter key when acceptCustomValue=true", (assert) => {
@@ -4625,7 +4772,7 @@ QUnit.module("focus policy", {
         this.clock.tick(TIME_TO_WAIT);
         assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), "a", "filter should not be cleared before focusout");
 
-        $input.focusout();
+        this.instance.blur();
         this.instance.option("opened", false);
         $($input).trigger($.Event("keydown", { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
@@ -4635,10 +4782,10 @@ QUnit.module("focus policy", {
     QUnit.test("input keep focus when popup is opened by click on button", (assert) => {
         const $arrow = this.$element.find(toSelector(TEXTEDITOR_BUTTONS_CONTAINER_CLASS));
 
-        this.$input.focusin();
+        this.instance.focus();
         assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is focused");
 
-        $arrow.focusin();
+        this.instance.focus();
         $($arrow).trigger("dxclick");
         assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is steel focused");
     });
@@ -4655,12 +4802,10 @@ QUnit.module("focus policy", {
             }
         });
 
-        const $input = this.$element.find("input");
-
-        $input.focusin();
+        this.instance.focus();
 
         // act
-        $input.focusout();
+        this.instance.blur();
 
         // assert
         assert.equal(focusOutCallCount, 1, "onFocusOut called once");
@@ -4676,7 +4821,7 @@ QUnit.module("focus policy", {
         });
 
         // act
-        const $input = this.$element.find("input");
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type("b");
 
         this.clock.tick(TIME_TO_WAIT);
@@ -4694,7 +4839,7 @@ QUnit.module("focus policy", {
         });
 
         try {
-            const $input = this.$element.find("input");
+            const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             $input.focusin();
 
             keyboardMock($input).type("b");
@@ -4705,4 +4850,95 @@ QUnit.module("focus policy", {
             assert.ok(false, "Exception: " + e);
         }
     });
+
+    QUnit.testInActiveWindow("dxSelectBox should save focus after inner buttons were clicked", (assert) => {
+        const focusStub = sinon.stub();
+        const blurStub = sinon.stub();
+        const clickStub = sinon.stub();
+
+        this.instance.option({
+            onFocusIn: focusStub,
+            onFocusOut: blurStub,
+            buttons: [{
+                name: "test",
+                options: {
+                    onClick: clickStub,
+                    icon: "home"
+                }
+            }]
+        });
+
+        const actionButtonElement = this.instance.getButton("test").element();
+
+        this.instance.focus();
+        assert.strictEqual(focusStub.callCount, 1, "FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+        assert.strictEqual(clickStub.callCount, 0, "action button is not clicked");
+
+        $(actionButtonElement).trigger("dxclick");
+        assert.strictEqual(focusStub.callCount, 1, "new FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+        assert.strictEqual(clickStub.callCount, 1, "action button clicked");
+    });
+
+    QUnit.testInActiveWindow("dxSelectBox should save focus after inner buttons were focused", (assert) => {
+        const focusStub = sinon.stub();
+        const blurStub = sinon.stub();
+
+        this.instance.option({
+            onFocusIn: focusStub,
+            onFocusOut: blurStub,
+            buttons: [{
+                name: "test",
+                options: {
+                    icon: "home"
+                }
+            }]
+        });
+
+        const actionButton = this.instance.getButton("test");
+
+        this.instance.focus();
+        assert.strictEqual(focusStub.callCount, 1, "FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+
+        actionButton.focus();
+        assert.strictEqual(focusStub.callCount, 1, "new FocusIn event has not been triggered");
+        assert.strictEqual(blurStub.callCount, 0, "FocusOut event has not been triggered");
+    });
+});
+
+QUnit.module("aria accessibility", () => {
+    const checkAsserts = (expectedValues) => {
+        const { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
+
+        QUnit.assert.strictEqual($target.attr("role"), role, "role");
+        QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
+        QUnit.assert.strictEqual(!!$target.attr("aria-owns"), isOwns, "owns");
+        QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
+    };
+
+    if(devices.real().deviceType === "desktop") {
+        [true, false].forEach((searchEnabled) => {
+            QUnit.test(`aria attributes, searchEnabled: ${searchEnabled}`, function() {
+                let $element = $("#selectBox").dxSelectBox({
+                    opened: true,
+                    searchEnabled: searchEnabled
+                });
+
+                let $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                let list = $(`.${LIST_CLASS}`).dxList("instance");
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
+                checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
+
+                $element.dxSelectBox("instance").option("searchEnabled", !searchEnabled);
+                $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: undefined });
+                checkAsserts({ $target: $input, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
+                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
+            });
+        });
+    }
 });

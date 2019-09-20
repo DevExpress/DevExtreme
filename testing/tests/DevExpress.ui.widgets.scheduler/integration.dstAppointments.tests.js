@@ -186,7 +186,7 @@ QUnit.test("Second recurring appointment should have right width if previous app
     assert.roughEqual($secondRecAppointment.outerWidth(), cellWidth * duration, 2.001, "Appt width is correct after the day of the time ajusting");
 });
 
-QUnit.test("Recurrence exception should not be rendered if exception goes after DS adjusting", function(assert) {
+QUnit.test("Recurrence exception should not be rendered if exception goes after adjusting AEST-> AEDT (T619455)", function(assert) {
     var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-39600000);
     try {
         this.createInstance({
@@ -235,5 +235,5 @@ QUnit.test("Appointment should rendered correctly if end date appointment coinci
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).first(),
         cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).first().outerWidth();
 
-    assert.equal($appointment.outerWidth(), cellWidth, 'Appointment width is correct after translation oт STD');
+    assert.roughEqual($appointment.outerWidth(), cellWidth, 1.1, 'Appointment width is correct after translation oт STD');
 });

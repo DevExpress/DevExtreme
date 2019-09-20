@@ -1,5 +1,6 @@
 var $ = require("jquery"),
-    devices = require("core/devices");
+    devices = require("core/devices"),
+    browser = require("core/utils/browser");
 
 require("ui/text_box");
 require("common.css!");
@@ -55,10 +56,12 @@ QUnit.test("init with options", function(assert) {
 
 QUnit.test("'maxLength' option", function(assert) {
     var originalDevices = devices.real();
+    var originalIE = browser.msie;
     devices.real({
-        platform: "not android",
+        platform: "not android and not ie",
         version: ["32"]
     });
+    browser.msie = false;
 
     try {
         var element = $("#textbox").dxTextBox({ maxLength: "5" }),
@@ -66,6 +69,7 @@ QUnit.test("'maxLength' option", function(assert) {
         assert.equal(input.attr("maxLength"), "5");
     } finally {
         devices.real(originalDevices);
+        browser.msie = originalIE;
     }
 });
 

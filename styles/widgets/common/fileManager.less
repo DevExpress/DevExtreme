@@ -1,14 +1,14 @@
 .dx-filemanager {
+    height: 500px;
     display: flex;
     flex-direction: column;
     border: 1px solid;
-    
+
     .dx-filemanager-toolbar {
         padding: 6px 10px;
 
         .dx-filemanager-toolbar-separator-item {
             width: 1px;
-            height: 36px;
             margin-right: 5px;
         }
     }
@@ -18,24 +18,24 @@
         height: 100%;
         border-top: 1px solid;
         box-sizing: border-box;
+        overflow: hidden;
 
-        .dx-filemanager-dirs-tree {
-            min-width: 20%;
+        .dx-filemanager-dirs-panel {
+            min-width: 250px;
+            max-width: 300px;
             padding: 5px 10px;
         }
     }
 
-    .dx-filemanager-view-separator {
-        min-width: 2px;
+    .dx-filemanager-dirs-panel {
+        height: 100%;
+        border-right: 1px solid;
     }
-    .dx-filemanager-view-separator:hover {
-        cursor: col-resize;
-    }
-    
+
     .dx-filemanager-breadcrumbs {
         padding: 6px 11px;
         border-bottom: 1px solid;
-        
+
         .dx-menu-horizontal .dx-menu-item-wrapper {
             vertical-align: middle;
         }
@@ -72,38 +72,33 @@
         top: -5000px;
         left: -5000px;
     }
-    
+
     .dx-filemanager-fileuploader .dx-filemanager-fileuploader-fileinput {
         display: none;
     }
 
-    .dx-filemanager-file-actions-button {
-       visibility: hidden;
-       float: right;
-       border: none;
-       background-color: transparent;
+    .dx-row {
+        .dx-filemanager-file-actions-button {
+            float: right;
 
-       .dx-button-content {
-            padding: 10px 7px;
-       }
-       
-       i {
-           font-style: normal;
-       }
+            .dx-button-content {
+                padding: 10px 14px;
+            }
+        }
+
+        &.dx-selection .dx-filemanager-file-actions-button,
+        &.dx-state-hover .dx-filemanager-file-actions-button {
+            visibility: visible;
+        }
     }
 
-    .dx-row.dx-selection .dx-filemanager-file-actions-button,
-    .dx-row.dx-state-hover .dx-filemanager-file-actions-button {
-        visibility: visible;
-    }
-    
     .dx-filemanager-items-panel {
         width: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
     }
-    
+
     .dx-filemanager-thumbnails {
         width: 100%;
         height: 100%;
@@ -171,17 +166,93 @@
             height: 100%;
         }
 
-        .dx-filemanager-details-item-thumbnail {
-            font-size: 18px;
+        .dx-filemanager-details-item-name-wrapper {
+            display: flex;
+            align-items: flex-start;
+
+            .dx-filemanager-details-item-name {
+                flex: 1 auto;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+}
+
+.dx-filemanager-file-actions-button {
+    visibility: hidden;
+    text-align: center;
+
+    &.dx-widget {
+        line-height: 100%;
+    }
+
+    .dx-button {
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+
+        .dx-button-content {
+            padding: 10px 11px;
+        }
+
+        i {
+            font-style: normal;
         }
     }
 
+    &.dx-filemanager-file-actions-button-activated,
+    &:hover {
+        visibility: visible;
+    }
+}
+
+.dx-filemanager-dirs-tree {
+    .dx-treeview-item-content {
+        display: flex;
+        align-items: flex-end;
+
+        .dx-filemanager-dirs-tree-item-text {
+            flex: 1 auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .dx-filemanager-file-actions-button {
+        margin-top: 1px;
+        margin-bottom: -1px;
+    }
+
+    .dx-filemanager-focused-item .dx-filemanager-file-actions-button,
+    .dx-treeview-item.dx-state-hover .dx-filemanager-file-actions-button {
+        visibility: visible;
+    }
 }
 
 .dx-filemanager-dialog.dx-filemanager-dialog-folder-chooser,
 .dx-filemanager-progresspanel {
     height: 100%;
     overflow: auto;
+}
+
+.dx-filemanager-dialog-folder-chooser > div {
+    height: 100%;
+}
+
+.dx-filemanager-dialog-popup > .dx-overlay-content {
+    min-width: 300px;
+    max-width: 400px;
+    min-height: 300px;
+    max-height: 400px;
+}
+
+.dx-filemanager-dialog-name-editor-popup > .dx-overlay-content {
+    max-width: 340px;
+    min-height: 180px;
+    max-height: 180px;
 }
 
 .dx-filemanager-progresspanel {
