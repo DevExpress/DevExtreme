@@ -421,6 +421,7 @@ var Sortable = Draggable.inherit({
             case "dropFeedbackMode":
             case "itemPoints":
             case "fromIndex":
+            case "animation":
                 break;
             case "dropInsideItem":
                 this._optionChangedDropInsideItem(args);
