@@ -46,7 +46,7 @@ export class TooltipStrategyBase {
             this.tooltip.option("contentTemplate", container => {
                 if(!this.list) {
                     const listElement = $("<div>");
-                    container.append(listElement);
+                    $(container).append(listElement);
                     this.list = this._createList(listElement, dataList);
                 }
             });
