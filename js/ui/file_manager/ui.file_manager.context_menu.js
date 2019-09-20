@@ -10,6 +10,7 @@ const FILEMANAGER_CONTEXT_MEMU_CLASS = "dx-filemanager-context-menu";
 const DEFAULT_CONTEXT_MENU_ITEMS = {
     create: {},
     upload: {},
+    download: {},
     rename: {},
     move: {},
     copy: {},

@@ -377,13 +377,13 @@ class FileManager extends Widget {
                 ],
 
                 fileItems: [
-                    "move", "copy", "rename", "separator", "delete", "refresh", "clear"
+                    "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear"
                 ]
             },
 
             contextMenu: {
                 items: [
-                    "create", "upload", "rename", "move", "copy", "delete", "refresh"
+                    "create", "upload", "rename", "move", "copy", "delete", "refresh", "download"
                 ]
             },
 
@@ -510,7 +510,13 @@ class FileManager extends Widget {
                  * @type boolean
                  * @default false
                  */
-                upload: false
+                upload: false,
+                /**
+                 * @name dxFileManagerOptions.permissions.download
+                 * @type boolean
+                 * @default false
+                 */
+                download: false
             }
         });
     }

@@ -74,6 +74,18 @@ export default class CustomFileProvider extends FileProvider {
         this._abortFileUploadFunction = this._ensureFunction(options.abortFileUpload);
 
         /**
+         * @name CustomFileProviderOptions.downloadItems
+         * @type function
+         */
+        this._downloadItemsFunction = this._ensureFunction(options.downloadItems);
+
+        /**
+         * @name CustomFileProviderOptions.getItemsContent
+         * @type function
+         */
+        this._getItemsContentFunction = this._ensureFunction(options.getItemsContent);
+
+        /**
          * @name CustomFileProviderOptions.uploadChunkSize
          * @type number
          */
@@ -111,6 +123,14 @@ export default class CustomFileProvider extends FileProvider {
 
     abortFileUpload(fileData, chunksInfo, destinationDirectory) {
         return this._abortFileUploadFunction(fileData, chunksInfo, destinationDirectory);
+    }
+
+    downloadItems(items) {
+        return this._downloadItemsFunction(items);
+    }
+
+    getItemsContent(items) {
+        return this._getItemsContentFunction(items);
     }
 
     getFileUploadChunkSize() {

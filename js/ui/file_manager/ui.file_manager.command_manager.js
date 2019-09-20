@@ -45,7 +45,7 @@ export class FileManagerCommandManager {
                 name: "download",
                 text: "Download",
                 icon: "download",
-                enabled: false
+                enabled: this._permissions.download
             },
             {
                 name: "upload",
