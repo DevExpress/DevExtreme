@@ -1,7 +1,7 @@
 import "common.css!";
 import "generic_light.css!";
 
-import { SchedulerTestWrapper } from "./helpers.js";
+import { SchedulerTestWrapper, initTestMarkup, createWrapper } from "./helpers.js";
 
 import $ from "jquery";
 import devices from "core/devices";
@@ -13,8 +13,78 @@ import resizeCallbacks from "core/utils/resize_callbacks";
 import "ui/scheduler/ui.scheduler";
 import "ui/switch";
 
-QUnit.testStart(function() {
-    $("#qunit-fixture").html('<div id="scheduler"></div>');
+QUnit.testStart(() => initTestMarkup());
+
+const moduleConfig = {
+    beforeEach() {
+        fx.off = true;
+    },
+
+    afterEach() {
+        fx.off = false;
+    }
+};
+
+QUnit.module("Drag and drop appointments", moduleConfig, () => {
+    const defaultData = [
+        {
+            text: "recurrent-app",
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            recurrenceRule: "FREQ=DAILY;COUNT=5"
+        }, {
+            text: "common-app",
+            startDate: new Date(2017, 4, 9, 9, 30),
+            endDate: new Date(2017, 4, 9, 11),
+        }
+    ];
+
+    const createScheduler = () => {
+        return createWrapper({
+            dataSource: defaultData,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2017, 4, 25),
+            firstDayOfWeek: 1,
+            startDayHour: 9,
+            height: 600
+        });
+    };
+
+
+    QUnit.test("sdfdf", assert => {
+        const scheduler = createScheduler();
+        scheduler.drawControl();
+
+        assert.notOk(scheduler.appointmentPopup.isVisible(), "appointment popup should be invisible in on init");
+
+        scheduler.appointments.click(scheduler.appointments.getAppointmentCount() - 1);
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentPopup.form.setSubject("NEW SUBJECT");
+
+        assert.ok(scheduler.appointmentPopup.isVisible(), "appointment popup should be visible after showAppointmentPopup method");
+        scheduler.appointmentPopup.clickDoneButton();
+
+        const dataItem = scheduler.instance.option("dataSource")[1];
+        assert.equal(Object.keys(dataItem).length, 3, "resulted");
+        assert.equal(dataItem.text, "NEW SUBJECT", "sddsfsdf");
+
+        scheduler.appointments.click(0);
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentPopup.dialog.clickEditSeries();
+
+        assert.ok(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), "sdfsdf");
+        assert.equal(scheduler.appointmentPopup.form.getSubject(), defaultData[0].text, "sdfsdf");
+
+        scheduler.appointmentPopup.clickDoneButton();
+
+        scheduler.appointments.click();
+        scheduler.tooltip.clickOnItem();
+
+        // const t = scheduler.appointmentPopup.form.isRecurrenceEditorVisible();
+        assert.notOk(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), "sdfsdf");
+        assert.equal(scheduler.appointmentPopup.form.getSubject(), "NEW SUBJECT", "sdfsdf");
+    });
 });
 
 const createInstance = function(options) {

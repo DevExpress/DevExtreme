@@ -106,6 +106,27 @@ export class SchedulerTestWrapper {
         };
 
         this.appointmentPopup = {
+            form: {
+                getSubjectTextBox: () => {
+                    const subjectElement = this.appointmentPopup.getPopup().find(".dx-textbox").eq(0);
+                    return subjectElement.dxTextBox("instance");
+                },
+                setSubject: (text) => {
+                    const textBox = this.appointmentPopup.form.getSubjectTextBox();
+                    textBox.option("value", text);
+                },
+                getSubject: () => {
+                    const textBox = this.appointmentPopup.form.getSubjectTextBox();
+                    return textBox.option("value");
+                },
+                isRecurrenceEditorVisible: () => $(".dx-recurrence-editor-container").is(":visible")
+            },
+
+            dialog: {
+                clickEditSeries: () => $(".dx-dialog").find(".dx-dialog-button").eq(0).trigger("dxclick"),
+                clickEditAppointment: () => $(".dx-dialog").find(".dx-dialog-button").eq(1).trigger("dxclick")
+            },
+
             getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find(".dx-scrollable-container").get(0);
@@ -115,7 +136,7 @@ export class SchedulerTestWrapper {
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick"),
             setInitialPopupSize: size => {
-                const _createPopupConfig = this.instance._appointmentPopup._createPopupConfig; // TODO
+                const _createPopupConfig = this.instance._appointmentPopup._createPopupConfig;
                 this.instance._appointmentPopup._createPopupConfig = () => {
                     const config = _createPopupConfig.call(this.instance._appointmentPopup);
                     return extend(config, size);
