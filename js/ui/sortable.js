@@ -195,10 +195,7 @@ var Sortable = Draggable.inherit({
             let itemPoint = itemPoints[i],
                 centerPosition = itemPoints[i + 1] && (itemPoint[axisName] + itemPoints[i + 1][axisName]) / 2;
 
-            if(centerPosition > cursorPosition) {
-                this._updatePlaceholderPosition(e, itemPoint);
-                break;
-            } else if(centerPosition === undefined) {
+            if(centerPosition > cursorPosition || centerPosition === undefined) {
                 this._updatePlaceholderPosition(e, itemPoint);
                 break;
             }
@@ -210,17 +207,12 @@ var Sortable = Draggable.inherit({
     },
 
     _createPlaceholder: function() {
-        let sourceDraggable = this._getSourceDraggable(),
-            isSourceDraggable = sourceDraggable.NAME !== this.NAME,
-            $placeholderContainer;
+        let $placeholderContainer;
 
-        if(isSourceDraggable) {
-            $placeholderContainer = this._getSourceElement().clone();
-            translator.resetPosition($placeholderContainer);
-        } else if(this._isIndicateMode()) {
+        if(this._isIndicateMode()) {
             $placeholderContainer = $("<div>")
                 .addClass(this._addWidgetPrefix(PLACEHOLDER_CLASS))
-                .appendTo(this._getContainer());
+                .insertBefore(this._getSourceDraggable()._$dragElement);
         }
 
         this._$placeholderElement = $placeholderContainer;
@@ -444,18 +436,29 @@ var Sortable = Draggable.inherit({
     _optionChangedToIndex: function(args) {
         let toIndex = args.value;
 
-        this._togglePlaceholder(toIndex !== null && toIndex >= 0);
-
         if(this._isIndicateMode()) {
-            if(toIndex !== null && toIndex >= 0) {
+            let showPlaceholder = toIndex !== null && toIndex >= 0;
+
+            this._togglePlaceholder(showPlaceholder);
+            if(showPlaceholder) {
                 let $placeholderElement = this._$placeholderElement || this._createPlaceholder(),
                     items = this._getItems(),
                     itemElement = items[toIndex],
-                    prevItemElement = items[toIndex - 1];
+                    prevItemElement = items[toIndex - 1],
+                    isVerticalOrientation = this._isVerticalOrientation(),
+                    position;
 
                 this._updatePlaceholderSizes($placeholderElement, itemElement);
 
-                this._moveItem($placeholderElement, itemElement, prevItemElement);
+                if(itemElement) {
+                    position = $(itemElement).offset();
+                } else if(prevItemElement) {
+                    position = $(prevItemElement).offset();
+                    position.top += isVerticalOrientation ? $(prevItemElement).outerHeight(true) : $(prevItemElement).outerWidth(true);
+                }
+                if(position) {
+                    this._move(position, $placeholderElement);
+                }
             }
         } else {
             this._moveItems(args.previousValue, args.value);
@@ -525,6 +528,10 @@ var Sortable = Draggable.inherit({
         if(!this._isIndicateMode()) {
             this._$sourceElement && this._$sourceElement.toggleClass(this._addWidgetPrefix("source-hidden"), value);
         }
+    },
+    _dispose: function() {
+        this.reset();
+        this.callBase();
     }
 });
 
