@@ -95,12 +95,6 @@ class RadioCollection extends CollectionWidget {
     _itemElements() {
         return this._itemContainer().children(this._itemSelector());
     }
-
-    itemElements() {
-        const elements = super.itemElements();
-
-        return elements.not(elements.find(this._itemSelector()));
-    }
 }
 
 class RadioGroup extends Editor {
@@ -364,7 +358,9 @@ class RadioGroup extends Editor {
     }
 
     itemElements() {
-        return this._radios.itemElements();
+        const result = this._radios.itemElements();
+
+        return result.not(result.find(this._radios._itemSelector()));
     }
 }
 
