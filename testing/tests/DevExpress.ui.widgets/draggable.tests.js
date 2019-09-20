@@ -1,10 +1,10 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
-    dragEvents = require("events/drag"),
     pointerMock = require("../../helpers/pointerMock.js"),
     viewPort = require("core/utils/view_port").value,
     GestureEmitter = require("events/gesture/emitter.gesture.js"),
-    animationFrame = require("animation/frame");
+    animationFrame = require("animation/frame"),
+    translator = require("animation/translator");
 
 require("common.css!");
 require("ui/draggable");
@@ -35,12 +35,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var DRAGGABLE_CLASS = "dx-draggable",
-    DRAGGABLE_ACTION_TO_EVENT_MAP = {
-        "onDragStart": dragEvents.start,
-        "onDragMove": dragEvents.move,
-        "onDragEnd": dragEvents.end
-    };
+var DRAGGABLE_CLASS = "dx-draggable";
 
 var setupDraggable = function(that, $element) {
     $("#qunit-fixture").addClass("qunit-fixture-visible");
@@ -87,40 +82,174 @@ QUnit.test("'immediate' option", function(assert) {
 
 QUnit.module("Events", moduleConfig);
 
-$.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
-    var checkCallback = function(draggable, spy, assert) {
-        assert.ok(spy.calledOnce, "callback fired");
+QUnit.test("onDragStart - check args", function(assert) {
+    // arrange
+    let onDragStartSpy = sinon.spy();
 
-        var firstCall = spy.getCall(0),
-            arg = firstCall.args[0],
-            context = firstCall.thisValue;
-
-        assert.strictEqual(context, draggable, "context equals to component");
-        assert.strictEqual(arg.component, draggable);
-        assert.strictEqual($(arg.element)[0], this.$element[0]);
-        assert.equal(arg.event.type, eventName);
-    };
-
-    QUnit.test("'" + callbackName + "' callback fired", function(assert) {
-        var callbackSpy = sinon.spy(noop),
-            options = {},
-            draggable;
-
-        options[callbackName] = callbackSpy;
-        draggable = this.createDraggable(options);
-
-        this.pointer.dragStart().drag().dragEnd();
-        checkCallback.call(this, draggable, callbackSpy, assert);
+    this.createDraggable({
+        onDragStart: onDragStartSpy
     });
 
-    QUnit.test("'" + callbackName + "' option changing", function(assert) {
-        var draggable = this.createDraggable(),
-            callbackSpy = sinon.spy(noop);
-        draggable.option(callbackName, callbackSpy);
+    // act
+    this.pointer.down().move(0, 20);
 
-        this.pointer.dragStart().drag().dragEnd();
-        checkCallback.call(this, draggable, callbackSpy, assert);
+    // assert
+    assert.ok(onDragStartSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragStartSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("'onDragStart' option changing", function(assert) {
+    // arrange
+    let onDragStartSpy = sinon.spy(),
+        draggable = this.createDraggable();
+
+    // act
+    draggable.option("onDragStart", onDragStartSpy);
+    this.pointer.down().move(0, 20);
+
+    // assert
+    assert.ok(onDragStartSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragStartSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("onDragStart - not drag item when eventArgs.cancel is true", function(assert) {
+    // arrange
+    let onDragStartSpy = sinon.spy((e) => { e.cancel = true; });
+
+    this.createDraggable({
+        onDragStart: onDragStartSpy
     });
+
+    // act
+    this.pointer.down().move(0, 20);
+
+    // assert
+    assert.ok(onDragStartSpy.calledOnce, "event fired");
+    assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "element isn't dragged");
+});
+
+QUnit.test("onDragMove - check args", function(assert) {
+    // arrange
+    let onDragMoveSpy = sinon.spy();
+
+    this.createDraggable({
+        onDragMove: onDragMoveSpy
+    });
+
+    // act
+    this.pointer.down().move(0, 20);
+
+    // assert
+    assert.ok(onDragMoveSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragMoveSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("'onDragMove' option changing", function(assert) {
+    // arrange
+    let onDragMoveSpy = sinon.spy(),
+        draggable = this.createDraggable();
+
+    // act
+    draggable.option("onDragMove", onDragMoveSpy);
+    this.pointer.down().move(0, 20);
+
+    // assert
+    assert.ok(onDragMoveSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragMoveSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("onDragMove - check args when cross-component dragging", function(assert) {
+    // arrange
+    let onDragMoveSpy = sinon.spy();
+
+    let draggable1 = this.createDraggable({
+        onDragMove: onDragMoveSpy,
+        group: "shared"
+    });
+
+    let draggable2 = this.createDraggable({
+        group: "shared"
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 300).move(0, 10);
+
+    // assert
+    assert.strictEqual(onDragMoveSpy.callCount, 2, "event was called twice");
+    assert.deepEqual($(onDragMoveSpy.getCall(1).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].fromComponent, draggable1, "fromComponent");
+    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].toComponent, draggable2, "toComponent");
+});
+
+QUnit.test("onDragEnd - check args", function(assert) {
+    // arrange
+    let onDragEndSpy = sinon.spy();
+
+    this.createDraggable({
+        onDragEnd: onDragEndSpy
+    });
+
+    // act
+    this.pointer.down().move(0, 20).up();
+
+    // assert
+    assert.ok(onDragEndSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragEndSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("'onDragEnd' option changing", function(assert) {
+    // arrange
+    let onDragEndSpy = sinon.spy(),
+        draggable = this.createDraggable();
+
+    // act
+    draggable.option("onDragEnd", onDragEndSpy);
+    this.pointer.down().move(0, 20).up();
+
+    // assert
+    assert.ok(onDragEndSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragEndSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("onDragEnd - check args when cross-component dragging", function(assert) {
+    // arrange
+    let onDragEndSpy = sinon.spy();
+
+    let draggable1 = this.createDraggable({
+        onDragEnd: onDragEndSpy,
+        group: "shared"
+    });
+
+    let draggable2 = this.createDraggable({
+        group: "shared"
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 300).move(0, 10).up();
+
+    // assert
+    assert.strictEqual(onDragEndSpy.callCount, 1, "event fired");
+    assert.deepEqual($(onDragEndSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.deepEqual(onDragEndSpy.getCall(0).args[0].fromComponent, draggable1, "fromComponent");
+    assert.deepEqual(onDragEndSpy.getCall(0).args[0].toComponent, draggable2, "toComponent");
+});
+
+QUnit.test("onDragEnd - not drag item when eventArgs.cancel is true", function(assert) {
+    // arrange
+    let onDragEndSpy = sinon.spy((e) => { e.cancel = true; });
+
+    this.createDraggable({
+        onDragEnd: onDragEndSpy
+    });
+
+    let initialPosition = translator.locate(this.$element);
+
+    // act
+    this.pointer.down().move(0, 40).up();
+
+    // assert
+    assert.ok(onDragEndSpy.calledOnce, "event fired");
+    assert.deepEqual(translator.locate(this.$element), initialPosition, "element position");
 });
 
 QUnit.test("'disabled' option", function(assert) {

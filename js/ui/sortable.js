@@ -69,7 +69,9 @@ var Sortable = Draggable.inherit({
              * @type_function_param1_field7 itemElement:dxElement
              * @type_function_param1_field8 fromIndex:number
              * @type_function_param1_field9 toIndex:number
-             * @type_function_param1_field10 dropInsideItem:boolean
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
              * @action
              */
             /**
@@ -248,7 +250,7 @@ var Sortable = Draggable.inherit({
 
                 !cancelAdd && this._moveItem($sourceElement, toIndex, cancelRemove);
             } else if(cancelAdd || cancelRemove) {
-                this._revertItemToInitialPosition($sourceElement, cancelRemove);
+                this._revertItemToInitialPosition(cancelRemove);
                 return;
             }
 
@@ -283,17 +285,18 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _revertItemToInitialPosition: function($itemElement, cancelRemove) {
-        let sourceDraggable = this._getSourceDraggable(),
+    _revertItemToInitialPosition: function(cancelRemove) {
+        let $sourceElement = this._getSourceElement(),
+            sourceDraggable = this._getSourceDraggable(),
             fromIndex = sourceDraggable.option("fromIndex");
 
         if(cancelRemove) {
-            let $clonedItemElement = $itemElement.clone();
-            sourceDraggable._toggleDragSourceClass(false, $clonedItemElement);
-            $itemElement.replaceWith($clonedItemElement);
+            let $clonedSourceElement = $sourceElement.clone();
+            sourceDraggable._toggleDragSourceClass(false, $clonedSourceElement);
+            $sourceElement.replaceWith($clonedSourceElement);
         }
 
-        sourceDraggable._moveItem($itemElement, fromIndex, false);
+        sourceDraggable._moveItem($sourceElement, fromIndex, false);
     },
 
     _isIndicateMode: function() {
@@ -583,19 +586,16 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _getCrossComponentEventArgs: function(e, eventName) {
-        let that = this,
-            sourceDraggable = that._getSourceDraggable();
+    _getCrossComponentEventArgs: function(e) {
+        let targetDraggable = this._getTargetDraggable();
 
-        return extend(this._getEventArgs(e), {
-            toIndex: that.option("toIndex"),
-            fromComponent: sourceDraggable,
-            toComponent: that
+        return extend(this.callBase.apply(this, arguments), {
+            toIndex: targetDraggable.option("toIndex")
         });
     },
 
     _fireAddEvent: function(sourceEvent) {
-        let args = this._getCrossComponentEventArgs(sourceEvent, "onAdd");
+        let args = this._getCrossComponentEventArgs(sourceEvent);
 
         this._getAction("onAdd")(args);
 
@@ -604,7 +604,7 @@ var Sortable = Draggable.inherit({
 
     _fireRemoveEvent: function(sourceEvent) {
         let sourceDraggable = this._getSourceDraggable(),
-            args = this._getCrossComponentEventArgs(sourceEvent, "onRemove");
+            args = this._getCrossComponentEventArgs(sourceEvent);
 
         sourceDraggable._getAction("onRemove")(args);
 

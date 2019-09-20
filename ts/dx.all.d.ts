@@ -3161,7 +3161,7 @@ declare module DevExpress.ui {
         /** @name dxDraggable.Options.onDragEnd */
         onDragEnd?: ((e: { component?: dxDraggable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable }) => any);
         /** @name dxDraggable.Options.onDragMove */
-        onDragMove?: ((e: { component?: dxDraggable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
+        onDragMove?: ((e: { component?: dxDraggable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable }) => any);
         /** @name dxDraggable.Options.onDragStart */
         onDragStart?: ((e: { component?: dxDraggable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
         /** @name dxDraggable.Options.onDrop */
@@ -5397,7 +5397,7 @@ declare module DevExpress.ui {
         /** @name dxSortable.Options.onDragEnd */
         onDragEnd?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, dropInsideItem?: boolean }) => any);
         /** @name dxSortable.Options.onDragMove */
-        onDragMove?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, dropInsideItem?: boolean }) => any);
+        onDragMove?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, dropInsideItem?: boolean }) => any);
         /** @name dxSortable.Options.onDragStart */
         onDragStart?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number }) => any);
         /** @name dxSortable.Options.onRemove */

@@ -225,6 +225,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @type_function_param1_field5 cancel:boolean
              * @type_function_param1_field6 itemData:any
              * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
              * @action
              */
             onDragMove: null,
@@ -685,7 +687,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             this._findScrollable(e);
         }
 
-        let eventArgs = this._getEventArgs(e);
+        let eventArgs = this._getCrossComponentEventArgs(e);
         this._getAction("onDragMove")(eventArgs);
 
         if(eventArgs.cancel === true) {
@@ -723,6 +725,16 @@ var Draggable = DOMComponentWithTemplate.inherit({
         that.horizontalScrollHelper && that.horizontalScrollHelper.findScrollable(allObjects, mousePosition);
     },
 
+    _getCrossComponentEventArgs: function(e) {
+        let sourceDraggable = this._getSourceDraggable(),
+            targetDraggable = this._getTargetDraggable();
+
+        return extend(this._getEventArgs(e), {
+            fromComponent: sourceDraggable,
+            toComponent: targetDraggable
+        });
+    },
+
     _getEventArgs: function(e) {
         let sourceDraggable = this._getSourceDraggable();
 
@@ -752,10 +764,15 @@ var Draggable = DOMComponentWithTemplate.inherit({
         };
     },
 
+    _revertItemToInitialPosition: function() {
+        !this._dragElementIsCloned() && this._move(this._startPosition, this._$sourceElement);
+    },
+
     _dragEndHandler: function(e) {
         let dragEndEventArgs = this._getDragEndAndDropArgs(e),
             dropEventArgs = this._getDragEndAndDropArgs(e),
-            targetDraggable = this._getTargetDraggable();
+            targetDraggable = this._getTargetDraggable(),
+            needRevertPosition = true;
 
         this._getAction("onDragEnd")(dragEndEventArgs);
 
@@ -766,7 +783,12 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
             if(!dropEventArgs.cancel) {
                 targetDraggable.dragEnd(dragEndEventArgs);
+                needRevertPosition = false;
             }
+        }
+
+        if(needRevertPosition) {
+            this._revertItemToInitialPosition();
         }
 
         this.reset();
