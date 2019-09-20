@@ -17,8 +17,6 @@ let speedDialMainItem = null;
 const SpeedDialMainItem = SpeedDialItem.inherit({
     _actionItems: [],
 
-    _shading: false,
-
     _getDefaultOptions() {
         const defaultOptions = {
             icon: "add",
@@ -45,7 +43,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
         return extend(
             this.callBase(),
-            extend(defaultOptions, config().floatingActionButtonConfig)
+            extend(defaultOptions, config().floatingActionButtonConfig, { shading: false })
         );
     },
 
@@ -130,8 +128,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             actions[i].toggle();
         }
 
-        this._options.shading = actions[0].option("visible") && this._shading;
-        this._toggleShading(this._options.shading);
+        this.option("shading", !this.option("shading") && !!config().floatingActionButtonConfig.shading);
 
         this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
         this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
@@ -240,10 +237,6 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             case "icon":
                 if(this._isVisible()) this._renderIcon();
                 break;
-            case "shading":
-                this._shading = args.value;
-                this._options.shading = false;
-                break;
             default:
                 this.callBase(args);
         }
@@ -339,7 +332,6 @@ exports.repaint = function() {
         closeIcon: speedDialMainItem._getDefaultOptions().closeIcon,
         position: speedDialMainItem._getPosition(),
         label: speedDialMainItem._getDefaultOptions().label,
-        maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount,
-        shading: speedDialMainItem._getDefaultOptions().shading
+        maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount
     });
 };
