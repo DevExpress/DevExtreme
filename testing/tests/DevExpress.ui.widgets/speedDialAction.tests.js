@@ -651,12 +651,11 @@ QUnit.module("add direction option", (hooks) => {
         let $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
 
         const fabDimensions = 30;
-        const fabOffsetY = 10;
 
         $fabMainContent.trigger("dxclick");
 
         assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "right first action position");
-        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions - fabOffsetY, 110, "right second action position");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 120, "right second action position");
 
         config({
             floatingActionButtonConfig: {
@@ -677,7 +676,7 @@ QUnit.module("add direction option", (hooks) => {
         $fabMainContent.trigger("dxclick");
 
         assert.equal($fabContent.eq(1).offset().top, 80, "right first action position");
-        assert.equal($fabContent.eq(2).offset().top, 110, "right second action position");
+        assert.equal($fabContent.eq(2).offset().top, 120, "right second action position");
 
         config({
             floatingActionButtonConfig: {
@@ -697,7 +696,7 @@ QUnit.module("add direction option", (hooks) => {
         $fabMainContent.trigger("dxclick");
 
         assert.equal($fabContent.eq(1).offset().top, 80, "right first action position");
-        assert.equal($fabContent.eq(2).offset().top, 110, "right second action position");
+        assert.equal($fabContent.eq(2).offset().top, 120, "right second action position");
 
 
         firstSDA.dispose();
