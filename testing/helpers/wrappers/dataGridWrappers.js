@@ -53,6 +53,10 @@ export class RowsViewWrapper extends WrapperBase {
     cellHasFocusedClass(rowIndex, columnIndex) {
         return this.getCellElement(rowIndex, columnIndex).hasClass("dx-focused");
     }
+
+    isFocusOverlayVisible() {
+        return !!this.getElement().find(".dx-datagrid-focus-overlay:visible").length;
+    }
 }
 
 export class PagerWrapper extends WrapperBase {
