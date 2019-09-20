@@ -128,7 +128,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             actions[i].toggle();
         }
 
-        this.option("shading", !this.option("shading") && !!config().floatingActionButtonConfig.shading);
+        if(config().floatingActionButtonConfig.shading) this.option("shading", !this.option("shading"));
 
         this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
         this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
