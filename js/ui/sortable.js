@@ -47,21 +47,129 @@ var Sortable = Draggable.inherit({
              */
             allowDropInsideItem: false,
             /**
+             * @name dxSortableOptions.onDragStart
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @action
+             */
+            /**
+             * @name dxSortableOptions.onDragMove
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
+             * @action
+             */
+            /**
+             * @name dxSortableOptions.onDragEnd
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
+             * @action
+             */
+            /**
              * @name dxSortableOptions.onDragChange
              * @type function(e)
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
              * @action
-             * @hidden
              */
             onDragChange: null,
+            /**
+             * @name dxSortableOptions.onAdd
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
+             * @action
+             */
+            onAdd: null,
+            /**
+             * @name dxSortableOptions.onRemove
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
+             * @action
+             */
+            onRemove: null,
+            /**
+             * @name dxSortableOptions.onReorder
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
+             * @action
+             */
+            onReorder: null,
             /**
              * @name dxSortableOptions.onPlaceholderPrepared
              * @type function(e)
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 dropInsideItem:boolean
              * @action
              * @hidden
              */
@@ -114,30 +222,40 @@ var Sortable = Draggable.inherit({
         this.option("toIndex", null);
     },
 
-    dragEnd: function() {
+    dragEnd: function(sourceEvent) {
         let $sourceElement = this._getSourceElement(),
             sourceDraggable = this._getSourceDraggable(),
             isIndicateMode = this._isIndicateMode(),
-            isSourceDraggable = sourceDraggable.NAME !== this.NAME;
+            isSourceDraggable = sourceDraggable.NAME !== this.NAME,
+            toIndex = this.option("toIndex");
 
-        if(isIndicateMode || isSourceDraggable) {
-            let prevTargetItemElement,
-                toIndex = this.option("toIndex"),
-                items = this._getItems(),
-                targetItemElement = items[toIndex];
+        if(toIndex !== null && toIndex >= 0) {
+            let cancelAdd,
+                cancelRemove;
 
-            if(toIndex !== null && toIndex >= 0) {
-                if(!targetItemElement) {
-                    prevTargetItemElement = items[toIndex - 1];
+            if(sourceDraggable !== this) {
+                cancelAdd = this._fireAddEvent(sourceEvent);
+
+                if(!cancelAdd) {
+                    cancelRemove = this._fireRemoveEvent(sourceEvent);
                 }
+            }
 
+            if(isIndicateMode || isSourceDraggable) {
                 if(isSourceDraggable) {
                     translator.resetPosition($sourceElement);
                 }
 
                 $sourceElement.show();
 
-                this._moveItem($sourceElement, targetItemElement, prevTargetItemElement);
+                !cancelAdd && this._moveItem($sourceElement, toIndex, cancelRemove);
+            } else if(cancelAdd || cancelRemove) {
+                this._revertItemToInitialPosition(cancelRemove);
+                return;
+            }
+
+            if(sourceDraggable === this) {
+                this._fireReorderEvent(sourceEvent);
             }
         }
     },
@@ -165,6 +283,20 @@ var Sortable = Draggable.inherit({
                 break;
             }
         }
+    },
+
+    _revertItemToInitialPosition: function(cancelRemove) {
+        let $sourceElement = this._getSourceElement(),
+            sourceDraggable = this._getSourceDraggable(),
+            fromIndex = sourceDraggable.option("fromIndex");
+
+        if(cancelRemove) {
+            let $clonedSourceElement = $sourceElement.clone();
+            sourceDraggable._toggleDragSourceClass(false, $clonedSourceElement);
+            $sourceElement.replaceWith($clonedSourceElement);
+        }
+
+        sourceDraggable._moveItem($sourceElement, fromIndex, false);
     },
 
     _isIndicateMode: function() {
@@ -294,8 +426,7 @@ var Sortable = Draggable.inherit({
         let sourceDraggable = this._getSourceDraggable(),
             toIndex = this._normalizeToIndex(itemPoint.index, itemPoint.dropInsideItem);
 
-        let eventArgs = extend(this._getEventArgs(), {
-            event: e,
+        let eventArgs = extend(this._getCrossComponentEventArgs(e), {
             toIndex,
             dropInsideItem: itemPoint.dropInsideItem
         });
@@ -314,8 +445,7 @@ var Sortable = Draggable.inherit({
             dropInsideItem: itemPoint.dropInsideItem,
             toIndex: itemPoint.index
         });
-        this._getAction("onPlaceholderPrepared")(extend(this._getEventArgs(), {
-            event: e,
+        this._getAction("onPlaceholderPrepared")(extend(this._getEventArgs(e), {
             placeholderElement: getPublicElement(this._$placeholderElement),
             dragElement: getPublicElement(sourceDraggable._$dragElement)
         }));
@@ -342,7 +472,25 @@ var Sortable = Draggable.inherit({
         $placeholderElement.css({ width, height });
     },
 
-    _moveItem: function($targetItem, item, prevItem) {
+    _moveItem: function($itemElement, index, cancelRemove) {
+        let $prevTargetItemElement,
+            $itemElements = this._getItems(),
+            $targetItemElement = $itemElements[index],
+            sourceDraggable = this._getSourceDraggable();
+
+        if(cancelRemove) {
+            $itemElement = $itemElement.clone();
+            sourceDraggable._toggleDragSourceClass(false, $itemElement);
+        }
+
+        if(!$targetItemElement) {
+            $prevTargetItemElement = $itemElements[index - 1];
+        }
+
+        this._moveItemCore($itemElement, $targetItemElement, $prevTargetItemElement);
+    },
+
+    _moveItemCore: function($targetItem, item, prevItem) {
         if(!item && !prevItem) {
             $targetItem.appendTo(this.$element());
         } else if(prevItem) {
@@ -352,22 +500,22 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _getEventArgs: function() {
-        let sourceElement = getPublicElement(this._getSourceElement()),
-            dropInsideItem = this.option("dropInsideItem");
-
-        return {
-            fromIndex: this.option("fromIndex"),
-            toIndex: this._normalizeToIndex(this.option("toIndex"), dropInsideItem),
-            dropInsideItem: dropInsideItem,
-            sourceElement: sourceElement
-        };
+    _getDragStartArgs: function(e, $itemElement) {
+        return extend(this.callBase.apply(this, arguments), {
+            fromIndex: $itemElement.index()
+        });
     },
 
-    _getDragEndArgs: function() {
-        var args = this.callBase.apply(this, arguments);
+    _getEventArgs: function(e) {
+        let sourceDraggable = this._getSourceDraggable(),
+            targetDraggable = this._getTargetDraggable(),
+            dropInsideItem = targetDraggable.option("dropInsideItem");
 
-        return extend(args, this._getEventArgs());
+        return extend(this.callBase.apply(this, arguments), {
+            fromIndex: sourceDraggable.option("fromIndex"),
+            toIndex: this._normalizeToIndex(targetDraggable.option("toIndex"), dropInsideItem),
+            dropInsideItem: dropInsideItem
+        });
     },
 
     _optionChanged: function(args) {
@@ -376,6 +524,9 @@ var Sortable = Draggable.inherit({
         switch(name) {
             case "onDragChange":
             case "onPlaceholderPrepared":
+            case "onAdd":
+            case "onRemove":
+            case "onReorder":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
             case "itemOrientation":
@@ -414,23 +565,56 @@ var Sortable = Draggable.inherit({
         }
 
         if(toIndex !== null && toIndex >= 0) {
-            let $placeholderElement = this._$placeholderElement || this._createPlaceholder(),
-                items = this._getItems(),
-                itemElement = items[toIndex],
-                prevItemElement = items[toIndex - 1];
+            let $placeholderElement = this._$placeholderElement || this._createPlaceholder();
 
             if(this._isIndicateMode()) {
+                let items = this._getItems(),
+                    itemElement = items[toIndex];
+
                 this._updatePlaceholderSizes($placeholderElement, itemElement);
             }
 
-            this._moveItem($placeholderElement || this._getSourceElement(), itemElement, prevItemElement);
+            this._moveItem($placeholderElement || this._getSourceElement(), toIndex);
         }
     },
-    _toggleDragSourceClass: function(value) {
+    _toggleDragSourceClass: function(value, $element) {
+        let $sourceElement = $element || this._$sourceElement;
+
         this.callBase.apply(this, arguments);
         if(!this._isIndicateMode()) {
-            this._$sourceElement && this._$sourceElement.toggleClass(this._addWidgetPrefix("source-hidden"), value);
+            $sourceElement && $sourceElement.toggleClass(this._addWidgetPrefix("source-hidden"), value);
         }
+    },
+
+    _getCrossComponentEventArgs: function(e) {
+        let targetDraggable = this._getTargetDraggable();
+
+        return extend(this.callBase.apply(this, arguments), {
+            toIndex: targetDraggable.option("toIndex")
+        });
+    },
+
+    _fireAddEvent: function(sourceEvent) {
+        let args = this._getCrossComponentEventArgs(sourceEvent);
+
+        this._getAction("onAdd")(args);
+
+        return args.cancel;
+    },
+
+    _fireRemoveEvent: function(sourceEvent) {
+        let sourceDraggable = this._getSourceDraggable(),
+            args = this._getCrossComponentEventArgs(sourceEvent);
+
+        sourceDraggable._getAction("onRemove")(args);
+
+        return args.cancel;
+    },
+
+    _fireReorderEvent: function(sourceEvent) {
+        let args = this._getEventArgs(sourceEvent);
+
+        this._getAction("onReorder")(args);
     }
 });
 
