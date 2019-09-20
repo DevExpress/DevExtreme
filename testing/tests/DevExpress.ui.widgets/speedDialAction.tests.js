@@ -561,3 +561,67 @@ QUnit.module("add visible option", (hooks) => {
         assert.equal($(FAB_INVISIBLE_SELECTOR).length, 3, "all actions are invisible");
     });
 });
+
+QUnit.module("add shading option", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
+    hooks.afterEach(() => {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+
+        fx.off = false;
+    }),
+    test("check rendering", (assert) => {
+        const firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
+        const secondSDA = $("#fab-two").dxSpeedDialAction().dxSpeedDialAction("instance");
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading by default before FAB click");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading by default after FAB click");
+
+        config({
+            floatingActionButtonConfig: {
+                shading: true
+            }
+        });
+
+        firstSDA.repaint();
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading if set value in true before FAB click");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 1, "there is shading after FAB click");
+
+        config({
+            floatingActionButtonConfig: {
+                shading: false
+            }
+        });
+
+        firstSDA.repaint();
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading if set value in false after repaint");
+
+        firstSDA.dispose();
+        secondSDA.dispose();
+    });
+});

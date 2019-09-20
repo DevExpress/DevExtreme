@@ -278,7 +278,8 @@ exports.initAction = function(newAction) {
             savedActions.push(newAction);
 
             speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
-                actions: savedActions
+                actions: savedActions,
+                shading: false
             }));
         } else if(savedActions.length === 1) {
             speedDialMainItem.option(extend({}, savedActions[0]._options, {
@@ -286,7 +287,8 @@ exports.initAction = function(newAction) {
             }));
         } else {
             speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
-                actions: savedActions
+                actions: savedActions,
+                shading: false
             }));
         }
     }
@@ -333,6 +335,7 @@ exports.repaint = function() {
         closeIcon: speedDialMainItem._getDefaultOptions().closeIcon,
         position: speedDialMainItem._getPosition(),
         label: speedDialMainItem._getDefaultOptions().label,
-        maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount
+        maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount,
+        shading: speedDialMainItem._getDefaultOptions().shading
     });
 };
