@@ -43,7 +43,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
         return extend(
             this.callBase(),
-            extend(defaultOptions, config().floatingActionButtonConfig)
+            extend(defaultOptions, config().floatingActionButtonConfig, { shading: false })
         );
     },
 
@@ -127,6 +127,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             actions[i]._$wrapper.css("position", this._$wrapper.css("position"));
             actions[i].toggle();
         }
+
+        if(config().floatingActionButtonConfig.shading) this.option("shading", !this.option("shading"));
 
         this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
         this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);

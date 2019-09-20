@@ -1576,8 +1576,13 @@
 @filemanager-progressbox-shadow-color: fade(darken(@base-shadow-color, 100%), 30%);
 
 // SpeedDialAction
-@speed-dial-action-bg: @base-bg;
+@speed-dial-action-bg: lighten(@base-bg, 3%);
+@speed-dial-action-hover-bg: lighten(@speed-dial-action-bg, 9%);
+@speed-dial-action-active-bg: lighten(@speed-dial-action-bg, 26%);
 @speed-dial-action-color: @base-text-color;
+@speed-dial-action-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+@speed-dial-action-label-shadow:  0 2px 6px rgba(0, 0, 0, 0.35);
+@speed-dial-action-shading-color: @overlay-shader-bg;
 
 // Gantt
 @gantt-collapsable-row-bg: lighten(@base-bg, 4%);

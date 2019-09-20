@@ -1,16 +1,18 @@
 .dx-fa-button-mixin(
     @main-action-button-size,
     @action-button-size,
-    @shadow,
     @icon-size,
     @font-size,
     @label-height,
     @label-padding,
-    @label-shadow,
     @label-offset
 ) {
     .dx-fa-button {
         &.dx-fa-button-main {
+            .dx-overlay-shader {
+                background-color: @speed-dial-action-shading-color;
+            }
+
             .dx-overlay-content {
                 min-width: @main-action-button-size;
                 max-height: @main-action-button-size;
@@ -18,7 +20,7 @@
                 color: @button-default-color;
                 overflow: visible;
                 border-radius: @main-action-button-size / 2;
-                box-shadow: @shadow;
+                box-shadow: @speed-dial-action-shadow;
 
                 &.dx-state-hover {
                     background-color: darken(@button-default-bg, 10%);
@@ -115,13 +117,13 @@
 
             &.dx-state-hover {
                 .dx-fa-button-icon {
-                    background-color: darken(@speed-dial-action-bg, 10%);
+                    background-color: @speed-dial-action-hover-bg;
                 }
             }
 
             &.dx-state-active {
                 .dx-fa-button-icon {
-                    background-color: darken(@speed-dial-action-bg, 15%);
+                    background-color: @speed-dial-action-active-bg;
                 }
             }
 
@@ -138,13 +140,13 @@
                     margin-right: @label-offset;
                     line-height: @label-height;
                     height: @label-height;
-                    box-shadow: @label-shadow;
+                    box-shadow: @speed-dial-action-label-shadow;
                     font-size: @font-size - 2;
                 }
             }
 
             .dx-fa-button-icon {
-                box-shadow: @shadow;
+                box-shadow: @speed-dial-action-shadow;
                 background-color: @speed-dial-action-bg;
                 border-radius: 50%;
                 position: relative;
