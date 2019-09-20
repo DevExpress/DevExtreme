@@ -648,6 +648,10 @@ if(Globalize && Globalize.formatDate) {
     };
 
     const globalizeDateLocalization = {
+        engine: function() {
+            return "globalize";
+        },
+
         _getPatternByFormat: function(format) {
             const that = this;
             const lowerFormat = format.toLowerCase();

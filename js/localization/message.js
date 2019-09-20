@@ -16,6 +16,10 @@ const getDataByLocale = (localeData, locale) => {
 const newMessages = {};
 
 const messageLocalization = dependencyInjector({
+    engine: function() {
+        return "base";
+    },
+
     _dictionary: baseDictionary,
 
     load: function(messages) {

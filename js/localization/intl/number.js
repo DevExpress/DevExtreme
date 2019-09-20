@@ -21,6 +21,9 @@ const getCurrencyFormatter = currency => {
 };
 
 module.exports = {
+    engine: function() {
+        return "intl";
+    },
     _formatNumberCore: function(value, format, formatConfig) {
         if(format === 'exponential') {
             return this.callBase.apply(this, arguments);

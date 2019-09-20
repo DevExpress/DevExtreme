@@ -37,6 +37,12 @@ QUnit.module("Intl localization", {
 }, () => {
     sharedTests();
 
+    QUnit.test("engine", assert => {
+        assert.equal(numberLocalization.engine(), "intl");
+        assert.equal(dateLocalization.engine(), "intl");
+    });
+
+
     const locales = [ "de", "en", "ja", "ru", "zh", "ar", "hr", "el", "ca" ];
     locales.forEach((localeId) => {
         const getIntlNumberFormatter = (format) => {
