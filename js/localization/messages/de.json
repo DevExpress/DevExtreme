@@ -266,7 +266,7 @@
         "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
         "dxFileManager-errorWrongFileExtension": "TODO",
         "dxFileManager-errorMaxFileSizeExceeded": "TODO",
-        "dxFileManager-errorDefault": "Unbekannter Fehler"
+        "dxFileManager-errorDefault": "Unbekannter Fehler",
       
         "dxDiagram-categoryGeneral": "Allgemein",
         "dxDiagram-categoryFlowchart": "Flussdiagramm",
