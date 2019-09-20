@@ -496,7 +496,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             return this.$element();
         }
 
-        let $target = $(e.target),
+        let $target = $(e && e.target),
             itemsSelector = this._getItemsSelector();
 
         if(itemsSelector[0] === ">") {
