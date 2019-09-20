@@ -31,6 +31,8 @@ export const Consts = {
     MENU_ITEM_WITH_TEXT_CLASS: "dx-menu-item-has-text",
     CONTEXT_MENU_CLASS: "dx-context-menu",
     MENU_ITEM_CLASS: "dx-menu-item",
+    MENU_ITEM_WITH_SUBMENU_CLASS: "dx-menu-item-has-submenu",
+    SUBMENU_CLASS: "dx-submenu",
     SELECTION_CLASS: "dx-selection",
     SPLITTER_CLASS: "dx-splitter",
     DISABLED_STATE_CLASS: "dx-state-disabled",
@@ -182,6 +184,10 @@ export class FileManagerWrapper {
 
     getContextMenuItem(text) {
         return this.getContextMenuItems(true).filter(`:contains('${text}')`);
+    }
+
+    getContextMenuSubMenuItems() {
+        return $(`.${Consts.CONTEXT_MENU_CLASS} .${Consts.MENU_ITEM_WITH_SUBMENU_CLASS} .${Consts.SUBMENU_CLASS} .${Consts.MENU_ITEM_CLASS}`);
     }
 
     _findActionButton($container) {

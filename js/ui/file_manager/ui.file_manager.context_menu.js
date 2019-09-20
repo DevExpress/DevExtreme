@@ -68,14 +68,15 @@ class FileManagerContextMenu extends Widget {
         this._contextMenu.show();
     }
 
-    createContextMenuItems(fileItems) {
+    createContextMenuItems(fileItems, contextMenuItems) {
         this._targetFileItems = fileItems;
 
         const result = [];
 
-        this.option("items").forEach(srcItem => {
+        const itemArray = contextMenuItems || this.option("items");
+        itemArray.forEach(srcItem => {
             const commandName = isString(srcItem) ? srcItem : srcItem.commandName;
-            const item = this._configureItemByCommandName(commandName, srcItem);
+            const item = this._configureItemByCommandName(commandName, srcItem, fileItems);
             if(this._isContextMenuItemAvailable(item, fileItems)) {
                 result.push(item);
             }
@@ -106,9 +107,13 @@ class FileManagerContextMenu extends Widget {
         });
     }
 
-    _configureItemByCommandName(commandName, item) {
+    _configureItemByCommandName(commandName, item, fileItems) {
         if(!this._isDefaultItem(commandName)) {
-            return item;
+            const res = extend(true, {}, item);
+            if(Array.isArray(item.items)) {
+                res.items = this.createContextMenuItems(fileItems, item.items);
+            }
+            return res;
         }
 
         let result = this._createMenuItemByCommandName(commandName);
