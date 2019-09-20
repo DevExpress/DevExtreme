@@ -358,9 +358,7 @@ class RadioGroup extends Editor {
     }
 
     itemElements() {
-        const result = this._radios.itemElements();
-
-        return result.not(result.find(this._radios._itemSelector()));
+        return this._radios.itemElements();
     }
 }
 
