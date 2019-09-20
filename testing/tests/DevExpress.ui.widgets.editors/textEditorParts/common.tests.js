@@ -801,22 +801,20 @@ QUnit.module("options changing", moduleConfig, () => {
     });
 
     QUnit.test("click on clear button should raise input event (T521817)", (assert) => {
-        let callCount = 0;
+        const onInputStub = sinon.stub();
 
         const $element = $("#texteditor").dxTextEditor({
             showClearButton: true,
             value: "foo",
-            onInput() {
-                assert.ok(true, "onInput was called");
-                callCount++;
-            }
+            onInput: onInputStub
         });
 
-        const $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+        $element
+            .find(CLEAR_BUTTON_SELECTOR)
+            .first()
+            .trigger("dxclick");
 
-        $clearButton.click();
-
-        assert.equal(callCount, 1, "onInput was called once");
+        assert.ok(onInputStub.calledOnce, "onInput was called once");
     });
 
     QUnit.test("tap on clear button should reset value (T310102)", (assert) => {
