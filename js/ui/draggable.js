@@ -143,6 +143,11 @@ class ScrollHelper {
 
                 that._$scrollable[that._scrollValue](nextScrollPosition);
             }
+
+            let dragMoveArgs = that._component._dragMoveArgs;
+            if(dragMoveArgs) {
+                that._component._dragMoveHandler(dragMoveArgs);
+            }
         }
     }
 
@@ -434,7 +439,14 @@ var Draggable = DOMComponentWithTemplate.inherit({
             allowMoveByClick = this.option("allowMoveByClick"),
             data = {
                 direction: this.option("dragDirection"),
-                immediate: this.option("immediate")
+                immediate: this.option("immediate"),
+                checkDropTarget: ($target) => {
+                    var sourceGroup = this.option("group"),
+                        targetComponent = $target.data("dxDraggable") || $target.data("dxSortable"),
+                        targetGroup = targetComponent && targetComponent.option("group");
+
+                    return sourceGroup && sourceGroup === targetGroup;
+                }
             };
 
         if(allowMoveByClick) {
@@ -520,7 +532,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             return this.$element();
         }
 
-        let $target = $(e.target),
+        let $target = $(e && e.target),
             itemsSelector = this._getItemsSelector();
 
         if(itemsSelector[0] === ">") {
@@ -670,6 +682,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragMoveHandler: function(e) {
+        this._dragMoveArgs = e;
         if(!this._$dragElement) {
             e.cancel = true;
             return;
