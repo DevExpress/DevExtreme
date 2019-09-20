@@ -3,6 +3,7 @@ import renderer from "core/renderer";
 import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerEvents from "events/pointer";
+import { Deferred } from "core/utils/deferred";
 
 QUnit.testStart(function() {
     var markup =
@@ -10974,6 +10975,131 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
     // assert
     assert.equal(that.editingController._editRowIndex, 0, "first row is still editing");
     assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
+});
+
+QUnit.test("It's impossible to save new data when editing form is invalid (async)", function(assert) {
+    // arrange
+    let rowsView = this.rowsView,
+        testElement = $('#container'),
+        $formRow,
+        inputElement,
+        done = assert.async();
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: "form",
+            allowUpdating: true,
+        },
+        columns: [{
+            dataField: 'age',
+            validationRules: [{
+                type: 'async',
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(function() {
+                        d.reject();
+                    }, 10);
+                    return d.promise();
+                }
+            }]
+        }]
+    });
+
+    // act
+    this.editRow(0);
+    $formRow = rowsView.getRow(0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger('change');
+
+    this.saveEditData();
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+    assert.equal($formRow.find(".dx-validation-pending").length, 1, "There is one pending editor in first row");
+
+    this.clock.tick(10);
+    this.clock.restore();
+
+    setTimeout(() => {
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+        assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
+        done();
+    });
+});
+
+QUnit.test("Only valid data is saved (async)", function(assert) {
+    // arrange
+    let rowsView = this.rowsView,
+        testElement = $('#container'),
+        $formRow,
+        inputElement,
+        done = assert.async();
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: "form",
+            allowUpdating: true,
+        },
+        columns: [{
+            dataField: 'age',
+            validationRules: [{
+                type: 'async',
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(function() {
+                        params.value === 1 ? d.resolve() : d.reject();
+                    }, 10);
+                    return d.promise();
+                }
+            }]
+        }]
+    });
+
+    // act
+    this.editRow(0);
+    $formRow = rowsView.getRow(0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger('change');
+
+    this.saveEditData();
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+    assert.equal($formRow.find(".dx-validation-pending").length, 1, "There is one pending editor in first row");
+
+    this.clock.tick(10);
+    this.clock.restore();
+
+    setTimeout(() => {
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+        assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
+
+        this.clock = sinon.useFakeTimers();
+        inputElement.val("1");
+        inputElement.trigger('change');
+        this.saveEditData();
+        this.clock.tick(10);
+        this.clock.restore();
+
+        setTimeout(() => {
+            assert.equal(this.editingController._editRowIndex, -1, "there is no editing row");
+            const $row = rowsView.getRow(0);
+            assert.ok($row.hasClass("dx-data-row"), "The form was closed");
+            done();
+        });
+    });
 });
 
 // T506863
