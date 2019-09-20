@@ -5390,6 +5390,10 @@ declare module DevExpress.ui {
         dropFeedbackMode?: 'push' | 'indicate';
         /** @name dxSortable.Options.itemOrientation */
         itemOrientation?: 'horizontal' | 'vertical';
+        /** @name dxSortable.Options.onAdd */
+        onAdd?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, sourceComponent?: dxSortable | dxDraggable, fromIndex?: number, toIndex?: number, sourceElement?: DevExpress.core.dxElement, dragElement?: DevExpress.core.dxElement }) => any);
+        /** @name dxSortable.Options.onRemove */
+        onRemove?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: event, targetComponent?: dxSortable | dxDraggable, fromIndex?: number, toIndex?: number, sourceElement?: DevExpress.core.dxElement, dragElement?: DevExpress.core.dxElement }) => any);
     }
     /** @name dxSortable */
     export class dxSortable extends DraggableBase {

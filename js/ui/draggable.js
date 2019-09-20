@@ -612,8 +612,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._$dragElement && this._$dragElement.toggleClass(this._addWidgetPrefix("dragging"), value);
     },
 
-    _toggleDragSourceClass: function(value) {
-        this._$sourceElement && this._$sourceElement.toggleClass(this._addWidgetPrefix("source"), value);
+    _toggleDragSourceClass: function(value, $element) {
+        let $sourceElement = $element || this._$sourceElement;
+        $sourceElement && $sourceElement.toggleClass(this._addWidgetPrefix("source"), value);
     },
 
     _getBoundOffset: function() {

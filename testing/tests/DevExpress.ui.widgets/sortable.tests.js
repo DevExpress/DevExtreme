@@ -44,6 +44,27 @@ var moduleConfig = {
     }
 };
 
+var crossComponentModuleConfig = {
+    createComponent: function(componentName, options, $element) {
+        let instance = ($element || this.$element)[componentName](options)[componentName]("instance");
+        this.instances.push(instance);
+        return instance;
+    },
+    beforeEach: function() {
+        $("#qunit-fixture").addClass("qunit-fixture-visible");
+
+        this.instances = [];
+        this.$element = $("#items");
+        this.createSortable = this.createComponent.bind(this, "dxSortable");
+        this.createDraggable = this.createComponent.bind(this, "dxDraggable");
+    },
+    afterEach: function() {
+        $("#qunit-fixture").removeClass("qunit-fixture-visible");
+        this.instances.forEach((instance) => {
+            instance.dispose();
+        });
+    }
+};
 
 QUnit.module("rendering", moduleConfig);
 
@@ -443,14 +464,13 @@ QUnit.test("Dragging an item to the last position when there is ignored (not dra
 });
 
 
-QUnit.module("Events", moduleConfig);
+QUnit.module("Events", crossComponentModuleConfig);
 
 QUnit.test("onDragChange - check args when dragging an item down", function(assert) {
     // arrange
     let items,
         args,
         onDragChange = sinon.spy();
-
 
     this.createSortable({
         filter: ".draggable",
@@ -474,7 +494,6 @@ QUnit.test("onDragChange - check args when dragging an item up", function(assert
     let items,
         args,
         onDragChange = sinon.spy();
-
 
     this.createSortable({
         filter: ".draggable",
@@ -522,14 +541,14 @@ QUnit.test("'onDragChange' option changing", function(assert) {
         items,
         onDragChange = sinon.spy();
 
-    this.createSortable({
+    let sortableInstance = this.createSortable({
         filter: ".draggable"
     });
 
     items = this.$element.children();
 
     // act
-    this.sortableInstance.option("onDragChange", onDragChange);
+    sortableInstance.option("onDragChange", onDragChange);
 
     // arrange
     items = this.$element.children();
@@ -724,7 +743,7 @@ QUnit.test("'onPlaceholderPrepared' option changing", function(assert) {
         items,
         onPlaceholderPrepared = sinon.spy();
 
-    this.createSortable({
+    let sortableInstance = this.createSortable({
         filter: ".draggable",
         dropFeedbackMode: "indicate"
     });
@@ -732,7 +751,7 @@ QUnit.test("'onPlaceholderPrepared' option changing", function(assert) {
     items = this.$element.children();
 
     // act
-    this.sortableInstance.option("onPlaceholderPrepared", onPlaceholderPrepared);
+    sortableInstance.option("onPlaceholderPrepared", onPlaceholderPrepared);
 
     // arrange
     items = this.$element.children();
@@ -750,27 +769,122 @@ QUnit.test("'onPlaceholderPrepared' option changing", function(assert) {
     assert.strictEqual(args[0].toIndex, 1, "toIndex");
 });
 
+QUnit.test("onAdd - check args", function(assert) {
+    // arrange
+    let onAddSpy = sinon.spy();
 
-QUnit.module("Cross-Component Drag and Drop", {
-    createComponent: function(componentName, options, $element) {
-        let instance = $element[componentName](options)[componentName]("instance");
-        this.instances.push(instance);
-        return instance;
-    },
-    beforeEach: function() {
-        $("#qunit-fixture").addClass("qunit-fixture-visible");
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items"));
 
-        this.instances = [];
-        this.createSortable = this.createComponent.bind(this, "dxSortable");
-        this.createDraggable = this.createComponent.bind(this, "dxDraggable");
-    },
-    afterEach: function() {
-        $("#qunit-fixture").removeClass("qunit-fixture-visible");
-        this.instances.forEach((instance) => {
-            instance.dispose();
-        });
-    }
+    let sortable2 = this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        onAdd: onAddSpy
+    }, $("#items2"));
+
+    // act
+    let $sourceElement = sortable1.$element().children().eq(1),
+        pointer = pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0),
+        $dragElement = $("body").children(".dx-sortable-dragging");
+
+    pointer.up();
+
+    // assert
+    assert.strictEqual(onAddSpy.callCount, 1, "onAdd is called");
+    assert.deepEqual(onAddSpy.getCall(0).args[0].sourceComponent, sortable1, "sourceComponent");
+    assert.deepEqual(onAddSpy.getCall(0).args[0].component, sortable2, "component");
+    assert.strictEqual(onAddSpy.getCall(0).args[0].fromIndex, 1, "fromIndex");
+    assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 2, "toIndex");
+    assert.strictEqual($(onAddSpy.getCall(0).args[0].sourceElement).get(0), $sourceElement.get(0), "sourceElement");
+    assert.strictEqual($(onAddSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "dragElement");
+    assert.strictEqual($(sortable2.element()).children("#item2").length, 1, "item is added");
 });
+
+QUnit.test("onAdd - not add item when eventArgs.cancel is true", function(assert) {
+    // arrange
+    let onAddSpy = sinon.spy((e) => { e.cancel = true; });
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        onAdd: onAddSpy
+    }, $("#items2"));
+
+    // act
+    pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
+
+    // assert
+    assert.strictEqual(onAddSpy.callCount, 1, "onAdd is called");
+    assert.strictEqual($(sortable2.element()).children("#item1").length, 0, "item isn't added");
+});
+
+QUnit.test("onRemove - check args", function(assert) {
+    // arrange
+    let onRemoveSpy = sinon.spy();
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        onRemove: onRemoveSpy
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items2"));
+
+    // act
+    let $sourceElement = sortable1.$element().children().eq(1),
+        pointer = pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0),
+        $dragElement = $("body").children(".dx-sortable-dragging");
+
+    pointer.up();
+
+    // assert
+    assert.strictEqual(onRemoveSpy.callCount, 1, "onRemove is called");
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].targetComponent, sortable2, "targetComponent");
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].component, sortable1, "component");
+    assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromIndex, 1, "fromIndex");
+    assert.strictEqual(onRemoveSpy.getCall(0).args[0].toIndex, 2, "toIndex");
+    assert.strictEqual($(onRemoveSpy.getCall(0).args[0].sourceElement).get(0), $sourceElement.get(0), "sourceElement");
+    assert.strictEqual($(onRemoveSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "dragElement");
+    assert.strictEqual($(sortable1.element()).children("#item2").length, 0, "item is removed");
+});
+
+QUnit.test("onRemove - not add item when eventArgs.cancel is true", function(assert) {
+    // arrange
+    let onRemoveSpy = sinon.spy((e) => { e.cancel = true; });
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        onRemove: onRemoveSpy
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items2"));
+
+    // act
+    pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
+
+    // assert
+    assert.strictEqual(onRemoveSpy.callCount, 1, "onRemove is called");
+    assert.strictEqual($(sortable1.element()).children("#item1").length, 1, "item isn't removed");
+    assert.strictEqual($(sortable1.element()).children("#item1").attr("class"), "draggable", "source item hasn't dx-sortable-source class");
+    assert.strictEqual($(sortable2.element()).children("#item1").attr("class"), "draggable", "cloned source item hasn't dx-sortable-source class");
+});
+
+
+QUnit.module("Cross-Component Drag and Drop", crossComponentModuleConfig);
 
 QUnit.test("Dragging item to another the sortable widget", function(assert) {
     // arrange
