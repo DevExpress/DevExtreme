@@ -205,41 +205,54 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
-             * @name DraggableBaseOptions.onDragStart
+             * @name dxDraggableOptions.onDragStart
              * @type function(e)
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
              * @action
              */
             onDragStart: null,
             /**
-             * @name DraggableBaseOptions.onDragMove
+             * @name dxDraggableOptions.onDragMove
              * @type function(e)
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
              * @action
              */
             onDragMove: null,
             /**
-             * @name DraggableBaseOptions.onDragEnd
+             * @name dxDraggableOptions.onDragEnd
              * @type function(e)
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
              * @action
              */
             onDragEnd: null,
             /**
-             * @name DraggableBaseOptions.onDrop
+             * @name dxDraggableOptions.onDrop
              * @type function(e)
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 itemElement:dxElement
-             * @type_function_param1_field6 fromComponent:dxDraggable
-             * @type_function_param1_field7 toComponent:dxDraggable
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
              * @action
              */
             onDrop: null,
@@ -448,6 +461,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return {
             container: getPublicElement($(container)),
             model: {
+                itemData: this.option("itemData"),
                 itemElement: getPublicElement($element)
             }
         };
@@ -662,13 +676,6 @@ var Draggable = DOMComponentWithTemplate.inherit({
         let offset = e.offset,
             startPosition = this._startPosition;
 
-        let eventArgs = this._getEventArgs(e);
-        this._getAction("onDragMove")(eventArgs);
-
-        if(eventArgs.cancel === true) {
-            return;
-        }
-
         this._move({
             left: startPosition.left + offset.x,
             top: startPosition.top + offset.y
@@ -676,6 +683,13 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         if(this.option("autoScroll")) {
             this._findScrollable(e);
+        }
+
+        let eventArgs = this._getEventArgs(e);
+        this._getAction("onDragMove")(eventArgs);
+
+        if(eventArgs.cancel === true) {
+            return;
         }
 
         let targetDraggable = this._getTargetDraggable();
@@ -714,7 +728,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         return {
             event: e,
-            itemData: sourceDraggable.option("itemData")
+            itemData: sourceDraggable.option("itemData"),
+            itemElement: getPublicElement(sourceDraggable._$sourceElement)
         };
     },
 
@@ -723,15 +738,18 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         return extend(this._getEventArgs(e), {
             fromComponent: this,
-            toComponent: targetDraggable,
-            itemElement: this._$sourceElement
+            toComponent: targetDraggable
         });
     },
 
     _getDragStartArgs: function(e, $itemElement) {
-        return extend(this._getEventArgs(e), {
+        let args = this._getEventArgs(e);
+
+        return {
+            event: args.event,
+            itemData: args.itemData,
             itemElement: $itemElement
-        });
+        };
     },
 
     _dragEndHandler: function(e) {

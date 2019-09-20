@@ -47,13 +47,62 @@ var Sortable = Draggable.inherit({
              */
             allowDropInsideItem: false,
             /**
+             * @name dxSortableOptions.onDragStart
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @action
+             */
+            /**
+             * @name dxSortableOptions.onDragMove
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 dropInsideItem:boolean
+             * @action
+             */
+            /**
+             * @name dxSortableOptions.onDragEnd
+             * @type function(e)
+             * @extends Action
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
+             * @action
+             */
+            /**
              * @name dxSortableOptions.onDragChange
              * @type function(e)
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
              * @action
-             * @hidden
              */
             onDragChange: null,
             /**
@@ -62,11 +111,14 @@ var Sortable = Draggable.inherit({
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field7 fromIndex:number
-             * @type_function_param1_field8 toIndex:number
-             * @type_function_param1_field9 itemElement:dxElement
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
              * @action
              */
             onAdd: null,
@@ -76,11 +128,14 @@ var Sortable = Draggable.inherit({
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
-             * @type_function_param1_field7 fromIndex:number
-             * @type_function_param1_field8 toIndex:number
-             * @type_function_param1_field9 itemElement:dxElement
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
              * @action
              */
             onRemove: null,
@@ -90,9 +145,14 @@ var Sortable = Draggable.inherit({
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 fromIndex:number
-             * @type_function_param1_field6 toIndex:number
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
              * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field12 dropInsideItem:boolean
              * @action
              */
             onReorder: null,
@@ -102,6 +162,12 @@ var Sortable = Draggable.inherit({
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
+             * @type_function_param1_field5 cancel:boolean
+             * @type_function_param1_field6 itemData:any
+             * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromIndex:number
+             * @type_function_param1_field9 toIndex:number
+             * @type_function_param1_field10 dropInsideItem:boolean
              * @action
              * @hidden
              */
@@ -357,7 +423,7 @@ var Sortable = Draggable.inherit({
         let sourceDraggable = this._getSourceDraggable(),
             toIndex = this._normalizeToIndex(itemPoint.index, itemPoint.dropInsideItem);
 
-        let eventArgs = extend(this._getEventArgs(e), {
+        let eventArgs = extend(this._getCrossComponentEventArgs(e), {
             toIndex,
             dropInsideItem: itemPoint.dropInsideItem
         });
@@ -438,14 +504,14 @@ var Sortable = Draggable.inherit({
     },
 
     _getEventArgs: function(e) {
-        let sourceElement = getPublicElement(this._getSourceElement()),
-            dropInsideItem = this.option("dropInsideItem");
+        let sourceDraggable = this._getSourceDraggable(),
+            targetDraggable = this._getTargetDraggable(),
+            dropInsideItem = targetDraggable.option("dropInsideItem");
 
         return extend(this.callBase.apply(this, arguments), {
-            fromIndex: this.option("fromIndex"),
-            toIndex: this._normalizeToIndex(this.option("toIndex"), dropInsideItem),
-            dropInsideItem: dropInsideItem,
-            itemElement: sourceElement
+            fromIndex: sourceDraggable.option("fromIndex"),
+            toIndex: this._normalizeToIndex(targetDraggable.option("toIndex"), dropInsideItem),
+            dropInsideItem: dropInsideItem
         });
     },
 
@@ -517,19 +583,19 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _getSortableEventArgs: function(e, eventName) {
+    _getCrossComponentEventArgs: function(e, eventName) {
         let that = this,
             sourceDraggable = that._getSourceDraggable();
 
-        return extend(true, {}, e, {
+        return extend(this._getEventArgs(e), {
             toIndex: that.option("toIndex"),
-            fromComponent: eventName !== "onReorder" ? sourceDraggable : undefined,
-            toComponent: eventName !== "onReorder" ? that : undefined
+            fromComponent: sourceDraggable,
+            toComponent: that
         });
     },
 
     _fireAddEvent: function(sourceEvent) {
-        let args = this._getSortableEventArgs(sourceEvent, "onAdd");
+        let args = this._getCrossComponentEventArgs(sourceEvent, "onAdd");
 
         this._getAction("onAdd")(args);
 
@@ -538,7 +604,7 @@ var Sortable = Draggable.inherit({
 
     _fireRemoveEvent: function(sourceEvent) {
         let sourceDraggable = this._getSourceDraggable(),
-            args = this._getSortableEventArgs(sourceEvent, "onRemove");
+            args = this._getCrossComponentEventArgs(sourceEvent, "onRemove");
 
         sourceDraggable._getAction("onRemove")(args);
 
@@ -546,7 +612,7 @@ var Sortable = Draggable.inherit({
     },
 
     _fireReorderEvent: function(sourceEvent) {
-        let args = this._getSortableEventArgs(sourceEvent, "onReorder");
+        let args = this._getEventArgs(sourceEvent);
 
         this._getAction("onReorder")(args);
     }

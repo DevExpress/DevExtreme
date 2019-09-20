@@ -886,7 +886,8 @@ QUnit.test("onReorder - check args", function(assert) {
 
     // act
     let $sourceElement = sortable.$element().children().eq(0);
-    pointerMock($sourceElement).start().down().move(0, 25).move(0, 5).up();
+
+    pointerMock($sourceElement).start().down().move(0, 40).move(0, 10).up();
 
     // assert
     assert.strictEqual(onReorderSpy.callCount, 1, "onRemove is called");
