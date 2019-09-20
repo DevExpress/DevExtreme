@@ -1,14 +1,16 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
-    dragEvents = require("events/drag"),
     pointerMock = require("../../helpers/pointerMock.js"),
     viewPort = require("core/utils/view_port").value,
     GestureEmitter = require("events/gesture/emitter.gesture.js"),
-    animationFrame = require("animation/frame");
+    animationFrame = require("animation/frame"),
+    translator = require("animation/translator");
 
 require("common.css!");
 require("ui/draggable");
 require("ui/scroll_view");
+
+$("body").css("height", "800px");
 
 QUnit.testStart(function() {
     var markup =
@@ -33,19 +35,14 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var DRAGGABLE_CLASS = "dx-draggable",
-    DRAGGABLE_ACTION_TO_EVENT_MAP = {
-        "onDragStart": dragEvents.start,
-        "onDragMove": dragEvents.move,
-        "onDragEnd": dragEvents.end
-    };
+var DRAGGABLE_CLASS = "dx-draggable";
 
 var setupDraggable = function(that, $element) {
     $("#qunit-fixture").addClass("qunit-fixture-visible");
 
     that.$element = $element;
-    that.createDraggable = function(options) {
-        return that.draggableInstance = that.$element.dxDraggable($.extend({ boundary: $("body") }, options)).dxDraggable("instance");
+    that.createDraggable = function(options, $element) {
+        return that.draggableInstance = ($element || that.$element).dxDraggable($.extend({ boundary: $("body") }, options)).dxDraggable("instance");
     };
     that.pointer = pointerMock(that.$element).start();
 
@@ -83,42 +80,176 @@ QUnit.test("'immediate' option", function(assert) {
     }
 });
 
-QUnit.module("callbacks", moduleConfig);
+QUnit.module("Events", moduleConfig);
 
-$.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
-    var checkCallback = function(draggable, spy, assert) {
-        assert.ok(spy.calledOnce, "callback fired");
+QUnit.test("onDragStart - check args", function(assert) {
+    // arrange
+    let onDragStartSpy = sinon.spy();
 
-        var firstCall = spy.getCall(0),
-            arg = firstCall.args[0],
-            context = firstCall.thisValue;
-
-        assert.strictEqual(context, draggable, "context equals to component");
-        assert.strictEqual(arg.component, draggable);
-        assert.strictEqual($(arg.element)[0], this.$element[0]);
-        assert.equal(arg.event.type, eventName);
-    };
-
-    QUnit.test("'" + callbackName + "' callback fired", function(assert) {
-        var callbackSpy = sinon.spy(noop),
-            options = {},
-            draggable;
-
-        options[callbackName] = callbackSpy;
-        draggable = this.createDraggable(options);
-
-        this.pointer.dragStart().drag().dragEnd();
-        checkCallback.call(this, draggable, callbackSpy, assert);
+    this.createDraggable({
+        onDragStart: onDragStartSpy
     });
 
-    QUnit.test("'" + callbackName + "' option changing", function(assert) {
-        var draggable = this.createDraggable(),
-            callbackSpy = sinon.spy(noop);
-        draggable.option(callbackName, callbackSpy);
+    // act
+    this.pointer.down().move(0, 20);
 
-        this.pointer.dragStart().drag().dragEnd();
-        checkCallback.call(this, draggable, callbackSpy, assert);
+    // assert
+    assert.ok(onDragStartSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragStartSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("'onDragStart' option changing", function(assert) {
+    // arrange
+    let onDragStartSpy = sinon.spy(),
+        draggable = this.createDraggable();
+
+    // act
+    draggable.option("onDragStart", onDragStartSpy);
+    this.pointer.down().move(0, 20);
+
+    // assert
+    assert.ok(onDragStartSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragStartSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("onDragStart - not drag item when eventArgs.cancel is true", function(assert) {
+    // arrange
+    let onDragStartSpy = sinon.spy((e) => { e.cancel = true; });
+
+    this.createDraggable({
+        onDragStart: onDragStartSpy
     });
+
+    // act
+    this.pointer.down().move(0, 20);
+
+    // assert
+    assert.ok(onDragStartSpy.calledOnce, "event fired");
+    assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "element isn't dragged");
+});
+
+QUnit.test("onDragMove - check args", function(assert) {
+    // arrange
+    let onDragMoveSpy = sinon.spy();
+
+    this.createDraggable({
+        onDragMove: onDragMoveSpy
+    });
+
+    // act
+    this.pointer.down().move(0, 20);
+
+    // assert
+    assert.ok(onDragMoveSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragMoveSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("'onDragMove' option changing", function(assert) {
+    // arrange
+    let onDragMoveSpy = sinon.spy(),
+        draggable = this.createDraggable();
+
+    // act
+    draggable.option("onDragMove", onDragMoveSpy);
+    this.pointer.down().move(0, 20);
+
+    // assert
+    assert.ok(onDragMoveSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragMoveSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("onDragMove - check args when cross-component dragging", function(assert) {
+    // arrange
+    let onDragMoveSpy = sinon.spy();
+
+    let draggable1 = this.createDraggable({
+        onDragMove: onDragMoveSpy,
+        group: "shared"
+    });
+
+    let draggable2 = this.createDraggable({
+        group: "shared"
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 300).move(0, 10);
+
+    // assert
+    assert.strictEqual(onDragMoveSpy.callCount, 2, "event was called twice");
+    assert.deepEqual($(onDragMoveSpy.getCall(1).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].fromComponent, draggable1, "fromComponent");
+    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].toComponent, draggable2, "toComponent");
+});
+
+QUnit.test("onDragEnd - check args", function(assert) {
+    // arrange
+    let onDragEndSpy = sinon.spy();
+
+    this.createDraggable({
+        onDragEnd: onDragEndSpy
+    });
+
+    // act
+    this.pointer.down().move(0, 20).up();
+
+    // assert
+    assert.ok(onDragEndSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragEndSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("'onDragEnd' option changing", function(assert) {
+    // arrange
+    let onDragEndSpy = sinon.spy(),
+        draggable = this.createDraggable();
+
+    // act
+    draggable.option("onDragEnd", onDragEndSpy);
+    this.pointer.down().move(0, 20).up();
+
+    // assert
+    assert.ok(onDragEndSpy.calledOnce, "event fired");
+    assert.deepEqual($(onDragEndSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+});
+
+QUnit.test("onDragEnd - check args when cross-component dragging", function(assert) {
+    // arrange
+    let onDragEndSpy = sinon.spy();
+
+    let draggable1 = this.createDraggable({
+        onDragEnd: onDragEndSpy,
+        group: "shared"
+    });
+
+    let draggable2 = this.createDraggable({
+        group: "shared"
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 300).move(0, 10).up();
+
+    // assert
+    assert.strictEqual(onDragEndSpy.callCount, 1, "event fired");
+    assert.deepEqual($(onDragEndSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.deepEqual(onDragEndSpy.getCall(0).args[0].fromComponent, draggable1, "fromComponent");
+    assert.deepEqual(onDragEndSpy.getCall(0).args[0].toComponent, draggable2, "toComponent");
+});
+
+QUnit.test("onDragEnd - not drag item when eventArgs.cancel is true", function(assert) {
+    // arrange
+    let onDragEndSpy = sinon.spy((e) => { e.cancel = true; });
+
+    this.createDraggable({
+        onDragEnd: onDragEndSpy
+    });
+
+    let initialPosition = translator.locate(this.$element);
+
+    // act
+    this.pointer.down().move(0, 40).up();
+
+    // assert
+    assert.ok(onDragEndSpy.calledOnce, "event fired");
+    assert.deepEqual(translator.locate(this.$element), initialPosition, "element position");
 });
 
 QUnit.test("'disabled' option", function(assert) {
@@ -143,6 +274,119 @@ QUnit.test("'dx-state-disabled' class (T284305)", function(assert) {
     instance.$element().removeClass("dx-state-disabled");
     this.pointer.down().move(100, 0).up();
     this.checkPosition(100, 0, assert);
+});
+
+QUnit.test("onDrop - check args", function(assert) {
+    // arrange
+    let onDropSpy = sinon.spy();
+
+    let draggable1 = this.createDraggable({
+        group: "shared"
+    });
+
+    let draggable2 = this.createDraggable({
+        onDrop: onDropSpy,
+        group: "shared"
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 300).up();
+
+    // assert
+    assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
+    assert.deepEqual($(onDropSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].toComponent, draggable2, "component");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].fromComponent, draggable1, "sourceComponent");
+    assert.strictEqual($(draggable2.element()).children("#draggable").length, 1, "dropped item");
+});
+
+QUnit.test("onDrop - check args when clone is true", function(assert) {
+    // arrange
+    let onDropSpy = sinon.spy();
+
+    let draggable1 = this.createDraggable({
+        group: "shared",
+        clone: true
+    });
+
+    let draggable2 = this.createDraggable({
+        group: "shared",
+        onDrop: onDropSpy
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 400).up();
+
+    // assert
+    assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
+    assert.deepEqual($(onDropSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].toComponent, draggable2, "component");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].fromComponent, draggable1, "sourceComponent");
+    assert.strictEqual($(draggable2.element()).children("#draggable").length, 1, "dropped item");
+});
+
+QUnit.test("onDrop - not drop item when eventArgs.cancel is true", function(assert) {
+    // arrange
+    let onDropSpy = sinon.spy((e) => { e.cancel = true; });
+
+    this.createDraggable({
+        group: "shared"
+    });
+
+    let draggable2 = this.createDraggable({
+        group: "shared",
+        onDrop: onDropSpy
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 400).up();
+
+    // assert
+    assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
+    assert.strictEqual($(draggable2.element()).children("#draggable").length, 0, "item isn't droped");
+});
+
+QUnit.test("onDragStart - add item data to event arguments", function(assert) {
+    // arrange
+    let itemData = { test: true },
+        onDragStartSpy = sinon.spy((e) => { e.itemData = itemData; });
+
+    let draggable = this.createDraggable({
+        onDragStart: onDragStartSpy
+    });
+
+    // act
+    this.pointer.down().move(0, 400).up();
+
+    // assert
+    assert.strictEqual(onDragStartSpy.callCount, 1, "onDragStart is called");
+    assert.deepEqual(draggable.option("itemData"), itemData, "itemData");
+});
+
+QUnit.test("onDrop - check itemData arg", function(assert) {
+    // arrange
+    let itemData = { test: true },
+        onDropSpy = sinon.spy(),
+        onDragStartSpy = sinon.spy((e) => { e.itemData = itemData; });
+
+    let draggable1 = this.createDraggable({
+        group: "shared",
+        onDragStart: onDragStartSpy
+    });
+
+    this.createDraggable({
+        group: "shared",
+        onDrop: onDropSpy
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 400).up();
+
+    // assert
+    assert.strictEqual(onDragStartSpy.callCount, 1, "onDragStart is called");
+    assert.deepEqual(draggable1.option("itemData"), itemData, "itemData");
+    assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
+    assert.deepEqual(onDropSpy.getCall(0).args[0].itemData, itemData, "itemData in onDrop event arguments");
 });
 
 
@@ -695,7 +939,7 @@ QUnit.test("Set template", function(assert) {
     // assert
     assert.strictEqual($("body").children("#myDragElement").length, 1, "there is a drag element");
     assert.strictEqual(template.callCount, 1, "template is called");
-    assert.deepEqual($(template.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "args[0].sourceElement");
+    assert.deepEqual($(template.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "args[0].itemElement");
     assert.deepEqual($(template.getCall(0).args[1]).get(0), $(viewPort()).get(0), "args[1] - container");
 });
 
@@ -1202,7 +1446,7 @@ QUnit.test("set cursorOffset as function", function(assert) {
     // assert
     assert.strictEqual(this.$element.length, 1, "there is a drag element");
     assert.deepEqual(this.$element.offset(), { left: 30, top: 30 }, "drag element offset");
-    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "source element");
+    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "item element");
     assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].dragElement).get(0), this.$element.get(0), "drag element");
 });
 
@@ -1262,7 +1506,7 @@ QUnit.test("set cursorOffset as function when clone is true", function(assert) {
     $dragElement = $("body").children(".dx-draggable-dragging");
     assert.strictEqual($dragElement.length, 1, "there is a drag element");
     assert.deepEqual($dragElement.offset(), { left: 30, top: 30 }, "drag element offset");
-    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].sourceElement).get(0), this.$element.get(0), "source element");
+    assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "item element");
     assert.deepEqual($(cursorOffsetSpy.getCall(0).args[0].dragElement).get(0), $dragElement.get(0), "drag element");
 });
 

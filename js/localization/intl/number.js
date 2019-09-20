@@ -78,6 +78,10 @@ module.exports = {
 
         format = this._normalizeFormat(format);
 
+        if(format.currency === "default") {
+            format.currency = dxConfig().defaultCurrency;
+        }
+
         if(!format || 'function' !== typeof format && !format.type && !format.formatter) {
             return getFormatter(format)(value);
         }
