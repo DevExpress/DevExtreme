@@ -15,6 +15,12 @@ const moduleConfig = {
         this.controller = new FileItemsController({
             fileProvider: this.data
         });
+
+        this.clock = sinon.useFakeTimers();
+    },
+
+    afterEach: function() {
+        this.clock.restore();
     }
 
 };
@@ -44,6 +50,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.equal(counter, 1);
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("get directory contents", function(assert) {
@@ -78,6 +86,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.equal(files[0].fileItem.name, "File1");
                 done3();
             });
+
+        this.clock.tick(100);
     });
 
     test("create new directory", function(assert) {
@@ -100,6 +110,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.equal(directories[2].fileItem.name, "New");
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("rename file item", function(assert) {
@@ -122,6 +134,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.equal(directories[0].fileItem.name, "New");
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("move file items", function(assert) {
@@ -152,6 +166,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.equal(directories[0].fileItem.name, "F1");
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("copy file items", function(assert) {
@@ -178,6 +194,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.ok(directories[0].parentDirectory.expanded);
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("delete file items", function(assert) {
@@ -201,6 +219,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.equal(itemInfos[0].fileItem.name, "F1");
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("get current path", function(assert) {
@@ -230,6 +250,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.equal(controller.getCurrentPath(), "F1/F1.1");
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("refresh data and restore state", function(assert) {
@@ -282,6 +304,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.ok(controller.getCurrentDirectory().expanded);
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("restore selection after refresh when selected item was removed", function(assert) {
@@ -331,6 +355,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 assert.equal(itemInfos.length, 0);
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("set current path", function(assert) {
@@ -361,6 +387,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
 
                 done();
             });
+
+        this.clock.tick(100);
     });
 
     test("upload fails when max file size exceeded", function(assert) {
@@ -387,6 +415,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                     },
                     "max file size exceeded error raised");
             });
+
+        this.clock.tick(100);
     });
 
     test("upload fails when file has wrong extension", function(assert) {
@@ -414,6 +444,8 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                     },
                     "wrong file extension error raised");
             });
+
+        this.clock.tick(100);
     });
 
     test("files with empty extensions can be allowed or denied", function(assert) {
@@ -448,6 +480,7 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
                 done2();
             });
 
+        this.clock.tick(100);
     });
 
 });
