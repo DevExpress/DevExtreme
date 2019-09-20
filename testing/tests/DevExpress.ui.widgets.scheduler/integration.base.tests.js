@@ -128,7 +128,7 @@ QUnit.test("Height of 'dx-scheduler-group-row' should be equal with height of 'd
     var groupRow = $element.find('.dx-scheduler-group-flex-container .dx-scheduler-group-row:last-child .dx-scheduler-group-header').eq(0),
         dataTableRow = $element.find('.dx-scheduler-date-table-row').eq(0);
 
-    assert.roughEqual(groupRow.outerHeight(), dataTableRow.outerHeight(), 0.01, 'Row heights is equal');
+    assert.roughEqual(groupRow.outerHeight(), dataTableRow.outerHeight(), 0.02, 'Row heights is equal');
 });
 
 QUnit.test("Header should be initialized with correct 'width' option", function(assert) {
