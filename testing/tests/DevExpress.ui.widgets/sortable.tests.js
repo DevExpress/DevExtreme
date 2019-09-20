@@ -895,6 +895,63 @@ QUnit.test("onReorder - check args", function(assert) {
     assert.strictEqual($(onReorderSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), "itemElement");
 });
 
+QUnit.test("onDragMove, onDragEnd, onDragChange, onReorder - check itemData arg", function(assert) {
+    // arrange
+    let itemData = { test: true },
+        options = {
+            filter: ".draggable",
+            onDragStart: function(e) {
+                e.itemData = itemData;
+            },
+            onDragMove: sinon.spy(),
+            onDragEnd: sinon.spy(),
+            onDragChange: sinon.spy(),
+            onReorder: sinon.spy()
+        };
+
+    let sortable = this.createSortable(options, $("#items"));
+
+    // act
+    let $sourceElement = sortable.$element().children().eq(0);
+    pointerMock($sourceElement).start().down().move(0, 25).move(0, 5).up();
+
+    // assert
+    assert.deepEqual(options.onDragMove.getCall(0).args[0].itemData, itemData, "itemData in onDragMove event arguments");
+    assert.deepEqual(options.onDragEnd.getCall(0).args[0].itemData, itemData, "itemData in onDragEnd event arguments");
+    assert.deepEqual(options.onDragChange.getCall(0).args[0].itemData, itemData, "itemData in onDragChange event arguments");
+    assert.deepEqual(options.onReorder.getCall(0).args[0].itemData, itemData, "itemData in onReorder event arguments");
+});
+
+QUnit.test("onAdd, onRemove - check itemData arg", function(assert) {
+    // arrange
+    let itemData = { test: true },
+        onAddSpy = sinon.spy(),
+        onRemoveSpy = sinon.spy();
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        onDragStart: function(e) {
+            e.itemData = itemData;
+        },
+        onRemove: onRemoveSpy
+    }, $("#items"));
+
+    this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        onAdd: onAddSpy
+    }, $("#items2"));
+
+    // act
+    let $sourceElement = sortable1.$element().children().eq(1);
+    pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(350, 30).move(50, 0).up();
+
+    // assert
+    assert.deepEqual(onAddSpy.getCall(0).args[0].itemData, itemData, "itemData in onDragMove event arguments");
+    assert.deepEqual(onRemoveSpy.getCall(0).args[0].itemData, itemData, "itemData in onDragEnd event arguments");
+});
+
 
 QUnit.module("Cross-Component Drag and Drop", crossComponentModuleConfig);
 

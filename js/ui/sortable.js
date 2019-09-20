@@ -357,8 +357,7 @@ var Sortable = Draggable.inherit({
         let sourceDraggable = this._getSourceDraggable(),
             toIndex = this._normalizeToIndex(itemPoint.index, itemPoint.dropInsideItem);
 
-        let eventArgs = extend(this._getEventArgs(), {
-            event: e,
+        let eventArgs = extend(this._getEventArgs(e), {
             toIndex,
             dropInsideItem: itemPoint.dropInsideItem
         });
@@ -377,8 +376,7 @@ var Sortable = Draggable.inherit({
             dropInsideItem: itemPoint.dropInsideItem,
             toIndex: itemPoint.index
         });
-        this._getAction("onPlaceholderPrepared")(extend(this._getEventArgs(), {
-            event: e,
+        this._getAction("onPlaceholderPrepared")(extend(this._getEventArgs(e), {
             placeholderElement: getPublicElement(this._$placeholderElement),
             dragElement: getPublicElement(sourceDraggable._$dragElement)
         }));
@@ -433,22 +431,22 @@ var Sortable = Draggable.inherit({
         }
     },
 
-    _getEventArgs: function() {
+    _getDragStartArgs: function(e, $itemElement) {
+        return extend(this.callBase.apply(this, arguments), {
+            fromIndex: $itemElement.index()
+        });
+    },
+
+    _getEventArgs: function(e) {
         let sourceElement = getPublicElement(this._getSourceElement()),
             dropInsideItem = this.option("dropInsideItem");
 
-        return {
+        return extend(this.callBase.apply(this, arguments), {
             fromIndex: this.option("fromIndex"),
             toIndex: this._normalizeToIndex(this.option("toIndex"), dropInsideItem),
             dropInsideItem: dropInsideItem,
             itemElement: sourceElement
-        };
-    },
-
-    _getDragEndArgs: function() {
-        var args = this.callBase.apply(this, arguments);
-
-        return extend(args, this._getEventArgs());
+        });
     },
 
     _optionChanged: function(args) {

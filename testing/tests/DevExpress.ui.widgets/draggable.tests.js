@@ -217,6 +217,49 @@ QUnit.test("onDrop - not drop item when eventArgs.cancel is true", function(asse
     assert.strictEqual($(draggable2.element()).children("#draggable").length, 0, "item isn't droped");
 });
 
+QUnit.test("onDragStart - add item data to event arguments", function(assert) {
+    // arrange
+    let itemData = { test: true },
+        onDragStartSpy = sinon.spy((e) => { e.itemData = itemData; });
+
+    let draggable = this.createDraggable({
+        onDragStart: onDragStartSpy
+    });
+
+    // act
+    this.pointer.down().move(0, 400).up();
+
+    // assert
+    assert.strictEqual(onDragStartSpy.callCount, 1, "onDragStart is called");
+    assert.deepEqual(draggable.option("itemData"), itemData, "itemData");
+});
+
+QUnit.test("onDrop - check itemData arg", function(assert) {
+    // arrange
+    let itemData = { test: true },
+        onDropSpy = sinon.spy(),
+        onDragStartSpy = sinon.spy((e) => { e.itemData = itemData; });
+
+    let draggable1 = this.createDraggable({
+        group: "shared",
+        onDragStart: onDragStartSpy
+    });
+
+    this.createDraggable({
+        group: "shared",
+        onDrop: onDropSpy
+    }, $("#items"));
+
+    // act
+    this.pointer.down().move(0, 400).up();
+
+    // assert
+    assert.strictEqual(onDragStartSpy.callCount, 1, "onDragStart is called");
+    assert.deepEqual(draggable1.option("itemData"), itemData, "itemData");
+    assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
+    assert.deepEqual(onDropSpy.getCall(0).args[0].itemData, itemData, "itemData in onDrop event arguments");
+});
+
 
 QUnit.module("'dragDirection' option", moduleConfig);
 

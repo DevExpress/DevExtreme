@@ -258,6 +258,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             boundary: window,
             boundOffset: 0,
             allowMoveByClick: false,
+            itemData: null,
             /**
              * @name DraggableBaseOptions.container
              * @type string|Node|jQuery
@@ -539,8 +540,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         }
 
         this._move(position, $element);
-
-        this._getAction("onDragMove")({ event: e });
+        this._getAction("onDragMove")(this._getEventArgs(e));
     },
 
     _isValidElement: function(event, $element) {
@@ -569,6 +569,15 @@ var Draggable = DOMComponentWithTemplate.inherit({
             return;
         }
 
+        let dragStartArgs = this._getDragStartArgs(e, $element);
+        this._getAction("onDragStart")(dragStartArgs);
+
+        if(dragStartArgs.cancel) {
+            e.cancel = true;
+            return;
+        }
+
+        this.option("itemData", dragStartArgs.itemData);
         this._setSourceDraggable();
 
         this._$sourceElement = $element;
@@ -599,8 +608,6 @@ var Draggable = DOMComponentWithTemplate.inherit({
         if(this.option("autoScroll")) {
             this._startAnimator();
         }
-
-        this._getAction("onDragStart")({ event: e });
     },
 
     _getAreaOffset: function($area) {
@@ -655,6 +662,13 @@ var Draggable = DOMComponentWithTemplate.inherit({
         let offset = e.offset,
             startPosition = this._startPosition;
 
+        let eventArgs = this._getEventArgs(e);
+        this._getAction("onDragMove")(eventArgs);
+
+        if(eventArgs.cancel === true) {
+            return;
+        }
+
         this._move({
             left: startPosition.left + offset.x,
             top: startPosition.top + offset.y
@@ -662,13 +676,6 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         if(this.option("autoScroll")) {
             this._findScrollable(e);
-        }
-
-        let eventArgs = { event: e };
-        this._getAction("onDragMove")(eventArgs);
-
-        if(eventArgs.cancel === true) {
-            return;
         }
 
         let targetDraggable = this._getTargetDraggable();
@@ -702,36 +709,46 @@ var Draggable = DOMComponentWithTemplate.inherit({
         that.horizontalScrollHelper && that.horizontalScrollHelper.findScrollable(allObjects, mousePosition);
     },
 
-    _getDragEndArgs: function(e) {
-        return {
-            event: e
-        };
-    },
-
-    _getDropArgs: function(e) {
-        let targetDraggable = this._getTargetDraggable();
+    _getEventArgs: function(e) {
+        let sourceDraggable = this._getSourceDraggable();
 
         return {
             event: e,
-            fromComponent: this,
-            toComponent: targetDraggable,
-            itemElement: this._$sourceElement
+            itemData: sourceDraggable.option("itemData")
         };
     },
 
+    _getDragEndAndDropArgs: function(e) {
+        let targetDraggable = this._getTargetDraggable();
+
+        return extend(this._getEventArgs(e), {
+            fromComponent: this,
+            toComponent: targetDraggable,
+            itemElement: this._$sourceElement
+        });
+    },
+
+    _getDragStartArgs: function(e, $itemElement) {
+        return extend(this._getEventArgs(e), {
+            itemElement: $itemElement
+        });
+    },
+
     _dragEndHandler: function(e) {
-        let dragEndEventArgs = this._getDragEndArgs(e),
-            dropEventArgs = this._getDropArgs(e),
+        let dragEndEventArgs = this._getDragEndAndDropArgs(e),
+            dropEventArgs = this._getDragEndAndDropArgs(e),
             targetDraggable = this._getTargetDraggable();
 
         this._getAction("onDragEnd")(dragEndEventArgs);
 
-        if(targetDraggable !== this) {
-            targetDraggable._getAction("onDrop")(dropEventArgs);
-        }
+        if(!dragEndEventArgs.cancel) {
+            if(targetDraggable !== this) {
+                targetDraggable._getAction("onDrop")(dropEventArgs);
+            }
 
-        if(!dragEndEventArgs.cancel && !dropEventArgs.cancel) {
-            targetDraggable.dragEnd(dragEndEventArgs);
+            if(!dropEventArgs.cancel) {
+                targetDraggable.dragEnd(dragEndEventArgs);
+            }
         }
 
         this.reset();
@@ -806,6 +823,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             case "boundOffset":
             case "handle":
             case "group":
+            case "itemData":
                 break;
             default:
                 this.callBase(args);
