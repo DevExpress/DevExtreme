@@ -1,7 +1,77 @@
 import $ from "jquery";
 import devices from "core/devices";
 import eventUtils from "events/utils";
+import {
+    setupDataGridModules,
+    MockDataController,
+    MockColumnsController,
+    MockSelectionController } from "../dataGridMocks.js";
 import pointerEvents from "events/pointer";
+
+export function setupModules(that, modulesOptions) {
+    var defaultSetCellValue = function(data, value) {
+        if(this.serializeValue) {
+            value = this.serializeValue(value);
+        }
+        data[this.dataField] = value;
+    };
+
+    that.columns = that.columns || [
+        { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1", calculateCellValue: function(data) { return data.Column1; }, setCellValue: defaultSetCellValue },
+        { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2", setCellValue: defaultSetCellValue },
+        { caption: 'Column 3', visible: true, allowEditing: true, dataField: "Column3", setCellValue: defaultSetCellValue },
+        { caption: 'Column 4', visible: true, allowEditing: true, dataField: "Column4", setCellValue: defaultSetCellValue }
+    ];
+
+    that.options = $.extend(true, { tabIndex: 0 }, that.options, {
+        keyboardNavigation: {
+            enabled: true,
+            enterKeyAction: "startEdit",
+            enterKeyDirection: "none",
+            editOnKeyPress: false
+        },
+        editing: { },
+        showColumnHeaders: true
+    });
+
+    that.$element = function() {
+        return $("#container");
+    };
+    that.selectionOptions = {};
+    that.dataControllerOptions = that.dataControllerOptions || {
+        store: {
+            update: function() { return $.Deferred().resolve(); },
+            key: $.noop
+        },
+        pageCount: 10,
+        pageIndex: 0,
+        pageSize: 6,
+        items: [
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 0, data: {} },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 1 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'detail', key: 2 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 3 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 4 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 5 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'group', data: {}, key: 6 },
+            { values: ['test1', 'test2', 'test3', 'test4'], summaryCells: [{}, {}, {}, {}], rowType: 'groupFooter', key: 7 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 8 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 9 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'group', data: {}, key: 10 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'detail', key: 11 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'group', data: { isContinuation: true }, key: 12 }
+        ]
+    };
+
+    setupDataGridModules(that, ['data', 'columns', "editorFactory", 'gridView', 'columnHeaders', 'rows', "grouping", "headerPanel", "search", "editing", "keyboardNavigation", "summary", "masterDetail", "virtualScrolling"], modulesOptions || {
+        initViews: true,
+        controllers: {
+            selection: new MockSelectionController(that.selectionOptions),
+            columns: new MockColumnsController(that.columns),
+            data: new MockDataController(that.dataControllerOptions)
+        }
+    });
+}
 
 export const CLICK_EVENT = eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"),
     device = devices.real(),
