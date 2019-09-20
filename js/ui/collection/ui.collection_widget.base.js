@@ -737,7 +737,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemElements: function() {
-        return this._itemContainer().find(this._itemSelector());
+        return this._itemContainer().children(this._itemSelector());
     },
 
     _initMarkup: function() {

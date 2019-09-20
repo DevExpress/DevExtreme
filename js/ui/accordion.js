@@ -175,10 +175,6 @@ var Accordion = CollectionWidget.inherit({
         ]);
     },
 
-    _itemElements: function() {
-        return this._itemContainer().children(this._itemSelector());
-    },
-
     _init: function() {
         this.callBase();
 

@@ -541,10 +541,6 @@ class Box extends CollectionWidget {
         return BOX_ITEM_DATA_KEY;
     }
 
-    _itemElements() {
-        return this._itemContainer().children(this._itemSelector());
-    }
-
     _init() {
         super._init();
         this.$element().addClass(`${BOX_CLASS}-${this.option("_layoutStrategy")}`);

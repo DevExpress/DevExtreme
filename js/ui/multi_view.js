@@ -160,10 +160,6 @@ const MultiView = CollectionWidget.inherit({
         return this._$itemContainer;
     },
 
-    _itemElements: function() {
-        return this._itemContainer().children(this._itemSelector());
-    },
-
     _itemWidth: function() {
         if(!this._itemWidthValue) {
             this._itemWidthValue = this._$wrapper.width();
