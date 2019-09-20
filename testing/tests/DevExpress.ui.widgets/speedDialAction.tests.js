@@ -625,3 +625,83 @@ QUnit.module("add shading option", (hooks) => {
         secondSDA.dispose();
     });
 });
+
+QUnit.module("add direction option", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
+    hooks.afterEach(() => {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+
+        fx.off = false;
+    }),
+    test("check rendering", (assert) => {
+        const firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
+        const secondSDA = $("#fab-two").dxSpeedDialAction().dxSpeedDialAction("instance");
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        let $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        const fabDimensions = 30;
+        const fabOffsetY = 10;
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "right first action position");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions - fabOffsetY, 110, "right second action position");
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "left top",
+                    my: "left top",
+                    offset: "16 16"
+                },
+                direction: "down"
+            }
+        });
+
+        firstSDA.repaint();
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($fabContent.eq(1).offset().top, 80, "right first action position");
+        assert.equal($fabContent.eq(2).offset().top, 110, "right second action position");
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "left top",
+                    my: "left top",
+                    offset: "16 16"
+                }
+            }
+        });
+
+        firstSDA.repaint();
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($fabContent.eq(1).offset().top, 80, "right first action position");
+        assert.equal($fabContent.eq(2).offset().top, 110, "right second action position");
+
+
+        firstSDA.dispose();
+        secondSDA.dispose();
+    });
+});
+
