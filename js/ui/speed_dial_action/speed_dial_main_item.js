@@ -17,6 +17,8 @@ let speedDialMainItem = null;
 const SpeedDialMainItem = SpeedDialItem.inherit({
     _actionItems: [],
 
+    _shading: false,
+
     _getDefaultOptions() {
         const defaultOptions = {
             icon: "add",
@@ -116,7 +118,6 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
     _clickHandler() {
         const actions = this._actionItems.filter((action) => action.option("actionVisible"));
-        const shading = this._getDefaultOptions().shading;
 
         if(actions.length === 1) return;
 
@@ -129,7 +130,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             actions[i].toggle();
         }
 
-        this.option("shading", actions[0].option("visible") && shading);
+        this._options.shading = actions[0].option("visible") && this._shading;
+        this._toggleShading(this._options.shading);
 
         this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
         this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
@@ -238,6 +240,10 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             case "icon":
                 if(this._isVisible()) this._renderIcon();
                 break;
+            case "shading":
+                this._shading = args.value;
+                this._options.shading = false;
+                break;
             default:
                 this.callBase(args);
         }
@@ -278,8 +284,7 @@ exports.initAction = function(newAction) {
             savedActions.push(newAction);
 
             speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
-                actions: savedActions,
-                shading: false
+                actions: savedActions
             }));
         } else if(savedActions.length === 1) {
             speedDialMainItem.option(extend({}, savedActions[0]._options, {
@@ -287,8 +292,7 @@ exports.initAction = function(newAction) {
             }));
         } else {
             speedDialMainItem.option(extend(speedDialMainItem._getCurrentOptions(savedActions), {
-                actions: savedActions,
-                shading: false
+                actions: savedActions
             }));
         }
     }
