@@ -1638,6 +1638,33 @@ declare module DevExpress.fileProvider {
     export class ArrayFileProvider extends FileProvider {
         constructor(options?: ArrayFileProviderOptions)
     }
+    /** @name CustomFileProvider.Options */
+    export interface CustomFileProviderOptions extends FileProviderOptions<CustomFileProvider> {
+        /** @name CustomFileProvider.Options.abortFileUpload */
+        abortFileUpload?: Function;
+        /** @name CustomFileProvider.Options.copyItem */
+        copyItem?: Function;
+        /** @name CustomFileProvider.Options.createDirectory */
+        createDirectory?: Function;
+        /** @name CustomFileProvider.Options.deleteItem */
+        deleteItem?: Function;
+        /** @name CustomFileProvider.Options.getItems */
+        getItems?: Function;
+        /** @name CustomFileProvider.Options.hasSubDirectoriesExpr */
+        hasSubDirectoriesExpr?: string | Function;
+        /** @name CustomFileProvider.Options.moveItem */
+        moveItem?: Function;
+        /** @name CustomFileProvider.Options.renameItem */
+        renameItem?: Function;
+        /** @name CustomFileProvider.Options.uploadChunkSize */
+        uploadChunkSize?: number;
+        /** @name CustomFileProvider.Options.uploadFileChunk */
+        uploadFileChunk?: Function;
+    }
+    /** @name CustomFileProvider */
+    export class CustomFileProvider extends FileProvider {
+        constructor(options?: CustomFileProviderOptions)
+    }
     /** @name FileProvider.Options */
     export interface FileProviderOptions<T = FileProvider> {
         /** @name FileProvider.Options.dateModifiedExpr */

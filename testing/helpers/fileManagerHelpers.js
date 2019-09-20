@@ -1,4 +1,6 @@
 import $ from "jquery";
+import { deserializeDate } from "core/utils/date_serialization";
+import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
 
 export const Consts = {
     WIDGET_CLASS: "dx-filemanager",
@@ -450,3 +452,41 @@ export const createUploaderFiles = count => {
 
     return result;
 };
+
+export const createSampleFileItems = () => {
+    const filesPathInfo = [
+        { key: "Root", name: "Root" },
+        { key: "Root/Files", name: "Files" },
+    ];
+
+    const itemData = [
+        { id: "Root\\Files\\Documents", name: "Documents", dateModified: "2019-02-14T07:44:15.4265625Z", isDirectory: true, size: 0, pathInfo: filesPathInfo },
+        { id: "Root\\Files\\Images", name: "Images", dateModified: "2019-02-14T07:44:15.4885105Z", isDirectory: true, size: 0, pathInfo: filesPathInfo },
+        { id: "Root\\Files\\Music", name: "Music", dateModified: "2019-02-14T07:44:15.4964648Z", isDirectory: true, size: 0, pathInfo: filesPathInfo },
+        { id: "Root\\Files\\Description.rtf", name: "Description.rtf", dateModified: "2017-02-09T09:38:46.3772529Z", isDirectory: false, size: 1, pathInfo: filesPathInfo },
+        { id: "Root\\Files\\Article.txt", name: "Article.txt", dateModified: "2017-02-09T09:38:46.3772529Z", isDirectory: false, size: 1, pathInfo: filesPathInfo }
+    ];
+
+    const fileManagerItems = [
+        createFileManagerItem(filesPathInfo, itemData[0]),
+        createFileManagerItem(filesPathInfo, itemData[1]),
+        createFileManagerItem(filesPathInfo, itemData[2]),
+        createFileManagerItem(filesPathInfo, itemData[3]),
+        createFileManagerItem(filesPathInfo, itemData[4])
+    ];
+
+    return { filesPathInfo, itemData, fileManagerItems };
+};
+
+const createFileManagerItem = (parentPath, dataObj) => {
+    let item = new FileManagerItem(parentPath, dataObj.name, dataObj.isDirectory);
+    item.dateModified = deserializeDate(dataObj.dateModified);
+    item.size = dataObj.size;
+    item.dataItem = dataObj;
+    if(dataObj.isDirectory) {
+        item.hasSubDirs = true;
+    }
+    return item;
+};
+
+

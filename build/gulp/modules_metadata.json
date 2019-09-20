@@ -363,6 +363,12 @@
     }
   },
   {
+    "name": "ui/file_manager/file_provider/custom",
+    "exports": {
+      "default": { "path": "fileProvider.CustomFileProvider" }
+    }
+  },
+  {
     "name": "ui/file_manager/file_provider/array",
     "exports": {
       "default": { "path": "fileProvider.ArrayFileProvider" }
