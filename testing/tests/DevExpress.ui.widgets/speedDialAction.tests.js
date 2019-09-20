@@ -123,12 +123,11 @@ QUnit.module("create multiple actions", (hooks) => {
         assert.equal($fabContent.eq(2).find(".dx-icon-filter").length, 1, "second action icon changed on icon filter");
 
         const fabDimensions = 30;
-        const fabOffsetY = 10;
 
         $fabMainContent.trigger("dxclick");
 
         assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "right first action position");
-        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions - fabOffsetY, 110, "right second action position");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 120, "right second action position");
 
         secondInstance.dispose();
 
