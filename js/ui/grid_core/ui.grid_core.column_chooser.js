@@ -205,7 +205,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 searchTimeout: columnChooser.searchTimeout,
                 onItemRendered: function(e) {
                     if(e.itemData.disableCheckBox) {
-                        let $treeViewNode = $(e.itemElement.closest(TREEVIEW_NODE_SELECTOR)),
+                        let $treeViewNode = $(e.itemElement).closest(TREEVIEW_NODE_SELECTOR),
                             checkBoxInstance,
                             $checkBox;
 
