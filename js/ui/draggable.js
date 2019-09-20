@@ -143,6 +143,11 @@ class ScrollHelper {
 
                 that._$scrollable[that._scrollValue](nextScrollPosition);
             }
+
+            let dragMoveArgs = that._component._dragMoveArgs;
+            if(dragMoveArgs) {
+                that._component._dragMoveHandler(dragMoveArgs);
+            }
         }
     }
 
@@ -634,6 +639,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragMoveHandler: function(e) {
+        this._dragMoveArgs = e;
         if(!this._$dragElement) {
             e.cancel = true;
             return;

@@ -914,6 +914,41 @@ QUnit.test("Vertical scrolling", function(assert) {
     assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
 });
 
+QUnit.test("onDragMove should be fired during scrolling", function(assert) {
+    // arrange
+    var etalonScrollTop = 0,
+        scrollSensitivity = 10,
+        scrollSpeed = 20,
+        speedIncreasePerPixel = scrollSpeed / scrollSensitivity,
+        onDragMoveSpy = sinon.spy(),
+        speed = speedIncreasePerPixel;
+
+    this.createDraggable({
+        scrollSensitivity: 10,
+        onDragMove: onDragMoveSpy,
+        scrollSpeed: 20
+    });
+
+    // act, assert
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    this.pointer.down().move(0, 240);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    this.pointer.down().move(0, 1);
+
+    for(let i = 1; i < 10; i++) {
+        this.clock.tick(10);
+
+        etalonScrollTop += speed;
+
+        assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
+        assert.equal(onDragMoveSpy.callCount, i + 2, "onDragMove called");
+    }
+});
+
 QUnit.test("Horizontal scrolling", function(assert) {
     // arrange
     var etalonScrollLeft = 0,

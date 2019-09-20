@@ -4,6 +4,7 @@ import { extend } from "../core/utils/extend";
 import Draggable from "./draggable";
 import { getPublicElement } from "../core/utils/dom";
 import translator from "../animation/translator";
+import fx from "../animation/fx";
 
 var SORTABLE = "dxSortable",
 
@@ -66,6 +67,10 @@ var Sortable = Draggable.inherit({
              * @hidden
              */
             onPlaceholderPrepared: null,
+            animation: {
+                type: "slide",
+                duration: 300
+            },
             fromIndex: null,
             toIndex: null,
             dropInsideItem: false,
@@ -84,6 +89,11 @@ var Sortable = Draggable.inherit({
             this._$placeholderElement.remove();
         }
         this._$placeholderElement = null;
+
+        if(!this._isIndicateMode() && this._$modifiedItem) {
+            this._$modifiedItem.css("marginBottom", this._modifiedItemMargin);
+            this._$modifiedItem = null;
+        }
     },
 
     _dragStartHandler: function(e) {
@@ -104,6 +114,40 @@ var Sortable = Draggable.inherit({
 
         this._updateItemPoints();
         this.option("fromIndex", -1);
+
+        if(!this._isIndicateMode()) {
+            let itemPoints = this.option("itemPoints"),
+                lastItemPoint = itemPoints[itemPoints.length - 1];
+
+            if(lastItemPoint) {
+                let $element = this.$element(),
+                    $sourceElement = this._getSourceElement(),
+                    isVertical = this._isVerticalOrientation(),
+                    sourceElementSize = isVertical ? $sourceElement.outerHeight(true) : $sourceElement.outerWidth(true),
+                    scrollSize = $element.get(0)[isVertical ? "scrollHeight" : "scrollWidth"],
+                    scrollPosition = $element.get(0)[isVertical ? "scrollTop" : "scrollLeft"],
+                    positionProp = isVertical ? "top" : "left",
+                    lastPointPosition = lastItemPoint[positionProp],
+                    elementPosition = $element.offset()[positionProp],
+                    freeSize = elementPosition + scrollSize - scrollPosition - lastPointPosition;
+
+                if(freeSize < sourceElementSize) {
+                    if(isVertical) {
+                        let $lastItem = $(this._getItems()).last();
+
+                        this._$modifiedItem = $lastItem;
+                        this._modifiedItemMargin = $lastItem.get(0).style.marginBottom;
+
+                        $lastItem.css("marginBottom", sourceElementSize - freeSize);
+
+                        let $sortable = $lastItem.closest(".dx-sortable"),
+                            sortable = $sortable.data("dxScrollable") || $sortable.data("dxScrollView");
+
+                        sortable && sortable.update();
+                    }
+                }
+            }
+        }
     },
 
     dragEnter: function() {
@@ -117,28 +161,22 @@ var Sortable = Draggable.inherit({
     dragEnd: function() {
         let $sourceElement = this._getSourceElement(),
             sourceDraggable = this._getSourceDraggable(),
-            isIndicateMode = this._isIndicateMode(),
-            isSourceDraggable = sourceDraggable.NAME !== this.NAME;
+            isSourceDraggable = sourceDraggable.NAME !== this.NAME,
+            prevTargetItemElement,
+            toIndex = this.option("toIndex"),
+            items = this._getItems(),
+            targetItemElement = items[toIndex];
 
-        if(isIndicateMode || isSourceDraggable) {
-            let prevTargetItemElement,
-                toIndex = this.option("toIndex"),
-                items = this._getItems(),
-                targetItemElement = items[toIndex];
-
-            if(toIndex !== null && toIndex >= 0) {
-                if(!targetItemElement) {
-                    prevTargetItemElement = items[toIndex - 1];
-                }
-
-                if(isSourceDraggable) {
-                    translator.resetPosition($sourceElement);
-                }
-
-                $sourceElement.show();
-
-                this._moveItem($sourceElement, targetItemElement, prevTargetItemElement);
+        if(toIndex !== null && toIndex >= 0) {
+            if(!targetItemElement) {
+                prevTargetItemElement = items[toIndex - 1];
             }
+
+            if(isSourceDraggable) {
+                translator.resetPosition($sourceElement);
+            }
+
+            this._moveItem($sourceElement, targetItemElement, prevTargetItemElement);
         }
     },
 
@@ -407,23 +445,78 @@ var Sortable = Draggable.inherit({
 
         this._togglePlaceholder(toIndex !== null && toIndex >= 0);
 
-        if(!this._isIndicateMode()) {
-            let targetDraggable = this._getTargetDraggable();
-            let isTargetSortable = targetDraggable.NAME === this.NAME;
-            this._$sourceElement && this._$sourceElement.toggle(isTargetSortable && !targetDraggable._isIndicateMode() || toIndex !== -1);
-        }
+        if(this._isIndicateMode()) {
+            if(toIndex !== null && toIndex >= 0) {
+                let $placeholderElement = this._$placeholderElement || this._createPlaceholder(),
+                    items = this._getItems(),
+                    itemElement = items[toIndex],
+                    prevItemElement = items[toIndex - 1];
 
-        if(toIndex !== null && toIndex >= 0) {
-            let $placeholderElement = this._$placeholderElement || this._createPlaceholder(),
-                items = this._getItems(),
-                itemElement = items[toIndex],
-                prevItemElement = items[toIndex - 1];
-
-            if(this._isIndicateMode()) {
                 this._updatePlaceholderSizes($placeholderElement, itemElement);
+
+                this._moveItem($placeholderElement, itemElement, prevItemElement);
+            }
+        } else {
+            this._moveItems(args.previousValue, args.value);
+        }
+    },
+    _getPositions: function(items, elementSize, fromIndex, toIndex) {
+        let positions = [];
+
+        for(let i = 0; i < items.length; i++) {
+            let position = 0;
+
+            if(toIndex === null || fromIndex === null) {
+                positions.push(position);
+                continue;
             }
 
-            this._moveItem($placeholderElement || this._getSourceElement(), itemElement, prevItemElement);
+            if(fromIndex === -1) {
+                if(i >= toIndex) {
+                    position = elementSize;
+                }
+            } else if(toIndex === -1) {
+                if(i > fromIndex) {
+                    position = -elementSize;
+                }
+            } else if(fromIndex < toIndex) {
+                if(i > fromIndex && i < toIndex) {
+                    position = -elementSize;
+                }
+            } else if(fromIndex > toIndex) {
+                if(i >= toIndex && i < fromIndex) {
+                    position = elementSize;
+                }
+            }
+            positions.push(position);
+        }
+
+        return positions;
+    },
+    _moveItems: function(prevToIndex, toIndex) {
+        let fromIndex = this.option("fromIndex"),
+            isVerticalOrientation = this._isVerticalOrientation(),
+            positionPropName = isVerticalOrientation ? "top" : "left",
+            $draggableItem = this._getDraggableElement(),
+            elementSize = isVerticalOrientation ? ($draggableItem.outerHeight() + $draggableItem.outerHeight(true)) / 2 : ($draggableItem.outerWidth() + $draggableItem.outerWidth(true)) / 2,
+            items = this._getItems(),
+            prevPositions = this._getPositions(items, elementSize, fromIndex, prevToIndex),
+            positions = this._getPositions(items, elementSize, fromIndex, toIndex),
+            animationConfig = this.option("animation");
+
+        for(let i = 0; i < items.length; i++) {
+            let $item = $(items[i]),
+                prevPosition = prevPositions[i],
+                position = positions[i];
+
+            if(toIndex === null || fromIndex === null) {
+                translator.resetPosition($item);
+            } else if(prevPosition !== position) {
+                fx.stop($item);
+                fx.animate($item, extend({}, animationConfig, {
+                    to: { [positionPropName]: position }
+                }));
+            }
         }
     },
     _toggleDragSourceClass: function(value) {

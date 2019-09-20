@@ -1,8 +1,12 @@
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
+import "ui/sortable";
+import fx from "animation/fx";
 
 import "common.css!";
-import "ui/sortable";
+
+fx.off = true;
+
 
 QUnit.testStart(function() {
     let markup =
@@ -250,7 +254,7 @@ QUnit.test("Source classes toggling", function(assert) {
     assert.notOk(items.eq(0).hasClass("dx-sortable-source-hidden"), "element has not source-hidden class");
 });
 
-QUnit.test("Change source position after dragging", function(assert) {
+QUnit.test("Move items during dragging", function(assert) {
     // arrange
     let items,
         $item,
@@ -272,10 +276,14 @@ QUnit.test("Change source position after dragging", function(assert) {
 
     // assert
     items = this.$element.children();
-    $item = items.eq(1);
+    $item = items.eq(0);
     assert.strictEqual(items.length, 3, "item count");
     assert.strictEqual($item.attr("id"), "item1", "first item is a source");
     assert.ok($item.hasClass("dx-sortable-source-hidden"), "has source-hidden class");
+
+    assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
+    assert.strictEqual(items[1].style.transform, "translate(0px, -30px)", "items 2 is moved up");
+    assert.strictEqual(items[2].style.transform, "", "items 3 is not moved");
 });
 
 QUnit.test("Drop when dropFeedbackMode is push", function(assert) {
@@ -397,7 +405,7 @@ QUnit.test("Dragging an item to the last position when there is ignored (not dra
 
     // assert
     items = this.$element.children();
-    assert.ok(items.eq(2).hasClass("dx-sortable-source"), "source item");
+    assert.ok(items.eq(0).hasClass("dx-sortable-source"), "source item");
     assert.strictEqual(items.eq(3).attr("id"), "item4", "ignored item");
 
     // act
@@ -794,11 +802,52 @@ QUnit.test("Dragging item to another the sortable widget", function(assert) {
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 2, "first list - item count");
-    assert.strictEqual(items2.length, 4, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 0, "first list - first item is removed");
-    assert.strictEqual(items2.filter("#item1").length, 1, "second list - first item of the first list was added");
+    assert.strictEqual(items1.length, 3, "first list - item count");
+    assert.strictEqual(items2.length, 3, "second list - item count");
+    assert.strictEqual(items1.filter("#item1").length, 1, "first list - first item is not removed");
+    assert.strictEqual(items2.filter("#item1").length, 0, "second list - first item of the first list was not added");
+
+    assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
+    assert.strictEqual(items1[1].style.transform, "translate(0px, -30px)", "items1 2 is moved up");
+    assert.strictEqual(items1[2].style.transform, "translate(0px, -30px)", "items1 3 is moved up");
+
+    assert.strictEqual(items2[0].style.transform, "translate(0px, 30px)", "items2 1 is moved down");
+    assert.strictEqual(items2[1].style.transform, "translate(0px, 30px)", "items2 2 is moved down");
+    assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
 });
+
+QUnit.test("Dragging item to another the sortable widget without free space", function(assert) {
+    // arrange
+    $("#items2").css("height", "");
+    $("#items2").children().last().css("margin", 1);
+
+
+    let sortable1 = this.createSortable({
+        dropFeedbackMode: "push",
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        dropFeedbackMode: "push",
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items2"));
+
+
+    // act
+    let pointer = pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
+
+    // assert
+    assert.strictEqual(sortable2.$element().children().last()[0].style.marginBottom, "29px", "items2 last item has margin bottom");
+
+    // act
+    pointer.up();
+
+    // assert
+    assert.strictEqual(sortable2.$element().children().last()[0].style.marginBottom, "1px", "items2 last item margin bottom is restored");
+});
+
 
 QUnit.test("Dragging item with dropFeedbackMode push to another the sortable widget with dropFeedbackMode indicate", function(assert) {
     // arrange
@@ -825,7 +874,7 @@ QUnit.test("Dragging item with dropFeedbackMode push to another the sortable wid
     assert.strictEqual(items1.length, 3, "first list - item count");
     assert.strictEqual(items2.length, 4, "second list - item count");
     assert.strictEqual(items1.filter("#item1").length, 1, "first list - first item is exists");
-    assert.strictEqual(items1.filter("#item1").is(":visible"), false, "first list - first item is not visible");
+    assert.strictEqual(items1.filter("#item1").hasClass("dx-sortable-source-hidden"), true, "first list - first item is hidden");
     assert.strictEqual(items2.filter("#item1").length, 0, "second list - first item of the first list is not added");
     assert.strictEqual(items2.eq(0).hasClass("dx-sortable-placeholder"), true, "second list - first item is placeholder");
 });
@@ -854,10 +903,17 @@ QUnit.test("Dragging item to another the sortable widget when group as object", 
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 2, "first list - item count");
-    assert.strictEqual(items2.length, 4, "second list - item count");
-    assert.strictEqual(items1.filter("#item1").length, 0, "first list - first item is removed");
-    assert.strictEqual(items2.filter("#item1").length, 1, "second list - first item of the first list was added");
+    assert.strictEqual(items1.length, 3, "first list - item count");
+    assert.strictEqual(items2.length, 3, "second list - item count");
+
+    assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
+    assert.strictEqual(items1[1].style.transform, "translate(0px, -30px)", "items1 2 is moved up");
+    assert.strictEqual(items1[2].style.transform, "translate(0px, -30px)", "items1 3 is moved up");
+
+    assert.strictEqual(items2[0].style.transform, "translate(0px, 30px)", "items2 1 is moved down");
+    assert.strictEqual(items2[1].style.transform, "translate(0px, 30px)", "items2 2 is moved down");
+    assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
+
 });
 
 QUnit.test("Dragging item should not work when another the sortable widget does not have a group", function(assert) {
@@ -1020,14 +1076,14 @@ QUnit.test("Update item points when dragging an item to another the sortable wid
 
     // assert
     var itemPoints = sortable2.option("itemPoints");
-    assert.equal(itemPoints.length, 5, "point count");
-    assert.deepEqual(itemPoints[0].top, 0, "top of the first point");
+    assert.equal(itemPoints.length, 4, "point count");
+    assert.deepEqual(itemPoints[0].top, 30, "top of the first point");
     assert.deepEqual(itemPoints[0].index, 0, "index of the first point");
-    assert.deepEqual(itemPoints[1].top, 30, "top of the first point");
+    assert.deepEqual(itemPoints[1].top, 60, "top of the first point");
     assert.deepEqual(itemPoints[1].index, 1, "index of the first point");
-    assert.deepEqual(itemPoints[2].top, 60, "top of the second point");
+    assert.deepEqual(itemPoints[2].top, 90, "top of the second point");
     assert.deepEqual(itemPoints[2].index, 2, "index of the second point");
-    assert.deepEqual(itemPoints[3].top, 90, "top of the third point");
+    assert.deepEqual(itemPoints[3].top, 120, "top of the third point");
     assert.deepEqual(itemPoints[3].index, 3, "index of the third point");
 });
 
@@ -1135,9 +1191,16 @@ QUnit.test("Dragging an item to another sortable and back when it is alone in th
     // assert
     items1 = sortable1.$element().children();
     items2 = sortable2.$element().children();
-    assert.strictEqual(items1.length, 4, "first list - item count");
-    assert.strictEqual(items1.first().attr("id"), "item7", "first list - item from second list");
-    assert.strictEqual(items2.length, 0, "second list - item count");
+    assert.strictEqual(items1.length, 3, "first list - item count");
+    assert.strictEqual(items2.length, 1, "second list - item count");
+
+    assert.strictEqual(items1[0].style.transform, "translate(0px, 30px)", "items1 1 is moved down");
+    assert.strictEqual(items1[1].style.transform, "translate(0px, 30px)", "items1 2 is moved down");
+    assert.strictEqual(items1[2].style.transform, "translate(0px, 30px)", "items1 3 is moved down");
+
+    assert.strictEqual(items2[0].style.transform, "", "items2 1 is not moved");
+    assert.strictEqual(items2.first().attr("id"), "item7", "source item position is not changed");
+    assert.strictEqual(items2.hasClass("dx-sortable-source-hidden"), true, "source item is hidden");
 
     // act
     pointer.move(0, 300).move(0, 10);
