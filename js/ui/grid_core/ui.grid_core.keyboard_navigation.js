@@ -131,8 +131,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         return;
                     }
                     if($cell.is("td") || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
-                        if(that.getController("editorFactory").focus() || that._isCellEditMode()) {
+                        if(that.getController("editorFactory").focus()) {
                             that._focus($cell);
+                        } else if(that._isCellEditMode()) {
+                            that._focus($cell, that._isHiddenFocus);
                         } else if(that._isHiddenFocus) {
                             that._focus($cell, true);
                         }
@@ -232,6 +234,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($cell);
 
             if(this._allowRowUpdating() && isCellEditMode && column && column.allowEditing) {
+                this._isNeedFocus = false;
                 this._isHiddenFocus = false;
             } else {
                 let $target = event && $(event.target),
@@ -2044,6 +2047,17 @@ module.exports = {
                 _delayedInputFocus: function() {
                     this._keyboardNavigationController._isNeedScroll = true;
                     this.callBase.apply(this, arguments);
+                },
+                _isEditingStart: function() {
+                    let keyboardNavigation = this.getController("keyboardNavigation"),
+                        cancel = this.callBase.apply(this, arguments);
+
+                    if(cancel && !keyboardNavigation._isNeedFocus) {
+                        let $cell = keyboardNavigation._getFocusedCell();
+                        keyboardNavigation._focus($cell, true);
+                    }
+
+                    return cancel;
                 }
             },
             data: {
