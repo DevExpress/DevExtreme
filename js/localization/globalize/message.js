@@ -17,6 +17,10 @@ if(Globalize && Globalize.formatMessage) {
     };
 
     const globalizeMessageLocalization = {
+        engine: function() {
+            return "globalize";
+        },
+
         ctor: function() {
             this.load(this._dictionary);
         },

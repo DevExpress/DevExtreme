@@ -37,6 +37,12 @@ QUnit.module("Intl localization", {
 }, () => {
     sharedTests();
 
+    QUnit.test("engine", assert => {
+        assert.equal(numberLocalization.engine(), "intl");
+        assert.equal(dateLocalization.engine(), "intl");
+    });
+
+
     const locales = [ "de", "en", "ja", "ru", "zh", "ar", "hr", "el", "ca" ];
     locales.forEach((localeId) => {
         const getIntlNumberFormatter = (format) => {
@@ -614,19 +620,21 @@ QUnit.module("Intl localization", {
         });
     });
 
-    QUnit.module("getCurrencySymbol");
+    QUnit.module("defaultCurrency");
 
-    QUnit.test("getCurrencySymbol and config.defaultCurrency", assert => {
+    QUnit.test("config.defaultCurrency affects on localization", assert => {
         var originalConfig = config();
 
         try {
             assert.equal(numberLocalization.getCurrencySymbol().symbol, "$");
+            assert.equal(numberLocalization.format(12, { style: "currency", currency: "default" }), "$12.00");
 
             config({
                 defaultCurrency: "EUR"
             });
 
             assert.equal(numberLocalization.getCurrencySymbol().symbol, "€");
+            assert.equal(numberLocalization.format(12, { style: "currency", currency: "default" }), "€12.00");
         } finally {
             config(originalConfig);
         }

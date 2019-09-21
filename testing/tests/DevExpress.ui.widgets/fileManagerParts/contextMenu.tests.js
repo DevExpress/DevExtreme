@@ -340,4 +340,57 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
         assert.ok($items.eq(2).text().indexOf("Rename") > -1, "rename item is rendered correctly");
     });
 
+    test("nested items set and use", function(assert) {
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("contextMenu", {
+            items: [
+                {
+                    text: "Edit",
+                    visible: true,
+                    items: [
+                        "move", "rename", "copy", "delete"
+                    ]
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getDetailsItemList().trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        let $items = this.wrapper.getContextMenuItems();
+
+        $items.eq(0).trigger("dxclick");
+        this.clock.tick(400);
+
+        let $subMenuItems = this.wrapper.getContextMenuSubMenuItems();
+        assert.equal($subMenuItems.length, 0, "there is no items available");
+
+        const $commandButton = this.wrapper.getToolbarButton("Refresh");
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        $items = this.wrapper.getContextMenuItems();
+
+        $items.eq(0).trigger("dxclick");
+        this.clock.tick(400);
+
+        $subMenuItems = this.wrapper.getContextMenuSubMenuItems();
+        assert.equal($subMenuItems.length, 4, "all of edit actions are visible");
+
+        $subMenuItems.eq(1).trigger("dxclick");
+        this.clock.tick(400);
+
+        this.wrapper.getDialogTextInput()
+            .val("New name.txt")
+            .trigger("change");
+        this.wrapper.getDialogButton("Save").trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), "New name.txt", "file is renamed");
+    });
+
 });

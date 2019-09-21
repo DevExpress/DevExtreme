@@ -32,6 +32,9 @@ const LargeNumberFormatPowers = {
 };
 
 const numberLocalization = dependencyInjector({
+    engine: function() {
+        return "base";
+    },
     numericFormats: NUMERIC_FORMATS,
 
     defaultLargeNumberFormatPostfixes: LargeNumberFormatPostfixes,

@@ -94,6 +94,7 @@ QUnit.module("Drag and Drop rows", moduleConfig);
 QUnit.test("Dragging row", function(assert) {
     // arrange
     let $draggableElement,
+        $placeholderElement,
         $testElement = $("#container");
 
     let rowsView = this.createRowsView();
@@ -104,8 +105,9 @@ QUnit.test("Dragging row", function(assert) {
 
     // assert
     $draggableElement = $("body").children(".dx-sortable-dragging");
-    assert.ok($(rowsView.element()).find("tbody").children().eq(2).hasClass("dx-sortable-placeholder"), "placeholder");
+    $placeholderElement = $("body").children(".dx-sortable-placeholder");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
+    assert.strictEqual($placeholderElement.length, 1, "placeholder");
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
@@ -239,7 +241,7 @@ QUnit.test("'rowDragging' option changing", function(assert) {
     let pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
 
     // assert
-    assert.strictEqual($(rowsView.element()).find(".dx-sortable-placeholder").length, 0, "no placeholder");
+    assert.strictEqual($("body").children(".dx-sortable-placeholder").length, 0, "no placeholder");
     assert.strictEqual($("body").children(".dx-sortable-dragging").length, 0, "no dragging element");
 
     // arrange
@@ -255,7 +257,7 @@ QUnit.test("'rowDragging' option changing", function(assert) {
     pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
 
     // assert
-    assert.strictEqual($(rowsView.element()).find(".dx-sortable-placeholder").length, 1, "there is placeholder");
+    assert.strictEqual($("body").children(".dx-sortable-placeholder").length, 1, "there is placeholder");
     assert.strictEqual($("body").children(".dx-sortable-dragging").length, 1, "there is dragging element");
 });
 
@@ -277,8 +279,8 @@ QUnit.test("Dragging row to the last position - row should be before the freespa
 
     // assert
     $rowElements = $(rowsView.element()).find("tbody").children();
-    assert.ok($rowElements.eq(3).hasClass("dx-sortable-placeholder"), "placeholder");
-    assert.ok($rowElements.eq(4).hasClass("dx-freespace-row"), "freespace row");
+    assert.ok($rowElements.eq(3).hasClass("dx-freespace-row"), "freespace row");
+    assert.ok($("body").children(".dx-sortable-placeholder").offset().top <= $rowElements.eq(3).offset().top, "placeholder");
 
     // act
     pointer.up();
@@ -330,7 +332,7 @@ QUnit.test("Dragging row by the handle", function(assert) {
 
     // assert
     $draggableElement = $("body").children(".dx-sortable-dragging");
-    assert.ok($(rowsView.element).find("tbody").children().eq(2).hasClass("dx-sortable-placeholder"), "placeholder");
+    assert.strictEqual($("body").children(".dx-sortable-placeholder").length, 1, "placeholder");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");

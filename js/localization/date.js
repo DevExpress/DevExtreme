@@ -51,6 +51,9 @@ const possiblePartPatterns = {
 };
 
 const dateLocalization = dependencyInjector({
+    engine: function() {
+        return "base";
+    },
     _getPatternByFormat: function(format) {
         return FORMATS_TO_PATTERN_MAP[format.toLowerCase()];
     },

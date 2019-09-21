@@ -21,6 +21,9 @@ const getCurrencyFormatter = currency => {
 };
 
 module.exports = {
+    engine: function() {
+        return "intl";
+    },
     _formatNumberCore: function(value, format, formatConfig) {
         if(format === 'exponential') {
             return this.callBase.apply(this, arguments);
@@ -74,6 +77,10 @@ module.exports = {
         }
 
         format = this._normalizeFormat(format);
+
+        if(format.currency === "default") {
+            format.currency = dxConfig().defaultCurrency;
+        }
 
         if(!format || 'function' !== typeof format && !format.type && !format.formatter) {
             return getFormatter(format)(value);

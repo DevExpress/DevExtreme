@@ -131,6 +131,9 @@ const monthNameStrategies = {
 };
 
 module.exports = {
+    engine: function() {
+        return "intl";
+    },
     getMonthNames: function(format, type) {
         const intlFormats = {
             wide: "long",
