@@ -791,7 +791,7 @@ declare module DevExpress {
         /** @name globalConfig.editorStylingMode */
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
         /** @name globalConfig.floatingActionButtonConfig */
-        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, label?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function, shading?: boolean };
+        floatingActionButtonConfig?: { closeIcon?: string, direction?: 'auto' | 'up' | 'down', icon?: string, label?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function, shading?: boolean };
         /** @name globalConfig.forceIsoDateParsing */
         forceIsoDateParsing?: boolean;
         /** @name globalConfig.oDataFilterToLower */
