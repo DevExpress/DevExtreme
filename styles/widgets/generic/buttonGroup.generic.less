@@ -39,6 +39,20 @@
     }
 }
 
+.dx-buttongroup-item-states(@hover-color, @focused-color) {
+    &.dx-state-hover {
+        background-color: @hover-color;
+    }
+
+    &.dx-state-focused {
+        background-color: @focused-color;
+    }
+}
+
+.dx-buttongroup-item-selected-states(@background-color) {
+    .dx-buttongroup-item-states(darken(@background-color, 10%), darken(@background-color, 15%));
+}
+
 .dx-buttongroup-item {
     &.dx-button {
         &.dx-button-mode-outlined,
@@ -50,29 +64,55 @@
                     opacity: @button-disabled-icon-opacity;
                 }
             }
+
+            .dx-buttongroup-item-states(@button-normal-outlined-bg-hover, @button-normal-outlined-bg-focused);
+
+            &.dx-button-default {
+                .dx-buttongroup-item-states(@button-default-outlined-bg-hover, @button-default-outlined-bg-focused);
+            }
+
+            &.dx-button-success {
+                .dx-buttongroup-item-states(@button-success-outlined-bg-hover, @button-success-outlined-bg-focused);
+            }
+
+            &.dx-button-danger {
+                .dx-buttongroup-item-states(@button-danger-outlined-bg-hover, @button-danger-outlined-bg-focused);
+            }
         }
 
-        &.dx-state-focused {
-            background-color: fade(@button-normal-color, 4%);
-        }
+        &.dx-button-mode-text {
+            .dx-buttongroup-item-states(@button-normal-text-bg-hover, @button-normal-text-bg-focused);
 
-        &.dx-state-hover {
-            background-color: fade(@button-normal-color, 4%);
+            &.dx-button-default {
+                .dx-buttongroup-item-states(@button-default-text-bg-hover, @button-default-text-bg-focused);
+            }
+
+            &.dx-button-success {
+                .dx-buttongroup-item-states(@button-success-text-bg-hover, @button-success-text-bg-focused);
+            }
+
+            &.dx-button-danger {
+                .dx-buttongroup-item-states(@button-danger-text-bg-hover, @button-danger-text-bg-focused);
+            }
         }
 
         &.dx-item-selected {
             background-color: @button-group-normal-selected-bg;
+            .dx-buttongroup-item-selected-states(@button-group-normal-selected-bg);
 
             &.dx-button-success {
                 background-color: @button-group-success-selected-bg;
+                .dx-buttongroup-item-selected-states(@button-group-success-selected-bg);
             }
 
             &.dx-button-default {
                 background-color: @button-group-default-selected-bg;
+                .dx-buttongroup-item-selected-states(@button-group-default-selected-bg);
             }
 
             &.dx-button-danger {
                 background-color: @button-group-danger-selected-bg;
+                .dx-buttongroup-item-selected-states(@button-group-danger-selected-bg);
             }
 
             &.dx-button-normal,
