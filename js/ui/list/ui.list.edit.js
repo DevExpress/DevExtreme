@@ -172,7 +172,13 @@ const ListEdit = ListBase.inherit({
             * @type boolean
             * @default false
             */
-            allowItemReordering: false
+            allowItemReordering: false,
+
+            /**
+            * @name dxListOptions.itemDragging
+            * @type dxSortableOptions
+            */
+            itemDragging: {}
 
             /**
             * @name dxListOptions.onItemDeleting
@@ -389,6 +395,7 @@ const ListEdit = ListBase.inherit({
             case "allowItemDeleting":
             case "itemDeleteMode":
             case "allowItemReordering":
+            case "itemDragging":
             case "selectAllText":
                 this._invalidate();
                 break;

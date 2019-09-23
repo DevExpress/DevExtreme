@@ -8,7 +8,8 @@ import fx from "../animation/fx";
 
 var SORTABLE = "dxSortable",
 
-    PLACEHOLDER_CLASS = "placeholder";
+    PLACEHOLDER_CLASS = "placeholder",
+    CLONE_CLASS = "clone";
 
 /**
 * @name dxSortable
@@ -339,7 +340,11 @@ var Sortable = Draggable.inherit({
     _getItems: function() {
         let itemsSelector = this._getItemsSelector();
 
-        return this.$element().find(itemsSelector).not("." + this._addWidgetPrefix(PLACEHOLDER_CLASS)).toArray();
+        return this.$element()
+            .find(itemsSelector)
+            .not("." + this._addWidgetPrefix(PLACEHOLDER_CLASS))
+            .not("." + this._addWidgetPrefix(CLONE_CLASS))
+            .toArray();
     },
 
     _isValidPoint: function($items, itemPointIndex, dropInsideItem) {
