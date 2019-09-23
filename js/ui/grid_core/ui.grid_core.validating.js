@@ -49,7 +49,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         _rowValidating: function(editData, validate) {
-            var that = this,
+            const deferred = new Deferred(),
                 brokenRules = validate ? validate.brokenRules || validate.brokenRule && [validate.brokenRule] : [],
                 isValid = validate ? validate.isValid : editData.isValid,
                 parameters = {
@@ -58,15 +58,19 @@ const ValidatingController = modules.Controller.inherit((function() {
                     key: editData.key,
                     newData: editData.data,
                     oldData: editData.oldData,
+                    promise: null,
                     errorText: this.getHiddenValidatorsErrorText(brokenRules)
                 };
 
-            that.executeAction("onRowValidating", parameters);
+            this.executeAction("onRowValidating", parameters);
 
-            editData.isValid = parameters.isValid;
-            editData.errorText = parameters.errorText;
+            when(parameters.promise).always(function() {
+                editData.isValid = parameters.isValid;
+                editData.errorText = parameters.errorText;
+                deferred.resolve(parameters);
+            });
 
-            return parameters;
+            return deferred.promise();
         },
 
         getHiddenValidatorsErrorText: function(brokenRules) {
@@ -147,7 +151,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
 
             when(validationResults && validationResults.complete || validationResults).done(validationResults => {
-                result.resolve(this._rowValidating(editData, validationResults));
+                when(this._rowValidating(editData, validationResults)).done(result.resolve);
             });
 
             return result.promise();
