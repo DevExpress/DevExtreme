@@ -5479,12 +5479,12 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.equal(focusedCellChangedFiresCount, 2, "onFocusedCellChanged fires count");
         assert.equal(editingStartFiresCount, 2, "onEditingStart fires count");
 
-        assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
-
         assert.notOk(keyboardNavigationController._editingController.isEditing(), "Is editing");
         assert.equal(this.rowsView.element().find("input").length, 0, "input");
-
-        assert.notOk($cell.hasClass("dx-focused"), "cell has no .dx-focused");
+        if(!browser.msie) {
+            assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
+            assert.notOk($cell.hasClass("dx-focused"), "cell has no .dx-focused");
+        }
     });
 
     QUnit.testInActiveWindow("DataGrid should preserve fosused overlay after cancel editing (T812546)", function(assert) {
