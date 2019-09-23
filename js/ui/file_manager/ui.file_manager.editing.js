@@ -165,8 +165,13 @@ class FileManagerEditingControl extends Widget {
             },
 
             download: {
-                action: () => { } // TODO implement this action
+                action: arg => this._download(arg)
+            },
+
+            getItemsContent: {
+                action: arg => this._getItemsContent(arg)
             }
+
         };
     }
 
@@ -291,6 +296,16 @@ class FileManagerEditingControl extends Widget {
     _tryUpload(destinationFolder) {
         this._uploadDirectoryInfo = destinationFolder && destinationFolder[0] || this._getCurrentDirectory();
         this._fileUploader.tryUpload();
+    }
+
+    _download(itemInfos) {
+        itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        return this._controller.downloadItems(itemInfos);
+    }
+
+    _getItemsContent(itemInfos) {
+        itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        return this._controller.getItemsContent(itemInfos);
     }
 
     _completeAction(operationInfo, context) {
