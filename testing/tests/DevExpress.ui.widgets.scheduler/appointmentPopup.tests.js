@@ -1154,3 +1154,48 @@ QUnit.test("The resize event of appointment popup is triggered the the window is
     resizeCallbacks.fire();
     assert.ok(isResizeEventTriggered, "The resize event of popup is triggered");
 });
+
+QUnit.test("Popup should not be closed until the valid value is typed", function(assert) {
+    const startDate = new Date(2015, 1, 1, 1),
+        validValue = "Test",
+        done = assert.async();
+    const scheduler = createInstance();
+    scheduler.instance.option("onAppointmentFormOpening", function(data) {
+        const items = data.form.option("items");
+        items[0].validationRules = [
+            {
+                type: "async",
+                validationCallback: function(params) {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve(params.value === validValue);
+                    }, 10);
+                    return d.promise();
+                }
+            }
+        ];
+
+        data.form.option("items", items);
+    });
+
+    scheduler.instance.showAppointmentPopup({
+        startDate: startDate,
+        endDate: new Date(2015, 1, 1, 2),
+        text: "caption"
+    });
+
+    scheduler.appointmentForm.setSubject("caption1");
+    scheduler.appointmentPopup.saveAppointmentData().done(() => {
+        assert.equal(scheduler.appointmentForm.getInvalidEditorsCount.call(scheduler), 1, "the only invalid editor is displayed in the form");
+
+        scheduler.appointmentForm.setSubject(validValue);
+        scheduler.appointmentPopup.saveAppointmentData().done(() => {
+            assert.notOk(scheduler.appointmentPopup.getPopupInstance().option("visible"), "the form is closed");
+
+            done();
+        });
+    });
+
+    assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, "the only pending editor is displayed in the form");
+});
+
