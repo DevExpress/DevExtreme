@@ -167,7 +167,7 @@ const needSkipEvent = (e) => {
             return false;
         }
         const isContentEditable = target.isContentEditable || target.hasAttribute("contenteditable");
-        const hasContentEditableParent = $target.closest("div[contenteditable='true']").is(':focus');
+        const hasContentEditableParent = $target.closest("div[contenteditable='true']");
         const isInputFocused = $target.is("input[type='number'], textarea, select") && $target.is(':focus');
         return isInputFocused || (isContentEditable && hasContentEditableParent);
     }
