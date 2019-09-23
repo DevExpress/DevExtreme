@@ -256,3 +256,4 @@ QUnit.test("group should be validated positively with a new validator (async)", 
     });
     ValidationEngine.registerValidatorInGroup(group, validator2);
 });
+

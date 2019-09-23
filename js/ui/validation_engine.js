@@ -584,6 +584,7 @@ const GroupConfig = Class.inherit({
              */
             complete: null
         };
+        this._unsubscribeFromAllChangeEvents();
         this._pendingValidators = [];
         this._resetValidationInfo();
         each(this.validators, (_, validator) => {
@@ -632,8 +633,8 @@ const GroupConfig = Class.inherit({
         }
         if(!this._validationInfo.deferred) {
             this._validationInfo.deferred = new Deferred();
+            this._validationInfo.result.complete = this._validationInfo.deferred.promise();
         }
-        this._validationInfo.result.complete = this._validationInfo.deferred.promise();
     },
 
     _addPendingValidator(validator) {
@@ -647,7 +648,7 @@ const GroupConfig = Class.inherit({
 
     _removePendingValidator(validator) {
         const index = inArray(validator, this._pendingValidators);
-        if(index >= -1) {
+        if(index >= 0) {
             this._pendingValidators.splice(index, 1);
         }
     },
