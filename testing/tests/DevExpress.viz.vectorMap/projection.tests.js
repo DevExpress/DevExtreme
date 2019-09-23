@@ -843,6 +843,24 @@ QUnit.test("Transform", function(assert) {
     assert.deepEqual(this.projection.transform([10, 20]), [11800, 28450]);
 });
 
+QUnit.test("Transform. Wide canvas, bounds wider than canvas", function(assert) {
+    this.projection.setBounds([20, -20, 60, -10]);
+    assert.deepEqual(this.projection.transform([-1, -1]), [400, 200]);
+    assert.deepEqual(this.projection.transform([1, 1]), [800, 700]);
+});
+
+QUnit.test("Transform. Wide canvas, canvas wider than bounds", function(assert) {
+    this.projection.setBounds([30, -20, 40, -10]);
+    assert.deepEqual(this.projection.transform([-1, -1]), [460, 275]);
+    assert.deepEqual(this.projection.transform([1, 1]), [740, 625]);
+});
+
+QUnit.test("Transform. (Canvas AR < bounds AR < projection AR) or (Canvas AR > bounds AR > projection AR)", function(assert) {
+    this.projection.setBounds([30, -20, 50, -10]);
+    assert.deepEqual(this.projection.transform([-1, -1]), [320, 100]);
+    assert.deepEqual(this.projection.transform([1, 1]), [880, 800]);
+});
+
 // TODO: Remove cases with bounds when "projection" module is considered stable
 QUnit.module('Mercator - project', {
     beforeEach: function() {
