@@ -34,6 +34,10 @@ export class RowsViewWrapper extends WrapperBase {
         return this.getVirtualRowElement().find("td").eq(columnIndex);
     }
 
+    getRowElement(rowIndex) {
+        return this.getElement().find(".dx-row").eq(rowIndex);
+    }
+
     getCellElement(rowIndex, columnIndex) {
         return this.getElement().find(".dx-data-row").eq(rowIndex).find("td").eq(columnIndex);
     }
@@ -48,6 +52,17 @@ export class RowsViewWrapper extends WrapperBase {
 
     getSelectionCheckBoxElement(rowIndex) {
         return this.getDataRowElement(rowIndex).find(".dx-select-checkbox");
+    }
+
+    isRowVisible(rowIndex) {
+        const $row = this.getRowElement(rowIndex);
+        return this._isInnerElementVisible($row);
+    }
+
+    _isInnerElementVisible($element) {
+        const rowsViewRect = this.getElement()[0].getBoundingClientRect();
+        const elementRect = $element[0].getBoundingClientRect();
+        return elementRect.top > rowsViewRect.top && elementRect.bottom <= rowsViewRect.bottom;
     }
 
     cellHasFocusedClass(rowIndex, columnIndex) {
