@@ -9538,6 +9538,51 @@ QUnit.test("Show error rows on save inserted rows when set validate in column an
     assert.ok(testElement.find('tbody > tr').eq(5).hasClass("dx-error-row"), "has error row 3");
 });
 
+QUnit.test("Show error row on save inserted row when promise is used in rowValidating", function(assert) {
+    // arrange
+    let rowsView = this.rowsView,
+        testElement = $('#container'),
+        errorText = "Test",
+        $errorRow;
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: "row"
+        },
+        columns: ['name'],
+        onRowValidating: function(options) {
+            const deferred = new Deferred();
+            options.promise = deferred.promise();
+            setTimeout(function() {
+                options.errorText = errorText;
+                options.isValid = false;
+                deferred.resolve();
+            }, 10);
+        }
+    });
+
+    // act
+    this.addRow();
+
+    // assert
+    assert.equal(testElement.find('tbody > tr').length, 5, "count rows");
+
+    // act
+    this.saveEditData();
+    $errorRow = rowsView.element().find("tr.dx-error-row");
+
+    // assert
+    assert.equal($errorRow.length, 0, "error row is not displayed before resolving the promise");
+
+    this.clock.tick(10);
+    $errorRow = rowsView.element().find("tr.dx-error-row");
+
+    assert.equal($errorRow.length, 1, "error row is displayed");
+    assert.equal($errorRow.find(".dx-error-message").text(), errorText, "errorText is correct");
+});
+
 // T241920
 QUnit.testInActiveWindow("Cell editor invalid value don't miss focus on saveEditData", function(assert) {
     // arrange
