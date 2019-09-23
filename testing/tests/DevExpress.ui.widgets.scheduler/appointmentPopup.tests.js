@@ -1099,3 +1099,54 @@ QUnit.test("The resize event of appointment popup is triggered the the window is
     resizeCallbacks.fire();
     assert.ok(isResizeEventTriggered, "The resize event of popup is triggered");
 });
+
+QUnit.test("Popup should not be closed until the valid valid value is typed", function(assert) {
+    const startDate = new Date(2015, 1, 1, 1),
+        validValue = "Test",
+        done = assert.async();
+
+    this.instance.option("onAppointmentFormOpening", function(data) {
+        const items = data.form.option("items");
+        items[0].validationRules = [
+            {
+                type: "async",
+                validationCallback: function(params) {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve(params.value === validValue);
+                    });
+                    return d.promise();
+                }
+            }
+        ];
+
+        data.form.option("items", items);
+    });
+
+    this.instance.showAppointmentPopup({
+        startDate: startDate,
+        endDate: new Date(2015, 1, 1, 2),
+        text: "caption"
+    });
+
+    let $popup = $(".dx-scheduler-appointment-popup"),
+        $input = $popup.find(".dx-texteditor-input").first(),
+        $buttonOk = $popup.find(".dx-popup-done.dx-button").first();
+    $input.val("caption1");
+    $input.trigger("change");
+    $buttonOk.trigger("dxclick");
+
+    assert.equal($popup.find(".dx-validation-pending").length, 1, "the only pending editor is displayed in the form");
+    setTimeout(() => {
+        assert.equal($popup.find(".dx-invalid").length, 1, "the only invalid editor is displayed in the form");
+
+        $input.val(validValue);
+        $input.trigger("change");
+        this.instance._popup.on("hidden", function() {
+            done();
+        });
+
+        $buttonOk = $(".dx-scheduler-appointment-popup .dx-popup-done.dx-button").first();
+        $buttonOk.trigger("dxclick");
+    }, 100);
+});
