@@ -11,6 +11,12 @@ class ExcelJSTestHelper {
 
         assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, excelCell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
 
+        let expectedFontStyles;
+        if(gridCell.rowType !== "data" && excelCell.value !== null) {
+            expectedFontStyles = { bold: true };
+        }
+        assert.deepEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).font, expectedFontStyles, `cell.font (${expectedAddress.row}, ${expectedAddress.column})`);
+
         const expectedColumn = expectedArgs[callIndex].gridCell.column;
         const actualColumn = gridCell.column;
 

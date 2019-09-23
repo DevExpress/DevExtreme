@@ -10,7 +10,9 @@ const MAX_EXCEL_COLUMN_WIDTH = 255;
 function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, keepColumnWidths = true, selectedRowsOnly = false } = options;
+    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, keepColumnWidths = true, selectedRowsOnly = false, keepPredefinedCellStyles = {
+        font: true
+    } } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -36,7 +38,7 @@ function exportDataGrid(options) {
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(result.from.row + rowIndex);
-                _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell);
+                _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell, keepPredefinedCellStyles);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
@@ -58,7 +60,7 @@ function exportDataGrid(options) {
     });
 }
 
-function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell) {
+function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, keepPredefinedCellStyles) {
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const gridCell = cellData.cellSourceData;
@@ -66,12 +68,25 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         const excelCell = row.getCell(startColumnIndex + cellIndex);
         excelCell.value = cellData.value;
 
+        _setPredefinedCellStyles(gridCell, excelCell, keepPredefinedCellStyles);
+
         if(isDefined(customizeCell)) {
             customizeCell({
                 cell: excelCell,
                 excelCell: excelCell,
                 gridCell: gridCell
             });
+        }
+    }
+}
+
+function _setPredefinedCellStyles(gridCell, excelCell, keepPredefinedCellStyles) {
+    let { rowType } = gridCell;
+
+    if(keepPredefinedCellStyles.font) {
+        if(rowType !== "data" && excelCell.value !== null) {
+            excelCell.font = excelCell.font || {};
+            excelCell.font.bold = true;
         }
     }
 }
