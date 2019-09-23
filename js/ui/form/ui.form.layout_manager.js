@@ -678,6 +678,12 @@ const LayoutManager = Widget.inherit({
         return (!!item.helpText && !this._hasBrowserFlex()) || inArray(item.editorType, largeEditors) !== -1;
     },
 
+    _isLabelNeedId: function(item) {
+        const editorsRequiringIdForLabel = ["dxRadioGroup", "dxCheckBox", "dxLookup", "dxSlider", "dxRangeSlider", "dxSwitch"]; // TODO: support "dxCalendar"
+
+        return inArray(item.editorType, editorsRequiringIdForLabel) !== -1;
+    },
+
     _getLabelOptions: function(item, id, isRequired) {
         var labelOptions = extend(
             {
@@ -690,8 +696,8 @@ const LayoutManager = Widget.inherit({
             item ? item.label : {}
         );
 
-        if(item.editorType === "dxRadioGroup") {
-            labelOptions.labelID = `label-dx-${new Guid()}`;
+        if(this._isLabelNeedId(item)) {
+            labelOptions.labelID = `dx-label-${new Guid()}`;
         }
 
         if(!labelOptions.text && item.dataField) {
