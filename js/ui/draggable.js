@@ -298,6 +298,11 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @default ""
              */
             handle: "",
+            /**
+             * @name dxDraggableOptions.filter
+             * @type string
+             * @default ""
+             */
             filter: "",
             /**
              * @name dxDraggableOptions.clone

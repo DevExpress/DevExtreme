@@ -124,25 +124,164 @@ module.exports = {
         return {
             /**
              * @name GridBaseOptions.rowDragging
-             * @type GridBaseRowDragging
-             */
-            /**
-             * @name GridBaseRowDragging
-             * @type dxSortableOptions
+             * @type object
              */
             rowDragging: {
                 /**
-                * @name GridBaseRowDragging.enabled
+                * @name GridBaseOptions.rowDragging.enabled
                 * @type boolean
                 * @default false
                 */
                 enabled: false,
                 /**
-                * @name GridBaseRowDragging.showDragIcons
+                * @name GridBaseOptions.rowDragging.showDragIcons
                 * @type boolean
                 * @default true
                 */
                 showDragIcons: true
+                /**
+                 * @name GridBaseOptions.rowDragging.filter
+                 * @type string
+                 * @default "> *"
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.itemOrientation
+                 * @type Enums.Orientation
+                 * @default "vertical"
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.dropFeedbackMode
+                 * @type Enums.DropFeedbackMode
+                 * @default "push"
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.allowDropInsideItem
+                 * @type boolean
+                 * @default false
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.onDragStart
+                 * @type function(e)
+                 * @extends Action
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field4 event:event
+                 * @type_function_param1_field5 cancel:boolean
+                 * @type_function_param1_field6 itemData:any
+                 * @type_function_param1_field7 itemElement:dxElement
+                 * @type_function_param1_field8 fromIndex:number
+                 * @action
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.onDragMove
+                 * @type function(e)
+                 * @extends Action
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field4 event:event
+                 * @type_function_param1_field5 cancel:boolean
+                 * @type_function_param1_field6 itemData:any
+                 * @type_function_param1_field7 itemElement:dxElement
+                 * @type_function_param1_field8 fromIndex:number
+                 * @type_function_param1_field9 toIndex:number
+                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field12 dropInsideItem:boolean
+                 * @action
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.onDragEnd
+                 * @type function(e)
+                 * @extends Action
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field4 event:event
+                 * @type_function_param1_field5 cancel:boolean
+                 * @type_function_param1_field6 itemData:any
+                 * @type_function_param1_field7 itemElement:dxElement
+                 * @type_function_param1_field8 fromIndex:number
+                 * @type_function_param1_field9 toIndex:number
+                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field12 dropInsideItem:boolean
+                 * @action
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.onDragChange
+                 * @type function(e)
+                 * @extends Action
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field4 event:event
+                 * @type_function_param1_field5 cancel:boolean
+                 * @type_function_param1_field6 itemData:any
+                 * @type_function_param1_field7 itemElement:dxElement
+                 * @type_function_param1_field8 fromIndex:number
+                 * @type_function_param1_field9 toIndex:number
+                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field12 dropInsideItem:boolean
+                 * @action
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.onAdd
+                 * @type function(e)
+                 * @extends Action
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field4 event:event
+                 * @type_function_param1_field5 cancel:boolean
+                 * @type_function_param1_field6 itemData:any
+                 * @type_function_param1_field7 itemElement:dxElement
+                 * @type_function_param1_field8 fromIndex:number
+                 * @type_function_param1_field9 toIndex:number
+                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field12 dropInsideItem:boolean
+                 * @action
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.onRemove
+                 * @type function(e)
+                 * @extends Action
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field4 event:event
+                 * @type_function_param1_field5 cancel:boolean
+                 * @type_function_param1_field6 itemData:any
+                 * @type_function_param1_field7 itemElement:dxElement
+                 * @type_function_param1_field8 fromIndex:number
+                 * @type_function_param1_field9 toIndex:number
+                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field12 dropInsideItem:boolean
+                 * @action
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.onReorder
+                 * @type function(e)
+                 * @extends Action
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field4 event:event
+                 * @type_function_param1_field5 cancel:boolean
+                 * @type_function_param1_field6 itemData:any
+                 * @type_function_param1_field7 itemElement:dxElement
+                 * @type_function_param1_field8 fromIndex:number
+                 * @type_function_param1_field9 toIndex:number
+                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field12 dropInsideItem:boolean
+                 * @action
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.onPlaceholderPrepared
+                 * @type function(e)
+                 * @extends Action
+                 * @type_function_param1 e:object
+                 * @type_function_param1_field4 event:event
+                 * @type_function_param1_field5 cancel:boolean
+                 * @type_function_param1_field6 itemData:any
+                 * @type_function_param1_field7 itemElement:dxElement
+                 * @type_function_param1_field8 fromIndex:number
+                 * @type_function_param1_field9 toIndex:number
+                 * @type_function_param1_field10 dropInsideItem:boolean
+                 * @action
+                 * @hidden
+                 */
             }
         };
     },

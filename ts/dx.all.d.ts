@@ -2007,7 +2007,7 @@ declare module DevExpress.ui {
         /** @name GridBase.Options.rowAlternationEnabled */
         rowAlternationEnabled?: boolean;
         /** @name GridBase.Options.rowDragging */
-        rowDragging?: GridBaseRowDragging;
+        rowDragging?: { allowDropInsideItem?: boolean, dropFeedbackMode?: 'push' | 'indicate', enabled?: boolean, filter?: string, itemOrientation?: 'horizontal' | 'vertical', onAdd?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, dropInsideItem?: boolean }) => any), onDragChange?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, dropInsideItem?: boolean }) => any), onDragEnd?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, dropInsideItem?: boolean }) => any), onDragMove?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, dropInsideItem?: boolean }) => any), onDragStart?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number }) => any), onPlaceholderPrepared?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, dropInsideItem?: boolean }) => any), onRemove?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, dropInsideItem?: boolean }) => any), onReorder?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, dropInsideItem?: boolean }) => any), showDragIcons?: boolean };
         /** @name GridBase.Options.scrolling */
         scrolling?: GridBaseScrolling;
         /** @name GridBase.Options.searchPanel */
@@ -2358,13 +2358,6 @@ declare module DevExpress.ui {
         icon?: string;
         /** @name GridBaseColumnButton.text */
         text?: string;
-    }
-    /** @name GridBaseRowDragging */
-    export interface GridBaseRowDragging {
-        /** @name GridBaseRowDragging.enabled */
-        enabled?: boolean;
-        /** @name GridBaseRowDragging.showDragIcons */
-        showDragIcons?: boolean;
     }
     /** @name HierarchicalCollectionWidget.Options */
     export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
@@ -3189,6 +3182,8 @@ declare module DevExpress.ui {
     export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
         /** @name dxDraggable.Options.clone */
         clone?: boolean;
+        /** @name dxDraggable.Options.filter */
+        filter?: string;
         /** @name dxDraggable.Options.onDragEnd */
         onDragEnd?: ((e: { component?: dxDraggable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable }) => any);
         /** @name dxDraggable.Options.onDragMove */
@@ -5419,6 +5414,8 @@ declare module DevExpress.ui {
         allowDropInsideItem?: boolean;
         /** @name dxSortable.Options.dropFeedbackMode */
         dropFeedbackMode?: 'push' | 'indicate';
+        /** @name dxSortable.Options.filter */
+        filter?: string;
         /** @name dxSortable.Options.itemOrientation */
         itemOrientation?: 'horizontal' | 'vertical';
         /** @name dxSortable.Options.onAdd */
