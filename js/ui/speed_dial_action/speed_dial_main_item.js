@@ -176,7 +176,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         return action._options.animation;
     },
 
-    _isDirectionDown(actions, direction) {
+    _isDirectionUp(actions, direction) {
         if(direction === "auto") {
             const actionsHeight = (this.initialOption("indent") - this.$content().height()) + this.initialOption("childIndent") * actions.length;
             const offsetTop = this.$content().offset().top;
@@ -198,7 +198,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             0;
 
         const actionOffsetYValue = this.initialOption("indent") + this.initialOption("childIndent") * index;
-        const actionOffsetY = this._isDirectionDown(actions, this.option("direction")) ? -actionOffsetYValue : actionOffsetYValue;
+        const actionOffsetY = this._isDirectionUp(actions, this.option("direction")) ? -actionOffsetYValue : actionOffsetYValue;
 
         const actionPositionAtMy = action._options.label ?
             (this._isPositionLeft(this._getPosition()) ? "left" : "right") :
