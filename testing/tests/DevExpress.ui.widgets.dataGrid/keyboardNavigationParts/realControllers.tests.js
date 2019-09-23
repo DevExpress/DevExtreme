@@ -407,9 +407,10 @@ QUnit.module("Real DataController and ColumnsController", {
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
-    QUnit.testInActiveWindow("DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process (T718459)", function(assert) {
+    QUnit.testInActiveWindow("DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process (T718459, T812546)", function(assert) {
         // arrange
         var keyboardNavigationController,
+            editingStartFiresCount = 0,
             focusedCellChangingFiresCount = 0,
             focusedCellChangedFiresCount = 0,
             $cell;
@@ -419,11 +420,10 @@ QUnit.module("Real DataController and ColumnsController", {
         };
 
         this.options = {
-            keyboardNavigation: {
-                enabled: true
-            },
+            useKeyboard: true,
             editing: { mode: 'cell', allowUpdating: true },
             onEditingStart: function(e) {
+                ++editingStartFiresCount;
                 e.cancel = e.data.name === "Alex";
             },
             onFocusedCellChanging: e => {
@@ -439,7 +439,7 @@ QUnit.module("Real DataController and ColumnsController", {
         // act
         this.gridView.render($("#container"));
         keyboardNavigationController = this.gridView.component.keyboardNavigationController;
-        $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell = $(this.getCellElement(1, 1));
         $cell.trigger(CLICK_EVENT);
         this.editCell(1, 1);
         this.clock.tick();
@@ -447,9 +447,11 @@ QUnit.module("Real DataController and ColumnsController", {
         // assert
         assert.equal(focusedCellChangingFiresCount, 1, "onFocusedCellChanging fires count");
         assert.equal(focusedCellChangedFiresCount, 1, "onFocusedCellChanged fires count");
+        assert.equal(editingStartFiresCount, 1, "onEditingStart fires count");
+        assert.notOk(keyboardNavigationController._isHiddenFocus, "hidden focus");
 
         // act
-        $cell = $(this.rowsView.element().find(".dx-row").eq(0).find("td").eq(1));
+        $cell = $(this.getCellElement(0, 1));
         $cell.trigger(CLICK_EVENT);
 
         // act
@@ -459,13 +461,56 @@ QUnit.module("Real DataController and ColumnsController", {
         // assert
         assert.equal(focusedCellChangingFiresCount, 2, "onFocusedCellChanging fires count");
         assert.equal(focusedCellChangedFiresCount, 2, "onFocusedCellChanged fires count");
-
-        assert.notOk(keyboardNavigationController._isHiddenFocus, "hidden focus");
+        assert.equal(editingStartFiresCount, 2, "onEditingStart fires count");
 
         assert.notOk(keyboardNavigationController._editingController.isEditing(), "Is editing");
         assert.equal(this.rowsView.element().find("input").length, 0, "input");
+        if(!browser.msie) {
+            assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
+            assert.notOk($cell.hasClass("dx-focused"), "cell has no .dx-focused");
+        }
+    });
 
-        assert.ok($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    QUnit.testInActiveWindow("DataGrid should preserve fosused overlay after cancel editing (T812546)", function(assert) {
+        // arrange
+        var editingStartFiresCount = 0,
+            keyboardNavigation;
+
+        this.$element = () => $("#container");
+
+        this.options = {
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            onEditingStart: function(e) {
+                ++editingStartFiresCount;
+                e.cancel = e.data.name === "Alex";
+
+                // assert
+                assert.notOk(keyboardNavigation._isHiddenFocus, "Focus is not hidden");
+            }
+        };
+
+        this.setupModule();
+        keyboardNavigation = this.getController("keyboardNavigation");
+
+        // act
+        this.gridView.render($("#container"));
+        $(this.getCellElement(1, 1)).trigger(pointerEvents.up);
+        this.clock.tick();
+        this.triggerKeyDown("upArrow", false, false, $(":focus"));
+        this.clock.tick();
+
+        // assert
+        assert.ok($(this.getCellElement(0, 1)).hasClass("dx-focused"), "Cell has focus overlay");
+
+        // act
+        this.editCell(0, 1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(editingStartFiresCount, 1, "onEditingStart fires count");
     });
 
     QUnit.testInActiveWindow("DataGrid should cancel editing cell if cell focusing canceled (T718459)", function(assert) {
