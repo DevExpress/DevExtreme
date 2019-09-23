@@ -17,20 +17,23 @@ registerDecorator(
     EditDecorator.inherit({
 
         _init: function() {
+            let list = this._list,
+                $element = list.$element();
+
             this._groupedEnabled = this._list.option("grouped");
 
             this._lockedDrag = false;
 
-            this._sortable = this._list._createComponent(this._list.$element(), Sortable, extend({
+            this._sortable = list._createComponent($element, Sortable, extend({
                 filter: ".dx-list-item",
-                container: this._list.$element(),
-                dragDirection: this._list.option("itemDragging.group") ? "both" : "vertical",
+                container: $element,
+                dragDirection: list.option("itemDragging.group") ? "both" : "vertical",
                 handle: "." + REORDER_HANDLE_CLASS,
                 template: this._dragTemplate,
                 onDragStart: this._dragStartHandler.bind(this),
                 onDragChange: this._dragChangeHandler.bind(this),
                 onDragEnd: this._dragEndHandler.bind(this)
-            }, this._list.option("itemDragging")));
+            }, list.option("itemDragging")));
         },
 
         _dragTemplate: function(e) {
