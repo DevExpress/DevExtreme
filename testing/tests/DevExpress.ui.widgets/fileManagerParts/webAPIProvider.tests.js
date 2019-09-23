@@ -152,6 +152,26 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
+    test("get items content test", function(assert) {
+        const done = assert.async();
+
+        ajaxMock.setup({
+            url: this.options.endpointUrl,
+            responseText: new ArrayBuffer(5),
+            callback: request => {
+                assert.strictEqual(request.method, "POST");
+                assert.strictEqual(request.responseType, "arraybuffer");
+            }
+        });
+
+        const item = new FileManagerItem(filesPathInfo, "Article.txt");
+        this.provider.getItemsContent([ item ])
+            .done(result => {
+                assert.strictEqual(result.byteLength, 5, "item content acquired");
+                done();
+            });
+    });
+
     test("generation end point", function(assert) {
         let provider = new WebApiFileProvider({
             endpointUrl: "myEndpoint"
