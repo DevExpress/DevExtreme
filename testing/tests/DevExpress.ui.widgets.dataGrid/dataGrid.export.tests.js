@@ -1556,7 +1556,7 @@ QUnit.test("Bands - show column headers & hide all columns in band, hide by visi
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols>' +
         '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="127.71" min="2" max="2" />' +
+        '<col width="127.86" min="2" max="2" />' +
         '</cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
