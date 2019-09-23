@@ -160,6 +160,66 @@ module.exports = {
                  * @default false
                  */
                 /**
+                 * @name GridBaseOptions.rowDragging.dragDirection
+                 * @type Enums.DragDirection
+                 * @default "both"
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.boundary
+                 * @type string|Node|jQuery
+                 * @default window
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.container
+                 * @type string|Node|jQuery
+                 * @default undefined
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.template
+                 * @type template|function
+                 * @type_function_return string|Node|jQuery
+                 * @default undefined
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.handle
+                 * @type string
+                 * @default ""
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.autoScroll
+                 * @type boolean
+                 * @default true
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.scrollSpeed
+                 * @type number
+                 * @default 60
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.scrollSensitivity
+                 * @type number
+                 * @default 60
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.group
+                 * @type any
+                 * @default undefined
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.cursorOffset
+                 * @type string|object
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.cursorOffset.x
+                 * @type number
+                 * @default 0
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.cursorOffset.y
+                 * @type number
+                 * @default 0
+                 */
+                /**
                  * @name GridBaseOptions.rowDragging.onDragStart
                  * @type function(e)
                  * @extends Action
@@ -266,21 +326,6 @@ module.exports = {
                  * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
                  * @type_function_param1_field12 dropInsideItem:boolean
                  * @action
-                 */
-                /**
-                 * @name GridBaseOptions.rowDragging.onPlaceholderPrepared
-                 * @type function(e)
-                 * @extends Action
-                 * @type_function_param1 e:object
-                 * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 cancel:boolean
-                 * @type_function_param1_field6 itemData:any
-                 * @type_function_param1_field7 itemElement:dxElement
-                 * @type_function_param1_field8 fromIndex:number
-                 * @type_function_param1_field9 toIndex:number
-                 * @type_function_param1_field10 dropInsideItem:boolean
-                 * @action
-                 * @hidden
                  */
             }
         };
