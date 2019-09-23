@@ -1926,3 +1926,27 @@ QUnit.test("Recurrent appointment with tail on next week has most top coordinate
 
     assert.ok(coords.top === 0, "Appointment tail has most top coordinate");
 });
+
+QUnit.test("Workspace view has correct viewEndDate with empty groups and groupByDate = true (T815379)", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        groupByDate: true,
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 16,
+        groups: [],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: [],
+                label: "Priority"
+            }
+        ],
+        height: 700
+    });
+
+    assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 4, 26, 15, 59), "Appointment tail has most top coordinate");
+});
