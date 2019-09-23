@@ -1724,6 +1724,27 @@ QUnit.test("Change axis type at runtime from discrete to continuous with visual 
     assert.deepEqual(onZoomEnd.lastCall.args[0].zoomFactor, NaN);
 });
 
+QUnit.test("Validate Axis on update", function(assert) {
+    const chart = this.createChart({
+        valueAxis: {
+            visualRange: [new Date(2019, 1, 1), new Date(2020, 1, 1)],
+            valueType: "datetime",
+            constantLines: [{
+                value: new Date(2019, 6, 3),
+                color: "black",
+                width: 5
+            }]
+        },
+        argumentAxis: {
+            visualRange: [0, 20]
+        }
+    });
+
+    chart.option("valueAxis.constantLines[0].value", new Date(2020, 7, 1));
+
+    assert.deepEqual(chart.getValueAxis().getOptions().dataType, "datetime");
+});
+
 QUnit.module("Legend title", $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
