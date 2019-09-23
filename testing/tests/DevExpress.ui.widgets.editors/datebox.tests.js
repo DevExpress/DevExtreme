@@ -3706,6 +3706,7 @@ QUnit.module("keyboard navigation", {
             assert.ok(true, "test does not actual for mobile devices");
             return;
         }
+
         this.dateBox.option({
             pickerType: "list",
             type: "time"
