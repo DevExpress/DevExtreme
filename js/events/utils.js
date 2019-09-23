@@ -163,13 +163,24 @@ const needSkipEvent = (e) => {
         return true;
     }
     if(isDxMouseWheelEvent(e)) {
-        if($target.is("textarea") && $target.hasClass("dx-texteditor-input")) {
+        const isTextArea = $target.is("textarea") && $target.hasClass("dx-texteditor-input");
+
+        if(isTextArea) {
             return false;
         }
-        const isContentEditable = target.isContentEditable || target.hasAttribute("contenteditable");
-        const hasContentEditableParent = $target.closest("div[contenteditable='true']");
+
+        const isContentEditable = () => {
+            const isTargetContentEditable = target.isContentEditable || target.hasAttribute("contenteditable");
+            const hasContentEditableParent = !!$target.closest("div[contenteditable='true']").length;
+            return isTargetContentEditable || hasContentEditableParent;
+        };
+
+        if(isContentEditable()) {
+            return !$target.closest(".dx-scrollview-content").length;
+        }
+
         const isInputFocused = $target.is("input[type='number'], textarea, select") && $target.is(':focus');
-        return isInputFocused || (isContentEditable && hasContentEditableParent);
+        return isInputFocused;
     }
     if(isMouseEvent(e)) {
         return touchInInput || e.which > 1; // only left mouse button
