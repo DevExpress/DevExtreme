@@ -9,8 +9,8 @@ QUnit.testStart(function() {
 
 import $ from "jquery";
 import "./keyboardNavigationParts/keyboardController.tests.js";
-import "./keyboardNavigationParts/accessibility.tests.js";
-import "./keyboardNavigationParts/customization.tests.js";
 import "./keyboardNavigationParts/keyboardKeys.tests.js";
-import "./keyboardNavigationParts/realControllers.tests.js";
 import "./keyboardNavigationParts/rowsView.tests.js";
+import "./keyboardNavigationParts/realControllers.tests.js";
+import "./keyboardNavigationParts/customization.tests.js";
+import "./keyboardNavigationParts/accessibility.tests.js";
