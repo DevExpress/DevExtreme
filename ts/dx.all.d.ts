@@ -1648,8 +1648,12 @@ declare module DevExpress.fileProvider {
         createDirectory?: Function;
         /** @name CustomFileProvider.Options.deleteItem */
         deleteItem?: Function;
+        /** @name CustomFileProvider.Options.downloadItems */
+        downloadItems?: Function;
         /** @name CustomFileProvider.Options.getItems */
         getItems?: Function;
+        /** @name CustomFileProvider.Options.getItemsContent */
+        getItemsContent?: Function;
         /** @name CustomFileProvider.Options.hasSubDirectoriesExpr */
         hasSubDirectoriesExpr?: string | Function;
         /** @name CustomFileProvider.Options.moveItem */
@@ -3475,7 +3479,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.onSelectedFileOpened */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, fileItem?: any }) => any);
         /** @name dxFileManager.Options.permissions */
-        permissions?: { copy?: boolean, create?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
+        permissions?: { copy?: boolean, create?: boolean, download?: boolean, move?: boolean, remove?: boolean, rename?: boolean, upload?: boolean };
         /** @name dxFileManager.Options.rootFolderName */
         rootFolderName?: string;
         /** @name dxFileManager.Options.selectionMode */

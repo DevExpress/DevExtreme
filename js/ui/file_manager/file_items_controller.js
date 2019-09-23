@@ -240,6 +240,16 @@ export default class FileItemsController {
         return this._fileProvider.getFileUploadChunkSize();
     }
 
+    downloadItems(itemInfos) {
+        const items = itemInfos.map(i => i.fileItem);
+        this._fileProvider.downloadItems(items);
+    }
+
+    getItemsContent(itemInfos) {
+        const items = itemInfos.map(i => i.fileItem);
+        return when(this._fileProvider.getItemsContent(items));
+    }
+
     _processEditAction(actionInfo, action, completeAction) {
         let actionResult = null;
 
