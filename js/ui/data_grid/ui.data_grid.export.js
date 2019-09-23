@@ -301,7 +301,7 @@ exports.DataProvider = Class.inherit({
             column = columns[rowIndex] && columns[rowIndex][cellIndex];
 
         return column ? {
-            colspan: (column.colspan || 1) - 1,
+            colspan: (column.exportColSpan || 1) - 1,
             rowspan: (column.rowspan || 1) - 1
         } : { colspan: 0, rowspan: 0 };
     },
@@ -333,10 +333,11 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             column,
             columns,
             columnsController = this._columnsController,
-            rowCount = columnsController.getRowCount();
+            rowCount = columnsController.getRowCount(),
+            currentHeaderRow;
 
         for(i = 0; i <= rowCount; i++) {
-            result.push([]);
+            currentHeaderRow = [];
             columns = columnsController.getVisibleColumns(i, true);
             let columnWidthsByColumnIndex;
             if(i === rowCount) {
@@ -359,18 +360,34 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                 });
 
                 if(this._needColumnExporting(column)) {
+                    column.exportColSpan = this._calculateExportColSpan(column);
                     if(columnWidthsByColumnIndex) {
                         this._updateColumnWidth(column, columnWidthsByColumnIndex[column.index]);
                     }
-                    result[i].push(column);
+                    currentHeaderRow.push(column);
                 }
             }
+            result.push(currentHeaderRow);
         }
 
         columns = result[rowCount];
         result = this._prepareItems(result.slice(0, -1));
         result.push(columns);
 
+        return result;
+    },
+
+    _calculateExportColSpan: function(column) {
+        if(!column.isBand) {
+            return;
+        }
+        const childColumns = this._columnsController.getChildrenByBandColumn(column.index, true);
+        let result = 0;
+        childColumns.forEach((childColumn) => {
+            if(this._needColumnExporting(childColumn)) {
+                result += this._calculateExportColSpan(childColumn) || 1;
+            }
+        });
         return result;
     },
 
