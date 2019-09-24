@@ -31,7 +31,7 @@ class FileManagerContextMenu extends Widget {
         this._contextMenu = this._createComponent($menu, ContextMenu, {
             cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
             showEvent: "",
-            onItemClick: ({ itemData: { commandName } }) => this._onContextMenuItemClick(commandName),
+            onItemClick: ({ itemData: { name } }) => this._onContextMenuItemClick(name),
             onHidden: () => this._onContextMenuHidden()
         });
 
@@ -76,7 +76,7 @@ class FileManagerContextMenu extends Widget {
 
         const itemArray = contextMenuItems || this.option("items");
         itemArray.forEach(srcItem => {
-            const commandName = isString(srcItem) ? srcItem : srcItem.commandName;
+            const commandName = isString(srcItem) ? srcItem : srcItem.name;
             const item = this._configureItemByCommandName(commandName, srcItem, fileItems);
             if(this._isContextMenuItemAvailable(item, fileItems)) {
                 result.push(item);
@@ -87,13 +87,13 @@ class FileManagerContextMenu extends Widget {
     }
 
     _isContextMenuItemAvailable(item, fileItems) {
-        if(!this._isDefaultItem(item.commandName)) {
+        if(!this._isDefaultItem(item.name)) {
             return item.visible;
         }
         if(item.visibilityMode === "manual") {
             return item.visible;
         }
-        return this._commandManager.isCommandAvailable(item.commandName, fileItems);
+        return this._commandManager.isCommandAvailable(item.name, fileItems);
     }
 
     _isDefaultItem(commandName) {
@@ -125,8 +125,8 @@ class FileManagerContextMenu extends Widget {
             this._extendAttributes(result, item, ["visible", "disabled"]);
         }
 
-        if(commandName && !result.commandName) {
-            extend(result, { commandName });
+        if(commandName && !result.name) {
+            extend(result, { name: commandName });
         }
 
         return result;
@@ -135,7 +135,7 @@ class FileManagerContextMenu extends Widget {
     _createMenuItemByCommandName(commandName) {
         const { text, icon } = this._commandManager.getCommandByName(commandName);
         return {
-            commandName,
+            name: commandName,
             text,
             icon,
             onItemClick: () => this._onContextMenuItemClick(commandName)

@@ -378,7 +378,7 @@ class FileManager extends Widget {
             /**
             * @name dxFileManagerToolbar.generalItems
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-            * @default [ "showDirsPanel", "create", "upload", "refresh", { commandName: "separator", location: "after" }, "viewMode" ]
+            * @default [ "showDirsPanel", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewMode" ]
             */
             /**
             * @name dxFileManagerToolbar.fileItems
@@ -391,7 +391,7 @@ class FileManager extends Widget {
             * @inherits dxToolbarItem
             */
             /**
-            * @name dxFileManagerToolbarItem.commandName
+            * @name dxFileManagerToolbarItem.name
             * @type Enums.FileManagerToolbarItem|string
             */
             /**
@@ -408,7 +408,7 @@ class FileManager extends Widget {
                 generalItems: [
                     "showDirsPanel", "create", "upload", "refresh",
                     {
-                        commandName: "separator",
+                        name: "separator",
                         location: "after"
                     },
                     "viewMode"
@@ -439,7 +439,7 @@ class FileManager extends Widget {
             * @inherits dxContextMenuItem
             */
             /**
-            * @name dxFileManagerContextMenuItem.commandName
+            * @name dxFileManagerContextMenuItem.name
             * @type Enums.FileManagerContextMenuItem|string
             */
             /**

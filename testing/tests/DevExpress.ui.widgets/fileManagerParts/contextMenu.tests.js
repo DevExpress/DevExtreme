@@ -228,16 +228,16 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
             items: [
                 "move",
                 {
-                    commandName: "create",
+                    name: "create",
                     icon: "upload"
                 },
                 "rename", "upload", "rename", "copy",
                 {
-                    commandName: "delete",
+                    name: "delete",
                     text: "Destruct"
                 },
                 {
-                    commandName: "refresh",
+                    name: "refresh",
                     onClick: testClick
                 }
             ]
@@ -323,7 +323,7 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
             items: [
                 "create", "upload",
                 {
-                    commandName: "rename",
+                    name: "rename",
                     visibilityMode: "manual",
                     visible: true
                 },

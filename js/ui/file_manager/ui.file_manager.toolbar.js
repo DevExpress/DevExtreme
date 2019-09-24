@@ -140,7 +140,7 @@ class FileManagerToolbar extends Widget {
         let groupHasItems = false;
 
         return items.map(item => {
-            const commandName = isString(item) ? item : item.commandName;
+            const commandName = isString(item) ? item : item.name;
             const preparedItem = this._configureItemByCommandName(commandName, item);
 
             if(commandName === "separator") {
@@ -189,8 +189,8 @@ class FileManagerToolbar extends Widget {
             }
         }
 
-        if(commandName && !result.commandName) {
-            extend(result, { commandName });
+        if(commandName && !result.name) {
+            extend(result, { name: commandName });
         }
 
         if(result.widget === "dxButton") {
@@ -318,7 +318,7 @@ class FileManagerToolbar extends Widget {
             const itemVisible = item.available;
 
             let showItem = false;
-            if(item.commandName === "separator") {
+            if(item.name === "separator") {
                 showItem = groupHasItems;
                 groupHasItems = false;
             } else {
@@ -338,7 +338,7 @@ class FileManagerToolbar extends Widget {
 
     _fileToolbarHasEffectiveItems(fileItems) {
         const items = this._fileToolbar.option("items");
-        return items.some(({ commandName }) => commandName !== "clear" && commandName !== "refresh" && this._commandManager.isCommandAvailable(commandName, fileItems));
+        return items.some(({ name }) => name !== "clear" && name !== "refresh" && this._commandManager.isCommandAvailable(name, fileItems));
     }
 
     _executeCommand(command) {
@@ -346,21 +346,21 @@ class FileManagerToolbar extends Widget {
     }
 
     _isToolbarItemAvailable(toolbarItem, fileItems) {
-        if(!this._isDefaultItem(toolbarItem.commandName)) {
+        if(!this._isDefaultItem(toolbarItem.name)) {
             return toolbarItem.visible;
         }
         if(toolbarItem.visibilityMode === "manual") {
             return toolbarItem.visible;
         }
-        if(toolbarItem.commandName === "refresh") {
+        if(toolbarItem.name === "refresh") {
             return this._generalToolbarVisible || !!this._isRefreshVisibleInFileToolbar;
         }
 
-        if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(toolbarItem.commandName) > -1) {
+        if(ALWAYS_VISIBLE_TOOLBAR_ITEMS.indexOf(toolbarItem.name) > -1) {
             return true;
         }
 
-        return this._commandManager.isCommandAvailable(toolbarItem.commandName, fileItems);
+        return this._commandManager.isCommandAvailable(toolbarItem.name, fileItems);
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {
@@ -369,7 +369,7 @@ class FileManagerToolbar extends Widget {
         const items = toolbar.option("items");
         for(let i = 0; i < items.length; i++) {
             const item = items[i];
-            if(item.commandName === commandName) {
+            if(item.name === commandName) {
                 toolbar.option(`items[${i}]`, options);
                 break;
             }

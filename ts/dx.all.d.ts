@@ -3498,8 +3498,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManagerContextMenuItem */
     export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
-        /** @name dxFileManagerContextMenuItem.commandName */
-        commandName?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
+        /** @name dxFileManagerContextMenuItem.name */
+        name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visibilityMode */
         visibilityMode?: 'default' | 'manual' | string;
     }
@@ -3512,10 +3512,10 @@ declare module DevExpress.ui {
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
-        /** @name dxFileManagerToolbarItem.commandName */
-        commandName?: 'showDirsPanel' | 'create' | 'upload' | 'refresh' | 'viewMode' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
         /** @name dxFileManagerToolbarItem.location */
         location?: 'after' | 'before' | 'center';
+        /** @name dxFileManagerToolbarItem.name */
+        name?: 'showDirsPanel' | 'create' | 'upload' | 'refresh' | 'viewMode' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
         /** @name dxFileManagerToolbarItem.visibilityMode */
         visibilityMode?: 'default' | 'manual' | string;
     }
