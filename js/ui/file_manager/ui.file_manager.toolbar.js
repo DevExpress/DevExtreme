@@ -40,7 +40,7 @@ const DEFAULT_ITEM_CONFIGS = {
             locateInMenu: "auto"
         }
     },
-    viewMode: {
+    viewSwitcher: {
         location: "after"
     },
     download: {
@@ -86,7 +86,7 @@ const DEFAULT_ITEM_CONFIGS = {
     }
 };
 
-const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ "separator", "viewMode" ];
+const ALWAYS_VISIBLE_TOOLBAR_ITEMS = [ "separator", "viewSwitcher" ];
 
 const REFRESH_ICON_MAP = {
     default: "dx-filemanager-i dx-filemanager-i-refresh",
@@ -169,7 +169,7 @@ class FileManagerToolbar extends Widget {
             case "separator":
                 result = this._createSeparatorItem();
                 break;
-            case "viewMode":
+            case "viewSwitcher":
                 result = this._createViewModeItem();
                 break;
         }

@@ -378,7 +378,7 @@ class FileManager extends Widget {
             /**
             * @name dxFileManagerToolbar.generalItems
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-            * @default [ "navPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewMode" ]
+            * @default [ "navPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
             */
             /**
             * @name dxFileManagerToolbar.fileItems
@@ -411,7 +411,7 @@ class FileManager extends Widget {
                         name: "separator",
                         location: "after"
                     },
-                    "viewMode"
+                    "viewSwitcher"
                 ],
 
                 fileItems: [

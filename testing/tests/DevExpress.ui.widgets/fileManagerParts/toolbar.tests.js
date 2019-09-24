@@ -225,7 +225,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
                     location: "after"
                 },
                 {
-                    name: "viewMode",
+                    name: "viewSwitcher",
                     location: "before"
                 }]
         });
@@ -270,7 +270,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
                     name: "separator",
                     location: "after"
                 },
-                "viewMode",
+                "viewSwitcher",
                 {
                     ID: 42,
                     name: "commandName",
@@ -305,7 +305,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
                     name: "separator",
                     location: "after"
                 },
-                "viewMode",
+                "viewSwitcher",
                 {
                     name: "commandName",
                     locateInMenu: "always",
@@ -375,7 +375,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
                     name: "separator",
                     location: "after"
                 },
-                "viewMode"
+                "viewSwitcher"
             ]
         });
         this.clock.tick(400);
