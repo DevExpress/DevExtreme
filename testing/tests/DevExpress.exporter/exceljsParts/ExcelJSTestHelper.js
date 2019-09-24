@@ -59,10 +59,10 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkPredefinedCellStyles(expectedCellArgs) {
+    checkPredefinedFont(expectedCells) {
         const rowTypes = ["header", "group", "groupFooter", "totalFooter"];
 
-        expectedCellArgs.forEach(expectedCell => {
+        expectedCells.forEach(expectedCell => {
             const { gridCell, excelCell } = expectedCell;
 
             if(inArray(gridCell.rowType, rowTypes) !== -1 && gridCell.value !== undefined) {

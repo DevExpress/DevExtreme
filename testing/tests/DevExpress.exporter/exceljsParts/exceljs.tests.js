@@ -110,7 +110,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount(topLeft, { row: 1, column: 1 });
                     helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -188,7 +188,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row, column: topLeft.column + 1 }, { row: 1, column: 2 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column).value, "f1", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column}).value`);
                     assert.equal(this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "f2", `this.worksheet.getCell(${topLeft.row}, ${topLeft.column + 1}).value`);
@@ -463,7 +463,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 1, column: topLeft.column + 1 }, { row: 2, column: 2 });
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "1", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.deepEqual(this.worksheet.getCell(topLeft.row + 1, topLeft.column + 1).value, "2", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column + 1}).value`);
                     assert.deepEqual(result.from, topLeft, "result.from");
@@ -1098,7 +1098,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 4, column: topLeft.column }, { row: 5, column: 1 });
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 4, column: topLeft.column }, { x: 0, y: topLeft.row });
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkValues(expectedRows, topLeft);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 4, column: topLeft.column }, "result.to");
@@ -1254,7 +1254,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkValues(expectedRows, topLeft);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
@@ -1376,7 +1376,7 @@ QUnit.module("API", moduleConfig, () => {
                 helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then(() => {
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkValues(expectedRows, topLeft);
                     done();
                 });
@@ -1425,7 +1425,7 @@ QUnit.module("API", moduleConfig, () => {
                 helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkValues(expectedRows, topLeft);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 5, column: topLeft.column }, "result.to");
@@ -1627,7 +1627,7 @@ QUnit.module("API", moduleConfig, () => {
                 helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkValues(expectedRows, topLeft);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 4, column: topLeft.column }, "result.to");
@@ -1834,7 +1834,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 4, column: topLeft.column + 2 }, { row: 5, column: 3 });
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 4, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkValues(expectedRows, topLeft);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 4, column: topLeft.column + 2 }, "result.to");
@@ -2540,7 +2540,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkValues(expectedRows, topLeft);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
@@ -2750,7 +2750,7 @@ QUnit.module("API", moduleConfig, () => {
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
                     helper.checkRowAndColumnCount({ row: topLeft.row + 2, column: topLeft.column + 1 }, { row: 3, column: 2 });
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
-                    helper.checkPredefinedCellStyles(expectedCustomizeCellArgs);
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkValues(expectedRows, topLeft);
                     assert.deepEqual(result.from, topLeft, "result.from");
                     assert.deepEqual(result.to, { row: topLeft.row + 2, column: topLeft.column + 1 }, "result.to");
