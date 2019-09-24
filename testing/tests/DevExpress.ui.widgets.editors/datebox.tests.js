@@ -3715,6 +3715,37 @@ QUnit.module("keyboard navigation", {
         const $cancelButton = this.dateBox._popup._wrapper().find(".dx-button.dx-popup-cancel");
         assert.ok($cancelButton.hasClass("dx-state-focused"), "cancel button is focused");
     });
+
+    QUnit.testInActiveWindow("Unsupported key handlers must be processed correctly", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        this.dateBox.option({
+            pickerType: "list",
+            type: "time"
+        });
+
+        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        this.dateBox.focus();
+
+        let isNoError = true;
+
+        try {
+            keyboard
+                .press("down")
+                .press("up")
+                .press("right")
+                .press("left");
+        } catch(e) {
+            isNoError = false;
+        }
+
+        assert.ok(isNoError, "key handlers processed without errors");
+    });
 });
 
 QUnit.module("aria accessibility", {}, () => {
