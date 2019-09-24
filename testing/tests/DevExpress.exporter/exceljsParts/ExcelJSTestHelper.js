@@ -62,7 +62,7 @@ class ExcelJSTestHelper {
             const { gridCell, excelCell } = expectedCell;
             const { rowType } = gridCell;
 
-            if(rowType === "header" || (rowType === "group" && gridCell.value !== undefined) || (rowType === "groupFooter") || (rowType === "totalFooter")) {
+            if((rowType === "header" || rowType === "group" || rowType === "groupFooter" || rowType === "totalFooter") && gridCell.value !== undefined) {
                 assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, { bold: true }, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
             } else {
                 assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, undefined, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
