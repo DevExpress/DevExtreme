@@ -368,8 +368,7 @@ class FileManager extends Widget {
 
             /**
             * @name dxFileManagerOptions.toolbar
-            * @type dxFileManagerToolbar
-            * @default { generalitems: [ "showDirsPanel", "create", "upload", "refresh", { commandName: "separator", location: "after" }, "viewMode" ], fileItems: [ "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear" ] }
+            * @type object
             */
 
             /**
@@ -379,10 +378,12 @@ class FileManager extends Widget {
             /**
             * @name dxFileManagerToolbar.generalItems
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+            * @default [ "showDirsPanel", "create", "upload", "refresh", { commandName: "separator", location: "after" }, "viewMode" ]
             */
             /**
             * @name dxFileManagerToolbar.fileItems
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+            * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear" ]
             */
 
             /**
@@ -420,8 +421,7 @@ class FileManager extends Widget {
 
             /**
             * @name dxFileManagerOptions.contextMenu
-            * @type dxFileManagerContextMenu
-            * @default { items: [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ] }
+            * @type object
             */
 
             /**
@@ -431,6 +431,7 @@ class FileManager extends Widget {
             /**
             * @name dxFileManagerContextMenu.items
             * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
+            * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
             */
 
             /**

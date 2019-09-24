@@ -3460,7 +3460,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.allowedFileExtensions */
         allowedFileExtensions?: Array<string>;
         /** @name dxFileManager.Options.contextMenu */
-        contextMenu?: dxFileManagerContextMenu;
+        contextMenu?: any;
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
@@ -3482,7 +3482,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
         /** @name dxFileManager.Options.toolbar */
-        toolbar?: dxFileManagerToolbar;
+        toolbar?: any;
         /** @name dxFileManager.Options.upload */
         upload?: { maxFileSize?: number };
     }
