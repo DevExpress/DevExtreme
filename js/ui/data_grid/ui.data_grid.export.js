@@ -386,13 +386,16 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             return;
         }
         const childColumns = this._columnsController.getChildrenByBandColumn(column.index, true);
-        let result = 0;
-        childColumns.forEach((childColumn) => {
+        if(!isDefined(childColumns)) {
+            return;
+        }
+        return childColumns.reduce((result, childColumn) => {
             if(this._needColumnExporting(childColumn)) {
-                result += this._calculateExportColspan(childColumn) || 1;
+                return result + (this._calculateExportColspan(childColumn) || 1);
+            } else {
+                return result;
             }
-        });
-        return result;
+        }, 0);
     },
 
     _needColumnExporting: function(column) {
