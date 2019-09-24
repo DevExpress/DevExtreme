@@ -79,9 +79,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 }
 
 function _setPredefinedCellStyles(gridCell, excelCell) {
-    let { rowType } = gridCell;
-
-    if(rowType !== "data" && excelCell.value !== null) {
+    if(gridCell.rowType !== "data" && excelCell.value !== null) {
         excelCell.font = excelCell.font || {};
         excelCell.font.bold = true;
     }
