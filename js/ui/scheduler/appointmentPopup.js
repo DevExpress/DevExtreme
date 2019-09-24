@@ -31,7 +31,9 @@ export default class AppointmentPopup {
             lastEditData: null,
             appointment: {
                 data: null,
-                processTimeZone: false
+                processTimeZone: false,
+                isEmptyText: false,
+                isEmptyDescription: false
             }
         };
     }
@@ -151,11 +153,15 @@ export default class AppointmentPopup {
             appointmentData[resourceName] = resourceValue;
         });
 
-        if(appointmentData.text === undefined) {
-            appointmentData.text = null;
+
+        this.state.appointment.isEmptyText = appointmentData.text === undefined;
+        this.state.appointment.isEmptyDescription = appointmentData.description === undefined;
+
+        if(this.state.appointment.isEmptyText) {
+            appointmentData.text = "";
         }
-        if(appointmentData.description === undefined) {
-            appointmentData.description = null;
+        if(this.state.appointment.isEmptyDescription) {
+            appointmentData.description = "";
         }
 
         const formData = extend(true, {}, appointmentData);
@@ -227,6 +233,7 @@ export default class AppointmentPopup {
 
     saveChanges(disableButton) {
         const validation = this._appointmentForm.validate();
+        const state = this.state.appointment;
 
         if(validation && !validation.isValid) {
             return false;
@@ -238,7 +245,13 @@ export default class AppointmentPopup {
             oldData = this.scheduler._editAppointmentData,
             recData = this.scheduler._updatedRecAppointment;
 
-        if(this.state.appointment.data.recurrenceRule === undefined && formData.recurrenceRule === "") { // TODO: plug for recurrent editor
+        if(state.isEmptyText && formData.text === "") {
+            delete formData.text;
+        }
+        if(state.isEmptyDescription && formData.description === "") {
+            delete formData.description;
+        }
+        if(state.data.recurrenceRule === undefined && formData.recurrenceRule === "") { // TODO: plug for recurrent editor
             delete formData.recurrenceRule;
         }
 
