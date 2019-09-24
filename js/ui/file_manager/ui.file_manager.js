@@ -366,6 +366,43 @@ class FileManager extends Widget {
             */
             selectionMode: "multiple", // "single"
 
+            /**
+            * @name dxFileManagerOptions.toolbar
+            * @type dxFileManagerToolbar
+            * @default { generalitems: [ "showDirsPanel", "create", "upload", "refresh", { commandName: "separator", location: "after" }, "viewMode" ], fileItems: [ "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear" ] }
+            */
+
+            /**
+            * @name dxFileManagerToolbar
+            * @type object
+            */
+            /**
+            * @name dxFileManagerToolbar.generalItems
+            * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+            */
+            /**
+            * @name dxFileManagerToolbar.fileItems
+            * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+            */
+
+            /**
+            * @name dxFileManagerToolbarItem
+            * @inherits dxToolbarItem
+            */
+            /**
+            * @name dxFileManagerToolbarItem.commandName
+            * @type Enums.FileManagerToolbarItem|string
+            */
+            /**
+            * @name dxFileManagerToolbarItem.location
+            * @default "before"
+            */
+            /**
+            * @name dxFileManagerToolbarItem.visibilityMode
+            * @type Enums.FileManagerToolbarItemVisibilityMode|string
+            * @default "default"
+            */
+
             toolbar: {
                 generalItems: [
                     "showDirsPanel", "create", "upload", "refresh",
@@ -380,6 +417,35 @@ class FileManager extends Widget {
                     "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear"
                 ]
             },
+
+            /**
+            * @name dxFileManagerOptions.contextMenu
+            * @type dxFileManagerContextMenu
+            * @default { items: [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ] }
+            */
+
+            /**
+            * @name dxFileManagerContextMenu
+            * @type object
+            */
+            /**
+            * @name dxFileManagerContextMenu.items
+            * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
+            */
+
+            /**
+            * @name dxFileManagerContextMenuItem
+            * @inherits dxContextMenuItem
+            */
+            /**
+            * @name dxFileManagerContextMenuItem.commandName
+            * @type Enums.FileManagerContextMenuItem|string
+            */
+            /**
+            * @name dxFileManagerContextMenuItem.visibilityMode
+            * @type Enums.FileManagerContextMenuItemVisibilityMode|string
+            * @default "default"
+            */
 
             contextMenu: {
                 items: [

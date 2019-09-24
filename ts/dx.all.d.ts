@@ -3459,6 +3459,8 @@ declare module DevExpress.ui {
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
         /** @name dxFileManager.Options.allowedFileExtensions */
         allowedFileExtensions?: Array<string>;
+        /** @name dxFileManager.Options.contextMenu */
+        contextMenu?: dxFileManagerContextMenu;
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
@@ -3479,6 +3481,8 @@ declare module DevExpress.ui {
         rootFolderName?: string;
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
+        /** @name dxFileManager.Options.toolbar */
+        toolbar?: dxFileManagerToolbar;
         /** @name dxFileManager.Options.upload */
         upload?: { maxFileSize?: number };
     }
@@ -3486,6 +3490,34 @@ declare module DevExpress.ui {
     export class dxFileManager extends Widget {
         constructor(element: Element, options?: dxFileManagerOptions)
         constructor(element: JQuery, options?: dxFileManagerOptions)
+    }
+    /** @name dxFileManagerContextMenu */
+    export interface dxFileManagerContextMenu {
+        /** @name dxFileManagerContextMenu.items */
+        items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>;
+    }
+    /** @name dxFileManagerContextMenuItem */
+    export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
+        /** @name dxFileManagerContextMenuItem.commandName */
+        commandName?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
+        /** @name dxFileManagerContextMenuItem.visibilityMode */
+        visibilityMode?: 'default' | 'manual' | string;
+    }
+    /** @name dxFileManagerToolbar */
+    export interface dxFileManagerToolbar {
+        /** @name dxFileManagerToolbar.fileItems */
+        fileItems?: Array<dxFileManagerToolbarItem | 'showDirsPanel' | 'create' | 'upload' | 'refresh' | 'viewMode' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        /** @name dxFileManagerToolbar.generalItems */
+        generalItems?: Array<dxFileManagerToolbarItem | 'showDirsPanel' | 'create' | 'upload' | 'refresh' | 'viewMode' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+    }
+    /** @name dxFileManagerToolbarItem */
+    export interface dxFileManagerToolbarItem extends dxToolbarItem {
+        /** @name dxFileManagerToolbarItem.commandName */
+        commandName?: 'showDirsPanel' | 'create' | 'upload' | 'refresh' | 'viewMode' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
+        /** @name dxFileManagerToolbarItem.location */
+        location?: 'after' | 'before' | 'center';
+        /** @name dxFileManagerToolbarItem.visibilityMode */
+        visibilityMode?: 'default' | 'manual' | string;
     }
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
