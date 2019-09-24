@@ -151,6 +151,13 @@ export default class AppointmentPopup {
             appointmentData[resourceName] = resourceValue;
         });
 
+        if(appointmentData.text === undefined) {
+            appointmentData.text = null;
+        }
+        if(appointmentData.description === undefined) {
+            appointmentData.description = null;
+        }
+
         const formData = extend(true, {}, appointmentData);
 
         if(isProcessTimeZone) {
