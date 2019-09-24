@@ -11,12 +11,6 @@ class ExcelJSTestHelper {
 
         assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, excelCell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
 
-        let expectedFontStyles;
-        if(gridCell.rowType !== "data" && excelCell.value !== null) {
-            expectedFontStyles = { bold: true };
-        }
-        assert.deepEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).font, expectedFontStyles, `cell.font (${expectedAddress.row}, ${expectedAddress.column})`);
-
         const expectedColumn = expectedArgs[callIndex].gridCell.column;
         const actualColumn = gridCell.column;
 
@@ -66,8 +60,9 @@ class ExcelJSTestHelper {
     checkPredefinedCellStyles(expectedCellArgs) {
         expectedCellArgs.forEach(expectedCell => {
             const { gridCell, excelCell } = expectedCell;
+            const { rowType } = gridCell;
 
-            if(gridCell.rowType === "header" || (gridCell.rowType === "group" && gridCell.value !== undefined) || (gridCell.rowType === "groupFooter") || (gridCell.rowType === "totalFooter")) {
+            if(rowType === "header" || (rowType === "group" && gridCell.value !== undefined) || (rowType === "groupFooter") || (rowType === "totalFooter")) {
                 assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, { bold: true }, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
             } else {
                 assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, undefined, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
