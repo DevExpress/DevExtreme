@@ -3,7 +3,6 @@ import renderer from "core/renderer";
 import fx from "animation/fx";
 import errors from "ui/widget/ui.errors";
 import translator from "animation/translator";
-import animationFrame from "animation/frame";
 import holdEvent from "events/hold";
 import { isRenderer } from "core/utils/type";
 import config from "core/config";
@@ -2479,16 +2478,22 @@ QUnit.test("keyboard navigation should work with without selectAll checkbox", (a
 QUnit.module("reordering decorator", {
     beforeEach: () => {
         fx.off = true;
+
+        $("#qunit-fixture").addClass("qunit-fixture-visible");
+
         this.clock = sinon.useFakeTimers();
     },
     afterEach: () => {
         fx.off = false;
+
+        $("#qunit-fixture").removeClass("qunit-fixture-visible");
+
         this.clock.restore();
     }
 });
 
 const REORDER_HANDLE_CLASS = "dx-list-reorder-handle";
-const REOREDERING_ITEM_CLASS = "dx-list-item-reordering";
+const REOREDERING_ITEM_CLASS = "dx-sortable-source-hidden";
 const REOREDERING_ITEM_GHOST_CLASS = "dx-list-item-ghost-reordering";
 
 const reorderingPointerMock = ($item, clock, usePixel) => {
@@ -2528,6 +2533,34 @@ const reorderingPointerMock = ($item, clock, usePixel) => {
 const topTranslation = ($item) => {
     return translator.locate($item).top;
 };
+
+QUnit.test("sortable options", (assert) => {
+    const $list = $("#templated-list").dxList({
+        items: ["0"],
+        allowItemReordering: true
+    });
+
+    var sortable = $list.dxSortable("instance");
+
+    assert.equal(sortable.option("dragDirection"), "vertical", "dragDirection");
+    assert.equal(sortable.option("filter"), ".dx-list-item", "filter");
+    assert.equal(sortable.option("handle"), ".dx-list-reorder-handle", "handle");
+});
+
+QUnit.test("passing itemDragging options to sortable", (assert) => {
+    const $list = $("#templated-list").dxList({
+        items: ["0"],
+        allowItemReordering: true,
+        itemDragging: {
+            group: "myGroup"
+        }
+    });
+
+    var sortable = $list.dxSortable("instance");
+
+    assert.equal(sortable.option("group"), "myGroup", "group parameter is passed");
+    assert.equal(sortable.option("dragDirection"), "both", "dragDirection is both if group is defined");
+});
 
 QUnit.test("reordering class should be present on item during drag", (assert) => {
     const $list = $("#templated-list").dxList({
@@ -2610,8 +2643,6 @@ QUnit.test("ghost item should be moved by drag", (assert) => {
 
     pointer.dragStart().drag(10);
 
-    assert.strictEqual($list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS)).length, 0, "ghost item should be rendered async");
-
     this.clock.tick();
     const $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
     const startPosition = topTranslation($ghostItem);
@@ -2649,11 +2680,11 @@ QUnit.test("next item should be moved", (assert) => {
     const item1Position = $item1.position();
     const item2Position = $item2.position();
 
-    pointer.dragStart(0.5).drag(0.4);
+    pointer.dragStart(0.5).drag(0.5);
     assert.deepEqual($item0.position(), item0Position, "first item was not moved");
     assert.deepEqual($item2.position(), item2Position, "third item was not moved");
 
-    pointer.drag(0.2);
+    pointer.drag(0.5);
     assert.deepEqual($item0.position(), item0Position, "first item was not moved");
     assert.deepEqual($item2.position(), item1Position, "third item was moved to position of second item");
 });
@@ -2672,11 +2703,11 @@ QUnit.test("prev item should be moved", (assert) => {
     const item1Position = $item1.position();
     const item2Position = $item2.position();
 
-    pointer.dragStart(0.5).drag(-0.4);
+    pointer.dragStart(0.5).drag(-0.6);
     assert.deepEqual($item0.position(), item0Position, "first item was not moved");
     assert.deepEqual($item2.position(), item2Position, "third item was not moved");
 
-    pointer.drag(-0.2);
+    pointer.drag(-0.5);
     assert.deepEqual($item0.position(), item1Position, "first item was moved to position of second item");
     assert.deepEqual($item2.position(), item2Position, "third item was not moved");
 });
@@ -2734,33 +2765,7 @@ QUnit.test("item should be moved with animation", (assert) => {
         const $item1 = $items.eq(1);
         const pointer = reorderingPointerMock($item1, this.clock);
 
-        pointer.dragStart(0.5).drag(0.6);
-        assert.strictEqual(animated, true, "animation present");
-    } finally {
-        fx.animate = origFX;
-    }
-});
-
-QUnit.test("item should be dropped with animation", (assert) => {
-    const origFX = fx.animate;
-    let animated = false;
-    fx.animate = () => {
-        animated = true;
-        return $.Deferred().resolve().promise();
-    };
-
-    try {
-        const $list = $("#templated-list").dxList({
-            items: ["0", "1", "2"],
-            allowItemReordering: true
-        });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-        const $item1 = $items.eq(1);
-        const pointer = reorderingPointerMock($item1, this.clock);
-
-        pointer.dragStart(0.5).drag(0.6);
-        animated = false;
-        pointer.dragEnd();
+        pointer.dragStart(0.5).drag(1);
         assert.strictEqual(animated, true, "animation present");
     } finally {
         fx.animate = origFX;
@@ -2775,7 +2780,6 @@ QUnit.test("drop item should reorder list items with correct indexes", (assert) 
     const list = $list.dxList("instance");
 
     list.reorderItem = (itemElement, toItemElement) => {
-        assert.deepEqual($ghostItem.position(), toItemElement.position(), "animated to target");
         assert.strictEqual(itemElement.text(), $item1.text());
         assert.strictEqual(toItemElement.text(), $item2.text());
     };
@@ -2785,9 +2789,8 @@ QUnit.test("drop item should reorder list items with correct indexes", (assert) 
     const $item2 = $items.eq(2);
     const pointer = reorderingPointerMock($item1, this.clock);
 
-    pointer.dragStart(0.5).drag(0.6);
+    pointer.dragStart(0.5).drag(1);
     this.clock.tick();
-    const $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
     pointer.dragEnd();
 });
 
@@ -2809,284 +2812,3 @@ QUnit.test("items should reset positions after dragend", (assert) => {
     });
 });
 
-const REQEST_ANIMATION_FRAME_TIMEOUT = 10;
-
-QUnit.module("reordering decorator", {
-    beforeEach: () => {
-        this.clock = sinon.useFakeTimers();
-        this.originalRAF = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = (callback) => {
-            return window.setTimeout(callback, REQEST_ANIMATION_FRAME_TIMEOUT);
-        };
-
-        fx.off = true;
-    },
-    afterEach: () => {
-        this.clock.restore();
-        animationFrame.requestAnimationFrame = this.originalRAF;
-
-        fx.off = false;
-    }
-});
-
-const mockScrollViewForReordering = (list) => {
-    const $items = list.$element().find(toSelector(LIST_ITEM_CLASS));
-    const itemHeight = $items.eq(0).outerHeight();
-    const listHeight = itemHeight * $items.length;
-    let scrollTop = 0;
-    let clientHeight = listHeight;
-    const scrollHeight = listHeight;
-    const optionMethod = list.option;
-
-    list.option = function(name, value) {
-        if(name === "height") {
-            clientHeight = value;
-        } else {
-            return optionMethod.apply(this, arguments);
-        }
-    };
-
-    list.$element().dxScrollView("option", "pushBackValue", 0);
-
-    list.scrollTo = (y) => {
-        scrollTop = y;
-    };
-    list.scrollBy = (dy) => {
-        scrollTop += dy;
-    };
-    list.scrollTop = () => {
-        return scrollTop;
-    };
-    list.clientHeight = (dy) => {
-        return clientHeight;
-    };
-    list.scrollHeight = () => {
-        return scrollHeight;
-    };
-};
-
-QUnit.test("list should be scrolled if drag near bottom continuously", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(0);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item, this.clock);
-
-    list.option("height", itemHeight * 3);
-    pointer.dragStart(0.5);
-    pointer.drag(1.81);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 30);
-    assert.strictEqual(list.scrollTop(), 31, "list was scrolled");
-});
-
-QUnit.test("last item should be moved with scrolling", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(0);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item, this.clock);
-
-    list.option("height", itemHeight * 3);
-
-    pointer.dragStart(0.5);
-
-    pointer.drag(1.81);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 30);
-    assert.strictEqual(topTranslation($items.eq(3)), -itemHeight, "item was moved");
-});
-
-QUnit.test("item should be moved without timeout if pointerType is mouse", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(0);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item);
-
-    list.option("height", itemHeight * 3);
-    pointer.dragStart(0.5);
-    pointer.drag(1.81);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 30);
-
-    assert.strictEqual(topTranslation($items.eq(3)), -itemHeight, "item was moved");
-});
-
-QUnit.test("list should not be scrolled greater then scroll height", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(0);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item, this.clock);
-
-    list.option("height", itemHeight * 3);
-    pointer.dragStart(0.5);
-    pointer.drag(1.81);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 100);
-    assert.strictEqual(list.scrollTop(), itemHeight, "list was not scrolled grater than can");
-});
-
-QUnit.test("list should be scrolled if drag near top continuously", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(3);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item, this.clock);
-
-    list.option("height", itemHeight * 3);
-    list.scrollTo(itemHeight);
-    pointer.dragStart(0.5);
-    pointer.drag(-1.81);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 30);
-    assert.strictEqual(list.scrollTop(), itemHeight - 31, "list was scrolled");
-});
-
-QUnit.test("list should be scrolled less then scroll height", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(3);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item, this.clock);
-
-    list.option("height", itemHeight * 3);
-    list.scrollTo(itemHeight);
-
-    pointer.dragStart(0.5);
-    pointer.drag(-1.81);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 100);
-    assert.strictEqual(list.scrollTop(), 0, "list was not scrolled less than can");
-});
-
-QUnit.test("animator should be stopped", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(0);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item, this.clock);
-
-    list.option("height", itemHeight * 3);
-
-    pointer.dragStart(0.5);
-    pointer.drag(1.81);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 10);
-    const scrollTop = list.scrollTop();
-
-    pointer.drag(-0.81);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 10);
-    assert.strictEqual(list.scrollTop(), scrollTop, "list was not scrolled after moving");
-});
-
-QUnit.test("animator should be stopped on drag end", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(0);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item, this.clock);
-
-    list.option("height", itemHeight * 3);
-    pointer.dragStart(0.5).drag(1.81).dragEnd();
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT * 10);
-    assert.strictEqual(list.scrollTop(), 1, "list was not scrolled after drop");
-});
-
-QUnit.test("scroll step should be adjusted if scroll bottom", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(0);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item, this.clock);
-
-    list.option("height", itemHeight * 3);
-    pointer.dragStart(0.5).drag(1.81);
-    assert.strictEqual(list.scrollTop(), 1, "list was scrolled");
-
-    pointer.drag(0.6);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT);
-    assert.strictEqual(list.scrollTop(), 7, "list was scrolled");
-});
-
-QUnit.test("scroll step should be adjusted if scroll top", (assert) => {
-    const $list = $("#templated-list").dxList({
-        items: ["0", "1", "2", "3"],
-        allowItemReordering: true
-    });
-    const list = $list.dxList("instance");
-
-    mockScrollViewForReordering(list);
-
-    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-    const $item = $items.eq(3);
-    const itemHeight = $item.outerHeight();
-    const pointer = reorderingPointerMock($item, this.clock);
-
-    list.option("height", itemHeight * 3);
-    list.scrollTo(itemHeight);
-
-    pointer.dragStart(0.5).drag(-1.81);
-    assert.strictEqual(list.scrollTop(), itemHeight - 1, "list was scrolled");
-
-    pointer.drag(-0.6);
-    this.clock.tick(REQEST_ANIMATION_FRAME_TIMEOUT);
-    assert.strictEqual(list.scrollTop(), itemHeight - 7, "list was scrolled");
-});

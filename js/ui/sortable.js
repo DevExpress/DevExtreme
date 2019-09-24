@@ -8,7 +8,8 @@ import fx from "../animation/fx";
 
 var SORTABLE = "dxSortable",
 
-    PLACEHOLDER_CLASS = "placeholder";
+    PLACEHOLDER_CLASS = "placeholder",
+    CLONE_CLASS = "clone";
 
 /**
 * @name dxSortable
@@ -213,7 +214,7 @@ var Sortable = Draggable.inherit({
         let $sourceElement = this._getSourceElement();
 
         this._updateItemPoints();
-        this.option("fromIndex", $sourceElement.index());
+        this.option("fromIndex", this._getElementIndex($sourceElement));
     },
 
     _dragEnterHandler: function() {
@@ -304,16 +305,20 @@ var Sortable = Draggable.inherit({
 
         let isVertical = this._isVerticalOrientation(),
             axisName = isVertical ? "top" : "left",
-            cursorPosition = isVertical ? e.pageY : e.pageX;
+            cursorPosition = isVertical ? e.pageY : e.pageX,
+            itemPoint;
 
-        for(let i = 0; i < itemPoints.length; i++) {
-            let itemPoint = itemPoints[i],
-                centerPosition = itemPoints[i + 1] && (itemPoint[axisName] + itemPoints[i + 1][axisName]) / 2;
+        for(let i = itemPoints.length - 1; i >= 0; i--) {
+            let centerPosition = itemPoints[i + 1] && (itemPoints[i][axisName] + itemPoints[i + 1][axisName]) / 2;
 
             if(centerPosition > cursorPosition || centerPosition === undefined) {
-                this._updatePlaceholderPosition(e, itemPoint);
+                itemPoint = itemPoints[i];
+            } else {
                 break;
             }
+        }
+        if(itemPoint) {
+            this._updatePlaceholderPosition(e, itemPoint);
         }
     },
 
@@ -338,7 +343,11 @@ var Sortable = Draggable.inherit({
     _getItems: function() {
         let itemsSelector = this._getItemsSelector();
 
-        return this.$element().find(itemsSelector).not("." + this._addWidgetPrefix(PLACEHOLDER_CLASS)).toArray();
+        return this.$element()
+            .find(itemsSelector)
+            .not("." + this._addWidgetPrefix(PLACEHOLDER_CLASS))
+            .not("." + this._addWidgetPrefix(CLONE_CLASS))
+            .toArray();
     },
 
     _isValidPoint: function($items, itemPointIndex, dropInsideItem) {
@@ -413,9 +422,13 @@ var Sortable = Draggable.inherit({
         this.option("itemPoints", this._getItemPoints());
     },
 
+    _getElementIndex: function($itemElement) {
+        return this._getItems().indexOf($itemElement.get(0));
+    },
+
     _getDragTemplateArgs: function($element) {
         return extend(this.callBase.apply(this, arguments), {
-            index: $element.index()
+            index: this._getElementIndex($element)
         });
     },
 
@@ -446,11 +459,13 @@ var Sortable = Draggable.inherit({
 
         this._getAction("onDragChange")(eventArgs);
 
-        if(eventArgs.cancel || eventArgs.cancel === undefined && !itemPoint.isValid) {
-            this.option({
-                dropInsideItem: false,
-                toIndex: null
-            });
+        if(eventArgs.cancel || !itemPoint.isValid) {
+            if(!itemPoint.isValid) {
+                this.option({
+                    dropInsideItem: false,
+                    toIndex: null
+                });
+            }
             return;
         }
 
@@ -515,7 +530,7 @@ var Sortable = Draggable.inherit({
 
     _getDragStartArgs: function(e, $itemElement) {
         return extend(this.callBase.apply(this, arguments), {
-            fromIndex: $itemElement.index()
+            fromIndex: this._getElementIndex($itemElement)
         });
     },
 

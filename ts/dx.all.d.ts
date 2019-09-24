@@ -4063,6 +4063,8 @@ declare module DevExpress.ui {
         indicateLoading?: boolean;
         /** @name dxList.Options.itemDeleteMode */
         itemDeleteMode?: 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
+        /** @name dxList.Options.itemDragging */
+        itemDragging?: dxSortableOptions;
         /** @name dxList.Options.items */
         items?: Array<string | dxListItem | any>;
         /** @name dxList.Options.menuItems */
