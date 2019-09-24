@@ -77,7 +77,6 @@ class BaseRenderingStrategy {
 
         var positionArray = this._getSortedPositions(map),
             resultPositions = this._getResultPositions(positionArray);
-
         return this._getExtendedPositionMap(map, resultPositions);
     }
 
@@ -307,10 +306,6 @@ class BaseRenderingStrategy {
 
     _columnCondition(a, b) {
         var isSomeEdge = this._isSomeEdge(a, b);
-
-        // if(a.i === 2 && a.j === 2) {
-        //     debugger;
-        // }
 
         var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
             rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
