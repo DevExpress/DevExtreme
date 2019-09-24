@@ -905,7 +905,7 @@
 // DataGrid
 @datagrid-base-color: @base-text-color;
 @datagrid-base-background-color: @base-bg;
-@datagrid-border-color: @base-border-color;
+@datagrid-border-color: #ddd;
 @datagrid-border: 1px solid @datagrid-border-color;
 
 /**
@@ -1074,7 +1074,7 @@
 
 @treelist-base-color: @base-text-color;
 @treelist-base-background-color: @base-bg;
-@treelist-border-color: @base-border-color;
+@treelist-border-color: #ddd;
 @treelist-border: 1px solid @treelist-border-color;
 
 @treelist-columnchooser-item-color: @datagrid-columnchooser-item-color;
@@ -1131,7 +1131,7 @@
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
-@PIVOTGRID_BORDER_COLOR: @base-border-color;
+@PIVOTGRID_BORDER_COLOR: #ddd;
 
 /**
 * @name 10. Header text color
@@ -1189,7 +1189,7 @@
 * @type color
 */
 
-@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color, 8%);
+@SCHEDULER_BASE_BORDER_COLOR: fade(#ddd, 60%);
 
 @scheduler-cell-active-bg: fade(darken(@base-bg, 13.3%), 70%);
 @scheduler-cell-hover-bg: @base-hover-bg;
@@ -1199,7 +1199,7 @@
 * @name 20. Hour separator color
 * @type color
 */
-@SCHEDULER_ACCENT_BORDER_COLOR: fade(@base-border-color, 23%);
+@SCHEDULER_ACCENT_BORDER_COLOR: darken(#ddd, 10%);
 @SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR: darken(@base-element-bg, 5%);
 @scheduler-header-bg: darken(@base-bg, 4%);
 

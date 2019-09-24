@@ -96,7 +96,7 @@
 @base-hover-bg: fade(@base-accent, 12%);
 
 @base-select-color: @base-text-color;
-@base-select-bg: fade(@base-accent, 48%);
+@base-select-bg: lighten(@base-accent, 21%);
 
 /**
 * @name 100. Focused state text color
@@ -282,7 +282,7 @@
 * @name 30. Border color
 * @type color
 */
-@button-normal-border-color: darken(@base-border-color, 17%); // #dee1e3 => #b1b7bd
+@button-normal-border-color: darken(#dee1e3, 17%); // #dee1e3 => #b1b7bd
 @button-special-hover: transparent;
 
 // Default button
@@ -496,7 +496,7 @@
 * @name 40. Selected item state background color
 * @type color
 */
-@list-item-selected-bg: @base-select-bg; // #f05b41 => #ffb5a8
+@list-item-selected-bg: fade(@base-accent, 48%); // #f05b41 => #ffb5a8
 
 @list-item-selected-hover-bg: fade(@base-accent, 30%);
 @list-item-focused-selected-bg: fade(@base-focus-bg, 70%);
@@ -908,7 +908,7 @@
 
 @datagrid-base-color: @base-text-color;
 @datagrid-base-background-color: @base-bg;
-@datagrid-border-color: @base-border-color;
+@datagrid-border-color: #dee1e3;
 @datagrid-border: 1px solid @datagrid-border-color;
 
 /**
@@ -941,7 +941,7 @@
 * @name 55. Selected row background color
 * @type color
 */
-@datagrid-selection-bg: @base-select-bg;
+@datagrid-selection-bg: fade(@base-accent, 48%);
 
 /**
 * @name 60. Selected row border color
@@ -1078,7 +1078,7 @@
 
 @treelist-base-color: @base-text-color;
 @treelist-base-background-color: @base-bg;
-@treelist-border-color: @base-border-color;
+@treelist-border-color: #dee1e3;
 @treelist-border: 1px solid @treelist-border-color;
 
 @treelist-columnchooser-item-color: @datagrid-columnchooser-item-color;
@@ -1148,7 +1148,7 @@
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
-@PIVOTGRID_BORDER_COLOR: @base-border-color;
+@PIVOTGRID_BORDER_COLOR: #dee1e3;
 
 /**
 * @name 10. Header text color
@@ -1204,7 +1204,7 @@
 * @name 10 Border color
 * @type color
 */
-@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color, 10%);
+@SCHEDULER_BASE_BORDER_COLOR: fade(#dee1e3, 60%);
 @scheduler-cell-active-bg: fade(darken(@base-bg, 13.3%), 70%);
 @scheduler-cell-hover-bg: @base-hover-bg;
 
@@ -1214,7 +1214,7 @@
 * @name 20. Hour separator color
 * @type color
 */
-@SCHEDULER_ACCENT_BORDER_COLOR: fade(@base-border-color, 23%);
+@SCHEDULER_ACCENT_BORDER_COLOR: darken(#dee1e3, 10%);
 
 /**
 * @name 30. Appointment text color

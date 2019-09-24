@@ -501,7 +501,7 @@
 */
 @list-item-selected-bg: @base-select-bg;
 
-@list-item-selected-hover-bg: fade(#000000, 20%);
+@list-item-selected-hover-bg: fade(#000, 20%);
 @list-item-focused-selected-bg: fade(@base-focus-bg, 70%);
 @list-focused-bg: @base-focus-bg;
 @list-item-color: @base-text-color;
@@ -915,7 +915,7 @@
 
 @datagrid-base-color: @base-text-color;
 @datagrid-base-background-color: @base-bg;
-@datagrid-border-color: @base-border-color;
+@datagrid-border-color: darken(@base-bg, 9%);
 @datagrid-border: 1px solid @datagrid-border-color;
 
 /**
@@ -1087,7 +1087,7 @@
 
 @treelist-base-color: @base-text-color;
 @treelist-base-background-color: @base-bg;
-@treelist-border-color: @base-border-color;
+@treelist-border-color: darken(@base-bg, 9%);
 @treelist-border: 1px solid @treelist-border-color;
 
 @treelist-columnchooser-item-color: @datagrid-columnchooser-item-color;
@@ -1217,7 +1217,7 @@
 * @name 10. Border color
 * @type color
 */
-@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color, 5%);
+@SCHEDULER_BASE_BORDER_COLOR: fade(darken(@base-bg, 9%), 60%);
 
 @scheduler-cell-active-bg: fade(darken(@base-bg, 13.3%), 70%);
 @scheduler-cell-hover-bg: fade(darken(@base-bg, 9%), 40%);

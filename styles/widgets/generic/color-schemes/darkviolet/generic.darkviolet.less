@@ -90,7 +90,7 @@
 @base-hover-bg: fade(#9e9ec5, 30%);
 
 @base-select-color: @base-text-color;
-@base-select-bg: fade(@base-accent, 46%);
+@base-select-bg: #573199;
 
 /**
 * @name 100. Focused state text color
@@ -502,7 +502,7 @@
 * @name 40. Selected item state background color
 * @type color
 */
-@list-item-selected-bg: @base-select-bg;
+@list-item-selected-bg: fade(@base-accent, 46%);
 
 @list-item-selected-hover-bg: fade(@base-accent, 60%);
 @list-item-focused-selected-bg: fade(@base-focus-bg, 70%);
@@ -917,7 +917,7 @@
 
 @datagrid-base-color: @base-text-color;
 @datagrid-base-background-color: @base-bg;
-@datagrid-border-color: @base-border-color;
+@datagrid-border-color: #343840;
 @datagrid-border: 1px solid @datagrid-border-color;
 
 /**
@@ -950,7 +950,7 @@
 * @name 55. Selected row background color
 * @type color
 */
-@datagrid-selection-bg: @base-select-bg;
+@datagrid-selection-bg: fade(@base-accent, 46%);
 
 /**
 * @name 60. Selected row border color
@@ -1086,7 +1086,7 @@
 
 @treelist-base-color: @base-text-color;
 @treelist-base-background-color: @base-bg;
-@treelist-border-color: @base-border-color;
+@treelist-border-color: #343840;
 @treelist-border: 1px solid @treelist-border-color;
 @treelist-columnchooser-item-color: @datagrid-columnchooser-item-color;
 @treelist-columnchooser-font-weight: @datagrid-columnchooser-font-weight;
@@ -1150,7 +1150,7 @@
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
-@PIVOTGRID_BORDER_COLOR: @base-border-color;
+@PIVOTGRID_BORDER_COLOR: #343840;
 
 /**
 * @name 20. Header text color
@@ -1207,7 +1207,7 @@
 * @name 10. Border color
 * @type color
 */
-@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color, 28%);
+@SCHEDULER_BASE_BORDER_COLOR: fade(#343840, 60%);
 
 @scheduler-cell-active-bg: fade(darken(@base-bg, 13.3%), 70%);
 @scheduler-cell-hover-bg: @base-hover-bg;
@@ -1217,7 +1217,7 @@
 * @name 20. Hour separator color
 * @type color
 */
-@SCHEDULER_ACCENT_BORDER_COLOR: @base-hover-bg;
+@SCHEDULER_ACCENT_BORDER_COLOR: #414152;
 
 /**
 * @name 30. Appointment text color
@@ -1311,7 +1311,7 @@
 * @name 20. Selected item background color
 * @type color
 */
-@menu-item-selected-bg: @base-select-bg;
+@menu-item-selected-bg: fade(@base-accent, 46%);
 @menu-popup-border-color: @base-border-color;
 @menu-separator-bg: @base-border-color;
 @menu-item-selected-color: @base-text-color;
