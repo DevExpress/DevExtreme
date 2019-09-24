@@ -63,6 +63,18 @@ class ExcelJSTestHelper {
         }
     }
 
+    checkPredefinedCellStyles(expectedCustomizeCellArgs) {
+        expectedCustomizeCellArgs.forEach(expectedCell => {
+            const { gridCell, excelCell } = expectedCell;
+
+            if(gridCell.rowType === "header" || (gridCell.rowType === "group" && gridCell.value !== undefined) || (gridCell.rowType === "groupFooter") || (gridCell.rowType === "totalFooter")) {
+                assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, { bold: true }, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
+            } else {
+                assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, undefined, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
+            }
+        });
+    }
+
     checkRowAndColumnCount(total, actual) {
         assert.equal(this.worksheet.rowCount, total.row, "worksheet.rowCount");
         assert.equal(this.worksheet.columnCount, total.column, "worksheet.columnCount");
