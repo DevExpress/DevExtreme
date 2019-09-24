@@ -42,7 +42,7 @@ export class GanttView extends Widget {
 
     _selectTask(id) {
         if(this.lastSelectedId !== undefined) {
-            this._ganttViewCore.unselectTask(parseInt(this.lastSelectedId));
+            this._ganttViewCore.unselectTask(this.lastSelectedId);
         }
         this._ganttViewCore.selectTask(id);
         this.lastSelectedId = id;
