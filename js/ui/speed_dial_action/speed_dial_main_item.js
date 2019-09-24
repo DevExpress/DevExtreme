@@ -124,7 +124,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
         for(let i = 0; i < actions.length; i++) {
             actions[i].option("animation", this._getActionAnimation(actions[i], i, lastActionIndex));
-            actions[i].option("position", this._getActionPosition(actions, actions[i], i));
+            actions[i].option("position", this._getActionPosition(actions, i));
             actions[i]._$wrapper.css("position", this._$wrapper.css("position"));
             actions[i].toggle();
         }
@@ -176,29 +176,35 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         return action._options.animation;
     },
 
-    _isDirectionUp(actions, direction) {
-        if(direction === "auto") {
-            const actionsHeight = (this.initialOption("indent") - this.$content().height()) + this.initialOption("childIndent") * actions.length;
-            const offsetTop = this.$content().offset().top;
-            const offsetBottom = this._getContainer().height() - this.$content().height() - this.$content().offset().top;
+    _getDirectionIndex(actions, direction) {
+        const directionIndex = 1;
 
-            if(actionsHeight > offsetTop && actionsHeight > offsetBottom) {
-                return offsetTop > offsetBottom;
+        if(direction === "auto") {
+            const contentHeight = this.$content().height();
+            const actionsHeight = this.initialOption("indent") + this.initialOption("childIndent") * actions.length - contentHeight;
+            const offsetTop = this.$content().offset().top;
+
+            if(actionsHeight < offsetTop) {
+                return -directionIndex;
             } else {
-                return offsetTop > actionsHeight;
+                const offsetBottom = this._getContainer().height() - contentHeight - offsetTop;
+
+                return offsetTop >= offsetBottom ? -directionIndex : directionIndex;
             }
         }
-        return direction !== "down";
+
+        return direction !== "down" ? -directionIndex : directionIndex;
     },
 
-    _getActionPosition(actions, action, index) {
+    _getActionPosition(actions, index) {
+        const action = actions[index];
         const actionOffsetXValue = this.initialOption("childOffset");
         const actionOffsetX = action._options.label && !this._$label ?
             (this._isPositionLeft(this._getPosition()) ? actionOffsetXValue : -actionOffsetXValue) :
             0;
 
         const actionOffsetYValue = this.initialOption("indent") + this.initialOption("childIndent") * index;
-        const actionOffsetY = this._isDirectionUp(actions, this.option("direction")) ? -actionOffsetYValue : actionOffsetYValue;
+        const actionOffsetY = this._getDirectionIndex(actions, this.option("direction")) * actionOffsetYValue;
 
         const actionPositionAtMy = action._options.label ?
             (this._isPositionLeft(this._getPosition()) ? "left" : "right") :
