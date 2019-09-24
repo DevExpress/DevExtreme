@@ -3506,16 +3506,16 @@ declare module DevExpress.ui {
     /** @name dxFileManagerToolbar */
     export interface dxFileManagerToolbar {
         /** @name dxFileManagerToolbar.fileItems */
-        fileItems?: Array<dxFileManagerToolbarItem | 'showDirsPanel' | 'create' | 'upload' | 'refresh' | 'viewMode' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        fileItems?: Array<dxFileManagerToolbarItem | 'navPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
         /** @name dxFileManagerToolbar.generalItems */
-        generalItems?: Array<dxFileManagerToolbarItem | 'showDirsPanel' | 'create' | 'upload' | 'refresh' | 'viewMode' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        generalItems?: Array<dxFileManagerToolbarItem | 'navPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
         /** @name dxFileManagerToolbarItem.location */
         location?: 'after' | 'before' | 'center';
         /** @name dxFileManagerToolbarItem.name */
-        name?: 'showDirsPanel' | 'create' | 'upload' | 'refresh' | 'viewMode' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
+        name?: 'navPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
         /** @name dxFileManagerToolbarItem.visibilityMode */
         visibilityMode?: 'default' | 'manual' | string;
     }
