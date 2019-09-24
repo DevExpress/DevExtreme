@@ -2971,7 +2971,7 @@ QUnit.module("Accessibility", () => {
             items: items
         });
 
-        const editorClassesRequiringIdForLabel = ["dx-radiogroup", "dx-checkbox", "dx-lookup", "dx-slider", "dx-rangeslider", "dx-switch"]; // TODO: support "dx-calendar"
+        const editorClassesRequiringIdForLabel = ["dx-radiogroup", "dx-checkbox", "dx-lookup", "dx-slider", "dx-rangeslider", "dx-switch"]; // TODO: Support "dx-calendar"
         editorTypes.forEach((editorType) => {
             const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
             const $editor = $testContainer.find(`.${editorClassName}`).eq(0);
