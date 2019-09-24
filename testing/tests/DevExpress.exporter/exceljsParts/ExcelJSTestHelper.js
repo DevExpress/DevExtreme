@@ -1,3 +1,5 @@
+import { inArray } from "core/utils/array";
+
 const { assert } = QUnit;
 
 class ExcelJSTestHelper {
@@ -58,11 +60,12 @@ class ExcelJSTestHelper {
     }
 
     checkPredefinedCellStyles(expectedCellArgs) {
+        const rowTypes = ["header", "group", "groupFooter", "totalFooter"];
+
         expectedCellArgs.forEach(expectedCell => {
             const { gridCell, excelCell } = expectedCell;
-            const { rowType } = gridCell;
 
-            if((rowType === "header" || rowType === "group" || rowType === "groupFooter" || rowType === "totalFooter") && gridCell.value !== undefined) {
+            if(inArray(gridCell.rowType, rowTypes) !== -1 && gridCell.value !== undefined) {
                 assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, { bold: true }, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
             } else {
                 assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, undefined, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
