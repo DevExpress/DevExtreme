@@ -538,13 +538,13 @@ QUnit.testInActiveWindow("View is focused when render of view is completed", fun
     assert.strictEqual(this.getController('editorFactory')._$focusedElement[0], $cell[0], "focused element");
 });
 */
-QUnit.testInActiveWindow("Input is focused when edit mode is enabled (T403964)", function(assert) {
+QUnit.testInActiveWindow("Interactive element is focused when edit mode is enabled (T403964)", function(assert) {
     // arrange
     var navigationController,
         view,
         $rowsElement = $("<div />").appendTo("#container").append($(`
             <tr class='dx-row'>"
-                <td><input></td>
+                <td class='cell-0'><input></td>
                 <td><input></td>
                 <td><textarea /></td>
                 <td><a>Link<a/></td>
@@ -557,6 +557,7 @@ QUnit.testInActiveWindow("Input is focused when edit mode is enabled (T403964)",
     };
 
     // act
+    $(".dx-row .cell-0").focus();
     this.component._controllers.editing._isEditing = true;
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
