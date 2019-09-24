@@ -25,7 +25,7 @@ var NATIVE_EVENTS_TO_TRIGGER = {
     "focusin": "focus",
     "focusout": "blur"
 };
-var NO_BUBBLE_EVENTS = ["blur", "focusout", "focus", "focusin", "load"];
+var NO_BUBBLE_EVENTS = ["blur", "focus", "load"];
 
 var forcePassiveFalseEventNames = ["touchmove", "wheel", "mousewheel", "touchstart"];
 
