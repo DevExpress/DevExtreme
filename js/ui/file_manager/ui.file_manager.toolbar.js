@@ -14,7 +14,7 @@ const FILE_MANAGER_TOOLBAR_VIEWMODE_ITEM_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-
 const FILE_MANAGER_TOOLBAR_HAS_LARGE_ICON_CLASS = FILE_MANAGER_TOOLBAR_CLASS + "-has-large-icon";
 
 const DEFAULT_ITEM_CONFIGS = {
-    showDirsPanel: {
+    navPane: {
         location: "before"
     },
     create: {

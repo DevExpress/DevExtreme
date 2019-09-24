@@ -80,7 +80,7 @@ export class FileManagerCommandManager {
                 enabled: true
             },
             {
-                name: "showDirsPanel",
+                name: "navPane",
                 icon: "menu",
                 enabled: false,
                 noFileItemRequired: true
