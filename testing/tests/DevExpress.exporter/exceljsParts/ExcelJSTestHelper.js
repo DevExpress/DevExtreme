@@ -63,8 +63,8 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkPredefinedCellStyles(expectedCustomizeCellArgs) {
-        expectedCustomizeCellArgs.forEach(expectedCell => {
+    checkPredefinedCellStyles(expectedCellArgs) {
+        expectedCellArgs.forEach(expectedCell => {
             const { gridCell, excelCell } = expectedCell;
 
             if(gridCell.rowType === "header" || (gridCell.rowType === "group" && gridCell.value !== undefined) || (gridCell.rowType === "groupFooter") || (gridCell.rowType === "totalFooter")) {
