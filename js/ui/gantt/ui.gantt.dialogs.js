@@ -7,6 +7,7 @@ export class GanttDialog {
 
         this.infoMap = {};
         this.infoMap["TaskEdit"] = TaskEditDialogInfo;
+        this.infoMap["Resources"] = ResourcesEditDialogInfo;
     }
     _apply() {
         const result = this._dialogInfo.getResult();
@@ -120,6 +121,25 @@ class TaskEditDialogInfo extends DialogInfoBase {
                 min: 0,
                 max: 100
             }
+        }, {
+            dataField: "assigned.items",
+            editorType: "dxTagBox",
+            label: { text: "Resources" },
+            editorOptions: {
+                dataSource: this._parameters.resources.items,
+                displayExpr: "text",
+                buttons: [{
+                    name: "editResources",
+                    location: "after",
+                    options: {
+                        text: "...",
+                        hint: "Edit Resource List",
+                        onClick: () => {
+                            this._parameters.showResourcesDialogCommand.execute();
+                        }
+                    }
+                }]
+            }
         }];
     }
     _updateParameters(formData) {
@@ -127,5 +147,55 @@ class TaskEditDialogInfo extends DialogInfoBase {
         this._parameters.start = formData.start;
         this._parameters.end = formData.end;
         this._parameters.progress = formData.progress;
+        this._parameters.assigned = formData.assigned;
+    }
+}
+
+class ResourcesEditDialogInfo extends DialogInfoBase {
+    getTitle() { return "Resources"; }
+    _getFormItems() {
+        return [{
+            label: { visible: false },
+            dataField: "resources.items",
+            editorType: "dxList",
+            editorOptions: {
+                allowItemDeleting: true,
+                itemDeleteMode: "static",
+                selectionMode: "none",
+                items: this._parameters.resources.items,
+                height: 250,
+                noDataText: "No resources",
+                onInitialized: (e) => { this.list = e.component; },
+                onItemDeleted: (e) => { this._parameters.resources.remove(e.itemData); }
+            }
+        }, {
+            label: { visible: false },
+            editorType: "dxTextBox",
+            editorOptions: {
+                onInitialized: (e) => { this.textBox = e.component; },
+                onInput: (e) => {
+                    const addButton = e.component.getButton("addResource");
+                    const resourceName = e.component.option("text");
+                    addButton.option("disabled", resourceName.length === 0);
+                },
+                buttons: [{
+                    name: "addResource",
+                    location: "after",
+                    options: {
+                        text: "Add",
+                        disabled: true,
+                        onClick: (e) => {
+                            const newItem = this._parameters.resources.createItem();
+                            newItem.text = this.textBox.option("text");
+                            this._parameters.resources.add(newItem);
+                            this.list.option("items", this._parameters.resources.items);
+                            this.list.scrollToItem(newItem);
+                            this.textBox.reset();
+                            e.component.option("disabled", true);
+                        }
+                    }
+                }]
+            }
+        }];
     }
 }
