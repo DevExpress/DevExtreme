@@ -3703,7 +3703,8 @@ QUnit.test("Appointments are rendered with custom cell width less than default (
                 cellDuration: 120,
                 maxAppointmentsPerCell: "unlimited"
             }],
-            currentView: 'timelineWeek'
+            currentView: 'timelineWeek',
+            currentDate: new Date(2019, 8, 22)
         });
 
         assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, "Appointments are rendered");
