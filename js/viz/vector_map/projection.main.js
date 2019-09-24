@@ -71,26 +71,28 @@ Projection.prototype = {
         this._disposeEvents();
     },
 
-    setEngine: function(value) {
+    setEngine: function(value, silent) {
         const that = this;
         const engine = getEngine(value);
         if(that._engine !== engine) {
             that._engine = engine;
             that._fire("engine");
-            if(that._changeCenter(engine.center())) {
-                that._triggerCenterChanged();
-            }
-            if(that._changeZoom(that._minZoom)) {
-                that._triggerZoomChanged();
+            if(!silent) {
+                if(that._changeCenter(engine.center())) {
+                    that._triggerCenterChanged();
+                }
+                if(that._changeZoom(that._minZoom)) {
+                    that._triggerZoomChanged();
+                }
             }
             that._adjustCenter();
             that._setupScreen();
         }
     },
 
-    setBounds: function(bounds) {
+    setBounds: function(bounds, silent) {
         if(bounds !== undefined) {
-            this.setEngine(this._engine.original().bounds(bounds));
+            this.setEngine(this._engine.original().bounds(bounds), silent);
         }
     },
 
