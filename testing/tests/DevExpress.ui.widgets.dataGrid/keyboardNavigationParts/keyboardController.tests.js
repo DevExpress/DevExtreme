@@ -376,7 +376,7 @@ QUnit.module("Keyboard navigation", {
             view,
             $rowsElement = $("<div />").appendTo("#container").append($(`
                 <tr class='dx-row'>"
-                    <td><input></td>
+                    <td class='cell-0'><input></td>
                     <td><input></td>
                     <td><textarea /></td>
                     <td><a>Link<a/></td>
@@ -389,6 +389,7 @@ QUnit.module("Keyboard navigation", {
         };
 
         // act
+        $(".dx-row .cell-0").focus();
         this.component._controllers.editing._isEditing = true;
         navigationController = new KeyboardNavigationController(this.component);
         navigationController.init();
