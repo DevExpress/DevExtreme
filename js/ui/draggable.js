@@ -273,9 +273,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
             /**
              * @name DraggableBaseOptions.boundary
              * @type string|Node|jQuery
-             * @default window
+             * @default undefined
              */
-            boundary: window,
+            boundary: undefined,
             boundOffset: 0,
             allowMoveByClick: false,
             itemData: null,
@@ -632,11 +632,12 @@ var Draggable = DOMComponentWithTemplate.inherit({
             left: $dragElement.offset().left - areaOffset.left,
             top: $dragElement.offset().top - areaOffset.top
         };
-
-        e.maxLeftOffset = startOffset.left - boundOffset.left;
-        e.maxRightOffset = areaWidth - startOffset.left - elementWidth - boundOffset.right;
-        e.maxTopOffset = startOffset.top - boundOffset.top;
-        e.maxBottomOffset = areaHeight - startOffset.top - elementHeight - boundOffset.bottom;
+        if($area.length) {
+            e.maxLeftOffset = startOffset.left - boundOffset.left;
+            e.maxRightOffset = areaWidth - startOffset.left - elementWidth - boundOffset.right;
+            e.maxTopOffset = startOffset.top - boundOffset.top;
+            e.maxBottomOffset = areaHeight - startOffset.top - elementHeight - boundOffset.bottom;
+        }
 
         if(this.option("autoScroll")) {
             this._startAnimator();
