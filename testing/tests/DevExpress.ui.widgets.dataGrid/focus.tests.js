@@ -14,10 +14,10 @@ import "data/odata/store";
 
 import $ from "jquery";
 import eventUtils from "events/utils";
-import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
 import ArrayStore from "data/array_store";
-import { DataGridWrapper, RowsViewWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 import pointerEvents from "events/pointer";
+import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
+import { DataGridWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var CLICK_EVENT = eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"),
     dataGridWrapper = new DataGridWrapper("#container");
@@ -26,7 +26,8 @@ var addOptionChangedHandlers = function(that) {
     that.optionCalled.add(function(optionName, value) {
         if(optionName === "focusedRowIndex" ||
            optionName === "focusedRowKey" ||
-           optionName === "focusedColumnIndex") {
+           optionName === "focusedColumnIndex" ||
+           optionName === "skipFocusedRowNavigation") {
             that.focusController.optionChanged({ name: optionName, value: value });
         }
     });
@@ -1005,7 +1006,7 @@ QUnit.testInActiveWindow("Focus row if grouping and virtual scrolling mode", fun
     assert.equal($(rowsView.getRow(0)).find("td").eq(1).text(), "Clark", "Clark");
 });
 
-QUnit.testInActiveWindow("Focus next row if grouping and virtual scrolling mode", function(assert) {
+QUnit.test("Focus next row if grouping and virtual scrolling mode", function(assert) {
     var rowsView;
 
     // arrange
@@ -1047,21 +1048,25 @@ QUnit.testInActiveWindow("Focus next row if grouping and virtual scrolling mode"
 
     addOptionChangedHandlers(this);
 
-    this.gridView.render($("#container"));
-
-    this.clock.tick();
-
-    // act
-    this.navigateToRow("Alice");
-
-    this.clock.tick();
-
     rowsView = this.gridView.getView("rowsView");
 
+    this.gridView.render($("#container"));
+    rowsView.height(140);
+    rowsView.resize();
+    this.clock.tick();
+
     // assert
-    assert.equal(this.option("focusedRowIndex"), 11, "FocusedRowIndex");
+    assert.equal(this.option("focusedRowIndex"), 6, "FocusedRowIndex");
+
+    this.navigateToRow("Alice");
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 6, "FocusedRowIndex");
+    assert.equal(this.option("focusedRowKey"), "Den", "FocusedRowKey");
     assert.equal(this.pageIndex(), 3, "PageIndex");
-    assert.equal($(rowsView.getRow(11)).find("td").eq(1).text(), "Alice", "Alice");
+    assert.equal($(rowsView.getCellElement(11, 1)).text(), "Alice");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(11));
 });
 
 QUnit.testInActiveWindow("DataGrid should focus row by focusedRowIndex if data was filtered", function(assert) {
@@ -4529,7 +4534,7 @@ QUnit.testInActiveWindow("Enter key navigation from the last cell should navigat
     assert.notOk(this.editingController.isEditing(), "Is editing");
 });
 
-QUnit.testInActiveWindow("Test navigateToRow method if paging", function(assert) {
+QUnit.test("Test navigateToRow method if paging", function(assert) {
     var keyboardController;
 
     // arrange
@@ -4570,10 +4575,10 @@ QUnit.testInActiveWindow("Test navigateToRow method if paging", function(assert)
     this.clock.tick();
 
     assert.equal(this.pageIndex(), 2, "Page index");
-    assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
+    assert.equal(keyboardController.getVisibleRowIndex(), undefined, "Focused row index");
 });
 
-QUnit.testInActiveWindow("Test navigateToRow method if virtualScrolling", function(assert) {
+QUnit.test("Test navigateToRow method if virtualScrolling", function(assert) {
     var keyboardController;
 
     // arrange
@@ -4617,10 +4622,11 @@ QUnit.testInActiveWindow("Test navigateToRow method if virtualScrolling", functi
     this.clock.tick();
 
     assert.equal(this.pageIndex(), 2, "Page index");
-    assert.equal(keyboardController.getVisibleRowIndex(), 5, "Focused row index");
+    assert.equal(keyboardController.getVisibleRowIndex(), undefined, "Focused row index");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(1), "Navigation row is visible");
 });
 
-QUnit.testInActiveWindow("Focused row should be visible if set focusedRowKey", function(assert) {
+QUnit.test("Focused row should be visible if set focusedRowKey", function(assert) {
     // arrange
     var rowsView,
         counter = 0;
@@ -4647,23 +4653,22 @@ QUnit.testInActiveWindow("Focused row should be visible if set focusedRowKey", f
 
     this.setupModule();
 
-    this.getController("focus")._scrollToFocusedRow = function($row) {
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView._scrollToElement = function($row) {
         ++counter;
         assert.ok($row.find("td").eq(0).text(), "Smith", "Row");
     };
-
-    this.gridView.render($("#container"));
-    rowsView = this.gridView.getView("rowsView");
     rowsView.height(100);
     this.gridView.component.updateDimensions();
     this.clock.tick();
 
     // assert
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
-    assert.ok(counter > 0, "_scrollToFocusedRow invoked");
+    assert.ok(counter > 0, "_scrollToElement has invoked");
 });
 
-QUnit.testInActiveWindow("Focused row should be visible in virual scrolling mode if page not loaded", function(assert) {
+QUnit.test("Focused row should preserve on navigation to the other row in virual scrolling mode if page not loaded", function(assert) {
     // arrange
     var rowsView;
 
@@ -4700,20 +4705,18 @@ QUnit.testInActiveWindow("Focused row should be visible in virual scrolling mode
     this.gridView.render($("#container"));
     rowsView = this.gridView.getView("rowsView");
     rowsView.height(100);
+    rowsView.resize();
     this.clock.tick();
 
     this.getController("focus").navigateToRow("Smith");
     this.clock.tick();
 
     // assert
-    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
-    var rect = rowsView.getRow(4)[0].getBoundingClientRect();
-    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
-    assert.ok(rowsViewRect.bottom > rect.bottom, "rowsViewRect.bottom > rect.bottom");
+    assert.notOk(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(4), "Navigation row is visible");
 });
 
-QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mode if page not loaded", function(assert) {
+QUnit.test("Focused row should preserve on navigation to the other row in infinite scrolling mode if page not loaded", function(assert) {
     // arrange
     var rowsView;
 
@@ -4750,16 +4753,15 @@ QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mo
     this.gridView.render($("#container"));
     rowsView = this.gridView.getView("rowsView");
     rowsView.height(100);
+    rowsView.resize();
     this.clock.tick();
 
     this.getController("focus").navigateToRow("Smith");
 
     // assert
-    assert.ok(rowsView.getRow(2).hasClass("dx-row-focused"), "Focused row");
-    var rect = rowsView.getRow(2)[0].getBoundingClientRect();
-    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
-    assert.ok(rowsViewRect.bottom > rect.bottom, "rowsViewRect.bottom > rect.bottom");
+    assert.notOk(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    assert.equal($(this.getCellElement(4, 0)).text(), "Smith", "Name in navigation row");
+    assert.ok(dataGridWrapper.rowsView.isRowVisible(4), "Navigation row is visible");
 });
 
 QUnit.testInActiveWindow("Keyboard navigation controller should find next cell if column index is wrong when jump from the group row", function(assert) {
@@ -5024,7 +5026,8 @@ QUnit.testInActiveWindow("Focused row public API should be accessible", function
     this.navigateToRow("Alex");
 
     // assert
-    assert.ok(this.isRowFocused("Alex"), "isRowFocused true");
+    assert.notOk(this.isRowFocused("Alex"), "isRowFocused true");
+    assert.ok(this.isRowFocused("Dan"), "isRowFocused false");
 });
 
 QUnit.test("DataGrid should not operate with focused row if dataSource is missing", function(assert) {
@@ -5473,8 +5476,7 @@ QUnit.testInActiveWindow("DataGrid - click by cell should not generate exception
     var d = $.Deferred(),
         rowsView,
         keyboardController,
-        items = generateItems(1),
-        rowsViewWrapper = new RowsViewWrapper("#container");
+        items = generateItems(1);
 
     // arrange
     this.$element = function() {
@@ -5518,8 +5520,8 @@ QUnit.testInActiveWindow("DataGrid - click by cell should not generate exception
 
     // act
     try {
-        rowsViewWrapper.getVirtualCell(0).trigger(pointerEvents.up).click();
-        rowsViewWrapper.getVirtualCell(1).trigger(pointerEvents.up).click();
+        dataGridWrapper.rowsView.getVirtualCell(0).trigger(pointerEvents.up).click();
+        dataGridWrapper.rowsView.getVirtualCell(1).trigger(pointerEvents.up).click();
         assert.ok(true, "No Exception");
     } catch(e) {
         // assert
