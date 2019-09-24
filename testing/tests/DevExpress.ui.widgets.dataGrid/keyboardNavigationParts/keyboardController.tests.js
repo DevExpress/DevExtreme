@@ -370,6 +370,58 @@ QUnit.module("Keyboard navigation", {
     //     assert.strictEqual(this.getController('editorFactory')._$focusedElement[0], $cell[0], "focused element");
     // });
 
+    QUnit.testInActiveWindow("Interactive element is focused when edit mode is enabled (T403964)", function(assert) {
+        // arrange
+        var navigationController,
+            view,
+            $rowsElement = $("<div />").appendTo("#container").append($(`
+                <tr class='dx-row'>"
+                    <td><input></td>
+                    <td><input></td>
+                    <td><textarea /></td>
+                    <td><a>Link<a/></td>
+                    <td><select /></td>
+                </tr>`));
+
+        view = this.getView("rowsView");
+        view.element = function() {
+            return $rowsElement;
+        };
+
+        // act
+        this.component._controllers.editing._isEditing = true;
+        navigationController = new KeyboardNavigationController(this.component);
+        navigationController.init();
+
+        navigationController._focusedView = view;
+        navigationController._isEditing = true;
+        navigationController._isNeedFocus = true;
+
+        // act, assert
+        navigationController._focusedCellPosition = { columnIndex: 1, rowIndex: 0 };
+        callViewsRenderCompleted(this.component._views);
+        this.clock.tick();
+        assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("input"), "Interactive element is input");
+
+        // act, assert
+        navigationController._focusedCellPosition = { columnIndex: 2, rowIndex: 0 };
+        callViewsRenderCompleted(this.component._views);
+        this.clock.tick();
+        assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("textarea"), "Interactive element is textarea");
+
+        // act, assert
+        navigationController._focusedCellPosition = { columnIndex: 3, rowIndex: 0 };
+        callViewsRenderCompleted(this.component._views);
+        this.clock.tick();
+        assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("a"), "Interactive element is link");
+
+        // act, assert
+        navigationController._focusedCellPosition = { columnIndex: 4, rowIndex: 0 };
+        callViewsRenderCompleted(this.component._views);
+        this.clock.tick();
+        assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("select"), "Interactive element is select");
+    });
+
     QUnit.testInActiveWindow("View is not focused when row is inline edited", function(assert) {
         // arrange
         var navigationController,
