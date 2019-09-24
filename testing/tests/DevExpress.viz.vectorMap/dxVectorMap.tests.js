@@ -97,6 +97,7 @@ QUnit.test("Set bounds when data ready called. Without bounds in options", funct
     spy.lastCall.args[0].dataReady();
 
     assert.strictEqual(this.projection.setBounds.callCount, 2);
+    assert.deepEqual(this.projection.setBounds.lastCall.args, [[-200, 10, 10, -10], true]);
 });
 
 QUnit.test("Projection by data. Default bounds are include common bounds", function(assert) {
