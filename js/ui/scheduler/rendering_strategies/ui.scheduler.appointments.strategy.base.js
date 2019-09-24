@@ -308,6 +308,10 @@ class BaseRenderingStrategy {
     _columnCondition(a, b) {
         var isSomeEdge = this._isSomeEdge(a, b);
 
+        // if(a.i === 2 && a.j === 2) {
+        //     debugger;
+        // }
+
         var columnCondition = this._normalizeCondition(a.left, b.left, isSomeEdge),
             rowCondition = this._normalizeCondition(a.top, b.top, isSomeEdge);
         return rowCondition ? rowCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
@@ -321,7 +325,7 @@ class BaseRenderingStrategy {
         // NOTE: ie & ff pixels
         var result = first - second;
 
-        return isSomeEdge || Math.abs(result) > 0.5 ? result : 0;
+        return isSomeEdge || Math.abs(result) > 0.8 ? result : 0;
     }
 
     _getResultPositions(sortedArray) {
