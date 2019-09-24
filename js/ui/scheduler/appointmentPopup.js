@@ -153,18 +153,17 @@ export default class AppointmentPopup {
             appointmentData[resourceName] = resourceValue;
         });
 
+        const formData = extend(true, {}, appointmentData);
 
         this.state.appointment.isEmptyText = appointmentData.text === undefined;
         this.state.appointment.isEmptyDescription = appointmentData.description === undefined;
 
         if(this.state.appointment.isEmptyText) {
-            appointmentData.text = "";
+            formData.text = "";
         }
         if(this.state.appointment.isEmptyDescription) {
-            appointmentData.description = "";
+            formData.description = "";
         }
-
-        const formData = extend(true, {}, appointmentData);
 
         if(isProcessTimeZone) {
             startDate = this.scheduler.fire("convertDateByTimezone", startDate);
