@@ -66,7 +66,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         const excelCell = row.getCell(startColumnIndex + cellIndex);
         excelCell.value = cellData.value;
 
-        _setPredefinedCellStyles(gridCell, excelCell);
+        _setPredefinedFont(gridCell, excelCell);
 
         if(isDefined(customizeCell)) {
             customizeCell({
@@ -78,7 +78,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
-function _setPredefinedCellStyles(gridCell, excelCell) {
+function _setPredefinedFont(gridCell, excelCell) {
     if(gridCell.rowType !== "data" && excelCell.value !== null) {
         excelCell.font = excelCell.font || {};
         excelCell.font.bold = true;
