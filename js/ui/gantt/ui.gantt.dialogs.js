@@ -5,9 +5,10 @@ export class GanttDialog {
     constructor(owner, $element) {
         this._popupInstance = owner._createComponent($element, Popup);
 
-        this.infoMap = {};
-        this.infoMap["TaskEdit"] = TaskEditDialogInfo;
-        this.infoMap["Resources"] = ResourcesEditDialogInfo;
+        this.infoMap = {
+            TaskEdit: TaskEditDialogInfo,
+            Resources: ResourcesEditDialogInfo
+        };
     }
     _apply() {
         const result = this._dialogInfo.getResult();
