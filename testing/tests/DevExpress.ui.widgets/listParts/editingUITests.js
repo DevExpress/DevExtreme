@@ -2540,7 +2540,7 @@ QUnit.test("sortable options", (assert) => {
         allowItemReordering: true
     });
 
-    var sortable = $list.dxSortable("instance");
+    var sortable = $list.find(".dx-sortable").dxSortable("instance");
 
     assert.equal(sortable.option("dragDirection"), "vertical", "dragDirection");
     assert.equal(sortable.option("filter"), ".dx-list-item", "filter");
@@ -2556,7 +2556,7 @@ QUnit.test("passing itemDragging options to sortable", (assert) => {
         }
     });
 
-    var sortable = $list.dxSortable("instance");
+    var sortable = $list.find(".dx-sortable").dxSortable("instance");
 
     assert.equal(sortable.option("group"), "myGroup", "group parameter is passed");
     assert.equal(sortable.option("dragDirection"), "both", "dragDirection is both if group is defined");
@@ -2605,7 +2605,7 @@ QUnit.test("list item should be duplicated on drag start", (assert) => {
     this.clock.tick();
     let $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
     assert.strictEqual($ghostItem.text(), $item.text(), "correct item was duplicated");
-    assert.strictEqual($ghostItem.position().top, $item.position().top + 10, "correct ghost position");
+    assert.strictEqual($ghostItem.offset().top, $item.offset().top + 10, "correct ghost position");
     assert.ok(!$ghostItem.hasClass(REOREDERING_ITEM_CLASS), "reordering class is not present");
 
     pointer.dragEnd();

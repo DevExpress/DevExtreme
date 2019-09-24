@@ -17,16 +17,15 @@ registerDecorator(
     EditDecorator.inherit({
 
         _init: function() {
-            let list = this._list,
-                $element = list.$element();
+            let list = this._list;
 
             this._groupedEnabled = this._list.option("grouped");
 
             this._lockedDrag = false;
 
-            this._sortable = list._createComponent($element, Sortable, extend({
+            this._sortable = list._createComponent(list._scrollView.$content(), Sortable, extend({
                 filter: ".dx-list-item",
-                container: $element,
+                container: list.$element(),
                 dragDirection: list.option("itemDragging.group") ? "both" : "vertical",
                 handle: "." + REORDER_HANDLE_CLASS,
                 template: this._dragTemplate,
