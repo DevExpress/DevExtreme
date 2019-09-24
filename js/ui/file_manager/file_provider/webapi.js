@@ -128,18 +128,22 @@ class WebApiFileProvider extends FileProvider {
     downloadItems(items) {
         const args = this._getDownloadArgs(items);
 
-        const formAttributes = {
-            method: "post",
-            action: args.url,
-            enctype: "multipart/form-data"
-        };
-
         const $form = $("<form>")
             .css({ display: "none" })
-            .attr(formAttributes);
+            .attr({
+                method: "post",
+                action: args.url,
+                enctype: "multipart/form-data"
+            });
 
-        $form.append(`<input type="hidden" name="command" value="${args.command}" />`);
-        $form.append(`<input type="hidden" name="arguments" value="${args.arguments}" />`);
+        ["command", "arguments"].forEach(name => {
+            $("<input>").attr({
+                type: "hidden",
+                name,
+                value: args[name]
+            }).appendTo($form);
+        });
+
         $form.appendTo("body");
 
         eventsEngine.trigger($form, "submit");
@@ -166,7 +170,8 @@ class WebApiFileProvider extends FileProvider {
     }
 
     _getDownloadArgs(items) {
-        const args = items.map(item => item.getFullPathInfo());
+        const pathInfoList = items.map(item => item.getFullPathInfo());
+        const args = { pathInfoList };
         const argsStr = JSON.stringify(args);
         return {
             url: this._endpointUrl,
