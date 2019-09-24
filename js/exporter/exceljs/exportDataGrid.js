@@ -10,9 +10,7 @@ const MAX_EXCEL_COLUMN_WIDTH = 255;
 function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, keepColumnWidths = true, selectedRowsOnly = false, applyPredefinedCellStyles = {
-        font: true
-    } } = options;
+    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, keepColumnWidths = true, selectedRowsOnly = false } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -38,7 +36,7 @@ function exportDataGrid(options) {
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(result.from.row + rowIndex);
-                _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell, applyPredefinedCellStyles);
+                _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
@@ -60,7 +58,7 @@ function exportDataGrid(options) {
     });
 }
 
-function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, applyPredefinedCellStyles) {
+function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell) {
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const gridCell = cellData.cellSourceData;
@@ -68,7 +66,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         const excelCell = row.getCell(startColumnIndex + cellIndex);
         excelCell.value = cellData.value;
 
-        _setPredefinedCellStyles(gridCell, excelCell, applyPredefinedCellStyles);
+        _setPredefinedCellStyles(gridCell, excelCell);
 
         if(isDefined(customizeCell)) {
             customizeCell({
@@ -80,14 +78,12 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
-function _setPredefinedCellStyles(gridCell, excelCell, applyPredefinedCellStyles) {
+function _setPredefinedCellStyles(gridCell, excelCell) {
     let { rowType } = gridCell;
 
-    if(applyPredefinedCellStyles.font) {
-        if(rowType !== "data" && excelCell.value !== null) {
-            excelCell.font = excelCell.font || {};
-            excelCell.font.bold = true;
-        }
+    if(rowType !== "data" && excelCell.value !== null) {
+        excelCell.font = excelCell.font || {};
+        excelCell.font.bold = true;
     }
 }
 
