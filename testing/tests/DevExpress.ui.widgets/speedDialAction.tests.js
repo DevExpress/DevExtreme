@@ -107,6 +107,8 @@ QUnit.module("create multiple actions", (hooks) => {
         assert.equal($fabMainElement.attr("title"), undefined, "default hint empty");
         assert.equal($fabMainContent.find(".dx-icon-add").length, 1, "default icon is applied");
         assert.equal($fabMainContent.find(".dx-icon-close").length, 1, "default close is applied");
+        assert.equal($fabMainContent.css("zIndex"), 1500, "right content zIndex");
+        assert.equal($fabMainContent.closest(".dx-overlay-wrapper").css("zIndex"), 1500, "right wrapper zIndex");
 
         assert.equal($fabElement.eq(1).attr("title"), "Arrow down", "first action with right hint");
         assert.equal($fabElement.eq(2).attr("title"), "Arrow up", "second action with right hint");
@@ -126,6 +128,11 @@ QUnit.module("create multiple actions", (hooks) => {
         const fabOffsetY = 10;
 
         $fabMainContent.trigger("dxclick");
+
+        assert.equal($fabContent.eq(1).css("zIndex"), 1500, "right first action content zIndex");
+        assert.equal($fabContent.eq(1).closest(".dx-overlay-wrapper").css("zIndex"), 1500, "right first action wrapper zIndex");
+        assert.equal($fabContent.eq(2).css("zIndex"), 1500, "right second action content zIndex");
+        assert.equal($fabContent.eq(2).closest(".dx-overlay-wrapper").css("zIndex"), 1500, "right second action wrapper zIndex");
 
         assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "right first action position");
         assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions - fabOffsetY, 110, "right second action position");
