@@ -7,7 +7,7 @@ export default class FormItemsRunTimeInfo {
     }
 
     _findWidgetInstance(condition) {
-        var result;
+        let result;
 
         each(this._map, function(guid, { widgetInstance, item }) {
             if(condition(item)) {
@@ -20,6 +20,17 @@ export default class FormItemsRunTimeInfo {
         return result;
     }
 
+    _findLayoutManagerInstance(condition) {
+        let result;
+        each(this._map, function(guid, { layoutManager, item }) {
+            if(condition(item)) {
+                result = layoutManager;
+                return false;
+            }
+        });
+        return result;
+    }
+
     clear() {
         this._map = {};
     }
@@ -29,6 +40,13 @@ export default class FormItemsRunTimeInfo {
         this._map[guid] = { item, widgetInstance, $itemContainer };
 
         return guid;
+    }
+
+    addLayoutManagerToItemByKey(layoutManager, key) {
+        const item = this._map[key];
+        if(item) {
+            item.layoutManager = layoutManager;
+        }
     }
 
     addItemsOrExtendFrom(itemsRunTimeInfo) {
@@ -44,6 +62,10 @@ export default class FormItemsRunTimeInfo {
 
     findWidgetInstanceByItem(item) {
         return this._findWidgetInstance(storedItem => storedItem === item);
+    }
+
+    getGroupOrTabLayoutManager(item) {
+        return this._findLayoutManagerInstance(storedItem => storedItem === item);
     }
 
     findWidgetInstanceByName(name) {
