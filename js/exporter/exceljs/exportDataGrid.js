@@ -79,7 +79,11 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 }
 
 function _setPredefinedFont(gridCell, excelCell) {
-    if(gridCell.rowType !== "data" && excelCell.value !== null) {
+    if(!isDefined(excelCell.value)) {
+        return;
+    }
+
+    if(gridCell.rowType !== "data") {
         excelCell.font = excelCell.font || {};
         excelCell.font.bold = true;
     }
