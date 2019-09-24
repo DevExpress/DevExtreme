@@ -36,7 +36,7 @@ var ROWS_VIEW_CLASS = "rowsview",
 
     FAST_EDITING_DELETE_KEY = "delete",
 
-    INTERACTIVE_ELEMENTS_SELECTOR = "input:not([type='hidden']), textarea, a, [tabindex]",
+    INTERACTIVE_ELEMENTS_SELECTOR = "input:not([type='hidden']), textarea, a, select, [tabindex]",
 
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
