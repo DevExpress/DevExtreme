@@ -12,31 +12,32 @@ if(Intl.__disableRegExpRestore) {
 }
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
+const patchPolyfillResults = () => {
+    dateLocalization.inject({
+        format: function(value, format) {
+            // NOTE: IntlPolyfill uses CLDR data, so it formats this format with ` at `, but real browser`s Intl uses `, ` separator.
+            let result = this.callBase.apply(this, arguments);
+            if(typeof result === "string") {
+                result = result && result.replace(" at ", ", ");
+            }
+            return result;
+        }
+    });
+
+    numberLocalization.inject({
+        format: function(value, format) {
+            // NOTE: IntlPolifill rounding bug. In real Intl it works OK.
+            let result = this.callBase.apply(this, arguments);
+            if(value === 4.645 && format.type === "fixedPoint" && format.precision === 2 && result === "4.64") {
+                result = "4.65";
+            }
+            return result;
+        }
+    });
+};
 
 QUnit.module("Intl localization", {
-    before: () => {
-        dateLocalization.inject({
-            format: function(value, format) {
-                // NOTE: IntlPolyfill uses CLDR data, so it formats this format with ` at `, but real browser`s Intl uses `, ` separator.
-                let result = this.callBase.apply(this, arguments);
-                if(typeof result === "string") {
-                    result = result && result.replace(" at ", ", ");
-                }
-                return result;
-            }
-        });
-
-        numberLocalization.inject({
-            format: function(value, format) {
-                // NOTE: IntlPolifill rounding bug. In real Intl it works OK.
-                let result = this.callBase.apply(this, arguments);
-                if(value === 4.645 && format.type === "fixedPoint" && format.precision === 2 && result === "4.64") {
-                    result = "4.65";
-                }
-                return result;
-            }
-        });
-    }
+    before: patchPolyfillResults
 }, () => {
     sharedTests();
 
@@ -710,6 +711,7 @@ QUnit.module("Intl localization", {
             dateLocalization.resetInjection();
             numberLocalization.inject(intlNumberLocalization);
             dateLocalization.inject(intlDateLocalization);
+            patchPolyfillResults();
         }
     });
 
