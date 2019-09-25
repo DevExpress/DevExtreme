@@ -65,10 +65,13 @@ var dxVectorMap = BaseWidget.inherit({
             notifyReady: that._notifyReady,
             dataReady() {
                 let bounds;
+                if(!that.option("getBoundsFromData")) {
+                    return;
+                }
                 if(!that.option("bounds")) {
                     that._preventProjectionEvents();
                     bounds = that._getBoundsFromData();
-                    that._projection.setBounds(bounds, true);
+                    that._projection.setBounds(bounds);
                     that._allowProjectionEvents();
                 }
                 if(!that.option("projection")) {
