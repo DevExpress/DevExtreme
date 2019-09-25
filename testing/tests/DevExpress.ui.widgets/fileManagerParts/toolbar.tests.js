@@ -208,7 +208,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         fileManagerInstance.option("toolbar", {
             generalItems: [
                 {
-                    name: "navPane",
+                    name: "showNavPane",
                     icon: "upload"
                 },
                 "upload",
@@ -265,7 +265,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("toolbar", {
             generalItems: [
-                "navPane", "create", "upload", "refresh",
+                "showNavPane", "create", "upload", "refresh",
                 {
                     name: "separator",
                     location: "after"
@@ -300,7 +300,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         fileManagerInstance.option("toolbar", {
             generalItems: [
-                "navPane", "create", "upload", "refresh",
+                "showNavPane", "create", "upload", "refresh",
                 {
                     name: "separator",
                     location: "after"
@@ -364,7 +364,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("toolbar", {
             generalItems: [
-                "navPane", "create", "upload", "separator",
+                "showNavPane", "create", "upload", "separator",
                 {
                     name: "move",
                     visibilityMode: "manual",

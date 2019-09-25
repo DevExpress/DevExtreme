@@ -192,7 +192,7 @@ class FileManager extends Widget {
             thumbnails: () => this._switchView("thumbnails"),
             details: () => this._switchView("details"),
             clear: () => this._clearSelection(),
-            navPane: () => this._adaptivityControl.toggleDrawer()
+            showNavPane: () => this._adaptivityControl.toggleDrawer()
         });
         this._commandManager.registerActions(actions);
     }
@@ -207,7 +207,7 @@ class FileManager extends Widget {
     }
 
     _onAdaptiveStateChanged({ enabled }) {
-        this._commandManager.setCommandEnabled("navPane", enabled);
+        this._commandManager.setCommandEnabled("showNavPane", enabled);
         this._updateToolbar();
     }
 
@@ -378,7 +378,7 @@ class FileManager extends Widget {
             /**
             * @name dxFileManagerToolbar.generalItems
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
-            * @default [ "navPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
+            * @default [ "showNavPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
             */
             /**
             * @name dxFileManagerToolbar.fileItems
@@ -406,7 +406,7 @@ class FileManager extends Widget {
 
             toolbar: {
                 generalItems: [
-                    "navPane", "create", "upload", "refresh",
+                    "showNavPane", "create", "upload", "refresh",
                     {
                         name: "separator",
                         location: "after"
