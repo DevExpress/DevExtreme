@@ -40,12 +40,14 @@ const config = {
     * @name globalConfig.decimalSeparator
     * @type string
     * @default "."
+    * @deprecated
     */
     decimalSeparator: ".",
     /**
     * @name globalConfig.thousandsSeparator
     * @type string
     * @default ","
+    * @deprecated
     */
     thousandsSeparator: ",",
     /**
@@ -155,12 +157,23 @@ const config = {
     }
 };
 
+const deprecatedFields = [ "decimalSeparator", "thousandsSeparator" ];
+
 const configMethod = (...args) => {
     if(!args.length) {
         return config;
     }
 
-    extendUtils.extend(config, args[0]);
+    const newConfig = args[0];
+
+    deprecatedFields.forEach((deprecatedField) => {
+        if(newConfig[deprecatedField]) {
+            const message = "Intl localization included in the DevExtreme. We recommend setting the locale so that the separators are selected based on it.";
+            errors.log("W0003", "config", deprecatedField, "19.2", message);
+        }
+    });
+
+    extendUtils.extend(config, newConfig);
 };
 
 if(typeof DevExpress !== "undefined" && DevExpress.config) {
