@@ -63,8 +63,8 @@ class ItemsOption extends Component {
     _getStore() {
         return this._dataSource.store();
     }
-    _getStoreKey(target) {
-        return this._getStore().keyOf(target);
+    _getStoreKey(data) {
+        return this._getStore().keyOf(data);
     }
 }
 ItemsOption.include(DataHelperMixin);
