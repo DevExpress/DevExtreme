@@ -53,7 +53,7 @@ const koDxValidator = Class.inherit({
         result.id = new Guid().toString();
         this._applyValidationResult(result);
         result.complete && result.complete.then((res) => {
-            if(res === this._validationInfo.result) {
+            if(res.id === this._validationInfo.result.id) {
                 this._applyValidationResult(res);
             }
         });
