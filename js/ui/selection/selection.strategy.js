@@ -9,6 +9,7 @@ module.exports = Class.inherit({
     ctor: function(options) {
         this.options = options;
 
+        this._setOption("disabledItemKeys", []);
         this._clearItemKeys();
     },
 
@@ -137,7 +138,7 @@ module.exports = Class.inherit({
             return this._isAnyItemSelected(items);
         }
 
-        if(selectedItemsLength >= this.options.totalCount()) {
+        if(selectedItemsLength >= this.options.totalCount() - this.options.disabledItemKeys.length) {
             return true;
         }
         return undefined;

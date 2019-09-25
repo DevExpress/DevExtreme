@@ -76,7 +76,6 @@ var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
     var functionFilter = function(equalKeys, keyOf, equalByReference, keyExpr, item) {
         var key = keyOf(item),
-            isNonDisabledSelectAll = !!isSelectAll && !item.disabled,
             keyHash,
             i;
 
@@ -85,18 +84,18 @@ var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
             if(!typeUtils.isObject(keyHash)) {
                 var selectedKeyHashesMap = getSelectedItemKeyHashesMap(normalizeKeys(selectedItemKeys, keyOf, keyExpr));
                 if(selectedKeyHashesMap[keyHash]) {
-                    return !isNonDisabledSelectAll;
+                    return !isSelectAll;
                 }
-                return isNonDisabledSelectAll;
+                return !!isSelectAll;
             }
         }
 
         for(i = 0; i < selectedItemKeys.length; i++) {
             if(equalKeys(selectedItemKeys[i], key)) {
-                return !isNonDisabledSelectAll;
+                return !isSelectAll;
             }
         }
-        return isNonDisabledSelectAll;
+        return !!isSelectAll;
     };
 
     var getFilterForPlainKey = function(keyExpr, keyValue) {
