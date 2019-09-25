@@ -630,7 +630,7 @@ QUnit.test("Validator should not be re-validated on pending with the same value"
                     const d = new Deferred();
                     setTimeout(function() {
                         d.resolve(true);
-                    }, 1000);
+                    }, 10);
                     return d.promise();
                 }
             }],
@@ -646,7 +646,7 @@ QUnit.test("Validator should not be re-validated on pending with the same value"
     assert.ok(isPromise(result1.complete), "result1.complete is a Promise object");
     assert.strictEqual(result1.complete, result2.complete, "result1.complete === result2.complete");
     result1.complete.then(function(res) {
-        assert.strictEqual(result1, res, "result1 === res");
+        assert.strictEqual(result1.id, res.id, "result1.id === res.id");
         assert.strictEqual(res.status, "valid", "res.status === 'valid'");
         assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
         done();
@@ -667,7 +667,7 @@ QUnit.test("Validator should resolve result.complete with the last value", funct
                     const d = new Deferred();
                     setTimeout(function() {
                         d.resolve(true);
-                    }, 1000);
+                    }, 10);
                     return d.promise();
                 }
             }],
@@ -683,13 +683,12 @@ QUnit.test("Validator should resolve result.complete with the last value", funct
     assert.notOk(result1 === result2, "Results should be different");
     assert.ok(isPromise(result1.complete), "result1.complete is a Promise object");
     assert.ok(isPromise(result2.complete), "result2.complete is a Promise object");
-    assert.strictEqual(result1.complete, result2.complete, "result1.complete === result2.complete");
     Promise.all([result1.complete, result2.complete]).then(function(values) {
         assert.ok(values.length === 2, "Results should be resolved twice");
-        assert.notOk(values[0] === result1, "The first result should not equal resolved result");
-        assert.strictEqual(result2, values[1], "The second result should equal resolved result");
+        assert.notOk(values[0].id === result1.id, "The first result should not equal resolved result");
+        assert.strictEqual(result2.id, values[1].id, "The second result should equal resolved result");
         assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
-        assert.strictEqual(values[0], values[1], "Resolved results should be the same");
+        assert.strictEqual(values[0].id, values[1].id, "Resolved results should be the same");
         assert.strictEqual(values[0].value, values[1].value, "Values of resolved results should be the same");
         done();
     });
