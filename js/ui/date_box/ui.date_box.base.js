@@ -19,6 +19,7 @@ var windowUtils = require("../../core/utils/window"),
     DATEBOX_CLASS = "dx-datebox",
     DX_AUTO_WIDTH_CLASS = "dx-auto-width",
     DX_INVALID_BADGE_CLASS = "dx-show-invalid-badge",
+    DX_CLEAR_BUTTON_CLASS = "dx-clear-button-area",
     DATEBOX_WRAPPER_CLASS = "dx-datebox-wrapper";
 
 var PICKER_TYPE = {
@@ -407,11 +408,11 @@ var DateBox = DropDownEditor.inherit({
         var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
         var $input = this._input();
-        var $editorInput = $input.get(0);
+        var inputElement = $input.get(0);
         var $dateBox = this.$element();
 
-        if(this._needsValidationIconHiding(longestValue, $dateBox, $input, $editorInput)) {
-            var style = $editorInput.style;
+        if(this._needsValidationIconHiding(longestValue, $dateBox, $input, inputElement)) {
+            var style = inputElement.style;
             this.option("rtlEnabled") ? style.paddingLeft = 0 : style.paddingRight = 0;
             if($dateBox.hasClass(DX_INVALID_BADGE_CLASS)) {
                 $dateBox.removeClass(DX_INVALID_BADGE_CLASS);
@@ -419,23 +420,23 @@ var DateBox = DropDownEditor.inherit({
         }
     },
 
-    _needsValidationIconHiding: function(longestValue, $dateBox, $input, $editorInput) {
+    _needsValidationIconHiding: function(longestValue, $dateBox, $input, inputElement) {
         var $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
 
         $longestValueElement.appendTo($dateBox);
         var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
-        var rightPadding = parseFloat(window.getComputedStyle($editorInput).paddingRight);
-        var leftPadding = parseFloat(window.getComputedStyle($editorInput).paddingLeft);
+        var rightPadding = parseFloat(window.getComputedStyle(inputElement).paddingRight);
+        var leftPadding = parseFloat(window.getComputedStyle(inputElement).paddingLeft);
         var necessaryWidth = elementWidth + leftPadding + rightPadding;
         $longestValueElement.remove();
 
         var clearButtonWidth = 0;
         if(this.option("showClearButton") && $input.val() === "") {
-            var $clearButton = $dateBox.find(".dx-clear-button-area");
+            var $clearButton = $dateBox.find("." + DX_CLEAR_BUTTON_CLASS);
             clearButtonWidth = parseFloat(window.getComputedStyle($clearButton.get(0)).width);
         }
 
-        var curWidth = parseFloat(window.getComputedStyle($editorInput).width) - clearButtonWidth;
+        var curWidth = parseFloat(window.getComputedStyle(inputElement).width) - clearButtonWidth;
 
         return (necessaryWidth > curWidth);
     },
