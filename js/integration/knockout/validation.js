@@ -57,7 +57,7 @@ const koDxValidator = Class.inherit({
                 this._applyValidationResult(res);
             }
         });
-        return result;
+        return this._validationInfo.result;
     },
 
     reset() {
