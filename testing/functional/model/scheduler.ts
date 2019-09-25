@@ -71,7 +71,7 @@ class AppointmentCollector {
     }
 }
 
-class ListItem {
+class AppointmentTooltipListItem {
     element: Selector;
     date: Selector;
     subject: Selector;
@@ -86,7 +86,7 @@ class ListItem {
     }
 }
 
-class Popup {
+class AppointmentPopup {
     element: Selector;
     wrapper: Selector;
 
@@ -105,7 +105,7 @@ class Popup {
     }
 }
 
-class Tooltip {
+class AppointmentTooltip {
     element: Selector;
     wrapper: Selector;
 
@@ -114,8 +114,8 @@ class Tooltip {
         this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltip}`);
     }
 
-    getListItem(title: string, index: number = 0): ListItem {
-        return new ListItem(this.wrapper, title, index);
+    getListItem(title: string, index: number = 0): AppointmentTooltipListItem {
+        return new AppointmentTooltipListItem(this.wrapper, title, index);
     }
 
     isVisible(): Promise<boolean> {
@@ -135,8 +135,8 @@ export default class Scheduler extends Widget {
     headerPanelCells: Selector;
     headerSpaceScroll: { left: Promise<number>, top: Promise<number> };
     workSpaceScroll: { left: Promise<number>, top: Promise<number> };
-    popup: Popup;
-    tooltip: Tooltip;
+    popup: AppointmentPopup;
+    tooltip: AppointmentTooltip;
 
     name: string = 'dxScheduler';
 
@@ -161,8 +161,8 @@ export default class Scheduler extends Widget {
             top: workSpaceScroll.scrollTop
         };
 
-        this.tooltip = new Tooltip(this.element);
-        this.popup = new Popup(this.element);
+        this.tooltip = new AppointmentTooltip(this.element);
+        this.popup = new AppointmentPopup(this.element);
     }
 
     getDateTableCell(rowIndex: number = 0, cellIndex: number = 0): Selector {
