@@ -120,7 +120,8 @@ function processMarkup() {
 }
 
 function resolveFullThemeName(desiredThemeName) {
-    var desiredThemeParts = desiredThemeName.split("."),
+
+    var desiredThemeParts = desiredThemeName ? desiredThemeName.split(".") : [],
         result = null;
 
     if(knownThemes) {
@@ -131,7 +132,7 @@ function resolveFullThemeName(desiredThemeName) {
         each(knownThemes, function(knownThemeName, themeData) {
             var knownThemeParts = knownThemeName.split(".");
 
-            if(knownThemeParts[0] !== desiredThemeParts[0]) {
+            if(desiredThemeParts[0] && knownThemeParts[0] !== desiredThemeParts[0]) {
                 return;
             }
 
@@ -196,12 +197,7 @@ function current(options) {
         loadCallback = options.loadCallback,
         currentThemeData;
 
-    currentThemeName = options.theme || currentThemeName;
-    if(isAutoInit && !currentThemeName) {
-        currentThemeName = themeNameFromDevice(devices.current());
-    }
-
-    currentThemeName = resolveFullThemeName(currentThemeName);
+    currentThemeName = resolveFullThemeName(options.theme || currentThemeName);
 
     if(currentThemeName) {
         currentThemeData = knownThemes[currentThemeName];
