@@ -186,40 +186,6 @@ QUnit.test("setEngine / non invertible", function(assert) {
     assert.deepEqual(this.projection.getTransform(), { translateX: 0, translateY: 0 }, "transform");
 });
 
-QUnit.test("setEngine / silent", function(assert) {
-    var onEngine = sinon.spy(),
-        onScreen = sinon.spy(),
-        onCenter = sinon.spy(),
-        onZoom = sinon.spy(),
-        engine = projection({
-            to: function(coords) {
-                return [
-                    (coords[0] + 60) / 20,
-                    (coords[1] - 40) / 10
-                ];
-            },
-            from: function(coords) {
-                return [
-                    (coords[0] - 3) * 20,
-                    (coords[1] + 4) * 10
-                ];
-            }
-        });
-    this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
-    this.projection.on({ engine: onEngine, screen: onScreen, center: onCenter, zoom: onZoom });
-
-    this.projection.setEngine(engine, true);
-
-    assert.strictEqual(onEngine.callCount, 1, "engine event is triggered");
-    assert.strictEqual(onScreen.callCount, 1, "screen event is triggered");
-    assert.strictEqual(onCenter.callCount, 0, "center event is not triggered");
-    assert.strictEqual(onZoom.callCount, 0, "zoom event is not triggered");
-    assert.strictEqual(this.centerChanged.lastCall, null, "centerChanged is not called");
-    assert.strictEqual(this.zoomChanged.lastCall, null, "zoomChanged is not called");
-    assert.deepEqual(this.projection.getCenter(), [20, -10], "center");
-    assert.strictEqual(this.projection.getZoom(), 2, "zoom");
-});
-
 QUnit.test("Event emitter methods are injected", function(assert) {
     var projection = this.projection;
     $.each(eventEmitterModule._TESTS_eventEmitterMethods, function(name, method) {
@@ -259,7 +225,7 @@ QUnit.test("setBounds", function(assert) {
 
     assert.deepEqual(this.engine.original.lastCall.args, [], "original");
     assert.deepEqual(engine1.bounds.lastCall.args, ["bounds"], "bounds");
-    assert.deepEqual(this.projection.setEngine.lastCall.args, [engine2, undefined], "engine");
+    assert.deepEqual(this.projection.setEngine.lastCall.args, [engine2], "engine");
 });
 
 QUnit.test("setBounds / no argument", function(assert) {
