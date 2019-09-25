@@ -416,15 +416,14 @@ var DateBox = DropDownEditor.inherit({
             // NOTE: no calculateWidth if type is rollers, why?
             shouldCalculateWidth = pickerType !== PICKER_TYPE.rollers && devices.current().platform === "generic";
 
-        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
-            longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
-
-        this._formatValidationIcon(longestValue);
-
         if(!windowUtils.hasWindow() || isWidthSet || !(shouldCalculateWidth && $element.is(":visible"))) {
             return;
         }
 
+        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
+            longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
+
+        this._formatValidationIcon(longestValue);
         $element.width(this._calculateWidth(longestValue));
         this._isSizeUpdatable = true;
     },
@@ -449,30 +448,32 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _formatValidationIcon: function(longestValue) {
-        let $input = this._input();
+        const $input = this._input();
+        const $editorInput = $input.get(0);
+        const $dateBox = this.$element();
         const $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
 
-        $longestValueElement.appendTo(this.$element());
+        $longestValueElement.appendTo($dateBox);
         const elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
-        const rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight);
-        const leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft);
+        const rightPadding = parseFloat(window.getComputedStyle($editorInput).paddingRight);
+        const leftPadding = parseFloat(window.getComputedStyle($editorInput).paddingLeft);
         const necessaryWidth = elementWidth + leftPadding + rightPadding;
         $longestValueElement.remove();
 
         let clearButtonWidth = 0;
         if(this.option("showClearButton") && $input.val() === "") {
-            const $clearButton = this.$element().find(".dx-clear-button-area");
+            const $clearButton = $dateBox.find(".dx-clear-button-area");
             clearButtonWidth = parseFloat(window.getComputedStyle($clearButton.get(0)).width);
         }
 
-        const curWidth = parseFloat(window.getComputedStyle($input.get(0)).width) - clearButtonWidth;
+        const curWidth = parseFloat(window.getComputedStyle($editorInput).width) - clearButtonWidth;
 
-        // console.log(necessaryWidth + " | " + curWidth);
-        let style = $input.get(0).style;
+        let style = $editorInput.style;
         if(necessaryWidth > curWidth) {
-            // console.log("REMOVE CLASS");
             this.option("rtlEnabled") ? style.paddingLeft = 0 : style.paddingRight = 0;
-            this.$element().removeClass("dx-show-invalid-badge");
+            if($dateBox.hasClass("dx-show-invalid-badge")) {
+                $dateBox.removeClass("dx-show-invalid-badge");
+            }
         }
     },
 
