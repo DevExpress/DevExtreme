@@ -31,21 +31,21 @@ var RowDraggingExtender = {
         columnsController.columnOption("type:drag", "visible", isHandleColumnVisible);
     },
 
-    _renderTable: function() {
+    _renderContent: function() {
         let that = this,
             rowDragging = that.option("rowDragging"),
-            $tableElement = that.callBase.apply(that, arguments);
+            $content = that.callBase.apply(that, arguments);
 
         if(rowDragging && rowDragging.enabled) {
-            that._sortable = that._createComponent($tableElement, Sortable, extend({
-                filter: "> tbody > .dx-data-row",
+            that._sortable = that._createComponent($content, Sortable, extend({
+                filter: "> table > tbody > .dx-data-row",
                 template: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
                 dropFeedbackMode: "indicate"
             }, rowDragging));
         }
 
-        return $tableElement;
+        return $content;
     },
 
     _getDraggableGridOptions: function(options) {

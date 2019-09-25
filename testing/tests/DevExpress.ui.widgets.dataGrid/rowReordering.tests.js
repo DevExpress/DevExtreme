@@ -291,6 +291,20 @@ QUnit.test("Dragging row to the last position - row should be before the freespa
     assert.ok($rowElements.eq(3).hasClass("dx-freespace-row"), "freespace row");
 });
 
+QUnit.test("Sortable should have height if dataSource is empty", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    this.options.dataSource = [];
+
+    rowsView = this.createRowsView();
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    assert.equal($("#container").find(".dx-sortable").height(), 100);
+});
 
 QUnit.module("Handle", $.extend({}, moduleConfig, {
     beforeEach: function() {

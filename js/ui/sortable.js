@@ -610,6 +610,7 @@ var Sortable = Draggable.inherit({
                 if(position) {
                     this._move(position, $placeholderElement);
                 }
+                $placeholderElement.toggle(!!position);
             }
         } else {
             this._moveItems(args.previousValue, args.value);
