@@ -21,7 +21,8 @@ const SpeedDialItem = Overlay.inherit({
             shading: false,
             useInkRipple: false,
             callOverlayRenderShading: false,
-            width: "auto"
+            width: "auto",
+            zIndex: 1500
         });
     },
 
@@ -102,6 +103,13 @@ const SpeedDialItem = Overlay.inherit({
         if(this._options.callOverlayRenderShading) {
             this.callBase();
         }
+    },
+
+    _updateZIndexStackPosition() {
+        const zIndex = this.option("zIndex");
+
+        this._$wrapper.css("zIndex", zIndex);
+        this._$content.css("zIndex", zIndex);
     },
 
     _fixWrapperPosition() {
