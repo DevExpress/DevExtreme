@@ -404,14 +404,14 @@ var DateBox = DropDownEditor.inherit({
             return;
         }
 
-        const format = this._strategy.getDisplayFormat(this.option("displayFormat")),
+        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
-        const $input = this._input();
-        const $editorInput = $input.get(0);
-        const $dateBox = this.$element();
+        var $input = this._input();
+        var $editorInput = $input.get(0);
+        var $dateBox = this.$element();
 
         if(this._needsValidationIconHiding(longestValue, $dateBox, $input, $editorInput)) {
-            let style = $editorInput.style;
+            var style = $editorInput.style;
             this.option("rtlEnabled") ? style.paddingLeft = 0 : style.paddingRight = 0;
             if($dateBox.hasClass(DX_INVALID_BADGE_CLASS)) {
                 $dateBox.removeClass(DX_INVALID_BADGE_CLASS);
@@ -420,22 +420,22 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _needsValidationIconHiding: function(longestValue, $dateBox, $input, $editorInput) {
-        const $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
+        var $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
 
         $longestValueElement.appendTo($dateBox);
-        const elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
-        const rightPadding = parseFloat(window.getComputedStyle($editorInput).paddingRight);
-        const leftPadding = parseFloat(window.getComputedStyle($editorInput).paddingLeft);
-        const necessaryWidth = elementWidth + leftPadding + rightPadding;
+        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
+        var rightPadding = parseFloat(window.getComputedStyle($editorInput).paddingRight);
+        var leftPadding = parseFloat(window.getComputedStyle($editorInput).paddingLeft);
+        var necessaryWidth = elementWidth + leftPadding + rightPadding;
         $longestValueElement.remove();
 
-        let clearButtonWidth = 0;
+        var clearButtonWidth = 0;
         if(this.option("showClearButton") && $input.val() === "") {
-            const $clearButton = $dateBox.find(".dx-clear-button-area");
+            var $clearButton = $dateBox.find(".dx-clear-button-area");
             clearButtonWidth = parseFloat(window.getComputedStyle($clearButton.get(0)).width);
         }
 
-        const curWidth = parseFloat(window.getComputedStyle($editorInput).width) - clearButtonWidth;
+        var curWidth = parseFloat(window.getComputedStyle($editorInput).width) - clearButtonWidth;
 
         return (necessaryWidth > curWidth);
     },
@@ -829,7 +829,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     dateValue: function(value, dxEvent) {
-        const isValueChanged = this._isValueChanged(value);
+        var isValueChanged = this._isValueChanged(value);
 
         if(isValueChanged && dxEvent) {
             this._saveValueChangeEvent(dxEvent);
