@@ -202,5 +202,6 @@ some imports
 
         assert.equal(process(themesFileContent, { fileInfo: { filename: "/linux/path/theme.less" } }), expectedThemesFileContent);
         assert.deepEqual(modulesHandler.bundledWidgets, [ "box", "button" ]);
+        assert.deepEqual(modulesHandler.unusedWidgets, [ "superwidget" ]);
     });
 });
