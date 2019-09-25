@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isString } from "../../core/utils/type";
+import { ensureDefined } from "../../core/utils/common";
 
 import Widget from "../widget/ui.widget";
 import ContextMenu from "../context_menu/ui.context_menu";
@@ -86,14 +87,11 @@ class FileManagerContextMenu extends Widget {
         return result;
     }
 
-    _isContextMenuItemAvailable(item, fileItems) {
-        if(!this._isDefaultItem(item.name)) {
-            return item.visible;
+    _isContextMenuItemAvailable(menuItem, fileItems) {
+        if(!this._isDefaultItem(menuItem.name) || !menuItem._autoHide) {
+            return ensureDefined(menuItem.visible, true);
         }
-        if(item.visibilityMode === "manual") {
-            return item.visible;
-        }
-        return this._commandManager.isCommandAvailable(item.name, fileItems);
+        return this._commandManager.isCommandAvailable(menuItem.name, fileItems);
     }
 
     _isDefaultItem(commandName) {
@@ -120,8 +118,12 @@ class FileManagerContextMenu extends Widget {
         let result = this._createMenuItemByCommandName(commandName);
         const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
         extend(result, defaultConfig);
-        this._extendAttributes(result, item, ["visibilityMode", "beginGroup", "text", "icon"]);
-        if(result.visibilityMode === "manual") {
+        this._extendAttributes(result, item, ["visible", "beginGroup", "text", "icon"]);
+
+        const itemVisible = ensureDefined(result.visible, "auto");
+        if(itemVisible === "auto") {
+            result._autoHide = true;
+        } else {
             this._extendAttributes(result, item, ["visible", "disabled"]);
         }
 

@@ -367,7 +367,6 @@ QUnit.module("Toolbar", moduleConfig, () => {
                 "showNavPane", "create", "upload", "separator",
                 {
                     name: "move",
-                    visibilityMode: "manual",
                     visible: true,
                     disabled: true
                 }, "refresh",

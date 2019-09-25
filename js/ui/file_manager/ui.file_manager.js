@@ -399,9 +399,9 @@ class FileManager extends Widget {
             * @default "before"
             */
             /**
-            * @name dxFileManagerToolbarItem.visibilityMode
-            * @type Enums.FileManagerToolbarItemVisibilityMode|string
-            * @default "default"
+            * @name dxFileManagerToolbarItem.visible
+            * @type Enums.Mode|boolean
+            * @default "auto"
             */
 
             toolbar: {
@@ -443,9 +443,9 @@ class FileManager extends Widget {
             * @type Enums.FileManagerContextMenuItem|string
             */
             /**
-            * @name dxFileManagerContextMenuItem.visibilityMode
-            * @type Enums.FileManagerContextMenuItemVisibilityMode|string
-            * @default "default"
+            * @name dxFileManagerContextMenuItem.visible
+            * @type Enums.Mode|boolean
+            * @default "auto"
             */
 
             contextMenu: {

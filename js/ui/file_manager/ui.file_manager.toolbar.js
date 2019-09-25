@@ -177,10 +177,15 @@ class FileManagerToolbar extends Widget {
         if(this._isDefaultItem(commandName)) {
             const defaultConfig = DEFAULT_ITEM_CONFIGS[commandName];
             extend(result, defaultConfig);
-            this._extendAttributes(result, item, ["visibilityMode", "location", "locateInMenu"]);
-            if(result.visibilityMode === "manual") {
-                this._extendAttributes(result, item, ["visible", "disabled"]);
+            this._extendAttributes(result, item, ["visible", "location", "locateInMenu"]);
+
+            const itemVisible = ensureDefined(item.visible, "auto");
+            if(itemVisible === "auto") {
+                result._autoHide = true;
+            } else {
+                this._extendAttributes(result, item, ["disabled"]);
             }
+
             this._extendAttributes(result.options, item, ["text", "icon"]);
         } else {
             extend(result, item);
@@ -346,11 +351,8 @@ class FileManagerToolbar extends Widget {
     }
 
     _isToolbarItemAvailable(toolbarItem, fileItems) {
-        if(!this._isDefaultItem(toolbarItem.name)) {
-            return toolbarItem.visible;
-        }
-        if(toolbarItem.visibilityMode === "manual") {
-            return toolbarItem.visible;
+        if(!this._isDefaultItem(toolbarItem.name) || !toolbarItem._autoHide) {
+            return ensureDefined(toolbarItem.visible, true);
         }
         if(toolbarItem.name === "refresh") {
             return this._generalToolbarVisible || !!this._isRefreshVisibleInFileToolbar;

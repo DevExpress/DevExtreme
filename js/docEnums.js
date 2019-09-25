@@ -1057,18 +1057,8 @@
  */
 
 /**
- * @typedef {string} Enums.FileManagerToolbarItemVisibilityMode
- * @enum {'default'|'manual'}
- */
-
-/**
  * @typedef {string} Enums.FileManagerContextMenuItem
  * @enum {'create'|'upload'|'refresh'|'download'|'move'|'copy'|'rename'|'delete'}
- */
-
-/**
- * @typedef {string} Enums.FileManagerContextMenuItemVisibilityMode
- * @enum {'default'|'manual'}
  */
 
 /**

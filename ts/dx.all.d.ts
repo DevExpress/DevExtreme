@@ -3500,15 +3500,15 @@ declare module DevExpress.ui {
     export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
         /** @name dxFileManagerContextMenuItem.name */
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
-        /** @name dxFileManagerContextMenuItem.visibilityMode */
-        visibilityMode?: 'default' | 'manual' | string;
+        /** @name dxFileManagerContextMenuItem.visible */
+        visible?: 'auto' | boolean;
     }
     /** @name dxFileManagerToolbar */
     export interface dxFileManagerToolbar {
-        /** @name dxFileManagerToolbar.fileItems */
-        fileItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
-        /** @name dxFileManagerToolbar.generalItems */
-        generalItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        /** @name dxFileManagerToolbar.fileSelectionItems */
+        fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
+        /** @name dxFileManagerToolbar.items */
+        items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -3516,8 +3516,8 @@ declare module DevExpress.ui {
         location?: 'after' | 'before' | 'center';
         /** @name dxFileManagerToolbarItem.name */
         name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
-        /** @name dxFileManagerToolbarItem.visibilityMode */
-        visibilityMode?: 'default' | 'manual' | string;
+        /** @name dxFileManagerToolbarItem.visible */
+        visible?: 'auto' | boolean;
     }
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
