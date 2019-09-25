@@ -562,17 +562,6 @@ QUnit.module("misc", () => {
         assert.equal(element.className, "", "attached classes was removed");
     });
 
-    test("themeNameFromDevice for iOS", (assert) => {
-        const themeNameFromDevice = themes.themeNameFromDevice;
-
-        assert.equal("ios7", themeNameFromDevice({ platform: "ios", version: [1] }));
-        assert.equal("ios7", themeNameFromDevice({ platform: "ios", version: [99] }));
-        assert.equal("ios7", themeNameFromDevice({ platform: "ios" }));
-    });
-
-    test("themeNameFromDevice for removed mobile themes (breaking change BC4928)", (assert) => {
-        assert.equal(themes.themeNameFromDevice({ platform: "android" }), "generic");
-    });
 });
 
 QUnit.module("web font checker", () => {
