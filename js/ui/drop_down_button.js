@@ -15,6 +15,7 @@ import { Deferred } from "../core/utils/deferred";
 import { extend } from "../core/utils/extend";
 import { isPlainObject } from "../core/utils/type";
 import { ensureDefined } from "../core/utils/common";
+import Guid from "../core/guid";
 import { format as formatMessage } from "../localization/message";
 
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
@@ -421,6 +422,9 @@ let DropDownButton = Widget.inherit({
 
         $content.empty();
 
+        this._popupContentId = "dx-" + new Guid();
+        this.setAria("id", this._popupContentId, $content);
+
         return template.render({
             container: domUtils.getPublicElement($content),
             model: this.option("items") || this._dataSource
@@ -514,10 +518,14 @@ let DropDownButton = Widget.inherit({
 
     _popupHidingHandler() {
         this.option("opened", false);
+        this.setAria({ "expanded": false });
+        this.setAria("owns");
     },
 
     _popupShowingHandler() {
         this.option("opened", true);
+        this.setAria({ "expanded": true });
+        this.setAria("owns", this._popupContentId);
     },
 
     _renderButtonGroup() {
@@ -618,6 +626,12 @@ let DropDownButton = Widget.inherit({
         this._popup && this._popup.repaint();
     },
 
+    _updateItemCollection(optionName) {
+        this._setWidgetOption("_list", [optionName]);
+        this._setListOption("selectedItemKeys", []);
+        this._loadSelectedItem().done(this._updateActionButton.bind(this));
+    },
+
     _optionChanged(args) {
         const { name, value } = args;
         switch(args.name) {
@@ -649,15 +663,11 @@ let DropDownButton = Widget.inherit({
             case "items":
                 this._dataSource = null;
                 this._itemsToDataSource();
-                this._setListOption(name, value);
-                this._setListOption("selectedItemKeys", []);
-                this._loadSelectedItem().done(this._updateActionButton.bind(this));
+                this._updateItemCollection(name);
                 break;
             case "dataSource":
                 this._initDataSource();
-                this._setListOption(name, value);
-                this._setListOption("selectedItemKeys", []);
-                this._loadSelectedItem().done(this._updateActionButton.bind(this));
+                this._updateItemCollection(name);
                 break;
             case "icon":
             case "text":
