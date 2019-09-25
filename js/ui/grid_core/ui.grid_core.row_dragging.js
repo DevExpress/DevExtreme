@@ -33,7 +33,6 @@ var RowDraggingExtender = {
     _renderTable: function() {
         let that = this,
             rowDragging = that.option("rowDragging"),
-            origOnDragEndEvent = rowDragging.onDragEnd,
             $tableElement = that.callBase.apply(that, arguments);
 
         if(rowDragging && rowDragging.enabled) {
@@ -42,12 +41,7 @@ var RowDraggingExtender = {
                 template: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
                 dropFeedbackMode: "indicate"
-            }, rowDragging, {
-                onDragEnd: function(e) {
-                    e.cancel = true;
-                    origOnDragEndEvent && origOnDragEndEvent.apply(this, arguments);
-                }
-            }));
+            }, rowDragging));
         }
 
         return $tableElement;
@@ -285,14 +279,13 @@ module.exports = {
                  * @extends Action
                  * @type_function_param1 e:object
                  * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 cancel:boolean
-                 * @type_function_param1_field6 itemData:any
-                 * @type_function_param1_field7 itemElement:dxElement
-                 * @type_function_param1_field8 fromIndex:number
-                 * @type_function_param1_field9 toIndex:number
-                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field12 dropInsideItem:boolean
+                 * @type_function_param1_field5 itemData:any
+                 * @type_function_param1_field6 itemElement:dxElement
+                 * @type_function_param1_field7 fromIndex:number
+                 * @type_function_param1_field8 toIndex:number
+                 * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field11 dropInsideItem:boolean
                  * @action
                  */
                 /**
@@ -301,14 +294,13 @@ module.exports = {
                  * @extends Action
                  * @type_function_param1 e:object
                  * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 cancel:boolean
-                 * @type_function_param1_field6 itemData:any
-                 * @type_function_param1_field7 itemElement:dxElement
-                 * @type_function_param1_field8 fromIndex:number
-                 * @type_function_param1_field9 toIndex:number
-                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field12 dropInsideItem:boolean
+                 * @type_function_param1_field5 itemData:any
+                 * @type_function_param1_field6 itemElement:dxElement
+                 * @type_function_param1_field7 fromIndex:number
+                 * @type_function_param1_field8 toIndex:number
+                 * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field11 dropInsideItem:boolean
                  * @action
                  */
                 /**
@@ -317,14 +309,13 @@ module.exports = {
                  * @extends Action
                  * @type_function_param1 e:object
                  * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 cancel:boolean
-                 * @type_function_param1_field6 itemData:any
-                 * @type_function_param1_field7 itemElement:dxElement
-                 * @type_function_param1_field8 fromIndex:number
-                 * @type_function_param1_field9 toIndex:number
-                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field12 dropInsideItem:boolean
+                 * @type_function_param1_field5 itemData:any
+                 * @type_function_param1_field6 itemElement:dxElement
+                 * @type_function_param1_field7 fromIndex:number
+                 * @type_function_param1_field8 toIndex:number
+                 * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field11 dropInsideItem:boolean
                  * @action
                  */
             }

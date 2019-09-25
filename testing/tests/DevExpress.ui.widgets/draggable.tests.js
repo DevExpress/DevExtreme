@@ -278,7 +278,11 @@ QUnit.test("'dx-state-disabled' class (T284305)", function(assert) {
 
 QUnit.test("onDrop - check args", function(assert) {
     // arrange
-    let onDropSpy = sinon.spy();
+    let onDropSpy = sinon.spy(function(e) {
+        if(e.fromComponent !== e.toComponent) {
+            $(e.element).append(e.itemElement);
+        }
+    });
 
     let draggable1 = this.createDraggable({
         group: "shared"
@@ -302,7 +306,11 @@ QUnit.test("onDrop - check args", function(assert) {
 
 QUnit.test("onDrop - check args when clone is true", function(assert) {
     // arrange
-    let onDropSpy = sinon.spy();
+    let onDropSpy = sinon.spy(function(e) {
+        if(e.fromComponent !== e.toComponent) {
+            $(e.element).append(e.itemElement);
+        }
+    });
 
     let draggable1 = this.createDraggable({
         group: "shared",

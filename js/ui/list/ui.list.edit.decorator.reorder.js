@@ -66,8 +66,6 @@ registerDecorator(
         },
 
         _dragEndHandler: function(e) {
-            e.cancel = true;
-
             var $targetElement = this._list.getItemElementByFlatIndex(e.toIndex);
             this._list.reorderItem($(e.itemElement), $targetElement);
         },

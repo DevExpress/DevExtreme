@@ -319,6 +319,7 @@ QUnit.test("Drop when dropFeedbackMode is push", function(assert) {
 
     this.createSortable({
         filter: ".draggable",
+        moveItemOnDrop: true,
         dropFeedbackMode: "push"
     });
 
@@ -342,6 +343,7 @@ QUnit.test("Drop when dropFeedbackMode is indicate", function(assert) {
 
     this.createSortable({
         filter: ".draggable",
+        moveItemOnDrop: true,
         dropFeedbackMode: "indicate"
     });
 
@@ -418,7 +420,8 @@ QUnit.test("Dragging an item to the last position when there is ignored (not dra
 
     this.$element.append("<div id='item4'></div>");
     this.createSortable({
-        filter: ".draggable"
+        filter: ".draggable",
+        moveItemOnDrop: true
     });
 
     items = this.$element.children();
@@ -451,7 +454,8 @@ QUnit.test("Dragging an item to the last position when there is ignored (not dra
     this.$element.append("<div id='item4'></div>");
     this.createSortable({
         filter: ".draggable",
-        dropFeedbackMode: "indicate"
+        dropFeedbackMode: "indicate",
+        moveItemOnDrop: true
     });
 
     items = this.$element.children();
@@ -681,9 +685,31 @@ QUnit.test("onDragEnd with eventArgs.cancel is true - the draggable element shou
     this.createSortable({
         filter: ".draggable",
         dropFeedbackMode: "indicate",
+        moveItemOnDrop: true,
         onDragEnd: function(e) {
             e.cancel = true;
         }
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(0)).start().down(15, 15).move(0, 30).up();
+
+    // assert
+    items = this.$element.children();
+    assert.strictEqual(items.eq(0).attr("id"), "item1", "first item");
+    assert.strictEqual(items.eq(1).attr("id"), "item2", "second item");
+    assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
+});
+
+QUnit.test("The draggable element should not change position without moveItemOnDrop", function(assert) {
+    // arrange
+    let items;
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate"
     });
 
     items = this.$element.children();
@@ -797,6 +823,7 @@ QUnit.test("onAdd - check args", function(assert) {
     let sortable2 = this.createSortable({
         filter: ".draggable",
         group: "shared",
+        moveItemOnDrop: true,
         onAdd: onAddSpy
     }, $("#items2"));
 
@@ -817,6 +844,30 @@ QUnit.test("onAdd - check args", function(assert) {
 QUnit.test("onAdd - not add item when eventArgs.cancel is true", function(assert) {
     // arrange
     let onAddSpy = sinon.spy((e) => { e.cancel = true; });
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        moveItemOnDrop: true,
+        onAdd: onAddSpy
+    }, $("#items2"));
+
+    // act
+    pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
+
+    // assert
+    assert.strictEqual(onAddSpy.callCount, 1, "onAdd is called");
+    assert.strictEqual($(sortable2.element()).children("#item1").length, 0, "item isn't added");
+});
+
+QUnit.test("onAdd - not add item without moveItemOnDrop", function(assert) {
+    // arrange
+    let onAddSpy = sinon.spy();
 
     let sortable1 = this.createSortable({
         filter: ".draggable",
@@ -849,6 +900,7 @@ QUnit.test("onRemove - check args", function(assert) {
 
     let sortable2 = this.createSortable({
         filter: ".draggable",
+        moveItemOnDrop: true,
         group: "shared"
     }, $("#items2"));
 
@@ -878,7 +930,8 @@ QUnit.test("onRemove - not add item when eventArgs.cancel is true", function(ass
 
     let sortable2 = this.createSortable({
         filter: ".draggable",
-        group: "shared"
+        group: "shared",
+        moveItemOnDrop: true
     }, $("#items2"));
 
     // act
@@ -891,13 +944,39 @@ QUnit.test("onRemove - not add item when eventArgs.cancel is true", function(ass
     assert.strictEqual($(sortable2.element()).children("#item1").attr("class"), "draggable", "cloned source item hasn't dx-sortable-source class");
 });
 
+QUnit.test("onRemove - not add item without moveItemOnDrop", function(assert) {
+    // arrange
+    let onRemoveSpy = sinon.spy();
+
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        group: "shared",
+        onRemove: onRemoveSpy
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items2"));
+
+    // act
+    pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0).up();
+
+    // assert
+    assert.strictEqual(onRemoveSpy.callCount, 1, "onRemove is called");
+    assert.strictEqual($(sortable1.element()).children("#item1").length, 1, "item isn't removed");
+    assert.strictEqual($(sortable1.element()).children("#item1").attr("class"), "draggable", "source item hasn't dx-sortable-source class");
+    assert.strictEqual($(sortable2.element()).children("#item1").length, 0, "source item is not added to second sortable");
+});
+
 QUnit.test("onReorder - check args", function(assert) {
     // arrange
     let onReorderSpy = sinon.spy();
 
     let sortable = this.createSortable({
         filter: ".draggable",
-        onReorder: onReorderSpy
+        onReorder: onReorderSpy,
+        moveItemOnDrop: true
     }, $("#items"));
 
     // act
@@ -1184,7 +1263,8 @@ QUnit.test("Dropping item to another the sortable widget", function(assert) {
 
     let sortable2 = this.createSortable({
         filter: ".draggable",
-        group: "shared"
+        group: "shared",
+        moveItemOnDrop: true
     }, $("#items2"));
 
     // act
@@ -1239,7 +1319,8 @@ QUnit.test("Dropping item to another the sortable widget with dropFeedbackMode i
     let sortable2 = this.createSortable({
         filter: ".draggable",
         group: "shared",
-        dropFeedbackMode: "indicate"
+        dropFeedbackMode: "indicate",
+        moveItemOnDrop: true
     }, $("#items2"));
 
     // act
@@ -1260,12 +1341,14 @@ QUnit.test("Dragging items between sortable widgets", function(assert) {
 
     let sortable1 = this.createSortable({
         filter: ".draggable",
-        group: "shared"
+        group: "shared",
+        moveItemOnDrop: true
     }, $("#items"));
 
     let sortable2 = this.createSortable({
         filter: ".draggable",
-        group: "shared"
+        group: "shared",
+        moveItemOnDrop: true
     }, $("#items2"));
 
     // act
@@ -1332,7 +1415,8 @@ QUnit.test("Drag and drop item from draggable to sortable", function(assert) {
 
     let sortable = this.createSortable({
         filter: ".draggable",
-        group: "shared"
+        group: "shared",
+        moveItemOnDrop: true
     }, $("#items2"));
 
     // act
@@ -1348,13 +1432,42 @@ QUnit.test("Drag and drop item from draggable to sortable", function(assert) {
     assert.strictEqual(items2.first().attr("id"), "item1", "second list - new item in first position");
 });
 
-QUnit.test("Drag and drop item from sortable to draggable", function(assert) {
+QUnit.test("Drag and drop item from sortable to draggable should not move item", function(assert) {
     // arrange
     let items1, items2;
 
     let draggable = this.createDraggable({
         filter: ".draggable",
         group: "shared"
+    }, $("#items"));
+
+    let sortable = this.createSortable({
+        filter: ".draggable",
+        group: "shared"
+    }, $("#items2"));
+
+    // act
+    pointerMock(sortable.$element().children().eq(0)).start({ x: 304, y: 0 }).down().move(-250, 0).move(-50, 0).up();
+
+    // assert
+    items1 = draggable.$element().children();
+    items2 = sortable.$element().children();
+    assert.strictEqual(items1.length, 3, "first list items are not changed");
+    assert.strictEqual(items2.length, 3, "second list items are not changed");
+});
+
+QUnit.test("Drag and drop item from sortable to draggable with drop handler", function(assert) {
+    // arrange
+    let items1, items2;
+
+    let draggable = this.createDraggable({
+        filter: ".draggable",
+        group: "shared",
+        onDrop: function(e) {
+            if(e.fromComponent !== e.toComponent) {
+                $(e.element).append(e.itemElement);
+            }
+        }
     }, $("#items"));
 
     let sortable = this.createSortable({
@@ -1386,7 +1499,8 @@ QUnit.test("Drag and drop item to empty sortable", function(assert) {
 
     let sortable2 = this.createSortable({
         filter: ".draggable",
-        group: "shared"
+        group: "shared",
+        moveItemOnDrop: true
     }, $("#items3"));
 
     // act
