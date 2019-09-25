@@ -1,7 +1,10 @@
 import sharedTests from "./sharedParts/localization.shared.js";
 import dateLocalization from "localization/date";
 import numberLocalization from "localization/number";
+import intlDateLocalization from "localization/intl/date";
+import intlNumberLocalization from "localization/intl/number";
 import { locale } from "localization/core";
+import { disableIntl } from "localization";
 import config from "core/config";
 
 if(Intl.__disableRegExpRestore) {
@@ -701,4 +704,30 @@ QUnit.module("Intl localization", {
         }
     });
 
+    QUnit.module("Fallback strategy", {
+        afterEach: () => {
+            numberLocalization.resetInjection();
+            dateLocalization.resetInjection();
+            numberLocalization.inject(intlNumberLocalization);
+            dateLocalization.inject(intlDateLocalization);
+        }
+    });
+
+    QUnit.test("disableIntl", assert => {
+        disableIntl();
+        assert.equal(numberLocalization.engine(), "base");
+        assert.equal(dateLocalization.engine(), "base");
+
+        numberLocalization.inject({
+            engine: () => "globalize"
+        });
+        dateLocalization.inject({
+            engine: () => "globalize"
+        });
+        disableIntl();
+
+        assert.equal(numberLocalization.engine(), "globalize");
+        assert.equal(dateLocalization.engine(), "globalize");
+
+    });
 });
