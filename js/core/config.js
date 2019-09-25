@@ -132,7 +132,14 @@ const config = {
         * @type boolean
         * @default false
         */
-        shading: false
+        shading: false,
+
+        /**
+        * @name globalConfig.floatingActionButtonConfig.direction
+        * @type Enums.floatingActionButtonDirection
+        * @default "auto"
+        */
+        direction: "auto"
     },
 
     optionsParser: (optionsString) => {
