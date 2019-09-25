@@ -9,6 +9,7 @@ import ValidationEngine from "./validation_engine";
 import DefaultAdapter from "./validation/default_adapter";
 import registerComponent from "../core/component_registrator";
 import { Deferred } from "../core/utils/deferred";
+import Guid from "../core/guid";
 
 const VALIDATOR_CLASS = "dx-validator",
     VALIDATION_STATUS_VALID = "valid",
@@ -118,8 +119,7 @@ const Validator = DOMComponent.inherit({
         this._initAdapter();
         this._validationInfo = {
             result: null,
-            deferred: null,
-            complete: null
+            deferred: null
         };
     },
 
@@ -248,8 +248,14 @@ const Validator = DOMComponent.inherit({
         } else {
             result = ValidationEngine.validate(value, rules, name);
         }
+        result.id = new Guid().toString();
         this._applyValidationResult(result, adapter);
-        return result;
+        result.complete && result.complete.then((res) => {
+            if(res.id === this._validationInfo.result.id) {
+                this._applyValidationResult(res, adapter);
+            }
+        });
+        return this._validationInfo.result;
     },
 
     /**
@@ -271,30 +277,35 @@ const Validator = DOMComponent.inherit({
         this._applyValidationResult(result, adapter);
     },
 
+    _updateValidationResult(result) {
+        if(!this._validationInfo.result || this._validationInfo.result.id !== result.id) {
+            this._validationInfo.result = extend({}, result);
+        } else {
+            for(let prop in result) {
+                if(prop !== "id" && prop !== "complete") {
+                    this._validationInfo.result[prop] = result[prop];
+                }
+            }
+        }
+    },
+
     _applyValidationResult(result, adapter) {
         const validatedAction = this._createActionByOption("onValidated");
         result.validator = this;
-        adapter.applyValidationResults && adapter.applyValidationResults(result);
+        this._updateValidationResult(result);
+        adapter.applyValidationResults && adapter.applyValidationResults(this._validationInfo.result);
         this.option({
-            validationStatus: result.status
+            validationStatus: this._validationInfo.result.status
         });
-        this._validationInfo.result = result;
-        if(result.status === VALIDATION_STATUS_PENDING) {
-            result.complete.then((res) => {
-                if(res === this._validationInfo.result) {
-                    this._applyValidationResult(res, adapter);
-                }
-                return res;
-            });
+        if(this._validationInfo.result.status === VALIDATION_STATUS_PENDING) {
             if(!this._validationInfo.deferred) {
                 this._validationInfo.deferred = new Deferred();
-                this._validationInfo.complete = this._validationInfo.deferred.promise();
+                this._validationInfo.result.complete = this._validationInfo.deferred.promise();
             }
-            this._validationInfo.result.complete = this._validationInfo.complete;
             this.fireEvent("validating", [this._validationInfo.result]);
             return;
         }
-        if(result.status !== VALIDATION_STATUS_PENDING) {
+        if(this._validationInfo.result.status !== VALIDATION_STATUS_PENDING) {
             validatedAction(result);
             if(this._validationInfo.deferred) {
                 this._validationInfo.deferred.resolve(result);

@@ -11024,6 +11024,7 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
 
 QUnit.test("It's impossible to save new data when editing form is invalid (async)", function(assert) {
     // arrange
+    this.clock.restore();
     let rowsView = this.rowsView,
         testElement = $('#container'),
         $formRow,
@@ -11059,27 +11060,20 @@ QUnit.test("It's impossible to save new data when editing form is invalid (async
     inputElement = getInputElements(testElement).first();
     inputElement.val("");
     inputElement.trigger('change');
-
-    this.saveEditData();
-    this.clock.tick();
-
-    // assert
-    assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
-    assert.equal($formRow.find(".dx-validation-pending").length, 1, "There is one pending editor in first row");
-
-    this.clock.tick(10);
-    this.clock.restore();
-
-    setTimeout(() => {
-        // assert
+    this.saveEditData().done(() => {
         assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
         assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
         done();
     });
+
+    // assert
+    assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+    assert.equal($formRow.find(".dx-validation-pending").length, 1, "There is one pending editor in first row");
 });
 
 QUnit.test("Only valid data is saved (async)", function(assert) {
     // arrange
+    this.clock.restore();
     let rowsView = this.rowsView,
         testElement = $('#container'),
         $formRow,
@@ -11089,6 +11083,7 @@ QUnit.test("Only valid data is saved (async)", function(assert) {
     rowsView.render(testElement);
 
     this.applyOptions({
+        loadingTimeout: undefined,
         editing: {
             mode: "form",
             allowUpdating: true,
@@ -11100,7 +11095,7 @@ QUnit.test("Only valid data is saved (async)", function(assert) {
                 validationCallback: function(params) {
                     const d = new Deferred();
                     setTimeout(function() {
-                        params.value === 1 ? d.resolve() : d.reject();
+                        params.value === 1 ? d.resolve(true) : d.reject();
                     }, 10);
                     return d.promise();
                 }
@@ -11116,35 +11111,23 @@ QUnit.test("Only valid data is saved (async)", function(assert) {
     inputElement.val("");
     inputElement.trigger('change');
 
-    this.saveEditData();
-    this.clock.tick();
-
-    // assert
-    assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
-    assert.equal($formRow.find(".dx-validation-pending").length, 1, "There is one pending editor in first row");
-
-    this.clock.tick(10);
-    this.clock.restore();
-
-    setTimeout(() => {
-        // assert
+    this.saveEditData().done(() => {
         assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
         assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
 
-        this.clock = sinon.useFakeTimers();
         inputElement.val("1");
         inputElement.trigger('change');
-        this.saveEditData();
-        this.clock.tick(10);
-        this.clock.restore();
-
-        setTimeout(() => {
+        this.saveEditData().done(() => {
             assert.equal(this.editingController._editRowIndex, -1, "there is no editing row");
             const $row = rowsView.getRow(0);
             assert.ok($row.hasClass("dx-data-row"), "The form was closed");
             done();
         });
     });
+
+    // assert
+    assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+    assert.equal($formRow.find(".dx-validation-pending").length, 1, "There is one pending editor in first row");
 });
 
 // T506863
