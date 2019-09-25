@@ -5,6 +5,7 @@ import registerComponentCallbacks from "../../core/component_registrator_callbac
 import Class from "../../core/class";
 import Callbacks from "../../core/utils/callbacks";
 import typeUtils from "../../core/utils/type";
+import compareUtils from "../../core/utils/compare";
 import iterator from "../../core/utils/iterator";
 const each = iterator.each;
 import arrayUtils from "../../core/utils/array";
@@ -163,7 +164,7 @@ let ComponentBuilder = Class.inherit({
                 this._component.option(optionPath, newValue);
                 updateWatcher();
 
-                if(this._component._optionManager._valuesEqual(oldValue, newValue) && this._ngLocker.locked(optionPath)) {
+                if(compareUtils.valuesEqual(oldValue, newValue) && this._ngLocker.locked(optionPath)) {
                     this._ngLocker.release(optionPath);
                 }
             };

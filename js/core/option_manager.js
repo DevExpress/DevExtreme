@@ -1,7 +1,7 @@
 import coreDataUtils from "./utils/data";
 import typeUtils from "./utils/type";
+import compareUtils from "./utils/compare";
 import CallBacks from "./utils/callbacks";
-import domAdapter from "./dom_adapter";
 import { extend } from "./utils/extend";
 
 export class OptionManager {
@@ -15,31 +15,6 @@ export class OptionManager {
         this._cachedDeprecateNames = [];
         this.cachedGetters = {};
         this.cachedSetters = {};
-    }
-
-    _valuesEqual(oldValue, newValue) {
-        oldValue = coreDataUtils.toComparable(oldValue, true);
-        newValue = coreDataUtils.toComparable(newValue, true);
-
-        if(oldValue && newValue && typeUtils.isRenderer(oldValue) && typeUtils.isRenderer(newValue)) {
-            return newValue.is(oldValue);
-        }
-
-        const oldValueIsNaN = oldValue !== oldValue;
-        const newValueIsNaN = newValue !== newValue;
-        if(oldValueIsNaN && newValueIsNaN) {
-            return true;
-        }
-
-        if(oldValue === 0 && newValue === 0) {
-            return (1 / oldValue) === (1 / newValue);
-        }
-
-        if(oldValue === null || typeof oldValue !== "object" || domAdapter.isElementNode(oldValue)) {
-            return oldValue === newValue;
-        }
-
-        return false;
     }
 
     _logWarningIfDeprecated(option) {
@@ -108,7 +83,7 @@ export class OptionManager {
     _setPreparedValue(name, value, merge) {
         const previousValue = this._getValue(this._options, name, false);
 
-        if(this._valuesEqual(previousValue, value)) {
+        if(compareUtils.valuesEqual(previousValue, value)) {
             return;
         }
 
