@@ -14,7 +14,7 @@ test(`The tooltip shouldn't hide after automatic scrolling during an appointment
         .resizeWindow(600, 400)
         .click(appointment.element)
         .wait(500)
-        .expect(scheduler.tooltip.isVisible()).ok()
+        .expect(scheduler.appointmentTooltip.isVisible()).ok()
 
 }).before(() => createScheduler({
     views: ['week'],
@@ -30,11 +30,11 @@ test(`The tooltip should hide after manually scrolling in the browser`, async t 
         .resizeWindow(600, 400)
         .click(appointment.element)
         .wait(500)
-        .expect(scheduler.tooltip.isVisible()).ok()
+        .expect(scheduler.appointmentTooltip.isVisible()).ok()
     await scroll(0, 100);
     await t
         .wait(500)
-        .expect(scheduler.tooltip.isVisible()).notOk()
+        .expect(scheduler.appointmentTooltip.isVisible()).notOk()
 
 }).before(() => createScheduler({
     views: ['week'],

@@ -47,13 +47,13 @@ fixture `Hotkeys for appointments update and navigation`
     test(`Show appointment popup in the "${view}" view (Enter)`, async t => {
         const scheduler = new Scheduler("#container");
         const appointment = scheduler.getAppointment(`Website Re-Design Plan`);
-        const popup = scheduler.popup;
+        const appointmentPopup = scheduler.appointmentPopup;
 
         await t
             .click(appointment.element)
             .expect(appointment.isFocused).ok()
             .pressKey(`enter`)
-            .expect(popup.isVisible()).ok()
+            .expect(appointmentPopup.isVisible()).ok()
 
     }).before(() => createScheduler({
         views: [view],
@@ -64,19 +64,19 @@ fixture `Hotkeys for appointments update and navigation`
     test(`Navigate between tooltip appointments in the "${view}" view (Up/Down)`, async t => {
         const scheduler = new Scheduler("#container");
         const collector = scheduler.getAppointmentCollector(`3`);
-        const popup = scheduler.popup;
-        const tooltip = scheduler.tooltip;
+        const appointmentPopup = scheduler.appointmentPopup;
+        const appointmentTooltip = scheduler.appointmentTooltip;
 
         await t
             .click(collector.element)
-            .expect(tooltip.isVisible()).ok()
+            .expect(appointmentTooltip.isVisible()).ok()
             .pressKey(`down`)
-            .expect(tooltip.getListItem('New Brochures').isFocused).ok()
+            .expect(appointmentTooltip.getListItem('New Brochures').isFocused).ok()
             .pressKey(`up`)
-            .expect(tooltip.getListItem('Approve New Online Marketing Strategy').isFocused).ok()
+            .expect(appointmentTooltip.getListItem('Approve New Online Marketing Strategy').isFocused).ok()
             .pressKey(`enter`)
-            .expect(tooltip.isVisible()).notOk()
-            .expect(popup.isVisible()).ok()
+            .expect(appointmentTooltip.isVisible()).notOk()
+            .expect(appointmentPopup.isVisible()).ok()
 
     }).before(() => createScheduler({
         views: [view],

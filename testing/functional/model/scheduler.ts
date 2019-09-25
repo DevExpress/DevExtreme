@@ -5,12 +5,13 @@ const CLASS = {
     appointment: 'dx-scheduler-appointment',
     appointmentContentDate: 'dx-scheduler-appointment-content-date',
     appointmentCollector: 'dx-scheduler-appointment-collector',
-    appointmentTooltip: 'dx-scheduler-appointment-tooltip-wrapper',
+    appointmentTooltipWrapper: 'dx-scheduler-appointment-tooltip-wrapper',
     appointmentPopup: 'dx-scheduler-appointment-popup',
     dateTableCell: 'dx-scheduler-date-table-cell',
     dateTableRow: 'dx-scheduler-date-table-row',
     dateTableScrollable: 'dx-scheduler-date-table-scrollable',
     headerPanelCell: 'dx-scheduler-header-panel-cell',
+    headerScrollable: 'dx-scheduler-header-scrollable',
     listItem: 'dx-list-item',
     popup: 'dx-popup',
     popupWrapper: 'dx-popup-wrapper',
@@ -18,13 +19,12 @@ const CLASS = {
     resizableHandleLeft: 'dx-resizable-handle-left',
     resizableHandleRight: 'dx-resizable-handle-right',
     resizableHandleTop: 'dx-resizable-handle-top',
-    schedulerHeaderScrollable: 'dx-scheduler-header-scrollable',
     scrollableContainer: 'dx-scrollable-container',
     stateFocused: 'dx-state-focused',
     stateInvisible: 'dx-state-invisible',
     tooltip: 'dx-tooltip',
-    tooltipAppointmentItemDate: 'dx-tooltip-appointment-item-content-date',
-    tooltipAppointmentItemSubject: 'dx-tooltip-appointment-item-content-subject',
+    tooltipAppointmentItemContentDate: 'dx-tooltip-appointment-item-content-date',
+    tooltipAppointmentItemContentSubject: 'dx-tooltip-appointment-item-content-subject',
     tooltipWrapper: 'dx-tooltip-wrapper'
 };
 
@@ -81,8 +81,8 @@ class AppointmentTooltipListItem {
         this.element = wrapper.find(`.${CLASS.listItem}`).withText(title).nth(index);
         this.isFocused = this.element.hasClass(CLASS.stateFocused);
 
-        this.date = this.element.find(`.${CLASS.tooltipAppointmentItemDate}`);
-        this.subject = this.element.find(`.${CLASS.tooltipAppointmentItemSubject}`);
+        this.date = this.element.find(`.${CLASS.tooltipAppointmentItemContentDate}`);
+        this.subject = this.element.find(`.${CLASS.tooltipAppointmentItemContentSubject}`);
     }
 }
 
@@ -97,10 +97,10 @@ class AppointmentPopup {
 
     isVisible(): Promise<boolean> {
         const { element } = this;
-        const invisibleClass = CLASS.stateInvisible;
+        const invisibleStateClass = CLASS.stateInvisible;
 
-        return ClientFunction(() => !$(element()).hasClass(invisibleClass), {
-            dependencies: { element, invisibleClass }
+        return ClientFunction(() => !$(element()).hasClass(invisibleStateClass), {
+            dependencies: { element, invisibleStateClass }
         })();
     }
 }
@@ -110,8 +110,8 @@ class AppointmentTooltip {
     wrapper: Selector;
 
     constructor(scheduler: Selector) {
-        this.element = scheduler.find(`.${CLASS.tooltip}.${CLASS.appointmentTooltip}`);
-        this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltip}`);
+        this.element = scheduler.find(`.${CLASS.tooltip}.${CLASS.appointmentTooltipWrapper}`);
+        this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltipWrapper}`);
     }
 
     getListItem(title: string, index: number = 0): AppointmentTooltipListItem {
@@ -120,10 +120,10 @@ class AppointmentTooltip {
 
     isVisible(): Promise<boolean> {
         const { element } = this;
-        const invisibleClass = CLASS.stateInvisible;
+        const invisibleStateClass = CLASS.stateInvisible;
 
-        return ClientFunction(() => !$(element()).hasClass(invisibleClass), {
-            dependencies: { element, invisibleClass }
+        return ClientFunction(() => !$(element()).hasClass(invisibleStateClass), {
+            dependencies: { element, invisibleStateClass }
         })();
     }
 }
@@ -135,8 +135,8 @@ export default class Scheduler extends Widget {
     headerPanelCells: Selector;
     headerSpaceScroll: { left: Promise<number>, top: Promise<number> };
     workSpaceScroll: { left: Promise<number>, top: Promise<number> };
-    popup: AppointmentPopup;
-    tooltip: AppointmentTooltip;
+    appointmentPopup: AppointmentPopup;
+    appointmentTooltip: AppointmentTooltip;
 
     name: string = 'dxScheduler';
 
@@ -148,7 +148,7 @@ export default class Scheduler extends Widget {
         this.dateTableScrollable =  this.element.find(`.${CLASS.dateTableScrollable}`);
         this.headerPanelCells = this.element.find(`.${CLASS.headerPanelCell}`);
 
-        const headerSpaceScroll = this.element.find(`.${CLASS.schedulerHeaderScrollable} .${CLASS.scrollableContainer}`);
+        const headerSpaceScroll = this.element.find(`.${CLASS.headerScrollable} .${CLASS.scrollableContainer}`);
         const workSpaceScroll = this.element.find(`.${CLASS.dateTableScrollable} .${CLASS.scrollableContainer}`);
 
         this.headerSpaceScroll = {
@@ -161,8 +161,8 @@ export default class Scheduler extends Widget {
             top: workSpaceScroll.scrollTop
         };
 
-        this.tooltip = new AppointmentTooltip(this.element);
-        this.popup = new AppointmentPopup(this.element);
+        this.appointmentTooltip = new AppointmentTooltip(this.element);
+        this.appointmentPopup = new AppointmentPopup(this.element);
     }
 
     getDateTableCell(rowIndex: number = 0, cellIndex: number = 0): Selector {
