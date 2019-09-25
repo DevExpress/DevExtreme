@@ -218,107 +218,92 @@ module.exports = {
                 /**
                  * @name GridBaseOptions.rowDragging.onDragStart
                  * @type function(e)
-                 * @extends Action
                  * @type_function_param1 e:object
-                 * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 cancel:boolean
-                 * @type_function_param1_field6 itemData:any
-                 * @type_function_param1_field7 itemElement:dxElement
-                 * @type_function_param1_field8 fromIndex:number
-                 * @action
+                 * @type_function_param1_field1 event:event
+                 * @type_function_param1_field2 cancel:boolean
+                 * @type_function_param1_field3 itemData:any
+                 * @type_function_param1_field4 itemElement:dxElement
+                 * @type_function_param1_field5 fromIndex:number
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragMove
                  * @type function(e)
-                 * @extends Action
                  * @type_function_param1 e:object
-                 * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 cancel:boolean
-                 * @type_function_param1_field6 itemData:any
-                 * @type_function_param1_field7 itemElement:dxElement
-                 * @type_function_param1_field8 fromIndex:number
-                 * @type_function_param1_field9 toIndex:number
-                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field12 dropInsideItem:boolean
-                 * @action
+                 * @type_function_param1_field1 event:event
+                 * @type_function_param1_field2 cancel:boolean
+                 * @type_function_param1_field3 itemData:any
+                 * @type_function_param1_field4 itemElement:dxElement
+                 * @type_function_param1_field5 fromIndex:number
+                 * @type_function_param1_field6 toIndex:number
+                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field9 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragEnd
                  * @type function(e)
-                 * @extends Action
                  * @type_function_param1 e:object
-                 * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 cancel:boolean
-                 * @type_function_param1_field6 itemData:any
-                 * @type_function_param1_field7 itemElement:dxElement
-                 * @type_function_param1_field8 fromIndex:number
-                 * @type_function_param1_field9 toIndex:number
-                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field12 dropInsideItem:boolean
-                 * @action
+                 * @type_function_param1_field1 event:event
+                 * @type_function_param1_field2 cancel:boolean
+                 * @type_function_param1_field3 itemData:any
+                 * @type_function_param1_field4 itemElement:dxElement
+                 * @type_function_param1_field5 fromIndex:number
+                 * @type_function_param1_field6 toIndex:number
+                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field9 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragChange
                  * @type function(e)
-                 * @extends Action
                  * @type_function_param1 e:object
-                 * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 cancel:boolean
-                 * @type_function_param1_field6 itemData:any
-                 * @type_function_param1_field7 itemElement:dxElement
-                 * @type_function_param1_field8 fromIndex:number
-                 * @type_function_param1_field9 toIndex:number
-                 * @type_function_param1_field10 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field11 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field12 dropInsideItem:boolean
-                 * @action
+                 * @type_function_param1_field1 event:event
+                 * @type_function_param1_field2 cancel:boolean
+                 * @type_function_param1_field3 itemData:any
+                 * @type_function_param1_field4 itemElement:dxElement
+                 * @type_function_param1_field5 fromIndex:number
+                 * @type_function_param1_field6 toIndex:number
+                 * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field9 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onAdd
                  * @type function(e)
-                 * @extends Action
                  * @type_function_param1 e:object
-                 * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 itemData:any
-                 * @type_function_param1_field6 itemElement:dxElement
-                 * @type_function_param1_field7 fromIndex:number
-                 * @type_function_param1_field8 toIndex:number
-                 * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field11 dropInsideItem:boolean
-                 * @action
+                 * @type_function_param1_field1 event:event
+                 * @type_function_param1_field2 itemData:any
+                 * @type_function_param1_field3 itemElement:dxElement
+                 * @type_function_param1_field4 fromIndex:number
+                 * @type_function_param1_field5 toIndex:number
+                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field8 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onRemove
                  * @type function(e)
-                 * @extends Action
                  * @type_function_param1 e:object
-                 * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 itemData:any
-                 * @type_function_param1_field6 itemElement:dxElement
-                 * @type_function_param1_field7 fromIndex:number
-                 * @type_function_param1_field8 toIndex:number
-                 * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field11 dropInsideItem:boolean
-                 * @action
+                 * @type_function_param1_field1 event:event
+                 * @type_function_param1_field2 itemData:any
+                 * @type_function_param1_field3 itemElement:dxElement
+                 * @type_function_param1_field4 fromIndex:number
+                 * @type_function_param1_field5 toIndex:number
+                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onReorder
                  * @type function(e)
-                 * @extends Action
                  * @type_function_param1 e:object
-                 * @type_function_param1_field4 event:event
-                 * @type_function_param1_field5 itemData:any
-                 * @type_function_param1_field6 itemElement:dxElement
-                 * @type_function_param1_field7 fromIndex:number
-                 * @type_function_param1_field8 toIndex:number
-                 * @type_function_param1_field9 fromComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field10 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field11 dropInsideItem:boolean
-                 * @action
+                 * @type_function_param1_field1 event:event
+                 * @type_function_param1_field2 itemData:any
+                 * @type_function_param1_field3 itemElement:dxElement
+                 * @type_function_param1_field4 fromIndex:number
+                 * @type_function_param1_field5 toIndex:number
+                 * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field8 dropInsideItem:boolean
                  */
             }
         };
