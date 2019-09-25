@@ -47,7 +47,11 @@
 * @type color
 */
 @base-border-color: fade(#000000, 13%);
-@base-border-color-without-alpha: rgb(red(@base-border-color) * alpha(@base-border-color) + (1 - alpha(@base-border-color)) * red(@base-bg), green(@base-border-color) * alpha(@base-border-color) + (1 - alpha(@base-border-color)) * green(@base-bg), blue(@base-border-color) * alpha(@base-border-color) + (1 - alpha(@base-border-color)) * blue(@base-bg));
+@base-border-color-without-alpha: rgb(
+    red(@base-border-color) * alpha(@base-border-color) + (1 - alpha(@base-border-color)) * red(@base-bg),
+    green(@base-border-color) * alpha(@base-border-color) + (1 - alpha(@base-border-color)) * green(@base-bg),
+    blue(@base-border-color) * alpha(@base-border-color) + (1 - alpha(@base-border-color)) * blue(@base-bg)
+);
 
 /**
 * @name 120. Border radius
