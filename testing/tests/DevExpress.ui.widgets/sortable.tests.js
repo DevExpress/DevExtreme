@@ -1515,6 +1515,29 @@ QUnit.test("Drag and drop item to empty sortable", function(assert) {
     assert.strictEqual(items2.filter("#item1").length, 1, "second list - item from first list");
 });
 
+QUnit.test("Placeholder should not visible on drag item to empty sortable", function(assert) {
+    // arrange
+    let sortable1 = this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate",
+        group: "shared"
+    }, $("#items"));
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate",
+        group: "shared"
+    }, $("#items3"));
+
+    // act
+    pointerMock(sortable1.$element().children().eq(0)).start().down().move(0, 300).move(0, 10);
+
+    // assert
+    assert.strictEqual($(".dx-sortable-placeholder").length, 2, "placeholders exist");
+    assert.strictEqual($(".dx-sortable-placeholder").eq(0).is(":visible"), false, "placeholder 1 is not visible");
+    assert.strictEqual($(".dx-sortable-placeholder").eq(1).is(":visible"), false, "placeholder 2 is not visible");
+});
+
 QUnit.test("Dragging an item to another sortable and back when it is alone in the collection", function(assert) {
     // arrange
     let items1, items2;
