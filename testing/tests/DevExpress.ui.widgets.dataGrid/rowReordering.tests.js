@@ -367,5 +367,6 @@ QUnit.test("Show handle when changing the 'rowDragging.showDragIcons' option", f
     // assert
     $handleElement = $(rowsView.getRowElement(0)).children().first();
     assert.ok($handleElement.hasClass("dx-command-drag"), "there is handle");
+    assert.ok($handleElement.hasClass("dx-cell-focus-disabled"), "cell focus disabled for handle");
     assert.strictEqual($handleElement.find(".dx-datagrid-drag-icon").length, 1, "there is handle icon");
 });
