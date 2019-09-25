@@ -269,7 +269,7 @@ QUnit.test("Dragging row to the last position - row should be before the freespa
         $testElement = $("#container");
 
     this.options.dataSource = this.options.dataSource.slice(0, 3);
-    this.options.rowDragging.onDragEnd = function(e) { e.cancel = false; };
+    this.options.rowDragging.moveItemOnDrop = true;
 
     rowsView = this.createRowsView();
     rowsView.render($testElement);

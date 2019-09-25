@@ -198,14 +198,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
     dragLeave: noop,
 
-    dragEnd: function() {
-        let $sourceElement = this._getSourceElement(),
-            sourceDraggable = this._getSourceDraggable();
-
-        if(sourceDraggable !== this) {
-            this.$element().append($sourceElement);
-        }
-    },
+    dragEnd: noop,
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -255,12 +248,12 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @extends Action
              * @type_function_param1 e:object
              * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 cancel:boolean
-             * @type_function_param1_field6 itemData:any
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
-             * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field5 itemData:any
+             * @type_function_param1_field6 itemElement:dxElement
+             * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+             * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
              * @action
+             * @hidden
              */
             onDrop: null,
             immediate: true,
@@ -302,6 +295,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @name dxDraggableOptions.filter
              * @type string
              * @default ""
+             * @hidden
              */
             filter: "",
             /**
