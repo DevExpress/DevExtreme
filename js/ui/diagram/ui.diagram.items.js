@@ -14,7 +14,7 @@ class ItemsOption extends Component {
         }
     }
     insert(data, callback, errorCallback) {
-        this._dataSource.store().insert(data).done(
+        this._getStore().insert(data).done(
             function(data) {
                 if(callback) {
                     callback(data);
@@ -29,7 +29,8 @@ class ItemsOption extends Component {
         );
     }
     update(key, data, callback, errorCallback) {
-        this._dataSource.store().update(key, data).done(
+        var storeKey = this._getStoreKey(data);
+        this._getStore().update(storeKey, data).done(
             function(data, key) {
                 if(callback) {
                     callback(key, data);
@@ -44,7 +45,8 @@ class ItemsOption extends Component {
         );
     }
     remove(key, data, callback, errorCallback) {
-        this._dataSource.store().remove(key).done(
+        var storeKey = this._getStoreKey(data);
+        this._getStore().remove(storeKey).done(
             function(key) {
                 if(callback) {
                     callback(key, data);
@@ -57,6 +59,12 @@ class ItemsOption extends Component {
                 }
             }
         );
+    }
+    _getStore() {
+        return this._dataSource.store();
+    }
+    _getStoreKey(target) {
+        return this._getStore().keyOf(target);
     }
 }
 ItemsOption.include(DataHelperMixin);
