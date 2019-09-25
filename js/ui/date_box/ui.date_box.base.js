@@ -49,15 +49,15 @@ var STRATEGY_CLASSES = {
     List: require("./ui.date_box.strategy.list")
 };
 
-// var isRealWidthSet = function($element) {
-//     var explicitWidth = $element[0].style.width;
+var isRealWidthSet = function($element) {
+    var explicitWidth = $element[0].style.width;
 
-//     if(explicitWidth && explicitWidth !== "auto" && explicitWidth !== "inherit") {
-//         return true;
-//     }
+    if(explicitWidth && explicitWidth !== "auto" && explicitWidth !== "inherit") {
+        return true;
+    }
 
-//     return false;
-// };
+    return false;
+};
 
 var DateBox = DropDownEditor.inherit({
 
@@ -380,7 +380,7 @@ var DateBox = DropDownEditor.inherit({
     _render: function() {
         this.callBase();
 
-        this._formatValidationIcon();
+        this._updateSize();
     },
 
     _renderDimensions: function() {
@@ -408,10 +408,48 @@ var DateBox = DropDownEditor.inherit({
         $element.addClass(DATEBOX_CLASS + "-" + this._pickerType);
     },
 
-    _formatValidationIcon: function(value) {
-        const longestValue = "12-12-1900";
+    _updateSize: function() {
+        var $element = this.$element(),
+            widthOption = this.option("width"),
+            isWidthSet = typeUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable),
+            pickerType = this._pickerType,
+            // NOTE: no calculateWidth if type is rollers, why?
+            shouldCalculateWidth = pickerType !== PICKER_TYPE.rollers && devices.current().platform === "generic";
 
-        const $input = this._input();
+        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
+            longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
+
+        this._formatValidationIcon(longestValue);
+
+        if(!windowUtils.hasWindow() || isWidthSet || !(shouldCalculateWidth && $element.is(":visible"))) {
+            return;
+        }
+
+        $element.width(this._calculateWidth(longestValue));
+        this._isSizeUpdatable = true;
+    },
+
+    _calculateWidth: function(value) {
+        var IE_ROUNDING_ERROR = 10;
+        var NATIVE_BUTTONS_WIDTH = 48;
+        var $input = this._input();
+        var $longestValueElement = dom.createTextElementHiddenCopy($input, value);
+
+        $longestValueElement.appendTo(this.$element());
+        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
+            rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight),
+            leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft),
+            beforeButtonsWidth = this._$beforeButtonsContainer ? parseFloat(window.getComputedStyle(this._$beforeButtonsContainer.get(0)).width) : 0,
+            afterButtonsWidth = this._$afterButtonsContainer ? parseFloat(window.getComputedStyle(this._$afterButtonsContainer.get(0)).width) : 0;
+
+        var width = elementWidth + rightPadding + leftPadding + IE_ROUNDING_ERROR + beforeButtonsWidth + afterButtonsWidth + ($input.prop("type") !== "text" ? NATIVE_BUTTONS_WIDTH : 0);
+        $longestValueElement.remove();
+
+        return width;
+    },
+
+    _formatValidationIcon: function(longestValue) {
+        let $input = this._input();
         const $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
 
         $longestValueElement.appendTo(this.$element());
@@ -419,18 +457,20 @@ var DateBox = DropDownEditor.inherit({
         const rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight);
         const leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft);
         const necessaryWidth = elementWidth + leftPadding + rightPadding;
+        $longestValueElement.remove();
 
-        let curWidth = 0;
-        if($input.val() === "") {
-            $input.val('a');
-            curWidth = parseFloat(window.getComputedStyle($input.get(0)).width);
-            $input.val("");
-        } else {
-            curWidth = parseFloat(window.getComputedStyle($input.get(0)).width);
+        let clearButtonWidth = 0;
+        if(this.option("showClearButton") && $input.val() === "") {
+            const $clearButton = this.$element().find(".dx-clear-button-area");
+            clearButtonWidth = parseFloat(window.getComputedStyle($clearButton.get(0)).width);
         }
 
+        const curWidth = parseFloat(window.getComputedStyle($input.get(0)).width) - clearButtonWidth;
+
+        // console.log(necessaryWidth + " | " + curWidth);
         let style = $input.get(0).style;
         if(necessaryWidth > curWidth) {
+            // console.log("REMOVE CLASS");
             this.option("rtlEnabled") ? style.paddingLeft = 0 : style.paddingRight = 0;
             this.$element().removeClass("dx-show-invalid-badge");
         }
@@ -496,7 +536,7 @@ var DateBox = DropDownEditor.inherit({
 
     _visibilityChanged: function(visible) {
         if(visible) {
-            this._formatValidationIcon();
+            this._updateSize();
         }
     },
 
@@ -729,7 +769,7 @@ var DateBox = DropDownEditor.inherit({
             case "showClearButton":
             case "buttons":
                 this.callBase.apply(this, arguments);
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "pickerType":
                 this._updatePickerOptions({ pickerType: args.value });
@@ -742,7 +782,7 @@ var DateBox = DropDownEditor.inherit({
                 this._refreshStrategy();
                 this._refreshFormatClass();
                 this._renderPopupWrapper();
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "placeholder":
                 this._renderPlaceholder();
@@ -782,14 +822,14 @@ var DateBox = DropDownEditor.inherit({
                 break;
             case "isValid":
                 this.callBase.apply(this, arguments);
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "showDropDownButton":
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "readOnly":
                 this.callBase.apply(this, arguments);
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "invalidDateMessage":
             case "dateOutOfRangeMessage":
