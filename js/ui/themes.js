@@ -235,19 +235,6 @@ function current(options) {
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
 }
 
-function themeNameFromDevice(device) {
-    var themeName = device.platform;
-
-    switch(themeName) {
-        case "ios":
-            return "ios7";
-        case "android":
-            return "generic";
-    }
-
-    return themeName;
-}
-
 function getCssClasses(themeName) {
     themeName = themeName || current();
 
@@ -445,7 +432,6 @@ exports.init = init;
 exports.attachCssClasses = attachCssClasses;
 exports.detachCssClasses = detachCssClasses;
 
-exports.themeNameFromDevice = themeNameFromDevice;
 exports.waitForThemeLoad = waitForThemeLoad;
 exports.isMaterial = isMaterial;
 exports.isIos7 = isIos7;
