@@ -1345,7 +1345,7 @@ QUnit.module("widget sizing render", {}, () => {
             "showClearButton": true
         });
 
-        assert.notOk($element.hasClass('dx-show-invalid-badge'), "vaidation icon's hidden");
+        assert.notOk($element.hasClass('dx-show-invalid-badge'), "validation icon's hidden");
     });
 
     QUnit.test("component should have correct width when it was rendered in a scaled container (T584097)", assert => {
