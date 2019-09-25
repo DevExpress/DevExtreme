@@ -518,14 +518,18 @@ let DropDownButton = Widget.inherit({
 
     _popupHidingHandler() {
         this.option("opened", false);
-        this.setAria({ "expanded": false });
-        this.setAria("owns");
+        this.setAria({
+            expanded: false,
+            owns: undefined
+        });
     },
 
     _popupShowingHandler() {
         this.option("opened", true);
-        this.setAria({ "expanded": true });
-        this.setAria("owns", this._popupContentId);
+        this.setAria({
+            expanded: true,
+            owns: this._popupContentId
+        });
     },
 
     _renderButtonGroup() {
