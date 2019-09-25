@@ -25,7 +25,7 @@ const moduleConfig = {
     }
 };
 
-QUnit.module("Drag and drop appointments", moduleConfig, () => {
+QUnit.module("Appointment popup form", moduleConfig, () => {
     const defaultData = [
         {
             text: "recurrent-app",
@@ -47,43 +47,42 @@ QUnit.module("Drag and drop appointments", moduleConfig, () => {
             currentDate: new Date(2017, 4, 25),
             firstDayOfWeek: 1,
             startDayHour: 9,
-            height: 600
+            height: 600,
+            width: 600
         });
     };
 
-
-    QUnit.test("sdfdf", assert => {
+    QUnit.test("Appointment popup should work properly", assert => {
+        const NEW_EXPECTED_SUBJECT = "NEW SUBJECT";
         const scheduler = createScheduler();
-        scheduler.drawControl();
 
         assert.notOk(scheduler.appointmentPopup.isVisible(), "appointment popup should be invisible in on init");
 
         scheduler.appointments.click(scheduler.appointments.getAppointmentCount() - 1);
         scheduler.tooltip.clickOnItem();
-        scheduler.appointmentPopup.form.setSubject("NEW SUBJECT");
+        scheduler.appointmentPopup.form.setSubject(NEW_EXPECTED_SUBJECT);
 
         assert.ok(scheduler.appointmentPopup.isVisible(), "appointment popup should be visible after showAppointmentPopup method");
         scheduler.appointmentPopup.clickDoneButton();
 
         const dataItem = scheduler.instance.option("dataSource")[1];
-        assert.equal(Object.keys(dataItem).length, 3, "resulted");
-        assert.equal(dataItem.text, "NEW SUBJECT", "sddsfsdf");
+        assert.equal(Object.keys(dataItem).length, 3, "In appointment properties shouldn't added excess properties");
+        assert.equal(dataItem.text, NEW_EXPECTED_SUBJECT, `Text property of appointment should be changed on ${NEW_EXPECTED_SUBJECT}`);
 
         scheduler.appointments.click(0);
         scheduler.tooltip.clickOnItem();
         scheduler.appointmentPopup.dialog.clickEditSeries();
 
-        assert.ok(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), "sdfsdf");
-        assert.equal(scheduler.appointmentPopup.form.getSubject(), defaultData[0].text, "sdfsdf");
+        assert.ok(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), "Recurrence editor should be visible after click on recurrence appointment");
+        assert.equal(scheduler.appointmentPopup.form.getSubject(), defaultData[0].text, `Subject in form should equal selected appointment`);
 
         scheduler.appointmentPopup.clickDoneButton();
 
-        scheduler.appointments.click();
+        scheduler.appointments.click(); // click on common appointment, due to redrawing its index has changed
         scheduler.tooltip.clickOnItem();
 
-        // const t = scheduler.appointmentPopup.form.isRecurrenceEditorVisible();
-        assert.notOk(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), "sdfsdf");
-        assert.equal(scheduler.appointmentPopup.form.getSubject(), "NEW SUBJECT", "sdfsdf");
+        assert.notOk(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), "Recurrence editor shouldn't visible on click on common appointment");
+        assert.equal(scheduler.appointmentPopup.form.getSubject(), NEW_EXPECTED_SUBJECT, "Subject in form should equal selected common appointment");
     });
 });
 

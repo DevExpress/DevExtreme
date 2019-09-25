@@ -155,8 +155,8 @@ export default class AppointmentPopup {
 
         const formData = extend(true, {}, appointmentData);
 
-        this.state.appointment.isEmptyText = appointmentData.text === undefined;
-        this.state.appointment.isEmptyDescription = appointmentData.description === undefined;
+        this.state.appointment.isEmptyText = appointmentData === undefined || appointmentData.text === undefined;
+        this.state.appointment.isEmptyDescription = appointmentData === undefined || appointmentData.description === undefined;
 
         if(this.state.appointment.isEmptyText) {
             formData.text = "";

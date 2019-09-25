@@ -152,8 +152,12 @@ export class SchedulerTestWrapper {
                 const $buttons = $toolbar.find(`.dx-toolbar-${sectionName} .dx-button`);
                 return buttonNames.every((name, index) => $buttons.eq(index).hasClass(`dx-popup-${name}`));
             },
+
             getDoneButton: () => this.appointmentPopup.getPopup().find(".dx-popup-done"),
-            clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger("dxclick")
+            clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger("dxclick"),
+
+            getCancelButton: () => this.appointmentPopup.getPopup().find(".dx-popup-cancel"),
+            clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger("dxclick")
         };
 
         this.appointmentForm = {
