@@ -2088,6 +2088,8 @@ declare module DevExpress.ui {
     }
     /** @name GridBase.Options.rowDragging */
     export interface GridBaseRowDragging {
+        /** @name GridBase.Options.rowDragging.allowReordering */
+        allowReordering?: boolean;
         /** @name GridBase.Options.rowDragging.autoScroll */
         autoScroll?: boolean;
         /** @name GridBase.Options.rowDragging.boundary */
@@ -5464,6 +5466,8 @@ declare module DevExpress.ui {
     export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
         /** @name dxSortable.Options.allowDropInsideItem */
         allowDropInsideItem?: boolean;
+        /** @name dxSortable.Options.allowReordering */
+        allowReordering?: boolean;
         /** @name dxSortable.Options.dropFeedbackMode */
         dropFeedbackMode?: 'push' | 'indicate';
         /** @name dxSortable.Options.filter */

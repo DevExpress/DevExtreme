@@ -157,6 +157,11 @@ module.exports = {
                  * @default false
                  */
                 /**
+                 * @name GridBaseOptions.rowDragging.allowReordering
+                 * @type boolean
+                 * @default true
+                 */
+                /**
                  * @name GridBaseOptions.rowDragging.dragDirection
                  * @type Enums.DragDirection
                  * @default "both"

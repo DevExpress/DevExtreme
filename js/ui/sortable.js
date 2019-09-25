@@ -47,6 +47,12 @@ var Sortable = Draggable.inherit({
              * @default false
              */
             allowDropInsideItem: false,
+            /**
+             * @name dxSortableOptions.allowReordering
+             * @type boolean
+             * @default true
+             */
+            allowReordering: true,
             moveItemOnDrop: false,
             /**
              * @name dxSortableOptions.onDragStart
@@ -349,7 +355,20 @@ var Sortable = Draggable.inherit({
             .toArray();
     },
 
+    _allowReordering: function() {
+        let sourceDraggable = this._getSourceDraggable(),
+            targetDraggable = this._getTargetDraggable();
+
+        return sourceDraggable !== targetDraggable || this.option("allowReordering");
+    },
+
     _isValidPoint: function($items, itemPointIndex, dropInsideItem) {
+        let allowReordering = dropInsideItem || this._allowReordering();
+
+        if(!allowReordering) {
+            return false;
+        }
+
         if(!this._isIndicateMode()) {
             return true;
         }
@@ -456,7 +475,7 @@ var Sortable = Draggable.inherit({
             dropInsideItem: itemPoint.dropInsideItem
         });
 
-        this._getAction("onDragChange")(eventArgs);
+        itemPoint.isValid && this._getAction("onDragChange")(eventArgs);
 
         if(eventArgs.cancel || !itemPoint.isValid) {
             if(!itemPoint.isValid) {
@@ -563,6 +582,7 @@ var Sortable = Draggable.inherit({
             case "itemPoints":
             case "fromIndex":
             case "animation":
+            case "allowReordering":
                 break;
             case "dropInsideItem":
                 this._optionChangedDropInsideItem(args);
