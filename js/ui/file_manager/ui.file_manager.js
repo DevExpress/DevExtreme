@@ -85,8 +85,8 @@ class FileManager extends Widget {
         const $toolbar = $("<div>").appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
             commandManager: this._commandManager,
-            generalItems: this.option("toolbar.generalItems"),
-            fileItems: this.option("toolbar.fileItems"),
+            generalItems: this.option("toolbar.items"),
+            fileItems: this.option("toolbar.fileSelectionItems"),
             itemViewMode: this.option("itemView").mode
         });
 
@@ -376,12 +376,12 @@ class FileManager extends Widget {
             * @type object
             */
             /**
-            * @name dxFileManagerToolbar.generalItems
+            * @name dxFileManagerToolbar.items
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
             * @default [ "showNavPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
             */
             /**
-            * @name dxFileManagerToolbar.fileItems
+            * @name dxFileManagerToolbar.fileSelectionItems
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
             * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear" ]
             */
@@ -405,7 +405,7 @@ class FileManager extends Widget {
             */
 
             toolbar: {
-                generalItems: [
+                items: [
                     "showNavPane", "create", "upload", "refresh",
                     {
                         name: "separator",
@@ -414,7 +414,7 @@ class FileManager extends Widget {
                     "viewSwitcher"
                 ],
 
-                fileItems: [
+                fileSelectionItems: [
                     "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear"
                 ]
             },
@@ -609,8 +609,8 @@ class FileManager extends Widget {
             case "toolbar":
                 this._toolbar.option(extend(
                     true,
-                    args.value.generalItems ? { generalItems: args.value.generalItems } : {},
-                    args.value.fileItems ? { fileItems: args.value.fileItems } : {}
+                    args.value.items ? { generalItems: args.value.items } : {},
+                    args.value.fileSelectionItems ? { fileItems: args.value.fileSelectionItems } : {}
                 ));
                 break;
             case "contextMenu":

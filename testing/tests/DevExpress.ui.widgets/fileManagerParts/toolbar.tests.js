@@ -206,7 +206,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("toolbar", {
-            generalItems: [
+            items: [
                 {
                     name: "showNavPane",
                     icon: "upload"
@@ -264,7 +264,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("toolbar", {
-            generalItems: [
+            items: [
                 "showNavPane", "create", "upload", "refresh",
                 {
                     name: "separator",
@@ -299,7 +299,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.equal(testClick.args[0][0].itemData.ID, 42, "custom attribute is available from onClick fuction");
 
         fileManagerInstance.option("toolbar", {
-            generalItems: [
+            items: [
                 "showNavPane", "create", "upload", "refresh",
                 {
                     name: "separator",
@@ -363,7 +363,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("toolbar", {
-            generalItems: [
+            items: [
                 "showNavPane", "create", "upload", "separator",
                 {
                     name: "move",
