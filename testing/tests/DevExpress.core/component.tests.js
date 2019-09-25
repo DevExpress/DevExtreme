@@ -137,7 +137,7 @@ QUnit.module("default", {}, () => {
             opt2: "custom"
         });
 
-        instance._setOptionWithoutNotify("opt2", "new custom");
+        instance._setOptionSilent("opt2", "new custom");
 
         assert.strictEqual(instance.option("opt2"), "new custom", "option has been changed");
         const log = instance._getTraceLogByMethod("_optionChanged");
@@ -476,7 +476,7 @@ QUnit.module("default", {}, () => {
 
         instance._logDeprecatedWarning = _logDeprecatedWarningMock;
 
-        instance._setOptionSilent({
+        instance._setOptionByStealth({
             deprecatedOption: true,
         });
 

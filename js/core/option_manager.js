@@ -17,7 +17,7 @@ export class OptionManager {
         this.cachedSetters = {};
     }
 
-    _valuesEqual(name, oldValue, newValue) {
+    _valuesEqual(oldValue, newValue) {
         oldValue = coreDataUtils.toComparable(oldValue, true);
         newValue = coreDataUtils.toComparable(newValue, true);
 
@@ -108,7 +108,7 @@ export class OptionManager {
     _setPreparedValue(name, value, merge) {
         const previousValue = this._getValue(this._options, name, false);
 
-        if(this._valuesEqual(name, previousValue, value)) {
+        if(this._valuesEqual(previousValue, value)) {
             return;
         }
 
@@ -203,7 +203,7 @@ export class OptionManager {
         this._changedCallbacks.add(callBack);
     }
 
-    onLogWarning(callBack) {
+    onDeprecated(callBack) {
         this._logWarningCallbacks.add(callBack);
     }
 

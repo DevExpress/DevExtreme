@@ -133,7 +133,7 @@ var Component = Class.inherit({
     _setOptionsByDevice: function(customRules) {
         var rulesOptions = this._getOptionByRules(customRules);
 
-        this._setOptionSilent(rulesOptions);
+        this._setOptionByStealth(rulesOptions);
     },
 
     _convertRulesToOptions: function(rules) {
@@ -218,7 +218,7 @@ var Component = Class.inherit({
                 }
             });
 
-            this._optionManager.onLogWarning((option, info) => {
+            this._optionManager.onDeprecated((option, info) => {
                 this._logDeprecatedWarning(option, info);
             });
 
@@ -459,7 +459,7 @@ var Component = Class.inherit({
         return this._optionManager.getSilent(name);
     },
 
-    _setOptionSilent: function(options, value) {
+    _setOptionByStealth: function(options, value) {
         this._optionManager.setSilent(options, value);
     },
 
@@ -477,7 +477,7 @@ var Component = Class.inherit({
         return Object.prototype.hasOwnProperty.call(deprecatedOptions, name);
     },
 
-    _setOptionWithoutNotify: function(name, value) {
+    _setOptionSilent: function(name, value) {
         this._cancelOptionChange = name;
         this.option(name, value);
         this._cancelOptionChange = false;

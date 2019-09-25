@@ -575,7 +575,7 @@ var Map = Widget.inherit({
     },
 
     setOptionSilent: function(name, value) {
-        this._setOptionWithoutNotify(name, value);
+        this._setOptionSilent(name, value);
     },
 
     /**
