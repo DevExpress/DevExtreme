@@ -358,6 +358,7 @@ var Component = Class.inherit({
             this._optionManager._setSilent(this._initialOptions, rulesOptions);
         }
 
+        optionName = optionName.replace(/\[/g, ".").replace(/\]/g, "");
         const fullPath = optionName.split(".");
         let value;
         for(let path of fullPath) {

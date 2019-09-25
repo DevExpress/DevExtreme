@@ -50,6 +50,9 @@ const TestComponent = Component.inherit({
                 opt5: {
                     subOpt1: "default"
                 },
+                opt6: [{
+                    subOpt: "default"
+                }],
                 deprecatedOption: "test",
                 secondLevel: {
                     deprecatedOption: 1
@@ -1320,19 +1323,23 @@ QUnit.module("defaultOptions", {
             opt4: "someValue",
             "opt5.subOpt1": "someValue",
             "opt5.subOpt2": "someValue",
+            "opt6[0].subOpt": "someValue"
         });
 
         assert.equal(instance.option("opt4"), "someValue");
         assert.equal(instance.option("opt5.subOpt1"), "someValue");
         assert.equal(instance.option("opt5.subOpt2"), "someValue");
+        assert.equal(instance.option("opt6[0].subOpt"), "someValue");
 
-        instance.resetOption('opt4');
-        instance.resetOption('opt5.subOpt1');
-        instance.resetOption('opt5.subOpt2');
+        instance.resetOption("opt4");
+        instance.resetOption("opt5.subOpt1");
+        instance.resetOption("opt5.subOpt2");
+        instance.resetOption("opt6[0].subOpt");
 
         assert.equal(instance.option("opt4"), "default");
         assert.equal(instance.option("opt5.subOpt1"), "default");
         assert.equal(instance.option("opt5.subOpt2"), undefined);
+        assert.equal(instance.option("opt6[0].subOpt"), "default");
     });
 
     QUnit.test("reset option with empty option name", (assert) => {
