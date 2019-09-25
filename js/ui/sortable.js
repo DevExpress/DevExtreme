@@ -558,6 +558,7 @@ var Sortable = Draggable.inherit({
                 break;
             case "itemOrientation":
             case "allowDropInsideItem":
+            case "moveItemOnDrop":
             case "dropFeedbackMode":
             case "itemPoints":
             case "fromIndex":
