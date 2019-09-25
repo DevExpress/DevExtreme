@@ -11,7 +11,7 @@ export class OptionManager {
         this._deprecatedOptions = deprecatedOptions;
         this._changingCallbacks = CallBacks({ syncStrategy: true });
         this._changedCallbacks = CallBacks({ syncStrategy: true });
-        this._logWarningCallbacks = CallBacks({ syncStrategy: true });
+        this._deprecatedCallbacks = CallBacks({ syncStrategy: true });
         this._cachedDeprecateNames = [];
         this.cachedGetters = {};
         this.cachedSetters = {};
@@ -20,7 +20,7 @@ export class OptionManager {
     _logWarningIfDeprecated(option) {
         const info = this._deprecatedOptions[option];
         if(info) {
-            this._logWarningCallbacks.fire(option, info);
+            this._deprecatedCallbacks.fire(option, info);
         }
     }
 
@@ -179,7 +179,7 @@ export class OptionManager {
     }
 
     onDeprecated(callBack) {
-        this._logWarningCallbacks.add(callBack);
+        this._deprecatedCallbacks.add(callBack);
     }
 
     getValue(name) {
@@ -210,6 +210,6 @@ export class OptionManager {
     dispose() {
         this._changingCallbacks.empty();
         this._changedCallbacks.empty();
-        this._logWarningCallbacks.empty();
+        this._deprecatedCallbacks.empty();
     }
 }
