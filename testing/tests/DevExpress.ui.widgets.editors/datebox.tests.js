@@ -1392,32 +1392,6 @@ QUnit.module("widget sizing render", {}, () => {
         assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("it should update widget size after toggle the 'readOnly' option", (assert) => {
-        if(devices.current().platform !== "generic") {
-            assert.ok(true, "automatic size fitting working with generic devices only");
-            return;
-        }
-
-        const $element = $("#dateBox");
-        const instance = $element.dxDateBox({
-            pickerType: "calendar",
-            readOnly: true,
-            displayFormat: "shortDate"
-        }).dxDateBox("instance");
-
-        const initialWidth = $element.outerWidth();
-
-        instance.option({
-            readOnly: false,
-            value: new Date()
-        });
-
-        const actualWidth = $element.outerWidth();
-
-        assert.notEqual(actualWidth, initialWidth, "width has been changed");
-        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
-    });
-
     QUnit.test("it should update widget size after the 'buttons' option changed (T809858)", (assert) => {
         if(devices.current().platform !== "generic") {
             assert.ok(true, "automatic size fitting working with generic devices only");

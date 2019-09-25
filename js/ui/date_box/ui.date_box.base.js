@@ -18,6 +18,7 @@ var windowUtils = require("../../core/utils/window"),
 
     DATEBOX_CLASS = "dx-datebox",
     DX_AUTO_WIDTH_CLASS = "dx-auto-width",
+    DX_INVALID_BADGE_CLASS = "dx-show-invalid-badge",
     DATEBOX_WRAPPER_CLASS = "dx-datebox-wrapper";
 
 var PICKER_TYPE = {
@@ -299,7 +300,7 @@ var DateBox = DropDownEditor.inherit({
 
     _init: function() {
         this._initStrategy();
-        this.$element().addClass("dx-show-invalid-badge");
+        this.$element().addClass(DX_INVALID_BADGE_CLASS);
         this.option(extend({}, this._strategy.getDefaultOptions(), this._userOptions));
         delete this._userOptions;
 
@@ -412,8 +413,8 @@ var DateBox = DropDownEditor.inherit({
         if(this._needsValidationIconHiding(longestValue, $dateBox, $input, $editorInput)) {
             let style = $editorInput.style;
             this.option("rtlEnabled") ? style.paddingLeft = 0 : style.paddingRight = 0;
-            if($dateBox.hasClass("dx-show-invalid-badge")) {
-                $dateBox.removeClass("dx-show-invalid-badge");
+            if($dateBox.hasClass(DX_INVALID_BADGE_CLASS)) {
+                $dateBox.removeClass(DX_INVALID_BADGE_CLASS);
             }
         }
     },
@@ -436,7 +437,7 @@ var DateBox = DropDownEditor.inherit({
 
         const curWidth = parseFloat(window.getComputedStyle($editorInput).width) - clearButtonWidth;
 
-        return necessaryWidth > curWidth;
+        return (necessaryWidth > curWidth);
     },
 
     _attachChildKeyboardEvents: function() {
