@@ -6,6 +6,7 @@ class ItemsOption extends Component {
         super();
         this._diagramWidget = diagramWidget;
     }
+
     _dataSourceLoadingChangedHandler(isLoading) {
         if(isLoading && !this._dataSource.isLoaded()) {
             this._diagramWidget._showLoadingIndicator();
@@ -60,6 +61,7 @@ class ItemsOption extends Component {
             }
         );
     }
+
     _getStore() {
         return this._dataSource.store();
     }
