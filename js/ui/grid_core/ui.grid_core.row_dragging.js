@@ -134,7 +134,13 @@ module.exports = {
                 * @type boolean
                 * @default true
                 */
-                showDragIcons: true
+                showDragIcons: true,
+                /**
+                 * @name GridBaseOptions.rowDragging.dropFeedbackMode
+                 * @type Enums.DropFeedbackMode
+                 * @default "indicate"
+                 */
+                dropFeedbackMode: "indicate"
                 /**
                  * @name GridBaseOptions.rowDragging.filter
                  * @type string
@@ -146,12 +152,7 @@ module.exports = {
                  * @default "vertical"
                  */
                 /**
-                 * @name GridBaseOptions.rowDragging.dropFeedbackMode
-                 * @type Enums.DropFeedbackMode
-                 * @default "push"
-                 */
-                /**
-                 * @name GridBaseOptions.rowDragging.allowDropInsideItem
+                 * @name dxDataGridOptions.rowDragging.allowDropInsideItem
                  * @type boolean
                  * @default false
                  */
