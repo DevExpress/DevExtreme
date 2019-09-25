@@ -599,6 +599,16 @@ function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
     return adjust(sign(value) * transformValue, Number(Math.pow(base, linearThreshold).toFixed(Math.abs(linearThreshold))));
 }
 
+function rangesAreEqual(range, rangeFromOptions) {
+    if(Array.isArray(rangeFromOptions)) {
+        return range.length === rangeFromOptions.length
+            && range.every((item, i) => item === rangeFromOptions[i]);
+    } else {
+        return range.startValue === rangeFromOptions.startValue
+            && range.endValue === rangeFromOptions.endValue;
+    }
+}
+
 exports.getVizRangeObject = getVizRangeObject;
 exports.convertVisualRangeObject = convertVisualRangeObject;
 exports.adjustVisualRange = adjustVisualRange;
@@ -623,3 +633,5 @@ exports.getPower = getPower;
 exports.rotateBBox = rotateBBox;
 exports.normalizeBBox = normalizeBBox;
 exports.PANE_PADDING = PANE_PADDING;
+
+exports.rangesAreEqual = rangesAreEqual;

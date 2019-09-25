@@ -120,7 +120,8 @@ function processMarkup() {
 }
 
 function resolveFullThemeName(desiredThemeName) {
-    var desiredThemeParts = desiredThemeName.split("."),
+
+    var desiredThemeParts = desiredThemeName ? desiredThemeName.split(".") : [],
         result = null;
 
     if(knownThemes) {
@@ -131,7 +132,7 @@ function resolveFullThemeName(desiredThemeName) {
         each(knownThemes, function(knownThemeName, themeData) {
             var knownThemeParts = knownThemeName.split(".");
 
-            if(knownThemeParts[0] !== desiredThemeParts[0]) {
+            if(desiredThemeParts[0] && knownThemeParts[0] !== desiredThemeParts[0]) {
                 return;
             }
 
@@ -196,12 +197,7 @@ function current(options) {
         loadCallback = options.loadCallback,
         currentThemeData;
 
-    currentThemeName = options.theme || currentThemeName;
-    if(isAutoInit && !currentThemeName) {
-        currentThemeName = themeNameFromDevice(devices.current());
-    }
-
-    currentThemeName = resolveFullThemeName(currentThemeName);
+    currentThemeName = resolveFullThemeName(options.theme || currentThemeName);
 
     if(currentThemeName) {
         currentThemeData = knownThemes[currentThemeName];
@@ -237,19 +233,6 @@ function current(options) {
     checkThemeDeprecation();
 
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
-}
-
-function themeNameFromDevice(device) {
-    var themeName = device.platform;
-
-    switch(themeName) {
-        case "ios":
-            return "ios7";
-        case "android":
-            return "generic";
-    }
-
-    return themeName;
 }
 
 function getCssClasses(themeName) {
@@ -449,7 +432,6 @@ exports.init = init;
 exports.attachCssClasses = attachCssClasses;
 exports.detachCssClasses = detachCssClasses;
 
-exports.themeNameFromDevice = themeNameFromDevice;
 exports.waitForThemeLoad = waitForThemeLoad;
 exports.isMaterial = isMaterial;
 exports.isIos7 = isIos7;

@@ -1,3 +1,12 @@
+@import (once) "./responsiveBox.material.less";
+@import (once) "./tabPanel.material.less";
+@import (once) "./validation.material.less";
+@import (once) "./scrollable.material.less";
+@import (once) "./textBox.material.less";
+@import (once) "./numberBox.material.less";
+@import (once) "./dateBox.material.less";
+@import (once) "./button.material.less";
+
 .dx-size-default() {
     @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_MARGIN: 6px;
     @MATERIAL_FORM_GROUP_CAPTION_BOTTOM_PADDING: 19px;
@@ -51,6 +60,10 @@
 }
 
 .dx-field-item-content {
+    .dx-switch {
+        vertical-align: middle;
+    }
+
     .dx-label-v-align & {
         .dx-textarea {
             margin-top: 6px;

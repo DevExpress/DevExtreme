@@ -25,7 +25,8 @@ const moduleConfig = {
                 move: true,
                 remove: true,
                 rename: true,
-                upload: true
+                upload: true,
+                download: true
             }
         });
 
@@ -442,6 +443,47 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal($cells.length, initialCount, "file count not changed");
         assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "first file is the target file");
         assert.equal(this.wrapper.getDetailsItemName(1), "File 2.jpg", "second file is not target file");
+    });
+
+    test("rename file failed for not allowed extension", function(assert) {
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxclick");
+        this.wrapper.getDetailsItemList().trigger("click");
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton("Rename").trigger("dxclick");
+        this.clock.tick(400);
+
+        this.wrapper.getDialogTextInput()
+            .val("Testpage 11.aspx")
+            .trigger("change");
+        this.wrapper.getDialogButton("Save").trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "file was not renamed");
+    });
+
+    test("download file", function(assert) {
+        const fileManager = this.$element.dxFileManager("instance");
+        const fileProvider = fileManager._controller._fileProvider;
+        sinon.stub(fileProvider, "downloadItems");
+
+        assert.equal(this.wrapper.getDetailsItemName(0), "File 1.txt", "has target file");
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxclick");
+        this.wrapper.getDetailsItemList().trigger("click");
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton("Download").filter(":visible").trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.strictEqual(fileProvider.downloadItems.callCount, 1, "downloadItems method called");
+        const items = fileProvider.downloadItems.args[0][0];
+        assert.strictEqual(items.length, 1, "downloadItems args is valid");
+        assert.strictEqual(items[0].name, "File 1.txt", "downloadItems args is valid");
+
+        fileProvider.downloadItems.restore();
     });
 
 });

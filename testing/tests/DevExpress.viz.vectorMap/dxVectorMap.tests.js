@@ -98,6 +98,7 @@ QUnit.test("Set bounds when data ready called. Without bounds in options", funct
     spy.lastCall.args[0].dataReady();
 
     assert.strictEqual(this.projection.setBounds.callCount, 2);
+    assert.deepEqual(this.projection.setBounds.lastCall.args, [[-200, 10, 10, -10]]);
 });
 
 QUnit.test("Projection by data. Default bounds are include common bounds", function(assert) {
@@ -113,8 +114,8 @@ QUnit.test("Projection by data. Default bounds are include common bounds", funct
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
-        layers: layers,
-        getBoundsFromData: true
+        getBoundsFromData: true,
+        layers: layers
     });
 
     spy.lastCall.args[0].dataReady();
@@ -159,8 +160,8 @@ QUnit.test("Projection by data. Projection in options", function(assert) {
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
-        layers: layers,
         getBoundsFromData: true,
+        layers: layers,
         projection: {}
     });
 
@@ -175,8 +176,8 @@ QUnit.test("Projection by data. Empty bbox", function(assert) {
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
-        layers: layers,
-        getBoundsFromData: true
+        getBoundsFromData: true,
+        layers: layers
     });
 
     spy.lastCall.args[0].dataReady();
@@ -202,9 +203,9 @@ QUnit.test("Set bounds when data ready called. With bounds in options", function
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
+        getBoundsFromData: true,
         bounds: [10, 10, 10, 10],
-        layers: [{ tag: "layer-1", dataSource: "data-1" }],
-        getBoundsFromData: true
+        layers: [{ tag: "layer-1", dataSource: "data-1" }]
     });
 
     spy.lastCall.args[0].dataReady();

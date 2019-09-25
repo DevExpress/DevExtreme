@@ -944,6 +944,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             if(typeUtils.isObject(options)) {
                 $.extend(true, that.options, options);
             }
+
+            if(!arguments.length) {
+                return this.options;
+            }
         };
 
         if(options) {

@@ -6,7 +6,7 @@ fixture `Keyboard Navigation`
     .page(url(__dirname, '../container.html'));
 
 test("Cell should not highlighted after editing another cell when startEditAction is 'dblClick' and 'batch' edit mode", async t => {
-    const dataGrid = new DataGrid("#container");
+const dataGrid = new DataGrid("#container");
 
     await t
         .expect(dataGrid.getDataCell(0, 1).isFocused).notOk()
@@ -113,4 +113,41 @@ test("Cell should be focused after Enter key press if enterKeyDirection is 'none
         enterKeyAction: "moveFocus",
         enterKeyDirection: "none"
     }
+}));
+
+test("TextArea should be focused on editing start", async t => {
+    const dataGrid = new DataGrid("#container"),
+        commandCell = dataGrid.getDataCell(1, 3).element,
+        dataCell = dataGrid.getDataCell(1, 0),
+        getTextArea = () => dataCell.element.find(".text-area-1");
+
+    await t
+        // act, assert
+        .click(commandCell.find(".dx-link-edit"))
+        .expect(dataCell.isEditCell).ok()
+        .expect(getTextArea().exists).ok()
+        .expect(getTextArea().focused).ok();
+}).before(() => createWidget("dxDataGrid", {
+    dataSource: [
+        { id: 0, name: "Alex" },
+        { id: 1, name: "Bob" }
+    ],
+    editing: {
+        mode: "row",
+        allowUpdating: true
+    },
+    columns: [
+        {
+            dataField: "name",
+            editCellTemplate: cell => $(cell).append($("<textarea class='text-area-1' />"))
+        },
+        {
+            dataField: "phone",
+            editCellTemplate: cell => $(cell).append($("<textarea class='text-area-2' />"))
+        },
+        {
+            dataField: "room",
+            editCellTemplate: cell => $(cell).append($("<textarea />"))
+        }
+    ]
 }));

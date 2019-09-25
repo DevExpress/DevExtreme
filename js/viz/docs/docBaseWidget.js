@@ -363,7 +363,16 @@ var BaseWidget = {
         * @type number
         * @default 10
         */
-        margin: 10
+        margin: 10,
+        /**
+        * @name BaseWidgetOptions.export.svgToCanvas
+        * @type function
+        * @type_function_param1 svg:SVGElement
+        * @type_function_param2 canvas:HTMLCanvasElement
+        * @type_function_return Promise<void>
+        * @default undefined
+        */
+        svgToCanvas: function(svg, canvas) { }
     },
     /**
     * @name BaseWidgetOptions.onExporting

@@ -99,15 +99,30 @@ Projection.prototype = {
         const canvas = that._canvas;
         const width = canvas.width;
         const height = canvas.height;
-        const aspectRatio = that._engine.ar();
+        const engine = that._engine;
+        const aspectRatio = engine.ar();
         that._x0 = canvas.left + width / 2;
         that._y0 = canvas.top + height / 2;
-        if(width / height <= aspectRatio) {
-            that._xRadius = width / 2;
-            that._yRadius = (width / 2) / aspectRatio;
+
+        const min = that.project(engine.min());
+        const max = that.project(engine.max());
+
+        const screenAR = width / height;
+        let boundsAR = _abs(max[0] - min[0]) / _abs(max[1] - min[1]);
+        let correction;
+        if(isNaN(boundsAR) || boundsAR === 0
+        || (_min(screenAR, aspectRatio) <= aspectRatio * boundsAR && aspectRatio * boundsAR <= _max(screenAR, aspectRatio))) {
+            correction = 1;
         } else {
-            that._xRadius = (height / 2) * aspectRatio;
-            that._yRadius = height / 2;
+            correction = boundsAR > 1 ? boundsAR : (1 / boundsAR);
+        }
+
+        if(aspectRatio * boundsAR >= screenAR) {
+            that._xRadius = width / 2 / correction;
+            that._yRadius = (width / 2) / (aspectRatio * correction);
+        } else {
+            that._xRadius = (height / 2) * (aspectRatio / correction);
+            that._yRadius = height / 2 / correction;
         }
         that._fire("screen");
     },

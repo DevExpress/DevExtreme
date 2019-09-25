@@ -217,3 +217,180 @@ QUnit.module("Raise context menu", moduleConfig, () => {
     });
 
 });
+
+QUnit.module("Cutomize context menu", moduleConfig, () => {
+
+    test("default items rearrangement and modification", function(assert) {
+        const testClick = sinon.spy();
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("contextMenu", {
+            items: [
+                "move",
+                {
+                    commandName: "create",
+                    icon: "upload"
+                },
+                "rename", "upload", "rename", "copy",
+                {
+                    commandName: "delete",
+                    text: "Destruct"
+                },
+                {
+                    commandName: "refresh",
+                    onClick: testClick
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItems();
+        assert.equal($items.length, 8, "all of items are visible");
+
+        assert.ok($items.eq(0).text().indexOf("Move") > -1, "move item is rendered in new position");
+        assert.ok($items.eq(1).text().indexOf("New folder") > -1, "create folder is rendered");
+        assert.ok($items.eq(1).find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "create folder item is rendered with new icon");
+        assert.ok($items.eq(2).text().indexOf("Rename") > -1, "rename item is rendered twice");
+        assert.ok($items.eq(3).text().indexOf("Upload files") > -1, "upload files item is rendered below its original position");
+
+        assert.ok($items.eq(4).text().indexOf("Rename") > -1, "rename item is rendered twice");
+        assert.ok($items.eq(5).text().indexOf("Copy") > -1, "copy item is rendered");
+        assert.ok($items.eq(6).text().indexOf("Destruct") > -1, "delete item is rendered with new text");
+        assert.ok($items.eq(7).text().indexOf("Refresh") > -1, "refresh files item is rendered");
+        assert.equal(testClick.callCount, 0, "refresh has not changed its action");
+    });
+
+    test("custom items render and modification", function(assert) {
+        const testClick = sinon.spy();
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("contextMenu", {
+            items: [
+                "create",
+                {
+                    ID: 42,
+                    text: "New commnand text",
+                    icon: "upload",
+                    visible: true,
+                    onClick: testClick
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        let $items = this.wrapper.getContextMenuItems();
+        assert.equal($items.length, 2, "all of items are visible");
+
+        assert.ok($items.eq(1).text().indexOf("New commnand text") > -1, "newCommand item is rendered correctly");
+        assert.ok($items.eq(1).find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "newCommand item is rendered with new icon");
+
+        $items.eq(1).trigger("dxclick");
+        assert.equal(testClick.callCount, 1, "newCommand has correct action");
+        assert.equal(testClick.args[0][0].itemData.ID, 42, "custom attribute is available from onClick fuction");
+
+        fileManagerInstance.option("contextMenu", {
+            items: [
+                "create",
+                {
+                    text: "New commnand text",
+                    visible: true,
+                    disabled: true,
+                    onClick: testClick
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        $items = this.wrapper.getContextMenuItems();
+        assert.equal($items.length, 2, "all of items are visible");
+
+        $items.eq(1).trigger("dxclick");
+        assert.equal(testClick.callCount, 1, "newCommand has no action due to its disabled state");
+    });
+
+    test("default items manual visibility management", function(assert) {
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("contextMenu", {
+            items: [
+                "create", "upload",
+                {
+                    commandName: "rename",
+                    visibilityMode: "manual",
+                    visible: true
+                },
+                "move", "copy", "delete", "refresh"
+            ]
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getFolderNode(0).trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        const $items = this.wrapper.getContextMenuItems();
+        assert.equal($items.length, 4, "all of items are visible");
+        assert.ok($items.eq(2).text().indexOf("Rename") > -1, "rename item is rendered correctly");
+    });
+
+    test("nested items set and use", function(assert) {
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("contextMenu", {
+            items: [
+                {
+                    text: "Edit",
+                    visible: true,
+                    items: [
+                        "move", "rename", "copy", "delete"
+                    ]
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getDetailsItemList().trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        let $items = this.wrapper.getContextMenuItems();
+
+        $items.eq(0).trigger("dxclick");
+        this.clock.tick(400);
+
+        let $subMenuItems = this.wrapper.getContextMenuSubMenuItems();
+        assert.equal($subMenuItems.length, 0, "there is no items available");
+
+        const $commandButton = this.wrapper.getToolbarButton("Refresh");
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        this.wrapper.getRowNameCellInDetailsView(1).trigger("dxcontextmenu");
+        this.clock.tick(400);
+
+        $items = this.wrapper.getContextMenuItems();
+
+        $items.eq(0).trigger("dxclick");
+        this.clock.tick(400);
+
+        $subMenuItems = this.wrapper.getContextMenuSubMenuItems();
+        assert.equal($subMenuItems.length, 4, "all of edit actions are visible");
+
+        $subMenuItems.eq(1).trigger("dxclick");
+        this.clock.tick(400);
+
+        this.wrapper.getDialogTextInput()
+            .val("New name.txt")
+            .trigger("change");
+        this.wrapper.getDialogButton("Save").trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getDetailsItemName(0), "New name.txt", "file is renamed");
+    });
+
+});

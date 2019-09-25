@@ -19,8 +19,7 @@ var $ = require("jquery"),
     stubSeriesFamily = createStubSeriesFamily(),
     stubThemeManager = createStubThemeManager(),
     exportModule = require("viz/core/export"),
-    stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager),
-    stubPoints = [{ argument: 0, value: 1 }, { argument: 1, value: 2 }, { argument: 2, value: 3 }];
+    stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
@@ -68,7 +67,7 @@ function createStubThemeManager() {
     themeManager.getOptions.withArgs("polarTranslatorOptions").returns({});
     themeManager.getOptions.withArgs("animation").returns({ enabled: true, maxPointCountSupported: 100 });
     themeManager.getOptions.withArgs("equalBarWidth").returns(true);
-    themeManager.getOptions.withArgs("tooltip").returns({ shared: true, enabled: true, font: {} });
+    themeManager.getOptions.withArgs("tooltip").returns({ enabled: true, font: {} });
     themeManager.getOptions.withArgs("rotated").returns(true);
     themeManager.getOptions.returns({});
     return themeManager;
@@ -77,7 +76,7 @@ function createSeries() {
     var series = sinon.createStubInstance(Series);
     series.isUpdated = true;
     series.isVisible.returns(true);
-    series.getPoints.returns(stubPoints);
+    series.getPoints.returns([{ argument: 0, value: 1 }, { argument: 1, value: 2 }, { argument: 2, value: 3 }]);
     series.getOptions.returns({ showInLegend: true, opacity: 0.5 });
     series.getLegendStyles.returns({ normal: { opacity: 0.5 } });
     series.getRangeData.returns({});
@@ -610,28 +609,6 @@ QUnit.test("create axis with correct types. Spider axis", function(assert) {
     assert.equal(valueAxis.updateOptions.lastCall.args[0].type, undefined);
 });
 
-QUnit.test("prepare shared tooltip", function(assert) {
-    var chart = this.createSimplePolarChart({
-        series: [{}, {}]
-    });
-
-    assert.ok(chart.series);
-    assert.equal(chart.series.length, 2);
-
-    var checkStackPoints = function(points) {
-        for(var i = 0; i < points.length; i++) {
-            assert.equal(points[i].stackPoints[0].argument, stubPoints[i].argument);
-            assert.equal(points[i].stackPoints[0].value, stubPoints[i].value);
-            assert.equal(points[i].stackPoints[0].stackName, null);
-            assert.equal(points[i].stackPoints[1].argument, stubPoints[i].argument);
-            assert.equal(points[i].stackPoints[1].value, stubPoints[i].value);
-            assert.equal(points[i].stackPoints[1].stackName, null);
-        }
-    };
-    checkStackPoints(chart.getAllSeries()[0].getPoints());
-    checkStackPoints(chart.getAllSeries()[1].getPoints());
-});
-
 QUnit.test("create constant lines and strips", function(assert) {
     this.createSimplePolarChart({
         argumentAxis: {
@@ -673,7 +650,7 @@ QUnit.test("Create Tracker.", function(assert) {
 
     var updateArg0 = tracker.stub("update").lastCall.args[0];
     assert.equal(updateArg0.argumentAxis, chart._argumentAxes[0], "argument axis");
-    assert.equal(updateArg0.chart, undefined, "chart instances should be not passed");
+    assert.equal(updateArg0.chart, chart, "chart instances should be not passed");
     assert.equal(updateArg0.rotated, undefined, "rotated");
     assert.equal(updateArg0.zoomingMode, undefined, "zoomingMode");
     assert.equal(updateArg0.scrollingMode, undefined, "scrollingMode");

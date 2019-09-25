@@ -1,3 +1,6 @@
+@import (once) "./scrollView.generic.less";
+@import (once) "./treeList.generic.less";
+
 @gantt_successor_background_color: white;
 
 .dx-gantt {
@@ -36,19 +39,6 @@
         color: @base-label-color;
     }
 
-    .dx-gantt-splitter {
-        width: 4px;
-        background-color: @datagrid-column-separator-bg;
-    }
-
-    .dx-gantt-splitter-transparent {
-        background-color: transparent;
-    }
-
-    .dx-gantt-splitter-border {
-        border-left: 2px solid @base-border-color;
-    }
-
     .dx-gantt-view {
         background-color: @base-bg;
     }
@@ -70,7 +60,6 @@
     }
 
     .dx-gantt-tac {
-        margin-top: -1px;
         height: calc(100% - @GANTT_HEADER_ITEM_HEIGHT);
     }
 
@@ -158,6 +147,14 @@
             height: @GANTT_TASK_HEIGHT;
             border: 1px solid darken(@base-accent, 10%);
             border-radius: @base-border-radius;
+
+            .dx-gantt-task-edit-progress {
+                border-color: transparent transparent darken(@base-accent, 10%) transparent;
+            }
+
+            .dx-gantt-task-edit-progress-status {
+                border-radius: @base-border-radius;
+            }
         }
     }
 
@@ -196,14 +193,20 @@
 
     .dx-gantt-sel {
         background-color: @gantt-selection-bg;
+        border-top: 1px solid @treelist-selection-bg;
+        border-bottom: 1px solid @treelist-selection-bg;
+    }
+
+    .dx-gantt-tac-hb .dx-gantt-sel {
+        border: none;
     }
 
     .dx-gantt-conn-v {
-        border-left: 1px solid @base-text-color;
+        border-left-color: @base-text-color;
     }
 
     .dx-gantt-conn-h {
-        border-top: 1px solid @base-text-color;
+        border-top-color: @base-text-color;
     }
 
     .dx-gantt-arrow {

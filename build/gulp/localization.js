@@ -8,6 +8,58 @@ var headerPipes = require('./header-pipes.js');
 var compressionPipes = require('./compression-pipes.js');
 var context = require('./context.js');
 
+var Cldr = require('cldrjs');
+var locales = require('cldr-core/availableLocales.json').availableLocales.full;
+var weekData = require('cldr-core/supplemental/weekData.json');
+var likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
+var parentLocales = require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
+
+var getParentLocale = require('../../js/localization/parentLocale.js');
+
+var firstDayOfWeekData = function() {
+    var DAY_INDEXES = {
+        "sun": 0,
+        "mon": 1,
+        "tue": 2,
+        "wed": 3,
+        "thu": 4,
+        "fri": 5,
+        "sat": 6
+    };
+    var DEFAULT_DAY_OF_WEEK_INDEX = 0;
+
+    var result = {};
+
+    Cldr.load(weekData, likelySubtags);
+
+    var getFirstIndex = (locale) => {
+        var firstDay = new Cldr(locale).supplemental.weekData.firstDay();
+        return DAY_INDEXES[firstDay];
+    };
+
+    locales.forEach(function(locale) {
+        var firstDayIndex = getFirstIndex(locale);
+
+        var parentLocale = getParentLocale(parentLocales, locale);
+        if(firstDayIndex !== DEFAULT_DAY_OF_WEEK_INDEX && (!parentLocale || firstDayIndex !== getFirstIndex(parentLocale))) {
+            result[locale] = firstDayIndex;
+        }
+    });
+
+    return result;
+};
+
+var accountingFormats = function() {
+    var result = {};
+
+    locales.forEach(function(locale) {
+        var numbersData = require(path.join(`../../node_modules/cldr-numbers-full/main/${locale}/numbers.json`));
+        result[locale] = numbersData.main[locale].numbers['currencyFormats-numberSystem-latn'].accounting;
+    });
+
+    return result;
+};
+
 var RESULT_PATH = path.join(context.RESULT_JS_PATH, 'localization');
 var DICTIONARY_SOURCE_FOLDER = 'js/localization/messages';
 
@@ -49,19 +101,32 @@ gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FO
     };
 })));
 
-gulp.task('localization-generated-sources', gulp.parallel([{
-    data: require('../../js/localization/messages/en.json'),
-    filename: 'default_messages.js',
-    destination: 'js/localization'
-},
-{
-    data: require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale,
-    filename: 'parentLocales.js',
-    destination: 'js/localization/cldr-data'
-}].map((source) => {
+gulp.task('localization-generated-sources', gulp.parallel([
+    {
+        data: require('../../js/localization/messages/en.json'),
+        filename: 'default_messages.js',
+        destination: 'js/localization'
+    },
+    {
+        data: parentLocales,
+        filename: 'parent_locales.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: firstDayOfWeekData(),
+        filename: 'first_day_of_week_data.js',
+        destination: 'js/localization/cldr-data'
+    },
+    {
+        data: accountingFormats(),
+        filename: 'accounting_formats.js',
+        destination: 'js/localization/cldr-data'
+
+    }
+].map((source) => {
     return function() {
         return gulp
-            .src('build/gulp/cldr-data-template.jst')
+            .src('build/gulp/generated_js.jst')
             .pipe(template({
                 json: serializeObject(source.data)
             }))

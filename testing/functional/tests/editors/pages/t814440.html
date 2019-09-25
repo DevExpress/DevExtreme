@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>T814440</title>
+
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.common.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.light.css"/>
+
+        <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+    </head>
+    <body>
+        <div id="textbox"></div>
+        <textarea id="eventLog" style="width: 100%; height: 400px;"></textarea>
+        <script>
+            $(function(){
+                const logEventElement = document.getElementById('eventLog');
+                const logEvent = (event, owner) => logEventElement.value += `${event}\n`;
+
+                $('#textbox').dxTextBox({
+                    mask: '9',
+                    valueChangeEvent: 'input',
+                    onValueChanged: () => logEvent('changed'),
+                    onInput: () => logEvent('input')
+                });
+            });
+        </script>
+    </body>
+</html>

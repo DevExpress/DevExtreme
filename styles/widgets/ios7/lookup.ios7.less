@@ -1,3 +1,7 @@
+@import (once) "./dropDownList.ios7.less";
+@import (once) "./popover.ios7.less";
+@import (once) "./textBox.ios7.less";
+
 @IOS7_LOOKUP_HEIGHT: 27px;
 @IOS7_LOOKUP_SELECTED_ICON_MARGIN: 20px;
 
@@ -94,7 +98,8 @@
     border-bottom: 1px solid #b5b5b5;
 }
 
-.dx-invalid.dx-lookup {
+.dx-invalid.dx-lookup,
+.dx-valid.dx-lookup {
     .dx-lookup-field {
         &:after {
             right: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET + 1;
@@ -110,10 +115,31 @@
     }
 
     .dx-invalid.dx-lookup,
-    &.dx-invalid.dx-lookup {
+    &.dx-invalid.dx-lookup,
+    .dx-valid.dx-lookup,
+    &.dx-valid.dx-lookup {
         .dx-lookup-field:after {
             left: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET + 1;
             right: auto;
+        }
+    }
+
+    .dx-validation-pending.dx-lookup,
+    &.dx-validation-pending.dx-lookup {
+        .dx-lookup-field-wrapper {
+            .dx-pending-indicator {
+                left: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET + 1;
+                right: auto;
+            }
+        }
+    }
+}
+
+.dx-validation-pending.dx-lookup {
+    .dx-lookup-field-wrapper {
+        .dx-pending-indicator {
+            right: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET + 1;
+            .pending-indicator-ios7();
         }
     }
 }

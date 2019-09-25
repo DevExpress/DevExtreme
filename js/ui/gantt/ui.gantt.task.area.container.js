@@ -41,6 +41,10 @@ export class TaskAreaContainer {
         return this._scrollView.scrollHeight();
     }
 
+    get isExternal() {
+        return true;
+    }
+
     getWidth() {
         return this._element.offsetWidth;
     }

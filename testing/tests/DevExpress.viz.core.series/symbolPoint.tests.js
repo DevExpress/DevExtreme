@@ -2314,7 +2314,8 @@ QUnit.module("Tooltip", {
                 return axis;
             },
             _argumentChecker: function() { return true; },
-            _valueChecker: function() { return true; }
+            _valueChecker: function() { return true; },
+            getStackName: function() { return undefined; }
         };
         var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
@@ -2393,32 +2394,34 @@ QUnit.test("Get tooltip format object with ErrorBar", function(assert) {
     assert.equal(formatObject.highErrorValue, 3);
 });
 
-QUnit.test("Get tooltip format object, stackPoints is created", function(assert) {
+QUnit.test("Get tooltip format object with stackPoints without stack", function(assert) {
     var point = createPoint(this.series, this.data, this.options),
         options1 = $.extend(true, {}, this.options),
         data1 = {
             value: 15,
-            argument: 5,
+            argument: 1,
             originalValue: 15,
-            originalArgument: 5
+            originalArgument: 1
         },
         options2 = $.extend(true, {}, this.options),
         data2 = {
             value: 20,
-            argument: 2,
+            argument: 1,
             originalValue: 20,
-            originalArgument: 2
+            originalArgument: 1
         };
 
-    point.stackPoints = [createPoint($.extend({}, this.series, { name: "series1" }), data1, options1), createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)];
-    point.setPercentValue(40, 30);
-
-    $.each(point.stackPoints, function(i, point) {
+    const stackPoints = [
+        createPoint($.extend({}, this.series, { name: "series1" }), data1, options1),
+        createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)
+    ].map(point => {
         point.setPercentValue(40, 30);
         point.inVisibleArea = true;
+        return point;
     });
 
-    var formatObject = point.getTooltipFormatObject(this.tooltip);
+    point.setPercentValue(40, 30);
+    var formatObject = point.getTooltipFormatObject(this.tooltip, stackPoints);
 
     assert.equal(formatObject.argument, 1);
     assert.equal(formatObject.total, 30);
@@ -2432,32 +2435,77 @@ QUnit.test("Get tooltip format object, stackPoints is created", function(assert)
     checkTooltipFormatObject(assert, formatObject.points[1], data2.argument, data2.value, data2.originalValue, data2.originalArgument, "series2", 0.5, 30);
 });
 
-QUnit.test("Get tooltip format object, points no visible", function(assert) {
+QUnit.test("Get tooltip format object with stackPoints with stack", function(assert) {
+    this.series.getStackName = function() { return "someStackName"; };
     var point = createPoint(this.series, this.data, this.options),
         options1 = $.extend(true, {}, this.options),
         data1 = {
             value: 15,
-            argument: 5,
+            argument: 1,
             originalValue: 15,
-            originalArgument: 5
+            originalArgument: 1
         },
         options2 = $.extend(true, {}, this.options),
         data2 = {
             value: 20,
-            argument: 2,
+            argument: 1,
             originalValue: 20,
-            originalArgument: 2
+            originalArgument: 1
         };
 
-    point.stackPoints = [createPoint($.extend({}, this.series, { name: "series1" }), data1, options1), createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)];
-    point.setPercentValue(40);
-
-    $.each(point.stackPoints, function(i, point) {
+    const stackPoints = [
+        createPoint($.extend({}, this.series, { name: "series1" }), data1, options1),
+        createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)
+    ].map(point => {
         point.setPercentValue(40, 30);
-        point.inVisibleArea = false;
+        point.inVisibleArea = true;
+        return point;
     });
 
-    var formatObject = point.getTooltipFormatObject(this.tooltip);
+    point.setPercentValue(40, 30);
+    var formatObject = point.getTooltipFormatObject(this.tooltip, stackPoints);
+
+    assert.equal(formatObject.argument, 1);
+    assert.equal(formatObject.total, 30);
+    assert.equal(formatObject.argumentText, "1:argument");
+    assert.equal(formatObject.totalText, "30:undefined");
+    assert.equal(formatObject.stackName, "someStackName");
+
+    assert.equal(formatObject.points.length, 2);
+
+    checkTooltipFormatObject(assert, formatObject.points[0], data1.argument, data1.value, data1.originalValue, data1.originalArgument, "series1", 0.375, 30);
+    checkTooltipFormatObject(assert, formatObject.points[1], data2.argument, data2.value, data2.originalValue, data2.originalArgument, "series2", 0.5, 30);
+});
+
+QUnit.test("Get tooltip format object, stacked points not visible", function(assert) {
+    var point = createPoint(this.series, this.data, this.options),
+        options1 = $.extend(true, {}, this.options),
+        data1 = {
+            value: 15,
+            argument: 1,
+            originalValue: 15,
+            originalArgument: 1
+        },
+        options2 = $.extend(true, {}, this.options),
+        data2 = {
+            value: 20,
+            argument: 1,
+            originalValue: 20,
+            originalArgument: 1
+        };
+
+    const stackPoints = [
+        createPoint($.extend({}, this.series, { name: "series1" }), data1, options1),
+        createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)
+    ].map(point => {
+        point.setPercentValue(40, 30);
+        point.inVisibleArea = false;
+        return point;
+    });
+
+    point.setPercentValue(40);
+
+    var formatObject = point.getTooltipFormatObject(this.tooltip, stackPoints);
 
     assert.equal(formatObject.points.length, 0);
 });
@@ -2468,67 +2516,31 @@ QUnit.test("Get tooltip format object, series of points no visible", function(as
         options1 = $.extend(true, {}, this.options),
         data1 = {
             value: 15,
-            argument: 5,
+            argument: 1,
             originalValue: 15,
-            originalArgument: 5
+            originalArgument: 1
         },
         options2 = $.extend(true, {}, this.options),
         data2 = {
             value: 20,
-            argument: 2,
+            argument: 1,
             originalValue: 20,
-            originalArgument: 2
+            originalArgument: 1
         };
 
-    point.stackPoints = [createPoint($.extend({}, this.series, { name: "series1" }), data1, options1), createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)];
+    const stackPoints = [
+        createPoint($.extend({}, this.series, { name: "series1" }), data1, options1),
+        createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)
+    ].map(point => {
+        point.setPercentValue(40);
+        point.inVisibleArea = false;
+        return point;
+    });
     point.setPercentValue(40);
 
-    $.each(point.stackPoints, function(i, point) {
-        point.setPercentValue(40);
-        point.inVisibleArea = true;
-    });
-
-    var formatObject = point.getTooltipFormatObject(this.tooltip);
+    var formatObject = point.getTooltipFormatObject(this.tooltip, stackPoints);
 
     assert.equal(formatObject.points.length, 0);
-});
-
-QUnit.test("Get tooltip format object, stackPoints with stackName is created", function(assert) {
-    var point = createPoint(this.series, this.data, this.options),
-        options1 = $.extend(true, {}, this.options),
-        data1 = {
-            value: 15,
-            argument: 5,
-            originalValue: 15,
-            originalArgument: 5
-        },
-        options2 = $.extend(true, {}, this.options),
-        data2 = {
-            value: 20,
-            argument: 2,
-            originalValue: 20,
-            originalArgument: 2
-        };
-
-    point.stackPoints = [createPoint($.extend({}, this.series, { name: "series1" }), data1, options1), createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)];
-    point.stackPoints.stackName = "stackName";
-    point.setPercentValue(40, 30);
-
-    $.each(point.stackPoints, function(i, point) {
-        point.setPercentValue(40, 30);
-        point.inVisibleArea = true;
-    });
-
-    var formatObject = point.getTooltipFormatObject(this.tooltip);
-
-    assert.equal(formatObject.argument, 1);
-    assert.equal(formatObject.total, 30);
-    assert.equal(formatObject.stackName, "stackName");
-
-    assert.equal(formatObject.points.length, 2);
-
-    checkTooltipFormatObject(assert, formatObject.points[0], data1.argument, data1.value, data1.originalValue, data1.originalArgument, "series1", 0.375, 30);
-    checkTooltipFormatObject(assert, formatObject.points[1], data2.argument, data2.value, data2.originalValue, data2.originalArgument, "series2", 0.5, 30);
 });
 
 QUnit.test("Get tooltip format object with aggreagation info", function(assert) {

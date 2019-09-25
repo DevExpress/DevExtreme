@@ -40,14 +40,26 @@ define(function(require, exports, module) {
         Globalize = require("globalize"),
         numberLocalization = require("localization/number"),
         dateLocalization = require("localization/date"),
-        messageLocalization = require("localization/message");
+        messageLocalization = require("localization/message"),
+        config = require("core/config");
 
     var likelySubtags = require("../../../node_modules/cldr-core/supplemental/likelySubtags.json!");
     Globalize.load(likelySubtags);
 
     var NBSP = String.fromCharCode(160);
 
-    require("./localization.base.tests.js");
+    var sharedTests = require("./sharedParts/localization.shared.js");
+
+    QUnit.module("Globalize common", null, function() {
+
+        QUnit.test("engine", assert => {
+            assert.equal(numberLocalization.engine(), "globalize");
+            assert.equal(dateLocalization.engine(), "globalize");
+            assert.equal(messageLocalization.engine(), "globalize");
+        });
+
+        sharedTests();
+    });
 
     QUnit.module("Localization date (ru)", {
         beforeEach: function() {
@@ -413,4 +425,21 @@ define(function(require, exports, module) {
         assert.equal(numberLocalization.getThousandsSeparator(), "\xa0");
         Globalize.locale("en");
     });
+
+    QUnit.test("getCurrencySymbol and config.defaultCurrency", assert => {
+        var originalConfig = config();
+
+        try {
+            assert.equal(numberLocalization.getCurrencySymbol().symbol, "$");
+
+            config({
+                defaultCurrency: "EUR"
+            });
+
+            assert.equal(numberLocalization.getCurrencySymbol().symbol, "€");
+        } finally {
+            config(originalConfig);
+        }
+    });
+
 });

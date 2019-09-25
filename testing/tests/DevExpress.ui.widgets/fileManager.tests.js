@@ -20,3 +20,4 @@ import "./fileManagerParts/fileItemsController.tests.js";
 import "./fileManagerParts/ajaxProvider.tests.js";
 import "./fileManagerParts/arrayProvider.tests.js";
 import "./fileManagerParts/webAPIProvider.tests.js";
+import "./fileManagerParts/customProvider.tests.js";

@@ -242,6 +242,7 @@ QUnit.module("custom uploading", moduleConfig, () => {
         assert.strictEqual(onProgressSpy.callCount, 1, "progress event is not called after error");
         assert.strictEqual(onUploadedSpy.callCount, 0, "uploaded event is not raised after error");
         assert.strictEqual(onUploadErrorSpy.callCount, 1, "upload error raised");
+        assert.strictEqual(onUploadErrorSpy.args[0][0].error, "Some error.", "upload error event has valid arguments");
 
         this.clock.tick(5000);
         assert.strictEqual(uploadChunkSpy.callCount, 2, "custom function is not called after error");
@@ -481,6 +482,7 @@ QUnit.module("custom uploading", moduleConfig, () => {
         assert.strictEqual(onProgressSpy.callCount, 0, "progress event is not called");
         assert.strictEqual(onUploadedSpy.callCount, 0, "uploaded event is not raised");
         assert.strictEqual(onUploadErrorSpy.callCount, 1, "upload error raised");
+        assert.strictEqual(onUploadErrorSpy.args[0][0].error, "Some error.", "upload error event has valid arguments");
     });
 
     test("whole file upload allows canceling", function(assert) {
@@ -517,6 +519,44 @@ QUnit.module("custom uploading", moduleConfig, () => {
         assert.strictEqual(uploadFileSpy.callCount, 1, "custom function called");
         assert.strictEqual(abortUploadSpy.callCount, 1, "abort upload called");
         assert.strictEqual(onUploadedSpy.callCount, 0, "uploaded event is not raised");
+    });
+
+    test("uploaded files are not aborted after resetting value", function(assert) {
+        const chunkSize = 20000,
+            fileSize = 50100,
+            uploadChunkSpy = sinon.spy(() => executeAfterDelay()),
+            onUploadedSpy = sinon.spy(),
+            onAbortedSpy = sinon.spy();
+
+        const $fileUploader = $("#fileuploader").dxFileUploader({
+            multiple: false,
+            uploadMode: "instantly",
+            chunkSize: chunkSize,
+            uploadChunk: uploadChunkSpy,
+            onUploaded: onUploadedSpy,
+            onUploadAborted: onAbortedSpy
+        });
+
+        const fileUploader = $fileUploader.dxFileUploader("instance");
+
+        const file = createBlobFile("image1.png", fileSize);
+        simulateFileChoose($fileUploader, [file]);
+
+        this.clock.tick(5000);
+        assert.strictEqual(uploadChunkSpy.callCount, 3, "custom function called for each chunk");
+        assert.strictEqual(onUploadedSpy.callCount, 1, "uploaded event raised");
+        assert.strictEqual(onAbortedSpy.callCount, 0, "upload aborted event is not called");
+
+        uploadChunkSpy.reset();
+        onUploadedSpy.reset();
+        onAbortedSpy.reset();
+
+        fileUploader.option("value", []);
+
+        this.clock.tick(1000);
+        assert.strictEqual(uploadChunkSpy.callCount, 0, "custom function not called");
+        assert.strictEqual(onUploadedSpy.callCount, 0, "uploaded event not raised");
+        assert.strictEqual(onAbortedSpy.callCount, 0, "upload aborted event is not called");
     });
 
 });

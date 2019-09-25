@@ -65,12 +65,13 @@ var environment = {
             widget: {
                 _getTemplate: function(f) {
                     this.template = {
-                        render: function(arg) {
+                        render: sinon.spy(function(arg) {
                             return f(arg.model, arg.container);
-                        }
+                        })
                     };
                     return this.template;
-                }
+                },
+                _requestChange: sinon.spy()
             },
             itemGroupClass: this.itemGroupClass,
             backgroundClass: this.backgroundClass,
@@ -2650,5 +2651,36 @@ QUnit.test("Pass customized item size to hover state", function(assert) {
 
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.state, "hovered");
     assert.deepEqual(this.options.markerTemplate.lastCall.args[0].marker.size, 60);
+});
+
+QUnit.test("Request change if template is asynchronous", function(assert) {
+    this.options.customizeItems = items => {
+        items.forEach(i => i.marker.size = 60);
+    };
+
+    this.createAndDrawLegend();
+
+    const widget = this.legend._widget;
+
+    assert.ok(!widget._requestChange.called);
+    widget.template.render.lastCall.args[0].onRendered();
+    assert.deepEqual(widget._requestChange.lastCall.args[0], ["LAYOUT"]);
+});
+
+QUnit.test("Do not request change if template is asynchronous but marker group is not empty", function(assert) {
+    this.options.markerTemplate = function(_, container) {
+        container.appendChild(document.createElement("svg"));
+    };
+    this.options.customizeItems = items => {
+        items.forEach(i => i.marker.size = 60);
+    };
+
+    this.createAndDrawLegend();
+
+    const widget = this.legend._widget;
+
+    assert.ok(!widget._requestChange.called);
+    widget.template.render.lastCall.args[0].onRendered();
+    assert.ok(!widget._requestChange.called);
 });
 

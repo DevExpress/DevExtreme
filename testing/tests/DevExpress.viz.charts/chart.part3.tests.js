@@ -1581,7 +1581,7 @@ QUnit.test("Negative Panes border width and height", function(assert) {
     assert.strictEqual(chart._renderer.stub("path").lastCall, null);
 });
 
-QUnit.module("Prepare shared tooltip", $.extend({}, commons.environment, {
+QUnit.module("Prepare points for shared tooltip", $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.call(this);
         this.clock = sinon.useFakeTimers();
@@ -1592,19 +1592,20 @@ QUnit.module("Prepare shared tooltip", $.extend({}, commons.environment, {
     }
 }));
 
-QUnit.test("stack is null", function(assert) {
-    assert.expect(2 + 2 * 3 * 5);
+QUnit.test("No stack name", function(assert) {
     // arrange
-    var point1 = new MockPoint({ argument: "1", val: 1 }),
-        point2 = new MockPoint({ argument: "2", val: 2 }),
-        point3 = new MockPoint({ argument: "3", val: 3 }),
-        point4 = new MockPoint({ argument: "1", val: 3 }),
-        point5 = new MockPoint({ argument: "2", val: 5 }),
-        point6 = new MockPoint({ argument: "3", val: 7 }),
-        stubSeries1 = new MockSeries({ points: [point1, point2, point3], stack: null }),
-        stubSeries2 = new MockSeries({ points: [point4, point5, point6], stack: null });
+    const s1Points = [new MockPoint({ argument: "1", val: 1 }),
+        new MockPoint({ argument: "2", val: 2 }),
+        new MockPoint({ argument: "3", val: 3 })];
+    const s2Points = [new MockPoint({ argument: "1", val: 3 }),
+        new MockPoint({ argument: "2", val: 5 }),
+        new MockPoint({ argument: "3", val: 7 })];
+    const stubSeries1 = new MockSeries({ points: s1Points });
+    const stubSeries2 = new MockSeries({ points: s2Points });
     chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
-    // act
+    s1Points.forEach(p => p.series = stubSeries1);
+    s2Points.forEach(p => p.series = stubSeries2);
+
     var chart = this.createChart({
         tooltip: { shared: true },
         series: [{
@@ -1616,134 +1617,64 @@ QUnit.test("stack is null", function(assert) {
         }]
     });
 
+    // act
+    const stackedPoints = chart.getStackedPoints(s1Points[1]);
+
     // assert
-    var checkStackPoints = function(series, points) {
-        $.each(series.getPoints(), function(i, point) {
-            assert.equal(point.stackPoints.length, 2);
-            assert.equal(point.stackPoints[0].argument, points[0 + i].argument);
-            assert.equal(point.stackPoints[0].stackName, null);
-            assert.equal(point.stackPoints[1].argument, points[3 + i].argument);
-            assert.equal(point.stackPoints[1].stackName, null);
-        });
-    };
-
-    assert.ok(chart.series, "dxChart has series");
-    assert.equal(chart.series.length, 2, "There should be single series");
-
-    checkStackPoints(chart.series[0], [point1, point2, point3, point4, point5, point6]);
-    checkStackPoints(chart.series[1], [point1, point2, point3, point4, point5, point6]);
+    assert.deepEqual(stackedPoints, [s1Points[1], s2Points[1]]);
 });
 
-QUnit.test("different stack", function(assert) {
-    assert.expect(2 + 2 * 3 * 4 + 3 * 2);
+QUnit.test("Different stacks", function(assert) {
     // arrange
-    var point1 = new MockPoint({ argument: "1", val: 1 }),
-        point2 = new MockPoint({ argument: "2", val: 2 }),
-        point3 = new MockPoint({ argument: "3", val: 3 }),
-        point4 = new MockPoint({ argument: "1", val: 4 }),
-        point5 = new MockPoint({ argument: "2", val: 5 }),
-        point6 = new MockPoint({ argument: "3", val: 6 }),
-        point7 = new MockPoint({ argument: "1", val: 7 }),
-        point8 = new MockPoint({ argument: "2", val: 8 }),
-        point9 = new MockPoint({ argument: "3", val: 9 }),
-        stubSeries1 = new MockSeries({ points: [point1, point2, point3], stack: null }),
-        stubSeries2 = new MockSeries({ points: [point4, point5, point6], stack: "a" }),
-        stubSeries3 = new MockSeries({ points: [point7, point8, point9], stack: "b" });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
-    // act
+    const s1Points = [new MockPoint({ argument: "1", val: 1 }),
+        new MockPoint({ argument: "2", val: 2 }),
+        new MockPoint({ argument: "3", val: 3 })];
+    const s2Points = [new MockPoint({ argument: "1", val: 4 }),
+        new MockPoint({ argument: "2", val: 5 }),
+        new MockPoint({ argument: "3", val: 6 })];
+    const s3Points = [new MockPoint({ argument: "1", val: 7 }),
+        new MockPoint({ argument: "2", val: 8 }),
+        new MockPoint({ argument: "3", val: 9 })];
+    const s4Points = [new MockPoint({ argument: "1", val: 10 }),
+        new MockPoint({ argument: "2", val: 11 }),
+        new MockPoint({ argument: "3", val: 12 })];
+    const stubSeries1 = new MockSeries({ points: s1Points, stack: "b" });
+    const stubSeries2 = new MockSeries({ points: s2Points, stack: "a" });
+    const stubSeries3 = new MockSeries({ points: s3Points });
+    const stubSeries4 = new MockSeries({ points: s4Points, stack: "b" });
+    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3, stubSeries4);
+    s1Points.forEach(p => p.series = stubSeries1);
+    s2Points.forEach(p => p.series = stubSeries2);
+    s3Points.forEach(p => p.series = stubSeries3);
+    s4Points.forEach(p => p.series = stubSeries4);
+
     var chart = this.createChart({
         tooltip: { shared: true },
-        series: [{ name: "name1", type: "line" }, { name: "name2", type: "line" }, { name: "name3", type: "line" }]
+        series: [{ name: "name1", type: "line" }, { name: "name2", type: "line" }, { name: "name3", type: "line" }, { name: "name4", type: "line" }]
     });
 
-    // assert
-    var checkStackPoints = function(series, points, stackName) {
-        $.each(series.getPoints(), function(i, point) {
-            assert.equal(point.stackPoints[0].argument, points[0 + i].argument);
-            assert.equal(point.stackPoints[0].stackName, null);
-            if(stackName === "a" || stackName === null) {
-                assert.equal(point.stackPoints[1].argument, points[3 + i].argument);
-                assert.equal(point.stackPoints[1].stackName, "a");
-            }
-            if(stackName === "b" || stackName === null) {
-                var num = stackName === "b" ? 1 : 2;
-                assert.equal(point.stackPoints[num].argument, points[6 + i].argument);
-                assert.equal(point.stackPoints[num].stackName, "b");
-            }
-        });
-    };
-
-    assert.ok(chart.series, "dxChart has series");
-    assert.equal(chart.series.length, 3, "There should be single series");
-
-    checkStackPoints(chart.series[0], [point1, point2, point3, point4, point5, point6, point7, point8, point9]);
-    checkStackPoints(chart.series[1], [point1, point2, point3, point4, point5, point6, point7, point8, point9], "a");
-    checkStackPoints(chart.series[2], [point1, point2, point3, point4, point5, point6, point7, point8, point9], "b");
-});
-
-QUnit.test("different stack", function(assert) {
-    assert.expect(2 + 2 * 3 * 4 + 3 * 2);
-    // arrange
-    var point1 = new MockPoint({ argument: "1", val: 1 }),
-        point2 = new MockPoint({ argument: "2", val: 2 }),
-        point3 = new MockPoint({ argument: "3", val: 3 }),
-        point4 = new MockPoint({ argument: "1", val: 4 }),
-        point5 = new MockPoint({ argument: "2", val: 5 }),
-        point6 = new MockPoint({ argument: "3", val: 6 }),
-        point7 = new MockPoint({ argument: "1", val: 7 }),
-        point8 = new MockPoint({ argument: "2", val: 8 }),
-        point9 = new MockPoint({ argument: "3", val: 9 }),
-        stubSeries1 = new MockSeries({ points: [point1, point2, point3], stack: "a" }),
-        stubSeries2 = new MockSeries({ points: [point4, point5, point6], stack: null }),
-        stubSeries3 = new MockSeries({ points: [point7, point8, point9], stack: "b" });
-    chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2, stubSeries3);
     // act
-    var chart = this.createChart({
-        tooltip: { shared: true },
-        series: [{ name: "name1", type: "line" }, { name: "name2", type: "line" }, { name: "name3", type: "line" }]
-    });
+    const stackedPoints = chart.getStackedPoints(s4Points[1]);
 
     // assert
-    var checkStackPoints = function(series, points, stackName) {
-        var num;
-        $.each(series.getPoints(), function(i, point) {
-            if(stackName === "a" || stackName === null) {
-                assert.equal(point.stackPoints[0].argument, points[0 + i].argument);
-                assert.equal(point.stackPoints[0].stackName, "a");
-            }
-            num = stackName === "b" ? 0 : 1;
-            assert.equal(point.stackPoints[num].argument, points[3 + i].argument);
-            assert.equal(point.stackPoints[num].stackName, null);
-            if(stackName === "b" || stackName === null) {
-                num = stackName === "b" ? 1 : 2;
-                assert.equal(point.stackPoints[num].argument, points[6 + i].argument);
-                assert.equal(point.stackPoints[num].stackName, "b");
-            }
-        });
-    };
-
-    assert.ok(chart.series, "dxChart has series");
-    assert.equal(chart.series.length, 3, "There should be single series");
-
-    checkStackPoints(chart.series[0], [point1, point2, point3, point4, point5, point6, point7, point8, point9], "a");
-    checkStackPoints(chart.series[1], [point1, point2, point3, point4, point5, point6, point7, point8, point9]);
-    checkStackPoints(chart.series[2], [point1, point2, point3, point4, point5, point6, point7, point8, point9], "b");
+    assert.deepEqual(stackedPoints, [s1Points[1], s4Points[1]]);
 });
 
-QUnit.test("update shared tooltip with not shared", function(assert) {
+QUnit.test("Invisible series don't count", function(assert) {
     // arrange
-    var point1 = new MockPoint({ argument: "1", val: 1 }),
-        point2 = new MockPoint({ argument: "2", val: 2 }),
-        point3 = new MockPoint({ argument: "3", val: 3 }),
-        point4 = new MockPoint({ argument: "1", val: 3 }),
-        point5 = new MockPoint({ argument: "2", val: 5 }),
-        point6 = new MockPoint({ argument: "3", val: 7 }),
-        stubSeries1 = new MockSeries({ points: [point1, point2, point3], stack: null }),
-        stubSeries2 = new MockSeries({ points: [point4, point5, point6], stack: null });
+    const s1Points = [new MockPoint({ argument: "1", val: 1 }),
+        new MockPoint({ argument: "2", val: 2 }),
+        new MockPoint({ argument: "3", val: 3 })];
+    const s2Points = [new MockPoint({ argument: "1", val: 3 }),
+        new MockPoint({ argument: "2", val: 5 }),
+        new MockPoint({ argument: "3", val: 7 })];
+    const stubSeries1 = new MockSeries({ points: s1Points, visible: false });
+    const stubSeries2 = new MockSeries({ points: s2Points });
     chartMocks.seriesMockData.series.push(stubSeries1, stubSeries2);
-    // act
+    s1Points.forEach(p => p.series = stubSeries1);
+    s2Points.forEach(p => p.series = stubSeries2);
+
     var chart = this.createChart({
-        dataSource: [{}],
         tooltip: { shared: true },
         series: [{
             name: "name1",
@@ -1753,22 +1684,12 @@ QUnit.test("update shared tooltip with not shared", function(assert) {
             type: "line"
         }]
     });
-    this.themeManager.getOptions.withArgs("tooltip").returns({ shared: false, enabled: true, font: {} });
-    chart.option({ tooltip: { shared: false } });
+
+    // act
+    const stackedPoints = chart.getStackedPoints(s2Points[0]);
 
     // assert
-    var checkStackPoints = function(series) {
-        $.each(series.getPoints(), function(i, point) {
-            assert.equal(point.stackPoints, null);
-            assert.equal(point.stackName, null);
-        });
-    };
-
-    assert.ok(chart.series, "dxChart has series");
-    assert.equal(chart.series.length, 2, "There should be single series");
-
-    checkStackPoints(chart.series[0]);
-    checkStackPoints(chart.series[1]);
+    assert.deepEqual(stackedPoints, [s2Points[0]]);
 });
 
 QUnit.module("check free canvas", commons.environment);

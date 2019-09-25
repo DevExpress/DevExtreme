@@ -125,7 +125,21 @@ const config = {
         * @type number
         * @default 5
         */
-        maxSpeedDialActionCount: 5
+        maxSpeedDialActionCount: 5,
+
+        /**
+        * @name globalConfig.floatingActionButtonConfig.shading
+        * @type boolean
+        * @default false
+        */
+        shading: false,
+
+        /**
+        * @name globalConfig.floatingActionButtonConfig.direction
+        * @type Enums.floatingActionButtonDirection
+        * @default "auto"
+        */
+        direction: "auto"
     },
 
     optionsParser: (optionsString) => {

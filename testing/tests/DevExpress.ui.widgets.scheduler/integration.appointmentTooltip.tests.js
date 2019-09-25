@@ -115,8 +115,6 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
             ]
         });
 
-        scheduler.drawControl();
-
         views.forEach(view => {
             scheduler.option("currentView", view);
 
@@ -1286,5 +1284,56 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
         scheduler.appointments.compact.click();
         assert.equal(getItemCount(), 1, "Tooltip should render 1 item");
         assert.roughEqual(getItemElement().outerHeight(), getOverlayContentElement().outerHeight(), 10, "Tooltip height should equals then list height");
+    });
+
+    test("Component should draw correctly, if component append to container in appointmentTooltipTemplate", assert => {
+        const data = [
+            {
+                text: "Website Re-Design Plan",
+                startDate: new Date(2017, 4, 22, 9, 30),
+                endDate: new Date(2017, 4, 22, 11, 30)
+            }, {
+                text: "Book Flights to San Fran for Sales Trip",
+                startDate: new Date(2017, 4, 22, 12, 0),
+                endDate: new Date(2017, 4, 22, 13, 0),
+                allDay: true
+            }, {
+                text: "Install New Router in Dev Room",
+                startDate: new Date(2017, 4, 22, 14, 30),
+                endDate: new Date(2017, 4, 22, 15, 30)
+            }, {
+                text: "Approve Personal Computer Upgrade Plan",
+                startDate: new Date(2017, 4, 22, 10, 0),
+                endDate: new Date(2017, 4, 22, 11, 0)
+            }
+        ];
+
+        const findButton = index => {
+            const tooltipContentElement = scheduler.tooltip.getItemElement(index);
+            return tooltipContentElement.find(`#button-${index}`).dxButton("instance");
+        };
+
+        const getExpectedText = index => `test-${index}`;
+
+        const scheduler = createScheduler({
+            dataSource: data,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2017, 4, 25),
+            appointmentTooltipTemplate: (appointmentData, container, targetedAppointmentData, itemIndex) => {
+                const div = $("<div>").attr("id", `button-${itemIndex}`);
+                $(container).append(div);
+                $(`#button-${itemIndex}`).dxButton({ text: `test-${itemIndex}` });
+            },
+            startDayHour: 9,
+            height: 600
+        });
+
+        scheduler.appointments.click();
+        assert.equal(findButton(0).option("text"), getExpectedText(0), "dxButton component should placed in item of tooltip");
+
+        scheduler.appointments.compact.click();
+        assert.equal(findButton(0).option("text"), getExpectedText(0), "dxButton component should placed in first item of compact tooltip");
+        assert.equal(findButton(1).option("text"), getExpectedText(1), "dxButton component should placed in second item of compact tooltip");
     });
 });

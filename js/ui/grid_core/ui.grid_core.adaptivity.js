@@ -13,6 +13,7 @@ import { getWindow } from "../../core/utils/window";
 import { equalByValue } from "../../core/utils/common";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
+import { Deferred, when } from "../../core/utils/deferred";
 
 var COLUMN_HEADERS_VIEW = "columnHeadersView",
     ROWS_VIEW = "rowsView",
@@ -901,10 +902,18 @@ module.exports = {
 
                 _afterSaveEditData: function() {
                     this.callBase();
-                    if(this._isRowEditMode() && this._adaptiveController.hasHiddenColumns()
-                        && this.getController("validating").validate(true)) {
-                        this._cancelEditAdaptiveDetailRow();
+                    const deferred = new Deferred();
+                    if(this._isRowEditMode() && this._adaptiveController.hasHiddenColumns()) {
+                        when(this.getController("validating").validate(true)).done((isValid) => {
+                            if(isValid) {
+                                this._cancelEditAdaptiveDetailRow();
+                            }
+                            deferred.resolve();
+                        });
+                    } else {
+                        deferred.resolve();
                     }
+                    return deferred.promise();
                 },
 
                 _beforeCancelEditData: function() {
@@ -1037,7 +1046,7 @@ module.exports = {
                             key: item.key,
                             data: item.data,
                             modifiedValues: item.modifiedValues,
-                            inserted: item.inserted,
+                            isNewRow: item.isNewRow,
                             values: item.values
                         });
                     } else if(changeType === "refresh") {

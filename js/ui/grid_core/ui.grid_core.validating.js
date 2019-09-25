@@ -16,6 +16,7 @@ import Tooltip from "../tooltip";
 import Overlay from "../overlay";
 import themes from "../themes";
 import errors from "../widget/ui.errors";
+import { Deferred, when } from "../../core/utils/deferred";
 
 var INVALIDATE_CLASS = "invalid",
     REVERT_TOOLTIP_CLASS = "revert-tooltip",
@@ -40,7 +41,7 @@ var INVALIDATE_CLASS = "invalid",
 
     COMMAND_TRANSPARENT = "transparent";
 
-var ValidatingController = modules.Controller.inherit((function() {
+const ValidatingController = modules.Controller.inherit((function() {
     return {
         init: function() {
             this._editingController = this.getController("editing");
@@ -48,7 +49,7 @@ var ValidatingController = modules.Controller.inherit((function() {
         },
 
         _rowValidating: function(editData, validate) {
-            var that = this,
+            const deferred = new Deferred(),
                 brokenRules = validate ? validate.brokenRules || validate.brokenRule && [validate.brokenRule] : [],
                 isValid = validate ? validate.isValid : editData.isValid,
                 parameters = {
@@ -57,15 +58,19 @@ var ValidatingController = modules.Controller.inherit((function() {
                     key: editData.key,
                     newData: editData.data,
                     oldData: editData.oldData,
+                    promise: null,
                     errorText: this.getHiddenValidatorsErrorText(brokenRules)
                 };
 
-            that.executeAction("onRowValidating", parameters);
+            this.executeAction("onRowValidating", parameters);
 
-            editData.isValid = parameters.isValid;
-            editData.errorText = parameters.errorText;
+            when(parameters.promise).always(function() {
+                editData.isValid = parameters.isValid;
+                editData.errorText = parameters.errorText;
+                deferred.resolve(parameters);
+            });
 
-            return parameters;
+            return deferred.promise();
         },
 
         getHiddenValidatorsErrorText: function(brokenRules) {
@@ -80,67 +85,91 @@ var ValidatingController = modules.Controller.inherit((function() {
         },
 
         validate: function(isFull) {
-            var that = this,
-                isValid = true,
-                editingController = that._editingController;
+            let isValid = true;
+            const editingController = this._editingController,
+                deferred = new Deferred(),
+                completeList = [];
 
             isFull = isFull || editingController.getEditMode() === EDIT_MODE_ROW;
 
-            if(that._isValidationInProgress) {
-                return false;
+            if(this._isValidationInProgress) {
+                return deferred.resolve(false).promise();
             }
 
-            that._isValidationInProgress = true;
+            this._isValidationInProgress = true;
             if(isFull) {
-                each(editingController._editData, function(index, editData) {
-                    var validationResult;
+                each(editingController._editData, (index, editData) => {
+                    let validationResult;
 
                     if(editData.type && editData.type !== "remove") {
-                        validationResult = that.validateGroup(editData);
-                        if(!validationResult.isValid) {
-                            each(validationResult.brokenRules, function() {
-                                var value = this.validator.option("adapter").getValue();
-                                if(value === undefined) {
-                                    value = null;
-                                }
-                                if(this.column) {
-                                    editingController.updateFieldValue({
-                                        key: editData.key,
-                                        column: this.column
-                                    }, value, null, true);
-                                }
-                            });
-                        }
-                        isValid = isValid && validationResult.isValid;
+                        validationResult = this.validateGroup(editData);
+                        completeList.push(validationResult);
+
+                        validationResult.done(validationResult => {
+                            if(!validationResult.isValid) {
+                                each(validationResult.brokenRules, function() {
+                                    var value = this.validator.option("adapter").getValue();
+                                    if(value === undefined) {
+                                        value = null;
+                                    }
+                                    if(this.column) {
+                                        editingController.updateFieldValue({
+                                            key: editData.key,
+                                            column: this.column
+                                        }, value, null, true);
+                                    }
+                                });
+                            }
+                            isValid = isValid && validationResult.isValid;
+                        });
                     }
                 });
-            } else if(that._currentCellValidator) {
-                isValid = that.validateGroup(that._currentCellValidator._findGroup()).isValid;
+            } else if(this._currentCellValidator) {
+                const validationResult = this.validateGroup(this._currentCellValidator._findGroup());
+                completeList.push(validationResult);
+                validationResult.done(validationResult => {
+                    isValid = validationResult.isValid;
+                });
             }
 
-            that._isValidationInProgress = false;
+            this._isValidationInProgress = false;
 
-            return isValid;
+            when(...completeList).done(function() {
+                deferred.resolve(isValid);
+            });
+
+            return deferred.promise();
         },
 
         validateGroup: function(editData) {
-            var that = this,
-                validateGroup = ValidationEngine.getGroupConfig(editData),
-                validationResults;
+            const result = new Deferred(),
+                validateGroup = ValidationEngine.getGroupConfig(editData);
+            let validationResults;
 
             if(validateGroup && validateGroup.validators.length) {
                 validationResults = ValidationEngine.validateGroup(editData);
             }
 
-            return that._rowValidating(editData, validationResults);
+            when(validationResults && validationResults.complete || validationResults).done(validationResults => {
+                when(this._rowValidating(editData, validationResults)).done(result.resolve);
+            });
+
+            return result.promise();
         },
 
         updateEditData: function(editData) {
-            var editMode = this._editingController.getEditMode();
+            const editMode = this._editingController.getEditMode();
 
             if(FORM_BASED_MODES.indexOf(editMode) === -1) {
                 this.setDisableApplyValidationResults(true);
-                editData.isValid = ValidationEngine.getGroupConfig(editData) ? ValidationEngine.validateGroup(editData).isValid : true;
+                if(ValidationEngine.getGroupConfig(editData)) {
+                    const validationResult = ValidationEngine.validateGroup(editData);
+                    when(validationResult.complete || validationResult).done(validationResult => {
+                        editData.isValid = validationResult.isValid;
+                    });
+                } else {
+                    editData.isValid = true;
+                }
                 this.setDisableApplyValidationResults(false);
             } else {
                 editData.isValid = true;
@@ -255,7 +284,7 @@ module.exports = {
             * @name GridBaseOptions.onRowValidating
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
+            * @type_function_param1_field4 brokenRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
             * @type_function_param1_field5 isValid:boolean
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 newData:object
@@ -431,43 +460,38 @@ module.exports = {
                 },
 
                 _beforeSaveEditData: function(editData, editIndex) {
-                    var that = this,
-                        isValid,
-                        isFullValid,
-                        result = that.callBase.apply(that, arguments),
-                        validatingController = that.getController("validating");
+                    let isValid,
+                        result = this.callBase.apply(this, arguments);
+                    const validatingController = this.getController("validating");
 
                     if(editData) {
                         isValid = editData.type === "remove" || editData.isValid;
                         result = result || !isValid;
                     } else {
-                        var disposeValidators = that._createInvisibleColumnValidators(this._editData);
-                        isFullValid = validatingController.validate(true);
-                        disposeValidators();
-                        that._updateRowAndPageIndices();
+                        const disposeValidators = this._createInvisibleColumnValidators(this._editData);
+                        result = new Deferred();
+                        validatingController.validate(true).done(isFullValid => {
+                            disposeValidators();
+                            this._updateRowAndPageIndices();
 
-                        switch(that.getEditMode()) {
-                            case EDIT_MODE_CELL:
-                                if(!isFullValid) {
-                                    that._focusEditingCell();
-                                    result = true;
-                                }
-                                break;
-                            case EDIT_MODE_BATCH:
-                                if(!isFullValid) {
-                                    that._editRowIndex = -1;
-                                    that._editColumnIndex = -1;
-                                    that.getController("data").updateItems();
-                                    result = true;
-                                }
-                                break;
-                            case EDIT_MODE_ROW:
-                            case EDIT_MODE_POPUP:
-                                result = !isFullValid;
-                                break;
-                        }
+                            switch(this.getEditMode()) {
+                                case EDIT_MODE_CELL:
+                                    if(!isFullValid) {
+                                        this._focusEditingCell();
+                                    }
+                                    break;
+                                case EDIT_MODE_BATCH:
+                                    if(!isFullValid) {
+                                        this._editRowIndex = -1;
+                                        this._editColumnIndex = -1;
+                                        this.getController("data").updateItems();
+                                    }
+                                    break;
+                            }
+                            result.resolve(!isFullValid);
+                        });
                     }
-                    return result;
+                    return result.promise ? result.promise() : result;
                 },
 
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
@@ -523,18 +547,26 @@ module.exports = {
                 },
 
                 showHighlighting: function($cell, skipValidation) {
-                    var isValid = true,
+                    let isValid = true,
+                        callBase = this.callBase,
                         validator;
 
                     if(!skipValidation) {
                         validator = $cell.data("dxValidator");
                         if(validator) {
-                            isValid = validator.validate().isValid;
+                            const validationResult = validator.validate();
+                            when(validationResult.complete || validationResult).done(validationResult => {
+                                isValid = validationResult.isValid;
+                                if(isValid) {
+                                    callBase.call(this, $cell);
+                                }
+                            });
+                            return;
                         }
                     }
 
                     if(isValid) {
-                        this.callBase($cell);
+                        callBase.call(this, $cell);
                     }
                 },
                 getEditDataByKey: function(key) {

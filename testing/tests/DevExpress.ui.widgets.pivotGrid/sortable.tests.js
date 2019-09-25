@@ -82,15 +82,15 @@ function createHorizontalMarkUp(width, addItems, createTable) {
 QUnit.module("sortable without containers");
 
 QUnit.test("sortable render without parameters", function(assert) {
-    var $sortable = $("#sortable").dxSortable({});
+    var $sortable = $("#sortable").dxSortableOld({});
 
-    assert.ok($sortable.hasClass("dx-sortable"), "dx-sortable class attached");
+    assert.ok($sortable.hasClass("dx-sortable-old"), "dx-sortable-old class attached");
 });
 
 QUnit.test("vertical dragging", function(assert) {
     var changedArgs,
         draggingArgs = [];
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".test-container",
         onDragging: function(e) {
@@ -134,7 +134,7 @@ QUnit.test("vertical dragging", function(assert) {
 });
 
 QUnit.test("set onChanged arg's fields", function(assert) {
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".test-container",
         onChanged: function(e) {
@@ -162,7 +162,7 @@ QUnit.test("set onChanged arg's fields", function(assert) {
 QUnit.test("horizontal dragging - right", function(assert) {
     createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE);
 
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         direction: "horizontal",
         itemContainerSelector: ".test-container"
@@ -192,7 +192,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
 // QUnit.test("horizontal dragging between lines", function(assert) {
 //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
 
-//    var $sortable = $("#sortable").dxSortable({
+//    var $sortable = $("#sortable").dxSortableOld({
 //        itemSelector: ".test-item",
 //        itemContainerSelector: ".test-container",
 //        direction: "auto"
@@ -224,7 +224,7 @@ QUnit.test("horizontal dragging - right", function(assert) {
 // QUnit.test("horizontal dragging between lines to the end of the first line", function(assert) {
 //    createHorizontalMarkUp(HORIZONTAL_WIDTH, true);
 
-//    var $sortable = $("#sortable").dxSortable({
+//    var $sortable = $("#sortable").dxSortableOld({
 //        itemSelector: ".test-item",
 //        itemContainerSelector: ".test-container",
 //        direction: "auto"
@@ -258,7 +258,7 @@ QUnit.test("dragging inside table", function(assert) {
 
     var changedArgs,
         draggingArgs = [],
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             direction: "auto",
             itemContainerSelector: ".test-container",
@@ -305,7 +305,7 @@ QUnit.test("dragging inside table", function(assert) {
 
 QUnit.test("dragging move over half of item height", function(assert) {
     var changedArgs;
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".test-container",
         onChanged: function(e) {
@@ -340,7 +340,7 @@ QUnit.test("dragging move over half of item height", function(assert) {
 
 QUnit.test("dragging - to end of container", function(assert) {
     var changedArgs;
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".test-container",
         onChanged: function(e) {
@@ -374,7 +374,7 @@ QUnit.test("dragging - to end of container", function(assert) {
 
 QUnit.test("dragging - to end of container without dragend", function(assert) {
     var changedArgs;
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".test-container",
         onChanged: function(e) {
@@ -404,17 +404,17 @@ QUnit.test("dragging - to end of container without dragend", function(assert) {
     var $draggable = $(".dx-drag");
     assert.ok($draggable.hasClass("test-item"));
     assert.ok($draggable.css("position"), "absolute");
-    assert.ok($draggable.hasClass($sortable.dxSortable("instance").option("dragClass")));
-    assert.ok($items.eq(4).hasClass($sortable.dxSortable("instance").option("targetClass")));
-    assert.ok($items.eq(0).hasClass($sortable.dxSortable("instance").option("sourceClass")));
+    assert.ok($draggable.hasClass($sortable.dxSortableOld("instance").option("dragClass")));
+    assert.ok($items.eq(4).hasClass($sortable.dxSortableOld("instance").option("targetClass")));
+    assert.ok($items.eq(0).hasClass($sortable.dxSortableOld("instance").option("sourceClass")));
 
     assert.ok(!changedArgs, "change callback not called");
-    assert.ok($sortable.hasClass($sortable.dxSortable("instance").option("targetClass")));
+    assert.ok($sortable.hasClass($sortable.dxSortableOld("instance").option("targetClass")));
 });
 
 QUnit.test("dragging - out from container", function(assert) {
     var changedArgs;
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".test-container",
         onChanged: function(e) {
@@ -447,7 +447,7 @@ QUnit.test("dragging - out from container", function(assert) {
 
 QUnit.test("dragging - out from container without dragend", function(assert) {
     var changedArgs;
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".test-container",
         onChanged: function(e) {
@@ -475,16 +475,16 @@ QUnit.test("dragging - out from container without dragend", function(assert) {
     assert.equal($items.eq(3).text(), "4", "item 3 text");
 
     assert.equal($(".dx-drag.test-item").length, 1, "drag element exists");
-    assert.ok($items.eq(0).hasClass($sortable.dxSortable("instance").option("sourceClass")));
+    assert.ok($items.eq(0).hasClass($sortable.dxSortableOld("instance").option("sourceClass")));
 
-    assert.ok(!$sortable.hasClass($sortable.dxSortable("instance").option("targetClass")));
+    assert.ok(!$sortable.hasClass($sortable.dxSortableOld("instance").option("targetClass")));
 
     assert.ok(!changedArgs, "changed called");
 });
 
 QUnit.skip("dragging not allowed item", function(assert) {
     var changedArgs;
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".test-container",
         onChanged: function(e) {
@@ -512,13 +512,13 @@ QUnit.skip("dragging not allowed item", function(assert) {
     assert.equal($items.eq(2).text(), "3", "item 2 text");
     assert.equal($items.eq(3).text(), "4", "item 3 text");
 
-    assert.ok(!$sortable.hasClass($sortable.dxSortable("instance").option("targetClass")));
+    assert.ok(!$sortable.hasClass($sortable.dxSortableOld("instance").option("targetClass")));
     assert.ok(!changedArgs, "changed not called");
 });
 
 QUnit.test("dragging when no itemContainer", function(assert) {
     var changedArgs;
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".no",
         onChanged: function(e) {
@@ -550,7 +550,7 @@ QUnit.test("dragging when no itemContainer", function(assert) {
 });
 
 QUnit.test("dragging with color swatch", function(assert) {
-    var $sortable = $("#swatchSortable").dxSortable({
+    var $sortable = $("#swatchSortable").dxSortableOld({
         itemSelector: ".test-item",
         itemContainerSelector: ".test-container"
     });
@@ -575,7 +575,7 @@ QUnit.test("indicator is shown on right dragging", function(assert) {
     createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
 
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             direction: "auto",
             useIndicator: true,
@@ -609,7 +609,7 @@ QUnit.test("indicator should not be shown on small dragging", function(assert) {
     createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
 
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             direction: "auto",
             useIndicator: true,
@@ -634,7 +634,7 @@ QUnit.test("indicator is shown on left dragging", function(assert) {
     createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE, true, true);
 
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             direction: "auto",
             useIndicator: true,
@@ -662,7 +662,7 @@ QUnit.test("indicator is shown after last item dragging", function(assert) {
     createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
 
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             direction: "auto",
             useIndicator: true,
@@ -689,7 +689,7 @@ QUnit.test("indicator is shown after last item dragging", function(assert) {
 QUnit.test("indicator was removed", function(assert) {
     createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
 
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         direction: "auto",
         useIndicator: true,
@@ -713,7 +713,7 @@ QUnit.test("indicator was removed", function(assert) {
 QUnit.test("remove indicator when item dragged out from container", function(assert) {
     createHorizontalMarkUp(HORIZONTAL_WIDTH_LARGE * 2, true, true);
 
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
         itemSelector: ".test-item",
         direction: "auto",
         useIndicator: true,
@@ -755,7 +755,7 @@ QUnit.test("indicator should be shown on dragging between groups", function(asse
                                         </div>');
 
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             groupSelector: ".group",
             direction: "auto",
@@ -791,7 +791,7 @@ QUnit.test("dragging to empty group", function(assert) {
                                         </div>');
 
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             groupSelector: ".group",
             direction: "auto",
@@ -816,7 +816,7 @@ QUnit.test("indicator is shown on bottom dragging when items are set in two line
     createHorizontalMarkUp(HORIZONTAL_WIDTH_SMALL, true, true);
 
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             direction: "auto",
             useIndicator: true,
@@ -848,7 +848,7 @@ QUnit.test("indicator is shown on bottom dragging when items are set in two line
 
 QUnit.test("indicator is shown on bottom dragging", function(assert) {
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             itemContainerSelector: ".test-container",
             useIndicator: true
@@ -879,7 +879,7 @@ QUnit.test("indicator is shown on bottom dragging", function(assert) {
 
 QUnit.test("indicator is shown on bottom dragging. RTL", function(assert) {
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             itemContainerSelector: ".test-container",
             useIndicator: true,
@@ -911,7 +911,7 @@ QUnit.test("indicator is shown on bottom dragging. RTL", function(assert) {
 
 QUnit.test("indicator is shown after last item bottom dragging", function(assert) {
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             itemContainerSelector: ".test-container",
             useIndicator: true
@@ -940,7 +940,7 @@ QUnit.test("indicator is shown after last item bottom dragging", function(assert
 
 QUnit.test("indicator is shown after last item bottom dragging. RTL", function(assert) {
     var indicator,
-        $sortable = $("#sortable").dxSortable({
+        $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             itemContainerSelector: ".test-container",
             useIndicator: true,
@@ -969,7 +969,7 @@ QUnit.test("indicator is shown after last item bottom dragging. RTL", function(a
 });
 
 QUnit.test("drag without source element", function(assert) {
-    var $sortable = $("#sortable").dxSortable({
+    var $sortable = $("#sortable").dxSortableOld({
             itemSelector: ".test-item",
             itemContainerSelector: ".test-container",
             useIndicator: true,
@@ -1004,7 +1004,7 @@ QUnit.test("Indicator should not be shown on dragging to the same item at anothe
             height: "200px"
         });
 
-    var sortableDown = $("#sortable1").dxSortable({
+    var sortableDown = $("#sortable1").dxSortableOld({
         selector: "#sortable1",
         itemSelector: ".test-item",
         groupSelector: ".group",
@@ -1016,7 +1016,7 @@ QUnit.test("Indicator should not be shown on dragging to the same item at anothe
         useIndicator: true,
     });
 
-    $("#sortable2").dxSortable({
+    $("#sortable2").dxSortableOld({
         selector: "#sortable2",
         itemSelector: ".test-item",
         groupSelector: ".group",
@@ -1045,7 +1045,7 @@ QUnit.module("sortable when source item is hidden", {
     beforeEach: function() {
         this.createSortable = function(options) {
             options = options || {};
-            return $(options.selector || "#sortable").dxSortable($.extend({
+            return $(options.selector || "#sortable").dxSortableOld($.extend({
                 itemSelector: ".test-item",
                 itemContainerSelector: ".test-container",
                 onChanged: sinon.stub(),
@@ -1090,8 +1090,8 @@ QUnit.test("dragging", function(assert) {
     assert.equal($items.eq(2).text(), "3", "item 2 text");
     assert.equal($items.eq(3).text(), "4", "item 3 text");
 
-    assert.deepEqual($sortable.dxSortable("instance").option("onChanged").lastCall.args[0].sourceIndex, 0);
-    assert.deepEqual($sortable.dxSortable("instance").option("onChanged").lastCall.args[0].targetIndex, 2);
+    assert.deepEqual($sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0].sourceIndex, 0);
+    assert.deepEqual($sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0].targetIndex, 2);
 });
 
 QUnit.test("dragging move over half of item height", function(assert) {
@@ -1117,8 +1117,8 @@ QUnit.test("dragging move over half of item height", function(assert) {
     assert.equal($items.eq(2).text(), "1", "item 2 text");
     assert.equal($items.eq(3).text(), "4", "item 3 text");
 
-    assert.deepEqual($sortable.dxSortable("instance").option("onChanged").lastCall.args[0].sourceIndex, 0);
-    assert.deepEqual($sortable.dxSortable("instance").option("onChanged").lastCall.args[0].targetIndex, 3);
+    assert.deepEqual($sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0].sourceIndex, 0);
+    assert.deepEqual($sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0].targetIndex, 3);
 });
 
 QUnit.test("dragging - to end of container", function(assert) {
@@ -1144,8 +1144,8 @@ QUnit.test("dragging - to end of container", function(assert) {
     assert.equal($items.eq(2).text(), "4", "item 2 text");
     assert.equal($items.eq(3).text(), "1", "item 3 text");
 
-    assert.deepEqual($sortable.dxSortable("instance").option("onChanged").lastCall.args[0].sourceIndex, 0);
-    assert.deepEqual($sortable.dxSortable("instance").option("onChanged").lastCall.args[0].targetIndex, 4);
+    assert.deepEqual($sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0].sourceIndex, 0);
+    assert.deepEqual($sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0].targetIndex, 4);
 });
 
 QUnit.test("dragging - add element to empty container", function(assert) {
@@ -1178,7 +1178,7 @@ QUnit.test("dragging - add element to empty container", function(assert) {
     // assert
     var $firstGroupItems = firstGroup.find(".test-item"),
         $secondGroupItems = secondGroup.find(".test-item"),
-        onChangedArgs = $sortable.dxSortable("instance").option("onChanged").lastCall.args[0];
+        onChangedArgs = $sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0];
 
     assert.equal($secondGroupItems.length, 1, "item count in second group");
     assert.equal($secondGroupItems.eq(0).text(), "3", "item 0 text");
@@ -1230,7 +1230,7 @@ QUnit.test("dragging between different sortables by groupFilter callback to empt
     // assert
     var $firstGroupItems = firstGroup.find(".test-item"),
         $secondGroupItems = secondGroup.find(".test-item"),
-        onChangedArgs = $sortable.dxSortable("instance").option("onChanged").lastCall.args[0];
+        onChangedArgs = $sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0];
 
     assert.equal($secondGroupItems.length, 1, "item count in second group");
     assert.equal($secondGroupItems.eq(0).text(), "3", "item 0 text");
@@ -1279,7 +1279,7 @@ QUnit.test("disable dragging between different sortables by groupFilter callback
         .up();
 
     // assert
-    var onChangedCalled = $sortable.dxSortable("instance").option("onChanged").called;
+    var onChangedCalled = $sortable.dxSortableOld("instance").option("onChanged").called;
 
     assert.strictEqual(onChangedCalled, false, "onChanged is not called");
 });
@@ -1321,7 +1321,7 @@ QUnit.test("dragging between different sortables by groupFilter callback to non-
     // assert
     var $firstGroupItems = firstGroup.find(".test-item"),
         $secondGroupItems = secondGroup.find(".test-item"),
-        onChangedArgs = $sortable.dxSortable("instance").option("onChanged").lastCall.args[0];
+        onChangedArgs = $sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0];
 
     assert.equal($secondGroupItems.length, 4, "item count in second group");
     assert.equal($secondGroupItems.eq(0).text(), "10", "item 0 text");
@@ -1464,7 +1464,7 @@ QUnit.test("Disable dragging", function(assert) {
         .up();
 
     // assert
-    assert.ok(!$sortable.dxSortable("instance").option("onChanged").called, "dragging should be disabled");
+    assert.ok(!$sortable.dxSortableOld("instance").option("onChanged").called, "dragging should be disabled");
 });
 
 QUnit.test("Enable dragging at runtime", function(assert) {
@@ -1474,7 +1474,7 @@ QUnit.test("Enable dragging at runtime", function(assert) {
         $item = $sortable.find(".test-item").eq(0),
         offset = $item.offset();
 
-    $sortable.dxSortable("option", "allowDragging", true);
+    $sortable.dxSortableOld("option", "allowDragging", true);
     // act
     pointerMock($item)
         .start()
@@ -1484,10 +1484,10 @@ QUnit.test("Enable dragging at runtime", function(assert) {
         .up();
 
     // assert
-    assert.ok($sortable.dxSortable("instance").option("onChanged").called, "dragging should be disabled");
+    assert.ok($sortable.dxSortableOld("instance").option("onChanged").called, "dragging should be disabled");
 
-    assert.deepEqual($sortable.dxSortable("instance").option("onChanged").lastCall.args[0].sourceIndex, 0);
-    assert.deepEqual($sortable.dxSortable("instance").option("onChanged").lastCall.args[0].targetIndex, 2);
+    assert.deepEqual($sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0].sourceIndex, 0);
+    assert.deepEqual($sortable.dxSortableOld("instance").option("onChanged").lastCall.args[0].targetIndex, 2);
 });
 
 
@@ -1495,7 +1495,7 @@ QUnit.module("Group items", {
     beforeEach: function() {
         this.createSortable = function(options) {
             options = options || {};
-            return $(options.selector || "#sortable").dxSortable($.extend({
+            return $(options.selector || "#sortable").dxSortableOld($.extend({
                 itemSelector: ".test-item",
                 itemContainerSelector: ".test-container",
                 onChanged: sinon.stub()
@@ -1557,7 +1557,7 @@ QUnit.test("Groups dragging. get correct source index for no group item", functi
         .move(offset.left + 5, offset.top - 25)
         .up();
 
-    var changedArgs = $sortable.dxSortable("option", "onChanged").lastCall.args[0];
+    var changedArgs = $sortable.dxSortableOld("option", "onChanged").lastCall.args[0];
 
     assert.strictEqual(changedArgs.sourceIndex, 2, "sourceIndex");
     assert.strictEqual(changedArgs.targetIndex, 1, "targetIndex");
@@ -1582,7 +1582,7 @@ QUnit.test("Groups dragging. get correct source index for group item", function(
         .move(offset.left + 5, offset.top + 25)
         .up();
 
-    var changedArgs = $sortable.dxSortable("option", "onChanged").lastCall.args[0];
+    var changedArgs = $sortable.dxSortableOld("option", "onChanged").lastCall.args[0];
 
     assert.strictEqual(changedArgs.sourceIndex, 1, "sourceIndex");
     assert.strictEqual(changedArgs.targetIndex, 2, "targetIndex");
@@ -1610,7 +1610,7 @@ QUnit.test("do not change index on small dragging inside group. horizontal", fun
         .move(offset.left + 350, offset.top + 5)
         .up();
 
-    assert.ok(!$sortable.dxSortable("option", "onChanged").called);
+    assert.ok(!$sortable.dxSortableOld("option", "onChanged").called);
 });
 
 QUnit.test("do not change index on small dragging inside group. horizontal", function(assert) {
@@ -1632,7 +1632,7 @@ QUnit.test("do not change index on small dragging inside group. horizontal", fun
         .move(offset.left + 3, offset.top + 10)
         .up();
 
-    assert.ok(!$sortable.dxSortable("option", "onChanged").called);
+    assert.ok(!$sortable.dxSortableOld("option", "onChanged").called);
 });
 
 QUnit.test("Get correct source index for last item", function(assert) {
@@ -1648,7 +1648,7 @@ QUnit.test("Get correct source index for last item", function(assert) {
         .move(offset.left + 5, offset.top - 25)
         .up();
 
-    var changedArgs = $sortable.dxSortable("option", "onChanged").lastCall.args[0];
+    var changedArgs = $sortable.dxSortableOld("option", "onChanged").lastCall.args[0];
 
     assert.strictEqual(changedArgs.sourceIndex, 3, "sourceIndex");
     assert.strictEqual(changedArgs.targetIndex, 1, "targetIndex");
@@ -1663,7 +1663,7 @@ QUnit.module("Horizontal direction. RTL", {
         this.createSortable = function(options) {
             options = options || {};
 
-            var $sortable = $(options.selector || "#sortable").dxSortable($.extend({
+            var $sortable = $(options.selector || "#sortable").dxSortableOld($.extend({
                 itemSelector: ".test-item",
                 itemContainerSelector: ".test-container",
                 onChanged: sinon.stub(),
@@ -1671,7 +1671,7 @@ QUnit.module("Horizontal direction. RTL", {
                 direction: "horizontal"
             }, options));
 
-            that.sortable = $sortable.dxSortable("instance");
+            that.sortable = $sortable.dxSortableOld("instance");
 
             return $sortable;
         };
@@ -1854,7 +1854,7 @@ QUnit.module("Scroll group content", {
     beforeEach: function() {
         this.createSortable = function(options) {
             options = options || {};
-            return $(options.selector || "#sortable").dxSortable($.extend({
+            return $(options.selector || "#sortable").dxSortableOld($.extend({
                 itemSelector: ".test-item",
                 itemContainerSelector: ".test-container",
                 groupSelector: ".test-container",
@@ -1923,7 +1923,7 @@ QUnit.test("Scroll down group content", function(assert) {
         .move(offset.left, offset.top + $(".test-container").height());
 
     assert.strictEqual(this.onScroll.callCount, 1);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortable("instance").__SCROLL_STEP);
+    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortableOld("instance").__SCROLL_STEP);
 });
 
 QUnit.test("Scroll down group content", function(assert) {
@@ -1939,7 +1939,7 @@ QUnit.test("Scroll down group content", function(assert) {
         .move(offset.left, offset.top + $(".test-container").height());
 
     assert.strictEqual(this.onScroll.callCount, 1);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortable("instance").__SCROLL_STEP);
+    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, $sortable.dxSortableOld("instance").__SCROLL_STEP);
 });
 
 QUnit.test("Scroll down group content second time after clock tick if pointer at the bottom", function(assert) {
@@ -1959,7 +1959,7 @@ QUnit.test("Scroll down group content second time after clock tick if pointer at
     this.clock.tick(10);
 
     assert.strictEqual(this.onScroll.callCount, 1);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 2 * $sortable.dxSortable("instance").__SCROLL_STEP);
+    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 2 * $sortable.dxSortableOld("instance").__SCROLL_STEP);
 });
 
 QUnit.test("Scroll down group content while pointer at the bottom", function(assert) {
@@ -1977,7 +1977,7 @@ QUnit.test("Scroll down group content while pointer at the bottom", function(ass
     this.clock.tick(100);
 
     assert.strictEqual(this.onScroll.callCount, 11);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 11 * $sortable.dxSortable("instance").__SCROLL_STEP);
+    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 11 * $sortable.dxSortableOld("instance").__SCROLL_STEP);
 });
 
 QUnit.test("Scroll up group content", function(assert) {
@@ -1995,7 +1995,7 @@ QUnit.test("Scroll up group content", function(assert) {
         .move(offset.left, offset.top + 8);
 
     assert.strictEqual(this.onScroll.callCount, 1);
-    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 50 - $sortable.dxSortable("instance").__SCROLL_STEP);
+    assert.strictEqual(this.onScroll.lastCall.args[0].scrollOffset.top, 50 - $sortable.dxSortableOld("instance").__SCROLL_STEP);
 });
 
 QUnit.test("Scroll up group content to begin when pointer above area", function(assert) {

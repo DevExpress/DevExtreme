@@ -1873,7 +1873,7 @@ var PivotGrid = Widget.inherit({
                     columnsArea.groupWidth(groupWidth - diff);
                 }
 
-                if(scrollingOptions.mode === "virtual" && !that._dataController.isEmpty()) {
+                if(scrollingOptions.mode === "virtual") {
                     var virtualContentParams = that._dataController.calculateVirtualContentParams({
                         virtualRowHeight: scrollingOptions.virtualRowHeight,
                         virtualColumnWidth: scrollingOptions.virtualColumnWidth,

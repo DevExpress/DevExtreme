@@ -82,6 +82,7 @@ var staticMethods = {
     * @param2_field9 onExporting:function(e)
     * @param2_field10 onExported:function
     * @param2_field11 onFileSaving:function(e)
+    * @param2_field12 svgToCanvas: function(svg, canvas)
     * @static
     * @module viz/export
     * @export exportWidgets
@@ -102,6 +103,7 @@ var staticMethods = {
     * @param2_field8 onExported:function
     * @param2_field9 onFileSaving:function(e)
     * @param2_field10 margin:number
+    * @param2_field11 svgToCanvas: function(svg, canvas)
     * @static
     * @module viz/export
     * @export exportFromMarkup

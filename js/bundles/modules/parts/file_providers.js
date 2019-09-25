@@ -1,10 +1,10 @@
 import DevExpress from "./core";
 
 /// BUNDLER_PARTS
-/* FileProviders (dx.module-core.js) */
+/* fileProviders (dx.module-core.js) */
 
 import fileProviders from "../../../bundles/modules/file_providers";
-DevExpress.FileProviders = fileProviders;
+DevExpress.fileProviders = fileProviders;
 
 /// BUNDLER_PARTS_END
 

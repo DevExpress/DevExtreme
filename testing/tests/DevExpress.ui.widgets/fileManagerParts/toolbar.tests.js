@@ -200,4 +200,198 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.equal(this.wrapper.getToolbarSeparators().length, 1, "specified separator visible");
     });
 
+    test("default items rearrangement and modification", function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("toolbar", {
+            generalItems: [
+                {
+                    commandName: "showDirsPanel",
+                    icon: "upload"
+                },
+                "upload",
+                {
+                    commandName: "create",
+                    locateInMenu: "always"
+                },
+                {
+                    commandName: "refresh",
+                    text: "Reinvigorate"
+                },
+                {
+                    commandName: "separator",
+                    location: "after"
+                },
+                {
+                    commandName: "viewMode",
+                    location: "before"
+                }]
+        });
+        this.clock.tick(400);
+
+        let $elements = this.wrapper.getGeneralToolbarElements();
+        assert.equal($elements.length, 5, "general toolbar has elements");
+
+        assert.ok($elements.eq(0).find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "show tree view button is rendered with new icon");
+        assert.ok($elements.eq(1).text().indexOf("Upload files") !== -1, "upload files button is rendered in new position");
+
+        const $toolbarDropDownMenuButton = this.wrapper.getToolbarDropDownMenuButton();
+        $toolbarDropDownMenuButton.trigger("dxclick");
+        this.clock.tick(400);
+        const toolbarDropDownMenuItem = this.wrapper.getToolbarDropDownMenuItem(0);
+        assert.ok($(toolbarDropDownMenuItem).find(".dx-button-text").text().indexOf("New folder") !== -1, "create folder button is rendered in the dropDown menu");
+
+        assert.ok($elements.eq(2).val().indexOf("Details") !== -1, "view switcher is rendered in new location");
+        assert.ok($elements.eq(3).text().indexOf("Reinvigorate") !== -1, "refresh button is rendered with new text");
+
+
+        const $item = this.wrapper.findDetailsItem("File 1.txt");
+        $item.trigger("dxclick");
+        $item.trigger("click");
+        this.clock.tick(400);
+
+        let $toolbar = this.wrapper.getToolbar();
+        assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
+    });
+
+    test("custom items render and modification", function(assert) {
+        const testClick = sinon.spy();
+
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("toolbar", {
+            generalItems: [
+                "showDirsPanel", "create", "upload", "refresh",
+                {
+                    commandName: "separator",
+                    location: "after"
+                },
+                "viewMode",
+                {
+                    ID: 42,
+                    commandName: "commandName",
+                    location: "after",
+                    locateInMenu: "never",
+                    visible: true,
+                    onClick: testClick,
+                    options:
+                        {
+                            text: "newButton"
+                        }
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        let $elements = this.wrapper.getGeneralToolbarElements();
+        assert.equal($elements.length, 6, "general toolbar has elements");
+
+        let $newButton = $elements.eq(5);
+        assert.ok($newButton.text().indexOf("newButton") !== -1, "newButton is rendered at correct place");
+        assert.ok($newButton.hasClass("dx-button-mode-text"), "newButton has default stylingMode");
+
+        $newButton.trigger("dxclick");
+        assert.equal(testClick.callCount, 1, "newButton has correct action");
+        assert.equal(testClick.args[0][0].itemData.ID, 42, "custom attribute is available from onClick fuction");
+
+        fileManagerInstance.option("toolbar", {
+            generalItems: [
+                "showDirsPanel", "create", "upload", "refresh",
+                {
+                    commandName: "separator",
+                    location: "after"
+                },
+                "viewMode",
+                {
+                    commandName: "commandName",
+                    locateInMenu: "always",
+                    visible: true,
+                    disabled: true,
+                    onClick: testClick,
+                    options:
+                        {
+                            text: "newButton"
+                        }
+                },
+                {
+                    commandName: "newCommand",
+                    location: "after",
+                    locateInMenu: "never",
+                    visible: false,
+                    options:
+                        {
+                            text: "Some new command",
+                            icon: "upload"
+                        }
+                }
+            ]
+        });
+        this.clock.tick(400);
+
+        $elements = this.wrapper.getGeneralToolbarElements();
+        assert.equal($elements.length, 7, "general toolbar has elements");
+        const $visibleElements = this.wrapper.getToolbarElements();
+        assert.equal($visibleElements.length, 3, "general toolbar has visible elements");
+
+        const $toolbarDropDownMenuButton = this.wrapper.getToolbarDropDownMenuButton();
+        $toolbarDropDownMenuButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        const toolbarDropDownMenuItem = this.wrapper.getToolbarDropDownMenuItem(0);
+        $newButton = $(toolbarDropDownMenuItem).find(".dx-button");
+        assert.ok($newButton.find(".dx-button-text").text().indexOf("newButton") !== -1, "newButton is rendered in the dropDown menu");
+
+        $newButton.trigger("dxclick");
+        assert.equal(testClick.callCount, 1, "newButton has no action due to its disabled state");
+
+        const $newCommandButton = $elements.eq(5);
+        assert.ok($newCommandButton.text().indexOf("Some new command") !== -1, "new command button is placed correctly");
+        assert.ok($newCommandButton.find(".dx-icon").hasClass(Consts.UPLOAD_ICON_CLASS), "new command button has new icon");
+
+        assert.ok($visibleElements.eq(0).text().indexOf("Some new command") === -1);
+        assert.ok($visibleElements.eq(1).text().indexOf("Some new command") === -1);
+        assert.ok($visibleElements.eq(2).val().indexOf("Some new command") === -1, "new command button is hidden");
+    });
+
+    test("default items manual visibility management", function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("toolbar", {
+            generalItems: [
+                "showDirsPanel", "create", "upload", "separator",
+                {
+                    commandName: "move",
+                    visibilityMode: "manual",
+                    visible: true,
+                    disabled: true
+                }, "refresh",
+                {
+                    commandName: "separator",
+                    location: "after"
+                },
+                "viewMode"
+            ]
+        });
+        this.clock.tick(400);
+
+        let $elements = this.wrapper.getToolbarElements();
+        assert.equal($elements.length, 4, "general toolbar has elements");
+
+        assert.ok($elements.eq(2).text().indexOf("Move") !== -1, "move is rendered in new position");
+
+        const $item = this.wrapper.findDetailsItem("File 1.txt");
+        $item.trigger("dxclick");
+        $item.trigger("click");
+        this.clock.tick(400);
+
+        let $toolbar = this.wrapper.getToolbar();
+        assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
+    });
+
 });

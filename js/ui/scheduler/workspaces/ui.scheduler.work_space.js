@@ -635,7 +635,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._$dateTable = $("<table>");
 
-        this._$groupTable = $("<table>").addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
+        this._$groupTable = $("<div>").addClass(WORKSPACE_VERTICAL_GROUP_TABLE_CLASS);
     },
 
     _initAllDayPanelElements: function() {
@@ -2350,7 +2350,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var rowIndex = this._getRowCount() - 1,
             cellIndex = this._getCellCount();
 
-        if(this.option("groupByDate")) {
+        if(this.option("groupByDate") && this._getGroupCount() > 0) {
             cellIndex = cellIndex * this._getGroupCount() - 1;
         } else {
             cellIndex = cellIndex - 1;

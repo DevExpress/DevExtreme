@@ -1,3 +1,6 @@
+@import (once) "./validation.ios7.less";
+@import (once) "./button.ios7.less";
+
 @TEXTEDITOR_ICON_SIZE: 18px;
 @CLEAR_ICON_SIZE: @TEXTEDITOR_ICON_SIZE;
 @CLEAR_ICON_TOP: 7px;
@@ -15,26 +18,47 @@
 @TEXTEDITOR_INVALID_BADGE_WIDTH: 22px;
 @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING: 4px;
 
-.validation-icon-position() {
-    &.dx-invalid {
-        .dx-texteditor-input {
-            padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
-        }
+.texteditor-input-padding() {
+    .dx-texteditor-input {
+        padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+    }
 
-        &.dx-rtl .dx-texteditor-input {
-            padding: @TEXTEDITOR_INPUT_PADDING;
-            padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
-        }
+    &.dx-rtl .dx-texteditor-input {
+        padding: @TEXTEDITOR_INPUT_PADDING;
+        padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+    }
+}
+
+.texteditor-validation-icon-offset() {
+    right: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+
+    .dx-rtl &,
+    .dx-rtl& {
+        left: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+        right: auto;
+    }
+}
+
+.validation-icon-position() {
+    &.dx-invalid,
+    &.dx-valid {
+        .texteditor-input-padding();
 
         .dx-texteditor-input-container {
             &:after {
-                right: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+                .texteditor-validation-icon-offset();
+            }
+        }
+    }
+}
 
-                .dx-rtl &,
-                .dx-rtl& {
-                    left: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
-                    right: auto;
-                }
+.pending-indicator-position() {
+    &.dx-validation-pending {
+        .texteditor-input-padding();
+
+        .dx-texteditor-input-container {
+            .dx-pending-indicator {
+                .texteditor-validation-icon-offset();
             }
         }
     }
@@ -83,6 +107,8 @@
 .dx-show-clear-button {
     &:not(.dx-texteditor-empty) {
         .validation-icon-position();
+
+        .pending-indicator-position();
     }
 }
 
@@ -116,30 +142,71 @@
     }
 }
 
-.dx-invalid-ios7-badge() {
+.badge-settings() {
     pointer-events: none;
     font-weight: bold;
-    background-color: @IOS7_BACKGROUND;
-    border: @TEXTEDITOR_INVALID_BADGE_BORDER_WIDTH solid @IOS7_INVALID_COLOR;
-    color: @IOS7_INVALID_COLOR;
-    content: '!';
     position: absolute;
     top: 50%;
     margin-top: -@TEXTEDITOR_INVALID_BADGE_WIDTH/2;
     width: @TEXTEDITOR_INVALID_BADGE_WIDTH;
     height: @TEXTEDITOR_INVALID_BADGE_WIDTH;
-    border-radius: 11px;
     text-align: center;
     line-height: @TEXTEDITOR_INVALID_BADGE_WIDTH - 3px;
+}
+
+.dx-invalid-ios7-badge() {
+    .badge-settings();
+
+    background-color: @IOS7_BACKGROUND;
+    border: @TEXTEDITOR_INVALID_BADGE_BORDER_WIDTH solid @IOS7_INVALID_COLOR;
+    color: @IOS7_INVALID_COLOR;
+    content: '!';
+    border-radius: 11px;
+}
+
+.dx-valid-ios7-badge() {
+    .badge-settings();
+
+    font-family: 'DXIcons', sans-serif;
+    color: @IOS7_BUTTON_SUCCESS;
+    content: '\f005';
+    .validation-badge-animation();
+}
+
+.pending-indicator-ios7() {
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    margin-top: -@TEXTEDITOR_INVALID_BADGE_WIDTH/2;
+    width: @TEXTEDITOR_INVALID_BADGE_WIDTH;
+    height: @TEXTEDITOR_INVALID_BADGE_WIDTH;
 }
 
 .dx-texteditor {
     .validation-icon-position();
 
+    .pending-indicator-position();
+
     &.dx-invalid {
         .dx-texteditor-input-container {
             &:after {
                 .dx-invalid-ios7-badge();
+            }
+        }
+    }
+
+    &.dx-valid {
+        .dx-texteditor-input-container {
+            &:after {
+                .dx-valid-ios7-badge();
+            }
+        }
+    }
+
+    &.dx-validation-pending {
+        .dx-texteditor-input-container {
+            .dx-pending-indicator {
+                .pending-indicator-ios7();
             }
         }
     }

@@ -1,51 +1,106 @@
-var each = require("../../core/utils/iterator").each,
-    Class = require("../../core/class"),
-    EventsMixin = require("../../core/events_mixin"),
-    ValidationEngine = require("../../ui/validation_engine"),
-    ko = require("knockout");
+import { each, map } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import Class from "../../core/class";
+import EventsMixin from "../../core/events_mixin";
+import ValidationEngine from "../../ui/validation_engine";
+import { Deferred } from "../../core/utils/deferred";
+import Guid from "../../core/guid";
+import ko from "knockout";
 
-var koDxValidator = Class.inherit({
-    ctor: function(target, option) {
-        var that = this;
-        that.target = target;
-        that.validationRules = option.validationRules;
-        that.name = option.name;
-        that.isValid = ko.observable(true);
-        that.validationError = ko.observable();
+const VALIDATION_STATUS_VALID = "valid",
+    VALIDATION_STATUS_PENDING = "pending";
 
-        each(this.validationRules, function(_, rule) {
-            rule.validator = that;
+const koDxValidator = Class.inherit({
+    ctor(target, { name, validationRules }) {
+        this.target = target;
+        this.name = name;
+        this.isValid = ko.observable(true);
+        this.validationError = ko.observable();
+        this.validationErrors = ko.observable();
+        this.validationStatus = ko.observable(VALIDATION_STATUS_VALID);
+
+        this.validationRules = map(validationRules, (rule, index) => {
+            return extend({}, rule, {
+                validator: this,
+                index: index
+            });
         });
+        this._validationInfo = {
+            result: null,
+            deferred: null
+        };
     },
 
+    _updateValidationResult(result) {
+        if(!this._validationInfo.result || this._validationInfo.result.id !== result.id) {
+            this._validationInfo.result = extend({}, result);
+        } else {
+            for(let prop in result) {
+                if(prop !== "id" && prop !== "complete") {
+                    this._validationInfo.result[prop] = result[prop];
+                }
+            }
+        }
+    },
 
-    validate: function() {
-        var result = ValidationEngine.validate(this.target(), this.validationRules, this.name);
+    validate() {
+        const currentResult = this._validationInfo && this._validationInfo.result,
+            value = this.target();
+        if(currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
+            return currentResult;
+        }
+        let result = ValidationEngine.validate(value, this.validationRules, this.name);
+        result.id = new Guid().toString();
         this._applyValidationResult(result);
-        return result;
+        result.complete && result.complete.then((res) => {
+            if(res.id === this._validationInfo.result.id) {
+                this._applyValidationResult(res);
+            }
+        });
+        return this._validationInfo.result;
     },
 
-    reset: function() {
+    reset() {
         this.target(null);
-        var result = { isValid: true, brokenRule: null };
+        const result = {
+            isValid: true,
+            brokenRule: null,
+            pendingRules: null,
+            status: VALIDATION_STATUS_VALID,
+            complete: null
+        };
         this._applyValidationResult(result);
         return result;
     },
 
-    _applyValidationResult: function(result) {
+    _applyValidationResult(result) {
         result.validator = this;
-
-        this.target.dxValidator.isValid(result.isValid);
-        this.target.dxValidator.validationError(result.brokenRule);
-        this.fireEvent("validated", [result]);
+        this._updateValidationResult(result);
+        this.target.dxValidator.isValid(this._validationInfo.result.isValid);
+        this.target.dxValidator.validationError(this._validationInfo.result.brokenRule);
+        this.target.dxValidator.validationErrors(this._validationInfo.result.brokenRules);
+        this.target.dxValidator.validationStatus(this._validationInfo.result.status);
+        if(result.status === VALIDATION_STATUS_PENDING) {
+            if(!this._validationInfo.deferred) {
+                this._validationInfo.deferred = new Deferred();
+                this._validationInfo.result.complete = this._validationInfo.deferred.promise();
+            }
+            this.fireEvent("validating", [this._validationInfo.result]);
+            return;
+        }
+        if(result.status !== VALIDATION_STATUS_PENDING) {
+            this.fireEvent("validated", [result]);
+            if(this._validationInfo.deferred) {
+                this._validationInfo.deferred.resolve(result);
+                this._validationInfo.deferred = null;
+            }
+        }
     }
-
 }).include(EventsMixin);
 
 
 ko.extenders.dxValidator = function(target, option) {
     target.dxValidator = new koDxValidator(target, option);
-
     target.subscribe(target.dxValidator.validate.bind(target.dxValidator));
 
     return target;

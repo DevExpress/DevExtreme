@@ -2504,7 +2504,7 @@ QUnit.testInActiveWindow("lookup search get focus on opening", function(assert) 
         }),
         instance = $element.dxLookup("instance");
 
-    $element.find("." + LOOKUP_FIELD_CLASS).focusin();
+    instance.focus();
     assert.ok($element.hasClass(FOCUSED_CLASS), "'focus' method focus field with closed overlay");
 
     instance.option("opened", true);
@@ -2900,6 +2900,14 @@ QUnit.test("Validation message", function(assert) {
     });
 
     assert.ok(instance);
+});
+
+QUnit.test("Pending indicator is rendered", function(assert) {
+    const $element = $("#widget").dxLookup(),
+        instance = $element.dxLookup("instance");
+
+    instance.option("validationStatus", "pending");
+    assert.ok($element.find(".dx-pending-indicator").dxLoadIndicator("instance").option("visible"));
 });
 
 QUnit.test("Lookup should select an item in the grouped list", function(assert) {

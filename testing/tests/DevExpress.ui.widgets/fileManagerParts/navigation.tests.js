@@ -1,4 +1,5 @@
 import $ from "jquery";
+import renderer from "core/renderer";
 const { test } = QUnit;
 import "ui/file_manager";
 import fx from "animation/fx";
@@ -149,6 +150,55 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         target = this.wrapper.getFolderNodeText(0);
         assert.equal(breadcrumbs, "TestRFN", "Custom breadcrumbs text is correct");
         assert.equal(target, "TestRFN", "Custom is correct");
+    });
+
+    test("splitter should change width of dirs tree and file items areas", function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 900;
+
+        $("#fileManager").css("width", "900px");
+        this.wrapper.getInstance().repaint();
+        const fileManagerWidth = $("#fileManager").get(0).clientWidth;
+
+        assert.ok(this.wrapper.getSplitter().length, "Splitter was rendered");
+        assert.ok(this.wrapper.isSplitterActive(), "Splitter is active");
+
+        let oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        let oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        this.wrapper.moveSplitter(100);
+        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth + 100, "Dirs tree has correct width");
+        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, oldItemViewWidth - 100, "Item view has correct width");
+
+        oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        this.wrapper.moveSplitter(-200);
+        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, oldTreeViewWidth - 200, "Dirs tree has correct width");
+        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, oldItemViewWidth + 200, "Item view has correct width");
+
+        oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        this.wrapper.moveSplitter(-oldTreeViewWidth * 2);
+        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, 0, "Dirs tree has correct width");
+        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, fileManagerWidth, "Item view has correct width");
+
+        const splitterWidth = this.wrapper.getSplitter().get(0).clientWidth;
+        oldTreeViewWidth = this.wrapper.getDrawerPanelContent().get(0).clientWidth;
+        oldItemViewWidth = this.wrapper.getItemsView().get(0).clientWidth;
+        this.wrapper.moveSplitter(oldItemViewWidth * 2);
+        assert.equal(this.wrapper.getDrawerPanelContent().get(0).clientWidth, fileManagerWidth - splitterWidth, "Dirs tree has correct width");
+        assert.equal(this.wrapper.getItemsView().get(0).clientWidth, splitterWidth, "Item view has correct width");
+
+        renderer.fn.width = originalFunc;
+    });
+
+    test("file items with the wrong extension is not shown", function(assert) {
+        assert.strictEqual(this.wrapper.getThumbnailsItems().length, 6, "all items are shown");
+
+        this.wrapper.getInstance().option("allowedFileExtensions", [".xml"]);
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getThumbnailsItems().length, 4, "only items with allow extensions are shown");
+        assert.strictEqual(this.wrapper.getThumbnailsItemName(3), "File 3.xml", "item name has allowed extension");
     });
 
 });

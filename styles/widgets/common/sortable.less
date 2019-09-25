@@ -1,0 +1,36 @@
+.dx-sortable {
+    cursor: pointer;
+    .user-select(none);
+
+    &.dx-state-disabled,
+    .dx-state-disabled & {
+        cursor: default;
+    }
+}
+
+.dx-sortable-dragging.dx-sortable-clone {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+}
+
+.dx-sortable-source {
+    opacity: 0.5;
+}
+
+.dx-sortable-source-hidden {
+    opacity: 0;
+}
+
+.dx-sortable-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+}
+
+.dx-sortable-placeholder-inside {
+    border-width: 2px;
+}

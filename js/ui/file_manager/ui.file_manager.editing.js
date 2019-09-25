@@ -66,22 +66,16 @@ class FileManagerEditingControl extends Widget {
         return this._createComponent($fileUploader, this._getFileUploaderComponent(), {
             getController: this._getFileUploaderController.bind(this),
             onUploadSessionStarted: e => this._onUploadSessionStarted(e),
-            onUploadProgress: e => this._onUploadProgress(e),
-            onFilesUploaded: result => {},
-            onErrorOccurred: () => {}
+            onUploadProgress: e => this._onUploadProgress(e)
         });
     }
 
     _getFileUploaderController() {
+        const uploadDirectory = this._uploadDirectoryInfo && this._uploadDirectoryInfo.fileItem;
         return {
             chunkSize: this._controller.getFileUploadChunkSize(),
-            initiateUpload: state => {
-                state.destinationFolder = this._uploadDirectoryInfo.fileItem;
-                return this._controller.initiateFileUpload(state);
-            },
-            uploadChunk: (state, chunk) => this._controller.uploadFileChunk(state, chunk),
-            finalizeUpload: state => this._controller.finalizeFileUpload(state),
-            abortUpload: state => this._controller.abortFileUpload(state)
+            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
+            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, uploadDirectory)
         };
     }
 
@@ -171,8 +165,13 @@ class FileManagerEditingControl extends Widget {
             },
 
             download: {
-                action: () => { } // TODO implement this action
+                action: arg => this._download(arg)
+            },
+
+            getItemsContent: {
+                action: arg => this._getItemsContent(arg)
             }
+
         };
     }
 
@@ -297,6 +296,16 @@ class FileManagerEditingControl extends Widget {
     _tryUpload(destinationFolder) {
         this._uploadDirectoryInfo = destinationFolder && destinationFolder[0] || this._getCurrentDirectory();
         this._fileUploader.tryUpload();
+    }
+
+    _download(itemInfos) {
+        itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        return this._controller.downloadItems(itemInfos);
+    }
+
+    _getItemsContent(itemInfos) {
+        itemInfos = itemInfos || this._model.getMultipleSelectedItems();
+        return this._controller.getItemsContent(itemInfos);
     }
 
     _completeAction(operationInfo, context) {

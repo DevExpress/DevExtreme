@@ -45,7 +45,7 @@ export class FileManagerCommandManager {
                 name: "download",
                 text: "Download",
                 icon: "download",
-                enabled: false
+                enabled: this._permissions.download
             },
             {
                 name: "upload",
@@ -128,6 +128,11 @@ export class FileManagerCommandManager {
         if(itemsLength === 0 || itemInfos.some(item => item.fileItem.isRoot || item.fileItem.isParentFolder)) {
             return false;
         }
+
+        if(commandName === "download") {
+            return itemInfos.every(itemInfo => !itemInfo.fileItem.isDirectory);
+        }
+
         return !command.isSingleFileItemCommand || itemsLength === 1;
     }
 

@@ -108,6 +108,7 @@ var checkTwoGroups = function(assert, series) {
     assert.equal(renderer.stub("g").getCall(0).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-series");
     assert.equal(renderer.stub("g").getCall(1).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-markers");
     assert.equal(renderer.stub("g").getCall(2).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-labels");
+    assert.equal(renderer.stub("g").getCall(2).returnValue._stored_settings["pointer-events"], null);
 
     assert.equal(series._markersGroup.stub("append").lastCall.args[0], parentGroup);
     assert.equal(series._labelsGroup.stub("append").lastCall.args[0], labelsGroup);

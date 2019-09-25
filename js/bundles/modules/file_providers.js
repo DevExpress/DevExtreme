@@ -1,8 +1,8 @@
 import DevExpress from "./core";
 import WebApiFileProvider from "../../ui/file_manager/file_provider/webapi";
-import OneDriveFileProvider from "../../ui/file_manager/file_provider/onedrive";
+import CustomFileProvider from "../../ui/file_manager/file_provider/custom";
 
-module.exports = DevExpress.FileProviders = DevExpress.FileProviders || {};
+module.exports = DevExpress.fileProviders = DevExpress.fileProviders || {};
 
-DevExpress.FileProviders.WebApi = WebApiFileProvider;
-DevExpress.FileProviders.OneDrive = OneDriveFileProvider;
+DevExpress.fileProviders.WebApi = WebApiFileProvider;
+DevExpress.fileProviders.Custom = CustomFileProvider;

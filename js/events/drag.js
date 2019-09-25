@@ -286,6 +286,10 @@ var DragEmitter = GestureEmitter.inherit({
             return false;
         }
 
+        if(config.checkDropTarget && !config.checkDropTarget($target)) {
+            return false;
+        }
+
         return $target;
     },
 

@@ -1587,8 +1587,17 @@
 
 // SpeedDialAction
 @speed-dial-action-bg: @base-bg;
+@speed-dial-action-hover-bg: darken(@speed-dial-action-bg, 8%);
+@speed-dial-action-active-bg: darken(@speed-dial-action-bg, 24%);
 @speed-dial-action-color: @base-text-color;
+@speed-dial-action-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+@speed-dial-action-label-shadow:  0 1px 4px rgba(0, 0, 0, 0.2);
+@speed-dial-action-shading-color: @overlay-shader-bg;
 
 // Gantt
 @gantt-collapsable-row-bg: darken(@base-bg, 4%);
 @gantt-selection-bg: fade(@treelist-selection-bg, 25%);
+
+// Splitter
+@splitter-border-color: @base-border-color;
+@splitter-bg: fade(@base-accent, 50%);

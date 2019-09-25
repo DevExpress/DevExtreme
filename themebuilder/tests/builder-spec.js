@@ -114,6 +114,33 @@ describe("Builder - testing exported function", () => {
             assert.ok(themeBuilderCss === distributionCss);
         });
     }).timeout(5000);
+
+
+    ["generic.light", "material.blue.light"].forEach(theme => {
+        const ModulesHandler = require("../modules/modules-handler");
+        const themesFileContent = fs.readFileSync(path.join(__dirname, "../../styles/theme.less"), "utf8");
+        const widgets = new ModulesHandler().availableWidgets(themesFileContent);
+
+        widgets.forEach(widget => {
+            const widgetName = widget.name;
+            const config = {
+                command: commands.BUILD_THEME,
+                reader: fileReader,
+                lessCompiler: lessCompiler,
+                items: [],
+                baseTheme: theme,
+                widgets: [widgetName]
+            };
+
+            it(`We can build bundle for every widget (${theme}, ${widgetName})`, () => {
+                return buildTheme(config).then((result) => {
+                    assert.isString(result.css, `${widgetName} bundle builded`);
+                    assert.deepEqual(result.widgets, [ widgetName ]);
+                });
+            });
+        });
+    });
+
 });
 
 

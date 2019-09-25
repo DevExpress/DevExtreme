@@ -227,7 +227,7 @@ var FilterBuilder = Widget.inherit({
              * @type string|function(data)
              * @default undefined
              * @type_function_param1 data:object
-             * @type_function_return string
+             * @type_function_return string|number|boolean
              */
 
             /**
@@ -841,6 +841,8 @@ var FilterBuilder = Widget.inherit({
             menu: {
                 items: items,
                 dataStructure: "plain",
+                keyExpr: "id",
+                parentId: "parentId",
                 displayExpr: "caption",
                 onItemClick: (e) => {
                     if(item !== e.itemData) {

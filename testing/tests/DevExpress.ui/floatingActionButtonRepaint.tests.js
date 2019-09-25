@@ -52,6 +52,7 @@ QUnit.module("apply current config options", (hooks) => {
 
         config({
             floatingActionButtonConfig: {
+                shading: true,
                 position: "left top",
                 icon: "edit",
                 closeIcon: "cancel"
@@ -64,6 +65,11 @@ QUnit.module("apply current config options", (hooks) => {
         assert.equal($fabMainContent.find(".dx-icon-cancel").length, 1, "default close icon is changed");
         assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
         assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+        assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading before FAB click");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 1, "there is shading after FAB click");
     });
 
     test("repaint with one action", (assert) => {

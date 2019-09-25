@@ -96,7 +96,7 @@ QUnit.test("Empty options", function(assert) {
     assert.equal($areaFieldsContainers.eq(4).attr("group"), "data", "group 5");
     assert.equal($areaFieldsContainers.eq(4).attr("allow-scrolling"), "true", "group 5 - allow-scrolling");
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance");
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance");
 
     assert.strictEqual(sortable.option("allowDragging"), true, "dragging should be enabled by default");
 });
@@ -1390,7 +1390,7 @@ QUnit.test("Pass allowDragging to sortable", function(assert) {
         allowFieldDragging: false
     });
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance");
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance");
 
     assert.strictEqual(sortable.option("allowDragging"), false, "allowDragging is passed to sortable");
 });
@@ -1402,7 +1402,7 @@ QUnit.test("Change allowDragging at runtime", function(assert) {
     });
     this.fieldChooser.option("allowFieldDragging", true);
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance");
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance");
 
     assert.strictEqual(sortable.option("allowDragging"), true, "allowDragging is passed to sortable");
 });
@@ -1497,7 +1497,7 @@ QUnit.test("change group position", function(assert) {
 
     changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(2));
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance"),
         onChangedHandler = sortable.option("onChanged");
     // act
     onChangedHandler(changedArgs);
@@ -1945,7 +1945,7 @@ QUnit.test("change group position", function(assert) {
     };
     this.setup(dataSourceOptions);
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance"),
         onChangedHandler = sortable.option("onChanged"),
         changedArgs = {
             sourceElement: this.$container.find(".dx-area-field").eq(2),
@@ -2158,7 +2158,7 @@ QUnit.test("change position between areas", function(assert) {
     ];
     this.setup(dataSource);
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance"),
         onChangedHandler = sortable.option("onChanged");
     // act
     onChangedHandler(this.createChangedArgs({
@@ -2189,7 +2189,7 @@ QUnit.test("move from area to treeview", function(assert) {
 
     this.setup(dataSource);
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance"),
         onChangedHandler = sortable.option("onChanged");
     // act
 
@@ -2285,7 +2285,7 @@ QUnit.test("Apply filters", function(assert) {
 QUnit.test("applyChanges", function(assert) {
     this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0, index: 0 }] });
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance"),
         onChangedHandler = sortable.option("onChanged");
 
     // act
@@ -2307,7 +2307,7 @@ QUnit.test("applyChanges", function(assert) {
 QUnit.test("cancelChanges", function(assert) {
     this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0, index: 0 }] });
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance"),
         onChangedHandler = sortable.option("onChanged");
 
     // act
@@ -2326,7 +2326,7 @@ QUnit.test("cancelChanges", function(assert) {
 QUnit.test("cancel changes on field chooser repaint", function(assert) {
     this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0, index: 0 }] });
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance"),
         onChangedHandler = sortable.option("onChanged");
 
     // act
@@ -2357,7 +2357,7 @@ QUnit.test("syncronize state option and dataSource state", function(assert) {
 QUnit.test("cancel changes on dataSource change", function(assert) {
     this.setup({ fields: [{ dataField: "Field1", area: 'column', areaIndex: 0, index: 0 }] });
 
-    var sortable = this.fieldChooser.$element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortableOld("instance"),
         onChangedHandler = sortable.option("onChanged");
 
     // act

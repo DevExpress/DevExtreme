@@ -1,43 +1,55 @@
-var Class = require("../core/class"),
-    extend = require("../core/utils/extend").extend,
-    inArray = require("../core/utils/array").inArray,
-    each = require("../core/utils/iterator").each,
-    EventsMixin = require("../core/events_mixin"),
-    errors = require("../core/errors"),
-    commonUtils = require("../core/utils/common"),
-    typeUtils = require("../core/utils/type"),
-    numberLocalization = require("../localization/number"),
-    messageLocalization = require("../localization/message");
+import Class from "../core/class";
+import { extend } from "../core/utils/extend";
+import { inArray } from "../core/utils/array";
+import { each } from "../core/utils/iterator";
+import EventsMixin from "../core/events_mixin";
+import errors from "../core/errors";
+import { grep } from "../core/utils/common";
+import typeUtils from "../core/utils/type";
+import numberLocalization from "../localization/number";
+import messageLocalization from "../localization/message";
+import Promise from "../core/polyfills/promise";
+import { fromPromise, Deferred } from "../core/utils/deferred";
 
-var BaseRuleValidator = Class.inherit({
-    NAME: "base",
+const VALIDATION_STATUS_VALID = "valid",
+    VALIDATION_STATUS_INVALID = "invalid",
+    VALIDATION_STATUS_PENDING = "pending";
 
-    defaultMessage: function(value) { return messageLocalization.getFormatter("validation-" + this.NAME)(value); },
-    defaultFormattedMessage: function(value) { return messageLocalization.getFormatter("validation-" + this.NAME + "-formatted")(value); },
-
-    _isValueEmpty: function(value) {
+class BaseRuleValidator {
+    constructor() {
+        this.NAME = "base";
+    }
+    defaultMessage(value) {
+        return messageLocalization.getFormatter(`validation-${this.NAME}`)(value);
+    }
+    defaultFormattedMessage(value) {
+        return messageLocalization.getFormatter(`validation-${this.NAME}-formatted`)(value);
+    }
+    _isValueEmpty(value) {
         return !rulesValidators.required.validate(value, {});
-    },
-
-    validate: function(value, rule) {
-        var valueArray = Array.isArray(value) ? value : [value],
-            result = true;
+    }
+    validate(value, rule) {
+        const valueArray = Array.isArray(value) ? value : [value];
+        let result = true;
 
         if(valueArray.length) {
-            valueArray.every(function(itemValue) {
+            valueArray.every((itemValue) => {
                 result = this._validate(itemValue, rule);
                 return result;
-            }, this);
+            });
         } else {
             result = this._validate(null, rule);
         }
 
         return result;
     }
-});
+}
 
-var RequiredRuleValidator = BaseRuleValidator.inherit({
-    NAME: "required",
+class RequiredRuleValidator extends BaseRuleValidator {
+    constructor() {
+        super();
+        this.NAME = "required";
+    }
 
     /**
      * @name RequiredRule.type
@@ -53,7 +65,7 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
      * @type string
      * @default 'Required'
      */
-    _validate: function(value, rule) {
+    _validate(value, rule) {
         if(!typeUtils.isDefined(value)) return false;
         if(value === false) {
             return false;
@@ -62,13 +74,15 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
-
         return value !== "";
     }
-});
+}
 
-var NumericRuleValidator = BaseRuleValidator.inherit({
-    NAME: "numeric",
+class NumericRuleValidator extends BaseRuleValidator {
+    constructor() {
+        super();
+        this.NAME = "numeric";
+    }
 
     /**
      * @name NumericRule.type
@@ -84,21 +98,23 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
      * @type boolean
      * @default true
      */
-    _validate: function(value, rule) {
+    _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-
         if(rule.useCultureSettings && typeUtils.isString(value)) {
             return !isNaN(numberLocalization.parse(value));
         } else {
             return typeUtils.isNumeric(value);
         }
     }
-});
+}
 
-var RangeRuleValidator = BaseRuleValidator.inherit({
-    NAME: "range",
+class RangeRuleValidator extends BaseRuleValidator {
+    constructor() {
+        super();
+        this.NAME = "range";
+    }
 
     /**
      * @name RangeRule.type
@@ -127,21 +143,18 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
      * @type boolean
      * @default true
      */
-    _validate: function(value, rule) {
+    _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-
-        var validNumber = rulesValidators["numeric"].validate(value, rule),
+        const validNumber = rulesValidators["numeric"].validate(value, rule),
             validValue = typeUtils.isDefined(value) && value !== "",
             number = validNumber ? parseFloat(value) : validValue && value.valueOf(),
             min = rule.min,
             max = rule.max;
-
         if(!(validNumber || typeUtils.isDate(value)) && !validValue) {
             return false;
         }
-
         if(typeUtils.isDefined(min)) {
             if(typeUtils.isDefined(max)) {
                 return number >= min && number <= max;
@@ -155,10 +168,13 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
             }
         }
     }
-});
+}
 
-var StringLengthRuleValidator = BaseRuleValidator.inherit({
-    NAME: "stringLength",
+class StringLengthRuleValidator extends BaseRuleValidator {
+    constructor() {
+        super();
+        this.NAME = "stringLength";
+    }
 
     /**
      * @name StringLengthRule.type
@@ -187,23 +203,24 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
      * @type boolean
      * @default false
      */
-    _validate: function(value, rule) {
+    _validate(value, rule) {
         value = typeUtils.isDefined(value) ? String(value) : "";
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
-
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-
         return rulesValidators.range.validate(value.length,
             extend({}, rule));
     }
-});
+}
 
-var CustomRuleValidator = BaseRuleValidator.inherit({
-    NAME: "custom",
+class CustomRuleValidator extends BaseRuleValidator {
+    constructor() {
+        super();
+        this.NAME = "custom";
+    }
 
     /**
      * @name CustomRule.type
@@ -234,12 +251,11 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      * @type boolean
      * @default false
      */
-    validate: function(value, rule) {
+    validate(value, rule) {
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-
-        var validator = rule.validator,
+        const validator = rule.validator,
             dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
             data = typeUtils.isFunction(dataGetter) && dataGetter(),
             params = {
@@ -247,17 +263,91 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
                 validator: validator,
                 rule: rule
             };
-
         if(data) {
             params.data = data;
         }
-
         return rule.validationCallback(params);
     }
-});
+}
 
-var CompareRuleValidator = BaseRuleValidator.inherit({
-    NAME: "compare",
+class AsyncRuleValidator extends CustomRuleValidator {
+    constructor() {
+        super();
+        this.NAME = "async";
+    }
+
+    /**
+     * @name AsyncRule.type
+     * @type Enums.ValidationRuleType
+     */
+    /**
+     * @name AsyncRule.validationCallback
+     * @type function
+     * @type_function_return Promise<any>
+     * @type_function_param1 options:object
+     * @type_function_param1_field1 value:string|number
+     * @type_function_param1_field2 rule:object
+     * @type_function_param1_field3 validator:object
+     * @type_function_param1_field4 data:object
+     */
+    /**
+     * @name AsyncRule.message
+     * @type string
+     * @default 'Value is invalid'
+     */
+    /**
+     * @name AsyncRule.reevaluate
+     * @type boolean
+     * @default true
+     */
+    /**
+     * @name AsyncRule.ignoreEmptyValue
+     * @type boolean
+     * @default false
+     */
+    validate(value, rule) {
+        if(!typeUtils.isDefined(rule.reevaluate)) {
+            extend(rule, { reevaluate: true });
+        }
+        if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
+            return new Promise(function(resolve) {
+                resolve(true);
+            });
+        }
+        const validator = rule.validator,
+            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
+            data = typeUtils.isFunction(dataGetter) && dataGetter(),
+            params = {
+                value: value,
+                validator: validator,
+                rule: rule
+            };
+        if(data) {
+            params.data = data;
+        }
+        const callbackResult = rule.validationCallback(params);
+        if(!typeUtils.isPromise(callbackResult)) {
+            throw errors.Error("E0103");
+        }
+        return this._getWrappedPromise(fromPromise(callbackResult).promise());
+    }
+
+    _getWrappedPromise(promise) {
+        const deferred = new Deferred();
+        promise.then(function(res) {
+            deferred.resolve(res);
+        }, function(err) {
+            deferred.resolve(typeUtils.isDefined(err) ? err : false);
+        });
+        return deferred.promise();
+    }
+}
+
+class CompareRuleValidator extends BaseRuleValidator {
+    constructor() {
+        super();
+        this.NAME = "compare";
+    }
 
     /**
      * @name CompareRule.type
@@ -288,20 +378,16 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
      * @type boolean
      * @default false
      */
-    _validate: function(value, rule) {
+    _validate(value, rule) {
         if(!rule.comparisonTarget) {
             throw errors.Error("E0102");
         }
-
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-
         extend(rule, { reevaluate: true });
-
-        var otherValue = rule.comparisonTarget(),
+        const otherValue = rule.comparisonTarget(),
             type = rule.comparisonType || "==";
-
         switch(type) {
             case "==":
                 return value == otherValue; // eslint-disable-line eqeqeq
@@ -319,13 +405,15 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
                 return value < otherValue;
             case "<=":
                 return value <= otherValue;
-
         }
     }
-});
+}
 
-var PatternRuleValidator = BaseRuleValidator.inherit({
-    NAME: "pattern",
+class PatternRuleValidator extends BaseRuleValidator {
+    constructor() {
+        super();
+        this.NAME = "pattern";
+    }
 
     /**
      * @name PatternRule.type
@@ -345,20 +433,23 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
      * @type boolean
      * @default true
      */
-    _validate: function(value, rule) {
+    _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-        var pattern = rule.pattern;
+        let pattern = rule.pattern;
         if(typeUtils.isString(pattern)) {
             pattern = new RegExp(pattern);
         }
         return pattern.test(value);
     }
-});
+}
 
-var EmailRuleValidator = BaseRuleValidator.inherit({
-    NAME: "email",
+class EmailRuleValidator extends BaseRuleValidator {
+    constructor() {
+        super();
+        this.NAME = "email";
+    }
 
     /**
      * @name EmailRule.type
@@ -374,7 +465,7 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
      * @type boolean
      * @default true
      */
-    _validate: function(value, rule) {
+    _validate(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
@@ -385,9 +476,9 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
                     pattern: /^[\d\w._-]+@([\d\w._-]+\.)+[\w]+$/i
                 }));
     }
-});
+}
 
-var rulesValidators = {
+const rulesValidators = {
     /**
      * @name RequiredRule
      * @section dxValidator
@@ -424,6 +515,13 @@ var rulesValidators = {
     "custom": new CustomRuleValidator(),
 
     /**
+     * @name AsyncRule
+     * @section dxValidator
+     * @type object
+     */
+    "async": new AsyncRuleValidator(),
+
+    /**
      * @name CompareRule
      * @section dxValidator
      * @type object
@@ -445,18 +543,21 @@ var rulesValidators = {
     "email": new EmailRuleValidator()
 };
 
-var GroupConfig = Class.inherit({
-    ctor: function(group) {
+const GroupConfig = Class.inherit({
+    ctor(group) {
         this.group = group;
         this.validators = [];
+        this._pendingValidators = [];
+        this._onValidatorStatusChanged = this._onValidatorStatusChanged.bind(this);
+        this._resetValidationInfo();
     },
 
-    validate: function() {
+    validate() {
         /**
          * @name dxValidationGroupResult
          * @type Object
          */
-        var result = {
+        const result = {
             /**
              * @name dxValidationGroupResult.isValid
              * @type boolean
@@ -464,39 +565,188 @@ var GroupConfig = Class.inherit({
             isValid: true,
             /**
              * @name dxValidationGroupResult.brokenRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
              */
             brokenRules: [],
             /**
              * @name dxValidationGroupResult.validators
              * @type Array<Object>
              */
-            validators: []
+            validators: [],
+            /**
+             * @name dxValidationGroupResult.status
+             * @type Enums.ValidationStatus
+             */
+            status: VALIDATION_STATUS_VALID,
+            /**
+             * @name dxValidationGroupResult.complete
+             * @type Promise<dxValidationGroupResult>
+             */
+            complete: null
         };
-
-        each(this.validators, function(_, validator) {
-            var validatorResult = validator.validate();
+        this._unsubscribeFromAllChangeEvents();
+        this._pendingValidators = [];
+        this._resetValidationInfo();
+        each(this.validators, (_, validator) => {
+            const validatorResult = validator.validate();
             result.isValid = result.isValid && validatorResult.isValid;
-
-            if(validatorResult.brokenRule) {
-                result.brokenRules.push(validatorResult.brokenRule);
+            if(validatorResult.brokenRules) {
+                result.brokenRules = result.brokenRules.concat(validatorResult.brokenRules);
             }
             result.validators.push(validator);
+            if(validatorResult.status === VALIDATION_STATUS_PENDING) {
+                this._addPendingValidator(validator);
+            }
+            this._subscribeToChangeEvents(validator);
         });
-
-        this.fireEvent("validated", [{
-            validators: result.validators,
-            brokenRules: result.brokenRules,
-            isValid: result.isValid
-        }]);
-
+        if(this._pendingValidators.length) {
+            result.status = VALIDATION_STATUS_PENDING;
+        } else {
+            result.status = result.isValid ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID;
+            this._unsubscribeFromAllChangeEvents();
+            this._raiseValidatedEvent(result);
+        }
+        this._updateValidationInfo(result);
         return result;
     },
 
-    reset: function() {
+    _subscribeToChangeEvents(validator) {
+        validator.on("validating", this._onValidatorStatusChanged);
+        validator.on("validated", this._onValidatorStatusChanged);
+    },
+
+    _unsubscribeFromChangeEvents(validator) {
+        validator.off("validating", this._onValidatorStatusChanged);
+        validator.off("validated", this._onValidatorStatusChanged);
+    },
+
+    _unsubscribeFromAllChangeEvents() {
+        each(this.validators, (_, validator) => {
+            this._unsubscribeFromChangeEvents(validator);
+        });
+    },
+
+    _updateValidationInfo(result) {
+        this._validationInfo.result = result;
+        if(result.status !== VALIDATION_STATUS_PENDING) {
+            return;
+        }
+        if(!this._validationInfo.deferred) {
+            this._validationInfo.deferred = new Deferred();
+            this._validationInfo.result.complete = this._validationInfo.deferred.promise();
+        }
+    },
+
+    _addPendingValidator(validator) {
+        const foundValidator = grep(this._pendingValidators, function(val) {
+            return val === validator;
+        })[0];
+        if(!foundValidator) {
+            this._pendingValidators.push(validator);
+        }
+    },
+
+    _removePendingValidator(validator) {
+        const index = inArray(validator, this._pendingValidators);
+        if(index >= 0) {
+            this._pendingValidators.splice(index, 1);
+        }
+    },
+
+    _orderBrokenRules(brokenRules) {
+        let orderedRules = [];
+        each(this.validators, function(_, validator) {
+            const foundRules = grep(brokenRules, function(rule) {
+                return rule.validator === validator;
+            });
+            if(foundRules.length) {
+                orderedRules = orderedRules.concat(foundRules);
+            }
+        });
+        return orderedRules;
+    },
+
+    _updateBrokenRules(result) {
+        if(!this._validationInfo.result) {
+            return;
+        }
+        let brokenRules = this._validationInfo.result.brokenRules;
+        const rules = grep(brokenRules, function(rule) {
+            return rule.validator !== result.validator;
+        });
+        if(result.brokenRules) {
+            brokenRules = rules.concat(result.brokenRules);
+        }
+        this._validationInfo.result.brokenRules = this._orderBrokenRules(brokenRules);
+    },
+
+    _onValidatorStatusChanged(result) {
+        if(result.status === VALIDATION_STATUS_PENDING) {
+            this._addPendingValidator(result.validator);
+            return;
+        }
+        this._resolveIfComplete(result);
+    },
+
+    _resolveIfComplete(result) {
+        this._removePendingValidator(result.validator);
+        this._updateBrokenRules(result);
+        if(!this._pendingValidators.length) {
+            this._unsubscribeFromAllChangeEvents();
+            if(!this._validationInfo.result) {
+                return;
+            }
+            this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID;
+            this._validationInfo.result.isValid = this._validationInfo.result.status === VALIDATION_STATUS_VALID;
+            const res = extend({}, this._validationInfo.result, { complete: null }),
+                deferred = this._validationInfo.deferred;
+            this._resetValidationInfo();
+            this._raiseValidatedEvent(res);
+            deferred && setTimeout(() => {
+                deferred.resolve(res);
+            });
+        }
+    },
+
+    _raiseValidatedEvent(result) {
+        this.fireEvent("validated", [result]);
+    },
+
+    _resetValidationInfo() {
+        this._validationInfo = {
+            result: null,
+            deferred: null
+        };
+    },
+
+    _synchronizeValidationInfo() {
+        if(this._validationInfo.result) {
+            this._validationInfo.result.validators = this.validators;
+        }
+    },
+
+    removeRegisteredValidator(validator) {
+        const index = inArray(validator, this.validators);
+        if(index > -1) {
+            this.validators.splice(index, 1);
+            this._synchronizeValidationInfo();
+            this._resolveIfComplete({ validator });
+        }
+    },
+
+    registerValidator(validator) {
+        if(inArray(validator, this.validators) < 0) {
+            this.validators.push(validator);
+            this._synchronizeValidationInfo();
+        }
+    },
+
+    reset() {
         each(this.validators, function(_, validator) {
             validator.reset();
         });
+        this._pendingValidators = [];
+        this._resetValidationInfo();
     }
 }).include(EventsMixin);
 
@@ -507,7 +757,7 @@ var GroupConfig = Class.inherit({
  * @module ui/validation_engine
  * @export default
  */
-var ValidationEngine = {
+const ValidationEngine = {
     groups: [],
 
     /**
@@ -525,45 +775,41 @@ var ValidationEngine = {
     * @return object
     * @static
     */
-    getGroupConfig: function(group) {
-        var result = commonUtils.grep(this.groups, function(config) {
+    getGroupConfig(group) {
+        const result = grep(this.groups, function(config) {
             return config.group === group;
         });
-
         if(result.length) {
             return result[0];
         }
         // TODO: consider throwing exception here, as it causes quite strange and hardly diagnostable behaviour
     },
 
-    initGroups: function() {
+    initGroups() {
         this.groups = [];
         this.addGroup();
     },
 
-    addGroup: function(group) {
-
-        var config = this.getGroupConfig(group);
+    addGroup(group) {
+        let config = this.getGroupConfig(group);
         if(!config) {
             config = new GroupConfig(group);
             this.groups.push(config);
         }
-
         return config;
     },
 
-    removeGroup: function(group) {
-        var config = this.getGroupConfig(group),
+    removeGroup(group) {
+        const config = this.getGroupConfig(group),
             index = inArray(config, this.groups);
-
         if(index > -1) {
             this.groups.splice(index, 1);
         }
-
         return config;
     },
 
-    _setDefaultMessage: function(rule, validator, name) {
+    _setDefaultMessage(info) {
+        const { rule, validator, name } = info;
         if(!typeUtils.isDefined(rule.message)) {
             if(validator.defaultFormattedMessage && typeUtils.isDefined(name)) {
                 rule.message = validator.defaultFormattedMessage(name);
@@ -573,63 +819,103 @@ var ValidationEngine = {
         }
     },
 
-    validate: function(value, rules, name) {
+    _addBrokenRule(info) {
+        const { result, rule } = info;
+        if(!result.brokenRule) {
+            result.brokenRule = rule;
+        }
+        if(!result.brokenRules) {
+            result.brokenRules = [];
+        }
+        result.brokenRules.push(rule);
+    },
+
+    validate(value, rules, name) {
         /**
          * @name dxValidatorResult
          * @type Object
          */
-        var result = {
-                name: name,
-                /**
-                 * @name dxValidatorResult.value
-                 * @type any
-                 */
-                value: value,
-                /**
-                 * @name dxValidatorResult.brokenRule
-                 * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
-                 */
-                brokenRule: null,
-                /**
-                 * @name dxValidatorResult.isValid
-                 * @type boolean
-                 */
-                isValid: true,
-                /**
-                 * @name dxValidatorResult.validationRules
-                 * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
-                 */
-                validationRules: rules
-            },
-            that = this;
-
-        each(rules || [], function(_, rule) {
-            var ruleValidator = rulesValidators[rule.type],
-                ruleValidationResult;
-
+        let result = {
+            name: name,
+            /**
+             * @name dxValidatorResult.value
+             * @type any
+             */
+            value: value,
+            /**
+             * @name dxValidatorResult.brokenRule
+             * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
+             */
+            brokenRule: null,
+            /**
+             * @name dxValidatorResult.brokenRules
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
+             */
+            brokenRules: null,
+            /**
+             * @name dxValidatorResult.isValid
+             * @type boolean
+             */
+            isValid: true,
+            /**
+             * @name dxValidatorResult.validationRules
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
+             */
+            validationRules: rules,
+            /**
+             * @name dxValidatorResult.pendingRules
+             * @type Array<AsyncRule>
+             */
+            pendingRules: null,
+            /**
+             * @name dxValidatorResult.status
+             * @type Enums.ValidationStatus
+             */
+            status: VALIDATION_STATUS_VALID,
+            /**
+             * @name dxValidatorResult.complete
+             * @type Promise<dxValidatorResult>
+             */
+            complete: null
+        };
+        const asyncRuleItems = [];
+        each(rules || [], (_, rule) => {
+            const ruleValidator = rulesValidators[rule.type];
+            let ruleValidationResult;
             if(ruleValidator) {
                 if(typeUtils.isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
                     if(!rule.isValid) {
                         result.isValid = false;
-                        result.brokenRule = rule;
+                        this._addBrokenRule({
+                            result,
+                            rule
+                        });
                         return false;
                     }
                     return true;
                 }
-
                 rule.value = value;
-
+                if(rule.type === "async") {
+                    asyncRuleItems.push({
+                        rule: rule,
+                        ruleValidator: ruleValidator
+                    });
+                    return true;
+                }
                 ruleValidationResult = ruleValidator.validate(value, rule);
                 rule.isValid = ruleValidationResult;
-
                 if(!ruleValidationResult) {
                     result.isValid = false;
-
-                    that._setDefaultMessage(rule, ruleValidator, name);
-
-                    result.brokenRule = rule;
+                    this._setDefaultMessage({
+                        rule,
+                        validator: ruleValidator,
+                        name
+                    });
+                    this._addBrokenRule({
+                        result,
+                        rule
+                    });
                 }
-
                 if(!rule.isValid) {
                     return false;
                 }
@@ -637,31 +923,108 @@ var ValidationEngine = {
                 throw errors.Error("E0100");
             }
         });
-
+        if(result.isValid && !result.brokenRules && asyncRuleItems.length) {
+            result = this._validateAsyncRules({
+                value,
+                items: asyncRuleItems,
+                result,
+                name
+            });
+        }
+        result.status = result.pendingRules ? VALIDATION_STATUS_PENDING : (result.isValid ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID);
         return result;
     },
 
-    registerValidatorInGroup: function(group, validator) {
-        var groupConfig = ValidationEngine.addGroup(group);
+    _validateAsyncRules({ result, value, items, name }) {
+        const asyncResults = [];
+        result.pendingRules = [];
+        each(items, (_, item) => {
+            result.pendingRules.push(item.rule);
+            const asyncResult = item.ruleValidator.validate(value, item.rule).then((res) => {
+                const ruleResult = this._getPatchedRuleResult(res);
+                this._updateRuleConfig({
+                    rule: item.rule,
+                    ruleResult,
+                    validator: item.ruleValidator,
+                    name
+                });
+                return ruleResult;
+            });
+            asyncResults.push(asyncResult);
+        });
+        result.complete = Promise.all(asyncResults).then((values) => {
+            return this._getAsyncRulesResult({
+                result,
+                values
+            });
+        });
+        return result;
+    },
 
-        if(inArray(validator, groupConfig.validators) < 0) {
-            groupConfig.validators.push(validator);
+    _updateRuleConfig({ rule, ruleResult, validator, name }) {
+        rule.isValid = ruleResult.isValid;
+        if(!ruleResult.isValid) {
+            if(typeUtils.isDefined(ruleResult.message) && typeUtils.isString(ruleResult.message) && ruleResult.message.length) {
+                rule.message = ruleResult.message;
+            } else {
+                this._setDefaultMessage({
+                    rule,
+                    validator: validator,
+                    name
+                });
+            }
         }
     },
 
-    _shouldRemoveGroup: function(group, validatorsInGroup) {
-        var isDefaultGroup = group === undefined,
-            isValidationGroupInstance = group && group.NAME === "dxValidationGroup";
+    _getPatchedRuleResult(ruleResult) {
+        let result;
+        const isValid = true;
+        if(typeUtils.isObject(ruleResult)) {
+            result = extend({}, ruleResult);
+            if(!typeUtils.isDefined(result.isValid)) {
+                result.isValid = isValid;
+            }
+        } else {
+            result = {
+                isValid: typeUtils.isBoolean(ruleResult) ? ruleResult : isValid
+            };
+        }
+        return result;
+    },
 
+    _getAsyncRulesResult({ values, result }) {
+        each(values, (index, val) => {
+            if(val.isValid === false) {
+                result.isValid = val.isValid;
+                const rule = result.pendingRules[index];
+                this._addBrokenRule({
+                    result,
+                    rule
+                });
+            }
+        });
+        result.pendingRules = null;
+        result.complete = null;
+        result.status = result.isValid ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID;
+        return result;
+    },
+
+    registerValidatorInGroup(group, validator) {
+        const groupConfig = ValidationEngine.addGroup(group);
+        groupConfig.registerValidator.call(groupConfig, validator);
+    },
+
+    _shouldRemoveGroup(group, validatorsInGroup) {
+        const isDefaultGroup = group === undefined,
+            isValidationGroupInstance = group && group.NAME === "dxValidationGroup";
         return !isDefaultGroup && !isValidationGroupInstance && !validatorsInGroup.length;
     },
 
-    removeRegisteredValidator: function(group, validator) {
-        var config = ValidationEngine.getGroupConfig(group),
-            validatorsInGroup = config && config.validators;
-        var index = inArray(validator, validatorsInGroup);
-        if(index > -1) {
-            validatorsInGroup.splice(index, 1);
+    removeRegisteredValidator(group, validator) {
+        const config = ValidationEngine.getGroupConfig(group);
+        if(config) {
+            config.removeRegisteredValidator.call(config, validator);
+            const validatorsInGroup = config.validators;
             if(this._shouldRemoveGroup(group, validatorsInGroup)) {
                 this.removeGroup(group);
             }
@@ -683,13 +1046,11 @@ var ValidationEngine = {
     * @return dxValidationGroupResult
     * @static
     */
-    validateGroup: function(group) {
-        var groupConfig = ValidationEngine.getGroupConfig(group);
-
+    validateGroup(group) {
+        const groupConfig = ValidationEngine.getGroupConfig(group);
         if(!groupConfig) {
             throw errors.Error("E0110");
         }
-
         return groupConfig.validate();
     },
 
@@ -706,16 +1067,13 @@ var ValidationEngine = {
     * @publicName resetGroup()
     * @static
     */
-    resetGroup: function(group) {
-        var groupConfig = ValidationEngine.getGroupConfig(group);
-
+    resetGroup(group) {
+        const groupConfig = ValidationEngine.getGroupConfig(group);
         if(!groupConfig) {
             throw errors.Error("E0110");
         }
-
         return groupConfig.reset();
     }
-
 };
 
 ValidationEngine.initGroups();

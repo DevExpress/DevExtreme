@@ -344,25 +344,6 @@ const subscribes = {
         return this.getWorkSpaceDateTableOffset();
     },
 
-    correctAppointmentCoordinates: function(options) {
-        let isAllDay = options.allDay,
-            containerSign = options.isFixedContainer ? -1 : 1;
-
-        let scrollTop = this.getWorkSpaceScrollableScrollTop(isAllDay),
-            allDayPanelTopOffset = !isAllDay ? this.getWorkSpaceAllDayOffset() : 0,
-            headerHeight = this.getWorkSpaceHeaderPanelHeight(),
-            scrollLeft = this.getWorkSpaceScrollableScrollLeft(),
-            tableLeftOffset = this.getWorkSpaceDateTableOffset();
-
-        let topOffset = -scrollTop + allDayPanelTopOffset + headerHeight,
-            leftOffset = -scrollLeft - tableLeftOffset;
-
-        options.callback({
-            top: options.coordinates.top + containerSign * topOffset,
-            left: options.coordinates.left + containerSign * leftOffset
-        });
-    },
-
     allDayPanelToggled: function() {
         this._appointments.updateDraggablesBoundOffsets();
     },
@@ -840,11 +821,11 @@ const subscribes = {
     },
 
     getEndDayHour: function() {
-        return this.option("endDayHour");
+        return this._workSpace.option("endDayHour") || this.option("endDayHour");
     },
 
     getStartDayHour: function() {
-        return this.option("startDayHour");
+        return this._workSpace.option("startDayHour") || this.option("startDayHour");
     },
 
     isAdaptive: function() {

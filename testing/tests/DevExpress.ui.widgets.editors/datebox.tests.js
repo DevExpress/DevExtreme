@@ -901,7 +901,7 @@ QUnit.module("merging dates", moduleConfig, () => {
         assert.deepEqual(this.instance.option("value"), date);
     });
 
-    QUnit.test("if value isn't specified then current day is default for an editor with type 'time'", (assert) => {
+    QUnit.test("if value isn't specified then Unix Epoch is default for an editor with type 'time'", (assert) => {
         this.instance.option({
             type: "time",
             pickerType: "list",
@@ -913,11 +913,11 @@ QUnit.module("merging dates", moduleConfig, () => {
             .trigger("change");
 
         const value = this.instance.option("value");
-        const now = new Date();
+        const defaultDate = new Date(null);
 
-        assert.equal(value.getFullYear(), now.getFullYear(), "correct year");
-        assert.equal(value.getMonth(), now.getMonth(), "correct month");
-        assert.equal(value.getDate(), now.getDate(), "correct date");
+        assert.equal(value.getFullYear(), defaultDate.getFullYear(), "correct year");
+        assert.equal(value.getMonth(), defaultDate.getMonth(), "correct month");
+        assert.equal(value.getDate(), defaultDate.getDate(), "correct date");
     });
 
     QUnit.test("mergeDates must merge seconds when type is 'time'", (assert) => {
@@ -3254,6 +3254,20 @@ QUnit.module("datebox w/ time list", {
         assert.strictEqual(this.dateBox.option("value").getFullYear(), 2018, "year is correct");
     });
 
+    QUnit.test("selected date should be in 1970 when it was set from user's input", (assert) => {
+        this.dateBox.option({
+            value: null,
+            displayFormat: "HH:mm"
+        });
+
+        keyboardMock(this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`))
+            .focus()
+            .type("11:11")
+            .change();
+
+        assert.strictEqual(this.dateBox.option("value").getFullYear(), new Date(null).getFullYear(), "year is correct");
+    });
+
     QUnit.test("the value's date part should not be changed if editing input's text by keyboard (T395685)", (assert) => {
         this.dateBox.option({
             focusStateEnabled: true,
@@ -3489,7 +3503,7 @@ QUnit.module("keyboard navigation", {
     }
 }, () => {
     QUnit.testInActiveWindow("popup hides on tab", (assert) => {
-        this.$input.focusin();
+        this.dateBox.focus();
         assert.ok(this.$dateBox.hasClass(STATE_FOCUSED_CLASS), "element is focused");
         this.dateBox.option("opened", true);
         this.keyboard.keyDown("tab");
@@ -3685,6 +3699,37 @@ QUnit.module("keyboard navigation", {
 
         const $cancelButton = this.dateBox._popup._wrapper().find(".dx-button.dx-popup-cancel");
         assert.ok($cancelButton.hasClass("dx-state-focused"), "cancel button is focused");
+    });
+
+    QUnit.testInActiveWindow("Unsupported key handlers must be processed correctly", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        this.dateBox.option({
+            pickerType: "list",
+            type: "time"
+        });
+
+        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        this.dateBox.focus();
+
+        let isNoError = true;
+
+        try {
+            keyboard
+                .press("down")
+                .press("up")
+                .press("right")
+                .press("left");
+        } catch(e) {
+            isNoError = false;
+        }
+
+        assert.ok(isNoError, "key handlers processed without errors");
     });
 });
 

@@ -7,7 +7,8 @@ import {
     map as _map, getLog, getCategoriesInfo,
     updatePanesCanvases, convertVisualRangeObject, PANE_PADDING,
     normalizePanesHeight,
-    checkElementHasPropertyFromStyleSheet
+    checkElementHasPropertyFromStyleSheet,
+    rangesAreEqual
 } from "./core/utils";
 import { type } from "../core/utils/type";
 import { getPrecision } from "../core/utils/math";
@@ -393,18 +394,6 @@ var dxChart = AdvancedChart.inherit({
             "zoomingMode": { since: "18.2", message: "Use the 'zoomAndPan' option instead" },
             "scrollingMode": { since: "18.2", message: "Use the 'zoomAndPan' option instead" }
         });
-    },
-
-    _partialOptionChangesMap: {
-        visualRange: VISUAL_RANGE,
-        _customVisualRange: VISUAL_RANGE,
-        strips: "REFRESH_AXES",
-        constantLines: "REFRESH_AXES"
-    },
-
-    _partialOptionChangesPath: {
-        argumentAxis: ["strips", "constantLines", "visualRange", "_customVisualRange"],
-        valueAxis: ["strips", "constantLines", "visualRange", "_customVisualRange"]
     },
 
     _initCore: function() {
@@ -1316,40 +1305,6 @@ var dxChart = AdvancedChart.inherit({
         return this._getOption("crosshair");
     },
 
-    _parseVisualRangeOption(fullName, value) {
-        const that = this;
-        const name = fullName.split(/[.[]/)[0];
-        const index = fullName.match(/\d+/g);
-
-        if(fullName.indexOf("visualRange") > 0) {
-            that._setCustomVisualRange(name === "argumentAxis", _isDefined(index) ? parseInt(index[0]) : index, value);
-        } else if((type(value) === "object" || type(value) === "array") && name.indexOf("Axis") > 0 && JSON.stringify(value).indexOf("visualRange") > 0) {
-            if(_isDefined(value.visualRange)) {
-                that._setCustomVisualRange(name === "argumentAxis", _isDefined(index) ? parseInt(index[0]) : index, value.visualRange);
-            } else if(_isArray(value)) {
-                value.forEach((a, i) => that._setCustomVisualRange(name === "argumentAxis", i, a.visualRange));
-            }
-        }
-    },
-
-    _setCustomVisualRange(isArgumentAxis, index, value) {
-        const that = this;
-        const axesName = isArgumentAxis ? "argumentAxis" : "valueAxis";
-        const options = that._options[axesName];
-
-        if(!options) {
-            return;
-        }
-
-        if(isArgumentAxis || !_isDefined(index)) {
-            options._customVisualRange = value;
-        } else {
-            options[index]._customVisualRange = value;
-        }
-
-        that._axesReinitialized = true;
-    },
-
     // API
     zoomArgument(min, max) {
         const that = this;
@@ -1363,36 +1318,14 @@ var dxChart = AdvancedChart.inherit({
 
     resetVisualRange() {
         const that = this;
-        that._argumentAxes.forEach(axis => {
-            axis.resetVisualRange(that.getArgumentAxis() !== axis);
+        const axes = that._argumentAxes;
+        const nonVirtualArgumentAxis = that.getArgumentAxis();
+
+        axes.forEach(axis => {
+            axis.resetVisualRange(nonVirtualArgumentAxis !== axis);
+            that._applyCustomVisualRangeOption(axis);
         });
-        that._valueAxes.forEach(axis => axis.resetVisualRange(false)); // T602156
-
-        that._requestChange([VISUAL_RANGE]);
-    },
-
-    _getVisualRangeSetter() {
-        const chart = this;
-        return function(axis, { skipEventRising, range }) {
-            if(axis.getOptions().optionPath) {
-                chart._parseVisualRangeOption(axis.getOptions().optionPath + ".visualRange", range);
-                axis.setCustomVisualRange(range);
-            }
-
-            axis.skipEventRising = skipEventRising;
-            if(axis.isArgumentAxis) {
-                if(axis !== chart.getArgumentAxis()) {
-                    return;
-                }
-                chart._argumentAxes.filter(a => a !== axis).forEach(a => a.visualRange(range, { start: true, end: true }));
-            }
-
-            if(chart._applyingChanges) {
-                chart._change_VISUAL_RANGE();
-            } else {
-                chart._requestChange([VISUAL_RANGE]);
-            }
-        };
+        that.callBase();
     },
 
     // T218011 for dashboards
@@ -1408,22 +1341,6 @@ var dxChart = AdvancedChart.inherit({
         };
     },
 
-    _change_VISUAL_RANGE: function() {
-        const that = this;
-
-        that._recreateSizeDependentObjects(false);
-        if(!that._changes.has("FULL_RENDER")) {
-            that._doRender({
-                force: true,
-                drawTitle: false,
-                drawLegend: false,
-                adjustAxes: this.option("adjustAxesOnZoom") || false, // T690411
-                animate: false
-            });
-            that._raiseZoomEndHandlers();
-        }
-    },
-
     _change_FULL_RENDER() {
         this.callBase();
         if(this._changes.has(VISUAL_RANGE)) {
@@ -1431,24 +1348,31 @@ var dxChart = AdvancedChart.inherit({
         }
     },
 
-    _raiseZoomEndHandlers() {
-        this._argumentAxes.forEach(axis => axis.handleZoomEnd());
-        this._valueAxes.forEach(axis => axis.handleZoomEnd());
+    _getAxesForScaling() {
+        return [this.getArgumentAxis()].concat(this._valueAxes);
     },
 
-    _notifyOptionChanged(option, value, previousValue) {
-        this.callBase.apply(this, arguments);
-        if(!this._optionChangedLocker) {
-            this._parseVisualRangeOption(option, value);
+    _applyVisualRangeByVirtualAxes(axis, range) {
+        const that = this;
+        if(axis.isArgumentAxis) {
+            if(axis !== that.getArgumentAxis()) {
+                return true;
+            }
+            that._argumentAxes.filter(a => a !== axis).forEach(a => a.visualRange(range, { start: true, end: true }));
         }
+        return false;
+    },
+
+    _raiseZoomEndHandlers() {
+        this._argumentAxes.forEach(axis => axis.handleZoomEnd());
+        this.callBase();
     },
 
     _setOptionsByReference() {
         this.callBase();
 
         _extend(this._optionsByReference, {
-            "argumentAxis.visualRange": true,
-            "valueAxis.visualRange": true
+            "argumentAxis.visualRange": true
         });
     },
 
@@ -1465,90 +1389,21 @@ var dxChart = AdvancedChart.inherit({
         return option;
     },
 
-    _optionChanged(arg) {
+    _notifyVisualRange() {
         const that = this;
-        if(!that._optionChangedLocker) {
-            if(arg.fullName.indexOf("visualRange") > 0) {
-                let axisPath;
-                if(arg.fullName) {
-                    axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
-                }
-                if(axisPath === "argumentAxis") {
-                    const pathElements = arg.fullName.split(".");
-                    const destElem = pathElements[pathElements.length - 1];
-                    if(destElem === "endValue" || destElem === "startValue") {
-                        that.getArgumentAxis().visualRange({
-                            [destElem]: arg.value
-                        });
-                    } else {
-                        that.getArgumentAxis().visualRange(arg.value, { skipEventRising: true });
-                    }
-                    return;
-                }
-                const axis = that._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];
-                if(axis) {
-                    axis.visualRange(arg.value, { skipEventRising: true });
-                }
-            } else if(that.getPartialChangeOptionsName(arg).indexOf("visualRange") > -1) {
-                if(arg.name === "argumentAxis") {
-                    that.getArgumentAxis().visualRange(arg.value.visualRange);
-                } else if(arg.name === "valueAxis") {
-                    if((type(arg.value) === "object")) {
-                        that._valueAxes[0].visualRange(arg.value.visualRange);
-                    } else {
-                        arg.value.forEach((v, index) => {
-                            if(_isDefined(v.visualRange) && _isDefined(that._valueAxes[index])) {
-                                that._valueAxes[index].visualRange(arg.value[index].visualRange);
-                            }
-                        });
-                    }
-                }
-            }
-        }
-        that.callBase(arg);
-    },
-
-    _notify() {
-        const that = this;
-
-        that.callBase();
-        if(that.option("disableTwoWayBinding") === true) { // for dashboards T732396
-            return;
-        }
+        const argAxis = that._argumentAxes[0];
         const argumentVisualRange =
-            convertVisualRangeObject(this._argumentAxes[0].visualRange(), !_isArray(that.option("argumentAxis.visualRange")));
+            convertVisualRangeObject(argAxis.visualRange(), !_isArray(that.option("argumentAxis.visualRange")));
 
-        if(!this._argumentAxes[0].skipEventRising || !rangesIsEqual(argumentVisualRange, that.option("argumentAxis.visualRange"))) {
+        if(!argAxis.skipEventRising || !rangesAreEqual(argumentVisualRange, that.option("argumentAxis.visualRange"))) {
             that.option("argumentAxis.visualRange", argumentVisualRange);
         } else {
-            this._argumentAxes[0].skipEventRising = null;
+            argAxis.skipEventRising = null;
         }
 
-        that._valueAxes.forEach(axis => {
-            if(axis.getOptions().optionPath) {
-                const path = `${axis.getOptions().optionPath}.visualRange`;
-                const visualRange = convertVisualRangeObject(axis.visualRange(), !_isArray(that.option(path)));
-
-                if(!axis.skipEventRising || !rangesIsEqual(visualRange, that.option(path))) {
-                    that.option(path, visualRange);
-                } else {
-                    axis.skipEventRising = null;
-                }
-            }
-        });
-
+        that.callBase();
     }
 });
-
-function rangesIsEqual(range, rangeFromOptions) {
-    if(_isArray(rangeFromOptions)) {
-        return range.length === rangeFromOptions.length
-            && range.every((item, i) => item === rangeFromOptions[i]);
-    } else {
-        return range.startValue === rangeFromOptions.startValue
-            && range.endValue === rangeFromOptions.endValue;
-    }
-}
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
 dxChart.addPlugin(require("./chart_components/zoom_and_pan"));

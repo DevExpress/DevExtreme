@@ -83,8 +83,8 @@ circularAxes = polarAxes.circular = {
         return [options.startAngle, options.endAngle];
     },
 
-    _updateRadius: function(canvas) {
-        var rad = Math.min((canvas.width - canvas.left - canvas.right), (canvas.height - canvas.top - canvas.bottom)) / 2;
+    _updateRadius(canvas) {
+        const rad = Math.min((canvas.width - canvas.left - canvas.right), (canvas.height - canvas.top - canvas.bottom)) / 2;
         this._radius = rad < 0 ? 0 : rad;
     },
 
@@ -172,6 +172,8 @@ circularAxes = polarAxes.circular = {
     },
 
     _setVisualRange: _noop,
+
+    applyVisualRangeSetter: _noop,
 
     allowToExtendVisualRange(isEnd) {
         return true;
@@ -524,11 +526,9 @@ polarAxes.circularSpider = _extend({}, circularAxes, {
 });
 
 polarAxes.linear = {
-    applyMargins: circularAxes.applyMargins,
     _resetMargins() {
         this._reinitTranslator(this._getViewportRange());
     },
-    _setVisualRange: _noop,
     _getStick: xyAxesLinear._getStick,
     _getSpiderCategoryOption: _noop,
 
@@ -539,17 +539,23 @@ polarAxes.linear = {
         };
     },
 
-    _updateRadius: circularAxes._updateRadius,
     getRadius: circularAxes.getRadius,
     getCenter: circularAxes.getCenter,
     getAngles: circularAxes.getAngles,
+    _updateRadius: circularAxes._updateRadius,
     _updateCenter: circularAxes._updateCenter,
 
-    _processCanvas: function(canvas) {
+    _processCanvas(canvas) {
         this._updateRadius(canvas);
         this._updateCenter(canvas);
 
-        return { left: 0, right: 0, width: this.getRadius() };
+        return {
+            left: 0,
+            right: 0,
+            startPadding: canvas.startPadding,
+            endPadding: canvas.endPadding,
+            width: this.getRadius()
+        };
     },
 
     _createAxisElement: xyAxesLinear._createAxisElement,
@@ -627,10 +633,15 @@ polarAxes.linear = {
         return this._translator.translate(value, offset);
     },
 
-    _getCanvasStartEnd: function() {
+    _getCanvasStartEnd() {
+        const invert = this.getTranslator().getBusinessRange().invert;
+        const coords = [0, this.getRadius()];
+
+        invert && coords.reverse();
+
         return {
-            start: 0,
-            end: this.getRadius()
+            start: coords[0],
+            end: coords[1]
         };
     },
 

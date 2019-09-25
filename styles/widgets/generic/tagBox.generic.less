@@ -1,3 +1,5 @@
+@import (once) "./selectBox.generic.less";
+
 .dx-size-default() {
     @GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM: 4px;
     @GENERIC_TAGBOX_TAG_CONTENT_MARGIN: 4px 0 0 4px;
@@ -117,15 +119,28 @@
     }
 }
 
-.dx-tagbox.dx-invalid {
+.tagbox-badge-offset() {
+    right: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+
+    .dx-rtl &,
+    .dx-rtl& {
+        left: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+    }
+}
+
+.dx-tagbox.dx-invalid,
+.dx-tagbox.dx-valid {
     .dx-texteditor-container {
         &:after {
-            right: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+            .tagbox-badge-offset();
+        }
+    }
+}
 
-            .dx-rtl &,
-            .dx-rtl& {
-                left: @GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
-            }
+.dx-tagbox.dx-validation-pending {
+    .dx-texteditor-container {
+        .dx-pending-indicator {
+            .tagbox-badge-offset();
         }
     }
 }
