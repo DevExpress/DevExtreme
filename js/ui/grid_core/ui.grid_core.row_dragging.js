@@ -3,6 +3,7 @@ import { extend } from "../../core/utils/extend";
 import Sortable from "../sortable";
 
 let COMMAND_HANDLE_CLASS = "dx-command-drag",
+    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     HANDLE_ICON_CLASS = "drag-icon";
 
 var RowDraggingExtender = {
@@ -103,6 +104,7 @@ var RowDraggingExtender = {
 
     _getHandleTemplate: function() {
         return (container, options) => {
+            $(container).addClass(CELL_FOCUS_DISABLED_CLASS);
             return $("<span>").addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
         };
     },
