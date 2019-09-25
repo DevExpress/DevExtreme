@@ -23,6 +23,8 @@ const CLASS = {
     stateFocused: 'dx-state-focused',
     stateInvisible: 'dx-state-invisible',
     tooltip: 'dx-tooltip',
+    tooltipAppointmentItemDate: 'dx-tooltip-appointment-item-content-date',
+    tooltipAppointmentItemSubject: 'dx-tooltip-appointment-item-content-subject',
     tooltipWrapper: 'dx-tooltip-wrapper'
 };
 
@@ -71,12 +73,16 @@ class AppointmentCollector {
 
 class ListItem {
     element: Selector;
-    isHovered: Promise<boolean>;
+    date: Selector;
+    subject: Selector;
     isFocused: Promise<boolean>;
 
-    constructor(wrapper: Selector, index: number = 0) {
-        this.element = wrapper.find(`.${CLASS.listItem}`).nth(index);
+    constructor(wrapper: Selector, title: string, index: number = 0) {
+        this.element = wrapper.find(`.${CLASS.listItem}`).withText(title).nth(index);
         this.isFocused = this.element.hasClass(CLASS.stateFocused);
+
+        this.date = this.element.find(`.${CLASS.tooltipAppointmentItemDate}`);
+        this.subject = this.element.find(`.${CLASS.tooltipAppointmentItemSubject}`);
     }
 }
 
@@ -108,8 +114,8 @@ class Tooltip {
         this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltip}`);
     }
 
-    getListItem(index: number = 0): ListItem {
-        return new ListItem(this.wrapper, index);
+    getListItem(title: string, index: number = 0): ListItem {
+        return new ListItem(this.wrapper, title, index);
     }
 
     isVisible(): Promise<boolean> {
