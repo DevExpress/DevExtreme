@@ -1344,8 +1344,16 @@ QUnit.module("widget sizing render", {}, () => {
         const $element = $("#innerDateBox").dxDateBox({
             "showClearButton": true
         });
+        const instance = $element.dxDateBox("instance");
 
         assert.notOk($element.hasClass('dx-show-invalid-badge'), "validation icon's hidden");
+
+        $("#containerWithWidth").get(0).style.width = "200px";
+        const kb = keyboardMock(instance._input());
+        kb.type("a");
+        kb.keyDown("enter");
+
+        assert.ok($element.hasClass('dx-show-invalid-badge'), "validation icon's visible");
     });
 
     QUnit.test("component should have correct width when it was rendered in a scaled container (T584097)", assert => {

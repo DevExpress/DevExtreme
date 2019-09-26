@@ -410,24 +410,16 @@ var DateBox = DropDownEditor.inherit({
         var $input = this._input();
         var inputElement = $input.get(0);
         var $dateBox = this.$element();
-
-        if(this._needsValidationIconHiding(longestValue, $dateBox, $input, inputElement)) {
-            var style = inputElement.style;
-            this.option("rtlEnabled") ? style.paddingLeft = 0 : style.paddingRight = 0;
-            if($dateBox.hasClass(DX_INVALID_BADGE_CLASS)) {
-                $dateBox.removeClass(DX_INVALID_BADGE_CLASS);
-            }
-        }
-    },
-
-    _needsValidationIconHiding: function(longestValue, $dateBox, $input, inputElement) {
         var $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
+        var isPaddingStored = this.storedPadding !== undefined;
+        var storedPadding = !isPaddingStored ? 0 : this.storedPadding;
+        var isRtlEnabled = this.option("rtlEnabled");
 
         $longestValueElement.appendTo($dateBox);
         var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
         var rightPadding = parseFloat(window.getComputedStyle(inputElement).paddingRight);
         var leftPadding = parseFloat(window.getComputedStyle(inputElement).paddingLeft);
-        var necessaryWidth = elementWidth + leftPadding + rightPadding;
+        var necessaryWidth = elementWidth + leftPadding + rightPadding + storedPadding;
         $longestValueElement.remove();
 
         var clearButtonWidth = 0;
@@ -437,8 +429,18 @@ var DateBox = DropDownEditor.inherit({
         }
 
         var curWidth = parseFloat(window.getComputedStyle(inputElement).width) - clearButtonWidth;
+        var shouldHideValidationIcon = (necessaryWidth > curWidth);
 
-        return (necessaryWidth > curWidth);
+        var style = inputElement.style;
+        $dateBox.toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon);
+        if(shouldHideValidationIcon) {
+            if(!isPaddingStored) {
+                this.storedPadding = isRtlEnabled ? leftPadding : rightPadding;
+            }
+            isRtlEnabled ? style.paddingLeft = 0 : style.paddingRight = 0;
+        } else {
+            isRtlEnabled ? style.paddingLeft = this.storedPadding + "px" : style.paddingRight = this.storedPadding + "px";
+        }
     },
 
     _attachChildKeyboardEvents: function() {
