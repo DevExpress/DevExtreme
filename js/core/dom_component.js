@@ -291,7 +291,7 @@ var DOMComponent = Component.inherit({
         }, nestedComponentOptions(this));
 
         synchronizableOptions.forEach((optionName) => {
-            nestedComponentConfig.optionName = this.option(optionName);
+            nestedComponentConfig[optionName] = this.option(optionName);
         });
 
         that._extendConfig(config, nestedComponentConfig);
