@@ -46,7 +46,7 @@
 * @name 40. Border color
 * @type color
 */
-@base-border-color: #e0e0e0;
+@base-border-color: fade(#000000, 12%);
 
 /**
 * @name 120. Border radius
@@ -88,7 +88,7 @@
 * @name 90. Hovered state background color
 * @type color
 */
-@base-hover-bg: darken(@base-bg, 4%);
+@base-hover-bg: fade(#000000, 4%);
 
 /**
 * @name 100. Focused state text color
@@ -100,7 +100,7 @@
 * @name 110. Focused state background color
 * @type color
 */
-@base-focus-bg: darken(@base-bg, 20%);
+@base-focus-bg: fade(#000000, 4%);
 
 
 @typography-bg: @base-bg;
@@ -520,8 +520,9 @@
 * @name 30. Selected item state background color
 * @type color
 */
-@list-item-selected-bg: darken(@base-bg, 12%);
-@list-item-focused-selected-bg: fade(@base-focus-bg, 70%);
+@list-item-selected-bg: fade(#000000, 12%);
+@list-item-selected-hover-bg: fade(#000000, 14%);
+@list-item-focused-selected-bg: fade(#000000, 18%);
 
 @list-item-hover-color: @base-hover-color;
 @list-item-selected-color: fade(@base-text-color, 100%);
@@ -956,7 +957,7 @@
 * @type color
 */
 @datagrid-row-focused-bg: @base-accent;
-@datagrid-hover-bg: darken(@datagrid-base-background-color, 5%);
+@datagrid-hover-bg: @base-hover-bg;
 @datagrid-row-hovered-color: @datagrid-base-color;
 
 /**
@@ -1364,7 +1365,8 @@
 @treeview-item-hover-color: @base-hover-color;
 @treeview-border-color: @base-border-color;
 @treeview-item-selected-color: @treeview-color;
-@treeview-item-selected-bg: darken(@base-bg, 12%);
+@treeview-item-selected-bg: fade(#000, 12%);
+@treeview-item-selected-hover-bg: fade(#000, 14%);
 @treeview-spin-icon-color: @base-spin-icon-color;
 
 //TimeView
