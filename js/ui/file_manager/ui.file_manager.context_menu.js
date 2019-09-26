@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isString } from "../../core/utils/type";
+import { isDefined, isString } from "../../core/utils/type";
 import { ensureDefined } from "../../core/utils/common";
 
 import Widget from "../widget/ui.widget";
@@ -120,8 +120,7 @@ class FileManagerContextMenu extends Widget {
         extend(result, defaultConfig);
         this._extendAttributes(result, item, ["visible", "beginGroup", "text", "icon"]);
 
-        const itemVisible = ensureDefined(result.visible, "auto");
-        if(itemVisible === "auto") {
+        if(!isDefined(result.visible)) {
             result._autoHide = true;
         } else {
             this._extendAttributes(result, item, ["visible", "disabled"]);

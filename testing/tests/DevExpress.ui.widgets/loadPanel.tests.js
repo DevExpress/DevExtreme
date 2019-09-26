@@ -1,5 +1,4 @@
 var $ = require("jquery"),
-    hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
     keyboardMock = require("../../helpers/keyboardMock.js"),
     fx = require("animation/fx");
 
@@ -240,15 +239,6 @@ QUnit.testInActiveWindow("Load panel with shading should grab focus from inputs 
     } finally {
         $input.remove();
     }
-});
-
-QUnit.module("regressions");
-
-QUnit.test("it's possible to close loadPanel with hardware back button (B251568)", function(assert) {
-    var instance = $("#loadPanel").dxLoadPanel({ }).dxLoadPanel("instance");
-    instance.show();
-    hideTopOverlayCallback.fire();
-    assert.equal(instance.option("visible"), true, "callback changed to noop");
 });
 
 QUnit.module("delay", {

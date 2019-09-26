@@ -792,11 +792,12 @@ var AdvancedChart = BaseChart.inherit({
 
         that._recreateSizeDependentObjects(false);
         if(!that._changes.has("FULL_RENDER")) {
+            const resizePanesOnZoom = this.option("resizePanesOnZoom");
             that._doRender({
                 force: true,
                 drawTitle: false,
                 drawLegend: false,
-                adjustAxes: this.option("adjustAxesOnZoom") || false, // T690411
+                adjustAxes: _isDefined(resizePanesOnZoom) ? resizePanesOnZoom : (this.option("adjustAxesOnZoom") || false),
                 animate: false
             });
             that._raiseZoomEndHandlers();

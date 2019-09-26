@@ -114,7 +114,6 @@ QUnit.test("Projection by data. Default bounds are include common bounds", funct
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
-        getBoundsFromData: true,
         layers: layers
     });
 
@@ -136,7 +135,6 @@ QUnit.test("Projection by data. Without projection in options", function(assert)
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
-        getBoundsFromData: true,
         layers: layers
     });
 
@@ -160,7 +158,6 @@ QUnit.test("Projection by data. Projection in options", function(assert) {
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
-        getBoundsFromData: true,
         layers: layers,
         projection: {}
     });
@@ -169,7 +166,7 @@ QUnit.test("Projection by data. Projection in options", function(assert) {
     assert.strictEqual(this.projection.setEngine.callCount, 1);
 });
 
-QUnit.test("Projection by data. Empty bbox", function(assert) {
+QUnit.test("Bounds by data. Empty bbox", function(assert) {
     var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
     var layers = [];
 

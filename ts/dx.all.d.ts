@@ -784,6 +784,7 @@ declare module DevExpress {
     export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
     /** @name globalConfig */
     export interface globalConfig {
+        /** @deprecated */
         /** @name globalConfig.decimalSeparator */
         decimalSeparator?: string;
         /** @name globalConfig.defaultCurrency */
@@ -800,6 +801,7 @@ declare module DevExpress {
         rtlEnabled?: boolean;
         /** @name globalConfig.serverDecimalSeparator */
         serverDecimalSeparator?: string;
+        /** @deprecated */
         /** @name globalConfig.thousandsSeparator */
         thousandsSeparator?: string;
         /** @name globalConfig.useLegacyStoreResult */
@@ -2088,6 +2090,8 @@ declare module DevExpress.ui {
     }
     /** @name GridBase.Options.rowDragging */
     export interface GridBaseRowDragging {
+        /** @name GridBase.Options.rowDragging.allowReordering */
+        allowReordering?: boolean;
         /** @name GridBase.Options.rowDragging.autoScroll */
         autoScroll?: boolean;
         /** @name GridBase.Options.rowDragging.boundary */
@@ -3546,7 +3550,7 @@ declare module DevExpress.ui {
         /** @name dxFileManagerContextMenuItem.name */
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */
-        visible?: 'auto' | boolean;
+        visible?: boolean;
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -3555,7 +3559,7 @@ declare module DevExpress.ui {
         /** @name dxFileManagerToolbarItem.name */
         name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
         /** @name dxFileManagerToolbarItem.visible */
-        visible?: 'auto' | boolean;
+        visible?: boolean;
     }
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
@@ -4603,8 +4607,6 @@ declare module DevExpress.ui {
     export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
         /** @name dxOverlay.Options.animation */
         animation?: dxOverlayAnimation;
-        /** @name dxOverlay.Options.closeOnBackButton */
-        closeOnBackButton?: boolean;
         /** @name dxOverlay.Options.closeOnOutsideClick */
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** @name dxOverlay.Options.contentTemplate */
@@ -5484,6 +5486,8 @@ declare module DevExpress.ui {
     export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
         /** @name dxSortable.Options.allowDropInsideItem */
         allowDropInsideItem?: boolean;
+        /** @name dxSortable.Options.allowReordering */
+        allowReordering?: boolean;
         /** @name dxSortable.Options.dropFeedbackMode */
         dropFeedbackMode?: 'push' | 'indicate';
         /** @name dxSortable.Options.filter */
@@ -5818,8 +5822,6 @@ declare module DevExpress.ui {
     export interface dxToastOptions extends dxOverlayOptions<dxToast> {
         /** @name dxToast.Options.animation */
         animation?: dxToastAnimation;
-        /** @name dxToast.Options.closeOnBackButton */
-        closeOnBackButton?: boolean;
         /** @name dxToast.Options.closeOnClick */
         closeOnClick?: boolean;
         /** @name dxToast.Options.closeOnOutsideClick */
@@ -7303,6 +7305,8 @@ declare module DevExpress.viz {
         onZoomStart?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, event?: event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
         /** @name dxChart.Options.panes */
         panes?: dxChartPanes | Array<dxChartPanes>;
+        /** @name dxChart.Options.resizePanesOnZoom */
+        resizePanesOnZoom?: boolean;
         /** @name dxChart.Options.resolveLabelOverlapping */
         resolveLabelOverlapping?: 'hide' | 'none' | 'stack';
         /** @name dxChart.Options.rotated */
