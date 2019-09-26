@@ -43,7 +43,7 @@ const SpeedDialAction = Widget.inherit({
             visible: true,
 
             /**
-            * @name dxSpeedDialActionOptions.visible
+            * @name dxSpeedDialActionOptions.index
             * @type number
             * @default 0
             */

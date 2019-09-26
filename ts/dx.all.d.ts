@@ -5440,6 +5440,8 @@ declare module DevExpress.ui {
     export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
         /** @name dxSpeedDialAction.Options.icon */
         icon?: string;
+        /** @name dxSpeedDialAction.Options.index */
+        index?: number;
         /** @name dxSpeedDialAction.Options.label */
         label?: string;
         /** @name dxSpeedDialAction.Options.onClick */
