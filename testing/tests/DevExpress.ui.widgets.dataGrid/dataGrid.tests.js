@@ -7203,6 +7203,55 @@ QUnit.test("Raise error if key field is missed", function(assert) {
     assert.equal($errorRow.find(".dx-error-message > a").attr("href"), errorUrl, "Url error code");
 });
 
+QUnit.test("Raise error if key field is missed and one of columns is named 'key'", function(assert) {
+    // act
+    var errorUrl = "http://js.devexpress.com/error/" + version.split(".").slice(0, 2).join("_") + "/E1046",
+        dataGrid = createDataGrid({
+            columns: ["key"],
+            keyExpr: "ID",
+            dataSource: [{ ID: 1, key: "John" }, { key: "Olivia" }]
+        });
+
+    this.clock.tick();
+
+    // assert
+    var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
+    assert.equal($errorRow.length, 1, "error row is shown");
+    assert.equal($errorRow.find(".dx-error-message").text().slice(0, 5), "E1046", "error number");
+
+    assert.equal($errorRow.find(".dx-error-message > a").attr("href"), errorUrl, "Url error code");
+});
+
+// T817255
+QUnit.test("No error after ungrouping with custom store and column reordering", function(assert) {
+    // arrange
+    var columnController,
+        dataGrid = createDataGrid({
+            columns: ["field1", {
+                dataField: "field2",
+                groupIndex: 0
+            }],
+            groupPanel: { visible: true },
+            allowColumnReordering: true,
+            dataSource: {
+                key: "field1",
+                load: function() {
+                    return [{ field1: 1, field2: 1 }, { field1: 2, field2: 2 }];
+                }
+            }
+        });
+
+    this.clock.tick();
+
+    columnController = dataGrid.getController("columns");
+
+    // act
+    columnController.moveColumn(0, 1, "group", "headers");
+
+    // assert
+    assert.strictEqual($($(dataGrid.$element()).find(".dx-error-row")).length, 0, "no errors");
+});
+
 // T719938
 QUnit.test("No error after adding row and virtual scrolling", function(assert) {
     // act
