@@ -807,13 +807,14 @@ var Popup = Overlay.inherit({
             case "toolbarItems":
             case "useDefaultToolbarButtons":
             case "useFlatToolbarButtons":
+                var isVisibilityToggle = args.fullName.search(".visible") !== -1;
                 var isPartialUpdate = args.fullName.search(".options") !== -1;
                 var isToolbarItemsChange = args.fullName.match(/^toolbarItems(\[\d+\])?$/);
 
                 this._renderTitle();
                 this._renderBottom();
 
-                if(!isPartialUpdate && !isToolbarItemsChange) {
+                if(!isVisibilityToggle && !isPartialUpdate && !isToolbarItemsChange) {
                     this._renderGeometry();
                 }
                 break;
