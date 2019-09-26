@@ -230,6 +230,7 @@ module.exports = {
                  * @type_function_param1_field3 itemData:any
                  * @type_function_param1_field4 itemElement:dxElement
                  * @type_function_param1_field5 fromIndex:number
+                 * @type_function_param1_field6 fromData:any
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragMove
@@ -243,7 +244,9 @@ module.exports = {
                  * @type_function_param1_field6 toIndex:number
                  * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
                  * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field9 dropInsideItem:boolean
+                 * @type_function_param1_field9 fromData:any
+                 * @type_function_param1_field10 toData:any
+                 * @type_function_param1_field11 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragEnd
@@ -257,7 +260,9 @@ module.exports = {
                  * @type_function_param1_field6 toIndex:number
                  * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
                  * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field9 dropInsideItem:boolean
+                 * @type_function_param1_field9 fromData:any
+                 * @type_function_param1_field10 toData:any
+                 * @type_function_param1_field11 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onDragChange
@@ -271,7 +276,9 @@ module.exports = {
                  * @type_function_param1_field6 toIndex:number
                  * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
                  * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field9 dropInsideItem:boolean
+                 * @type_function_param1_field9 fromData:any
+                 * @type_function_param1_field10 toData:any
+                 * @type_function_param1_field11 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onAdd
@@ -284,7 +291,9 @@ module.exports = {
                  * @type_function_param1_field5 toIndex:number
                  * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
                  * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 dropInsideItem:boolean
+                 * @type_function_param1_field9 fromData:any
+                 * @type_function_param1_field10 toData:any
+                 * @type_function_param1_field11 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onRemove
@@ -297,6 +306,8 @@ module.exports = {
                  * @type_function_param1_field5 toIndex:number
                  * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
                  * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+                 * @type_function_param1_field8 fromData:any
+                 * @type_function_param1_field9 toData:any
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onReorder
@@ -309,7 +320,9 @@ module.exports = {
                  * @type_function_param1_field5 toIndex:number
                  * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
                  * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field8 dropInsideItem:boolean
+                 * @type_function_param1_field8 fromData:any
+                 * @type_function_param1_field9 toData:any
+                 * @type_function_param1_field10 dropInsideItem:boolean
                  */
             }
         };

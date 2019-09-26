@@ -211,6 +211,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @type_function_param1_field5 cancel:boolean
              * @type_function_param1_field6 itemData:any
              * @type_function_param1_field7 itemElement:dxElement
+             * @type_function_param1_field8 fromData:any
              * @action
              */
             onDragStart: null,
@@ -225,6 +226,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @type_function_param1_field7 itemElement:dxElement
              * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
              * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field10 fromData:any
+             * @type_function_param1_field11 toData:any
              * @action
              */
             onDragMove: null,
@@ -239,6 +242,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @type_function_param1_field7 itemElement:dxElement
              * @type_function_param1_field8 fromComponent:dxSortable|dxDraggable
              * @type_function_param1_field9 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field10 fromData:any
+             * @type_function_param1_field11 toData:any
              * @action
              */
             onDragEnd: null,
@@ -252,6 +257,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @type_function_param1_field6 itemElement:dxElement
              * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
              * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+             * @type_function_param1_field9 fromData:any
+             * @type_function_param1_field10 toData:any
              * @action
              * @hidden
              */
@@ -321,12 +328,19 @@ var Draggable = DOMComponentWithTemplate.inherit({
              * @type number
              * @default 60
              */
-            scrollSensitivity: 60
+            scrollSensitivity: 60,
             /**
              * @name DraggableBaseOptions.group
              * @type any
              * @default undefined
              */
+            group: undefined,
+            /**
+             * @name DraggableBaseOptions.data
+             * @type any
+             * @default undefined
+             */
+            data: undefined,
             /**
              * @name DraggableBaseOptions.cursorOffset
              * @type string|object
@@ -348,7 +362,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this.callBase.apply(this, arguments);
 
         extend(this._optionsByReference, {
-            group: true
+            group: true,
+            itemData: true,
+            data: true
         });
     },
 
@@ -700,7 +716,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             this._findScrollable(e);
         }
 
-        let eventArgs = this._getCrossComponentEventArgs(e);
+        let eventArgs = this._getEventArgs(e);
         this._getAction("onDragMove")(eventArgs);
 
         if(eventArgs.cancel === true) {
@@ -738,23 +754,18 @@ var Draggable = DOMComponentWithTemplate.inherit({
         that.horizontalScrollHelper && that.horizontalScrollHelper.findScrollable(allObjects, mousePosition);
     },
 
-    _getCrossComponentEventArgs: function(e) {
+    _getEventArgs: function(e) {
         let sourceDraggable = this._getSourceDraggable(),
             targetDraggable = this._getTargetDraggable();
-
-        return extend(this._getEventArgs(e), {
-            fromComponent: sourceDraggable,
-            toComponent: targetDraggable
-        });
-    },
-
-    _getEventArgs: function(e) {
-        let sourceDraggable = this._getSourceDraggable();
 
         return {
             event: e,
             itemData: sourceDraggable.option("itemData"),
-            itemElement: getPublicElement(sourceDraggable._$sourceElement)
+            itemElement: getPublicElement(sourceDraggable._$sourceElement),
+            fromComponent: sourceDraggable,
+            toComponent: targetDraggable,
+            fromData: sourceDraggable.option("data"),
+            toData: targetDraggable.option("data"),
         };
     },
 
@@ -763,7 +774,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         return extend(this._getEventArgs(e), {
             fromComponent: this,
-            toComponent: targetDraggable
+            toComponent: targetDraggable,
+            toData: targetDraggable.option("data")
         });
     },
 
@@ -773,7 +785,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return {
             event: args.event,
             itemData: args.itemData,
-            itemElement: $itemElement
+            itemElement: $itemElement,
+            fromData: args.fromData
         };
     },
 
@@ -876,6 +889,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             case "boundOffset":
             case "handle":
             case "group":
+            case "data":
             case "itemData":
                 break;
             default:
