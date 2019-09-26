@@ -204,7 +204,7 @@ QUnit.test("hideAppointmentPopup should hide a popup and save changes", function
     assert.equal($(".dx-scheduler-appointment").length, 1, "appointment is created");
 });
 
-QUnit.test("showAppointmentPopup should render a popup form only once", function(assert) { // TODO
+QUnit.test("showAppointmentPopup should render a popup form only once", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 1" });
 
     var $form = $(".dx-scheduler-appointment-popup").find(".dx-form");
