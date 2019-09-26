@@ -9682,7 +9682,7 @@ declare module DevExpress.viz {
         /** @name dxSankey.Options.tooltip.linkTooltipTemplate */
         linkTooltipTemplate?: DevExpress.core.template | ((info: { source?: string, target?: string, weight?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxSankey.Options.tooltip.nodeTooltipTemplate */
-        nodeTooltipTemplate?: DevExpress.core.template | ((info: { title?: string, weightIn?: number, weightOut?: number }) => string | Element | JQuery);
+        nodeTooltipTemplate?: DevExpress.core.template | ((info: { title?: string, weightIn?: number, weightOut?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxSankey */
     export class dxSankey extends BaseWidget {
