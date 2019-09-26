@@ -3460,7 +3460,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.allowedFileExtensions */
         allowedFileExtensions?: Array<string>;
         /** @name dxFileManager.Options.contextMenu */
-        contextMenu?: any;
+        contextMenu?: { items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'> };
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
@@ -3482,7 +3482,7 @@ declare module DevExpress.ui {
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
         /** @name dxFileManager.Options.toolbar */
-        toolbar?: any;
+        toolbar?: { fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>, items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'> };
         /** @name dxFileManager.Options.upload */
         upload?: { maxFileSize?: number };
     }
@@ -3491,24 +3491,12 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxFileManagerOptions)
         constructor(element: JQuery, options?: dxFileManagerOptions)
     }
-    /** @name dxFileManagerContextMenu */
-    export interface dxFileManagerContextMenu {
-        /** @name dxFileManagerContextMenu.items */
-        items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>;
-    }
     /** @name dxFileManagerContextMenuItem */
     export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
         /** @name dxFileManagerContextMenuItem.name */
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */
         visible?: 'auto' | boolean;
-    }
-    /** @name dxFileManagerToolbar */
-    export interface dxFileManagerToolbar {
-        /** @name dxFileManagerToolbar.fileSelectionItems */
-        fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
-        /** @name dxFileManagerToolbar.items */
-        items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>;
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {

@@ -372,10 +372,6 @@ class FileManager extends Widget {
             */
 
             /**
-            * @name dxFileManagerToolbar
-            * @type object
-            */
-            /**
             * @name dxFileManagerOptions.toolbar.items
             * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
             * @default [ "showNavPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
@@ -424,10 +420,6 @@ class FileManager extends Widget {
             * @type object
             */
 
-            /**
-            * @name dxFileManagerContextMenu
-            * @type object
-            */
             /**
             * @name dxFileManagerOptions.contextMenu.items
             * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
