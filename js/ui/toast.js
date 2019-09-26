@@ -138,11 +138,6 @@ var Toast = Overlay.inherit({
             */
             height: "auto",
 
-            /**
-            * @name dxToastOptions.closeOnBackButton
-            * @type boolean
-            * @default false
-            */
             closeOnBackButton: false,
 
             /**
