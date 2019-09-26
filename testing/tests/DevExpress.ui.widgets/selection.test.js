@@ -149,6 +149,37 @@ QUnit.test("Select all by one page should skip non-selectable items", function(a
     assert.deepEqual(selection.getSelectedItems(), [this.data[1], this.data[2]], "selected items");
 });
 
+QUnit.test("Select all for all pages when item is disabled", function(assert) {
+    this.data[5].disabled = true;
+    var dataSource = createDataSource(this.data, { key: "id" }, { paginate: true, pageSize: 3 });
+
+    var selection = new Selection({
+        key: function() {
+            var store = dataSource.store();
+            return store && store.key();
+        },
+        keyOf: function(item) {
+            var store = dataSource.store();
+            return store && store.keyOf(item);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        load: function(options) {
+            return dataSource && dataSource.store().load(options);
+        }
+    });
+
+    dataSource.load();
+    selection.selectAll();
+
+    assert.deepEqual(selection.getSelectedItemKeys(), [1, 2, 3, 4, 5, 7], "selected item keys are correct");
+    assert.strictEqual(selection.getSelectAllState(), true, "select all is false");
+});
+
 QUnit.test("Select all by one page and changeItemSelection", function(assert) {
     var dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
 
