@@ -2353,59 +2353,67 @@ const Scheduler = Widget.inherit({
     _doneButtonClickHandler: function(args) {
         args.cancel = true;
 
-        this._saveChanges(true);
+        this.saveEditData();
+    },
 
-        if(this._lastEditData) {
-            var startDate = this.fire("getField", "startDate", this._lastEditData);
-            this._workSpace.updateScrollPosition(startDate);
-            delete this._lastEditData;
-        }
+    saveEditData: function() {
+        const deferred = new deferredUtils.Deferred();
+        deferredUtils.when(this._saveChanges(true)).done(() => {
+            if(this._lastEditData) {
+                const startDate = this.fire("getField", "startDate", this._lastEditData);
+                this._workSpace.updateScrollPosition(startDate);
+                delete this._lastEditData;
+            }
+            deferred.resolve();
+        });
+        return deferred.promise();
     },
 
     _saveChanges: function(disableButton) {
-        var validation = this._appointmentForm.validate();
+        const deferred = new deferredUtils.Deferred(),
+            validation = this._appointmentForm.validate();
 
-        if(validation && !validation.isValid) {
-            return false;
-        }
-
-        disableButton && this._disableDoneButton();
-
-        var formData = objectUtils.deepExtendArraySafe({}, this._getFormData(), true),
-            oldData = this._editAppointmentData,
-            recData = this._updatedRecAppointment;
-
-        function convert(obj, dateFieldName) {
-            var date = new Date(this.fire("getField", dateFieldName, obj));
-            var tzDiff = this._getTimezoneOffsetByOption() * toMs("hour") + this.fire("getClientTimezoneOffset", date);
+        const convert = (obj, dateFieldName) => {
+            const date = new Date(this.fire("getField", dateFieldName, obj)),
+                tzDiff = this._getTimezoneOffsetByOption() * toMs("hour") + this.fire("getClientTimezoneOffset", date);
 
             return new Date(date.getTime() + tzDiff);
-        }
+        };
 
-        if(oldData) {
-            this._convertDatesByTimezoneBack(false, formData);
-        }
-
-        if(oldData && !recData) {
-            this.updateAppointment(oldData, formData);
-        } else {
-
-            if(recData) {
-                this.updateAppointment(oldData, recData);
-                delete this._updatedRecAppointment;
-
-                if(typeof this._getTimezoneOffsetByOption() === "number") {
-                    this.fire("setField", "startDate", formData, convert.call(this, formData, "startDate"));
-                    this.fire("setField", "endDate", formData, convert.call(this, formData, "endDate"));
-                }
+        disableButton && this._disableDoneButton();
+        deferredUtils.when(validation && validation.complete || validation).done((validation) => {
+            if(validation && !validation.isValid) {
+                this._enableDoneButton();
+                deferred.resolve(false);
+                return;
             }
 
-            this.addAppointment(formData);
-        }
-        this._enableDoneButton();
+            const formData = objectUtils.deepExtendArraySafe({}, this._getFormData(), true),
+                oldData = this._editAppointmentData,
+                recData = this._updatedRecAppointment;
 
-        this._lastEditData = formData;
-        return true;
+            if(oldData) {
+                this._convertDatesByTimezoneBack(false, formData);
+            }
+            if(oldData && !recData) {
+                this.updateAppointment(oldData, formData);
+            } else {
+                if(recData) {
+                    this.updateAppointment(oldData, recData);
+                    delete this._updatedRecAppointment;
+
+                    if(typeof this._getTimezoneOffsetByOption() === "number") {
+                        this.fire("setField", "startDate", formData, convert.call(this, formData, "startDate"));
+                        this.fire("setField", "endDate", formData, convert.call(this, formData, "endDate"));
+                    }
+                }
+                this.addAppointment(formData);
+            }
+            this._enableDoneButton();
+            this._lastEditData = formData;
+            deferred.resolve(true);
+        });
+        return deferred.promise();
     },
 
     _getFormData: function() {
