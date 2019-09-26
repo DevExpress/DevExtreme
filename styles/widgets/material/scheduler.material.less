@@ -465,7 +465,7 @@
     padding: (@MATERIAL_SCHEDULER_HEADER_HEIGHT - @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT) * 0.5;
 
     .dx-button {
-        .dx-button-flat-color-styling(@button-default-bg);
+        .dx-button-flat-color-styling(@button-default-bg, @button-default-text-hover-bg, @button-default-text-focused-bg, @button-default-text-active-bg);
 
         .dx-button-text {
             text-transform: none;
@@ -537,7 +537,7 @@
     }
 
     margin-top: (@MATERIAL_SCHEDULER_HEADER_HEIGHT - @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT) * 0.5 - 1px;
-    .dx-button-flat-color-styling(@base-icon-color);
+    .dx-button-flat-color-styling(@base-icon-color, fade(@button-normal-bg-inverted, 8%), fade(@button-normal-bg-inverted, 8%), fade(@button-normal-bg-inverted, 30%));
 
     z-index: 1;
 
@@ -940,7 +940,7 @@
     .dx-button {
         min-width: auto;
         padding: 0;
-        .dx-button-flat-color-styling(@button-default-bg);
+        .dx-button-flat-color-styling(@button-default-bg, @button-default-text-hover-bg, @button-default-text-focused-bg, @button-default-text-active-bg);
 
         .dx-icon {
             .dx-icon-sizing(@MATERIAL_BASE_ICON_SIZE);
