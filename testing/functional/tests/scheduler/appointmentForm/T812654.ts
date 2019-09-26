@@ -41,22 +41,21 @@ fixture `Scheduler: T812654`
     .page(url(__dirname, '../../container.html'));
 
     test("Custom form shouldn't throw exception, after second show appointment form(T812654)", async t => {
+        const APPOINTMENT_TEXT = "Website Re-Design Plan";
+        const TEXT_EDITOR_CLASS = ".dx-texteditor-input";
+        const CHECKBOX_CLASS = ".dx-checkbox.dx-widget";
+
         const scheduler = new Scheduler("#container");
 
-        await t.setTestSpeed(0.1);
+        await t.doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
+            .click(CHECKBOX_CLASS)
 
-        await t.click(scheduler.getAppointment("Website Re-Design Plan").element) // DB click
-            .click(scheduler.tooltip);
+            .expect(Selector(TEXT_EDITOR_CLASS).value)
+            .eql(APPOINTMENT_TEXT)
 
-        await t.click(".dx-checkbox.dx-widget");
+            .click(scheduler.appointmentPopup.cancelButton)
+            .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
 
-        const textarea = Selector(".dx-texteditor-input");
-
-        await t.expect(textarea.value).eql("Website Re-Design Plan");
-
-        await t.click(".dx-popup-cancel.dx-button");
-
-        await t.click(scheduler.getAppointment("Website Re-Design Plan").element)
-            .click(scheduler.tooltip);
-
+            .expect(Selector(TEXT_EDITOR_CLASS).exists)
+            .eql(false);
     }).before(() => createScheduler());
