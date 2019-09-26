@@ -177,7 +177,7 @@ QUnit.test("Select all for all pages when item is disabled", function(assert) {
     selection.selectAll();
 
     assert.deepEqual(selection.getSelectedItemKeys(), [1, 2, 3, 4, 5, 7], "selected item keys are correct");
-    assert.strictEqual(selection.getSelectAllState(), true, "select all is false");
+    assert.strictEqual(selection.getSelectAllState(), true, "select all is correct");
 });
 
 QUnit.test("Select all by one page and changeItemSelection", function(assert) {
