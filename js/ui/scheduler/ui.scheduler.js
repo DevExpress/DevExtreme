@@ -2353,13 +2353,20 @@ const Scheduler = Widget.inherit({
     _doneButtonClickHandler: function(args) {
         args.cancel = true;
 
+        this.saveEditData();
+    },
+
+    saveEditData: function() {
+        const deferred = new deferredUtils.Deferred();
         deferredUtils.when(this._saveChanges(true)).done(() => {
             if(this._lastEditData) {
                 const startDate = this.fire("getField", "startDate", this._lastEditData);
                 this._workSpace.updateScrollPosition(startDate);
                 delete this._lastEditData;
             }
+            deferred.resolve();
         });
+        return deferred.promise();
     },
 
     _saveChanges: function(disableButton) {

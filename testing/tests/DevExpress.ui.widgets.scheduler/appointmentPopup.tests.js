@@ -1114,7 +1114,7 @@ QUnit.test("Popup should not be closed until the valid valid value is typed", fu
                     const d = $.Deferred();
                     setTimeout(function() {
                         d.resolve(params.value === validValue);
-                    });
+                    }, 10);
                     return d.promise();
                 }
             }
@@ -1137,16 +1137,17 @@ QUnit.test("Popup should not be closed until the valid valid value is typed", fu
     $buttonOk.trigger("dxclick");
 
     assert.equal($popup.find(".dx-validation-pending").length, 1, "the only pending editor is displayed in the form");
-    setTimeout(() => {
+    this.instance.saveEditData().done(() => {
         assert.equal($popup.find(".dx-invalid").length, 1, "the only invalid editor is displayed in the form");
 
         $input.val(validValue);
         $input.trigger("change");
-        this.instance._popup.on("hidden", function() {
-            done();
-        });
-
         $buttonOk = $(".dx-scheduler-appointment-popup .dx-popup-done.dx-button").first();
         $buttonOk.trigger("dxclick");
-    }, 100);
+        this.instance.saveEditData().done(() => {
+            assert.notOk(this.instance._popup.option("visible"), "the form is closed");
+
+            done();
+        });
+    });
 });
