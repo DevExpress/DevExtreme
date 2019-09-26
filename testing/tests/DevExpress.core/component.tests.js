@@ -772,7 +772,7 @@ QUnit.module("default", {}, () => {
 
     QUnit.test("dispose optionManager", (assert) => {
         const component = new TestComponent();
-        const callbacks = ["_changedCallbacks", "_changingCallbacks", "_logWarningCallbacks"];
+        const callbacks = ["_changedCallbacks", "_changingCallbacks", "_deprecatedCallbacks"];
 
         callbacks.forEach((callback) => {
             assert.equal(component._optionManager[callback]._list.length, 1);
