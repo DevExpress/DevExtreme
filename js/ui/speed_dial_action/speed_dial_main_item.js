@@ -116,7 +116,11 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     },
 
     _clickHandler() {
-        const actions = this._actionItems.filter((action) => action.option("actionVisible"));
+        const actions = this._actionItems
+            .filter((action) => action.option("actionVisible"))
+            .sort((action, nextAction) => {
+                return action.option("index") - nextAction.option("index");
+            });
 
         if(actions.length === 1) return;
 
