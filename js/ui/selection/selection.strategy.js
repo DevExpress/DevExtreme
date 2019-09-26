@@ -56,7 +56,7 @@ module.exports = Class.inherit({
         return commonUtils.equalByValue(key1, key2);
     },
 
-    nonDisabled: function(items) {
+    getSelectableItems: function(items) {
         return items.filter(function(item) {
             return !item.disabled;
         });
@@ -145,7 +145,7 @@ module.exports = Class.inherit({
     },
 
     _getVisibleSelectAllState: function() {
-        var items = this.nonDisabled(this.options.plainItems()),
+        var items = this.getSelectableItems(this.options.plainItems()),
             hasSelectedItems = false,
             hasUnselectedItems = false;
 
