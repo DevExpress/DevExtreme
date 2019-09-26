@@ -112,11 +112,6 @@ var LoadPanel = Overlay.inherit({
             */
             delay: 0,
 
-            /**
-            * @name dxLoadPanelOptions.closeOnBackButton
-            * @default false
-            * @hidden
-            */
             closeOnBackButton: false,
 
             /**
