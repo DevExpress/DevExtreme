@@ -2351,7 +2351,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var rowIndex = this._getRowCount() - 1,
             cellIndex = this._getCellCount();
 
-        if(this.option("groupByDate")) {
+        if(this.option("groupByDate") && this._getGroupCount() > 0) {
             cellIndex = cellIndex * this._getGroupCount() - 1;
         } else {
             cellIndex = cellIndex - 1;

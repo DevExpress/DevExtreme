@@ -416,7 +416,7 @@ module.exports = {
                     this.callBase(rowIndex);
 
                     let visibleRow = this.getController("data").getVisibleRows()[rowIndex];
-                    if(!visibleRow || !visibleRow.inserted) {
+                    if(!visibleRow || !visibleRow.isNewRow) {
                         this.option("focusedRowIndex", rowIndex);
                     }
                 },

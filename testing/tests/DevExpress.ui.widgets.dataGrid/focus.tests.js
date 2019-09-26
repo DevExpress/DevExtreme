@@ -2877,7 +2877,7 @@ QUnit.testInActiveWindow("onFocusedCellChanged event the inserted row (T743086)"
         },
         onFocusedCellChanged: function(e) {
             ++focusedCellChangedCount;
-            assert.ok(e.row.inserted, "Inserted row");
+            assert.ok(e.row.isNewRow, "Inserted row");
             assert.equal(e.row.rowType, "data", "Row type");
             assert.deepEqual(e.row.data, { }, "Row data");
         }
@@ -3261,6 +3261,39 @@ QUnit.testInActiveWindow("isHighlighted in the onFocusedCellChanged event", func
     // assert
     assert.equal(focusedColumnChangingCount, 1, "onFocusedCellChanging fires count");
     assert.equal(focusedColumnChangedCount, 1, "focusedColumnChangedCount fires count");
+});
+
+QUnit.testInActiveWindow("Should not render overlay on focused row with tabindex if useKeyboard set false", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 }
+    ];
+
+    this.options = {
+        useKeyboard: false
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    $(this.getRowElement(1))
+        .attr("tabindex", 0)
+        .focus();
+    $(this.getCellElement(1, 1))
+        .trigger("dxpointerdown");
+    this.clock.tick();
+
+    // assert
+    assert.notOk(dataGridWrapper.rowsView.isFocusOverlayVisible(), "has no focus overlay");
 });
 
 QUnit.testInActiveWindow("Not highlight cell by isHighlighted arg in the onFocusedCellChanging event by LeftArrow key", function(assert) {

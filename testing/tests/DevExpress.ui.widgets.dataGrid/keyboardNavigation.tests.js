@@ -31,7 +31,8 @@ import fx from "animation/fx";
 
 var device = devices.real();
 
-var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation");
+var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation"),
+    dataGridWrapper = new DataGridWrapper("#container");
 
 function testInDesktop(name, testFunc) {
     if(device.deviceType === "desktop") {
@@ -537,15 +538,18 @@ QUnit.testInActiveWindow("View is focused when render of view is completed", fun
     assert.strictEqual(this.getController('editorFactory')._$focusedElement[0], $cell[0], "focused element");
 });
 */
-QUnit.testInActiveWindow("Input is focused when edit mode is enabled", function(assert) {
+QUnit.testInActiveWindow("Interactive element is focused when edit mode is enabled (T403964)", function(assert) {
     // arrange
     var navigationController,
         view,
-        $rowsElement = $("<div />").appendTo("#container").append($("<tr class='dx-row'>" +
-                "<td><input></td>" +
-                "<td><input></td>" +
-                "<td><input></td>" +
-        "</tr>"));
+        $rowsElement = $("<div />").appendTo("#container").append($(`
+            <tr class='dx-row'>"
+                <td class='cell-0'><input></td>
+                <td><input></td>
+                <td><textarea /></td>
+                <td><a>Link<a/></td>
+                <td><select /></td>
+            </tr>`));
 
     view = this.getView("rowsView");
     view.element = function() {
@@ -553,6 +557,7 @@ QUnit.testInActiveWindow("Input is focused when edit mode is enabled", function(
     };
 
     // act
+    $(".dx-row .cell-0").focus();
     this.component._controllers.editing._isEditing = true;
     navigationController = new KeyboardNavigationController(this.component);
     navigationController.init();
@@ -561,90 +566,30 @@ QUnit.testInActiveWindow("Input is focused when edit mode is enabled", function(
     navigationController._focusedView = view;
     navigationController._isEditing = true;
     navigationController._isNeedFocus = true;
-    navigationController._focusedCellPosition = {
-        columnIndex: 1,
-        rowIndex: 0
-    };
 
+    // act, assert
+    navigationController._focusedCellPosition = { columnIndex: 1, rowIndex: 0 };
     callViewsRenderCompleted(this.component._views);
-
     this.clock.tick();
+    assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("input"), "Interactive element is input");
 
-    assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("input"));
-});
-
-// T403964
-QUnit.testInActiveWindow("Only visible input element is focused when edit mode is enabled", function(assert) {
-    // arrange
-    var navigationController,
-        view,
-        $rowsElement = $("<div />").appendTo("#container").append($("<tr class='dx-row'>" +
-                "<td><input></td>" +
-                "<td><input class='input1' style='display: none' /><input class='input2' /><input class='input3' style='display: none' /></td>" +
-                "<td><input></td>" +
-        "</tr>"));
-
-    view = this.getView("rowsView");
-    view.element = function() {
-        return $rowsElement;
-    };
-
-    // act
-    this.component._controllers.editing._isEditing = true;
-    navigationController = new KeyboardNavigationController(this.component);
-    navigationController.init();
-
-    navigationController._focusedViews.viewIndex = 0;
-    navigationController._focusedView = view;
-    navigationController._isEditing = true;
-    navigationController._isNeedFocus = true;
-    navigationController._focusedCellPosition = {
-        columnIndex: 1,
-        rowIndex: 0
-    };
-
+    // act, assert
+    navigationController._focusedCellPosition = { columnIndex: 2, rowIndex: 0 };
     callViewsRenderCompleted(this.component._views);
-
     this.clock.tick();
+    assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("textarea"), "Interactive element is textarea");
 
-    assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("input"));
-    assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.hasClass("input2"));
-});
-
-QUnit.testInActiveWindow("Textarea is focused when edit mode is enabled", function(assert) {
-    // arrange
-    var navigationController,
-        view,
-        $rowsElement = $("<div />").appendTo("#container").append($("<tr class='dx-row'>" +
-                "<td><textarea /></td>" +
-                "<td><textarea /></td>" +
-                "<td><textarea /></td>" +
-        "</tr>"));
-
-    view = this.getView("rowsView");
-    view.element = function() {
-        return $rowsElement;
-    };
-
-    // act
-    this.component._controllers.editing._isEditing = true;
-    navigationController = new KeyboardNavigationController(this.component);
-    navigationController.init();
-
-    navigationController._focusedViews.viewIndex = 0;
-    navigationController._focusedView = view;
-    navigationController._isEditing = true;
-    navigationController._isNeedFocus = true;
-    navigationController._focusedCellPosition = {
-        columnIndex: 1,
-        rowIndex: 0
-    };
-
+    // act, assert
+    navigationController._focusedCellPosition = { columnIndex: 3, rowIndex: 0 };
     callViewsRenderCompleted(this.component._views);
-
     this.clock.tick();
+    assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("a"), "Interactive element is link");
 
-    assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("textarea"));
+    // act, assert
+    navigationController._focusedCellPosition = { columnIndex: 4, rowIndex: 0 };
+    callViewsRenderCompleted(this.component._views);
+    this.clock.tick();
+    assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is("select"), "Interactive element is select");
 });
 
 QUnit.testInActiveWindow("View is not focused when row is inline edited", function(assert) {
@@ -3034,6 +2979,43 @@ QUnit.testInActiveWindow("Edit cell after enter key", function(assert) {
     assert.equal(this.editingController._editColumnIndex, 2, "edit column index");
 });
 
+QUnit.testInActiveWindow("Edit cell should not lose focus after enter key", function(assert) {
+    let inputBlurFired = false,
+        inputChangeFired = false,
+        $input;
+
+    // arrange
+    setupModules(this);
+
+    // act
+    this.options.editing = { allowUpdating: true, mode: "batch" };
+    this.gridView.render($("#container"));
+
+    this.focusFirstCell();
+
+    // act
+    this.triggerKeyDown("enter");
+    this.clock.tick();
+
+    // arrange
+    $input = dataGridWrapper.rowsView.getEditorInputElement(0, 0);
+
+    // assert
+    assert.ok($input.is(":focus"), "input is focused");
+
+    // arrange
+    $input.on("blur", () => inputBlurFired = true);
+    $input.on("change", () => inputChangeFired = true);
+
+    // act
+    this.triggerKeyDown("enter", false, false, $input);
+    this.clock.tick();
+
+    // assert
+    assert.notOk(inputBlurFired);
+    assert.ok(inputChangeFired);
+});
+
 // T202754
 QUnit.testInActiveWindow("Enter after edit cell by enter when default prevented", function(assert) {
     // arrange
@@ -3882,7 +3864,7 @@ QUnit.testInActiveWindow("Focus next editor after tab key for inserted row when 
     // arrange
     setupModules(this);
     this.options.editing = { allowUpdating: false, mode: "cell" };
-    this.dataControllerOptions.items[0].inserted = true;
+    this.dataControllerOptions.items[0].isNewRow = true;
     this.gridView.render($("#container"));
 
     // act
@@ -5385,9 +5367,10 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
-    QUnit.testInActiveWindow("DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process (T718459)", function(assert) {
+    QUnit.testInActiveWindow("DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process (T718459, T812546)", function(assert) {
         // arrange
         var keyboardNavigationController,
+            editingStartFiresCount = 0,
             focusedCellChangingFiresCount = 0,
             focusedCellChangedFiresCount = 0,
             $cell;
@@ -5400,6 +5383,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
             useKeyboard: true,
             editing: { mode: 'cell', allowUpdating: true },
             onEditingStart: function(e) {
+                ++editingStartFiresCount;
                 e.cancel = e.data.name === "Alex";
             },
             onFocusedCellChanging: e => {
@@ -5415,7 +5399,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // act
         this.gridView.render($("#container"));
         keyboardNavigationController = this.gridView.component.keyboardNavigationController;
-        $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell = $(this.getCellElement(1, 1));
         $cell.trigger(CLICK_EVENT);
         this.editCell(1, 1);
         this.clock.tick();
@@ -5423,9 +5407,11 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // assert
         assert.equal(focusedCellChangingFiresCount, 1, "onFocusedCellChanging fires count");
         assert.equal(focusedCellChangedFiresCount, 1, "onFocusedCellChanged fires count");
+        assert.equal(editingStartFiresCount, 1, "onEditingStart fires count");
+        assert.notOk(keyboardNavigationController._isHiddenFocus, "hidden focus");
 
         // act
-        $cell = $(this.rowsView.element().find(".dx-row").eq(0).find("td").eq(1));
+        $cell = $(this.getCellElement(0, 1));
         $cell.trigger(CLICK_EVENT);
 
         // act
@@ -5435,13 +5421,56 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // assert
         assert.equal(focusedCellChangingFiresCount, 2, "onFocusedCellChanging fires count");
         assert.equal(focusedCellChangedFiresCount, 2, "onFocusedCellChanged fires count");
-
-        assert.notOk(keyboardNavigationController._isHiddenFocus, "hidden focus");
+        assert.equal(editingStartFiresCount, 2, "onEditingStart fires count");
 
         assert.notOk(keyboardNavigationController._editingController.isEditing(), "Is editing");
         assert.equal(this.rowsView.element().find("input").length, 0, "input");
+        if(!browser.msie) {
+            assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
+            assert.notOk($cell.hasClass("dx-focused"), "cell has no .dx-focused");
+        }
+    });
 
-        assert.ok($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    QUnit.testInActiveWindow("DataGrid should preserve fosused overlay after cancel editing (T812546)", function(assert) {
+        // arrange
+        var editingStartFiresCount = 0,
+            keyboardNavigation;
+
+        this.$element = () => $("#container");
+
+        this.options = {
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            onEditingStart: function(e) {
+                ++editingStartFiresCount;
+                e.cancel = e.data.name === "Alex";
+
+                // assert
+                assert.notOk(keyboardNavigation._isHiddenFocus, "Focus is not hidden");
+            }
+        };
+
+        this.setupModule();
+        keyboardNavigation = this.getController("keyboardNavigation");
+
+        // act
+        this.gridView.render($("#container"));
+        $(this.getCellElement(1, 1)).trigger("dxpointerdown");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow", false, false, $(":focus"));
+        this.clock.tick();
+
+        // assert
+        assert.ok($(this.getCellElement(0, 1)).hasClass("dx-focused"), "Cell has focus overlay");
+
+        // act
+        this.editCell(0, 1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(editingStartFiresCount, 1, "onEditingStart fires count");
     });
 
     QUnit.testInActiveWindow("DataGrid should cancel editing cell if cell focusing canceled (T718459)", function(assert) {
@@ -9674,8 +9703,6 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("View selector", function(assert) {
-        var dataGridWrapper = new DataGridWrapper("#container");
-
         this.options = {
             headerFilter: { visible: true },
             filterRow: { visible: true },

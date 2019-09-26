@@ -59,6 +59,10 @@ export class RowsViewWrapper extends WrapperBase {
 
         return diffTop >= 0 && diffBottom >= 0;
     }
+
+    isFocusOverlayVisible() {
+        return !!this.getElement().find(".dx-datagrid-focus-overlay:visible").length;
+    }
 }
 
 export class PagerWrapper extends WrapperBase {

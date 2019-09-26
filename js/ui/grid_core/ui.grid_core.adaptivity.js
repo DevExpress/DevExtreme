@@ -1037,7 +1037,7 @@ module.exports = {
                             key: item.key,
                             data: item.data,
                             modifiedValues: item.modifiedValues,
-                            inserted: item.inserted,
+                            isNewRow: item.isNewRow,
                             values: item.values
                         });
                     } else if(changeType === "refresh") {
