@@ -1853,7 +1853,7 @@ QUnit.test("Recalculate canvas on zooming - draw axes in new canvas", function(a
         series: [{}],
         dataSource: [{ arg: 1, val: 10 }],
         legend: { visible: false },
-        adjustAxesOnZoom: true
+        resizePanesOnZoom: true
     });
 
     var argAxisStub = this.axisStub.getCall(0).returnValue;

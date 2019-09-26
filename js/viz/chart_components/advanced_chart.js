@@ -796,7 +796,7 @@ var AdvancedChart = BaseChart.inherit({
                 force: true,
                 drawTitle: false,
                 drawLegend: false,
-                adjustAxes: this.option("adjustAxesOnZoom") || false, // T690411
+                adjustAxes: this.option("resizePanesOnZoom") || false, // T690411
                 animate: false
             });
             that._raiseZoomEndHandlers();
