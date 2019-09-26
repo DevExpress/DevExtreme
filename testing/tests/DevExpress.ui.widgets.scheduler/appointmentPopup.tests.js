@@ -1100,7 +1100,7 @@ QUnit.test("The resize event of appointment popup is triggered the the window is
     assert.ok(isResizeEventTriggered, "The resize event of popup is triggered");
 });
 
-QUnit.test("Popup should not be closed until the valid valid value is typed", function(assert) {
+QUnit.test("Popup should not be closed until the valid value is typed", function(assert) {
     const startDate = new Date(2015, 1, 1, 1),
         validValue = "Test",
         done = assert.async();
