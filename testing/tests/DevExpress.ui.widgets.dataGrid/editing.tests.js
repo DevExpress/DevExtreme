@@ -6901,6 +6901,40 @@ if(!devices.win8) {
         assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(2).val(), "555555");
     });
 
+    QUnit.test("Cell validating is setCellValue is set and editing mode is form", function(assert) {
+        // arrange
+        var that = this,
+            rowsView = this.rowsView,
+            $testElement = $('#container'),
+            $targetInput;
+
+        that.options.editing = {
+            mode: "form",
+            allowUpdating: true
+        };
+        that.options.columns[0] = {
+            dataField: "name",
+            setCellValue: (newData, value) => newData[this.dataField] = value,
+            validationRules: [{
+                type: "custom",
+                validationCallback: () => { return false; }
+            }]
+        };
+
+        rowsView.render($testElement);
+        that.columnsController.init();
+
+        that.editingController.editRow(0);
+
+        $targetInput = $testElement.find('tbody > tr').first().find('input').first();
+
+        // act
+        $targetInput.val('Test name');
+        $targetInput.trigger('change');
+        // assert
+        assert.ok($testElement.find("tbody > tr").first().find(".dx-texteditor").first().hasClass("dx-invalid"));
+    });
+
     QUnit.test('cellValue', function(assert) {
         // arrange
         var that = this,

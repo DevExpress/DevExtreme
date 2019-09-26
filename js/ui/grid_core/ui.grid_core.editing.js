@@ -1738,7 +1738,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(focusPreviousEditingCell) {
                 that._focusEditingCell();
-                that._updateEditRow(options.row, true);
+                that._updateEditRow(options.row, true, isCustomSetCellValue);
                 return;
             }
 
@@ -1757,10 +1757,10 @@ var EditingController = modules.ViewController.inherit((function() {
             }
 
             if(options.row && (forceUpdateRow || isCustomSetCellValue)) {
-                that._updateEditRow(options.row, forceUpdateRow);
+                that._updateEditRow(options.row, forceUpdateRow, isCustomSetCellValue);
             }
         },
-        _updateEditRowCore: function(row, skipCurrentRow) {
+        _updateEditRowCore: function(row, skipCurrentRow, isCustomSetCellValue) {
             var that = this,
                 editForm = that._editForm,
                 editMode = getEditMode(that);
@@ -1777,13 +1777,17 @@ var EditingController = modules.ViewController.inherit((function() {
                     rowIndices: that._getRowIndicesForCascadeUpdating(row, skipCurrentRow)
                 });
             }
+
+            if(isCustomSetCellValue && that._editForm) {
+                that._editForm.validate();
+            }
         },
 
-        _updateEditRow: function(row, forceUpdateRow) {
+        _updateEditRow: function(row, forceUpdateRow, isCustomSetCellValue) {
             var that = this;
 
             if(forceUpdateRow || !isRowEditMode(that)) {
-                that._updateEditRowCore(row, !forceUpdateRow);
+                that._updateEditRowCore(row, !forceUpdateRow, isCustomSetCellValue);
                 if(!forceUpdateRow) {
                     that._focusEditingCell();
                 }
@@ -1794,7 +1798,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         focusedElement = $focusedElement.get(0),
                         selectionRange = getSelectionRange(focusedElement);
 
-                    that._updateEditRowCore(row);
+                    that._updateEditRowCore(row, false, isCustomSetCellValue);
 
                     if(columnIndex >= 0) {
                         var $focusedItem = that._rowsView._getCellElement(row.rowIndex, columnIndex);
