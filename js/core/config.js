@@ -168,7 +168,7 @@ const configMethod = (...args) => {
 
     deprecatedFields.forEach((deprecatedField) => {
         if(newConfig[deprecatedField]) {
-            const message = "Intl localization included in the DevExtreme. We recommend setting the locale so that the separators are selected based on it.";
+            const message = `Now, the ${deprecatedField} is selected based on the specified locale.`;
             errors.log("W0003", "config", deprecatedField, "19.2", message);
         }
     });
