@@ -101,6 +101,114 @@ QUnit.test("Drag template - check args", function(assert) {
 });
 
 
+QUnit.module("allowReordering", moduleConfig);
+
+QUnit.test("allowReordering = false when dropFeedbackMode is 'push'", function(assert) {
+    // arrange
+    let onDragChangeSpy = sinon.spy(),
+        onReorderSpy = sinon.spy();
+
+    this.createSortable({
+        filter: ".draggable",
+        allowReordering: false,
+        dropFeedbackMode: "push",
+        moveItemOnDrop: true,
+        onDragChange: onDragChangeSpy,
+        onReorder: onReorderSpy
+    });
+
+    // act
+    let pointer = pointerMock(this.$element.children().first()).start().down().move(0, 65);
+
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 0, "onDragChange event is not called");
+    assert.strictEqual(this.$element.children().get(1).style.transform, "", "item position is not changed");
+
+    // act
+    pointer.up();
+
+    // assert
+    assert.strictEqual(onReorderSpy.callCount, 0, "onReorder event is not called");
+    assert.strictEqual(this.$element.children().first().text(), "item1", "first item is not changed");
+});
+
+QUnit.test("allowReordering = false when dropFeedbackMode is 'indicate'", function(assert) {
+    // arrange
+    let onDragChangeSpy = sinon.spy(),
+        onReorderSpy = sinon.spy();
+
+    this.createSortable({
+        filter: ".draggable",
+        allowReordering: false,
+        dropFeedbackMode: "indicate",
+        moveItemOnDrop: true,
+        onDragChange: onDragChangeSpy,
+        onReorder: onReorderSpy
+    });
+
+    // act
+    let pointer = pointerMock(this.$element.children().first()).start().down().move(0, 65);
+
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 0, "onDragChange event is not called");
+    assert.strictEqual($(".dx-sortable-placeholder").length, 0, "placeholder does not exist");
+
+    // act
+    pointer.up();
+
+    // assert
+    assert.strictEqual(onReorderSpy.callCount, 0, "onReorder event is not called");
+    assert.strictEqual(this.$element.children().first().text(), "item1", "first item is not changed");
+});
+
+QUnit.test("allowReordering = false when allowDropInsideItem is true", function(assert) {
+    // arrange
+    let onDragChangeSpy = sinon.spy();
+
+    this.createSortable({
+        allowReordering: false,
+        allowDropInsideItem: true,
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    let pointer = pointerMock(this.$element.children().first()).start().down(15, 15).move(0, 50);
+
+    // assert
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 0, "onDragChange event is not called");
+    assert.strictEqual($(".dx-sortable-placeholder").length, 0, "placeholder does not exist");
+
+    // act
+    pointer.move(0, 10);
+
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 1, "onDragChange event is called");
+    assert.strictEqual($(".dx-sortable-placeholder.dx-sortable-placeholder-inside").length, 1, "placeholder exists");
+});
+
+QUnit.test("option changing", function(assert) {
+    // arrange
+    var sortable = this.createSortable({
+        filter: ".draggable",
+        moveItemOnDrop: true
+    });
+
+    // act
+    sortable.option("allowReordering", false);
+    let pointer = pointerMock(this.$element.children().first()).start().down().move(0, 65);
+
+    // assert
+    assert.strictEqual(this.$element.children().get(1).style.transform, "", "item position is not changed");
+
+    // act
+    pointer.up();
+
+    // assert
+    assert.strictEqual(this.$element.children().first().text(), "item1", "first item is not changed");
+});
+
+
 QUnit.module("placeholder and source", moduleConfig);
 
 QUnit.test("Source item if filter is not defined", function(assert) {
@@ -1065,6 +1173,44 @@ QUnit.test("Dragging item to another the sortable widget", function(assert) {
         dropFeedbackMode: "push",
         filter: ".draggable",
         group: "shared"
+    }, $("#items2"));
+
+    // act
+    pointerMock(sortable1.$element().children().eq(0)).start().down().move(350, 0).move(50, 0);
+
+    // assert
+    items1 = sortable1.$element().children();
+    items2 = sortable2.$element().children();
+    assert.strictEqual(items1.length, 3, "first list - item count");
+    assert.strictEqual(items2.length, 3, "second list - item count");
+    assert.strictEqual(items1.filter("#item1").length, 1, "first list - first item is not removed");
+    assert.strictEqual(items2.filter("#item1").length, 0, "second list - first item of the first list was not added");
+
+    assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
+    assert.strictEqual(items1[1].style.transform, "translate(0px, -30px)", "items1 2 is moved up");
+    assert.strictEqual(items1[2].style.transform, "translate(0px, -30px)", "items1 3 is moved up");
+
+    assert.strictEqual(items2[0].style.transform, "translate(0px, 30px)", "items2 1 is moved down");
+    assert.strictEqual(items2[1].style.transform, "translate(0px, 30px)", "items2 2 is moved down");
+    assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
+});
+
+QUnit.test("Dragging item to another the sortable widget when allowReordering is false", function(assert) {
+    // arrange
+    let items1, items2;
+
+    let sortable1 = this.createSortable({
+        dropFeedbackMode: "push",
+        filter: ".draggable",
+        group: "shared",
+        allowReordering: false
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        dropFeedbackMode: "push",
+        filter: ".draggable",
+        group: "shared",
+        allowReordering: false
     }, $("#items2"));
 
     // act
