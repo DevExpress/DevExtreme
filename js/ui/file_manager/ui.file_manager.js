@@ -396,8 +396,7 @@ class FileManager extends Widget {
             */
             /**
             * @name dxFileManagerToolbarItem.visible
-            * @type Enums.Mode|boolean
-            * @default "auto"
+            * @default undefined
             */
 
             toolbar: {
@@ -436,8 +435,7 @@ class FileManager extends Widget {
             */
             /**
             * @name dxFileManagerContextMenuItem.visible
-            * @type Enums.Mode|boolean
-            * @default "auto"
+            * @default undefined
             */
 
             contextMenu: {

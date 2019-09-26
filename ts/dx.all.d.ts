@@ -3550,7 +3550,7 @@ declare module DevExpress.ui {
         /** @name dxFileManagerContextMenuItem.name */
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /** @name dxFileManagerContextMenuItem.visible */
-        visible?: 'auto' | boolean;
+        visible?: boolean;
     }
     /** @name dxFileManagerToolbarItem */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -3559,7 +3559,7 @@ declare module DevExpress.ui {
         /** @name dxFileManagerToolbarItem.name */
         name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
         /** @name dxFileManagerToolbarItem.visible */
-        visible?: 'auto' | boolean;
+        visible?: boolean;
     }
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
