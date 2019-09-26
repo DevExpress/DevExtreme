@@ -20,11 +20,11 @@ export default class FormItemsRunTimeInfo {
         return result;
     }
 
-    _findLayoutManagerInstance(condition) {
+    _findFieldByCondition(condition, field) {
         let result;
-        each(this._map, function(guid, { layoutManager, item }) {
-            if(condition(item)) {
-                result = layoutManager;
+        each(this._map, function(guid, value) {
+            if(condition(value)) {
+                result = field === "guid" ? guid : value[field];
                 return false;
             }
         });
@@ -35,11 +35,17 @@ export default class FormItemsRunTimeInfo {
         this._map = {};
     }
 
-    add(item, widgetInstance, guid, $itemContainer) {
-        guid = guid || new Guid();
-        this._map[guid] = { item, widgetInstance, $itemContainer };
+    removeItemsFrom(itemsRunTimeInfo) {
+        each(itemsRunTimeInfo.getItems(), guid => {
+            delete this._map[guid];
+        });
+    }
 
-        return guid;
+    add(options) {
+        const { guid } = options;
+        const key = guid || new Guid();
+        this._map[key] = options;
+        return key;
     }
 
     addLayoutManagerToItemByKey(layoutManager, key) {
@@ -55,7 +61,12 @@ export default class FormItemsRunTimeInfo {
                 this._map[key].widgetInstance = itemRunTimeInfo.widgetInstance;
                 this._map[key].$itemContainer = itemRunTimeInfo.$itemContainer;
             } else {
-                this.add(itemRunTimeInfo.item, itemRunTimeInfo.widgetInstance, key, itemRunTimeInfo.$itemContainer);
+                this.add({
+                    item: itemRunTimeInfo.item,
+                    widgetInstance: itemRunTimeInfo.widgetInstance,
+                    guid: key,
+                    $itemContainer: itemRunTimeInfo.$itemContainer
+                });
             }
         });
     }
@@ -64,8 +75,16 @@ export default class FormItemsRunTimeInfo {
         return this._findWidgetInstance(storedItem => storedItem === item);
     }
 
-    getGroupOrTabLayoutManager(item) {
-        return this._findLayoutManagerInstance(storedItem => storedItem === item);
+    getGroupOrTabLayoutManagerByPath(path) {
+        return this._findFieldByCondition(value => value.path === path, "layoutManager");
+    }
+
+    getKeyByPath(path) {
+        return this._findFieldByCondition(value => value.path === path, "guid");
+    }
+
+    getPathFromItem(targetItem) {
+        return this._findFieldByCondition(value => value.item === targetItem, "path");
     }
 
     findWidgetInstanceByName(name) {
@@ -83,6 +102,10 @@ export default class FormItemsRunTimeInfo {
             }
         }
         return null;
+    }
+
+    getItems() {
+        return this._map;
     }
 
     each(handler) {
