@@ -317,7 +317,7 @@ QUnit.module("disabled state", () => {
         [true, false, undefined, "not declared"].forEach((isButtonDisabled) => {
 
             const checkClickHandlers = (assert, itemClickHandler, buttonClickHandler, buttonDisabled, toolbarDisabled, locateInMenu) => {
-                if(locateInMenu !== "auto") {
+                if(locateInMenu !== "never") {
                     return;
                 }
 
@@ -366,12 +366,12 @@ QUnit.module("disabled state", () => {
                                 let $element = $("#toolbar");
                                 $element.dxToolbar(toolbarOptions);
 
-                                let $button = locateInMenu === "auto" ? $element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0) : $element.find(`.${DROP_DOWN_MENU_CLASS}`).eq(0);
+                                let $button = locateInMenu === "never" ? $element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0) : $element.find(`.${DROP_DOWN_MENU_CLASS}`).eq(0);
 
                                 const expectedToolbarValue = isToolbarDisabled !== "not declared" ? isToolbarDisabled : false;
                                 const expectedButtonValue = isButtonDisabled !== "not declared" ? isButtonDisabled : false;
 
-                                checkDisabledState(assert, $button, $element, locateInMenu === "auto" ? expectedButtonValue : false, expectedToolbarValue);
+                                checkDisabledState(assert, $button, $element, locateInMenu === "never" ? expectedButtonValue : false, expectedToolbarValue);
 
                                 eventsEngine.trigger($button, 'dxclick');
                                 checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedButtonValue, expectedToolbarValue, locateInMenu);
@@ -384,7 +384,7 @@ QUnit.module("disabled state", () => {
                                     $element.dxToolbar("option", "disabled", isToolbarDisabledNew);
                                 } else {
                                     $element.dxToolbar("option", "disabled", isToolbarDisabledNew);
-                                    checkDisabledState(assert, $button, $element, locateInMenu === "auto" ? expectedButtonValue : false, isToolbarDisabledNew);
+                                    checkDisabledState(assert, $button, $element, locateInMenu === "never" ? expectedButtonValue : false, isToolbarDisabledNew);
                                     $button.dxButton("option", "disabled", isButtonDisabledNew);
                                 }
 
