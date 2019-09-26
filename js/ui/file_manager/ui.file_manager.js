@@ -85,8 +85,8 @@ class FileManager extends Widget {
         const $toolbar = $("<div>").appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
             commandManager: this._commandManager,
-            generalItems: this.option("toolbar.generalItems"),
-            fileItems: this.option("toolbar.fileItems"),
+            generalItems: this.option("toolbar.items"),
+            fileItems: this.option("toolbar.fileSelectionItems"),
             itemViewMode: this.option("itemView").mode
         });
 
@@ -192,7 +192,7 @@ class FileManager extends Widget {
             thumbnails: () => this._switchView("thumbnails"),
             details: () => this._switchView("details"),
             clear: () => this._clearSelection(),
-            showDirsPanel: () => this._adaptivityControl.toggleDrawer()
+            showNavPane: () => this._adaptivityControl.toggleDrawer()
         });
         this._commandManager.registerActions(actions);
     }
@@ -207,7 +207,7 @@ class FileManager extends Widget {
     }
 
     _onAdaptiveStateChanged({ enabled }) {
-        this._commandManager.setCommandEnabled("showDirsPanel", enabled);
+        this._commandManager.setCommandEnabled("showNavPane", enabled);
         this._updateToolbar();
     }
 
@@ -366,20 +366,79 @@ class FileManager extends Widget {
             */
             selectionMode: "multiple", // "single"
 
+            /**
+            * @name dxFileManagerOptions.toolbar
+            * @type object
+            */
+
+            /**
+            * @name dxFileManagerOptions.toolbar.items
+            * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+            * @default [ "showNavPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
+            */
+            /**
+            * @name dxFileManagerOptions.toolbar.fileSelectionItems
+            * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+            * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear" ]
+            */
+
+            /**
+            * @name dxFileManagerToolbarItem
+            * @inherits dxToolbarItem
+            */
+            /**
+            * @name dxFileManagerToolbarItem.name
+            * @type Enums.FileManagerToolbarItem|string
+            */
+            /**
+            * @name dxFileManagerToolbarItem.location
+            * @default "before"
+            */
+            /**
+            * @name dxFileManagerToolbarItem.visible
+            * @type Enums.Mode|boolean
+            * @default "auto"
+            */
+
             toolbar: {
-                generalItems: [
-                    "showDirsPanel", "create", "upload", "refresh",
+                items: [
+                    "showNavPane", "create", "upload", "refresh",
                     {
-                        commandName: "separator",
+                        name: "separator",
                         location: "after"
                     },
-                    "viewMode"
+                    "viewSwitcher"
                 ],
 
-                fileItems: [
+                fileSelectionItems: [
                     "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear"
                 ]
             },
+
+            /**
+            * @name dxFileManagerOptions.contextMenu
+            * @type object
+            */
+
+            /**
+            * @name dxFileManagerOptions.contextMenu.items
+            * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
+            * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
+            */
+
+            /**
+            * @name dxFileManagerContextMenuItem
+            * @inherits dxContextMenuItem
+            */
+            /**
+            * @name dxFileManagerContextMenuItem.name
+            * @type Enums.FileManagerContextMenuItem|string
+            */
+            /**
+            * @name dxFileManagerContextMenuItem.visible
+            * @type Enums.Mode|boolean
+            * @default "auto"
+            */
 
             contextMenu: {
                 items: [
@@ -542,8 +601,8 @@ class FileManager extends Widget {
             case "toolbar":
                 this._toolbar.option(extend(
                     true,
-                    args.value.generalItems ? { generalItems: args.value.generalItems } : {},
-                    args.value.fileItems ? { fileItems: args.value.fileItems } : {}
+                    args.value.items ? { generalItems: args.value.items } : {},
+                    args.value.fileSelectionItems ? { fileItems: args.value.fileSelectionItems } : {}
                 ));
                 break;
             case "contextMenu":

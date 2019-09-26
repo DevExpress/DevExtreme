@@ -3509,6 +3509,8 @@ declare module DevExpress.ui {
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
         /** @name dxFileManager.Options.allowedFileExtensions */
         allowedFileExtensions?: Array<string>;
+        /** @name dxFileManager.Options.contextMenu */
+        contextMenu?: { items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'> };
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
@@ -3529,6 +3531,8 @@ declare module DevExpress.ui {
         rootFolderName?: string;
         /** @name dxFileManager.Options.selectionMode */
         selectionMode?: 'multiple' | 'single';
+        /** @name dxFileManager.Options.toolbar */
+        toolbar?: { fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'>, items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator'> };
         /** @name dxFileManager.Options.upload */
         upload?: { maxFileSize?: number };
     }
@@ -3536,6 +3540,22 @@ declare module DevExpress.ui {
     export class dxFileManager extends Widget {
         constructor(element: Element, options?: dxFileManagerOptions)
         constructor(element: JQuery, options?: dxFileManagerOptions)
+    }
+    /** @name dxFileManagerContextMenuItem */
+    export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
+        /** @name dxFileManagerContextMenuItem.name */
+        name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
+        /** @name dxFileManagerContextMenuItem.visible */
+        visible?: 'auto' | boolean;
+    }
+    /** @name dxFileManagerToolbarItem */
+    export interface dxFileManagerToolbarItem extends dxToolbarItem {
+        /** @name dxFileManagerToolbarItem.location */
+        location?: 'after' | 'before' | 'center';
+        /** @name dxFileManagerToolbarItem.name */
+        name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'viewSwitcher' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clear' | 'separator' | string;
+        /** @name dxFileManagerToolbarItem.visible */
+        visible?: 'auto' | boolean;
     }
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
