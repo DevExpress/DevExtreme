@@ -1,6 +1,6 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isString } from "../../core/utils/type";
+import { isDefined, isString } from "../../core/utils/type";
 import { ensureDefined } from "../../core/utils/common";
 
 import Widget from "../widget/ui.widget";
@@ -179,8 +179,7 @@ class FileManagerToolbar extends Widget {
             extend(result, defaultConfig);
             this._extendAttributes(result, item, ["visible", "location", "locateInMenu"]);
 
-            const itemVisible = ensureDefined(item.visible, "auto");
-            if(itemVisible === "auto") {
+            if(!isDefined(item.visible)) {
                 result._autoHide = true;
             } else {
                 this._extendAttributes(result, item, ["disabled"]);
