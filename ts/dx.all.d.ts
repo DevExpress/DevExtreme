@@ -7305,6 +7305,8 @@ declare module DevExpress.viz {
         onZoomStart?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, event?: event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
         /** @name dxChart.Options.panes */
         panes?: dxChartPanes | Array<dxChartPanes>;
+        /** @name dxChart.Options.resizePanesOnZoom */
+        resizePanesOnZoom?: boolean;
         /** @name dxChart.Options.resolveLabelOverlapping */
         resolveLabelOverlapping?: 'hide' | 'none' | 'stack';
         /** @name dxChart.Options.rotated */
