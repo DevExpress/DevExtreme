@@ -746,7 +746,10 @@
             justify-content: center;
             align-items: center;
 
-            .flex-container(row, nowrap);
+
+            &:not(.dx-scheduler-header-panel-week-cell) {
+                .flex-container(row-reverse, nowrap);
+            }
         }
 
         .dx-scheduler-header-panel-week-cell {
