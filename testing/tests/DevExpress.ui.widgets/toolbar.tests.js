@@ -333,8 +333,15 @@ QUnit.module("disabled state", () => {
             [true, false, undefined].forEach((isToolbarDisabledNew) => {
                 [true, false, undefined].forEach((isButtonDisabledNew) => {
                     [true, false].forEach((changeDisabledOrder) => {
-                        ["auto", "always"].forEach((locateInMenu) => {
-                            QUnit.test(`new dxToolbar({toolbar.disabled: ${isToolbarDisabled}, button.disabled: ${isButtonDisabled}), locateInMenu: ${locateInMenu}`, function(assert) {
+                        ["never", "always"].forEach((locateInMenu) => {
+                            QUnit.test(`new dxToolbar({
+                                    toolbar.disabled: ${isToolbarDisabled}, 
+                                    button.disabled: ${isButtonDisabled}), 
+                                    toolbar.disabled new: ${isToolbarDisabledNew}, 
+                                    button.disabled new: ${isButtonDisabledNew}, 
+                                    changeDisableOrder: ${changeDisabledOrder}, 
+                                    locateInMenu: ${locateInMenu}`,
+                            function(assert) {
                                 let itemClickHandler = sinon.spy();
                                 let buttonClickHandler = sinon.spy();
                                 let toolbarOptions = {
@@ -373,11 +380,9 @@ QUnit.module("disabled state", () => {
                                 buttonClickHandler.reset();
 
                                 if(changeDisabledOrder) {
-                                    assert.ok(true, ` new button state - ${isButtonDisabledNew} : new toolbar state - ${isToolbarDisabledNew}`);
                                     $button.dxButton("option", "disabled", isButtonDisabledNew);
                                     $element.dxToolbar("option", "disabled", isToolbarDisabledNew);
                                 } else {
-                                    assert.ok(true, ` new toolbar state - ${isToolbarDisabledNew} : new button state - ${isButtonDisabledNew}`);
                                     $element.dxToolbar("option", "disabled", isToolbarDisabledNew);
                                     checkDisabledState(assert, $button, $element, locateInMenu === "auto" ? expectedButtonValue : false, isToolbarDisabledNew);
                                     $button.dxButton("option", "disabled", isButtonDisabledNew);
