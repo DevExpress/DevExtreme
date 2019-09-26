@@ -12,13 +12,26 @@ export default abstract class DropDownList extends TextBox {
     constructor (id: string) {
         super(id);
 
-        this.opened = this.input.hasAttribute(ATTR.popupId);
+        const popupOwnerElement = this.getPopupOwnerElement();
+        const popupIdAttr = this.getPopupIdAttr();
+
+        this.opened = popupOwnerElement.hasAttribute(popupIdAttr);
+    }
+
+    getPopupOwnerElement () {
+        return this.input;
+    }
+
+    getPopupIdAttr () {
+        return ATTR.popupId;
     }
 
     async getList(): Promise<List> {
         await t.expect(this.opened).ok();
 
-        const popupId = await this.input.getAttribute(ATTR.popupId);
+        const popupOwnerElement = this.getPopupOwnerElement();
+        const popupIdAttr = this.getPopupIdAttr();
+        const popupId = await popupOwnerElement.getAttribute(popupIdAttr);
         const popup = Selector(`#${popupId}`);
 
         return new List(popup);
