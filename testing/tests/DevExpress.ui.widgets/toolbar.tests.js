@@ -355,7 +355,7 @@ QUnit.module("disabled state", () => {
 
                             let $button = $element.find(`.${TOOLBAR_ITEM_CLASS} .dx-button`).eq(0);
                             const expectedToolbarValue = isToolbarDisabled !== "not declared" ? isToolbarDisabled : false;
-                            let expectedButtonValue = isButtonDisabled !== "not declared" ? isButtonDisabled : isToolbarDisabled;
+                            let expectedButtonValue = isButtonDisabled !== "not declared" ? isButtonDisabled : false;
 
                             if(expectedButtonValue === "not declared") {
                                 expectedButtonValue = false;
@@ -376,6 +376,7 @@ QUnit.module("disabled state", () => {
                             } else {
                                 assert.ok(true, ` new toolbar state - ${isToolbarDisabledNew} : new button state - ${isButtonDisabledNew}`);
                                 $element.dxToolbar("option", "disabled", isToolbarDisabledNew);
+                                checkDisabledState(assert, $button, $element, expectedButtonValue, isToolbarDisabledNew);
                                 $button.dxButton("option", "disabled", isButtonDisabledNew);
                             }
 
