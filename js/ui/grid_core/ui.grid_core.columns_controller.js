@@ -2521,6 +2521,17 @@ module.exports = {
                         groupParameters = dataSource ? dataSource.group() || [] : that.getGroupDataSourceParameters();
 
                         that._customizeColumns(that._columns);
+
+                        const currentEditMode = that.option("editing.mode");
+                        if(currentEditMode !== "form" && currentEditMode !== "popup") {
+                            const hasAsyncRules = that._columns.some(function(col) {
+                                return (col.validationRules || []).some(rule => rule.type === "async");
+                            });
+                            if(hasAsyncRules) {
+                                errors.log("E1057", that.component.NAME, currentEditMode);
+                            }
+                        }
+
                         updateIndexes(that);
 
                         var columns = that._columns;
