@@ -784,6 +784,7 @@ declare module DevExpress {
     export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
     /** @name globalConfig */
     export interface globalConfig {
+        /** @deprecated */
         /** @name globalConfig.decimalSeparator */
         decimalSeparator?: string;
         /** @name globalConfig.defaultCurrency */
@@ -800,6 +801,7 @@ declare module DevExpress {
         rtlEnabled?: boolean;
         /** @name globalConfig.serverDecimalSeparator */
         serverDecimalSeparator?: string;
+        /** @deprecated */
         /** @name globalConfig.thousandsSeparator */
         thousandsSeparator?: string;
         /** @name globalConfig.useLegacyStoreResult */
