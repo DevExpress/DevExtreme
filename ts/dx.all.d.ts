@@ -4603,8 +4603,6 @@ declare module DevExpress.ui {
     export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
         /** @name dxOverlay.Options.animation */
         animation?: dxOverlayAnimation;
-        /** @name dxOverlay.Options.closeOnBackButton */
-        closeOnBackButton?: boolean;
         /** @name dxOverlay.Options.closeOnOutsideClick */
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** @name dxOverlay.Options.contentTemplate */
@@ -5818,8 +5816,6 @@ declare module DevExpress.ui {
     export interface dxToastOptions extends dxOverlayOptions<dxToast> {
         /** @name dxToast.Options.animation */
         animation?: dxToastAnimation;
-        /** @name dxToast.Options.closeOnBackButton */
-        closeOnBackButton?: boolean;
         /** @name dxToast.Options.closeOnClick */
         closeOnClick?: boolean;
         /** @name dxToast.Options.closeOnOutsideClick */
