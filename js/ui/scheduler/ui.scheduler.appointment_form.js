@@ -87,7 +87,6 @@ const SchedulerAppointmentForm = {
                     type: "required"
                 }],
                 editorOptions: {
-                    // type: allDay ? "date" : "datetime",
                     width: "100%",
                     calendarOptions: {
                         firstDayOfWeek: schedulerInst.option("firstDayOfWeek")
@@ -130,7 +129,6 @@ const SchedulerAppointmentForm = {
                     type: "required"
                 }],
                 editorOptions: {
-                    // type: allDay ? "date" : "datetime",
                     width: "100%",
                     calendarOptions: {
                         firstDayOfWeek: schedulerInst.option("firstDayOfWeek")

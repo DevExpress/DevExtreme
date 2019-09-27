@@ -56,13 +56,13 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
         const NEW_EXPECTED_SUBJECT = "NEW SUBJECT";
         const scheduler = createScheduler();
 
-        assert.notOk(scheduler.appointmentPopup.isVisible(), "appointment popup should be invisible in on init");
+        assert.notOk(scheduler.appointmentPopup.isVisible(), "Appointment popup should be invisible in on init");
 
         scheduler.appointments.click(scheduler.appointments.getAppointmentCount() - 1);
         scheduler.tooltip.clickOnItem();
         scheduler.appointmentPopup.form.setSubject(NEW_EXPECTED_SUBJECT);
 
-        assert.ok(scheduler.appointmentPopup.isVisible(), "appointment popup should be visible after showAppointmentPopup method");
+        assert.ok(scheduler.appointmentPopup.isVisible(), "Appointment popup should be visible after showAppointmentPopup method");
         scheduler.appointmentPopup.clickDoneButton();
 
         const dataItem = scheduler.instance.option("dataSource")[1];
