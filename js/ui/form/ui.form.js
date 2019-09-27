@@ -1299,7 +1299,7 @@ const Form = Widget.inherit({
             const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
 
             if(layoutManager) {
-                this._itemsRunTimeInfo.removeItemsFrom(layoutManager.getItemsRunTimeInfo());
+                this._itemsRunTimeInfo.removeItemsByItems(layoutManager.getItemsRunTimeInfo());
                 const items = this._prepareItems(value, false, itemPath);
                 this._setLayoutManagerItemOption(layoutManager, optionName, items, itemPath);
                 return true;

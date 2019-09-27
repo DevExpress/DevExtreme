@@ -20,11 +20,11 @@ export default class FormItemsRunTimeInfo {
         return result;
     }
 
-    _findFieldByCondition(condition, field) {
+    _findFieldByCondition(callback, field) {
         let result;
-        each(this._map, function(guid, value) {
-            if(condition(value)) {
-                result = field === "guid" ? guid : value[field];
+        each(this._map, function(key, value) {
+            if(callback(value)) {
+                result = field === "guid" ? key : value[field];
                 return false;
             }
         });
@@ -35,15 +35,14 @@ export default class FormItemsRunTimeInfo {
         this._map = {};
     }
 
-    removeItemsFrom(itemsRunTimeInfo) {
+    removeItemsByItems(itemsRunTimeInfo) {
         each(itemsRunTimeInfo.getItems(), guid => {
             delete this._map[guid];
         });
     }
 
     add(options) {
-        const { guid } = options;
-        const key = guid || new Guid();
+        const key = options.guid || new Guid();
         this._map[key] = options;
         return key;
     }
