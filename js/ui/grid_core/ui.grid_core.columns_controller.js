@@ -2507,6 +2507,17 @@ module.exports = {
                         assignColumns(that, createColumnsFromOptions(that, columns));
                     }
                 },
+                _checkAsyncValidationRules: function() {
+                    const currentEditMode = this.option("editing.mode");
+                    if(currentEditMode !== "form" && currentEditMode !== "popup") {
+                        const hasAsyncRules = this._columns.some(function(col) {
+                            return (col.validationRules || []).some(rule => rule.type === "async");
+                        });
+                        if(hasAsyncRules) {
+                            errors.log("E1057", this.component.NAME, currentEditMode);
+                        }
+                    }
+                },
                 updateColumns: function(dataSource, forceApplying) {
                     var that = this,
                         sortParameters,
@@ -2522,15 +2533,7 @@ module.exports = {
 
                         that._customizeColumns(that._columns);
 
-                        const currentEditMode = that.option("editing.mode");
-                        if(currentEditMode !== "form" && currentEditMode !== "popup") {
-                            const hasAsyncRules = that._columns.some(function(col) {
-                                return (col.validationRules || []).some(rule => rule.type === "async");
-                            });
-                            if(hasAsyncRules) {
-                                errors.log("E1057", that.component.NAME, currentEditMode);
-                            }
-                        }
+                        that._checkAsyncValidationRules();
 
                         updateIndexes(that);
 
