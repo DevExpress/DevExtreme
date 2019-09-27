@@ -10,7 +10,7 @@ fixture `Appointment popup form`
         const APPOINTMENT_TEXT = "Website Re-Design Plan";
         const TEXT_EDITOR_CLASS = ".dx-texteditor-input";
         const CHECKBOX_CLASS = ".dx-checkbox.dx-widget";
-        const CANCEL_BUTTON_CLASS = "dx-popup-cancel.dx-button";
+        const CANCEL_BUTTON_CLASS = ".dx-popup-cancel.dx-button";
 
         const scheduler = new Scheduler("#container");
 
@@ -21,7 +21,9 @@ fixture `Appointment popup form`
             .eql(APPOINTMENT_TEXT)
 
             .click(CANCEL_BUTTON_CLASS)
-            .doubleClick(scheduler.getAppointment(APPOINTMENT_TEXT).element)
+
+            .click(scheduler.getAppointment(APPOINTMENT_TEXT).element)
+            .click(scheduler.tooltip)
 
             .expect(Selector(TEXT_EDITOR_CLASS).exists)
             .eql(false);
