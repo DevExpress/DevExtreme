@@ -286,12 +286,15 @@ var DOMComponent = Component.inherit({
         });
 
         var nestedComponentOptions = that.option("nestedComponentOptions") || commonUtils.noop;
-        that._extendConfig(config, extend({
+        var nestedComponentConfig = extend({
             integrationOptions: this.option("integrationOptions"),
-            rtlEnabled: this.option("rtlEnabled"),
-            disabled: this.option("disabled"),
-            templatesRenderAsynchronously: this.option("templatesRenderAsynchronously")
-        }, nestedComponentOptions(this)));
+        }, nestedComponentOptions(this));
+
+        synchronizableOptions.forEach((optionName) => {
+            nestedComponentConfig[optionName] = this.option(optionName);
+        });
+
+        that._extendConfig(config, nestedComponentConfig);
 
         var instance;
         if(isString(component)) {
