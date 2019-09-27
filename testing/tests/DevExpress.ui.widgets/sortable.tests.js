@@ -818,6 +818,35 @@ QUnit.test("onDragEnd with eventArgs.cancel is true - the draggable element shou
     assert.strictEqual(items.eq(2).attr("id"), "item3", "third item");
 });
 
+QUnit.test("onDragEnd - check args when dropping onto itself (dropFeedbackMode is 'indicate')", function(assert) {
+    // arrange
+    let items,
+        args,
+        onDragEnd = sinon.spy();
+
+
+    this.createSortable({
+        dropFeedbackMode: "indicate",
+        filter: ".draggable",
+        data: "x",
+        onDragEnd: onDragEnd
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointerMock(items.eq(1)).start().down(45, 45).move(10, 0).up();
+
+    // assert
+    args = onDragEnd.getCall(0).args;
+    assert.deepEqual($(args[0].itemElement).get(0), items.get(1), "source element");
+    assert.strictEqual(args[0].fromIndex, 1, "fromIndex");
+    assert.strictEqual(args[0].toIndex, 1, "toIndex");
+    assert.strictEqual(args[0].fromData, "x", "fromData");
+    assert.strictEqual(args[0].toData, "x", "toData");
+    assert.strictEqual(args[0].dropInsideItem, false, "dropInsideItem is false");
+});
+
 QUnit.test("The draggable element should not change position without moveItemOnDrop", function(assert) {
     // arrange
     let items;

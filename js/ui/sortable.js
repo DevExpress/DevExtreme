@@ -481,6 +481,10 @@ var Sortable = Draggable.inherit({
         let isAnotherDraggable = this._getSourceDraggable() !== this._getTargetDraggable(),
             fromIndex = this.option("fromIndex");
 
+        if(toIndex === null) {
+            return fromIndex;
+        }
+
         return Math.max(isAnotherDraggable || fromIndex >= toIndex || dropInsideItem ? toIndex : toIndex - 1, 0);
     },
 
