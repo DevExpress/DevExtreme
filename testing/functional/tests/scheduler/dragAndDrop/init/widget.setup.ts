@@ -1,21 +1,21 @@
 import { extend } from '../../../../../../js/core/utils/extend';
-import { createWidget } from "../../../../helpers/testHelper";
+import { createWidget } from '../../../../helpers/testHelper';
 
 const resources = [
-	{ id: 0, color: `#e01e38` },
-	{ id: 1, color: `#f98322` },
-	{ id: 2, color: `#1e65e8` }
+	{ id: 0, color: "#e01e38" },
+	{ id: 1, color: "#f98322" },
+	{ id: 2, color: "#1e65e8" }
 ];
 
 export const createScheduler = (options = {}) =>
-	createWidget(`dxScheduler`, extend({
-		views: [`day`],
+	createWidget("dxScheduler", extend({
+		views: ["day"],
 		dataSource: [],
 		resources: [
 			{
-				fieldExpr: `resourceId`,
+				fieldExpr: "resourceId",
 				dataSource: resources,
-				label: `Color`
+				label: "Color"
 			}
 		],
 		width: 1666,
@@ -23,6 +23,6 @@ export const createScheduler = (options = {}) =>
 		startDayHour: 9,
 		firstDayOfWeek: 1,
 		maxAppointmentsPerCell: 5,
-		currentView: `day`,
+		currentView: "day",
 		currentDate: new Date(2019, 3, 1)
 	}, options));
