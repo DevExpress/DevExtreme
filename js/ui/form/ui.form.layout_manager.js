@@ -580,7 +580,12 @@ const LayoutManager = Widget.inherit({
 
         var instance = this._createComponent($button, "dxButton", extend(defaultOptions, item.buttonOptions));
 
-        this._itemsRunTimeInfo.add(item, instance, item.guid, $container);
+        this._itemsRunTimeInfo.add({
+            item,
+            widgetInstance: instance,
+            guid: item.guid,
+            $itemContainer: $container
+        });
         this._addItemClasses($container, item.col);
 
         return $button;
@@ -639,7 +644,12 @@ const LayoutManager = Widget.inherit({
             validationBoundary: that.option("validationBoundary")
         });
 
-        this._itemsRunTimeInfo.add(item, instance, item.guid, $container);
+        this._itemsRunTimeInfo.add({
+            item,
+            widgetInstance: instance,
+            guid: item.guid,
+            $itemContainer: $container
+        });
 
         const editorElem = $editor.children().first();
         const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
@@ -1257,6 +1267,10 @@ const LayoutManager = Widget.inherit({
         if(responsiveBox) {
             return responsiveBox.option("currentScreenFactor") === responsiveBox.option("singleColumnScreen");
         }
+    },
+
+    getItemsRunTimeInfo: function() {
+        return this._itemsRunTimeInfo;
     }
 });
 
