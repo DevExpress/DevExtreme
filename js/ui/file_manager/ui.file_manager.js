@@ -154,7 +154,6 @@ class FileManager extends Widget {
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
-            onSelectedFileOpened: this._createActionByOption("onSelectedFileOpened"),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option("customizeDetailColumns")
         };
@@ -173,7 +172,7 @@ class FileManager extends Widget {
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
             rootFolderDisplayName: this.option("rootFolderName"),
             path: "",
-            onPathChanged: e => this.setCurrentFolderPath(e.newPath),
+            onPathChanged: e => this._setCurrentPath(e.newPath),
             onOutsideClick: () => this._clearSelection()
         });
     }
@@ -583,7 +582,7 @@ class FileManager extends Widget {
 
         switch(name) {
             case "currentPath":
-                this._controller.setCurrentPath(this.option("currentPath"));
+                this._setCurrentPath(args.value);
                 break;
             case "fileProvider":
             case "selectionMode":
@@ -659,6 +658,10 @@ class FileManager extends Widget {
         if(newCurrentDirectory) {
             this._filesTreeView.expandDirectory(newCurrentDirectory.parentDirectory);
         }
+    }
+
+    _setCurrentPath(path) {
+        this._controller.setCurrentPath(path);
     }
 
 }
