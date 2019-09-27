@@ -60,10 +60,7 @@ const SchedulerAppointmentForm = {
             },
             screenByWidth: () => {
                 const formWidth = $container.parent().outerWidth();
-                const popup = $container.parent().parent().parent().data("dxPopup"); // T812654: this fix only 19.1. In 19.2 this code has been refactored.
-                if(popup && popup.option("visible")) {
-                    this._updateLabelLocation(formWidth);
-                }
+                this._updateLabelLocation(formWidth);
 
                 return formWidth < SCREEN_SIZE_OF_SINGLE_COLUMN ? "xs" : "lg";
             }
