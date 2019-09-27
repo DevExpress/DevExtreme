@@ -1,5 +1,6 @@
 import { Selector } from 'testcafe';
 import { pathToFileURL } from 'url';
+import url from '../../helpers/getPageUrl';
 import { join } from  'path';
 import List from '../../model/list';
 
