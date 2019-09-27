@@ -1361,6 +1361,49 @@ QUnit.test("minWidth should not be assigned to expand column from columnMinWidth
     assert.strictEqual(visibleColumns[2].minWidth, 20);
 });
 
+QUnit.test("The E1057 error should be thrown when async rule is used for the row, cell or batch edit mode", function(assert) {
+    sinon.spy(errors, "log");
+    const options = {
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: "TestField",
+            validationRules: [{ type: "async" }]
+        }]
+    };
+    this.applyOptions(options);
+    this.columnsController.applyDataSource(createMockDataSource([]));
+
+    assert.equal(errors.log.callCount, 1, "log called for the first time");
+    assert.equal(errors.log.lastCall.args[0], "E1057", "Error code");
+
+    options.editing.mode = "cell";
+    this.applyOptions(options);
+
+    assert.equal(errors.log.callCount, 2, "log called for the second time");
+    assert.equal(errors.log.lastCall.args[0], "E1057", "Error code");
+
+    options.editing.mode = "batch";
+    this.applyOptions(options);
+
+    assert.equal(errors.log.callCount, 3, "log called for the third time");
+    assert.equal(errors.log.lastCall.args[0], "E1057", "Error code");
+
+    options.editing.mode = "form";
+    this.applyOptions(options);
+
+    assert.equal(errors.log.callCount, 3, "log is not called for the form edit mode");
+
+    options.editing.mode = "popup";
+    this.applyOptions(options);
+
+    assert.equal(errors.log.callCount, 3, "log is not called for the form popup mode");
+
+    errors.log.restore();
+});
+
 QUnit.module("initialization from dataSource", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Initialize from array store", function(assert) {
