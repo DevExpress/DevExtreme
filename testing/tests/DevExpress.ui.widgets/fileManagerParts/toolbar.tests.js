@@ -393,4 +393,53 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
     });
 
+    test("itemView selectbox must show correct state", function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("itemView.mode", "thumbnails");
+        this.clock.tick(400);
+
+        let $selectBox = this.wrapper.getGeneralToolbarElements().last();
+        assert.equal($selectBox.val(), "Thumbnails View", "Thumbnails View");
+
+        $selectBox.trigger("dxclick");
+        this.clock.tick(400);
+        let detailsViewSelector = this.wrapper.getItemViewPopupListItem(1);
+        $(detailsViewSelector).trigger("dxclick");
+        this.clock.tick(400);
+
+        $selectBox = this.wrapper.getGeneralToolbarElements().last();
+        assert.equal($selectBox.val(), "Details View", "Details View");
+
+        let $cell = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td`).eq(1);
+        $cell.trigger("dxclick");
+        this.$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
+        this.clock.tick(400);
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('Rename')`);
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+        const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
+        $input.val("Testfile 11.txt");
+        $input.trigger("change");
+        const $okButton = $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('Save')`);
+        $okButton.trigger("dxclick");
+        this.clock.tick(400);
+        $cell = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td`).eq(1);
+        assert.equal(this.wrapper.getDetailsItemName(0), "Testfile 11.txt", "File renamed");
+
+        $selectBox = this.wrapper.getGeneralToolbarElements().last();
+        assert.equal($selectBox.val(), "Details View", "Details View");
+
+        $selectBox.trigger("dxclick");
+        this.clock.tick(400);
+        detailsViewSelector = this.wrapper.getItemViewPopupListItem(0);
+        $(detailsViewSelector).trigger("dxclick");
+        this.clock.tick(400);
+
+        $selectBox = this.wrapper.getGeneralToolbarElements().last();
+        assert.equal($selectBox.val(), "Thumbnails View", "Thumbnails View");
+    });
+
 });

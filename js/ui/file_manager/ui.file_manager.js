@@ -258,6 +258,7 @@ class FileManager extends Widget {
         this._disposeWidget(this._itemView);
 
         this._createItemView(this._$itemsPanel, viewMode);
+        this.option("itemView.mode", viewMode);
     }
 
     _disposeWidget(widget) {
