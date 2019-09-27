@@ -234,7 +234,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($cell);
 
             if(this._allowRowUpdating() && isCellEditMode && column && column.allowEditing) {
-                this._isNeedFocus = false;
                 this._isHiddenFocus = false;
             } else {
                 let $target = event && $(event.target),
@@ -2058,6 +2057,23 @@ module.exports = {
                     }
 
                     return cancel;
+                },
+                _focusEditingCell: function() {
+                    if(!this.component.columnCount()) {
+                        this.callBase.apply(this, arguments);
+                    } else {
+                        let showEditorAlways = this.component.columnOption(this._editColumnIndex, "showEditorAlways"),
+                            dataType = this.component.columnOption(this._editColumnIndex, "dataType"),
+                            isCheckbox = dataType === "boolean",
+                            $cell;
+
+                        if(showEditorAlways && !isCheckbox) {
+                            $cell = this.getController("keyboardNavigation")._getFocusedCell();
+                            this.callBase.apply(this, [null, $cell]);
+                        } else {
+                            this.callBase.apply(this, arguments);
+                        }
+                    }
                 }
             },
             data: {

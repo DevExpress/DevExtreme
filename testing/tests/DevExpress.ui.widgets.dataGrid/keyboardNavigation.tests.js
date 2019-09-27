@@ -5208,6 +5208,39 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(this.gridView.component.editorFactoryController.focus(), "has overlay focus");
     });
 
+    QUnit.testInActiveWindow("DataGrid - should focus cell after changing value of previous cell with showEditorAlways (T816039)", function(assert) {
+        // arrange
+        this.columns = [
+            {
+                dataField: "name",
+                showEditorAlways: true
+            }
+        ];
+
+        this.options = {
+            editing: { mode: 'cell', allowUpdating: true }
+        };
+
+        this.setupModule();
+
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+        // act
+        this.cellValue(0, 0, "changed");
+        dataGridWrapper.rowsView.getEditorInputElement(0, 0)
+            .focus()
+            .trigger("dxclick");
+        dataGridWrapper.rowsView.getEditorInputElement(1, 0)
+            .focus()
+            .trigger("dxclick");
+
+        this.clock.tick();
+
+        // assert
+        assert.ok($(this.getCellElement(1, 0)).hasClass("dx-focused"), "second cell has focus");
+    });
+
     // T802790
     QUnit.testInActiveWindow("After pressing space button checkboxes should not be rendered if showCheckBoxesMode = 'none' and focusedRowEnabled = 'true'", function(assert) {
         // arrange
