@@ -326,6 +326,23 @@ QUnit.test("element should be removed from drop targets if it has not any subscr
     assert.equal(dropTargets.length, 0, "drop target removed");
 });
 
+QUnit.test("There are no exceptions when dragging an element when it has several subscriptions with and without a selector to the dragenter event", function(assert) {
+    var $element = $("#element"),
+        pointer = pointerMock($element);
+
+    $("#container").on(dragEvents.enter, noop);
+    $("#container").on(dragEvents.enter, "#dropTarget", noop);
+
+    $element.on(dragEvents.start, noop);
+
+    try {
+        pointer.start().down().move(10, 10);
+        assert.ok(true);
+    } catch(e) {
+        assert.ok(false);
+    }
+});
+
 
 QUnit.module("dropping");
 
