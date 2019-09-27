@@ -2106,8 +2106,6 @@ declare module DevExpress.ui {
         dragDirection?: 'both' | 'horizontal' | 'vertical';
         /** @name GridBase.Options.rowDragging.dropFeedbackMode */
         dropFeedbackMode?: 'push' | 'indicate';
-        /** @name GridBase.Options.rowDragging.enabled */
-        enabled?: boolean;
         /** @name GridBase.Options.rowDragging.filter */
         filter?: string;
         /** @name GridBase.Options.rowDragging.group */

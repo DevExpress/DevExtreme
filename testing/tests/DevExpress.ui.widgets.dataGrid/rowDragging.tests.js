@@ -65,7 +65,6 @@ var moduleConfig = {
             dataSource: generateData(10),
             columns: ["field1", "field2", "field3"],
             rowDragging: {
-                enabled: true,
                 allowReordering: true
             }
         };
@@ -149,7 +148,7 @@ QUnit.test("Draggable element (grid) - checking options", function(assert) {
         },
         loadingTimeout: undefined,
         rowDragging: {
-            enabled: true,
+            allowReordering: true,
             showDragIcons: undefined
         }
     }, "options");
@@ -231,7 +230,7 @@ QUnit.test("'rowDragging' option changing", function(assert) {
     let $testElement = $("#container");
 
     this.options.rowDragging = {
-        enabled: false
+        allowReordering: false
     };
 
     let rowsView = this.createRowsView();
@@ -248,9 +247,9 @@ QUnit.test("'rowDragging' option changing", function(assert) {
     pointer.up();
 
     this.options.rowDragging = {
-        enabled: true,
         allowReordering: true
     };
+
     rowsView.optionChanged({ name: "rowDragging" });
 
     // act
@@ -313,7 +312,6 @@ QUnit.module("Handle", $.extend({}, moduleConfig, {
             dataSource: generateData(10),
             columns: ["field1", "field2", "field3"],
             rowDragging: {
-                enabled: true,
                 allowReordering: true
             }
         };
@@ -359,7 +357,7 @@ QUnit.test("Show handle when changing the 'rowDragging.showDragIcons' option", f
         $testElement = $("#container");
 
     this.options.rowDragging = {
-        enabled: false
+        allowReordering: false
     };
 
     rowsView = createRowsView.call(this);
@@ -372,7 +370,6 @@ QUnit.test("Show handle when changing the 'rowDragging.showDragIcons' option", f
 
     // act
     this.options.rowDragging = {
-        enabled: true,
         showDragIcons: true,
         allowReordering: true
     };

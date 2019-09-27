@@ -72,7 +72,6 @@ var moduleConfig = {
             rootValue: 0,
             columns: ["field1", "field2", "field3"],
             rowDragging: {
-                enabled: true,
                 allowReordering: true,
                 allowDropInsideItem: true
             }
