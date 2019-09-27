@@ -40,9 +40,8 @@ const SchedulerAppointmentForm = {
     },
 
     _updateLabelLocation: function(formWidth) {
-        const form = this._appointmentForm;
-        if(form._initialized && form.isReady()) {
-            form.option("labelLocation", formWidth < SCREEN_SIZE_OF_TOP_LABEL_LOCATION ? "top" : "left");
+        if(this._appointmentForm._initialized && this._appointmentForm.isReady()) {
+            this._appointmentForm.option("labelLocation", formWidth < SCREEN_SIZE_OF_TOP_LABEL_LOCATION ? "top" : "left");
         }
     },
 
@@ -57,7 +56,10 @@ const SchedulerAppointmentForm = {
             showColonAfterLabel: false,
             screenByWidth: () => {
                 const formWidth = $container.parent().outerWidth();
-                this._updateLabelLocation(formWidth);
+                const popup = $container.parent().parent().parent().data("dxPopup"); // T812654: this fix only 19.1. In 19.2 this code has been refactored.
+                if(popup && popup.option("visible")) {
+                    this._updateLabelLocation(formWidth);
+                }
                 return formWidth < SCREEN_SIZE_OF_SINGLE_COLUMN ? "xs" : "lg";
             }
         });
