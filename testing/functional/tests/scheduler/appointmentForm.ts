@@ -6,7 +6,7 @@ import { Selector } from 'testcafe';
 fixture `Appointment popup form`
     .page(url(__dirname, '../container.html'));
 
-    test("Custom form shouldn't throw exception, after second show appointment form(T812654)", async t => {
+    test("Custom form shouldn't throw exception, after second show appointment form (T812654)", async t => {
         const APPOINTMENT_TEXT = "Website Re-Design Plan";
         const TEXT_EDITOR_CLASS = ".dx-texteditor-input";
         const CHECKBOX_CLASS = ".dx-checkbox.dx-widget";

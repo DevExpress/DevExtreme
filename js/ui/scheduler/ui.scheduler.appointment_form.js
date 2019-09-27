@@ -40,7 +40,7 @@ const SchedulerAppointmentForm = {
     },
 
     _updateLabelLocation: function(formWidth) {
-        if(this._appointmentForm._initialized && this._appointmentForm.isReady()) {
+        if(formWidth > 0 && this._appointmentForm._initialized && this._appointmentForm.isReady()) {
             this._appointmentForm.option("labelLocation", formWidth < SCREEN_SIZE_OF_TOP_LABEL_LOCATION ? "top" : "left");
         }
     },
@@ -54,12 +54,17 @@ const SchedulerAppointmentForm = {
             formData: formData,
             colCount: 2,
             showColonAfterLabel: false,
+            onContentReady: () => { // T812654: this fix only 19.1. In 19.2 this code has been refactored.
+                const formWidth = $container.parent().outerWidth();
+                this._updateLabelLocation(formWidth);
+            },
             screenByWidth: () => {
                 const formWidth = $container.parent().outerWidth();
                 const popup = $container.parent().parent().parent().data("dxPopup"); // T812654: this fix only 19.1. In 19.2 this code has been refactored.
                 if(popup && popup.option("visible")) {
                     this._updateLabelLocation(formWidth);
                 }
+
                 return formWidth < SCREEN_SIZE_OF_SINGLE_COLUMN ? "xs" : "lg";
             }
         });
