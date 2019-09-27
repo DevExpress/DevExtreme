@@ -1582,6 +1582,11 @@ module.exports = {
                         case "adaptColumnWidthByRatio":
                             args.handled = true;
                             break;
+                        case "dataSource":
+                            if(args.value !== args.previousValue && !this.option("columns") && (!Array.isArray(args.value) || !Array.isArray(args.previousValue))) {
+                                this._columns = [];
+                            }
+                            break;
                         case "columns":
                             args.handled = true;
                             if(args.name === args.fullName) {
