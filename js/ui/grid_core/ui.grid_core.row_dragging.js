@@ -15,7 +15,7 @@ var RowDraggingExtender = {
     _allowReordering: function() {
         let rowDragging = this.option("rowDragging");
 
-        return !!(rowDragging && (rowDragging.allowReordering || rowDragging.group));
+        return !!(rowDragging && (rowDragging.allowReordering || rowDragging.allowDropInsideItem || rowDragging.group));
     },
 
     _updateHandleColumn: function() {
@@ -148,7 +148,13 @@ module.exports = {
                  * @type boolean
                  * @default false
                  */
-                allowReordering: false
+                allowReordering: false,
+                /**
+                 * @name GridBaseOptions.rowDragging.allowDropInsideItem
+                 * @type boolean
+                 * @default false
+                 */
+                allowDropInsideItem: false
                 /**
                  * @name GridBaseOptions.rowDragging.filter
                  * @type string
@@ -158,11 +164,6 @@ module.exports = {
                  * @name GridBaseOptions.rowDragging.itemOrientation
                  * @type Enums.Orientation
                  * @default "vertical"
-                 */
-                /**
-                 * @name dxDataGridOptions.rowDragging.allowDropInsideItem
-                 * @type boolean
-                 * @default false
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.dragDirection

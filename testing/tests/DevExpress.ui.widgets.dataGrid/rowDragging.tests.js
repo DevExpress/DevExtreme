@@ -305,6 +305,32 @@ QUnit.test("Sortable should have height if dataSource is empty", function(assert
     assert.equal($("#container").find(".dx-sortable").height(), 100);
 });
 
+QUnit.test("Dragging row when allowDropInsideItem is true", function(assert) {
+    // arrange
+    let $draggableElement,
+        $placeholderElement,
+        $testElement = $("#container");
+
+    this.options.rowDragging = {
+        allowDropInsideItem: true
+    };
+
+    let rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 50);
+
+    // assert
+    $draggableElement = $("body").children(".dx-sortable-dragging");
+    $placeholderElement = $("body").children(".dx-sortable-placeholder.dx-sortable-placeholder-inside");
+    assert.strictEqual($draggableElement.length, 1, "there is dragging element");
+    assert.strictEqual($placeholderElement.length, 1, "placeholder");
+    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
+});
+
+
 QUnit.module("Handle", $.extend({}, moduleConfig, {
     beforeEach: function() {
         $("#qunit-fixture").addClass("qunit-fixture-visible");
