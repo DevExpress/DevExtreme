@@ -18,6 +18,7 @@ export const Consts = {
     FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
     BREADCRUMBS_CLASS: "dx-filemanager-breadcrumbs",
+    BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: "dx-filemanager-breadcrumbs-parent-folder-item",
     ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
     FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
     CUSTOM_THUMBNAIL_CLASS: "dx-filemanager-item-custom-thumbnail",
@@ -92,12 +93,27 @@ export class FileManagerWrapper {
 
     getBreadcrumbsPath() {
         let result = "";
-        const $elements = this._$element.find(`.${Consts.BREADCRUMBS_CLASS} .${Consts.MENU_ITEM_WITH_TEXT_CLASS}`);
+        const $elements = this.getBreadcrumbsItems();
         $elements.each((_, element) => {
             const name = $(element).text();
             result = result ? `${result}/${name}` : name;
         });
         return result;
+    }
+
+    getBreadcrumbsItems() {
+        return this._$element.find(`.${Consts.BREADCRUMBS_CLASS} .${Consts.MENU_ITEM_WITH_TEXT_CLASS}`);
+    }
+
+    getBreadcrumbsItemByText(text) {
+        return this.getBreadcrumbsItems().filter(function() {
+            const content = $(this).text();
+            return $.trim(content) === text;
+        }).first();
+    }
+
+    getBreadcrumbsParentDirectoryItem() {
+        return this._$element.find(`.${Consts.BREADCRUMBS_CLASS} .${Consts.BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS}`);
     }
 
     getToolbar() {
