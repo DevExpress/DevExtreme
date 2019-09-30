@@ -12,14 +12,20 @@ import "generic_light.css!";
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="button"></div>\
+        '<form id="form">\
+        <div id="button"></div>\
         <div id="widget"></div>\
         <div id="widthRootStyle" style="width: 300px;"></div>\
         <div id="inkButton"></div>\
             <div data-options="dxTemplate: { name: \'content\' }" data-bind="text: text"></div>\
-        </div>';
+        </div>\
+        </form>';
 
     $("#qunit-fixture").html(markup);
+
+    $("#form").on("submit", function(e) {
+        e.preventDefault();
+    });
 });
 
 const BUTTON_HAS_TEXT_CLASS = "dx-button-has-text";
@@ -299,6 +305,7 @@ QUnit.module("submit behavior", {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
         this.$element = $("#button").dxButton({ useSubmitBehavior: true });
+        this.$form = $("#form");
         this.clickButton = function() {
             this.$element.trigger("dxclick");
             this.clock.tick();
@@ -365,38 +372,43 @@ QUnit.module("submit behavior", {
     });
 
     QUnit.test("Submit button should not be enabled on pending", (assert) => {
-        try {
-            const validator = new Validator(document.createElement("div"), {
-                    adapter: sinon.createStubInstance(DefaultAdapter),
-                    validationRules: [{
-                        type: "async",
-                        validationCallback: function() {
-                            const d = new Deferred();
-                            return d.promise();
-                        }
-                    }]
-                }),
-                clickHandlerSpy = sinon.spy(e => {
-                    assert.ok(e.isDefaultPrevented(), "default is prevented");
-                }),
-                $element = this.$element.dxButton({ validationGroup: "testGroup" }),
-                buttonInstance = this.$element.dxButton("instance");
+        const validator = new Validator($("<div>").appendTo(this.$form), {
+                adapter: sinon.createStubInstance(DefaultAdapter),
+                validationRules: [{
+                    type: "async",
+                    validationCallback: function() {
+                        const d = new Deferred();
+                        setTimeout(() => {
+                            d.resolve();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }),
+            done = assert.async(),
+            button = this.$element.dxButton({
+                validationGroup: "testGroup",
+                onOptionChanged: function(args) {
+                    if(args.name === "disabled" && args.value === false) {
+                        assert.equal(validator._validationInfo.result.status, "valid", "validator is valid");
+                        assert.notOk(button.option("disabled"), "button is enabled");
 
+                        ValidationEngine.initGroups();
+                        done();
+                    }
+                }
+            }).dxButton("instance");
 
-            ValidationEngine.registerValidatorInGroup("testGroup", validator);
+        ValidationEngine.registerValidatorInGroup("testGroup", validator);
+        this.$element
+            .find("." + BUTTON_SUBMIT_INPUT_CLASS);
+        this.clickButton();
 
-            $element
-                .find("." + BUTTON_SUBMIT_INPUT_CLASS)
-                .on("click", clickHandlerSpy);
+        assert.ok(button.option("disabled"), "button is disabled after the click");
+        assert.equal(validator._validationInfo.result.status, "pending", "validator in pending");
 
-            this.clickButton();
-
-            assert.ok(clickHandlerSpy.called);
-            assert.ok(buttonInstance.option("disabled"), "button is disabled after the click");
-            assert.strictEqual(buttonInstance._validationStatus, "pending");
-        } finally {
-            ValidationEngine.initGroups();
-        }
+        this.clock.tick(10);
+        this.clock.restore();
     });
 });
 

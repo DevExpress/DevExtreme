@@ -316,7 +316,6 @@ var Button = Widget.inherit({
             this._validationStatus = result.status;
             if(this._validationStatus === "valid") {
                 this._$submitInput.get(0).click();
-            } else {
                 this._setDisabled(false);
             }
             return result;
