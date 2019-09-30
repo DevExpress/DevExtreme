@@ -189,8 +189,8 @@ class FileManager extends Widget {
     _initCommandManager() {
         const actions = extend(this._editing.getCommandActions(), {
             refresh: () => this._refreshAndShowProgress(),
-            thumbnails: () => this._switchView("thumbnails"),
-            details: () => this._switchView("details"),
+            thumbnails: () => this.option("itemView.mode", "thumbnails"),
+            details: () => this.option("itemView.mode", "details"),
             clear: () => this._clearSelection(),
             showNavPane: () => this._adaptivityControl.toggleDrawer()
         });
@@ -258,7 +258,7 @@ class FileManager extends Widget {
         this._disposeWidget(this._itemView);
 
         this._createItemView(this._$itemsPanel, viewMode);
-        this.option("itemView.mode", viewMode);
+        this._toolbar.option({ itemViewMode: viewMode });
     }
 
     _disposeWidget(widget) {
@@ -588,7 +588,6 @@ class FileManager extends Widget {
                 break;
             case "fileProvider":
             case "selectionMode":
-            case "itemView":
             case "customizeThumbnail":
             case "customizeDetailColumns":
             case "rootFolderName":
@@ -596,6 +595,13 @@ class FileManager extends Widget {
             case "permissions":
             case "upload":
                 this.repaint();
+                break;
+            case "itemView":
+                if(args.fullName === "itemView.mode") {
+                    this._switchView(args.value);
+                } else {
+                    this.repaint();
+                }
                 break;
             case "toolbar":
                 this._toolbar.option(extend(
