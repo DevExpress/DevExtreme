@@ -223,7 +223,7 @@ class FileManager extends Widget {
     }
 
     _updateToolbar() {
-        const items = this.getSelectedItems();
+        const items = this._getSelectedItemInfos();
         this._toolbar.update(items);
     }
 
@@ -270,7 +270,7 @@ class FileManager extends Widget {
     }
 
     _getMultipleSelectedItems() {
-        return this._itemsViewAreaActive ? this.getSelectedItems() : [ this._getCurrentDirectory() ];
+        return this._itemsViewAreaActive ? this._getSelectedItemInfos() : [ this._getCurrentDirectory() ];
     }
 
     _showError(message) { // TODO use notification control instead of it
@@ -351,6 +351,13 @@ class FileManager extends Widget {
             * @default ""
             */
             currentPath: "",
+
+            /**
+            * @name dxFileManagerOptions.currentDirectory
+            * @type object
+            * @default null
+            */
+            currentDirectory: null,
 
             /**
             * @name dxFileManagerOptions.rootFolderName
@@ -582,6 +589,8 @@ class FileManager extends Widget {
         const name = args.name;
 
         switch(name) {
+            case "currentDirectory":
+                break;
             case "currentPath":
                 this._setCurrentPath(args.value);
                 break;
@@ -637,10 +646,16 @@ class FileManager extends Widget {
     }
 
     _onSelectedDirectoryChanged() {
+        const directoryInfo = this._controller.getCurrentDirectory();
+        const directoryItem = directoryInfo && directoryInfo.fileItem || null;
+        const currentPath = this._controller.getCurrentPath();
+
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
-        this._breadcrumbs.option("path", this._controller.getCurrentPath());
-        this.option("currentPath", this._controller.getCurrentPath());
+        this._breadcrumbs.option("path", currentPath);
+
+        this.option("currentDirectory", directoryItem);
+        this.option("currentPath", currentPath);
         this._onCurrentDirectoryChangedAction();
     }
 
@@ -648,8 +663,17 @@ class FileManager extends Widget {
         return this._controller.getDirectories(parentDirectoryInfo);
     }
 
-    getSelectedItems() {
+    _getSelectedItemInfos() {
         return this._itemView.getSelectedItems();
+    }
+
+    /**
+     * @name dxFileManagerMethods.getSelectedItems
+     * @publicName getSelectedItems()
+     * @return Array<object>
+     */
+    getSelectedItems() {
+        return this._getSelectedItemInfos().map(itemInfo => itemInfo.fileItem);
     }
 
     _onSelectedItemOpened({ fileItemInfo }) {
