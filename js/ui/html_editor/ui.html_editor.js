@@ -469,9 +469,18 @@ const HtmlEditor = Editor.inherit({
             case "formDialogOptions":
                 this._renderFormDialog();
                 break;
+            case "width":
+                this.callBase(args);
+                this._repaintToolbar();
+                break;
             default:
                 this.callBase(args);
         }
+    },
+
+    _repaintToolbar: function() {
+        const toolbar = this._quillInstance.getModule("toolbar");
+        toolbar && toolbar.repaint();
     },
 
     _updateHtmlContent: function(newMarkup) {
