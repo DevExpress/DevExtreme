@@ -406,35 +406,31 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         $selectBox.trigger("dxclick");
         this.clock.tick(400);
-        let detailsViewSelector = this.wrapper.getItemViewPopupListItem(1);
+        let detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(1);
         $(detailsViewSelector).trigger("dxclick");
         this.clock.tick(400);
 
         $selectBox = this.wrapper.getGeneralToolbarElements().last();
         assert.equal($selectBox.val(), "Details View", "Details View");
 
-        let $cell = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td`).eq(1);
-        $cell.trigger("dxclick");
-        this.$element.find(`.${Consts.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
+        this.wrapper.findDetailsItem("File 1.txt").trigger("dxclick");
+        this.wrapper.getDetailsItemList().trigger("click");
         this.clock.tick(400);
-        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('Rename')`);
-        $commandButton.trigger("dxclick");
+        this.wrapper.getToolbarButton("Rename").trigger("dxclick");
         this.clock.tick(400);
-        const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
-        $input.val("Testfile 11.txt");
-        $input.trigger("change");
-        const $okButton = $(`.${Consts.POPUP_BOTTOM_CLASS} .${Consts.BUTTON_CLASS}:contains('Save')`);
-        $okButton.trigger("dxclick");
+        this.wrapper.getDialogTextInput()
+            .val("New filename.txt")
+            .trigger("change");
+        this.wrapper.getDialogButton("Save").trigger("dxclick");
         this.clock.tick(400);
-        $cell = this.$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td`).eq(1);
-        assert.equal(this.wrapper.getDetailsItemName(0), "Testfile 11.txt", "File renamed");
+        assert.equal(this.wrapper.getDetailsItemName(0), "New filename.txt", "File renamed");
 
         $selectBox = this.wrapper.getGeneralToolbarElements().last();
         assert.equal($selectBox.val(), "Details View", "Details View");
 
         $selectBox.trigger("dxclick");
         this.clock.tick(400);
-        detailsViewSelector = this.wrapper.getItemViewPopupListItem(0);
+        detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
         $(detailsViewSelector).trigger("dxclick");
         this.clock.tick(400);
 
