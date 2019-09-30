@@ -9049,7 +9049,8 @@ QUnit.test("dataSource changing not reset columns order when dataSource structur
     // arrange, act
     var dataGrid = createDataGrid({
         loadingTimeout: undefined,
-        dataSource: [{ field1: 1, field2: 2 }]
+        dataSource: [{ field1: 1, field2: 2 }],
+        columns: ["field1", "field2"]
     });
 
     dataGrid.columnOption("field2", "visibleIndex", 0);

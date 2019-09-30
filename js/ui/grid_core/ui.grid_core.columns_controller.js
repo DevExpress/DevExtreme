@@ -1583,7 +1583,7 @@ module.exports = {
                             args.handled = true;
                             break;
                         case "dataSource":
-                            if(args.value !== args.previousValue && !this.option("columns") && (!Array.isArray(args.value) || !Array.isArray(args.previousValue))) {
+                            if(args.value !== args.previousValue && !this.option("columns")) {
                                 this._columns = [];
                             }
                             break;
