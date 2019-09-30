@@ -106,6 +106,27 @@ export class SchedulerTestWrapper {
         };
 
         this.appointmentPopup = {
+            form: {
+                getSubjectTextBox: () => {
+                    const subjectElement = this.appointmentPopup.getPopup().find(".dx-textbox").eq(0);
+                    return subjectElement.dxTextBox("instance");
+                },
+                setSubject: (text) => {
+                    const textBox = this.appointmentPopup.form.getSubjectTextBox();
+                    textBox.option("value", text);
+                },
+                getSubject: () => {
+                    const textBox = this.appointmentPopup.form.getSubjectTextBox();
+                    return textBox.option("value");
+                },
+                isRecurrenceEditorVisible: () => $(".dx-recurrence-editor-container").is(":visible")
+            },
+
+            dialog: {
+                clickEditSeries: () => $(".dx-dialog").find(".dx-dialog-button").eq(0).trigger("dxclick"),
+                clickEditAppointment: () => $(".dx-dialog").find(".dx-dialog-button").eq(1).trigger("dxclick")
+            },
+
             getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find(".dx-scrollable-container").get(0);
@@ -114,10 +135,10 @@ export class SchedulerTestWrapper {
             getPopupInstance: () => $(".dx-scheduler-appointment-popup.dx-widget").dxPopup("instance"),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick"),
-            setInitialPopupSize: (size) => {
-                const popupConfig = this.instance._popupConfig;
-                this.instance._popupConfig = appointmentData => {
-                    const config = popupConfig.call(this.instance, appointmentData);
+            setInitialPopupSize: size => {
+                const _createPopupConfig = this.instance._appointmentPopup._createPopupConfig;
+                this.instance._appointmentPopup._createPopupConfig = () => {
+                    const config = _createPopupConfig.call(this.instance._appointmentPopup);
                     return extend(config, size);
                 };
             },
@@ -131,8 +152,13 @@ export class SchedulerTestWrapper {
                 const $buttons = $toolbar.find(`.dx-toolbar-${sectionName} .dx-button`);
                 return buttonNames.every((name, index) => $buttons.eq(index).hasClass(`dx-popup-${name}`));
             },
+
             getDoneButton: () => this.appointmentPopup.getPopup().find(".dx-popup-done"),
-            clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger("dxclick")
+            clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger("dxclick"),
+
+            getCancelButton: () => this.appointmentPopup.getPopup().find(".dx-popup-cancel"),
+            clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger("dxclick"),
+            saveAppointmentData: () => this.instance._appointmentPopup.saveEditData.call(this.instance._appointmentPopup),
         };
 
         this.appointmentForm = {
@@ -143,6 +169,8 @@ export class SchedulerTestWrapper {
             hasFormSingleColumn: () => this.appointmentPopup.getPopup().find(".dx-responsivebox").hasClass("dx-responsivebox-screen-xs"),
             getRecurrentAppointmentFormDialogButtons: () => $(".dx-dialog-buttons .dx-button"),
             clickFormDialogButton: (index = 0) => this.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(index).trigger("dxclick"),
+            getPendingEditorsCount: () => $(this.appointmentForm.getFormInstance().element()).find(".dx-validation-pending").length,
+            getInvalidEditorsCount: () => $(this.appointmentForm.getFormInstance().element()).find(".dx-invalid").length
         };
 
         this.workSpace = {

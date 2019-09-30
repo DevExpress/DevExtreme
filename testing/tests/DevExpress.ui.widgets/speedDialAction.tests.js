@@ -107,6 +107,8 @@ QUnit.module("create multiple actions", (hooks) => {
         assert.equal($fabMainElement.attr("title"), undefined, "default hint empty");
         assert.equal($fabMainContent.find(".dx-icon-add").length, 1, "default icon is applied");
         assert.equal($fabMainContent.find(".dx-icon-close").length, 1, "default close is applied");
+        assert.equal($fabMainContent.css("zIndex"), 1500, "right content zIndex");
+        assert.equal($fabMainContent.closest(".dx-overlay-wrapper").css("zIndex"), 1500, "right wrapper zIndex");
 
         assert.equal($fabElement.eq(1).attr("title"), "Arrow down", "first action with right hint");
         assert.equal($fabElement.eq(2).attr("title"), "Arrow up", "second action with right hint");
@@ -123,12 +125,16 @@ QUnit.module("create multiple actions", (hooks) => {
         assert.equal($fabContent.eq(2).find(".dx-icon-filter").length, 1, "second action icon changed on icon filter");
 
         const fabDimensions = 30;
-        const fabOffsetY = 10;
 
         $fabMainContent.trigger("dxclick");
 
+        assert.equal($fabContent.eq(1).css("zIndex"), 1500, "right first action content zIndex");
+        assert.equal($fabContent.eq(1).closest(".dx-overlay-wrapper").css("zIndex"), 1500, "right first action wrapper zIndex");
+        assert.equal($fabContent.eq(2).css("zIndex"), 1500, "right second action content zIndex");
+        assert.equal($fabContent.eq(2).closest(".dx-overlay-wrapper").css("zIndex"), 1500, "right second action wrapper zIndex");
+
         assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "right first action position");
-        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions - fabOffsetY, 110, "right second action position");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 120, "right second action position");
 
         secondInstance.dispose();
 
@@ -620,6 +626,138 @@ QUnit.module("add shading option", (hooks) => {
         $fabMainContent.trigger("dxclick");
 
         assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading if set value in false after repaint");
+
+        firstSDA.dispose();
+        secondSDA.dispose();
+    });
+});
+
+QUnit.module("add direction option", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
+    hooks.afterEach(() => {
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+
+        fx.off = false;
+    }),
+    test("check rendering", (assert) => {
+        const firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
+        const secondSDA = $("#fab-two").dxSpeedDialAction().dxSpeedDialAction("instance");
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        let $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        const fabDimensions = 30;
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "right first action position");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 120, "right second action position");
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "left top",
+                    my: "left top",
+                    offset: "16 16"
+                },
+                direction: "down"
+            }
+        });
+
+        firstSDA.repaint();
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($fabContent.eq(1).offset().top, 80, "right first action position");
+        assert.equal($fabContent.eq(2).offset().top, 120, "right second action position");
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "left top",
+                    my: "left top",
+                    offset: "16 16"
+                }
+            }
+        });
+
+        firstSDA.repaint();
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($fabContent.eq(1).offset().top, 80, "right first action position");
+        assert.equal($fabContent.eq(2).offset().top, 120, "right second action position");
+
+
+        firstSDA.dispose();
+        secondSDA.dispose();
+    });
+});
+
+QUnit.module("add index option", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
+    hooks.afterEach(() => {
+        fx.off = false;
+    }),
+    test("check rendering", (assert) => {
+        const firstSDA = $("#fab-one").dxSpeedDialAction({
+            index: 1,
+            icon: "add"
+        }).dxSpeedDialAction("instance");
+        const secondSDA = $("#fab-two").dxSpeedDialAction({
+            index: 2,
+            icon: "trash"
+        }).dxSpeedDialAction("instance");
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        let $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        const fabDimensions = 30;
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "add action is first");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 120, "trash action is second");
+
+
+        firstSDA.option("index", 2);
+        secondSDA.option("index", 1);
+
+        $fabMainContent.trigger("dxclick");
+
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 120, "trash action is first");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 80, "add action is second");
+
+        firstSDA.option("index", 5);
+        secondSDA.option("index", -1);
+
+        $fabMainContent.trigger("dxclick");
+
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 120, "trash action is first");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 80, "add action is second");
+
 
         firstSDA.dispose();
         secondSDA.dispose();

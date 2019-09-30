@@ -1,7 +1,7 @@
 import "common.css!";
 import "generic_light.css!";
 
-import { SchedulerTestWrapper } from "./helpers.js";
+import { SchedulerTestWrapper, initTestMarkup, createWrapper } from "./helpers.js";
 
 import $ from "jquery";
 import devices from "core/devices";
@@ -13,8 +13,77 @@ import resizeCallbacks from "core/utils/resize_callbacks";
 import "ui/scheduler/ui.scheduler";
 import "ui/switch";
 
-QUnit.testStart(function() {
-    $("#qunit-fixture").html('<div id="scheduler"></div>');
+QUnit.testStart(() => initTestMarkup());
+
+const moduleConfig = {
+    beforeEach() {
+        fx.off = true;
+    },
+
+    afterEach() {
+        fx.off = false;
+    }
+};
+
+QUnit.module("Appointment popup form", moduleConfig, () => {
+    const defaultData = [
+        {
+            text: "recurrent-app",
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            recurrenceRule: "FREQ=DAILY;COUNT=5"
+        }, {
+            text: "common-app",
+            startDate: new Date(2017, 4, 9, 9, 30),
+            endDate: new Date(2017, 4, 9, 11),
+        }
+    ];
+
+    const createScheduler = () => {
+        return createWrapper({
+            dataSource: defaultData,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2017, 4, 25),
+            firstDayOfWeek: 1,
+            startDayHour: 9,
+            height: 600,
+            width: 600
+        });
+    };
+
+    QUnit.test("Appointment popup should work properly", assert => {
+        const NEW_EXPECTED_SUBJECT = "NEW SUBJECT";
+        const scheduler = createScheduler();
+
+        assert.notOk(scheduler.appointmentPopup.isVisible(), "Appointment popup should be invisible in on init");
+
+        scheduler.appointments.click(scheduler.appointments.getAppointmentCount() - 1);
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentPopup.form.setSubject(NEW_EXPECTED_SUBJECT);
+
+        assert.ok(scheduler.appointmentPopup.isVisible(), "Appointment popup should be visible after showAppointmentPopup method");
+        scheduler.appointmentPopup.clickDoneButton();
+
+        const dataItem = scheduler.instance.option("dataSource")[1];
+        assert.equal(Object.keys(dataItem).length, 3, "In appointment properties shouldn't added excess properties");
+        assert.equal(dataItem.text, NEW_EXPECTED_SUBJECT, `Text property of appointment should be changed on ${NEW_EXPECTED_SUBJECT}`);
+
+        scheduler.appointments.click(0);
+        scheduler.tooltip.clickOnItem();
+        scheduler.appointmentPopup.dialog.clickEditSeries();
+
+        assert.ok(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), "Recurrence editor should be visible after click on recurrence appointment");
+        assert.equal(scheduler.appointmentPopup.form.getSubject(), defaultData[0].text, `Subject in form should equal selected appointment`);
+
+        scheduler.appointmentPopup.clickDoneButton();
+
+        scheduler.appointments.click(); // click on common appointment, due to redrawing its index has changed
+        scheduler.tooltip.clickOnItem();
+
+        assert.notOk(scheduler.appointmentPopup.form.isRecurrenceEditorVisible(), "Recurrence editor shouldn't visible on click on common appointment");
+        assert.equal(scheduler.appointmentPopup.form.getSubject(), NEW_EXPECTED_SUBJECT, "Subject in form should equal selected common appointment");
+    });
 });
 
 const createInstance = function(options) {
@@ -141,6 +210,7 @@ QUnit.test("showAppointmentPopup should render a popup form only once", function
     var $form = $(".dx-scheduler-appointment-popup").find(".dx-form");
     assert.equal($form.length, 1, "Form was rendered");
 
+    this.instance.hideAppointmentPopup();
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 2" });
 
     assert.equal($form.find(".dx-textbox").eq(0).dxTextBox("instance").option("text"), "appointment 2", "Form data is correct");
@@ -731,22 +801,6 @@ QUnit.test("It should be possible to render endDateTimeZone editor on appt form"
     assert.equal(endDateTimezoneEditor.option("observer"), this.instance, "Observer is defined");
 });
 
-QUnit.test("Scheduler appointment popup should has right content when appointmentPopupTemplate is used", function(assert) {
-    var task = { startDate: new Date(2015, 1, 10), endDate: new Date(2015, 1, 13), text: "caption" };
-
-    this.instance.option("appointmentPopupTemplate", function() {
-        assert.deepEqual(arguments[0], task, "passed appointment data is right");
-        return $("<div>").addClass("new-scheduler-popup-template");
-    });
-
-    this.instance.showAppointmentPopup(task);
-
-    var $popup = $(".new-scheduler-popup-template");
-
-    assert.equal($popup.length, 1, "popup with template was shown");
-});
-
-
 QUnit.test("Validate works always before done click", function(assert) {
     var data = new DataSource({
         store: this.tasks
@@ -800,9 +854,10 @@ QUnit.test("Done button custom configuration should be correct", function(assert
     this.instance.option({ dataSource: data });
     this.instance.option({
         onAppointmentFormOpening: function(e) {
-            var buttons = e.component._popup.option('toolbarItems');
+            const popup = e.component.getAppointmentPopup();
+            const buttons = popup.option('toolbarItems');
             buttons[0].options = { text: 'Text 1' };
-            e.component._popup.option('toolbarItems', buttons);
+            popup.option('toolbarItems', buttons);
         },
         onAppointmentAdding: function(e) {
             e.cancel = true;
@@ -1099,3 +1154,48 @@ QUnit.test("The resize event of appointment popup is triggered the the window is
     resizeCallbacks.fire();
     assert.ok(isResizeEventTriggered, "The resize event of popup is triggered");
 });
+
+QUnit.test("Popup should not be closed until the valid value is typed", function(assert) {
+    const startDate = new Date(2015, 1, 1, 1),
+        validValue = "Test",
+        done = assert.async();
+    const scheduler = createInstance();
+    scheduler.instance.option("onAppointmentFormOpening", function(data) {
+        const items = data.form.option("items");
+        items[0].validationRules = [
+            {
+                type: "async",
+                validationCallback: function(params) {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve(params.value === validValue);
+                    }, 10);
+                    return d.promise();
+                }
+            }
+        ];
+
+        data.form.option("items", items);
+    });
+
+    scheduler.instance.showAppointmentPopup({
+        startDate: startDate,
+        endDate: new Date(2015, 1, 1, 2),
+        text: "caption"
+    });
+
+    scheduler.appointmentForm.setSubject("caption1");
+    scheduler.appointmentPopup.saveAppointmentData().done(() => {
+        assert.equal(scheduler.appointmentForm.getInvalidEditorsCount.call(scheduler), 1, "the only invalid editor is displayed in the form");
+
+        scheduler.appointmentForm.setSubject(validValue);
+        scheduler.appointmentPopup.saveAppointmentData().done(() => {
+            assert.notOk(scheduler.appointmentPopup.getPopupInstance().option("visible"), "the form is closed");
+
+            done();
+        });
+    });
+
+    assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, "the only pending editor is displayed in the form");
+});
+

@@ -1632,21 +1632,27 @@ QUnit.test("Use 'itemOption' with no items", function(assert) {
 
 QUnit.test("Use 'itemOption' do not change the order of an items", function(assert) {
     // arrange
-    var $testContainer = $("#form").dxForm({
-            height: 200,
-            formData: { ID: 1, FistName: "Alex", LastName: "Johnson", Address: "Alabama" },
-            items: [
-                "ID",
-                { dataField: "FirstName" },
-                { dataField: "LastName" },
-                "Address"
-            ]
-        }),
-        form = $testContainer.dxForm("instance");
+    const contentReadyStub = sinon.stub();
+    const $testContainer = $("#form").dxForm({
+        height: 200,
+        formData: { ID: 1, FistName: "Alex", LastName: "Johnson", Address: "Alabama" },
+        items: [
+            "ID",
+            { dataField: "FirstName" },
+            { dataField: "LastName" },
+            "Address"
+        ]
+    });
+    const form = $testContainer.dxForm("instance");
+
+    form.on("contentReady", contentReadyStub);
 
     // act
     form.itemOption("FirstName", {
         visible: true,
+        label: {
+            text: "Test Label"
+        },
         editorOptions: {
             value: "",
             useMaskedValue: true,
@@ -1663,6 +1669,9 @@ QUnit.test("Use 'itemOption' do not change the order of an items", function(asse
             {
                 dataField: "FirstName",
                 visible: true,
+                label: {
+                    text: "Test Label"
+                },
                 editorOptions: {
                     value: "",
                     useMaskedValue: true,
@@ -1674,6 +1683,8 @@ QUnit.test("Use 'itemOption' do not change the order of an items", function(asse
             { dataField: "Address" }
         ],
         "correct items order");
+
+    assert.equal(contentReadyStub.callCount, 1, "the form renders once");
 });
 
 QUnit.test("Use 'itemOption' with groups", function(assert) {

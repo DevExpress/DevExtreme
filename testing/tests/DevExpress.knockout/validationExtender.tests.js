@@ -1,12 +1,14 @@
-var $ = require("jquery"),
-    Editor = require("ui/editor/editor"),
-    ValidationGroup = require("ui/validation_group"),
-    ValidationEngine = require("ui/validation_engine"),
-    registerComponent = require("core/component_registrator"),
-    ko = require("knockout");
+import $ from "jquery";
+import Editor from "ui/editor/editor";
+import ValidationGroup from "ui/validation_group";
+import ValidationEngine from "ui/validation_engine";
+import registerComponent from "core/component_registrator";
+import { isPromise } from "core/utils/type";
+import ko from "knockout";
+import { Deferred } from "core/utils/deferred";
 
-require("ui/button");
-require("integration/knockout");
+import "ui/button";
+import "integration/knockout";
 
 var FIXTURE_ELEMENT = $("<div id=qunit-fixture></div>").appendTo("body");
 
@@ -251,4 +253,39 @@ QUnit.test("T437697: dxValidationSummary - validator.focus is not a function", f
     } catch(e) {
         assert.ok(false, e);
     }
+});
+
+QUnit.test("Validator should be validated positively (async)", function(assert) {
+    // arrange
+    const vm = {
+        login: ko.observable("testuser").extend({
+            dxValidator: {
+                validationRules: [
+                    {
+                        type: "async",
+                        validationCallback: function() {
+                            const d = new Deferred();
+                            setTimeout(() => {
+                                d.resolve();
+                            }, 10);
+                            return d.promise();
+                        }
+                    }
+                ]
+            }
+        })
+    };
+    const done = assert.async();
+    const validator = vm.login.dxValidator,
+        result = validator.validate();
+
+    // assert
+    assert.strictEqual(result.isValid, true, "result.isValid === true");
+    assert.ok(isPromise(result.complete), "result.complete is a promise object");
+
+    result.complete.then((res) => {
+        assert.strictEqual(result.id, res.id, "result.id === res.id");
+        done();
+    });
+
 });

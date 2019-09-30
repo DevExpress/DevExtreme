@@ -698,10 +698,13 @@ const GroupConfig = Class.inherit({
             }
             this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID;
             this._validationInfo.result.isValid = this._validationInfo.result.status === VALIDATION_STATUS_VALID;
-            const res = extend({}, this._validationInfo.result, { complete: null });
-            this._raiseValidatedEvent(res);
-            this._validationInfo.deferred && this._validationInfo.deferred.resolve(res);
+            const res = extend({}, this._validationInfo.result, { complete: null }),
+                deferred = this._validationInfo.deferred;
             this._resetValidationInfo();
+            this._raiseValidatedEvent(res);
+            deferred && setTimeout(() => {
+                deferred.resolve(res);
+            });
         }
     },
 

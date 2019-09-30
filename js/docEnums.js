@@ -1051,6 +1051,15 @@
  * @enum {'multiple'|'single'}
  */
 
+/**
+ * @typedef {string} Enums.FileManagerToolbarItem
+ * @enum {'showNavPane'|'create'|'upload'|'refresh'|'viewSwitcher'|'download'|'move'|'copy'|'rename'|'delete'|'clear'|'separator'}
+ */
+
+/**
+ * @typedef {string} Enums.FileManagerContextMenuItem
+ * @enum {'create'|'upload'|'refresh'|'download'|'move'|'copy'|'rename'|'delete'}
+ */
 
 /**
  * @typedef {string} Enums.FileManagerItemViewMode
@@ -1144,4 +1153,9 @@
 /**
  * @typedef {string} Enums.ValidationStatus
  * @enum {'valid'|'invalid'|'pending'}
+ */
+
+/**
+ * @typedef {string} Enums.floatingActionButtonDirection
+ * @enum {'auto'|'up'|'down'}
  */

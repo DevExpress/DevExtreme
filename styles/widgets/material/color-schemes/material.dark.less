@@ -46,7 +46,7 @@
 * @name 40. Border color
 * @type color
 */
-@base-border-color: #515159;
+@base-border-color: fade(#ffffff, 13%);
 
 /**
 * @name 120. Border radius
@@ -88,7 +88,7 @@
 * @name 90. Hovered state background color
 * @type color
 */
-@base-hover-bg: lighten(@base-bg, 4%);
+@base-hover-bg: fade(#ffffff, 5%);
 
 /**
 * @name 100. Focused state text color
@@ -100,7 +100,7 @@
 * @name 110. Focused state background color
 * @type color
 */
-@base-focus-bg: lighten(@base-bg, 20%);
+@base-focus-bg: fade(#ffffff, 5%);
 
 @typography-bg: @base-bg;
 @typography-color: @base-text-color;
@@ -270,21 +270,31 @@
 * @name 30. Hovered state background color
 * @type color
 */
-@button-normal-hover-bg: darken(@button-normal-bg, 8%);
+@button-normal-hover-bg: lighten(@button-normal-bg, 8%);
 
 /**
 * @name 40. Focused state background color
 * @type color
 */
-@button-normal-focused-bg: darken(@button-normal-bg, 12%);
+@button-normal-focused-bg: lighten(@button-normal-bg, 8%);
 
 /**
 * @name 60. Active state background color
 * @type color
 */
-@button-normal-active-bg: darken(@button-normal-bg, 12%);
+@button-normal-active-bg: lighten(@button-normal-bg, 30%);
 
 @button-normal-icon-color: @button-icon-color;
+
+@button-normal-bg-inverted: lighten(@button-normal-bg, 100%);
+
+@button-normal-outlined-hover-bg: fade(@button-normal-bg-inverted, 8%);
+@button-normal-outlined-focused-bg: fade(@button-normal-bg-inverted, 8%);
+@button-normal-outlined-active-bg: fade(@button-normal-bg-inverted, 30%);
+
+@button-normal-text-hover-bg: fade(@button-normal-bg-inverted, 8%);
+@button-normal-text-focused-bg: fade(@button-normal-bg-inverted, 8%);
+@button-normal-text-active-bg: fade(@button-normal-bg-inverted, 30%);
 
 // Default button
 
@@ -304,20 +314,28 @@
 * @name 30. Hovered state background color
 * @type color
 */
-@button-default-hover-bg: darken(@button-default-bg, 8%);
+@button-default-hover-bg: lighten(@button-default-bg, 18%);
 
 /**
 * @name 40. Focused state background color
 * @type color
 */
-@button-default-focused-bg: darken(@button-default-bg, 12%);
+@button-default-focused-bg: lighten(@button-default-bg, 18%);
 
 /**
 * @name 60. Active state background color
 * @type color
 */
-@button-default-active-bg: darken(@button-default-focused-bg, 12%);
+@button-default-active-bg: lighten(@button-default-focused-bg, 40%);
 @button-default-icon-color: @button-inverted-icon-color;
+
+@button-default-outlined-hover-bg: fade(@button-default-bg, 8%);
+@button-default-outlined-focused-bg: fade(@button-default-bg, 8%);
+@button-default-outlined-active-bg: fade(@button-default-bg, 36%);
+
+@button-default-text-hover-bg: fade(@button-default-bg, 8%);
+@button-default-text-focused-bg: fade(@button-default-bg, 8%);
+@button-default-text-active-bg: fade(@button-default-bg, 36%);
 
 // Danger button
 
@@ -337,20 +355,28 @@
 * @name 40. Hovered state background color
 * @type color
 */
-@button-danger-hover-bg: darken(@button-danger-bg, 8%);
+@button-danger-hover-bg: lighten(@button-danger-bg, 18%);
 
 /**
 * @name 60. Focused state background color
 * @type color
 */
-@button-danger-focused-bg: darken(@button-danger-bg, 12%);
+@button-danger-focused-bg: lighten(@button-danger-bg, 18%);
 
 /**
 * @name 80. Active state background color
 * @type color
 */
-@button-danger-active-bg: darken(@button-danger-bg, 12%);
+@button-danger-active-bg: lighten(@button-danger-bg, 40%);
 @button-danger-icon-color: @button-inverted-icon-color;
+
+@button-danger-outlined-hover-bg: fade(@button-danger-bg, 8%);
+@button-danger-outlined-focused-bg: fade(@button-danger-bg, 8%);
+@button-danger-outlined-active-bg: fade(@button-danger-bg, 36%);
+
+@button-danger-text-hover-bg: fade(@button-danger-bg, 8%);
+@button-danger-text-focused-bg: fade(@button-danger-bg, 8%);
+@button-danger-text-active-bg: fade(@button-danger-bg, 36%);
 
 // Success button
 
@@ -370,20 +396,28 @@
 * @name 40. Hovered state background color
 * @type color
 */
-@button-success-hover-bg: darken(@button-success-bg, 8%);
+@button-success-hover-bg: lighten(@button-success-bg, 18%);
 
 /**
 * @name 60. Focused state background color
 * @type color
 */
-@button-success-focused-bg: darken(@button-success-bg, 12%);
+@button-success-focused-bg: lighten(@button-success-bg, 18%);
 
 /**
 * @name 80. Active state background color
 * @type color
 */
-@button-success-active-bg: darken(@button-success-bg, 12%);
+@button-success-active-bg: lighten(@button-success-bg, 40%);
 @button-success-icon-color: @button-inverted-icon-color;
+
+@button-success-outlined-hover-bg: fade(@button-success-bg, 8%);
+@button-success-outlined-focused-bg: fade(@button-success-bg, 8%);
+@button-success-outlined-active-bg: fade(@button-success-bg, 36%);
+
+@button-success-text-hover-bg: fade(@button-success-bg, 8%);
+@button-success-text-focused-bg: fade(@button-success-bg, 8%);
+@button-success-text-active-bg: fade(@button-success-bg, 36%);
 
 // Flat button
 
@@ -395,15 +429,73 @@
 
 // ButtonGroup
 
-@button-group-normal-selected-bg: darken(@button-normal-bg, 10%);
+// Normal Button
+
+/**
+* @name 10. Selected item text color
+* @type color
+*/
 @button-group-normal-selected-color: @base-inverted-text-color;
 
-@button-group-default-selected-bg: darken(@button-default-bg, 10%);
+/**
+* @name 20. Selected item background color
+* @type color
+*/
+@button-group-normal-selected-bg: fade(lighten(@button-normal-bg, 100%), 18%);
 
-@button-group-danger-selected-bg: darken(@button-danger-bg, 10%);
+@button-group-normal-selected-bg-hover: fade(@button-group-normal-selected-bg, 12%);
+@button-group-normal-selected-bg-focused: fade(@button-group-normal-selected-bg, 12%);
+
+// Default Button
+
+/**
+* @name 10. Selected item text color
+* @type color
+*/
+@button-group-default-selected-color: @base-inverted-text-color;
+
+/**
+* @name 20. Selected item background color
+* @type color
+*/
+@button-group-default-selected-bg: fade(@button-default-bg, 22%);
+
+@button-group-default-selected-bg-hover: fade(@button-group-default-selected-bg, 14%);
+@button-group-default-selected-bg-focused: fade(@button-group-default-selected-bg, 14%);
+
+// Danger Button
+
+/**
+* @name 10. Selected item text color
+* @type color
+*/
 @button-group-danger-selected-color: @base-inverted-text-color;
 
-@button-group-success-selected-bg: darken(@button-success-bg, 10%);
+/**
+* @name 20. Selected item background color
+* @type color
+*/
+@button-group-danger-selected-bg: fade(@button-danger-bg, 22%);
+
+@button-group-danger-selected-bg-hover: fade(@button-group-danger-selected-bg, 14%);
+@button-group-danger-selected-bg-focused: fade(@button-group-danger-selected-bg, 14%);
+
+// Success Button
+
+/**
+* @name 10. Selected item text color
+* @type color
+*/
+@button-group-success-selected-color: @base-inverted-text-color;
+
+/**
+* @name 20. Selected item background color
+* @type color
+*/
+@button-group-success-selected-bg: fade(@button-success-bg, 22%);
+
+@button-group-success-selected-bg-hover: fade(@button-group-success-selected-bg, 14%);
+@button-group-success-selected-bg-focused: fade(@button-group-success-selected-bg, 14%);
 
 // Checkbox
 
@@ -549,8 +641,9 @@
 * @name 50. Selected item state background color
 * @type color
 */
-@list-item-selected-bg: lighten(@base-bg, 12%);
-@list-item-focused-selected-bg: fade(@base-focus-bg, 70%);
+@list-item-selected-bg: fade(#6e6e80, 50%);
+@list-item-selected-hover-bg: fade(#6e6e80, 35%);
+@list-item-focused-selected-bg: fade(#6e6e80, 40%);
 
 @list-item-hover-color:  @base-hover-color;
 @list-item-selected-color: fade(@base-text-color, 100%);
@@ -987,7 +1080,7 @@
 */
 @datagrid-row-focused-bg: @base-accent;
 
-@datagrid-hover-bg: lighten(@datagrid-base-background-color, 5%);
+@datagrid-hover-bg: @base-hover-bg;
 @datagrid-row-hovered-color: @datagrid-base-color;
 
 /**
@@ -1408,7 +1501,8 @@
 @treeview-item-hover-color: @base-hover-color;
 @treeview-border-color: @base-border-color;
 @treeview-item-selected-color: @treeview-color;
-@treeview-item-selected-bg: lighten(@base-bg, 12%);
+@treeview-item-selected-bg: fade(#6e6e80, 50%);
+@treeview-item-selected-hover-bg: fade(#6e6e80, 40%);
 @treeview-spin-icon-color: @base-spin-icon-color;
 
 //TimeView

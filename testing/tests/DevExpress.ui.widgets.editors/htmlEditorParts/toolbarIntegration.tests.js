@@ -703,4 +703,29 @@ QUnit.module("Toolbar integration", {
             }
         }).dxHtmlEditor("instance");
     });
+
+    test("Toolbar should correctly update its dimensions after changing the width of the HtmlEditor", (assert) => {
+        const $container = $("#htmlEditor");
+        const instance = $container.dxHtmlEditor({
+            width: 1000,
+            toolbar: {
+                items: [
+                    "undo", "redo", "bold", "italic", "strike", "underline", "separator",
+                    "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                    "orderedList", "bulletList", "separator",
+                    "color", "background", "separator",
+                    "link", "image", "separator",
+                    "clear", "codeBlock", "blockquote"
+                ]
+            }
+        }).dxHtmlEditor("instance");
+
+        this.clock.tick();
+        instance.option("width", 100);
+        this.clock.tick();
+
+        const toolbarWidth = $container.find(`.${TOOLBAR_CLASS}`).width();
+        const beforeContainerWidth = $container.find(`.dx-toolbar-before`).width();
+        assert.ok(beforeContainerWidth <= toolbarWidth, "toolbar items fits the widget container");
+    });
 });

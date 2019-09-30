@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { isString } from "../../core/utils/type";
+import { isDefined, isString } from "../../core/utils/type";
+import { ensureDefined } from "../../core/utils/common";
 
 import Widget from "../widget/ui.widget";
 import ContextMenu from "../context_menu/ui.context_menu";
@@ -31,7 +32,7 @@ class FileManagerContextMenu extends Widget {
         this._contextMenu = this._createComponent($menu, ContextMenu, {
             cssClass: FILEMANAGER_CONTEXT_MEMU_CLASS,
             showEvent: "",
-            onItemClick: ({ itemData: { commandName } }) => this._onContextMenuItemClick(commandName),
+            onItemClick: ({ itemData: { name } }) => this._onContextMenuItemClick(name),
             onHidden: () => this._onContextMenuHidden()
         });
 
@@ -76,7 +77,7 @@ class FileManagerContextMenu extends Widget {
 
         const itemArray = contextMenuItems || this.option("items");
         itemArray.forEach(srcItem => {
-            const commandName = isString(srcItem) ? srcItem : srcItem.commandName;
+            const commandName = isString(srcItem) ? srcItem : srcItem.name;
             const item = this._configureItemByCommandName(commandName, srcItem, fileItems);
             if(this._isContextMenuItemAvailable(item, fileItems)) {
                 result.push(item);
@@ -86,14 +87,11 @@ class FileManagerContextMenu extends Widget {
         return result;
     }
 
-    _isContextMenuItemAvailable(item, fileItems) {
-        if(!this._isDefaultItem(item.commandName)) {
-            return item.visible;
+    _isContextMenuItemAvailable(menuItem, fileItems) {
+        if(!this._isDefaultItem(menuItem.name) || !menuItem._autoHide) {
+            return ensureDefined(menuItem.visible, true);
         }
-        if(item.visibilityMode === "manual") {
-            return item.visible;
-        }
-        return this._commandManager.isCommandAvailable(item.commandName, fileItems);
+        return this._commandManager.isCommandAvailable(menuItem.name, fileItems);
     }
 
     _isDefaultItem(commandName) {
@@ -120,13 +118,16 @@ class FileManagerContextMenu extends Widget {
         let result = this._createMenuItemByCommandName(commandName);
         const defaultConfig = DEFAULT_CONTEXT_MENU_ITEMS[commandName];
         extend(result, defaultConfig);
-        this._extendAttributes(result, item, ["visibilityMode", "beginGroup", "text", "icon"]);
-        if(result.visibilityMode === "manual") {
+        this._extendAttributes(result, item, ["visible", "beginGroup", "text", "icon"]);
+
+        if(!isDefined(result.visible)) {
+            result._autoHide = true;
+        } else {
             this._extendAttributes(result, item, ["visible", "disabled"]);
         }
 
-        if(commandName && !result.commandName) {
-            extend(result, { commandName });
+        if(commandName && !result.name) {
+            extend(result, { name: commandName });
         }
 
         return result;
@@ -135,7 +136,7 @@ class FileManagerContextMenu extends Widget {
     _createMenuItemByCommandName(commandName) {
         const { text, icon } = this._commandManager.getCommandByName(commandName);
         return {
-            commandName,
+            name: commandName,
             text,
             icon,
             onItemClick: () => this._onContextMenuItemClick(commandName)

@@ -206,26 +206,26 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("toolbar", {
-            generalItems: [
+            items: [
                 {
-                    commandName: "showDirsPanel",
+                    name: "showNavPane",
                     icon: "upload"
                 },
                 "upload",
                 {
-                    commandName: "create",
+                    name: "create",
                     locateInMenu: "always"
                 },
                 {
-                    commandName: "refresh",
+                    name: "refresh",
                     text: "Reinvigorate"
                 },
                 {
-                    commandName: "separator",
+                    name: "separator",
                     location: "after"
                 },
                 {
-                    commandName: "viewMode",
+                    name: "viewSwitcher",
                     location: "before"
                 }]
         });
@@ -264,16 +264,16 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("toolbar", {
-            generalItems: [
-                "showDirsPanel", "create", "upload", "refresh",
+            items: [
+                "showNavPane", "create", "upload", "refresh",
                 {
-                    commandName: "separator",
+                    name: "separator",
                     location: "after"
                 },
-                "viewMode",
+                "viewSwitcher",
                 {
                     ID: 42,
-                    commandName: "commandName",
+                    name: "commandName",
                     location: "after",
                     locateInMenu: "never",
                     visible: true,
@@ -299,15 +299,15 @@ QUnit.module("Toolbar", moduleConfig, () => {
         assert.equal(testClick.args[0][0].itemData.ID, 42, "custom attribute is available from onClick fuction");
 
         fileManagerInstance.option("toolbar", {
-            generalItems: [
-                "showDirsPanel", "create", "upload", "refresh",
+            items: [
+                "showNavPane", "create", "upload", "refresh",
                 {
-                    commandName: "separator",
+                    name: "separator",
                     location: "after"
                 },
-                "viewMode",
+                "viewSwitcher",
                 {
-                    commandName: "commandName",
+                    name: "commandName",
                     locateInMenu: "always",
                     visible: true,
                     disabled: true,
@@ -318,7 +318,7 @@ QUnit.module("Toolbar", moduleConfig, () => {
                         }
                 },
                 {
-                    commandName: "newCommand",
+                    name: "newCommand",
                     location: "after",
                     locateInMenu: "never",
                     visible: false,
@@ -363,19 +363,18 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         const fileManagerInstance = $("#fileManager").dxFileManager("instance");
         fileManagerInstance.option("toolbar", {
-            generalItems: [
-                "showDirsPanel", "create", "upload", "separator",
+            items: [
+                "showNavPane", "create", "upload", "separator",
                 {
-                    commandName: "move",
-                    visibilityMode: "manual",
+                    name: "move",
                     visible: true,
                     disabled: true
                 }, "refresh",
                 {
-                    commandName: "separator",
+                    name: "separator",
                     location: "after"
                 },
-                "viewMode"
+                "viewSwitcher"
             ]
         });
         this.clock.tick(400);
@@ -392,6 +391,51 @@ QUnit.module("Toolbar", moduleConfig, () => {
 
         let $toolbar = this.wrapper.getToolbar();
         assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), "file toolbar displayed");
+    });
+
+    test("itemView selectbox must show correct state", function(assert) {
+        createFileManager(false);
+        this.clock.tick(400);
+
+        const fileManagerInstance = $("#fileManager").dxFileManager("instance");
+        fileManagerInstance.option("itemView.mode", "thumbnails");
+        this.clock.tick(400);
+
+        let $selectBox = this.wrapper.getGeneralToolbarElements().last();
+        assert.equal($selectBox.val(), "Thumbnails View", "Thumbnails View");
+
+        $selectBox.trigger("dxclick");
+        this.clock.tick(400);
+        let detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(1);
+        $(detailsViewSelector).trigger("dxclick");
+        this.clock.tick(400);
+
+        $selectBox = this.wrapper.getGeneralToolbarElements().last();
+        assert.equal($selectBox.val(), "Details View", "Details View");
+
+        this.wrapper.findDetailsItem("File 1.txt").trigger("dxclick");
+        this.wrapper.getDetailsItemList().trigger("click");
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton("Rename").trigger("dxclick");
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput()
+            .val("New filename.txt")
+            .trigger("change");
+        this.wrapper.getDialogButton("Save").trigger("dxclick");
+        this.clock.tick(400);
+        assert.equal(this.wrapper.getDetailsItemName(0), "New filename.txt", "File renamed");
+
+        $selectBox = this.wrapper.getGeneralToolbarElements().last();
+        assert.equal($selectBox.val(), "Details View", "Details View");
+
+        $selectBox.trigger("dxclick");
+        this.clock.tick(400);
+        detailsViewSelector = this.wrapper.getToolbarViewSwitcherListItem(0);
+        $(detailsViewSelector).trigger("dxclick");
+        this.clock.tick(400);
+
+        $selectBox = this.wrapper.getGeneralToolbarElements().last();
+        assert.equal($selectBox.val(), "Thumbnails View", "Thumbnails View");
     });
 
 });

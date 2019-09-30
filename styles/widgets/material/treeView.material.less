@@ -131,6 +131,10 @@
         > .dx-treeview-item {
             color: @treeview-item-selected-color;
             background-color: @treeview-item-selected-bg;
+
+            &.dx-state-hover:not(.dx-state-focused) {
+                background-color: @treeview-item-selected-hover-bg;
+            }
         }
     }
 

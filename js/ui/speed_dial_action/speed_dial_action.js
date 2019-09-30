@@ -43,6 +43,13 @@ const SpeedDialAction = Widget.inherit({
             visible: true,
 
             /**
+            * @name dxSpeedDialActionOptions.index
+            * @type number
+            * @default 0
+            */
+            index: 0,
+
+            /**
             * @name dxSpeedDialActionOptions.width
             * @hidden
             */
@@ -97,6 +104,7 @@ const SpeedDialAction = Widget.inherit({
             case "icon":
             case "label":
             case "visible":
+            case "index":
                 initAction(this);
                 break;
             case "animation":
