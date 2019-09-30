@@ -308,16 +308,14 @@ var Button = Widget.inherit({
 
     _setDisabled: function(value) {
         this.option("disabled", value);
-        this._needValidate = !value;
     },
 
     _waitForValidationCompleting: function(complete) {
         complete.then((result) => {
             this._validationStatus = result.status;
+            this._setDisabled(false);
             if(this._validationStatus === "valid") {
                 this._$submitInput.get(0).click();
-            } else {
-                this._setDisabled(false);
             }
             return result;
         });
@@ -331,12 +329,13 @@ var Button = Widget.inherit({
                     const result = validationGroup.validate();
                     this._validationStatus = result.status;
                     if(this._validationStatus === "pending") {
+                        this._needValidate = false;
                         this._setDisabled(true);
                         this._waitForValidationCompleting(result.complete);
                     }
                 }
-            } else if(this._validationStatus !== "pending") {
-                this._setDisabled(false);
+            } else {
+                this._needValidate = true;
             }
             this._validationStatus !== "valid" && e.preventDefault();
             e.stopPropagation();
