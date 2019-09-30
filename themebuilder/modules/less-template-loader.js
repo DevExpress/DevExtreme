@@ -166,7 +166,8 @@ class LessTemplateLoader {
                     css: this._makeInfoHeader() + css,
                     swatchSelector: this.swatchSelector,
                     version: this.version,
-                    widgets: modulesHandler.bundledWidgets
+                    widgets: modulesHandler.bundledWidgets,
+                    unusedWidgets: modulesHandler.unusedWidgets
                 });
             }, error => {
                 reject(error);

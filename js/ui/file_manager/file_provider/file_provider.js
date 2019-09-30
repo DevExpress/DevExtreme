@@ -76,6 +76,12 @@ class FileProvider {
     abortFileUpload(fileData, chunksInfo, destinationDirectory) {
     }
 
+    downloadItems(items) {
+    }
+
+    getItemsContent(items) {
+    }
+
     getFileUploadChunkSize() {
         return DEFAULT_FILE_UPLOAD_CHUNK_SIZE;
     }

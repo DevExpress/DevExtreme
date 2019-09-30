@@ -580,7 +580,12 @@ const LayoutManager = Widget.inherit({
 
         var instance = this._createComponent($button, "dxButton", extend(defaultOptions, item.buttonOptions));
 
-        this._itemsRunTimeInfo.add(item, instance, item.guid, $container);
+        this._itemsRunTimeInfo.add({
+            item,
+            widgetInstance: instance,
+            guid: item.guid,
+            $itemContainer: $container
+        });
         this._addItemClasses($container, item.col);
 
         return $button;
@@ -634,11 +639,17 @@ const LayoutManager = Widget.inherit({
             template: that._getTemplateByFieldItem(item),
             isRequired: isRequired,
             helpID: helpID,
+            labelID: labelOptions.labelID,
             id: id,
             validationBoundary: that.option("validationBoundary")
         });
 
-        this._itemsRunTimeInfo.add(item, instance, item.guid, $container);
+        this._itemsRunTimeInfo.add({
+            item,
+            widgetInstance: instance,
+            guid: item.guid,
+            $itemContainer: $container
+        });
 
         const editorElem = $editor.children().first();
         const $validationTarget = editorElem.hasClass(TEMPLATE_WRAPPER_CLASS) ? editorElem.children().first() : editorElem;
@@ -677,6 +688,12 @@ const LayoutManager = Widget.inherit({
         return (!!item.helpText && !this._hasBrowserFlex()) || inArray(item.editorType, largeEditors) !== -1;
     },
 
+    _isLabelNeedId: function(item) {
+        const editorsRequiringIdForLabel = ["dxRadioGroup", "dxCheckBox", "dxLookup", "dxSlider", "dxRangeSlider", "dxSwitch"]; // TODO: support "dxCalendar"
+
+        return inArray(item.editorType, editorsRequiringIdForLabel) !== -1;
+    },
+
     _getLabelOptions: function(item, id, isRequired) {
         var labelOptions = extend(
             {
@@ -688,6 +705,10 @@ const LayoutManager = Widget.inherit({
             },
             item ? item.label : {}
         );
+
+        if(this._isLabelNeedId(item)) {
+            labelOptions.labelID = `dx-label-${new Guid()}`;
+        }
 
         if(!labelOptions.text && item.dataField) {
             labelOptions.text = inflector.captionize(item.dataField);
@@ -701,25 +722,29 @@ const LayoutManager = Widget.inherit({
     },
 
     _renderLabel: function(options) {
-        if(typeUtils.isDefined(options.text) && options.text.length > 0) {
-            var labelClasses = FIELD_ITEM_LABEL_CLASS + " " + FIELD_ITEM_LABEL_LOCATION_CLASS + options.location,
-                $label = $("<label>")
-                    .addClass(labelClasses)
-                    .attr("for", options.id),
-                $labelContent = $("<span>")
-                    .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
-                    .appendTo($label);
+        const { text, id, location, alignment, isRequired, labelID = null } = options;
+
+        if(typeUtils.isDefined(text) && text.length > 0) {
+            const labelClasses = FIELD_ITEM_LABEL_CLASS + " " + FIELD_ITEM_LABEL_LOCATION_CLASS + location;
+            const $label = $("<label>")
+                .addClass(labelClasses)
+                .attr("for", id)
+                .attr("id", labelID);
+
+            const $labelContent = $("<span>")
+                .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
+                .appendTo($label);
 
             $("<span>")
                 .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
-                .text(options.text)
+                .text(text)
                 .appendTo($labelContent);
 
-            if(options.alignment) {
-                $label.css("textAlign", options.alignment);
+            if(alignment) {
+                $label.css("textAlign", alignment);
             }
 
-            $labelContent.append(this._renderLabelMark(options.isRequired));
+            $labelContent.append(this._renderLabelMark(isRequired));
 
             return $label;
         }
@@ -784,6 +809,7 @@ const LayoutManager = Widget.inherit({
             template: options.template,
             name: options.name,
             helpID: options.helpID,
+            labelID: options.labelID,
             isRequired: options.isRequired
         };
 
@@ -879,6 +905,7 @@ const LayoutManager = Widget.inherit({
             try {
                 editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);
                 editorInstance.setAria("describedby", renderOptions.helpID);
+                editorInstance.setAria("labelledby", renderOptions.labelID);
                 editorInstance.setAria("required", renderOptions.isRequired);
 
                 if(themes.isMaterial()) {
@@ -1240,6 +1267,10 @@ const LayoutManager = Widget.inherit({
         if(responsiveBox) {
             return responsiveBox.option("currentScreenFactor") === responsiveBox.option("singleColumnScreen");
         }
+    },
+
+    getItemsRunTimeInfo: function() {
+        return this._itemsRunTimeInfo;
     }
 });
 

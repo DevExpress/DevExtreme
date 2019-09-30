@@ -464,4 +464,38 @@ QUnit.module("Dialogs", moduleConfig, () => {
         const firstTitle = $taskWrapper.children().children().first().text();
         assert.equal(firstTitle, testTitle, "title text was modified");
     });
+    test("resources editing", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.instance.option("editing.enabled", true);
+        this.clock.tick();
+        getGanttViewCore(this.instance).commandManager.showResourcesDialog.execute();
+        this.clock.tick();
+        const $dialog = $("body").find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, "dialog is shown");
+
+        let $resources = $dialog.find(".dx-list-item");
+        assert.equal($resources.length, resources.length, "dialog has all resources");
+
+        const $deleteButtons = $dialog.find(".dx-list-static-delete-button");
+        $deleteButtons.eq(0).trigger("dxclick");
+        $resources = $dialog.find(".dx-list-item");
+        assert.equal($resources.length, resources.length - 1, "first resource removed from list");
+
+        const newResourceText = "newResource";
+        const textBox = $dialog.find(".dx-textbox").eq(0).dxTextBox("instance");
+        textBox.option("text", newResourceText);
+        const $addButton = $dialog.find(".dx-button-has-text").eq(0);
+        $addButton.dxButton("instance").option("disabled", false);
+        $addButton.trigger("dxclick");
+        $resources = $dialog.find(".dx-list-item");
+        assert.equal($resources.length, resources.length, "added resource to list");
+
+        const $okButton = $dialog.find(".dx-popup-bottom").find(".dx-button").eq(0);
+        $okButton.trigger("dxclick");
+        this.clock.tick();
+        const modelResources = getGanttViewCore(this.instance).viewModel.resources.items;
+        assert.equal(modelResources[0].text, resources[1].text, "first resource removed from model");
+        assert.equal(modelResources[1].text, resources[2].text, "second resource moved");
+        assert.equal(modelResources[2].text, newResourceText, "new resource added");
+    });
 });

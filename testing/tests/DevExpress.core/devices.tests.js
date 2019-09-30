@@ -204,7 +204,7 @@ QUnit.test("method themes.ready calls a callback function after device setting a
 
     themes.ready(function() {
         assert.ok(devices.current().ios, "correct ios flag");
-        assert.equal(themes.current(), "ios7.default");
+        assert.equal(themes.current(), "generic.light");
 
         done();
     });

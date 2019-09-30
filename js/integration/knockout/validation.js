@@ -4,6 +4,7 @@ import Class from "../../core/class";
 import EventsMixin from "../../core/events_mixin";
 import ValidationEngine from "../../ui/validation_engine";
 import { Deferred } from "../../core/utils/deferred";
+import Guid from "../../core/guid";
 import ko from "knockout";
 
 const VALIDATION_STATUS_VALID = "valid",
@@ -26,9 +27,20 @@ const koDxValidator = Class.inherit({
         });
         this._validationInfo = {
             result: null,
-            deferred: null,
-            complete: null
+            deferred: null
         };
+    },
+
+    _updateValidationResult(result) {
+        if(!this._validationInfo.result || this._validationInfo.result.id !== result.id) {
+            this._validationInfo.result = extend({}, result);
+        } else {
+            for(let prop in result) {
+                if(prop !== "id" && prop !== "complete") {
+                    this._validationInfo.result[prop] = result[prop];
+                }
+            }
+        }
     },
 
     validate() {
@@ -38,8 +50,14 @@ const koDxValidator = Class.inherit({
             return currentResult;
         }
         let result = ValidationEngine.validate(value, this.validationRules, this.name);
+        result.id = new Guid().toString();
         this._applyValidationResult(result);
-        return result;
+        result.complete && result.complete.then((res) => {
+            if(res.id === this._validationInfo.result.id) {
+                this._applyValidationResult(res);
+            }
+        });
+        return this._validationInfo.result;
     },
 
     reset() {
@@ -57,23 +75,16 @@ const koDxValidator = Class.inherit({
 
     _applyValidationResult(result) {
         result.validator = this;
-        this._validationInfo.result = result;
-        this.target.dxValidator.isValid(result.isValid);
-        this.target.dxValidator.validationError(result.brokenRule);
-        this.target.dxValidator.validationErrors(result.brokenRules);
-        this.target.dxValidator.validationStatus(result.status);
+        this._updateValidationResult(result);
+        this.target.dxValidator.isValid(this._validationInfo.result.isValid);
+        this.target.dxValidator.validationError(this._validationInfo.result.brokenRule);
+        this.target.dxValidator.validationErrors(this._validationInfo.result.brokenRules);
+        this.target.dxValidator.validationStatus(this._validationInfo.result.status);
         if(result.status === VALIDATION_STATUS_PENDING) {
-            result.complete.then((res) => {
-                if(res === this._validationInfo.result) {
-                    this._applyValidationResult(res);
-                }
-                return res;
-            });
             if(!this._validationInfo.deferred) {
                 this._validationInfo.deferred = new Deferred();
-                this._validationInfo.complete = this._validationInfo.deferred.promise();
+                this._validationInfo.result.complete = this._validationInfo.deferred.promise();
             }
-            this._validationInfo.result.complete = this._validationInfo.complete;
             this.fireEvent("validating", [this._validationInfo.result]);
             return;
         }

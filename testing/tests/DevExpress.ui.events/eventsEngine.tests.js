@@ -198,6 +198,20 @@ QUnit.test("'focusin' and 'focus' events call element.focus, 'focusout' and 'blu
     focus.restore();
 });
 
+QUnit.test("focusin event bubbling", function(assert) {
+    var textBox = document.createElement("input");
+    var container = document.createElement(container);
+    var handlerSpy = sinon.spy();
+
+    container.appendChild(textBox);
+
+    eventsEngine.on(container, "focusin", handlerSpy);
+
+    eventsEngine.trigger(textBox, "focusin");
+
+    assert.equal(handlerSpy.callCount, 1);
+});
+
 QUnit.test("prevent triggered 'load' event bubbling to body", function(assert) {
     var done = assert.async();
     var image = document.createElement("img");

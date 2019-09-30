@@ -147,6 +147,14 @@
             height: @GANTT_TASK_HEIGHT;
             border: 1px solid darken(@base-accent, 10%);
             border-radius: @base-border-radius;
+
+            .dx-gantt-task-edit-progress {
+                border-color: transparent transparent darken(@base-accent, 10%) transparent;
+            }
+
+            .dx-gantt-task-edit-progress-status {
+                border-radius: @base-border-radius;
+            }
         }
     }
 
@@ -194,11 +202,11 @@
     }
 
     .dx-gantt-conn-v {
-        border-left: 1px solid @base-text-color;
+        border-left-color: @base-text-color;
     }
 
     .dx-gantt-conn-h {
-        border-top: 1px solid @base-text-color;
+        border-top-color: @base-text-color;
     }
 
     .dx-gantt-arrow {

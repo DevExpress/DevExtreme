@@ -1674,6 +1674,11 @@ module.exports = {
                         case "adaptColumnWidthByRatio":
                             args.handled = true;
                             break;
+                        case "dataSource":
+                            if(args.value !== args.previousValue && !this.option("columns") && (!Array.isArray(args.value) || !Array.isArray(args.previousValue))) {
+                                this._columns = [];
+                            }
+                            break;
                         case "columns":
                             args.handled = true;
                             if(args.name === args.fullName) {
@@ -2507,6 +2512,17 @@ module.exports = {
                         assignColumns(that, createColumnsFromOptions(that, columns));
                     }
                 },
+                _checkAsyncValidationRules: function() {
+                    const currentEditMode = this.option("editing.mode");
+                    if(currentEditMode !== "form" && currentEditMode !== "popup") {
+                        const hasAsyncRules = this._columns.some(function(col) {
+                            return (col.validationRules || []).some(rule => rule.type === "async");
+                        });
+                        if(hasAsyncRules) {
+                            errors.log("E1057", this.component.NAME, currentEditMode);
+                        }
+                    }
+                },
                 updateColumns: function(dataSource, forceApplying) {
                     var that = this,
                         sortParameters,
@@ -2521,6 +2537,9 @@ module.exports = {
                         groupParameters = dataSource ? dataSource.group() || [] : that.getGroupDataSourceParameters();
 
                         that._customizeColumns(that._columns);
+
+                        that._checkAsyncValidationRules();
+
                         updateIndexes(that);
 
                         var columns = that._columns;

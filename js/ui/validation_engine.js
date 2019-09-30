@@ -584,6 +584,7 @@ const GroupConfig = Class.inherit({
              */
             complete: null
         };
+        this._unsubscribeFromAllChangeEvents();
         this._pendingValidators = [];
         this._resetValidationInfo();
         each(this.validators, (_, validator) => {
@@ -632,8 +633,8 @@ const GroupConfig = Class.inherit({
         }
         if(!this._validationInfo.deferred) {
             this._validationInfo.deferred = new Deferred();
+            this._validationInfo.result.complete = this._validationInfo.deferred.promise();
         }
-        this._validationInfo.result.complete = this._validationInfo.deferred.promise();
     },
 
     _addPendingValidator(validator) {
@@ -647,7 +648,7 @@ const GroupConfig = Class.inherit({
 
     _removePendingValidator(validator) {
         const index = inArray(validator, this._pendingValidators);
-        if(index >= -1) {
+        if(index >= 0) {
             this._pendingValidators.splice(index, 1);
         }
     },
@@ -697,10 +698,13 @@ const GroupConfig = Class.inherit({
             }
             this._validationInfo.result.status = this._validationInfo.result.brokenRules.length === 0 ? VALIDATION_STATUS_VALID : VALIDATION_STATUS_INVALID;
             this._validationInfo.result.isValid = this._validationInfo.result.status === VALIDATION_STATUS_VALID;
-            const res = extend({}, this._validationInfo.result, { complete: null });
-            this._raiseValidatedEvent(res);
-            this._validationInfo.deferred && this._validationInfo.deferred.resolve(res);
+            const res = extend({}, this._validationInfo.result, { complete: null }),
+                deferred = this._validationInfo.deferred;
             this._resetValidationInfo();
+            this._raiseValidatedEvent(res);
+            deferred && setTimeout(() => {
+                deferred.resolve(res);
+            });
         }
     },
 

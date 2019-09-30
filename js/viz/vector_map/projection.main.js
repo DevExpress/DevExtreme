@@ -104,8 +104,8 @@ Projection.prototype = {
         that._x0 = canvas.left + width / 2;
         that._y0 = canvas.top + height / 2;
 
-        const min = that.project(engine.min());
-        const max = that.project(engine.max());
+        const min = [that.project([engine.min()[0], 0])[0], that.project([0, engine.min()[1]])[1]];
+        const max = [that.project([engine.max()[0], 0])[0], that.project([0, engine.max()[1]])[1]];
 
         const screenAR = width / height;
         let boundsAR = _abs(max[0] - min[0]) / _abs(max[1] - min[1]);

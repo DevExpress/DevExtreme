@@ -3,6 +3,7 @@ import renderer from "core/renderer";
 import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerEvents from "events/pointer";
+import { Deferred } from "core/utils/deferred";
 
 QUnit.testStart(function() {
     var markup =
@@ -6906,6 +6907,42 @@ QUnit.test("Changing the current row data in the setCellValue should not be appl
     assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(2).val(), "555555");
 });
 
+QUnit.test("Cell validating is setCellValue is set and editing mode is form", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $('#container'),
+        $targetInput;
+
+    that.options.editing = {
+        mode: "form",
+        allowUpdating: true
+    };
+    that.options.columns[0] = {
+        dataField: "name",
+        setCellValue: (newData, value) => newData[this.dataField] = value,
+        validationRules: [{
+            type: "custom",
+            validationCallback: () => { return false; }
+        }]
+    };
+
+    rowsView.render($testElement);
+    that.columnsController.init();
+
+    that.editingController.editRow(0);
+
+    $targetInput = $testElement.find('tbody > tr').first().find('input').first();
+
+    // act
+    $targetInput.val('Test name');
+    $targetInput.trigger('change');
+    this.clock.tick();
+
+    // assert
+    assert.ok($testElement.find("tbody > tr").first().find(".dx-texteditor").first().hasClass("dx-invalid"));
+});
+
 QUnit.test('cellValue', function(assert) {
     // arrange
     var that = this,
@@ -9537,6 +9574,51 @@ QUnit.test("Show error rows on save inserted rows when set validate in column an
     assert.ok(testElement.find('tbody > tr').eq(5).hasClass("dx-error-row"), "has error row 3");
 });
 
+QUnit.test("Show error row on save inserted row when promise is used in rowValidating", function(assert) {
+    // arrange
+    let rowsView = this.rowsView,
+        testElement = $('#container'),
+        errorText = "Test",
+        $errorRow;
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: "row"
+        },
+        columns: ['name'],
+        onRowValidating: function(options) {
+            const deferred = new Deferred();
+            options.promise = deferred.promise();
+            setTimeout(function() {
+                options.errorText = errorText;
+                options.isValid = false;
+                deferred.resolve();
+            }, 10);
+        }
+    });
+
+    // act
+    this.addRow();
+
+    // assert
+    assert.equal(testElement.find('tbody > tr').length, 5, "count rows");
+
+    // act
+    this.saveEditData();
+    $errorRow = rowsView.element().find("tr.dx-error-row");
+
+    // assert
+    assert.equal($errorRow.length, 0, "error row is not displayed before resolving the promise");
+
+    this.clock.tick(10);
+    $errorRow = rowsView.element().find("tr.dx-error-row");
+
+    assert.equal($errorRow.length, 1, "error row is displayed");
+    assert.equal($errorRow.find(".dx-error-message").text(), errorText, "errorText is correct");
+});
+
 // T241920
 QUnit.testInActiveWindow("Cell editor invalid value don't miss focus on saveEditData", function(assert) {
     // arrange
@@ -10974,6 +11056,114 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
     // assert
     assert.equal(that.editingController._editRowIndex, 0, "first row is still editing");
     assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
+});
+
+QUnit.test("It's impossible to save new data when editing form is invalid (async)", function(assert) {
+    // arrange
+    this.clock.restore();
+    let rowsView = this.rowsView,
+        testElement = $('#container'),
+        $formRow,
+        inputElement,
+        done = assert.async();
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: "form",
+            allowUpdating: true,
+        },
+        columns: [{
+            dataField: 'age',
+            validationRules: [{
+                type: 'async',
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(function() {
+                        d.reject();
+                    }, 10);
+                    return d.promise();
+                }
+            }]
+        }]
+    });
+
+    // act
+    this.editRow(0);
+    $formRow = rowsView.getRow(0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger('change');
+    this.saveEditData().done(() => {
+        assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+        assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
+        done();
+    });
+
+    // assert
+    assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+    assert.equal($formRow.find(".dx-validation-pending").length, 1, "There is one pending editor in first row");
+});
+
+QUnit.test("Only valid data is saved (async)", function(assert) {
+    // arrange
+    this.clock.restore();
+    let rowsView = this.rowsView,
+        testElement = $('#container'),
+        $formRow,
+        inputElement,
+        done = assert.async();
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "form",
+            allowUpdating: true,
+        },
+        columns: [{
+            dataField: 'age',
+            validationRules: [{
+                type: 'async',
+                validationCallback: function(params) {
+                    const d = new Deferred();
+                    setTimeout(function() {
+                        params.value === 1 ? d.resolve(true) : d.reject();
+                    }, 10);
+                    return d.promise();
+                }
+            }]
+        }]
+    });
+
+    // act
+    this.editRow(0);
+    $formRow = rowsView.getRow(0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger('change');
+
+    this.saveEditData().done(() => {
+        assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+        assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
+
+        inputElement.val("1");
+        inputElement.trigger('change');
+        this.saveEditData().done(() => {
+            assert.equal(this.editingController._editRowIndex, -1, "there is no editing row");
+            const $row = rowsView.getRow(0);
+            assert.ok($row.hasClass("dx-data-row"), "The form was closed");
+            done();
+        });
+    });
+
+    // assert
+    assert.equal(this.editingController._editRowIndex, 0, "first row is still editing");
+    assert.equal($formRow.find(".dx-validation-pending").length, 1, "There is one pending editor in first row");
 });
 
 // T506863

@@ -17,7 +17,8 @@
                 require("jquery"),
                 require("core/templates/template_engine_registry").setTemplateEngine,
                 aspnet,
-                function() { return require("ui/widget/ui.errors"); }
+                function() { return require("ui/widget/ui.errors"); },
+                function() { return require("../../helpers/ajaxMock.js"); }
             );
         });
     } else {
@@ -25,10 +26,11 @@
             window.jQuery,
             DevExpress.setTemplateEngine,
             DevExpress.aspnet,
-            function() { return window.DevExpress_ui_widget_errors; }
+            function() { return window.DevExpress_ui_widget_errors; },
+            function() { return window.ajaxMock; }
         );
     }
-}(function($, setTemplateEngine, aspnet, errorsAccessor) {
+}(function($, setTemplateEngine, aspnet, errorsAccessor, ajaxMockAccessor) {
 
     if(QUnit.urlParams["nojquery"]) {
         return;
@@ -480,6 +482,101 @@
             setTemplateEngine("default");
             delete window.__createButton;
         }
+    });
+
+    QUnit.module("Remote validation", {
+        beforeEach: function() {
+            this.ajaxMock = ajaxMockAccessor();
+        },
+        afterEach: function() {
+            this.ajaxMock.clear();
+        }
+    }, function() {
+
+        QUnit.test("sendValidationRequest - ajax options", function(assert) {
+            assert.expect(4);
+
+            this.ajaxMock.setup({
+                url: "ctrl/action",
+                callback: function(options) {
+                    assert.equal(options.url, "ctrl/action");
+                    assert.deepEqual(options.data, { prop: "val" });
+                    assert.equal(options.dataType, "json");
+                    assert.equal(options.method, "POST");
+                }
+            });
+
+            aspnet.sendValidationRequest(
+                "prop",
+                "val",
+                "ctrl/action",
+                "POST"
+            );
+        });
+
+        [true, false].forEach(function(responseValue) {
+            QUnit.test("sendValidationRequest - '" + responseValue + "' response", function(assert) {
+                var done = assert.async();
+
+                this.ajaxMock.setup({
+                    url: "url",
+                    responseText: responseValue
+                });
+
+                aspnet.sendValidationRequest(
+                    "prop",
+                    "val",
+                    "url"
+                ).done(function(response) {
+                    assert.strictEqual(response, responseValue);
+                    done();
+                });
+            });
+        });
+
+        QUnit.test("sendValidationRequest - string response", function(assert) {
+            var done = assert.async();
+
+            this.ajaxMock.setup({
+                url: "url",
+                responseText: "custom error"
+            });
+
+            aspnet.sendValidationRequest(
+                "prop",
+                "val",
+                "url"
+            ).done(function(response) {
+                assert.deepEqual(response, {
+                    isValid: false,
+                    message: "custom error"
+                });
+                done();
+            });
+
+        });
+
+        QUnit.test("sendValidationRequest - server error response", function(assert) {
+            var done = assert.async();
+
+            this.ajaxMock.setup({
+                url: "url",
+                status: 0,
+                responseText: "server error"
+            });
+
+            aspnet.sendValidationRequest(
+                "prop",
+                "val",
+                "url"
+            ).fail(function(response) {
+                assert.deepEqual(response, {
+                    isValid: false,
+                    message: "server error"
+                });
+                done();
+            });
+        });
     });
 
 }));

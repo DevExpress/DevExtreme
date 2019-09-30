@@ -7,7 +7,7 @@ export async function createWidget(widgetName: string, options: any, disableAnim
         {
             dependencies:
             {
-                widgetName: widgetName,
+                widgetName,
                 options
             }
         }

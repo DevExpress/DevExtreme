@@ -77,7 +77,6 @@ class BaseRenderingStrategy {
 
         var positionArray = this._getSortedPositions(map),
             resultPositions = this._getResultPositions(positionArray);
-
         return this._getExtendedPositionMap(map, resultPositions);
     }
 
@@ -321,7 +320,7 @@ class BaseRenderingStrategy {
         // NOTE: ie & ff pixels
         var result = first - second;
 
-        return isSomeEdge || Math.abs(result) > 1 ? result : 0;
+        return isSomeEdge || Math.abs(result) > 0.8 ? result : 0;
     }
 
     _getResultPositions(sortedArray) {

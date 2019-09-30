@@ -166,8 +166,8 @@ class Diagram extends Widget {
             const $tooltip = $("<div>")
                 .html($target.attr("title"))
                 .appendTo($container);
-            this._tooltipInstance = this._createComponent($tooltip, Tooltip, {
-                target: $target,
+            this._createComponent($tooltip, Tooltip, {
+                target: $target.get(0),
                 showEvent: "mouseenter",
                 hideEvent: "mouseleave",
                 position: "top",
@@ -413,6 +413,7 @@ class Diagram extends Widget {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;
 
         const { DiagramCommand, ConnectorLineOption, ConnectorLineEnding } = getDiagram();
+        let lineOptionGetter, lineOptionSetter, startLineEndingGetter, startLineEndingSetter, endLineEndingGetter, endLineEndingSetter;
         const data = {
             nodeDataSource: this._nodes,
             edgeDataSource: this._edges,
@@ -483,11 +484,8 @@ class Diagram extends Widget {
 
                 getText: this._createOptionGetter("edges.textExpr"),
                 setText: this._createOptionSetter("edges.textExpr"),
-                getLineOption: function(obj) {
-                    var getter = this._createOptionGetter("edges.lineTypeExpr");
-                    if(!getter) return;
-
-                    var lineType = getter(obj);
+                getLineOption: (lineOptionGetter = this._createOptionGetter("edges.lineTypeExpr")) && function(obj) {
+                    var lineType = lineOptionGetter(obj);
                     switch(lineType) {
                         case "straight":
                             return ConnectorLineOption.Straight;
@@ -495,10 +493,7 @@ class Diagram extends Widget {
                             return ConnectorLineOption.Orthogonal;
                     }
                 }.bind(this),
-                setLineOption: function(obj, value) {
-                    var setter = this._createOptionSetter("edges.lineTypeExpr");
-                    if(!setter) return;
-
+                setLineOption: (lineOptionSetter = this._createOptionSetter("edges.lineTypeExpr")) && function(obj, value) {
                     switch(value) {
                         case ConnectorLineOption.Straight:
                             value = "straight";
@@ -507,13 +502,10 @@ class Diagram extends Widget {
                             value = "orthogonal";
                             break;
                     }
-                    setter(obj, value);
+                    lineOptionSetter(obj, value);
                 }.bind(this),
-                getStartLineEnding: function(obj) {
-                    var getter = this._createOptionGetter("edges.fromLineEndExpr");
-                    if(!getter) return;
-
-                    var lineType = getter(obj);
+                getStartLineEnding: (startLineEndingGetter = this._createOptionGetter("edges.fromLineEndExpr")) && function(obj) {
+                    var lineType = startLineEndingGetter(obj);
                     switch(lineType) {
                         case "arrow":
                             return ConnectorLineEnding.Arrow;
@@ -521,10 +513,7 @@ class Diagram extends Widget {
                             return ConnectorLineEnding.None;
                     }
                 }.bind(this),
-                setStartLineEnding: function(obj, value) {
-                    var setter = this._createOptionSetter("edges.fromLineEndExpr");
-                    if(!setter) return;
-
+                setStartLineEnding: (startLineEndingSetter = this._createOptionSetter("edges.fromLineEndExpr")) && function(obj, value) {
                     switch(value) {
                         case ConnectorLineEnding.Arrow:
                             value = "arrow";
@@ -533,13 +522,10 @@ class Diagram extends Widget {
                             value = "none";
                             break;
                     }
-                    setter(obj, value);
+                    startLineEndingSetter(obj, value);
                 }.bind(this),
-                getEndLineEnding: function(obj) {
-                    var getter = this._createOptionGetter("edges.toLineEndExpr");
-                    if(!getter) return;
-
-                    var lineType = getter(obj);
+                getEndLineEnding: (endLineEndingGetter = this._createOptionGetter("edges.toLineEndExpr")) && function(obj) {
+                    var lineType = endLineEndingGetter(obj);
                     switch(lineType) {
                         case "none":
                             return ConnectorLineEnding.None;
@@ -547,10 +533,7 @@ class Diagram extends Widget {
                             return ConnectorLineEnding.Arrow;
                     }
                 }.bind(this),
-                setEndLineEnding: function(obj, value) {
-                    var setter = this._createOptionSetter("edges.toLineEndExpr");
-                    if(!setter) return;
-
+                setEndLineEnding: (endLineEndingSetter = this._createOptionSetter("edges.toLineEndExpr")) && function(obj, value) {
                     switch(value) {
                         case ConnectorLineEnding.Arrow:
                             value = "arrow";
@@ -559,7 +542,7 @@ class Diagram extends Widget {
                             value = "none";
                             break;
                     }
-                    setter(obj, value);
+                    endLineEndingSetter(obj, value);
                 }.bind(this)
             },
             layoutParameters: this._getDataBindingLayoutParameters()

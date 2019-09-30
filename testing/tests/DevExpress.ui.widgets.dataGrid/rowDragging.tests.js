@@ -65,7 +65,6 @@ var moduleConfig = {
             dataSource: generateData(10),
             columns: ["field1", "field2", "field3"],
             rowDragging: {
-                enabled: true,
                 allowReordering: true
             }
         };
@@ -149,7 +148,7 @@ QUnit.test("Draggable element (grid) - checking options", function(assert) {
         },
         loadingTimeout: undefined,
         rowDragging: {
-            enabled: true,
+            allowReordering: true,
             showDragIcons: undefined
         }
     }, "options");
@@ -231,7 +230,7 @@ QUnit.test("'rowDragging' option changing", function(assert) {
     let $testElement = $("#container");
 
     this.options.rowDragging = {
-        enabled: false
+        allowReordering: false
     };
 
     let rowsView = this.createRowsView();
@@ -248,9 +247,9 @@ QUnit.test("'rowDragging' option changing", function(assert) {
     pointer.up();
 
     this.options.rowDragging = {
-        enabled: true,
         allowReordering: true
     };
+
     rowsView.optionChanged({ name: "rowDragging" });
 
     // act
@@ -269,7 +268,7 @@ QUnit.test("Dragging row to the last position - row should be before the freespa
         $testElement = $("#container");
 
     this.options.dataSource = this.options.dataSource.slice(0, 3);
-    this.options.rowDragging.onDragEnd = function(e) { e.cancel = false; };
+    this.options.rowDragging.moveItemOnDrop = true;
 
     rowsView = this.createRowsView();
     rowsView.render($testElement);
@@ -291,6 +290,46 @@ QUnit.test("Dragging row to the last position - row should be before the freespa
     assert.ok($rowElements.eq(3).hasClass("dx-freespace-row"), "freespace row");
 });
 
+QUnit.test("Sortable should have height if dataSource is empty", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    this.options.dataSource = [];
+
+    rowsView = this.createRowsView();
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    assert.equal($("#container").find(".dx-sortable").height(), 100);
+});
+
+QUnit.test("Dragging row when allowDropInsideItem is true", function(assert) {
+    // arrange
+    let $draggableElement,
+        $placeholderElement,
+        $testElement = $("#container");
+
+    this.options.rowDragging = {
+        allowDropInsideItem: true
+    };
+
+    let rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 50);
+
+    // assert
+    $draggableElement = $("body").children(".dx-sortable-dragging");
+    $placeholderElement = $("body").children(".dx-sortable-placeholder.dx-sortable-placeholder-inside");
+    assert.strictEqual($draggableElement.length, 1, "there is dragging element");
+    assert.strictEqual($placeholderElement.length, 1, "placeholder");
+    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
+});
+
 
 QUnit.module("Handle", $.extend({}, moduleConfig, {
     beforeEach: function() {
@@ -299,7 +338,6 @@ QUnit.module("Handle", $.extend({}, moduleConfig, {
             dataSource: generateData(10),
             columns: ["field1", "field2", "field3"],
             rowDragging: {
-                enabled: true,
                 allowReordering: true
             }
         };
@@ -345,7 +383,7 @@ QUnit.test("Show handle when changing the 'rowDragging.showDragIcons' option", f
         $testElement = $("#container");
 
     this.options.rowDragging = {
-        enabled: false
+        allowReordering: false
     };
 
     rowsView = createRowsView.call(this);
@@ -358,7 +396,6 @@ QUnit.test("Show handle when changing the 'rowDragging.showDragIcons' option", f
 
     // act
     this.options.rowDragging = {
-        enabled: true,
         showDragIcons: true,
         allowReordering: true
     };
@@ -367,5 +404,6 @@ QUnit.test("Show handle when changing the 'rowDragging.showDragIcons' option", f
     // assert
     $handleElement = $(rowsView.getRowElement(0)).children().first();
     assert.ok($handleElement.hasClass("dx-command-drag"), "there is handle");
+    assert.ok($handleElement.hasClass("dx-cell-focus-disabled"), "cell focus disabled for handle");
     assert.strictEqual($handleElement.find(".dx-datagrid-drag-icon").length, 1, "there is handle icon");
 });

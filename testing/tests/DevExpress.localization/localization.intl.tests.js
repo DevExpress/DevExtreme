@@ -1,7 +1,10 @@
 import sharedTests from "./sharedParts/localization.shared.js";
 import dateLocalization from "localization/date";
 import numberLocalization from "localization/number";
+import intlDateLocalization from "localization/intl/date";
+import intlNumberLocalization from "localization/intl/number";
 import { locale } from "localization/core";
+import { disableIntl } from "localization";
 import config from "core/config";
 
 if(Intl.__disableRegExpRestore) {
@@ -9,31 +12,32 @@ if(Intl.__disableRegExpRestore) {
 }
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
+const patchPolyfillResults = () => {
+    dateLocalization.inject({
+        format: function(value, format) {
+            // NOTE: IntlPolyfill uses CLDR data, so it formats this format with ` at `, but real browser`s Intl uses `, ` separator.
+            let result = this.callBase.apply(this, arguments);
+            if(typeof result === "string") {
+                result = result && result.replace(" at ", ", ");
+            }
+            return result;
+        }
+    });
+
+    numberLocalization.inject({
+        format: function(value, format) {
+            // NOTE: IntlPolifill rounding bug. In real Intl it works OK.
+            let result = this.callBase.apply(this, arguments);
+            if(value === 4.645 && format.type === "fixedPoint" && format.precision === 2 && result === "4.64") {
+                result = "4.65";
+            }
+            return result;
+        }
+    });
+};
 
 QUnit.module("Intl localization", {
-    before: () => {
-        dateLocalization.inject({
-            format: function(value, format) {
-                // NOTE: IntlPolyfill uses CLDR data, so it formats this format with ` at `, but real browser`s Intl uses `, ` separator.
-                let result = this.callBase.apply(this, arguments);
-                if(typeof result === "string") {
-                    result = result && result.replace(" at ", ", ");
-                }
-                return result;
-            }
-        });
-
-        numberLocalization.inject({
-            format: function(value, format) {
-                // NOTE: IntlPolifill rounding bug. In real Intl it works OK.
-                let result = this.callBase.apply(this, arguments);
-                if(value === 4.645 && format.type === "fixedPoint" && format.precision === 2 && result === "4.64") {
-                    result = "4.65";
-                }
-                return result;
-            }
-        });
-    }
+    before: patchPolyfillResults
 }, () => {
     sharedTests();
 
@@ -701,4 +705,31 @@ QUnit.module("Intl localization", {
         }
     });
 
+    QUnit.module("Fallback strategy", {
+        afterEach: () => {
+            numberLocalization.resetInjection();
+            dateLocalization.resetInjection();
+            numberLocalization.inject(intlNumberLocalization);
+            dateLocalization.inject(intlDateLocalization);
+            patchPolyfillResults();
+        }
+    });
+
+    QUnit.test("disableIntl", assert => {
+        disableIntl();
+        assert.equal(numberLocalization.engine(), "base");
+        assert.equal(dateLocalization.engine(), "base");
+
+        numberLocalization.inject({
+            engine: () => "globalize"
+        });
+        dateLocalization.inject({
+            engine: () => "globalize"
+        });
+        disableIntl();
+
+        assert.equal(numberLocalization.engine(), "globalize");
+        assert.equal(dateLocalization.engine(), "globalize");
+
+    });
 });

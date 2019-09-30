@@ -1,9 +1,11 @@
+import $ from "../../../core/renderer";
 import ajax from "../../../core/utils/ajax";
 import { ensureDefined, noop } from "../../../core/utils/common";
 import Guid from "../../../core/guid";
 import { getWindow } from "../../../core/utils/window";
 import { each } from "../../../core/utils/iterator";
 import { Deferred } from "../../../core/utils/deferred";
+import eventsEngine from "../../../events/core/events_engine";
 
 import { FileProvider } from "./file_provider";
 import { compileGetter } from "../../../core/utils/data";
@@ -121,6 +123,61 @@ class WebApiFileProvider extends FileProvider {
 
     abortFileUpload(fileData, chunksInfo, destinationDirectory) {
         return this._executeRequest("AbortUpload", { uploadId: chunksInfo.customData.uploadId });
+    }
+
+    downloadItems(items) {
+        const args = this._getDownloadArgs(items);
+
+        const $form = $("<form>")
+            .css({ display: "none" })
+            .attr({
+                method: "post",
+                action: args.url,
+                enctype: "multipart/form-data"
+            });
+
+        ["command", "arguments"].forEach(name => {
+            $("<input>").attr({
+                type: "hidden",
+                name,
+                value: args[name]
+            }).appendTo($form);
+        });
+
+        $form.appendTo("body");
+
+        eventsEngine.trigger($form, "submit");
+
+        if(eventsEngine.trigger($form, "submit")) {
+            $form.remove();
+        }
+    }
+
+    getItemsContent(items) {
+        const args = this._getDownloadArgs(items);
+
+        const formData = new window.FormData();
+        formData.append("command", args.command);
+        formData.append("arguments", args.arguments);
+
+        return ajax.sendRequest({
+            url: args.url,
+            method: "POST",
+            responseType: "arraybuffer",
+            data: formData,
+            cache: false
+        });
+    }
+
+    _getDownloadArgs(items) {
+        const pathInfoList = items.map(item => item.getFullPathInfo());
+        const args = { pathInfoList };
+        const argsStr = JSON.stringify(args);
+        return {
+            url: this._endpointUrl,
+            arguments: argsStr,
+            command: "Download"
+        };
     }
 
     _getItemsIds(items) {

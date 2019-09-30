@@ -6,6 +6,7 @@ class ModulesHandler {
         this.widgets = (widgetsList || []).map(w => w.toLowerCase());
 
         this.bundledWidgets = [];
+        this.unusedWidgets = [];
     }
 
     getWidgetFromImport(importString) {
@@ -62,6 +63,8 @@ class ModulesHandler {
                         this.bundledWidgets.push(widget.name);
                     }
                 });
+
+                this.unusedWidgets = this.widgets.filter(w => this.bundledWidgets.indexOf(w) < 0);
             } else {
                 this.bundledWidgets = availableWidgets.map(w => w.name);
             }

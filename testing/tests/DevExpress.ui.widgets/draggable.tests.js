@@ -278,7 +278,11 @@ QUnit.test("'dx-state-disabled' class (T284305)", function(assert) {
 
 QUnit.test("onDrop - check args", function(assert) {
     // arrange
-    let onDropSpy = sinon.spy();
+    let onDropSpy = sinon.spy(function(e) {
+        if(e.fromComponent !== e.toComponent) {
+            $(e.element).append(e.itemElement);
+        }
+    });
 
     let draggable1 = this.createDraggable({
         group: "shared"
@@ -302,15 +306,21 @@ QUnit.test("onDrop - check args", function(assert) {
 
 QUnit.test("onDrop - check args when clone is true", function(assert) {
     // arrange
-    let onDropSpy = sinon.spy();
+    let onDropSpy = sinon.spy(function(e) {
+        if(e.fromComponent !== e.toComponent) {
+            $(e.element).append(e.itemElement);
+        }
+    });
 
     let draggable1 = this.createDraggable({
         group: "shared",
+        data: "x",
         clone: true
     });
 
     let draggable2 = this.createDraggable({
         group: "shared",
+        data: "y",
         onDrop: onDropSpy
     }, $("#items"));
 
@@ -320,8 +330,10 @@ QUnit.test("onDrop - check args when clone is true", function(assert) {
     // assert
     assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
     assert.deepEqual($(onDropSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
-    assert.strictEqual(onDropSpy.getCall(0).args[0].toComponent, draggable2, "component");
-    assert.strictEqual(onDropSpy.getCall(0).args[0].fromComponent, draggable1, "sourceComponent");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].fromComponent, draggable1, "fromComponent");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].toComponent, draggable2, "toComponent");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].fromData, "x", "fromData");
+    assert.strictEqual(onDropSpy.getCall(0).args[0].toData, "y", "toData");
     assert.strictEqual($(draggable2.element()).children("#draggable").length, 1, "dropped item");
 });
 
@@ -352,6 +364,7 @@ QUnit.test("onDragStart - add item data to event arguments", function(assert) {
         onDragStartSpy = sinon.spy((e) => { e.itemData = itemData; });
 
     let draggable = this.createDraggable({
+        data: "x",
         onDragStart: onDragStartSpy
     });
 
@@ -360,7 +373,8 @@ QUnit.test("onDragStart - add item data to event arguments", function(assert) {
 
     // assert
     assert.strictEqual(onDragStartSpy.callCount, 1, "onDragStart is called");
-    assert.deepEqual(draggable.option("itemData"), itemData, "itemData");
+    assert.deepEqual(onDragStartSpy.getCall(0).args[0].fromData, "x", "fromData arg");
+    assert.deepEqual(draggable.option("itemData"), itemData, "itemData option");
 });
 
 QUnit.test("onDrop - check itemData arg", function(assert) {

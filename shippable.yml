@@ -21,6 +21,7 @@ env:
     - TARGET=test BROWSER=firefox CONSTEL=viz
     - TARGET=test_functional COMPONENT=dataGrid
     - TARGET=test_functional COMPONENT=scheduler
+    - TARGET=test_functional COMPONENT=editors
     - TARGET=test_themebuilder
 
 build:

@@ -85,8 +85,8 @@ class FileManager extends Widget {
         const $toolbar = $("<div>").appendTo(this._$wrapper);
         this._toolbar = this._createComponent($toolbar, FileManagerToolbar, {
             commandManager: this._commandManager,
-            generalItems: this.option("toolbar.generalItems"),
-            fileItems: this.option("toolbar.fileItems"),
+            generalItems: this.option("toolbar.items"),
+            fileItems: this.option("toolbar.fileSelectionItems"),
             itemViewMode: this.option("itemView").mode
         });
 
@@ -154,7 +154,6 @@ class FileManager extends Widget {
             onError: ({ error }) => this._showError(error),
             onSelectionChanged: this._onItemViewSelectionChanged.bind(this),
             onSelectedItemOpened: this._onSelectedItemOpened.bind(this),
-            onSelectedFileOpened: this._createActionByOption("onSelectedFileOpened"),
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
             customizeDetailColumns: this.option("customizeDetailColumns")
         };
@@ -173,7 +172,7 @@ class FileManager extends Widget {
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
             rootFolderDisplayName: this.option("rootFolderName"),
             path: "",
-            onPathChanged: e => this.setCurrentFolderPath(e.newPath),
+            onPathChanged: e => this._setCurrentPath(e.newPath),
             onOutsideClick: () => this._clearSelection()
         });
     }
@@ -192,7 +191,7 @@ class FileManager extends Widget {
             thumbnails: () => this._switchView("thumbnails"),
             details: () => this._switchView("details"),
             clear: () => this._clearSelection(),
-            showDirsPanel: () => this._adaptivityControl.toggleDrawer()
+            showNavPane: () => this._adaptivityControl.toggleDrawer()
         });
         this._commandManager.registerActions(actions);
     }
@@ -207,7 +206,7 @@ class FileManager extends Widget {
     }
 
     _onAdaptiveStateChanged({ enabled }) {
-        this._commandManager.setCommandEnabled("showDirsPanel", enabled);
+        this._commandManager.setCommandEnabled("showNavPane", enabled);
         this._updateToolbar();
     }
 
@@ -366,24 +365,81 @@ class FileManager extends Widget {
             */
             selectionMode: "multiple", // "single"
 
+            /**
+            * @name dxFileManagerOptions.toolbar
+            * @type object
+            */
+
+            /**
+            * @name dxFileManagerOptions.toolbar.items
+            * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+            * @default [ "showNavPane", "create", "upload", "refresh", { name: "separator", location: "after" }, "viewSwitcher" ]
+            */
+            /**
+            * @name dxFileManagerOptions.toolbar.fileSelectionItems
+            * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
+            * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear" ]
+            */
+
+            /**
+            * @name dxFileManagerToolbarItem
+            * @inherits dxToolbarItem
+            */
+            /**
+            * @name dxFileManagerToolbarItem.name
+            * @type Enums.FileManagerToolbarItem|string
+            */
+            /**
+            * @name dxFileManagerToolbarItem.location
+            * @default "before"
+            */
+            /**
+            * @name dxFileManagerToolbarItem.visible
+            * @default undefined
+            */
+
             toolbar: {
-                generalItems: [
-                    "showDirsPanel", "create", "upload", "refresh",
+                items: [
+                    "showNavPane", "create", "upload", "refresh",
                     {
-                        commandName: "separator",
+                        name: "separator",
                         location: "after"
                     },
-                    "viewMode"
+                    "viewSwitcher"
                 ],
 
-                fileItems: [
-                    "move", "copy", "rename", "separator", "delete", "refresh", "clear"
+                fileSelectionItems: [
+                    "download", "separator", "move", "copy", "rename", "separator", "delete", "refresh", "clear"
                 ]
             },
 
+            /**
+            * @name dxFileManagerOptions.contextMenu
+            * @type object
+            */
+
+            /**
+            * @name dxFileManagerOptions.contextMenu.items
+            * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
+            * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
+            */
+
+            /**
+            * @name dxFileManagerContextMenuItem
+            * @inherits dxContextMenuItem
+            */
+            /**
+            * @name dxFileManagerContextMenuItem.name
+            * @type Enums.FileManagerContextMenuItem|string
+            */
+            /**
+            * @name dxFileManagerContextMenuItem.visible
+            * @default undefined
+            */
+
             contextMenu: {
                 items: [
-                    "create", "upload", "rename", "move", "copy", "delete", "refresh"
+                    "create", "upload", "rename", "move", "copy", "delete", "refresh", "download"
                 ]
             },
 
@@ -510,7 +566,13 @@ class FileManager extends Widget {
                  * @type boolean
                  * @default false
                  */
-                upload: false
+                upload: false,
+                /**
+                 * @name dxFileManagerOptions.permissions.download
+                 * @type boolean
+                 * @default false
+                 */
+                download: false
             }
         });
     }
@@ -520,7 +582,7 @@ class FileManager extends Widget {
 
         switch(name) {
             case "currentPath":
-                this._controller.setCurrentPath(this.option("currentPath"));
+                this._setCurrentPath(args.value);
                 break;
             case "fileProvider":
             case "selectionMode":
@@ -536,8 +598,8 @@ class FileManager extends Widget {
             case "toolbar":
                 this._toolbar.option(extend(
                     true,
-                    args.value.generalItems ? { generalItems: args.value.generalItems } : {},
-                    args.value.fileItems ? { fileItems: args.value.fileItems } : {}
+                    args.value.items ? { generalItems: args.value.items } : {},
+                    args.value.fileSelectionItems ? { fileItems: args.value.fileSelectionItems } : {}
                 ));
                 break;
             case "contextMenu":
@@ -596,6 +658,10 @@ class FileManager extends Widget {
         if(newCurrentDirectory) {
             this._filesTreeView.expandDirectory(newCurrentDirectory.parentDirectory);
         }
+    }
+
+    _setCurrentPath(path) {
+        this._controller.setCurrentPath(path);
     }
 
 }
