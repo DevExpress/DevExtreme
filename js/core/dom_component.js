@@ -1,23 +1,24 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    windowUtils = require("../core/utils/window"),
-    extend = require("./utils/extend").extend,
-    config = require("./config"),
-    errors = require("./errors"),
-    getPublicElement = require("../core/utils/dom").getPublicElement,
-    windowResizeCallbacks = require("../core/utils/resize_callbacks"),
-    commonUtils = require("./utils/common"),
-    each = require("./utils/iterator").each,
-    typeUtils = require("./utils/type"),
-    inArray = require("./utils/array").inArray,
-    publicComponentUtils = require("./utils/public_component"),
-    dataUtils = require("./element_data"),
-    Component = require("./component"),
-    abstract = Component.abstract;
+import $ from "../core/renderer";
+import eventsEngine from "../events/core/events_engine";
+import windowUtils from "../core/utils/window";
+import { extend } from "./utils/extend";
+import config from "./config";
+import errors from "./errors";
+import { getPublicElement } from "../core/utils/dom";
+import windowResizeCallbacks from "../core/utils/resize_callbacks";
+import commonUtils from "./utils/common";
+import { each } from "./utils/iterator";
+import { isString } from "./utils/type";
+import { inArray } from "./utils/array";
+import publicComponentUtils from "./utils/public_component";
+import dataUtils from "./element_data";
+import Component from "./component";
 
-var RTL_DIRECTION_CLASS = "dx-rtl",
-    VISIBILITY_CHANGE_CLASS = "dx-visibility-change-handler",
-    VISIBILITY_CHANGE_EVENTNAMESPACE = "VisibilityChange";
+const { abstract } = Component;
+
+const RTL_DIRECTION_CLASS = "dx-rtl";
+const VISIBILITY_CHANGE_CLASS = "dx-visibility-change-handler";
+const VISIBILITY_CHANGE_EVENTNAMESPACE = "VisibilityChange";
 
 /**
  * @name DOMComponent
@@ -93,8 +94,12 @@ var DOMComponent = Component.inherit({
     ctor: function(element, options) {
         this._$element = $(element);
         publicComponentUtils.attachInstanceToElement(this._$element, this, this._dispose);
-        this._synchronizableOptionsForCreateComponent = ["rtlEnabled", "disabled", "templatesRenderAsynchronously"];
+
         this.callBase(options);
+    },
+
+    _getSynchronizableOptionsForCreateComponent: function() {
+        return ["rtlEnabled", "disabled", "templatesRenderAsynchronously"];
     },
 
     _visibilityChanged: abstract,
@@ -276,20 +281,23 @@ var DOMComponent = Component.inherit({
 
         config = config || {};
 
-        var synchronizableOptions = commonUtils.grep(this._synchronizableOptionsForCreateComponent, function(value) {
+        var synchronizableOptions = commonUtils.grep(this._getSynchronizableOptionsForCreateComponent(), function(value) {
             return !(value in config);
         });
 
         var nestedComponentOptions = that.option("nestedComponentOptions") || commonUtils.noop;
-        that._extendConfig(config, extend({
+        var nestedComponentConfig = extend({
             integrationOptions: this.option("integrationOptions"),
-            rtlEnabled: this.option("rtlEnabled"),
-            disabled: this.option("disabled"),
-            templatesRenderAsynchronously: this.option("templatesRenderAsynchronously")
-        }, nestedComponentOptions(this)));
+        }, nestedComponentOptions(this));
+
+        synchronizableOptions.forEach((optionName) => {
+            nestedComponentConfig[optionName] = this.option(optionName);
+        });
+
+        that._extendConfig(config, nestedComponentConfig);
 
         var instance;
-        if(typeUtils.isString(component)) {
+        if(isString(component)) {
             var $element = $(element)[component](config);
             instance = $element[component]("instance");
         } else if(element) {

@@ -196,4 +196,16 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
+    test("generation end point", function(assert) {
+        let provider = new WebApiFileProvider({
+            endpointUrl: "myEndpoint"
+        });
+        assert.ok(provider._getEndpointUrl("myCommand", { }).indexOf("myEndpoint?command=myCommand") !== -1);
+
+        provider = new WebApiFileProvider({
+            endpointUrl: "myEndpoint?param1=value"
+        });
+        assert.ok(provider._getEndpointUrl("myCommand", { }).indexOf("myEndpoint?param1=value&command=myCommand") !== -1);
+    });
+
 });

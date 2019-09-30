@@ -838,6 +838,8 @@ var FilterBuilder = Widget.inherit({
             menu: {
                 items: items,
                 dataStructure: "plain",
+                keyExpr: "id",
+                parentId: "parentId",
                 displayExpr: "caption",
                 onItemClick: (e) => {
                     if(item !== e.itemData) {

@@ -621,7 +621,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _getDateByDefault: function() {
-        return this._strategy.useCurrentDateByDefault() && new Date();
+        return this._strategy.useCurrentDateByDefault() && this._strategy.getDefaultDate();
     },
 
     _getParsedDate: function(text) {

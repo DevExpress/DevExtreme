@@ -2233,6 +2233,20 @@ testModule("container", moduleConfig, () => {
             viewPort(origViewport);
         }
     });
+
+    test("T811495 - content should be inside container if it is provided by defaultOptions", (assert) => {
+        class TestOverlay extends Overlay {}
+
+        TestOverlay.defaultOptions({
+            options: {
+                container: "#customTargetContainer"
+            }
+        });
+
+        const overlay = new TestOverlay("#overlay");
+        overlay.show();
+        assert.strictEqual($("#customTargetContainer").children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
+    });
 });
 
 

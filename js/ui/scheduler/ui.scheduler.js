@@ -2247,6 +2247,7 @@ const Scheduler = Widget.inherit({
             var startDateExpr = this._dataAccessors.expr.startDateExpr,
                 endDateExpr = this._dataAccessors.expr.endDateExpr;
 
+            formData.recurrenceRule = formData.recurrenceRule || null;
             AppointmentForm.updateFormData(this._appointmentForm, formData);
             this._appointmentForm.option("readOnly", this._editAppointmentData ? !this._editing.allowUpdating : false);
 
@@ -2533,7 +2534,9 @@ const Scheduler = Widget.inherit({
             this._editAppointmentData = targetAppointment;
 
         } else {
-            this._updateAppointment(targetAppointment, updatedAppointment);
+            this._updateAppointment(targetAppointment, updatedAppointment, function() {
+                this._appointments.moveAppointmentBack();
+            });
         }
     },
 

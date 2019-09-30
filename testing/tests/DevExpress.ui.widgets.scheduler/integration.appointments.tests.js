@@ -1651,6 +1651,51 @@ QUnit.test("Appointment should be rendered correctly after changing view (T59369
     assert.notOk(this.instance.$element().find(".dx-scheduler-appointment").eq(0).data("dxItemData").settings, "Item hasn't excess settings");
 });
 
+QUnit.test("Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        editing: true,
+        views: ["workWeek"],
+        currentView: "workWeek",
+        dataSource: [{
+            text: "Test appointment",
+            priorityId: 1,
+            startDate: new Date(2015, 4, 25, 14, 30),
+            endDate: new Date(2015, 4, 25, 15, 30),
+            recurrenceRule: "FREQ=YEARLY"
+        }],
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: [
+                    { text: "Low Priority", id: 1 },
+                    { text: "High Priority", id: 2 }
+                ],
+                label: "Priority"
+            }
+        ],
+        onAppointmentUpdating: function(e) {
+            e.cancel = true;
+        },
+        width: 800
+    });
+    var $appointment = this.scheduler.appointments.getAppointment(0);
+    let oldAppointmentCoords = translator.locate($appointment);
+    $appointment.trigger(dragEvents.start);
+    this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.end);
+
+    this.scheduler.appointmentForm.clickFormDialogButton(1);
+
+    let newAppointmentCoords = translator.locate(this.scheduler.appointments.getAppointment(0));
+
+    assert.deepEqual(oldAppointmentCoords, newAppointmentCoords, "Appointment has correct coords");
+
+    this.clock.tick();
+});
+
 QUnit.test("Appointment should push correct data to the onAppointmentUpdating event on changing group by drag'n'drop ", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 4, 25),
@@ -3624,4 +3669,121 @@ QUnit.test("Appointment should be rendered without compact ones if only one per 
     });
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 30, "Scheduler appointments are rendered without compact ones");
+});
+
+QUnit.test("Appointments are rendered with custom cell width less than default (T816873)", function(assert) {
+    let $style = $("<style>").text('#dxLineSchedule .dx-scheduler-date-table-cell, #dxLineSchedule .dx-scheduler-header-panel-cell {width: 100px !important;}');
+    try {
+        $style.appendTo("head");
+
+        const data = [{
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T130000",
+            recurrenceException: "",
+            startDate: "2019-09-19T18:00:00.000Z",
+            endDate: "2019-09-19T18:04:00.000Z"
+        }, {
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T050000",
+            recurrenceException: "",
+            startDate: "2019-09-20T10:00:00.000Z",
+            endDate: "2019-09-20T04:59:59.000Z"
+        }, {
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T045900",
+            recurrenceException: "",
+            startDate: "2019-09-20T09:59:00.000Z",
+            endDate: "2019-09-20T10:00:00.000Z"
+        }];
+
+        this.createInstance({
+            dataSource: data,
+            elementAttr: {
+                id: "dxLineSchedule"
+            },
+            views: [{
+                type: "timelineWeek",
+                cellDuration: 120,
+                maxAppointmentsPerCell: "unlimited"
+            }],
+            currentView: 'timelineWeek',
+            currentDate: new Date(2019, 8, 22)
+        });
+
+        assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, "Appointments are rendered");
+    } finally {
+        $style.remove();
+    }
+});
+
+QUnit.test("Appointments are rendered with custom cell width less than default (T816873)", function(assert) {
+    let $style = $("<style>").text('#dxLineSchedule .dx-scheduler-date-table-cell, #dxLineSchedule .dx-scheduler-header-panel-cell {width: 100px !important;}');
+    try {
+        $style.appendTo("head");
+
+        const data = [{
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T130000",
+            recurrenceException: "",
+            startDate: "2019-09-19T18:00:00.000Z",
+            endDate: "2019-09-19T18:04:00.000Z"
+        }, {
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T050000",
+            recurrenceException: "",
+            startDate: "2019-09-20T10:00:00.000Z",
+            endDate: "2019-09-20T04:59:59.000Z"
+        }, {
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;UNTIL=20190930T045900",
+            recurrenceException: "",
+            startDate: "2019-09-20T09:59:00.000Z",
+            endDate: "2019-09-20T10:00:00.000Z"
+        }];
+
+        this.createInstance({
+            dataSource: data,
+            elementAttr: {
+                id: "dxLineSchedule"
+            },
+            views: [{
+                type: "timelineWeek",
+                cellDuration: 120,
+                maxAppointmentsPerCell: "unlimited"
+            }],
+            currentView: 'timelineWeek',
+            currentDate: new Date(2019, 8, 22)
+        });
+
+        assert.ok(this.scheduler.appointments.getAppointmentCount() > 0, "Appointments are rendered");
+    } finally {
+        $style.remove();
+    }
+});
+
+QUnit.test("Long term appoinment inflict index shift in other appointments (T737780)", function(assert) {
+    var data = [
+        {
+            text: "Website Re-Design Plan",
+            startDate: new Date(2017, 4, 2, 9, 30),
+            endDate: new Date(2017, 4, 12, 11, 30)
+        }, {
+            text: "Book Flights to San Fran for Sales Trip",
+            startDate: new Date(2017, 4, 4, 12, 0),
+            endDate: new Date(2017, 4, 4, 13, 0),
+            allDay: true
+        }, {
+            text: "Approve Personal Computer Upgrade Plan",
+            startDate: new Date(2017, 4, 10, 10, 0),
+            endDate: new Date(2017, 4, 10, 11, 0)
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2017, 4, 25),
+        startDayHour: 9,
+        height: 600
+    });
+
+    let appointments = this.instance._getAppointmentsToRepaint();
+    assert.ok(appointments[0].settings[1].index === 0, "Long term appointment tail has right index");
+    assert.ok(appointments[1].settings[0].index === 1, "Appointment next to long term appointment head has right index");
+    assert.ok(appointments[2].settings[0].index === 1, "Appointment next to long term appointment tail has right index");
 });

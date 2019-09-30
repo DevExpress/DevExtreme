@@ -169,6 +169,7 @@ var AdvancedChart = BaseChart.inherit({
             if(curAxes && curAxes.length > 0) {
                 _each(curAxes, (_, axis) => {
                     axis.updateOptions(opt);
+                    axis.validate();
                     axesBasis.push({ axis: axis });
                 });
             } else {

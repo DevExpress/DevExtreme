@@ -66,6 +66,8 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         const excelCell = row.getCell(startColumnIndex + cellIndex);
         excelCell.value = cellData.value;
 
+        _setPredefinedFont(gridCell, excelCell);
+
         if(isDefined(customizeCell)) {
             customizeCell({
                 cell: excelCell,
@@ -73,6 +75,17 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
                 gridCell: gridCell
             });
         }
+    }
+}
+
+function _setPredefinedFont(gridCell, excelCell) {
+    if(!isDefined(excelCell.value)) {
+        return;
+    }
+
+    if(gridCell.rowType !== "data") {
+        excelCell.font = excelCell.font || {};
+        excelCell.font.bold = true;
     }
 }
 

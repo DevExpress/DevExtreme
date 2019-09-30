@@ -7298,10 +7298,10 @@ QUnit.test("Inserting several rows for cell editing mode", function(assert) {
     assert.equal(items.length, 4, "two rows are added");
 
     assert.deepEqual(items[0].data, {}, "row 0 data");
-    assert.ok(items[0].inserted, "row 0 is inserted");
+    assert.ok(items[0].isNewRow, "row 0 is inserted");
     assert.deepEqual(items[1].data, array[0], "row 1 data");
     assert.deepEqual(items[2].data, array[1], "row 2 data");
-    assert.notOk(items[3].inserted, "row 3 is saved");
+    assert.notOk(items[3].isNewRow, "row 3 is saved");
 });
 
 QUnit.test("Inserting several rows for row editing mode", function(assert) {

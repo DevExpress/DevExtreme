@@ -1098,7 +1098,6 @@ QUnit.test("toolBar should not update geometry after toolbarItems visibility opt
     assert.ok(renderGeometrySpy.notCalled, "renderGeometry is not called for toolbarItems option partial change");
 });
 
-
 QUnit.test("toolBar should not update geometry after partial update of its items", function(assert) {
     this.instance.option({
         visible: true,
@@ -1488,7 +1487,6 @@ QUnit.module("renderGeometry", () => {
             title: "test",
             titleTemplate: () => $("<div>").text("title template"),
             bottomTemplate: () => $("<div>").text("bottom template"),
-            toolbarItems: [{ text: "text" }],
             useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
             useFlatToolbarButtons: !options.useFlatToolbarButtons
         };

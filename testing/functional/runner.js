@@ -13,7 +13,7 @@ createTestCafe('localhost', 1437, 1438)
             componentFolder = args.componentFolder.trim(),
             runner = testCafe.createRunner()
                 .browsers(args.browsers.split(" "))
-                .src([`./testing/functional/tests/${componentFolder}/*.ts`]);
+                .src([`./testing/functional/tests/${componentFolder}/**/*.ts`]);
 
         if(testName) {
             runner.filter(name => name === testName);

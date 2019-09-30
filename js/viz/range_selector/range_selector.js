@@ -1,55 +1,67 @@
-var registerComponent = require("../../core/component_registrator"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    vizUtils = require("../core/utils"),
-    dateUtils = require("../../core/utils/date"),
-    adjust = require("../../core/utils/math").adjust,
-    addInterval = dateUtils.addInterval,
-    dateToMilliseconds = dateUtils.dateToMilliseconds,
-    getSequenceByInterval = dateUtils.getSequenceByInterval,
-    rangeModule = require("../translators/range"),
-    axisModule = require("../axes/base_axis"),
-    patchFontOptions = vizUtils.patchFontOptions,
-    parseUtils = require("../components/parse_utils"),
-    _normalizeEnum = vizUtils.normalizeEnum,
-    formatHelper = require("../../format_helper"),
-    commonModule = require("./common"),
-    slidersControllerModule = require("./sliders_controller"),
-    trackerModule = require("./tracker"),
-    rangeViewModule = require("./range_view"),
-    seriesDataSourceModule = require("./series_data_source"),
-    tickGeneratorModule = require("../axes/tick_generator"),
-    parseValue = vizUtils.getVizRangeObject,
-    convertVisualRangeObject = vizUtils.convertVisualRangeObject,
+import registerComponent from "../../core/component_registrator";
+import {
+    isDefined as _isDefined,
+    isNumeric as _isNumber,
+    isDate as _isDate,
+    type as _type,
+    isPlainObject
+} from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import {
+    patchFontOptions,
+    normalizeEnum as _normalizeEnum,
+    getVizRangeObject as parseValue,
+    convertVisualRangeObject,
+    getCategoriesInfo,
+    getLog
+} from "../core/utils";
+import {
+    addInterval,
+    dateToMilliseconds,
+    getDateUnitInterval,
+    dateUnitIntervals,
+    getNextDateUnit,
+    getDateFormatByTickInterval,
+    correctDateWithUnitBeginning,
+    getSequenceByInterval
+} from "../../core/utils/date";
+import { adjust } from "../../core/utils/math";
+import rangeModule from "../translators/range";
+import axisModule from "../axes/base_axis";
+import parseUtils from "../components/parse_utils";
+import formatHelper from "../../format_helper";
+import commonModule from "./common";
+import slidersControllerModule from "./sliders_controller";
+import { Tracker } from "./tracker";
+import rangeViewModule from "./range_view";
+import seriesDataSourceModule from "./series_data_source";
+import tickGeneratorModule from "../axes/tick_generator";
+import baseWidgetModule from "../core/base_widget";
 
-    _isDefined = typeUtils.isDefined,
-    _isNumber = typeUtils.isNumeric,
-    _isDate = typeUtils.isDate,
-    _max = Math.max,
-    _ceil = Math.ceil,
-    _floor = Math.floor,
-
-    START_VALUE = "startValue",
-    END_VALUE = "endValue",
-    DATETIME = "datetime",
-    VALUE = "value",
-    DISCRETE = "discrete",
-    SEMIDISCRETE = "semidiscrete",
-    STRING = "string",
-    VALUE_CHANGED = VALUE + "Changed",
-    CONTAINER_BACKGROUND_COLOR = "containerBackgroundColor",
-    SLIDER_MARKER = "sliderMarker",
-    OPTION_BACKGROUND = "background",
-    LOGARITHMIC = "logarithmic",
-    KEEP = "keep",
-    SHIFT = "shift",
-    RESET = "reset",
-    INVISIBLE_POS = -1000,
-    SEMIDISCRETE_GRID_SPACING_FACTOR = 50,
-    DEFAULT_AXIS_DIVISION_FACTOR = 30,
-    DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15,
-    logarithmBase = 10;
+const _max = Math.max;
+const _ceil = Math.ceil;
+const _floor = Math.floor;
+const START_VALUE = "startValue";
+const END_VALUE = "endValue";
+const DATETIME = "datetime";
+const VALUE = "value";
+const DISCRETE = "discrete";
+const SEMIDISCRETE = "semidiscrete";
+const STRING = "string";
+const VALUE_CHANGED = VALUE + "Changed";
+const CONTAINER_BACKGROUND_COLOR = "containerBackgroundColor";
+const SLIDER_MARKER = "sliderMarker";
+const OPTION_BACKGROUND = "background";
+const LOGARITHMIC = "logarithmic";
+const KEEP = "keep";
+const SHIFT = "shift";
+const RESET = "reset";
+const INVISIBLE_POS = -1000;
+const SEMIDISCRETE_GRID_SPACING_FACTOR = 50;
+const DEFAULT_AXIS_DIVISION_FACTOR = 30;
+const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
+const logarithmBase = 10;
 
 function calculateMarkerHeight(renderer, value, sliderMarkerOptions) {
     var formattedText = (value === undefined ? commonModule.consts.emptySliderMarkerText : commonModule.formatValue(value, sliderMarkerOptions)),
@@ -109,8 +121,8 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
 }
 
 function calculateValueType(firstValue, secondValue) {
-    var typeFirstValue = typeUtils.type(firstValue),
-        typeSecondValue = typeUtils.type(secondValue),
+    var typeFirstValue = _type(firstValue),
+        typeSecondValue = _type(secondValue),
         validType = function(type) {
             return typeFirstValue === type || typeSecondValue === type;
         };
@@ -125,7 +137,7 @@ function showScaleMarkers(scaleOptions) {
 function updateTranslatorRangeInterval(translatorRange, scaleOptions) {
     var intervalX = scaleOptions.minorTickInterval || scaleOptions.tickInterval;
     if(scaleOptions.valueType === "datetime") {
-        intervalX = dateUtils.dateToMilliseconds(intervalX);
+        intervalX = dateToMilliseconds(intervalX);
     }
     translatorRange.addRange({ interval: intervalX });
 }
@@ -162,12 +174,12 @@ function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers, tickIn
 }
 
 function getMinorTickIntervalUnit(tickInterval, minorTickInterval, withCorrection) {
-    var interval = dateUtils.getDateUnitInterval(minorTickInterval),
-        majorUnit = dateUtils.getDateUnitInterval(tickInterval),
-        idx = dateUtils.dateUnitIntervals.indexOf(interval);
+    var interval = getDateUnitInterval(minorTickInterval),
+        majorUnit = getDateUnitInterval(tickInterval),
+        idx = dateUnitIntervals.indexOf(interval);
 
     if(withCorrection && interval === majorUnit && idx > 0) {
-        interval = dateUtils.dateUnitIntervals[idx - 1];
+        interval = dateUnitIntervals[idx - 1];
     }
 
     return interval;
@@ -178,7 +190,7 @@ function getNextTickInterval(tickInterval, minorTickInterval, isDateType) {
         tickInterval = minorTickInterval;
     } else {
         if(isDateType) {
-            tickInterval = dateUtils.getNextDateUnit(tickInterval);
+            tickInterval = getNextDateUnit(tickInterval);
         } else {
             tickInterval += minorTickInterval;
         }
@@ -304,7 +316,7 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
 
         categories = seriesDataSource ? seriesDataSource.argCategories : (scaleOptions.categories || (!seriesDataSource) && startValue && endValue && [startValue, endValue]);
         categories = categories || [];
-        scaleOptions._categoriesInfo = categoriesInfo = vizUtils.getCategoriesInfo(categories, startValue, endValue);
+        scaleOptions._categoriesInfo = categoriesInfo = getCategoriesInfo(categories, startValue, endValue);
     }
 
     if(scaleOptions.type === SEMIDISCRETE) {
@@ -411,7 +423,7 @@ function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tic
                 if(!scaleOptions.marker.visible) {
                     scaleOptions.label.format = formatHelper.getDateFormatByTickInterval(scaleOptions.startValue, scaleOptions.endValue, scaleOptions.tickInterval);
                 } else {
-                    scaleOptions.label.format = dateUtils.getDateFormatByTickInterval(scaleOptions.tickInterval);
+                    scaleOptions.label.format = getDateFormatByTickInterval(scaleOptions.tickInterval);
                 }
             }
         }
@@ -485,7 +497,7 @@ function prepareScaleOptions(scaleOption, calculatedValueType, incidentOccurred,
 function correctValueByInterval(value, isDate, interval) {
     if(_isDefined(value)) {
         value = isDate
-            ? dateUtils.correctDateWithUnitBeginning(new Date(value), interval)
+            ? correctDateWithUnitBeginning(new Date(value), interval)
             : adjust(_floor(adjust(value / interval)) * interval);
     }
     return value;
@@ -521,12 +533,12 @@ function getIntervalCustomTicks(options) {
 
 function getPrecisionForSlider(startValue, endValue, screenDelta) {
     var d = Math.abs(endValue - startValue) / screenDelta,
-        tail = d - Math.floor(d);
+        tail = d - _floor(d);
 
-    return tail > 0 ? Math.ceil(Math.abs(adjust(vizUtils.getLog(tail, 10)))) : 0;
+    return tail > 0 ? _ceil(Math.abs(adjust(getLog(tail, 10)))) : 0;
 }
 
-var dxRangeSelector = require("../core/base_widget").inherit({
+var dxRangeSelector = baseWidgetModule.inherit({
     _toggleParentsScrollSubscription() {},
     _eventsMap: {
         "onValueChanged": { name: VALUE_CHANGED }
@@ -591,7 +603,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             renderer: renderer,
             root: scaleGroup,
             scaleBreaksGroup: scaleBreaksGroup,
-            updateSelectedRange: function(range) { that.setValue(convertVisualRangeObject(range)); },
+            updateSelectedRange: function(range, e) { that.setValue(convertVisualRangeObject(range), e); },
             incidentOccurred: that._incidentOccurred
         });
 
@@ -605,21 +617,22 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             renderer: renderer,
             root: slidersGroup,
             trackersGroup: trackersGroup,
-            updateSelectedRange: function(range, lastSelectedRange) {
+            updateSelectedRange: function(range, lastSelectedRange, e) {
                 if(!that._rangeOption) {
-                    that.option(VALUE, convertVisualRangeObject(range, typeUtils.isPlainObject(that._options[VALUE])));
+                    that.option(VALUE, convertVisualRangeObject(range, isPlainObject(that._options[VALUE])));
                 }
 
                 that._eventTrigger(VALUE_CHANGED, {
                     value: convertVisualRangeObject(range),
-                    previousValue: convertVisualRangeObject(lastSelectedRange)
+                    previousValue: convertVisualRangeObject(lastSelectedRange),
+                    event: e
                 });
             },
             axis: that._axis,
             translator: that._axis.getTranslator()
         });
 
-        that._tracker = new trackerModule.Tracker({
+        that._tracker = new Tracker({
             renderer: renderer,
             controller: that._slidersController
         });
@@ -954,7 +967,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
                         sliderMarkerOptions.format = formatHelper.getDateFormatByTickInterval(startValue, endValue, interval);
                     }
                 } else {
-                    sliderMarkerOptions.format = dateUtils.getDateFormatByTickInterval(interval);
+                    sliderMarkerOptions.format = getDateFormatByTickInterval(interval);
                 }
             }
             // T347293
@@ -969,7 +982,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         return convertVisualRangeObject(this._slidersController.getSelectedRange());
     },
 
-    setValue: function(value) {
+    setValue: function(value, e) {
         var current;
         const visualRange = parseValue(value);
         if(!this._isUpdating && value) {
@@ -977,7 +990,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             // TODO: Move the check inside the SlidersController
             current = this._slidersController.getSelectedRange();
             if(!current || current.startValue !== visualRange.startValue || current.endValue !== visualRange.endValue) {
-                this._slidersController.setSelectedRange(parseValue(value));
+                this._slidersController.setSelectedRange(parseValue(value), e);
             }
         }
     },
@@ -1029,7 +1042,7 @@ function createDateMarkersEvent(scaleOptions, markerTrackers, setSelectedRange) 
             minRange = scaleOptions.minRange ? addInterval(range.startValue, scaleOptions.minRange) : undefined,
             maxRange = scaleOptions.maxRange ? addInterval(range.startValue, scaleOptions.maxRange) : undefined;
         if(!(minRange && minRange > range.endValue || maxRange && maxRange < range.endValue)) {
-            setSelectedRange(range);
+            setSelectedRange(range, e);
         }
     }
 }
@@ -1039,7 +1052,7 @@ function getShiftDirection() {
 }
 
 function getTickStartPositionShift(length) {
-    return length % 2 === 1 ? -Math.floor(length / 2) : -length / 2;
+    return length % 2 === 1 ? -_floor(length / 2) : -length / 2;
 }
 
 function AxisWrapper(params) {
@@ -1074,7 +1087,7 @@ AxisWrapper.prototype = {
 
     update: function(options, isCompactMode, canvas, businessRange, seriesDataSource) {
         var axis = this._axis;
-        axis.updateOptions(prepareAxisOptions(options, isCompactMode, canvas.height, canvas.height / 2 - Math.ceil(options.width / 2)));
+        axis.updateOptions(prepareAxisOptions(options, isCompactMode, canvas.height, canvas.height / 2 - _ceil(options.width / 2)));
         axis.validate();
         axis.setBusinessRange(businessRange, true);
         if(seriesDataSource !== undefined && seriesDataSource.isShowChart()) {
@@ -1119,7 +1132,12 @@ registerComponent("dxRangeSelector", dxRangeSelector);
 module.exports = dxRangeSelector;
 
 // PLUGINS_SECTION
-dxRangeSelector.addPlugin(require("../core/export").plugin);
-dxRangeSelector.addPlugin(require("../core/title").plugin);
-dxRangeSelector.addPlugin(require("../core/loading_indicator").plugin);
-dxRangeSelector.addPlugin(require("../core/data_source").plugin);
+import { plugin as exportPlugin } from "../core/export";
+import { plugin as titlePlugin } from "../core/title";
+import { plugin as LoadingIndicatorPlugin } from "../core/loading_indicator";
+import { plugin as dataSourcePlugin } from "../core/data_source";
+
+dxRangeSelector.addPlugin(exportPlugin);
+dxRangeSelector.addPlugin(titlePlugin);
+dxRangeSelector.addPlugin(LoadingIndicatorPlugin);
+dxRangeSelector.addPlugin(dataSourcePlugin);

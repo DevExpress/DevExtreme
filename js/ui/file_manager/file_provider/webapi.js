@@ -129,16 +129,11 @@ class WebApiFileProvider extends FileProvider {
     }
 
     _executeRequest(command, args) {
-        const queryString = this._getQueryString({
-            command,
-            arguments: JSON.stringify(args)
-        });
-
         const method = command === "GetDirContents" ? "GET" : "POST";
 
         const deferred = new Deferred();
         ajax.sendRequest({
-            url: this._endpointUrl + "?" + queryString,
+            url: this._getEndpointUrl(command, args),
             method,
             dataType: "json",
             cache: false
@@ -147,6 +142,15 @@ class WebApiFileProvider extends FileProvider {
         },
         e => deferred.reject(e));
         return deferred.promise();
+    }
+
+    _getEndpointUrl(command, args) {
+        const queryString = this._getQueryString({
+            command,
+            arguments: JSON.stringify(args)
+        });
+        const separator = this._endpointUrl && this._endpointUrl.indexOf("?") > 0 ? "&" : "?";
+        return this._endpointUrl + separator + queryString;
     }
 
     _getQueryString(params) {
