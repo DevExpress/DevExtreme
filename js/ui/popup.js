@@ -820,11 +820,14 @@ var Popup = Overlay.inherit({
             case "toolbarItems":
             case "useDefaultToolbarButtons":
             case "useFlatToolbarButtons":
-                var isPartialUpdate = args.fullName.search(".options") !== -1;
+                // NOTE: Geometry rendering after "toolbarItems" runtime change breaks the popup animation first appereance.
+                // But geometry rendering for options connected to the popup position still should be called.
+                var shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
+
                 this._renderTitle();
                 this._renderBottom();
 
-                if(!isPartialUpdate) {
+                if(shouldRenderGeometry) {
                     this._renderGeometry();
                 }
                 break;
