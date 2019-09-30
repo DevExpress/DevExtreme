@@ -318,7 +318,6 @@ var DateBox = DropDownEditor.inherit({
 
     _init: function() {
         this._initStrategy();
-        this.$element().addClass(DX_INVALID_BADGE_CLASS);
         this.option(extend({}, this._strategy.getDefaultOptions(), this._userOptions));
         delete this._userOptions;
 
