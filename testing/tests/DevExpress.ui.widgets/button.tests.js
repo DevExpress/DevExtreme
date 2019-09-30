@@ -406,7 +406,7 @@ QUnit.module("submit behavior", {
         }
     });
 
-    QUnit.test("Submit button should be enabled when validation is passed negatively", (assert) => {
+    QUnit.test("Submit button should change the 'disabled' option to 'false' when validation is passed negatively", (assert) => {
         this.clock.restore();
         const validator = new Validator($("<div>").appendTo(this.$form), {
                 adapter: sinon.createStubInstance(DefaultAdapter),
@@ -421,24 +421,29 @@ QUnit.module("submit behavior", {
                     }
                 }]
             }),
-            done = assert.async(),
-            button = this.$element.dxButton({
-                validationGroup: "testGroup",
-                onOptionChanged: function(args) {
-                    if(args.name === "disabled" && args.value === false) {
+            done = assert.async();
+
+        this.$element.dxButton({
+            validationGroup: "testGroup",
+            onOptionChanged: function(args) {
+                if(args.name === "disabled") {
+                    if(args.value === true) {
+                        assert.equal(validator._validationInfo.result.status, "pending", "validator in pending");
+                    } else {
                         assert.equal(validator._validationInfo.result.status, "invalid", "validator is invalid");
-                        assert.notOk(button.option("disabled"), "button is enabled");
 
                         ValidationEngine.initGroups();
                         done();
                     }
                 }
-            }).dxButton("instance");
+            }
+        });
+
         ValidationEngine.registerValidatorInGroup("testGroup", validator);
         this.$element.trigger("dxclick");
     });
 
-    QUnit.test("Submit button should be enabled when validation is passed positevely", (assert) => {
+    QUnit.test("Submit button should change the 'disabled' option to 'false' when validation is passed positively", (assert) => {
         this.clock.restore();
         const validator = new Validator($("<div>").appendTo(this.$form), {
                 adapter: sinon.createStubInstance(DefaultAdapter),
@@ -453,19 +458,23 @@ QUnit.module("submit behavior", {
                     }
                 }]
             }),
-            done = assert.async(),
-            button = this.$element.dxButton({
-                validationGroup: "testGroup",
-                onOptionChanged: function(args) {
-                    if(args.name === "disabled" && args.value === false) {
+            done = assert.async();
+
+        this.$element.dxButton({
+            validationGroup: "testGroup",
+            onOptionChanged: function(args) {
+                if(args.name === "disabled") {
+                    if(args.value === true) {
+                        assert.equal(validator._validationInfo.result.status, "pending", "validator in pending");
+                    } else {
                         assert.equal(validator._validationInfo.result.status, "valid", "validator is valid");
-                        assert.notOk(button.option("disabled"), "button is enabled");
 
                         ValidationEngine.initGroups();
                         done();
                     }
                 }
-            }).dxButton("instance");
+            }
+        });
 
         ValidationEngine.registerValidatorInGroup("testGroup", validator);
         this.$element.trigger("dxclick");
