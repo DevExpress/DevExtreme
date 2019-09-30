@@ -208,6 +208,7 @@ class FileManagerItem {
 class FileManagerRootItem extends FileManagerItem {
     constructor() {
         super(null, "Files", true);
+        this.key = "__dxfmroot_394CED1B-58CF-4925-A5F8-042BC0822B31_51558CB8-C170-4655-A9E0-C454ED8EA2C1";
         this.isRoot = true;
     }
 }
