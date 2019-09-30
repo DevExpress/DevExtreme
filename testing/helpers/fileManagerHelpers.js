@@ -24,6 +24,7 @@ export const Consts = {
     CUSTOM_THUMBNAIL_CLASS: "dx-filemanager-item-custom-thumbnail",
     TOOLBAR_SEPARATOR_ITEM: "dx-filemanager-toolbar-separator-item",
     DETAILS_ITEM_NAME_CLASS: "dx-filemanager-details-item-name",
+    POPUP_NORMAL_CLASS: "dx-popup-normal",
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
     BUTTON_CLASS: "dx-button",
     BUTTON_TEXT_CLASS: "dx-button-text",
@@ -143,6 +144,10 @@ export class FileManagerWrapper {
 
     getToolbarDropDownMenuItem(childIndex) {
         return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
+    }
+
+    getToolbarViewSwitcherListItem(childIndex) {
+        return $(`.${Consts.POPUP_NORMAL_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
     }
 
     getCustomThumbnails() {
