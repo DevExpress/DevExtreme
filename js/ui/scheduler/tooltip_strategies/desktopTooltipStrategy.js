@@ -155,7 +155,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         const oldCellIndex = this.scheduler._workSpace.getCellIndexByCoordinates(this.state.initPosition);
 
         if(newCellIndex === oldCellIndex) {
-            this.getAppointmentsInstance()._clearItem({ itemData: itemData });
+            this._getAppointmentsInstance()._clearItem({ itemData: itemData });
         }
     }
 }
