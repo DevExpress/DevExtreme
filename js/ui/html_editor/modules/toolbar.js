@@ -322,6 +322,10 @@ class ToolbarModule extends BaseModule {
             .removeClass(TOOLBAR_WRAPPER_CLASS);
     }
 
+    repaint() {
+        this.toolbarInstance && this.toolbarInstance.repaint();
+    }
+
     _getContainer() {
         const $container = $("<div>");
 
