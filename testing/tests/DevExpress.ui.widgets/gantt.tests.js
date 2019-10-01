@@ -183,7 +183,8 @@ QUnit.module("Options", moduleConfig, () => {
                 keyExpr: "i",
                 taskIdExpr: "tid",
                 resourceIdExpr: "rid"
-            }
+            },
+            columns: ["t"]
         };
         this.createInstance(options);
         this.clock.tick();
@@ -193,6 +194,8 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(firstTitle, tasksDS[0].t);
         const firstProgressElement = taskWrapperElements.first().children().children().last();
         assert.ok(firstProgressElement.width() > 0);
+        const $firstTreeListRowText = this.$element.find(".dx-data-row").first().find(".dx-treelist-text-content").first().text();
+        assert.equal($firstTreeListRowText, tasksDS[0].t, "treeList has title text");
 
         const dependencyElements = this.$element.find(TASK_ARROW_SELECTOR);
         assert.equal(dependencyElements.length, dependenciesDS.length);
@@ -442,10 +445,11 @@ QUnit.module("Dialogs", moduleConfig, () => {
     });
     test("task editing", (assert) => {
         this.createInstance(allSourcesOptions);
+        this.instance.option("editing.enabled", true);
         this.clock.tick();
         showTaskEditDialog(this.instance);
         this.clock.tick();
-        const $dialog = $("body").find(POPUP_SELECTOR);
+        let $dialog = $("body").find(POPUP_SELECTOR);
         assert.equal($dialog.length, 1, "dialog is shown");
 
         const $inputs = $dialog.find(INPUT_TEXT_EDITOR_SELECTOR);
@@ -463,6 +467,13 @@ QUnit.module("Dialogs", moduleConfig, () => {
         const $taskWrapper = this.$element.find(TASK_WRAPPER_SELECTOR).eq(0);
         const firstTitle = $taskWrapper.children().children().first().text();
         assert.equal(firstTitle, testTitle, "title text was modified");
+
+        this.instance.option("editing.enabled", false);
+        showTaskEditDialog(this.instance);
+        assert.equal($dialog.find(".dx-popup-bottom").find(".dx-button").length, 1, "only cancel button in toolbar");
+        $dialog = $("body").find(POPUP_SELECTOR);
+        const inputs = $dialog.find(".dx-texteditor-input");
+        assert.equal(inputs.attr("readOnly"), "readonly", "all inputs is readOnly");
     });
     test("resources editing", (assert) => {
         this.createInstance(allSourcesOptions);
@@ -497,5 +508,9 @@ QUnit.module("Dialogs", moduleConfig, () => {
         assert.equal(modelResources[0].text, resources[1].text, "first resource removed from model");
         assert.equal(modelResources[1].text, resources[2].text, "second resource moved");
         assert.equal(modelResources[2].text, newResourceText, "new resource added");
+
+        this.instance.option("editing.enabled", false);
+        getGanttViewCore(this.instance).commandManager.showResourcesDialog.execute();
+        assert.equal($dialog.find(".dx-popup-bottom").find(".dx-button").length, 1, "only cancel button in toolbar");
     });
 });
