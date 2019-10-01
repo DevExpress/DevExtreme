@@ -142,7 +142,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
         const createScheduler = (views) => {
             return createWrapper({
-                dataSource: data,
+                dataSource: $.extend(true, [], data),
                 views: views,
                 currentView: views[0].name,
                 currentDate: new Date(2017, 4, 25),
@@ -167,7 +167,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
         const getFakeAppointmentPosition = scheduler => {
             const fakeAppointment = scheduler.appointments.compact.getFakeAppointment();
-            const position = getAbsolutePosition(fakeAppointment);
+            const position = translator.locate(fakeAppointment);
 
             return {
                 left: position.left + fakeAppointment.width() / 2,
@@ -192,10 +192,11 @@ module("Drag and drop appointments", moduleConfig, () => {
 
                 [false, true].forEach(rtlEnabled => {
                     scheduler.option("rtlEnabled", rtlEnabled);
+                    scheduler.option("dataSource", $.extend(true, [], data));
 
-                    scheduler.appointments.compact.getButtons().slice(0, 2).each((index, button) =>
-                        testFakeAppointmentPosition(scheduler, button, index, view.name, rtlEnabled, assert)
-                    );
+                    scheduler.appointments.compact.getButtons().slice(0, 1).each((index, button) => {
+                        testFakeAppointmentPosition(scheduler, button, index, view.name, rtlEnabled, assert);
+                    });
                 });
             });
         };
@@ -208,10 +209,12 @@ module("Drag and drop appointments", moduleConfig, () => {
 
             const compactAppointment = scheduler.appointments.compact.getAppointment();
             const mousePosition = createMousePosition(compactAppointment);
+
             const pointer = pointerMock(compactAppointment).start();
+
             pointer
-                .dragStart({ pageX: mousePosition.x, pageY: mousePosition.y })
-                .drag(dragOffset.left, dragOffset.top);
+                .down(mousePosition.x, mousePosition.y)
+                .move(dragOffset.left, dragOffset.top);
 
             const fakeAppointmentPosition = getFakeAppointmentPosition(scheduler);
 
@@ -221,7 +224,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 `appointment should have correct top position in ${viewName} and rtlEnable=${rtlEnabled}`);
 
             pointer
-                .dragEnd();
+                .up();
         };
 
         test("in common views", assert => testViews(commonViews, assert));
@@ -232,7 +235,7 @@ module("Drag and drop appointments", moduleConfig, () => {
     module("Appointment should move a same distance as mouse", () => {
         const createScheduler = views => {
             return createWrapper({
-                dataSource: data,
+                dataSource: $.extend(true, [], data),
                 width: 850,
                 height: 600,
                 views: views,
@@ -279,13 +282,13 @@ module("Drag and drop appointments", moduleConfig, () => {
             const positionBeforeDrag = getAbsolutePosition(appointment);
             const pointer = pointerMock(appointment).start();
             pointer
-                .dragStart()
-                .drag(dragCase.left, dragCase.top);
+                .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                .move(dragCase.left, dragCase.top);
 
-            const positionAfterDrag = getAbsolutePosition(appointment);
+            const positionAfterDrag = translator.locate(appointment);
 
             pointer
-                .dragEnd();
+                .up();
 
             assert.equal(positionAfterDrag.left - positionBeforeDrag.left, dragCase.left,
                 `appointment '${text}' should have correct left position in ${viewName} and rtlEnabled=${rtlEnabled}`);
@@ -300,10 +303,12 @@ module("Drag and drop appointments", moduleConfig, () => {
                 scheduler.option("currentView", view.name);
 
                 [false, true].forEach(rtlEnabled => {
+                    let items = $.extend(true, [], data);
                     scheduler.option("rtlEnabled", rtlEnabled);
+                    scheduler.option("dataSource", items);
 
                     dragCases.forEach(dragCase =>
-                        data.forEach(({ text }) => testAppointmentPosition(scheduler, text, rtlEnabled, dragCase, view.name, assert))
+                        items.forEach(({ text }) => testAppointmentPosition(scheduler, text, rtlEnabled, dragCase, view.name, assert))
                     );
                 });
             });

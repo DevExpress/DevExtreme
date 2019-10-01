@@ -2,20 +2,22 @@ import $ from "../../../core/renderer";
 import { TooltipStrategyBase, createDefaultTooltipTemplate } from './tooltipStrategyBase';
 import Tooltip from "../../tooltip";
 import translator from "../../../animation/translator";
-import dragEvents from "../../../events/drag";
-import eventsEngine from "../../../events/core/events_engine";
 import { FunctionTemplate } from "../../../core/templates/function_template";
 import { touch } from "../../../core/utils/support";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
 const MAX_TOOLTIP_HEIGHT = 200;
 
+const LIST_ITEM_DATA_KEY = "dxListItemData";
+
+const FIXED_CONTAINER_CLASS = "dx-scheduler-fixed-appointments";
+
 class TooltipBehaviorBase {
     constructor(scheduler) {
         this.scheduler = scheduler;
     }
 
-    onListItemRendered(e) {
+    onListRendered(e) {
     }
 
     onListItemClick(e) {
@@ -54,13 +56,44 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         };
     }
 
-    onListItemRendered(e) {
-        if(this.scheduler._allowDragging()) {
-            const data = e.itemData.data;
+    onListRendered(e) {
+        let $element = $(e.element);
 
-            eventsEngine.on(e.itemElement, dragEvents.start, e => this._onDragStart(e, data));
-            eventsEngine.on(e.itemElement, dragEvents.move, e => this._onDragMove(e));
-            eventsEngine.on(e.itemElement, dragEvents.end, e => this._onDragEnd(e, data));
+        if(this.scheduler._allowDragging() && !$element.hasClass("dx-draggable")) {
+            const workspace = this._getWorkspaceInstance();
+            const dragBehavior = workspace && workspace.dragBehavior;
+
+            dragBehavior && dragBehavior.addTo($element, {
+                filter: ".dx-list-item",
+                container: "." + FIXED_CONTAINER_CLASS,
+                group: "shared",
+                cursorOffset: function(options) {
+                    let event = options.event,
+                        $dragElement = $(options.dragElement),
+                        offset = $(options.itemElement).offset();
+
+                    return {
+                        x: event.pageX - offset.left - ($dragElement.width() / 2),
+                        y: event.pageY - offset.top - ($dragElement.height() / 2)
+                    };
+                },
+                template: (options) => {
+                    let itemData = options.itemData,
+                        appointment = itemData && itemData.appointment;
+
+                    itemData.dragElement = this._createDragAppointment(appointment, appointment.settings);
+
+                    return itemData.dragElement;
+                },
+                onDragStart: (e) => {
+                    let itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+
+                    e.itemData = {
+                        appointment: itemData.data
+                    };
+                    this.scheduler.hideAppointmentTooltip();
+                }
+            });
         }
     }
 
@@ -95,6 +128,10 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
 
     _getAppointmentsInstance() {
         return this.scheduler.getAppointmentsInstance();
+    }
+
+    _getWorkspaceInstance() {
+        return this.scheduler.getWorkSpace();
     }
 
     _createDragAppointment(itemData, settings) {
@@ -140,13 +177,12 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         const appointments = this._getAppointmentsInstance();
         appointments.dragBehavior.onDragStartCore(this.state.appointment, false);
     }
-
     _onDragMove(e) {
-        this._getAppointmentsInstance().dragBehavior.onDragMoveCore(this.state.appointment, e.offset);
+        this._getWorkspaceInstance().dragBehavior.onDragMoveCore(this.state.appointment, e.offset);
     }
 
     _onDragEnd(e, itemData) {
-        this._getAppointmentsInstance().dragBehavior.onDragEndCore(this.state.appointment, e);
+        this._getWorkspaceInstance().dragBehavior.onDragEndCore(this.state.appointment, e);
         this._removeAppointmentIfDragEndOnCurrentCell(itemData);
     }
 
@@ -254,8 +290,8 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         return $("<div>").appendTo(this.scheduler.$element()).addClass(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
     }
 
-    _onListItemRendered(e) {
-        this.behavior.onListItemRendered(e);
+    _onListRendered(e) {
+        this.behavior.onListRendered(e);
     }
 
     _canRaiseClickEvent() {

@@ -26,7 +26,8 @@ var $ = require("../../../core/renderer"),
     HorizontalGroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy.horizontal"),
     VerticalGroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy.vertical"),
     tableCreator = require("../ui.scheduler.table_creator"),
-    VerticalShader = require("../shaders/ui.scheduler.current_time_shader.vertical");
+    VerticalShader = require("../shaders/ui.scheduler.current_time_shader.vertical"),
+    AppointmentDragBehavior = require("../appointmentDragBehavior");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
@@ -454,7 +455,6 @@ var SchedulerWorkSpace = Widget.inherit({
                 break;
             case "allDayExpanded":
                 this._changeAllDayVisibility();
-                this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
                 this.headerPanelOffsetRecalculate();
                 this._updateScrollable();
@@ -1632,21 +1632,18 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _attachTablesEvents: function() {
-        this._attachTableEvents(this._getDateTable());
-        this._attachTableEvents(this._getAllDayTable());
-    },
-
-    _attachTableEvents: function($table) {
         var that = this,
             isPointerDown = false,
             cellHeight,
-            cellWidth;
+            cellWidth,
+            $element = this.$element(),
+            selector = "." + DATE_TABLE_CLASS + " td" + ", ." + ALL_DAY_TABLE_CLASS + " td";
 
-        eventsEngine.off($table, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
-        eventsEngine.off($table, SCHEDULER_CELL_DXDROP_EVENT_NAME);
-        eventsEngine.off($table, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
-        eventsEngine.off($table, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
-        eventsEngine.on($table, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, "td", {
+        eventsEngine.off($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
+        eventsEngine.off($element, SCHEDULER_CELL_DXDROP_EVENT_NAME);
+        eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
+        eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
+        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, selector, {
             itemSizeFunc: function($element) {
                 if(!cellHeight) {
                     cellHeight = $element.get(0).getBoundingClientRect().height;
@@ -1666,12 +1663,12 @@ var SchedulerWorkSpace = Widget.inherit({
             that._$currentTableTarget = $(e.target);
             that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
         });
-        eventsEngine.on($table, SCHEDULER_CELL_DXDROP_EVENT_NAME, "td", function(e) {
+        eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, selector, function(e) {
             $(e.target).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
             cellHeight = 0;
             cellWidth = 0;
         });
-        eventsEngine.on($table, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, "td", function(e) {
+        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, selector, function(e) {
             if(eventUtils.isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
                 that.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
@@ -1682,7 +1679,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 });
             }
         });
-        eventsEngine.on($table, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, "td", function(e) {
+        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, selector, function(e) {
             if(isPointerDown && that._dateTableScrollable && !that._dateTableScrollable.option("scrollByContent")) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -2515,6 +2512,13 @@ var SchedulerWorkSpace = Widget.inherit({
 
     needApplyCollectorOffset: function() {
         return false;
+    },
+
+    initDragBehavior: function(appointments) {
+        if(!this.dragBehavior && appointments) {
+            this.dragBehavior = new AppointmentDragBehavior(appointments);
+            this.dragBehavior.addTo(this.$element());
+        }
     },
 
     _supportCompactDropDownAppointments: function() {
