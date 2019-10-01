@@ -110,14 +110,6 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         return MIN_APPOINTMENT_HEIGHT;
     }
 
-    _correctRtlCoordinatesParts(coordinates, width) {
-        for(var i = 1; i < coordinates.length; i++) {
-            coordinates[i].left -= width;
-        }
-
-        return coordinates;
-    }
-
     _sortCondition(a, b) {
         var result = this._columnCondition(a, b);
         return this._fixUnstableSorting(result, a, b);
