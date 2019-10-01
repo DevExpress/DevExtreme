@@ -1342,12 +1342,12 @@ QUnit.module("widget sizing render", {}, () => {
 
     QUnit.test("validation icon should hide if container size is too small", assert => {
         const $element = $("#innerDateBox").dxDateBox({
-            "showClearButton": true
+            "showClearButton": true,
+            "pickerType": "calendar",
         });
         const instance = $element.dxDateBox("instance");
 
         assert.notOk($element.hasClass('dx-show-invalid-badge'), "validation icon's hidden");
-
         $("#containerWithWidth").get(0).style.width = "200px";
         const kb = keyboardMock(instance._input());
         kb.type("a");
