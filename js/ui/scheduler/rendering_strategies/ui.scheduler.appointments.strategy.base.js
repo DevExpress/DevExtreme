@@ -89,18 +89,15 @@ class BaseRenderingStrategy {
     }
 
     _correctRtlCoordinates(coordinates) {
-        var width = coordinates[0].width || this._getAppointmentMaxWidth();
+        const width = coordinates[0].width || this._getAppointmentMaxWidth();
 
-        if(!coordinates[0].appointmentReduced) {
-            coordinates[0].left -= width;
-        }
-
-        this._correctRtlCoordinatesParts(coordinates, width);
+        coordinates.forEach(coordinate => {
+            if(!coordinate.appointmentReduced) {
+                coordinate.left -= width;
+            }
+        });
 
         return coordinates;
-    }
-
-    _correctRtlCoordinatesParts() {
     }
 
     _getAppointmentMaxWidth() {
