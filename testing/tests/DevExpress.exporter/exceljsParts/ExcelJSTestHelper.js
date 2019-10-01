@@ -1,3 +1,6 @@
+import { inArray } from "core/utils/array";
+import { isDefined } from "core/utils/type";
+
 const { assert } = QUnit;
 
 class ExcelJSTestHelper {
@@ -55,6 +58,20 @@ class ExcelJSTestHelper {
         for(let i = 0; i < expectedWidths.length; i++) {
             assert.equal(this.worksheet.getColumn(startColumnIndex + i).width, expectedWidths[i], `worksheet.getColumns(${i}).width`);
         }
+    }
+
+    checkPredefinedFont(expectedCells) {
+        const rowTypes = ["header", "group", "groupFooter", "totalFooter"];
+
+        expectedCells.forEach(expectedCell => {
+            const { gridCell, excelCell } = expectedCell;
+
+            if(inArray(gridCell.rowType, rowTypes) !== -1 && isDefined(gridCell.value)) {
+                assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, { bold: true }, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
+            } else {
+                assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).font, undefined, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).font`);
+            }
+        });
     }
 
     checkRowAndColumnCount(total, actual) {

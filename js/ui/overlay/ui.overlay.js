@@ -292,11 +292,6 @@ var Overlay = Widget.inherit({
             */
             closeOnOutsideClick: false,
 
-            /**
-            * @name dxOverlayOptions.closeOnBackButton
-            * @type boolean
-            * @default true
-            */
             closeOnBackButton: true,
 
             /**

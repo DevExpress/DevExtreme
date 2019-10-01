@@ -266,7 +266,12 @@
     .dx-clear-button-area {
         width: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
         min-width: @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        right: 0;
+        left: 4px;
+
+        .dx-rtl& {
+            right: 4px;
+            left: 0;
+        }
     }
 
     .dx-icon-clear {
@@ -311,7 +316,7 @@
         }
     }
 
-    .dx-texteditor-input-container {
+    &.dx-show-invalid-badge .dx-texteditor-input-container {
         &:after {
             .dx-invalid-material-badge();
         }

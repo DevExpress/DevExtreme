@@ -338,6 +338,10 @@ class ToolbarModule extends BaseModule {
         }
     }
 
+    repaint() {
+        this.toolbarInstance && this.toolbarInstance.repaint();
+    }
+
     _getContainer() {
         const $container = $("<div>");
 

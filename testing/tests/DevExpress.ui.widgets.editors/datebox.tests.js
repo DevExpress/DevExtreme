@@ -1355,6 +1355,22 @@ QUnit.module("widget sizing render", {}, () => {
         assert.ok($element.outerWidth() <= 100, "outer width of the element must be less or equal to a container width");
     });
 
+    QUnit.test("validation icon should hide if container size is too small", assert => {
+        const $element = $("#innerDateBox").dxDateBox({
+            "showClearButton": true,
+            "pickerType": "calendar",
+        });
+        const instance = $element.dxDateBox("instance");
+
+        assert.notOk($element.hasClass('dx-show-invalid-badge'), "validation icon's hidden");
+        $("#containerWithWidth").get(0).style.width = "200px";
+        const kb = keyboardMock(instance._input());
+        kb.type("a");
+        kb.keyDown("enter");
+
+        assert.ok($element.hasClass('dx-show-invalid-badge'), "validation icon's visible");
+    });
+
     QUnit.test("component should have correct width when it was rendered in a scaled container (T584097)", assert => {
         const $parent = $("#parent-div");
         $parent.css("width", 200);
@@ -1405,57 +1421,6 @@ QUnit.module("widget sizing render", {}, () => {
         instance.option("width", customWidth);
 
         assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
-    });
-
-    QUnit.test("it should update widget size after toggle the 'readOnly' option", (assert) => {
-        if(devices.current().platform !== "generic") {
-            assert.ok(true, "automatic size fitting working with generic devices only");
-            return;
-        }
-
-        const $element = $("#dateBox");
-        const instance = $element.dxDateBox({
-            pickerType: "calendar",
-            readOnly: true,
-            displayFormat: "shortDate"
-        }).dxDateBox("instance");
-
-        const initialWidth = $element.outerWidth();
-
-        instance.option({
-            readOnly: false,
-            value: new Date()
-        });
-
-        const actualWidth = $element.outerWidth();
-
-        assert.notEqual(actualWidth, initialWidth, "width has been changed");
-        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
-    });
-
-    QUnit.test("it should update widget size after the 'buttons' option changed (T809858)", (assert) => {
-        if(devices.current().platform !== "generic") {
-            assert.ok(true, "automatic size fitting working with generic devices only");
-            return;
-        }
-
-        const $element = $("#dateBox");
-        const instance = $element.dxDateBox({
-            pickerType: "calendar",
-            displayFormat: "shortDate"
-        }).dxDateBox("instance");
-
-        const initialWidth = $element.outerWidth();
-
-        instance.option("buttons", [{
-            name: "test",
-            options: { text: "after" }
-        }]);
-
-        const actualWidth = $element.outerWidth();
-
-        assert.notEqual(actualWidth, initialWidth, "width has been changed");
-        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
     });
 });
 
@@ -3714,6 +3679,37 @@ QUnit.module("keyboard navigation", {
 
         const $cancelButton = this.dateBox._popup._wrapper().find(".dx-button.dx-popup-cancel");
         assert.ok($cancelButton.hasClass("dx-state-focused"), "cancel button is focused");
+    });
+
+    QUnit.testInActiveWindow("Unsupported key handlers must be processed correctly", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        this.dateBox.option({
+            pickerType: "list",
+            type: "time"
+        });
+
+        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        this.dateBox.focus();
+
+        let isNoError = true;
+
+        try {
+            keyboard
+                .press("down")
+                .press("up")
+                .press("right")
+                .press("left");
+        } catch(e) {
+            isNoError = false;
+        }
+
+        assert.ok(isNoError, "key handlers processed without errors");
     });
 });
 

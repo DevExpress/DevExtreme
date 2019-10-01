@@ -1260,7 +1260,7 @@ var BaseChart = BaseWidget.inherit({
         let seriesThemes = [];
         const seriesVisibilityChanged = (target) => {
             that._specialProcessSeries();
-            that._populateBusinessRange(target && target.getValueAxis());
+            that._populateBusinessRange(target && target.getValueAxis(), true);
             that._renderer.stopAllAnimations(true);
             that._updateLegend();
             that._requestChange(["FULL_RENDER"]);

@@ -6901,6 +6901,40 @@ if(!devices.win8) {
         assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(2).val(), "555555");
     });
 
+    QUnit.test("Cell validating is setCellValue is set and editing mode is form", function(assert) {
+        // arrange
+        var that = this,
+            rowsView = this.rowsView,
+            $testElement = $('#container'),
+            $targetInput;
+
+        that.options.editing = {
+            mode: "form",
+            allowUpdating: true
+        };
+        that.options.columns[0] = {
+            dataField: "name",
+            setCellValue: (newData, value) => newData[this.dataField] = value,
+            validationRules: [{
+                type: "custom",
+                validationCallback: () => { return false; }
+            }]
+        };
+
+        rowsView.render($testElement);
+        that.columnsController.init();
+
+        that.editingController.editRow(0);
+
+        $targetInput = $testElement.find('tbody > tr').first().find('input').first();
+
+        // act
+        $targetInput.val('Test name');
+        $targetInput.trigger('change');
+        // assert
+        assert.ok($testElement.find("tbody > tr").first().find(".dx-texteditor").first().hasClass("dx-invalid"));
+    });
+
     QUnit.test('cellValue', function(assert) {
         // arrange
         var that = this,
@@ -10938,7 +10972,8 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
         rowsView = this.rowsView,
         testElement = $('#container'),
         $formRow,
-        inputElement;
+        inputElement,
+        $invalid;
 
     rowsView.render(testElement);
 
@@ -10968,8 +11003,11 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
     that.clock.tick();
 
     // assert
+    $invalid = $formRow.find(".dx-invalid");
     assert.equal(that.editingController._editRowIndex, 0, "first row is still editing");
-    assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
+    assert.equal($invalid.length, 1, "There is one invalid editor in first row");
+    // T819068
+    assert.equal($invalid.find(".dx-overlay-content").css("whiteSpace"), "normal", "white-space is normal");
 });
 
 // T506863
