@@ -91,9 +91,6 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     _getDeltaWidth() {
     }
 
-    _correctRtlCoordinatesParts() {
-    }
-
     _getAppointmentMaxWidth() {
         return this.getDefaultCellWidth();
     }
