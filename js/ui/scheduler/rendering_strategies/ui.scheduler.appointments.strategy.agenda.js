@@ -93,8 +93,6 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _getDeltaWidth: noop,
 
-    _correctRtlCoordinatesParts: noop,
-
     _getAppointmentMaxWidth: function() {
         return this._defaultWidth;
     },
