@@ -68,6 +68,8 @@ function exportDataGrid(options) {
 }
 
 function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell) {
+    const styles = dataProvider.getStyles();
+
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const gridCell = cellData.cellSourceData;
@@ -76,7 +78,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
-            const { bold, alignment, wrapText } = dataProvider.getStyles()[dataProvider.getStyleId(rowIndex, cellIndex)];
+            const { bold, alignment, wrapText } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
             _setPredefinedFont(excelCell, bold);
             _setAlignment(excelCell, wrapText, alignment);
@@ -100,7 +102,6 @@ function _setPredefinedFont(excelCell, bold) {
 
 function _setAlignment(excelCell, wrapText, alignment) {
     Object.assign(excelCell, { alignment: { wrapText: wrapText, horizontal: alignment, vertical: 'top' } });
-
 }
 
 function _setColumnsWidth(worksheet, columns, startColumnIndex) {

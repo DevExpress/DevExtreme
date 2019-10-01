@@ -74,22 +74,39 @@ class ExcelJSTestHelper {
         });
     }
 
-    checkAlignment(expectedCells, rtlEnabled) {
+    checkAlignment(expectedCells, rtlEnabled, isSummaryAlignByColumn) {
         expectedCells.forEach(expectedCell => {
             const { gridCell, excelCell } = expectedCell;
+            let expectedAlignment;
 
-            const comment = `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).alignment`;
-            const actualCellAlignment = this.worksheet.getCell(excelCell.row, excelCell.column).alignment;
+            if(isDefined(gridCell.value)) {
+                let hAlignment;
+                let vAlignment = "top";
 
-            if(gridCell.rowType === "header") {
-                assert.deepEqual(actualCellAlignment, { horizontal: "center", vertical: "top", wrapText: true }, comment);
-            } else if(gridCell.rowType === "data") {
-                assert.deepEqual(actualCellAlignment, { horizontal: "left", vertical: "top", wrapText: false }, comment);
-            } else if(gridCell.rowType === "group") {
-                assert.deepEqual(actualCellAlignment, { horizontal: rtlEnabled ? "right" : "left", vertical: "top", wrapText: false }, comment);
-            } else {
-                assert.deepEqual(actualCellAlignment, undefined, comment);
+                if(gridCell.column.dataType === "number" || rtlEnabled) {
+                    hAlignment = "right";
+                } else if(gridCell.column.dataType === "boolean") {
+                    hAlignment = "center";
+                } else {
+                    hAlignment = "left";
+                }
+
+                let wrapText;
+                if(gridCell.rowType === "header") {
+                    hAlignment = "center";
+                    wrapText = true;
+                } else if(gridCell.rowType === "data") {
+                    wrapText = false;
+                } else if(gridCell.rowType === "group") {
+                    wrapText = gridCell.groupSummaryItems && isSummaryAlignByColumn ? true : false;
+                } else if(gridCell.rowType === "groupFooter" || gridCell.rowType === "totalFooter") {
+                    wrapText = true;
+                }
+
+                expectedAlignment = { horizontal: gridCell.hAlignment || hAlignment, vertical: vAlignment, wrapText: gridCell.wrapText || wrapText };
             }
+
+            assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).alignment, expectedAlignment, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).alignment`);
         });
     }
 
