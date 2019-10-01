@@ -2709,7 +2709,7 @@ QUnit.testInActiveWindow("onFocusedRowChanged and onFocusedRowChanging events sh
     // act
     this.option("focusedRowEnabled", true);
 
-    $(rowsView.getRow(1).find("td").eq(1)).trigger(pointerEvents.up).click();
+    $(rowsView.getRow(1).find("td").eq(1)).trigger("dxpointerdown").click();
 
     // assert
     assert.equal(focusedRowChangedCount, 1, "onFocusedRowChanged fires count");
