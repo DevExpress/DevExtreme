@@ -421,10 +421,8 @@ module.exports = {
                     var rowIndex = this.option("focusedRowIndex"),
                         columnIndex = this.option("focusedColumnIndex");
 
-                    if(this.option("focusedRowEnabled")) {
-                        this.createAction("onFocusedRowChanging", { excludeValidators: ["disabled", "readOnly"] });
-                        this.createAction("onFocusedRowChanged", { excludeValidators: ["disabled", "readOnly"] });
-                    }
+                    this.createAction("onFocusedRowChanging", { excludeValidators: ["disabled", "readOnly"] });
+                    this.createAction("onFocusedRowChanged", { excludeValidators: ["disabled", "readOnly"] });
 
                     this.createAction("onFocusedCellChanging", { excludeValidators: ["disabled", "readOnly"] });
                     this.createAction("onFocusedCellChanged", { excludeValidators: ["disabled", "readOnly"] });
