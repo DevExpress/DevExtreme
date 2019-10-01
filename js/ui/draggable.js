@@ -403,18 +403,19 @@ var Draggable = DOMComponentWithTemplate.inherit({
         };
     },
 
-    _initPosition: function($element, $dragElement) {
+    _initPosition: function($element, $dragElement, initialPosition) {
         let elementOffset,
             dragElementOffset,
             isCloned = this._dragElementIsCloned(),
             cursorOffset = this.option("cursorOffset"),
+            currentLocate = translator.locate($dragElement),
             normalizedCursorOffset = this._normalizeCursorOffset(cursorOffset, $element, $dragElement);
 
-        if(isCloned) {
-            elementOffset = $element.offset();
+        if(isCloned || initialPosition) {
+            elementOffset = initialPosition || $element.offset();
             dragElementOffset = $dragElement.offset();
-            elementOffset.top -= dragElementOffset.top - normalizedCursorOffset.top;
-            elementOffset.left -= dragElementOffset.left - normalizedCursorOffset.left;
+            elementOffset.top -= dragElementOffset.top - normalizedCursorOffset.top - currentLocate.top;
+            elementOffset.left -= dragElementOffset.left - normalizedCursorOffset.left - currentLocate.left;
         }
 
         if(elementOffset || cursorOffset) {
@@ -602,7 +603,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragStartHandler: function(e) {
-        let $element = this._getDraggableElement(e);
+        let $dragElement,
+            initialPosition,
+            isFixedPosition,
+            $element = this._getDraggableElement(e);
 
         if(this._$sourceElement) {
             return;
@@ -624,11 +628,14 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._setSourceDraggable();
 
         this._$sourceElement = $element;
-        let $dragElement = this._$dragElement = this._createDragElement($element);
+        initialPosition = $element.offset();
+        $dragElement = this._$dragElement = this._createDragElement($element);
 
         this._toggleDraggingClass(true);
         this._toggleDragSourceClass(true);
-        this._initPosition($element, $dragElement);
+        isFixedPosition = $dragElement.css("position") === "fixed";
+
+        this._initPosition($element, $dragElement, isFixedPosition && initialPosition);
 
         var $area = this._getArea(),
             areaOffset = this._getAreaOffset($area),
