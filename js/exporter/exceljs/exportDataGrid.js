@@ -10,7 +10,15 @@ const MAX_EXCEL_COLUMN_WIDTH = 255;
 function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, keepColumnWidths = true, selectedRowsOnly = false } = options;
+    let {
+        customizeCell,
+        component,
+        worksheet,
+        topLeftCell = { row: 1, column: 1 },
+        excelFilterEnabled,
+        keepColumnWidths = true,
+        selectedRowsOnly = false
+    } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
@@ -36,6 +44,7 @@ function exportDataGrid(options) {
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(result.from.row + rowIndex);
+
                 _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell);
 
                 if(rowIndex >= headerRowCount) {
@@ -66,7 +75,12 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         const excelCell = row.getCell(startColumnIndex + cellIndex);
         excelCell.value = cellData.value;
 
-        _setPredefinedFont(gridCell, excelCell);
+        if(isDefined(excelCell.value)) {
+            const { bold, alignment, wrapText } = dataProvider.getStyles()[dataProvider.getStyleId(rowIndex, cellIndex)];
+
+            _setPredefinedFont(excelCell, bold);
+            _setAlignment(excelCell, wrapText, alignment);
+        }
 
         if(isDefined(customizeCell)) {
             customizeCell({
@@ -78,15 +92,15 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
-function _setPredefinedFont(gridCell, excelCell) {
-    if(!isDefined(excelCell.value)) {
-        return;
+function _setPredefinedFont(excelCell, bold) {
+    if(isDefined(bold)) {
+        Object.assign(excelCell, { font: { bold: bold } });
     }
+}
 
-    if(gridCell.rowType !== "data") {
-        excelCell.font = excelCell.font || {};
-        excelCell.font.bold = true;
-    }
+function _setAlignment(excelCell, wrapText, alignment) {
+    Object.assign(excelCell, { alignment: { wrapText: wrapText, horizontal: alignment, vertical: 'top' } });
+
 }
 
 function _setColumnsWidth(worksheet, columns, startColumnIndex) {

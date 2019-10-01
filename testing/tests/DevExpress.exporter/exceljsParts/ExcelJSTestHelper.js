@@ -74,6 +74,25 @@ class ExcelJSTestHelper {
         });
     }
 
+    checkAlignment(expectedCells, rtlEnabled) {
+        expectedCells.forEach(expectedCell => {
+            const { gridCell, excelCell } = expectedCell;
+
+            const comment = `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).alignment`;
+            const actualCellAlignment = this.worksheet.getCell(excelCell.row, excelCell.column).alignment;
+
+            if(gridCell.rowType === "header") {
+                assert.deepEqual(actualCellAlignment, { horizontal: "center", vertical: "top", wrapText: true }, comment);
+            } else if(gridCell.rowType === "data") {
+                assert.deepEqual(actualCellAlignment, { horizontal: "left", vertical: "top", wrapText: false }, comment);
+            } else if(gridCell.rowType === "group") {
+                assert.deepEqual(actualCellAlignment, { horizontal: rtlEnabled ? "right" : "left", vertical: "top", wrapText: false }, comment);
+            } else {
+                assert.deepEqual(actualCellAlignment, undefined, comment);
+            }
+        });
+    }
+
     checkRowAndColumnCount(total, actual) {
         assert.equal(this.worksheet.rowCount, total.row, "worksheet.rowCount");
         assert.equal(this.worksheet.columnCount, total.column, "worksheet.columnCount");
