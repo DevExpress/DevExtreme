@@ -11024,7 +11024,8 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
         rowsView = this.rowsView,
         testElement = $('#container'),
         $formRow,
-        inputElement;
+        inputElement,
+        $invalid;
 
     rowsView.render(testElement);
 
@@ -11054,8 +11055,11 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
     that.clock.tick();
 
     // assert
+    $invalid = $formRow.find(".dx-invalid");
     assert.equal(that.editingController._editRowIndex, 0, "first row is still editing");
-    assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
+    assert.equal($invalid.length, 1, "There is one invalid editor in first row");
+    // T819068
+    assert.equal($invalid.find(".dx-overlay-content").css("whiteSpace"), "normal", "white-space is normal");
 });
 
 QUnit.test("It's impossible to save new data when editing form is invalid (async)", function(assert) {
