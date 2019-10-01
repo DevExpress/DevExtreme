@@ -90,11 +90,11 @@ class BaseRenderingStrategy {
     _correctRtlCoordinates(coordinates) {
         var width = coordinates[0].width || this._getAppointmentMaxWidth();
 
-        if(!coordinates[0].appointmentReduced) {
-            coordinates[0].left -= width;
+        for(var i = 0; i < coordinates.length; i++) {
+            if(!coordinates[i].appointmentReduced) {
+                coordinates[i].left -= width;
+            }
         }
-
-        this._correctRtlCoordinatesParts(coordinates, width);
 
         return coordinates;
     }

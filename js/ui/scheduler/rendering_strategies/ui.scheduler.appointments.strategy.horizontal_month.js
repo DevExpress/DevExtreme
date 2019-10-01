@@ -66,12 +66,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineAppointmentsSt
         return this._isRtl() ? max : max - width;
     }
 
-    _correctRtlCoordinatesParts(coordinates, width) {
-        for(var i = 1; i < coordinates.length; i++) {
-            coordinates[i].left -= width;
-        }
-
-        return coordinates;
+    _correctRtlCoordinatesParts() {
     }
 
     _getFullWeekAppointmentWidth(groupIndex) {
