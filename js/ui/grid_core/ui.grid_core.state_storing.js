@@ -209,7 +209,7 @@ module.exports = {
 
                     that.option("searchPanel.text", searchText || "");
 
-                    that.option("filterValue", state.filterValue || (filterSyncController ? filterSyncController.getFilterValueFromColumns(state.columns) : null));
+                    that.option("filterValue", state.filterValue || (filterSyncController ? filterSyncController.getFilterValueFromColumns(state.columns || columnsController.getColumns()) : null));
 
                     that.option("filterPanel.filterEnabled", state.filterPanel ? state.filterPanel.filterEnabled : true);
 
