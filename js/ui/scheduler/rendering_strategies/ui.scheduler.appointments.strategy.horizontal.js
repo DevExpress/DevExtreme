@@ -110,14 +110,6 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return MIN_APPOINTMENT_HEIGHT;
     },
 
-    _correctRtlCoordinatesParts: function(coordinates, width) {
-        for(var i = 1; i < coordinates.length; i++) {
-            coordinates[i].left -= width;
-        }
-
-        return coordinates;
-    },
-
     _sortCondition: function(a, b) {
         var result = this._columnCondition(a, b);
         return this._fixUnstableSorting(result, a, b);
