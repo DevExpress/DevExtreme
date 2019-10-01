@@ -668,3 +668,15 @@ QUnit.test("Pager should be visible when set the pageSize equal to totalCount", 
     assert.strictEqual(this.pagerView._invalidate.callCount, 0, "render not execute");
     this.pagerView._invalidate.restore();
 });
+
+QUnit.test("dxPager - infoText has rtl direction with rtlEnabled true (T753000)", function(assert) {
+    // arrange
+    var container = $("#container").addClass("dx-rtl");
+
+    // act
+    this.options.pager.showInfo = true;
+    this.pagerView.render(container);
+
+    // assert
+    assert.equal(this.pagerView.element().find(".dx-info").css("direction"), "rtl", "infoText has rtl direction");
+});

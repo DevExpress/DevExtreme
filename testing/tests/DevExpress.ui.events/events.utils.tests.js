@@ -142,12 +142,272 @@ QUnit.module("event utils", () => {
         assert.equal(severalEventsByArray, "custom1.Widget custom2.Widget", "several custom event names");
     });
 
-    test("normalizeKeyName method should normalize key name based on 'key' or 'which' attribute", assert => {
-        assert.strictEqual(normalizeKeyName({ key: "Up" }), "upArrow", "IE11 API");
-        assert.strictEqual(normalizeKeyName({ key: "ArrowUp" }), "upArrow", "Standard API");
-        assert.strictEqual(normalizeKeyName({ key: "ArrowUp", which: 36 }), "upArrow", "'key' attribute is prior");
-        assert.strictEqual(normalizeKeyName({ which: 38 }), "upArrow", "'which' attribute used where 'key' attribute unsupported");
-        assert.strictEqual(normalizeKeyName({ }), undefined, "return undefined in case event has no 'key' or 'which' attribute");
+    [
+        {
+            testData: { key: "Up" },
+            expected: "upArrow",
+            comment: "IE11 API"
+        },
+        {
+            testData: { key: "Left" },
+            expected: "leftArrow",
+            comment: "IE11 API"
+        },
+        {
+            testData: { key: "Right" },
+            expected: "rightArrow",
+            comment: "IE11 API"
+        },
+        {
+            testData: { key: "Down" },
+            expected: "downArrow",
+            comment: "IE11 API"
+        },
+        {
+            testData: { key: "Del" },
+            expected: "del",
+            comment: "IE11 API"
+        },
+        {
+            testData: { key: "Subtract" },
+            expected: "minus",
+            comment: "IE11 API"
+        },
+        {
+            testData: { key: "Esc" },
+            expected: "escape",
+            comment: "IE11 API"
+        },
+        {
+            testData: { key: "Backspace" },
+            expected: "backspace",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "Tab" },
+            expected: "tab",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "Enter" },
+            expected: "enter",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "Escape" },
+            expected: "escape",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "PageUp" },
+            expected: "pageUp",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "PageDown" },
+            expected: "pageDown",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "End" },
+            expected: "end",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "Home" },
+            expected: "home",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "ArrowLeft" },
+            expected: "leftArrow",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "ArrowUp" },
+            expected: "upArrow",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "ArrowRight" },
+            expected: "rightArrow",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "ArrowDown" },
+            expected: "downArrow",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "f" },
+            expected: "F",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: " " },
+            expected: "space",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "a" },
+            expected: "A",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "*" },
+            expected: "asterisk",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "-" },
+            expected: "minus",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "Control" },
+            expected: "control",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "Alt" },
+            expected: "alt",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "Shift" },
+            expected: "shift",
+            comment: "Standard API"
+        },
+        {
+            testData: { key: "ArrowUp", which: 36 },
+            expected: "upArrow",
+            comment: "'key' attribute is prior"
+        },
+        {
+            testData: { },
+            expected: undefined,
+            comment: "return undefined in case event has no 'key' or 'which' attribute"
+        },
+        // Legacy & iOS 10.2-
+        {
+            testData: { which: 8 },
+            expected: "backspace",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 9 },
+            expected: "tab",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 13 },
+            expected: "enter",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 27 },
+            expected: "escape",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 33 },
+            expected: "pageUp",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 34 },
+            expected: "pageDown",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 35 },
+            expected: "end",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 36 },
+            expected: "home",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 37 },
+            expected: "leftArrow",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 38 },
+            expected: "upArrow",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 39 },
+            expected: "rightArrow",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 40 },
+            expected: "downArrow",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 46 },
+            expected: "del",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 32 },
+            expected: "space",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 70 },
+            expected: "F",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 65 },
+            expected: "A",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 106 },
+            expected: "asterisk",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 109 },
+            expected: "minus",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 189 },
+            expected: "minus",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 173 },
+            expected: "minus",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 16 },
+            expected: "shift",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 17 },
+            expected: "control",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        },
+        {
+            testData: { which: 18 },
+            expected: "alt",
+            comment: "'which' attribute used where 'key' attribute unsupported"
+        }
+    ].forEach(({ testData, expected, comment }) => {
+        test(`normalizeKeyName(${testData.key || testData.which || "undefined"}) method should normalize key name based on "key" or "which" field`, (assert) => {
+            assert.strictEqual(normalizeKeyName(testData), expected, comment);
+        });
     });
 
     test("getChar method should get char based on 'key' or 'which' attribute", assert => {

@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { DataSource } from "data/data_source/data_source";
 import { isRenderer } from "core/utils/type";
+import { createTextElementHiddenCopy } from "core/utils/dom";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import browser from "core/utils/browser";
 import config from "core/config";
@@ -563,6 +564,19 @@ QUnit.module("tags", moduleSetup, () => {
 
         const $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
         assert.equal($tag.text(), "", "tag has correct text");
+    });
+
+    QUnit.test("onValueChanged has dxclick event on remove button click", assert => {
+        const $element = $("#tagBox").dxTagBox({
+            value: ["123"],
+            onValueChanged: function(e) {
+                assert.equal(e.event.type, "dxclick", "correct event type");
+                assert.deepEqual(e.event.target, $removeButton.get(0), "correct target element");
+            }
+        });
+
+        const $removeButton = $element.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).last();
+        $($removeButton).trigger("dxclick");
     });
 });
 
@@ -2618,9 +2632,29 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         const $input = $tagBox.find("input");
         const inputWidth = $input.width();
 
-        keyboardMock($input).type("te");
+        keyboardMock($input).type("test text");
 
         assert.ok($input.width() > inputWidth, "input size increase");
+    });
+
+    QUnit.test("width of input is enougth for all content", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            searchEnabled: true,
+            width: 300
+        });
+        const text = "wwwwwwwwwwwwww";
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+
+        $input.css("padding", "0 10px");
+
+        keyboardMock($input).type(text);
+        const inputWidth = $input.width();
+
+        var inputCopy = createTextElementHiddenCopy($input, text);
+        inputCopy.appendTo("#qunit-fixture");
+
+        assert.ok(inputWidth >= inputCopy.width(), "correctWidth");
+        inputCopy.remove();
     });
 
     QUnit.test("size of input is reset after selecting item", assert => {
@@ -2628,7 +2662,8 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: true,
             items: ["test1", "test2"]
         });
-        const $input = $tagBox.find("input");
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const initInputWidth = $input.width();
 
         $tagBox.dxTagBox("option", "value", ["test1"]);
@@ -2640,7 +2675,8 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: false,
             editEnabled: false
         });
-        const $input = $tagBox.find("input");
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         // NOTE: width should be 0.1 because of T393423
         assert.roughEqual($input.width(), 0.1, 0.101, "input has correct width");
     });
@@ -3031,11 +3067,12 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchMode: "startswith"
         });
         const $input = $element.find(".dx-texteditor-input");
+        const inputWidth = $input.width();
 
         keyboardMock($input)
             .type("a");
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal(parseInt($input.attr("size")), items[0].length + 2, "input size is changed for substitution");
+        assert.ok($input.width() > inputWidth, "input size is changed for substitution");
     });
 
     QUnit.test("filter should be reset after the search value clearing (T385456)", assert => {
@@ -3194,6 +3231,55 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
         assert.deepEqual(instance.option("value"), ["test1", "test2"], "Correct value");
     });
+
+    QUnit.test("load tags data should not raise an error after widget has been disposed", (assert) => {
+        assert.expect(1);
+
+        const $container = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: (loadOptions) => {
+                    const d = $.Deferred();
+
+                    setTimeout(function() {
+                        const data = loadOptions && loadOptions.searchValue ?
+                            ["test1"] :
+                            ["test1", "test2", "test3"];
+
+                        d.resolve(data);
+                    }, TIME_TO_WAIT);
+
+                    return d.promise();
+                }
+            },
+            searchEnabled: true,
+            searchTimeout: 0,
+            onValueChanged: function({ component, value }) {
+                if(value.length === 2) {
+                    let isOK = true;
+
+                    try {
+                        component.dispose();
+                    } catch(e) {
+                        isOK = false;
+                    }
+
+                    assert.ok(isOK, "there is no exception");
+                }
+            },
+            value: ["test2"]
+        });
+        const instance = $container.dxTagBox("instance");
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        keyboardMock(instance._input()).type("te");
+        this.clock.tick(TIME_TO_WAIT);
+
+        const $listItems = $(`.${LIST_ITEM_CLASS}`);
+
+        $listItems.first().trigger("dxclick");
+        this.clock.tick(TIME_TO_WAIT);
+    });
 });
 
 QUnit.module("popup position and size", moduleSetup, () => {
@@ -3307,6 +3393,30 @@ QUnit.module("popup position and size", moduleSetup, () => {
         this.clock.tick(4100);
 
         assert.equal($(".dx-list-item").length, 1, "search was completed");
+    });
+
+    QUnit.test("load selected item data via custom store", (assert) => {
+        let testPassed = true;
+        try {
+            const $tagBox = $("#tagBox").dxTagBox({
+                dataSource: {
+                    load() {
+                        return new $.Deferred().resolve({ data: [{ id: 2, name: "test" }], totalCount: 1 }).promise();
+                    },
+                    key: "id"
+                },
+                valueExpr: "id",
+                displayExpr: "name",
+                value: [2]
+            });
+            const tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
+
+            assert.strictEqual(tagText, "test", "correct display value");
+        } catch(e) {
+            testPassed = false;
+        }
+
+        assert.ok(testPassed, "There is no errors during test");
     });
 });
 

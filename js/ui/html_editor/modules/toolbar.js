@@ -289,7 +289,7 @@ class ToolbarModule extends BaseModule {
             .appendTo(container);
         this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
-        eventsEngine.on(this._$toolbar, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
+        eventsEngine.on(this._$toolbarContainer, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
             e.preventDefault();
         });
 
@@ -306,7 +306,7 @@ class ToolbarModule extends BaseModule {
         return {
             dataSource: this._prepareToolbarItems(),
             disabled: this.isInteractionDisabled,
-            menuContainer: this._$toolbar
+            menuContainer: this._$toolbarContainer
         };
     }
 
@@ -320,6 +320,10 @@ class ToolbarModule extends BaseModule {
         this._$toolbarContainer
             .empty()
             .removeClass(TOOLBAR_WRAPPER_CLASS);
+    }
+
+    repaint() {
+        this.toolbarInstance && this.toolbarInstance.repaint();
     }
 
     _getContainer() {

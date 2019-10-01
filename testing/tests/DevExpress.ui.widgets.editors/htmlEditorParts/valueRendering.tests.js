@@ -3,6 +3,8 @@ import $ from "jquery";
 import "ui/html_editor";
 import "ui/html_editor/converters/markdown";
 
+import { checkLink } from "./utils.js";
+
 const CONTENT_CLASS = "dx-htmleditor-content";
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 
@@ -225,6 +227,25 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
         instance.delete(0, 4);
         assert.equal(instance.option("value"), "", "value is empty line");
     });
+
+    test("editor should trigger the 'valueChanged' event after formatting a link", (assert) => {
+        assert.expect(1);
+
+        const done = assert.async();
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                value: "<a href='www.test.test'>test</a>",
+                onValueChanged: ({ value }) => {
+                    const hasColor = /style=(".*?"|'.*?'|[^"'][^\s]*)/.test(value);
+
+                    assert.ok(hasColor, "link has a color");
+                    done();
+                }
+            }).dxHtmlEditor("instance");
+
+        instance.setSelection(0, 4);
+        instance.format("color", "red");
+    });
 });
 
 
@@ -294,7 +315,7 @@ QUnit.module("Custom blots rendering", {
 }, () => {
     test("render image", (assert) => {
         const testTag = /<img([\w\W]+?)/;
-        const testSrc = /src="http:\/\/test.com\/test.jpg"/g;
+        const testSrc = /src="http:\/\/test.test\/test.jpg"/g;
         const testAlt = /alt="altering"/g;
         const testWidth = /width="100"/g;
         const testHeight = /height="100"/g;
@@ -311,7 +332,7 @@ QUnit.module("Custom blots rendering", {
             })
             .dxHtmlEditor("instance");
 
-        instance.insertEmbed(0, "extendedImage", { src: "http://test.com/test.jpg", width: 100, height: 100, alt: "altering" });
+        instance.insertEmbed(0, "extendedImage", { src: "http://test.test/test.jpg", width: 100, height: 100, alt: "altering" });
         this.clock.tick();
     });
 
@@ -319,14 +340,18 @@ QUnit.module("Custom blots rendering", {
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 value: "test",
-                onValueChanged: (e) => {
-                    assert.equal(e.value, '<p><a href="http://test.com" target="_blank">test</a>test</p>', "markup contains a link");
+                onValueChanged: ({ value }) => {
+                    checkLink(assert, {
+                        href: "http://test.test",
+                        content: "test",
+                        afterLink: "test"
+                    }, value);
                 }
             })
             .dxHtmlEditor("instance");
 
         instance.setSelection(0, 0);
-        instance.insertText(0, "test", "link", { href: "http://test.com", target: true });
+        instance.insertText(0, "test", "link", { href: "http://test.test", target: true });
     });
 
     test("render variable", (assert) => {

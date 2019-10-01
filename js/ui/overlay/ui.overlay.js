@@ -461,7 +461,8 @@ var Overlay = Widget.inherit({
 
     _initOptions: function(options) {
         this._initTarget(options.target);
-        this._initContainer(options.container);
+        var container = options.container === undefined ? this.option("container") : options.container;
+        this._initContainer(container);
         this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
         this.callBase(options);
@@ -747,7 +748,11 @@ var Overlay = Widget.inherit({
 
     _forceFocusLost: function() {
         var activeElement = domAdapter.getActiveElement();
-        activeElement && this._$content.find(activeElement).length && activeElement.blur();
+        var shouldResetActiveElement = !!this._$content.find(activeElement).length;
+
+        if(shouldResetActiveElement) {
+            domUtils.resetActiveElement();
+        }
     },
 
     _animate: function(animation, completeCallback, startCallback) {
@@ -954,8 +959,14 @@ var Overlay = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._$content.appendTo(this.$element());
+        this._appendContentToElement();
         this._renderVisibilityAnimate(this.option("visible"));
+    },
+
+    _appendContentToElement: function() {
+        if(!this._$content.parent().is(this.$element())) {
+            this._$content.appendTo(this.$element());
+        }
     },
 
     _renderContent: function() {
@@ -972,6 +983,8 @@ var Overlay = Widget.inherit({
         }
 
         this._contentAlreadyRendered = true;
+        this._appendContentToElement();
+
         this.callBase();
     },
 
@@ -1003,9 +1016,6 @@ var Overlay = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        const $element = this.$element();
-        this._$content.appendTo($element);
-
         const whenContentRendered = new Deferred();
 
         const contentTemplateOption = this.option("contentTemplate"),

@@ -2293,6 +2293,7 @@ Axis.prototype = {
         var options = this._options;
         return {
             isHorizontal: this._isHorizontal,
+            shiftZeroValue: !this.isArgumentAxis,
             interval: options.semiDiscreteInterval,
             stick: this._getStick(),
             breaksSize: options.breakStyle ? options.breakStyle.width : 0

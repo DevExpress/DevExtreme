@@ -59,6 +59,38 @@ function skipTestOnMobile(assert) {
     return isMobile;
 }
 
+QUnit.module("T712431", () => {
+    // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
+    var APPOINTMENT_WIDTH = 941;
+
+    var createInstance = function(options) {
+        return $("#scheduler").dxScheduler($.extend(options, { })).dxScheduler("instance");
+    };
+
+    QUnit.test('Appointment width should be not less 941px with width control 1100px', function(assert) {
+        var data = [
+            {
+                text: "Website Re-Design Plan 2",
+                startDate: new Date(2017, 4, 7, 9, 30),
+                endDate: new Date(2017, 4, 12, 17, 20)
+            }
+        ];
+
+        createInstance({
+            dataSource: data,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            width: 1100,
+            height: 600
+        });
+
+        var appointment = $(".dx-scheduler-appointment");
+        assert.roughEqual(appointment.outerWidth(), APPOINTMENT_WIDTH, 1);
+    });
+});
+
 QUnit.module("Integration: Appointments", {
     beforeEach: function() {
         fx.off = true;
@@ -102,6 +134,66 @@ QUnit.module("Integration: Appointments", {
 
         $(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance").open();
     }
+});
+
+QUnit.test("Appointments should be rendered on the same line after navigating to the next month, crossScrollingEnabled = true(T804721)", function(assert) {
+    var expectedTop = 26;
+    var views = ["timelineMonth", "timelineWeek"];
+
+    var helper = {
+        getNavigator: function() { return $(".dx-scheduler-navigator"); },
+        getCaption: function() { return $(".dx-scheduler-navigator").find(".dx-scheduler-navigator-caption").text(); },
+        clickOnPrevButton: function() {
+            helper.getNavigator().find(".dx-scheduler-navigator-previous").trigger("dxclick");
+        },
+        clickOnNextButton: function() {
+            helper.getNavigator().find(".dx-scheduler-navigator-next").trigger("dxclick");
+        },
+        getAppointments: function() {
+            return $(".dx-scheduler-appointment");
+        }
+    };
+
+    var data = [{
+        text: "Event 1",
+        recurrenceRule: "FREQ=DAILY",
+        startDate: new Date(2019, 1, 1, 14, 0),
+        endDate: new Date(2019, 1, 1, 12, 30),
+    }];
+
+    this.instance = $("#scheduler").dxScheduler({
+        dataSource: data,
+        views: views,
+        currentView: views[0],
+        currentDate: new Date(2019, 2, 1),
+        crossScrollingEnabled: true,
+        height: 600
+    }).dxScheduler("instance");
+
+    var testTopPosition = function(view, navigatorDate) {
+        helper.getAppointments().each(function(index, element) {
+            var currentTop = translator.locate($(element)).top;
+            assert.equal(currentTop, expectedTop, `current appointment top position should be equal ${expectedTop} in ${view} type, ${navigatorDate} date`);
+        });
+    };
+
+    views.forEach(function(view) {
+        this.instance.option("currentView", view);
+
+        testTopPosition(view, helper.getCaption());
+
+        helper.clickOnNextButton();
+        testTopPosition(view, helper.getCaption());
+
+        helper.clickOnNextButton();
+        testTopPosition(view, helper.getCaption());
+
+        helper.clickOnPrevButton();
+        testTopPosition(view, helper.getCaption());
+
+        helper.clickOnPrevButton();
+        testTopPosition(view, helper.getCaption());
+    }.bind(this));
 });
 
 QUnit.test("DataSource option should be passed to the appointments collection after wrap by layout manager", function(assert) {

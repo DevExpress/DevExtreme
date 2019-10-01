@@ -532,7 +532,7 @@ _Translator2d.prototype = {
             if(!isDefined(bp) || range.maxVisible.valueOf() !== bp.valueOf()) {
                 return null;
             }
-            return this.translateSpecialCase(bp === 0 ? "canvas_position_default" : "canvas_position_middle");
+            return this.translateSpecialCase(bp === 0 && this._options.shiftZeroValue ? "canvas_position_default" : "canvas_position_middle");
         }
 
         bp = this._fromValue(bp);

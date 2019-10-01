@@ -163,8 +163,8 @@ var ODataStore = Store.inherit({
         var params = {};
 
         if(extraOptions) {
-            params["$expand"] = odataUtils.generateExpand(this._version, extraOptions.expand, extraOptions.select);
-            params["$select"] = odataUtils.generateSelect(this._version, extraOptions.select);
+            params["$expand"] = odataUtils.generateExpand(this._version, extraOptions.expand, extraOptions.select) || undefined;
+            params["$select"] = odataUtils.generateSelect(this._version, extraOptions.select) || undefined;
         }
 
         return this._sendRequest(this._byKeyUrl(key), "GET", params);

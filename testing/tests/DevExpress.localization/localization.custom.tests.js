@@ -100,3 +100,32 @@ QUnit.test("parse number by LDML pattern", function(assert) {
 QUnit.test("parse negative number in rtl mode", function(assert) {
     assert.equal(numberLocalization.parse("\u061C-١٢٣"), -123);
 });
+
+QUnit.module("Custom minimumGroupingDigits", {
+    beforeEach: function() {
+        numberLocalization.inject({
+            format: function(value, format) {
+                if(format === "fixedPoint") {
+                    if(value === 1000) {
+                        return "1000";
+                    }
+                    if(value === 10000) {
+                        return "10 000";
+                    }
+                }
+                return this.callBase.apply(this, arguments);
+            }
+        });
+    },
+    afterEach: function() {
+        numberLocalization.resetInjection();
+    }
+});
+
+QUnit.test("getThousandsSeparator", function(assert) {
+    assert.equal(numberLocalization.getThousandsSeparator(), " ");
+});
+
+QUnit.test("format number", function(assert) {
+    assert.equal(numberLocalization.format(1234.5, "#,##0.00"), "1 234.50");
+});

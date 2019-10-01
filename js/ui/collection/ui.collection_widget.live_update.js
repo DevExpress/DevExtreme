@@ -70,7 +70,7 @@ export default CollectionWidget.inherit({
     _partialRefresh: function() {
         if(this.option("repaintChangesOnly")) {
             let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), this.keyOf.bind(this), this._isItemEquals);
-            if(result) {
+            if(result && this._itemsCache.length) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
                 return true;
@@ -111,9 +111,30 @@ export default CollectionWidget.inherit({
 
     _insertByChange: function(keyInfo, items, change, isPartialRefresh) {
         when(isPartialRefresh || arrayUtils.insert(keyInfo, items, change.data, change.index)).done(() => {
+            this._beforeItemElementInserted(change);
             this._renderItem(isDefined(change.index) ? change.index : items.length, change.data);
             this._correctionIndex++;
         });
+    },
+
+    _updateSelectionAfterRemoveByChange: function(removeIndex) {
+        var selectedIndex = this.option("selectedIndex");
+
+        if(selectedIndex > removeIndex) {
+            this.option("selectedIndex", selectedIndex - 1);
+        } else if(selectedIndex === removeIndex && this.option("selectedItems").length === 1) {
+            this.option("selectedItems", []);
+        } else {
+            this._normalizeSelectedItems();
+        }
+    },
+
+    _beforeItemElementInserted: function(change) {
+        var selectedIndex = this.option("selectedIndex");
+
+        if(change.index <= selectedIndex) {
+            this.option("selectedIndex", selectedIndex + 1);
+        }
     },
 
     _removeByChange: function(keyInfo, items, change, isPartialRefresh) {
@@ -127,7 +148,7 @@ export default CollectionWidget.inherit({
                 if(isPartialRefresh) {
                     this._updateIndicesAfterIndex(index - 1);
                     this._afterItemElementDeleted($removedItemElement, deletedActionArgs);
-                    this._normalizeSelectedItems();
+                    this._updateSelectionAfterRemoveByChange(index);
                 } else {
                     this._deleteItemElementByIndex(index);
                     this._afterItemElementDeleted($removedItemElement, deletedActionArgs);

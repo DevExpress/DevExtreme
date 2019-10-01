@@ -18,8 +18,8 @@ namespace Runner.Controllers
 
         private const int NodeServerCheckTimeout = 100;
         private const int NodeServerKillTimeout = 200;
-        private const int NodeScriptTimeout = 3000;
-        private const int DirectoryKillTimeout = 3000;
+        private const int NodeScriptTimeout = 15000;
+        private const int DirectoryKillTimeout = 5000;
 
         private const string PathToDataDirectory = "testing/content/VectorMapData/";
 
@@ -220,8 +220,11 @@ namespace Runner.Controllers
                     if (!isJson)
                     {
                         var k = text.IndexOf("=");
-                        variable = text.Substring(0, k).Trim();
-                        text = text.Substring(k + 1, text.Length - k - 2).Trim();
+                        if (k > 0)
+                        {
+                            variable = text.Substring(0, k).Trim();
+                            text = text.Substring(k + 1, text.Length - k - 2).Trim();
+                        }
                     }
                     return new
                     {

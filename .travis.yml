@@ -1,5 +1,4 @@
-dist: trusty
-sudo: required
+dist: bionic
 language: generic
 
 services:
@@ -9,6 +8,7 @@ env:
   matrix:
     - TARGET=lint
     - TARGET=test CONSTEL=misc
+    - TARGET=test CONSTEL=misc JQUERY=true
     - TARGET=test CONSTEL=ui
     - TARGET=test CONSTEL=ui.editors
     - TARGET=test CONSTEL=ui.grid
@@ -27,6 +27,10 @@ cache:
     - node_modules
     - dotnet_packages
 
+before_cache:
+  # See https://github.com/DevExpress/DevExtreme/pull/1251
+  - sudo chmod -R +Xr dotnet_packages
+
 script:
 
   # clean bloated PATH to prevent conflicts
@@ -38,6 +42,7 @@ script:
     -e TARGET=$TARGET
     -e BROWSER=$BROWSER
     -e CONSTEL=$CONSTEL
+    -e JQUERY=$JQUERY
     -v $TRAVIS_BUILD_DIR:/devextreme
     docker.io/devexpress/devextreme-build:18_2
     ./docker-ci.sh

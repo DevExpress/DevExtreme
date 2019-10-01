@@ -2924,8 +2924,8 @@ QUnit.module("datebox with time component", {
             type: "datetime",
             pickerType: "calendar",
             opened: true,
-            min: new Date("2015/1/25 12:00:00"),
-            value: new Date("2015/1/25 12:00:00")
+            min: new Date("2015/1/25 13:00:00"),
+            value: new Date("2015/1/25 13:00:00")
         }).dxDateBox("instance");
         const $submitElement = $("#dateBox").find("input[type=hidden]");
         const $hourDownButton = $(dateBox.content()).find(".dx-numberbox-spin-down").first();
@@ -2934,7 +2934,7 @@ QUnit.module("datebox with time component", {
         $(".dx-popup-done.dx-button").first().trigger("dxclick");
 
         assert.notOk(dateBox.option("isValid"), "editor is invalid");
-        assert.equal($submitElement.val(), "2015-01-25T12:00:00", "submit element has correct value");
+        assert.equal($submitElement.val(), "2015-01-25T13:00:00", "submit element has correct value");
     });
 
     QUnit.test("Reset seconds and milliseconds when DateBox has no value for time view", assert => {
@@ -3633,6 +3633,37 @@ QUnit.module("keyboard navigation", {
         const $cancelButton = this.dateBox._popup._wrapper().find(".dx-button.dx-popup-cancel");
         assert.ok($cancelButton.hasClass("dx-state-focused"), "cancel button is focused");
     });
+
+    QUnit.testInActiveWindow("Unsupported key handlers must be processed correctly", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        this.dateBox.option({
+            pickerType: "list",
+            type: "time"
+        });
+
+        const $input = this.$dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        this.dateBox.focus();
+
+        let isNoError = true;
+
+        try {
+            keyboard
+                .press("down")
+                .press("up")
+                .press("right")
+                .press("left");
+        } catch(e) {
+            isNoError = false;
+        }
+
+        assert.ok(isNoError, "key handlers processed without errors");
+    });
 });
 
 QUnit.module("aria accessibility", {}, () => {
@@ -3800,6 +3831,26 @@ QUnit.module("datebox validation", {}, () => {
             .change();
 
         assert.ok(dateBox.option("isValid"), "widget is valid");
+    });
+
+    QUnit.test("required validator should not block valuechange in datetime strategy", (assert) => {
+        const $dateBox = $("#dateBox").dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            opened: true,
+            value: null
+        }).dxValidator({
+            validationRules: [{
+                type: "required"
+            }]
+        });
+        const dateBox = $dateBox.dxDateBox("instance");
+        const $done = $(dateBox.content()).parent().find(".dx-popup-done.dx-button");
+
+        $done.trigger("dxclick");
+
+        assert.ok(dateBox.option("isValid"), "widget is valid");
+        assert.ok(dateBox.option("value"), "value is not empty");
     });
 
     QUnit.test("widget is still valid after drop down is opened", assert => {
@@ -4403,76 +4454,4 @@ QUnit.module("DateBox number and string value support", {
         });
     });
 
-    QUnit.test("T678838: DateBox doesn't switch format when time is changed", assert => {
-        const $dateBox = $("#dateBox").dxDateBox({
-            value: new Date(2018, 6, 6, 2),
-            type: "datetime",
-            pickerType: "calendar"
-        });
-
-        const instance = $dateBox.dxDateBox("instance");
-        instance.open();
-
-        const $inputs = $("." + DATEBOX_WRAPPER_CLASS + " ." + TEXTEDITOR_INPUT_CLASS);
-        const $hoursInput = $inputs.eq(0);
-        const $formatInput = $inputs.eq(2);
-
-        assert.equal($formatInput.val(), "AM", "format value is correct");
-
-        $hoursInput
-            .val(16)
-            .trigger("change");
-
-        assert.equal(parseInt($hoursInput.val()), 4, "hour input value is correct formated after set hour in 24 format");
-        assert.equal($formatInput.val(), "PM", "format value is changed");
-
-        $("." + DATEBOX_WRAPPER_CLASS)
-            .find(".dx-button.dx-popup-done")
-            .trigger("dxclick");
-
-        assert.equal(instance.option("value").valueOf(), (new Date(2018, 6, 6, 16)).valueOf(), "DateBox value is correct");
-    });
-
-    QUnit.test("date value should be formatted after change AM/PM format", assert => {
-        const TIMEVIEW_FORMAT12_AM = -1;
-        const TIMEVIEW_FORMAT12_PM = 1;
-
-        const $dateBox = $("#dateBox").dxDateBox({
-            value: new Date(2018, 6, 6, 16),
-            type: "datetime",
-            pickerType: "calendar"
-        });
-
-        const dateBox = $dateBox.dxDateBox("instance");
-
-        dateBox.open();
-        const formatSelectBox = $(".dx-timeview-format12").dxSelectBox("instance");
-        const $hourDown = $(dateBox.content()).parent().find(".dx-numberbox-spin-down").eq(0);
-        const $hourUp = $(dateBox.content()).parent().find(".dx-numberbox-spin-up").eq(0);
-        const $hoursInput = $(".dx-numberbox").eq(0).find("." + TEXTEDITOR_INPUT_CLASS);
-
-        assert.equal(formatSelectBox.option("value"), TIMEVIEW_FORMAT12_PM, "correct value on init");
-
-        formatSelectBox.option("value", TIMEVIEW_FORMAT12_AM);
-        $("." + DATEBOX_WRAPPER_CLASS)
-            .find(".dx-button.dx-popup-done")
-            .trigger("dxclick");
-
-        assert.equal(dateBox.option("value").valueOf(), (new Date(2018, 6, 6, 4)).valueOf(), "DateBox value is formatted");
-
-        dateBox.option("value", new Date(2018, 6, 6, 16));
-        dateBox.open();
-
-        $hourDown.trigger("dxpointerdown");
-        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_PM, "date format should be PM after decrement hours");
-
-        $hourUp.trigger("dxpointerdown");
-        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_PM, "date format should be PM after increment hours");
-
-        $hoursInput.val(9).trigger("change");
-        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_AM, "date format should be AM after change value to 9");
-
-        $hoursInput.val(16).trigger("change");
-        assert.ok(formatSelectBox.option("value") === TIMEVIEW_FORMAT12_PM, "date format should be PM after change value to 16");
-    });
 });

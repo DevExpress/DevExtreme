@@ -20,31 +20,33 @@ import { isRenderer } from "core/utils/type";
 
 import "common.css!";
 
-var SCROLLABLE_CLASS = "dx-scrollable",
-    SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container",
-    SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper",
-    SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content",
-    SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar",
-    SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll",
-    SCROLLABLE_SCROLL_CONTENT_CLASS = "dx-scrollable-scroll-content",
-    SCROLLBAR_VERTICAL_CLASS = "dx-scrollbar-vertical",
-    SCROLLBAR_HORIZONTAL_CLASS = "dx-scrollbar-horizontal",
-    SCROLLABLE_NATIVE_CLASS = "dx-scrollable-native",
-    SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden",
-    SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisible",
-    SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled",
-    SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = "dx-scrollable-scrollbar-active",
-    RTL_CLASS = "dx-rtl";
+const SCROLLABLE_CLASS = "dx-scrollable";
+const SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container";
+const SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper";
+const SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content";
+const SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar";
+const SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll";
+const SCROLLABLE_SCROLL_CONTENT_CLASS = "dx-scrollable-scroll-content";
+const SCROLLBAR_VERTICAL_CLASS = "dx-scrollbar-vertical";
+const SCROLLBAR_HORIZONTAL_CLASS = "dx-scrollbar-horizontal";
+const SCROLLABLE_NATIVE_CLASS = "dx-scrollable-native";
+const SCROLLABLE_SCROLLBARS_HIDDEN = "dx-scrollable-scrollbars-hidden";
+const SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE = "dx-scrollable-scrollbars-alwaysvisible";
+const SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled";
+const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = "dx-scrollable-scrollbar-active";
+const RTL_CLASS = "dx-rtl";
 
-var SCROLLBAR_MIN_HEIGHT = 15,
-    INERTIA_TIMEOUT = 100;
+const SCROLLBAR_HOVERABLE_CLASS = "dx-scrollbar-hoverable";
 
-var ACCELERATION = simulatedStrategy.ACCELERATION,
-    MIN_VELOCITY_LIMIT = simulatedStrategy.MIN_VELOCITY_LIMIT,
-    FRAME_DURATION = simulatedStrategy.FRAME_DURATION,
-    SCROLL_LINE_HEIGHT = simulatedStrategy.SCROLL_LINE_HEIGHT;
+const SCROLLBAR_MIN_HEIGHT = 15;
+const INERTIA_TIMEOUT = 100;
 
-var GESTURE_LOCK_KEY = "dxGestureLock";
+const ACCELERATION = simulatedStrategy.ACCELERATION;
+const MIN_VELOCITY_LIMIT = simulatedStrategy.MIN_VELOCITY_LIMIT;
+const FRAME_DURATION = simulatedStrategy.FRAME_DURATION;
+const SCROLL_LINE_HEIGHT = simulatedStrategy.SCROLL_LINE_HEIGHT;
+
+const GESTURE_LOCK_KEY = "dxGestureLock";
 
 var moduleConfig = {
     beforeEach: function() {
@@ -96,6 +98,12 @@ QUnit.testStart(function() {
                 <div id="scaledScrollable">\
                     <div id="scaledContent" style="height: 1000px; width: 1000px;"></div>\
                 </div>\
+            </div>\
+            </div>\
+        <div id="scrollable_container">\
+            <div style="width: 400px">\
+                <div id="content_container_1" tabindex="1" style="height: 200px; width: 198px;"></div>\
+                <div id="content_container_2" tabindex="2" style="height: 200px; width: 198px;"></div>\
             </div>\
         </div>';
 
@@ -1840,28 +1848,6 @@ QUnit.test("scrollbar add active class when click on scrollbar area", function(a
     assert.equal($scrollbar.hasClass(SCROLLBAR_ACTIVE_CLASS), false, "active class was removed after mouse up");
 });
 
-QUnit.test("dx-state-hover-enabled class attached only when showScrollbar is visible", function(assert) {
-    var HOVERED_CLASS = "dx-scrollbar-hoverable";
-    var $scrollable = $("#scrollable").dxScrollable({
-        showScrollbar: 'onScroll',
-        useNative: false,
-        useSimulatedScrollbar: true,
-        direction: "vertical",
-        scrollByThumb: true
-    });
-    var scrollable = $scrollable.dxScrollable("instance"),
-        scrollBar = Scrollbar.getInstance($scrollable.find("." + SCROLLBAR_VERTICAL_CLASS));
-
-    assert.equal(scrollBar.option("hoverStateEnabled"), false, "hoverStateEnabled option is false for onScroll mode");
-    assert.equal($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).hasClass(HOVERED_CLASS), false, "dx-scrollbar-hoverable was not attached when showScrollbar is onScroll");
-
-    scrollable.option("showScrollbar", "onHover");
-
-    scrollBar = Scrollbar.getInstance($scrollable.find("." + SCROLLBAR_VERTICAL_CLASS));
-    assert.equal(scrollBar.option("hoverStateEnabled"), true, "hoverStateEnabled option is true for onHover mode");
-    assert.equal($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).hasClass(HOVERED_CLASS), true, "dx-scrollbar-hoverable was attached when showScrollbar is onHover");
-});
-
 QUnit.test("useSimulatedScrollbar is false when useNative option set to true", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         useNative: true
@@ -1909,6 +1895,46 @@ QUnit.test("content size should be rounded to prevent unexpected scrollbar appea
     });
 
     assert.ok(scrollbar.$element().is(":hidden"), "scrollbar is not visible");
+});
+
+QUnit.module("Hoverable interaction", () => {
+    [false, true].forEach((disabled) => {
+        [false, true].forEach((onInitialize) => {
+            ["vertical", "horizontal"].forEach((direction) => {
+                ["onScroll", "onHover", "always", "never"].forEach((showScrollbarMode) => {
+                    QUnit.test(`ScrollBar hoverable - disabled: ${disabled}, showScrollbar: ${showScrollbarMode}, direction: ${direction}, onInitialize: ${onInitialize}`, (assert) => {
+                        const $scrollable = $("#scrollable").dxScrollable({
+                            useNative: false,
+                            useSimulatedScrollbar: true,
+                            showScrollbar: showScrollbarMode,
+                            direction: direction,
+                            disabled: onInitialize ? disabled : false,
+                            scrollByThumb: true
+                        });
+
+                        if(!onInitialize) {
+                            $scrollable.dxScrollable("instance").option("disabled", disabled);
+                        }
+
+                        const $scrollBar = $scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`);
+                        const scrollBar = Scrollbar.getInstance($scrollBar);
+
+                        const isScrollbarHoverable = (showScrollbarMode === "onHover" || showScrollbarMode === "always");
+
+                        assert.strictEqual(scrollBar.option("hoverStateEnabled"), isScrollbarHoverable, "scrollbar.hoverStateEnabled");
+                        assert.strictEqual($scrollBar.hasClass(SCROLLBAR_HOVERABLE_CLASS), isScrollbarHoverable, `scrollbar hasn't ${SCROLLBAR_HOVERABLE_CLASS}`);
+                        assert.strictEqual($scrollable.hasClass(SCROLLABLE_DISABLED_CLASS), disabled ? true : false, "scrollable-disabled-class");
+
+                        if(browser.msie && parseInt(browser.version) >= 12 && !onInitialize) {
+                            assert.ok(true, "Skip assert for Edge. The pointer-event property processed with a timeout");
+                        } else {
+                            assert.strictEqual($scrollBar.css("pointer-events"), disabled ? "none" : "auto", "pointer-events");
+                        }
+                    });
+                });
+            });
+        });
+    });
 });
 
 QUnit.module("api", moduleConfig);
@@ -2856,6 +2882,78 @@ QUnit.test("scroll should work on mousewheel after draging on horizontal bar", f
     assert.equal(scrollable.scrollOffset().top, distance, "scrolled vertically");
 });
 
+if(devices.current().deviceType === "desktop") {
+    ["vertical", "horizontal"].forEach((direction) => {
+        class ValidateMouseWheelEventTestHelper {
+            constructor(direction) {
+                this._direction = direction;
+                this._wheelEvent = {
+                    type: "dxmousewheel",
+                    pointerType: "mouse",
+                    shiftKey: direction === "vertical" ? false : true
+                };
+
+                this.$scrollable = this._getScrollable();
+
+                this.strategy = this.$scrollable.dxScrollable("instance")._strategy;
+            }
+
+            _getScrollable() {
+                return $("#scrollable").dxScrollable({
+                    useNative: true,
+                    direction: this._direction
+                });
+            }
+
+            getEvent() { return this._wheelEvent; }
+
+            getScrollableContainer() {
+                return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+            }
+        }
+
+        QUnit.test(`validate() mouse wheel (top, left) - direction:${direction}`, (assert) => {
+            let helper = new ValidateMouseWheelEventTestHelper(direction);
+            let event = helper.getEvent();
+
+            event.delta = 1;
+            assert.strictEqual(!!helper.strategy.validate(event), false, "validate result when event.delta = 1");
+
+            event.delta = -1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
+        });
+
+        QUnit.test(`validate() mousewheel (bottom, right)- direction:${direction}`, (assert) => {
+            let helper = new ValidateMouseWheelEventTestHelper(direction);
+            let event = helper.getEvent();
+            let $container = helper.getScrollableContainer();
+
+            $container.scrollTop(50);
+            $container.scrollLeft(50);
+
+            event.delta = 1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = 1");
+
+            event.delta = -1;
+            assert.strictEqual(!!helper.strategy.validate(event), false, "validate result when event.delta = -1");
+        });
+
+        QUnit.test(`validate() mousewheel (center, center)- direction:${direction}`, (assert) => {
+            let helper = new ValidateMouseWheelEventTestHelper(direction);
+            let event = helper.getEvent();
+            let $container = helper.getScrollableContainer();
+
+            $container.scrollTop(25);
+            $container.scrollLeft(25);
+
+            event.delta = 1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = 1");
+
+            event.delta = -1;
+            assert.strictEqual(!!helper.strategy.validate(event), true, "validate result when event.delta = -1");
+        });
+    });
+}
 
 QUnit.module("initViewport integration", moduleConfig);
 
@@ -4572,6 +4670,58 @@ QUnit.testInActiveWindow("arrows was not handled when focus on input element", f
     }
 });
 
+[true, false].forEach((useNativeMode) => {
+    ["vertical", "horizontal"].forEach((scrollbarDirection) => {
+        function checkScrollLocation($scrollable, expectedLocation) {
+            let $scroll = $scrollable.find("." + SCROLLABLE_SCROLL_CLASS);
+            let scrollLocation = translator.locate($scroll);
+            QUnit.assert.deepEqual(scrollLocation, expectedLocation, "scroll location");
+        }
+
+        QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}`, (assert) => {
+            if(devices.real().deviceType !== "desktop") {
+                assert.ok(true, "mobile device does not support tabindex on div element");
+                return;
+            }
+
+            let done = assert.async();
+
+            const scrollableContainerSize = 200;
+            const $scrollable = $("#scrollable_container").dxScrollable({
+                height: scrollableContainerSize,
+                width: scrollableContainerSize,
+                useNative: useNativeMode,
+                direction: scrollbarDirection,
+                showScrollbar: "always",
+                useSimulatedScrollbar: true
+            });
+
+            let $contentContainer1 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_1`);
+            let $contentContainer2 = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS} #content_container_2`);
+
+            if(scrollbarDirection === "horizontal") {
+                $contentContainer1.css("display", "inline-block");
+                $contentContainer2.css("display", "inline-block");
+            }
+
+            return new Promise(function(resolve) {
+                $scrollable.dxScrollable("option", "onScroll", function() {
+                    setTimeout(() => {
+                        checkScrollLocation($scrollable, scrollbarDirection === "vertical" ? { top: 100, left: 0 } : { top: 0, left: 100 });
+                        done();
+                    });
+                    resolve();
+                });
+
+                checkScrollLocation($scrollable, { top: 0, left: 0 });
+
+                const keyboard = keyboardMock($contentContainer1);
+                $contentContainer2.focus();
+                keyboard.keyDown("tab");
+            });
+        });
+    });
+});
 
 QUnit.module("visibility events integration");
 

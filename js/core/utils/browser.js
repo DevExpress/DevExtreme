@@ -26,13 +26,17 @@ var browserFromUA = function(ua) {
     if(browserName === "webkit") {
         result["webkit"] = true;
 
-        if(ua.indexOf("chrome") < 0 && safari.exec(ua)) {
+        if(ua.indexOf("chrome") >= 0 || ua.indexOf("crios") >= 0) {
+            browserName = "chrome";
+            browserVersion = /(?:Chrome|CriOS)\/(\d+\.\d+)/i.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
+        } else if(ua.indexOf("fxios") >= 0) {
+            browserName = "mozilla";
+            browserVersion = /FxiOS\/(\d+\.\d+)/i.exec(ua);
+            browserVersion = browserVersion && browserVersion[1];
+        } else if(safari.exec(ua)) {
             browserName = "safari";
             browserVersion = /Version\/([0-9.]+)/i.exec(ua);
-            browserVersion = browserVersion && browserVersion[1];
-        } else if(ua.indexOf("chrome") >= 0) {
-            browserName = "chrome";
-            browserVersion = /Chrome\/(\d+\.\d+)/i.exec(ua);
             browserVersion = browserVersion && browserVersion[1];
         }
     }

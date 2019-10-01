@@ -120,7 +120,7 @@ var SchedulerAppointmentForm = {
                             endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr),
                             endValue = dateSerialization.deserializeDate(endDateEditor.option("value"));
 
-                        if(endValue < value) {
+                        if(typeUtils.isDefined(endValue) && typeUtils.isDefined(value) && endValue < value) {
                             var duration = endValue.getTime() - previousValue.getTime();
                             endDateEditor.option("value", new Date(value.getTime() + duration));
                         }

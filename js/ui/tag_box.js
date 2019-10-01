@@ -7,7 +7,7 @@ import browser from "../core/utils/browser";
 import { noop, ensureDefined, equalByValue } from "../core/utils/common";
 import { SelectionFilterCreator as FilterCreator } from "../core/utils/selection_filter";
 import { Deferred, when } from "../core/utils/deferred";
-import { getPublicElement } from "../core/utils/dom";
+import { getPublicElement, createTextElementHiddenCopy } from "../core/utils/dom";
 import { isDefined, isObject, isString } from "../core/utils/type";
 import { hasWindow } from "../core/utils/window";
 import { extend } from "../core/utils/extend";
@@ -17,6 +17,7 @@ import messageLocalization from "../localization/message";
 import { addNamespace, normalizeKeyName } from "../events/utils";
 import { name as clickEvent } from "../events/click";
 import caret from "./text_box/utils.caret";
+import { normalizeLoadResult } from "../data/data_source/data_source";
 
 import SelectBox from "./select_box";
 import BindableTemplate from "./widget/bindable_template";
@@ -754,7 +755,25 @@ const TagBox = SelectBox.inherit({
 
     _renderInputSize: function() {
         const $input = this._input();
-        $input.prop("size", $input.val() ? $input.val().length + 2 : 1);
+        const value = $input.val();
+        const cursorWidth = 5;
+        let width = "";
+        let size = "";
+        const canTypeText = this.option("searchEnabled") || this.option("editEnabled");
+
+        if(value && canTypeText) {
+            const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
+
+            $calculationElement.insertAfter($input);
+            width = $calculationElement.outerWidth() + cursorWidth;
+
+            $calculationElement.remove();
+        } else if(!value) {
+            size = 1;
+        }
+
+        $input.css("width", width);
+        $input.attr("size", size);
     },
 
     _renderInputSubstitution: function() {
@@ -822,7 +841,13 @@ const TagBox = SelectBox.inherit({
             dataSource
                 .store()
                 .load({ filter, customQueryParams, expand })
-                .done(function(items) {
+                .done((data, extra) => {
+                    if(this._disposed) {
+                        d.reject();
+                        return;
+                    }
+
+                    const { data: items } = normalizeLoadResult(data, extra);
                     const mappedItems = dataSource._applyMapFunction(items);
                     d.resolve(mappedItems.filter(clientFilterFunction));
                 })
@@ -1059,6 +1084,7 @@ const TagBox = SelectBox.inherit({
         const e = args.event;
 
         e.stopPropagation();
+        this._saveValueChangeEvent(e);
 
         const $tag = $(e.target).closest(`.${TAGBOX_TAG_CLASS}`);
         this._removeTagElement($tag);

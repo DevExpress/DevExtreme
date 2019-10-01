@@ -207,7 +207,7 @@ var baseFixedColumns = {
         }
 
         if(!isFixedTableRendering && that._isFixedColumns) {
-            isEmptyCell = column.fixed || column.command;
+            isEmptyCell = column.fixed || (column.command && column.fixed !== false);
 
             if(isGroupCell) {
                 isEmptyCell = false;
@@ -380,6 +380,8 @@ var baseFixedColumns = {
 
     setColumnWidths: function(widths) {
         var columns,
+            visibleColumns = this._columnsController.getVisibleColumns(),
+            hasVisibleWidth = widths && widths.length && isDefined(visibleColumns[0].visibleWidth),
             useVisibleColumns = false;
 
         this.callBase.apply(this, arguments);
@@ -388,14 +390,16 @@ var baseFixedColumns = {
             if(this.option("legacyRendering")) {
                 useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
             } else {
-                useVisibleColumns = widths && widths.filter(function(width) { return width === "auto"; }).length;
+                let hasAutoWidth = widths && widths.some(function(width) { return width === "auto"; });
+                useVisibleColumns = hasAutoWidth && (!hasVisibleWidth || !this.isScrollbarVisible(true));
             }
+
             if(useVisibleColumns) {
-                columns = this._columnsController.getVisibleColumns();
+                columns = visibleColumns;
             }
             this.callBase(widths, this._fixedTableElement, columns, true);
         }
-        if(widths && widths.length && isDefined(this._columnsController.getVisibleColumns()[0].visibleWidth)) {
+        if(hasVisibleWidth) {
             this.synchronizeRows();
         }
     },

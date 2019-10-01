@@ -367,6 +367,13 @@ var DropDownEditor = TextBox.inherit({
 
         this._disposeKeyboardProcessor();
 
+        // NOTE: to prevent buttons disposition
+        var beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;
+        var afterButtonsContainerParent = this._$afterButtonsContainer && this._$afterButtonsContainer[0].parentNode;
+        beforeButtonsContainerParent && beforeButtonsContainerParent.removeChild(this._$beforeButtonsContainer[0]);
+        afterButtonsContainerParent && afterButtonsContainerParent.removeChild(this._$afterButtonsContainer[0]);
+
+        this._detachFocusEvents();
         $container.empty();
         this._$dropDownButton = null;
         this._$clearButton = null;
@@ -375,15 +382,16 @@ var DropDownEditor = TextBox.inherit({
             model: data,
             container: domUtils.getPublicElement($container),
             onRendered: () => {
-                if(!this._input().length) {
+                var $input = this._input();
+
+                if(!$input.length) {
                     throw errors.Error("E1010");
                 }
 
                 this._refreshEvents();
                 this._refreshValueChangeEvent();
                 this._renderFocusState();
-
-                isFocused && eventsEngine.trigger(this._input(), "focus");
+                isFocused && eventsEngine.trigger($input, "focus");
             }
         });
     },

@@ -3532,6 +3532,122 @@ QUnit.test("Exception when store not returned totalCount after full reload", fun
     }
 });
 
+// T754708
+QUnit.test("The collapseAll method should work after expanding group row", function(assert) {
+    // arrange
+    var dataSource = this.createDataSource({
+        group: "field2",
+        pageSize: 2
+    });
+
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [{
+        key: 2, items: null
+    }, {
+        key: 3, items: null
+    }], "loaded items");
+
+    dataSource.changeRowExpand([2]); // expand group row
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [
+        {
+            isContinuationOnNextPage: true,
+            items: [
+                {
+                    field1: 1,
+                    field2: 2,
+                    field3: 3
+                }
+            ],
+            key: 2
+        }
+    ], "loaded items");
+
+    // act
+    dataSource.collapseAll();
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [{
+        key: 2, items: null
+    }, {
+        key: 3, items: null
+    }], "loaded items");
+});
+
+// T754708
+QUnit.test("The expandAll method  should work after collapsing group row", function(assert) {
+    // arrange
+    var dataSource = this.createDataSource({
+        group: "field2",
+        pageSize: 2
+    });
+
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [{
+        key: 2, items: null
+    }, {
+        key: 3, items: null
+    }], "loaded items");
+
+    dataSource.expandAll();
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [
+        {
+            isContinuationOnNextPage: true,
+            items: [
+                {
+                    field1: 1,
+                    field2: 2,
+                    field3: 3
+                }
+            ],
+            key: 2
+        }
+    ], "loaded items");
+
+    dataSource.changeRowExpand([2]); // collapse group row
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [{
+        key: 2, items: null
+    },
+    {
+        isContinuationOnNextPage: true,
+        items: [],
+        key: 3
+    }], "loaded items");
+
+    // act
+    dataSource.expandAll();
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(dataSource.items(), [
+        {
+            isContinuationOnNextPage: true,
+            items: [
+                {
+                    field1: 1,
+                    field2: 2,
+                    field3: 3
+                }
+            ],
+            key: 2
+        }
+    ], "loaded items");
+});
+
+
 $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "Grouping with remoteOperations and with remote groupPaging"], function(moduleIndex, moduleName) {
 
     QUnit.module(moduleName, {

@@ -50,7 +50,7 @@ function generateCustomizeTooltipCallback(customizeTooltip, fontOptions, rtlEnab
 }
 
 function createAxis(isHorizontal) {
-    var translator = new translator2DModule.Translator2D({}, {}, { isHorizontal: !!isHorizontal });
+    var translator = new translator2DModule.Translator2D({}, {}, { shiftZeroValue: !isHorizontal, isHorizontal: !!isHorizontal });
 
     return {
         getTranslator: function() {

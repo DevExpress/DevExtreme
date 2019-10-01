@@ -1,8 +1,8 @@
-var $ = require("jquery"),
-    keyboardMock = require("../../../helpers/keyboardMock.js"),
-    caretWorkaround = require("./caretWorkaround.js");
+import $ from "jquery";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import caretWorkaround from "./caretWorkaround.js";
 
-require("ui/text_box/ui.text_editor");
+import "ui/text_box/ui.text_editor";
 
 var testMaskRule = function(title, config) {
     QUnit.test(title, function(assert) {
@@ -636,6 +636,24 @@ QUnit.test("all selected chars should be deleted on del key", function(assert) {
 
     assert.equal($input.val(), "x__", "printed only one char");
     assert.equal(keyboard.caret().start, 1, "caret position set to start");
+});
+
+QUnit.test("it should correctly handle selected range changing when input is missed", (assert) => {
+    assert.expect(1);
+
+    $("#texteditor").dxTextEditor({
+        onInitialized: ({ component }) => {
+            let isPassed = true;
+
+            try {
+                component._caret({ start: 0, end: 1 });
+            } catch(e) {
+                isPassed = false;
+            }
+
+            assert.ok(isPassed, "In case an input isn't ready, _caret doesn't generate an error");
+        }
+    });
 });
 
 QUnit.module("showMaskMode", moduleConfig);
@@ -1482,12 +1500,20 @@ QUnit.test("custom function get fullText and current index", function(assert) {
 });
 
 QUnit.test("fullText updated, if pasted text is accepted", function(assert) {
+    // Fix blinking on blur in MS Edge (https://trello.com/c/HyC0Shoz)
+    assert.expect(1);
+    var firstTimeCall = true;
+
     var $textEditor = $("#texteditor").dxTextEditor({
         mask: "xy",
         maskRules: {
             "x": "x",
             "y": function(char, index, fullText) {
-                assert.equal(fullText, "x_", "x is accepted");
+                if(firstTimeCall) {
+                    assert.equal(fullText, "x_", "x is accepted");
+                }
+
+                firstTimeCall = false;
                 return char === "y";
             }
         }
@@ -1623,7 +1649,10 @@ QUnit.test("validation after value changed", function(assert) {
     $input.trigger("change");
 
     textEditor.option("value", "");
-    assert.equal(textEditor.option("isValid"), true, "mask with an empty value should be valid. Required validator should check it");
+    assert.ok(textEditor.option("isValid"), "mask with an empty value should be valid. Required validator should check it");
+
+    textEditor.option("value", "f");
+    assert.notOk(textEditor.option("isValid"), "mask with an invalid value should be invalid");
 });
 
 

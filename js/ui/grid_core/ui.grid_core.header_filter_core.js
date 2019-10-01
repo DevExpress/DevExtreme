@@ -188,7 +188,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 shading: false,
                 showTitle: false,
                 showCloseButton: false,
-                closeOnTargetScroll: true,
+                closeOnTargetScroll: false, // T756320
                 dragEnabled: false,
                 closeOnOutsideClick: true,
                 focusStateEnabled: false,

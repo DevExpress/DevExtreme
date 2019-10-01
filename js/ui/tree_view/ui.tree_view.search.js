@@ -1,3 +1,4 @@
+import $ from "../../core/renderer";
 import registerComponent from "../../core/component_registrator";
 import searchBoxMixin from "../widget/ui.search_box_mixin";
 import { extend } from "../../core/utils/extend";
@@ -67,9 +68,9 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         }
     },
 
-    _focusTarget: function() {
-        if(this.option("searchEnabled")) {
-            return this._scrollableContainer.$element();
+    _itemContainer: function(isSearchMode) {
+        if(this._scrollableContainer && isSearchMode) {
+            return $(this._scrollableContainer.content());
         }
 
         return this.callBase();

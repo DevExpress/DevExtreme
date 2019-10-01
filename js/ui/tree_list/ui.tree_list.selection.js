@@ -43,7 +43,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                             selectedItemKeys: this.option("selectedRowKeys")
                         });
                     }
-                    originalHandleDataChanged.apply(this, e);
+                    originalHandleDataChanged.apply(this, arguments);
                 },
 
                 loadDescendants: function() {

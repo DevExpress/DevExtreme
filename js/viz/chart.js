@@ -802,7 +802,7 @@ var dxChart = AdvancedChart.inherit({
         if(!sizeShortage || !panesCanvases) {
             return;
         }
-        this._renderer.stopAllAnimations();
+        this._renderer.stopAllAnimations(true);
         var that = this,
             rotated = that._isRotated(),
             extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes),
@@ -1248,7 +1248,15 @@ var dxChart = AdvancedChart.inherit({
                     axisPath = arg.fullName.slice(0, arg.fullName.indexOf("."));
                 }
                 if(axisPath === "argumentAxis") {
-                    that.getArgumentAxis().visualRange(arg.value);
+                    const pathElements = arg.fullName.split(".");
+                    const destElem = pathElements[pathElements.length - 1];
+                    if(destElem === "endValue" || destElem === "startValue") {
+                        that.getArgumentAxis().visualRange({
+                            [destElem]: arg.value
+                        });
+                    } else {
+                        that.getArgumentAxis().visualRange(arg.value);
+                    }
                     return;
                 }
                 const axis = that._valueAxes.filter(a => a.getOptions().optionPath === axisPath)[0];

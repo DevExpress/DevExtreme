@@ -1,64 +1,40 @@
-var $ = require("../../core/renderer"),
-    isDefined = require("../../core/utils/type").isDefined,
-    browser = require("../../core/utils/browser"),
-    domAdapter = require("../../core/dom_adapter");
+import $ from "../../core/renderer";
+import { isDefined } from "../../core/utils/type";
+import browser from "../../core/utils/browser";
+import domAdapter from "../../core/dom_adapter";
 
-var isFocusingOnCaretChange = browser.msie || browser.safari;
+const isFocusingOnCaretChange = browser.msie || browser.safari;
 
-var getCaret = function(input) {
-    if(isObsoleteBrowser(input)) {
-        return getCaretForObsoleteBrowser(input);
+const getCaret = function(input) {
+    let range;
+
+    try {
+        range = {
+            start: input.selectionStart,
+            end: input.selectionEnd
+        };
+    } catch(e) {
+        range = {
+            start: 0,
+            end: 0
+        };
     }
 
-    return {
-        start: input.selectionStart,
-        end: input.selectionEnd
-    };
+    return range;
 };
 
-var setCaret = function(input, position) {
-    if(isObsoleteBrowser(input)) {
-        setCaretForObsoleteBrowser(input, position);
-        return;
-    }
+const setCaret = function(input, position) {
     if(!domAdapter.getBody().contains(input)) {
         return;
     }
 
-    input.selectionStart = position.start;
-    input.selectionEnd = position.end;
+    try {
+        input.selectionStart = position.start;
+        input.selectionEnd = position.end;
+    } catch(e) { }
 };
 
-var isObsoleteBrowser = function(input) {
-    return !input.setSelectionRange;
-};
-
-var getCaretForObsoleteBrowser = function(input) {
-    var range = domAdapter.getSelection().createRange();
-    var rangeCopy = range.duplicate();
-
-    range.move('character', -input.value.length);
-    range.setEndPoint('EndToStart', rangeCopy);
-
-    return {
-        start: range.text.length,
-        end: range.text.length + rangeCopy.text.length
-    };
-};
-
-var setCaretForObsoleteBrowser = function(input, position) {
-    if(!domAdapter.getBody().contains(input)) {
-        return;
-    }
-
-    var range = input.createTextRange();
-    range.collapse(true);
-    range.moveStart("character", position.start);
-    range.moveEnd("character", position.end - position.start);
-    range.select();
-};
-
-var caret = function(input, position) {
+const caret = function(input, position) {
     input = $(input).get(0);
 
     if(!isDefined(position)) {

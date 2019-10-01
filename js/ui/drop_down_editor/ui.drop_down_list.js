@@ -12,6 +12,8 @@ var $ = require("../../core/renderer"),
     errors = require("../widget/ui.errors"),
     eventUtils = require("../../events/utils"),
     devices = require("../../core/devices"),
+    dataQuery = require("../../data/query"),
+    each = require("../../core/utils/iterator").each,
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
     themes = require("../themes"),
@@ -335,6 +337,44 @@ var DropDownList = DropDownEditor.inherit({
         }
     },
 
+    _fitIntoRange: function(value, start, end) {
+        if(value > end) {
+            return start;
+        }
+        if(value < start) {
+            return end;
+        }
+        return value;
+    },
+
+    _items: function() {
+        var items = this._getPlainItems(!this._list && this._dataSource.items());
+
+        var availableItems = new dataQuery(items).filter("disabled", "<>", true).toArray();
+
+        return availableItems;
+    },
+
+    _calcNextItem: function(step) {
+        var items = this._items();
+        var nextIndex = this._fitIntoRange(this._getSelectedIndex() + step, 0, items.length - 1);
+        return items[nextIndex];
+    },
+
+    _getSelectedIndex: function() {
+        var items = this._items();
+        var selectedItem = this.option("selectedItem");
+        var result = -1;
+        each(items, (function(index, item) {
+            if(this._isValueEquals(item, selectedItem)) {
+                result = index;
+                return false;
+            }
+        }).bind(this));
+
+        return result;
+    },
+
     _createPopup: function() {
         this.callBase();
         this._popup._wrapper().addClass(this._popupWrapperClass());
@@ -513,9 +553,7 @@ var DropDownList = DropDownEditor.inherit({
     _fireContentReadyAction: commonUtils.noop,
 
     _setAriaTargetForList: function() {
-        // TODO: make getAriaTarget option
         this._list._getAriaTarget = this._getAriaTarget.bind(this);
-        this._list.setAria("role", "combobox");
     },
 
     _renderList: function() {
@@ -525,10 +563,10 @@ var DropDownList = DropDownEditor.inherit({
             .appendTo(this._popup.$content());
 
         this._list = this._createComponent($list, List, this._listConfig());
-
         this._refreshList();
 
         this._setAriaTargetForList();
+        this._list.option("_listAttributes", { "role": "combobox" });
 
         this._renderPreventBlur(this._$list);
     },

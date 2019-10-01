@@ -1,27 +1,25 @@
-var $ = require("../../core/renderer"),
-    map = require("../../core/utils/iterator").map,
-    PlainEditStrategy = require("../collection/ui.collection_widget.edit.strategy.plain");
+import $ from "../../core/renderer";
+import { map } from "../../core/utils/iterator";
+import PlainEditStrategy from "../collection/ui.collection_widget.edit.strategy.plain";
 
-var MenuBaseEditStrategy = PlainEditStrategy.inherit({
-    _getPlainItems: function() {
+class MenuBaseEditStrategy extends PlainEditStrategy {
+    _getPlainItems() {
         return map(this._collectionWidget.option("items"), function getMenuItems(item) {
             return (item.items ? [item].concat(map(item.items, getMenuItems)) : item);
         });
-    },
+    }
 
-    _stringifyItem: function(item) {
-        var that = this;
-
-        return JSON.stringify(item, function(key, value) {
+    _stringifyItem(item) {
+        return JSON.stringify(item, (key, value) => {
             if(key === "template") {
-                return that._getTemplateString(value);
+                return this._getTemplateString(value);
             }
             return value;
         });
-    },
+    }
 
-    _getTemplateString: function(template) {
-        var result;
+    _getTemplateString(template) {
+        let result;
 
         if(typeof (template) === "object") {
             result = $(template).text();
@@ -31,6 +29,6 @@ var MenuBaseEditStrategy = PlainEditStrategy.inherit({
 
         return result;
     }
-});
+}
 
 module.exports = MenuBaseEditStrategy;

@@ -6,6 +6,7 @@ env:
   matrix:
     - TARGET=lint
     - TARGET=test CONSTEL=misc
+    - TARGET=test CONSTEL=misc JQUERY=true
     - TARGET=test CONSTEL=ui
     - TARGET=test CONSTEL=ui.editors
     - TARGET=test CONSTEL=ui.grid

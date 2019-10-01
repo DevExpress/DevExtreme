@@ -4,6 +4,7 @@ import "ui/html_editor";
 import fx from "animation/fx";
 
 import keyboardMock from "../../../helpers/keyboardMock.js";
+import { checkLink } from "./utils.js";
 
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
@@ -121,7 +122,7 @@ QUnit.module("Toolbar integration", {
 
         instance.setSelection(0, 2);
 
-        $(`.${TOOLBAR_CLASS}`).on("dxclick", toolbarClickStub);
+        $(`.${TOOLBAR_WRAPPER_CLASS}`).on("dxclick", toolbarClickStub);
         $("#htmlEditor")
             .find(`.dx-dropdownmenu-button`)
             .trigger("dxclick");
@@ -141,12 +142,14 @@ QUnit.module("Toolbar integration", {
 
     test("Add a link via dialog", (assert) => {
         const done = assert.async();
-        const expected = '<p><a href="http://test.com" target="_blank">te</a>st</p>';
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["link"] },
-            onValueChanged: (e) => {
-                assert.equal(e.value, expected, "link has been added");
+            onValueChanged: ({ value }) => {
+                checkLink(assert, {
+                    href: "http://test.test",
+                    content: "te"
+                }, value);
                 done();
             }
         }).dxHtmlEditor("instance");
@@ -166,7 +169,7 @@ QUnit.module("Toolbar integration", {
 
         $inputs
             .first()
-            .val("http://test.com")
+            .val("http://test.test")
             .change();
 
         $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
@@ -432,5 +435,30 @@ QUnit.module("Toolbar integration", {
                 done();
             }
         }).dxHtmlEditor("instance");
+    });
+
+    test("Toolbar should correctly update its dimensions after changing the width of the HtmlEditor", (assert) => {
+        const $container = $("#htmlEditor");
+        const instance = $container.dxHtmlEditor({
+            width: 1000,
+            toolbar: {
+                items: [
+                    "undo", "redo", "bold", "italic", "strike", "underline", "separator",
+                    "alignLeft", "alignCenter", "alignRight", "alignJustify", "separator",
+                    "orderedList", "bulletList", "separator",
+                    "color", "background", "separator",
+                    "link", "image", "separator",
+                    "clear", "codeBlock", "blockquote"
+                ]
+            }
+        }).dxHtmlEditor("instance");
+
+        this.clock.tick();
+        instance.option("width", 100);
+        this.clock.tick();
+
+        const toolbarWidth = $container.find(`.${TOOLBAR_CLASS}`).width();
+        const beforeContainerWidth = $container.find(`.dx-toolbar-before`).width();
+        assert.ok(beforeContainerWidth <= toolbarWidth, "toolbar items fits the widget container");
     });
 });

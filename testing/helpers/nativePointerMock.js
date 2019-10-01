@@ -961,14 +961,16 @@
                 return this;
             },
 
-            wheel: function(d) {
+            wheel: function(d, shiftKey) {
                 if(document["onwheel"] !== undefined) {
                     triggerEvent("wheel", {
-                        deltaY: -d / 30
+                        deltaY: -d / 30,
+                        shiftKey: shiftKey
                     });
                 } else {
                     triggerEvent("mousewheel", {
-                        wheelDelta: d
+                        wheelDelta: d,
+                        shiftKey: shiftKey
                     });
                 }
 

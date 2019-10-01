@@ -216,6 +216,7 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when no scroll"
 
     $.map(that.columns, function(column) {
         column.width = 50;
+        column.visibleWidth = 50;
         return column;
     });
 
@@ -334,6 +335,7 @@ QUnit.test("RowsView - set column width for fixed table when no scroll", functio
 
     $.map(that.columns, function(column) {
         column.width = 50;
+        column.visibleWidth = 50;
         return column;
     });
 

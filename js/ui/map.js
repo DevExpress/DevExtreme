@@ -460,10 +460,6 @@ var Map = Widget.inherit({
     _optionChanged: function(args) {
         var name = args.name;
 
-        if(this._cancelOptionChange) {
-            return;
-        }
-
         var changeBag = this._optionChangeBag;
         this._optionChangeBag = null;
 
@@ -584,11 +580,8 @@ var Map = Widget.inherit({
         this._createActionByOption("onUpdated")();
     },
 
-    // TODO: move this ability to component?
     setOptionSilent: function(name, value) {
-        this._cancelOptionChange = true;
-        this.option(name, value);
-        this._cancelOptionChange = false;
+        this._setOptionSilent(name, value);
     },
 
     /**

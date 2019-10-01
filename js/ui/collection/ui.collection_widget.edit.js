@@ -1,18 +1,16 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    BaseCollectionWidget = require("./ui.collection_widget.base"),
-    errors = require("../widget/ui.errors"),
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    noop = require("../../core/utils/common").noop,
-    isDefined = require("../../core/utils/type").isDefined,
-    PlainEditStrategy = require("./ui.collection_widget.edit.strategy.plain"),
-    compileGetter = require("../../core/utils/data").compileGetter,
-    DataSource = require("../../data/data_source/data_source").DataSource,
-    Selection = require("../selection/selection"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import BaseCollectionWidget from "./ui.collection_widget.base";
+import errors from "../widget/ui.errors";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import { noop } from "../../core/utils/common";
+import { isDefined } from "../../core/utils/type";
+import PlainEditStrategy from "./ui.collection_widget.edit.strategy.plain";
+import { compileGetter } from "../../core/utils/data";
+import { DataSource, normalizeLoadResult } from "../../data/data_source/data_source";
+import Selection from "../selection/selection";
+import { when, Deferred, fromPromise } from "../../core/utils/deferred";
 
 var ITEM_DELETING_DATA_KEY = "dxItemDeleting",
     NOT_EXISTING_INDEX = -1;
@@ -252,9 +250,20 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     options.userData = that._dataSource._userData;
                 }
                 var store = that._dataSource && that._dataSource.store();
-                return store ? store.load(options).done(function(items) {
-                    that._dataSource._applyMapFunction(items);
-                }) : new Deferred().resolve([]);
+
+                if(store) {
+                    return store.load(options).done(function(loadResult) {
+                        if(that._disposed) {
+                            return;
+                        }
+
+                        var items = normalizeLoadResult(loadResult).data;
+
+                        that._dataSource._applyMapFunction(items);
+                    });
+                } else {
+                    return new Deferred().resolve(this.plainItems());
+                }
             },
             dataFields: function() {
                 return that._dataSource && that._dataSource.select();
@@ -582,10 +591,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _optionChanged: function(args) {
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
         switch(args.name) {
             case "selectionMode":
                 if(args.value === "multi") {
@@ -630,13 +635,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         this._syncSelectionOptions("selectedItems");
     },
 
-    // TODO: move this ability to component?
-    _setOptionSilent: function(name, value) {
-        this._cancelOptionChange = name;
-        this.option(name, value);
-        this._cancelOptionChange = false;
-    },
-
     _waitDeletingPrepare: function($itemElement) {
         if($itemElement.data(ITEM_DELETING_DATA_KEY)) {
             return new Deferred().resolve().promise();
@@ -655,7 +653,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
                 shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
 
-            when(deferredUtils.fromPromise(deletingActionArgs.cancel))
+            when(fromPromise(deletingActionArgs.cancel))
                 .always(function() {
                     $itemElement.data(ITEM_DELETING_DATA_KEY, false);
                 })

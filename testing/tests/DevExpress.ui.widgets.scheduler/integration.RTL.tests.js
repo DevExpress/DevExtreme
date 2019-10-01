@@ -77,5 +77,5 @@ QUnit.test("Task positions, month view", function(assert) {
     var $cell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(1),
         $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
 
-    assert.roughEqual($appointment.position().left + $appointment.outerWidth(), $cell.position().left + $cell.outerWidth(), 0.1, "task position is correct");
+    assert.roughEqual($appointment.position().left + $appointment.outerWidth(), $cell.position().left + $cell.outerWidth(), 1, "task position is correct");
 });

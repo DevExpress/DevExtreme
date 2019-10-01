@@ -1,3 +1,5 @@
+/* global Node */
+
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isDefined } from "../../core/utils/type";
@@ -14,10 +16,12 @@ import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
 import ConverterController from "./converterController";
 import getWordMatcher from "./matchers/wordLists";
+import getTextDecorationMatcher from "./matchers/textDecoration";
 import FormDialog from "./ui/formDialog";
 
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
+const QUILL_CLIPBOARD_CLASS = "ql-clipboard";
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 const HTML_EDITOR_CONTENT_CLASS = "dx-htmleditor-content";
 
@@ -155,16 +159,28 @@ const HtmlEditor = Editor.inherit({
         return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
     },
 
-    _focusInHandler: function() {
+    _focusInHandler: function({ relatedTarget }) {
+        if(this._shouldSkipFocusEvent(relatedTarget)) {
+            return;
+        }
+
         this._toggleFocusClass(true, this.$element());
 
         this.callBase.apply(this, arguments);
     },
 
-    _focusOutHandler: function() {
+    _focusOutHandler: function({ relatedTarget }) {
+        if(this._shouldSkipFocusEvent(relatedTarget)) {
+            return;
+        }
+
         this._toggleFocusClass(false, this.$element());
 
         this.callBase.apply(this, arguments);
+    },
+
+    _shouldSkipFocusEvent: function(relatedTarget) {
+        return $(relatedTarget).hasClass(QUILL_CLIPBOARD_CLASS);
     },
 
     _initMarkup: function() {
@@ -311,7 +327,8 @@ const HtmlEditor = Editor.inherit({
     },
 
     _getModulesConfig: function() {
-        const wordListMatcher = getWordMatcher(this._getRegistrator().getQuill());
+        const quill = this._getRegistrator().getQuill();
+        const wordListMatcher = getWordMatcher(quill);
         let modulesConfig = extend({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
@@ -321,7 +338,8 @@ const HtmlEditor = Editor.inherit({
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
-                    ['p.MsoListParagraphCxSpLast', wordListMatcher]
+                    ['p.MsoListParagraphCxSpLast', wordListMatcher],
+                    [Node.ELEMENT_NODE, getTextDecorationMatcher(quill)]
                 ]
             }
         }, this._getCustomModules());
@@ -451,9 +469,18 @@ const HtmlEditor = Editor.inherit({
             case "formDialogOptions":
                 this._renderFormDialog();
                 break;
+            case "width":
+                this.callBase(args);
+                this._repaintToolbar();
+                break;
             default:
                 this.callBase(args);
         }
+    },
+
+    _repaintToolbar: function() {
+        const toolbar = this._quillInstance.getModule("toolbar");
+        toolbar && toolbar.repaint();
     },
 
     _updateHtmlContent: function(newMarkup) {

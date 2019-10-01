@@ -1,8 +1,8 @@
-var $ = require("jquery");
-var eventsEngine = require("events/core/events_engine");
-var keyboardMock = require("../../helpers/keyboardMock.js");
-var registerEvent = require("events/core/event_registrator");
-var compareVersion = require("core/utils/version").compare;
+import $ from "jquery";
+import eventsEngine from "events/core/events_engine";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import registerEvent from "events/core/event_registrator";
+import { compare as compareVersion } from "core/utils/version";
 
 QUnit.module("base");
 
@@ -328,7 +328,7 @@ QUnit.test("On/trigger/off event listeners", function(assert) {
             callbackIsCalled = true;
         });
         assert.deepEqual(addListener.callCount, 1, eventName + ": addListener.callCount, 1");
-        if(eventsEngine.forcePassiveFalseEventNames.indexOf(eventName) > -1) {
+        if(eventsEngine.forcePassiveFalseEventNames.indexOf(eventName) > -1 && eventsEngine.passiveEventHandlersSupported()) {
             assert.deepEqual(addListener.getCall(0).args[2].passive, false, eventName + ": passive, false");
         } else {
             assert.deepEqual(addListener.getCall(0).args[2], undefined, eventName + ": addListener.options is undefined");
@@ -347,6 +347,27 @@ QUnit.test("On/trigger/off event listeners", function(assert) {
 
     addListener.restore();
     removeListener.restore();
+});
+
+QUnit.test("Passive event listeners support detection, positive case", assert => {
+    const addEventListenerStub = sinon.stub(window, "addEventListener", (name, handler, options) => {
+        options.passive;
+    });
+
+    const isPassiveEventListenerSupported = eventsEngine.detectPassiveEventHandlersSupport();
+    assert.ok(isPassiveEventListenerSupported);
+
+    addEventListenerStub.restore();
+});
+
+QUnit.test("Passive event listeners support detection, negative case", assert => {
+    const addEventListenerStub = sinon.stub(window, "addEventListener", (name, handler) => {
+    });
+
+    const isPassiveEventListenerSupported = eventsEngine.detectPassiveEventHandlersSupport();
+    assert.notOk(isPassiveEventListenerSupported);
+
+    addEventListenerStub.restore();
 });
 
 QUnit.test("'on' signatures", function(assert) {

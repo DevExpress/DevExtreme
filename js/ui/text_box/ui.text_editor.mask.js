@@ -656,10 +656,16 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _caret: function(position) {
-        if(!arguments.length) {
-            return caret(this._input());
+        var $input = this._input();
+
+        if(!$input.length) {
+            return;
         }
-        caret(this._input(), position);
+
+        if(!arguments.length) {
+            return caret($input);
+        }
+        caret($input, position);
     },
 
     _hasSelection: function() {
@@ -692,7 +698,7 @@ var TextEditorMask = TextEditorBase.inherit({
         if(!this._maskRulesChain) {
             return;
         }
-        var isValid = this._maskRulesChain.isEmpty() ? true : this._maskRulesChain.isValid(this._normalizeChainArguments());
+        var isValid = stringUtils.isEmpty(this.option("value")) || this._maskRulesChain.isValid(this._normalizeChainArguments());
 
         this.option({
             isValid: isValid,

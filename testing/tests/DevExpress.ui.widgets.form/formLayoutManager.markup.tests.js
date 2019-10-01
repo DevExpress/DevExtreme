@@ -4,16 +4,21 @@ import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
 import { __internals as internals } from "ui/form/ui.form.layout_manager";
 import config from "core/config";
 import typeUtils from "core/utils/type";
+import { inArray } from "core/utils/array";
 import windowUtils from "core/utils/window";
 import errors from "ui/widget/ui.errors";
 
 import "ui/switch";
+import "ui/autocomplete";
+import "ui/color_box";
+import "ui/drop_down_box";
 import "ui/select_box";
 import "ui/tag_box";
 import "ui/lookup";
 import "ui/text_area";
 import "ui/radio_group";
 import "ui/range_slider";
+import "ui/slider";
 
 import "common.css!";
 
@@ -1186,7 +1191,6 @@ QUnit.module("Layout manager", () => {
         assert.equal($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).text(), "Age", "Correct field rendered");
     });
 
-
     test("CustomizeItem work well after option change", (assert) => {
         // arrange, act
         let $editors,
@@ -1768,7 +1772,7 @@ QUnit.module("Layout manager", () => {
         selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
 
         // assert
-        assert.deepEqual(selectBox.option("value"), undefined);
+        assert.deepEqual(selectBox.option("value"), null);
     });
 
     test("Update value in dxSelectBox editor when data option is changed", (assert) => {
@@ -2079,6 +2083,18 @@ QUnit.module("Layout manager", () => {
         assert.equal(textBox.option("value"), "", "Value is empty string");
         assert.notOk(dateBox.option("isValid"), "'isValid' is false");
         assert.equal(dateBox.option("value"), null, "Value is null");
+    });
+
+    test("Render with empty items", function(assert) {
+        const layoutManager = $("#container").dxLayoutManager({
+            formData: {
+                name: "Test Name"
+            },
+            items: []
+        }).dxLayoutManager("instance");
+
+        assert.equal(layoutManager.$element().children().length, 0, "layout manager content is empty");
+        assert.notOk(layoutManager.getEditor("name"), "editor is not created");
     });
 });
 
@@ -2945,6 +2961,32 @@ QUnit.module("Accessibility", () => {
 
         // assert
         assert.equal(itemDescribedBy, helpTextID, "Help text id and input's describedby attributes are equal");
+    });
+
+    test("Check aria-labelledby attribute for ariaTarget and id attr for label (T813296)", (assert) => {
+        const editorTypes = ["dxTextBox", "dxAutocomplete", "dxCalendar", "dxCheckBox", "dxColorBox", "dxDateBox", "dxDropDownBox", "dxLookup", "dxNumberBox", "dxRadioGroup", "dxSlider", "dxRangeSlider", "dxSelectBox", "dxSwitch", "dxTagBox", "dxTextArea"];
+        let items = editorTypes.map((editorType, index) => { return { dataField: `test${index}`, editorType: editorType }; });
+
+        const $testContainer = $("#container").dxLayoutManager({
+            items: items
+        });
+
+        const editorClassesRequiringIdForLabel = ["dx-radiogroup", "dx-checkbox", "dx-lookup", "dx-slider", "dx-rangeslider", "dx-switch"]; // TODO: Support "dx-calendar"
+        editorTypes.forEach((editorType) => {
+            const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
+            const $editor = $testContainer.find(`.${editorClassName}`).eq(0);
+            const $ariaTarget = $editor[editorType]("instance")._getAriaTarget();
+            const $label = $editor.closest(`.${internals.FIELD_ITEM_CLASS}`).children().first();
+
+            if(inArray(editorClassName, editorClassesRequiringIdForLabel) !== -1) {
+                assert.ok($ariaTarget.attr("aria-labelledby"), `aria-labeledby attribute ${editorClassName}`);
+                assert.ok($label.attr("id"), `label id attribute for ${editorClassName}`);
+                assert.strictEqual($ariaTarget.attr("aria-labelledby"), $label.attr("id"), "attributes aria-labelledby and labelID are equal");
+            } else {
+                assert.equal($ariaTarget.eq(0).attr("aria-labelledby"), null, `aria-labeledby attribute ${editorClassName}`);
+                assert.equal($label.attr("id"), null, `label id attribute for ${editorClassName}`);
+            }
+        });
     });
 });
 

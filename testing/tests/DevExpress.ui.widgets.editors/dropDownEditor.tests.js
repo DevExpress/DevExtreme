@@ -930,6 +930,32 @@ QUnit.test("events should be rendered for input after value is changed when fiel
     });
 });
 
+QUnit.testInActiveWindow("widget should detach focus events before fieldTemplate rerender", (assert) => {
+    const focusOutSpy = sinon.stub();
+    const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        dataSource: [1, 2],
+        fieldTemplate: function(value, container) {
+            const $textBoxContainer = $("<div>").appendTo(container);
+            $("<div>").dxTextBox().appendTo($textBoxContainer);
+
+            $($textBoxContainer).one("dxremove", () => {
+                $textBoxContainer.detach();
+            });
+        },
+        onFocusOut: focusOutSpy,
+        opened: true
+    });
+
+    const $input = $dropDownEditor.find(".dx-texteditor-input");
+    const keyboard = keyboardMock($input);
+
+    $input.focus();
+    keyboard.press("down");
+    keyboard.press("enter");
+
+    assert.strictEqual(focusOutSpy.callCount, 0, "there's no focus outs from deleted field container");
+});
+
 
 QUnit.module("options");
 

@@ -31,15 +31,21 @@ const MS_ORDERED_LIST = "<p class=MsoListParagraphCxSpMiddle style='text-indent:
 "</span>i.<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
 "</span></span></span><![endif]><span lang=EN-US style='mso-ansi-language:EN-US'>3<o:p></o:p></span></p>";
 
-const { test } = QUnit;
+const TEXT_WITH_DECORATION = "<span style='text-decoration: underline;'>test1</span>" +
+    "<span style='text-decoration: line-through;'>test2</span>" +
+    "<span style='text-decoration: underline line-through;'>test3</span>";
 
-QUnit.module("Paste MS lists", () => {
+const MS_INVALID_LIST_PARAGRAPH = "<p class='MsoListParagraphCxSpFirst'><span>test<o:p></o:p></span></p>";
+
+const { module: testModule, test } = QUnit;
+
+testModule("Paste from MS Word", () => {
     test("paste bullet list with indent", (assert) => {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
-                onValueChanged: (e) => {
-                    assert.equal(e.value, "<ul><li>1<ul><li>2<ul><li>3</li></ul></li></ul></li></ul>");
+                onValueChanged: ({ value }) => {
+                    assert.equal(value, "<ul><li>1<ul><li>2<ul><li>3</li></ul></li></ul></li></ul>");
                     done();
                 }
             })
@@ -53,14 +59,46 @@ QUnit.module("Paste MS lists", () => {
         const done = assert.async();
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
-                onValueChanged: (e) => {
-                    assert.equal(e.value, "<ol><li>1<ol><li>2<ol><li>3</li></ol></li></ol></li></ol>");
+                onValueChanged: ({ value }) => {
+                    assert.equal(value, "<ol><li>1<ol><li>2<ol><li>3</li></ol></li></ol></li></ol>");
                     done();
                 }
             })
             .dxHtmlEditor("instance");
 
         const newDelta = instance._quillInstance.clipboard.convert(MS_ORDERED_LIST);
+        instance._quillInstance.setContents(newDelta);
+    });
+
+    test("paste list paragraph without styles", (assert) => {
+        const done = assert.async();
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                onValueChanged: ({ value }) => {
+                    assert.equal(value, "<p>test</p>");
+                    done();
+                }
+            })
+            .dxHtmlEditor("instance");
+
+        const newDelta = instance._quillInstance.clipboard.convert(MS_INVALID_LIST_PARAGRAPH);
+        instance._quillInstance.setContents(newDelta);
+    });
+});
+
+testModule("Text with decoration", () => {
+    test("paste text with text-decoration style", (assert) => {
+        const done = assert.async();
+        const instance = $("#htmlEditor")
+            .dxHtmlEditor({
+                onValueChanged: ({ value }) => {
+                    assert.equal(value, "<p><u>test1</u><s>test2<u>test3</u></s></p>", "correct value");
+                    done();
+                }
+            })
+            .dxHtmlEditor("instance");
+
+        const newDelta = instance._quillInstance.clipboard.convert(TEXT_WITH_DECORATION);
         instance._quillInstance.setContents(newDelta);
     });
 });

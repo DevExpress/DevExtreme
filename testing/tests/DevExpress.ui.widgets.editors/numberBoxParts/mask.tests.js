@@ -34,13 +34,15 @@ const moduleConfig = {
 QUnit.module("format: api value changing", moduleConfig, () => {
     QUnit.test("number type of input should be converted to tel on mobile device when inputMode is unsupported", assert => {
         const realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "mobile" });
-        const realChrome = browser.chrome;
-        const realVersion = browser.version;
+        const realBrowser = browser;
         const $element = $("<div>").appendTo("body");
 
         try {
             browser.chrome = true;
             browser.version = "50.0";
+            browser.chrome = false;
+            browser.safari = false;
+            browser.msie = false;
 
             const instance = $element.dxNumberBox({
                 useMaskBehavior: true,
@@ -53,8 +55,10 @@ QUnit.module("format: api value changing", moduleConfig, () => {
             instance.option("mode", "number");
             assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
         } finally {
-            browser.chrome = realChrome;
-            browser.version = realVersion;
+            browser.chrome = realBrowser.chrome;
+            browser.safari = realBrowser.safari;
+            browser.msie = realBrowser.msie;
+            browser.version = realBrowser.version;
             realDeviceMock.restore();
             $element.remove();
         }
@@ -373,6 +377,19 @@ QUnit.module("format: sign and minus button", moduleConfig, () => {
 
         assert.equal(this.input.val(), "<<123.4>>", "value is correct");
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret is good");
+    });
+
+    QUnit.test("NumberBox should keep selected range after the ValueChange event", (assert) => {
+        this.instance.option({
+            format: "#0.#;<<#0.#>>",
+            value: 123.4
+        });
+
+        this.keyboard.caret({ start: 1, end: 2 }).press("-").change();
+        this.clock.tick();
+
+        assert.equal(this.input.val(), "<<123.4>>", "value is correct");
+        assert.deepEqual(this.keyboard.caret(), { start: 3, end: 4 }, "caret preserved");
     });
 });
 
@@ -1495,6 +1512,25 @@ QUnit.module("format: removing", moduleConfig, () => {
         } finally {
             config({ decimalSeparator: oldDecimalSeparator });
         }
+    });
+
+    [",", "."].forEach((separator) => {
+        QUnit.test(`caret should be moved to the float part by "${separator}"`, (assert) => {
+            this.instance.option({
+                format: {
+                    type: 'fixedPoint',
+                    precision: 2
+                },
+                value: 0
+            });
+
+            this.keyboard
+                .caret({ start: 0, end: 4 })
+                .type(`${separator}45`)
+                .change();
+
+            assert.strictEqual(this.instance.option("value"), 0.45, "Value is correct");
+        });
     });
 
     QUnit.test("should parse float numbers with the ',' separator", (assert) => {

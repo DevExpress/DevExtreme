@@ -1383,7 +1383,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedRowChanging: function(eventArgs, $newFocusedRow) {
         var newRowIndex = this._getRowIndex($newFocusedRow),
             dataController = this.getController("data"),
-            prevFocusedRowIndex = this.getVisibleRowIndex(),
+            prevFocusedRowIndex = this.option("focusedRowIndex"),
             args = {
                 rowElement: $newFocusedRow,
                 prevRowIndex: prevFocusedRowIndex,
@@ -1701,6 +1701,10 @@ module.exports = {
                 init: function() {
                     this.callBase();
                     this._keyboardNavigationController = this.getController("keyboardNavigation");
+                },
+                _delayedInputFocus: function() {
+                    this._keyboardNavigationController._isNeedScroll = true;
+                    this.callBase.apply(this, arguments);
                 }
             },
             data: {

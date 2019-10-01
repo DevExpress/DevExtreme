@@ -642,6 +642,48 @@ QUnit.test("Set argument visual range using option", function(assert) {
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 2, endValue: 10 });
 });
 
+// T804296
+QUnit.test("Set argument visual range using option. endValue was set only", function(assert) {
+    var chart = this.createChart({
+        series: [{}],
+        argumentAxis: {
+            valueMarginsEnabled: false
+        },
+        dataSource: [{
+            arg: 1,
+            val: 1
+        }, {
+            arg: 100,
+            val: 1
+        }]
+    });
+
+    chart.option("argumentAxis.visualRange.endValue", 80);
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 80 });
+});
+
+// T804296
+QUnit.test("Set argument visual range using option. startValue was set only", function(assert) {
+    var chart = this.createChart({
+        series: [{}],
+        argumentAxis: {
+            valueMarginsEnabled: false
+        },
+        dataSource: [{
+            arg: 1,
+            val: 1
+        }, {
+            arg: 100,
+            val: 1
+        }]
+    });
+
+    chart.option("argumentAxis.visualRange.startValue", 20);
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 20, endValue: 100 });
+});
+
 QUnit.test("Using the single section of axis options for some panes (check customVisualRange merging)", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
     var visualRangeChanged = sinon.spy();
@@ -1617,6 +1659,23 @@ QUnit.test("reject selection after options updating", function(assert) {
     chart.option("rotated", true);
 
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), false);
+});
+
+QUnit.test("Change series and argumentAxis with visualRange options", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: {}
+    });
+
+    chart.beginUpdate();
+    chart.option({
+        series: {}
+    });
+    chart.option("argumentAxis.tickInterval", 0.2);
+    chart.option("argumentAxis.visualRange", [6, 7]);
+    chart.endUpdate();
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 6, endValue: 7 });
 });
 
 QUnit.module("B237847. Groups and classes", moduleSetup);

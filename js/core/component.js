@@ -375,7 +375,7 @@ var Component = Class.inherit({
                 that._optionChangedCallbacks.fireWith(that, [extend(that._defaultActionArgs(), args)]);
                 that._optionChangedAction(extend({}, args));
 
-                if(!that._disposed) {
+                if(!that._disposed && this._cancelOptionChange !== args.name) {
                     that._optionChanged(args);
                 }
             }
@@ -502,6 +502,12 @@ var Component = Class.inherit({
     isOptionDeprecated: function(name) {
         var deprecatedOptions = this._getDeprecatedOptions();
         return deprecatedOptions.hasOwnProperty(name);
+    },
+
+    _setOptionSilent: function(name, value) {
+        this._cancelOptionChange = name;
+        this.option(name, value);
+        this._cancelOptionChange = false;
     },
 
     /**

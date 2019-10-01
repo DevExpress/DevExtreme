@@ -108,6 +108,7 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
     },
     afterEach: function() {
         this.clock.restore();
+        this.dispose();
     }
 });
 
@@ -1875,6 +1876,55 @@ QUnit.testInActiveWindow("Fire onFocusedRowChanging by UpArrow key", function(as
     assert.equal(focusedRowChangingCount, 1, "onFocusedRowChanging fires count");
 });
 
+QUnit.testInActiveWindow("DataGrid - should restore previos row index after the focus losing (T804103)", function(assert) {
+    var rowsView,
+        focusedRowChangingCount = 0,
+        keyboardController;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [{ name: "Alex" }, { name: "Dan" }];
+    this.columns = ["name"];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Dan",
+        editing: {
+            allowEditing: false
+        },
+        onFocusedRowChanging: function(e) {
+            focusedRowChangingCount++;
+
+            // assert
+            if(focusedRowChangingCount === 1) {
+                assert.equal(e.prevRowIndex, 1, "prevRowIndex is right");
+            } else if(focusedRowChangingCount === 2) {
+                assert.equal(e.prevRowIndex, 0, "prevRowIndex is right");
+            }
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+
+    // act
+    $(rowsView.getCellElement(0, 0)).trigger(CLICK_EVENT);
+    keyboardController._focusedCellPosition = {};
+    $(rowsView.getCellElement(1, 0)).trigger(CLICK_EVENT);
+
+    // assert
+    assert.equal(focusedRowChangingCount, 2, "focusedRowChangingCount");
+});
+
 QUnit.testInActiveWindow("Fire onFocusedRowChanging by UpArrow key when virtual scrolling is enabled", function(assert) {
     // arrange
     var rowsView,
@@ -1902,7 +1952,7 @@ QUnit.testInActiveWindow("Fire onFocusedRowChanging by UpArrow key when virtual 
             // assert
             assert.equal(e.cancel, false);
             assert.equal(e.newRowIndex, 39);
-            assert.equal(e.prevRowIndex, 20); // TODO replace with 40
+            assert.equal(e.prevRowIndex, 40);
         },
         paging: {
             pageIndex: 2
