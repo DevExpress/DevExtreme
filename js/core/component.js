@@ -5,6 +5,7 @@ var Config = require("./config"),
     Action = require("./action"),
     errors = require("./errors"),
     commonUtils = require("./utils/common"),
+    dataUtils = require("./utils/data"),
     typeUtils = require("./utils/type"),
     deferredUtils = require("../core/utils/deferred"),
     Deferred = deferredUtils.Deferred,
@@ -169,7 +170,7 @@ var Component = Class.inherit({
     _isInitialOptionValue: function(name) {
         var optionValue = this.option(name),
             initialOptionValue = this.initialOption(name),
-            isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
+            isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : dataUtils.equalByComplexValue(optionValue, initialOptionValue);
 
         return isInitialOption;
     },
@@ -352,10 +353,9 @@ var Component = Class.inherit({
 
     initialOption: function(optionName) {
         if(!this._initialOptions) {
-            this._initialOptions = {};
             this._initialOptions = this._getDefaultOptions();
-            const rulesOptions = this._getOptionByRules(this._getOptionSilent("defaultOptionsRules"));
-            this._optionManager._setSilent(this._initialOptions, rulesOptions);
+            const rulesOptions = this._getOptionByRules(this._getOptionByStealth("defaultOptionsRules"));
+            this._optionManager.setValueByReference(this._initialOptions, rulesOptions);
         }
 
         optionName = optionName.replace(/\[/g, ".").replace(/\]/g, "");
@@ -456,12 +456,21 @@ var Component = Class.inherit({
         return result;
     },
 
-    _getOptionSilent: function(name) {
-        return this._optionManager.getSilent(name);
+    _convertToObj(options, value) {
+        if(typeof options !== "string") return options;
+
+        const result = {};
+        result[options] = value;
+        return result;
+    },
+
+    _getOptionByStealth: function(name) {
+        return this._optionManager.getValueSilently(name);
     },
 
     _setOptionByStealth: function(options, value) {
-        this._optionManager.setSilent(options, value);
+        options = this._convertToObj(options, value);
+        this._optionManager.setValueSilently(options);
     },
 
     _getEventName: function(actionName) {
@@ -524,19 +533,30 @@ var Component = Class.inherit({
         this.beginUpdate();
 
         try {
-            this._optionManager.setValue(options, value);
+            options = this._convertToObj(options, value);
+            this._optionManager.setValue(options);
         } finally {
             this.endUpdate();
         }
     },
 
+    /**
+     * @name componentmethods.resetOption
+     * @publicName resetOption()
+     */
+    /**
+     * @name componentmethods.resetOption
+     * @publicName resetOption(optionName)
+     * @param1 optionName:string
+     */
     resetOption: function(name) {
         if(!name) {
             return;
         }
         const defaultValue = this.initialOption(name);
         this.beginUpdate();
-        this._optionManager.setValue(name, defaultValue);
+        const option = this._convertToObj(name, defaultValue);
+        this._optionManager.setValue(option);
         this.endUpdate();
     }
 }).include(EventsMixin);

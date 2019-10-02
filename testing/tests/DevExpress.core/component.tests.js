@@ -483,7 +483,7 @@ QUnit.module("default", {}, () => {
             deprecatedOption: true,
         });
 
-        assert.equal(instance._getOptionSilent("deprecatedOption"), true);
+        assert.equal(instance._getOptionByStealth("deprecatedOption"), true);
         assert.equal(warningCount, 0);
     });
 

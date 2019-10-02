@@ -2,9 +2,8 @@ import gridCore from "./ui.data_grid.core";
 import focusModule from "../grid_core/ui.grid_core.focus";
 import { Deferred } from "../../core/utils/deferred";
 import { isDefined } from "../../core/utils/type";
-import { equalByValue } from "../../core/utils/common";
 import { createGroupFilter } from "./ui.data_grid.utils";
-import { compileGetter } from "../../core/utils/data";
+import { compileGetter, equalByComplexValue } from "../../core/utils/data";
 import { extend } from "../../core/utils/extend";
 
 var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
@@ -121,7 +120,7 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                         groupOffset;
 
                     dataSource._grouping._updatePagingOptions({ skip: 0, take: MAX_SAFE_INTEGER }, function(groupInfo, totalOffset) {
-                        if(equalByValue(groupInfo.path, groupPath)) {
+                        if(equalByComplexValue(groupInfo.path, groupPath)) {
                             groupOffset = totalOffset;
                         }
                     });

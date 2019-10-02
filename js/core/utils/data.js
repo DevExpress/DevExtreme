@@ -4,6 +4,7 @@ var errors = require("../errors"),
     typeUtils = require("./type"),
     each = require("./iterator").each,
     variableWrapper = require("./variable_wrapper"),
+    domAdapter = require("../dom_adapter"),
     unwrapVariable = variableWrapper.unwrap,
     isWrapped = variableWrapper.isWrapped,
     assign = variableWrapper.assign;
@@ -200,6 +201,92 @@ var toComparable = function(value, caseSensitive) {
     return value;
 };
 
+const isArraysEqualByValue = function(array1, array2, deep) {
+    if(array1.length !== array2.length) {
+        return false;
+    }
+
+    for(let i = 0; i < array1.length; i++) {
+        if(!equalByComplexValue(array1[i], array2[i], deep + 1)) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+const isObjectsEqualByValue = function(object1, object2, deep) {
+    for(const propertyName in object1) {
+        if(
+            Object.prototype.hasOwnProperty.call(object1, propertyName) &&
+            !equalByComplexValue(object1[propertyName], object2[propertyName], deep + 1)
+        ) {
+            return false;
+        }
+    }
+
+    for(const propertyName in object2) {
+        if(!(propertyName in object1)) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+const maxEqualityDeep = 3;
+
+const equalByComplexValue = function(object1, object2, deep) {
+    deep = deep || 0;
+
+    object1 = toComparable(object1, true);
+    object2 = toComparable(object2, true);
+
+    if(object1 === object2 || deep >= maxEqualityDeep) {
+        return true;
+    }
+
+    if(typeUtils.isObject(object1) && typeUtils.isObject(object2)) {
+        return isObjectsEqualByValue(object1, object2, deep);
+    } else if(Array.isArray(object1) && Array.isArray(object2)) {
+        return isArraysEqualByValue(object1, object2, deep);
+    }
+
+    return false;
+};
+
+const hasNegation = function(oldValue, newValue) {
+    return (1 / oldValue) === (1 / newValue);
+};
+
+const equals = function(oldValue, newValue) {
+    oldValue = toComparable(oldValue, true);
+    newValue = toComparable(newValue, true);
+
+    if(oldValue && newValue && typeUtils.isRenderer(oldValue) && typeUtils.isRenderer(newValue)) {
+        return newValue.is(oldValue);
+    }
+
+    const oldValueIsNaN = oldValue !== oldValue;
+    const newValueIsNaN = newValue !== newValue;
+    if(oldValueIsNaN && newValueIsNaN) {
+        return true;
+    }
+
+    if(oldValue === 0 && newValue === 0) {
+        return hasNegation(oldValue, newValue);
+    }
+
+    if(oldValue === null || typeof oldValue !== "object" || domAdapter.isElementNode(oldValue)) {
+        return oldValue === newValue;
+    }
+
+    return false;
+};
+
+
 exports.compileGetter = compileGetter;
 exports.compileSetter = compileSetter;
 exports.toComparable = toComparable;
+exports.equalByComplexValue = equalByComplexValue;
+exports.equals = equals;

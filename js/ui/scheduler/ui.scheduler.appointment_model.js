@@ -3,7 +3,7 @@ import iteratorUtils from "../../core/utils/iterator";
 import dateSerialization from "../../core/utils/date_serialization";
 import recurrenceUtils from "./utils.recurrence";
 import dateUtils from "../../core/utils/date";
-import commonUtils from "../../core/utils/common";
+import { equalByComplexValue } from "../../core/utils/data";
 import typeUtils from "../../core/utils/type";
 import { inArray } from "../../core/utils/array";
 import { extend } from "../../core/utils/extend";
@@ -141,7 +141,7 @@ class AppointmentModel {
         var dateFilter = this._filterMaker.dateFilter(),
             dataSourceFilter = this._dataSource.filter();
 
-        return dataSourceFilter && (commonUtils.equalByValue(dataSourceFilter, dateFilter) || (dataSourceFilter.length && commonUtils.equalByValue(dataSourceFilter[DATE_FILTER_POSITION], dateFilter)));
+        return dataSourceFilter && (equalByComplexValue(dataSourceFilter, dateFilter) || (dataSourceFilter.length && equalByComplexValue(dataSourceFilter[DATE_FILTER_POSITION], dateFilter)));
     }
 
     _combineFilter() {
