@@ -331,7 +331,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             scrollSensitivity: 60,
             /**
              * @name DraggableBaseOptions.group
-             * @type any
+             * @type string
              * @default undefined
              */
             group: undefined,

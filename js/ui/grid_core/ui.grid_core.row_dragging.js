@@ -161,11 +161,6 @@ module.exports = {
                  * @default "> *"
                  */
                 /**
-                 * @name GridBaseOptions.rowDragging.itemOrientation
-                 * @type Enums.Orientation
-                 * @default "vertical"
-                 */
-                /**
                  * @name GridBaseOptions.rowDragging.dragDirection
                  * @type Enums.DragDirection
                  * @default "both"
@@ -208,7 +203,7 @@ module.exports = {
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.group
-                 * @type any
+                 * @type string
                  * @default undefined
                  */
                 /**
