@@ -71,12 +71,18 @@ export default class AppointmentDragBehavior {
     }
 
     addTo(appointment, options) {
+        let onDragStart = options && options.onDragStart;
+
         this.scheduler._createComponent(appointment, Draggable, extend({
             filter: ".dx-scheduler-appointment",
             immediate: false,
-            onDragStart: this.onDragStart.bind(this),
             onDragEnd: e => this.onDragEnd(e)
-        }, options));
+        }, options, {
+            onDragStart: (e) => {
+                this.onDragStart.call(this, e);
+                onDragStart && onDragStart.call(this, e);
+            }
+        }));
     }
 
     moveBack() {

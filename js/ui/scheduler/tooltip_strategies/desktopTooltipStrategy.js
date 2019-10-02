@@ -57,7 +57,8 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     onListRendered(e) {
-        let $element = $(e.element);
+        let that = this,
+            $element = $(e.element);
 
         if(this.scheduler._allowDragging() && !$element.hasClass("dx-draggable")) {
             const workspace = this._getWorkspaceInstance();
@@ -77,20 +78,21 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
                     };
                 },
                 template: (options) => {
-                    let itemData = options.itemData,
-                        appointment = itemData && itemData.appointment;
+                    let itemData = options.itemData;
 
-                    itemData.dragElement = this._createDragAppointment(appointment, appointment.settings);
-
-                    return itemData.dragElement;
+                    return itemData && itemData.dragElement;
                 },
-                onDragStart: (e) => {
+                onDragStart: function(e) {
                     let itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
 
-                    e.itemData = {
-                        appointment: itemData.data
-                    };
-                    this.scheduler.hideAppointmentTooltip();
+                    if(itemData) {
+                        e.itemData = {
+                            appointment: itemData.data,
+                            dragElement: that._createDragAppointment(itemData.data, itemData.data.settings)
+                        };
+
+                        this.initialPosition = translator.locate($(e.itemData.dragElement));
+                    }
                 }
             });
         }

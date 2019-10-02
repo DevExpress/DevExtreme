@@ -389,4 +389,34 @@ module("Drag and drop appointments", moduleConfig, () => {
 
         pointer.dragEnd();
     });
+
+    QUnit.test("Appointment should move to the first cell from tooltip case", function(assert) {
+        const scheduler = createWrapper({
+            editing: true,
+            height: 600,
+            views: [{ type: "month", maxAppointmentsPerCell: 1 }],
+            currentView: "month",
+            dataSource: [{
+                text: "Task 1",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: "Task 2",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            }],
+            currentDate: new Date(2015, 1, 9)
+        });
+
+        scheduler.appointments.compact.click(0);
+        const compactAppointment = scheduler.appointments.compact.getAppointment();
+        const compactAppointmentOffset = $(compactAppointment).offset();
+
+        pointerMock(compactAppointment).start().down(compactAppointmentOffset.left, compactAppointmentOffset.top).move(0, -100).up();
+
+        const data = scheduler.instance.option("dataSource")[1];
+        assert.deepEqual(data.startDate, new Date(2015, 1, 1, 1), "start date is correct");
+        assert.deepEqual(data.endDate, new Date(2015, 1, 1, 2), "end date is correct");
+    });
 });
