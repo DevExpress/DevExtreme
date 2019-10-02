@@ -2315,6 +2315,7 @@ module.exports = {
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
+             * @type_function_param1_field5 promise:Promise<void>
              * @extends Action
              * @action
              */
