@@ -11421,6 +11421,40 @@ QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour",
     assert.equal(dataGrid.cellValue(0, 0), "test", "cell value is changed");
 });
 
+// T819067
+QUnit.testInActiveWindow("Datebox editor's enter key handler should be replaced by noop", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
+    // arrange
+    var dataGrid = createDataGrid({
+            dataSource: [{ dateField: "2000/01/01 12:42" }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: "dateField",
+                dataType: 'date',
+            }]
+        }),
+        dateBox,
+        enterKeyHandler;
+
+    this.clock.tick();
+
+    // act
+    $(dataGrid.getCellElement(0, 0)).trigger("dxclick");
+
+    dateBox = dataGrid.$element().find(".dx-datebox").dxDateBox("instance");
+    enterKeyHandler = dateBox._supportedKeys().enter;
+
+    // assert
+    assert.equal(enterKeyHandler, commonUtils.noop, "dateBox enter key handler was replaced");
+});
+
 QUnit.testInActiveWindow("dataGrid resize generates exception if fixed column presents and validation applied in cell edit mode (T629168)", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
