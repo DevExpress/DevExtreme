@@ -1617,6 +1617,22 @@ QUnit.module("Lookup Value", function() {
 
         utils.getCurrentLookupValueText(field, value, r => assert.equal(r, "Televisions"));
     });
+
+    QUnit.test("lookup.displayExpr as function", function(assert) {
+        var value = { text: "123" },
+            field = {
+                lookup: {
+                    dataSource: [ value ],
+                    displayExpr: function(item) {
+                        return item.text;
+                    }
+                }
+            };
+
+        utils.getCurrentLookupValueText(field, value, function(r) {
+            assert.equal(r, "123");
+        });
+    });
 });
 
 QUnit.module("Between operation", function() {
