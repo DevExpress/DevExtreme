@@ -1,11 +1,14 @@
 import $ from "jquery";
 import { extend } from "core/utils/extend";
+import devices from "core/devices";
 
 export const TOOLBAR_TOP_LOCATION = "top";
 export const TOOLBAR_BOTTOM_LOCATION = "bottom";
 
 const SCHEDULER_ID = "scheduler";
 const TEST_ROOT_ELEMENT_ID = "qunit-fixture";
+
+export const isDesktopEnvironment = () => devices.real().deviceType === "desktop";
 
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
