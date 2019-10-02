@@ -2844,6 +2844,61 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
+
+            QUnit.test("Total summary, alignment, rtlEnabled: true" + options, (assert) => {
+                const done = assert.async();
+                const ds = [
+                    { f1: "f1_1", f2: "f2_1" },
+                    { f1: "f1_2", f2: "f2_2" }
+                ];
+
+                let dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", caption: "f1", dataType: "string" },
+                        { dataField: "f2", caption: "f2", dataType: "string" },
+                    ],
+                    dataSource: ds,
+                    summary: {
+                        totalItems: [
+                            { name: 'TotalSummary 1', column: "f1", summaryType: "max" },
+                            { name: 'TotalSummary 2', column: "f1", summaryType: "min" },
+                            { name: 'TotalSummary 3', column: "f2", summaryType: "max" },
+                            { name: 'TotalSummary 4', column: "f2", summaryType: "min" }
+                        ]
+                    },
+                    rtlEnabled: true,
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                let expectedCustomizeCellArgs = [
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
+                    { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 1" } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 3" } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[0].f1, totalSummaryItemName: "TotalSummary 2" } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[0].f2, totalSummaryItemName: "TotalSummary 4" } },
+                ];
+
+                const expectedRows = [
+                    { values: [ "f1_1", "f2_1" ], outlineLevel: 0 },
+                    { values: [ "f1_2", "f2_2" ], outlineLevel: 0 },
+                    { values: [ "Max: f1_2", "Max: f2_2" ], outlineLevel: 0 },
+                    { values: [ "Min: f1_1", "Min: f2_1" ], outlineLevel: 0 }
+                ];
+
+                helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
+
+                exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
+                    helper.checkPredefinedFont(expectedCustomizeCellArgs);
+                    helper.checkAlignment(expectedCustomizeCellArgs, true);
+                    helper.checkValues(expectedRows, topLeft);
+                    done();
+                });
+            });
+
             QUnit.test("TODO: not implemented yet - Total summary, totalItems.alignment, total_2.alignment: center, total_3: right" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
@@ -2890,13 +2945,9 @@ QUnit.module("API", moduleConfig, () => {
                 helper._extendExpectedCustomizeCellArgs(expectedCustomizeCellArgs, expectedRows, topLeft);
 
                 exportDataGrid(getDataGridConfig(dataGrid, expectedCustomizeCellArgs)).then((result) => {
-                    helper.checkRowAndColumnCount({ row: topLeft.row + 3, column: topLeft.column + 1 }, { row: 4, column: 2 });
-                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkPredefinedFont(expectedCustomizeCellArgs);
                     helper.checkAlignment(expectedCustomizeCellArgs);
                     helper.checkValues(expectedRows, topLeft);
-                    assert.deepEqual(result.from, topLeft, "result.from");
-                    assert.deepEqual(result.to, { row: topLeft.row + 3, column: topLeft.column + 1 }, "result.to");
                     done();
                 });
             });
