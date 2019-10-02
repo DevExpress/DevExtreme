@@ -1355,22 +1355,6 @@ QUnit.module("widget sizing render", {}, () => {
         assert.ok($element.outerWidth() <= 100, "outer width of the element must be less or equal to a container width");
     });
 
-    QUnit.test("validation icon should hide if container size is too small", assert => {
-        const $element = $("#innerDateBox").dxDateBox({
-            "showClearButton": true,
-            "pickerType": "calendar",
-        });
-        const instance = $element.dxDateBox("instance");
-
-        assert.notOk($element.hasClass('dx-show-invalid-badge'), "validation icon's hidden");
-        $("#containerWithWidth").get(0).style.width = "200px";
-        const kb = keyboardMock(instance._input());
-        kb.type("a");
-        kb.keyDown("enter");
-
-        assert.ok($element.hasClass('dx-show-invalid-badge'), "validation icon's visible");
-    });
-
     QUnit.test("component should have correct width when it was rendered in a scaled container (T584097)", assert => {
         const $parent = $("#parent-div");
         $parent.css("width", 200);
@@ -1421,6 +1405,57 @@ QUnit.module("widget sizing render", {}, () => {
         instance.option("width", customWidth);
 
         assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
+    });
+
+    QUnit.test("it should update widget size after toggle the 'readOnly' option", (assert) => {
+        if(devices.current().platform !== "generic") {
+            assert.ok(true, "automatic size fitting working with generic devices only");
+            return;
+        }
+
+        const $element = $("#dateBox");
+        const instance = $element.dxDateBox({
+            pickerType: "calendar",
+            readOnly: true,
+            displayFormat: "shortDate"
+        }).dxDateBox("instance");
+
+        const initialWidth = $element.outerWidth();
+
+        instance.option({
+            readOnly: false,
+            value: new Date()
+        });
+
+        const actualWidth = $element.outerWidth();
+
+        assert.notEqual(actualWidth, initialWidth, "width has been changed");
+        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
+    });
+
+    QUnit.test("it should update widget size after the 'buttons' option changed (T809858)", (assert) => {
+        if(devices.current().platform !== "generic") {
+            assert.ok(true, "automatic size fitting working with generic devices only");
+            return;
+        }
+
+        const $element = $("#dateBox");
+        const instance = $element.dxDateBox({
+            pickerType: "calendar",
+            displayFormat: "shortDate"
+        }).dxDateBox("instance");
+
+        const initialWidth = $element.outerWidth();
+
+        instance.option("buttons", [{
+            name: "test",
+            options: { text: "after" }
+        }]);
+
+        const actualWidth = $element.outerWidth();
+
+        assert.notEqual(actualWidth, initialWidth, "width has been changed");
+        assert.ok(actualWidth > initialWidth, "actual width takes action buttons into account");
     });
 });
 

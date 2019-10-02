@@ -18,8 +18,6 @@ var windowUtils = require("../../core/utils/window"),
 
     DATEBOX_CLASS = "dx-datebox",
     DX_AUTO_WIDTH_CLASS = "dx-auto-width",
-    DX_INVALID_BADGE_CLASS = "dx-show-invalid-badge",
-    DX_CLEAR_BUTTON_CLASS = "dx-clear-button-area",
     DATEBOX_WRAPPER_CLASS = "dx-datebox-wrapper";
 
 var PICKER_TYPE = {
@@ -49,6 +47,16 @@ var STRATEGY_CLASSES = {
     Native: require("./ui.date_box.strategy.native"),
     CalendarWithTime: require("./ui.date_box.strategy.calendar_with_time"),
     List: require("./ui.date_box.strategy.list")
+};
+
+var isRealWidthSet = function($element) {
+    var explicitWidth = $element[0].style.width;
+
+    if(explicitWidth && explicitWidth !== "auto" && explicitWidth !== "inherit") {
+        return true;
+    }
+
+    return false;
 };
 
 var DateBox = DropDownEditor.inherit({
@@ -388,7 +396,7 @@ var DateBox = DropDownEditor.inherit({
     _render: function() {
         this.callBase();
 
-        this._formatValidationIcon();
+        this._updateSize();
     },
 
     _renderDimensions: function() {
@@ -416,47 +424,42 @@ var DateBox = DropDownEditor.inherit({
         $element.addClass(DATEBOX_CLASS + "-" + this._pickerType);
     },
 
-    _formatValidationIcon: function() {
-        if(!windowUtils.hasWindow()) {
+    _updateSize: function() {
+        var $element = this.$element(),
+            widthOption = this.option("width"),
+            isWidthSet = typeUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable),
+            pickerType = this._pickerType,
+            // NOTE: no calculateWidth if type is rollers, why?
+            shouldCalculateWidth = pickerType !== PICKER_TYPE.rollers && devices.current().platform === "generic";
+
+        if(!windowUtils.hasWindow() || isWidthSet || !(shouldCalculateWidth && $element.is(":visible"))) {
             return;
         }
 
         var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
-        var $input = this._input();
-        var inputElement = $input.get(0);
-        var $dateBox = this.$element();
-        var $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
-        var isPaddingStored = this.storedPadding !== undefined;
-        var storedPadding = !isPaddingStored ? 0 : this.storedPadding;
-        var isRtlEnabled = this.option("rtlEnabled");
 
-        $longestValueElement.appendTo($dateBox);
-        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
-        var rightPadding = parseFloat(window.getComputedStyle(inputElement).paddingRight);
-        var leftPadding = parseFloat(window.getComputedStyle(inputElement).paddingLeft);
-        var necessaryWidth = elementWidth + leftPadding + rightPadding + storedPadding;
+        $element.width(this._calculateWidth(longestValue));
+        this._isSizeUpdatable = true;
+    },
+
+    _calculateWidth: function(value) {
+        var IE_ROUNDING_ERROR = 10;
+        var NATIVE_BUTTONS_WIDTH = 48;
+        var $input = this._input();
+        var $longestValueElement = dom.createTextElementHiddenCopy($input, value);
+
+        $longestValueElement.appendTo(this.$element());
+        var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
+            rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight),
+            leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft),
+            beforeButtonsWidth = this._$beforeButtonsContainer ? parseFloat(window.getComputedStyle(this._$beforeButtonsContainer.get(0)).width) : 0,
+            afterButtonsWidth = this._$afterButtonsContainer ? parseFloat(window.getComputedStyle(this._$afterButtonsContainer.get(0)).width) : 0;
+
+        var width = elementWidth + rightPadding + leftPadding + IE_ROUNDING_ERROR + beforeButtonsWidth + afterButtonsWidth + ($input.prop("type") !== "text" ? NATIVE_BUTTONS_WIDTH : 0);
         $longestValueElement.remove();
 
-        var clearButtonWidth = 0;
-        if(this.option("showClearButton") && $input.val() === "") {
-            var clearButtonElement = $dateBox.find("." + DX_CLEAR_BUTTON_CLASS).get(0);
-            clearButtonWidth = parseFloat(window.getComputedStyle(clearButtonElement).width);
-        }
-
-        var curWidth = parseFloat(window.getComputedStyle(inputElement).width) - clearButtonWidth;
-        var shouldHideValidationIcon = (necessaryWidth > curWidth);
-
-        var style = inputElement.style;
-        $dateBox.toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon);
-        if(shouldHideValidationIcon) {
-            if(!isPaddingStored) {
-                this.storedPadding = isRtlEnabled ? leftPadding : rightPadding;
-            }
-            isRtlEnabled ? style.paddingLeft = 0 : style.paddingRight = 0;
-        } else {
-            isRtlEnabled ? style.paddingLeft = this.storedPadding + "px" : style.paddingRight = this.storedPadding + "px";
-        }
+        return width;
     },
 
     _attachChildKeyboardEvents: function() {
@@ -519,7 +522,7 @@ var DateBox = DropDownEditor.inherit({
 
     _visibilityChanged: function(visible) {
         if(visible) {
-            this._formatValidationIcon();
+            this._updateSize();
         }
     },
 
@@ -752,7 +755,7 @@ var DateBox = DropDownEditor.inherit({
             case "showClearButton":
             case "buttons":
                 this.callBase.apply(this, arguments);
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "pickerType":
                 this._updatePickerOptions({ pickerType: args.value });
@@ -765,7 +768,7 @@ var DateBox = DropDownEditor.inherit({
                 this._refreshStrategy();
                 this._refreshFormatClass();
                 this._renderPopupWrapper();
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "placeholder":
                 this._renderPlaceholder();
@@ -805,14 +808,14 @@ var DateBox = DropDownEditor.inherit({
                 break;
             case "isValid":
                 this.callBase.apply(this, arguments);
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "showDropDownButton":
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "readOnly":
                 this.callBase.apply(this, arguments);
-                this._formatValidationIcon();
+                this._updateSize();
                 break;
             case "invalidDateMessage":
             case "dateOutOfRangeMessage":
@@ -848,7 +851,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     dateValue: function(value, dxEvent) {
-        var isValueChanged = this._isValueChanged(value);
+        const isValueChanged = this._isValueChanged(value);
 
         if(isValueChanged && dxEvent) {
             this._saveValueChangeEvent(dxEvent);
