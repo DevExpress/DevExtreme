@@ -1074,6 +1074,22 @@ if(devices.real().deviceType === "desktop") {
             keyboardMock($input).paste("2/15/2019");
             assert.strictEqual($input.get(0).value, "2/15/2019");
         });
+
+        QUnit.test("selected date should be in 1970 when it was set from user's input (T758357)", (assert) => {
+            const $dateBox = $("#dateBox").dxDateBox({
+                value: null,
+                displayFormat: "HH:mm",
+                type: "time",
+                useMaskBehavior: true
+            });
+
+            keyboardMock($dateBox.find(".dx-texteditor-input"))
+                .focus()
+                .type("11:11")
+                .change();
+
+            assert.strictEqual($dateBox.dxDateBox("option", "value").getFullYear(), new Date(null).getFullYear(), "year is correct");
+        });
     });
 
     module("Advanced caret", setupModule, () => {
