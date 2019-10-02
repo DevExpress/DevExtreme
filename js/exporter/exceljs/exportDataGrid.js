@@ -96,12 +96,16 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
 function _setPredefinedFont(excelCell, bold) {
     if(isDefined(bold)) {
-        Object.assign(excelCell, { font: { bold: bold } });
+        excelCell.font = excelCell.font || {};
+        excelCell.font.bold = bold;
     }
 }
 
 function _setAlignment(excelCell, wrapText, alignment) {
-    Object.assign(excelCell, { alignment: { wrapText: wrapText, horizontal: alignment, vertical: 'top' } });
+    excelCell.alignment = excelCell.alignment || {};
+    excelCell.alignment.wrapText = wrapText;
+    excelCell.alignment.horizontal = alignment;
+    excelCell.alignment.vertical = "top";
 }
 
 function _setColumnsWidth(worksheet, columns, startColumnIndex) {
