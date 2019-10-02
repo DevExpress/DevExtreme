@@ -75,10 +75,10 @@ class ExcelJSTestHelper {
     }
 
     checkAlignment(expectedCells) {
-        expectedCells.forEach((expectedCell, index) => {
+        expectedCells.forEach(expectedCell => {
             const { excelCell } = expectedCell;
 
-            assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).alignment, excelCell.alignment[index], `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).alignment`);
+            assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).alignment, excelCell.alignment, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).alignment`);
         });
     }
 
@@ -105,8 +105,9 @@ class ExcelJSTestHelper {
                 if(!("value" in args.gridCell)) {
                     args.gridCell.value = expectedRows[rowIndex].values[columnIndex];
                 }
+
                 if(isDefined(expectedAlignment)) {
-                    args.excelCell.alignment = expectedAlignment;
+                    args.excelCell.alignment = expectedAlignment[rowIndex * columnCount + columnIndex];
                 }
             }
         }
