@@ -80,7 +80,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         if(isDefined(excelCell.value)) {
             const { bold, alignment, wrapText } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
-            _setPredefinedFont(excelCell, bold);
+            _setFont(excelCell, bold);
             _setAlignment(excelCell, wrapText, alignment);
         }
 
@@ -94,7 +94,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
-function _setPredefinedFont(excelCell, bold) {
+function _setFont(excelCell, bold) {
     if(isDefined(bold)) {
         excelCell.font = excelCell.font || {};
         excelCell.font.bold = bold;

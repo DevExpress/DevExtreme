@@ -60,7 +60,7 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkPredefinedFont(expectedCells) {
+    checkFont(expectedCells) {
         const rowTypes = ["header", "group", "groupFooter", "totalFooter"];
 
         expectedCells.forEach(expectedCell => {
