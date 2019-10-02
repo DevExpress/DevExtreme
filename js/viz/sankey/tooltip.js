@@ -4,7 +4,7 @@ var _extend = require("../../core/utils/extend").extend,
         return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${info.weight}` };
     },
     defaultCustomizeNodeTooltip = function(info) {
-        return { html: `<strong>${info.title}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outgoing weight: ${info.weightOut}` };
+        return { html: `<strong>${info.label}</strong><br/>Incoming weight: ${info.weightIn}<br/>Outgoing weight: ${info.weightOut}` };
     },
     generateCustomCallback = function(customCallback, defaultCallback) {
         return function(objectInfo) {

@@ -9619,13 +9619,13 @@ declare module DevExpress.viz {
         /** @name dxSankey.Options.tooltip.customizeLinkTooltip */
         customizeLinkTooltip?: ((info: { source?: string, target?: string, weight?: number }) => any);
         /** @name dxSankey.Options.tooltip.customizeNodeTooltip */
-        customizeNodeTooltip?: ((info: { title?: string, weightIn?: number, weightOut?: number }) => any);
+        customizeNodeTooltip?: ((info: { title?: string, label?: string, weightIn?: number, weightOut?: number }) => any);
         /** @name dxSankey.Options.tooltip.enabled */
         enabled?: boolean;
         /** @name dxSankey.Options.tooltip.linkTooltipTemplate */
         linkTooltipTemplate?: DevExpress.core.template | ((info: { source?: string, target?: string, weight?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxSankey.Options.tooltip.nodeTooltipTemplate */
-        nodeTooltipTemplate?: DevExpress.core.template | ((info: { title?: string, weightIn?: number, weightOut?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        nodeTooltipTemplate?: DevExpress.core.template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /** @name dxSankey */
     export class dxSankey extends BaseWidget {
@@ -9664,6 +9664,8 @@ declare module DevExpress.viz {
     }
     /** @name dxSankeyNode */
     export class dxSankeyNode {
+        /** @name dxSankeyNode.label */
+        label: string;
         /** @name dxSankeyNode.linksIn */
         linksIn: Array<any>;
         /** @name dxSankeyNode.linksOut */

@@ -173,7 +173,7 @@ QUnit.test("Show custom tooltip (text) on hovered node", function(assert) {
 
     this.trigger(pointerEvents.move, 2);
     assert.ok(stub.called);
-    assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', weightIn: 2, weightOut: 0 });
+    assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', label: 'Z', weightIn: 2, weightOut: 0 });
 });
 
 QUnit.test("Show custom tooltip (text) on hovered link", function(assert) {
@@ -203,7 +203,7 @@ QUnit.test("Show custom tooltip (html) on hovered node", function(assert) {
 
     this.trigger(pointerEvents.move, 2);
     assert.ok(stub.called);
-    assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', weightIn: 2, weightOut: 0 });
+    assert.deepEqual(stub.getCall(0).args[0], { title: 'Z', label: 'Z', weightIn: 2, weightOut: 0 });
 });
 
 QUnit.test("Show custom tooltip (html) on hovered link", function(assert) {
@@ -236,7 +236,7 @@ QUnit.test("Tooltip with template. Hover node - call node template", function(as
 
     this.trigger(pointerEvents.move, 2, { pageX: 100, pageY: 100 });
     assert.equal(nodeTooltipTemplate.callCount, 1);
-    assert.deepEqual(nodeTooltipTemplate.getCall(0).args[0], { title: 'Z', weightIn: 2, weightOut: 0 });
+    assert.deepEqual(nodeTooltipTemplate.getCall(0).args[0], { title: 'Z', label: 'Z', weightIn: 2, weightOut: 0 });
     assert.ok(domAdapter.isNode(nodeTooltipTemplate.getCall(0).args[1].get(0)));
 
     assert.equal(linkTooltipTemplate.callCount, 0);
