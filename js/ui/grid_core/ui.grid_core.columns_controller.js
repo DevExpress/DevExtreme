@@ -198,6 +198,7 @@ module.exports = {
              * @type_function_param1 newData:object
              * @type_function_param2 value:any
              * @type_function_param3 currentRowData:object
+             * @type_function_return void|Promise<void>
              */
             /**
              * @name GridBaseColumn.calculateDisplayValue

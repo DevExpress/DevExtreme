@@ -290,6 +290,7 @@ module.exports = {
             * @type_function_param1_field7 newData:object
             * @type_function_param1_field8 oldData:object
             * @type_function_param1_field9 errorText:string
+            * @type_function_param1_field10 promise:Promise<void>
             * @extends Action
             * @action
             */
