@@ -6901,7 +6901,7 @@ if(!devices.win8) {
         assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(2).val(), "555555");
     });
 
-    QUnit.test("Cell validating is setCellValue is set and editing mode is form", function(assert) {
+    QUnit.test("Cell validating is setCellValue is set and editing mode is form (T816256)", function(assert) {
         // arrange
         var that = this,
             rowsView = this.rowsView,
@@ -6931,6 +6931,7 @@ if(!devices.win8) {
         // act
         $targetInput.val('Test name');
         $targetInput.trigger('change');
+        this.clock.tick();
         // assert
         assert.ok($testElement.find("tbody > tr").first().find(".dx-texteditor").first().hasClass("dx-invalid"));
     });
