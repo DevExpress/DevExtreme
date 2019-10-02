@@ -61,6 +61,11 @@ class ItemsOption extends Component {
             }
         );
     }
+    _dataSourceOptions() {
+        return {
+            paginate: false
+        };
+    }
 
     _getStore() {
         return this._dataSource.store();
