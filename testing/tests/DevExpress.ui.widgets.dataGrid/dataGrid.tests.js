@@ -13659,6 +13659,117 @@ QUnit.test("The calculateCellValue arguments should be correct after resetting t
     assert.deepEqual(calculateCellValue.getCall(0).args[0], { field1: "test1", field2: "test2" }, "calculateCellValue - first call arguments");
 });
 
+// T817555
+QUnit.test("State reset should save default grouping", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, "field2"],
+        dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was not reset");
+});
+
+// T817555
+QUnit.test("State reset should save default grouping if sorting was applied", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
+        dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was not reset");
+});
+
+// T817555
+QUnit.test("State reset should return default grouping after ungrouping", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
+        dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.columnOption(0, "groupIndex", undefined);
+    dataGrid.columnOption(1, "sortOrder", undefined);
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was returned to default");
+    assert.equal(dataGrid.columnOption(1, "sortOrder"), "asc", "sortOrder was returned to default");
+});
+
+// T818434
+QUnit.test("State reset should reset filtering", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+            columns: [{ dataField: "field1" }, { dataField: "field2" }],
+            dataSource: [{ field1: "test1", field2: 1 }, { field1: "test2", field2: 2 }]
+        }),
+        filter;
+
+    this.clock.tick(0);
+
+    // act
+    filter = ["field1", "=", "test1"];
+    dataGrid.filter(filter);
+
+    // assert
+    assert.deepEqual(dataGrid.filter(), filter, "dataGrid's filter");
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.filter(), undefined, "dataGrid's filter");
+
+    // act
+    filter = ["field2", "=", 1];
+    dataGrid.filter(filter);
+
+    // assert
+    assert.deepEqual(dataGrid.filter(), filter, "dataGrid's filter");
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.filter(), undefined, "dataGrid's filter");
+
+    // act
+    filter = [["field1", "=", "test1"], "and", ["field2", "=", 1]];
+    dataGrid.filter(filter);
+
+    // assert
+    assert.deepEqual(dataGrid.filter(), filter, "dataGrid's filter");
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.filter(), undefined, "dataGrid's filter");
+});
+
 QUnit.test("Clear state when initial options is defined in dataSource", function(assert) {
     var dataGrid = createDataGrid({
         columnChooser: { enabled: true },
