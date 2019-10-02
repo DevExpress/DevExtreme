@@ -74,39 +74,11 @@ class ExcelJSTestHelper {
         });
     }
 
-    checkAlignment(expectedCells, rtlEnabled, isSummaryAlignByColumn) {
-        expectedCells.forEach(expectedCell => {
-            const { gridCell, excelCell } = expectedCell;
-            let expectedAlignment;
+    checkAlignment(expectedCells) {
+        expectedCells.forEach((expectedCell, index) => {
+            const { excelCell } = expectedCell;
 
-            if(isDefined(gridCell.value)) {
-                let hAlignment;
-                let vAlignment = "top";
-
-                if(gridCell.column.dataType === "number" || rtlEnabled) {
-                    hAlignment = "right";
-                } else if(gridCell.column.dataType === "boolean") {
-                    hAlignment = "center";
-                } else {
-                    hAlignment = "left";
-                }
-
-                let wrapText;
-                if(gridCell.rowType === "header") {
-                    hAlignment = "center";
-                    wrapText = true;
-                } else if(gridCell.rowType === "data") {
-                    wrapText = false;
-                } else if(gridCell.rowType === "group") {
-                    wrapText = gridCell.groupSummaryItems && isSummaryAlignByColumn ? true : false;
-                } else if(gridCell.rowType === "groupFooter" || gridCell.rowType === "totalFooter") {
-                    wrapText = true;
-                }
-
-                expectedAlignment = { horizontal: gridCell.hAlignment || hAlignment, vertical: vAlignment, wrapText: gridCell.wrapText || wrapText };
-            }
-
-            assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).alignment, expectedAlignment, `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).alignment`);
+            assert.deepEqual(this.worksheet.getCell(excelCell.row, excelCell.column).alignment, excelCell.alignment[index], `this.worksheet.getCell(${excelCell.row}, ${excelCell.column}).alignment`);
         });
     }
 
@@ -117,7 +89,9 @@ class ExcelJSTestHelper {
         assert.equal(this.worksheet.actualColumnCount, actual.column, "worksheet.actualColumnCount");
     }
 
-    _extendExpectedCustomizeCellArgs(argsArray, expectedRows, topLeft) {
+    _extendExpectedCustomizeCellArgs(options) {
+        const { expectedCustomizeCellArgs: argsArray, expectedRows, expectedAlignment, topLeft } = options;
+
         for(let rowIndex = 0; rowIndex < expectedRows.length; rowIndex++) {
             const columnCount = expectedRows[rowIndex].values.length;
 
@@ -130,6 +104,9 @@ class ExcelJSTestHelper {
                 };
                 if(!("value" in args.gridCell)) {
                     args.gridCell.value = expectedRows[rowIndex].values[columnIndex];
+                }
+                if(isDefined(expectedAlignment)) {
+                    args.excelCell.alignment = expectedAlignment;
                 }
             }
         }
