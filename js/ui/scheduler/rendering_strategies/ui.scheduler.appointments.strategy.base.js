@@ -84,18 +84,17 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _correctRtlCoordinates: function(coordinates) {
-        var width = coordinates[0].width || this._getAppointmentMaxWidth();
+        const width = coordinates[0].width || this._getAppointmentMaxWidth();
 
-        if(!coordinates[0].appointmentReduced) {
-            coordinates[0].left -= width;
+        for(var i = 0; i < coordinates.length; i++) {
+            var coordinate = coordinates[i];
+            if(!coordinate.appointmentReduced) {
+                coordinate.left -= width;
+            }
         }
-
-        this._correctRtlCoordinatesParts(coordinates, width);
 
         return coordinates;
     },
-
-    _correctRtlCoordinatesParts: noop,
 
     _getAppointmentMaxWidth: function() {
         return this._defaultWidth;

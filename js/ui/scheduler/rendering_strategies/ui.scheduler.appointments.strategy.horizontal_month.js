@@ -1,5 +1,4 @@
-var noop = require("../../../core/utils/common").noop,
-    extend = require("../../../core/utils/extend").extend,
+var extend = require("../../../core/utils/extend").extend,
     HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line");
 
 var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
@@ -66,8 +65,6 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     _calculateMultiWeekAppointmentLeftOffset: function(max, width) {
         return this._isRtl() ? max : max - width;
     },
-
-    _correctRtlCoordinatesParts: noop,
 
     _getFullWeekAppointmentWidth: function(groupIndex) {
         this.instance.fire("getFullWeekAppointmentWidth", {
