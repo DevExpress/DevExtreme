@@ -237,7 +237,7 @@ const Validator = DOMComponent.inherit({
             rules = this._getValidationRules();
         const currentResult = this._validationInfo && this._validationInfo.result;
         if(currentResult && currentResult.status === VALIDATION_STATUS_PENDING && currentResult.value === value) {
-            return currentResult;
+            return extend({}, currentResult);
         }
         let result;
         if(bypass) {
@@ -255,7 +255,7 @@ const Validator = DOMComponent.inherit({
                 this._applyValidationResult(res, adapter);
             }
         });
-        return this._validationInfo.result;
+        return extend({}, this._validationInfo.result);
     },
 
     /**

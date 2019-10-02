@@ -3,6 +3,7 @@ const { test } = QUnit;
 import FileItemsController from "ui/file_manager/file_items_controller";
 import { ErrorCode } from "ui/file_manager/ui.file_manager.common";
 import { createUploaderFiles } from "../../../helpers/fileManagerHelpers.js";
+import { isString } from "core/utils/type";
 
 const moduleConfig = {
 
@@ -481,6 +482,16 @@ QUnit.module("FileItemsController tests", moduleConfig, () => {
             });
 
         this.clock.tick(100);
+    });
+
+    test("root direcotry key is unique", function(assert) {
+        const rootDir = this.controller.getCurrentDirectory();
+        const rootKey = rootDir.fileItem.key;
+
+        assert.ok(isString(rootKey), "root key has type of string");
+        assert.ok(rootKey.length > 10, "root key contains many characters");
+        assert.ok(rootKey.indexOf("Files") === -1, "root key doesn't contain root directory name");
+        assert.ok(rootKey.indexOf("__dxfmroot_") === 0, "root key starts with internal prefix");
     });
 
 });

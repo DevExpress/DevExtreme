@@ -143,6 +143,52 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root folder");
     });
 
+    test("getSelectedItems method", function(assert) {
+        const testCases = [
+            { mode: "thumbnails", wrapperMethod: "findThumbnailsItem", eventName: "click" },
+            { mode: "details", wrapperMethod: "findDetailsItem", eventName: "dxclick" }
+        ];
+
+        testCases.forEach(({ mode, wrapperMethod, eventName }) => {
+            const inst = this.wrapper.getInstance();
+            inst.option("itemView.mode", mode);
+            this.clock.tick(400);
+
+            let items = inst.getSelectedItems();
+            assert.strictEqual(items.length, 0, "selected items count is valid");
+
+            this.wrapper[wrapperMethod]("Folder 1").trigger(eventName);
+            this.clock.tick(400);
+
+            items = inst.getSelectedItems();
+            assert.strictEqual(items.length, 1, "selected items count is valid");
+            assert.strictEqual(items[0].relativeName, "Folder 1", "item is in selection");
+            assert.ok(items[0].isDirectory, "directory selected");
+
+            const e = $.Event(eventName);
+            e.ctrlKey = true;
+            this.wrapper[wrapperMethod]("File 2.jpg").trigger(e);
+            this.clock.tick(400);
+
+            items = inst.getSelectedItems();
+            assert.strictEqual(items.length, 2, "selected items count is valid");
+            assert.strictEqual(items[0].relativeName, "Folder 1", "item is in selection");
+            assert.ok(items[0].isDirectory, "directory selected");
+            assert.strictEqual(items[1].relativeName, "File 2.jpg", "item is in selection");
+            assert.notOk(items[1].isDirectory, "file selected");
+        });
+    });
+
+    test("currentDirectory option", function(assert) {
+        const inst = this.wrapper.getInstance();
+        inst.option("currentPath", "Folder 1/Folder 1.1");
+        this.clock.tick(800);
+
+        const dir = inst.option("currentDirectory");
+        assert.strictEqual(dir.relativeName, "Folder 1/Folder 1.1", "directory has correct relative name");
+        assert.ok(dir.isDirectory, "directory has directory flag");
+    });
+
     test("change current directory by public API", function(assert) {
         const inst = this.wrapper.getInstance();
         assert.equal("", inst.option("currentPath"));

@@ -3461,6 +3461,8 @@ declare module DevExpress.ui {
         allowedFileExtensions?: Array<string>;
         /** @name dxFileManager.Options.contextMenu */
         contextMenu?: { items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'> };
+        /** @name dxFileManager.Options.currentDirectory */
+        currentDirectory?: any;
         /** @name dxFileManager.Options.currentPath */
         currentPath?: string;
         /** @name dxFileManager.Options.customizeDetailColumns */
@@ -3490,6 +3492,8 @@ declare module DevExpress.ui {
     export class dxFileManager extends Widget {
         constructor(element: Element, options?: dxFileManagerOptions)
         constructor(element: JQuery, options?: dxFileManagerOptions)
+        /** @name dxFileManager.getSelectedItems() */
+        getSelectedItems(): Array<any>;
     }
     /** @name dxFileManagerContextMenuItem */
     export interface dxFileManagerContextMenuItem extends dxContextMenuItem {

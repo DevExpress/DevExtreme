@@ -607,7 +607,7 @@ const GroupConfig = Class.inherit({
             this._raiseValidatedEvent(result);
         }
         this._updateValidationInfo(result);
-        return result;
+        return extend({}, this._validationInfo.result);
     },
 
     _subscribeToChangeEvents(validator) {
