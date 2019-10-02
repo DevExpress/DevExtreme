@@ -13698,6 +13698,31 @@ QUnit.test("State reset should reset filtering", function(assert) {
     assert.equal(dataGrid.filter(), undefined, "dataGrid's filter");
 });
 
+// T817555
+QUnit.test("Double reset should work correctly when rows are grouped", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
+        dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.columnOption(0, "groupIndex", undefined);
+    dataGrid.columnOption(1, "sortOrder", undefined);
+
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was returned to default");
+    assert.equal(dataGrid.columnOption(1, "sortOrder"), "asc", "sortOrder was returned to default");
+});
+
 QUnit.test("Clear state when initial options is defined in dataSource", function(assert) {
     var dataGrid = createDataGrid({
         columnChooser: { enabled: true },
