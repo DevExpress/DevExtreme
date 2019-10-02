@@ -9,9 +9,11 @@ QUnit.testStart(() => {
 });
 
 const TREELIST_SELECTOR = ".dx-treelist",
+    TREELIST_DATA_ROW_SELECTOR = ".dx-data-row",
     TREELIST_WRAPPER_SELECTOR = ".dx-gantt-treelist-wrapper",
     TREELIST_HEADER_ROW_SELECTOR = ".dx-header-row",
     GANTT_VIEW_SELECTOR = ".dx-gantt-view",
+    GANTT_VIEW_ROW_SELECTOR = ".dx-gantt-altRow",
     TASK_WRAPPER_SELECTOR = ".dx-gantt-taskWrapper",
     TASK_RESOURCES_SELECTOR = ".dx-gantt-taskRes",
     TASK_ARROW_SELECTOR = ".dx-gantt-arrow",
@@ -112,6 +114,13 @@ QUnit.module("Markup", moduleConfig, () => {
         const element = this.$element.find(TASK_RESOURCES_SELECTOR);
         assert.equal(element.length, resourceAssignments.length);
     });
+    test("row heights", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+        const treeListRowElement = this.$element.find(TREELIST_DATA_ROW_SELECTOR).last().get(0);
+        const ganttViewRowElement = this.$element.find(GANTT_VIEW_ROW_SELECTOR).get(0);
+        assert.equal(treeListRowElement.getBoundingClientRect().height, ganttViewRowElement.getBoundingClientRect().height, "row heights are equal");
+    });
 });
 
 QUnit.module("Options", moduleConfig, () => {
@@ -194,7 +203,7 @@ QUnit.module("Options", moduleConfig, () => {
         assert.equal(firstTitle, tasksDS[0].t);
         const firstProgressElement = taskWrapperElements.first().children().children().last();
         assert.ok(firstProgressElement.width() > 0);
-        const $firstTreeListRowText = this.$element.find(".dx-data-row").first().find(".dx-treelist-text-content").first().text();
+        const $firstTreeListRowText = this.$element.find(TREELIST_DATA_ROW_SELECTOR).first().find(".dx-treelist-text-content").first().text();
         assert.equal($firstTreeListRowText, tasksDS[0].t, "treeList has title text");
 
         const dependencyElements = this.$element.find(TASK_ARROW_SELECTOR);
