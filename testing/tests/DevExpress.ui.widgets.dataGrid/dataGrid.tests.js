@@ -16788,3 +16788,38 @@ QUnit.test("Cancel focused row if click selection checkBox (T812681)", function(
     assert.equal(dataGrid.option("focusedRowKey"), undefined, "focusedRowKey");
     assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
 });
+
+QUnit.test("Popup should apply data changes after editorOptions changing (T817880)", function(assert) {
+    // arrange
+    var $popupEditors,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [
+                { "name": "Alex", "text": "123" }
+            ],
+            editing: {
+                mode: "popup",
+                allowUpdating: true,
+                popup: { width: 700, height: 525 },
+                form: {
+                    items: ["name", {
+                        dataField: "text",
+                        editorOptions: {
+                            height: 50
+                        }
+                    }]
+                }
+            }
+        });
+
+    // act
+    dataGrid.editRow(0);
+    dataGrid.option("editing.form.items[1].editorOptions", { height: 100 });
+    dataGrid.cellValue(0, "name", "new name");
+    this.clock.tick();
+
+    // assert
+    $popupEditors = $(".dx-popup-content").find(".dx-texteditor");
+    assert.equal($popupEditors.eq(0).find("input").eq(0).val(), "new name", "value changed");
+    assert.equal($popupEditors.eq(1).get(0).style.height, "100px", "editorOptions applied");
+});
