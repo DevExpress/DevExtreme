@@ -1455,3 +1455,63 @@ QUnit.test("TreeList should correctly switch dx-row-alt class for fixed column a
     assert.notOk($row.eq(0).hasClass("dx-row-alt"), "unfixed table row element");
     assert.notOk($row.eq(1).hasClass("dx-row-alt"), "fixed table row element");
 });
+
+QUnit.test("TreeList should reshape data after update dataSource if reshapeOnPush set true (T815367)", function(assert) {
+    // arrange
+    var $row,
+        treeList = createTreeList({
+            dataSource: {
+                store: [{
+                    ID: 1,
+                    Head_ID: 0,
+                    Name: "John"
+                }],
+                reshapeOnPush: true
+            },
+            keyExpr: "ID",
+            parentIdExpr: "Head_ID",
+            columns: ["Name"],
+            expandedRowKeys: [1]
+        });
+    this.clock.tick();
+
+    // act
+    treeList.getDataSource().store().push([{
+        type: 'insert',
+        data: { ID: 2, Head_ID: 1, Name: "Alex" }
+    }]);
+    this.clock.tick();
+
+    // arrange
+    $row = $(treeList.getRowElement(1));
+
+    // assert
+    assert.ok($row && $row.text() === "Alex", "pushed item displays");
+});
+
+QUnit.test("TreeList should not reshape data after expand row (T815367)", function(assert) {
+    // arrange
+    var onNodesInitializedSpy = sinon.spy(),
+        treeList = createTreeList({
+            dataSource: {
+                store: [
+                    { ID: 1, Head_ID: 0, Name: "John" },
+                    { ID: 2, Head_ID: 1, Name: "Alex" }
+                ],
+                reshapeOnPush: true
+            },
+            keyExpr: "ID",
+            parentIdExpr: "Head_ID",
+            columns: ["Name"],
+            expandedRowKeys: [],
+            onNodesInitialized: onNodesInitializedSpy
+        });
+    this.clock.tick();
+
+    // act
+    treeList.expandRow(1);
+    this.clock.tick();
+
+    // assert
+    assert.equal(onNodesInitializedSpy.callCount, 1, "data did not reshape");
+});
