@@ -234,6 +234,10 @@ var EditorFactoryMixin = (function() {
                 $editorElement.dxTextBox("instance").registerKeyHandler("enter", noop);
             }
 
+            if(options.editorName === "dxDateBox") {
+                $editorElement.dxDateBox("instance").registerKeyHandler("enter", noop);
+            }
+
             if(options.editorName === "dxTextArea") {
                 $editorElement.dxTextArea("instance").registerKeyHandler("enter", function(event) {
                     if(normalizeKeyName(event) === "enter" && !event.ctrlKey && !event.shiftKey) {
