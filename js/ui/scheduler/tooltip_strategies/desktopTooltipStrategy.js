@@ -66,7 +66,6 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
             dragBehavior && dragBehavior.addTo($element, {
                 filter: ".dx-list-item",
                 container: "." + FIXED_CONTAINER_CLASS,
-                group: "shared",
                 cursorOffset: function(options) {
                     let event = options.event,
                         $dragElement = $(options.dragElement),

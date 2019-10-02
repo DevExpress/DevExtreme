@@ -806,34 +806,36 @@ var Draggable = DOMComponentWithTemplate.inherit({
             targetDraggable = this._getTargetDraggable(),
             needRevertPosition = true;
 
-        this._getAction("onDragEnd")(dragEndEventArgs);
+        try {
+            this._getAction("onDragEnd")(dragEndEventArgs);
+        } finally {
+            if(!dragEndEventArgs.cancel) {
+                if(targetDraggable !== this) {
+                    targetDraggable._getAction("onDrop")(dropEventArgs);
+                }
 
-        if(!dragEndEventArgs.cancel) {
-            if(targetDraggable !== this) {
-                targetDraggable._getAction("onDrop")(dropEventArgs);
+                if(!dropEventArgs.cancel) {
+                    targetDraggable.dragEnd(dragEndEventArgs);
+                    needRevertPosition = false;
+                }
             }
 
-            if(!dropEventArgs.cancel) {
-                targetDraggable.dragEnd(dragEndEventArgs);
-                needRevertPosition = false;
+            if(needRevertPosition) {
+                this._revertItemToInitialPosition();
             }
+
+            this.reset();
+            targetDraggable.reset();
+            this._stopAnimator();
+            this.horizontalScrollHelper.reset();
+            this.verticalScrollHelper.reset();
+
+            this._resetDragElement();
+            this._resetSourceElement();
+
+            this._resetTargetDraggable();
+            this._resetSourceDraggable();
         }
-
-        if(needRevertPosition) {
-            this._revertItemToInitialPosition();
-        }
-
-        this.reset();
-        targetDraggable.reset();
-        this._stopAnimator();
-        this.horizontalScrollHelper.reset();
-        this.verticalScrollHelper.reset();
-
-        this._resetDragElement();
-        this._resetSourceElement();
-
-        this._resetTargetDraggable();
-        this._resetSourceDraggable();
     },
 
     _dragEnterHandler: function(e) {

@@ -1972,11 +1972,13 @@ QUnit.test("Appointment should be returned back if an error occurs during drag (
         $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
         pointerMock($appointment).start().down().move(10, 10).up();
     }, function(err) {
-        var updatedPosition = this.instance.$element().find("." + APPOINTMENT_CLASS).eq(0).position();
+        $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+        var updatedPosition = $appointment.position();
 
         assert.roughEqual(updatedPosition.top, initialPosition.top, 1.1, "Top is OK");
         assert.roughEqual(updatedPosition.left, initialPosition.left, 1.1, "Left is OK");
         assert.equal(err.message, "An error occured", "Error message is OK");
+        assert.notOk($appointment.hasClass("dx-draggable-dragging"), "appointment hasn't 'dx-draggable-dragging' class");
 
         return true;
     }.bind(this));

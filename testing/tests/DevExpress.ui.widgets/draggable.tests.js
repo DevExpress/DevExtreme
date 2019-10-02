@@ -455,6 +455,28 @@ QUnit.test("onDragEnd - the position should be correctly reset when eventArgs.ca
     assert.deepEqual(translator.locate($("#items").children().eq(0)), initialLocate);
 });
 
+QUnit.test("onDragEnd - the position should be reset if an error occurs during drag", function(assert) {
+    // arrange
+    this.createDraggable({
+        filter: ">.draggable",
+        onDragEnd: function(e) {
+            e.cancel = true;
+            throw new Error("test");
+        }
+    }, $("#items"));
+
+    let initialLocate = translator.locate($("#items").children().eq(0));
+
+    try {
+        // act
+        pointerMock($("#items").children().eq(0)).start({ x: 325, y: 305 }).down().move(100, 100).up();
+    } catch(e) {
+        // assert
+        assert.deepEqual(translator.locate($("#items").children().eq(0)), initialLocate);
+        assert.notOk($("#items").children().eq(0).hasClass("dx-draggable-dragging"), "item hasn't 'dx-draggable-dragging' class");
+    }
+});
+
 
 QUnit.module("'dragDirection' option", moduleConfig);
 
