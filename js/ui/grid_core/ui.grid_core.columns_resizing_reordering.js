@@ -740,10 +740,11 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
 
             that._setupResizingInfo(eventData.x);
 
+            that._isResizing = true;
+
             that._tablePositionController.update(that._targetPoint.y);
             that._columnsSeparatorView.show();
             that._trackerView.show();
-            that._isResizing = true;
             e.preventDefault();
             e.stopPropagation();
         }
@@ -1019,9 +1020,14 @@ var TablePositionViewController = modules.ViewController.inherit({
             offsetTop = offset && offset.top || 0,
             diffOffsetTop = typeUtils.isDefined(top) ? Math.abs(top - offsetTop) : 0,
             columnsHeadersHeight = that._columnHeadersView ? that._columnHeadersView.getHeight() : 0,
-            rowsHeight = that._rowsView ? that._rowsView.height() - that._rowsView.getScrollbarWidth(true) : 0;
+            scrollBarWidth = that._rowsView.getScrollbarWidth(true),
+            rowsHeight = that._rowsView ? that._rowsView.height() - scrollBarWidth : 0,
+            columnsResizerController = that.component.getController("columnsResizer");
 
-        params.height = columnsHeadersHeight + rowsHeight - diffOffsetTop;
+        params.height = columnsHeadersHeight;
+        if(columnsResizerController.isResizing() !== false) {
+            params.height += rowsHeight - diffOffsetTop;
+        }
 
         if(top !== null && $element && $element.length) {
             params.top = $element[0].offsetTop + diffOffsetTop;

@@ -479,6 +479,9 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
                         isColumnOptionUsed: function(optionName) {
                             return true;
                         }
+                    },
+                    columnsResizer: {
+                        isResizing: () => true
                     }
                 },
                 _views: {
@@ -503,6 +506,11 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
                         }
                     }
                 },
+
+                getController: function(name) {
+                    return this._controllers[name];
+                },
+
                 NAME: "dxDataGrid"
             },
             tablePosition,
@@ -555,6 +563,9 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
                         isColumnOptionUsed: function(optionName) {
                             return true;
                         }
+                    },
+                    columnsResizer: {
+                        isResizing: () => true
                     }
                 },
                 _views: {
@@ -584,6 +595,11 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
                         }
                     }
                 },
+
+                getController: function(name) {
+                    return this._controllers[name];
+                },
+
                 NAME: "dxDataGrid"
             },
             tablePosition,
@@ -607,6 +623,72 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
 
         // arrange
         assert.equal(separator.element().height(), columnHeadersViewHeight + rowsViewHeight - scrollBarWidth, "height of columns separator");
+    });
+
+    QUnit.test("Column separator height should be equal to the headers heigth if 'resizing' is false", function(assert) {
+        // arrange
+        var columnHeadersViewHeight = 45,
+            rowsViewHeight = 100,
+            scrollBarWidth = 16,
+            component = {
+                option: function() {
+                    return true;
+                },
+                _controllers: {
+                    columnsResizer: {
+                        isResizing: () => false
+                    }
+                },
+                _views: {
+                    columnHeadersView: {
+                        element: function() {
+                            return $(".dx-datagrid-headers");
+                        },
+                        getHeight: function() {
+                            return columnHeadersViewHeight;
+                        },
+                        getHeadersRowHeight: function() {
+                            return 20;
+                        }
+                    },
+                    rowsView: {
+                        height: function() {
+                            return rowsViewHeight;
+                        },
+                        resizeCompleted: $.Callbacks(),
+                        getScrollbarWidth: function(isHorizontal) {
+                            return isHorizontal ? scrollBarWidth : 0;
+                        }
+                    }
+                },
+
+                getController: function(name) {
+                    return this._controllers[name];
+                },
+
+                NAME: "dxDataGrid"
+            },
+            tablePosition,
+            $container = $("#container"),
+            separator;
+
+        // act
+        $("<div/>")
+            .addClass("dx-datagrid-headers")
+            .appendTo($container);
+
+        tablePosition = new columnResizingReordering.TablePositionViewController(component);
+        component._controllers.tablePosition = tablePosition;
+        tablePosition.init();
+
+        separator = new columnResizingReordering.ColumnsSeparatorView(component);
+        separator.init();
+        separator.render($container);
+
+        tablePosition.update();
+
+        // arrange
+        assert.equal(separator.element().height(), columnHeadersViewHeight, "height of columns separator");
     });
 
     QUnit.test("IsVisible when columns options is empty", function(assert) {
@@ -821,7 +903,11 @@ function getEvent(options) {
                             { values: [1] },
                             { values: [2] }
                         ]
-                    })
+                    }),
+
+                    columnsResizer: {
+                        isResizing: () => true
+                    }
                 },
 
                 _createComponent: function(element, name, config) {
@@ -832,6 +918,10 @@ function getEvent(options) {
 
                 _createActionByOption: function() {
                     return function() { };
+                },
+
+                getController: function(name) {
+                    return this._controllers[name];
                 }
             };
 
