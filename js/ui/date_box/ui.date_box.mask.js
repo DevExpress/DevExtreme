@@ -179,8 +179,9 @@ const DateBoxMask = DateBoxBase.inherit({
 
     _setNewDateIfEmpty() {
         if(!this._maskValue) {
-            this._maskValue = new Date();
-            this._initialMaskValue = new Date();
+            var value = this.option("type") === "time" ? new Date(null) : new Date();
+            this._maskValue = value;
+            this._initialMaskValue = value;
             this._renderDateParts();
         }
     },

@@ -9,6 +9,7 @@ module.exports = Class.inherit({
     ctor: function(options) {
         this.options = options;
 
+        this._setOption("disabledItemKeys", []);
         this._clearItemKeys();
     },
 
@@ -53,6 +54,12 @@ module.exports = Class.inherit({
         }
 
         return commonUtils.equalByValue(key1, key2);
+    },
+
+    getSelectableItems: function(items) {
+        return items.filter(function(item) {
+            return !item.disabled;
+        });
     },
 
     _clearSelection: function(keys, preserve, isDeselect, isSelectAll) {
@@ -131,14 +138,14 @@ module.exports = Class.inherit({
             return this._isAnyItemSelected(items);
         }
 
-        if(selectedItemsLength >= this.options.totalCount()) {
+        if(selectedItemsLength >= this.options.totalCount() - this.options.disabledItemKeys.length) {
             return true;
         }
         return undefined;
     },
 
     _getVisibleSelectAllState: function() {
-        var items = this.options.plainItems(),
+        var items = this.getSelectableItems(this.options.plainItems()),
             hasSelectedItems = false,
             hasUnselectedItems = false;
 

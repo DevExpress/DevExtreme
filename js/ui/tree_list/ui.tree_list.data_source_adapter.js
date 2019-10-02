@@ -635,6 +635,17 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             that.callBase(options);
         },
 
+        _handlePush: function(changes) {
+            let reshapeOnPush = this._dataSource._reshapeOnPush,
+                isNeedReshape = reshapeOnPush && !!changes.length;
+
+            if(isNeedReshape) {
+                this._isReload = true;
+            }
+
+            this.callBase.apply(this, arguments);
+        },
+
         init: function(dataSource, remoteOperations) {
             this.callBase.apply(this, arguments);
 

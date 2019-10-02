@@ -74,6 +74,50 @@ QUnit.test("Select all by one page", function(assert) {
     assert.strictEqual(selection.getSelectAllState(true), true, "select all is true");
 });
 
+QUnit.test("Select all with disabled items", function(assert) {
+    this.data[2].disabled = true;
+    var dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
+
+    var expectedData = [];
+    for(var i = 0; i < 2; i++) {
+        expectedData.push(this.data[i]);
+    }
+
+    var selectionChangedCallCount = 0;
+
+    var selectionChangedHandler = function(args) {
+        selectionChangedCallCount++;
+        assert.deepEqual(args.selectedItems, expectedData, "selectedItems is right");
+        assert.deepEqual(args.selectedItemKeys, expectedData, "selectedItemsKeys is right");
+        assert.deepEqual(args.addedItemKeys, expectedData, "addedItemKeys is right");
+        assert.deepEqual(args.removedItemKeys, [], "removedItemKeys is right");
+    };
+
+    var selection = new Selection({
+        key: function() {
+            var store = dataSource.store();
+            return store && store.key();
+        },
+        keyOf: function(item) {
+            var store = dataSource.store();
+            return store && store.keyOf(item);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        onSelectionChanged: selectionChangedHandler
+    });
+
+    dataSource.load();
+    selection.selectAll(true);
+
+    assert.strictEqual(selectionChangedCallCount, 1, "selectionChanged called once");
+    assert.strictEqual(selection.getSelectAllState(true), true, "select all is true");
+});
+
 // T532618
 QUnit.test("Select all by one page should skip non-selectable items", function(assert) {
     var dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
@@ -103,6 +147,37 @@ QUnit.test("Select all by one page should skip non-selectable items", function(a
 
     assert.strictEqual(selection.getSelectAllState(true), true, "select all is true");
     assert.deepEqual(selection.getSelectedItems(), [this.data[1], this.data[2]], "selected items");
+});
+
+QUnit.test("Select all for all pages when item is disabled", function(assert) {
+    this.data[5].disabled = true;
+    var dataSource = createDataSource(this.data, { key: "id" }, { paginate: true, pageSize: 3 });
+
+    var selection = new Selection({
+        key: function() {
+            var store = dataSource.store();
+            return store && store.key();
+        },
+        keyOf: function(item) {
+            var store = dataSource.store();
+            return store && store.keyOf(item);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        load: function(options) {
+            return dataSource && dataSource.store().load(options);
+        }
+    });
+
+    dataSource.load();
+    selection.selectAll();
+
+    assert.deepEqual(selection.getSelectedItemKeys(), [1, 2, 3, 4, 5, 7], "selected item keys are correct");
+    assert.strictEqual(selection.getSelectAllState(), true, "select all is correct");
 });
 
 QUnit.test("Select all by one page and changeItemSelection", function(assert) {

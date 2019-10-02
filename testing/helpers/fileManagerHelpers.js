@@ -18,11 +18,13 @@ export const Consts = {
     FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
     BREADCRUMBS_CLASS: "dx-filemanager-breadcrumbs",
+    BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS: "dx-filemanager-breadcrumbs-parent-folder-item",
     ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
     FOCUSED_ITEM_CLASS: "dx-filemanager-focused-item",
     CUSTOM_THUMBNAIL_CLASS: "dx-filemanager-item-custom-thumbnail",
     TOOLBAR_SEPARATOR_ITEM: "dx-filemanager-toolbar-separator-item",
     DETAILS_ITEM_NAME_CLASS: "dx-filemanager-details-item-name",
+    POPUP_NORMAL_CLASS: "dx-popup-normal",
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
     BUTTON_CLASS: "dx-button",
     BUTTON_TEXT_CLASS: "dx-button-text",
@@ -92,12 +94,27 @@ export class FileManagerWrapper {
 
     getBreadcrumbsPath() {
         let result = "";
-        const $elements = this._$element.find(`.${Consts.BREADCRUMBS_CLASS} .${Consts.MENU_ITEM_WITH_TEXT_CLASS}`);
+        const $elements = this.getBreadcrumbsItems();
         $elements.each((_, element) => {
             const name = $(element).text();
             result = result ? `${result}/${name}` : name;
         });
         return result;
+    }
+
+    getBreadcrumbsItems() {
+        return this._$element.find(`.${Consts.BREADCRUMBS_CLASS} .${Consts.MENU_ITEM_WITH_TEXT_CLASS}`);
+    }
+
+    getBreadcrumbsItemByText(text) {
+        return this.getBreadcrumbsItems().filter(function() {
+            const content = $(this).text();
+            return $.trim(content) === text;
+        }).first();
+    }
+
+    getBreadcrumbsParentDirectoryItem() {
+        return this._$element.find(`.${Consts.BREADCRUMBS_CLASS} .${Consts.BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS}`);
     }
 
     getToolbar() {
@@ -127,6 +144,10 @@ export class FileManagerWrapper {
 
     getToolbarDropDownMenuItem(childIndex) {
         return $(`.${Consts.DROPDOWN_MENU_LIST_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
+    }
+
+    getToolbarViewSwitcherListItem(childIndex) {
+        return $(`.${Consts.POPUP_NORMAL_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
     }
 
     getCustomThumbnails() {

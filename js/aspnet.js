@@ -10,7 +10,8 @@
                 require("./ui/validation_engine"),
                 require("./core/utils/iterator"),
                 require("./core/utils/dom").extractTemplateMarkup,
-                require("./core/utils/string").encodeHtml
+                require("./core/utils/string").encodeHtml,
+                require("./core/utils/ajax")
             );
         });
     } else {
@@ -22,10 +23,11 @@
             DevExpress.validationEngine,
             DevExpress.utils.iterator,
             DevExpress.utils.dom.extractTemplateMarkup,
-            DevExpress.utils.string.encodeHtml
+            DevExpress.utils.string.encodeHtml,
+            DevExpress.utils.ajax
         );
     }
-})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml) {
+})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml, ajax) {
     var templateCompiler = createTemplateCompiler();
     var pendingCreateComponentRoutines = [ ];
 
@@ -178,6 +180,35 @@
                     items.length && summary.option("items", items);
                 }
             }
+        },
+
+        sendValidationRequest: function(propertyName, propertyValue, url, method) {
+            var d = $.Deferred();
+            var data = { };
+            data[propertyName] = propertyValue;
+
+            ajax.sendRequest({
+                url: url,
+                dataType: "json",
+                method: method || "GET",
+                data: data
+            }).then(function(response) {
+                if(typeof response === "string") {
+                    d.resolve({
+                        isValid: false,
+                        message: response
+                    });
+                } else {
+                    d.resolve(response);
+                }
+            }, function(xhr) {
+                d.reject({
+                    isValid: false,
+                    message: xhr.responseText
+                });
+            });
+
+            return d.promise();
         }
     };
 });

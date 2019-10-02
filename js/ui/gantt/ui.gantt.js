@@ -50,8 +50,11 @@ class Gantt extends Widget {
         this._renderSplitter();
     }
     _renderTreeList() {
+        const { keyExpr, parentIdExpr } = this.option("tasks");
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
-            dataSource: this._tasks,
+            dataSource: this._tasksRaw,
+            keyExpr: keyExpr,
+            parentIdExpr: parentIdExpr,
             columns: this.option("columns"),
             columnResizingMode: "nextColumn",
             height: "100%",
@@ -237,7 +240,8 @@ class Gantt extends Widget {
         this[`_${dataSourceName}`] = mappedData;
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === "tasks") {
-            this._setTreeListOption("dataSource", mappedData);
+            this._tasksRaw = data;
+            this._setTreeListOption("dataSource", data);
         }
     }
 
@@ -261,7 +265,7 @@ class Gantt extends Widget {
         if(!this._dialogInstance) {
             this._dialogInstance = new GanttDialog(this, this._$dialog);
         }
-        this._dialogInstance.show(e.name, e.parameters, e.callback);
+        this._dialogInstance.show(e.name, e.parameters, e.callback, this.option("editing"));
     }
 
     _clean() {

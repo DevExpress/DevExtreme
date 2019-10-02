@@ -201,14 +201,12 @@ QUnit.module("modify global action button config", (hooks) => {
 
     test("check main fab position after change", (assert) => {
         var firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
-        $("#fab-two").dxSpeedDialAction();
 
-        const $fabMainElement = $(FAB_MAIN_SELECTOR);
-        const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
         const fabDimensions = 64;
 
-        assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
-        assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
+        assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "one action - default position top");
+        assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "one action - default position left");
 
         config({
             floatingActionButtonConfig: {
@@ -218,8 +216,35 @@ QUnit.module("modify global action button config", (hooks) => {
 
         firstSDA.repaint();
 
-        assert.equal($fabMainContent.offset().top, 0, "default position top is changed");
-        assert.equal($fabMainContent.offset().left, 0, "default position left is changed");
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.offset().top, 0, "one action - correct position top after config change");
+        assert.equal($fabMainContent.offset().left, 0, "one action - correct position left after config change");
+
+        $("#fab-two").dxSpeedDialAction();
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.offset().top, 0, "multiple actions - default position top");
+        assert.equal($fabMainContent.offset().left, 0, "multiple actions - default position left");
+
+        config({
+            floatingActionButtonConfig: {
+                position: {
+                    at: "right bottom",
+                    my: "right bottom",
+                    offset: "-16 -16"
+                }
+            }
+        });
+
+        firstSDA.repaint();
+
+        $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "multiple actions - correct position top after config change");
+        assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "multiple actions - correct position left after config change");
+
     });
 });
 
@@ -710,3 +735,56 @@ QUnit.module("add direction option", (hooks) => {
     });
 });
 
+QUnit.module("add index option", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
+    hooks.afterEach(() => {
+        fx.off = false;
+    }),
+    test("check rendering", (assert) => {
+        const firstSDA = $("#fab-one").dxSpeedDialAction({
+            index: 1,
+            icon: "add"
+        }).dxSpeedDialAction("instance");
+        const secondSDA = $("#fab-two").dxSpeedDialAction({
+            index: 2,
+            icon: "trash"
+        }).dxSpeedDialAction("instance");
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        let $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        const fabDimensions = 30;
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "add action is first");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 120, "trash action is second");
+
+
+        firstSDA.option("index", 2);
+        secondSDA.option("index", 1);
+
+        $fabMainContent.trigger("dxclick");
+
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 120, "trash action is first");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 80, "add action is second");
+
+        firstSDA.option("index", 5);
+        secondSDA.option("index", -1);
+
+        $fabMainContent.trigger("dxclick");
+
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 120, "trash action is first");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 80, "add action is second");
+
+
+        firstSDA.dispose();
+        secondSDA.dispose();
+    });
+});

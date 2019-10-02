@@ -15,6 +15,7 @@ const CLASS = {
     listItem: 'dx-list-item',
     popup: 'dx-popup',
     popupWrapper: 'dx-popup-wrapper',
+    cancelButton: 'dx-popup-cancel.dx-button',
     resizableHandleBottom: 'dx-resizable-handle-bottom',
     resizableHandleLeft: 'dx-resizable-handle-left',
     resizableHandleRight: 'dx-resizable-handle-right',
@@ -90,9 +91,22 @@ class AppointmentPopup {
     element: Selector;
     wrapper: Selector;
 
+    subjectElement: Selector;
+    descriptionElement: Selector;
+
+    doneButton: Selector;
+    cancelButton: Selector;
+
+
     constructor(scheduler: Selector) {
         this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
         this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
+
+        this.subjectElement = this.wrapper.find(".dx-texteditor-input").nth(0);
+        this.descriptionElement = this.wrapper.find(".dx-texteditor-input").nth(3);
+
+        this.doneButton = this.wrapper.find(".dx-popup-done.dx-button");
+        this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
     }
 
     isVisible(): Promise<boolean> {

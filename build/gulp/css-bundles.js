@@ -6,13 +6,15 @@ const replace = require('gulp-replace');
 
 const headerPipes = require('./header-pipes.js');
 
-const outputDirectory = path.join(__dirname, "../../artifacts/npm/devextreme/less");
-const sourcesPath = path.join(outputDirectory, "sources");
-const bundlesPath = path.join(outputDirectory, "bundles");
-const widgetsPath = path.join(outputDirectory, "widgets");
+const outputDirectory = path.join(__dirname, '../../artifacts/npm/devextreme/less');
+const sourcesPath = path.join(outputDirectory, 'sources');
+const bundlesPath = path.join(outputDirectory, 'bundles');
+const widgetsPath = path.join(outputDirectory, 'widgets');
+const iconsPath = path.join(sourcesPath, 'widgets', 'base', 'icons');
+const fontsPath = path.join(sourcesPath, 'widgets', 'material', 'fonts');
 
-const ModulesHandler = require("../../themebuilder/modules/modules-handler");
-const themesFileContent = fs.readFileSync(path.join(__dirname, "../../styles", "theme.less"), "utf8");
+const ModulesHandler = require('../../themebuilder/modules/modules-handler');
+const themesFileContent = fs.readFileSync(path.join(__dirname, '../../styles', 'theme.less'), 'utf8');
 const widgets = new ModulesHandler().availableWidgets(themesFileContent);
 
 gulp.task('copy-less', () => {
@@ -26,11 +28,19 @@ gulp.task('copy-less', () => {
 });
 
 gulp.task('copy-bundles', () => {
-    return gulp.src('themebuilder/data/less/bundles/*.less')
+    return gulp.src([
+        'themebuilder/data/less/bundles/*.less',
+        '!themebuilder/data/less/bundles/dx.common.less'
+    ])
         .pipe(replace('@import (once) "../theme.less";', '@import (once) "../sources/theme.less";'))
         .pipe(headerPipes.starLicense())
         .pipe(gulp.dest(bundlesPath));
 });
+
+gulp.task('copy-fonts', gulp.parallel(
+    () => gulp.src('icons/**/*').pipe(gulp.dest(iconsPath)),
+    () => gulp.src('fonts/**/*').pipe(gulp.dest(fontsPath))
+));
 
 gulp.task('create-widgets', () => {
     return gulp.src([
@@ -62,4 +72,4 @@ gulp.task('create-widgets', () => {
         }));
 });
 
-gulp.task('npm-less', gulp.parallel('copy-less', 'copy-bundles', 'create-widgets'));
+gulp.task('npm-less', gulp.parallel('copy-less', 'copy-bundles', 'copy-fonts', 'create-widgets'));

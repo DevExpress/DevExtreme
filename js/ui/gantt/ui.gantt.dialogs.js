@@ -16,13 +16,13 @@ export class GanttDialog {
         this.hide();
     }
 
-    show(name, parameters, callback) {
+    show(name, parameters, callback, editingOptions) {
         this._callback = callback;
 
         if(!this.infoMap[name]) {
             return;
         }
-        this._dialogInfo = new this.infoMap[name](parameters, this._apply.bind(this), this.hide.bind(this));
+        this._dialogInfo = new this.infoMap[name](parameters, this._apply.bind(this), this.hide.bind(this), editingOptions);
         this._popupInstance.option({
             title: this._dialogInfo.getTitle(),
             toolbarItems: this._dialogInfo.getToolbarItems(),
@@ -39,10 +39,11 @@ export class GanttDialog {
 }
 
 class DialogInfoBase {
-    constructor(parameters, applyAction, hideAction) {
+    constructor(parameters, applyAction, hideAction, editingOptions) {
         this._parameters = parameters;
         this._applyAction = applyAction;
         this._hideAction = hideAction;
+        this._editingOptions = editingOptions;
     }
 
     _getFormItems() { return {}; }
@@ -71,7 +72,10 @@ class DialogInfoBase {
     }
 
     getTitle() { return ""; }
-    getToolbarItems() { return [ this._getOkToolbarItem(), this._getCancelToolbarItem()]; }
+    getToolbarItems() {
+        return this._editingOptions.enabled ?
+            [ this._getOkToolbarItem(), this._getCancelToolbarItem()] : [this._getCancelToolbarItem()];
+    }
     getMaxWidth() { return 400; }
     getHeight() { return "auto"; }
     getContentTemplate() {
@@ -93,17 +97,20 @@ class DialogInfoBase {
 class TaskEditDialogInfo extends DialogInfoBase {
     getTitle() { return "Task Information"; }
     _getFormItems() {
+        const readOnly = !this._editingOptions.enabled || !this._editingOptions.allowTaskUpdating;
         return [{
             dataField: "title",
             editorType: "dxTextBox",
-            label: { text: "Title" }
+            label: { text: "Title" },
+            editorOptions: { readOnly: readOnly }
         }, {
             dataField: "start",
             editorType: "dxDateBox",
             label: { text: "Start" },
             editorOptions: {
                 type: "datetime",
-                width: "100%"
+                width: "100%",
+                readOnly: readOnly
             }
         }, {
             dataField: "end",
@@ -111,7 +118,8 @@ class TaskEditDialogInfo extends DialogInfoBase {
             label: { text: "End" },
             editorOptions: {
                 type: "datetime",
-                width: "100%"
+                width: "100%",
+                readOnly: readOnly
             }
         }, {
             dataField: "progress",
@@ -120,13 +128,15 @@ class TaskEditDialogInfo extends DialogInfoBase {
             editorOptions: {
                 showSpinButtons: true,
                 min: 0,
-                max: 100
+                max: 100,
+                readOnly: readOnly
             }
         }, {
             dataField: "assigned.items",
             editorType: "dxTagBox",
             label: { text: "Resources" },
             editorOptions: {
+                readOnly: readOnly,
                 dataSource: this._parameters.resources.items,
                 displayExpr: "text",
                 buttons: [{
@@ -160,7 +170,7 @@ class ResourcesEditDialogInfo extends DialogInfoBase {
             dataField: "resources.items",
             editorType: "dxList",
             editorOptions: {
-                allowItemDeleting: true,
+                allowItemDeleting: this._editingOptions.enabled && this._editingOptions.allowResourceDeleting,
                 itemDeleteMode: "static",
                 selectionMode: "none",
                 items: this._parameters.resources.items,
@@ -173,6 +183,7 @@ class ResourcesEditDialogInfo extends DialogInfoBase {
             label: { visible: false },
             editorType: "dxTextBox",
             editorOptions: {
+                readOnly: !this._editingOptions.enabled || !this._editingOptions.allowResourceAdding,
                 onInitialized: (e) => { this.textBox = e.component; },
                 onInput: (e) => {
                     const addButton = e.component.getButton("addResource");

@@ -102,7 +102,7 @@ QUnit.test("Editor for resource should be passed to details view", function(asse
     assert.deepEqual(ownerEditor.editorOptions.dataSource.items(), resources[0].dataSource, "Data source is OK");
     assert.deepEqual(taskDetailsView.option("formData").ownerId, [1], "Value is OK");
 
-
+    this.instance.hideAppointmentPopup();
     this.instance.showAppointmentPopup(task2);
     taskDetailsView = this.instance.getAppointmentDetailsForm();
 
@@ -112,6 +112,7 @@ QUnit.test("Editor for resource should be passed to details view", function(asse
 
     assert.ok(taskDetailsView.getEditor("roomId"), "Editor is exist");
     assert.equal(roomEditor.editorType, "dxSelectBox", "Editor is dxSelectBox");
+
     assert.strictEqual(taskDetailsView.option("formData").roomId, 1, "Value is OK");
     assert.deepEqual(roomEditor.editorOptions.dataSource.items(), roomResource, "Data source is OK");
 });

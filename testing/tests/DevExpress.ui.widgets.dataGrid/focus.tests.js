@@ -2624,6 +2624,54 @@ QUnit.testInActiveWindow("onFocusedRowChanged event should fire only once if row
     assert.equal(focusedRowChangedCount, 1, "onFocusedRowChanged fires count");
 });
 
+// T818734
+QUnit.testInActiveWindow("onFocusedRowChanged and onFocusedRowChanging events should fire after enabling focusedRow if it was disabled on init", function(assert) {
+    // arrange
+    var focusedRowChangedCount = 0,
+        focusedRowChangingCount = 0,
+        rowsView;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 }
+    ];
+
+    this.options = {
+        loadingTimeout: 0,
+        keyExpr: "name",
+        focusedRowEnabled: false,
+        onFocusedRowChanged: function(e) {
+            ++focusedRowChangedCount;
+        },
+        onFocusedRowChanging: function(e) {
+            ++focusedRowChangingCount;
+        }
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // act
+    this.option("focusedRowEnabled", true);
+
+    $(rowsView.getRow(1).find("td").eq(1)).trigger(pointerEvents.up).click();
+
+    // assert
+    assert.equal(focusedRowChangedCount, 1, "onFocusedRowChanged fires count");
+    assert.equal(focusedRowChangingCount, 1, "onFocusedRowChanging fires count");
+});
+
 QUnit.testInActiveWindow("onFocusedCellChanged event", function(assert) {
     var rowsView,
         focusedCellChangedCount = 0;

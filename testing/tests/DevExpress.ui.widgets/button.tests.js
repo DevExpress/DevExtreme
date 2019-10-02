@@ -12,14 +12,20 @@ import "generic_light.css!";
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="button"></div>\
+        '<form id="form">\
+        <div id="button"></div>\
         <div id="widget"></div>\
         <div id="widthRootStyle" style="width: 300px;"></div>\
         <div id="inkButton"></div>\
             <div data-options="dxTemplate: { name: \'content\' }" data-bind="text: text"></div>\
-        </div>';
+        </div>\
+        </form>';
 
     $("#qunit-fixture").html(markup);
+
+    $("#form").on("submit", function(e) {
+        e.preventDefault();
+    });
 });
 
 const BUTTON_HAS_TEXT_CLASS = "dx-button-has-text";
@@ -299,6 +305,7 @@ QUnit.module("submit behavior", {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
         this.$element = $("#button").dxButton({ useSubmitBehavior: true });
+        this.$form = $("#form");
         this.clickButton = function() {
             this.$element.trigger("dxclick");
             this.clock.tick();
@@ -397,6 +404,80 @@ QUnit.module("submit behavior", {
         } finally {
             ValidationEngine.initGroups();
         }
+    });
+
+    QUnit.test("Submit button should change the 'disabled' option to 'false' when validation is passed negatively", (assert) => {
+        this.clock.restore();
+        const validator = new Validator($("<div>").appendTo(this.$form), {
+                adapter: sinon.createStubInstance(DefaultAdapter),
+                validationRules: [{
+                    type: "async",
+                    validationCallback: function() {
+                        const d = new Deferred();
+                        setTimeout(() => {
+                            d.reject();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }),
+            done = assert.async();
+
+        this.$element.dxButton({
+            validationGroup: "testGroup",
+            onOptionChanged: function(args) {
+                if(args.name === "disabled") {
+                    if(args.value === true) {
+                        assert.equal(validator._validationInfo.result.status, "pending", "validator in pending");
+                    } else {
+                        assert.equal(validator._validationInfo.result.status, "invalid", "validator is invalid");
+
+                        ValidationEngine.initGroups();
+                        done();
+                    }
+                }
+            }
+        });
+
+        ValidationEngine.registerValidatorInGroup("testGroup", validator);
+        this.$element.trigger("dxclick");
+    });
+
+    QUnit.test("Submit button should change the 'disabled' option to 'false' when validation is passed positively", (assert) => {
+        this.clock.restore();
+        const validator = new Validator($("<div>").appendTo(this.$form), {
+                adapter: sinon.createStubInstance(DefaultAdapter),
+                validationRules: [{
+                    type: "async",
+                    validationCallback: function() {
+                        const d = new Deferred();
+                        setTimeout(() => {
+                            d.resolve();
+                        }, 10);
+                        return d.promise();
+                    }
+                }]
+            }),
+            done = assert.async();
+
+        this.$element.dxButton({
+            validationGroup: "testGroup",
+            onOptionChanged: function(args) {
+                if(args.name === "disabled") {
+                    if(args.value === true) {
+                        assert.equal(validator._validationInfo.result.status, "pending", "validator in pending");
+                    } else {
+                        assert.equal(validator._validationInfo.result.status, "valid", "validator is valid");
+
+                        ValidationEngine.initGroups();
+                        done();
+                    }
+                }
+            }
+        });
+
+        ValidationEngine.registerValidatorInGroup("testGroup", validator);
+        this.$element.trigger("dxclick");
     });
 });
 

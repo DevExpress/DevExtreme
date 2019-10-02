@@ -249,7 +249,7 @@ module.exports = Class.inherit({
     },
 
     _onePageSelectAll: function(isDeselect) {
-        var items = this.options.plainItems();
+        var items = this._selectionStrategy.getSelectableItems(this.options.plainItems());
         for(var i = 0; i < items.length; i++) {
             var item = items[i];
 

@@ -35,7 +35,8 @@ const KEY_MAP = {
     "multiply": "asterisk",
     "spacebar": "space",
     "del": "del",
-    "subtract": "minus"
+    "subtract": "minus",
+    "esc": "escape"
 };
 
 const LEGACY_KEY_CODES = {

@@ -176,6 +176,13 @@ module.exports = SelectionStrategy.inherit({
     },
 
     addSelectedItem: function(key, itemData) {
+        if(itemData.disabled) {
+            if(this.options.disabledItemKeys.indexOf(key) === -1) {
+                this.options.disabledItemKeys.push(key);
+            }
+            return;
+        }
+
         var keyHash = this._getKeyHash(key);
 
         if(this._indexOfSelectedItemKey(keyHash) === -1) {

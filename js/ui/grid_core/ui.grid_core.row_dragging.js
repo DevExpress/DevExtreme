@@ -12,10 +12,17 @@ var RowDraggingExtender = {
         this._updateHandleColumn();
     },
 
+    _allowReordering: function() {
+        let rowDragging = this.option("rowDragging");
+
+        return !!(rowDragging && (rowDragging.allowReordering || rowDragging.allowDropInsideItem || rowDragging.group));
+    },
+
     _updateHandleColumn: function() {
         let rowDragging = this.option("rowDragging"),
+            allowReordering = this._allowReordering(),
             columnsController = this._columnsController,
-            isHandleColumnVisible = rowDragging.enabled && rowDragging.showDragIcons;
+            isHandleColumnVisible = allowReordering && rowDragging.showDragIcons;
 
         columnsController && columnsController.addCommandColumn({
             type: "drag",
@@ -33,10 +40,11 @@ var RowDraggingExtender = {
 
     _renderContent: function() {
         let that = this,
-            rowDragging = that.option("rowDragging"),
+            rowDragging = this.option("rowDragging"),
+            allowReordering = this._allowReordering(),
             $content = that.callBase.apply(that, arguments);
 
-        if(rowDragging && rowDragging.enabled) {
+        if(allowReordering) {
             that._sortable = that._createComponent($content, Sortable, extend({
                 filter: "> table > tbody > .dx-data-row",
                 template: that._getDraggableRowTemplate(),
@@ -63,7 +71,7 @@ var RowDraggingExtender = {
                 visible: false
             },
             rowDragging: {
-                enabled: true,
+                allowReordering: true,
                 showDragIcons: gridOptions.rowDragging.showDragIcons
             },
             loadingTimeout: undefined,
@@ -124,12 +132,6 @@ module.exports = {
              */
             rowDragging: {
                 /**
-                * @name GridBaseOptions.rowDragging.enabled
-                * @type boolean
-                * @default false
-                */
-                enabled: false,
-                /**
                 * @name GridBaseOptions.rowDragging.showDragIcons
                 * @type boolean
                 * @default true
@@ -140,7 +142,19 @@ module.exports = {
                  * @type Enums.DropFeedbackMode
                  * @default "indicate"
                  */
-                dropFeedbackMode: "indicate"
+                dropFeedbackMode: "indicate",
+                /**
+                 * @name GridBaseOptions.rowDragging.allowReordering
+                 * @type boolean
+                 * @default false
+                 */
+                allowReordering: false,
+                /**
+                 * @name GridBaseOptions.rowDragging.allowDropInsideItem
+                 * @type boolean
+                 * @default false
+                 */
+                allowDropInsideItem: false
                 /**
                  * @name GridBaseOptions.rowDragging.filter
                  * @type string
@@ -150,16 +164,6 @@ module.exports = {
                  * @name GridBaseOptions.rowDragging.itemOrientation
                  * @type Enums.Orientation
                  * @default "vertical"
-                 */
-                /**
-                 * @name dxDataGridOptions.rowDragging.allowDropInsideItem
-                 * @type boolean
-                 * @default false
-                 */
-                /**
-                 * @name GridBaseOptions.rowDragging.allowReordering
-                 * @type boolean
-                 * @default true
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.dragDirection

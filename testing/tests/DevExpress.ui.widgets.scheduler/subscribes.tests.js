@@ -452,27 +452,6 @@ QUnit.test("'showAddAppointmentPopup' should update appointment data if there is
     }, "Appointment data is OK");
 });
 
-QUnit.test("'resizePopup' should trigger dxresize event for appointment popup", function(assert) {
-    var resizeHandler = sinon.spy();
-
-    this.createInstance({
-        currentDate: new Date(2015, 1, 1),
-        currentView: "day",
-        dataSource: []
-    });
-
-    this.instance.fire("showAddAppointmentPopup", {
-        startDate: new Date(2015, 1, 1),
-        endDate: new Date(2015, 1, 1, 1),
-        allDay: true
-    });
-
-    $(this.instance._popup.$element()).on("dxresize", resizeHandler);
-    this.instance.fire("resizePopup");
-
-    assert.ok(resizeHandler.called, "event has been triggered");
-});
-
 QUnit.test("'appointmentFocused' should fire restoreScrollTop", function(assert) {
     this.createInstance();
 

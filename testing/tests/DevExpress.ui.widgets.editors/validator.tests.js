@@ -642,7 +642,7 @@ QUnit.test("Validator should not be re-validated on pending with the same value"
         result2 = validator.validate();
 
     assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
-    assert.strictEqual(result1, result2, "The result should be the same");
+    assert.strictEqual(result1.id, result2.id, "The result id's should be the same");
     assert.ok(isPromise(result1.complete), "result1.complete is a Promise object");
     assert.strictEqual(result1.complete, result2.complete, "result1.complete === result2.complete");
     result1.complete.then(function(res) {

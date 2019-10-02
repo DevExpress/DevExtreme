@@ -11464,6 +11464,40 @@ QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour",
     assert.equal(dataGrid.cellValue(0, 0), "test", "cell value is changed");
 });
 
+// T819067
+QUnit.testInActiveWindow("Datebox editor's enter key handler should be replaced by noop", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
+    // arrange
+    var dataGrid = createDataGrid({
+            dataSource: [{ dateField: "2000/01/01 12:42" }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: "dateField",
+                dataType: 'date',
+            }]
+        }),
+        dateBox,
+        enterKeyHandler;
+
+    this.clock.tick();
+
+    // act
+    $(dataGrid.getCellElement(0, 0)).trigger("dxclick");
+
+    dateBox = dataGrid.$element().find(".dx-datebox").dxDateBox("instance");
+    enterKeyHandler = dateBox._supportedKeys().enter;
+
+    // assert
+    assert.equal(enterKeyHandler, commonUtils.noop, "dateBox enter key handler was replaced");
+});
+
 QUnit.testInActiveWindow("dataGrid resize generates exception if fixed column presents and validation applied in cell edit mode (T629168)", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
@@ -16632,6 +16666,47 @@ QUnit.test("Pressing symbol keys inside detail grid editor does not change maste
 
     // assert
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, "Master grid focusedCellPosition is not changed");
+});
+
+QUnit.test("DataGrid should regenerate columns and apply filter after dataSource change if columns autogenerate", function(assert) {
+    // arrange
+    var dataSource0 = {
+            store: [
+                { id: 0, c0: "c0_0" },
+                { id: 1, c0: "c0_1" }
+            ]
+        },
+        dataSource1 = {
+            store: [
+                { id: 0, c1: "c1_0" },
+                { id: 1, c1: "c1_1" }
+            ]
+        },
+        rows,
+        dataSourceChanged = false,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource0,
+            customizeColumns: columns => {
+                if(dataSourceChanged) {
+                    columns[1].filterValue = "c1_1";
+                }
+            }
+        });
+
+    // arrange, act
+    dataSourceChanged = true;
+    dataGrid.option("dataSource", dataSource1);
+    rows = dataGrid.getVisibleRows();
+    // assert
+    assert.equal(rows.length, 1, "Row was filtered");
+    assert.deepEqual(rows[0].data.id, 1, "Second row");
+
+    // act
+    dataGrid.option("dataSource", dataSource1);
+    // assert
+    assert.equal(rows.length, 1, "Row was filtered");
+    assert.deepEqual(rows[0].data.id, 1, "Second row");
 });
 
 // T671532

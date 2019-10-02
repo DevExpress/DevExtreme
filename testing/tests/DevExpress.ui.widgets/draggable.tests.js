@@ -1,20 +1,26 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    pointerMock = require("../../helpers/pointerMock.js"),
-    viewPort = require("core/utils/view_port").value,
-    GestureEmitter = require("events/gesture/emitter.gesture.js"),
-    animationFrame = require("animation/frame"),
-    translator = require("animation/translator");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import pointerMock from "../../helpers/pointerMock.js";
+import viewPort from "core/utils/view_port";
+import GestureEmitter from "events/gesture/emitter.gesture.js";
+import animationFrame from "animation/frame";
+import translator from "animation/translator";
 
-require("common.css!");
-require("ui/draggable");
-require("ui/scroll_view");
+import "common.css!";
+import "ui/draggable";
+import "ui/scroll_view";
 
-$("body").css("height", "800px");
+$("body").css({
+    minHeight: "800px",
+    minWidth: "800px",
+    margin: "0px",
+    padding: "0px"
+});
 
 QUnit.testStart(function() {
     var markup =
-        '<div id="area" style="width: 300px; height: 250px; position: relative; background: green;">\
+        '<style>.fixedPosition.dx-draggable-dragging { position: fixed; }</style>\
+        <div id="area" style="width: 300px; height: 250px; position: relative; background: green;">\
             <div style="width: 30px; height: 50px; background: yellow;" id="draggable"></div>\
             <div style="width: 100px; height: 100px; background: grey;" id="draggableWithHandle">\
                 <div id="handle" style="width: 30px; height: 30px; background: grey;"></div>\
@@ -79,6 +85,7 @@ QUnit.test("'immediate' option", function(assert) {
         this.checkPosition(0, 0, assert);
     }
 });
+
 
 QUnit.module("Events", moduleConfig);
 
@@ -628,7 +635,7 @@ QUnit.test("enabled", function(assert) {
         allowMoveByClick: true
     });
 
-    pointerMock(viewPort()).down(100, 100);
+    pointerMock(viewPort.value()).down(100, 100);
 
     this.checkPosition(100 - this.$element.width() / 2, 100 - this.$element.height() / 2, assert);
 });
@@ -671,7 +678,7 @@ QUnit.test("changing", function(assert) {
     var draggable = this.createDraggable({ });
 
     draggable.option("allowMoveByClick", true);
-    pointerMock(viewPort()).down(100, 100);
+    pointerMock(viewPort.value()).down(100, 100);
 
     this.checkPosition(100 - this.$element.width() / 2, 100 - this.$element.height() / 2, assert);
 });
@@ -743,6 +750,62 @@ QUnit.test("element position on click should be updated considering dragDirectio
 
     pointerMock($area).down(elementPosition.left + 10, elementPosition.top + elementHeight + 5);
     this.checkPosition(elementPosition.left, elementPosition.top + elementHeight / 2 + 5, assert);
+});
+
+QUnit.test("Start position should be correct when the element has a fixed position", function(assert) {
+    // arrange
+    $("#items").children().css("float", "right");
+
+    this.createDraggable({
+        filter: ">.draggable",
+        onDragStart: function(e) {
+            $(e.itemElement).addClass("fixedPosition");
+        }
+    }, $("#items"));
+
+    // act
+    pointerMock($("#items").children().eq(0)).start({ x: 275, y: 255 }).down().move(100, 100);
+
+    // assert
+    this.checkPosition(370, 350, assert, $("#items").children().eq(0));
+});
+
+QUnit.test("Start position should be correct when the element has a fixed position and clone is true", function(assert) {
+    // arrange
+    $("#items").children().css("float", "right");
+
+    this.createDraggable({
+        filter: ">.draggable",
+        clone: true,
+        onDragStart: function(e) {
+            $(e.itemElement).addClass("fixedPosition");
+        }
+    }, $("#items"));
+
+    // act
+    pointerMock($("#items").children().eq(0)).start({ x: 275, y: 255 }).down().move(100, 100);
+
+    // assert
+    this.checkPosition(370, 350, assert, $("body").children(".dx-draggable-dragging"));
+});
+
+QUnit.test("Start position should be correct when element has a fixed position and a specified location", function(assert) {
+    // arrange
+    translator.move($("#items").children().first(), { left: 50, top: 50 });
+    $("#items").children().css("float", "right");
+
+    this.createDraggable({
+        filter: ">.draggable",
+        onDragStart: function(e) {
+            $(e.itemElement).addClass("fixedPosition");
+        }
+    }, $("#items"));
+
+    // act
+    pointerMock($("#items").children().eq(0)).start({ x: 325, y: 305 }).down().move(100, 100);
+
+    // assert
+    this.checkPosition(420, 400, assert, $("#items").children().eq(0));
 });
 
 
@@ -954,7 +1017,7 @@ QUnit.test("Set template", function(assert) {
     assert.strictEqual($("body").children("#myDragElement").length, 1, "there is a drag element");
     assert.strictEqual(template.callCount, 1, "template is called");
     assert.deepEqual($(template.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "args[0].itemElement");
-    assert.deepEqual($(template.getCall(0).args[1]).get(0), $(viewPort()).get(0), "args[1] - container");
+    assert.deepEqual($(template.getCall(0).args[1]).get(0), $(viewPort.value()).get(0), "args[1] - container");
 });
 
 QUnit.test("Remove my element after the drop end", function(assert) {
@@ -1482,7 +1545,7 @@ QUnit.test("set cursorOffset as string when clone is true", function(assert) {
     assert.deepEqual($dragElement.offset(), { left: 30, top: 30 }, "drag element offset");
 });
 
-QUnit.test("set cursorOffset as object clone is true", function(assert) {
+QUnit.test("set cursorOffset as object when clone is true", function(assert) {
     // arrange
     let $dragElement;
 

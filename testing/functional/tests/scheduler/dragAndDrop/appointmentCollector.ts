@@ -6,25 +6,52 @@ import Scheduler from '../../../model/scheduler';
 fixture `Drag-and-drop behaviour for the appointment tooltip`
     .page(url(__dirname, '../../container.html'));
 
-test(`Drag-n-drop between a scheduler table cell and the appointment tooltip`, async t => {
+test("Drag-n-drop between a scheduler table cell and the appointment tooltip", async t => {
     const scheduler = new Scheduler("#container");
-    const appointment = scheduler.getAppointment(`New Brochures`);
-    const collector = scheduler.getAppointmentCollector(`3`);
+    const appointment = scheduler.getAppointment("Approve Personal Computer Upgrade Plan");
+    const collector = scheduler.getAppointmentCollector("2");
     const appointmentTooltip = scheduler.appointmentTooltip;
-    const appointmentTooltipItem = appointmentTooltip.getListItem('New Brochures');
+    const appointmentTooltipItem = appointmentTooltip.getListItem("Approve Personal Computer Upgrade Plan");
 
     await t
         .click(collector.element)
         .expect(appointmentTooltip.isVisible()).ok()
-        .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(0, 1))
+        .dragToElement(appointmentTooltipItem.element, scheduler.getDateTableCell(2, 5))
         .expect(appointmentTooltipItem.element.exists).notOk()
         .expect(appointment.element.exists).ok()
-        .expect(appointment.size.height).eql(`250px`)
-        .expect(appointment.date.startTime).eql(`9:00 AM`)
-        .expect(appointment.date.endTime).eql(`11:30 AM`)
-        .dragToElement(appointment.element, scheduler.getDateTableCell(0, 0))
+        .expect(appointment.size.height).eql("100px")
+        .expect(appointment.date.startTime).eql("10:00 AM")
+        .expect(appointment.date.endTime).eql("11:00 AM")
+        .dragToElement(appointment.element, scheduler.getDateTableCell(2, 2))
         .click(collector.element)
-        .expect(appointmentTooltipItem.element.exists).ok()
+        .expect(appointmentTooltip.isVisible()).ok()
         .expect(appointment.element.exists).notOk()
 
-}).before(() => createScheduler(`week`, appointmentCollectorData));
+}).before(() => createScheduler({
+    views: ["week"],
+    currentView: "week",
+    dataSource: appointmentCollectorData,
+    maxAppointmentsPerCell: 2,
+    width: 1000
+}));
+
+test("Drag-n-drop in same table cell", async t => {
+    const scheduler = new Scheduler("#container");
+    const collector = scheduler.getAppointmentCollector("2");
+    const appointmentTooltip = scheduler.appointmentTooltip;
+    const appointmentTooltipItem = appointmentTooltip.getListItem("Approve Personal Computer Upgrade Plan");
+
+    await t
+        .click(collector.element)
+        .expect(appointmentTooltip.isVisible()).ok()
+        .drag(appointmentTooltipItem.element, 0, -50)
+        .click(collector.element)
+        .expect(appointmentTooltip.isVisible()).ok()
+
+}).before(() => createScheduler({
+    views: ["week"],
+    currentView: "week",
+    dataSource: appointmentCollectorData,
+    maxAppointmentsPerCell: 2,
+    width: 1000
+}));

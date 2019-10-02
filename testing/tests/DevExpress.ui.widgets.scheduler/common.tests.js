@@ -2234,7 +2234,10 @@ QUnit.testStart(function() {
             $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
 
             this.clock.tick();
-            assert.deepEqual(this.instance._appointmentForm.option("formData").startDate, new Date(2015, 1, 9, 13), "Form data is correct");
+
+            const appointmentForm = this.instance._appointmentPopup._appointmentForm;
+
+            assert.deepEqual(appointmentForm.option("formData").startDate, new Date(2015, 1, 9, 13), "Form data is correct");
         } finally {
             tzOffsetStub.restore();
         }
