@@ -40,6 +40,10 @@ var moduleConfig = {
                     <div id="scaledContent" style="height: 1000px; width: 1000px;"></div>\
                 </div>\
             </div>\
+        </div>\
+        <div id="scrollableContainer">\
+            <div id="innerContent">\
+            </div>\
         </div>';
         $("#qunit-fixture").html(markup);
 
@@ -117,6 +121,35 @@ QUnit.test("scrollbar is hidden when scrolling is completed", function(assert) {
         .down()
         .move(0, -1)
         .up();
+});
+
+[150, 300].forEach((scrollableContentSize) => {
+    ["vertical", "horizontal"].forEach((direction) => {
+        let scrollableContainerSize = 200;
+        let expectedScrollBarVisibility = scrollableContentSize < scrollableContainerSize ? false : true;
+
+        QUnit.test(`Scrollbar.visible on 'mouseenter'/'mouseleave', showScrollbar: 'onHover', direction: ${direction}, content ${scrollableContentSize < scrollableContainerSize ? 'less' : 'more'} than container`, function(assert) {
+            const $scrollable = $("#scrollableContainer");
+            $scrollable.dxScrollable({
+                width: scrollableContainerSize,
+                height: scrollableContainerSize,
+                useNative: false,
+                direction: direction,
+                showScrollbar: "onHover"
+            });
+
+            $scrollable.find(`#innerContent`).css({ height: scrollableContentSize, width: scrollableContentSize });
+
+            const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+            $container.trigger("mouseenter");
+
+            const scrollbar = Scrollbar.getInstance($scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`));
+            assert.equal(scrollbar.option("visible"), expectedScrollBarVisibility, "thumb.visible after mouseenter");
+
+            $container.trigger("mouseleave");
+            assert.equal(scrollbar.option("visible"), false, "thumb.visible after mouseleave");
+        });
+    });
 });
 
 QUnit.test("scrollbar height calculated correctly", function(assert) {
