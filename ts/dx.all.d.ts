@@ -3513,6 +3513,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
+        /** @name dxFileUploader.Options.abortUpload */
+        abortUpload?: ((file: File, chunksInfo: { bytesLoaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.accept */
         accept?: string;
         /** @name dxFileUploader.Options.allowCanceling */
@@ -3544,7 +3546,7 @@ declare module DevExpress.ui {
         /** @name dxFileUploader.Options.onUploadAborted */
         onUploadAborted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
         /** @name dxFileUploader.Options.onUploadError */
-        onUploadError?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
+        onUploadError?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest, error?: any }) => any);
         /** @name dxFileUploader.Options.onUploadStarted */
         onUploadStarted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
         /** @name dxFileUploader.Options.onUploaded */
@@ -3561,8 +3563,12 @@ declare module DevExpress.ui {
         showFileList?: boolean;
         /** @name dxFileUploader.Options.uploadButtonText */
         uploadButtonText?: string;
+        /** @name dxFileUploader.Options.uploadChunk */
+        uploadChunk?: ((file: File, chunksInfo: { bytesLoaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.uploadFailedMessage */
         uploadFailedMessage?: string;
+        /** @name dxFileUploader.Options.uploadFile */
+        uploadFile?: ((file: File, progressCallback(loadedBytes): any) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.uploadHeaders */
         uploadHeaders?: any;
         /** @name dxFileUploader.Options.uploadMethod */
