@@ -49,11 +49,10 @@ exports.DataProvider = Class.inherit({
         var exportController = this._exportController,
             groupColumns = exportController._columnsController.getGroupColumns(),
             excelWrapTextEnabled = exportController.option("export.excelWrapTextEnabled");
-
         this._options = {
             columns: exportController._getColumns(this._initialColumnWidthsByColumnIndex),
             groupColumns: groupColumns,
-            items: exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
+            items: this._selectedRowsOnly || exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
             getVisibleIndex: exportController._columnsController.getVisibleIndex.bind(exportController._columnsController),
             isHeadersVisible: exportController.option("showColumnHeaders"),
             summaryTexts: exportController.option("summary.texts"),
@@ -78,9 +77,10 @@ exports.DataProvider = Class.inherit({
         }
     },
 
-    ctor: function(exportController, initialColumnWidthsByColumnIndex) {
+    ctor: function(exportController, initialColumnWidthsByColumnIndex, selectedRowsOnly) {
         this._exportController = exportController;
         this._initialColumnWidthsByColumnIndex = initialColumnWidthsByColumnIndex;
+        this._selectedRowsOnly = selectedRowsOnly;
     },
 
     getStyles: function() {
@@ -301,7 +301,7 @@ exports.DataProvider = Class.inherit({
             column = columns[rowIndex] && columns[rowIndex][cellIndex];
 
         return column ? {
-            colspan: (column.colspan || 1) - 1,
+            colspan: (column.exportColspan || 1) - 1,
             rowspan: (column.rowspan || 1) - 1
         } : { colspan: 0, rowspan: 0 };
     },
@@ -333,10 +333,12 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             column,
             columns,
             columnsController = this._columnsController,
-            rowCount = columnsController.getRowCount();
+            rowCount = columnsController.getRowCount(),
+            currentHeaderRow,
+            currentColspan;
 
         for(i = 0; i <= rowCount; i++) {
-            result.push([]);
+            currentHeaderRow = [];
             columns = columnsController.getVisibleColumns(i, true);
             let columnWidthsByColumnIndex;
             if(i === rowCount) {
@@ -359,12 +361,17 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                 });
 
                 if(this._needColumnExporting(column)) {
+                    currentColspan = this._calculateExportColspan(column);
+                    if(isDefined(currentColspan)) {
+                        column.exportColspan = currentColspan;
+                    }
                     if(columnWidthsByColumnIndex) {
                         this._updateColumnWidth(column, columnWidthsByColumnIndex[column.index]);
                     }
-                    result[i].push(column);
+                    currentHeaderRow.push(column);
                 }
             }
+            result.push(currentHeaderRow);
         }
 
         columns = result[rowCount];
@@ -372,6 +379,23 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         result.push(columns);
 
         return result;
+    },
+
+    _calculateExportColspan: function(column) {
+        if(!column.isBand) {
+            return;
+        }
+        const childColumns = this._columnsController.getChildrenByBandColumn(column.index, true);
+        if(!isDefined(childColumns)) {
+            return;
+        }
+        return childColumns.reduce((result, childColumn) => {
+            if(this._needColumnExporting(childColumn)) {
+                return result + (this._calculateExportColspan(childColumn) || 1);
+            } else {
+                return result;
+            }
+        }, 0);
     },
 
     _needColumnExporting: function(column) {
@@ -582,7 +606,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
     getExportFormat: function() { return ["EXCEL"]; },
 
-    getDataProvider: function() {
+    getDataProvider: function(selectedRowsOnly) {
         const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
         let initialColumnWidthsByColumnIndex;
         if(columnWidths && columnWidths.length) {
@@ -592,7 +616,8 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                 initialColumnWidthsByColumnIndex[columnsLastRowVisibleColumns[i].index] = columnWidths[i];
             }
         }
-        return new exports.DataProvider(this, initialColumnWidthsByColumnIndex);
+
+        return new exports.DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
     },
     /**
     * @name dxDataGridMethods.exportToExcel

@@ -1901,3 +1901,52 @@ QUnit.test("Month view; dates are rendered correctly with grouping by date & emp
 
     assert.notOk(hasNaNCellData, "Container has valid data");
 });
+
+QUnit.test("Recurrent appointment with tail on next week has most top coordinate (T805446)", function(assert) {
+    this.createInstance({
+        views: ['week', { type: 'day', intervalCount: 2 }],
+        currentView: 'week',
+        crossScrollingEnabled: true,
+        dataSource: [{
+            text: 'Recurrent',
+            startDate: "2019-05-13T19:59:00",
+            endDate: "2019-05-14T04:00:00",
+            recurrenceRule: 'FREQ=WEEKLY;BYDAY=SU'
+        }],
+        startDayHour: 0,
+        endDayHour: 24,
+        firstDayOfWeek: 1,
+        cellDuration: 60,
+        currentDate: new Date(2019, 7, 19)
+    });
+
+    const appointment = this.scheduler.appointments.getAppointment();
+
+    const coords = translator.locate(appointment);
+
+    assert.ok(coords.top === 0, "Appointment tail has most top coordinate");
+});
+
+QUnit.test("Workspace view has correct viewEndDate with empty groups and groupByDate = true (T815379)", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        groupByDate: true,
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 16,
+        groups: [],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: [],
+                label: "Priority"
+            }
+        ],
+        height: 700
+    });
+
+    assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 4, 26, 15, 59), "Appointment tail has most top coordinate");
+});

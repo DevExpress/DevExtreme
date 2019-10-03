@@ -7,6 +7,7 @@ export class DataGridWrapper {
         this.headerPanel = new HeaderPanelWrapper(containerSelector);
         this.headers = new HeadersWrapper(containerSelector);
         this.filterRow = new FilterRowWrapper(containerSelector);
+        this.rowsView = new RowsViewWrapper(containerSelector);
     }
 }
 
@@ -27,6 +28,40 @@ export class RowsViewWrapper extends WrapperBase {
 
     getVirtualCell(columnIndex) {
         return this.getVirtualRowElement().find("td").eq(columnIndex);
+    }
+
+    getRowElement(rowIndex) {
+        return this.getElement().find(".dx-row").eq(rowIndex);
+    }
+
+    getDataRowElement(rowIndex) {
+        return this.getElement().find(".dx-data-row").eq(rowIndex);
+    }
+
+    getEditorInputElement(rowIndex, columnIndex) {
+        return this.getDataRowElement(rowIndex).find("td").eq(columnIndex).find(".dx-texteditor-input");
+    }
+
+    getSelectionCheckBoxElement(rowIndex) {
+        return this.getDataRowElement(rowIndex).find(".dx-select-checkbox");
+    }
+
+    isRowVisible(rowIndex, precision) {
+        const $row = this.getRowElement(rowIndex);
+        return this._isInnerElementVisible($row, precision);
+    }
+
+    _isInnerElementVisible($element, precision = 0) {
+        const rowsViewRect = this.getElement()[0].getBoundingClientRect();
+        const elementRect = $element[0].getBoundingClientRect();
+        const diffTop = Math.floor(elementRect.top - rowsViewRect.top) + precision;
+        const diffBottom = Math.floor(rowsViewRect.bottom - elementRect.bottom) + precision;
+
+        return diffTop >= 0 && diffBottom >= 0;
+    }
+
+    isFocusOverlayVisible() {
+        return !!this.getElement().find(".dx-datagrid-focus-overlay:visible").length;
     }
 }
 

@@ -94,11 +94,11 @@ SlidersController.prototype = {
         };
     },
 
-    _processSelectionChanged: function() {
+    _processSelectionChanged: function(e) {
         var that = this,
             selectedRange = that.getSelectedRange();
         if(valueOf(selectedRange.startValue) !== valueOf(that._lastSelectedRange.startValue) || valueOf(selectedRange.endValue) !== valueOf(that._lastSelectedRange.endValue)) {
-            that._params.updateSelectedRange(selectedRange, that._lastSelectedRange);
+            that._params.updateSelectedRange(selectedRange, that._lastSelectedRange, e);
             that._lastSelectedRange = selectedRange;
         }
     },
@@ -214,7 +214,7 @@ SlidersController.prototype = {
         return { startValue: this._sliders[0].getValue(), endValue: this._sliders[1].getValue() };
     },
 
-    setSelectedRange: function(visualRange) {
+    setSelectedRange: function(visualRange, e) {
         visualRange = visualRange || {};
         const that = this;
         const translator = that._params.translator;
@@ -247,7 +247,7 @@ SlidersController.prototype = {
         that._sliders[0]._position = translator.to(values[0], -1);
         that._sliders[1]._position = translator.to(values[1], +1);
         that._applyTotalPosition(true);
-        that._processSelectionChanged();
+        that._processSelectionChanged(e);
     },
 
     beginSelectedAreaMoving: function(initialPosition) {
@@ -256,35 +256,35 @@ SlidersController.prototype = {
             offset = (sliders[0].getPosition() + sliders[1].getPosition()) / 2 - initialPosition,
             currentPosition = initialPosition;
 
-        move.complete = function() {
-            that._dockSelectedArea();
+        move.complete = function(e) {
+            that._dockSelectedArea(e);
         };
         return move;
 
-        function move(position) {
+        function move(position, e) {
             if(position !== currentPosition && (position > currentPosition === position > (sliders[0].getPosition() + sliders[1].getPosition()) / 2 - offset)) {
-                that._moveSelectedArea(position + offset, false);
+                that._moveSelectedArea(position + offset, false, e);
             }
             currentPosition = position;
         }
     },
 
-    _dockSelectedArea: function() {
+    _dockSelectedArea: function(e) {
         var translator = this._params.translator,
             sliders = this._sliders;
 
         sliders[0]._position = translator.to(sliders[0].getValue(), -1);
         sliders[1]._position = translator.to(sliders[1].getValue(), +1);
         this._applyTotalPosition(true);
-        this._processSelectionChanged();
+        this._processSelectionChanged(e);
     },
 
-    moveSelectedArea: function(screenPosition) {
-        this._moveSelectedArea(screenPosition, true);
-        this._dockSelectedArea();
+    moveSelectedArea: function(screenPosition, e) {
+        this._moveSelectedArea(screenPosition, true, e);
+        this._dockSelectedArea(e);
     },
 
-    _moveSelectedArea: function(screenPosition, isAnimated) {
+    _moveSelectedArea: function(screenPosition, isAnimated, e) {
         var that = this,
             translator = that._params.translator,
             sliders = that._sliders,
@@ -309,11 +309,11 @@ SlidersController.prototype = {
         sliders[1]._position = endPosition;
         that._applyTotalPosition(isAnimated);
         if(that._isOnMoving) {
-            that._processSelectionChanged();
+            that._processSelectionChanged(e);
         }
     },
 
-    placeSliderAndBeginMoving: function(firstPosition, secondPosition) {
+    placeSliderAndBeginMoving: function(firstPosition, secondPosition, e) {
         var that = this,
             translator = that._params.translator,
             sliders = that._sliders,
@@ -362,7 +362,7 @@ SlidersController.prototype = {
         sliders[1]._position = positions[1];
         that._applyTotalPosition(true);
         if(that._isOnMoving) {
-            that._processSelectionChanged();
+            that._processSelectionChanged(e);
         }
 
         handler = that.beginSliderMoving(1 - index, secondPosition);
@@ -387,13 +387,13 @@ SlidersController.prototype = {
             moveOffset = sliders[index].getPosition() - initialPosition,
             swapOffset = compareMin(sliders[index].getPosition(), initialPosition) ? -moveOffset : moveOffset;
 
-        move.complete = function() {
+        move.complete = function(e) {
             sliders[index]._setValid(true);
-            that._dockSelectedArea();
+            that._dockSelectedArea(e);
         };
         return move;
 
-        function move(position) {
+        function move(position, e) {
             var isValid,
                 temp,
                 pos,
@@ -442,7 +442,7 @@ SlidersController.prototype = {
                     that._applyTotalPosition(false);
                     slider.toForeground();
                     if(that._isOnMoving) {
-                        that._processSelectionChanged();
+                        that._processSelectionChanged(e);
                     }
                 }
             }

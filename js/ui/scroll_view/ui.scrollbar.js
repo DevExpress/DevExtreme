@@ -129,7 +129,7 @@ var Scrollbar = Widget.inherit({
     },
 
     _adjustVisibility: function(visible) {
-        if(this.containerToContentRatio() && !this._needScrollbar()) {
+        if(this._baseContainerToContentRatio && !this._needScrollbar()) {
             return false;
         }
 
@@ -168,12 +168,22 @@ var Scrollbar = Widget.inherit({
         return -location * this._thumbRatio;
     },
 
+
     _update: function() {
         var containerSize = Math.round(this.option("containerSize")),
-            contentSize = Math.round(this.option("contentSize"));
+            contentSize = Math.round(this.option("contentSize")),
+            baseContainerSize = Math.round(this.option("baseContainerSize")),
+            baseContentSize = Math.round(this.option("baseContentSize"));
 
-        this._containerToContentRatio = (contentSize ? containerSize / contentSize : containerSize);
-        var thumbSize = Math.round(Math.max(Math.round(containerSize * this._containerToContentRatio), THUMB_MIN_SIZE));
+        // NOTE: if current scrollbar's using outside of scrollable
+        if(isNaN(baseContainerSize)) {
+            baseContainerSize = containerSize;
+            baseContentSize = contentSize;
+        }
+
+        this._baseContainerToContentRatio = (baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize);
+        this._realContainerToContentRatio = (contentSize ? containerSize / contentSize : containerSize);
+        var thumbSize = Math.round(Math.max(Math.round(containerSize * this._realContainerToContentRatio), THUMB_MIN_SIZE));
         this._thumbRatio = (containerSize - thumbSize) / (this.option("scaleRatio") * (contentSize - containerSize));
 
         this.option(this._dimension, thumbSize / this.option("scaleRatio"));
@@ -185,11 +195,11 @@ var Scrollbar = Widget.inherit({
     },
 
     _needScrollbar: function() {
-        return !this._isHidden() && (this._containerToContentRatio < 1);
+        return !this._isHidden() && (this._baseContainerToContentRatio < 1);
     },
 
     containerToContentRatio: function() {
-        return this._containerToContentRatio;
+        return this._realContainerToContentRatio;
     },
 
     _normalizeSize: function(size) {
@@ -214,6 +224,10 @@ var Scrollbar = Widget.inherit({
             case "containerSize":
             case "contentSize":
                 this.option()[args.name] = this._normalizeSize(args.value);
+                this._update();
+                break;
+            case "baseContentSize":
+            case "baseContainerSize":
                 this._update();
                 break;
             case "visibilityMode":

@@ -3768,6 +3768,31 @@ QUnit.test("Insert several rows and remove they with edit mode batch", function(
     });
 });
 
+// T808395
+QUnit.test("First cell should be focused after inserting new row if startEditAction is 'dblClick'", function(assert) {
+    // arrange
+    var that = this,
+        headerPanel = this.headerPanel,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowAdding: true,
+        mode: 'batch',
+        startEditAction: "dblClick"
+    };
+
+    headerPanel.render(testElement);
+    rowsView.render(testElement);
+
+    // act
+    this.addRow();
+    this.clock.tick(300);
+
+    // assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 1, 'first row has editor');
+});
+
 QUnit.test('Insert Row when batch editing', function(assert) {
     // arrange
     var that = this,
@@ -4862,6 +4887,44 @@ QUnit.test("deleteRow should not work if adding is started", function(assert) {
     // assert
     assert.notOk(that.editingController.isEditing(), "no editing");
     assert.equal(testElement.find('.dx-data-row').length, 6, "row is removed");
+});
+
+// T804894
+QUnit.test("addRow should not work if updating is started with validation error", function(assert) {
+    // arrange
+    var that = this,
+        testElement = $('#container');
+
+    that.options.editing = {
+        mode: "cell"
+    };
+
+    that.options.onRowValidating = function(e) {
+        e.isValid = false;
+    };
+
+    that.validatingController.optionChanged({ name: "onRowValidating" });
+
+    that.rowsView.render(testElement);
+    that.editingController.init();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row count");
+
+    // act
+    that.editCell(0, 0);
+    that.cellValue(0, 0, "Test");
+    that.addRow();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 7, "row is not added");
+
+    // act
+    that.cancelEditData();
+    that.addRow();
+
+    // assert
+    assert.equal(testElement.find('.dx-data-row').length, 8, "row is added");
 });
 
 // T100624
@@ -6166,8 +6229,8 @@ QUnit.test("Batch mode - Correct insert row index for a new row when a previous 
 
     // assert
     var items = this.dataController.items();
-    assert.ok(items[0].inserted, "first row is inserted");
-    assert.ok(items[1].inserted, "second row is inserted");
+    assert.ok(items[0].isNewRow, "first row is inserted");
+    assert.ok(items[1].isNewRow, "second row is inserted");
 });
 
 QUnit.test("Restore a height of rowsView when editing is canceled with empty data", function(assert) {
@@ -6437,7 +6500,7 @@ QUnit.test("Add row when data items are an instance of the class and one of the 
     // assert
     items = that.dataController.items();
     assert.strictEqual(items.length, 2, "item count");
-    assert.ok(items[0].inserted, "item is inserted");
+    assert.ok(items[0].isNewRow, "item is inserted");
     assert.ok(items[0].data instanceof Employee, "item is an instance of the Employee class");
     assert.strictEqual(items[0].data.isYoung, false, "field value");
 });
@@ -6838,6 +6901,41 @@ if(!devices.win8) {
         assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(2).val(), "555555");
     });
 
+    QUnit.test("Cell validating is setCellValue is set and editing mode is form (T816256)", function(assert) {
+        // arrange
+        var that = this,
+            rowsView = this.rowsView,
+            $testElement = $('#container'),
+            $targetInput;
+
+        that.options.editing = {
+            mode: "form",
+            allowUpdating: true
+        };
+        that.options.columns[0] = {
+            dataField: "name",
+            setCellValue: (newData, value) => newData[this.dataField] = value,
+            validationRules: [{
+                type: "custom",
+                validationCallback: () => { return false; }
+            }]
+        };
+
+        rowsView.render($testElement);
+        that.columnsController.init();
+
+        that.editingController.editRow(0);
+
+        $targetInput = $testElement.find('tbody > tr').first().find('input').first();
+
+        // act
+        $targetInput.val('Test name');
+        $targetInput.trigger('change');
+        this.clock.tick();
+        // assert
+        assert.ok($testElement.find("tbody > tr").first().find(".dx-texteditor").first().hasClass("dx-invalid"));
+    });
+
     QUnit.test('cellValue', function(assert) {
         // arrange
         var that = this,
@@ -7166,6 +7264,40 @@ QUnit.test("Add a custom link for the 'buttons' command column", function(assert
     assert.ok($linkElements.eq(0).hasClass("dx-link-save"), "the save link");
     assert.ok($linkElements.eq(1).hasClass("mylink"), "custom link");
     assert.strictEqual($linkElements.eq(1).text(), "My link", "text of the custom link");
+});
+
+// T814768
+QUnit.test("Button with svg icon in command column", function(assert) {
+    // arrange
+    var that = this,
+        $commandElement,
+        $svgIcon,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true
+    };
+
+    that.options.columns.push({
+        type: "buttons",
+        buttons: ["edit", {
+            hint: "Clone",
+            icon: "<svg height='20' width='20'><circle cx='10' cy='10' r='100' stroke='black' stroke-width='3' fill='red' /></svg>"
+        }]
+    });
+
+    that.columnsController.reset();
+
+    // act
+    that.rowsView.render($testElement);
+
+    // assert
+    $commandElement = $(".dx-command-edit-with-icons").eq(0);
+    $svgIcon = $commandElement.find(".dx-svg-icon");
+
+    assert.ok($svgIcon.length, "svg icon");
+    assert.ok($svgIcon.find("circle").length, "svg icon content");
 });
 
 QUnit.test("Add a custom icon for the 'buttons' command column", function(assert) {
@@ -10841,7 +10973,8 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
         rowsView = this.rowsView,
         testElement = $('#container'),
         $formRow,
-        inputElement;
+        inputElement,
+        $invalid;
 
     rowsView.render(testElement);
 
@@ -10871,8 +11004,11 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
     that.clock.tick();
 
     // assert
+    $invalid = $formRow.find(".dx-invalid");
     assert.equal(that.editingController._editRowIndex, 0, "first row is still editing");
-    assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
+    assert.equal($invalid.length, 1, "There is one invalid editor in first row");
+    // T819068
+    assert.equal($invalid.find(".dx-overlay-content").css("whiteSpace"), "normal", "white-space is normal");
 });
 
 // T506863
@@ -11855,7 +11991,7 @@ QUnit.test("Uploading items when virtual scrolling after insert row", function(a
     items = this.dataController.items();
     assert.equal(this.dataController.pageIndex(), 0, "page index");
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 });
 
 // T258714
@@ -11901,7 +12037,7 @@ QUnit.test("Change page index when virtual scrolling after insert row", function
     assert.strictEqual(changeType, "pageIndex", "change type");
     assert.equal(this.dataController.pageIndex(), 1, "page index");
     assert.equal(items.length, 17, "items count");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 });
 
 // T258714
@@ -11932,7 +12068,7 @@ QUnit.test("Uploading items when infinite scrolling after insert row", function(
     items = this.dataController.items();
     // assert.equal(this.dataController.pageIndex(), 1, "page index");
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 });
 
 // T258714
@@ -11972,7 +12108,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
     // assert
     items = this.dataController.items();
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[4].inserted, "insert item");
+    assert.ok(items[4].isNewRow, "insert item");
 
     // act
     this.rowsView.scrollTo({ y: 0 });
@@ -11982,7 +12118,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
     items = this.dataController.items();
     assert.equal(this.dataController.pageIndex(), 0, "page index");
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 });
 
 // T258714
@@ -12015,7 +12151,7 @@ QUnit.test("Edit row after the virtual scrolling when there is inserted row", fu
     items = this.dataController.items();
     // assert.equal(this.dataController.pageIndex(), 1, "page index");
     assert.equal(items.length, 13, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 
     // act
     this.editCell(5, 0);
@@ -12204,7 +12340,7 @@ QUnit.test("Position of the inserted row if masterDetail is used", function(asse
     // assert
     items = this.dataController.items();
     assert.equal(items.length, 14, "count items");
-    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 4, "insert item");
+    assert.equal(items.filter(function(item) { return item.isNewRow; })[0].rowIndex, 4, "insert item");
 });
 
 // T538954
@@ -12239,7 +12375,7 @@ QUnit.test("Position of the inserted row if top visible row is master detail", f
     // assert
     items = this.dataController.items();
     assert.equal(items.length, 12, "count items");
-    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 10, "insert item");
+    assert.equal(items.filter(function(item) { return item.isNewRow; })[0].rowIndex, 10, "insert item");
 });
 
 // T601854
@@ -12295,7 +12431,7 @@ QUnit.test("Position of the inserted row if top visible row is adaptive detail",
     // assert
     items = this.dataController.items();
     assert.equal(items.length, 12, "count items");
-    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 8, "insert item");
+    assert.equal(items.filter(function(item) { return item.isNewRow; })[0].rowIndex, 8, "insert item");
 });
 
 // T343567
@@ -12401,7 +12537,7 @@ QUnit.test("Save inserted data with set onRowValidating and infinite scrolling",
     // assert
     items = that.dataController.items();
     assert.equal(items.length, 17, "count items");
-    assert.ok(items[0].inserted, "inserted item");
+    assert.ok(items[0].isNewRow, "inserted item");
 });
 
 // T258714
@@ -12434,7 +12570,7 @@ QUnit.test("Edit row after the infinite scrolling when there is inserted row", f
     items = this.dataController.items();
     // assert.equal(this.dataController.pageIndex(), 1, "page index");
     assert.equal(items.length, 9, "count items");
-    assert.ok(items[0].inserted, "insert item");
+    assert.ok(items[0].isNewRow, "insert item");
 
     // act
     this.editCell(5, 0);
@@ -12475,7 +12611,7 @@ QUnit.test("Position of the inserted row if grouping is used", function(assert) 
 
     // assert
     var item3 = this.dataController.items()[2];
-    assert.ok(item3.inserted, "Item3 is inserted");
+    assert.ok(item3.isNewRow, "Item3 is inserted");
     assert.deepEqual(item3.data, {}, "Item3 is empty");
 });
 
@@ -13868,6 +14004,35 @@ QUnit.test("Show editing popup on row adding", function(assert) {
     assert.ok(that.isEditingPopupVisible(), "Editing popup is visible");
     assert.equal($editingForm.find(".dx-texteditor").length, that.columns.length, "The expected count of editors are rendered");
     assert.equal($editingForm.find(".dx-texteditor input").val(), "", "Editor has empty initial value");
+});
+
+QUnit.test("Show editing popup with custom editCellTemplate on row adding", function(assert) {
+    var that = this;
+    var editCellTemplateOptions;
+
+    this.columns[0].editCellTemplate = function(container, options) {
+        $(container).addClass("test-editor");
+        editCellTemplateOptions = options;
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    // act
+    that.addRow();
+    that.clock.tick();
+    that.preparePopupHelpers();
+    that.clock.tick();
+
+
+    // assert
+    var $editingForm = that.getEditPopupContent().find(".dx-form");
+
+    assert.equal($editingForm.find(".test-editor").length, 1, "editCellTemplate is rendered in popup");
+    assert.strictEqual(editCellTemplateOptions.value, undefined, "editCellTemplate value");
+    assert.ok("value" in editCellTemplateOptions, "editCellTemplate value exists"); // T808450
+    assert.equal(editCellTemplateOptions.isOnForm, true, "editCellTemplate isOnForm");
+    assert.equal(typeof editCellTemplateOptions.setValue, "function", "editCellTemplate setValue exists");
 });
 
 QUnit.testInActiveWindow("Focus the first editor at popup shown", function(assert) {

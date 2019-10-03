@@ -154,11 +154,6 @@ var ColorBox = DropDownEditor.inherit({
             */
 
             /**
-            * @name dxColorBoxOptions.showClearButton
-            * @hidden
-            */
-
-            /**
             * @name dxColorBoxOptions.valueChangeEvent
             * @hidden
             */

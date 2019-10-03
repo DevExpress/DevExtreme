@@ -558,6 +558,1037 @@ interface JQuery {
     dxVectorMap(options: DevExpress.viz.dxVectorMapOptions): JQuery;
 }
 /* #EndJQueryAugmentation */
+declare module DevExpress {
+    /** @name Component.Options */
+    export interface ComponentOptions<T = Component> {
+        /** @name Component.Options.onDisposing */
+        onDisposing?: ((e: { component?: T }) => any);
+        /** @name Component.Options.onInitialized */
+        onInitialized?: ((e: { component?: T, element?: DevExpress.core.dxElement }) => any);
+        /** @name Component.Options.onOptionChanged */
+        onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
+    }
+    /** @name Component */
+    export class Component {
+        constructor(options?: ComponentOptions);
+        /** @name Component.beginUpdate() */
+        beginUpdate(): void;
+        /** @name Component.endUpdate() */
+        endUpdate(): void;
+        /** @name Component.instance() */
+        instance(): this;
+        /** @name EventsMixin.off(eventName) */
+        off(eventName: string): this;
+        /** @name EventsMixin.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(events) */
+        on(events: any): this;
+        /** @name Component.option() */
+        option(): any;
+        /** @name Component.option(optionName) */
+        option(optionName: string): any;
+        /** @name Component.option(optionName, optionValue) */
+        option(optionName: string, optionValue: any): void;
+        /** @name Component.option(options) */
+        option(options: any): void;
+    }
+    /** @name DOMComponent.Options */
+    export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
+        /** @name DOMComponent.Options.bindingOptions */
+        bindingOptions?: any;
+        /** @name DOMComponent.Options.elementAttr */
+        elementAttr?: any;
+        /** @name DOMComponent.Options.height */
+        height?: number | string | (() => number | string);
+        /** @name DOMComponent.Options.onDisposing */
+        onDisposing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
+        /** @name DOMComponent.Options.onOptionChanged */
+        onOptionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
+        /** @name DOMComponent.Options.rtlEnabled */
+        rtlEnabled?: boolean;
+        /** @name DOMComponent.Options.width */
+        width?: number | string | (() => number | string);
+    }
+    /** @name DOMComponent */
+    export class DOMComponent extends Component {
+        constructor(element: Element | JQuery, options?: DOMComponentOptions);
+        /** @name DOMComponent.defaultOptions(rule) */
+        static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
+        /** @name DOMComponent.dispose() */
+        dispose(): void;
+        /** @name DOMComponent.element() */
+        element(): DevExpress.core.dxElement;
+        /** @name DOMComponent.getInstance(element) */
+        static getInstance(element: Element | JQuery): DOMComponent;
+    }
+    /** @name DataHelperMixin */
+    export class DataHelperMixin {
+        /** @name DataHelperMixin.getDataSource() */
+        getDataSource(): DevExpress.data.DataSource;
+    }
+    /** @name Device */
+    export interface Device {
+        /** @name Device.android */
+        android?: boolean;
+        /** @name Device.deviceType */
+        deviceType?: 'phone' | 'tablet' | 'desktop';
+        /** @name Device.generic */
+        generic?: boolean;
+        /** @name Device.grade */
+        grade?: 'A' | 'B' | 'C';
+        /** @name Device.ios */
+        ios?: boolean;
+        /** @name Device.phone */
+        phone?: boolean;
+        /** @name Device.platform */
+        platform?: 'android' | 'ios' | 'win' | 'generic';
+        /** @name Device.tablet */
+        tablet?: boolean;
+        /** @name Device.version */
+        version?: Array<number>;
+        /** @name Device.win */
+        win?: boolean;
+    }
+    /** @name DevicesObject */
+    export class DevicesObject {
+        constructor(options: { window?: Window });
+        /** @name DevicesObject.current() */
+        current(): Device;
+        /** @name DevicesObject.current(deviceName) */
+        current(deviceName: string | Device): void;
+        /** @name EventsMixin.off(eventName) */
+        off(eventName: string): this;
+        /** @name EventsMixin.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(events) */
+        on(events: any): this;
+        /** @name DevicesObject.orientation() */
+        orientation(): string;
+        /** @name DevicesObject.real() */
+        real(): Device;
+    }
+    /** @name EndpointSelector */
+    export class EndpointSelector {
+        constructor(options: any);
+        /** @name EndpointSelector.urlFor(key) */
+        urlFor(key: string): string;
+    }
+    /** @name TransitionExecutor */
+    export class TransitionExecutor {
+        /** @name TransitionExecutor.enter(elements, animation) */
+        enter(elements: JQuery, animation: animationConfig | string): void;
+        /** @name TransitionExecutor.leave(elements, animation) */
+        leave(elements: JQuery, animation: animationConfig | string): void;
+        /** @name TransitionExecutor.reset() */
+        reset(): void;
+        /** @name TransitionExecutor.start() */
+        start(): Promise<void> & JQueryPromise<void>;
+        /** @name TransitionExecutor.stop() */
+        stop(): void;
+    }
+    /** @name animationConfig */
+    export interface animationConfig {
+        /** @name animationConfig.complete */
+        complete?: (($element: DevExpress.core.dxElement, config: any) => any);
+        /** @name animationConfig.delay */
+        delay?: number;
+        /** @name animationConfig.direction */
+        direction?: 'bottom' | 'left' | 'right' | 'top';
+        /** @name animationConfig.duration */
+        duration?: number;
+        /** @name animationConfig.easing */
+        easing?: string;
+        /** @name animationConfig.from */
+        from?: number | string | any;
+        /** @name animationConfig.staggerDelay */
+        staggerDelay?: number;
+        /** @name animationConfig.start */
+        start?: (($element: DevExpress.core.dxElement, config: any) => any);
+        /** @name animationConfig.to */
+        to?: number | string | any;
+        /** @name animationConfig.type */
+        type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
+    }
+    /** @name animationPresets */
+    export class animationPresets {
+        /** @name animationPresets.applyChanges() */
+        applyChanges(): void;
+        /** @name animationPresets.clear() */
+        clear(): void;
+        /** @name animationPresets.clear(name) */
+        clear(name: string): void;
+        /** @name animationPresets.getPreset(name) */
+        getPreset(name: string): any;
+        /** @name animationPresets.registerDefaultPresets() */
+        registerDefaultPresets(): void;
+        /** @name animationPresets.registerPreset(name, config) */
+        registerPreset(name: string, config: { animation?: animationConfig, device?: Device }): void;
+        /** @name animationPresets.resetToDefaults() */
+        resetToDefaults(): void;
+    }
+    /** @name config() */
+    export function config(): globalConfig;
+    /** @name config(config) */
+    export function config(config: globalConfig): void;
+    /** @name devices */
+    export var devices: DevicesObject;
+    /** @name dxEvent */
+    export class dxEvent {
+        /** @name dxEvent.currentTarget */
+        currentTarget: Element;
+        /** @name dxEvent.data */
+        data: any;
+        /** @name dxEvent.delegateTarget */
+        delegateTarget: Element;
+        /** @name dxEvent.target */
+        target: Element;
+        /** @name dxEvent.isDefaultPrevented() */
+        isDefaultPrevented(): boolean;
+        /** @name dxEvent.isImmediatePropagationStopped() */
+        isImmediatePropagationStopped(): boolean;
+        /** @name dxEvent.isPropagationStopped() */
+        isPropagationStopped(): boolean;
+        /** @name dxEvent.preventDefault() */
+        preventDefault(): void;
+        /** @name dxEvent.stopImmediatePropagation() */
+        stopImmediatePropagation(): void;
+        /** @name dxEvent.stopPropagation() */
+        stopPropagation(): void;
+    }
+    /** @name event */
+    export type event = dxEvent | JQueryEventObject;
+    /** @name eventsHandler */
+    export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
+    /** @name globalConfig */
+    export interface globalConfig {
+        /** @name globalConfig.decimalSeparator */
+        decimalSeparator?: string;
+        /** @name globalConfig.defaultCurrency */
+        defaultCurrency?: string;
+        /** @name globalConfig.editorStylingMode */
+        editorStylingMode?: 'outlined' | 'underlined' | 'filled';
+        /** @name globalConfig.floatingActionButtonConfig */
+        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
+        /** @name globalConfig.forceIsoDateParsing */
+        forceIsoDateParsing?: boolean;
+        /** @name globalConfig.oDataFilterToLower */
+        oDataFilterToLower?: boolean;
+        /** @name globalConfig.rtlEnabled */
+        rtlEnabled?: boolean;
+        /** @name globalConfig.serverDecimalSeparator */
+        serverDecimalSeparator?: string;
+        /** @name globalConfig.thousandsSeparator */
+        thousandsSeparator?: string;
+        /** @name globalConfig.useLegacyStoreResult */
+        useLegacyStoreResult?: boolean;
+        /** @name globalConfig.useLegacyVisibleIndex */
+        useLegacyVisibleIndex?: boolean;
+    }
+    /** @name hideTopOverlay() */
+    export function hideTopOverlay(): boolean;
+    /** @name localization */
+    export class localization {
+        /** @name localization.formatDate(value, format) */
+        static formatDate(value: Date, format: DevExpress.ui.format): string;
+        /** @name localization.formatMessage(key, value) */
+        static formatMessage(key: string, value: string | Array<string>): string;
+        /** @name localization.formatNumber(value, format) */
+        static formatNumber(value: number, format: DevExpress.ui.format): string;
+        /** @name localization.loadMessages(messages) */
+        static loadMessages(messages: any): void;
+        /** @name localization.locale() */
+        static locale(): string;
+        /** @name localization.locale(locale) */
+        static locale(locale: string): void;
+        /** @name localization.parseDate(text, format) */
+        static parseDate(text: string, format: DevExpress.ui.format): Date;
+        /** @name localization.parseNumber(text, format) */
+        static parseNumber(text: string, format: DevExpress.ui.format): number;
+    }
+    /** @name positionConfig */
+    export interface positionConfig {
+        /** @name positionConfig.at */
+        at?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
+        /** @name positionConfig.boundary */
+        boundary?: string | Element | JQuery | Window;
+        /** @name positionConfig.boundaryOffset */
+        boundaryOffset?: string | { x?: number, y?: number };
+        /** @name positionConfig.collision */
+        collision?: 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit' | { x?: 'fit' | 'flip' | 'flipfit' | 'none', y?: 'fit' | 'flip' | 'flipfit' | 'none' };
+        /** @name positionConfig.my */
+        my?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
+        /** @name positionConfig.of */
+        of?: string | Element | JQuery | Window;
+        /** @name positionConfig.offset */
+        offset?: string | { x?: number, y?: number };
+    }
+    /** @name registerComponent(name, componentClass) */
+    export function registerComponent(name: string, componentClass: any): void;
+    /** @name registerComponent(name, namespace, componentClass) */
+    export function registerComponent(name: string, namespace: any, componentClass: any): void;
+    /** @name ui */
+    export class ui {
+        /** @name ui.notify(message,type,displayTime) */
+        static notify(message: string, type?: string, displayTime?: number): void;
+        /** @name ui.notify(options,type,displayTime) */
+        static notify(options: any, type?: string, displayTime?: number): void;
+        /** @name ui.repaintFloatingActionButton() */
+        static repaintFloatingActionButton(): void;
+        /** @name ui.setTemplateEngine(name) */
+        static setTemplateEngine(templateEngineName: string): void;
+        /** @name ui.setTemplateEngine(options) */
+        static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
+    }
+    /** @name validationEngine */
+    export class validationEngine {
+        /** @name validationEngine.getGroupConfig() */
+        static getGroupConfig(): any;
+        /** @name validationEngine.getGroupConfig(group) */
+        static getGroupConfig(group: string | any): any;
+        /** @name validationEngine.registerModelForValidation(model) */
+        static registerModelForValidation(model: any): void;
+        /** @name validationEngine.resetGroup() */
+        static resetGroup(): void;
+        /** @name validationEngine.resetGroup(group) */
+        static resetGroup(group: string | any): void;
+        /** @name validationEngine.unregisterModelForValidation(model) */
+        static unregisterModelForValidation(model: any): void;
+        /** @name validationEngine.validateGroup() */
+        static validateGroup(): DevExpress.ui.dxValidationGroupResult;
+        /** @name validationEngine.validateGroup(group) */
+        static validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
+        /** @name validationEngine.validateModel(model) */
+        static validateModel(model: any): any;
+    }
+    /** @name viz */
+    export class viz {
+        /** @name viz.currentPalette() */
+        static currentPalette(): string;
+        /** @name viz.currentPalette(paletteName) */
+        static currentPalette(paletteName: string): void;
+        /** @name viz.currentTheme() */
+        static currentTheme(): string;
+        /** @name viz.currentTheme(platform, colorScheme) */
+        static currentTheme(platform: string, colorScheme: string): void;
+        /** @name viz.currentTheme(theme) */
+        static currentTheme(theme: string): void;
+        /** @name viz.exportFromMarkup(markup, options) */
+        static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number }): void;
+        /** @name viz.exportWidgets(widgetInstances) */
+        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
+        /** @name viz.exportWidgets(widgetInstances, options) */
+        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function }): void;
+        /** @name viz.generateColors(palette, count, options) */
+        static generateColors(palette: 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+        /** @name viz.getMarkup(widgetInstances) */
+        static getMarkup(widgetInstances: Array<DOMComponent>): string;
+        /** @name viz.getPalette(paletteName) */
+        static getPalette(paletteName: string): any;
+        /** @name viz.getTheme(theme) */
+        static getTheme(theme: string): any;
+        /** @name viz.refreshPaths() */
+        static refreshPaths(): void;
+        /** @name viz.refreshTheme() */
+        static refreshTheme(): void;
+        /** @name viz.registerPalette(paletteName, palette) */
+        static registerPalette(paletteName: string, palette: any): void;
+        /** @name viz.registerTheme(customTheme, baseTheme) */
+        static registerTheme(customTheme: any, baseTheme: string): void;
+    }
+}
+declare module DevExpress.core {
+    /** @name EventsMixin */
+    export class EventsMixin {
+        /** @name EventsMixin.off(eventName) */
+        off(eventName: string): this;
+        /** @name EventsMixin.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(events) */
+        on(events: any): this;
+    }
+    /** @name dxElement */
+    export type dxElement = Element & JQuery;
+}
+declare module DevExpress.data {
+    /** @name ArrayStore.Options */
+    export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
+        /** @name ArrayStore.Options.data */
+        data?: Array<any>;
+    }
+    /** @name ArrayStore */
+    export class ArrayStore extends Store {
+        constructor(options?: ArrayStoreOptions)
+        /** @name ArrayStore.clear() */
+        clear(): void;
+        /** @name ArrayStore.createQuery() */
+        createQuery(): any;
+    }
+    /** @name CustomStore.Options */
+    export interface CustomStoreOptions extends StoreOptions<CustomStore> {
+        /** @name CustomStore.Options.byKey */
+        byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
+        /** @name CustomStore.Options.cacheRawData */
+        cacheRawData?: boolean;
+        /** @name CustomStore.Options.insert */
+        insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
+        /** @name CustomStore.Options.load */
+        load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any> | Array<any>);
+        /** @name CustomStore.Options.loadMode */
+        loadMode?: 'processed' | 'raw';
+        /** @name CustomStore.Options.remove */
+        remove?: ((key: any | string | number) => Promise<void> | JQueryPromise<void>);
+        /** @name CustomStore.Options.totalCount */
+        totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> | JQueryPromise<number>);
+        /** @name CustomStore.Options.update */
+        update?: ((key: any | string | number, values: any) => Promise<any> | JQueryPromise<any>);
+        /** @name CustomStore.Options.useDefaultSearch */
+        useDefaultSearch?: boolean;
+    }
+    /** @name CustomStore */
+    export class CustomStore extends Store {
+        constructor(options?: CustomStoreOptions)
+        /** @name CustomStore.clearRawDataCache() */
+        clearRawDataCache(): void;
+    }
+    /** @name DataSource.Options */
+    export interface DataSourceOptions {
+        /** @name DataSource.Options.customQueryParams */
+        customQueryParams?: any;
+        /** @name DataSource.Options.expand */
+        expand?: Array<string> | string;
+        /** @name DataSource.Options.filter */
+        filter?: string | Array<any> | Function;
+        /** @name DataSource.Options.group */
+        group?: string | Array<any> | Function;
+        /** @name DataSource.Options.map */
+        map?: ((dataItem: any) => any);
+        /** @name DataSource.Options.onChanged */
+        onChanged?: ((e: { changes?: Array<any> }) => any);
+        /** @name DataSource.Options.onLoadError */
+        onLoadError?: ((error: { message?: string }) => any);
+        /** @name DataSource.Options.onLoadingChanged */
+        onLoadingChanged?: ((isLoading: boolean) => any);
+        /** @name DataSource.Options.pageSize */
+        pageSize?: number;
+        /** @name DataSource.Options.paginate */
+        paginate?: boolean;
+        /** @name DataSource.Options.postProcess */
+        postProcess?: ((data: Array<any>) => Array<any>);
+        /** @name DataSource.Options.pushAggregationTimeout */
+        pushAggregationTimeout?: number;
+        /** @name DataSource.Options.requireTotalCount */
+        requireTotalCount?: boolean;
+        /** @name DataSource.Options.reshapeOnPush */
+        reshapeOnPush?: boolean;
+        /** @name DataSource.Options.searchExpr */
+        searchExpr?: string | Function | Array<string | Function>;
+        /** @name DataSource.Options.searchOperation */
+        searchOperation?: string;
+        /** @name DataSource.Options.searchValue */
+        searchValue?: any;
+        /** @name DataSource.Options.select */
+        select?: string | Array<any> | Function;
+        /** @name DataSource.Options.sort */
+        sort?: string | Array<any> | Function;
+        /** @name DataSource.Options.store */
+        store?: Store | StoreOptions | Array<any> | any;
+    }
+    /** @name DataSource */
+    export class DataSource {
+        constructor(data: Array<any>);
+        constructor(options: CustomStoreOptions | DataSourceOptions);
+        constructor(store: Store);
+        constructor(url: string);
+        /** @name DataSource.cancel(operationId) */
+        cancel(): boolean;
+        /** @name DataSource.dispose() */
+        dispose(): void;
+        /** @name DataSource.filter() */
+        filter(): any;
+        /** @name DataSource.filter(filterExpr) */
+        filter(filterExpr: any): void;
+        /** @name DataSource.group() */
+        group(): any;
+        /** @name DataSource.group(groupExpr) */
+        group(groupExpr: any): void;
+        /** @name DataSource.isLastPage() */
+        isLastPage(): boolean;
+        /** @name DataSource.isLoaded() */
+        isLoaded(): boolean;
+        /** @name DataSource.isLoading() */
+        isLoading(): boolean;
+        /** @name DataSource.items() */
+        items(): Array<any>;
+        /** @name DataSource.key() */
+        key(): any & string & number;
+        /** @name DataSource.load() */
+        load(): Promise<any> & JQueryPromise<any>;
+        /** @name DataSource.loadOptions() */
+        loadOptions(): any;
+        /** @name EventsMixin.off(eventName) */
+        off(eventName: string): this;
+        /** @name EventsMixin.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(events) */
+        on(events: any): this;
+        /** @name DataSource.pageIndex() */
+        pageIndex(): number;
+        /** @name DataSource.pageIndex(newIndex) */
+        pageIndex(newIndex: number): void;
+        /** @name DataSource.pageSize() */
+        pageSize(): number;
+        /** @name DataSource.pageSize(value) */
+        pageSize(value: number): void;
+        /** @name DataSource.paginate() */
+        paginate(): boolean;
+        /** @name DataSource.paginate(value) */
+        paginate(value: boolean): void;
+        /** @name DataSource.reload() */
+        reload(): Promise<any> & JQueryPromise<any>;
+        /** @name DataSource.requireTotalCount() */
+        requireTotalCount(): boolean;
+        /** @name DataSource.requireTotalCount(value) */
+        requireTotalCount(value: boolean): void;
+        /** @name DataSource.searchExpr() */
+        searchExpr(): string & Function & Array<string | Function>;
+        /** @name DataSource.searchExpr(expr) */
+        searchExpr(expr: string | Function | Array<string | Function>): void;
+        /** @name DataSource.searchOperation() */
+        searchOperation(): string;
+        /** @name DataSource.searchOperation(op) */
+        searchOperation(op: string): void;
+        /** @name DataSource.searchValue() */
+        searchValue(): any;
+        /** @name DataSource.searchValue(value) */
+        searchValue(value: any): void;
+        /** @name DataSource.select() */
+        select(): any;
+        /** @name DataSource.select(expr) */
+        select(expr: any): void;
+        /** @name DataSource.sort() */
+        sort(): any;
+        /** @name DataSource.sort(sortExpr) */
+        sort(sortExpr: any): void;
+        /** @name DataSource.store() */
+        store(): any;
+        /** @name DataSource.totalCount() */
+        totalCount(): number;
+    }
+    /** @name EdmLiteral */
+    export class EdmLiteral {
+        constructor(value: string);
+        /** @name EdmLiteral.valueOf() */
+        valueOf(): string;
+    }
+    /** @name Guid */
+    export class Guid {
+        constructor();
+        constructor(value: string);
+        /** @name Guid.toString() */
+        toString(): string;
+        /** @name Guid.valueOf() */
+        valueOf(): string;
+    }
+    /** @name LoadOptions */
+    export interface LoadOptions {
+        /** @name LoadOptions.customQueryParams */
+        customQueryParams?: any;
+        /** @name LoadOptions.expand */
+        expand?: any;
+        /** @name LoadOptions.filter */
+        filter?: any;
+        /** @name LoadOptions.group */
+        group?: any;
+        /** @name LoadOptions.groupSummary */
+        groupSummary?: any;
+        /** @name LoadOptions.parentIds */
+        parentIds?: Array<any>;
+        /** @name LoadOptions.requireGroupCount */
+        requireGroupCount?: boolean;
+        /** @name LoadOptions.requireTotalCount */
+        requireTotalCount?: boolean;
+        /** @name LoadOptions.searchExpr */
+        searchExpr?: string | Function | Array<string | Function>;
+        /** @name LoadOptions.searchOperation */
+        searchOperation?: string;
+        /** @name LoadOptions.searchValue */
+        searchValue?: any;
+        /** @name LoadOptions.select */
+        select?: any;
+        /** @name LoadOptions.skip */
+        skip?: number;
+        /** @name LoadOptions.sort */
+        sort?: any;
+        /** @name LoadOptions.take */
+        take?: number;
+        /** @name LoadOptions.totalSummary */
+        totalSummary?: any;
+        /** @name LoadOptions.userData */
+        userData?: any;
+    }
+    /** @name LocalStore.Options */
+    export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
+        /** @name LocalStore.Options.flushInterval */
+        flushInterval?: number;
+        /** @name LocalStore.Options.immediate */
+        immediate?: boolean;
+        /** @name LocalStore.Options.name */
+        name?: string;
+    }
+    /** @name LocalStore */
+    export class LocalStore extends ArrayStore {
+        constructor(options?: LocalStoreOptions)
+        /** @name LocalStore.clear() */
+        clear(): void;
+    }
+    /** @name ODataContext.Options */
+    export interface ODataContextOptions {
+        /** @name ODataContext.Options.beforeSend */
+        beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
+        /** @name ODataContext.Options.deserializeDates */
+        deserializeDates?: boolean;
+        /** @name ODataContext.Options.entities */
+        entities?: any;
+        /** @name ODataContext.Options.errorHandler */
+        errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+        /** @name ODataContext.Options.filterToLower */
+        filterToLower?: boolean;
+        /** @name ODataContext.Options.jsonp */
+        jsonp?: boolean;
+        /** @name ODataContext.Options.url */
+        url?: string;
+        /** @name ODataContext.Options.version */
+        version?: number;
+        /** @name ODataContext.Options.withCredentials */
+        withCredentials?: boolean;
+    }
+    /** @name ODataContext */
+    export class ODataContext {
+        constructor(options?: ODataContextOptions)
+        /** @name ODataContext.get(operationName, params) */
+        get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
+        /** @name ODataContext.invoke(operationName, params, httpMethod) */
+        invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
+        /** @name ODataContext.objectLink(entityAlias, key) */
+        objectLink(entityAlias: string, key: any | string | number): any;
+    }
+    /** @name ODataStore.Options */
+    export interface ODataStoreOptions extends StoreOptions<ODataStore> {
+        /** @name ODataStore.Options.beforeSend */
+        beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
+        /** @name ODataStore.Options.deserializeDates */
+        deserializeDates?: boolean;
+        /** @name ODataStore.Options.errorHandler */
+        errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+        /** @name ODataStore.Options.fieldTypes */
+        fieldTypes?: any;
+        /** @name ODataStore.Options.filterToLower */
+        filterToLower?: boolean;
+        /** @name ODataStore.Options.jsonp */
+        jsonp?: boolean;
+        /** @name ODataStore.Options.keyType */
+        keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
+        /** @name ODataStore.Options.onLoading */
+        onLoading?: ((loadOptions: LoadOptions) => any);
+        /** @name ODataStore.Options.url */
+        url?: string;
+        /** @name ODataStore.Options.version */
+        version?: number;
+        /** @name ODataStore.Options.withCredentials */
+        withCredentials?: boolean;
+    }
+    /** @name ODataStore */
+    export class ODataStore extends Store {
+        constructor(options?: ODataStoreOptions)
+        /** @name Store.byKey(key) */
+        byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+        /** @name ODataStore.byKey(key, extraOptions) */
+        byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
+        /** @name ODataStore.createQuery(loadOptions) */
+        createQuery(loadOptions: any): any;
+    }
+    /** @name PivotGridDataSource.Options */
+    export interface PivotGridDataSourceOptions {
+        /** @name PivotGridDataSource.Options.fields */
+        fields?: Array<PivotGridDataSourceField>;
+        /** @name PivotGridDataSource.Options.filter */
+        filter?: string | Array<any> | Function;
+        /** @name PivotGridDataSource.Options.onChanged */
+        onChanged?: Function;
+        /** @name PivotGridDataSource.Options.onFieldsPrepared */
+        onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => any);
+        /** @name PivotGridDataSource.Options.onLoadError */
+        onLoadError?: ((error: any) => any);
+        /** @name PivotGridDataSource.Options.onLoadingChanged */
+        onLoadingChanged?: ((isLoading: boolean) => any);
+        /** @name PivotGridDataSource.Options.paginate */
+        paginate?: boolean;
+        /** @name PivotGridDataSource.Options.remoteOperations */
+        remoteOperations?: boolean;
+        /** @name PivotGridDataSource.Options.retrieveFields */
+        retrieveFields?: boolean;
+        /** @name PivotGridDataSource.Options.store */
+        store?: Store | StoreOptions | XmlaStore | XmlaStoreOptions | Array<{ type?: 'array' | 'local' | 'odata' | 'xmla' }> | { type?: 'array' | 'local' | 'odata' | 'xmla' };
+    }
+    /** @name PivotGridDataSource.Options.fields */
+    export interface PivotGridDataSourceField {
+        /** @name PivotGridDataSource.Options.fields.allowCrossGroupCalculation */
+        allowCrossGroupCalculation?: boolean;
+        /** @name PivotGridDataSource.Options.fields.allowExpandAll */
+        allowExpandAll?: boolean;
+        /** @name PivotGridDataSource.Options.fields.allowFiltering */
+        allowFiltering?: boolean;
+        /** @name PivotGridDataSource.Options.fields.allowSorting */
+        allowSorting?: boolean;
+        /** @name PivotGridDataSource.Options.fields.allowSortingBySummary */
+        allowSortingBySummary?: boolean;
+        /** @name PivotGridDataSource.Options.fields.area */
+        area?: 'column' | 'data' | 'filter' | 'row' | undefined;
+        /** @name PivotGridDataSource.Options.fields.areaIndex */
+        areaIndex?: number;
+        /** @name PivotGridDataSource.Options.fields.calculateCustomSummary */
+        calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
+        /** @name PivotGridDataSource.Options.fields.calculateSummaryValue */
+        calculateSummaryValue?: ((e: DevExpress.ui.dxPivotGridSummaryCell) => number);
+        /** @name PivotGridDataSource.Options.fields.caption */
+        caption?: string;
+        /** @name PivotGridDataSource.Options.fields.customizeText */
+        customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
+        /** @name PivotGridDataSource.Options.fields.dataField */
+        dataField?: string;
+        /** @name PivotGridDataSource.Options.fields.dataType */
+        dataType?: 'date' | 'number' | 'string';
+        /** @name PivotGridDataSource.Options.fields.displayFolder */
+        displayFolder?: string;
+        /** @name PivotGridDataSource.Options.fields.expanded */
+        expanded?: boolean;
+        /** @name PivotGridDataSource.Options.fields.filterType */
+        filterType?: 'exclude' | 'include';
+        /** @name PivotGridDataSource.Options.fields.filterValues */
+        filterValues?: Array<any>;
+        /** @name PivotGridDataSource.Options.fields.format */
+        format?: DevExpress.ui.format;
+        /** @name PivotGridDataSource.Options.fields.groupIndex */
+        groupIndex?: number;
+        /** @name PivotGridDataSource.Options.fields.groupInterval */
+        groupInterval?: 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year' | number;
+        /** @name PivotGridDataSource.Options.fields.groupName */
+        groupName?: string;
+        /** @name PivotGridDataSource.Options.fields.headerFilter */
+        headerFilter?: { allowSearch?: boolean, height?: number, width?: number };
+        /** @name PivotGridDataSource.Options.fields.isMeasure */
+        isMeasure?: boolean;
+        /** @name PivotGridDataSource.Options.fields.name */
+        name?: string;
+        /** @name PivotGridDataSource.Options.fields.runningTotal */
+        runningTotal?: 'column' | 'row';
+        /** @name PivotGridDataSource.Options.fields.selector */
+        selector?: Function;
+        /** @name PivotGridDataSource.Options.fields.showGrandTotals */
+        showGrandTotals?: boolean;
+        /** @name PivotGridDataSource.Options.fields.showTotals */
+        showTotals?: boolean;
+        /** @name PivotGridDataSource.Options.fields.showValues */
+        showValues?: boolean;
+        /** @name PivotGridDataSource.Options.fields.sortBy */
+        sortBy?: 'displayText' | 'value' | 'none';
+        /** @name PivotGridDataSource.Options.fields.sortBySummaryField */
+        sortBySummaryField?: string;
+        /** @name PivotGridDataSource.Options.fields.sortBySummaryPath */
+        sortBySummaryPath?: Array<number | string>;
+        /** @name PivotGridDataSource.Options.fields.sortOrder */
+        sortOrder?: 'asc' | 'desc';
+        /** @name PivotGridDataSource.Options.fields.sortingMethod */
+        sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
+        /** @name PivotGridDataSource.Options.fields.summaryDisplayMode */
+        summaryDisplayMode?: 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
+        /** @name PivotGridDataSource.Options.fields.summaryType */
+        summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+        /** @name PivotGridDataSource.Options.fields.visible */
+        visible?: boolean;
+        /** @name PivotGridDataSource.Options.fields.width */
+        width?: number;
+        /** @name PivotGridDataSource.Options.fields.wordWrapEnabled */
+        wordWrapEnabled?: boolean;
+    }
+    /** @name PivotGridDataSource */
+    export class PivotGridDataSource {
+        constructor(options?: PivotGridDataSourceOptions)
+        /** @name PivotGridDataSource.collapseAll(id) */
+        collapseAll(id: number | string): void;
+        /** @name PivotGridDataSource.collapseHeaderItem(area, path) */
+        collapseHeaderItem(area: string, path: Array<string | number | Date>): void;
+        /** @name PivotGridDataSource.createDrillDownDataSource(options) */
+        createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>, rowPath?: Array<string | number | Date>, dataIndex?: number, maxRowCount?: number, customColumns?: Array<string> }): DataSource;
+        /** @name PivotGridDataSource.dispose() */
+        dispose(): void;
+        /** @name PivotGridDataSource.expandAll(id) */
+        expandAll(id: number | string): void;
+        /** @name PivotGridDataSource.expandHeaderItem(area, path) */
+        expandHeaderItem(area: string, path: Array<any>): void;
+        /** @name PivotGridDataSource.field(id) */
+        field(id: number | string): any;
+        /** @name PivotGridDataSource.field(id, options) */
+        field(id: number | string, options: any): void;
+        /** @name PivotGridDataSource.fields() */
+        fields(): Array<PivotGridDataSourceField>;
+        /** @name PivotGridDataSource.fields(fields) */
+        fields(fields: Array<PivotGridDataSourceField>): void;
+        /** @name PivotGridDataSource.filter() */
+        filter(): any;
+        /** @name PivotGridDataSource.filter(filterExpr) */
+        filter(filterExpr: any): void;
+        /** @name PivotGridDataSource.getAreaFields(area, collectGroups) */
+        getAreaFields(area: string, collectGroups: boolean): Array<PivotGridDataSourceField>;
+        /** @name PivotGridDataSource.getData() */
+        getData(): any;
+        /** @name PivotGridDataSource.isLoading() */
+        isLoading(): boolean;
+        /** @name PivotGridDataSource.load() */
+        load(): Promise<any> & JQueryPromise<any>;
+        /** @name EventsMixin.off(eventName) */
+        off(eventName: string): this;
+        /** @name EventsMixin.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(events) */
+        on(events: any): this;
+        /** @name PivotGridDataSource.reload() */
+        reload(): Promise<any> & JQueryPromise<any>;
+        /** @name PivotGridDataSource.state() */
+        state(): any;
+        /** @name PivotGridDataSource.state(state) */
+        state(state: any): void;
+    }
+    /** @name Query */
+    export class Query {
+        /** @name Query.aggregate(seed, step, finalize) */
+        aggregate(seed: any, step: Function, finalize: Function): Promise<any> & JQueryPromise<any>;
+        /** @name Query.aggregate(step) */
+        aggregate(step: Function): Promise<any> & JQueryPromise<any>;
+        /** @name Query.avg() */
+        avg(): Promise<number> & JQueryPromise<number>;
+        /** @name Query.avg(getter) */
+        avg(getter: any): Promise<number> & JQueryPromise<number>;
+        /** @name Query.count() */
+        count(): Promise<number> & JQueryPromise<number>;
+        /** @name Query.enumerate() */
+        enumerate(): Promise<any> & JQueryPromise<any>;
+        /** @name Query.filter(criteria) */
+        filter(criteria: Array<any>): Query;
+        /** @name Query.filter(predicate) */
+        filter(predicate: Function): Query;
+        /** @name Query.groupBy(getter) */
+        groupBy(getter: any): Query;
+        /** @name Query.max() */
+        max(): Promise<number | Date> & JQueryPromise<number | Date>;
+        /** @name Query.max(getter) */
+        max(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
+        /** @name Query.min() */
+        min(): Promise<number | Date> & JQueryPromise<number | Date>;
+        /** @name Query.min(getter) */
+        min(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
+        /** @name Query.select(getter) */
+        select(getter: any): Query;
+        /** @name Query.slice(skip, take) */
+        slice(skip: number, take?: number): Query;
+        /** @name Query.sortBy(getter) */
+        sortBy(getter: any): Query;
+        /** @name Query.sortBy(getter, desc) */
+        sortBy(getter: any, desc: boolean): Query;
+        /** @name Query.sum() */
+        sum(): Promise<number> & JQueryPromise<number>;
+        /** @name Query.sum(getter) */
+        sum(getter: any): Promise<number> & JQueryPromise<number>;
+        /** @name Query.thenBy(getter) */
+        thenBy(getter: any): Query;
+        /** @name Query.thenBy(getter, desc) */
+        thenBy(getter: any, desc: boolean): Query;
+        /** @name Query.toArray() */
+        toArray(): Array<any>;
+    }
+    /** @name Store.Options */
+    export interface StoreOptions<T = Store> {
+        /** @name Store.Options.errorHandler */
+        errorHandler?: Function;
+        /** @name Store.Options.key */
+        key?: string | Array<string>;
+        /** @name Store.Options.onInserted */
+        onInserted?: ((values: any, key: any | string | number) => any);
+        /** @name Store.Options.onInserting */
+        onInserting?: ((values: any) => any);
+        /** @name Store.Options.onLoaded */
+        onLoaded?: ((result: Array<any>) => any);
+        /** @name Store.Options.onLoading */
+        onLoading?: ((loadOptions: LoadOptions) => any);
+        /** @name Store.Options.onModified */
+        onModified?: Function;
+        /** @name Store.Options.onModifying */
+        onModifying?: Function;
+        /** @name Store.Options.onPush */
+        onPush?: ((changes: Array<any>) => any);
+        /** @name Store.Options.onRemoved */
+        onRemoved?: ((key: any | string | number) => any);
+        /** @name Store.Options.onRemoving */
+        onRemoving?: ((key: any | string | number) => any);
+        /** @name Store.Options.onUpdated */
+        onUpdated?: ((key: any | string | number, values: any) => any);
+        /** @name Store.Options.onUpdating */
+        onUpdating?: ((key: any | string | number, values: any) => any);
+    }
+    /** @name Store */
+    export class Store {
+        constructor(options?: StoreOptions)
+        /** @name Store.byKey(key) */
+        byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
+        /** @name Store.insert(values) */
+        insert(values: any): Promise<any> & JQueryPromise<any>;
+        /** @name Store.key() */
+        key(): any;
+        /** @name Store.keyOf(obj) */
+        keyOf(obj: any): any;
+        /** @name Store.load() */
+        load(): Promise<any> & JQueryPromise<any>;
+        /** @name Store.load(options) */
+        load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
+        /** @name EventsMixin.off(eventName) */
+        off(eventName: string): this;
+        /** @name EventsMixin.off(eventName, eventHandler) */
+        off(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(eventName, eventHandler) */
+        on(eventName: string, eventHandler: Function): this;
+        /** @name EventsMixin.on(events) */
+        on(events: any): this;
+        /** @name Store.push(changes) */
+        push(changes: Array<any>): void;
+        /** @name Store.remove(key) */
+        remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
+        /** @name Store.totalCount(options) */
+        totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
+        /** @name Store.update(key, values) */
+        update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
+    }
+    /** @name XmlaStore.Options */
+    export interface XmlaStoreOptions {
+        /** @name XmlaStore.Options.beforeSend */
+        beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
+        /** @name XmlaStore.Options.catalog */
+        catalog?: string;
+        /** @name XmlaStore.Options.cube */
+        cube?: string;
+        /** @name XmlaStore.Options.url */
+        url?: string;
+    }
+    /** @name XmlaStore */
+    export class XmlaStore {
+        constructor(options?: XmlaStoreOptions)
+    }
+    /** @name Utils.base64_encode(input) */
+    export function base64_encode(input: string | Array<number>): string;
+    /** @name Utils.errorHandler */
+    export function errorHandler(e: Error): void;
+    /** @name Utils.query(array) */
+    export function query(array: Array<any>): Query;
+    /** @name Utils.query(url, queryOptions) */
+    export function query(url: string, queryOptions: any): Query;
+}
+declare module DevExpress.data.utils {
+    /** @name Utils.compileGetter(expr) */
+    export function compileGetter(expr: string | Array<string>): Function;
+    /** @name Utils.compileSetter(expr) */
+    export function compileSetter(expr: string | Array<string>): Function;
+}
+declare module DevExpress.data.utils.odata {
+    /** @name Utils.keyConverters */
+    export var keyConverters: any;
+}
+declare module DevExpress.events {
+    /** @name events.off(element) */
+    export function off(element: Element | Array<Element>): void;
+    /** @name events.off(element, eventName) */
+    export function off(element: Element | Array<Element>, eventName: string): void;
+    /** @name events.off(element, eventName, handler) */
+    export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
+    /** @name events.off(element, eventName, selector) */
+    export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
+    /** @name events.off(element, eventName, selector, handler) */
+    export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+    /** @name events.on(element, eventName, data, handler) */
+    export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
+    /** @name events.on(element, eventName, handler) */
+    export function on(element: Element | Array<Element>, eventName: string, handler: Function): void;
+    /** @name events.on(element, eventName, selector, data, handler) */
+    export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
+    /** @name events.on(element, eventName, selector, handler) */
+    export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+    /** @name events.one(element, eventName, data, handler) */
+    export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
+    /** @name events.one(element, eventName, handler) */
+    export function one(element: Element | Array<Element>, eventName: string, handler: Function): void;
+    /** @name events.one(element, eventName, selector, data, handler) */
+    export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
+    /** @name events.one(element, eventName, selector, handler) */
+    export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
+    /** @name events.trigger(element, event) */
+    export function trigger(element: Element | Array<Element>, event: string | event): void;
+    /** @name events.trigger(element, event, extraParameters) */
+    export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
+    /** @name events.triggerHandler(element, event) */
+    export function triggerHandler(element: Element | Array<Element>, event: string | event): void;
+    /** @name events.triggerHandler(element, event, extraParameters) */
+    export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
+}
+declare module DevExpress.exporter {
+    /** @name ExcelDataGridCell */
+    export interface ExcelDataGridCell {
+        /** @name ExcelDataGridCell.column */
+        column?: DevExpress.ui.dxDataGridColumn;
+        /** @name ExcelDataGridCell.data */
+        data?: any;
+        /** @name ExcelDataGridCell.groupIndex */
+        groupIndex?: number;
+        /** @name ExcelDataGridCell.groupSummaryItems */
+        groupSummaryItems?: Array<{ name?: string, value?: any }>;
+        /** @name ExcelDataGridCell.rowType */
+        rowType?: string;
+        /** @name ExcelDataGridCell.totalSummaryItemName */
+        totalSummaryItemName?: string;
+        /** @name ExcelDataGridCell.value */
+        value?: any;
+    }
+    /** @name ExcelFont */
+    export interface ExcelFont {
+        /** @name ExcelFont.bold */
+        bold?: boolean;
+        /** @name ExcelFont.color */
+        color?: string;
+        /** @name ExcelFont.italic */
+        italic?: boolean;
+        /** @name ExcelFont.name */
+        name?: string;
+        /** @name ExcelFont.size */
+        size?: number;
+        /** @name ExcelFont.underline */
+        underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
+    }
+}
+declare module DevExpress.fx {
+    /** @name fx.animate(element, config) */
+    export function animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
+    /** @name fx.isAnimating(element) */
+    export function isAnimating(element: Element): boolean;
+    /** @name fx.stop(element, jumpToEnd) */
+    export function stop(element: Element, jumpToEnd: boolean): void;
+}
 declare module DevExpress.ui {
     /** @name AjaxFileProvider.Options */
     export interface AjaxFileProviderOptions extends FileProviderOptions<AjaxFileProvider> {
@@ -1743,7 +2774,7 @@ declare module DevExpress.ui {
         /** @name dxDataGrid.Options.onCellHoverChanged */
         onCellHoverChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /** @name dxDataGrid.Options.onCellPrepared */
-        onCellPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function, oldValue?: any }) => any);
+        onCellPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function, oldValue?: any }) => any);
         /** @name dxDataGrid.Options.onContextMenuPreparing */
         onContextMenuPreparing?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /** @name dxDataGrid.Options.onEditingStart */
@@ -1767,11 +2798,11 @@ declare module DevExpress.ui {
         /** @name dxDataGrid.Options.onFocusedRowChanging */
         onFocusedRowChanging?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, prevRowIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxDataGridRowObject>, cancel?: boolean }) => any);
         /** @name dxDataGrid.Options.onRowClick */
-        onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
+        onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
         /** @name dxDataGrid.Options.onRowDblClick */
-        onRowDblClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement }) => any);
+        onRowDblClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxDataGrid.Options.onRowPrepared */
-        onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
+        onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxDataGrid.Options.remoteOperations */
         remoteOperations?: boolean | { filtering?: boolean, groupPaging?: boolean, grouping?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } | 'auto';
         /** @name dxDataGrid.Options.rowTemplate */
@@ -1903,6 +2934,8 @@ declare module DevExpress.ui {
         isEditing?: boolean;
         /** @name dxDataGridRowObject.isExpanded */
         isExpanded?: boolean;
+        /** @name dxDataGridRowObject.isNewRow */
+        isNewRow?: boolean;
         /** @name dxDataGridRowObject.isSelected */
         isSelected?: boolean;
         /** @name dxDataGridRowObject.key */
@@ -2710,13 +3743,13 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditor.delete(index, length) */
         delete(index: number, length: number): void;
         /** @name dxHtmlEditor.format(formatName, formatValue) */
-        format(formatName: string, formatValue: any): void;
+        format(formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
         /** @name dxHtmlEditor.formatLine(index, length, formatName, formatValue) */
-        formatLine(index: number, length: number, formatName: string, formatValue: any): void;
+        formatLine(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
         /** @name dxHtmlEditor.formatLine(index, length, formats) */
         formatLine(index: number, length: number, formats: any): void;
         /** @name dxHtmlEditor.formatText(index, length, formatName, formatValue) */
-        formatText(index: number, length: number, formatName: string, formatValue: any): void;
+        formatText(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
         /** @name dxHtmlEditor.formatText(index, length, formats) */
         formatText(index: number, length: number, formats: any): void;
         /** @name dxHtmlEditor.get(componentPath) */
@@ -2781,12 +3814,12 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorToolbar.container */
         container?: string | Element | JQuery;
         /** @name dxHtmlEditorToolbar.items */
-        items?: Array<dxHtmlEditorToolbarItem | string>;
+        items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear'>;
     }
     /** @name dxHtmlEditorToolbarItem */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
         /** @name dxHtmlEditorToolbarItem.formatName */
-        formatName?: string;
+        formatName?: 'background' | 'bold' | 'color' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | string;
         /** @name dxHtmlEditorToolbarItem.formatValues */
         formatValues?: Array<string | number | boolean>;
         /** @name dxHtmlEditorToolbarItem.location */
@@ -3295,8 +4328,6 @@ declare module DevExpress.ui {
     export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
         /** @name dxOverlay.Options.animation */
         animation?: dxOverlayAnimation;
-        /** @name dxOverlay.Options.closeOnBackButton */
-        closeOnBackButton?: boolean;
         /** @name dxOverlay.Options.closeOnOutsideClick */
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** @name dxOverlay.Options.contentTemplate */
@@ -4485,8 +5516,6 @@ declare module DevExpress.ui {
     export interface dxToastOptions extends dxOverlayOptions<dxToast> {
         /** @name dxToast.Options.animation */
         animation?: dxToastAnimation;
-        /** @name dxToast.Options.closeOnBackButton */
-        closeOnBackButton?: boolean;
         /** @name dxToast.Options.closeOnClick */
         closeOnClick?: boolean;
         /** @name dxToast.Options.closeOnOutsideClick */
@@ -4606,7 +5635,7 @@ declare module DevExpress.ui {
         /** @name dxTreeList.Options.onCellHoverChanged */
         onCellHoverChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
         /** @name dxTreeList.Options.onCellPrepared */
-        onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function, oldValue?: any }) => any);
+        onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function, oldValue?: any }) => any);
         /** @name dxTreeList.Options.onContextMenuPreparing */
         onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /** @name dxTreeList.Options.onEditingStart */
@@ -4626,11 +5655,11 @@ declare module DevExpress.ui {
         /** @name dxTreeList.Options.onNodesInitialized */
         onNodesInitialized?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeListNode }) => any);
         /** @name dxTreeList.Options.onRowClick */
-        onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
+        onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
         /** @name dxTreeList.Options.onRowDblClick */
-        onRowDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
+        onRowDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /** @name dxTreeList.Options.onRowPrepared */
-        onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: DevExpress.core.dxElement, node?: dxTreeListNode, level?: number }) => any);
+        onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement, node?: dxTreeListNode, level?: number }) => any);
         /** @name dxTreeList.Options.paging */
         paging?: dxTreeListPaging;
         /** @name dxTreeList.Options.parentIdExpr */
@@ -4766,6 +5795,8 @@ declare module DevExpress.ui {
         isEditing?: boolean;
         /** @name dxTreeListRowObject.isExpanded */
         isExpanded?: boolean;
+        /** @name dxTreeListRowObject.isNewRow */
+        isNewRow?: boolean;
         /** @name dxTreeListRowObject.isSelected */
         isSelected?: boolean;
         /** @name dxTreeListRowObject.key */
@@ -5002,591 +6033,17 @@ declare module DevExpress.ui {
         static ready(callback: Function): void;
     }
 }
-declare module DevExpress.data {
-    /** @name ArrayStore.Options */
-    export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
-        /** @name ArrayStore.Options.data */
-        data?: Array<any>;
-    }
-    /** @name ArrayStore */
-    export class ArrayStore extends Store {
-        constructor(options?: ArrayStoreOptions)
-        /** @name ArrayStore.clear() */
-        clear(): void;
-        /** @name ArrayStore.createQuery() */
-        createQuery(): any;
-    }
-    /** @name CustomStore.Options */
-    export interface CustomStoreOptions extends StoreOptions<CustomStore> {
-        /** @name CustomStore.Options.byKey */
-        byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
-        /** @name CustomStore.Options.cacheRawData */
-        cacheRawData?: boolean;
-        /** @name CustomStore.Options.insert */
-        insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
-        /** @name CustomStore.Options.load */
-        load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any> | Array<any>);
-        /** @name CustomStore.Options.loadMode */
-        loadMode?: 'processed' | 'raw';
-        /** @name CustomStore.Options.remove */
-        remove?: ((key: any | string | number) => Promise<void> | JQueryPromise<void>);
-        /** @name CustomStore.Options.totalCount */
-        totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> | JQueryPromise<number>);
-        /** @name CustomStore.Options.update */
-        update?: ((key: any | string | number, values: any) => Promise<any> | JQueryPromise<any>);
-        /** @name CustomStore.Options.useDefaultSearch */
-        useDefaultSearch?: boolean;
-    }
-    /** @name CustomStore */
-    export class CustomStore extends Store {
-        constructor(options?: CustomStoreOptions)
-        /** @name CustomStore.clearRawDataCache() */
-        clearRawDataCache(): void;
-    }
-    /** @name DataSource.Options */
-    export interface DataSourceOptions {
-        /** @name DataSource.Options.customQueryParams */
-        customQueryParams?: any;
-        /** @name DataSource.Options.expand */
-        expand?: Array<string> | string;
-        /** @name DataSource.Options.filter */
-        filter?: string | Array<any> | Function;
-        /** @name DataSource.Options.group */
-        group?: string | Array<any> | Function;
-        /** @name DataSource.Options.map */
-        map?: ((dataItem: any) => any);
-        /** @name DataSource.Options.onChanged */
-        onChanged?: ((e: { changes?: Array<any> }) => any);
-        /** @name DataSource.Options.onLoadError */
-        onLoadError?: ((error: { message?: string }) => any);
-        /** @name DataSource.Options.onLoadingChanged */
-        onLoadingChanged?: ((isLoading: boolean) => any);
-        /** @name DataSource.Options.pageSize */
-        pageSize?: number;
-        /** @name DataSource.Options.paginate */
-        paginate?: boolean;
-        /** @name DataSource.Options.postProcess */
-        postProcess?: ((data: Array<any>) => Array<any>);
-        /** @name DataSource.Options.pushAggregationTimeout */
-        pushAggregationTimeout?: number;
-        /** @name DataSource.Options.requireTotalCount */
-        requireTotalCount?: boolean;
-        /** @name DataSource.Options.reshapeOnPush */
-        reshapeOnPush?: boolean;
-        /** @name DataSource.Options.searchExpr */
-        searchExpr?: string | Function | Array<string | Function>;
-        /** @name DataSource.Options.searchOperation */
-        searchOperation?: string;
-        /** @name DataSource.Options.searchValue */
-        searchValue?: any;
-        /** @name DataSource.Options.select */
-        select?: string | Array<any> | Function;
-        /** @name DataSource.Options.sort */
-        sort?: string | Array<any> | Function;
-        /** @name DataSource.Options.store */
-        store?: Store | StoreOptions | Array<any> | any;
-    }
-    /** @name DataSource */
-    export class DataSource {
-        constructor(data: Array<any>);
-        constructor(options: CustomStoreOptions | DataSourceOptions);
-        constructor(store: Store);
-        constructor(url: string);
-        /** @name DataSource.cancel(operationId) */
-        cancel(): boolean;
-        /** @name DataSource.dispose() */
-        dispose(): void;
-        /** @name DataSource.filter() */
-        filter(): any;
-        /** @name DataSource.filter(filterExpr) */
-        filter(filterExpr: any): void;
-        /** @name DataSource.group() */
-        group(): any;
-        /** @name DataSource.group(groupExpr) */
-        group(groupExpr: any): void;
-        /** @name DataSource.isLastPage() */
-        isLastPage(): boolean;
-        /** @name DataSource.isLoaded() */
-        isLoaded(): boolean;
-        /** @name DataSource.isLoading() */
-        isLoading(): boolean;
-        /** @name DataSource.items() */
-        items(): Array<any>;
-        /** @name DataSource.key() */
-        key(): any & string & number;
-        /** @name DataSource.load() */
-        load(): Promise<any> & JQueryPromise<any>;
-        /** @name DataSource.loadOptions() */
-        loadOptions(): any;
-        /** @name EventsMixin.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
-        on(events: any): this;
-        /** @name DataSource.pageIndex() */
-        pageIndex(): number;
-        /** @name DataSource.pageIndex(newIndex) */
-        pageIndex(newIndex: number): void;
-        /** @name DataSource.pageSize() */
-        pageSize(): number;
-        /** @name DataSource.pageSize(value) */
-        pageSize(value: number): void;
-        /** @name DataSource.paginate() */
-        paginate(): boolean;
-        /** @name DataSource.paginate(value) */
-        paginate(value: boolean): void;
-        /** @name DataSource.reload() */
-        reload(): Promise<any> & JQueryPromise<any>;
-        /** @name DataSource.requireTotalCount() */
-        requireTotalCount(): boolean;
-        /** @name DataSource.requireTotalCount(value) */
-        requireTotalCount(value: boolean): void;
-        /** @name DataSource.searchExpr() */
-        searchExpr(): string & Function & Array<string | Function>;
-        /** @name DataSource.searchExpr(expr) */
-        searchExpr(expr: string | Function | Array<string | Function>): void;
-        /** @name DataSource.searchOperation() */
-        searchOperation(): string;
-        /** @name DataSource.searchOperation(op) */
-        searchOperation(op: string): void;
-        /** @name DataSource.searchValue() */
-        searchValue(): any;
-        /** @name DataSource.searchValue(value) */
-        searchValue(value: any): void;
-        /** @name DataSource.select() */
-        select(): any;
-        /** @name DataSource.select(expr) */
-        select(expr: any): void;
-        /** @name DataSource.sort() */
-        sort(): any;
-        /** @name DataSource.sort(sortExpr) */
-        sort(sortExpr: any): void;
-        /** @name DataSource.store() */
-        store(): any;
-        /** @name DataSource.totalCount() */
-        totalCount(): number;
-    }
-    /** @name EdmLiteral */
-    export class EdmLiteral {
-        constructor(value: string);
-        /** @name EdmLiteral.valueOf() */
-        valueOf(): string;
-    }
-    /** @name Guid */
-    export class Guid {
-        constructor();
-        constructor(value: string);
-        /** @name Guid.toString() */
-        toString(): string;
-        /** @name Guid.valueOf() */
-        valueOf(): string;
-    }
-    /** @name LoadOptions */
-    export interface LoadOptions {
-        /** @name LoadOptions.customQueryParams */
-        customQueryParams?: any;
-        /** @name LoadOptions.expand */
-        expand?: any;
-        /** @name LoadOptions.filter */
-        filter?: any;
-        /** @name LoadOptions.group */
-        group?: any;
-        /** @name LoadOptions.groupSummary */
-        groupSummary?: any;
-        /** @name LoadOptions.parentIds */
-        parentIds?: Array<any>;
-        /** @name LoadOptions.requireGroupCount */
-        requireGroupCount?: boolean;
-        /** @name LoadOptions.requireTotalCount */
-        requireTotalCount?: boolean;
-        /** @name LoadOptions.searchExpr */
-        searchExpr?: string | Function | Array<string | Function>;
-        /** @name LoadOptions.searchOperation */
-        searchOperation?: string;
-        /** @name LoadOptions.searchValue */
-        searchValue?: any;
-        /** @name LoadOptions.select */
-        select?: any;
-        /** @name LoadOptions.skip */
-        skip?: number;
-        /** @name LoadOptions.sort */
-        sort?: any;
-        /** @name LoadOptions.take */
-        take?: number;
-        /** @name LoadOptions.totalSummary */
-        totalSummary?: any;
-        /** @name LoadOptions.userData */
-        userData?: any;
-    }
-    /** @name LocalStore.Options */
-    export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
-        /** @name LocalStore.Options.flushInterval */
-        flushInterval?: number;
-        /** @name LocalStore.Options.immediate */
-        immediate?: boolean;
-        /** @name LocalStore.Options.name */
-        name?: string;
-    }
-    /** @name LocalStore */
-    export class LocalStore extends ArrayStore {
-        constructor(options?: LocalStoreOptions)
-        /** @name LocalStore.clear() */
-        clear(): void;
-    }
-    /** @name ODataContext.Options */
-    export interface ODataContextOptions {
-        /** @name ODataContext.Options.beforeSend */
-        beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
-        /** @name ODataContext.Options.deserializeDates */
-        deserializeDates?: boolean;
-        /** @name ODataContext.Options.entities */
-        entities?: any;
-        /** @name ODataContext.Options.errorHandler */
-        errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
-        /** @name ODataContext.Options.filterToLower */
-        filterToLower?: boolean;
-        /** @name ODataContext.Options.jsonp */
-        jsonp?: boolean;
-        /** @name ODataContext.Options.url */
-        url?: string;
-        /** @name ODataContext.Options.version */
-        version?: number;
-        /** @name ODataContext.Options.withCredentials */
-        withCredentials?: boolean;
-    }
-    /** @name ODataContext */
-    export class ODataContext {
-        constructor(options?: ODataContextOptions)
-        /** @name ODataContext.get(operationName, params) */
-        get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
-        /** @name ODataContext.invoke(operationName, params, httpMethod) */
-        invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
-        /** @name ODataContext.objectLink(entityAlias, key) */
-        objectLink(entityAlias: string, key: any | string | number): any;
-    }
-    /** @name ODataStore.Options */
-    export interface ODataStoreOptions extends StoreOptions<ODataStore> {
-        /** @name ODataStore.Options.beforeSend */
-        beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
-        /** @name ODataStore.Options.deserializeDates */
-        deserializeDates?: boolean;
-        /** @name ODataStore.Options.errorHandler */
-        errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
-        /** @name ODataStore.Options.fieldTypes */
-        fieldTypes?: any;
-        /** @name ODataStore.Options.filterToLower */
-        filterToLower?: boolean;
-        /** @name ODataStore.Options.jsonp */
-        jsonp?: boolean;
-        /** @name ODataStore.Options.keyType */
-        keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
-        /** @name ODataStore.Options.onLoading */
-        onLoading?: ((loadOptions: LoadOptions) => any);
-        /** @name ODataStore.Options.url */
-        url?: string;
-        /** @name ODataStore.Options.version */
-        version?: number;
-        /** @name ODataStore.Options.withCredentials */
-        withCredentials?: boolean;
-    }
-    /** @name ODataStore */
-    export class ODataStore extends Store {
-        constructor(options?: ODataStoreOptions)
-        /** @name Store.byKey(key) */
-        byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
-        /** @name ODataStore.byKey(key, extraOptions) */
-        byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
-        /** @name ODataStore.createQuery(loadOptions) */
-        createQuery(loadOptions: any): any;
-    }
-    /** @name PivotGridDataSource.Options */
-    export interface PivotGridDataSourceOptions {
-        /** @name PivotGridDataSource.Options.fields */
-        fields?: Array<PivotGridDataSourceField>;
-        /** @name PivotGridDataSource.Options.filter */
-        filter?: string | Array<any> | Function;
-        /** @name PivotGridDataSource.Options.onChanged */
-        onChanged?: Function;
-        /** @name PivotGridDataSource.Options.onFieldsPrepared */
-        onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => any);
-        /** @name PivotGridDataSource.Options.onLoadError */
-        onLoadError?: ((error: any) => any);
-        /** @name PivotGridDataSource.Options.onLoadingChanged */
-        onLoadingChanged?: ((isLoading: boolean) => any);
-        /** @name PivotGridDataSource.Options.paginate */
-        paginate?: boolean;
-        /** @name PivotGridDataSource.Options.remoteOperations */
-        remoteOperations?: boolean;
-        /** @name PivotGridDataSource.Options.retrieveFields */
-        retrieveFields?: boolean;
-        /** @name PivotGridDataSource.Options.store */
-        store?: Store | StoreOptions | XmlaStore | XmlaStoreOptions | Array<{ type?: 'array' | 'local' | 'odata' | 'xmla' }> | { type?: 'array' | 'local' | 'odata' | 'xmla' };
-    }
-    /** @name PivotGridDataSource.Options.fields */
-    export interface PivotGridDataSourceField {
-        /** @name PivotGridDataSource.Options.fields.allowCrossGroupCalculation */
-        allowCrossGroupCalculation?: boolean;
-        /** @name PivotGridDataSource.Options.fields.allowExpandAll */
-        allowExpandAll?: boolean;
-        /** @name PivotGridDataSource.Options.fields.allowFiltering */
-        allowFiltering?: boolean;
-        /** @name PivotGridDataSource.Options.fields.allowSorting */
-        allowSorting?: boolean;
-        /** @name PivotGridDataSource.Options.fields.allowSortingBySummary */
-        allowSortingBySummary?: boolean;
-        /** @name PivotGridDataSource.Options.fields.area */
-        area?: 'column' | 'data' | 'filter' | 'row' | undefined;
-        /** @name PivotGridDataSource.Options.fields.areaIndex */
-        areaIndex?: number;
-        /** @name PivotGridDataSource.Options.fields.calculateCustomSummary */
-        calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
-        /** @name PivotGridDataSource.Options.fields.calculateSummaryValue */
-        calculateSummaryValue?: ((e: DevExpress.ui.dxPivotGridSummaryCell) => number);
-        /** @name PivotGridDataSource.Options.fields.caption */
-        caption?: string;
-        /** @name PivotGridDataSource.Options.fields.customizeText */
-        customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
-        /** @name PivotGridDataSource.Options.fields.dataField */
-        dataField?: string;
-        /** @name PivotGridDataSource.Options.fields.dataType */
-        dataType?: 'date' | 'number' | 'string';
-        /** @name PivotGridDataSource.Options.fields.displayFolder */
-        displayFolder?: string;
-        /** @name PivotGridDataSource.Options.fields.expanded */
-        expanded?: boolean;
-        /** @name PivotGridDataSource.Options.fields.filterType */
-        filterType?: 'exclude' | 'include';
-        /** @name PivotGridDataSource.Options.fields.filterValues */
-        filterValues?: Array<any>;
-        /** @name PivotGridDataSource.Options.fields.format */
-        format?: DevExpress.ui.format;
-        /** @name PivotGridDataSource.Options.fields.groupIndex */
-        groupIndex?: number;
-        /** @name PivotGridDataSource.Options.fields.groupInterval */
-        groupInterval?: 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year' | number;
-        /** @name PivotGridDataSource.Options.fields.groupName */
-        groupName?: string;
-        /** @name PivotGridDataSource.Options.fields.headerFilter */
-        headerFilter?: { allowSearch?: boolean, height?: number, width?: number };
-        /** @name PivotGridDataSource.Options.fields.isMeasure */
-        isMeasure?: boolean;
-        /** @name PivotGridDataSource.Options.fields.name */
-        name?: string;
-        /** @name PivotGridDataSource.Options.fields.runningTotal */
-        runningTotal?: 'column' | 'row';
-        /** @name PivotGridDataSource.Options.fields.selector */
-        selector?: Function;
-        /** @name PivotGridDataSource.Options.fields.showGrandTotals */
-        showGrandTotals?: boolean;
-        /** @name PivotGridDataSource.Options.fields.showTotals */
-        showTotals?: boolean;
-        /** @name PivotGridDataSource.Options.fields.showValues */
-        showValues?: boolean;
-        /** @name PivotGridDataSource.Options.fields.sortBy */
-        sortBy?: 'displayText' | 'value' | 'none';
-        /** @name PivotGridDataSource.Options.fields.sortBySummaryField */
-        sortBySummaryField?: string;
-        /** @name PivotGridDataSource.Options.fields.sortBySummaryPath */
-        sortBySummaryPath?: Array<number | string>;
-        /** @name PivotGridDataSource.Options.fields.sortOrder */
-        sortOrder?: 'asc' | 'desc';
-        /** @name PivotGridDataSource.Options.fields.sortingMethod */
-        sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
-        /** @name PivotGridDataSource.Options.fields.summaryDisplayMode */
-        summaryDisplayMode?: 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
-        /** @name PivotGridDataSource.Options.fields.summaryType */
-        summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
-        /** @name PivotGridDataSource.Options.fields.visible */
-        visible?: boolean;
-        /** @name PivotGridDataSource.Options.fields.width */
-        width?: number;
-        /** @name PivotGridDataSource.Options.fields.wordWrapEnabled */
-        wordWrapEnabled?: boolean;
-    }
-    /** @name PivotGridDataSource */
-    export class PivotGridDataSource {
-        constructor(options?: PivotGridDataSourceOptions)
-        /** @name PivotGridDataSource.collapseAll(id) */
-        collapseAll(id: number | string): void;
-        /** @name PivotGridDataSource.collapseHeaderItem(area, path) */
-        collapseHeaderItem(area: string, path: Array<string | number | Date>): void;
-        /** @name PivotGridDataSource.createDrillDownDataSource(options) */
-        createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>, rowPath?: Array<string | number | Date>, dataIndex?: number, maxRowCount?: number, customColumns?: Array<string> }): DataSource;
-        /** @name PivotGridDataSource.dispose() */
-        dispose(): void;
-        /** @name PivotGridDataSource.expandAll(id) */
-        expandAll(id: number | string): void;
-        /** @name PivotGridDataSource.expandHeaderItem(area, path) */
-        expandHeaderItem(area: string, path: Array<any>): void;
-        /** @name PivotGridDataSource.field(id) */
-        field(id: number | string): any;
-        /** @name PivotGridDataSource.field(id, options) */
-        field(id: number | string, options: any): void;
-        /** @name PivotGridDataSource.fields() */
-        fields(): Array<PivotGridDataSourceField>;
-        /** @name PivotGridDataSource.fields(fields) */
-        fields(fields: Array<PivotGridDataSourceField>): void;
-        /** @name PivotGridDataSource.filter() */
-        filter(): any;
-        /** @name PivotGridDataSource.filter(filterExpr) */
-        filter(filterExpr: any): void;
-        /** @name PivotGridDataSource.getAreaFields(area, collectGroups) */
-        getAreaFields(area: string, collectGroups: boolean): Array<PivotGridDataSourceField>;
-        /** @name PivotGridDataSource.getData() */
-        getData(): any;
-        /** @name PivotGridDataSource.isLoading() */
-        isLoading(): boolean;
-        /** @name PivotGridDataSource.load() */
-        load(): Promise<any> & JQueryPromise<any>;
-        /** @name EventsMixin.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
-        on(events: any): this;
-        /** @name PivotGridDataSource.reload() */
-        reload(): Promise<any> & JQueryPromise<any>;
-        /** @name PivotGridDataSource.state() */
-        state(): any;
-        /** @name PivotGridDataSource.state(state) */
-        state(state: any): void;
-    }
-    /** @name Query */
-    export class Query {
-        /** @name Query.aggregate(seed, step, finalize) */
-        aggregate(seed: any, step: Function, finalize: Function): Promise<any> & JQueryPromise<any>;
-        /** @name Query.aggregate(step) */
-        aggregate(step: Function): Promise<any> & JQueryPromise<any>;
-        /** @name Query.avg() */
-        avg(): Promise<number> & JQueryPromise<number>;
-        /** @name Query.avg(getter) */
-        avg(getter: any): Promise<number> & JQueryPromise<number>;
-        /** @name Query.count() */
-        count(): Promise<number> & JQueryPromise<number>;
-        /** @name Query.enumerate() */
-        enumerate(): Promise<any> & JQueryPromise<any>;
-        /** @name Query.filter(criteria) */
-        filter(criteria: Array<any>): Query;
-        /** @name Query.filter(predicate) */
-        filter(predicate: Function): Query;
-        /** @name Query.groupBy(getter) */
-        groupBy(getter: any): Query;
-        /** @name Query.max() */
-        max(): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** @name Query.max(getter) */
-        max(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** @name Query.min() */
-        min(): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** @name Query.min(getter) */
-        min(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** @name Query.select(getter) */
-        select(getter: any): Query;
-        /** @name Query.slice(skip, take) */
-        slice(skip: number, take?: number): Query;
-        /** @name Query.sortBy(getter) */
-        sortBy(getter: any): Query;
-        /** @name Query.sortBy(getter, desc) */
-        sortBy(getter: any, desc: boolean): Query;
-        /** @name Query.sum() */
-        sum(): Promise<number> & JQueryPromise<number>;
-        /** @name Query.sum(getter) */
-        sum(getter: any): Promise<number> & JQueryPromise<number>;
-        /** @name Query.thenBy(getter) */
-        thenBy(getter: any): Query;
-        /** @name Query.thenBy(getter, desc) */
-        thenBy(getter: any, desc: boolean): Query;
-        /** @name Query.toArray() */
-        toArray(): Array<any>;
-    }
-    /** @name Store.Options */
-    export interface StoreOptions<T = Store> {
-        /** @name Store.Options.errorHandler */
-        errorHandler?: Function;
-        /** @name Store.Options.key */
-        key?: string | Array<string>;
-        /** @name Store.Options.onInserted */
-        onInserted?: ((values: any, key: any | string | number) => any);
-        /** @name Store.Options.onInserting */
-        onInserting?: ((values: any) => any);
-        /** @name Store.Options.onLoaded */
-        onLoaded?: ((result: Array<any>) => any);
-        /** @name Store.Options.onLoading */
-        onLoading?: ((loadOptions: LoadOptions) => any);
-        /** @name Store.Options.onModified */
-        onModified?: Function;
-        /** @name Store.Options.onModifying */
-        onModifying?: Function;
-        /** @name Store.Options.onPush */
-        onPush?: ((changes: Array<any>) => any);
-        /** @name Store.Options.onRemoved */
-        onRemoved?: ((key: any | string | number) => any);
-        /** @name Store.Options.onRemoving */
-        onRemoving?: ((key: any | string | number) => any);
-        /** @name Store.Options.onUpdated */
-        onUpdated?: ((key: any | string | number, values: any) => any);
-        /** @name Store.Options.onUpdating */
-        onUpdating?: ((key: any | string | number, values: any) => any);
-    }
-    /** @name Store */
-    export class Store {
-        constructor(options?: StoreOptions)
-        /** @name Store.byKey(key) */
-        byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
-        /** @name Store.insert(values) */
-        insert(values: any): Promise<any> & JQueryPromise<any>;
-        /** @name Store.key() */
-        key(): any;
-        /** @name Store.keyOf(obj) */
-        keyOf(obj: any): any;
-        /** @name Store.load() */
-        load(): Promise<any> & JQueryPromise<any>;
-        /** @name Store.load(options) */
-        load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
-        /** @name EventsMixin.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
-        on(events: any): this;
-        /** @name Store.push(changes) */
-        push(changes: Array<any>): void;
-        /** @name Store.remove(key) */
-        remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
-        /** @name Store.totalCount(options) */
-        totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
-        /** @name Store.update(key, values) */
-        update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
-    }
-    /** @name XmlaStore.Options */
-    export interface XmlaStoreOptions {
-        /** @name XmlaStore.Options.beforeSend */
-        beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
-        /** @name XmlaStore.Options.catalog */
-        catalog?: string;
-        /** @name XmlaStore.Options.cube */
-        cube?: string;
-        /** @name XmlaStore.Options.url */
-        url?: string;
-    }
-    /** @name XmlaStore */
-    export class XmlaStore {
-        constructor(options?: XmlaStoreOptions)
-    }
-    /** @name Utils.base64_encode(input) */
-    export function base64_encode(input: string | Array<number>): string;
-    /** @name Utils.errorHandler */
-    export function errorHandler(e: Error): void;
-    /** @name Utils.query(array) */
-    export function query(array: Array<any>): Query;
-    /** @name Utils.query(url, queryOptions) */
-    export function query(url: string, queryOptions: any): Query;
+declare module DevExpress.ui.dxOverlay {
+    /** @name ui.dxOverlay.baseZIndex(zIndex) */
+    export function baseZIndex(zIndex: number): void;
+}
+declare module DevExpress.utils {
+    /** @name utils.cancelAnimationFrame(requestID) */
+    export function cancelAnimationFrame(requestID: number): void;
+    /** @name utils.initMobileViewport(options) */
+    export function initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;
+    /** @name utils.requestAnimationFrame(callback) */
+    export function requestAnimationFrame(callback: Function): number;
 }
 declare module DevExpress.viz {
     /** @name BarGaugeBarInfo */
@@ -8748,7 +9205,7 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.indent */
         indent?: { left?: number, right?: number };
         /** @name dxRangeSelector.Options.onValueChanged */
-        onValueChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date> }) => any);
+        onValueChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: event }) => any);
         /** @name dxRangeSelector.Options.scale */
         scale?: { aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: DevExpress.ui.format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
         /** @name dxRangeSelector.Options.selectedRangeColor */
@@ -9183,470 +9640,13 @@ declare module DevExpress.viz {
     export class polarPointObject extends basePointObject {
     }
 }
-declare module DevExpress {
-    /** @name Component.Options */
-    export interface ComponentOptions<T = Component> {
-        /** @name Component.Options.onDisposing */
-        onDisposing?: ((e: { component?: T }) => any);
-        /** @name Component.Options.onInitialized */
-        onInitialized?: ((e: { component?: T, element?: DevExpress.core.dxElement }) => any);
-        /** @name Component.Options.onOptionChanged */
-        onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
-    }
-    /** @name Component */
-    export class Component {
-        constructor(options?: ComponentOptions);
-        /** @name Component.beginUpdate() */
-        beginUpdate(): void;
-        /** @name Component.endUpdate() */
-        endUpdate(): void;
-        /** @name Component.instance() */
-        instance(): this;
-        /** @name EventsMixin.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
-        on(events: any): this;
-        /** @name Component.option() */
-        option(): any;
-        /** @name Component.option(optionName) */
-        option(optionName: string): any;
-        /** @name Component.option(optionName, optionValue) */
-        option(optionName: string, optionValue: any): void;
-        /** @name Component.option(options) */
-        option(options: any): void;
-    }
-    /** @name DOMComponent.Options */
-    export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
-        /** @name DOMComponent.Options.bindingOptions */
-        bindingOptions?: any;
-        /** @name DOMComponent.Options.elementAttr */
-        elementAttr?: any;
-        /** @name DOMComponent.Options.height */
-        height?: number | string | (() => number | string);
-        /** @name DOMComponent.Options.onDisposing */
-        onDisposing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
-        /** @name DOMComponent.Options.onOptionChanged */
-        onOptionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
-        /** @name DOMComponent.Options.rtlEnabled */
-        rtlEnabled?: boolean;
-        /** @name DOMComponent.Options.width */
-        width?: number | string | (() => number | string);
-    }
-    /** @name DOMComponent */
-    export class DOMComponent extends Component {
-        constructor(element: Element | JQuery, options?: DOMComponentOptions);
-        /** @name DOMComponent.defaultOptions(rule) */
-        static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
-        /** @name DOMComponent.dispose() */
-        dispose(): void;
-        /** @name DOMComponent.element() */
-        element(): DevExpress.core.dxElement;
-        /** @name DOMComponent.getInstance(element) */
-        static getInstance(element: Element | JQuery): DOMComponent;
-    }
-    /** @name DataHelperMixin */
-    export class DataHelperMixin {
-        /** @name DataHelperMixin.getDataSource() */
-        getDataSource(): DevExpress.data.DataSource;
-    }
-    /** @name Device */
-    export interface Device {
-        /** @name Device.android */
-        android?: boolean;
-        /** @name Device.deviceType */
-        deviceType?: 'phone' | 'tablet' | 'desktop';
-        /** @name Device.generic */
-        generic?: boolean;
-        /** @name Device.grade */
-        grade?: 'A' | 'B' | 'C';
-        /** @name Device.ios */
-        ios?: boolean;
-        /** @name Device.phone */
-        phone?: boolean;
-        /** @name Device.platform */
-        platform?: 'android' | 'ios' | 'win' | 'generic';
-        /** @name Device.tablet */
-        tablet?: boolean;
-        /** @name Device.version */
-        version?: Array<number>;
-        /** @name Device.win */
-        win?: boolean;
-    }
-    /** @name DevicesObject */
-    export class DevicesObject {
-        constructor(options: { window?: Window });
-        /** @name DevicesObject.current() */
-        current(): Device;
-        /** @name DevicesObject.current(deviceName) */
-        current(deviceName: string | Device): void;
-        /** @name EventsMixin.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
-        on(events: any): this;
-        /** @name DevicesObject.orientation() */
-        orientation(): string;
-        /** @name DevicesObject.real() */
-        real(): Device;
-    }
-    /** @name EndpointSelector */
-    export class EndpointSelector {
-        constructor(options: any);
-        /** @name EndpointSelector.urlFor(key) */
-        urlFor(key: string): string;
-    }
-    /** @name TransitionExecutor */
-    export class TransitionExecutor {
-        /** @name TransitionExecutor.enter(elements, animation) */
-        enter(elements: JQuery, animation: animationConfig | string): void;
-        /** @name TransitionExecutor.leave(elements, animation) */
-        leave(elements: JQuery, animation: animationConfig | string): void;
-        /** @name TransitionExecutor.reset() */
-        reset(): void;
-        /** @name TransitionExecutor.start() */
-        start(): Promise<void> & JQueryPromise<void>;
-        /** @name TransitionExecutor.stop() */
-        stop(): void;
-    }
-    /** @name animationConfig */
-    export interface animationConfig {
-        /** @name animationConfig.complete */
-        complete?: (($element: DevExpress.core.dxElement, config: any) => any);
-        /** @name animationConfig.delay */
-        delay?: number;
-        /** @name animationConfig.direction */
-        direction?: 'bottom' | 'left' | 'right' | 'top';
-        /** @name animationConfig.duration */
-        duration?: number;
-        /** @name animationConfig.easing */
-        easing?: string;
-        /** @name animationConfig.from */
-        from?: number | string | any;
-        /** @name animationConfig.staggerDelay */
-        staggerDelay?: number;
-        /** @name animationConfig.start */
-        start?: (($element: DevExpress.core.dxElement, config: any) => any);
-        /** @name animationConfig.to */
-        to?: number | string | any;
-        /** @name animationConfig.type */
-        type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
-    }
-    /** @name animationPresets */
-    export class animationPresets {
-        /** @name animationPresets.applyChanges() */
-        applyChanges(): void;
-        /** @name animationPresets.clear() */
-        clear(): void;
-        /** @name animationPresets.clear(name) */
-        clear(name: string): void;
-        /** @name animationPresets.getPreset(name) */
-        getPreset(name: string): any;
-        /** @name animationPresets.registerDefaultPresets() */
-        registerDefaultPresets(): void;
-        /** @name animationPresets.registerPreset(name, config) */
-        registerPreset(name: string, config: { animation?: animationConfig, device?: Device }): void;
-        /** @name animationPresets.resetToDefaults() */
-        resetToDefaults(): void;
-    }
-    /** @name config() */
-    export function config(): globalConfig;
-    /** @name config(config) */
-    export function config(config: globalConfig): void;
-    /** @name devices */
-    export var devices: DevicesObject;
-    /** @name dxEvent */
-    export class dxEvent {
-        /** @name dxEvent.currentTarget */
-        currentTarget: Element;
-        /** @name dxEvent.data */
-        data: any;
-        /** @name dxEvent.delegateTarget */
-        delegateTarget: Element;
-        /** @name dxEvent.target */
-        target: Element;
-        /** @name dxEvent.isDefaultPrevented() */
-        isDefaultPrevented(): boolean;
-        /** @name dxEvent.isImmediatePropagationStopped() */
-        isImmediatePropagationStopped(): boolean;
-        /** @name dxEvent.isPropagationStopped() */
-        isPropagationStopped(): boolean;
-        /** @name dxEvent.preventDefault() */
-        preventDefault(): void;
-        /** @name dxEvent.stopImmediatePropagation() */
-        stopImmediatePropagation(): void;
-        /** @name dxEvent.stopPropagation() */
-        stopPropagation(): void;
-    }
-    /** @name event */
-    export type event = dxEvent | JQueryEventObject;
-    /** @name eventsHandler */
-    export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
-    /** @name globalConfig */
-    export interface globalConfig {
-        /** @name globalConfig.decimalSeparator */
-        decimalSeparator?: string;
-        /** @name globalConfig.defaultCurrency */
-        defaultCurrency?: string;
-        /** @name globalConfig.editorStylingMode */
-        editorStylingMode?: 'outlined' | 'underlined' | 'filled';
-        /** @name globalConfig.floatingActionButtonConfig */
-        floatingActionButtonConfig?: { closeIcon?: string, icon?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function };
-        /** @name globalConfig.forceIsoDateParsing */
-        forceIsoDateParsing?: boolean;
-        /** @name globalConfig.oDataFilterToLower */
-        oDataFilterToLower?: boolean;
-        /** @name globalConfig.rtlEnabled */
-        rtlEnabled?: boolean;
-        /** @name globalConfig.serverDecimalSeparator */
-        serverDecimalSeparator?: string;
-        /** @name globalConfig.thousandsSeparator */
-        thousandsSeparator?: string;
-        /** @name globalConfig.useLegacyStoreResult */
-        useLegacyStoreResult?: boolean;
-        /** @name globalConfig.useLegacyVisibleIndex */
-        useLegacyVisibleIndex?: boolean;
-    }
-    /** @name hideTopOverlay() */
-    export function hideTopOverlay(): boolean;
-    /** @name localization */
-    export class localization {
-        /** @name localization.formatDate(value, format) */
-        static formatDate(value: Date, format: DevExpress.ui.format): string;
-        /** @name localization.formatMessage(key, value) */
-        static formatMessage(key: string, value: string | Array<string>): string;
-        /** @name localization.formatNumber(value, format) */
-        static formatNumber(value: number, format: DevExpress.ui.format): string;
-        /** @name localization.loadMessages(messages) */
-        static loadMessages(messages: any): void;
-        /** @name localization.locale() */
-        static locale(): string;
-        /** @name localization.locale(locale) */
-        static locale(locale: string): void;
-        /** @name localization.parseDate(text, format) */
-        static parseDate(text: string, format: DevExpress.ui.format): Date;
-        /** @name localization.parseNumber(text, format) */
-        static parseNumber(text: string, format: DevExpress.ui.format): number;
-    }
-    /** @name positionConfig */
-    export interface positionConfig {
-        /** @name positionConfig.at */
-        at?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
-        /** @name positionConfig.boundary */
-        boundary?: string | Element | JQuery | Window;
-        /** @name positionConfig.boundaryOffset */
-        boundaryOffset?: string | { x?: number, y?: number };
-        /** @name positionConfig.collision */
-        collision?: 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit' | { x?: 'fit' | 'flip' | 'flipfit' | 'none', y?: 'fit' | 'flip' | 'flipfit' | 'none' };
-        /** @name positionConfig.my */
-        my?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
-        /** @name positionConfig.of */
-        of?: string | Element | JQuery | Window;
-        /** @name positionConfig.offset */
-        offset?: string | { x?: number, y?: number };
-    }
-    /** @name registerComponent(name, componentClass) */
-    export function registerComponent(name: string, componentClass: any): void;
-    /** @name registerComponent(name, namespace, componentClass) */
-    export function registerComponent(name: string, namespace: any, componentClass: any): void;
-    /** @name ui */
-    export class ui {
-        /** @name ui.notify(message,type,displayTime) */
-        static notify(message: string, type?: string, displayTime?: number): void;
-        /** @name ui.notify(options,type,displayTime) */
-        static notify(options: any, type?: string, displayTime?: number): void;
-        /** @name ui.repaintFloatingActionButton() */
-        static repaintFloatingActionButton(): void;
-        /** @name ui.setTemplateEngine(name) */
-        static setTemplateEngine(templateEngineName: string): void;
-        /** @name ui.setTemplateEngine(options) */
-        static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
-    }
-    /** @name validationEngine */
-    export class validationEngine {
-        /** @name validationEngine.getGroupConfig() */
-        static getGroupConfig(): any;
-        /** @name validationEngine.getGroupConfig(group) */
-        static getGroupConfig(group: string | any): any;
-        /** @name validationEngine.registerModelForValidation(model) */
-        static registerModelForValidation(model: any): void;
-        /** @name validationEngine.resetGroup() */
-        static resetGroup(): void;
-        /** @name validationEngine.resetGroup(group) */
-        static resetGroup(group: string | any): void;
-        /** @name validationEngine.unregisterModelForValidation(model) */
-        static unregisterModelForValidation(model: any): void;
-        /** @name validationEngine.validateGroup() */
-        static validateGroup(): DevExpress.ui.dxValidationGroupResult;
-        /** @name validationEngine.validateGroup(group) */
-        static validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
-        /** @name validationEngine.validateModel(model) */
-        static validateModel(model: any): any;
-    }
-    /** @name viz */
-    export class viz {
-        /** @name viz.currentPalette() */
-        static currentPalette(): string;
-        /** @name viz.currentPalette(paletteName) */
-        static currentPalette(paletteName: string): void;
-        /** @name viz.currentTheme() */
-        static currentTheme(): string;
-        /** @name viz.currentTheme(platform, colorScheme) */
-        static currentTheme(platform: string, colorScheme: string): void;
-        /** @name viz.currentTheme(theme) */
-        static currentTheme(theme: string): void;
-        /** @name viz.exportFromMarkup(markup, options) */
-        static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number }): void;
-        /** @name viz.exportWidgets(widgetInstances) */
-        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
-        /** @name viz.exportWidgets(widgetInstances, options) */
-        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function }): void;
-        /** @name viz.generateColors(palette, count, options) */
-        static generateColors(palette: 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
-        /** @name viz.getMarkup(widgetInstances) */
-        static getMarkup(widgetInstances: Array<DOMComponent>): string;
-        /** @name viz.getPalette(paletteName) */
-        static getPalette(paletteName: string): any;
-        /** @name viz.getTheme(theme) */
-        static getTheme(theme: string): any;
-        /** @name viz.refreshPaths() */
-        static refreshPaths(): void;
-        /** @name viz.refreshTheme() */
-        static refreshTheme(): void;
-        /** @name viz.registerPalette(paletteName, palette) */
-        static registerPalette(paletteName: string, palette: any): void;
-        /** @name viz.registerTheme(customTheme, baseTheme) */
-        static registerTheme(customTheme: any, baseTheme: string): void;
-    }
-}
-declare module DevExpress.core {
-    /** @name EventsMixin */
-    export class EventsMixin {
-        /** @name EventsMixin.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
-        on(events: any): this;
-    }
-    /** @name dxElement */
-    export type dxElement = Element & JQuery;
-}
-declare module DevExpress.exporter {
-    /** @name ExcelDataGridCell */
-    export interface ExcelDataGridCell {
-        /** @name ExcelDataGridCell.column */
-        column?: DevExpress.ui.dxDataGridColumn;
-        /** @name ExcelDataGridCell.data */
-        data?: any;
-        /** @name ExcelDataGridCell.groupIndex */
-        groupIndex?: number;
-        /** @name ExcelDataGridCell.groupSummaryItems */
-        groupSummaryItems?: Array<{ name?: string, value?: any }>;
-        /** @name ExcelDataGridCell.rowType */
-        rowType?: string;
-        /** @name ExcelDataGridCell.totalSummaryItemName */
-        totalSummaryItemName?: string;
-        /** @name ExcelDataGridCell.value */
-        value?: any;
-    }
-    /** @name ExcelFont */
-    export interface ExcelFont {
-        /** @name ExcelFont.bold */
-        bold?: boolean;
-        /** @name ExcelFont.color */
-        color?: string;
-        /** @name ExcelFont.italic */
-        italic?: boolean;
-        /** @name ExcelFont.name */
-        name?: string;
-        /** @name ExcelFont.size */
-        size?: number;
-        /** @name ExcelFont.underline */
-        underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
-    }
-}
-declare module DevExpress.data.utils {
-    /** @name Utils.compileGetter(expr) */
-    export function compileGetter(expr: string | Array<string>): Function;
-    /** @name Utils.compileSetter(expr) */
-    export function compileSetter(expr: string | Array<string>): Function;
-}
-declare module DevExpress.data.utils.odata {
-    /** @name Utils.keyConverters */
-    export var keyConverters: any;
-}
-declare module DevExpress.events {
-    /** @name events.off(element) */
-    export function off(element: Element | Array<Element>): void;
-    /** @name events.off(element, eventName) */
-    export function off(element: Element | Array<Element>, eventName: string): void;
-    /** @name events.off(element, eventName, handler) */
-    export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
-    /** @name events.off(element, eventName, selector) */
-    export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
-    /** @name events.off(element, eventName, selector, handler) */
-    export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
-    /** @name events.on(element, eventName, data, handler) */
-    export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
-    /** @name events.on(element, eventName, handler) */
-    export function on(element: Element | Array<Element>, eventName: string, handler: Function): void;
-    /** @name events.on(element, eventName, selector, data, handler) */
-    export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
-    /** @name events.on(element, eventName, selector, handler) */
-    export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
-    /** @name events.one(element, eventName, data, handler) */
-    export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
-    /** @name events.one(element, eventName, handler) */
-    export function one(element: Element | Array<Element>, eventName: string, handler: Function): void;
-    /** @name events.one(element, eventName, selector, data, handler) */
-    export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
-    /** @name events.one(element, eventName, selector, handler) */
-    export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
-    /** @name events.trigger(element, event) */
-    export function trigger(element: Element | Array<Element>, event: string | event): void;
-    /** @name events.trigger(element, event, extraParameters) */
-    export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
-    /** @name events.triggerHandler(element, event) */
-    export function triggerHandler(element: Element | Array<Element>, event: string | event): void;
-    /** @name events.triggerHandler(element, event, extraParameters) */
-    export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
-}
-declare module DevExpress.fx {
-    /** @name fx.animate(element, config) */
-    export function animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
-    /** @name fx.isAnimating(element) */
-    export function isAnimating(element: Element): boolean;
-    /** @name fx.stop(element, jumpToEnd) */
-    export function stop(element: Element, jumpToEnd: boolean): void;
-}
-declare module DevExpress.ui.dxOverlay {
-    /** @name ui.dxOverlay.baseZIndex(zIndex) */
-    export function baseZIndex(zIndex: number): void;
-}
-declare module DevExpress.utils {
-    /** @name utils.cancelAnimationFrame(requestID) */
-    export function cancelAnimationFrame(requestID: number): void;
-    /** @name utils.initMobileViewport(options) */
-    export function initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;
-    /** @name utils.requestAnimationFrame(callback) */
-    export function requestAnimationFrame(callback: Function): number;
+declare module DevExpress.viz.map {
+    /** @name viz.map.projection(data) */
+    export function projection(data: { to?: Function, from?: Function, aspectRatio?: number }): any;
 }
 declare module DevExpress.viz.map.projection {
     /** @name viz.map.projection.add(name, projection) */
     export function add(name: string, projection: any): void;
     /** @name viz.map.projection.get(name) */
     export function get(name: string): any;
-}
-declare module DevExpress.viz.map {
-    /** @name viz.map.projection(data) */
-    export function projection(data: { to?: Function, from?: Function, aspectRatio?: number }): any;
 }

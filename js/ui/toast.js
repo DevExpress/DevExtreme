@@ -82,7 +82,7 @@ var Toast = Overlay.inherit({
             /**
             * @name dxToastOptions.position
             * @type positionConfig|string
-            * @default: "bottom center"
+            * @default "bottom center"
             */
             position: "bottom center",
 
@@ -138,11 +138,6 @@ var Toast = Overlay.inherit({
             */
             height: "auto",
 
-            /**
-            * @name dxToastOptions.closeOnBackButton
-            * @type boolean
-            * @default false
-            */
             closeOnBackButton: false,
 
             /**

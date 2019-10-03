@@ -1,6 +1,7 @@
 import $ from "jquery";
 import config from "core/config";
 import repaintFloatingActionButton from "ui/speed_dial_action/repaint_floating_action_button";
+import fx from "animation/fx";
 
 import "ui/speed_dial_action";
 import "common.css!";
@@ -19,6 +20,9 @@ QUnit.testStart(() => {
 const FAB_MAIN_CLASS = "dx-fa-button-main";
 
 QUnit.module("apply current config options", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         config({
             floatingActionButtonConfig: {
@@ -29,6 +33,8 @@ QUnit.module("apply current config options", (hooks) => {
                 }
             }
         });
+
+        fx.off = false;
     }),
 
     test("repaint with multiple actions", (assert) => {

@@ -1150,8 +1150,10 @@ QUnit.module("format: incomplete value", moduleConfig, () => {
 
     QUnit.test("incomplete value should be reformatted on focusout after paste", (assert) => {
         this.instance.option("value", null);
+        this.instance.focus();
         this.input.val("123.");
-        this.input.trigger("focusout");
+        this.instance.blur();
+
         assert.equal(this.input.val(), "123", "input was reformatted");
     });
 
@@ -1512,6 +1514,25 @@ QUnit.module("format: removing", moduleConfig, () => {
         } finally {
             config({ decimalSeparator: oldDecimalSeparator });
         }
+    });
+
+    [",", "."].forEach((separator) => {
+        QUnit.test(`caret should be moved to the float part by "${separator}"`, (assert) => {
+            this.instance.option({
+                format: {
+                    type: 'fixedPoint',
+                    precision: 2
+                },
+                value: 0
+            });
+
+            this.keyboard
+                .caret({ start: 0, end: 4 })
+                .type(`${separator}45`)
+                .change();
+
+            assert.strictEqual(this.instance.option("value"), 0.45, "Value is correct");
+        });
     });
 
     QUnit.test("should parse float numbers with the ',' separator", (assert) => {

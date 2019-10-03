@@ -9,6 +9,8 @@ var $ = require("../../core/renderer"),
     dateUtils = require("./ui.date_utils"),
     dateLocalization = require("../../localization/date");
 
+var DATE_FORMAT = "date";
+
 var BOUNDARY_VALUES = {
     "min": new Date(0, 0, 0, 0, 0),
     "max": new Date(0, 0, 0, 23, 59)
@@ -49,6 +51,10 @@ var ListStrategy = DateBoxStrategy.inherit({
 
     useCurrentDateByDefault: function() {
         return true;
+    },
+
+    getDefaultDate: function() {
+        return new Date(null);
     },
 
     _getPopupWidth: function() {
@@ -271,6 +277,16 @@ var ListStrategy = DateBoxStrategy.inherit({
         var maxHeight = $(window).height() * 0.45;
         this.dateBox._setPopupOption("height", Math.min(popupHeight, maxHeight));
         this.dateBox._timeList && this.dateBox._timeList.updateDimensions();
+    },
+
+    getParsedText: function(text, format) {
+        var value = this.callBase(text, format);
+
+        if(value) {
+            value = dateUtils.mergeDates(value, new Date(null), DATE_FORMAT);
+        }
+
+        return value;
     }
 });
 

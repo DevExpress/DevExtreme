@@ -21,7 +21,10 @@ var noop = require("../../core/utils/common").noop,
     INSIDE = "inside";
 
 exports.pie = _extend({}, barSeries, {
-    _setGroupsSettings: chartScatterSeries._setGroupsSettings,
+    _setGroupsSettings: function() {
+        chartScatterSeries._setGroupsSettings.apply(this, arguments);
+        this._labelsGroup.attr({ "pointer-events": null });
+    },
 
     _createErrorBarGroup: _noop,
 
@@ -99,8 +102,7 @@ exports.pie = _extend({}, barSeries, {
     _createGroups: chartScatterSeries._createGroups,
 
     _setMarkerGroupSettings: function() {
-        var that = this;
-        that._markersGroup.attr({ "class": "dxc-markers" });
+        this._markersGroup.attr({ "class": "dxc-markers" });
     },
 
     _getMainColor(data, point) {

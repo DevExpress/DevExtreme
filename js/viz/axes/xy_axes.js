@@ -323,10 +323,6 @@ module.exports = {
         },
 
         _updateAxisElementPosition: function() {
-            if(!this._axisElement) {
-                return;
-            }
-
             var axisCoord = this._axisPosition,
                 canvas = this._getCanvasStartEnd();
 
@@ -979,9 +975,14 @@ module.exports = {
             max: true
         },
 
-        _setVisualRange(visualRange) {
+        _setVisualRange(visualRange, allowPartialUpdate) {
             const range = this.adjustRange(vizUtils.getVizRangeObject(visualRange));
-            this._viewport = range;
+            if(allowPartialUpdate) {
+                isDefined(range.startValue) && (this._viewport.startValue = range.startValue);
+                isDefined(range.endValue) && (this._viewport.endValue = range.endValue);
+            } else {
+                this._viewport = range;
+            }
         },
 
         applyVisualRangeSetter(visualRangeSetter) {
@@ -1236,7 +1237,10 @@ module.exports = {
                 constantLinesGroups = that._axisConstantLineGroups;
 
             function shiftGroup(side, group) {
-                var attr = {},
+                var attr = {
+                        translateX: 0,
+                        translateY: 0
+                    },
                     shift = margins[side] ? margins[side] + axesSpacing : 0;
 
                 attr[isHorizontal ? "translateY" : "translateX"] = (side === "left" || side === "top" ? -1 : 1) * shift;

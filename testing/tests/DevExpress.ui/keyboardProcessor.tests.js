@@ -81,7 +81,7 @@ QUnit.module("keyboardProcessor", {
             handler: stubHandler
         });
 
-        this.processor.process(this.keyDownEvent);
+        this.processor._processFunction(this.keyDownEvent);
 
         assert.ok(stubHandler.notCalled, "event was not processed");
     });

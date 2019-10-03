@@ -577,9 +577,12 @@ var SelectBox = DropDownList.inherit({
     },
 
     _focusOutHandler: function(e) {
-        this.callBase(e);
+        if(!this._preventNestedFocusEvent(e)) {
+            this._clearSearchTimer();
+            this._restoreInputText();
+        }
 
-        this._restoreInputText();
+        this.callBase(e);
     },
 
     _clearTextValue: function() {

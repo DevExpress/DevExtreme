@@ -631,6 +631,10 @@
                 border-top: ~"@{@{widgetName}-border}";
                 border-bottom: ~"@{@{widgetName}-border}";
             }
+
+            &.dx-@{widgetName}-edit-form {
+                white-space: normal;
+            }
         }
 
         .dx-master-detail-row {
@@ -767,8 +771,8 @@
             }
         }
 
-        .dx-selection.dx-row,
-        .dx-selection.dx-row:hover {
+        .dx-selection.dx-row:not(.dx-row-focused),
+        .dx-selection.dx-row:not(.dx-row-focused):hover {
             & > td,
             & > tr > td {
                 background-color: ~"@{@{widgetName}-selection-bg}";
@@ -789,7 +793,7 @@
                 }
             }
 
-            &:not(.dx-row-lines):not(.dx-row-focused) {
+            &:not(.dx-row-lines) {
                 & > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";

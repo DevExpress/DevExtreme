@@ -89,18 +89,15 @@ class BaseRenderingStrategy {
     }
 
     _correctRtlCoordinates(coordinates) {
-        var width = coordinates[0].width || this._getAppointmentMaxWidth();
+        const width = coordinates[0].width || this._getAppointmentMaxWidth();
 
-        if(!coordinates[0].appointmentReduced) {
-            coordinates[0].left -= width;
-        }
-
-        this._correctRtlCoordinatesParts(coordinates, width);
+        coordinates.forEach(coordinate => {
+            if(!coordinate.appointmentReduced) {
+                coordinate.left -= width;
+            }
+        });
 
         return coordinates;
-    }
-
-    _correctRtlCoordinatesParts() {
     }
 
     _getAppointmentMaxWidth() {
@@ -321,7 +318,7 @@ class BaseRenderingStrategy {
         // NOTE: ie & ff pixels
         var result = first - second;
 
-        return isSomeEdge || Math.abs(result) > 1 ? result : 0;
+        return isSomeEdge || Math.abs(result) > 0.8 ? result : 0;
     }
 
     _getResultPositions(sortedArray) {

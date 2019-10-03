@@ -3753,7 +3753,7 @@ QUnit.test("Data -> set visualRange -> update data, argument keep mode, value re
     assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 200, endValue: 400 }, "Case 5");
 });
 
-QUnit.module("Visual range on updates. Misc", moduleSetup);
+QUnit.module("Visual range updates. Misc", moduleSetup);
 
 QUnit.test("Data -> update data and visualRange, argument reset mode - take given range and keep argument range", function(assert) {
     const dataSource = [
@@ -4343,4 +4343,59 @@ QUnit.test("Value Axis. Reset visualRange with null option", function(assert) {
     assert.deepEqual(onOptionChanged.getCall(0).args[0].value, [2, 4], "Case 8");
     assert.deepEqual(onOptionChanged.getCall(1).args[0].fullName, "valueAxis.visualRange", "Case 8");
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [20, 40], "Case 8");
+});
+
+QUnit.test("Value Axis without visualRange. Hide and show series - update visual range", function(assert) {
+    const dataSource = [
+        { arg: 1, val: 10, val1: 110 },
+        { arg: 2, val: 20, val1: 120 },
+        { arg: 3, val: 30, val1: 130 },
+        { arg: 4, val: 40, val1: 140 },
+        { arg: 5, val: 50, val1: 150 }
+    ];
+
+    let [chart] = this.createChart({
+        dataSource
+    });
+    chart.option({ series: [{}, { valueField: "val1" }] });
+
+    // Case 1
+    chart.getAllSeries()[1].hide();
+
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 10, endValue: 50 }, "Case 1");
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 10, endValue: 50 }, "Case 1");
+
+    // Case 2
+    chart.getAllSeries()[1].show();
+
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 10, endValue: 150 }, "Case 2");
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 10, endValue: 150 }, "Case 2");
+});
+
+QUnit.test("Value Axis with visualRange. Hide and show series - do not update visual range", function(assert) {
+    const dataSource = [
+        { arg: 1, val: 10, val1: 110 },
+        { arg: 2, val: 20, val1: 120 },
+        { arg: 3, val: 30, val1: 130 },
+        { arg: 4, val: 40, val1: 140 },
+        { arg: 5, val: 50, val1: 150 }
+    ];
+
+    let [chart] = this.createChart({
+        dataSource
+    });
+    chart.option({ series: [{}, { valueField: "val1" }] });
+    chart.getValueAxis().visualRange([-10, 3000]);
+
+    // Case 1
+    chart.getAllSeries()[1].hide();
+
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: -10, endValue: 3000 }, "Case 1");
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: -10, endValue: 3000 }, "Case 1");
+
+    // Case 2
+    chart.getAllSeries()[1].show();
+
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: -10, endValue: 3000 }, "Case 2");
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: -10, endValue: 3000 }, "Case 2");
 });

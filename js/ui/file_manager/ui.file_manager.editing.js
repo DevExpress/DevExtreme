@@ -167,7 +167,7 @@ class FileManagerEditingControl extends Widget {
 
     _tryEditAction(action, arg) {
         let items = arg;
-        if(!items) {
+        if(!items || items.length === 0) {
             items = action.useCurrentFolder ? [ this._model.getCurrentFolder() ] : this._model.getMultipleSelectedItems();
         }
         const onlyFiles = !action.affectsAllItems && items.every(item => !item.isDirectory);

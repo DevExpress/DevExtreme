@@ -90,6 +90,7 @@ export default function createConstantLine(axis, options) {
             } else {
                 this.label && this.label.attr(axis._getConstantLineLabelsCoords(this.coord, this.labelOptions));
                 this.line && this.line.attr(axis._getConstantLineGraphicAttributes(this.coord));
+                axis._rotateConstantLine(this.line, this.coord);
             }
         },
 

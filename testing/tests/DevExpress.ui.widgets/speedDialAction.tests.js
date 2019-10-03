@@ -1,10 +1,10 @@
 import $ from "jquery";
 import config from "core/config";
+import fx from "animation/fx";
 
 import "ui/speed_dial_action";
 import "common.css!";
 import "generic_light.css!";
-
 
 const { test } = QUnit;
 
@@ -123,6 +123,9 @@ QUnit.module("create multiple actions", (hooks) => {
 });
 
 QUnit.module("modify global action button config", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
@@ -137,6 +140,7 @@ QUnit.module("modify global action button config", (hooks) => {
             }
         });
 
+        fx.off = false;
     }),
 
     test("check main fab rendering", (assert) => {
@@ -200,9 +204,14 @@ QUnit.module("modify global action button config", (hooks) => {
 });
 
 QUnit.module("add or remove action buttons", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
+
+        fx.off = false;
     }),
 
     test("check main fab rendering", (assert) => {

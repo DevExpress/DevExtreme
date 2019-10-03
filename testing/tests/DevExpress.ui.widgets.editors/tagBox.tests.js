@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { DataSource } from "data/data_source/data_source";
 import { isRenderer } from "core/utils/type";
+import { createTextElementHiddenCopy } from "core/utils/dom";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import browser from "core/utils/browser";
 import config from "core/config";
@@ -41,9 +42,7 @@ const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template";
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template";
 const FOCUSED_CLASS = "dx-state-focused";
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
-const KEY_TAB = "Tab";
 const KEY_ENTER = "Enter";
-const KEY_ESC = "Escape";
 const KEY_DOWN = "ArrowDown";
 const KEY_SPACE = " ";
 
@@ -1949,75 +1948,6 @@ QUnit.module("keyboard navigation", {
         const $applyButton = this.instance._popup._wrapper().find(".dx-button.dx-popup-done");
         assert.ok($applyButton.hasClass("dx-state-focused"), "the apply button is focused");
     });
-
-    QUnit.testInActiveWindow("the 'select all' checkbox should be focused on the 'tab' key press if the input is focused and showSelectionControls if true (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        keyboardMock(this.$element.find(`.${TEXTBOX_CLASS}`))
-            .focus()
-            .press("tab");
-
-        const $selectAllCheckbox = this.instance._popup._wrapper().find(".dx-list-select-all-checkbox");
-        assert.ok($selectAllCheckbox.hasClass("dx-state-focused"), "the select all checkbox is focused");
-    });
-
-    QUnit.testInActiveWindow("the input should be focused on the 'shift+tab' key press if the select all checkbox is focused (T389453)", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        const $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
-
-        $selectAllCheckbox
-            .focus()
-            .trigger($.Event("keydown", {
-                key: KEY_TAB,
-                shiftKey: true
-            }));
-
-        assert.ok(this.$element.hasClass("dx-state-focused"), "widget is focused");
-    });
-
-    QUnit.testInActiveWindow("popup should be closed on the 'esc' key press if the select all checkbox is focused", (assert) => {
-        if(devices.real().platform !== "generic") {
-            assert.ok(true, "desktop specific test");
-            return;
-        }
-
-        this.instance.option({
-            showSelectionControls: true,
-            applyValueMode: "useButtons",
-            opened: true
-        });
-
-        const $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
-
-        $selectAllCheckbox
-            .focus()
-            .trigger($.Event("keydown", {
-                key: KEY_ESC,
-                shiftKey: true
-            }));
-
-        assert.ok(this.$element.hasClass("dx-state-focused"), "widget is focused");
-        assert.notOk(this.instance.option("opened"), "popup is closed");
-    });
 });
 
 QUnit.module("keyboard navigation through tags", {
@@ -2442,24 +2372,24 @@ QUnit.module("keyboard navigation through tags", {
     });
 
     QUnit.testInActiveWindow("the 'focused' class should be removed from the focused tag when the widget loses focus", (assert) => {
+        this.instance.focus();
         this.keyboard
-            .focus()
             .press("left");
 
-        $(this.$input).trigger("focusout");
+        this.instance.blur();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
     });
 
     QUnit.testInActiveWindow("the should be no focused tags on when the widget gets focus", (assert) => {
+        this.instance.focus();
+
         this.keyboard
-            .focus()
             .press("left");
 
-        this.$input
-            .trigger("focusout")
-            .trigger("focusin");
+        this.instance.blur();
+        this.instance.focus();
 
         const focusedTagsCount = this.getFocusedTag().length;
         assert.equal(focusedTagsCount, 0, "there are no focused tags");
@@ -2631,9 +2561,29 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const inputWidth = $input.width();
 
-        keyboardMock($input).type("te");
+        keyboardMock($input).type("test text");
 
         assert.ok($input.width() > inputWidth, "input size increase");
+    });
+
+    QUnit.test("width of input is enougth for all content", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            searchEnabled: true,
+            width: 300
+        });
+        const text = "wwwwwwwwwwwwww";
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+
+        $input.css("padding", "0 10px");
+
+        keyboardMock($input).type(text);
+        const inputWidth = $input.width();
+
+        var inputCopy = createTextElementHiddenCopy($input, text);
+        inputCopy.appendTo("#qunit-fixture");
+
+        assert.ok(inputWidth >= inputCopy.width(), "correctWidth");
+        inputCopy.remove();
     });
 
     QUnit.test("size of input is reset after selecting item", assert => {
@@ -2641,6 +2591,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: true,
             items: ["test1", "test2"]
         });
+
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         const initInputWidth = $input.width();
 
@@ -2653,6 +2604,7 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchEnabled: false,
             editEnabled: false
         });
+
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
         // NOTE: width should be 0.1 because of T393423
         assert.roughEqual($input.width(), 0.1, 0.101, "input has correct width");
@@ -2958,17 +2910,18 @@ QUnit.module("searchEnabled", moduleSetup, () => {
 
     QUnit.testInActiveWindow("input should be cleared after widget focus out", assert => {
         const items = [1, 2, 3];
-
         const $element = $("#tagBox").dxTagBox({
             items,
             searchEnabled: true,
             focusStateEnabled: true
         });
+        const instance = $element.dxTagBox("instance");
 
+        instance.focus();
         const $input = $element.find(`.${TEXTBOX_CLASS}`);
 
         $input.val("123");
-        $($input).trigger("focusout");
+        instance.blur();
 
         assert.equal($input.val(), "", "search value is cleared");
     });
@@ -3044,11 +2997,12 @@ QUnit.module("searchEnabled", moduleSetup, () => {
             searchMode: "startswith"
         });
         const $input = $element.find(".dx-texteditor-input");
+        const inputWidth = $input.width();
 
         keyboardMock($input)
             .type("a");
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal(parseInt($input.attr("size")), items[0].length + 2, "input size is changed for substitution");
+        assert.ok($input.width() > inputWidth, "input size is changed for substitution");
     });
 
     QUnit.test("filter should be reset after the search value clearing (T385456)", assert => {
@@ -4428,9 +4382,8 @@ QUnit.module("single line mode", {
 
     QUnit.test("tags container should be scrolled to the end on focusin (T390041)", (assert) => {
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
     });
 
@@ -4457,7 +4410,6 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
@@ -4466,9 +4418,8 @@ QUnit.module("single line mode", {
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on rendering");
 
-        $input
-            .focus()
-            .blur();
+        this.instance.focus();
+        this.instance.blur();
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, "scroll position is correct on focus out");
     });
@@ -4477,14 +4428,13 @@ QUnit.module("single line mode", {
         this.instance.option("rtlEnabled", true);
 
         const $container = this.$element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
-        const $input = this.$element.find(`.${TEXTBOX_CLASS}`);
         const sign = browser.webkit || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla)
             ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
             : 0;
 
-        $($input).trigger("focusin");
+        this.instance.focus();
         assert.equal($container.scrollLeft(), expectedScrollPosition, "tags container is scrolled to the end");
     });
 

@@ -213,11 +213,34 @@ class MentionModule extends PopupModule {
         };
 
         setTimeout(function() {
-            this.quill.deleteText(startIndex, textLength, SILENT_ACTION);
+            this.quill.insertText(startIndex, ' ', SILENT_ACTION);
+            this.quill.deleteText(startIndex + 1, textLength, SILENT_ACTION);
             this.quill.insertEmbed(startIndex, "mention", value);
-            this.quill.insertText(startIndex + 1, ' ', SILENT_ACTION);
             this.quill.setSelection(startIndex + 2);
         }.bind(this));
+    }
+
+    _getLastInsertOperation(ops) {
+        const lastOperation = ops[ops.length - 1];
+        const isLastOperationInsert = 'insert' in lastOperation;
+
+        if(isLastOperationInsert) {
+            return lastOperation;
+        }
+
+        const isLastOperationDelete = 'delete' in lastOperation;
+
+        if(isLastOperationDelete && ops.length >= 2) {
+            const penultOperation = ops[ops.length - 2];
+            const isPenultOperationInsert = 'insert' in penultOperation;
+            const isSelectionReplacing = isLastOperationDelete && isPenultOperationInsert;
+
+            if(isSelectionReplacing) {
+                return penultOperation;
+            }
+        }
+
+        return null;
     }
 
     onTextChange(newDelta, oldDelta, source) {
@@ -227,7 +250,12 @@ class MentionModule extends PopupModule {
             if(this._isMentionActive) {
                 this._processSearchValue(lastOperation) && this._filterList(this._searchValue);
             } else {
-                this.checkMentionRequest(lastOperation, newDelta.ops);
+                const { ops } = newDelta;
+                const lastInsertOperation = this._getLastInsertOperation(ops);
+
+                if(lastInsertOperation) {
+                    this.checkMentionRequest(lastInsertOperation, ops);
+                }
             }
         }
     }
@@ -340,7 +368,6 @@ class MentionModule extends PopupModule {
             pageX: leftOffset + mentionLeft,
             pageY: topOffset + mentionTop
         });
-
         return {
             of: positionEvent,
             offset: {

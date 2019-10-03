@@ -318,26 +318,6 @@ var baseScatterMethods = {
         return checkFields(data, fieldsToCheck, skippedFields || {}) && data.value === data.value;
     },
 
-    getErrorBarRangeCorrector: function() {
-        var mode,
-            func;
-
-        if(this.areErrorBarsVisible()) {
-            mode = _normalizeEnum(this._options.valueErrorBar.displayMode);
-            func = function(point) {
-                var lowError = point.lowError,
-                    highError = point.highError;
-                switch(mode) {
-                    case "low": return [lowError];
-                    case "high": return [highError];
-                    case "none": return [];
-                    default: return [lowError, highError];
-                }
-            };
-        }
-        return func;
-    },
-
     getValueRangeInitialValue: function() {
         return undefined;
     },

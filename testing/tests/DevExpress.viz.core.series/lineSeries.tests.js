@@ -133,6 +133,7 @@ var checkThreeGroups = function(assert, series) {
     assert.equal(renderer.stub("g").getCall(1).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-elements");
     assert.equal(renderer.stub("g").getCall(2).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-markers");
     assert.equal(renderer.stub("g").getCall(3).returnValue.stub("attr").firstCall.args[0]["class"], "dxc-labels");
+    assert.equal(renderer.stub("g").getCall(3).returnValue._stored_settings["pointer-events"], "none");
 
     assert.equal(series._elementsGroup.stub("append").lastCall.args[0], parentGroup);
     assert.equal(series._markersGroup.stub("append").lastCall.args[0], parentGroup);

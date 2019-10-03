@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import config from "../../core/config";
 import { extend } from "../../core/utils/extend";
+import { equalByValue } from '../../core/utils/common';
 import eventsEngine from "../../events/core/events_engine";
 import errors from "../widget/ui.errors";
 import { getSwatchContainer } from "../widget/swatch_container";
@@ -145,8 +146,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
     },
 
     _setPosition() {
-        this._normalizePosition();
-        this._actions.onPositioned({ position: this._renderPosition() });
+        this._hide();
+        this._show();
     },
 
     _optionChanged(args) {
@@ -164,7 +165,9 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 this._renderCloseIcon();
                 break;
             case "position":
-                this._setPosition();
+                if(!equalByValue(args.value, args.previousValue)) {
+                    this._setPosition();
+                }
                 break;
             default:
                 this.callBase(args);

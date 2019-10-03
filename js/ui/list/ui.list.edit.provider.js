@@ -226,8 +226,8 @@ var EditProvider = Class.inherit({
         return this._eventHandler("handleClick", $itemElement, e);
     },
 
-    handleKeyboardEvents: function(itemIndex, focusOnList) {
-        return this._eventHandler("handleKeyboardEvents", itemIndex, focusOnList);
+    handleKeyboardEvents: function(currentFocusedIndex, moveFocusUp) {
+        return this._eventHandler("handleKeyboardEvents", currentFocusedIndex, moveFocusUp);
     },
 
     handleEnterPressing: function() {

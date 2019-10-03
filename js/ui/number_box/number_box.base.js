@@ -18,6 +18,8 @@ var math = Math;
 var WIDGET_CLASS = "dx-numberbox";
 var FIREFOX_CONTROL_KEYS = ["tab", "del", "backspace", "leftArrow", "rightArrow", "home", "end", "enter"];
 
+var FORCE_VALUECHANGE_EVENT_NAMESPACE = "NumberBoxForceValueChange";
+
 var NumberBoxBase = TextEditor.inherit({
 
     _supportedKeys: function() {
@@ -353,7 +355,10 @@ var NumberBoxBase = TextEditor.inherit({
 
     _renderValueChangeEvent: function() {
         this.callBase();
-        eventsEngine.on(this._input(), "focusout", this._forceRefreshInputValue.bind(this));
+
+        var forceValueChangeEvent = eventUtils.addNamespace("focusout", FORCE_VALUECHANGE_EVENT_NAMESPACE);
+        eventsEngine.off(this.element(), forceValueChangeEvent);
+        eventsEngine.on(this.element(), forceValueChangeEvent, this._forceRefreshInputValue.bind(this));
     },
 
     _forceRefreshInputValue: function() {

@@ -28,7 +28,13 @@ const KeyboardProcessor = Class.inherit({
         this._childProcessors = [];
         if(this._element) {
             this._processFunction = (e) => {
-                this.process(e);
+                const isNotFocusTarget = this._focusTarget && this._focusTarget !== e.target && inArray(e.target, this._focusTarget) < 0;
+                const shouldSkipProcessing = this._isComposingJustFinished && e.which === 229 || this._isComposing || isNotFocusTarget;
+
+                this._isComposingJustFinished = false;
+                if(!shouldSkipProcessing) {
+                    this.process(e);
+                }
             };
             this._toggleProcessingWithContext = this.toggleProcessing.bind(this);
 
@@ -76,14 +82,6 @@ const KeyboardProcessor = Class.inherit({
     },
 
     process: function(e) {
-        const isNotFocusTarget = this._focusTarget && this._focusTarget !== e.target && inArray(e.target, this._focusTarget) < 0;
-        const shouldSkipProcessing = this._isComposingJustFinished && e.which === 229 || this._isComposing || isNotFocusTarget;
-
-        this._isComposingJustFinished = false;
-        if(shouldSkipProcessing) {
-            return false;
-        }
-
         const args = {
             keyName: normalizeKeyName(e),
             key: e.key,

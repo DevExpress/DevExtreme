@@ -132,7 +132,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     return item.selected;
                 },
                 isSelectableItem: function(item) {
-                    return item && item.rowType === "data" && !item.inserted;
+                    return item && item.rowType === "data" && !item.isNewRow;
                 },
                 getItemData: function(item) {
                     return item && (item.oldData || item.data || item);
@@ -780,7 +780,7 @@ module.exports = {
 
             rowsView: {
                 renderSelectCheckBoxContainer: function($container, options) {
-                    if(options.rowType === "data" && !options.row.inserted) {
+                    if(options.rowType === "data" && !options.row.isNewRow) {
                         $container.addClass(EDITOR_CELL_CLASS);
                         this._attachCheckBoxClickEvent($container);
 

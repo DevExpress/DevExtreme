@@ -723,6 +723,94 @@ QUnit.module("Filter value", function() {
         clickByOutside();
         assert.deepEqual(filterBuilder.option("value"), ["field2", "contains", "K&S Music"], "expression is correct");
     });
+
+    // T812261
+    QUnit.test("hierarchical fields", function(assert) {
+        var container = $("#container"),
+            $fields;
+
+        container.dxFilterBuilder({
+            value: [
+                ["id", "=", "1"]
+            ],
+            allowHierarchicalFields: true,
+            fields: [{
+                dataField: "id",
+            }, {
+                dataField: "address.state",
+            }, {
+                dataField: "address.city",
+            }]
+        }).dxFilterBuilder("instance");
+
+        // act, assert
+        $("." + FILTER_BUILDER_ITEM_FIELD_CLASS).trigger("dxclick");
+
+        $fields = $("." + TREE_VIEW_ITEM_CLASS);
+
+        assert.equal($fields.length, 2, "treeview items count");
+        assert.equal($(".dx-treeview-toggle-item-visibility").length, 1, "");
+
+        assert.equal($fields.eq(0).text(), "Id");
+        assert.equal($fields.eq(1).text(), "Address");
+
+        $(".dx-treeview-toggle-item-visibility").trigger("dxclick");
+
+        $fields = $("." + TREE_VIEW_ITEM_CLASS);
+
+        assert.equal($fields.length, 4, "treeview items count");
+
+        assert.equal($fields.eq(0).text(), "Id");
+        assert.equal($fields.eq(1).text(), "Address");
+        assert.equal($fields.eq(2).text(), "State");
+        assert.equal($fields.eq(3).text(), "City");
+    });
+
+    // T812261, T750946
+    QUnit.test("hierarchical fields with two fields with the same dataField", function(assert) {
+        var container = $("#container"),
+            $fields;
+
+        container.dxFilterBuilder({
+            value: [
+                ["id", "=", "1"]
+            ],
+            allowHierarchicalFields: true,
+            fields: [{
+                dataField: "id",
+            }, {
+                dataField: "address.same",
+                caption: "State",
+                name: "State"
+            }, {
+                dataField: "address.same",
+                caption: "City",
+                name: "City"
+            }]
+        }).dxFilterBuilder("instance");
+
+        // act, assert
+        $("." + FILTER_BUILDER_ITEM_FIELD_CLASS).trigger("dxclick");
+
+        $fields = $("." + TREE_VIEW_ITEM_CLASS);
+
+        assert.equal($fields.length, 2, "treeview items count");
+        assert.equal($(".dx-treeview-toggle-item-visibility").length, 1, "");
+
+        assert.equal($fields.eq(0).text(), "Id");
+        assert.equal($fields.eq(1).text(), "Address");
+
+        $(".dx-treeview-toggle-item-visibility").trigger("dxclick");
+
+        $fields = $("." + TREE_VIEW_ITEM_CLASS);
+
+        assert.equal($fields.length, 4, "treeview items count");
+
+        assert.equal($fields.eq(0).text(), "Id");
+        assert.equal($fields.eq(1).text(), "Address");
+        assert.equal($fields.eq(2).text(), "State");
+        assert.equal($fields.eq(3).text(), "City");
+    });
 });
 
 QUnit.module("Create editor", function() {

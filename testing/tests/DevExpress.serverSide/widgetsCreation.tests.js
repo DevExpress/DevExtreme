@@ -45,6 +45,7 @@ var widgets = {
     RadioGroup: require("ui/radio_group"),
     Resizable: require("ui/resizable"),
     ResponsiveBox: require("ui/responsive_box"),
+    Sankey: require("viz/sankey"),
     Scheduler: require("ui/scheduler"),
     ScrollView: require("ui/scroll_view"),
     SelectBox: require("ui/select_box"),

@@ -117,7 +117,7 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxHtmlEditorToolbar.items
-            * @type Array<dxHtmlEditorToolbarItem,string>
+            * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
             */
 
             /**
@@ -126,7 +126,7 @@ const HtmlEditor = Editor.inherit({
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatName
-            * @type string
+            * @type Enums.HtmlEditorToolbarItem|string
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatValues
@@ -588,9 +588,18 @@ const HtmlEditor = Editor.inherit({
                     this._quillInstance.getModule("resizing").option(args.name, args.value);
                 }
                 break;
+            case "width":
+                this.callBase(args);
+                this._repaintToolbar();
+                break;
             default:
                 this.callBase(args);
         }
+    },
+
+    _repaintToolbar: function() {
+        const toolbar = this._quillInstance.getModule("toolbar");
+        toolbar && toolbar.repaint();
     },
 
     _updateHtmlContent: function(newMarkup) {
@@ -689,7 +698,7 @@ const HtmlEditor = Editor.inherit({
     /**
     * @name dxHtmlEditorMethods.format
     * @publicName format(formatName, formatValue)
-    * @param1 formatName:string
+    * @param1 formatName:Enums.HtmlEditorFormat|string
     * @param2 formatValue:any
     */
     format: function(formatName, formatValue) {
@@ -701,7 +710,7 @@ const HtmlEditor = Editor.inherit({
     * @publicName formatText(index, length, formatName, formatValue)
     * @param1 index:number
     * @param2 length:number
-    * @param3 formatName:string
+    * @param3 formatName:Enums.HtmlEditorFormat|string
     * @param4 formatValue:any
     */
     /**
@@ -720,7 +729,7 @@ const HtmlEditor = Editor.inherit({
     * @publicName formatLine(index, length, formatName, formatValue)
     * @param1 index:number
     * @param2 length:number
-    * @param3 formatName:string
+    * @param3 formatName:Enums.HtmlEditorFormat|string
     * @param4 formatValue:any
     */
     /**

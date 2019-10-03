@@ -673,17 +673,19 @@ var SchedulerAppointments = CollectionWidget.inherit({
             result = endDate.getTime() + deltaTime,
             visibleDayDuration = (endDayHour - startDayHour) * toMs("hour");
 
-        var daysCount = Math.ceil(deltaTime / visibleDayDuration),
-            maxDate = new Date(endDate);
+        var daysCount = deltaTime > 0 ? Math.ceil(deltaTime / visibleDayDuration) : Math.floor(deltaTime / visibleDayDuration),
+            maxDate = new Date(endDate),
+            minDate = new Date(endDate);
 
+        minDate.setHours(startDayHour, 0, 0, 0);
         maxDate.setHours(endDayHour, 0, 0, 0);
 
-        if(result > maxDate.getTime()) {
+        if(result > maxDate.getTime() || result <= minDate.getTime()) {
             var tailOfCurrentDay = maxDate.getTime() - endDate.getTime(),
                 tailOfPrevDays = deltaTime - tailOfCurrentDay;
 
             var lastDay = new Date(endDate.setDate(endDate.getDate() + daysCount));
-            lastDay.setHours(startDayHour);
+            lastDay.setHours(startDayHour, 0, 0, 0);
 
             result = lastDay.getTime() + tailOfPrevDays - visibleDayDuration * (daysCount - 1);
         }
@@ -696,17 +698,19 @@ var SchedulerAppointments = CollectionWidget.inherit({
             result = startDate.getTime() - deltaTime,
             visibleDayDuration = (endDayHour - startDayHour) * toMs("hour");
 
-        var daysCount = Math.ceil(deltaTime / visibleDayDuration),
+        var daysCount = deltaTime > 0 ? Math.ceil(deltaTime / visibleDayDuration) : Math.floor(deltaTime / visibleDayDuration),
+            maxDate = new Date(startDate),
             minDate = new Date(startDate);
 
         minDate.setHours(startDayHour, 0, 0, 0);
+        maxDate.setHours(endDayHour, 0, 0, 0);
 
-        if(result < minDate.getTime()) {
+        if(result < minDate.getTime() || result >= maxDate.getTime()) {
             var tailOfCurrentDay = startDate.getTime() - minDate.getTime(),
                 tailOfPrevDays = deltaTime - tailOfCurrentDay;
 
             var firstDay = new Date(startDate.setDate(startDate.getDate() - daysCount));
-            firstDay.setHours(endDayHour);
+            firstDay.setHours(endDayHour, 0, 0, 0);
 
             result = firstDay.getTime() - tailOfPrevDays + visibleDayDuration * (daysCount - 1);
         }

@@ -211,8 +211,6 @@ var TextEditorMask = TextEditorBase.inherit({
         this._maskStrategy.attachEvents();
         this._parseMask();
         this._renderMaskedValue();
-
-        this._changedValue = this._input().val();
     },
 
     _suppressCaretChanging: function(callback, args) {
@@ -398,7 +396,7 @@ var TextEditorMask = TextEditorBase.inherit({
         return text.replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
     },
 
-    _maskKeyHandler: function(e, tryHandleKeyCallback) {
+    _maskKeyHandler: function(e, keyHandler) {
         if(this.option("readOnly")) {
             return;
         }
@@ -408,15 +406,26 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this._handleSelection();
 
-        if(!tryHandleKeyCallback.call(this)) {
-            return;
-        }
+        const previousText = this._input().val();
+        const raiseInputEvent = () => {
+            if(previousText !== this._input().val()) {
+                this._maskStrategy.runWithoutEventProcessing(
+                    () => eventsEngine.trigger(this._input(), "input")
+                );
+            }
+        };
 
-        this.setForwardDirection();
-        this._adjustCaret();
-        this._changedValue = this._input().val();
-        this._displayMask();
-        this._maskRulesChain.reset();
+        const handled = keyHandler();
+
+        if(handled) {
+            handled.then(raiseInputEvent);
+        } else {
+            this.setForwardDirection();
+            this._adjustCaret();
+            this._displayMask();
+            this._maskRulesChain.reset();
+            raiseInputEvent();
+        }
     },
 
     _handleKey: function(key, direction) {

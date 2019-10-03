@@ -276,8 +276,8 @@ var NativeStrategy = Class.inherit({
 
     scrollBy: function(distance) {
         var location = this.location();
-        this._$container.scrollTop(-location.top - distance.top + this.option("pushBackValue"));
-        this._$container.scrollLeft(-location.left - distance.left);
+        this._$container.scrollTop(Math.round(-location.top - distance.top + this.option("pushBackValue")));
+        this._$container.scrollLeft(Math.round(-location.left - distance.left));
     },
 
     validate: function(e) {

@@ -475,4 +475,20 @@ define(function(require) {
             assert.equal(this, context);
         });
     });
+
+    QUnit.test("Can resolve chain with an empty string and zero", function(assert) {
+        var deferred = new Deferred();
+
+        deferred.then(function(v) {
+            assert.equal(v, 1);
+            return "";
+        }).then(function(v) {
+            assert.strictEqual(v, "");
+            return 0;
+        }).then(function(v) {
+            assert.strictEqual(v, 0);
+        });
+
+        deferred.resolve(1);
+    });
 });

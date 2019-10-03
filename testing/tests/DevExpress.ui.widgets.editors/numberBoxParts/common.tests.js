@@ -130,7 +130,7 @@ QUnit.module("basics", {}, () => {
             .caret(3)
             .type("..200");
 
-        $input.focusout();
+        instance.blur();
 
         assert.strictEqual(instance.option("value"), 100, "validate value on focusout");
     });
@@ -615,6 +615,7 @@ QUnit.module("basics", {}, () => {
                 return (value < 10 ? "0" : "") + value;
             }
         });
+        const instance = $numberBox.dxNumberBox("instance");
 
         const $input = $numberBox.find(".dx-texteditor-input");
 
@@ -623,9 +624,9 @@ QUnit.module("basics", {}, () => {
             .type("0");
 
         $input.trigger("change");
-        $input.trigger("focusout");
+        instance.blur();
 
-        assert.equal($numberBox.dxNumberBox("option", "value"), 50, "value is correct");
+        assert.equal(instance.option("value"), 50, "value is correct");
         assert.equal($numberBox.find(".dx-texteditor-input").val(), "50", "input value is correct");
     });
 
@@ -885,20 +886,20 @@ QUnit.module("input value updating", {}, () => {
         keyboard
             .type("-");
         assert.equal($input.val(), "-");
-        $input.focusout();
+        instance.blur();
 
         $input.val("");
         keyboard
             .type("2e");
         assert.equal($input.val(), "2e");
-        $input.focusout();
+        instance.blur();
 
         $input.val("");
         keyboard
             .type(".5");
 
         assert.equal($input.val(), ".5");
-        $input.focusout();
+        instance.blur();
         assert.equal(instance.option("value"), 0.5);
 
         $input.val("1");
@@ -912,7 +913,7 @@ QUnit.module("input value updating", {}, () => {
             .triggerEvent("keyup");
 
         assert.equal($input.val(), "1.5");
-        $input.focusout();
+        instance.blur();
 
         $input.val("");
         keyboard
@@ -924,7 +925,7 @@ QUnit.module("input value updating", {}, () => {
             .triggerEvent("keyup");
 
         assert.equal($input.val(), "-5");
-        $input.focusout();
+        instance.blur();
     });
 
     QUnit.test("T378082 - value should be null if the incorrect value is entered", (assert) => {
@@ -957,7 +958,7 @@ QUnit.module("input value updating", {}, () => {
         assert.equal(instance.option("value"), 7, "value is correct");
         assert.equal($input.val(), "7.", "input is not cleaned yet");
 
-        $input.focusout();
+        instance.blur();
         assert.equal(instance.option("value"), 7, "value is correct");
         assert.equal($input.val(), "7", "input is cleaned");
     });
@@ -1526,7 +1527,7 @@ QUnit.module("regressions", {
             .type(".1.1")
             .change();
 
-        $input.focusout();
+        this.instance.blur();
 
         if(this.instance.option("mode") === "text") {
             assert.equal(this.instance.option("value"), 0.1, "check that incorrect input handling is work");
@@ -1540,7 +1541,7 @@ QUnit.module("regressions", {
             .type("1...")
             .change();
 
-        $input.focusout();
+        this.instance.blur();
         assert.equal(this.instance.option("value") || '', $input.val(), "check that input value equal option value after incorrect value");
     });
 
@@ -1569,7 +1570,7 @@ QUnit.module("regressions", {
             .val("1e2")
             .trigger("change");
         assert.strictEqual(instance.option("value"), 100, "check widgets option value 100");
-        $input.focusout();
+        instance.blur();
         expectedInputValue = isTextMode ? "100" : "1e2";
         assert.strictEqual($input.val(), expectedInputValue, "check input value 100");
 
@@ -1577,7 +1578,7 @@ QUnit.module("regressions", {
             .val("2e+3")
             .trigger("change");
         assert.strictEqual(instance.option("value"), 2000, "check widgets option value 2000");
-        $input.focusout();
+        instance.blur();
         expectedInputValue = isTextMode ? "2000" : "2e+3";
         assert.strictEqual($input.val(), expectedInputValue, "check input value 2000");
 
@@ -1585,7 +1586,7 @@ QUnit.module("regressions", {
             .val("1e-2")
             .trigger("change");
         assert.strictEqual(instance.option("value"), 0.01, "check widgets option value 0.01");
-        $input.focusout();
+        instance.blur();
         expectedInputValue = isTextMode ? "0.01" : "1e-2";
         assert.strictEqual($input.val(), expectedInputValue, "check input value 0.01");
 
@@ -1596,7 +1597,7 @@ QUnit.module("regressions", {
             .type(" 2")
             .change();
         assert.equal(instance.option("value"), 2, "check widgets option value 2");
-        $input.focusout();
+        instance.blur();
         assert.equal($input.val(), "2", "check input value 2");
 
         instance.option("value", "1");
@@ -1605,7 +1606,7 @@ QUnit.module("regressions", {
             .type(" 1")
             .change();
         assert.equal(instance.option("value"), 11, "check widgets option value 1");
-        $input.focusout();
+        instance.blur();
         assert.equal($input.val(), "11", "check input value 1");
     });
 
@@ -1684,7 +1685,7 @@ QUnit.module("regressions", {
             .change();
 
         assert.equal(instance.option("value"), 1.1);
-        $input.focusout();
+        instance.blur();
         assert.equal($input.val(), "1.1");
 
         instance.option("value", "");
@@ -1695,7 +1696,7 @@ QUnit.module("regressions", {
             .change();
 
         assert.equal(instance.option("value"), 1.2);
-        $input.focusout();
+        instance.blur();
         assert.equal($input.val(), "1.2");
     });
 
@@ -1925,8 +1926,8 @@ QUnit.module("number validation", {}, () => {
         keyboard
             .type(initialValue);
 
-        $input.focusout();
-        $input.focus();
+        numberBox.blur();
+        numberBox.focus();
 
         keyboard
             .caret(30)

@@ -30,6 +30,8 @@ exports.FocusController = core.ViewController.inherit((function() {
                 args.handled = true;
             } else if(args.name === "focusedRowEnabled") {
                 args.handled = true;
+            } else if(args.name === "skipFocusedRowNavigation") {
+                args.handled = true;
             } else {
                 this.callBase(args);
             }
@@ -105,7 +107,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(key === undefined) {
                 this._resetFocusedRow();
             } else {
-                this.navigateToRow(key);
+                this._navigateToRow(key, true);
             }
         },
 
@@ -140,10 +142,25 @@ exports.FocusController = core.ViewController.inherit((function() {
          * @param1 key:any
          */
         navigateToRow: function(key) {
+            this._navigateToRow(key);
+        },
+        _navigateToRow: function(key, needFocusRow) {
             var that = this,
                 dataController = this.getController("data"),
                 rowIndex = this.option("focusedRowIndex"),
-                result = new Deferred();
+                result = new Deferred(),
+                navigateTo = (key, result) => {
+                    if(needFocusRow) {
+                        that._triggerUpdateFocusedRow(key, result);
+                    } else {
+                        let rowsView = that.getView("rowsView"),
+                            rowIndex = that.getController("data").getRowIndexByKey(key),
+                            rowElement = rowsView.getRow(rowIndex);
+                        rowsView._scrollToElement(rowElement);
+                    }
+                };
+
+            that.option("skipFocusedRowNavigation", !needFocusRow);
 
             if(key === undefined || !dataController.dataSource()) {
                 return result.reject().promise();
@@ -153,7 +170,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 isPaginate = dataController.getDataSource().paginate();
 
             if(!isPaginate || rowIndex >= 0 && rowIndex === rowIndexByKey) {
-                that._triggerUpdateFocusedRow(key, result);
+                navigateTo(key, result);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
                     if(pageIndex < 0) {
@@ -165,28 +182,30 @@ exports.FocusController = core.ViewController.inherit((function() {
                             if(that.isRowFocused(key)) {
                                 result.resolve(that._getFocusedRowIndexByKey(key));
                             } else {
-                                that._triggerUpdateFocusedRow(key, result);
+                                navigateTo(key, result);
                             }
                         }).fail(result.reject);
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
                             if(that.option("scrolling.rowRenderingMode") === "virtual") {
                                 setTimeout(function() {
-                                    that._navigateToVirtualRow(key, result);
+                                    that._navigateToVirtualRow(key, result, needFocusRow);
                                 });
                             } else {
-                                that._triggerUpdateFocusedRow(key, result);
+                                navigateTo(key, result);
                             }
 
                         }).fail(result.reject);
                     }
-                }).fail(result.reject);
+                })
+                    .always(() => that.option("skipFocusedRowNavigation", false))
+                    .fail(result.reject);
             }
 
             return result.promise();
         },
 
-        _navigateToVirtualRow: function(key, result) {
+        _navigateToVirtualRow: function(key, result, needFocusRow) {
             var that = this,
                 dataController = this.getController("data"),
                 rowsScrollController = dataController._rowsScrollController,
@@ -197,12 +216,14 @@ exports.FocusController = core.ViewController.inherit((function() {
                 var focusedRowIndex = rowIndex + dataController.getRowIndexOffset() - dataController.getRowIndexDelta(),
                     offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
-                var triggerUpdateFocusedRow = function() {
-                    that.component.off("contentReady", triggerUpdateFocusedRow);
-                    that._triggerUpdateFocusedRow(key, result);
-                };
+                if(needFocusRow) {
+                    var triggerUpdateFocusedRow = function() {
+                        that.component.off("contentReady", triggerUpdateFocusedRow);
+                        that._triggerUpdateFocusedRow(key, result);
+                    };
+                    that.component.on("contentReady", triggerUpdateFocusedRow);
+                }
 
-                that.component.on("contentReady", triggerUpdateFocusedRow);
                 scrollable.scrollTo({ y: offset });
             }
         },
@@ -220,8 +241,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                         focusedRowKey: key
                     });
                 } else {
-                    let rowIndex = dataController.getRowIndexByKey(key);
-                    this._scrollToFocusedRow(this.getView("rowsView").getRow(rowIndex));
+                    let rowIndex = dataController.getRowIndexByKey(key),
+                        rowsView = this.getView("rowsView");
+                    rowsView._scrollToElement(rowsView.getRow(rowIndex));
                 }
 
                 result && result.resolve(focusedRowIndex);
@@ -251,7 +273,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                     keyboardController.setFocusedRowIndex(currentFocusedRowIndex);
                     this._triggerUpdateFocusedRow(focusedRowKey);
                 } else {
-                    this.navigateToRow(focusedRowKey).done(focusedRowIndex => {
+                    this._navigateToRow(focusedRowKey, true).done(focusedRowIndex => {
                         if(currentFocusedRowIndex >= 0 && focusedRowIndex < 0) {
                             this._focusRowByIndex();
                         }
@@ -308,44 +330,16 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
         _prepareFocusedRow: function(changedItem, $tableElement, focusedRowIndex) {
             var $row,
-                tabIndex = this.option("tabindex") || 0;
+                tabIndex = this.option("tabindex") || 0,
+                rowsView = this.getView("rowsView");
 
             if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
-                $row = $(this.getView("rowsView")._getRowElements($tableElement).eq(focusedRowIndex));
+                $row = $(rowsView._getRowElements($tableElement).eq(focusedRowIndex));
                 $row.addClass(ROW_FOCUSED_CLASS).attr("tabindex", tabIndex);
-                this._scrollToFocusedRow($row);
+                rowsView._scrollToElement($row);
             }
 
             return $row;
-        },
-
-        _scrollToFocusedRow: function($row) {
-            var that = this,
-                rowsView = that.getView("rowsView"),
-                $rowsViewElement = rowsView.element(),
-                $focusedRow;
-
-            if(!$rowsViewElement) {
-                return;
-            }
-
-            $focusedRow = $row && $row.length ? $row : $rowsViewElement.find(FOCUSED_ROW_SELECTOR);
-
-            if($focusedRow.length > 0) {
-                var focusedRowRect = $focusedRow[0].getBoundingClientRect(),
-                    rowsViewRect = rowsView.element()[0].getBoundingClientRect(),
-                    diff;
-
-                if(focusedRowRect.bottom > rowsViewRect.bottom) {
-                    diff = focusedRowRect.bottom - rowsViewRect.bottom;
-                } else if(focusedRowRect.top < rowsViewRect.top) {
-                    diff = focusedRowRect.top - rowsViewRect.top;
-                }
-
-                if(diff) {
-                    rowsView.scrollTo({ y: rowsView._scrollTop + diff });
-                }
-            }
         }
     };
 })());
@@ -397,10 +391,8 @@ module.exports = {
                     var rowIndex = this.option("focusedRowIndex"),
                         columnIndex = this.option("focusedColumnIndex");
 
-                    if(this.option("focusedRowEnabled")) {
-                        this.createAction("onFocusedRowChanging", { excludeValidators: ["disabled", "readOnly"] });
-                        this.createAction("onFocusedRowChanged", { excludeValidators: ["disabled", "readOnly"] });
-                    }
+                    this.createAction("onFocusedRowChanging", { excludeValidators: ["disabled", "readOnly"] });
+                    this.createAction("onFocusedRowChanged", { excludeValidators: ["disabled", "readOnly"] });
 
                     this.createAction("onFocusedCellChanging", { excludeValidators: ["disabled", "readOnly"] });
                     this.createAction("onFocusedCellChanged", { excludeValidators: ["disabled", "readOnly"] });
@@ -422,7 +414,7 @@ module.exports = {
                     this.callBase(rowIndex);
 
                     let visibleRow = this.getController("data").getVisibleRows()[rowIndex];
-                    if(!visibleRow || !visibleRow.inserted) {
+                    if(!visibleRow || !visibleRow.isNewRow) {
                         this.option("focusedRowIndex", rowIndex);
                     }
                 },
@@ -508,9 +500,10 @@ module.exports = {
                 },
 
                 _fireChanged: function(e) {
-                    var isPartialUpdateWithDeleting;
+                    var isPartialUpdateWithDeleting,
+                        skipFocusedRowNavigation = this.option("skipFocusedRowNavigation");
 
-                    if(this.option("focusedRowEnabled") && this._dataSource) {
+                    if(this.option("focusedRowEnabled") && !skipFocusedRowNavigation && this._dataSource) {
                         let isPartialUpdate = e.changeType === "update" && e.repaintChangesOnly;
 
                         isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf("remove") >= 0;
@@ -545,7 +538,7 @@ module.exports = {
                     this._prevRenderingPageIndex = renderingPageIndex;
 
                     if(reload && focusedRowKey !== undefined) {
-                        focusController.navigateToRow(focusedRowKey).done(function(focusedRowIndex) {
+                        focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
                             if(focusedRowIndex < 0) {
                                 focusController._focusRowByIndex();
                             }
@@ -742,12 +735,12 @@ module.exports = {
                         dataSource = that.component.getController("data")._dataSource,
                         operationTypes = dataSource && dataSource.operationTypes();
 
-                    that._scrollToFocusOnResize = that._scrollToFocusOnResize || function() {
-                        that.getController("focus")._scrollToFocusedRow($row);
-                        that.resizeCompleted.remove(that._scrollToFocusOnResize);
-                    };
-
                     if($row.length) {
+                        that._scrollToFocusOnResize = that._scrollToFocusOnResize || function() {
+                            that._scrollToElement($row);
+                            that.resizeCompleted.remove(that._scrollToFocusOnResize);
+                        };
+
                         $row.attr("tabIndex", tabIndex);
                         if(rowIndex >= 0) {
                             if(columnIndex < 0) {
@@ -763,6 +756,11 @@ module.exports = {
                             }
                         }
                     }
+                },
+
+                _scrollToElement: function(element) {
+                    const scrollable = this.getScrollable();
+                    scrollable && scrollable.scrollToElement(element);
                 }
             }
         }

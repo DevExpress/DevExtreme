@@ -577,6 +577,24 @@ QUnit.test("Closed path", function(assert) {
     });
 });
 
+QUnit.test("Several closed paths (T809807)", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<path d="M 36 181 L 184 98 L 331 280 Z M 36 181 L 184 98 L 331 280 Z" stroke-width="2" stroke="#FF0000" fill="none"></path>' + testingMarkupEnd,
+        imageBlob = getData(markup);
+
+    assert.expect(3);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.paths[0].length, 8, "Four components on path");
+            assert.deepEqual(that.paths[0][3], { action: "Z" }, "Fourth component of path");
+            assert.deepEqual(that.paths[0][7], { action: "Z" }, "Eighth component of path");
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test("Filled path", function(assert) {
     var that = this,
         done = assert.async(),

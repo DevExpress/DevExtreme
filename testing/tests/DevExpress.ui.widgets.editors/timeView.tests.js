@@ -419,7 +419,7 @@ QUnit.test("boundary hours should change correctly after day time changing", fun
     assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 0, 0, 0, 0), 0, "time is correct");
 });
 
-QUnit.test("day time should be changed when clock moves back through the boundary", function(assert) {
+QUnit.test("midday part should not be changed when clock moves back through the boundary (T808116)", function(assert) {
     var $element = $("#timeView").dxTimeView({
             use24HourFormat: false,
             value: new Date(2011, 0, 1, 12, 0, 10, 0)
@@ -429,8 +429,8 @@ QUnit.test("day time should be changed when clock moves back through the boundar
         instance = $element.dxTimeView("instance");
 
     hourNumberBox.option("value", 11);
-    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_AM, "am is selected");
-    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 11, 0, 0, 0), "time is correct");
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_PM, "pm is selected");
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 23, 0, 0, 0), "time is correct");
 
     hourNumberBox.option("value", 12);
     assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_PM, "pm is selected");

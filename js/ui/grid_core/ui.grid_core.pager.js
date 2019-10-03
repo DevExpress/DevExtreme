@@ -26,7 +26,7 @@ var PagerView = modules.View.inherit({
                 } else {
                     that.render();
                 }
-            } else if(!e || e.changeType !== "update") {
+            } else if(!e || e.changeType !== "update" && e.changeType !== "updateSelection") {
                 that.render();
             }
         });

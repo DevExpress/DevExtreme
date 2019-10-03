@@ -240,11 +240,11 @@ var stubInvokeMethod = function(instance, options) {
         });
         var $element = this.instance.$element();
 
-        assert.roughEqual($element.find("." + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 24, 1, "Indicator has correct height");
+        assert.roughEqual($element.find("." + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 25, 1, "Indicator has correct height");
 
         this.instance.option("allDayExpanded", true);
 
-        assert.roughEqual($element.find("." + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 74, 1, "Indicator has correct height");
+        assert.roughEqual($element.find("." + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 75, 1, "Indicator has correct height");
     });
 
     QUnit.test("Shader should have correct height, Day view", function(assert) {

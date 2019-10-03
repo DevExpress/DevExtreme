@@ -1400,6 +1400,42 @@ QUnit.test("click should not be blocked on menu's item", function(assert) {
     }
 });
 
+QUnit.test("Hover root menu item -> move mouse pointer to the first submenu item (disabled)", function(assert) {
+    if(!isDeviceDesktop(assert)) return;
+
+    var menu$ = $("#menu").dxMenu({
+            items: [{
+                text: "Item 1",
+                items: [{
+                    disabled: true, text: "item 1_1"
+                }]
+            }],
+            showFirstSubmenuMode: { name: "onHover", delay: 0 },
+            hideSubmenuOnMouseLeave: true
+        }),
+        $rootMenuItem = $(menu$).find("." + DX_MENU_ITEM_CLASS);
+
+    menu$.trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
+
+    $($rootMenuItem).trigger("dxpointermove");
+    this.clock.tick(100);
+
+    var submenu = getSubMenuInstance($rootMenuItem);
+    var $subMenuItem = hoverSubmenuItemByIndex(submenu, 0);
+    var oldQuerySelector = submenu.itemsContainer().get(0).querySelector;
+    submenu.itemsContainer().get(0).querySelector = function(selectors) {
+        if(selectors === ":hover") {
+            return "this is a DOM element";
+        }
+        return oldQuerySelector(selectors);
+    };
+
+    menu$.trigger($.Event("dxhoverend", { target: $rootMenuItem.get(0), relatedTarget: $subMenuItem }));
+    this.clock.tick(100);
+
+    submenu = getSubMenuInstance($rootMenuItem);
+    assert.ok(submenu.option("visible"), "submenu shown");
+});
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {

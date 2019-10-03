@@ -1,11 +1,12 @@
-var eventsEngine = require("../../events/core/events_engine"),
-    pointerEvents = require("../../events/pointer"),
-    window = require("../../core/utils/window").getWindow(),
-    domAdapter = require("../../core/dom_adapter"),
-    each = require("../../core/utils/iterator").each,
-    msPointerEnabled = require("../../core/utils/support").pointer,
+import eventsEngine from "../../events/core/events_engine";
+import pointerEvents from "../../events/pointer";
+import windowModule from "../../core/utils/window";
+import domAdapter from "../../core/dom_adapter";
+import { each } from "../../core/utils/iterator";
+import { pointer as msPointerEnabled } from "../../core/utils/support";
 
-    MIN_MANUAL_SELECTING_WIDTH = 10;
+const MIN_MANUAL_SELECTING_WIDTH = 10;
+const window = windowModule.getWindow();
 
 function isLeftButtonPressed(event) {
     var e = event || window.event,
@@ -68,44 +69,44 @@ function initializeAreaEvents(controller, area, state, getRootOffsetLeft) {
         isActive = false,
         initialPosition,
         movingHandler = null,
-        docEvents = {};
+        docEvents = {
+            [pointerEvents.move](e) {
+                var position,
+                    offset;
+                if(isTouchEvent !== isTouchEventArgs(e)) return;
 
-    docEvents[pointerEvents.move] = function(e) {
-        var position,
-            offset;
-        if(isTouchEvent !== isTouchEventArgs(e)) return;
-
-        if(!isLeftButtonPressed(e)) {
-            cancel();
-        }
-        if(isActive) {
-            position = getEventPageX(e);
-            offset = getRootOffsetLeft();
-            if(movingHandler) {
-                movingHandler(position - offset);
-            } else {
-                if(state.manualRangeSelectionEnabled && Math.abs(initialPosition - position) >= MIN_MANUAL_SELECTING_WIDTH) {
-                    movingHandler = controller.placeSliderAndBeginMoving(initialPosition - offset, position - offset);
+                if(!isLeftButtonPressed(e)) {
+                    cancel(e);
+                }
+                if(isActive) {
+                    position = getEventPageX(e);
+                    offset = getRootOffsetLeft();
+                    if(movingHandler) {
+                        movingHandler(position - offset, e);
+                    } else {
+                        if(state.manualRangeSelectionEnabled && Math.abs(initialPosition - position) >= MIN_MANUAL_SELECTING_WIDTH) {
+                            movingHandler = controller.placeSliderAndBeginMoving(initialPosition - offset, position - offset, e);
+                        }
+                    }
+                }
+            },
+            [pointerEvents.up](e) {
+                var position;
+                if(isActive) {
+                    position = getEventPageX(e);
+                    if(!movingHandler && state.moveSelectedRangeByClick && Math.abs(initialPosition - position) < MIN_MANUAL_SELECTING_WIDTH) {
+                        controller.moveSelectedArea(position - getRootOffsetLeft(), e);
+                    }
+                    cancel(e);
                 }
             }
-        }
-    };
-    docEvents[pointerEvents.up] = function(e) {
-        var position;
-        if(isActive) {
-            position = getEventPageX(e);
-            if(!movingHandler && state.moveSelectedRangeByClick && Math.abs(initialPosition - position) < MIN_MANUAL_SELECTING_WIDTH) {
-                controller.moveSelectedArea(position - getRootOffsetLeft());
-            }
-            cancel();
-        }
-    };
+        };
 
-    function cancel() {
+    function cancel(e) {
         if(isActive) {
             isActive = false;
             if(movingHandler) {
-                movingHandler.complete();
+                movingHandler.complete(e);
                 movingHandler = null;
             }
         }
@@ -125,24 +126,25 @@ function initializeSelectedAreaEvents(controller, area, state, getRootOffsetLeft
     var isTouchEvent,
         isActive = false,
         movingHandler = null,
-        docEvents = {};
+        docEvents = {
+            [pointerEvents.move](e) {
+                if(isTouchEvent !== isTouchEventArgs(e)) return;
 
-    docEvents[pointerEvents.move] = function(e) {
-        if(isTouchEvent !== isTouchEventArgs(e)) return;
+                if(!isLeftButtonPressed(e)) {
+                    cancel(e);
+                }
+                if(isActive) {
+                    preventDefault(e);
+                    movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
+                }
+            },
+            [pointerEvents.up]: cancel
+        };
 
-        if(!isLeftButtonPressed(e)) {
-            cancel();
-        }
-        if(isActive) {
-            preventDefault(e);
-            movingHandler(getEventPageX(e) - getRootOffsetLeft());
-        }
-    };
-    docEvents[pointerEvents.up] = cancel;
-    function cancel() {
+    function cancel(e) {
         if(isActive) {
             isActive = false;
-            movingHandler.complete();
+            movingHandler.complete(e);
             movingHandler = null;
         }
     }
@@ -162,43 +164,43 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
     var isTouchEvent,
         isActive = false,
         movingHandler = null,
-        docEvents = {};
+        docEvents = {
+            [pointerEvents.move](e) {
+                if(isTouchEvent !== isTouchEventArgs(e)) return;
 
-    docEvents[pointerEvents.move] = function(e) {
-        if(isTouchEvent !== isTouchEventArgs(e)) return;
-
-        if(!isLeftButtonPressed(e)) {
-            cancel();
-        }
-        if(isActive) {
-            preventDefault(e);
-            movingHandler(getEventPageX(e) - getRootOffsetLeft());
-        }
-    };
-    docEvents[pointerEvents.up] = cancel;
+                if(!isLeftButtonPressed(e)) {
+                    cancel(e);
+                }
+                if(isActive) {
+                    preventDefault(e);
+                    movingHandler(getEventPageX(e) - getRootOffsetLeft(), e);
+                }
+            },
+            [pointerEvents.up]: cancel
+        };
 
     each(sliders, function(i, slider) {
-        var events = {};
-        events[pointerEvents.down] = function(e) {
-            if(!state.enabled || !isLeftButtonPressed(e) || isActive) return;
+        slider.on({
+            [pointerEvents.down](e) {
+                if(!state.enabled || !isLeftButtonPressed(e) || isActive) return;
 
-            isActive = true;
-            isTouchEvent = isTouchEventArgs(e);
-            movingHandler = controller.beginSliderMoving(i, getEventPageX(e) - getRootOffsetLeft());
-            stopPropagationAndPreventDefault(e);
-        };
-        events[pointerEvents.move] = function() {
-            if(!movingHandler) {
-                controller.foregroundSlider(i);
+                isActive = true;
+                isTouchEvent = isTouchEventArgs(e);
+                movingHandler = controller.beginSliderMoving(i, getEventPageX(e) - getRootOffsetLeft());
+                stopPropagationAndPreventDefault(e);
+            },
+            [pointerEvents.move]() {
+                if(!movingHandler) {
+                    controller.foregroundSlider(i);
+                }
             }
-        };
-        slider.on(events);
+        });
     });
 
-    function cancel() {
+    function cancel(e) {
         if(isActive) {
             isActive = false;
-            movingHandler.complete();
+            movingHandler.complete(e);
             movingHandler = null;
         }
     }
@@ -206,7 +208,7 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
     return docEvents;
 }
 
-function Tracker(params) {
+export function Tracker(params) {
     var state = this._state = {},
         targets = params.controller.getTrackerTargets();
     if(msPointerEnabled) {
@@ -243,5 +245,3 @@ Tracker.prototype = {
         state.manualRangeSelectionEnabled = behavior.manualRangeSelectionEnabled;
     }
 };
-
-exports.Tracker = Tracker;

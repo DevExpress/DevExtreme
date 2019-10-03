@@ -29,6 +29,7 @@ export const createDefaultTooltipTemplate = (template, data, targetData, index) 
 export class TooltipStrategyBase {
     constructor(scheduler) {
         this.scheduler = scheduler;
+        this.tooltip = null;
     }
 
     show(target, dataList, isSingleItemBehavior) {
@@ -41,9 +42,14 @@ export class TooltipStrategyBase {
     _showCore(target, dataList, isSingleItemBehavior) {
         if(!this.tooltip) {
             this.tooltip = this._createTooltip(target);
-            this.list = this._createList(dataList);
 
-            this.tooltip.option("contentTemplate", () => this.list.$element());
+            this.tooltip.option("contentTemplate", container => {
+                if(!this.list) {
+                    const listElement = $("<div>");
+                    $(container).append(listElement);
+                    this.list = this._createList(listElement, dataList);
+                }
+            });
         } else {
             this._shouldUseTarget() && this.tooltip.option("target", target);
             this.list.option("dataSource", dataList);
@@ -85,8 +91,8 @@ export class TooltipStrategyBase {
         };
     }
 
-    _createList(dataList) {
-        return this.scheduler._createComponent($("<div>"), List, this._createListOption(dataList));
+    _createList(listElement, dataList) {
+        return this.scheduler._createComponent(listElement, List, this._createListOption(dataList));
     }
 
     _onListItemRendered(e) {

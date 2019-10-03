@@ -7,6 +7,7 @@ var vizUtils = require("../core/utils"),
     tick = require("./tick").tick,
     polarAxes,
     _map = vizUtils.map,
+    baseAxisModule = require("./base_axis"),
 
     _math = Math,
     _abs = _math.abs,
@@ -139,6 +140,37 @@ circularAxes = polarAxes.circular = {
         }
     },
 
+    getMargins() {
+        const tickOptions = this._options.tick;
+        const tickOuterLength = Math.max(tickOptions.visible ? tickOptions.length / 2 + tickOptions.shift : 0, 0);
+        const radius = this.getRadius();
+        const { x, y } = this._center;
+        const labelBoxes = this._majorTicks.map(t => t.label && t.label.getBBox()).filter(b => b);
+
+        const canvas = extend({}, this._canvas, {
+            left: x - radius,
+            top: y - radius,
+            right: this._canvas.width - (x + radius),
+            bottom: this._canvas.height - (y + radius)
+        });
+
+        const margins = baseAxisModule.calculateCanvasMargins(labelBoxes, canvas);
+        Object.keys(margins).forEach(k => margins[k] = (margins[k] < tickOuterLength ? tickOuterLength : margins[k]));
+
+        return margins;
+    },
+
+    updateSize() {
+        const that = this;
+
+        baseAxisModule.Axis.prototype.updateSize.apply(that, arguments);
+
+        baseAxisModule.measureLabels(that._majorTicks);
+        that._adjustLabelsCoord(0, 0, true);
+
+        this._checkBoundedLabelsOverlapping(this._majorTicks, this._majorTicks.map(t=>t.labelBBox));
+    },
+
     _setVisualRange: _noop,
 
     allowToExtendVisualRange(isEnd) {
@@ -202,10 +234,12 @@ circularAxes = polarAxes.circular = {
     },
 
     _createConstantLine: function(value, attr) {
-        var center = this.getCenter();
+        return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr);
+    },
 
-        return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr)
-            .rotate(value + this.getAngles()[0], center.x, center.y);
+    _rotateConstantLine(line, value) {
+        const { x, y } = this.getCenter();
+        line.rotate(value + this.getAngles()[0], x, y);
     },
 
     _getConstantLineLabelsCoords: function(value) {
@@ -246,7 +280,7 @@ circularAxes = polarAxes.circular = {
         ];
     },
 
-    _getLabelAdjustedCoord: function(tick) {
+    _getLabelAdjustedCoord: function(tick, _offset, _maxWidth, checkCanvas) {
         var that = this,
             labelCoords = tick.labelCoords,
             labelY = labelCoords.y,
@@ -261,26 +295,54 @@ circularAxes = polarAxes.circular = {
             x = labelCoords.x + indentFromAxis * cos,
             y = labelY + (labelY - box.y - halfHeight) + indentFromAxis * sin;
 
+        let shiftX = 0;
+        let shiftY = 0;
+
         switch(getPolarQuarter(labelAngle)) {
             case 1:
-                x += halfWidth;
-                y += halfHeight * sin;
+                shiftX = halfWidth;
+                shiftY = halfHeight * sin;
                 break;
             case 2:
-                x += halfWidth * cos;
-                y += halfHeight;
+                shiftX = halfWidth * cos;
+                shiftY = halfHeight;
                 break;
             case 3:
-                x += -halfWidth;
-                y += halfHeight * sin;
+                shiftX = -halfWidth;
+                shiftY = halfHeight * sin;
                 break;
             case 4:
-                x += halfWidth * cos;
-                y += -halfHeight;
+                shiftX = halfWidth * cos;
+                shiftY = -halfHeight;
                 break;
         }
 
-        return { x: x, y: y };
+        if(checkCanvas) {
+            const canvas = that._canvas;
+            const boxShiftX = (x - labelCoords.x) + shiftX;
+            const boxShiftY = (y - labelCoords.y) + shiftY;
+
+            if(box.x + boxShiftX < canvas.originalLeft) {
+                shiftX -= box.x + boxShiftX - canvas.originalLeft;
+            }
+
+            if(box.x + box.width + boxShiftX > canvas.width - canvas.originalRight) {
+                shiftX -= box.x + box.width + boxShiftX - (canvas.width - canvas.originalRight);
+            }
+
+            if(box.y + boxShiftY < canvas.originalTop) {
+                shiftY -= box.y + boxShiftY - canvas.originalTop;
+            }
+
+            if(box.y + box.height + boxShiftY > canvas.height - canvas.originalBottom) {
+                shiftY -= box.y + box.height + boxShiftY - (canvas.height - canvas.originalBottom);
+            }
+        }
+
+        return {
+            x: x + shiftX,
+            y: y + shiftY
+        };
     },
 
     _getGridLineDrawer: function() {
@@ -355,9 +417,14 @@ circularAxes = polarAxes.circular = {
         return constants.getTicksCountInRange(that._majorTicks, "angle", _math.max(angle1, angle2));
     },
 
-    _checkBoundedLabelsOverlapping: function(step, majorTicks, boxes) {
-        var lastVisibleLabelIndex = _math.floor((boxes.length - 1) / step) * step,
-            labelOpt = this._options.label;
+    _checkBoundedLabelsOverlapping: function(majorTicks, boxes, mode) {
+        const labelOpt = this._options.label;
+        mode = mode || this._validateOverlappingMode(labelOpt.overlappingBehavior);
+        if(mode !== "hide") {
+            return;
+        }
+        const lastVisibleLabelIndex = majorTicks.reduce((lastVisibleLabelIndex, tick, index) => tick.label ? index : lastVisibleLabelIndex, null);
+
         if(!lastVisibleLabelIndex) {
             return;
         }
@@ -538,11 +605,15 @@ polarAxes.linear = {
 
     _getGridPoints: function(coords) {
         var pos = this.getCenter();
+        const radius = vizUtils.getDistance(pos.x, pos.y, coords.x, coords.y);
+        if(radius > this.getRadius()) {
+            return { cx: null, cy: null, r: null };
+        }
 
         return {
             cx: pos.x,
             cy: pos.y,
-            r: vizUtils.getDistance(pos.x, pos.y, coords.x, coords.y)
+            r: radius
         };
     },
 
@@ -661,6 +732,9 @@ polarAxes.linearSpider = _extend({}, polarAxes.linear, {
 
     _getGridPointsByRadius: function(radius) {
         var pos = this.getCenter();
+        if(radius > this.getRadius()) {
+            return { points: null };
+        }
 
         return {
             points: _map(this._spiderTicks, function(tick) {

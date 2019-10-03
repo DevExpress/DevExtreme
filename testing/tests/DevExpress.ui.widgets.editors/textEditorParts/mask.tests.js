@@ -872,6 +872,74 @@ QUnit.module("focusing", moduleConfig, () => {
 });
 
 QUnit.module("value", moduleConfig, () => {
+    QUnit.test("extra backspace when clear value set by option should be ignored", (assert) => {
+        const $textEditor = $("#texteditor").dxTextEditor({
+            name: "phone",
+            mask: "999-999-9999"
+        }).dxTextEditor("instance");
+        $textEditor.option("value", "9998887777");
+
+        const $input = $textEditor.$element().find(".dx-texteditor-input");
+        const keyboard = keyboardMock($input, true);
+
+        const BACKSPACE_CNT = 12;
+        const LAST_CARET = 12;
+        keyboard.caret(LAST_CARET);
+        for(let i = 0; i < BACKSPACE_CNT; ++i) {
+            keyboard.press("backspace");
+        }
+        keyboard.type("  ");
+        keyboard.press("enter");
+
+        assert.equal($textEditor.option("value"), "", "cleared correctly");
+    });
+
+    QUnit.test("extra char that do not fit in the field should be ignored", (assert) => {
+        const $textEditor = $("#texteditor").dxTextEditor({
+            name: "phone",
+            mask: "999-999-9999"
+        }).dxTextEditor("instance");
+        $textEditor.option("value", "9998887777");
+
+        const $input = $textEditor.$element().find(".dx-texteditor-input");
+        const keyboard = keyboardMock($input, true);
+
+        const LAST_CARET = 12;
+        keyboard.caret(LAST_CARET);
+
+        keyboard.press("backspace")
+            .press("backspace")
+            .press("backspace")
+            .type("222")
+            .type("00000000");
+        keyboard.press("enter");
+
+        assert.equal($textEditor.option("value"), "9998887222", "extra symbols are ignored");
+    });
+
+    QUnit.test("inappropriate to mask char should be recognized as a space", (assert) => {
+        const $textEditor = $("#texteditor").dxTextEditor({
+            name: "phone",
+            mask: "999-999-9999"
+        }).dxTextEditor("instance");
+
+        $textEditor.option("value", "9998887777");
+
+        const $input = $textEditor.$element().find(".dx-texteditor-input");
+        const keyboard = keyboardMock($input, true);
+
+        const MIDDLE_CARET = 7;
+        keyboard.caret(MIDDLE_CARET);
+
+        keyboard.press("backspace")
+            .press("backspace")
+            .press("backspace")
+            .type("asd");
+        keyboard.press("enter");
+
+        assert.equal($textEditor.option("value"), "999   7777", "extra symbols are ignored");
+    });
+
     QUnit.test("value considers mask", (assert) => {
         const $textEditor = $("#texteditor").dxTextEditor({
             mask: "(X)",

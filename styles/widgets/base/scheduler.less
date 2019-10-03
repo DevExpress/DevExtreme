@@ -747,6 +747,10 @@
             align-items: center;
 
             .flex-container(row, nowrap);
+
+            &:not(.dx-scheduler-header-panel-week-cell) {
+                .flex-container(row-reverse, nowrap);
+            }
         }
 
         .dx-scheduler-header-panel-week-cell {
@@ -1420,7 +1424,7 @@
     }
 
     .dx-scheduler-header-panel {
-        border-collapse: collapse;
+        border-spacing: 0;
         table-layout: fixed;
         margin-top: @SCHEDULER_HEADER_PANEL_TOP_GAP;
         width: 100%;
@@ -1671,7 +1675,7 @@
     }
 
     .dx-scheduler-all-day-table {
-        border-collapse: collapse;
+        border-spacing: 0;
         table-layout: fixed;
         width: 100%;
     }
@@ -1759,7 +1763,7 @@
 
     .dx-scheduler-date-table {
         width: 100%;
-        border-collapse: collapse;
+        border-spacing: 0;
         table-layout: fixed;
         float: left;
         margin-left: -@SCHEDULER_LEFT_COLUMN_WIDTH;
@@ -2210,7 +2214,6 @@
 
         .dx-scheduler-group-table {
             border-spacing: 0;
-            border-collapse: collapse;
             margin-top: 0;
             height: 100%;
             float: left;
@@ -2406,7 +2409,7 @@
             min-height: 100px;
             border-right: @SCHEDULER_BASE_BORDER;
             border-top: @SCHEDULER_BASE_BORDER;
-            border-collapse: collapse;
+            border-spacing: 0;
 
             .flex-container(column, nowrap);
 

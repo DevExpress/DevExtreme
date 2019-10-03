@@ -2504,7 +2504,7 @@ QUnit.testInActiveWindow("lookup search get focus on opening", function(assert) 
         }),
         instance = $element.dxLookup("instance");
 
-    $element.find("." + LOOKUP_FIELD_CLASS).focusin();
+    instance.focus();
     assert.ok($element.hasClass(FOCUSED_CLASS), "'focus' method focus field with closed overlay");
 
     instance.option("opened", true);

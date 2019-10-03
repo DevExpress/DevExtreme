@@ -2159,7 +2159,13 @@ var SchedulerWorkSpace = Widget.inherit({
 
         currentDayStart.setHours(this.option("startDayHour"), 0, 0, 0);
 
-        return ((date.getTime() - currentDayStart.getTime()) % cellDuration) / cellDuration;
+        let currentDateTime = date.getTime(),
+            currentDayStartTime = currentDayStart.getTime(),
+            minTime = this._firstViewDate.getTime();
+
+        return (currentDateTime > minTime)
+            ? ((currentDateTime - currentDayStartTime) % cellDuration) / cellDuration
+            : 0;
     },
 
     getCoordinatesByDateInGroup: function(date, appointmentResources, inAllDayRow) {
@@ -2345,7 +2351,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var rowIndex = this._getRowCount() - 1,
             cellIndex = this._getCellCount();
 
-        if(this.option("groupByDate")) {
+        if(this.option("groupByDate") && this._getGroupCount() > 0) {
             cellIndex = cellIndex * this._getGroupCount() - 1;
         } else {
             cellIndex = cellIndex - 1;
