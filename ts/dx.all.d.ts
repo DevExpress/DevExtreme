@@ -9670,6 +9670,7 @@ declare module DevExpress.viz {
         linksIn: Array<any>;
         /** @name dxSankeyNode.linksOut */
         linksOut: Array<any>;
+        /** @deprecated */
         /** @name dxSankeyNode.title */
         title: string;
         /** @name dxSankeyNode.hideTooltip() */

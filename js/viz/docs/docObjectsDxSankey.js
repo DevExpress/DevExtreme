@@ -7,7 +7,7 @@ var Node = {
     /**
     * @name dxSankeyNodefields.title
     * @type string
-    * @hidden
+    * @deprecated
     */
     title: undefined,
     /**
