@@ -16459,6 +16459,40 @@ QUnit.test("Focus row element should support native DOM", function(assert) {
     }, "Check that correct cell is focused");
 });
 
+QUnit.testInActiveWindow("DataGrid - Master grid should not render it's overlay in detail grid (T818373)", function(assert) {
+    // arrange
+    var detailGrid,
+        detailRowsViewWrapper = new RowsViewWrapper(".internal-grid");
+
+    this.dataGrid.option({
+        dataSource: [{ id: 0, value: "value 1", text: "Awesome" }],
+        keyExpr: "id",
+        masterDetail: {
+            enabled: true,
+            template: function(container) {
+                detailGrid = $("<div>")
+                    .addClass("internal-grid")
+                    .dxDataGrid({
+                        dataSource: [{ field1: "test1", field2: "test2" }],
+                        onFocusedCellChanging: e => e.isHighlighted = true
+                    })
+                    .appendTo(container).dxDataGrid("instance");
+            }
+        }
+    });
+    this.clock.tick();
+
+    // act
+    this.dataGrid.expandRow(0);
+    this.clock.tick();
+    $(detailGrid.getCellElement(0, 0)).focus();
+    this.clock.tick();
+
+    // assert
+    assert.equal(detailRowsViewWrapper.findFocusOverlay().length, 1, "Detail grid has one focus overlay");
+    assert.ok(detailRowsViewWrapper.isFocusOverlayVisible(), "Detail grid focus overlay is visible");
+});
+
 // T592731
 QUnit.test("Pressing arrow keys inside editor of the internal grid does not call preventDefault", function(assert) {
     // arrange

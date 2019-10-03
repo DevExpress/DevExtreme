@@ -507,6 +507,22 @@ module.exports = (function() {
             }
 
             return lastColumnIndex;
+        },
+
+        isEventInCurrentGrid: function(controller, event) {
+            var $target = event && $(event.target);
+            if($target) {
+                let gridSelector = `.${controller.getWidgetContainerClass()}`,
+                    $grid = controller.component.$element(),
+                    $closestGrid = $target.closest(gridSelector);
+
+                if($grid && !$grid.is(gridSelector)) {
+                    $grid = $grid.find(gridSelector).first();
+                }
+
+                return $closestGrid.is($grid);
+            }
+            return false;
         }
     };
 })();

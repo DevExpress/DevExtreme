@@ -9,6 +9,7 @@ import { addNamespace, fireEvent, normalizeKeyName } from "../../events/utils";
 import browser from "../../core/utils/browser";
 import { extend } from "../../core/utils/extend";
 import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
+import { isEventInCurrentGrid } from "./ui.grid_core.utils";
 
 var EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
@@ -63,20 +64,24 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _updateFocus: function(e) {
-        var that = this,
-            isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+        if(isEventInCurrentGrid(this, e.event)) {
+            var that = this,
+                isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
-        that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
+            that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
 
-        clearTimeout(that._updateFocusTimeoutID);
+            clearTimeout(that._updateFocusTimeoutID);
 
-        that._updateFocusTimeoutID = setTimeout(function() {
-            delete that._updateFocusTimeoutID;
-            if(!that._isFocusOverlay) {
-                that._updateFocusCore();
-            }
-            that._isFocusOverlay = false;
-        });
+            that._updateFocusTimeoutID = setTimeout(function() {
+                delete that._updateFocusTimeoutID;
+                if(!that._isFocusOverlay) {
+                    that._updateFocusCore();
+                }
+                that._isFocusOverlay = false;
+            });
+        } else {
+            this.loseFocus();
+        }
     },
 
     _updateFocusOverlaySize: function($element, position) {

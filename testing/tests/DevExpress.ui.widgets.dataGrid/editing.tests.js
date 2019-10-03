@@ -16,8 +16,7 @@ QUnit.testStart(function() {
     }\
 </style>\
 <div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
+    <div id="container" class="dx-datagrid">\
     </div>\
 </div>';
 
