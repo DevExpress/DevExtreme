@@ -1,12 +1,11 @@
 import $ from "jquery";
+import fx from "animation/fx";
 
 import nativePointerMock from "../../../helpers/nativePointerMock.js";
 
 import "ui/html_editor";
 import "ui/popup";
 import "ui/scroll_view";
-
-import fx from "animation/fx";
 
 const { test } = QUnit;
 
@@ -22,32 +21,53 @@ QUnit.module("Scrolling", {
         fx.off = false;
     }
 }, () => {
-
+    const SCROLLABLE_CONTAINER_SELECTOR = ".dx-scrollable-container";
     class TestHelper {
         constructor() {
             this.editorOptions = {
                 height: 150
             };
+
+            this.presetValue = true;
         }
 
-        _prepareEnvironment(callBack) {
-            this.editorOptions.onContentReady = callBack;
-            this.$container = $("<div>");
-            this.$editor = $("#htmlEditor").wrap(this.$container);
+        _prepareEnvironment() {
+            this.$editor = $("#htmlEditor").wrap($("<div>"));
+            this.$container = this.$editor.parent();
             this.editor = this.$editor.dxHtmlEditor(this.editorOptions).dxHtmlEditor("instance");
             this.$editorContent = this.$editor.find(".dx-htmleditor-content");
-            this.editor.insertText(0, MULTILINE_VALUE);
+            this.presetValue && this.editor.insertText(0, MULTILINE_VALUE);
             this.maxScrollValue = this._getMaxScrollValue();
         }
 
         initPopupTest() {
             this._prepareEnvironment();
 
-            this.popup = this.$container.dxPopup({ height: 100 }).dxPopup("instance");
+            this.popup = this.$container.dxPopup({
+                height: 100,
+                onContentReady: ({ component }) => {
+                    $(component.content()).css("overflow", "auto").height(100);
+                },
+                visible: true
+            }).dxPopup("instance");
         }
 
-        initScrollViewTest(callBack) {
-            this._prepareEnvironment(callBack);
+        initPopupWithScrollViewTest() {
+            this._prepareEnvironment();
+
+            this.$container.wrap($("<div>"));
+            this.$container.dxScrollView({
+                height: 100,
+                useNative: false,
+                showScrollbar: "always",
+            });
+            this.popup = this.$container.parent().dxPopup({
+                visible: true
+            }).dxPopup("instance");
+        }
+
+        initScrollViewTest() {
+            this._prepareEnvironment();
 
             this.scrollView = this.$container.dxScrollView({
                 height: 100,
@@ -79,76 +99,229 @@ QUnit.module("Scrolling", {
         }
     }
 
-    // test("HtmlEditor nested in the ScrollView", (assert) => {
-    //     const helper = new TextAreaInScrollableTestHelper(direction);
-    //     const $container = helper.getScrollableContainer();
-
-    //     helper.setPosition($container, 100);
-
-    //     const pointer = nativePointerMock(helper.$textAreaInput);
-
-    //     pointer.start().wheel(20, helper.isShift());
-    //     helper.checkAsserts(assert, 80);
-
-    //     pointer.start().wheel(-20, helper.isShift());
-    //     helper.checkAsserts(assert, 80);
-
-    // });
-
-
-    test(`mousewheel: textArea (scrollPosition - MIN) - wheel -> up -> down`, (assert) => {
+    test(`editor + scrollView: editor scrollTop - start`, (assert) => {
         const helper = new TestHelper();
         helper.initScrollViewTest();
 
-        const $scrollableContainer = $(helper.scrollView.content());
+        const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
         helper.setScrollableContainer($scrollableContainer);
 
         helper.setPosition($scrollableContainer, 50);
 
-        const pointer = nativePointerMock(helper.$editorContent);
+        const pointer = nativePointerMock(helper.$editorContent.children().first());
 
         pointer.start().wheel(20);
-        helper.checkAsserts(assert, 80);
+        helper.checkAsserts(assert, 30);
 
         pointer.start().wheel(-20);
-        helper.checkAsserts(assert, 80);
+        helper.checkAsserts(assert, 30);
+
     });
 
-    test(`mousewheel: textArea (scrollPosition - MAX) - wheel -> down -> up`, (assert) => {
+    test(`editor + scrollView: editor scrollTop - end`, (assert) => {
         const helper = new TestHelper();
         helper.initScrollViewTest();
 
-        const $scrollableContainer = $(helper.scrollView.content());
+        const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.setPosition($scrollableContainer, 50);
+        helper.setPosition($scrollableContainer, 25);
         helper.setPosition(helper.$editorContent, helper.maxScrollValue);
 
         const pointer = nativePointerMock(helper.$editorContent);
 
         pointer.start().wheel(-20);
-        helper.checkAsserts(assert, 70);
+        helper.checkAsserts(assert, 45);
 
         pointer.start().wheel(20);
-        helper.checkAsserts(assert, 70);
+        helper.checkAsserts(assert, 45);
     });
 
-    test(`mousewheel: textArea (scrollPosition - MIDDLE) - wheel -> down -> up`, (assert) => {
+    test(`editor + scrollView: editor scrollTop - middle`, (assert) => {
         const helper = new TestHelper();
         helper.initScrollViewTest();
 
-        const $scrollableContainer = $(helper.scrollView.content());
+        const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
         helper.setScrollableContainer($scrollableContainer);
 
-        helper.setPosition($scrollableContainer, 100);
+        helper.setPosition($scrollableContainer, 50);
         helper.setPosition(helper.$editorContent, helper.maxScrollValue / 2);
 
         const pointer = nativePointerMock(helper.$editorContent);
 
         pointer.start().wheel(-20);
-        helper.checkAsserts(assert, 100);
+        helper.checkAsserts(assert, 50);
 
         pointer.start().wheel(20);
-        helper.checkAsserts(assert, 100);
+        helper.checkAsserts(assert, 50);
+    });
+
+    test(`editor + popup: editor scrollTop - start`, (assert) => {
+        const helper = new TestHelper();
+        helper.initPopupTest();
+
+        const $scrollableContainer = $(helper.popup.content());
+        helper.setScrollableContainer($scrollableContainer);
+
+        helper.setPosition($scrollableContainer, 50);
+
+        const pointer = nativePointerMock(helper.$editorContent);
+
+        pointer.start().wheel(20);
+        helper.checkAsserts(assert, 50);
+
+        pointer.start().wheel(-20);
+        helper.checkAsserts(assert, 50);
+    });
+
+    test(`editor + popup: editor scrollTop - end`, (assert) => {
+        const helper = new TestHelper();
+        helper.initPopupTest();
+
+        const $scrollableContainer = $(helper.popup.content());
+        helper.setScrollableContainer($scrollableContainer);
+
+        helper.setPosition($scrollableContainer, 25);
+        helper.setPosition(helper.$editorContent, helper.maxScrollValue);
+
+        const pointer = nativePointerMock(helper.$editorContent);
+
+        pointer.start().wheel(-20);
+        helper.checkAsserts(assert, 25);
+
+        pointer.start().wheel(20);
+        helper.checkAsserts(assert, 25);
+    });
+
+    test(`editor + popup: editor scrollTop - middle`, (assert) => {
+        const helper = new TestHelper();
+        helper.initPopupTest();
+
+        const $scrollableContainer = $(helper.popup.content());
+        helper.setScrollableContainer($scrollableContainer);
+
+        helper.setPosition($scrollableContainer, 50);
+        helper.setPosition(helper.$editorContent, helper.maxScrollValue / 2);
+
+        const pointer = nativePointerMock(helper.$editorContent);
+
+        pointer.start().wheel(-20);
+        helper.checkAsserts(assert, 50);
+
+        pointer.start().wheel(20);
+        helper.checkAsserts(assert, 50);
+    });
+
+    test(`editor + popup + scrollView: editor scrollTop - start`, (assert) => {
+        const helper = new TestHelper();
+        helper.initPopupWithScrollViewTest();
+
+        const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
+        helper.setScrollableContainer($scrollableContainer);
+
+        helper.setPosition($scrollableContainer, 50);
+
+        const pointer = nativePointerMock(helper.$editorContent);
+
+        pointer.start().wheel(20);
+        helper.checkAsserts(assert, 30);
+
+        pointer.start().wheel(-20);
+        helper.checkAsserts(assert, 30);
+    });
+
+    test(`editor + popup + scrollView: editor scrollTop - end`, (assert) => {
+        const helper = new TestHelper();
+        helper.initPopupWithScrollViewTest();
+
+        const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
+        helper.setScrollableContainer($scrollableContainer);
+
+        helper.setPosition($scrollableContainer, 25);
+        helper.setPosition(helper.$editorContent, helper.maxScrollValue);
+
+        const pointer = nativePointerMock(helper.$editorContent);
+
+        pointer.start().wheel(-20);
+        helper.checkAsserts(assert, 45);
+
+        pointer.start().wheel(20);
+        helper.checkAsserts(assert, 45);
+    });
+
+    test(`editor + popup + scrollView: editor scrollTop - middle`, (assert) => {
+        const helper = new TestHelper();
+        helper.initPopupWithScrollViewTest();
+
+        const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
+        helper.setScrollableContainer($scrollableContainer);
+
+        helper.setPosition($scrollableContainer, 50);
+        helper.setPosition(helper.$editorContent, helper.maxScrollValue / 2);
+
+        const pointer = nativePointerMock(helper.$editorContent);
+
+        pointer.start().wheel(-20);
+        helper.checkAsserts(assert, 50);
+
+        pointer.start().wheel(20);
+        helper.checkAsserts(assert, 50);
+    });
+
+    test(`editor + popup: wheel event should be passed for element with contenteditable=false`, (assert) => {
+        const helper = new TestHelper();
+        const labelClass = "test-label";
+
+        helper.presetValue = false;
+        helper.editorOptions.onInitialized = ({ component: instance }) => {
+            const Parchment = instance.get("parchment");
+
+            class Label extends Parchment.Embed {
+                static create(value) {
+                    const node = super.create(value);
+                    node.innerText = value;
+                    node.contentEditable = "false";
+                    return node;
+                }
+
+                deleteAt() { }
+
+                static value(node) {
+                    return node.childNodes[0].textContent;
+                }
+            }
+
+            Label.blotName = "label";
+            Label.tagName = "div";
+            Label.className = labelClass;
+
+            instance.register(Label);
+        };
+        helper.editorOptions.onContentReady = ({ component: instance }) => {
+            const quill = instance.getQuillInstance();
+            const Delta = instance.get("delta");
+
+            const newDelta = new Delta()
+                .insert({ label: "Footer (Readonly)" })
+                .insert(MULTILINE_VALUE);
+
+            quill.updateContents(newDelta);
+        };
+
+        helper.initPopupWithScrollViewTest();
+
+        const $scrollableContainer = $(SCROLLABLE_CONTAINER_SELECTOR);
+        helper.setScrollableContainer($scrollableContainer);
+
+        helper.setPosition($scrollableContainer, 50);
+        helper.setPosition(helper.$editorContent, helper.maxScrollValue / 2);
+
+        const pointer = nativePointerMock(helper.$editorContent.find(`.${labelClass}`));
+
+        pointer.start().wheel(-20);
+        helper.checkAsserts(assert, 50);
+
+        pointer.start().wheel(20);
+        helper.checkAsserts(assert, 50);
     });
 });
