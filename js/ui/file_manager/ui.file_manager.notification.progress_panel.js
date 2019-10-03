@@ -311,6 +311,7 @@ class FileManagerProgressPanel extends Widget {
             info.details.forEach(item => this._displayClosedOperationItem(item));
         } else {
             this._raiseOperationClosed(info);
+            info.$info.next(`.${FILE_MANAGER_PROGRESS_PANEL_SEPARATOR_CLASS}`).remove();
             info.$info.remove();
         }
     }

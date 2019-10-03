@@ -343,4 +343,48 @@ QUnit.module("Progress panel tests", moduleConfig, () => {
         assert.deepEqual(this.logger.getEntries(), expectedEntries, "event raised");
     });
 
+    test("Amount of separators must be one less of infos amount", function(assert) {
+        createProgressPanel(this);
+
+        const operationInfo1 = this.progressPanel.addOperation("Operation 1");
+        this.progressPanel.completeOperation(operationInfo1, "Completed 1");
+        const operationInfo2 = this.progressPanel.addOperation("Operation 2");
+        this.progressPanel.completeOperation(operationInfo2, "Completed 2");
+        const operationInfo3 = this.progressPanel.addOperation("Operation 3");
+        this.progressPanel.completeOperation(operationInfo3, "Completed 3");
+
+        let infos = this.progressPanelWrapper.getInfos();
+        let separators = this.progressPanelWrapper.getSeparators();
+        assert.equal(separators.length, 2, "Correct number of separators");
+
+        infos[0].common.$closeButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        infos = this.progressPanelWrapper.getInfos();
+        separators = this.progressPanelWrapper.getSeparators();
+        assert.equal(separators.length, 1, "Correct number of separators");
+
+        const operationInfo4 = this.progressPanel.addOperation("Operation 4");
+        this.progressPanel.completeOperation(operationInfo4, "Completed 4");
+
+        infos = this.progressPanelWrapper.getInfos();
+        separators = this.progressPanelWrapper.getSeparators();
+        assert.equal(separators.length, 2, "Correct number of separators");
+
+        infos[0].common.$closeButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        infos = this.progressPanelWrapper.getInfos();
+        separators = this.progressPanelWrapper.getSeparators();
+        assert.equal(separators.length, 1, "Correct number of separators");
+
+        infos[0].common.$closeButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        infos = this.progressPanelWrapper.getInfos();
+        separators = this.progressPanelWrapper.getSeparators();
+        assert.equal(separators.length, 0, "Correct number of separators");
+
+    });
+
 });
