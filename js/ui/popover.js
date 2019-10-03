@@ -95,12 +95,12 @@ var POPOVER_CLASS = "dx-popover",
 
         var EVENT_HANDLER_NAME = `_${name}EventHandler`;
         if(isSelector) {
+            that[EVENT_HANDLER_NAME] = handler;
             eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
-            that[EVENT_HANDLER_NAME] = undefined;
         } else {
             var targetElement = getPublicElement($(target));
+            that[EVENT_HANDLER_NAME] = undefined;
             eventsEngine.on(targetElement, eventName, handler);
-            that[EVENT_HANDLER_NAME] = handler;
         }
     },
     detachEvent = function(that, target, name, event) {
@@ -116,7 +116,7 @@ var POPOVER_CLASS = "dx-popover",
         if(that[EVENT_HANDLER_NAME]) {
             eventsEngine.off(domAdapter.getDocument(), eventName, target, that[EVENT_HANDLER_NAME]);
         } else {
-            eventsEngine.off($(target), eventName);
+            eventsEngine.off(getPublicElement($(target)), eventName);
         }
     };
 
