@@ -276,6 +276,13 @@ export class FileManagerProgressPanelWrapper {
             .get();
     }
 
+    getSeparators() {
+        return this._$element
+            .find(".dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-separator")
+            .map((_, separator) => new FileManagerProgressPanelInfoWrapper($(separator)))
+            .get();
+    }
+
     findProgressBoxes($container) {
         return $container
             .children(".dx-filemanager-progress-box")
