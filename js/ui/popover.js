@@ -1,7 +1,7 @@
 var $ = require("../core/renderer"),
     windowUtils = require("../core/utils/window"),
     window = windowUtils.getWindow(),
-    domAdapter = require("../core/dom_adapter"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
@@ -67,7 +67,8 @@ var POPOVER_CLASS = "dx-popover",
             action,
             handler,
             eventName,
-            target = that.option("target"),
+            $target = $(that.option("target")),
+            target = getPublicElement($target),
             event = getEventName(that, name + "Event");
 
         if(!event || that.option("disabled")) {
@@ -91,13 +92,7 @@ var POPOVER_CLASS = "dx-popover",
             action({ event: e, target: $(e.currentTarget) });
         };
 
-        if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
-            that["_" + name + "EventHandler"] = undefined;
-            eventsEngine.on(target, eventName, handler);
-        } else {
-            that["_" + name + "EventHandler"] = handler;
-            eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
-        }
+        eventsEngine.on(target, eventName, handler);
     },
     detachEvent = function(that, target, name, event) {
         var eventName = event || getEventName(that, name + "Event");
@@ -107,12 +102,7 @@ var POPOVER_CLASS = "dx-popover",
         }
 
         eventName = eventUtils.addNamespace(eventName, that.NAME);
-
-        if(that["_" + name + "EventHandler"]) {
-            eventsEngine.off(domAdapter.getDocument(), eventName, target, that["_" + name + "EventHandler"]);
-        } else {
-            eventsEngine.off($(target), eventName);
-        }
+        eventsEngine.off($(target), eventName);
     };
 
 /**
