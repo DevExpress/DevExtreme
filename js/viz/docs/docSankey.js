@@ -213,7 +213,7 @@ var dxSankey = {
         * @default undefined
         * @type function(info)
         * @type_function_param1 info:object
-        * @type_function_param1_field1 title:string
+        * @type_function_param1_field1 title:string:deprecated(label)
         * @type_function_param1_field2 label:string
         * @type_function_param1_field3 weightIn:Number
         * @type_function_param1_field4 weightOut:Number
