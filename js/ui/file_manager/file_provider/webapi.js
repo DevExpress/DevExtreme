@@ -132,8 +132,7 @@ class WebApiFileProvider extends FileProvider {
             .css({ display: "none" })
             .attr({
                 method: "post",
-                action: args.url,
-                enctype: "multipart/form-data"
+                action: args.url
             });
 
         ["command", "arguments"].forEach(name => {
@@ -148,9 +147,7 @@ class WebApiFileProvider extends FileProvider {
 
         eventsEngine.trigger($form, "submit");
 
-        if(eventsEngine.trigger($form, "submit")) {
-            $form.remove();
-        }
+        setTimeout(() => $form.remove());
     }
 
     getItemsContent(items) {
@@ -165,6 +162,11 @@ class WebApiFileProvider extends FileProvider {
             method: "POST",
             responseType: "arraybuffer",
             data: formData,
+            upload: {
+                onprogress: noop,
+                onloadstart: noop,
+                onabort: noop
+            },
             cache: false
         });
     }
