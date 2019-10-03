@@ -2,6 +2,7 @@ var $ = require("../core/renderer"),
     windowUtils = require("../core/utils/window"),
     window = windowUtils.getWindow(),
     getPublicElement = require("../core/utils/dom").getPublicElement,
+    domAdapter = require("../core/dom_adapter"),
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
@@ -67,8 +68,8 @@ var POPOVER_CLASS = "dx-popover",
             action,
             handler,
             eventName,
-            $target = $(that.option("target")),
-            target = getPublicElement($target),
+            target = that.option("target"),
+            isSelector = typeUtils.isString(target),
             event = getEventName(that, name + "Event");
 
         if(!event || that.option("disabled")) {
@@ -92,7 +93,15 @@ var POPOVER_CLASS = "dx-popover",
             action({ event: e, target: $(e.currentTarget) });
         };
 
-        eventsEngine.on(target, eventName, handler);
+        var EVENT_HANDLER_NAME = `_${name}EventHandler`;
+        if(isSelector) {
+            eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
+            that[EVENT_HANDLER_NAME] = undefined;
+        } else {
+            var targetElement = getPublicElement($(target));
+            eventsEngine.on(targetElement, eventName, handler);
+            that[EVENT_HANDLER_NAME] = handler;
+        }
     },
     detachEvent = function(that, target, name, event) {
         var eventName = event || getEventName(that, name + "Event");
@@ -102,7 +111,13 @@ var POPOVER_CLASS = "dx-popover",
         }
 
         eventName = eventUtils.addNamespace(eventName, that.NAME);
-        eventsEngine.off($(target), eventName);
+
+        var EVENT_HANDLER_NAME = `_${name}EventHandler`;
+        if(that[EVENT_HANDLER_NAME]) {
+            eventsEngine.off(domAdapter.getDocument(), eventName, target, that[EVENT_HANDLER_NAME]);
+        } else {
+            eventsEngine.off($(target), eventName);
+        }
     };
 
 /**

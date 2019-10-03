@@ -66,6 +66,21 @@ QUnit.test("tooltip should render when target is core renderer object", function
     assert.ok($tooltip2.hasClass(DX_INVISIBILITY_CLASS), "second tooltip is hidden");
 });
 
+QUnit.test("tooltip should render when target is selector", function(assert) {
+    var $tooltip = $("#tooltip");
+
+    new Tooltip($tooltip, {
+        target: '#defferedTarget',
+        showEvent: "mouseenter",
+        hideEvent: "mouseleave"
+    });
+
+    $("<div>").attr("id", "defferedTarget").appendTo("body");
+    $('#defferedTarget').trigger("mouseenter");
+
+    assert.notOk($tooltip.hasClass(DX_INVISIBILITY_CLASS), "first tooltip is visible");
+});
+
 
 QUnit.module("overlay integration", {
     beforeEach: function() {
