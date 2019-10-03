@@ -2813,11 +2813,11 @@ QUnit.module("API", moduleConfig, () => {
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) }, excelCell: { value: "f1_2", alignment: alignLeftTopNoWrap } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) }, excelCell: { value: "f2_2", alignment: alignLeftTopNoWrap } }
                 ], [
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 1" }, excelCell: { value: "Max: f1_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 3" }, excelCell: { value: "Max: f2_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } }
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 1" }, excelCell: { value: "Max: f1_2", alignment: alignLeftTopWrap, font: { bold: true } } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 3" }, excelCell: { value: "Max: f2_2", alignment: alignLeftTopWrap, font: { bold: true } } }
                 ], [
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[0].f1, totalSummaryItemName: "TotalSummary 2" }, excelCell: { value: "Min: f1_1", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[0].f2, totalSummaryItemName: "TotalSummary 4" }, excelCell: { value: "Min: f2_1", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } }
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[0].f1, totalSummaryItemName: "TotalSummary 2" }, excelCell: { value: "Min: f1_1", alignment: alignLeftTopWrap, font: { bold: true } } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[0].f2, totalSummaryItemName: "TotalSummary 4" }, excelCell: { value: "Min: f2_1", alignment: alignLeftTopWrap, font: { bold: true } } }
                 ]];
 
                 helper._extendExpectedCellArgs(expectedCellArgs, topLeft);
@@ -2859,11 +2859,11 @@ QUnit.module("API", moduleConfig, () => {
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) }, excelCell: { value: "f1_2", alignment: alignLeftTopNoWrap } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) }, excelCell: { value: "f2_2", alignment: alignLeftTopNoWrap } }
                 ], [
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 1" }, excelCell: { value: "Max: f1_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 3" }, excelCell: { value: "Max: f2_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } }
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 1" }, excelCell: { value: "Max: f1_2", alignment: alignLeftTopWrap, font: { bold: true } } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 3" }, excelCell: { value: "Max: f2_2", alignment: alignLeftTopWrap, font: { bold: true } } }
                 ], [
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 2" }, excelCell: { value: "Min: f1_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 4" }, excelCell: { value: "Min: f2_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } }
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 2" }, excelCell: { value: "Min: f1_2", alignment: alignLeftTopWrap, font: { bold: true } } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 4" }, excelCell: { value: "Min: f2_2", alignment: alignLeftTopWrap, font: { bold: true } } }
                 ]];
 
                 helper._extendExpectedCellArgs(expectedCellArgs, topLeft);
@@ -2958,7 +2958,7 @@ QUnit.module("API", moduleConfig, () => {
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) }, excelCell: { value: "f2_2", alignment: alignLeftTopNoWrap } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) }, excelCell: { value: "f3_2", alignment: alignLeftTopNoWrap } }
                 ], [
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2 }, excelCell: { value: "Max: f2_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2 }, excelCell: { value: "Max: f2_2", alignment: alignLeftTopWrap, font: { bold: true } } },
                     { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2) }, excelCell: { value: undefined } }
                 ]];
 
@@ -3006,7 +3006,7 @@ QUnit.module("API", moduleConfig, () => {
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) }, excelCell: { value: "f3_2", alignment: alignLeftTopNoWrap } }
                 ], [
                     { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1) }, excelCell: { value: undefined, alignment: undefined } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2), value: ds[1].f3 }, excelCell: { value: "Max: f3_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } }
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2), value: ds[1].f3 }, excelCell: { value: "Max: f3_2", alignment: alignLeftTopWrap, font: { bold: true } } }
                 ]];
 
                 helper._extendExpectedCellArgs(expectedCellArgs, topLeft);
@@ -3053,7 +3053,7 @@ QUnit.module("API", moduleConfig, () => {
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) }, excelCell: { value: "f1_2", alignment: alignLeftTopNoWrap } },
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) }, excelCell: { value: "f3_2", alignment: alignLeftTopNoWrap } }
                 ], [
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1 }, excelCell: { value: "Max: f1_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } },
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1 }, excelCell: { value: "Max: f1_2", alignment: alignLeftTopWrap, font: { bold: true } } },
                     { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2) }, excelCell: { value: undefined } }
                 ]];
 
@@ -3150,7 +3150,7 @@ QUnit.module("API", moduleConfig, () => {
                     { gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(2) }, excelCell: { value: "f3_2", alignment: alignLeftTopNoWrap } }
                 ], [
                     { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0) }, excelCell: { value: undefined } },
-                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2), value: ds[1].f3 }, excelCell: { value: "Max: f3_2", alignment: { horizontal: "left", vertical: "top", wrapText: true }, font: { bold: true } } }
+                    { gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(2), value: ds[1].f3 }, excelCell: { value: "Max: f3_2", alignment: alignLeftTopWrap, font: { bold: true } } }
                 ]];
 
                 helper._extendExpectedCellArgs(expectedCellArgs, topLeft);
