@@ -1,7 +1,6 @@
 import fx from "animation/fx";
 import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
-import translator from "animation/translator";
 import {
     createWrapper,
     initTestMarkup,
@@ -86,15 +85,7 @@ module("Drag and drop appointments", moduleConfig, () => {
         color: "#ff9747"
     }];
 
-    const getAbsolutePosition = appointment => {
-        const appointmentPosition = translator.locate(appointment);
-        const parentPosition = appointment.parent()[0].getBoundingClientRect();
-
-        return {
-            top: parentPosition.top + appointmentPosition.top,
-            left: parentPosition.left + appointmentPosition.left
-        };
-    };
+    const getAbsolutePosition = appointment => appointment.offset();
 
     module("Appointment should move a same distance in dragging from tooltip case", () => {
         const data = [
@@ -167,7 +158,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
         const getFakeAppointmentPosition = scheduler => {
             const fakeAppointment = scheduler.appointments.compact.getFakeAppointment();
-            const position = translator.locate(fakeAppointment);
+            const position = getAbsolutePosition(fakeAppointment);
 
             return {
                 left: position.left + fakeAppointment.width() / 2,
@@ -194,9 +185,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                     scheduler.option("rtlEnabled", rtlEnabled);
                     scheduler.option("dataSource", $.extend(true, [], data));
 
-                    scheduler.appointments.compact.getButtons().slice(0, 1).each((index, button) => {
-                        testFakeAppointmentPosition(scheduler, button, index, view.name, rtlEnabled, assert);
-                    });
+                    testFakeAppointmentPosition(scheduler, scheduler.appointments.compact.getButton(0), 0, view.name, rtlEnabled, assert);
                 });
             });
         };
@@ -285,7 +274,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 .down(positionBeforeDrag.left, positionBeforeDrag.top)
                 .move(dragCase.left, dragCase.top);
 
-            const positionAfterDrag = translator.locate(appointment);
+            const positionAfterDrag = getAbsolutePosition(appointment);
 
             pointer
                 .up();
@@ -411,7 +400,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
         scheduler.appointments.compact.click(0);
         const compactAppointment = scheduler.appointments.compact.getAppointment();
-        const compactAppointmentOffset = $(compactAppointment).offset();
+        const compactAppointmentOffset = getAbsolutePosition(compactAppointment);
 
         pointerMock(compactAppointment).start().down(compactAppointmentOffset.left, compactAppointmentOffset.top).move(0, -100).up();
 

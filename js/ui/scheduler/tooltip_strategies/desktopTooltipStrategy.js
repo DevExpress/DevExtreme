@@ -11,6 +11,7 @@ const MAX_TOOLTIP_HEIGHT = 200;
 const LIST_ITEM_DATA_KEY = "dxListItemData";
 
 const FIXED_CONTAINER_CLASS = "dx-scheduler-fixed-appointments";
+const LIST_ITEM_CLASS = "dx-list-item";
 
 class TooltipBehaviorBase {
     constructor(scheduler) {
@@ -57,19 +58,18 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     onListRendered(e) {
-        let that = this,
+        let dragElement,
             $element = $(e.element);
 
-        if(this.scheduler._allowDragging() && !$element.hasClass("dx-draggable")) {
-            const workspace = this._getWorkspaceInstance();
-            const dragBehavior = workspace && workspace.dragBehavior;
+        if(this.scheduler._allowDragging()) {
+            const dragBehavior = this._getWorkspaceInstance().dragBehavior;
 
             dragBehavior && dragBehavior.addTo($element, {
-                filter: ".dx-list-item",
-                container: "." + FIXED_CONTAINER_CLASS,
-                cursorOffset: function(options) {
-                    let event = options.event,
-                        $dragElement = $(options.dragElement),
+                filter: `.${LIST_ITEM_CLASS}`,
+                container: this.scheduler.$element().find(`.${FIXED_CONTAINER_CLASS}`),
+                cursorOffset: (options) => {
+                    const event = options.event,
+                        $dragElement = $(dragElement),
                         offset = $(options.itemElement).offset();
 
                     return {
@@ -77,21 +77,19 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
                         y: event.pageY - offset.top - ($dragElement.height() / 2)
                     };
                 },
-                template: (options) => {
-                    let itemData = options.itemData;
-
-                    return itemData && itemData.dragElement;
+                template: () => {
+                    return dragElement;
                 },
-                onDragStart: function(e) {
-                    let itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+                onDragStart: (e) => {
+                    const event = e.event,
+                        itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
 
                     if(itemData) {
-                        e.itemData = {
-                            appointment: itemData.data,
-                            dragElement: that._createDragAppointment(itemData.data, itemData.data.settings)
-                        };
+                        event.data = event.data || {};
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.data.settings);
 
-                        this.initialPosition = translator.locate($(e.itemData.dragElement));
+                        dragBehavior.initialPosition = translator.locate($(dragElement));
+                        this.scheduler.hideAppointmentTooltip();
                     }
                 }
             });
@@ -167,33 +165,6 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
             top: mousePosition.top - dragAndDropContainerRect.top - appointment.height() / 2,
             left: mousePosition.left - dragAndDropContainerRect.left - appointment.width() / 2
         };
-    }
-
-    _onDragStart(e, itemData) {
-        this.state.appointment = this._createDragAppointment(itemData, itemData.settings);
-        this.state.initPosition = this._createInitPosition(this.state.appointment, { top: e.pageY, left: e.pageX });
-
-        translator.move(this.state.appointment, this.state.initPosition);
-
-        const appointments = this._getAppointmentsInstance();
-        appointments.dragBehavior.onDragStartCore(this.state.appointment, false);
-    }
-    _onDragMove(e) {
-        this._getWorkspaceInstance().dragBehavior.onDragMoveCore(this.state.appointment, e.offset);
-    }
-
-    _onDragEnd(e, itemData) {
-        this._getWorkspaceInstance().dragBehavior.onDragEndCore(this.state.appointment, e);
-        this._removeAppointmentIfDragEndOnCurrentCell(itemData);
-    }
-
-    _removeAppointmentIfDragEndOnCurrentCell(itemData) {
-        const newCellIndex = this.scheduler._workSpace.getDroppableCellIndex();
-        const oldCellIndex = this.scheduler._workSpace.getCellIndexByCoordinates(this.state.initPosition);
-
-        if(newCellIndex === oldCellIndex) {
-            this._getAppointmentsInstance()._clearItem({ itemData: itemData });
-        }
     }
 }
 

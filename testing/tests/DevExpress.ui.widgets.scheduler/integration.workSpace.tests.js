@@ -406,8 +406,8 @@ QUnit.test("drop and dragenter handlers should be different for date table and a
         }
     });
 
-    assert.strictEqual(log[dragEvents.drop].selector, ".dx-scheduler-date-table td, .dx-scheduler-all-day-table td");
-    assert.strictEqual(log[dragEvents.enter].selector, ".dx-scheduler-date-table td, .dx-scheduler-all-day-table td");
+    assert.strictEqual(log[dragEvents.drop].selector, ".dx-scheduler-date-table td, .dx-scheduler-all-day-table td", "Drop event: selector is correct");
+    assert.strictEqual(log[dragEvents.enter].selector, ".dx-scheduler-date-table td, .dx-scheduler-all-day-table td", "Drag enter event: selector is correct");
 
     eventsEngine.on.restore();
 });

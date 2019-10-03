@@ -830,8 +830,7 @@ const subscribes = {
     },
 
     moveBack: function() {
-        let workspace = this.getWorkSpace(),
-            dragBehavior = workspace && workspace.dragBehavior;
+        const dragBehavior = this.getWorkSpace().dragBehavior;
 
         dragBehavior && dragBehavior.moveBack();
     }

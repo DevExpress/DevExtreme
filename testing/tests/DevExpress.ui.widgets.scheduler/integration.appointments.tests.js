@@ -1975,8 +1975,8 @@ QUnit.test("Appointment should be returned back if an error occurs during drag (
         $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
         var updatedPosition = $appointment.position();
 
-        assert.roughEqual(updatedPosition.top, initialPosition.top, 1.1, "Top is OK");
-        assert.roughEqual(updatedPosition.left, initialPosition.left, 1.1, "Left is OK");
+        assert.roughEqual(updatedPosition.top, initialPosition.top, 0.5, "Top is OK");
+        assert.roughEqual(updatedPosition.left, initialPosition.left, 0.5, "Left is OK");
         assert.equal(err.message, "An error occured", "Error message is OK");
         assert.notOk($appointment.hasClass("dx-draggable-dragging"), "appointment hasn't 'dx-draggable-dragging' class");
 

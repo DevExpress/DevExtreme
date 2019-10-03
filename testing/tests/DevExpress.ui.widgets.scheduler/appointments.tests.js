@@ -399,10 +399,7 @@ QUnit.test("Appointment should not be changed while resize when 'esc' key was pr
     this.initItems([item]);
 
     this.instance.option({ focusStateEnabled: true });
-
-    var updateSpy = sinon.spy(commonUtils.noop);
-
-    this.instance.notifyObserver = updateSpy;
+    var updateStub = sinon.stub(this.instance, "notifyObserver").withArgs("updateAppointmentAfterResize");
 
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         keyboard = keyboardMock($appointment);
@@ -412,7 +409,7 @@ QUnit.test("Appointment should not be changed while resize when 'esc' key was pr
     keyboard.keyDown("esc");
     pointer.up();
 
-    assert.strictEqual(updateSpy.getCalls().filter((call) => call.args[0] === "updateAppointmentAfterResize").length, 0, "Observer was not notified");
+    assert.notOk(updateStub.called, "'updateAppointmentAfterResize' method isn't called");
 });
 
 QUnit.test("Appointment should not be changed while resize when 'esc' key was pressed", function(assert) {

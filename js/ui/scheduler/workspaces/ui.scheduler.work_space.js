@@ -96,7 +96,9 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     DATE_TABLE_MIN_CELL_WIDTH = 75,
 
     DAY_MS = toMs("day"),
-    HOUR_MS = toMs("hour");
+    HOUR_MS = toMs("hour"),
+
+    SCHEDULER_DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
 
 var formatWeekday = function(date) {
     return dateLocalization.getDayNames("abbreviated")[date.getDay()];
@@ -1636,14 +1638,13 @@ var SchedulerWorkSpace = Widget.inherit({
             isPointerDown = false,
             cellHeight,
             cellWidth,
-            $element = this.$element(),
-            selector = "." + DATE_TABLE_CLASS + " td" + ", ." + ALL_DAY_TABLE_CLASS + " td";
+            $element = this.$element();
 
         eventsEngine.off($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXDROP_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
-        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, selector, {
+        eventsEngine.on($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, {
             itemSizeFunc: function($element) {
                 if(!cellHeight) {
                     cellHeight = $element.get(0).getBoundingClientRect().height;
@@ -1663,12 +1664,12 @@ var SchedulerWorkSpace = Widget.inherit({
             that._$currentTableTarget = $(e.target);
             that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, selector, function(e) {
+        eventsEngine.on($element, SCHEDULER_CELL_DXDROP_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
             $(e.target).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
             cellHeight = 0;
             cellWidth = 0;
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, selector, function(e) {
+        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
             if(eventUtils.isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
                 that.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
@@ -1679,7 +1680,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 });
             }
         });
-        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, selector, function(e) {
+        eventsEngine.on($element, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, SCHEDULER_DRAG_AND_DROP_SELECTOR, function(e) {
             if(isPointerDown && that._dateTableScrollable && !that._dateTableScrollable.option("scrollByContent")) {
                 e.preventDefault();
                 e.stopPropagation();

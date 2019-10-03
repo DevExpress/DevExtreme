@@ -5,6 +5,8 @@ import { extend } from "../../core/utils/extend";
 
 const FIXED_CONTAINER_PROP_NAME = "fixedContainer";
 
+const APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment";
+
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
         this.scheduler = scheduler;
@@ -46,8 +48,7 @@ export default class AppointmentDragBehavior {
     }
 
     onDragEnd(e) {
-        let itemData = e.itemData,
-            itemElement = itemData && itemData.dragElement || e.itemElement;
+        const itemElement = e.event.data && e.event.data.itemElement || e.itemElement;
 
         this.onDragEndCore($(itemElement), e);
     }
@@ -71,18 +72,12 @@ export default class AppointmentDragBehavior {
     }
 
     addTo(appointment, options) {
-        let onDragStart = options && options.onDragStart;
-
         this.scheduler._createComponent(appointment, Draggable, extend({
-            filter: ".dx-scheduler-appointment",
+            filter: `.${APPOINTMENT_ITEM_CLASS}`,
             immediate: false,
-            onDragEnd: e => this.onDragEnd(e)
-        }, options, {
-            onDragStart: (e) => {
-                this.onDragStart.call(this, e);
-                onDragStart && onDragStart.call(this, e);
-            }
-        }));
+            onDragStart: this.onDragStart.bind(this),
+            onDragEnd: this.onDragEnd.bind(this)
+        }, options));
     }
 
     moveBack() {
