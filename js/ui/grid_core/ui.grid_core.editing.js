@@ -535,7 +535,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(this._editPopup && this._editPopup.option("visible") && args.fullName.indexOf("editing.form") === 0) {
                     var rowIndex = this._getVisibleEditRowIndex();
                     if(rowIndex >= 0) {
-                        this._showEditPopup(rowIndex);
+                        this._showEditPopup(rowIndex, true);
                     }
                 } else {
                     this.init();
@@ -921,7 +921,7 @@ var EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _showEditPopup: function(rowIndex) {
+        _showEditPopup: function(rowIndex, repaintForm) {
             var that = this,
                 isMobileDevice = devices.current().deviceType !== "desktop",
                 popupOptions = extend(
@@ -946,6 +946,10 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editPopup.on("hiding", that._getEditPopupHiddenHandler());
                 that._editPopup.on("shown", function(e) {
                     eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not("." + SCROLLABLE_CONTAINER_CLASS).first(), "focus");
+
+                    if(repaintForm) {
+                        that._editForm && that._editForm.repaint();
+                    }
                 });
             }
 
