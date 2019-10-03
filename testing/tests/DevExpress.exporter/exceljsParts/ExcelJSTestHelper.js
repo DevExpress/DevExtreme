@@ -63,8 +63,8 @@ class ExcelJSTestHelper {
     }
 
     checkOutlineLevel(expectedOutlineLevelValues, startRowIndex) {
-        for(let i = 0; i < startRowIndex.length; i++) {
-            assert.equal(this.worksheet.getRow(startRowIndex + i).width, expectedOutlineLevelValues[i], `worksheet.getRow(${i}).outlineLevel`);
+        for(let i = 0; i < expectedOutlineLevelValues.length; i++) {
+            assert.equal(this.worksheet.getRow(startRowIndex + i).outlineLevel, expectedOutlineLevelValues[i], `worksheet.getRow(${i}).outlineLevel`);
         }
     }
 
