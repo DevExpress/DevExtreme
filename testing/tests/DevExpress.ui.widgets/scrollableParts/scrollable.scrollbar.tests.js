@@ -127,7 +127,8 @@ QUnit.test("scrollbar is hidden when scrolling is completed", function(assert) {
     ["vertical", "horizontal"].forEach((direction) => {
         ["onHover", "always", "never", "onScroll"].forEach((showScrollbar) => {
             let scrollableContainerSize = 200;
-            let expectedScrollBarVisibility = scrollableContentSize < scrollableContainerSize || showScrollbar === "never" || showScrollbar === "onScroll" ? false : true;
+            let scrollBarVisibleAfterMouseEnter = showScrollbar === "always" || showScrollbar === "onHover" && scrollableContentSize > scrollableContainerSize;
+            let scrollBarVisibleAfterMouseLeave = showScrollbar === "always";
 
             QUnit.test(`Scrollbar.visible on 'mouseenter'/'mouseleave', direction: '${direction}', showScrollbar: '${showScrollbar}', content ${scrollableContentSize < scrollableContainerSize ? 'less' : 'more'} than container`, function(assert) {
                 const $scrollable = $("#scrollableContainer");
@@ -145,10 +146,10 @@ QUnit.test("scrollbar is hidden when scrolling is completed", function(assert) {
                 $container.trigger("mouseenter");
 
                 const scrollbar = Scrollbar.getInstance($scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`));
-                assert.equal(scrollbar.option("visible"), showScrollbar === "always" ? true : expectedScrollBarVisibility, "thumb.visible after mouseenter");
+                assert.equal(scrollbar.option("visible"), scrollBarVisibleAfterMouseEnter, "thumb.visible after mouseenter");
 
                 $container.trigger("mouseleave");
-                assert.equal(scrollbar.option("visible"), showScrollbar === "always" ? true : false, "thumb.visible after mouseleave");
+                assert.equal(scrollbar.option("visible"), scrollBarVisibleAfterMouseLeave, "thumb.visible after mouseleave");
             });
         });
     });
