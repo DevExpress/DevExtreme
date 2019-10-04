@@ -9,11 +9,11 @@ var noop = require("../../core/utils/common").noop,
     _isNumber = typeUtils.isNumeric;
 
 function moveLabel(node, labelOptions, availableLabelWidth, rect) {
-    if(node.label.getBBox().width > availableLabelWidth) {
+    if(node._label.getBBox().width > availableLabelWidth) {
         node.labelText.applyEllipsis(availableLabelWidth);
     }
 
-    var bBox = node.label.getBBox(),
+    var bBox = node._label.getBBox(),
         verticalOffset = labelOptions.verticalOffset,
         horizontalOffset = labelOptions.horizontalOffset,
         labelOffsetY = Math.round(node.rect.y + node.rect.height / 2 - bBox.y - bBox.height / 2) + verticalOffset,
@@ -377,9 +377,9 @@ var dxSankey = require("../core/base_widget").inherit({
             // test and handle labels overlapping here
             if(labelOptions.overlappingBehavior !== 'none') {
                 that._nodes.forEach(function(thisNode) {
-                    var thisBox = thisNode.label.getBBox();
+                    var thisBox = thisNode._label.getBBox();
                     that._nodes.forEach(function(otherNode) {
-                        var otherBox = otherNode.label.getBBox();
+                        var otherBox = otherNode._label.getBBox();
                         if(thisNode.id !== otherNode.id && defaultLayoutBuilder.overlap(thisBox, otherBox)) {
                             if(labelOptions.overlappingBehavior === 'ellipsis') {
                                 thisNode.labelText.applyEllipsis(otherBox.x - thisBox.x);
@@ -397,11 +397,11 @@ var dxSankey = require("../core/base_widget").inherit({
         var textData = labelOptions.customizeText(node),
             settings = node.getLabelAttributes(labelOptions, filter);
         if(textData) {
-            node.label = this._renderer.g().append(this._groupLabels);
+            node._label = this._renderer.g().append(this._groupLabels);
             node.labelText = this._renderer.text(textData)
                 .attr(settings.attr)
                 .css(settings.css);
-            node.labelText.append(node.label);
+            node.labelText.append(node._label);
         }
 
     },
