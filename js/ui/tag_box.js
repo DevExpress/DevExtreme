@@ -53,7 +53,7 @@ const TagBox = SelectBox.inherit({
         const parent = this.callBase();
         const sendToList = (e) => this._list._keyboardProcessor.process(e);
 
-        return extend(parent, {
+        return extend({}, parent, {
             backspace: function(e) {
                 if(!this._isCaretAtTheStart()) {
                     return;
@@ -77,8 +77,14 @@ const TagBox = SelectBox.inherit({
                 this._removeTagElement($tagToDelete);
                 delete this._preserveFocusedTag;
             },
-            upArrow: sendToList,
-            downArrow: sendToList,
+            upArrow: (e) => {
+                const handler = e.altKey ? parent.upArrow : sendToList;
+                return handler.apply(this, arguments);
+            },
+            downArrow: (e) => {
+                const handler = e.altKey ? parent.downArrow : sendToList;
+                return handler.apply(this, arguments);
+            },
             del: function(e) {
                 if(!this._$focusedTag || !this._isCaretAtTheStart()) {
                     return;
