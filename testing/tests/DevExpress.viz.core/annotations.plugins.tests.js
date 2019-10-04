@@ -5,7 +5,7 @@ import TooltipModule from "viz/core/tooltip";
 import vizMocks from "../../helpers/vizMocks.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import eventsEngine from "events/core/events_engine";
-import domAdapter from "core/dom_adapter";
+import { getDocument } from "core/dom_adapter";
 import devices from "core/devices";
 
 import "viz/chart";
@@ -859,7 +859,7 @@ QUnit.module("Tooltip", environment, function() {
 
         pointer.start({ x: 30, y: 30 }).down().up();
         rootPointer.start().down(40, 40);
-        eventsEngine.trigger(domAdapter.getDocument(), "dxpointerdown");
+        eventsEngine.trigger(getDocument(), "dxpointerdown");
 
         const tooltip = this.tooltip;
 

@@ -1,5 +1,5 @@
 import { inArray } from "./array";
-import domAdapter from "../dom_adapter";
+import { createElement } from "../dom_adapter";
 import { ensureDefined } from "./common";
 import callOnce from "./call_once";
 import windowUtils from "./window";
@@ -37,7 +37,7 @@ const inputType = function(type) {
         return true;
     }
 
-    const input = domAdapter.createElement("input");
+    const input = createElement("input");
     try {
         input.setAttribute("type", type);
         input.value = "wrongValue";

@@ -6,7 +6,7 @@ import arrayUtils from "../../data/array_utils";
 import { keysEqual } from "../../data/utils";
 import { when } from "../../core/utils/deferred";
 import { findChanges } from "../../core/utils/array_compare";
-import domAdapter from "../../core/dom_adapter";
+import { insertElement } from "../../core/dom_adapter";
 import { noop } from "../../core/utils/common";
 
 export default CollectionWidget.inherit({
@@ -182,7 +182,7 @@ export default CollectionWidget.inherit({
 
     _appendItemToContainer: function($container, $itemFrame, index) {
         let nextSiblingElement = $container.children(this._itemSelector()).get(index);
-        domAdapter.insertElement($container.get(0), $itemFrame.get(0), nextSiblingElement);
+        insertElement($container.get(0), $itemFrame.get(0), nextSiblingElement);
     },
 
     _optionChanged: function(args) {
