@@ -404,7 +404,7 @@ var DropDownList = DropDownEditor.inherit({
         return this._loadItem(value).always(callback);
     },
 
-    _loadItem: function(value, cache) {
+    _getItemFromPlain: function(value, cache) {
         var plainItems,
             selectedItem;
 
@@ -426,6 +426,12 @@ var DropDownList = DropDownEditor.inherit({
             }).bind(this))[0];
         }
 
+        return selectedItem;
+    },
+
+    _loadItem: function(value, cache) {
+        var selectedItem = this._getItemFromPlain(value, cache);
+
         return selectedItem !== undefined
             ? new Deferred().resolve(selectedItem).promise()
             : this._loadValue(value);
@@ -434,7 +440,7 @@ var DropDownList = DropDownEditor.inherit({
     _getPlainItems: function(items) {
         var plainItems = [];
 
-        items = items || this.option("items") || [];
+        items = items || this.option("items") || this._dataSource.items() || [];
 
         for(var i = 0; i < items.length; i++) {
             if(items[i] && items[i].items) {

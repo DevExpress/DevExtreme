@@ -5426,6 +5426,47 @@ QUnit.module("regression", {
         assert.equal($.trim($tagContainer.text()), "Item1Item3", "selected values are rendered");
     });
 
+    QUnit.test("selection should work with pregrouped data without paging and with preloaded datasource", (assert) => {
+        const ds = new DataSource({
+            store: [
+                { key: "Category 1", items: [{ id: 11, name: "Item 11" }, { id: 12, name: "Item 12" }] },
+                { key: "Category 2", items: [{ id: 21, name: "Item 21" }, { id: 22, name: "Item 22" }] }
+            ]
+        });
+        ds.load();
+
+        const $tagBox = $("#tagBox").dxTagBox({
+            dataSource: ds,
+            valueExpr: "id",
+            displayExpr: "name",
+            value: [21],
+            grouped: true
+        });
+
+        assert.strictEqual($tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS).text(), "Item 21", "Tag was selected");
+    });
+
+    QUnit.test("selection should work with pregrouped data without paging", (assert) => {
+        const loadMock = sinon.stub().returns([
+            { key: "Category 1", items: [{ id: 11, name: "Item 11" }, { id: 12, name: "Item 12" }] },
+            { key: "Category 2", items: [{ id: 21, name: "Item 21" }, { id: 22, name: "Item 22" }] }
+        ]);
+        const ds = new DataSource({
+            load: loadMock
+        });
+
+        const $tagBox = $("#tagBox").dxTagBox({
+            dataSource: ds,
+            valueExpr: "id",
+            displayExpr: "name",
+            value: [21],
+            grouped: true
+        });
+
+        assert.strictEqual(loadMock.callCount, 1, "there was only one load");
+        assert.strictEqual($tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS).text(), "Item 21", "Tag was selected");
+    });
+
     QUnit.testInActiveWindow("focusout event should remove focus class from the widget", assert => {
         const $tagBox = $("#tagBox").dxTagBox({});
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
