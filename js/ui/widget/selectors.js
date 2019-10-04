@@ -1,5 +1,5 @@
 var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter").default;
+    domAdapter = require("../../core/dom_adapter");
 
 var focusable = function(element, tabIndex) {
     if(!visible(element)) {

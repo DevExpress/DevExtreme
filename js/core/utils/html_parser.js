@@ -1,5 +1,5 @@
 var merge = require("./array").merge,
-    domAdapter = require("../dom_adapter").default;
+    domAdapter = require("../dom_adapter");
 
 var isTagName = (/<([a-z][^/\0>\x20\t\r\n\f]+)/i);
 

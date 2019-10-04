@@ -1,4 +1,4 @@
-var domAdapter = require("core/dom_adapter").default;
+var domAdapter = require("core/dom_adapter");
 
 QUnit.module("DOM Adapter", {
     beforeEach: function() {

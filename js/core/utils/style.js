@@ -1,7 +1,7 @@
 var camelize = require("./inflector").camelize,
     callOnce = require("./call_once"),
     typeUtils = require("./type"),
-    domAdapter = require("../dom_adapter").default;
+    domAdapter = require("../dom_adapter");
 
 var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
     cssPrefixes = {

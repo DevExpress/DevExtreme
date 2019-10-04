@@ -1,5 +1,5 @@
 var each = require("../core/utils/iterator").each,
-    domAdapter = require("../core/dom_adapter").default,
+    domAdapter = require("../core/dom_adapter"),
     window = require("../core/utils/window").getWindow(),
     callOnce = require("../core/utils/call_once"),
     DXPROXY_HOST = "dxproxy.devexpress.com:8000",

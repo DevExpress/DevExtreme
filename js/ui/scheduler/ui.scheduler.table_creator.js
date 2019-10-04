@@ -1,5 +1,5 @@
 var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter").default,
+    domAdapter = require("../../core/dom_adapter"),
     dataUtils = require("../../core/element_data"),
     typeUtils = require("../../core/utils/type"),
     getPublicElement = require("../../core/utils/dom").getPublicElement;

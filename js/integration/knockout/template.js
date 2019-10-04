@@ -1,5 +1,5 @@
 var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter").default,
+    domAdapter = require("../../core/dom_adapter"),
     ko = require("knockout"),
     typeUtils = require("../../core/utils/type"),
     TemplateBase = require("../../ui/widget/ui.template_base"),

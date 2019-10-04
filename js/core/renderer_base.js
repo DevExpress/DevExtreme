@@ -1,5 +1,5 @@
 var dataUtils = require("./element_data");
-var domAdapter = require("./dom_adapter").default;
+var domAdapter = require("./dom_adapter");
 var windowUtils = require("./utils/window");
 var window = windowUtils.getWindow();
 var typeUtils = require("./utils/type");

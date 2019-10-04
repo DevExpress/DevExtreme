@@ -1,6 +1,6 @@
 var $ = require("../../core/renderer"),
     readyCallbacks = require("../../core/utils/ready_callbacks"),
-    domAdapter = require("../../core/dom_adapter").default,
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     Class = require("../../core/class"),

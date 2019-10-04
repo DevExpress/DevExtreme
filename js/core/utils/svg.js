@@ -1,4 +1,4 @@
-var domAdapter = require("../../core/dom_adapter").default,
+var domAdapter = require("../../core/dom_adapter"),
     window = require("./window").getWindow(),
     $ = require("../../core/renderer");
 

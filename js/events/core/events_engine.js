@@ -1,6 +1,6 @@
 var registerEventCallbacks = require("./event_registrator_callbacks");
 var extend = require("../../core/utils/extend").extend;
-var domAdapter = require("../../core/dom_adapter").default;
+var domAdapter = require("../../core/dom_adapter");
 var windowUtils = require("../../core/utils/window");
 var window = windowUtils.getWindow();
 var injector = require("../../core/utils/dependency_injector");

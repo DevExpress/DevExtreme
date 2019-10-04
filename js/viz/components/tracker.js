@@ -1,5 +1,5 @@
 var _eventData = require("../../events/utils").eventData,
-    domAdapter = require("../../core/dom_adapter").default,
+    domAdapter = require("../../core/dom_adapter"),
     clickEventName = require("../../events/click").name,
     downPointerEventName = require("../../events/pointer").down,
     movePointerEventName = require("../../events/pointer").move,

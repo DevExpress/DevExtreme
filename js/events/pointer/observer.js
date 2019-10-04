@@ -1,6 +1,6 @@
 var each = require("../../core/utils/iterator").each,
     readyCallbacks = require("../../core/utils/ready_callbacks"),
-    domAdapter = require("../../core/dom_adapter").default;
+    domAdapter = require("../../core/dom_adapter");
 
 var addEventsListener = function(events, handler) {
     readyCallbacks.add(function() {

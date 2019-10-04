@@ -1,5 +1,5 @@
 var Config = require("./config"),
-    domAdapter = require("./dom_adapter").default,
+    domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
     Action = require("./action"),

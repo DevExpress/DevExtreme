@@ -1,5 +1,5 @@
 var eventsEngine = require("../../events/core/events_engine"),
-    domAdapter = require("../../core/dom_adapter").default,
+    domAdapter = require("../../core/dom_adapter"),
     ready = require("../../core/utils/ready_callbacks").add,
     isFunction = require("../../core/utils/type").isFunction,
     BaseWidget = require("../core/base_widget"),

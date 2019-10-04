@@ -1,5 +1,5 @@
 var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter").default,
+    domAdapter = require("../../core/dom_adapter"),
     windowUtils = require("../../core/utils/window"),
     ready = require("../../core/utils/ready_callbacks").add,
     window = windowUtils.getWindow(),

@@ -1,5 +1,5 @@
 var WeakMap = require("./polyfills/weak_map");
-var domAdapter = require("./dom_adapter").default;
+var domAdapter = require("./dom_adapter");
 var eventsEngine = require("../events/core/events_engine");
 var MemorizedCallbacks = require("./memorized_callbacks");
 
