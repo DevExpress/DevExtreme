@@ -4,15 +4,31 @@ import { extend } from "../../core/utils/extend";
 import stateStoringCore from "./ui.grid_core.state_storing_core";
 import { Deferred } from "../../core/utils/deferred";
 
+var getDataControllerState = function(that, includeAllowedPageSizes) {
+    var pagerView = that.getView("pagerView"),
+        dataController = that.getController("data"),
+        state = {
+            allowedPageSizes: pagerView && includeAllowedPageSizes ? pagerView.getPageSizes() : undefined,
+            filterPanel: { filterEnabled: that.option("filterPanel.filterEnabled") },
+            filterValue: that.option("filterValue"),
+            focusedRowKey: that.option("focusedRowEnabled") ? that.option("focusedRowKey") : undefined
+        };
+
+    return extend(state, dataController.getUserState());
+};
+
 // TODO move processLoadState to target modules (data, columns, pagerView)
 var processLoadState = function(that) {
     var columnsController = that.getController("columns"),
         selectionController = that.getController("selection"),
         exportController = that.getController("export"),
-        dataController = that.getController("data"),
-        pagerView = that.getView("pagerView");
+        dataController = that.getController("data");
+
+    that._defaultState = {};
 
     if(columnsController) {
+        that._defaultState.columns = columnsController.getUserState();
+
         columnsController.columnsChanged.add(function() {
             that.updateState({
                 columns: columnsController.getUserState()
@@ -21,6 +37,12 @@ var processLoadState = function(that) {
     }
 
     if(selectionController) {
+        var selectedRowKeys = that.option("selectedRowKeys"),
+            selectionFilter = that.option("selectionFilter");
+
+        that._defaultState.selectedRowKeys = selectedRowKeys && selectedRowKeys.slice(0);
+        that._defaultState.selectionFilter = selectionFilter && selectionFilter.slice(0);
+
         selectionController.selectionChanged.add(function(e) {
             that.updateState({
                 selectedRowKeys: e.selectedRowKeys,
@@ -31,13 +53,12 @@ var processLoadState = function(that) {
 
     if(dataController) {
         that._initialPageSize = that.option("paging.pageSize");
+
+        that._defaultState = extend({}, that._defaultState, getDataControllerState(that));
+        that._defaultState.pageSize = that.option("paging.pageSize");
+
         dataController.changed.add(function() {
-            var state = extend({
-                allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined,
-                filterPanel: { filterEnabled: that.option("filterPanel.filterEnabled") },
-                filterValue: that.option("filterValue"),
-                focusedRowKey: that.option("focusedRowEnabled") ? that.option("focusedRowKey") : undefined
-            }, dataController.getUserState());
+            var state = getDataControllerState(that, true);
 
             that.updateState(state);
         });
@@ -129,8 +150,8 @@ module.exports = {
         controllers: {
             stateStoring: {
                 init: function() {
-                    this.callBase.apply(this, arguments);
                     processLoadState(this);
+                    this.callBase.apply(this, arguments);
                 },
                 /**
                  * @name GridBaseMethods.state
@@ -146,10 +167,13 @@ module.exports = {
                     return this.callBase() || this.getController("data").isStateLoading();
                 },
                 state: function(state) {
-                    var result = this.callBase.apply(this, arguments);
+                    var that = this,
+                        result = that.callBase.apply(this, arguments);
+
                     if(state !== undefined) {
-                        this.applyState(extend({}, state));
+                        that.applyState(extend({}, that._defaultState, state));
                     }
+
                     return result;
                 },
                 updateState: function(state) {
