@@ -2,13 +2,17 @@ import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isDefined, isFunction } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
-import { executeAsync } from "../../core/utils/common";
+import { executeAsync, noop } from "../../core/utils/common";
 import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
 import Errors from "../widget/ui.errors";
 import Callbacks from "../../core/utils/callbacks";
 import { Deferred } from "../../core/utils/deferred";
+import eventsEngine from "../../events/core/events_engine";
+import { isDxMouseWheelEvent, addNamespace } from "../../events/utils";
+import scrollEvents from "../scroll_view/ui.events.emitter.gesture.scroll";
+import { allowScroll } from "../text_box/utils.scroll";
 
 import QuillRegistrator from "./quill_registrator";
 import "./converters/delta";
@@ -248,6 +252,10 @@ const HtmlEditor = Editor.inherit({
     },
 
     _focusTarget: function() {
+        return this._getContent();
+    },
+
+    _getContent: function() {
         return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
     },
 
@@ -398,7 +406,7 @@ const HtmlEditor = Editor.inherit({
         this._deltaConverter.setQuillInstance(this._quillInstance);
         this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
         this._quillInstance.on("text-change", this._textChangeHandlerWithContext);
-
+        this._renderScrollHandler();
         if(this._hasTranscludedContent()) {
             this._updateContentTask = executeAsync(() => {
                 this._applyTranscludedContent();
@@ -406,6 +414,25 @@ const HtmlEditor = Editor.inherit({
         } else {
             this._finalizeContentRendering();
         }
+    },
+
+    _renderScrollHandler: function() {
+        const $scrollContainer = this._getContent();
+
+        const initScrollData = {
+            validate: (e) => {
+                if(isDxMouseWheelEvent(e)) {
+                    if(allowScroll($scrollContainer, -e.delta, e.shiftKey)) {
+                        e._needSkipEvent = true;
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+        };
+
+        eventsEngine.on($scrollContainer, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
     },
 
     _applyTranscludedContent: function() {
@@ -609,6 +636,7 @@ const HtmlEditor = Editor.inherit({
 
     _clean: function() {
         if(this._quillInstance) {
+            eventsEngine.off(this._getContent(), `.${this.NAME}`);
             this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
             this._cleanCallback.fire();
         }

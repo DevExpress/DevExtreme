@@ -1,6 +1,7 @@
 var $ = require("../core/renderer"),
     windowUtils = require("../core/utils/window"),
     window = windowUtils.getWindow(),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     domAdapter = require("../core/dom_adapter").default,
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
@@ -68,6 +69,7 @@ var POPOVER_CLASS = "dx-popover",
             handler,
             eventName,
             target = that.option("target"),
+            isSelector = typeUtils.isString(target),
             event = getEventName(that, name + "Event");
 
         if(!event || that.option("disabled")) {
@@ -91,12 +93,14 @@ var POPOVER_CLASS = "dx-popover",
             action({ event: e, target: $(e.currentTarget) });
         };
 
-        if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
-            that["_" + name + "EventHandler"] = undefined;
-            eventsEngine.on(target, eventName, handler);
-        } else {
-            that["_" + name + "EventHandler"] = handler;
+        var EVENT_HANDLER_NAME = "_" + name + "EventHandler";
+        if(isSelector) {
+            that[EVENT_HANDLER_NAME] = handler;
             eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
+        } else {
+            var targetElement = getPublicElement($(target));
+            that[EVENT_HANDLER_NAME] = undefined;
+            eventsEngine.on(targetElement, eventName, handler);
         }
     },
     detachEvent = function(that, target, name, event) {
@@ -108,10 +112,11 @@ var POPOVER_CLASS = "dx-popover",
 
         eventName = eventUtils.addNamespace(eventName, that.NAME);
 
-        if(that["_" + name + "EventHandler"]) {
-            eventsEngine.off(domAdapter.getDocument(), eventName, target, that["_" + name + "EventHandler"]);
+        var EVENT_HANDLER_NAME = "_" + name + "EventHandler";
+        if(that[EVENT_HANDLER_NAME]) {
+            eventsEngine.off(domAdapter.getDocument(), eventName, target, that[EVENT_HANDLER_NAME]);
         } else {
-            eventsEngine.off($(target), eventName);
+            eventsEngine.off(getPublicElement($(target)), eventName);
         }
     };
 
