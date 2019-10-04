@@ -78,11 +78,11 @@ const TagBox = SelectBox.inherit({
                 delete this._preserveFocusedTag;
             },
             upArrow: (e) => {
-                const handler = e.altKey ? parent.upArrow : sendToList;
+                const handler = e.altKey || !this._list ? parent.upArrow : sendToList;
                 return handler.apply(this, arguments);
             },
             downArrow: (e) => {
-                const handler = e.altKey ? parent.downArrow : sendToList;
+                const handler = e.altKey || !this._list ? parent.downArrow : sendToList;
                 return handler.apply(this, arguments);
             },
             del: function(e) {

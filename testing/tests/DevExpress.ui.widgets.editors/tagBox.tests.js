@@ -1831,6 +1831,22 @@ QUnit.module("keyboard navigation", {
         assert.notOk(this.instance.option("opened"), "overlay is invisible on alt+up press");
     });
 
+    QUnit.test("up and down keys should work correctly in dxTagBox", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        this.reinit({
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+
+        this.keyboard.press("down");
+        this.keyboard.press("up");
+        assert.ok(true, "there is no exceptions");
+    });
+
     QUnit.test("tagBox selects item on space key", (assert) => {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
