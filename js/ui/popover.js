@@ -93,7 +93,7 @@ var POPOVER_CLASS = "dx-popover",
             action({ event: e, target: $(e.currentTarget) });
         };
 
-        var EVENT_HANDLER_NAME = `_${name}EventHandler`;
+        var EVENT_HANDLER_NAME = "_" + name + "EventHandler";
         if(isSelector) {
             that[EVENT_HANDLER_NAME] = handler;
             eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
@@ -112,7 +112,7 @@ var POPOVER_CLASS = "dx-popover",
 
         eventName = eventUtils.addNamespace(eventName, that.NAME);
 
-        var EVENT_HANDLER_NAME = `_${name}EventHandler`;
+        var EVENT_HANDLER_NAME = "_" + name + "EventHandler";
         if(that[EVENT_HANDLER_NAME]) {
             eventsEngine.off(domAdapter.getDocument(), eventName, target, that[EVENT_HANDLER_NAME]);
         } else {
