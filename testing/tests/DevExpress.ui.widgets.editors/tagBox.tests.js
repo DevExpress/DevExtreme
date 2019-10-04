@@ -4846,6 +4846,35 @@ QUnit.module("dataSource integration", moduleSetup, () => {
         assert.strictEqual(tagText, "Test1 changed", "Tag text contains an updated data");
     });
 
+    QUnit.test("Tagbox should not try to update size if input is empty(T818690)", (assert) => {
+        const instance = $("#tagBox").dxTagBox({
+            multiline: false,
+            searchEnabled: true,
+            showDropDownButton: true,
+            showSelectionControls: true,
+            valueExpr: "ID"
+        }).dxTagBox("instance");
+
+        setTimeout(() => {
+            instance.beginUpdate();
+            try {
+                instance.option("displayExpr", "Label");
+
+                instance.option("items", [
+                    { ID: 1, Label: "Test 1" }
+                ]);
+
+                instance.endUpdate();
+            } catch(e) {
+                assert.ok(false, "Сannot update tagbox size bacause of input value is initRender[] object");
+            }
+            instance.endUpdate();
+        }, 1000);
+        this.clock.tick(1000);
+
+        assert.ok(true, "TagBox rendered");
+    });
+
     QUnit.test("TagBox should correctly handle disposing on data loading", (assert) => {
         assert.expect(1);
 
