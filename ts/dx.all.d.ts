@@ -3514,7 +3514,7 @@ declare module DevExpress.ui {
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
         /** @name dxFileUploader.Options.abortUpload */
-        abortUpload?: ((file: File, chunksInfo: { bytesLoaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
+        abortUpload?: ((file: File, chunksInfo: { bytesUploaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.accept */
         accept?: string;
         /** @name dxFileUploader.Options.allowCanceling */
@@ -3564,7 +3564,7 @@ declare module DevExpress.ui {
         /** @name dxFileUploader.Options.uploadButtonText */
         uploadButtonText?: string;
         /** @name dxFileUploader.Options.uploadChunk */
-        uploadChunk?: ((file: File, chunksInfo: { bytesLoaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
+        uploadChunk?: ((file: File, chunksInfo: { bytesUploaded?: number, chunkCount?: number, customData?: any, chunkBlob?: Blob, chunkIndex?: number }) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.uploadFailedMessage */
         uploadFailedMessage?: string;
         /** @name dxFileUploader.Options.uploadFile */

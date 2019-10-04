@@ -365,7 +365,7 @@ class FileUploader extends Editor {
             * @type function
             * @type_function_param1 file:File
             * @type_function_param2 chunksInfo:object
-            * @type_function_param2_field1 bytesLoaded:Number
+            * @type_function_param2_field1 bytesUploaded:Number
             * @type_function_param2_field2 chunkCount:Number
             * @type_function_param2_field3 customData:object
             * @type_function_param2_field4 chunkBlob:Blob
@@ -379,7 +379,7 @@ class FileUploader extends Editor {
             * @type function
             * @type_function_param1 file:File
             * @type_function_param2 chunksInfo:object
-            * @type_function_param2_field1 bytesLoaded:Number
+            * @type_function_param2_field1 bytesUploaded:Number
             * @type_function_param2_field2 chunkCount:Number
             * @type_function_param2_field3 customData:object
             * @type_function_param2_field4 chunkBlob:Blob
@@ -1703,7 +1703,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
 
     _createChunksInfo(chunksData) {
         return {
-            bytesLoaded: chunksData.loadedBytes,
+            bytesUploaded: chunksData.loadedBytes,
             chunkCount: chunksData.count,
             customData: chunksData.customData,
             chunkBlob: chunksData.currentChunk.blob,

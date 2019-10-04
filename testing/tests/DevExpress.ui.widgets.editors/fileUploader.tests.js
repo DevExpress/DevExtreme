@@ -107,7 +107,7 @@ const executeAfterDelay = (action, delay) => {
 const getUploadChunkArgumentsSummary = (file, chunksInfo) => {
     return {
         fileName: file.name,
-        bytesLoaded: chunksInfo.bytesLoaded,
+        bytesUploaded: chunksInfo.bytesUploaded,
         chunkCount: chunksInfo.chunkCount,
         blobSize: chunksInfo.chunkBlob.size,
         chunkIndex: chunksInfo.chunkIndex
@@ -168,7 +168,7 @@ QUnit.module("custom uploading", moduleConfig, () => {
         const file = createBlobFile("image1.png", fileSize);
         simulateFileChoose($fileUploader, [file]);
 
-        const expectedArgsInfo = { fileName: "image1.png", bytesLoaded: 0, chunkCount: 3, blobSize: chunkSize, chunkIndex: 0 };
+        const expectedArgsInfo = { fileName: "image1.png", bytesUploaded: 0, chunkCount: 3, blobSize: chunkSize, chunkIndex: 0 };
 
         this.clock.tick(500);
         assert.strictEqual(uploadChunkSpy.callCount, 1, "custom function called for 1st chunk");
@@ -177,7 +177,7 @@ QUnit.module("custom uploading", moduleConfig, () => {
         assert.deepEqual(lastArgsInfo, expectedArgsInfo, "custom function has valid arguments");
 
         this.clock.tick(1000);
-        expectedArgsInfo.bytesLoaded = 20000;
+        expectedArgsInfo.bytesUploaded = 20000;
         expectedArgsInfo.chunkIndex++;
         assert.strictEqual(uploadChunkSpy.callCount, 2, "custom function called for 2nd chunk");
         assert.strictEqual(onProgressSpy.callCount, 1, "progress event called for 1st chunk");
@@ -185,7 +185,7 @@ QUnit.module("custom uploading", moduleConfig, () => {
         assert.deepEqual(lastArgsInfo, expectedArgsInfo, "custom function has valid arguments");
 
         this.clock.tick(1000);
-        expectedArgsInfo.bytesLoaded = 40000;
+        expectedArgsInfo.bytesUploaded = 40000;
         expectedArgsInfo.chunkIndex++;
         expectedArgsInfo.blobSize = 10100;
         assert.strictEqual(uploadChunkSpy.callCount, 3, "custom function called for 3rd chunk");
@@ -326,7 +326,7 @@ QUnit.module("custom uploading", moduleConfig, () => {
         assert.strictEqual(onProgressSpy.callCount, 1, "progress event is not called after cancel");
         assert.strictEqual(onUploadedSpy.callCount, 0, "uploaded event is not raised after cancel");
         assert.strictEqual(onUploadAbortedSpy.callCount, 0, "upload aborted event is not raised");
-        const expectedArgsInfo = { fileName: "image1.png", bytesLoaded: 20000, chunkCount: 3, blobSize: 20000, chunkIndex: 1 };
+        const expectedArgsInfo = { fileName: "image1.png", bytesUploaded: 20000, chunkCount: 3, blobSize: 20000, chunkIndex: 1 };
         assert.deepEqual(expectedArgsInfo, lastArgsInfo, "custom function has valid arguments");
 
         this.clock.tick(1000);
