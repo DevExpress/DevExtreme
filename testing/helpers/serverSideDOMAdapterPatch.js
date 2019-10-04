@@ -1,4 +1,4 @@
-var domAdapter = require("core/dom_adapter");
+var domAdapter = require("core/dom_adapter").default;
 var readyCallbacks = require("core/utils/ready_callbacks");
 
 var documentMock = (function() {

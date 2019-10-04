@@ -1,7 +1,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
-    domAdapter = require("../core/dom_adapter"),
+    domAdapter = require("../core/dom_adapter").default,
     domUtils = require("../core/utils/dom"),
     animationFrame = require("../animation/frame"),
     eventUtils = require("./utils"),

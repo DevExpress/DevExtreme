@@ -1,6 +1,6 @@
 var $ = require("../../core/renderer"),
     config = require("../../core/config"),
-    domAdapter = require("../../core/dom_adapter"),
+    domAdapter = require("../../core/dom_adapter").default,
     windowUtils = require("./window"),
     window = windowUtils.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),

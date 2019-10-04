@@ -3,7 +3,7 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/utils/window").getWindow(),
-    domAdapter = require("../core/dom_adapter"),
+    domAdapter = require("../core/dom_adapter").default,
     eventsEngine = require("../events/core/events_engine"),
     ready = require("../core/utils/ready_callbacks").add,
     commonUtils = require("../core/utils/common"),

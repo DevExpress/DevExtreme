@@ -1,7 +1,7 @@
 var $ = require("../core/renderer"),
     windowUtils = require("../core/utils/window"),
     window = windowUtils.getWindow(),
-    domAdapter = require("../core/dom_adapter"),
+    domAdapter = require("../core/dom_adapter").default,
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),

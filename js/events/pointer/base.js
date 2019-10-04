@@ -1,6 +1,6 @@
 var eventsEngine = require("../../events/core/events_engine"),
     browser = require("../../core/utils/browser"),
-    domAdapter = require("../../core/dom_adapter"),
+    domAdapter = require("../../core/dom_adapter").default,
     Class = require("../../core/class"),
     eventUtils = require("../utils");
 

@@ -1,4 +1,4 @@
-const domAdapter = require("../dom_adapter");
+const domAdapter = require("../dom_adapter").default;
 const injector = require("./dependency_injector");
 const windowUtils = require("./window");
 const callOnce = require("./call_once");

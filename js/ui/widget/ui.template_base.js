@@ -1,5 +1,5 @@
 var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
+    domAdapter = require("../../core/dom_adapter").default,
     Callbacks = require("../../core/utils/callbacks"),
     domUtils = require("../../core/utils/dom"),
     Class = require("../../core/class"),

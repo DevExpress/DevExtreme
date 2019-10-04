@@ -1,5 +1,5 @@
 var windowUtils = require("./window"),
-    domAdapter = require("../dom_adapter"),
+    domAdapter = require("../dom_adapter").default,
     Callbacks = require("./callbacks"),
     readyCallbacks = require("./ready_callbacks"),
     callOnce = require("./call_once");

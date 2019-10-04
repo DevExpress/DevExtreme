@@ -1,5 +1,5 @@
 var Deferred = require("./deferred").Deferred;
-var domAdapter = require("../../core/dom_adapter");
+var domAdapter = require("../../core/dom_adapter").default;
 var httpRequest = require("../../core/http_request");
 var windowUtils = require("../../core/utils/window");
 var window = windowUtils.getWindow();

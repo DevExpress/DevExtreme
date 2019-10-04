@@ -1,6 +1,6 @@
 var eventsEngine = require("../events/core/events_engine"),
     domUtils = require("../core/utils/dom"),
-    domAdapter = require("../core/dom_adapter"),
+    domAdapter = require("../core/dom_adapter").default,
     Class = require("../core/class"),
     registerEvent = require("./core/event_registrator"),
     clickEvent = require("./click"),

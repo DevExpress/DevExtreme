@@ -1,5 +1,5 @@
 var $ = require("../../../core/renderer"),
-    domAdapter = require("../../../core/dom_adapter"),
+    domAdapter = require("../../../core/dom_adapter").default,
     eventsEngine = require("../../../events/core/events_engine"),
     dataUtils = require("../../../core/element_data"),
     dateUtils = require("../../../core/utils/date"),

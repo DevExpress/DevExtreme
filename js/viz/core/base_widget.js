@@ -1,7 +1,7 @@
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     windowUtils = require("../../core/utils/window"),
-    domAdapter = require("../../core/dom_adapter"),
+    domAdapter = require("../../core/dom_adapter").default,
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     version = require("../../core/version"),

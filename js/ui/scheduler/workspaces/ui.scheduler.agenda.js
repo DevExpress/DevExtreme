@@ -1,5 +1,5 @@
 var $ = require("../../../core/renderer"),
-    domAdapter = require("../../../core/dom_adapter"),
+    domAdapter = require("../../../core/dom_adapter").default,
     noop = require("../../../core/utils/common").noop,
     each = require("../../../core/utils/iterator").each,
     getPublicElement = require("../../../core/utils/dom").getPublicElement,

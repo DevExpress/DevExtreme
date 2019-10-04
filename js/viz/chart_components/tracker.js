@@ -1,4 +1,4 @@
-var domAdapter = require("../../core/dom_adapter"),
+var domAdapter = require("../../core/dom_adapter").default,
     eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     extend = require("../../core/utils/extend").extend,

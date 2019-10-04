@@ -1,6 +1,6 @@
 var eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
-    domAdapter = require("../../core/dom_adapter"),
+    domAdapter = require("../../core/dom_adapter").default,
     ready = require("../../core/utils/ready_callbacks").add,
     wheelEvent = require("../../events/core/wheel"),
 

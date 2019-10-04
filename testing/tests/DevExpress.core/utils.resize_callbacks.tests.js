@@ -1,5 +1,5 @@
 var resizeCallbacks = require("core/utils/resize_callbacks"),
-    domAdapter = require("core/dom_adapter");
+    domAdapter = require("core/dom_adapter").default;
 
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {

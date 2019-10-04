@@ -1,6 +1,6 @@
 /* global Windows */
 var $ = require("../core/renderer"),
-    domAdapter = require("../core/dom_adapter"),
+    domAdapter = require("../core/dom_adapter").default,
     windowUtils = require("../core/utils/window"),
     window = windowUtils.getWindow(),
     navigator = windowUtils.getNavigator(),

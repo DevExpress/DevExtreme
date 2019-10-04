@@ -1,4 +1,4 @@
-var domAdapter = require("core/dom_adapter");
+var domAdapter = require("core/dom_adapter").default;
 var windowUtils = require("core/utils/window");
 var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
 
