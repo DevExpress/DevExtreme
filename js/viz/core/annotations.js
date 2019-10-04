@@ -1,4 +1,4 @@
-import { getDocument } from "../../core/dom_adapter";
+import domAdapter from "../../core/dom_adapter";
 import { isDefined } from "../../core/utils/type";
 import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
@@ -245,15 +245,15 @@ const corePlugin = {
     },
     dispose() {
         this._annotationsGroup.linkRemove().linkOff();
-        eventsEngine.off(getDocument(), DOT_EVENT_NS);
+        eventsEngine.off(domAdapter.getDocument(), DOT_EVENT_NS);
         this._annotationsGroup.off(DOT_EVENT_NS);
         this._annotations.tooltip && this._annotations.tooltip.dispose();
     },
     extenders: {
         _createHtmlStructure() {
             this._annotationsGroup = this._renderer.g().attr({ "class": `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, "annotations").linkAppend();
-            eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
-            eventsEngine.on(getDocument(), POINTER_UP_EVENT_NAME, (event) => {
+            eventsEngine.on(domAdapter.getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
+            eventsEngine.on(domAdapter.getDocument(), POINTER_UP_EVENT_NAME, (event) => {
                 this._annotations._hideToolTipForDrag = false;
                 this._annotationsPointerEventHandler(event);
             });

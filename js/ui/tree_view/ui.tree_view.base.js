@@ -1,5 +1,5 @@
 import $ from "../../core/renderer";
-import { isElementNode } from "../../core/dom_adapter";
+import domAdapter from "../../core/dom_adapter";
 import { on, off } from "../../events/core/events_engine";
 import messageLocalization from "../../localization/message";
 import clickEvent from "../../events/click";
@@ -1008,7 +1008,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return null;
         }
 
-        if(isElementNode(itemElement)) {
+        if(domAdapter.isElementNode(itemElement)) {
             return this._getNodeByElement(itemElement);
         }
 

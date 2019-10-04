@@ -3,7 +3,7 @@ import { extend } from "../../../core/utils/extend";
 
 import Popup from "../../popup";
 import Form from "../../form";
-import { getActiveElement } from "../../../core/dom_adapter";
+import domAdapter from "../../../core/dom_adapter";
 import { resetActiveElement } from "../../../core/utils/dom";
 import { Deferred } from "../../../core/utils/deferred";
 import { format } from "../../../localization/message";
@@ -100,7 +100,7 @@ class FormDialog {
     _updateEditorValue(component, dataField) {
         if(browser.msie && parseInt(browser.version) <= 11) {
             const editor = component.getEditor(dataField);
-            const activeElement = getActiveElement();
+            const activeElement = domAdapter.getActiveElement();
 
             if(editor.$element().find(activeElement).length) {
                 resetActiveElement();

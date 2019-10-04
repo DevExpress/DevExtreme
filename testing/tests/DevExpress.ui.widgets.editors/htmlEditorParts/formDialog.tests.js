@@ -2,7 +2,7 @@ import $ from "jquery";
 
 import FormDialog from "ui/html_editor/ui/formDialog";
 import { isPromise } from "core/utils/type";
-import { getActiveElement } from "core/dom_adapter";
+import domAdapter from "core/dom_adapter";
 import browser from "core/utils/browser";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 
@@ -103,9 +103,9 @@ QUnit.module("FormDialog", moduleConfig, () => {
         const activeElements = [];
         const kb = keyboardMock($input);
         kb.type("Test");
-        activeElements.push(getActiveElement());
+        activeElements.push(domAdapter.getActiveElement());
         kb.change().press("enter");
-        activeElements.push(getActiveElement());
+        activeElements.push(domAdapter.getActiveElement());
     });
 
     test("confirm dialog by button", (assert) => {
