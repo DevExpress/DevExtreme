@@ -3568,7 +3568,7 @@ declare module DevExpress.ui {
         /** @name dxFileUploader.Options.uploadFailedMessage */
         uploadFailedMessage?: string;
         /** @name dxFileUploader.Options.uploadFile */
-        uploadFile?: ((file: File, progressCallback(loadedBytes): any) => Promise<any> | JQueryPromise<any> | any);
+        uploadFile?: ((file: File, progressCallback: Function) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.uploadHeaders */
         uploadHeaders?: any;
         /** @name dxFileUploader.Options.uploadMethod */
