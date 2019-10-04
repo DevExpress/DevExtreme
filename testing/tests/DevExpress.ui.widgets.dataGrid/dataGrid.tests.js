@@ -2301,49 +2301,6 @@ QUnit.test("Change column width via columnOption method (T628065)", function(ass
     assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
-QUnit.test("Change column sortOrder via option method with canceling in onOptionChanged handler", function(assert) {
-    // arrange
-    var dataGrid = $("#dataGrid").dxDataGrid({
-        loadingTimeout: undefined,
-        dataSource: [],
-        columns: [{ dataField: "column1", sortOrder: "asc" }],
-        onOptionChanged: function(args) {
-            if(args.fullName === "columns[0].sortOrder") {
-                dataGrid.option("columns[0].sortOrder", "asc");
-            }
-        }
-    }).dxDataGrid("instance");
-
-    // act
-    dataGrid.option("columns[0].sortOrder", "desc");
-
-    // assert
-    assert.strictEqual(dataGrid.columnOption(0, "sortOrder"), "asc", "sortOrder internal state");
-    assert.strictEqual(dataGrid.option("columns[0].sortOrder"), "asc", "sortOrder option value");
-});
-
-// T734761
-QUnit.test("Change column sortOrder via columnOption method with canceling in onOptionChanged handler", function(assert) {
-    // arrange
-    var dataGrid = $("#dataGrid").dxDataGrid({
-        loadingTimeout: undefined,
-        dataSource: [],
-        columns: [{ dataField: "column1", sortOrder: "asc" }],
-        onOptionChanged: function(args) {
-            if(args.fullName === "columns[0].sortOrder") {
-                dataGrid.option("columns[0].sortOrder", "asc");
-            }
-        }
-    }).dxDataGrid("instance");
-
-    // act
-    dataGrid.columnOption(0, "sortOrder", "desc");
-
-    // assert
-    assert.strictEqual(dataGrid.columnOption(0, "sortOrder"), "asc", "sortOrder internal state");
-    assert.strictEqual(dataGrid.option("columns[0].sortOrder"), "asc", "sortOrder option value");
-});
-
 // T688721, T694661
 QUnit.test("column width as string should works correctly", function(assert) {
     // act
@@ -7289,6 +7246,35 @@ QUnit.test("No error after ungrouping with custom store and column reordering", 
 
     // assert
     assert.strictEqual($($(dataGrid.$element()).find(".dx-error-row")).length, 0, "no errors");
+});
+
+// T819729
+QUnit.test("correct cellInfo is passed to cellTemplate function after ungrouping", function(assert) {
+    // arrange
+    var columnController,
+        dataGrid = createDataGrid({
+            dataSource: [{ field1: "some", field2: "some" }, { field1: "some", field2: "some" }],
+            allowColumnReordering: true,
+            columns: [{
+                dataField: "field1",
+                groupIndex: 0,
+                cellTemplate: function(cellElement, cellInfo) {
+                    // assert
+                    assert.notOk(cellInfo.data.key);
+                    assert.notOk(cellInfo.data.items);
+                    assert.ok(cellInfo.data.field1);
+                    assert.ok(cellInfo.data.field2);
+                }
+            }, "field2"]
+        });
+
+    this.clock.tick();
+
+    columnController = dataGrid.getController("columns");
+
+    // act
+    columnController.moveColumn(0, 1, "group", "headers");
+    this.clock.tick();
 });
 
 // T719938
@@ -13649,56 +13635,6 @@ QUnit.test("State reset should return default grouping and sorting after their c
     assert.equal(dataGrid.columnOption(1, "sortOrder"), "asc", "sortOrder was returned to default");
 });
 
-// T817555
-QUnit.test("State reset should reset focusedRow and selection after their changes", function(assert) {
-    // arrange
-    var dataGrid = createDataGrid({
-        focusedRowEnabled: true,
-        selection: { mode: "single" },
-        columns: [{ dataField: "field1" }, { dataField: "field2" }],
-        dataSource: [{ field1: "test1", field2: "test2", id: 1 }, { field1: "test3", field2: "test4", id: 2 }]
-    });
-
-    this.clock.tick(0);
-
-    // act
-    dataGrid.option("focusedRowKey", 1);
-    dataGrid.option("selectedRowKeys", [1]);
-
-    dataGrid.state(null);
-    this.clock.tick(0);
-
-    // assert
-    assert.equal(dataGrid.option("focusedRowKey"), undefined, "focusedRowKey was reset");
-    assert.deepEqual(dataGrid.option("selectedRowKeys"), [], "selectedRowKeys was reset");
-});
-
-// T817555
-QUnit.test("State reset should return focusedRow and selection to default values after their changes", function(assert) {
-    // arrange
-    var dataGrid = createDataGrid({
-        focusedRowEnabled: true,
-        focusedRowKey: 1,
-        selectedRowKeys: [1],
-        selection: { mode: "single" },
-        columns: [{ dataField: "field1" }, { dataField: "field2" }],
-        dataSource: [{ field1: "test1", field2: "test2", id: 1 }, { field1: "test3", field2: "test4", id: 2 }]
-    });
-
-    this.clock.tick(0);
-
-    // act
-    dataGrid.option("focusedRowKey", 2);
-    dataGrid.option("selectedRowKeys", [2]);
-
-    dataGrid.state(null);
-    this.clock.tick(0);
-
-    // assert
-    assert.equal(dataGrid.option("focusedRowKey"), 1, "focusedRowKey was reset");
-    assert.deepEqual(dataGrid.option("selectedRowKeys"), [1], "selectedRowKeys was reset");
-});
-
 // T818434
 QUnit.test("State reset should reset filtering", function(assert) {
     // arrange
@@ -13818,8 +13754,8 @@ QUnit.test("Clear state when initial options is defined in dataSource", function
     // assert
     visibleColumns = dataGrid.getController("columns").getVisibleColumns();
     assert.equal(visibleColumns.length, 3, "visible column count");
-    assert.equal(visibleColumns[0].sortOrder, undefined, "field1 sortOrder");
-    assert.equal(visibleColumns[0].sortIndex, undefined, "field1 sortIndex");
+    assert.equal(visibleColumns[0].sortOrder, "desc", "field1 sortOrder");
+    assert.equal(visibleColumns[0].sortIndex, 0, "field1 sortIndex");
     assert.equal(dataGrid.pageSize(), 10, "page size");
 });
 
