@@ -1,6 +1,7 @@
 import { Deferred, when } from "../../core/utils/deferred";
 import { errors as dataErrors } from "../../data/errors";
 import { isDefined } from "../../core/utils/type";
+import { compileGetter } from "../../core/utils/data";
 import errors from "../widget/ui.errors";
 import filterUtils from "../shared/filtering";
 import formatHelper from "../../format_helper";
@@ -489,7 +490,7 @@ function getCurrentLookupValueText(field, value, handler) {
     } else {
         var dataSource = new DataSource(lookup.dataSource);
         dataSource.loadSingle(lookup.valueExpr, value).done(function(result) {
-            result ? handler(lookup.displayExpr ? result[lookup.displayExpr] : result) : handler("");
+            result ? handler(lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result) : handler("");
         }).fail(function() {
             handler("");
         });

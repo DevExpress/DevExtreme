@@ -264,6 +264,7 @@ class FileUploader extends Editor {
             * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field6 event:event
             * @type_function_param1_field7 request:XMLHttpRequest
+            * @type_function_param1_field8 error:any
             * @action
             */
             onUploadError: null,
@@ -350,8 +351,41 @@ class FileUploader extends Editor {
             * @action
             */
 
+            /**
+            * @name dxFileUploaderOptions.uploadFile
+            * @type function
+            * @type_function_param1 file:File
+            * @type_function_param2 progressCallback(loadedBytes):any
+            * @type_function_return Promise<any>|any
+            */
             uploadFile: null,
+
+            /**
+            * @name dxFileUploaderOptions.uploadChunk
+            * @type function
+            * @type_function_param1 file:File
+            * @type_function_param2 uploadInfo:object
+            * @type_function_param2_field1 bytesUploaded:Number
+            * @type_function_param2_field2 chunkCount:Number
+            * @type_function_param2_field3 customData:object
+            * @type_function_param2_field4 chunkBlob:Blob
+            * @type_function_param2_field5 chunkIndex:Number
+            * @type_function_return Promise<any>|any
+            */
             uploadChunk: null,
+
+            /**
+            * @name dxFileUploaderOptions.abortUpload
+            * @type function
+            * @type_function_param1 file:File
+            * @type_function_param2 uploadInfo:object
+            * @type_function_param2_field1 bytesUploaded:Number
+            * @type_function_param2_field2 chunkCount:Number
+            * @type_function_param2_field3 customData:object
+            * @type_function_param2_field4 chunkBlob:Blob
+            * @type_function_param2_field5 chunkIndex:Number
+            * @type_function_return Promise<any>|any
+            */
             abortUpload: null,
 
             validationMessageOffset: { h: 0, v: 0 },
@@ -1488,8 +1522,8 @@ class FileUploadStrategyBase {
         this.fileUploader._uploadErrorAction({
             file: file.value,
             event: undefined,
-            error,
-            request: file.request
+            request: file.request,
+            error
         });
     }
 
@@ -1669,7 +1703,7 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
 
     _createChunksInfo(chunksData) {
         return {
-            bytesLoaded: chunksData.loadedBytes,
+            bytesUploaded: chunksData.loadedBytes,
             chunkCount: chunksData.count,
             customData: chunksData.customData,
             chunkBlob: chunksData.currentChunk.blob,

@@ -9,6 +9,7 @@ import Drawer from "../drawer/ui.drawer";
 import FileManagerProgressPanel from "./ui.file_manager.notification.progress_panel";
 
 const FILE_MANAGER_NOTIFICATION_CLASS = "dx-filemanager-notification";
+const FILE_MANAGER_NOTIFICATION_DRAWER_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-drawer`;
 const FILE_MANAGER_NOTIFICATION_POPUP_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-popup`;
 const FILE_MANAGER_NOTIFICATION_POPUP_ERROR_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-popup-error`;
 const FILE_MANAGER_NOTIFICATION_COMMON_CLASS = `${FILE_MANAGER_NOTIFICATION_CLASS}-common`;
@@ -28,7 +29,9 @@ export default class FileManagerNotificationControl extends Widget {
         this._failedOperationCount = 0;
 
         const $progressPanelContainer = this.option("progressPanelContainer");
-        const $progressDrawer = $("<div>").appendTo($progressPanelContainer);
+        const $progressDrawer = $("<div>")
+            .addClass(FILE_MANAGER_NOTIFICATION_DRAWER_CLASS)
+            .appendTo($progressPanelContainer);
 
         const contentRenderer = this.option("contentTemplate");
         if(isFunction(contentRenderer)) {

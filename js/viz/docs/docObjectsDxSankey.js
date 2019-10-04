@@ -7,8 +7,14 @@ var Node = {
     /**
     * @name dxSankeyNodefields.title
     * @type string
+    * @deprecated
     */
     title: undefined,
+    /**
+    * @name dxSankeyNodefields.label
+    * @type string
+    */
+    label: undefined,
     /**
     * @name dxSankeyNodefields.linksIn
     * @type Array<Object>

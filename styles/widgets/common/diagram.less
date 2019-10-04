@@ -15,7 +15,7 @@
     border: @TRANSPARENT_BORDER;
     display: flex;
     flex-flow: column;
-    min-height: 400px;
+    height: 400px;
 
     .dx-diagram-toolbar-wrapper {
         padding: 5px;
@@ -83,8 +83,8 @@
     &.dx-diagram-fullscreen {
         left: 0;
         top: 0;
-        min-width: 100%;
-        min-height: 100%;
+        width: 100% !important; // stylelint-disable-line declaration-no-important
+        height: 100% !important; // stylelint-disable-line declaration-no-important
         position: fixed;
         z-index: 2;
     }

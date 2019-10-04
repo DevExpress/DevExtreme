@@ -1707,12 +1707,16 @@ module.exports = {
                         case "dateSerializationFormat":
                         case "columnResizingMode":
                         case "columnMinWidth":
-                        case "columnWidth":
+                        case "columnWidth": {
                             args.handled = true;
-                            if(!(args.fullName && args.fullName.indexOf("editing.popup") === 0)) {
+                            let isEditingPopup = args.fullName && args.fullName.indexOf("editing.popup") === 0,
+                                isEditingForm = args.fullName && args.fullName.indexOf("editing.form") === 0;
+
+                            if(!isEditingPopup && !isEditingForm) {
                                 this.reinit();
                             }
                             break;
+                        }
                         case "rtlEnabled":
                             this.reinit();
                             break;

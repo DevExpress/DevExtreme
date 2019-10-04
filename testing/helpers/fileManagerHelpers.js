@@ -42,7 +42,8 @@ export const Consts = {
     DROPDOWN_MENU_BUTTON_CLASS: "dx-dropdownmenu-button",
     DROPDOWN_MENU_LIST_CLASS: "dx-dropdownmenu-list",
     DROPDOWN_MENU_CONTENT_CLASS: "dx-scrollview-content",
-    DROPDOWN_MENU_LIST_ITEM_CLASS: "dx-list-item"
+    DROPDOWN_MENU_LIST_ITEM_CLASS: "dx-list-item",
+    SCROLLABLE_ClASS: "dx-scrollable"
 };
 const showMoreButtonText = "\u22EE";
 
@@ -174,6 +175,10 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.GRID_DATA_ROW_CLASS} > td:contains('${itemName}')`);
     }
 
+    getDetailsItemScrollable() {
+        return this.getDetailsItemList().find(`.${Consts.SCROLLABLE_ClASS}`);
+    }
+
     getDetailsItemName(index) {
         return this._$element.find(`.${Consts.DETAILS_ITEM_NAME_CLASS}`).eq(index).text();
     }
@@ -269,6 +274,10 @@ export class FileManagerProgressPanelWrapper {
             .find(".dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-info")
             .map((_, info) => new FileManagerProgressPanelInfoWrapper($(info)))
             .get();
+    }
+
+    getSeparators() {
+        return this._$element.find(".dx-filemanager-progress-panel-infos-container > .dx-filemanager-progress-panel-separator");
     }
 
     findProgressBoxes($container) {
