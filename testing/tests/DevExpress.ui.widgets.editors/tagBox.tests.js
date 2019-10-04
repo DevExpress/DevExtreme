@@ -4809,12 +4809,10 @@ QUnit.module("dataSource integration", moduleSetup, () => {
 
     QUnit.test("Tagbox should not try to update size if input is empty(T818690)", (assert) => {
         const instance = $("#tagBox").dxTagBox({
-            maxDisplayedTags: 2,
             multiline: false,
             searchEnabled: true,
             showDropDownButton: true,
             showSelectionControls: true,
-            placeholder: "All",
             valueExpr: "ID"
         }).dxTagBox("instance");
 
