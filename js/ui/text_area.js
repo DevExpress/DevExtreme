@@ -9,6 +9,7 @@ import eventUtils from "../events/utils";
 import pointerEvents from "../events/pointer";
 import scrollEvents from "../ui/scroll_view/ui.events.emitter.gesture.scroll";
 import sizeUtils from "../core/utils/size";
+import { allowScroll } from "./text_box/utils.scroll";
 import TextBox from "./text_box";
 
 const TEXTAREA_CLASS = "dx-textarea";
@@ -136,7 +137,7 @@ var TextArea = TextBox.inherit({
         const initScrollData = {
             validate: (e) => {
                 if(eventUtils.isDxMouseWheelEvent(e) && $(e.target).is(this._input())) {
-                    if(this._allowScroll(-e.delta, e.shiftKey)) {
+                    if(allowScroll($input, -e.delta, e.shiftKey)) {
                         e._needSkipEvent = true;
                         return true;
                     }
@@ -159,7 +160,7 @@ var TextArea = TextBox.inherit({
         const currentEventY = eventUtils.eventData(e).y;
         const delta = this._eventY - currentEventY;
 
-        if(this._allowScroll(delta)) {
+        if(allowScroll(this._input(), delta)) {
             e.isScrollingEvent = true;
             e.stopPropagation();
         }
@@ -167,25 +168,6 @@ var TextArea = TextBox.inherit({
         this._eventY = currentEventY;
     },
 
-    _allowScroll: function(delta, shiftKey) {
-        const $input = this._input();
-        const scrollTopPos = shiftKey ? $input.scrollLeft() : $input.scrollTop();
-
-        const prop = shiftKey ? "Width" : "Height";
-        const scrollBottomPos = $input.prop(`scroll${prop}`) - $input.prop(`client${prop}`) - scrollTopPos;
-
-        if(scrollTopPos === 0 && scrollBottomPos === 0) {
-            return false;
-        }
-
-        const isScrollFromTop = scrollTopPos === 0 && delta >= 0;
-        const isScrollFromBottom = scrollBottomPos === 0 && delta <= 0;
-        const isScrollFromMiddle = scrollTopPos > 0 && scrollBottomPos > 0;
-
-        if(isScrollFromTop || isScrollFromBottom || isScrollFromMiddle) {
-            return true;
-        }
-    },
 
     _renderDimensions: function() {
         var $element = this.$element();
