@@ -1397,7 +1397,7 @@ QUnit.testInActiveWindow("Tab index should not exist for the previous focused ro
     // assert
     assert.equal($(rowsView.getRow(0)).find('[tabindex="0"]').length, 1, "Row 0 has tabindex");
     // act
-    this.getController("focus")._clearPreviousFocusedRow($(rowsView.getRow(0).parent()));
+    this.getController("focus")._clearPreviousFocusedRow($(rowsView.getRow(0).parent().parent()));
     // assert
     assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex = 1");
     assert.equal($(rowsView.getRow(0)).find('[tabindex="0"]').length, 0, "Row 0 has no tabindex");
