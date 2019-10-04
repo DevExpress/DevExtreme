@@ -364,7 +364,7 @@ class FileUploader extends Editor {
             * @name dxFileUploaderOptions.uploadChunk
             * @type function
             * @type_function_param1 file:File
-            * @type_function_param2 chunksInfo:object
+            * @type_function_param2 uploadInfo:object
             * @type_function_param2_field1 bytesUploaded:Number
             * @type_function_param2_field2 chunkCount:Number
             * @type_function_param2_field3 customData:object
@@ -378,7 +378,7 @@ class FileUploader extends Editor {
             * @name dxFileUploaderOptions.abortUpload
             * @type function
             * @type_function_param1 file:File
-            * @type_function_param2 chunksInfo:object
+            * @type_function_param2 uploadInfo:object
             * @type_function_param2_field1 bytesUploaded:Number
             * @type_function_param2_field2 chunkCount:Number
             * @type_function_param2_field3 customData:object
