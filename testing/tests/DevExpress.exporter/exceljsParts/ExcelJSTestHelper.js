@@ -5,18 +5,18 @@ class ExcelJSTestHelper {
         this.worksheet = worksheet;
     }
 
-    checkCustomizeCell(eventArgs, expectedArgs, callIndex) {
+    checkCustomizeCell(eventArgs, expectedCells, callIndex) {
         const { gridCell, excelCell } = eventArgs;
 
-        const currentRowIndex = Math.trunc(callIndex / expectedArgs[0].length);
-        const currentCellIndex = callIndex % expectedArgs[currentRowIndex].length;
-        const expectedCellArgs = expectedArgs[currentRowIndex][currentCellIndex];
+        const currentRowIndex = Math.trunc(callIndex / expectedCells[0].length);
+        const currentCellIndex = callIndex % expectedCells[currentRowIndex].length;
+        const expectedCell = expectedCells[currentRowIndex][currentCellIndex];
 
-        const expectedAddress = expectedCellArgs.excelCell.address;
+        const expectedAddress = expectedCell.excelCell.address;
 
         assert.strictEqual(this.worksheet.getRow(expectedAddress.row).getCell(expectedAddress.column).address, excelCell.address, `cell.address (${expectedAddress.row}, ${expectedAddress.column})`);
 
-        const expectedColumn = expectedCellArgs.gridCell.column;
+        const expectedColumn = expectedCell.gridCell.column;
         const actualColumn = gridCell.column;
 
         assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${callIndex}`);
@@ -29,9 +29,9 @@ class ExcelJSTestHelper {
         for(const propertyName in gridCell) {
             if(gridCellSkipProperties.indexOf(propertyName) === -1) {
                 if(propertyName === "groupSummaryItems") {
-                    assert.deepEqual(gridCell[propertyName], expectedCellArgs.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                    assert.deepEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
                 } else {
-                    assert.strictEqual(gridCell[propertyName], expectedCellArgs.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
+                    assert.strictEqual(gridCell[propertyName], expectedCell.gridCell[propertyName], `gridCell[${propertyName}], ${callIndex}`);
                 }
             }
         }
@@ -102,7 +102,7 @@ class ExcelJSTestHelper {
         }
     }
 
-    _extendExpectedCellArgs(argsArray, topLeft) {
+    _extendExpectedCells(argsArray, topLeft) {
         this._iterateCells(argsArray, (cellArgs, rowIndex, columnIndex) => {
             cellArgs.excelCell.address = {
                 row: rowIndex + topLeft.row,
