@@ -746,7 +746,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: string, wrapText: true" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: string, export.wrapText: true" + options, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1" }];
 
@@ -913,7 +913,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: number, wrapText: false" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: number, export.wrapText: false" + options, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 1 }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -1171,7 +1171,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns, wrapTextEnabled: true, wrapText: false, col_1.alignment: 'center', col_2.alignment: 'right', col_3.alignment: 'left'" + options, (assert) => {
+            QUnit.test("Data - 3 columns, grid.wrapTextEnabled: true, export.wrapText: false, col_1.alignment: 'center', col_2.alignment: 'right', col_3.alignment: 'left'" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: true, f3: 1 },
@@ -1380,7 +1380,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, wrapTextEnabled: false, export.excelWrapTextEnabled: true, col_1.alignment: 'center', col_2.alignment: 'right'" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, grid.wrapTextEnabled: false, export.excelWrapTextEnabled: true, col_1.alignment: 'center', col_2.alignment: 'right'" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -1425,7 +1425,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, wrapText: true, rtlEnabled: true" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, export.wrapText: true, rtlEnabled: true" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -2863,7 +2863,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary, wrapText: false, rtlEnabled: true" + options, (assert) => {
+            QUnit.test("Total summary, export.wrapText: false, rtlEnabled: true" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -2912,7 +2912,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("TODO: not supported - Total summary, wrapText: true, totalItems.alignment, total_2.alignment: center, total_3: right" + options, (assert) => {
+            QUnit.test("TODO: not supported - Total summary, export.wrapText: true, totalItems.alignment, total_2.alignment: center, total_3: right" + options, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
