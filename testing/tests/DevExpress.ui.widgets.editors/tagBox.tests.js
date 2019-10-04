@@ -1808,6 +1808,29 @@ QUnit.module("keyboard navigation", {
         assert.equal($tags.text(), "1", "rendered first item");
     });
 
+    QUnit.test("control keys test", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        this.reinit({
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+
+        const altDown = $.Event("keydown", { key: "ArrowDown", altKey: true });
+        const altUp = $.Event("keydown", { key: "ArrowUp", altKey: true });
+
+        assert.ok(!this.instance.option("opened"), "overlay is hidden on first show");
+
+        this.$input.trigger(altDown);
+        assert.ok(this.instance.option("opened"), "overlay is visible on alt+down press");
+
+        this.$input.trigger(altUp);
+        assert.notOk(this.instance.option("opened"), "overlay is invisible on alt+up press");
+    });
+
     QUnit.test("tagBox selects item on space key", (assert) => {
         if(devices.real().platform !== "generic") {
             assert.ok(true, "test does not actual for mobile devices");
