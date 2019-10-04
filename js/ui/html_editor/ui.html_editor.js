@@ -1,5 +1,3 @@
-/* global Node */
-
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isDefined, isFunction } from "../../core/utils/type";
@@ -28,6 +26,8 @@ const HTML_EDITOR_CONTENT_CLASS = "dx-htmleditor-content";
 const MARKDOWN_VALUE_TYPE = "markdown";
 
 const ANONYMOUS_TEMPLATE_NAME = "htmlContent";
+
+const ELEMENT_NODE = 1;
 
 const HtmlEditor = Editor.inherit({
 
@@ -438,7 +438,7 @@ const HtmlEditor = Editor.inherit({
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
                     ['p.MsoListParagraphCxSpLast', wordListMatcher],
-                    [Node.ELEMENT_NODE, getTextDecorationMatcher(quill)]
+                    [ELEMENT_NODE, getTextDecorationMatcher(quill)]
                 ]
             }
         }, this._getCustomModules());
