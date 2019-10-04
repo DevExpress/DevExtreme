@@ -924,6 +924,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCellArgs);
                     helper.checkAlignment(expectedCellArgs);
                     helper.checkValues(expectedCellArgs);
+                    assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkResult(result, { row: 2, column: 1 }, topLeft);
                     done();
