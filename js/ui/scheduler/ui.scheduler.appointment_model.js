@@ -108,7 +108,7 @@ const compareDateWithEndDayHour = (startDate, endDate, startDayHour, endDayHour,
     result = (apptStartHour < endTime.hours) ||
         (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) ||
         (allDay && startDate <= max) ||
-        (severalDays && ((startDate < max && endDate > max) || (endDate > min && startDate < min)) && (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60));
+        (severalDays && (startDate < max && endDate > min) && (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60));
 
     if(apptDuration < hiddenInterval) {
         if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
