@@ -17,7 +17,8 @@ function exportDataGrid(options) {
         topLeftCell = { row: 1, column: 1 },
         excelFilterEnabled = false,
         keepColumnWidths = true,
-        selectedRowsOnly = false
+        selectedRowsOnly = false,
+        wrapText = undefined
     } = options;
 
     worksheet.properties.outlineProperties = {
@@ -45,7 +46,7 @@ function exportDataGrid(options) {
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(cellsRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell);
+                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell, wrapText);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
@@ -67,7 +68,7 @@ function exportDataGrid(options) {
     });
 }
 
-function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell) {
+function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, wrapTextEnabled) {
     const styles = dataProvider.getStyles();
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -81,7 +82,7 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             const { bold, alignment, wrapText } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
             _setFont(excelCell, bold);
-            _setAlignment(excelCell, wrapText, alignment);
+            _setAlignment(excelCell, isDefined(wrapTextEnabled) ? wrapTextEnabled : wrapText, alignment);
         }
 
         if(isDefined(customizeCell)) {
