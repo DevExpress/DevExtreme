@@ -893,13 +893,43 @@ const TagBox = SelectBox.inherit({
         }
     },
 
+    _isGroupedData: function() {
+        return this.option("grouped") && !this._dataSource.group();
+    },
+
+    _getItemsByValues: function(values) {
+        var resultItems = [];
+        values.forEach(function(value) {
+            var item = this._getItemFromPlain(value);
+            if(isDefined(item)) {
+                resultItems.push(item);
+            }
+        }.bind(this));
+        return resultItems;
+    },
+
+    _getFilteredGroupedItems: function(values) {
+        var selectedItems = new Deferred();
+        if(!this._dataSource.items().length) {
+            this._dataSource.load().done(function() {
+                selectedItems.resolve(this._getItemsByValues(values));
+            }.bind(this)).fail(selectedItems.resolve([]));
+        } else {
+            selectedItems.resolve(this._getItemsByValues(values));
+        }
+
+        return selectedItems.promise();
+    },
+
     _loadTagsData: function() {
         const values = this._getValue();
         const tagData = new Deferred();
 
         this._selectedItems = [];
 
-        this._getFilteredItems(values)
+        var filteredItemsPromise = this._isGroupedData() ? this._getFilteredGroupedItems(values) : this._getFilteredItems(values);
+
+        filteredItemsPromise
             .done((filteredItems) => {
                 const items = this._createTagsData(values, filteredItems);
                 items.always(function(data) {
