@@ -13572,6 +13572,7 @@ QUnit.test("The calculateCellValue arguments should be correct after resetting t
     // arrange
     var calculateCellValue = sinon.spy(),
         dataGrid = createDataGrid({
+            groupPanel: { visible: true },
             columns: [{ dataField: "field1", groupIndex: 0, calculateCellValue: calculateCellValue }, "field2"],
             dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
         });
@@ -13591,6 +13592,7 @@ QUnit.test("The calculateCellValue arguments should be correct after resetting t
 QUnit.test("State reset should save default grouping", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
+        groupPanel: { visible: true },
         columns: [{ dataField: "field1", groupIndex: 0 }, "field2"],
         dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
     });
@@ -13609,6 +13611,7 @@ QUnit.test("State reset should save default grouping", function(assert) {
 QUnit.test("State reset should save default grouping if sorting was applied", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
+        groupPanel: { visible: true },
         columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
         dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
     });
@@ -13624,9 +13627,10 @@ QUnit.test("State reset should save default grouping if sorting was applied", fu
 });
 
 // T817555
-QUnit.test("State reset should return default grouping after ungrouping", function(assert) {
+QUnit.test("State reset should return default grouping and sorting after their changes", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
+        groupPanel: { visible: true },
         columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
         dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
     });
@@ -13636,12 +13640,63 @@ QUnit.test("State reset should return default grouping after ungrouping", functi
     // act
     dataGrid.columnOption(0, "groupIndex", undefined);
     dataGrid.columnOption(1, "sortOrder", undefined);
+
     dataGrid.state(null);
     this.clock.tick(0);
 
     // assert
     assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was returned to default");
     assert.equal(dataGrid.columnOption(1, "sortOrder"), "asc", "sortOrder was returned to default");
+});
+
+// T817555
+QUnit.test("State reset should reset focusedRow and selection after their changes", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        focusedRowEnabled: true,
+        selection: { mode: "single" },
+        columns: [{ dataField: "field1" }, { dataField: "field2" }],
+        dataSource: [{ field1: "test1", field2: "test2", id: 1 }, { field1: "test3", field2: "test4", id: 2 }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.option("focusedRowKey", 1);
+    dataGrid.option("selectedRowKeys", [1]);
+
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.option("focusedRowKey"), undefined, "focusedRowKey was reset");
+    assert.deepEqual(dataGrid.option("selectedRowKeys"), [], "selectedRowKeys was reset");
+});
+
+// T817555
+QUnit.test("State reset should return focusedRow and selection to default values after their changes", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        selectedRowKeys: [1],
+        selection: { mode: "single" },
+        columns: [{ dataField: "field1" }, { dataField: "field2" }],
+        dataSource: [{ field1: "test1", field2: "test2", id: 1 }, { field1: "test3", field2: "test4", id: 2 }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.option("focusedRowKey", 2);
+    dataGrid.option("selectedRowKeys", [2]);
+
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.option("focusedRowKey"), 1, "focusedRowKey was reset");
+    assert.deepEqual(dataGrid.option("selectedRowKeys"), [1], "selectedRowKeys was reset");
 });
 
 // T818434
@@ -13702,6 +13757,7 @@ QUnit.test("State reset should reset filtering", function(assert) {
 QUnit.test("Double reset should work correctly when rows are grouped", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
+        groupPanel: { visible: true },
         columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
         dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
     });
@@ -13762,8 +13818,8 @@ QUnit.test("Clear state when initial options is defined in dataSource", function
     // assert
     visibleColumns = dataGrid.getController("columns").getVisibleColumns();
     assert.equal(visibleColumns.length, 3, "visible column count");
-    assert.equal(visibleColumns[0].sortOrder, "desc", "field1 sortOrder");
-    assert.equal(visibleColumns[0].sortIndex, 0, "field1 sortIndex");
+    assert.equal(visibleColumns[0].sortOrder, undefined, "field1 sortOrder");
+    assert.equal(visibleColumns[0].sortIndex, undefined, "field1 sortIndex");
     assert.equal(dataGrid.pageSize(), 10, "page size");
 });
 

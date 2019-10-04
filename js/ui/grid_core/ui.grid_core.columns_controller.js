@@ -1249,29 +1249,16 @@ module.exports = {
                     fullOptionName = options.fullOptionName;
 
                 if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
-                    var oldSkipProcessingColumnsChange = that._skipProcessingColumnsChange,
-                        fullPath,
-                        oldOptionValue;
+                    var oldSkipProcessingColumnsChange = that._skipProcessingColumnsChange;
 
                     that._skipProcessingColumnsChange = true;
 
                     var columnOptions = that.component.option(fullOptionName);
 
                     if(isPlainObject(columnOptions)) {
-                        fullPath = fullOptionName + "." + optionName;
-
-                        if(!that._columnOptionsToRestore[fullPath]) {
-                            oldOptionValue = columnOptions[optionName];
-
-                            if((typeof oldOptionValue) === "object") {
-                                that._columnOptionsToRestore[fullPath] = Object.assign({}, oldOptionValue);
-                            } else {
-                                that._columnOptionsToRestore[fullPath] = oldOptionValue;
-                            }
-                        }
-
                         columnOptions[optionName] = value;
                     }
+
                     that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
                     that._skipProcessingColumnsChange = oldSkipProcessingColumnsChange;
                 }
@@ -1542,18 +1529,6 @@ module.exports = {
                 _endUpdateCore: function() {
                     !this._skipProcessingColumnsChange && fireColumnsChanged(this);
                 },
-                _restoreDefaultColumnOptions: function() {
-                    var that = this,
-                        columnOptionsToRestore = Object.keys(that._columnOptionsToRestore);
-
-                    columnOptionsToRestore.forEach(columnOption => {
-                        var oldOptionValue = that._columnOptionsToRestore[columnOption];
-
-                        that.component.option(columnOption, oldOptionValue);
-                    });
-
-                    that._columnOptionsToRestore = {};
-                },
                 init: function() {
                     var that = this,
                         columns = that.option("columns");
@@ -1563,12 +1538,6 @@ module.exports = {
                     that._columns = that._columns || [];
 
                     that._isColumnsFromOptions = !!columns;
-
-                    if(!that._columnOptionsToRestore) {
-                        that._columnOptionsToRestore = {};
-                    } else {
-                        that._restoreDefaultColumnOptions();
-                    }
 
                     if(that._isColumnsFromOptions) {
                         assignColumns(that, columns ? createColumnsFromOptions(that, columns) : []);
