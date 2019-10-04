@@ -7,6 +7,7 @@ import pointerMock from "../../../helpers/pointerMock.js";
 import Scrollable from "ui/scroll_view/ui.scrollable";
 
 import "common.css!";
+import "ui/scroll_view";
 
 import {
     SCROLLABLE_CONTAINER_CLASS,
@@ -123,16 +124,17 @@ QUnit.test("scrollbar is hidden when scrolling is completed", function(assert) {
         .up();
 });
 
+// T817096
 [150, 300].forEach((scrollableContentSize) => {
     ["vertical", "horizontal"].forEach((direction) => {
         ["onHover", "always", "never", "onScroll"].forEach((showScrollbar) => {
             let scrollableContainerSize = 200;
-            let scrollBarVisibleAfterMouseEnter = showScrollbar === "always" || showScrollbar === "onHover" && scrollableContentSize > scrollableContainerSize;
-            let scrollBarVisibleAfterMouseLeave = showScrollbar === "always";
+            let scrollBarVisibleAfterMouseEnter = (showScrollbar === "always" || showScrollbar === "onHover") && scrollableContentSize > scrollableContainerSize;
+            let scrollBarVisibleAfterMouseLeave = showScrollbar === "always" && scrollableContentSize > scrollableContainerSize;
 
             QUnit.test(`Scrollbar.visible on 'mouseenter'/'mouseleave', direction: '${direction}', showScrollbar: '${showScrollbar}', content ${scrollableContentSize < scrollableContainerSize ? 'less' : 'more'} than container`, function(assert) {
                 const $scrollable = $("#scrollableContainer");
-                $scrollable.dxScrollable({
+                $scrollable.dxScrollView({ // dxScrollView is created because it is used in T817096 and it significantly changes inherited code
                     width: scrollableContainerSize,
                     height: scrollableContainerSize,
                     useNative: false,
@@ -143,7 +145,7 @@ QUnit.test("scrollbar is hidden when scrolling is completed", function(assert) {
                 $scrollable.find(`#innerContent`).css({ height: scrollableContentSize, width: scrollableContentSize });
 
                 const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
-                $container.trigger("mouseenter");
+                $container.trigger("scroll");
 
                 const scrollbar = Scrollbar.getInstance($scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`));
                 assert.equal(scrollbar.option("visible"), scrollBarVisibleAfterMouseEnter, "thumb.visible after mouseenter");
