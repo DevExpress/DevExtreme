@@ -72,8 +72,10 @@ QUnit.module("API", moduleConfig, () => {
         let topLeftCellOption = `, topLeftCell: ${JSON.stringify(topLeftCell)}`;
 
         [true, false].forEach((excelFilterEnabled) => {
-            let options = topLeftCellOption + `, excelFilterEnabled: ${excelFilterEnabled}`;
-            const getDataGridConfig = (dataGrid, expectedCustomizeCellArgs, keepColumnWidths = true, selectedRowsOnly = false, wrapText = undefined) => {
+            let testCaption = topLeftCellOption + `, excelFilterEnabled: ${excelFilterEnabled}`;
+            const getOptions = (dataGrid, expectedCustomizeCellArgs, options) => {
+                let { keepColumnWidths = true, selectedRowsOnly = false, wrapText = undefined } = options || {};
+
                 const result = {
                     component: dataGrid,
                     worksheet: this.worksheet,
@@ -91,14 +93,14 @@ QUnit.module("API", moduleConfig, () => {
                 return result;
             };
 
-            QUnit.test("Empty grid" + options, (assert) => {
+            QUnit.test("Empty grid" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({}).dxDataGrid("instance");
 
                 let expectedArgs = [];
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedArgs)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedArgs)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                     helper.checkColumnWidths([undefined], topLeft.column);
                     helper.checkAutoFilter(false);
@@ -109,7 +111,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - 1 column" + options, (assert) => {
+            QUnit.test("Header - 1 column" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -123,7 +125,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
@@ -136,7 +138,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - 1 column, width: 1700" + options, (assert) => {
+            QUnit.test("Header - 1 column, width: 1700" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -147,13 +149,13 @@ QUnit.module("API", moduleConfig, () => {
                 const expectedCells = [[ { excelCell: {}, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } } ]];
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkColumnWidths([242.85, undefined], topLeft.column);
                     done();
                 });
             });
 
-            QUnit.test("Header - 1 column, width: 1800" + options, (assert) => {
+            QUnit.test("Header - 1 column, width: 1800" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -164,13 +166,13 @@ QUnit.module("API", moduleConfig, () => {
                 const expectedCells = [[ { excelCell: {}, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } } ]];
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkColumnWidths([MAX_EXCEL_COLUMN_WIDTH, undefined], topLeft.column);
                     done();
                 });
             });
 
-            QUnit.test("Header - 1 column, showColumnHeaders: false" + options, (assert) => {
+            QUnit.test("Header - 1 column, showColumnHeaders: false" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -181,7 +183,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 const expectedCells = [];
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                     helper.checkAutoFilter(false);
@@ -191,7 +193,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - 1 column, default alignment" + options, (assert) => {
+            QUnit.test("Header - 1 column, default alignment" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -204,13 +206,13 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then(() => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkAlignment(expectedCells);
                     done();
                 });
             });
 
-            QUnit.test("Header - 1 column, grid.wordWrapEnabled: true" + options, (assert) => {
+            QUnit.test("Header - 1 column, grid.wordWrapEnabled: true" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -224,13 +226,13 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then(() => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkAlignment(expectedCells);
                     done();
                 });
             });
 
-            QUnit.test("Header - 1 column, export.wrapText: true" + options, (assert) => {
+            QUnit.test("Header - 1 column, export.wrapText: true" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -243,13 +245,13 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, false, true)).then(() => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then(() => {
                     helper.checkAlignment(expectedCells);
                     done();
                 });
             });
 
-            QUnit.test("Header - 1 column, export.wrapText: false" + options, (assert) => {
+            QUnit.test("Header - 1 column, export.wrapText: false" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -262,13 +264,13 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, false, false)).then(() => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then(() => {
                     helper.checkAlignment(expectedCells);
                     done();
                 });
             });
 
-            QUnit.test("Header - 1 column, grid.wordWrapEnabled: true, export.wrapText: false" + options, (assert) => {
+            QUnit.test("Header - 1 column, grid.wordWrapEnabled: true, export.wrapText: false" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -282,13 +284,13 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, false, false)).then(() => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then(() => {
                     helper.checkAlignment(expectedCells);
                     done();
                 });
             });
 
-            QUnit.test("Header - 2 column" + options, (assert) => {
+            QUnit.test("Header - 2 column" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -303,7 +305,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
@@ -315,7 +317,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - 2 column, column.width: XXXpx" + options, (assert) => {
+            QUnit.test("Header - 2 column, column.width: XXXpx" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -323,13 +325,13 @@ QUnit.module("API", moduleConfig, () => {
                     columns: [{ caption: "f1", width: "200px" }, { caption: "f2", width: "300px" }]
                 }).dxDataGrid("instance");
 
-                exportDataGrid(getDataGridConfig(dataGrid, null, true)).then(() => {
+                exportDataGrid(getOptions(dataGrid, null, true)).then(() => {
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     done();
                 });
             });
 
-            QUnit.test("Header - 2 column, column.width: XX%" + options, (assert) => {
+            QUnit.test("Header - 2 column, column.width: XX%" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -337,13 +339,13 @@ QUnit.module("API", moduleConfig, () => {
                     columns: [{ caption: "f1", width: "40%" }, { caption: "f2", width: "60%" }]
                 }).dxDataGrid("instance");
 
-                exportDataGrid(getDataGridConfig(dataGrid, null, true)).then(() => {
+                exportDataGrid(getOptions(dataGrid, null, true)).then(() => {
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     done();
                 });
             });
 
-            QUnit.test("Header - 2 column, column.width: auto" + options, (assert) => {
+            QUnit.test("Header - 2 column, column.width: auto" + testCaption, (assert) => {
                 const currentDevice = devices.current();
                 const isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "generic";
                 const done = assert.async();
@@ -353,7 +355,7 @@ QUnit.module("API", moduleConfig, () => {
                     columns: [{ caption: "f1", width: "auto" }, { caption: "f2", width: "auto" }]
                 }).dxDataGrid("instance");
 
-                exportDataGrid(getDataGridConfig(dataGrid, null, true)).then(() => {
+                exportDataGrid(getOptions(dataGrid, null, true)).then(() => {
                     let expectedWidths = [3.71, 67.71, undefined];
                     if(browser.mozilla) {
                         expectedWidths = [3.85, 67.57, undefined];
@@ -365,7 +367,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - 2 column, keepColumnWidths: false" + options, (assert) => {
+            QUnit.test("Header - 2 column, keepColumnWidths: false" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -373,13 +375,13 @@ QUnit.module("API", moduleConfig, () => {
                     columns: [{ caption: "f1", width: 200 }, { caption: "f2", width: 300 }]
                 }).dxDataGrid("instance");
 
-                exportDataGrid(getDataGridConfig(dataGrid, null, false)).then(() => {
+                exportDataGrid(getOptions(dataGrid, null, { keepColumnWidths: false })).then(() => {
                     helper.checkColumnWidths([undefined, undefined, undefined], topLeft.column);
                     done();
                 });
             });
 
-            QUnit.test("Header - column.visible, { caption: f1, visible: false }" + options, (assert) => {
+            QUnit.test("Header - column.visible, { caption: f1, visible: false }" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -389,7 +391,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 const expectedCells = [];
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                     helper.checkColumnWidths([undefined], topLeft.column);
                     helper.checkAutoFilter(false);
@@ -398,7 +400,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - column.visible, { caption: f1 }, { caption: f2, visible: false }" + options, (assert) => {
+            QUnit.test("Header - column.visible, { caption: f1 }, { caption: f2, visible: false }" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -412,7 +414,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
@@ -424,7 +426,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - column.visible, { caption: f1, visible: false }, { caption: f2 }" + options, (assert) => {
+            QUnit.test("Header - column.visible, { caption: f1, visible: false }, { caption: f2 }" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -438,7 +440,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromGrid500Pixels, undefined], topLeft.column);
                     helper.checkFont(expectedCells);
@@ -450,7 +452,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - column.visibleIndex" + options, (assert) => {
+            QUnit.test("Header - column.visibleIndex" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -470,7 +472,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 2 }, { x: 0, y: topLeft.row });
@@ -480,7 +482,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - column.visibleIndex, { caption: f1, visible: false }" + options, (assert) => {
+            QUnit.test("Header - column.visibleIndex, { caption: f1, visible: false }" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -499,7 +501,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
@@ -509,7 +511,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - column.visibleIndex, { caption: f2, visible: false }" + options, (assert) => {
+            QUnit.test("Header - column.visibleIndex, { caption: f2, visible: false }" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -528,7 +530,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
@@ -538,7 +540,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - column.visibleIndex, { caption: f3, visible: false }" + options, (assert) => {
+            QUnit.test("Header - column.visibleIndex, { caption: f3, visible: false }" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -557,7 +559,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
@@ -567,7 +569,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 2 column & 2 rows" + options, (assert) => {
+            QUnit.test("Data - 2 column & 2 rows" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1", f2: "2" }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -585,7 +587,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -597,7 +599,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 2 column & 2 rows, clearing predefined font settings" + options, (assert) => {
+            QUnit.test("Data - 2 column & 2 rows, clearing predefined font settings" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1", f2: "2" }];
 
@@ -610,8 +612,8 @@ QUnit.module("API", moduleConfig, () => {
                     component: dataGrid,
                     worksheet: this.worksheet,
                     topLeftCell: topLeftCell,
-                    customizeCell: (options) => {
-                        const { gridCell, excelCell } = options;
+                    customizeCell: (testCaption) => {
+                        const { gridCell, excelCell } = testCaption;
 
                         if(gridCell.rowType === "header") { excelCell.font = undefined; }
                         if(gridCell.rowType === "data") { excelCell.font = { bold: true }; }
@@ -626,7 +628,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 2 column & 2 rows, wordWrapEnabled = true, col_2.alignment: 'right'" + options, (assert) => {
+            QUnit.test("Data - 2 column & 2 rows, wordWrapEnabled = true, col_2.alignment: 'right'" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1", f2: "2" }];
 
@@ -651,7 +653,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 2 column & 2 rows, wordWrapEnabled = true, export.excelWrapTextEnabled = false" + options, (assert) => {
+            QUnit.test("Data - 2 column & 2 rows, wordWrapEnabled = true, export.excelWrapTextEnabled = false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1", f2: "2" }];
 
@@ -678,7 +680,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 2 column & 2 rows, export.excelWrapTextEnabled = true, clearing predefined alignment settings" + options, (assert) => {
+            QUnit.test("Data - 2 column & 2 rows, export.excelWrapTextEnabled = true, clearing predefined alignment settings" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1", f2: "2" }];
 
@@ -696,8 +698,8 @@ QUnit.module("API", moduleConfig, () => {
                     component: dataGrid,
                     worksheet: this.worksheet,
                     topLeftCell: topLeftCell,
-                    customizeCell: (options) => {
-                        const { gridCell, excelCell } = options;
+                    customizeCell: (testCaption) => {
+                        const { gridCell, excelCell } = testCaption;
 
                         if(gridCell.rowType === "header") { excelCell.alignment = undefined; }
                         if(gridCell.rowType === "data") { excelCell.alignment = alignment; }
@@ -712,7 +714,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: string" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: string" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1" }];
 
@@ -733,7 +735,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -746,7 +748,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: string, export.wrapText: true" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: string, export.wrapText: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1" }];
 
@@ -767,7 +769,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, false, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellsRange) => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -775,7 +777,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: string, selectedRowKeys: [ds[1]]" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: string, selectedRowKeys: [ds[1]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "0" }, { f1: "1" }];
 
@@ -792,7 +794,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -804,7 +806,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: string, unbound" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: string, unbound" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ id: 0 }];
 
@@ -831,7 +833,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 5 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 4 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -843,7 +845,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]]" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ id: 0 }, { id: 1 }];
 
@@ -865,7 +867,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, true, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -877,7 +879,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]], dataField property does not exist in dataSource" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: string, unbound, selectedRowKeys: [ds[0]], dataField property does not exist in dataSource" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ field1: 'str1', field2: 'str1_1' }, { field1: 'str1', field2: 'str_1_2' }];
 
@@ -901,7 +903,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, true, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -913,7 +915,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: number, export.wrapText: false" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: number, export.wrapText: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 1 }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -933,7 +935,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, false, false)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -946,7 +948,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: number, unbound" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: number, unbound" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ id: 0 }];
 
@@ -977,7 +979,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 7 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 6 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -995,7 +997,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: number, unbound, selectedRowKeys: [ds[0]]" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: number, unbound, selectedRowKeys: [ds[0]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ id: 0 }, { id: 1 }];
 
@@ -1015,7 +1017,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, true, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1027,7 +1029,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: boolean" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: boolean" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: true }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -1048,7 +1050,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -1061,7 +1063,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: date" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: date" + testCaption, (assert) => {
                 const done = assert.async();
                 const date = new Date(2019, 3, 12);
                 const ds = [{ f1: date }];
@@ -1082,7 +1084,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -1095,7 +1097,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: dateTime" + options, (assert) => {
+            QUnit.test("Data - columns.dataType: dateTime" + testCaption, (assert) => {
                 const done = assert.async();
                 const dateTime = new Date(2019, 3, 12, 12, 15);
                 const ds = [{ f1: dateTime }];
@@ -1116,7 +1118,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -1129,7 +1131,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns" + options, (assert) => {
+            QUnit.test("Data - 3 columns" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -1159,7 +1161,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1171,7 +1173,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns, grid.wrapTextEnabled: true, export.wrapText: false, col_1.alignment: 'center', col_2.alignment: 'right', col_3.alignment: 'left'" + options, (assert) => {
+            QUnit.test("Data - 3 columns, grid.wrapTextEnabled: true, export.wrapText: false, col_1.alignment: 'center', col_2.alignment: 'right', col_3.alignment: 'left'" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: true, f3: 1 },
@@ -1201,7 +1203,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, false, false)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1213,7 +1215,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns - col_1.allowExporting: false" + options, (assert) => {
+            QUnit.test("Data - 3 columns - col_1.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -1242,7 +1244,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
@@ -1255,7 +1257,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns - col_2.allowExporting: false" + options, (assert) => {
+            QUnit.test("Data - 3 columns - col_2.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -1284,7 +1286,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
@@ -1297,7 +1299,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns - col_3.allowExporting: false" + options, (assert) => {
+            QUnit.test("Data - 3 columns - col_3.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -1326,7 +1328,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
@@ -1339,7 +1341,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level" + options, (assert) => {
+            QUnit.test("Grouping - 1 level" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -1368,7 +1370,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 4, column: topLeft.column }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -1380,7 +1382,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, grid.wrapTextEnabled: false, export.excelWrapTextEnabled: true, col_1.alignment: 'center', col_2.alignment: 'right'" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, grid.wrapTextEnabled: false, export.excelWrapTextEnabled: true, col_1.alignment: 'center', col_2.alignment: 'right'" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -1413,7 +1415,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 4, column: topLeft.column }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -1425,7 +1427,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, export.wrapText: true, rtlEnabled: true" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, export.wrapText: true, rtlEnabled: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -1455,7 +1457,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, false, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 4, column: topLeft.column }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -1467,7 +1469,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, selectedRowKeys: [ds[0]]" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, selectedRowKeys: [ds[0]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
 
@@ -1490,7 +1492,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, true, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1502,7 +1504,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, selectedRowKeys: [ds[1]]" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, selectedRowKeys: [ds[1]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
 
@@ -1525,7 +1527,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, true, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1537,7 +1539,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, selectedRowKeys: [ds[0], ds[1]]" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, selectedRowKeys: [ds[0], ds[1]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
 
@@ -1562,7 +1564,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, true, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1574,7 +1576,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, unbound" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, unbound" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -1601,7 +1603,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1613,7 +1615,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, unbound, selectedRowKeys: [ds[1]]" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, unbound, selectedRowKeys: [ds[1]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 'str1', f2: 'str1_1' }, { f1: 'str1', f2: 'str_1_2' }];
 
@@ -1639,7 +1641,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -1650,7 +1652,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, 2 group row, selectedRowKeys: [ds[1]]" + options, (assert) => {
+            QUnit.test("Grouping - 1 level, 2 group row, selectedRowKeys: [ds[1]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 'str1_1', f2: 'str1_2', f3: "str1_3" }, { f1: 'str2_1', f2: 'str2_2', f3: "str2_3" }];
 
@@ -1673,7 +1675,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, true, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1685,7 +1687,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level - 1 summary group node" + options, (assert) => {
+            QUnit.test("Grouping - 1 level - 1 summary group node" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: 1 },
@@ -1716,7 +1718,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1728,7 +1730,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level - 1 summary showInGroupFooter" + options, (assert) => {
+            QUnit.test("Grouping - 1 level - 1 summary showInGroupFooter" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -1765,7 +1767,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 5, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1777,7 +1779,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level - 1 summary showInGroupFooter, rtlEnabled: true" + options, (assert) => {
+            QUnit.test("Grouping - 1 level - 1 summary showInGroupFooter, rtlEnabled: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -1815,7 +1817,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 5, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1827,7 +1829,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level & 2 column" + options, (assert) => {
+            QUnit.test("Grouping - 1 level & 2 column" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
@@ -1867,7 +1869,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1879,7 +1881,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level & 2 column, 1 summary showInGroupFooter, 1 summary alignByColumn, selectedRowKeys: [ds[1]]" + options, (assert) => {
+            QUnit.test("Grouping - 1 level & 2 column, 1 summary showInGroupFooter, 1 summary alignByColumn, selectedRowKeys: [ds[1]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
@@ -1917,7 +1919,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1929,7 +1931,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level" + options, (assert) => {
+            QUnit.test("Grouping - 2 level" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
@@ -1963,7 +1965,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 6, column: 1 }, { row: 6, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 5, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1975,7 +1977,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level - 2 summary group node" + options, (assert) => {
+            QUnit.test("Grouping - 2 level - 2 summary group node" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
@@ -2009,7 +2011,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 1 }, { row: 5, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 4, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2021,7 +2023,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level - 2 summary showInGroupFooter" + options, (assert) => {
+            QUnit.test("Grouping - 2 level - 2 summary showInGroupFooter" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1" },
@@ -2068,7 +2070,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 11, column: 1 }, { row: 11, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 10, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2080,7 +2082,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level & 2 column - 2 summary showInGroupFooter" + options, (assert) => {
+            QUnit.test("Grouping - 2 level & 2 column - 2 summary showInGroupFooter" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1", f4: "f4_1" },
@@ -2141,7 +2143,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 11, column: 2 }, { row: 11, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 10, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2153,7 +2155,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 2 level & 2 column - 2 summary alignByColumn" + options, (assert) => {
+            QUnit.test("Grouping - 2 level & 2 column - 2 summary alignByColumn" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f1_2", f3: "f3_1", f4: "f4_1", f5: "f5_1" },
@@ -2202,7 +2204,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 5, column: 3 }, { row: 5, column: 3 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 4, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2214,7 +2216,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2250,7 +2252,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
@@ -2263,7 +2265,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & group.allowExporting: false" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & group.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2299,7 +2301,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn250Pixels, undefined], topLeft.column);
@@ -2312,7 +2314,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2345,7 +2347,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
@@ -2358,7 +2360,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2391,7 +2393,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
@@ -2404,7 +2406,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_3.allowExporting: false" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_3.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2437,7 +2439,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
@@ -2450,7 +2452,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2494,7 +2496,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2506,7 +2508,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2546,7 +2548,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2558,7 +2560,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2598,7 +2600,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2610,7 +2612,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_1.alignByColumn: true x showInGroupFooter: true" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_1.alignByColumn: true x showInGroupFooter: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2650,7 +2652,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2662,7 +2664,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2699,7 +2701,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2711,7 +2713,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2751,7 +2753,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2763,7 +2765,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + options, (assert) => {
+            QUnit.test("Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1", f4: "f4_1" },
@@ -2800,7 +2802,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -2812,7 +2814,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary" + options, (assert) => {
+            QUnit.test("Total summary" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -2852,7 +2854,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
@@ -2863,7 +2865,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary, export.wrapText: false, rtlEnabled: true" + options, (assert) => {
+            QUnit.test("Total summary, export.wrapText: false, rtlEnabled: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -2904,7 +2906,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, false, false)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then((cellsRange) => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2912,7 +2914,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("TODO: not supported - Total summary, export.wrapText: true, totalItems.alignment, total_2.alignment: center, total_3: right" + options, (assert) => {
+            QUnit.test("TODO: not supported - Total summary, export.wrapText: true, totalItems.alignment, total_2.alignment: center, total_3: right" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -2953,7 +2955,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, false, false, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellsRange) => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2961,7 +2963,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary, selectedRowKeys: [ds[1]]" + options, (assert) => {
+            QUnit.test("Total summary, selectedRowKeys: [ds[1]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -2999,7 +3001,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells, true, true)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { selectedRowsOnly: true })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -3011,7 +3013,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_1.allowExporting: false" + options, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_1.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -3047,7 +3049,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -3059,7 +3061,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_1.allowExporting: false" + options, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_1.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -3095,7 +3097,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -3107,7 +3109,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_1.allowExporting: false" + options, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_1.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -3142,7 +3144,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -3154,7 +3156,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_2.allowExporting: false" + options, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_1 - col_2.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -3190,7 +3192,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -3202,7 +3204,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_2.allowExporting: false" + options, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_2 - col_2.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -3238,7 +3240,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -3250,7 +3252,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_2.allowExporting: false" + options, (assert) => {
+            QUnit.test("Total summary - 3 columns & total_col_1.showInColumn: col_3 - col_2.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1", f3: "f3_1" },
@@ -3286,7 +3288,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getDataGridConfig(dataGrid, expectedCells)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
