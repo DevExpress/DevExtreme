@@ -1,74 +1,77 @@
-/* global document, Node */
+/* global document */
+import injector from "./utils/dependency_injector";
+import { noop } from "./utils/common";
 
-var injector = require("./utils/dependency_injector");
-var noop = require("./utils/common").noop;
+const ELEMENT_NODE = 1;
+const TEXT_NODE = 3;
+const DOCUMENT_NODE = 9;
 
-var nativeDOMAdapterStrategy = {
-    querySelectorAll: function(element, selector) {
+const nativeDOMAdapterStrategy = {
+    querySelectorAll(element, selector) {
         return element.querySelectorAll(selector);
     },
 
-    elementMatches: function(element, selector) {
-        var matches = element.matches || element.matchesSelector || element.mozMatchesSelector ||
+    elementMatches(element, selector) {
+        const matches = element.matches || element.matchesSelector || element.mozMatchesSelector ||
             element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector ||
-            function(selector) {
-                var doc = element.document || element.ownerDocument;
+            (selector => {
+                const doc = element.document || element.ownerDocument;
 
                 if(!doc) {
                     return false;
                 }
 
-                var items = this.querySelectorAll(doc, selector);
+                const items = this.querySelectorAll(doc, selector);
 
-                for(var i = 0; i < items.length; i++) {
+                for(let i = 0; i < items.length; i++) {
                     if(items[i] === element) {
                         return true;
                     }
                 }
-            }.bind(this);
+            });
 
         return matches.call(element, selector);
     },
 
-    createElement: function(tagName, context) {
+    createElement(tagName, context) {
         context = context || this._document;
         return context.createElement(tagName);
     },
 
-    createElementNS: function(ns, tagName, context) {
+    createElementNS(ns, tagName, context) {
         context = context || this._document;
         return context.createElementNS(ns, tagName);
     },
 
-    createTextNode: function(text, context) {
+    createTextNode(text, context) {
         context = context || this._document;
         return context.createTextNode(text);
     },
 
-    isNode: function(element) {
+    isNode(element) {
         return typeof element === "object" && "nodeType" in element;
     },
 
-    isElementNode: function(element) {
-        return element && element.nodeType === Node.ELEMENT_NODE;
+    isElementNode(element) {
+        return element && element.nodeType === ELEMENT_NODE;
     },
 
-    isTextNode: function(element) {
-        return element && element.nodeType === Node.TEXT_NODE;
+    isTextNode(element) {
+        return element && element.nodeType === TEXT_NODE;
     },
 
-    isDocument: function(element) {
-        return element && element.nodeType === Node.DOCUMENT_NODE;
+    isDocument(element) {
+        return element && element.nodeType === DOCUMENT_NODE;
     },
 
-    removeElement: function(element) {
-        var parentNode = element && element.parentNode;
+    removeElement(element) {
+        const parentNode = element && element.parentNode;
         if(parentNode) {
             parentNode.removeChild(element);
         }
     },
 
-    insertElement: function(parentElement, newElement, nextSiblingElement) {
+    insertElement(parentElement, newElement, nextSiblingElement) {
         if(parentElement && newElement && parentElement !== newElement) {
             if(nextSiblingElement) {
                 parentElement.insertBefore(newElement, nextSiblingElement);
@@ -78,29 +81,29 @@ var nativeDOMAdapterStrategy = {
         }
     },
 
-    getAttribute: function(element, name) {
+    getAttribute(element, name) {
         return element.getAttribute(name);
     },
 
-    setAttribute: function(element, name, value) {
+    setAttribute(element, name, value) {
         element.setAttribute(name, value);
     },
 
-    removeAttribute: function(element, name) {
+    removeAttribute(element, name) {
         element.removeAttribute(name);
     },
 
-    setProperty: function(element, name, value) {
+    setProperty(element, name, value) {
         element[name] = value;
     },
 
-    setText: function(element, text) {
+    setText(element, text) {
         if(element) {
             element.textContent = text;
         }
     },
 
-    setClass: function(element, className, isAdd) {
+    setClass(element, className, isAdd) {
         if(element.nodeType === 1 && className) {
             if(element.classList) {
                 if(isAdd) {
@@ -109,11 +112,11 @@ var nativeDOMAdapterStrategy = {
                     element.classList.remove(className);
                 }
             } else { // IE9
-                var classNameSupported = typeof element.className === 'string';
-                var elementClass = classNameSupported ? element.className : (this.getAttribute(element, 'class') || '');
-                var classNames = elementClass.split(" ");
-                var classIndex = classNames.indexOf(className);
-                var resultClassName;
+                const classNameSupported = typeof element.className === 'string';
+                const elementClass = classNameSupported ? element.className : (this.getAttribute(element, 'class') || '');
+                const classNames = elementClass.split(" ");
+                const classIndex = classNames.indexOf(className);
+                let resultClassName;
                 if(isAdd && classIndex < 0) {
                     resultClassName = elementClass ? elementClass + " " + className : className;
                 }
@@ -132,60 +135,60 @@ var nativeDOMAdapterStrategy = {
         }
     },
 
-    setStyle: function(element, name, value) {
+    setStyle(element, name, value) {
         element.style[name] = value || '';
     },
 
     _document: typeof document === "undefined" ? undefined : document,
 
-    getDocument: function() {
+    getDocument() {
         return this._document;
     },
 
-    getActiveElement: function() {
+    getActiveElement() {
         return this._document.activeElement;
     },
 
-    getBody: function() {
+    getBody() {
         return this._document.body;
     },
 
-    createDocumentFragment: function() {
+    createDocumentFragment() {
         return this._document.createDocumentFragment();
     },
 
-    getDocumentElement: function() {
+    getDocumentElement() {
         return this._document.documentElement;
     },
 
-    getLocation: function() {
+    getLocation() {
         return this._document.location;
     },
 
-    getSelection: function() {
+    getSelection() {
         return this._document.selection;
     },
 
-    getReadyState: function() {
+    getReadyState() {
         return this._document.readyState;
     },
 
-    getHead: function() {
+    getHead() {
         return this._document.head;
     },
 
-    hasDocumentProperty: function(property) {
+    hasDocumentProperty(property) {
         return property in this._document;
     },
 
-    listen: function(element, event, callback, options) {
+    listen(element, event, callback, options) {
         if(!element || !("addEventListener" in element)) {
             return noop;
         }
 
         element.addEventListener(event, callback, options);
 
-        return function() {
+        return () => {
             element.removeEventListener(event, callback);
         };
     }
