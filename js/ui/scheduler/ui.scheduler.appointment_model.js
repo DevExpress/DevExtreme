@@ -288,11 +288,6 @@ class AppointmentModel {
                 result = false;
             }
 
-            // NOTE: appointment should not be rendered if started in maxDate or ended in minDate
-            if(result && (comparableStartDate >= max || comparableEndDate <= min)) {
-                result = false;
-            }
-
             if(result && startDayHour !== undefined) {
                 result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays);
             }
