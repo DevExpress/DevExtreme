@@ -3803,6 +3803,7 @@ QUnit.test("Multi-day appointment should be rendered when started after endDayHo
         dataSource: data,
         views: ["timelineWeek"],
         currentView: "timelineWeek",
+        currentDate: new Date(2019, 9, 4),
         cellDuration: 660,
         startDayHour: 7,
         endDayHour: 18,
