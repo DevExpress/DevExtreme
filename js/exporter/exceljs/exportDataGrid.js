@@ -15,7 +15,7 @@ function exportDataGrid(options) {
         component,
         worksheet,
         topLeftCell = { row: 1, column: 1 },
-        excelFilterEnabled,
+        excelFilterEnabled = false,
         keepColumnWidths = true,
         selectedRowsOnly = false
     } = options;
@@ -25,7 +25,7 @@ function exportDataGrid(options) {
         summaryRight: false
     };
 
-    let result = {
+    let cellsRange = {
         from: { row: topLeftCell.row, column: topLeftCell.column },
         to: { row: topLeftCell.row, column: topLeftCell.column }
     };
@@ -39,30 +39,30 @@ function exportDataGrid(options) {
             let dataRowsCount = dataProvider.getRowsCount();
 
             if(keepColumnWidths) {
-                _setColumnsWidth(worksheet, columns, result.from.column);
+                _setColumnsWidth(worksheet, columns, cellsRange.from.column);
             }
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                const row = worksheet.getRow(result.from.row + rowIndex);
+                const row = worksheet.getRow(cellsRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell);
+                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
                 }
                 if(rowIndex >= 1) {
-                    result.to.row++;
+                    cellsRange.to.row++;
                 }
             }
 
-            result.to.column += columns.length > 0 ? columns.length - 1 : 0;
+            cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
             if(excelFilterEnabled === true) {
-                if(dataRowsCount > 0) worksheet.autoFilter = result;
-                worksheet.views = [{ state: 'frozen', ySplit: result.from.row + dataProvider.getFrozenArea().y - 1 }];
+                if(dataRowsCount > 0) worksheet.autoFilter = cellsRange;
+                worksheet.views = [{ state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 }];
             }
 
-            resolve(result);
+            resolve(cellsRange);
         });
     });
 }
@@ -103,9 +103,12 @@ function _setFont(excelCell, bold) {
 
 function _setAlignment(excelCell, wrapText, alignment) {
     excelCell.alignment = excelCell.alignment || {};
-    excelCell.alignment.wrapText = wrapText;
-    excelCell.alignment.horizontal = alignment;
-    excelCell.alignment.vertical = "top";
+    if(isDefined(wrapText)) {
+        excelCell.alignment.wrapText = wrapText;
+    }
+    if(isDefined(alignment)) {
+        excelCell.alignment.horizontal = alignment;
+    }
 }
 
 function _setColumnsWidth(worksheet, columns, startColumnIndex) {
