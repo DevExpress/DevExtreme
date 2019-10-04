@@ -71,7 +71,7 @@
     "gulp-replace-async": "0.0.1",
     "gulp-tap": "^1.0.1",
     "gulp-template": "^4.0.0",
-    "gulp-typescript": "^3.0.2",
+    "gulp-typescript": "^5.0.0",
     "gulp-uglify": "^1.5.3",
     "gulp-watch": "^5.0.0",
     "handlebars": "^4.1.2",
