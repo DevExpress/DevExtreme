@@ -1346,6 +1346,7 @@ QUnit.test("Dragging item to another the sortable widget without free space", fu
 
     // assert
     assert.strictEqual(sortable2.$element().children().last()[0].style.marginBottom, "29px", "items2 last item has margin bottom");
+    assert.strictEqual(sortable2.$element().css("overflow"), "hidden", "overflow is hidden to correct applying margin to sortable element");
 
     // act
     pointer.up();
