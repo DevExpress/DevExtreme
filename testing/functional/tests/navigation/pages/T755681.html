@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>ContextMenu tests T755681</title>
+        <title>T755681</title>
 
         <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.common.css"/>
         <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.light.css"/>
@@ -11,18 +11,15 @@
     </head>
     <body>
         <div id="contextMenu"></div>
-        <button  id="menuTarget">Open context menu</button>
+        <button id="menuTarget">Open context menu</button>
 
         <script>
             $(function(){
-                let isItemAdded = false;
-                let isFirstShown = true;
-                let onPositioningCallCount = 0;
-
                 const menuTargetSelector = "#menuTarget";
-                const items = [{ text: "item 1" }];
+                let items = [{ text: "item 1" }];
+                let isItemAdded = false;
 
-                const contextMenu = $('#contextMenu').dxList({
+                $('#contextMenu').dxContextMenu({
                     items: items,
                     showEvent:"dxclick",
                     target: menuTargetSelector,
@@ -32,18 +29,10 @@
                                 isItemAdded = true;
                                 items.push({ text: "item 2" });
                                 e.component.option("items", items);
-                            }, 500);
-                            // assert.ok(e.jQEvent, "event is defined");
-                            // assert.ok(true, "item added");
-                        } else {
-                            // assert.ok(!e.jQEvent, "event is not defined");
-                            // assert.strictEqual(e.component.option("items").length, 2, "items.length");
+                            }, 1000);
                         }
-                    },
-                    onPositioning: function() {
-                        onPositioningCallCount++;
                     }
-                }).dxContextMenu("instance");
+                });
             });
         </script>
     </body>
