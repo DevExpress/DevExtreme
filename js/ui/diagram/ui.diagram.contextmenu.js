@@ -32,6 +32,8 @@ class DiagramContextMenu extends Widget {
 
             onItemClick: ({ itemData }) => this._onItemClick(itemData),
             onShowing: (e) => {
+                if(this._tempState === true) return;
+
                 this._tempState = true;
                 if(e.jQEvent) {
                     this.clickPosition = { x: e.jQEvent.clientX, y: e.jQEvent.clientY };
