@@ -12,25 +12,17 @@ const FAB_CLASS = "dx-fa-button";
 const FAB_ICON_CLASS = "dx-fa-button-icon";
 const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
-const SpeedDialItem = Overlay.inherit({
-    _actionEvents: [
-        "initialized",
-        "disposing",
-        "contentReady"
-    ],
-
-    _clickActionArgs: null,
-
+class SpeedDialItem extends Overlay {
     _getDefaultOptions() {
-        return extend(this.callBase(), {
+        return extend(super._getDefaultOptions(), {
             shading: false,
             useInkRipple: false,
             callOverlayRenderShading: false
         });
-    },
+    }
 
     _defaultOptionsRules() {
-        return this.callBase().concat([
+        return super._defaultOptionsRules().concat([
             {
                 device() {
                     return themes.isMaterial();
@@ -40,20 +32,20 @@ const SpeedDialItem = Overlay.inherit({
                 }
             }
         ]);
-    },
+    }
 
     _render() {
         this.$element().addClass(FAB_CLASS);
-        this.callBase();
+        super._render();
         this._renderIcon();
         this.option("useInkRipple") && this._renderInkRipple();
         this._renderClick();
-    },
+    }
 
     _init() {
-        this.callBase();
+        super._init();
         this._renderEvents();
-    },
+    }
 
     _renderButtonIcon($element, icon, iconClass) {
         !!$element && $element.remove();
@@ -66,40 +58,46 @@ const SpeedDialItem = Overlay.inherit({
             .appendTo(this.$content());
 
         return $element;
-    },
+    }
 
     _renderIcon() {
         this._$icon = this._renderButtonIcon(
             this._$icon,
             this._options.icon,
             FAB_ICON_CLASS);
-    },
+    }
 
     _renderShading() {
         if(this._options.callOverlayRenderShading) {
-            this.callBase();
+            super._renderShading();
         }
-    },
+    }
 
     _getActionComponent() {
         return this.option("actionComponent") || this.option("actions")[0];
-    },
+    }
 
     _renderEvents() {
-        this._actionEvents.forEach((actionEvent) => {
+        const actionEvents = [
+            "initialized",
+            "disposing",
+            "contentReady"
+        ];
+
+        actionEvents.forEach((actionEvent) => {
             this.on(actionEvent, () => {
                 const actionOption = "on" + actionEvent.charAt(0).toUpperCase() + actionEvent.substr(1);
                 this._getActionComponent()._createActionByOption(actionOption, {}, true)({ actionElement: this.$element() });
             });
         });
-    },
+    }
 
     _fixWrapperPosition() {
         const $wrapper = this._$wrapper;
         const $container = this._getContainer();
 
         $wrapper.css("position", this._isWindow($container) ? "fixed" : "absolute");
-    },
+    }
 
     _setClickAction() {
         const eventName = addNamespace(clickEvent.name, this.NAME);
@@ -107,33 +105,33 @@ const SpeedDialItem = Overlay.inherit({
 
         eventsEngine.off(overlayContent, eventName);
         eventsEngine.on(overlayContent, eventName, (e) => {
-            this._clickActionArgs = {
+            const clickActionArgs = {
                 event: e,
                 actionElement: this.element(),
                 element: this._getActionComponent().$element()
             };
 
-            this._clickAction(this._clickActionArgs);
+            this._clickAction(clickActionArgs);
         });
-    },
+    }
 
     _defaultActionArgs() {
         return {
             component: this._getActionComponent()
         };
-    },
+    }
 
     _renderClick() {
         this._clickAction = this._getActionComponent()._createActionByOption("onClick");
         this._setClickAction();
-    },
+    }
 
     _renderInkRipple() {
         this._inkRipple = inkRipple.render();
-    },
+    }
 
     _toggleActiveState($element, value, e) {
-        this.callBase.apply(this, arguments);
+        super._toggleActiveState.apply(this, arguments);
 
         if(!this._inkRipple) {
             return;
@@ -149,7 +147,7 @@ const SpeedDialItem = Overlay.inherit({
         } else {
             this._inkRipple.hideWave(config);
         }
-    },
+    }
 
     _optionChanged(args) {
         switch(args.name) {
@@ -163,9 +161,9 @@ const SpeedDialItem = Overlay.inherit({
                 this._render();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
     }
-});
+}
 
 module.exports = SpeedDialItem;

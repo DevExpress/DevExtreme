@@ -251,9 +251,14 @@ QUnit.module("add or remove action buttons", (hooks) => {
 });
 
 QUnit.module("check action buttons position", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
+
+        fx.off = false;
     }),
 
     test("if container is window", (assert) => {
@@ -315,9 +320,14 @@ QUnit.module("check action buttons position", (hooks) => {
 });
 
 QUnit.module("check action buttons click args", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
+
+        fx.off = false;
     }),
 
     test("component", (assert) => {
@@ -348,9 +358,14 @@ QUnit.module("check action buttons click args", (hooks) => {
 });
 
 QUnit.module("check action buttons events", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
     hooks.afterEach(() => {
         $("#fab-one").dxSpeedDialAction("instance").dispose();
         $("#fab-two").dxSpeedDialAction("instance").dispose();
+
+        fx.off = false;
     }),
 
     test("trigger and args", (assert) => {
@@ -358,29 +373,28 @@ QUnit.module("check action buttons events", (hooks) => {
             .dxSpeedDialAction()
             .dxSpeedDialAction("instance")
             .on("contentReady", (e) => {
-                assert.ok(e.component, "first SDA content ready component in args");
-                assert.ok(e.actionElement, "first SDA content ready actionElement in args");
-                assert.ok(e.element, "first SDA content ready element in args");
+                assert.equal(e.component.NAME, "dxSpeedDialAction", "right first SDA content ready component in args");
+                assert.ok(e.actionElement.hasClass("dx-overlay"), "right first SDA content ready actionElement in args");
+                assert.equal($(e.element).attr("id"), "fab-one", "right first SDA content ready element in args");
             })
             .on("disposing", (e) => {
-                assert.ok(e.component, "first SDA disposing component in args");
+                assert.equal(e.component.NAME, "dxSpeedDialAction", "right first SDA disposing component in args");
                 assert.ok(e.actionElement, "first SDA disposing actionElement in args");
                 assert.ok(e.element, "first SDA disposing element in args");
             })
             .on("initialized", (e) => {
-                assert.ok(e.component, "first SDA initialized component in args");
-                assert.ok(e.actionElement, "first SDA initialized actionElement in args");
-                assert.ok(e.element, "first SDA initialized element in args");
+                assert.equal(e.component.NAME, "dxSpeedDialAction", "right first SDA initialized component in args");
+                assert.ok(e.actionElement.hasClass("dx-overlay"), "right first SDA initialized actionElement in args");
+                assert.equal($(e.element).attr("id"), "fab-one", "right first SDA initialized element in args");
             })
             .on("click", (e) => {
-                assert.ok(e.component, "first SDA click component in args");
-                assert.ok(e.actionElement, "first SDA click actionElement in args");
-                assert.ok(e.element, "first SDA click element in args");
+                assert.equal(e.component.NAME, "dxSpeedDialAction", "right first SDA click component in args");
+                assert.ok($(e.actionElement).hasClass("dx-overlay"), "right first SDA click actionElement in args");
+                assert.equal($(e.element).attr("id"), "fab-one", "right first SDA click element in args");
                 assert.ok(e.event, "first SDA click event in args");
             });
 
-        const $fabMainElement = $("." + FAB_MAIN_CLASS);
-        let $fabMainContent = $fabMainElement.find(".dx-overlay-content");
+        let $fabMainContent = $("." + FAB_MAIN_CLASS).find(".dx-overlay-content");
 
         $fabMainContent.trigger("dxclick");
 
@@ -388,10 +402,12 @@ QUnit.module("check action buttons events", (hooks) => {
             .dxSpeedDialAction()
             .dxSpeedDialAction("instance")
             .on("contentReady", (e) => {
-                assert.ok(e.component, "second SDA content ready component in args");
-                assert.ok(e.actionElement, "second SDA content ready actionElement in args");
-                assert.ok(e.element, "second SDA content ready element in args");
+                assert.equal(e.component.NAME, "dxSpeedDialAction", "right second SDA content ready component in args");
+                assert.ok(e.actionElement.hasClass("dx-overlay"), "right second SDA content ready actionElement in args");
+                assert.equal($(e.element).attr("id"), "fab-two", "right second SDA content ready element in args");
             });
+
+        $fabMainContent = $("." + FAB_MAIN_CLASS).find(".dx-overlay-content");
 
         $fabMainContent.trigger("dxclick");
     });

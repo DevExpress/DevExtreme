@@ -14,9 +14,7 @@ const INVISIBLE_STATE_CLASS = "dx-state-invisible";
 
 let speedDialMainItem = null;
 
-const SpeedDialMainItem = SpeedDialItem.inherit({
-    _actionItems: [],
-
+class SpeedDialMainItem extends SpeedDialItem {
     _getDefaultOptions() {
         const defaultOptions = {
             icon: "add",
@@ -41,13 +39,13 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         };
 
         return extend(
-            this.callBase(),
+            super._getDefaultOptions(),
             extend(defaultOptions, config().floatingActionButtonConfig)
         );
-    },
+    }
 
     _defaultOptionsRules() {
-        return this.callBase().concat([
+        return super._defaultOptionsRules().concat([
             {
                 device() {
                     return themes.isMaterial();
@@ -58,15 +56,15 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 }
             }
         ]);
-    },
+    }
 
     _render() {
         this.$element().addClass(FAB_MAIN_CLASS);
-        this.callBase();
+        super._render();
         this._moveToContainer();
         this._renderCloseIcon();
         this._renderClick();
-    },
+    }
 
     _renderCloseIcon() {
         this._$closeIcon = this._renderButtonIcon(
@@ -75,7 +73,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             FAB_CLOSE_ICON_CLASS);
 
         this._$closeIcon.addClass(INVISIBLE_STATE_CLASS);
-    },
+    }
 
     _renderClick() {
         this._clickAction = this.option("actions").length === 1 ?
@@ -83,7 +81,7 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             this._createAction(this._clickHandler);
 
         this._setClickAction();
-    },
+    }
 
     _clickHandler() {
         const actions = this._actionItems;
@@ -97,19 +95,21 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
         this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
         this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
-    },
+    }
 
     _renderActions() {
         const actions = this.option("actions");
         const lastActionIndex = actions.length - 1;
         const minActionButtonCount = 1;
 
-        if(this._actionItems.length) {
+        if(this._actionItems && this._actionItems.length) {
             this._actionItems.forEach(actionItem => {
                 actionItem.dispose();
                 actionItem.$element().remove();
             });
         }
+
+        this._actionItems = [];
 
         if(actions.length === minActionButtonCount) return;
 
@@ -143,12 +143,12 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
 
             this._actionItems.push(this._createComponent($actionElement, SpeedDialItem, action._options));
         }
-    },
+    }
 
     _setPosition() {
         this._hide();
         this._show();
-    },
+    }
 
     _optionChanged(args) {
         switch(args.name) {
@@ -170,10 +170,10 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 }
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
     }
-});
+}
 
 exports.initAction = function(newAction) {
     // TODO: workaround for Angular/React/Vue
