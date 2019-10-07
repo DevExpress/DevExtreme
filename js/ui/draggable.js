@@ -293,6 +293,14 @@ var Draggable = DOMComponentWithTemplate.inherit({
              */
             template: undefined,
             /**
+             * @name DraggableBaseOptions.contentTemplate
+             * @type template|function
+             * @type_function_return string|Node|jQuery
+             * @hidden
+             * @default "content"
+             */
+            contentTemplate: "content",
+            /**
              * @name DraggableBaseOptions.handle
              * @type string
              * @default ""
@@ -378,8 +386,6 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this.verticalScrollHelper = new ScrollHelper("vertical", this);
     },
 
-    _initTemplates: noop,
-
     _normalizeCursorOffset: function(offset, $sourceElement, $dragElement) {
         if(typeUtils.isFunction(offset)) {
             offset = offset.call(this, {
@@ -445,12 +451,19 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return this.option("filter") || "";
     },
 
+    _$content: function() {
+        var $element = this.$element(),
+            $wrapper = $element.children(".dx-template-wrapper");
+
+        return $wrapper.length ? $wrapper : $element;
+    },
+
     _attachEventHandlers: function() {
         if(this.option("disabled")) {
             return;
         }
 
-        var $element = this.$element(),
+        var $element = this._$content(),
             itemsSelector = this._getItemsSelector(),
             allowMoveByClick = this.option("allowMoveByClick"),
             data = {
@@ -528,7 +541,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _detachEventHandlers: function() {
-        eventsEngine.off(this.$element(), "." + DRAGGABLE);
+        eventsEngine.off(this._$content(), "." + DRAGGABLE);
         eventsEngine.off(this._getArea(), "." + DRAGGABLE);
     },
 
@@ -552,7 +565,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             itemsSelector = this._getItemsSelector();
 
         if(itemsSelector[0] === ">") {
-            var $items = this.$element().find(itemsSelector);
+            var $items = this._$content().find(itemsSelector);
             if(!$items.is($target)) {
                 $target = $target.closest($items);
             }
@@ -857,9 +870,23 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return this["_" + name + "Action"] || this._createActionByOption(name);
     },
 
+    _getAnonymousTemplateName: function() {
+        return "content";
+    },
+
     _render: function() {
         this.callBase();
         this.$element().addClass(this._addWidgetPrefix());
+
+        const transclude = this._getAnonymousTemplateName() === this.option("contentTemplate"),
+            template = this._getTemplateByOption("contentTemplate");
+
+        if(template) {
+            $(template.render({
+                container: this.element(),
+                transclude
+            }));
+        }
     },
 
     _optionChanged: function(args) {

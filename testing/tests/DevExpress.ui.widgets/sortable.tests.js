@@ -26,6 +26,13 @@ QUnit.testStart(function() {
             <div style="width: 30px; height: 300px; float: left;">item2</div>
             <div style="width: 30px; height: 300px; float: left;">item3</div>
         </div>
+        <div id="itemsWithContentTemplate" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+            <div data-options="dxTemplate:{ name:'content' }">
+                <div id="item1" class="draggable" style="width: 300px; height: 30px; background: yellow;">item1</div>
+                <div id="item2" class="draggable" style="width: 300px; height: 30px; background: red;">item2</div>
+                <div id="item3" class="draggable" style="width: 300px; height: 30px; background: blue;">item3</div>
+            </div>
+        </div>
         `;
 
     $("#qunit-fixture").html(markup);
@@ -228,6 +235,30 @@ QUnit.test("Source item if filter is not defined", function(assert) {
 
     // assert
     $items = this.$element.children();
+    let $source = $items.eq(0);
+    assert.strictEqual($items.length, 3, "item count");
+    assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
+});
+
+QUnit.test("Source item if content template is defined", function(assert) {
+    // arrange
+    this.$element = $("#itemsWithContentTemplate");
+
+    this.createSortable({
+        dropFeedbackMode: "push"
+    });
+
+    let $items = this.$element.children().children();
+    let $dragItemElement = $items.eq(0);
+
+    // assert
+    assert.strictEqual($items.length, 3, "item count");
+
+    // act
+    pointerMock($dragItemElement).start().down().move(10, 0);
+
+    // assert
+    $items = this.$element.children().children();
     let $source = $items.eq(0);
     assert.strictEqual($items.length, 3, "item count");
     assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
