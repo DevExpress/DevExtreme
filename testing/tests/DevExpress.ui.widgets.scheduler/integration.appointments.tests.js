@@ -3812,3 +3812,26 @@ QUnit.test("Multi-day appointment should be rendered when started after endDayHo
 
     assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, "Appointments are rendered");
 });
+
+QUnit.test("Appointment with equal startDate and endDate should render with 1 minute duration (T817857)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Zero minute appointment",
+            startDate: new Date(2019, 8, 1, 10, 0),
+            endDate: new Date(2019, 8, 1, 10, 0),
+        }, {
+            text: "One minute appointment",
+            startDate: new Date(2019, 8, 1, 11, 0),
+            endDate: new Date(2019, 8, 1, 11, 1),
+        }],
+        views: ["day"],
+        currentView: "day",
+        currentDate: new Date(2019, 8, 1, 10, 0),
+        startDayHour: 7,
+        endDayHour: 18,
+        height: 580,
+    });
+
+    assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, "Appointments are rendered");
+    assert.equal(this.scheduler.appointments.getAppointmentHeight(0), this.scheduler.appointments.getAppointmentHeight(1), "Appointment heights are equal");
+});
