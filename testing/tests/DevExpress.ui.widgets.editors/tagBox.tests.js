@@ -2605,24 +2605,27 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.ok($input.width() > inputWidth, "input size increase");
     });
 
-    QUnit.test("width of input is enougth for all content", assert => {
-        const $tagBox = $("#tagBox").dxTagBox({
-            searchEnabled: true,
-            width: 300
+    ["searchEnabled", "acceptCustomValue"].forEach((option) => {
+        QUnit.test(`width of input is enougth for all content with ${option} option (T807069)`, assert => {
+            const $tagBox = $("#tagBox").dxTagBox({
+                width: 300
+            });
+            const tagBox = $tagBox.dxTagBox("instance");
+
+            tagBox.option(option, true);
+            const text = "wwwwwwwwwwwwwwwwwwww";
+            const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+            $input.css("padding", "0 10px");
+
+            keyboardMock($input).type(text);
+            const inputWidth = $input.width();
+
+            var inputCopy = createTextElementHiddenCopy($input, text);
+            inputCopy.appendTo("#qunit-fixture");
+
+            assert.ok(inputWidth >= inputCopy.width());
+            inputCopy.remove();
         });
-        const text = "wwwwwwwwwwwwww";
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-
-        $input.css("padding", "0 10px");
-
-        keyboardMock($input).type(text);
-        const inputWidth = $input.width();
-
-        var inputCopy = createTextElementHiddenCopy($input, text);
-        inputCopy.appendTo("#qunit-fixture");
-
-        assert.ok(inputWidth >= inputCopy.width(), "correctWidth");
-        inputCopy.remove();
     });
 
     QUnit.test("size of input is reset after selecting item", assert => {
@@ -2638,10 +2641,10 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.roughEqual($tagBox.find(`.${TEXTBOX_CLASS}`).width(), initInputWidth, 0.1, "input width is not changed after selecting item");
     });
 
-    QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", assert => {
+    QUnit.test("size of input is 1 when searchEnabled and acceptCustomValue is false", assert => {
         const $tagBox = $("#tagBox").dxTagBox({
             searchEnabled: false,
-            editEnabled: false
+            acceptCustomValue: false
         });
 
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);

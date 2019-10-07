@@ -754,7 +754,7 @@ const TagBox = SelectBox.inherit({
         const cursorWidth = 5;
         let width = "";
         let size = "";
-        const canTypeText = this.option("searchEnabled") || this.option("editEnabled");
+        const canTypeText = this.option("searchEnabled") || this.option("acceptCustomValue");
         if(isEmptyInput && canTypeText) {
             const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
 
