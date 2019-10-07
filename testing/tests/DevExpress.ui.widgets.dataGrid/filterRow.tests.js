@@ -4,6 +4,9 @@ QUnit.testStart(function() {
     <div class="dx-datagrid">\
         <div id="container"></div>\
     </div>\
+    <div id="container2">\
+        <div class="dx-datagrid"></div>\
+    </div>\
 </div>';
 
     $("#qunit-fixture").html(markup);
@@ -1568,14 +1571,15 @@ QUnit.testInActiveWindow('Filter row with menu: focus behavior', function(assert
 // T189448
 QUnit.test('Filter row - focus editor', function(assert) {
     // arrange
+    this.$element = () => $('#container2');
     var that = this,
-        $testElement = $('#container').addClass("dx-datagrid-borders");
+        $testElement = this.$element().addClass("dx-datagrid-borders");
 
     setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
         initViews: true
     });
 
-    that.columnHeadersView.render($testElement);
+    that.columnHeadersView.render('#container2 .dx-datagrid');
 
     // act
     that.editorFactoryController.focus($testElement.find("td").first());

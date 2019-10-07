@@ -8,7 +8,10 @@ QUnit.testStart(function() {
     }\
 </style>\
 <div>\
-    <div id="container"  class="dx-datagrid dx-widget" style = "width: 400px;"></div>\
+    <div id="container" class="dx-datagrid dx-widget" style="width: 400px;"></div>\
+    <div id="container2">\
+        <div class="dx-datagrid dx-widget" style = "width: 400px;"></div>\
+    </div>\
 </div>';
 
     $("#qunit-fixture").html(markup);
@@ -1373,11 +1376,12 @@ if(device.deviceType === "desktop") {
     // T241973
     QUnit.test("Synchronize position main table with fixed table", function(assert) {
         // arrange
+        this.$element = () => $("#container2");
         var that = this,
             $fixTable,
             scrollableInstance,
             countCallScrollOffsetChanged = 0,
-            $testElement = $("#container");
+            $testElement = this.$element();
 
         that.items = [{ values: ["test4", "test1", "test3", "test5", "test2"], rowType: "data" },
             { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
@@ -1387,7 +1391,7 @@ if(device.deviceType === "desktop") {
             { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
 
         that.setupDataGrid();
-        that.rowsView.render($testElement);
+        that.rowsView.render("#container2 .dx-datagrid");
         that.rowsView.height(50);
         that.rowsView.resize();
 

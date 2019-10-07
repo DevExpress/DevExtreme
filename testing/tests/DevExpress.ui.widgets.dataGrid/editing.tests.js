@@ -21,6 +21,9 @@ QUnit.testStart(function() {
     <div class="dx-datagrid">\
         <div id="container"></div>\
     </div>\
+    <div id="container2">\
+        <div class="dx-datagrid">\
+    </div>\
 </div>';
 
     $("#qunit-fixture").html(markup);
@@ -1798,14 +1801,14 @@ QUnit.testInActiveWindow('Not close Editing Cell in batch mode on click focus ov
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        testElement = $('#container2');
 
     that.options.editing = {
         allowUpdating: true,
         mode: 'batch'
     };
 
-    rowsView.render(testElement);
+    rowsView.render($('#container2 .dx-datagrid'));
     that.$element = function() {
         return testElement;
     };
@@ -5803,13 +5806,13 @@ QUnit.testInActiveWindow('Hide focus overlay before update on editing cell', fun
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        testElement = $('#container2');
 
     that.options.editing = {
         allowEditing: true,
         mode: 'batch'
     };
-    rowsView.render(testElement);
+    rowsView.render('#container2 .dx-datagrid');
     that.$element = function() {
         return testElement;
     };
@@ -6556,7 +6559,7 @@ QUnit.testInActiveWindow("Focused cell when editing cell in batch mode", functio
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        testElement = $('#container2');
 
     that.options.scrolling = {
         useNative: false
@@ -6567,7 +6570,7 @@ QUnit.testInActiveWindow("Focused cell when editing cell in batch mode", functio
         mode: 'batch'
     };
 
-    rowsView.render(testElement);
+    rowsView.render('#container2 .dx-datagrid');
     that.columnsController.init();
     that.$element = function() {
         return testElement;
@@ -6595,7 +6598,7 @@ QUnit.testInActiveWindow("Focused cell when editing cell in batch mode when fixe
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        testElement = $('#container2');
 
     that.options.scrolling = {
         useNative: false
@@ -6606,7 +6609,7 @@ QUnit.testInActiveWindow("Focused cell when editing cell in batch mode when fixe
         mode: 'batch'
     };
 
-    rowsView.render(testElement);
+    rowsView.render('#container2 .dx-datagrid');
     that.columnsController.init();
     that.$element = function() {
         return testElement;
@@ -6635,7 +6638,7 @@ QUnit.testInActiveWindow("Focused last cell width when editing cell in batch mod
     // arrange
     var that = this,
         rowsView = this.rowsView,
-        testElement = $('#container');
+        testElement = $('#container2');
 
     that.options.scrolling = {
         useNative: false
@@ -6646,7 +6649,7 @@ QUnit.testInActiveWindow("Focused last cell width when editing cell in batch mod
         mode: 'batch'
     };
 
-    rowsView.render(testElement);
+    rowsView.render('#container2 .dx-datagrid');
     that.columnsController.init();
     that.$element = function() {
         return testElement;
@@ -7097,7 +7100,7 @@ QUnit.testInActiveWindow("Focused lookup column with showEditorAlways is enabled
     var that = this,
         callCountFocusEditingCell = 0,
         rowsView = this.rowsView,
-        $testElement = $('#container');
+        $testElement = $('#container2');
 
     that.options.columns = [{
         dataField: "name",
@@ -7113,7 +7116,7 @@ QUnit.testInActiveWindow("Focused lookup column with showEditorAlways is enabled
         mode: 'cell'
     };
 
-    rowsView.render($testElement);
+    rowsView.render('#container2 .dx-datagrid');
     that.columnsController.init();
     that.$element = function() {
         return $testElement;

@@ -11,6 +11,7 @@ import eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import { noop } from "../../core/utils/common";
 import { selectView } from "../shared/accessibility";
+import { isElementInCurrentGrid } from "./ui.grid_core.utils";
 
 var ROWS_VIEW_CLASS = "rowsview",
     EDIT_FORM_CLASS = "edit-form",
@@ -725,8 +726,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
     _isEventInCurrentGrid: function(event) {
-        var $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent();
-        return $grid.is(this.component.$element());
+        return isElementInCurrentGrid(this, $(event.target));
     },
 
     _clickTargetCellHandler: function(event, $cell) {
