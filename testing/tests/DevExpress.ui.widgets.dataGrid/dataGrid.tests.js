@@ -877,6 +877,87 @@ QUnit.test("Change row expand state on row click", function(assert) {
 
 });
 
+QUnit.test("DataGrid - CustomStore.load should contain the 'select' parameter after grouping operations (T817511)", function(assert) {
+    // arrange
+    var arrayStore = new ArrayStore({
+        key: "id",
+        data: [
+            { id: 0, text: "Text", countryId: 0, cityId: 0 },
+            { id: 1, text: "Text", countryId: 0, cityId: 1 },
+            { id: 2, text: "Text", countryId: 1, cityId: 0 },
+            { id: 3, text: "Text", countryId: 1, cityId: 1 },
+        ]
+    });
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: {
+            key: "id",
+            select: ["id", "text", "countryId", "cityId"],
+            load: function(options) {
+                var d = $.Deferred();
+
+                // assert
+                assert.notEqual(options.select, undefined, "options.select is defined");
+
+                setTimeout(function() {
+                    var result = {};
+                    arrayStore.load(options).done(function(data) {
+                        result.data = data;
+
+                        if(options.group) {
+                            data.forEach(item => {
+                                item.count = item.items.length;
+                                item.items = null;
+                            });
+                        }
+                    });
+                    if(options.requireGroupCount) {
+                        arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                            result.groupCount = groupedData.length;
+                        });
+                    }
+                    if(options.requireTotalCount) {
+                        arrayStore.totalCount(options).done(function(totalCount) {
+                            result.totalCount = totalCount;
+                        });
+                    }
+
+                    d.resolve(result);
+                });
+
+                return d;
+            },
+            group: [{
+                selector: "countryId",
+                isExpanded: false
+            }, {
+                selector: "cityId",
+                isExpanded: false
+            }]
+        },
+        remoteOperations: {
+            groupPaging: true
+        },
+        groupPanel: {
+            visible: true
+        },
+        grouping: {
+            autoExpandAll: false
+        }
+    }).dxDataGrid("instance");
+    this.clock.tick();
+
+    // act
+    dataGrid.expandRow([0]);
+    this.clock.tick();
+
+    dataGrid.expandRow([0, 0]);
+    this.clock.tick();
+
+    dataGrid.columnOption("cityId", "groupIndex", undefined);
+    this.clock.tick();
+});
+
 // T553981
 QUnit.test("Row expand state should not be changed on row click when scrolling mode is 'infinite'", function(assert) {
     // arrange
