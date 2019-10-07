@@ -97,12 +97,12 @@
         }
 
         .dx-gantt-task {
-            background-color: lighten(@base-accent, 10%);
+            background-color: @base-accent;
             border-radius: @base-border-radius;
 
             .dx-gantt-tPrg {
                 border-radius: @base-border-radius;
-                background-color: darken(@base-accent, 10%);
+                background-color: rgba(0, 0, 0, 0.2);
             }
 
             &.dx-gantt-smallTask {
@@ -115,8 +115,8 @@
 
             &.dx-gantt-milestone {
                 background-image: linear-gradient(135deg, @base-border-color, @base-text-color);
-                width: 11px;
-                height: 11px;
+                width: @GANTT_MILESTONE_SIZE;
+                height: @GANTT_MILESTONE_SIZE;
             }
         }
 
