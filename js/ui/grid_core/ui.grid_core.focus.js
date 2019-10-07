@@ -9,6 +9,7 @@ import { getIndexByKey } from "./ui.grid_core.utils";
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
     FOCUSED_ROW_SELECTOR = ".dx-row" + "." + ROW_FOCUSED_CLASS,
+    DATA_GRID_TABLE_SELECTOR = ".dx-datagrid-table",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled";
 
 exports.FocusController = core.ViewController.inherit((function() {
@@ -316,15 +317,22 @@ exports.FocusController = core.ViewController.inherit((function() {
             });
         },
         _clearPreviousFocusedRow: function($tableElement, focusedRowIndex) {
-            var $prevRowFocusedElement = $tableElement.find(FOCUSED_ROW_SELECTOR),
-                $firstRow;
+            const isNotMasterDetailFocusedRow = (_, $focusedRow) => {
+                const $focusedRowTable = $focusedRow.closest(DATA_GRID_TABLE_SELECTOR);
+                return $tableElement.is($focusedRowTable);
+            };
+
+            const $prevRowFocusedElement = $tableElement
+                .find(FOCUSED_ROW_SELECTOR)
+                .filter(isNotMasterDetailFocusedRow);
+
             $prevRowFocusedElement
                 .removeClass(ROW_FOCUSED_CLASS)
                 .removeClass(CELL_FOCUS_DISABLED_CLASS)
                 .removeAttr("tabindex");
             $prevRowFocusedElement.children("td").removeAttr("tabindex");
             if(focusedRowIndex !== 0) {
-                $firstRow = $(this.getView("rowsView").getRowElement(0));
+                const $firstRow = $(this.getView("rowsView").getRowElement(0));
                 $firstRow.removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
             }
         },
