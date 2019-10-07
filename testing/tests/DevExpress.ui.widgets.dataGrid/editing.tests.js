@@ -5322,6 +5322,44 @@ QUnit.test("When select all items row with modified cell must have 'dx-selection
     assert.ok($rows.eq(1).hasClass(rowSelectionClass), 'row has selection class');
 });
 
+// T716667
+QUnit.test("Editing cell should not be closed on click if column is fixed to right", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+
+    that.options.columns = [{
+        dataField: "name",
+        fixed: true,
+        fixedPosition: "right"
+    }, {
+        dataField: "age",
+        allowEditing: false
+    }, {
+        dataField: "lastName",
+        allowEditing: false
+    }];
+
+    that.columnsController.optionChanged({ name: "columns", fullName: "columns" });
+
+    rowsView.render(testElement);
+    this.editCell(0, 2);
+
+    // act
+    $(this.getCellElement(0, 2)).trigger("dxpointerdown").trigger("dxclick");
+
+    // assert
+    assert.strictEqual(this.getVisibleColumns()[2].fixed, true, "third column is fixed");
+    assert.strictEqual(getInputElements($(this.getCellElement(0, 2))).length, 1, "Editor exists");
+    assert.ok(this.editingController.isEditing(), "editing is not canceled");
+});
+
 // B255559
 QUnit.test("Selection don't working for a inserted row", function(assert) {
     // arrange
