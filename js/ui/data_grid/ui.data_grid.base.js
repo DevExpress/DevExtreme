@@ -24,8 +24,8 @@ import "./ui.data_grid.grid_view";
 import "./ui.data_grid.header_panel";
 
 gridCore.registerModulesOrder([
-    "columns",
     "stateStoring",
+    "columns",
     "selection",
     "editorFactory",
     "columnChooser",
