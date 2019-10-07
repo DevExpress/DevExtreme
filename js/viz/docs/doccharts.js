@@ -3868,7 +3868,12 @@ var dxChartCommonAnnotationConfig = {
     * @type boolean
     * @default false
     */
-    allowDragging: false
+    allowDragging: false,
+    /**
+    * @name dxChartCommonAnnotationConfig.customData
+    * @type object
+    */
+    customData: undefined
 };
 /**
 * @name dxChartAnnotationConfig
