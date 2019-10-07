@@ -1907,6 +1907,29 @@ QUnit.test("marginOptions.size and marginOptions.percentStick, min != 1, max = 1
     });
 });
 
+QUnit.test("marginOptions.percentStick, min != 1, max = 1 - calculate custom margin", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            maxValueMargin: 0.1
+        },
+        marginOptions: {
+            size: 100,
+            percentStick: true
+        },
+        range: {
+            min: 0.4,
+            max: 1
+        },
+        ticks: [0.4, 1],
+        expectedRange: {
+            minVisible: 0.268,
+            maxVisible: 1.06
+        },
+        isArgumentAxis: false
+    });
+});
+
 QUnit.test("marginOptions.size and marginOptions.percentStick, min = -1 - do not calculate min margin", function(assert) {
     this.testMargins(assert, {
         options: {
@@ -1924,6 +1947,29 @@ QUnit.test("marginOptions.size and marginOptions.percentStick, min = -1 - do not
         expectedRange: {
             minVisible: -1,
             maxVisible: -0.28
+        },
+        isArgumentAxis: false
+    });
+});
+
+QUnit.test("marginOptions.percentStick, min = -1 - calculate calculate custom min margin", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.1
+        },
+        marginOptions: {
+            size: 100,
+            percentStick: true
+        },
+        range: {
+            min: -1,
+            max: -0.4
+        },
+        ticks: [-1, -0.4],
+        expectedRange: {
+            minVisible: -1.06,
+            maxVisible: -0.268
         },
         isArgumentAxis: false
     });
