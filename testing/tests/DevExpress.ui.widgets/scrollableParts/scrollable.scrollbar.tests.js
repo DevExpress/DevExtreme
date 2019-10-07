@@ -124,39 +124,6 @@ QUnit.test("scrollbar is hidden when scrolling is completed", function(assert) {
         .up();
 });
 
-// T817096
-[150, 300].forEach((scrollableContentSize) => {
-    ["vertical", "horizontal"].forEach((direction) => {
-        ["onHover", "always", "never", "onScroll"].forEach((showScrollbar) => {
-            let scrollableContainerSize = 200;
-            let scrollBarVisibleAfterMouseEnter = (showScrollbar === "always" || showScrollbar === "onHover") && scrollableContentSize > scrollableContainerSize;
-            let scrollBarVisibleAfterMouseLeave = showScrollbar === "always" && scrollableContentSize > scrollableContainerSize;
-
-            QUnit.test(`Scrollbar.visible on 'mouseenter'/'mouseleave', direction: '${direction}', showScrollbar: '${showScrollbar}', content ${scrollableContentSize < scrollableContainerSize ? 'less' : 'more'} than container`, function(assert) {
-                const $scrollable = $("#scrollableContainer");
-                $scrollable.dxScrollView({ // dxScrollView is created because it is used in T817096 and it significantly changes inherited code
-                    width: scrollableContainerSize,
-                    height: scrollableContainerSize,
-                    useNative: false,
-                    direction: direction,
-                    showScrollbar: showScrollbar
-                });
-
-                $scrollable.find(`#innerContent`).css({ height: scrollableContentSize, width: scrollableContentSize });
-
-                const $container = $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
-                $container.trigger("scroll");
-
-                const scrollbar = Scrollbar.getInstance($scrollable.find(`.${SCROLLABLE_SCROLLBAR_CLASS}`));
-                assert.equal(scrollbar.option("visible"), scrollBarVisibleAfterMouseEnter, "thumb.visible after mouseenter");
-
-                $container.trigger("mouseleave");
-                assert.equal(scrollbar.option("visible"), scrollBarVisibleAfterMouseLeave, "thumb.visible after mouseleave");
-            });
-        });
-    });
-});
-
 QUnit.test("scrollbar height calculated correctly", function(assert) {
     var containerHeight = 50,
         contentHeight = 100,
