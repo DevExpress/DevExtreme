@@ -1979,6 +1979,7 @@ const Scheduler = Widget.inherit({
 
         var countConfig = this._getViewCountConfig();
         this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this._getCurrentViewType()].workSpace, this._workSpaceConfig(groups, countConfig));
+        this._allowDragging() && this._workSpace.initDragBehavior(this._appointments);
         this._workSpace.getWorkArea().append(this._appointments.$element());
 
         this._recalculateWorkspace();

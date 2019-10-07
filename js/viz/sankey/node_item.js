@@ -57,7 +57,7 @@ function Node(widget, params) {
     that.color = params.color;
     that.options = params.options;
     that.rect = params.rect;
-    that.title = params.rect._name;
+    that.label = that.title = params.rect._name;
     that.coords = {
         x: params.rect.x + params.rect.width / 2 + widgetOffset.left,
         y: params.rect.y + params.rect.height / 2 + widgetOffset.top
@@ -127,7 +127,8 @@ Node.prototype = {
         this.widget._getOption("hoverEnabled", true) && this.widget._tooltip && this.widget._tooltip.show({
             type: 'node',
             info: {
-                title: this.title,
+                label: this.label,
+                title: this.label,
                 weightIn: this.linksIn.reduce(function(previousValue, currentValue) { return previousValue + currentValue.weight; }, 0),
                 weightOut: this.linksOut.reduce(function(previousValue, currentValue) { return previousValue + currentValue.weight; }, 0)
             }

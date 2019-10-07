@@ -1,8 +1,11 @@
 import $ from "../../core/renderer";
 import Draggable from "../draggable";
 import translator from "../../animation/translator";
+import { extend } from "../../core/utils/extend";
 
 const FIXED_CONTAINER_PROP_NAME = "fixedContainer";
+
+const APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment";
 
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
@@ -40,34 +43,14 @@ export default class AppointmentDragBehavior {
     }
 
     onDragStart(e) {
-        const appointment = $(e.element);
-        this.onDragStartCore(appointment, this.isAllDay(appointment));
-    }
-
-    onDragStartCore(appointment, isAllDay) {
-        this.initialPosition = translator.locate(appointment);
-
-        this.scheduler.option(FIXED_CONTAINER_PROP_NAME).append(appointment);
+        this.initialPosition = translator.locate($(e.itemElement));
         this.scheduler.notifyObserver("hideAppointmentTooltip");
-
-        this.containerShift = this.getContainerShift(isAllDay);
-
-        this.onDragMoveCore(appointment, { x: 0, y: 0 });
-    }
-
-    onDragMove(e) {
-        this.onDragMoveCore($(e.element), e.event.offset);
-    }
-
-    onDragMoveCore(appointment, mouseOffset) {
-        translator.move(appointment, {
-            left: this.initialPosition.left + this.containerShift.left + mouseOffset.x,
-            top: this.initialPosition.top + this.containerShift.top + mouseOffset.y
-        });
     }
 
     onDragEnd(e) {
-        this.onDragEndCore($(e.element), e);
+        const itemElement = e.event.data && e.event.data.itemElement || e.itemElement;
+
+        this.onDragEndCore($(itemElement), e);
     }
 
     onDragEndCore(appointment, e) {
@@ -80,6 +63,7 @@ export default class AppointmentDragBehavior {
             e.event.cancel = true;
         } else {
             this.scheduler.notifyObserver("updateAppointmentAfterDrag", {
+                event: e,
                 data: this.scheduler._getItemData(appointment),
                 $appointment: appointment,
                 coordinates: this.initialPosition
@@ -87,16 +71,13 @@ export default class AppointmentDragBehavior {
         }
     }
 
-    addTo(appointment) {
-        this.scheduler._createComponent(appointment, Draggable, {
-            boundary: this.getDraggableArea(),
-            boundOffset: this.scheduler._calculateBoundOffset(),
+    addTo(appointment, options) {
+        this.scheduler._createComponent(appointment, Draggable, extend({
+            filter: `.${APPOINTMENT_ITEM_CLASS}`,
             immediate: false,
-
-            onDragStart: e => this.onDragStart(e),
-            onDragMove: e => this.onDragMove(e),
-            onDragEnd: e => this.onDragEnd(e)
-        });
+            onDragStart: this.onDragStart.bind(this),
+            onDragEnd: this.onDragEnd.bind(this)
+        }, options));
     }
 
     moveBack() {
@@ -105,3 +86,5 @@ export default class AppointmentDragBehavior {
         }
     }
 }
+
+module.exports = AppointmentDragBehavior;

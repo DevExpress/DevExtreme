@@ -198,6 +198,7 @@ module.exports = {
              * @type_function_param1 newData:object
              * @type_function_param2 value:any
              * @type_function_param3 currentRowData:object
+             * @type_function_return void|Promise<void>
              */
             /**
              * @name GridBaseColumn.calculateDisplayValue
@@ -1341,14 +1342,9 @@ module.exports = {
                     fullOptionName = options.fullOptionName;
 
                 if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
-                    var oldSkipProcessingColumnsChange = that._skipProcessingColumnsChange;
                     that._skipProcessingColumnsChange = true;
-                    var columnOptions = that.component.option(fullOptionName);
-                    if(isPlainObject(columnOptions)) {
-                        columnOptions[optionName] = value;
-                    }
                     that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
-                    that._skipProcessingColumnsChange = oldSkipProcessingColumnsChange;
+                    that._skipProcessingColumnsChange = false;
                 }
             };
 
@@ -1681,15 +1677,16 @@ module.exports = {
                             break;
                         case "columns":
                             args.handled = true;
-                            if(args.name === args.fullName) {
-                                this._columnsUserState = null;
-                                this._ignoreColumnOptionNames = null;
-                                this.init();
-                            } else {
-                                if(this.option(args.fullName) === undefined || this.option(args.fullName) === args.value) {
+                            if(!this._skipProcessingColumnsChange) {
+                                if(args.name === args.fullName) {
+                                    this._columnsUserState = null;
+                                    this._ignoreColumnOptionNames = null;
+                                    this.init();
+                                } else {
                                     this._columnOptionChanged(args);
-                                    this._updateRequireResize(args);
                                 }
+                            } else {
+                                this._updateRequireResize(args);
                             }
                             break;
                         case "commonColumnSettings":
@@ -1706,12 +1703,16 @@ module.exports = {
                         case "dateSerializationFormat":
                         case "columnResizingMode":
                         case "columnMinWidth":
-                        case "columnWidth":
+                        case "columnWidth": {
                             args.handled = true;
-                            if(!(args.fullName && args.fullName.indexOf("editing.popup") === 0)) {
+                            let isEditingPopup = args.fullName && args.fullName.indexOf("editing.popup") === 0,
+                                isEditingForm = args.fullName && args.fullName.indexOf("editing.form") === 0;
+
+                            if(!isEditingPopup && !isEditingForm) {
                                 this.reinit();
                             }
                             break;
+                        }
                         case "rtlEnabled":
                             this.reinit();
                             break;
@@ -2906,6 +2907,8 @@ module.exports = {
                     that._hasUserState = !!state;
 
                     updateColumnChanges(that, "filtering");
+                    updateColumnChanges(that, "grouping");
+
                     that.init();
 
                     if(dataSource) {

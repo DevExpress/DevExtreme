@@ -239,80 +239,83 @@ export class Plaque {
         const contentWidth = options.width > 0 ? options.width : null;
         const contentHeight = options.height > 0 ? options.height : null;
 
+        const onRender = () => {
+            const bBox = this._contentBBox = this.measureContent(this.widget, this._contentGroup);
+
+            const size = this._size = {
+                width: max(contentWidth, bBox.width) + options.paddingLeftRight * 2,
+                height: max(contentHeight, bBox.height) + options.paddingTopBottom * 2,
+                offset
+            };
+
+            const xOff = shadowSettings.offsetX;
+            const yOff = shadowSettings.offsetY;
+            const blur = shadowSettings.blur * 2 + 1;
+            const lm = max(blur - xOff, 0); // left margin
+            const rm = max(blur + xOff, 0); // right margin
+            const tm = max(blur - yOff, 0); // top margin
+            const bm = max(blur + yOff, 0); // bottom margin
+
+            this.margins = {
+                lm, rm, tm, bm
+            };
+
+            if(!isDefined(x)) {
+                if(isDefined(offsetX)) {
+                    x = anchorX + offsetX;
+                } else {
+                    if(bounds.width < size.width) {
+                        x = round(bounds.xl + bounds.width / 2);
+                    } else {
+                        x = min(max(anchorX, Math.ceil(bounds.xl + size.width / 2 + lm)), Math.floor(bounds.xr - size.width / 2 - rm));
+                    }
+                }
+
+            } else {
+                x += offsetX || 0;
+                if(!isDefined(anchorX)) {
+                    anchorX = x;
+                }
+            }
+            if(!isDefined(y)) {
+                if(isDefined(offsetY)) {
+                    y = anchorY + offsetY;
+                } else {
+                    const y_top = anchorY - options.arrowLength - size.height / 2 - offset;
+                    const y_bottom = anchorY + options.arrowLength + size.height / 2 + offset;
+
+                    if(bounds.height < size.height + options.arrowLength) {
+                        y = round(bounds.yt + size.height / 2);
+                    } else if(y_top - size.height / 2 - tm < bounds.yt) {
+                        if(y_bottom + size.height / 2 + bm < bounds.yb) {
+                            y = y_bottom;
+                            anchorY += offset;
+                        } else {
+                            y = round(bounds.yt + size.height / 2);
+                        }
+                    } else {
+                        y = y_top;
+                        anchorY -= offset;
+                    }
+                }
+            } else {
+                y += (offsetY || 0);
+                if(!isDefined(anchorY)) {
+                    anchorY = y + size.height / 2;
+                }
+            }
+
+            this.anchorX = anchorX;
+            this.anchorY = anchorY;
+            this.move(x, y);
+        };
+
         if(this.contentTemplate.render) {
-            this.contentTemplate.render({ model: options, container: this._contentGroup.element });
+            this.contentTemplate.render({ model: options, container: this._contentGroup.element, onRendered: onRender });
         } else {
             this.contentTemplate(this.widget, this._contentGroup);
+            onRender();
         }
-
-        const bBox = this._contentBBox = this.measureContent(this.widget, this._contentGroup);
-
-        const size = this._size = {
-            width: max(contentWidth, bBox.width) + options.paddingLeftRight * 2,
-            height: max(contentHeight, bBox.height) + options.paddingTopBottom * 2,
-            offset
-        };
-
-        const xOff = shadowSettings.offsetX;
-        const yOff = shadowSettings.offsetY;
-        const blur = shadowSettings.blur * 2 + 1;
-        const lm = max(blur - xOff, 0); // left margin
-        const rm = max(blur + xOff, 0); // right margin
-        const tm = max(blur - yOff, 0); // top margin
-        const bm = max(blur + yOff, 0); // bottom margin
-
-        this.margins = {
-            lm, rm, tm, bm
-        };
-
-        if(!isDefined(x)) {
-            if(isDefined(offsetX)) {
-                x = anchorX + offsetX;
-            } else {
-                if(bounds.width < size.width) {
-                    x = round(bounds.xl + bounds.width / 2);
-                } else {
-                    x = min(max(anchorX, Math.ceil(bounds.xl + size.width / 2 + lm)), Math.floor(bounds.xr - size.width / 2 - rm));
-                }
-            }
-
-        } else {
-            x += offsetX || 0;
-            if(!isDefined(anchorX)) {
-                anchorX = x;
-            }
-        }
-        if(!isDefined(y)) {
-            if(isDefined(offsetY)) {
-                y = anchorY + offsetY;
-            } else {
-                const y_top = anchorY - options.arrowLength - size.height / 2 - offset;
-                const y_bottom = anchorY + options.arrowLength + size.height / 2 + offset;
-
-                if(bounds.height < size.height + options.arrowLength) {
-                    y = round(bounds.yt + size.height / 2);
-                } else if(y_top - size.height / 2 - tm < bounds.yt) {
-                    if(y_bottom + size.height / 2 + bm < bounds.yb) {
-                        y = y_bottom;
-                        anchorY += offset;
-                    } else {
-                        y = round(bounds.yt + size.height / 2);
-                    }
-                } else {
-                    y = y_top;
-                    anchorY -= offset;
-                }
-            }
-        } else {
-            y += (offsetY || 0);
-            if(!isDefined(anchorY)) {
-                anchorY = y + size.height / 2;
-            }
-        }
-
-        this.anchorX = anchorX;
-        this.anchorY = anchorY;
-        this.move(x, y);
     }
 
     _draw() {

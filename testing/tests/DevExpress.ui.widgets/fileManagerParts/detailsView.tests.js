@@ -1,7 +1,7 @@
 import $ from "jquery";
 import "ui/file_manager";
 import fx from "animation/fx";
-import { Consts } from "../../../helpers/fileManagerHelpers.js";
+import { Consts, FileManagerWrapper } from "../../../helpers/fileManagerHelpers.js";
 
 const { test } = QUnit;
 
@@ -46,6 +46,8 @@ const moduleConfig = {
                 }
             ]
         });
+
+        this.wrapper = new FileManagerWrapper(this.$element);
 
         this.clock.tick(400);
     },
@@ -176,6 +178,10 @@ QUnit.module("Details View", moduleConfig, () => {
         this.clock.tick(400);
 
         assert.equal(columnHeader.attr("aria-sort"), "none", "sorting default");
+    });
+
+    test("Details view must has ScrollView", function(assert) {
+        assert.ok(this.wrapper.getDetailsItemScrollable().length);
     });
 
 });

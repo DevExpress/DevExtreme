@@ -2227,18 +2227,17 @@ QUnit.testStart(function() {
             }
         });
 
-        var cells = $element.find("." + CELL_CLASS),
-            $table = $element.find(".dx-scheduler-date-table");
+        var cells = $element.find("." + CELL_CLASS);
 
         pointerMock(cells.eq(15)).start().click();
 
-        $($table).on("dxpointermove", "td", function(e) {
+        $element.on("dxpointermove", "td", function(e) {
             assert.ok(e.isDefaultPrevented(), "default is prevented");
             assert.ok(e.isPropagationStopped(), "propagation is stopped");
         });
 
-        $($table).trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
-        $($table).trigger($.Event("dxpointermove", { target: cells.eq(16).get(0), which: 1 }));
+        $element.trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
+        $element.trigger($.Event("dxpointermove", { target: cells.eq(16).get(0), which: 1 }));
 
     });
 

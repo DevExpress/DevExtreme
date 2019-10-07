@@ -2,6 +2,7 @@ import pointerMock from "../../helpers/pointerMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 
 import $ from "jquery";
+import "ui/scheduler/workspaces/ui.scheduler.work_space_week";
 import VerticalAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical";
 import HorizontalMonthAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month";
 import SchedulerAppointments from "ui/scheduler/ui.scheduler.appointments";
@@ -14,7 +15,6 @@ import typeUtils from "core/utils/type";
 import dateUtils from "core/utils/date";
 import { isRenderer } from "core/utils/type";
 import config from "core/config";
-import Draggable from "ui/draggable";
 import Resizable from "ui/resizable";
 import fx from "animation/fx";
 import { DataSource } from "data/data_source/data_source";
@@ -23,9 +23,12 @@ const compileGetter = dataCoreUtils.compileGetter;
 const compileSetter = dataCoreUtils.compileSetter;
 
 QUnit.testStart(function() {
-    $("#qunit-fixture").html('<div id="scheduler-appointments"></div>\
-                                <div id="allDayContainer"></div>\
-                                <div id="fixedContainer"></div>');
+    $("#qunit-fixture").html(`
+        <div id="scheduler-work-space"></div>
+        <div id="scheduler-appointments"></div>
+        <div id="allDayContainer"></div>
+        <div id="fixedContainer"></div>
+    `);
 });
 
 var moduleOptions = {
@@ -154,6 +157,9 @@ var moduleOptions = {
 
         this.instance = $("#scheduler-appointments").dxSchedulerAppointments({ observer: observer }).dxSchedulerAppointments("instance");
 
+        this.workspaceInstance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({}).dxSchedulerWorkSpaceWeek("instance");
+        this.workspaceInstance.getWorkArea().append(this.instance.$element());
+        this.workspaceInstance.initDragBehavior(this.instance);
     },
     afterEach: function() {
         this.clock.restore();
@@ -393,21 +399,17 @@ QUnit.test("Appointment should not be changed while resize when 'esc' key was pr
     this.initItems([item]);
 
     this.instance.option({ focusStateEnabled: true });
-
-    var updateSpy = sinon.spy(commonUtils.noop);
-
-    this.instance.notifyObserver = updateSpy;
+    var updateStub = sinon.stub(this.instance, "notifyObserver").withArgs("updateAppointmentAfterResize");
 
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         keyboard = keyboardMock($appointment);
 
-
     var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-bottom")).start();
-    pointer.dragStart().drag(0, 40);
+    pointer.down().move(0, 40);
     keyboard.keyDown("esc");
-    pointer.dragEnd();
+    pointer.up();
 
-    assert.ok(!updateSpy.calledOnce, "Observer was not notified");
+    assert.notOk(updateStub.called, "'updateAppointmentAfterResize' method isn't called");
 });
 
 QUnit.test("Appointment should not be changed while resize when 'esc' key was pressed", function(assert) {
@@ -436,48 +438,12 @@ QUnit.test("Appointment should not be changed while resize when 'esc' key was pr
         keyboard = keyboardMock($appointment),
         pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-bottom")).start();
 
-    pointer.dragStart().drag(0, 40);
+    pointer.down().move(0, 40);
     keyboard.keyDown("esc");
-    pointer.dragEnd();
+    pointer.up();
 
     assert.equal($appointment.width(), initialWidth, "Appointment width is correct");
     assert.equal($appointment.height(), initialHeight, "Appointment height is correct");
-});
-
-QUnit.test("Scheduler appointment should be draggable", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9)
-        },
-        settings: [{}]
-    };
-
-    this.initItems([item]);
-
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
-        draggableInstance = $appointment.dxDraggable("instance");
-
-    assert.ok(draggableInstance instanceof Draggable, "Appointment is instance of dxDraggable");
-});
-
-QUnit.test("Scheduler appointment should not be draggable if allowDrag is false", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9)
-        },
-        settings: [{}]
-    };
-
-    this.initItems([item]);
-    this.instance.option({ allowDrag: false });
-
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
-
-    assert.notOk($appointment.data("dxDraggable"), "Appointment is not dxDraggable");
 });
 
 QUnit.test("Allday appointment should stay in allDayContainer after small dragging", function(assert) {
@@ -528,37 +494,11 @@ QUnit.test("Appointment tooltip should be hidden when drag is started", function
     var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
-    pointer.dragStart().drag(0, 60);
+    pointer.down().move(0, 60);
 
     assert.deepEqual(updateSpy.getCall(0).args[0], "hideAppointmentTooltip", "Correct method of observer is called");
 
-    pointer.dragEnd();
-});
-
-QUnit.test("Appointment should be placed in fixed container on drag-start", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9)
-        },
-        settings: [{}]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        items: [item],
-        focusStateEnabled: true
-    });
-
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
-        pointer = pointerMock($appointment).start();
-
-    pointer.dragStart().drag(0, 60);
-    assert.equal($("#fixedContainer .dx-scheduler-appointment").length, 1, "fixedContainer has 1 item");
-
-    pointer.dragEnd();
-    assert.equal($("#fixedContainer .dx-scheduler-appointment").length, 0, "fixedContainer is empty after drag-end");
+    pointer.up();
 });
 
 QUnit.test("Appointment should be rendered a many times if coordinates array contains a few items", function(assert) {
@@ -587,35 +527,6 @@ QUnit.test("Appointment should be rendered a many times if coordinates array con
     assert.deepEqual(translator.locate($appointment.eq(1)), { top: 10, left: 10 }, "appointment is rendered in right place");
     assert.deepEqual(translator.locate($appointment.eq(2)), { top: 20, left: 20 }, "appointment is rendered in right place");
     assert.deepEqual(this.instance.option("items"), [item], "items are not affected");
-});
-
-QUnit.test("Draggable clone should be correct", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 10)
-        },
-        settings: [
-            { top: 0, left: 0, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 },
-            { top: 10, left: 10, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 },
-            { top: 20, left: 20, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 }
-        ]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        items: [item]
-    });
-
-    var $secondAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(1),
-        pointer = pointerMock($secondAppointment).start();
-
-    $secondAppointment.dxDraggable("instance").option("onDragMove", function(e) {
-        assert.deepEqual($(arguments[0].element).get(0), $secondAppointment.get(0), "draggable element is right");
-    });
-
-    pointer.dragStart().drag(0, 60).dragEnd();
 });
 
 QUnit.test("Delta time for resizable appointment should be 0 if appointment isn't resized", function(assert) {

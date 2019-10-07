@@ -170,6 +170,7 @@ const subscribes = {
                 this._convertDatesByTimezoneBack(true, updatedData, appointment);
 
                 this._updateAppointment(target, appointment, function() {
+                    options.event.cancel = true;
                     this._appointments.moveAppointmentBack();
                 });
             }).bind(this));
@@ -342,10 +343,6 @@ const subscribes = {
 
     getWorkSpaceDateTableOffset: function() {
         return this.getWorkSpaceDateTableOffset();
-    },
-
-    allDayPanelToggled: function() {
-        this._appointments.updateDraggablesBoundOffsets();
     },
 
     formatDates: function(options) {
@@ -830,6 +827,12 @@ const subscribes = {
 
     isAdaptive: function() {
         return this.option("adaptivityEnabled");
+    },
+
+    moveBack: function() {
+        const dragBehavior = this.getWorkSpace().dragBehavior;
+
+        dragBehavior && dragBehavior.moveBack();
     }
 };
 module.exports = subscribes;

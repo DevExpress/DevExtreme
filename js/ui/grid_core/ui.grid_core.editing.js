@@ -302,9 +302,10 @@ var EditingController = modules.ViewController.inherit((function() {
                 let isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length;
 
                 if(isDataRow) {
-                    let $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
-                        columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
-                        rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent()),
+                    let rowsView = this.getView("rowsView"),
+                        $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
+                        rowIndex = rowsView.getRowIndex($targetCell.parent()),
+                        columnIndex = rowsView.getCellElements(rowIndex).index($targetCell),
                         visibleColumns = this._columnsController.getVisibleColumns(),
                         // TODO jsdmitry: Move this code to _rowClick method of rowsView
                         allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
@@ -553,7 +554,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(this._editPopup && this._editPopup.option("visible") && args.fullName.indexOf("editing.form") === 0) {
                     var rowIndex = this._getVisibleEditRowIndex();
                     if(rowIndex >= 0) {
-                        this._showEditPopup(rowIndex);
+                        this._showEditPopup(rowIndex, true);
                     }
                 } else {
                     this.init();
@@ -1001,7 +1002,7 @@ var EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _showEditPopup: function(rowIndex) {
+        _showEditPopup: function(rowIndex, repaintForm) {
             var that = this,
                 isMobileDevice = devices.current().deviceType !== "desktop",
                 popupOptions = extend(
@@ -1026,6 +1027,10 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editPopup.on("hiding", that._getEditPopupHiddenHandler());
                 that._editPopup.on("shown", function(e) {
                     eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not("." + SCROLLABLE_CONTAINER_CLASS).first(), "focus");
+
+                    if(repaintForm) {
+                        that._editForm && that._editForm.repaint();
+                    }
                 });
             }
 
@@ -2315,6 +2320,7 @@ module.exports = {
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
+             * @type_function_param1_field5 promise:Promise<void>
              * @extends Action
              * @action
              */

@@ -1037,8 +1037,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in vertic
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
 
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(10).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.start);
-    $appointment.trigger(dragEvents.end);
+    pointerMock($appointment).start().down().move(10, 10).up();
 
     this.clock.tick();
     var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
@@ -1081,8 +1080,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in vertic
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
 
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(75).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.start);
-    $appointment.trigger(dragEvents.end);
+    pointerMock($appointment).start().down().move(10, 10).up();
 
     this.clock.tick();
     var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");

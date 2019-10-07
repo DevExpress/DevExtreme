@@ -1816,18 +1816,18 @@ QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
         moduleSetup.beforeEach.call(this);
         var dataSource = [];
         for(var i = 0; i < 500000; i += 250) {
-            var y1_rand = Math.random();
-            var y2_rand = Math.random();
+            var y1 = Math.sin(i);
+            var y2 = Math.sin(i);
 
             dataSource.push({
                 arg: i,
                 date: new Date(i),
-                val: y1_rand * 10 - y2_rand * 5,
-                val1: y1_rand * 10.5 - y2_rand * 5,
-                low: y1_rand * 10 - y2_rand * 8,
-                open: y1_rand * 10 - y2_rand * 6,
-                close: y1_rand * 10 - y2_rand * 4,
-                high: y1_rand * 10 - y2_rand * 2
+                val: y1 * 10 - y2 * 5,
+                val1: y1 * 10.5 - y2 * 5,
+                low: y1 * 10 - y2 * 8,
+                open: y1 * 10 - y2 * 6,
+                close: y1 * 10 - y2 * 4,
+                high: y1 * 10 - y2 * 2
             });
         }
 

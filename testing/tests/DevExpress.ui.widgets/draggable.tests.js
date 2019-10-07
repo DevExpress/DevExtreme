@@ -410,6 +410,73 @@ QUnit.test("onDrop - check itemData arg", function(assert) {
     assert.deepEqual(onDropSpy.getCall(0).args[0].itemData, itemData, "itemData in onDrop event arguments");
 });
 
+QUnit.test("onDragEnd - the position should be correctly reset when eventArgs.cancel is true and element has a fixed position", function(assert) {
+    // arrange
+    $("#items").children().css("float", "right");
+
+    this.createDraggable({
+        filter: ">.draggable",
+        onDragStart: function(e) {
+            $(e.itemElement).addClass("fixedPosition");
+        },
+        onDragEnd: function(e) {
+            e.cancel = true;
+        }
+    }, $("#items"));
+    let initialLocate = translator.locate($("#items").children().eq(0));
+
+    // act
+    pointerMock($("#items").children().eq(0)).start({ x: 275, y: 255 }).down().move(100, 100).up();
+
+    // assert
+    assert.deepEqual(translator.locate($("#items").children().eq(0)), initialLocate);
+});
+
+QUnit.test("onDragEnd - the position should be correctly reset when eventArgs.cancel is true and element has a specified location", function(assert) {
+    // arrange
+    translator.move($("#items").children().first(), { left: 50, top: 50 });
+    $("#items").children().css("float", "right");
+
+    this.createDraggable({
+        filter: ">.draggable",
+        onDragStart: function(e) {
+            $(e.itemElement).addClass("fixedPosition");
+        },
+        onDragEnd: function(e) {
+            e.cancel = true;
+        }
+    }, $("#items"));
+    let initialLocate = translator.locate($("#items").children().eq(0));
+
+    // act
+    pointerMock($("#items").children().eq(0)).start({ x: 325, y: 305 }).down().move(100, 100).up();
+
+    // assert
+    assert.deepEqual(translator.locate($("#items").children().eq(0)), initialLocate);
+});
+
+QUnit.test("onDragEnd - the position should be reset if an error occurs during drag", function(assert) {
+    // arrange
+    this.createDraggable({
+        filter: ">.draggable",
+        onDragEnd: function(e) {
+            e.cancel = true;
+            throw new Error("test");
+        }
+    }, $("#items"));
+
+    let initialLocate = translator.locate($("#items").children().eq(0));
+
+    try {
+        // act
+        pointerMock($("#items").children().eq(0)).start({ x: 325, y: 305 }).down().move(100, 100).up();
+    } catch(e) {
+        // assert
+        assert.deepEqual(translator.locate($("#items").children().eq(0)), initialLocate);
+        assert.notOk($("#items").children().eq(0).hasClass("dx-draggable-dragging"), "item hasn't 'dx-draggable-dragging' class");
+    }
+});
+
 
 QUnit.module("'dragDirection' option", moduleConfig);
 

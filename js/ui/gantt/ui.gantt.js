@@ -158,7 +158,7 @@ class Gantt extends Widget {
     }
     _getTreeListRowHeight() {
         const $row = this._treeList._$element.find(".dx-data-row");
-        return $row.length ? $row.last().outerHeight() : GANTT_DEFAULT_ROW_HEIGHT;
+        return $row.length ? $row.last().get(0).getBoundingClientRect().height : GANTT_DEFAULT_ROW_HEIGHT;
     }
 
 
