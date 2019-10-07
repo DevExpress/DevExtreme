@@ -3870,10 +3870,10 @@ var dxChartCommonAnnotationConfig = {
     */
     allowDragging: false,
     /**
-    * @name dxChartCommonAnnotationConfig.customData
+    * @name dxChartCommonAnnotationConfig.data
     * @type object
     */
-    customData: undefined
+    data: undefined
 };
 /**
 * @name dxChartAnnotationConfig

@@ -1108,7 +1108,7 @@ QUnit.module("Custom annotaion", environment);
 
 QUnit.test("Use functional template to draw custom annotation", function(assert) {
     const template = sinon.spy();
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "custom", template, customData: { isCustomData: true } } ], {})[0];
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "custom", template, data: { isCustomData: true } } ], {})[0];
     this.renderer.g.reset();
 
     annotation.draw(this.widget, this.group);
@@ -1117,7 +1117,7 @@ QUnit.test("Use functional template to draw custom annotation", function(assert)
     assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-custom-annotation" }]);
 
     assert.equal(template.callCount, 1);
-    assert.deepEqual(template.getCall(0).args, [{ argument: 0, x: 0, y: 0, type: "custom", template, customData: { isCustomData: true } }, this.renderer.g.getCall(3).returnValue.element]);
+    assert.deepEqual(template.getCall(0).args, [{ argument: 0, x: 0, y: 0, type: "custom", template, data: { isCustomData: true } }, this.renderer.g.getCall(3).returnValue.element]);
 });
 
 QUnit.test("No template option - do not create annotations", function(assert) {
