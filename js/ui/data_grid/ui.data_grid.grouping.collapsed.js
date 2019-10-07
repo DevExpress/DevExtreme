@@ -244,7 +244,8 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 filter: createGroupFilter(expandedInfo.paths[expandedItemIndex], {
                     filter: options.storeLoadOptions.filter,
                     group: groups
-                })
+                }),
+                select: options.storeLoadOptions.select
             };
 
             if(expandedItemIndex === 0) {
@@ -466,7 +467,8 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                             filter: dataSource.filter(),
                             group: dataSource.group()
                         }),
-                        group: [groups[path.length]]
+                        group: [groups[path.length]],
+                        select: dataSource.select()
                     }).done(function(groupCount) {
                         groupInfo.count = groupCount;
                     });
@@ -645,14 +647,16 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                                 filter: storeLoadOptions.filter,
                                 group: group
                             }),
-                            group: group.slice(groupInfo.path.length)
+                            group: group.slice(groupInfo.path.length),
+                            select: storeLoadOptions.select
                         }),
                         groupOffsetQuery = loadGroupTotalCount(dataSource, {
                             filter: createOffsetFilter(groupInfo.path, {
                                 filter: storeLoadOptions.filter,
                                 group: group
                             }),
-                            group: group.slice(groupInfo.path.length - 1, 1)
+                            group: group.slice(groupInfo.path.length - 1, 1),
+                            select: storeLoadOptions.select
                         });
 
                     return when(groupOffsetQuery, groupCountQuery).done(function(offset, count) {
