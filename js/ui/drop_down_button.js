@@ -17,9 +17,6 @@ import { isPlainObject } from "../core/utils/type";
 import { ensureDefined } from "../core/utils/common";
 import Guid from "../core/guid";
 import { format as formatMessage } from "../localization/message";
-import windowUtils from "../core/utils/window";
-const Window = windowUtils.getWindow();
-
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
 const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
@@ -433,6 +430,14 @@ let DropDownButton = Widget.inherit({
         });
     },
 
+    _setPopupOption: function(optionName, value) {
+        this._setWidgetOption("_popup", arguments);
+    },
+
+    _updatePopupWidth: function() {
+        this._setPopupOption("width", this.$element().outerWidth());
+    },
+
     _popupOptions() {
         return extend({
             dragEnabled: false,
@@ -451,7 +456,9 @@ let DropDownButton = Widget.inherit({
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
                 hide: { type: "fade", duration: 400, from: 1, to: 0 }
             },
-            width: Window.getComputedStyle(this.$element().get(0)).width,
+            width: function() {
+                return this.$element().outerWidth();
+            }.bind(this),
             height: "auto",
             shading: false,
             visible: this.option("opened"),
@@ -687,6 +694,7 @@ let DropDownButton = Widget.inherit({
             case "width":
             case "height":
                 this._buttonGroup.option(name, value);
+                this._updatePopupWidth();
                 break;
             case "itemTemplate":
             case "grouped":

@@ -243,7 +243,6 @@ QUnit.module("popup integration", {
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
                 hide: { type: "fade", duration: 400, from: 1, to: 0 }
             },
-            width: "40px",
             height: "auto",
             shading: false,
             position: {
