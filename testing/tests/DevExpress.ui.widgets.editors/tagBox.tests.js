@@ -2608,11 +2608,10 @@ QUnit.module("searchEnabled", moduleSetup, () => {
     ["searchEnabled", "acceptCustomValue"].forEach((option) => {
         QUnit.test(`width of input is enougth for all content with ${option} option (T807069)`, assert => {
             const $tagBox = $("#tagBox").dxTagBox({
-                width: 300
+                width: 300,
+                [option]: true
             });
-            const tagBox = $tagBox.dxTagBox("instance");
 
-            tagBox.option(option, true);
             const text = "wwwwwwwwwwwwwwwwwwww";
             const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
             $input.css("padding", "0 10px");
