@@ -12,6 +12,7 @@ const environment = {
                 return {
                     render(arg) {
                         callback(arg.model, arg.container);
+                        arg.onRendered();
                     }
                 };
             },
