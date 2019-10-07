@@ -7727,6 +7727,41 @@ QUnit.test("search text when scrolling mode virtual and one column is not define
     assert.equal(dataGrid.getVisibleRows().length, 1, "items were filtered");
 });
 
+// T820316
+QUnit.test("Error should not be thrown when searching text in calculated column with lookup", function(assert) {
+    var visibleRows,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
+            searchPanel: {
+                visible: true
+            },
+            columns: [{
+                calculateCellValue: function(rowData) {
+                    return rowData.num;
+                },
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }, "text"]
+        });
+
+    try {
+        dataGrid.option("searchPanel.text", "one");
+        this.clock.tick();
+    } catch(e) {
+        assert.ok(false, "error was thrown");
+    }
+
+    visibleRows = dataGrid.getVisibleRows();
+
+    assert.equal(visibleRows.length, 1, "one row is visible");
+    assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, "visible row's data");
+});
+
 // T583229
 QUnit.test("The same page should not load when scrolling in virtual mode", function(assert) {
     var dataGrid,
