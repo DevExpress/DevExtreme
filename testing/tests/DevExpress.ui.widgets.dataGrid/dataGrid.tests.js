@@ -383,6 +383,44 @@ QUnit.testInActiveWindow("Global column index should be unique for the different
     assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).text(), "Field 4");
 });
 
+QUnit.testInActiveWindow("DataGrid - focused row changing should not affect on focused row in master detail (T818808)", function(assert) {
+    // arrange
+    var rowsViewWrapper = new RowsViewWrapper(".detail-grid"),
+        masterDetailDataGrids = [],
+        dataGrid = createDataGrid({
+            dataSource: [{ id: 0, text: "0" }, { id: 1, text: "1" }],
+            keyExpr: "id",
+            focusedRowEnabled: true,
+            masterDetail: {
+                enabled: true,
+                template: function(container, e) {
+                    masterDetailDataGrids.push($("<div class='detail-grid'>").dxDataGrid({
+                        loadingTimeout: undefined,
+                        keyExpr: "id",
+                        focusedRowEnabled: true,
+                        dataSource: [{ id: 3, text: "3" }]
+                    }).appendTo(container).dxDataGrid("instance"));
+                }
+            },
+        });
+
+    this.clock.tick();
+
+    $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.down);
+    this.clock.tick();
+
+    dataGrid.expandRow(0);
+    this.clock.tick();
+
+    masterDetailDataGrids[0].option("focusedRowKey", 3);
+    this.clock.tick();
+
+    $(dataGrid.getCellElement(2, 1)).trigger(pointerEvents.down);
+    this.clock.tick();
+
+    assert.ok(rowsViewWrapper.hasFocusedRow(), "master detail has focused row");
+});
+
 QUnit.test("Command column accessibility structure", function(assert) {
     // arrange
     createDataGrid({
