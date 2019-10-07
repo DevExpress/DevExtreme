@@ -7,7 +7,6 @@ import pointerMock from "../../../helpers/pointerMock.js";
 import Scrollable from "ui/scroll_view/ui.scrollable";
 
 import "common.css!";
-import "ui/scroll_view";
 
 import {
     SCROLLABLE_CONTAINER_CLASS,
@@ -40,10 +39,6 @@ var moduleConfig = {
                 <div id="scaledScrollable">\
                     <div id="scaledContent" style="height: 1000px; width: 1000px;"></div>\
                 </div>\
-            </div>\
-        </div>\
-        <div id="scrollableContainer">\
-            <div id="innerContent">\
             </div>\
         </div>';
         $("#qunit-fixture").html(markup);
