@@ -2733,7 +2733,6 @@ QUnit.testStart(function() {
                 assert.equal(new Color($appointment.css("backgroundColor")).toHex(), "#ff0000", "Resource color is applied");
                 assert.ok($appointment.attr("data-groupid-1"), "Resource data attribute is defined");
                 assert.ok($appointment.hasClass("dx-scheduler-appointment-recurrence"), "Recurrent class is defined");
-                assert.ok($appointment.hasClass("dx-draggable"), "Draggable class is defined");
                 assert.ok($appointment.hasClass("dx-resizable"), "Resizable class is defined");
             },
             currentDate: new Date(2015, 1, 9)

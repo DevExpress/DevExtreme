@@ -15,7 +15,8 @@ var translator = require("animation/translator"),
     Color = require("color"),
     fx = require("animation/fx"),
     dragEvents = require("events/drag"),
-    DataSource = require("data/data_source/data_source").DataSource;
+    DataSource = require("data/data_source/data_source").DataSource,
+    pointerMock = require("../../helpers/pointerMock.js");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -754,9 +755,9 @@ QUnit.test("Multi week task dragging on month view", function(assert) {
         recurrenceRule: ""
     };
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    pointer.up();
 
     var updatedMultiWeekItem = this.instance.option("dataSource").items()[0];
 
@@ -794,9 +795,9 @@ QUnit.test("Multi week allDay task dragging on month view", function(assert) {
         recurrenceRule: ""
     };
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    pointer.up();
 
     var updatedMultiWeekItem = this.instance.option("dataSource").items()[0];
 

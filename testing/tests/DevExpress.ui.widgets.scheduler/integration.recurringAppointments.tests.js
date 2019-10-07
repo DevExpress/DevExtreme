@@ -145,9 +145,9 @@ QUnit.test("Recurring Task dragging", function(assert) {
         allDay: false
     };
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    pointer.up();
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var dataSourceItem = this.instance.option("dataSource").items()[0];
@@ -158,9 +158,9 @@ QUnit.test("Recurring Task dragging", function(assert) {
     assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, "New data is correct");
     assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, "New data is correct");
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(8).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    pointer.up();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     dataSourceItem = this.instance.option("dataSource").items()[0];
@@ -201,9 +201,9 @@ QUnit.test("Recurring Task dragging with 'series' recurrenceEditMode", function(
         allDay: false
     };
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    pointer.up();
 
     var dataSourceItem = this.instance.option("dataSource").items()[0];
 
@@ -243,9 +243,9 @@ QUnit.test("Recurrent Task dragging with 'occurrence' recurrenceEditMode", funct
         recurrenceException: ""
     };
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    pointer.up();
 
     var updatedSingleItem = this.instance.option("dataSource").items()[1],
         updatedRecurringItem = this.instance.option("dataSource").items()[0],
@@ -280,9 +280,9 @@ QUnit.test("Updated single item should not have recurrenceException ", function(
         firstDayOfWeek: 1
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.end);
+    pointer.up();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var singleItem = this.instance.option("dataSource").items()[1];
@@ -318,9 +318,9 @@ QUnit.test("Recurrent Task dragging, single mode", function(assert) {
         recurrenceRule: ""
     };
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    pointer.up();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedSingleItem = this.instance.option("dataSource").items()[1],
@@ -357,9 +357,9 @@ QUnit.test("Recurrent Task dragging, single mode - recurrenceException updating 
         firstDayOfWeek: 1
     });
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(1)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.end);
+    pointer.up();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedRecurringItem = this.instance.option("dataSource").items()[0],
@@ -729,9 +729,9 @@ QUnit.test("Recurrent allDay task dragging on month view, single mode", function
         recurrenceRule: ""
     };
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    pointer.up();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedSingleItem = this.instance.option("dataSource").items()[1],
@@ -778,9 +778,9 @@ QUnit.test("Recurrent allDay task dragging on month view, single mode, 24h appoi
         recurrenceRule: ""
     };
 
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find(".dx-scheduler-appointment").eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
-    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    pointer.up();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedSingleItem = this.instance.option("dataSource").items()[1],
@@ -1153,7 +1153,7 @@ QUnit.test("T697037. Recurrence exception date should equal date of appointment,
     var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2),
         pointer = pointerMock($appointment).start();
 
-    pointer.dragStart().drag(0, -30).dragEnd();
+    pointer.down().move(0, -30).up();
 
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 });

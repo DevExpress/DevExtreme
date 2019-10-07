@@ -20,9 +20,7 @@ import dblclickEvent from "../../events/double_click";
 import dateLocalization from "../../localization/date";
 import messageLocalization from "../../localization/message";
 import CollectionWidget from "../collection/ui.collection_widget.edit";
-import Draggable from "../draggable";
 import { Deferred } from "../../core/utils/deferred";
-import AppointmentDragBehavior from "./appointmentDragBehavior";
 
 const APPOINTMENT_SETTINGS_NAME = "dxAppointmentSettings";
 
@@ -41,7 +39,6 @@ const toMs = dateUtils.dateToMilliseconds;
 var SchedulerAppointments = CollectionWidget.inherit({
     ctor: function(element, options) {
         this.callBase(element, options);
-        this.dragBehavior = new AppointmentDragBehavior(this);
     },
 
     _supportedKeys: function() {
@@ -555,8 +552,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
                     $appointment.css("backgroundColor", color);
                 }
             });
-
-            this.option("allowDrag") && this.dragBehavior.addTo($appointment);
         }
     },
 
@@ -941,25 +936,12 @@ var SchedulerAppointments = CollectionWidget.inherit({
         return obj;
     },
 
-    updateDraggablesBoundOffsets: function() {
-        if(this.option("allowDrag")) {
-            this.$element().find("." + APPOINTMENT_ITEM_CLASS).each((function(_, appointmentElement) {
-                var $appointment = $(appointmentElement),
-                    appointmentData = this._getItemData($appointment);
-
-                if(!this.invoke("isAllDay", appointmentData)) {
-                    Draggable.getInstance($appointment).option("boundOffset", this._calculateBoundOffset());
-                }
-            }).bind(this));
-        }
-    },
-
     moveAppointmentBack: function() {
         var $appointment = this._$currentAppointment,
             size = this._initialSize,
             coords = this._initialCoordinates;
 
-        this.dragBehavior.moveBack();
+        this.notifyObserver("moveBack");
 
         if($appointment) {
             if(coords) {

@@ -174,27 +174,6 @@ QUnit.test("Scheduler tasks should have a right parent", function(assert) {
     assert.equal(this.instance.$element().find(".dx-scheduler-work-space .dx-scrollable-content>.dx-scheduler-scrollable-appointments").length, 1, "scrollable is parent of dxSchedulerAppointments");
 });
 
-QUnit.test("Tasks should have right boundOffset", function(assert) {
-    var tasks = [
-        { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
-    ];
-    var dataSource = new DataSource({
-        store: tasks
-    });
-    this.createInstance({
-        currentView: "week",
-        currentDate: new Date(2015, 2, 16),
-        dataSource: dataSource,
-        editing: true
-    });
-
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-        draggableBounds = $appointment.dxDraggable("instance").option("boundOffset"),
-        allDayPanelHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").first().outerHeight();
-
-    assert.roughEqual(draggableBounds.top, -allDayPanelHeight, 1, "bounds are OK");
-});
-
 QUnit.test("Draggable rendering option 'immediate' should be turned off", function(assert) {
     var tasks = [
         { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
@@ -209,30 +188,10 @@ QUnit.test("Draggable rendering option 'immediate' should be turned off", functi
         editing: true
     });
 
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-        immediate = $appointment.dxDraggable("instance").option("immediate");
+    var $workspace = $(this.instance.$element()).find(".dx-scheduler-work-space"),
+        immediate = $workspace.dxDraggable("instance").option("immediate");
 
     assert.notOk(immediate, "immediate option is false");
-});
-
-QUnit.test("Tasks should have right draggable boundary", function(assert) {
-    var tasks = [
-        { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
-    ];
-    var dataSource = new DataSource({
-        store: tasks
-    });
-    this.createInstance({
-        currentView: "week",
-        currentDate: new Date(2015, 2, 16),
-        dataSource: dataSource,
-        editing: true
-    });
-
-    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
-        draggableArea = $appointment.dxDraggable("instance").option("boundary");
-
-    assert.equal(draggableArea, this.instance.getWorkSpaceScrollableContainer(), "boundary is OK");
 });
 
 QUnit.test("Tasks should be filtered by date before render", function(assert) {
@@ -1274,9 +1233,9 @@ QUnit.test("Task dragging", function(assert) {
         allDay: false
     };
 
-    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(5).trigger(dragEvents.enter);
-    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.end);
+    pointer.up();
 
     var dataSourceItem = this.instance.option("dataSource").items()[0];
 
@@ -1321,9 +1280,9 @@ QUnit.test("Task dragging", function(assert) {
                 AllDay: false
             };
 
-            $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.start);
+            let pointer = pointerMock($(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0)).start().down().move(10, 10);
             $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(5).trigger(dragEvents.enter);
-            $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.end);
+            pointer.up();
 
             this.clock.tick();
 
@@ -1424,9 +1383,9 @@ QUnit.test("Appointment should be dragged correctly in grouped timeline (T739132
         "priority": 1
     };
 
-    this.scheduler.appointments.getAppointment(0).trigger(dragEvents.start);
+    let pointer = pointerMock(this.scheduler.appointments.getAppointment(0)).start().down().move(-200, 5);
     this.scheduler.workSpace.getCell(0).trigger(dragEvents.enter);
-    this.scheduler.appointments.getAppointment().trigger(dragEvents.end);
+    pointer.up();
 
     let dataSourceItem = this.instance.option("dataSource").items()[0];
 
@@ -1462,9 +1421,9 @@ QUnit.test("Appointment should have correct position while dragging from group",
     });
     var $appointment = $(this.instance.$element().find("." + APPOINTMENT_CLASS)).eq(0);
 
-    $appointment.trigger(dragEvents.start);
+    let pointer = pointerMock($appointment).start().down().move(10, 10);
     $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.end);
+    pointer.up();
 
     this.clock.tick();
     var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
@@ -1569,18 +1528,15 @@ QUnit.test("Appointment should have correct position while dragging from group, 
     });
     var $appointment = $(this.instance.$element().find("." + APPOINTMENT_CLASS)).eq(0);
 
-    $appointment.trigger(dragEvents.start);
+    const startPosition = $appointment.offset();
 
-    const expectedInitTop = 901;
-    const expectedInitLeft = 406;
+    let pointer = pointerMock($appointment).start().down().move(10, 10);
 
-    const startPosition = translator.locate($appointment);
-
-    assert.roughEqual(startPosition.top, expectedInitTop, 1.5, "Start position is correct");
-    assert.roughEqual(startPosition.left, expectedInitLeft, 1.5, "Start position is correct");
+    assert.roughEqual(translator.locate($appointment).top, startPosition.top + 10, 1.5, "Start position is correct");
+    assert.roughEqual(translator.locate($appointment).left, startPosition.left + 10, 1.5, "Start position is correct");
 
     $(this.instance.$element().find("." + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.end);
+    pointer.up();
 
     this.clock.tick();
     var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
@@ -1623,15 +1579,15 @@ QUnit.test("Appointment should have correct position while dragging into allDay 
     });
 
     var $appointment = $(this.instance.$element().find("." + APPOINTMENT_CLASS)).eq(0);
+    var startPosition = $appointment.offset();
 
-    $appointment.trigger(dragEvents.start);
+    let pointer = pointerMock($appointment).start().down().move(10, 10);
 
-    var startPosition = translator.locate($appointment);
-    assert.roughEqual(startPosition.top, 550, 2.1, "Start position is correct");
-    assert.roughEqual(startPosition.left, 370, 1.5, "Start position is correct");
+    assert.roughEqual(translator.locate($appointment).top, startPosition.top + 10, 2.1, "Start position is correct");
+    assert.roughEqual(translator.locate($appointment).left, startPosition.left + 10, 1.5, "Start position is correct");
 
     $(this.instance.$element().find(".dx-scheduler-all-day-table-cell")).eq(11).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.end);
+    pointer.up();
 
     this.clock.tick();
     var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
@@ -1736,9 +1692,9 @@ QUnit.test("Appointment should push correct data to the onAppointmentUpdating ev
     var stub = sinon.stub(this.instance._options, "onAppointmentUpdating");
     var $appointment = this.scheduler.appointments.getAppointment(0);
 
-    $appointment.trigger(dragEvents.start);
+    let pointer = pointerMock($appointment).start().down().move(10, 10);
     this.scheduler.workSpace.getCell(7).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.end);
+    pointer.up();
 
     const result = stub.getCall(0).args[0];
 
@@ -1923,8 +1879,7 @@ QUnit.test("Appointment should be updated correctly if it is dropped to the neig
 
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(9).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.start);
-    $appointment.trigger(dragEvents.end);
+    pointerMock($appointment).start().down().move(10, 10).up();
 
     this.clock.tick();
     var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
@@ -1951,8 +1906,7 @@ QUnit.test("Dropping appointment to the neighbor cell (month view) with predefin
 
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.start);
-    $appointment.trigger(dragEvents.end);
+    pointerMock($appointment).start().down().move(10, 10).up();
 
     this.clock.tick();
     var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
@@ -1979,8 +1933,7 @@ QUnit.test("Dropping appointment should keep predefined hours (month view)", fun
 
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.start);
-    $appointment.trigger(dragEvents.end);
+    pointerMock($appointment).start().down().move(10, 10).up();
 
     this.clock.tick();
     var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
@@ -2017,14 +1970,15 @@ QUnit.test("Appointment should be returned back if an error occurs during drag (
 
     assert.throws(function() {
         $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
-        $appointment.trigger(dragEvents.start);
-        $appointment.trigger(dragEvents.end);
+        pointerMock($appointment).start().down().move(10, 10).up();
     }, function(err) {
-        var updatedPosition = this.instance.$element().find("." + APPOINTMENT_CLASS).eq(0).position();
+        $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
+        var updatedPosition = $appointment.position();
 
-        assert.equal(updatedPosition.top, initialPosition.top, "Top is OK");
-        assert.equal(updatedPosition.left, initialPosition.left, "Left is OK");
+        assert.roughEqual(updatedPosition.top, initialPosition.top, 0.5, "Top is OK");
+        assert.roughEqual(updatedPosition.left, initialPosition.left, 0.5, "Left is OK");
         assert.equal(err.message, "An error occured", "Error message is OK");
+        assert.notOk($appointment.hasClass("dx-draggable-dragging"), "appointment hasn't 'dx-draggable-dragging' class");
 
         return true;
     }.bind(this));
@@ -2057,8 +2011,7 @@ QUnit.test("Appointment should be returned back if the 'update' method rejects d
     var initialPosition = $appointment.position();
 
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(16).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.start);
-    $appointment.trigger(dragEvents.end);
+    pointerMock($appointment).start().down().move(10, 10).up();
 
     var updatedPosition = this.instance.$element().find("." + APPOINTMENT_CLASS).eq(0).position();
 
@@ -3507,8 +3460,7 @@ QUnit.test("Appointment should be dragged correctly between the groups in vertic
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0);
 
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(54).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.start);
-    $appointment.trigger(dragEvents.end);
+    pointerMock($appointment).start().down().move(10, 10).up();
 
     this.clock.tick();
     var appointmentData = dataUtils.data(this.instance.$element().find("." + APPOINTMENT_CLASS).get(0), "dxItemData");
@@ -3582,8 +3534,7 @@ QUnit.test("Long appt parts should have correct coordinates after drag to the la
         cellPosition = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(6).position().left;
 
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(6).trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.start);
-    $appointment.trigger(dragEvents.end);
+    pointerMock($appointment).start().down().move(10, 10).up();
 
     this.clock.tick();
     var $firstPart = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),

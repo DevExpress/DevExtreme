@@ -85,7 +85,7 @@ export class TooltipStrategyBase {
     _createListOption(dataList) {
         return {
             dataSource: dataList,
-            onItemRendered: e => this._onListItemRendered(e),
+            onContentReady: this._onListRendered.bind(this),
             onItemClick: e => this._onListItemClick(e),
             itemTemplate: (item, index) => this._renderTemplate(this.tooltip.option("target"), item.data, item.currentData || item.data, index, item.color)
         };
@@ -95,7 +95,7 @@ export class TooltipStrategyBase {
         return this.scheduler._createComponent(listElement, List, this._createListOption(dataList));
     }
 
-    _onListItemRendered(e) {
+    _onListRendered(e) {
     }
 
     _getTargetData(data, $appointment) {
