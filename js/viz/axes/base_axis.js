@@ -1680,12 +1680,14 @@ Axis.prototype = {
 
         const percentStick = margins.percentStick && !this.isArgumentAxis;
 
-        if(percentStick && _abs(dataRange.max) === 1) {
-            maxPercentPadding = maxPadding = 0;
-        }
+        if(percentStick) {
+            if(_abs(dataRange.max) === 1) {
+                maxPadding = 0;
+            }
 
-        if(percentStick && _abs(dataRange.min) === 1) {
-            minPercentPadding = minPadding = 0;
+            if(_abs(dataRange.min) === 1) {
+                minPadding = 0;
+            }
         }
 
         const canvasStartEnd = that._getCanvasStartEnd();
