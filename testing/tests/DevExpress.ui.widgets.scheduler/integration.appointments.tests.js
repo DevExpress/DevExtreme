@@ -3759,3 +3759,28 @@ QUnit.test("Long term appoinment inflict index shift in other appointments (T737
     assert.ok(appointments[1].settings[0].index === 1, "Appointment next to long term appointment head has right index");
     assert.ok(appointments[2].settings[0].index === 1, "Appointment next to long term appointment tail has right index");
 });
+
+QUnit.test("Multi-day appointment should be rendered when started after endDayHour (T819852)", function(assert) {
+    var data = [{
+        text: "Google AdWords Strategy",
+        startDate: new Date("2019-10-01T18:00:00.000"),
+        endDate: new Date("2019-10-02T16:00:00.000"),
+    }, {
+        text: "New Brochures",
+        startDate: new Date("2019-10-02T17:00:00.000"),
+        endDate: new Date("2019-10-03T17:00:00.000"),
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineWeek"],
+        currentView: "timelineWeek",
+        currentDate: new Date(2019, 9, 4),
+        cellDuration: 660,
+        startDayHour: 7,
+        endDayHour: 18,
+        height: 580
+    });
+
+    assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, "Appointments are rendered");
+});
