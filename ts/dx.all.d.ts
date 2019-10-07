@@ -7788,10 +7788,10 @@ declare module DevExpress.viz {
         border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /** @name dxChartCommonAnnotationConfig.color */
         color?: string;
-        /** @name dxChartCommonAnnotationConfig.customData */
-        customData?: any;
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
         customizeTooltip?: ((annotationItem: dxChartAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.data */
+        data?: any;
         /** @name dxChartCommonAnnotationConfig.description */
         description?: string;
         /** @name dxChartCommonAnnotationConfig.font */
