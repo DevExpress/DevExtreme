@@ -3,6 +3,8 @@ import DropDownButton from "ui/drop_down_button";
 import typeUtils from "core/utils/type";
 import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
+import windowUtils from "core/utils/window";
+const Window = windowUtils.getWindow();
 
 import "common.css!";
 
@@ -221,6 +223,16 @@ QUnit.module("popup integration", {
         assert.ok($popupContent.hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
     });
 
+    QUnit.test("popup width shoud be equal to dropDownButton width", (assert) => {
+        const instance = $("#dropDownButton").dxDropDownButton({
+            width: 150,
+            opened: true,
+        }).dxDropDownButton("instance");
+
+        const popupContentElement = getPopup(instance).content();
+        assert.equal(Window.getComputedStyle(popupContentElement).width, "150px", "popup has special class");
+    });
+
     QUnit.test("popup should have correct options after rendering", (assert) => {
         const options = {
             deferRendering: this.instance.option("deferRendering"),
@@ -231,7 +243,7 @@ QUnit.module("popup integration", {
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
                 hide: { type: "fade", duration: 400, from: 1, to: 0 }
             },
-            width: "auto",
+            width: "40px",
             height: "auto",
             shading: false,
             position: {

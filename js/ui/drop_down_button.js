@@ -17,6 +17,8 @@ import { isPlainObject } from "../core/utils/type";
 import { ensureDefined } from "../core/utils/common";
 import Guid from "../core/guid";
 import { format as formatMessage } from "../localization/message";
+import windowUtils from "../core/utils/window";
+const Window = windowUtils.getWindow();
 
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
@@ -449,7 +451,7 @@ let DropDownButton = Widget.inherit({
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
                 hide: { type: "fade", duration: 400, from: 1, to: 0 }
             },
-            width: "auto",
+            width: Window.getComputedStyle(this.$element().get(0)).width,
             height: "auto",
             shading: false,
             visible: this.option("opened"),
