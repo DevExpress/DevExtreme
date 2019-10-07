@@ -4,7 +4,7 @@ import { extend } from "../../core/utils/extend";
 import stateStoringCore from "./ui.grid_core.state_storing_core";
 import { Deferred } from "../../core/utils/deferred";
 
-var getDataControllerState = function(that) {
+var getDataState = function(that) {
     var pagerView = that.getView("pagerView"),
         dataController = that.getController("data"),
         state = {
@@ -45,7 +45,7 @@ var processLoadState = function(that) {
         that._initialPageSize = that.option("paging.pageSize");
 
         dataController.changed.add(function() {
-            var state = getDataControllerState(that);
+            var state = getDataState(that);
 
             that.updateState(state);
         });
