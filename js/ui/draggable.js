@@ -875,6 +875,12 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return "content";
     },
 
+    _initTemplates: function() {
+        if(!this.option("contentTemplate")) return;
+
+        this.callBase.apply(this, arguments);
+    },
+
     _render: function() {
         this.callBase();
         this.$element().addClass(this._addWidgetPrefix());
@@ -901,6 +907,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
             case "template":
+            case "contentTemplate":
             case "container":
             case "clone":
                 this._resetDragElement();
