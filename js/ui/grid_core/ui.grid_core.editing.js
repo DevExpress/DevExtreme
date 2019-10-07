@@ -255,8 +255,9 @@ var EditingController = modules.ViewController.inherit((function() {
         _needToCloseEditableCell: function($targetElement) {
             var isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length,
                 $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
-                columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
-                rowIndex = this.getView("rowsView").getRowIndex($targetCell.parent()),
+                rowsView = this.getView("rowsView"),
+                rowIndex = rowsView.getRowIndex($targetCell.parent()),
+                columnIndex = rowsView.getCellElements(rowIndex).index($targetCell),
                 visibleColumns = this._columnsController.getVisibleColumns(),
                 // TODO jsdmitry: Move this code to _rowClick method of rowsView
                 allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
