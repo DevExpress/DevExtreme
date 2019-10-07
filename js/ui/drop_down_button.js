@@ -17,6 +17,7 @@ import { isPlainObject } from "../core/utils/type";
 import { ensureDefined } from "../core/utils/common";
 import Guid from "../core/guid";
 import { format as formatMessage } from "../localization/message";
+
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
 const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
