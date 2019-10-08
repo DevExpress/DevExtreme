@@ -4,7 +4,7 @@ import { Selector } from 'testcafe';
 import ScrollView from '../../model/scrollView';
 import { appendElementTo } from './helpers/domUtils';
 
-fixture `ContextMenu`
+fixture `ScrollView`
     .page(url(__dirname, '../container.html'));
 
 // T817096
