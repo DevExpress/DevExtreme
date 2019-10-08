@@ -9,7 +9,7 @@ import { addNamespace, fireEvent, normalizeKeyName } from "../../events/utils";
 import browser from "../../core/utils/browser";
 import { extend } from "../../core/utils/extend";
 import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
-import { isEventInCurrentGrid } from "./ui.grid_core.utils";
+import { isElementInCurrentGrid } from "./ui.grid_core.utils";
 
 var EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
@@ -64,27 +64,20 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _updateFocus: function(e) {
-        let that = this,
-            $target = $(e.event.target),
-            isInsideGrid = !!$target.closest(`.${that.getWidgetContainerClass()}`).length;
+        var that = this,
+            isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
-        if(!isInsideGrid || isEventInCurrentGrid(this, e.event)) {
-            var isFocusOverlay = e && e.event && $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+        that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
 
-            that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
+        clearTimeout(that._updateFocusTimeoutID);
 
-            clearTimeout(that._updateFocusTimeoutID);
-
-            that._updateFocusTimeoutID = setTimeout(function() {
-                delete that._updateFocusTimeoutID;
-                if(!that._isFocusOverlay) {
-                    that._updateFocusCore();
-                }
-                that._isFocusOverlay = false;
-            });
-        } else {
-            this.loseFocus();
-        }
+        that._updateFocusTimeoutID = setTimeout(function() {
+            delete that._updateFocusTimeoutID;
+            if(!that._isFocusOverlay) {
+                that._updateFocusCore();
+            }
+            that._isFocusOverlay = false;
+        });
     },
 
     _updateFocusOverlaySize: function($element, position) {
@@ -131,6 +124,10 @@ var EditorFactory = modules.ViewController.inherit({
     renderFocusOverlay: function($element, hideBorder) {
         var that = this,
             focusOverlayPosition;
+
+        if(!isElementInCurrentGrid(this, $element)) {
+            return;
+        }
 
         if(!that._$focusOverlay) {
             that._$focusOverlay = $("<div>").addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + " " + POINTER_EVENTS_TARGET_CLASS);

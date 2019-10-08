@@ -12,7 +12,7 @@ import eventUtils from "../../events/utils";
 import pointerEvents from "../../events/pointer";
 import { noop } from "../../core/utils/common";
 import { selectView } from "../shared/accessibility";
-import { isEventInCurrentGrid } from "./ui.grid_core.utils";
+import { isElementInCurrentGrid } from "./ui.grid_core.utils";
 
 var ROWS_VIEW_CLASS = "rowsview",
     EDIT_FORM_CLASS = "edit-form",
@@ -169,6 +169,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var tabIndex = this.option("tabIndex");
         $element.attr("tabIndex", isDefined(tabIndex) ? tabIndex : 0);
     },
+    _isEventInCurrentGrid: function(event) {
+        return isElementInCurrentGrid(this, $(event.target));
+    },
     _clickHandler: function(e) {
         var event = e.event,
             $target = $(event.currentTarget),
@@ -177,7 +180,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $parent = $target.parent(),
             isEditingRow = $parent.hasClass(EDIT_ROW_CLASS);
 
-        if(isEventInCurrentGrid(this, event) && this._isCellValid($target, true)) {
+        if(this._isEventInCurrentGrid(event) && this._isCellValid($target, true)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
 
             this._focusView(data.view, data.viewIndex);
@@ -1428,7 +1431,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             that._documentClickHandler = that.createAction(function(e) {
                 var $target = $(e.event.target),
-                    isCurrentRowsViewClick = isEventInCurrentGrid(that, e.event) && $target.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length,
+                    isCurrentRowsViewClick = that._isEventInCurrentGrid(e.event) && $target.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length,
                     isEditorOverlay = $target.closest("." + DROPDOWN_EDITOR_OVERLAY_CLASS).length;
                 if(!isCurrentRowsViewClick && !isEditorOverlay) {
                     that._resetFocusedCell();
