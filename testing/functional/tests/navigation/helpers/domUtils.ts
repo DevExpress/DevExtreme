@@ -22,4 +22,3 @@ const appendElementTo = ClientFunction((selector: string, tagName: string, optio
 export {
     appendElementTo
 }
-    
