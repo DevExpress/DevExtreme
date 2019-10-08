@@ -212,6 +212,16 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal($folder11Node.find("span").text(), "Folder 1.1");
     });
 
+    test("during navigation internal current directory updated only once", function(assert) {
+        const inst = this.wrapper.getInstance();
+        const setCurrentDirSpy = sinon.spy(inst._controller, "setCurrentDirectory");
+
+        this.wrapper.findThumbnailsItem("Folder 1").trigger("dxdblclick");
+        this.clock.tick(400);
+
+        assert.strictEqual(setCurrentDirSpy.callCount, 1, "internal method called once");
+    });
+
     test("change root file name by public API", function(assert) {
         let treeViewNode = this.wrapper.getFolderNodes();
         assert.equal(treeViewNode.length, 4, "Everything right on its' place");
