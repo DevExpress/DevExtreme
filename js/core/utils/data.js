@@ -236,20 +236,20 @@ const objectsEqualByValue = function(object1, object2, depth) {
 
 const maxEqualityDepth = 3;
 
-const equalByComplexValue = function(object1, object2, deep) {
-    deep = deep || 0;
+const equalByComplexValue = function(object1, object2, depth) {
+    depth = depth || 0;
 
     object1 = toComparable(object1, true);
     object2 = toComparable(object2, true);
 
-    if(object1 === object2 || deep >= maxEqualityDepth) {
+    if(object1 === object2 || depth >= maxEqualityDepth) {
         return true;
     }
 
     if(typeUtils.isObject(object1) && typeUtils.isObject(object2)) {
-        return objectsEqualByValue(object1, object2, deep);
+        return objectsEqualByValue(object1, object2, depth);
     } else if(Array.isArray(object1) && Array.isArray(object2)) {
-        return arraysEqualByValue(object1, object2, deep);
+        return arraysEqualByValue(object1, object2, depth);
     }
 
     return false;
