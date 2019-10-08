@@ -64,9 +64,12 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     _updateFocus: function(e) {
-        if(isEventInCurrentGrid(this, e.event)) {
-            var that = this,
-                isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+        let that = this,
+            $target = $(e.event.target),
+            isInsideGrid = !!$target.closest(`.${that.getWidgetContainerClass()}`).length;
+
+        if(!isInsideGrid || isEventInCurrentGrid(this, e.event)) {
+            var isFocusOverlay = e && e.event && $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
             that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
 
