@@ -22,6 +22,7 @@ env:
     - TARGET=test_functional COMPONENT=dataGrid
     - TARGET=test_functional COMPONENT=scheduler
     - TARGET=test_functional COMPONENT=editors
+    - TARGET=test_functional COMPONENT=navigation
     - TARGET=test_themebuilder
 
 build:
