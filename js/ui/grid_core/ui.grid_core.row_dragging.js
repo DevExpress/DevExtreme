@@ -98,7 +98,7 @@ var RowDraggingExtender = {
                 row = items && items[options.fromIndex],
                 gridOptions = this._getDraggableGridOptions(row);
 
-            this._createComponent($dataGridContainer, "dxDataGrid", gridOptions);
+            this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
 
             return $dataGridContainer;
         };
