@@ -523,7 +523,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             template = this._getTemplate(template);
             result = $(template.render(this._getDragTemplateArgs($element)));
         } else if(clone) {
-            result = $element.clone().appendTo(container);
+            result = $element.clone().outerWidth($element.outerWidth()).appendTo(container);
         }
 
         return result.toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0));
