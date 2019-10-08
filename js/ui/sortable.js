@@ -395,7 +395,7 @@ var Sortable = Draggable.inherit({
     _isValidPoint: function($items, itemPointIndex, dropInsideItem) {
         let allowReordering = dropInsideItem || this._allowReordering();
 
-        if(!allowReordering) {
+        if(!allowReordering && itemPointIndex !== 0) {
             return false;
         }
 

@@ -194,6 +194,37 @@ QUnit.test("allowReordering = false when allowDropInsideItem is true", function(
     assert.strictEqual($(".dx-sortable-placeholder.dx-sortable-placeholder-inside").length, 1, "placeholder exists");
 });
 
+QUnit.test("Move to root if allowReordering is false and allowDropInsideItem is true", function(assert) {
+    // arrange
+    let onDragChangeSpy = sinon.spy();
+
+    this.createSortable({
+        allowReordering: false,
+        allowDropInsideItem: true,
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    let pointer = pointerMock(this.$element.children().eq(1)).start().down(15, 45).move(0, -30);
+
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 1, "onDragChange event is not called");
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].dropInsideItem, true, "onDragChange dropInsideItem arg is true");
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].fromIndex, 1, "onDragChange from arg");
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 0, "onDragChange toIndex arg");
+    assert.strictEqual($(".dx-sortable-placeholder").length, 1, "inside placeholder exists");
+
+    // act
+    pointer.move(0, -10);
+
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 2, "onDragChange event is called");
+    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].dropInsideItem, false, "onDragChange dropInsideItem arg is false");
+    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].fromIndex, 1, "onDragChange from arg");
+    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].toIndex, 0, "onDragChange toIndex arg");
+    assert.strictEqual($(".dx-sortable-placeholder:not(.dx-sortable-placeholder-inside)").length, 1, "placeholder exists");
+});
+
 QUnit.test("option changing", function(assert) {
     // arrange
     var sortable = this.createSortable({
