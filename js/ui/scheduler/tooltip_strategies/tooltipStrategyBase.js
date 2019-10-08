@@ -18,10 +18,12 @@ const TOOLTIP_APPOINTMENT_ITEM = "dx-tooltip-appointment-item",
 export const createDefaultTooltipTemplate = (template, data, targetData, index) => {
     return new FunctionTemplate(options => {
         return template.render({
-            model: data,
-            targetedAppointmentData: targetData,
+            model: {
+                appointmentData: data,
+                targetedAppointmentData: targetData
+            },
             container: options.container,
-            currentIndex: index
+            index: index
         });
     });
 };
