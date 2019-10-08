@@ -2564,7 +2564,20 @@ QUnit.test("sortable should be created with deprecated option allowItemReorderin
     var sortable = $list.find(".dx-sortable").dxSortable("instance");
 
     assert.ok(sortable, "sortable is created");
-    assert.equal(sortable.option("allowReordering"), true, "allowReordering is true");
+    assert.strictEqual(sortable.option("allowReordering"), true, "allowReordering is true");
+});
+
+QUnit.test("sortable should be created with option itemDragging.allowDropInsideItem", (assert) => {
+    const $list = $("#templated-list").dxList({
+        items: ["0"],
+        itemDragging: { allowDropInsideItem: true }
+    });
+
+    var sortable = $list.find(".dx-sortable").dxSortable("instance");
+
+    assert.ok(sortable, "sortable is created");
+    assert.strictEqual(sortable.option("allowDropInsideItem"), true, "allowDropInsideItem is true");
+    assert.strictEqual(sortable.option("allowReordering"), false, "allowReordering is true");
 });
 
 QUnit.test("passing itemDragging options to sortable if group is defined", (assert) => {

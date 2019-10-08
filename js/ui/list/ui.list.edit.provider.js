@@ -73,7 +73,7 @@ registerOption(
 );
 registerOption(
     function() {
-        return this.option("itemDragging.allowReordering") || this.option("itemDragging.group");
+        return this.option("itemDragging.allowReordering") || this.option("itemDragging.allowDropInsideItem") || this.option("itemDragging.group");
     },
     function() {
         return "reorder";
