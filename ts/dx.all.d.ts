@@ -4073,6 +4073,7 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** @name dxList.Options.allowItemDeleting */
         allowItemDeleting?: boolean;
+        /** @deprecated */
         /** @name dxList.Options.allowItemReordering */
         allowItemReordering?: boolean;
         /** @name dxList.Options.bounceEnabled */

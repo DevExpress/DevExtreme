@@ -179,7 +179,7 @@ const ListEdit = ListBase.inherit({
             * @name dxListOptions.allowItemReordering
             * @type boolean
             * @default false
-            * @deprecated dxListOptions.itemDragging.allowReordering
+            * @deprecated dxListOptions.itemDragging
             */
             allowItemReordering: false,
 
