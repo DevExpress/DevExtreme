@@ -39,8 +39,7 @@ export class OptionManager {
     }
 
     _getFieldName(fullName) {
-        const splitNames = fullName.split('.');
-        return splitNames[splitNames.length - 1];
+        return fullName.substr(fullName.lastIndexOf('.') + 1);
     }
 
     _setField(options, fullName, value) {
@@ -91,10 +90,10 @@ export class OptionManager {
 
     _setRelevantNames(options, name, value) {
         if(!name) return;
-        const alias = this._normalizeName(name);
+        const normalizedName = this._normalizeName(name);
 
-        if(alias && alias !== name) {
-            this._setField(options, alias, value);
+        if(normalizedName && normalizedName !== name) {
+            this._setField(options, normalizedName, value);
             this._clearField(options, name);
         }
     }
@@ -115,10 +114,9 @@ export class OptionManager {
         }
         if(deprecate) {
             this._notifyDeprecated(name);
-            const alias = deprecate.alias;
 
-            if(alias) {
-                name = alias;
+            if(deprecate.alias) {
+                name = deprecate.alias;
             }
         }
 

@@ -201,13 +201,13 @@ var toComparable = function(value, caseSensitive) {
     return value;
 };
 
-const isArraysEqualByValue = function(array1, array2, deep) {
+const arraysEqualByValue = function(array1, array2, depth) {
     if(array1.length !== array2.length) {
         return false;
     }
 
     for(let i = 0; i < array1.length; i++) {
-        if(!equalByComplexValue(array1[i], array2[i], deep + 1)) {
+        if(!equalByComplexValue(array1[i], array2[i], depth + 1)) {
             return false;
         }
     }
@@ -215,11 +215,11 @@ const isArraysEqualByValue = function(array1, array2, deep) {
     return true;
 };
 
-const isObjectsEqualByValue = function(object1, object2, deep) {
+const objectsEqualByValue = function(object1, object2, depth) {
     for(const propertyName in object1) {
         if(
             Object.prototype.hasOwnProperty.call(object1, propertyName) &&
-            !equalByComplexValue(object1[propertyName], object2[propertyName], deep + 1)
+            !equalByComplexValue(object1[propertyName], object2[propertyName], depth + 1)
         ) {
             return false;
         }
@@ -234,7 +234,7 @@ const isObjectsEqualByValue = function(object1, object2, deep) {
     return true;
 };
 
-const maxEqualityDeep = 3;
+const maxEqualityDepth = 3;
 
 const equalByComplexValue = function(object1, object2, deep) {
     deep = deep || 0;
@@ -242,14 +242,14 @@ const equalByComplexValue = function(object1, object2, deep) {
     object1 = toComparable(object1, true);
     object2 = toComparable(object2, true);
 
-    if(object1 === object2 || deep >= maxEqualityDeep) {
+    if(object1 === object2 || deep >= maxEqualityDepth) {
         return true;
     }
 
     if(typeUtils.isObject(object1) && typeUtils.isObject(object2)) {
-        return isObjectsEqualByValue(object1, object2, deep);
+        return objectsEqualByValue(object1, object2, deep);
     } else if(Array.isArray(object1) && Array.isArray(object2)) {
-        return isArraysEqualByValue(object1, object2, deep);
+        return arraysEqualByValue(object1, object2, deep);
     }
 
     return false;

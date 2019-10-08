@@ -63,6 +63,14 @@ class PostponedOperations {
     }
 }
 
+const normalizeOptions = (options, value) => {
+    if(typeof options !== "string") return options;
+
+    const result = {};
+    result[options] = value;
+    return result;
+};
+
 var Component = Class.inherit({
 
     _setDeprecatedOptions: function() {
@@ -361,7 +369,7 @@ var Component = Class.inherit({
         optionName = optionName.replace(/\[/g, ".").replace(/\]/g, "");
         const fullPath = optionName.split(".");
         let value;
-        for(let path of fullPath) {
+        for(const path of fullPath) {
             value = value ? value[path] : this._initialOptions[path];
         }
 
@@ -456,21 +464,12 @@ var Component = Class.inherit({
         return result;
     },
 
-    _convertToObj(options, value) {
-        if(typeof options !== "string") return options;
-
-        const result = {};
-        result[options] = value;
-        return result;
-    },
-
     _getOptionByStealth: function(name) {
         return this._optionManager.getValueSilently(name);
     },
 
     _setOptionByStealth: function(options, value) {
-        options = this._convertToObj(options, value);
-        this._optionManager.setValueSilently(options);
+        this._optionManager.setValueSilently(normalizeOptions(options, value));
     },
 
     _getEventName: function(actionName) {
@@ -533,8 +532,7 @@ var Component = Class.inherit({
         this.beginUpdate();
 
         try {
-            options = this._convertToObj(options, value);
-            this._optionManager.setValue(options);
+            this._optionManager.setValue(normalizeOptions(options, value));
         } finally {
             this.endUpdate();
         }
@@ -555,8 +553,7 @@ var Component = Class.inherit({
         }
         const defaultValue = this.initialOption(name);
         this.beginUpdate();
-        const option = this._convertToObj(name, defaultValue);
-        this._optionManager.setValue(option);
+        this._optionManager.setValue(normalizeOptions(name, defaultValue));
         this.endUpdate();
     }
 }).include(EventsMixin);
