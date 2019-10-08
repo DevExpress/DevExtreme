@@ -830,7 +830,7 @@ const subscribes = {
                 tailDuration = visibleDayDuration;
             }
 
-            result = floorQuantityOfDays * visibleDayDuration + tailDuration;
+            result = (floorQuantityOfDays * visibleDayDuration + tailDuration) || toMs("minute");
         }
         options.callback(result);
     },
