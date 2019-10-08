@@ -4,6 +4,15 @@ import { logger } from "core/utils/console";
 import ValidationEngine from "ui/validation_engine";
 
 import "ui/form/ui.form";
+import "ui/text_area";
+import "ui/autocomplete";
+import "ui/calendar";
+import "ui/date_box";
+import "ui/drop_down_box";
+import "ui/html_editor";
+import "ui/lookup";
+import "ui/radio_group";
+import "ui/tag_box";
 
 const INVALID_CLASS = "dx-invalid";
 const VALIDATION_SUMMARY_ITEM_CLASS = "dx-validationsummary-item";
@@ -299,7 +308,7 @@ QUnit.test("Validate via validationRules when rules and 'isRequired' item option
     assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "lastName") + "]").length, 1, "invalid lastName editor");
 });
 
-QUnit.test("Reset validation summary when values are reset in form", assert => {
+QUnit.test("validate -> resetValues old test", assert => {
     // arrange
     const form = $("#form").dxForm({
         formData: {
@@ -319,6 +328,63 @@ QUnit.test("Reset validation summary when values are reset in form", assert => {
 
     // assert
     assert.equal($("." + VALIDATION_SUMMARY_ITEM_CLASS).length, 0, "validation summary items");
+});
+
+QUnit.test("validate -> resetValues when there are invalid validation rules", function(assert) {
+    function findInvalidElements$(form) {
+        return form.$element().find("." + INVALID_CLASS);
+    }
+    function findInvalidSummaryElements$(form) {
+        return form.$element().find("." + VALIDATION_SUMMARY_ITEM_CLASS);
+    }
+
+    const formItems = [
+        { dataField: "dxAutocomplete", editorType: "dxAutocomplete" },
+        { dataField: "dxCalendar", editorType: "dxCalendar" },
+        { dataField: "dxCheckBox", editorType: "dxCheckBox" },
+        { dataField: "dxDateBox", editorType: "dxDateBox" },
+        { dataField: "dxDropDownBox", editorType: "dxDropDownBox", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxHtmlEditor", editorType: "dxHtmlEditor" },
+        { dataField: "dxLookup", editorType: "dxLookup", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxNumberBox", editorType: "dxNumberBox" },
+        { dataField: "dxRadioGroup", editorType: "dxRadioGroup", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxSelectBox", editorType: "dxSelectBox", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxTagBox", editorType: "dxTagBox", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxTextArea", editorType: "dxTextArea" },
+        { dataField: "dxTextBox", editorType: "dxTextBox" },
+    ];
+
+    let validationCallbackLog = [];
+    const form = $("#form").dxForm({
+        showValidationSummary: true,
+        items: formItems,
+        customizeItem(item) {
+            item.validationRules = [{
+                type: "custom",
+                message: item.dataField,
+                validationCallback: (e) => {
+                    validationCallbackLog.push(e.rule.message);
+                    return false;
+                }
+            }];
+        }
+    }).dxForm("instance");
+
+    form.validate();
+
+    formItems.forEach(item => assert.strictEqual(form.getEditor(item.dataField).option("isValid"), false, "form.getEditor." + item.dataField));
+    assert.equal(findInvalidElements$(form).length, formItems.length, "There are all the invalid elements");
+    assert.equal(findInvalidSummaryElements$(form).length, formItems.length, "There are all the validation summary items");
+    assert.equal(validationCallbackLog.length, formItems.length, "validationCallbackLog on validate");
+
+    validationCallbackLog = [];
+    form.resetValues();
+    formItems.forEach(item => assert.strictEqual(form.getEditor(item.dataField).option("isValid"), true, "form.getEditor." + item.dataField));
+    assert.equal(findInvalidElements$(form).length, 0, "There are no invalid elements");
+    assert.equal(findInvalidSummaryElements$(form).length, 0, "There are no validation summary items");
+    assert.equal(validationCallbackLog.length, /* TODO: avoid all the calls */ 3, "validationCallbackLog on resetValues: " + JSON.stringify(validationCallbackLog));
+
+    form.dispose();
 });
 
 QUnit.test("Changing an validationRules options of an any item does not invalidate whole form (T673188)", assert => {
