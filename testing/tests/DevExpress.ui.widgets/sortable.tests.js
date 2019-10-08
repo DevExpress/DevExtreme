@@ -92,7 +92,7 @@ QUnit.test("Drag template - check args", function(assert) {
 
     this.createSortable({
         filter: ".draggable",
-        template: dragTemplate
+        dragTemplate: dragTemplate
     });
 
     items = this.$element.children();
@@ -102,9 +102,9 @@ QUnit.test("Drag template - check args", function(assert) {
 
     // assert
     assert.strictEqual(dragTemplate.callCount, 1, "drag template is called");
-    assert.deepEqual($(dragTemplate.getCall(0).args[0].itemElement).get(0), items.get(0), "first arg");
-    assert.strictEqual(dragTemplate.getCall(0).args[1], 0, "second arg");
-    assert.deepEqual($(dragTemplate.getCall(0).args[2]).get(0), $("body").get(0), "third arg");
+    assert.strictEqual($(dragTemplate.getCall(0).args[0].itemElement).get(0), items.get(0), "itemElement arg");
+    assert.strictEqual(dragTemplate.getCall(0).args[0].fromIndex, 0, "fromIndex arg");
+    assert.strictEqual($(dragTemplate.getCall(0).args[1]).get(0), $("body").get(0), "second arg");
 });
 
 
@@ -1344,14 +1344,14 @@ QUnit.test("Dragging item to another the sortable widget when allowReordering is
     assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
 });
 
-QUnit.test("Dragging item to another the sortable widget if template contains scrollable", function(assert) {
+QUnit.test("Dragging item to another the sortable widget if dragTemplate contains scrollable", function(assert) {
     // arrange
     let items1, items2;
 
     let sortable1 = this.createSortable({
         dropFeedbackMode: "push",
         filter: ".draggable",
-        template: function() {
+        dragTemplate: function() {
             return $("<div>").css({
                 width: 100,
                 height: 100
