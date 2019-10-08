@@ -8,6 +8,7 @@ import "common.css!";
 
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
+const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = "dx-dropdownbutton-popup-wrapper";
 const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
 
@@ -205,8 +206,9 @@ QUnit.module("popup integration", {
         this.popup = getPopup(this.instance);
     }
 }, () => {
-    QUnit.test("popup content should have special class", (assert) => {
-        assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
+    QUnit.test("popup should have special classes", (assert) => {
+        assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has a special class");
+        assert.ok($(this.popup._wrapper()).hasClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS), "popup wrapper has a special class");
     });
 
     QUnit.test("popup content should have special class when custom template is used", (assert) => {
