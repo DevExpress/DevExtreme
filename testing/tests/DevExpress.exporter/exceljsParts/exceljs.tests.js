@@ -74,13 +74,12 @@ QUnit.module("API", moduleConfig, () => {
         [true, false].forEach((excelFilterEnabled) => {
             let testCaption = topLeftCellOption + `, excelFilterEnabled: ${excelFilterEnabled}`;
             const getOptions = (dataGrid, expectedCustomizeCellArgs, options) => {
-                let { keepColumnWidths = true, selectedRowsOnly = false, wrapText = undefined } = options || {};
+                let { keepColumnWidths = true, selectedRowsOnly = false } = options || {};
 
                 const result = {
                     component: dataGrid,
                     worksheet: this.worksheet,
                     topLeftCell: topLeftCell,
-                    wrapText: wrapText,
                     customizeCell: (eventArgs) => {
                         if(typeUtils.isDefined(expectedCustomizeCellArgs)) {
                             helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, this.customizeCellCallCount++);
@@ -232,11 +231,14 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Header - 1 column, export.wrapText: true" + testCaption, (assert) => {
+            QUnit.test("Header - 1 column, export.excelWrapTextEnabled: true" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
-                    columns: [{ caption: "f1" }]
+                    columns: [{ caption: "f1" }],
+                    export: {
+                        excelWrapTextEnabled: true
+                    }
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
@@ -245,46 +247,52 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then(() => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then(() => {
                     helper.checkAlignment(expectedCells);
                     done();
                 });
             });
 
-            QUnit.test("Header - 1 column, export.wrapText: false" + testCaption, (assert) => {
-                const done = assert.async();
-
-                const dataGrid = $("#dataGrid").dxDataGrid({
-                    columns: [{ caption: "f1" }]
-                }).dxDataGrid("instance");
-
-                const expectedCells = [[
-                    { excelCell: { value: "f1", alignment: alignCenterNoWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
-                ]];
-
-                helper._extendExpectedCells(expectedCells, topLeft);
-
-                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then(() => {
-                    helper.checkAlignment(expectedCells);
-                    done();
-                });
-            });
-
-            QUnit.test("Header - 1 column, grid.wordWrapEnabled: true, export.wrapText: false" + testCaption, (assert) => {
+            QUnit.test("Header - 1 column, export.excelWrapTextEnabled: false" + testCaption, (assert) => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
                     columns: [{ caption: "f1" }],
-                    wordWrapEnabled: true
+                    export: {
+                        excelWrapTextEnabled: true
+                    }
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "f1", alignment: alignCenterNoWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                    { excelCell: { value: "f1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then(() => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then(() => {
+                    helper.checkAlignment(expectedCells);
+                    done();
+                });
+            });
+
+            QUnit.test("Header - 1 column, grid.wordWrapEnabled: true, export.excelWrapTextEnabled: false" + testCaption, (assert) => {
+                const done = assert.async();
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [{ caption: "f1" }],
+                    wordWrapEnabled: true,
+                    export: {
+                        excelWrapTextEnabled: false
+                    }
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "f1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then(() => {
                     helper.checkAlignment(expectedCells);
                     done();
                 });
@@ -748,7 +756,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: string, export.wrapText: true" + testCaption, (assert) => {
+            QUnit.test("Data - columns.dataType: string, grid.wordWrapEnabled: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1" }];
 
@@ -757,6 +765,7 @@ QUnit.module("API", moduleConfig, () => {
                         dataField: "f1",
                         dataType: "string"
                     }],
+                    wordWrapEnabled: true,
                     dataSource: ds,
                     loadingTimeout: undefined
                 }).dxDataGrid("instance");
@@ -769,7 +778,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -915,7 +924,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: number, export.wrapText: false" + testCaption, (assert) => {
+            QUnit.test("Data - columns.dataType: number, grid.wordWrapEnabled: false" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: 1 }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -923,19 +932,20 @@ QUnit.module("API", moduleConfig, () => {
                         dataField: "f1",
                         dataType: "number"
                     }],
+                    wordWrapEnabled: false,
                     dataSource: ds,
                     loadingTimeout: undefined
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "F1", alignment: alignCenterNoWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
                 ], [
                     { excelCell: { value: ds[0].f1, alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
                     helper.checkFont(expectedCells);
@@ -1173,7 +1183,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 3 columns, grid.wrapTextEnabled: true, export.wrapText: false, col_1.alignment: 'center', col_2.alignment: 'right', col_3.alignment: 'left'" + testCaption, (assert) => {
+            QUnit.test("Data - 3 columns, grid.wordWrapEnabled: true, export.excelWrapTextEnabled: false, col_1.alignment: 'center', col_2.alignment: 'right', col_3.alignment: 'left'" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: true, f3: 1 },
@@ -1185,8 +1195,11 @@ QUnit.module("API", moduleConfig, () => {
                         { dataField: "f2", caption: "f2", dataType: "boolean", alignment: "right" },
                         { dataField: "f3", caption: "f3", dataType: "number", alignment: "left" },
                     ],
+                    export: {
+                        excelWrapTextEnabled: false
+                    },
                     dataSource: ds,
-                    wordWrapEnabled: true,
+                    wordWrapEnabled: false,
                     loadingTimeout: undefined,
                     showColumnHeaders: false
                 }).dxDataGrid("instance");
@@ -1203,7 +1216,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 2, column: 3 }, { row: 2, column: 3 }, topLeft);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
@@ -1427,7 +1440,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Grouping - 1 level, export.wrapText: true, rtlEnabled: true" + testCaption, (assert) => {
+            QUnit.test("Grouping - 1 level, export.excelWrapTextEnabled: true, rtlEnabled: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -1438,6 +1451,9 @@ QUnit.module("API", moduleConfig, () => {
                         { dataField: "f1", caption: "f1", dataType: "string", groupIndex: 0 },
                         { dataField: "f2", caption: "f2", dataType: "string" },
                     ],
+                    export: {
+                        excelWrapTextEnabled: true
+                    },
                     dataSource: ds,
                     rtlEnabled: true,
                     loadingTimeout: undefined
@@ -1446,11 +1462,11 @@ QUnit.module("API", moduleConfig, () => {
                 const expectedCells = [[
                     { excelCell: { value: "f2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", value: "f2", column: dataGrid.columnOption(1) } }
                 ], [
-                    { excelCell: { value: "f1: f1_1", alignment: alignRightWrap, font: { bold: true } }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: ds[0].f1 } }
+                    { excelCell: { value: "f1: f1_1", alignment: alignRightNoWrap, font: { bold: true } }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: ds[0].f1 } }
                 ], [
                     { excelCell: { value: "f2_1", alignment: alignRightWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
                 ], [
-                    { excelCell: { value: "f1: f1_2", alignment: alignRightWrap, font: { bold: true } }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: ds[1].f1 } }
+                    { excelCell: { value: "f1: f1_2", alignment: alignRightNoWrap, font: { bold: true } }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: ds[1].f1 } }
                 ], [
                     { excelCell: { value: "f2_2", alignment: alignRightWrap }, gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } }
                 ]];
@@ -2865,7 +2881,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Total summary, export.wrapText: false, rtlEnabled: true" + testCaption, (assert) => {
+            QUnit.test("Total summary, export.excelWrapTextEnabled: false, rtlEnabled: true" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -2885,6 +2901,9 @@ QUnit.module("API", moduleConfig, () => {
                             { name: 'TotalSummary 4', column: "f2", summaryType: "min" }
                         ]
                     },
+                    export: {
+                        excelWrapTextEnabled: false
+                    },
                     rtlEnabled: true,
                     showColumnHeaders: false,
                     loadingTimeout: undefined
@@ -2897,16 +2916,16 @@ QUnit.module("API", moduleConfig, () => {
                     { excelCell: { value: "f1_2", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
                     { excelCell: { value: "f2_2", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } }
                 ], [
-                    { excelCell: { value: "Max: f1_2", alignment: alignRightTopNoWrap, font: { bold: true } }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 1" } },
-                    { excelCell: { value: "Max: f2_2", alignment: alignRightTopNoWrap, font: { bold: true } }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 3" } }
+                    { excelCell: { value: "Max: f1_2", alignment: alignRightTopWrap, font: { bold: true } }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 1" } },
+                    { excelCell: { value: "Max: f2_2", alignment: alignRightTopWrap, font: { bold: true } }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[1].f2, totalSummaryItemName: "TotalSummary 3" } }
                 ], [
-                    { excelCell: { value: "Min: f1_1", alignment: alignRightTopNoWrap, font: { bold: true } }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[0].f1, totalSummaryItemName: "TotalSummary 2" } },
-                    { excelCell: { value: "Min: f2_1", alignment: alignRightTopNoWrap, font: { bold: true } }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[0].f2, totalSummaryItemName: "TotalSummary 4" } }
+                    { excelCell: { value: "Min: f1_1", alignment: alignRightTopWrap, font: { bold: true } }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[0].f1, totalSummaryItemName: "TotalSummary 2" } },
+                    { excelCell: { value: "Min: f2_1", alignment: alignRightTopWrap, font: { bold: true } }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), value: ds[0].f2, totalSummaryItemName: "TotalSummary 4" } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: false })).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
@@ -2914,7 +2933,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("TODO: not supported - Total summary, export.wrapText: true, totalItems.alignment, total_2.alignment: center, total_3: right" + testCaption, (assert) => {
+            QUnit.test("TODO: not supported - Total summary, export.excelWrapTextEnabled: true, totalItems.alignment, total_2.alignment: center, total_3: right" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
                     { f1: "f1_1", f2: "f2_1" },
@@ -2934,6 +2953,9 @@ QUnit.module("API", moduleConfig, () => {
                             { name: 'TotalSummary 3', column: "f2", summaryType: "max", alignment: "right" },
                             { name: 'TotalSummary 4', column: "f2", summaryType: "min" }
                         ]
+                    },
+                    export: {
+                        excelWrapTextEnabled: true
                     },
                     showColumnHeaders: false,
                     loadingTimeout: undefined
@@ -2955,7 +2977,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
-                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false, wrapText: true })).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then((cellsRange) => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
