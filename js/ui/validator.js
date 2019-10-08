@@ -274,7 +274,9 @@ const Validator = DOMComponent.inherit({
             };
         adapter.reset();
         this._resetValidationRules();
-        this._applyValidationResult(result, adapter);
+        if(!this._validationInfo.result || this._validationInfo.result.status !== VALIDATION_STATUS_PENDING) {
+            this._applyValidationResult(result, adapter);
+        }
     },
 
     _updateValidationResult(result) {
