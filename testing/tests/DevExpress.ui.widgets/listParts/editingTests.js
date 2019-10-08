@@ -282,7 +282,9 @@ QUnit.test("items reordering by keyboard", function(assert) {
     var $list = $("#list").dxList({
             items: items,
             editEnabled: true,
-            allowItemReordering: false,
+            itemDragging: {
+                allowReordering: false
+            },
             focusStateEnabled: true
         }),
         list = $list.dxList("instance"),
@@ -292,9 +294,9 @@ QUnit.test("items reordering by keyboard", function(assert) {
     this.clock.tick();
     $lastItem.trigger($.Event("keydown", { key: "ArrowUp", shiftKey: true }));
 
-    assert.deepEqual(list.option("items"), items, "reordering by keyboard is impossible if 'allowItemReordering' = false ");
+    assert.deepEqual(list.option("items"), items, "reordering by keyboard is impossible if 'itemDragging.allowReordering' = false ");
 
-    list.option("allowItemReordering", true);
+    list.option("itemDragging.allowReordering", true);
 
     $lastItem = $list.find("." + LIST_ITEM_CLASS).eq(2);
     $lastItem.trigger("dxpointerdown");

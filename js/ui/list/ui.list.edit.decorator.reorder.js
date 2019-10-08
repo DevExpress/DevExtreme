@@ -25,6 +25,7 @@ registerDecorator(
 
             this._sortable = list._createComponent(list._scrollView.$content(), Sortable, extend({
                 contentTemplate: null,
+                allowReordering: false,
                 filter: ".dx-list-item",
                 container: list.$element(),
                 dragDirection: list.option("itemDragging.group") ? "both" : "vertical",
