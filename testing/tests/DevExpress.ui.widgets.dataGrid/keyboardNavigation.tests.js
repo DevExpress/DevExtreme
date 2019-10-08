@@ -1,8 +1,10 @@
 QUnit.testStart(function() {
-    var markup =
-'<div>\
-    <div id="container"  class="dx-datagrid"></div>\
-</div>';
+    var markup = `
+        <div>
+            <div id="container"></div>
+            <div class="dx-datagrid"></div>
+        </div>
+    `;
 
     $("#qunit-fixture").html(markup);
 });
@@ -342,7 +344,7 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
     var navigationController,
         isFocused = false,
         $cell,
-        $rowsElement = $("<div />").append($("<tr class='dx-row'><td/></tr>")).appendTo("#container");
+        $rowsElement = $("<div />").append($("<tr class='dx-row'><td/></tr>")).appendTo(".dx-datagrid");
 
     this.getView("rowsView").element = function() {
         return $rowsElement;
@@ -375,7 +377,7 @@ QUnit.testInActiveWindow("Cell is focused when clicked on input in cell", functi
     var navigationController,
         $input,
         $cell,
-        $rowsElement = $("<div />").append($("<tr class='dx-row'><td><input/></td></tr>")).appendTo("#container");
+        $rowsElement = $("<div />").append($("<tr class='dx-row'><td><input/></td></tr>")).appendTo(".dx-datagrid");
 
     this.getView("rowsView").element = function() {
         return $rowsElement;
@@ -656,7 +658,7 @@ QUnit.testInActiveWindow("Focus by click is not applied when editing is enabled"
     // arrange
     var navigationController,
         isViewFocused = false,
-        $rowsViewElement = $("<div />").append($("<table><tbody><tr class='dx-row'><td><input class='dx-texteditor-input'></td><td><input class='dx-texteditor-input'></td></tr></tbody></table>")).appendTo("#container"),
+        $rowsViewElement = $("<div />").append($("<table><tbody><tr class='dx-row'><td><input class='dx-texteditor-input'></td><td><input class='dx-texteditor-input'></td></tr></tbody></table>")).appendTo(".dx-datagrid"),
         rowsView = this.getView("rowsView");
 
     rowsView.element = function() {
@@ -881,7 +883,7 @@ QUnit.testInActiveWindow("focused cell info is not reset when element of rowvIew
     // act
     $rowsView
         .append($cell)
-        .appendTo($("#container"));
+        .appendTo($(".dx-datagrid"));
 
     navigationController.init();
     navigationController._focusedCellPosition = {
@@ -5058,7 +5060,7 @@ QUnit.testInActiveWindow('Render rows view with keyboard navigation', function(a
 QUnit.testInActiveWindow('Tab from focused element before rowsview must focus first cell', function(assert) {
     // arrange
     var rowsView = this.createRowsView(this.items),
-        testElement = $('#container');
+        testElement = $('.dx-datagrid');
 
     rowsView.render(testElement);
     this.clock.tick();
