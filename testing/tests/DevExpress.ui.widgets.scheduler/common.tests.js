@@ -2910,7 +2910,7 @@ QUnit.testStart(function() {
             currentView: "week"
         });
 
-        assert.equal(workSpaceSpy.callCount, 1, "Resources aren't required");
+        assert.equal(workSpaceSpy.callCount, 2, "Resources aren't required");
     });
 
     QUnit.test("onAppointmentClick should fires when appointment is clicked", function(assert) {
