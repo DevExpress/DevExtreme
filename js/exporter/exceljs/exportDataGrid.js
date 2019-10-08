@@ -101,13 +101,13 @@ function _setFont(excelCell, bold) {
     }
 }
 
-function _setAlignment(excelCell, wrapText, alignment) {
+function _setAlignment(excelCell, wrapText, horizontalAlignment) {
     excelCell.alignment = excelCell.alignment || {};
     if(isDefined(wrapText)) {
         excelCell.alignment.wrapText = wrapText;
     }
-    if(isDefined(alignment)) {
-        excelCell.alignment.horizontal = alignment;
+    if(isDefined(horizontalAlignment)) {
+        excelCell.alignment.horizontal = horizontalAlignment;
     }
 }
 
