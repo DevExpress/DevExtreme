@@ -18,11 +18,16 @@ function allowSearch(column) {
 
 function parseValue(column, text) {
     var lookup = column.lookup;
+
+    if(!column.parseValue) {
+        return text;
+    }
+
     if(lookup) {
         return column.parseValue.call(lookup, text);
-    } else {
-        return column.parseValue ? column.parseValue(text) : text;
     }
+
+    return column.parseValue(text);
 }
 
 
