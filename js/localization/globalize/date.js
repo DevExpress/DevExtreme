@@ -685,7 +685,7 @@ if(Globalize && Globalize.formatDate) {
         },
 
         getMonthNames: function(format, type) {
-            const months = Globalize.locale().main("dates/calendars/gregorian/months/" + (type || "stand-alone") + "/" + (format || "wide"));
+            const months = Globalize.locale().main("dates/calendars/gregorian/months/" + (type === "format" ? type : "stand-alone") + "/" + (format || "wide"));
 
             return iteratorUtils.map(months, month => { return month; });
         },
