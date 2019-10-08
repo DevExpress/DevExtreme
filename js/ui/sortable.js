@@ -367,7 +367,7 @@ var Sortable = Draggable.inherit({
     _getItems: function() {
         let itemsSelector = this._getItemsSelector();
 
-        return this.$element()
+        return this._$content()
             .find(itemsSelector)
             .not("." + this._addWidgetPrefix(PLACEHOLDER_CLASS))
             .not("." + this._addWidgetPrefix(CLONE_CLASS))

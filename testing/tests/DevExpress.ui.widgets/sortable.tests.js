@@ -26,6 +26,13 @@ QUnit.testStart(function() {
             <div style="width: 30px; height: 300px; float: left;">item2</div>
             <div style="width: 30px; height: 300px; float: left;">item3</div>
         </div>
+        <div id="itemsWithContentTemplate" style="width: 300px; height: 250px; position: relative; background: grey;">
+            <div data-options="dxTemplate:{ name:'content' }">
+                <div id="item11" class="draggable" style="width: 300px; height: 30px; background: yellow;">item1</div>
+                <div id="item12" class="draggable" style="width: 300px; height: 30px; background: red;">item2</div>
+                <div id="item13" class="draggable" style="width: 300px; height: 30px; background: blue;">item3</div>
+            </div>
+        </div>
         `;
 
     $("#qunit-fixture").html(markup);
@@ -233,6 +240,30 @@ QUnit.test("Source item if filter is not defined", function(assert) {
     assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
 });
 
+QUnit.test("Source item if content template is defined", function(assert) {
+    // arrange
+    this.$element = $("#itemsWithContentTemplate");
+
+    this.createSortable({
+        dropFeedbackMode: "push"
+    });
+
+    let $items = this.$element.children().children();
+    let $dragItemElement = $items.eq(0);
+
+    // assert
+    assert.strictEqual($items.length, 3, "item count");
+
+    // act
+    pointerMock($dragItemElement).start().down().move(10, 0);
+
+    // assert
+    $items = this.$element.children().children();
+    let $source = $items.eq(0);
+    assert.strictEqual($items.length, 3, "item count");
+    assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
+});
+
 QUnit.test("Source item", function(assert) {
     // arrange
     this.createSortable({
@@ -418,6 +449,39 @@ QUnit.test("Move items during dragging", function(assert) {
     assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
     assert.strictEqual(items[1].style.transform, "translate(0px, -30px)", "items 2 is moved up");
     assert.strictEqual(items[2].style.transform, "", "items 3 is not moved");
+});
+
+QUnit.test("Move items during dragging if content tempalte is defined", function(assert) {
+    // arrange
+    let items,
+        $item,
+        $dragItemElement;
+
+    this.$element = $("#itemsWithContentTemplate");
+
+    this.createSortable({
+        dropFeedbackMode: "push"
+    });
+
+    items = this.$element.children().children();
+    $dragItemElement = items.eq(0);
+
+    // assert
+    assert.strictEqual(items.length, 3, "item count");
+
+    // act
+    pointerMock($dragItemElement).start().down(15, 15).move(15, 1000);
+
+    // assert
+    items = this.$element.children().children();
+    $item = items.eq(0);
+    assert.strictEqual(items.length, 3, "item count");
+    assert.strictEqual($item.attr("id"), "item11", "first item is a source");
+    assert.ok($item.hasClass("dx-sortable-source-hidden"), "has source-hidden class");
+
+    assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
+    assert.strictEqual(items[1].style.transform, "translate(0px, -30px)", "items 2 is moved up");
+    assert.strictEqual(items[2].style.transform, "translate(0px, -30px)", "items 3 is moved up");
 });
 
 QUnit.test("Drop when dropFeedbackMode is push", function(assert) {
