@@ -2630,8 +2630,8 @@ QUnit.test("Appointment should be rendered correctly with expressions on custom 
         startDateExpr: "Start",
         endDateExpr: "End",
         textExpr: "Text",
-        appointmentTemplate: function(data) {
-            return "<div class='custom-title'>" + data.Text + "</div>";
+        appointmentTemplate: function(model) {
+            return "<div class='custom-title'>" + model.appointmentData.Text + "</div>";
         }
     });
 
