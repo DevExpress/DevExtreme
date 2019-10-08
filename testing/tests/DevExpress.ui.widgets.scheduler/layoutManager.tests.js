@@ -145,17 +145,26 @@ QUnit.test("Default appointment duration should be equal to 30 minutes", functio
     assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 8, 30), "End date of appointment is 30 minutes");
 });
 
-QUnit.test("Appointment duration should be equal to 30 minutes if end date equal or lower than start date", function(assert) {
+QUnit.test("Appointment duration should be equal to 30 minutes if end date lower than start date", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: [
-            { text: "Appointment 1", startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 8) },
-            { text: "Appointment 2", startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 7) }
+            { text: "Appointment 1", startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 7) }
         ]
     });
 
     assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 8, 30), "End date is correct");
-    assert.deepEqual(this.instance.option("dataSource")[1].endDate, new Date(2015, 1, 9, 8, 30), "End date is correct");
+});
+
+QUnit.test("Appointment duration should not change if end date equal to start date", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        dataSource: [
+            { text: "Appointment 1", startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 8) },
+        ]
+    });
+
+    assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 8, 0), "End date is correct");
 });
 
 QUnit.test("AllDay appointment without endDate shoud be rendered correctly", function(assert) {
