@@ -286,12 +286,16 @@ var Draggable = DOMComponentWithTemplate.inherit({
              */
             container: undefined,
             /**
-             * @name DraggableBaseOptions.template
+             * @name dxDraggableOptions.dragTemplate
              * @type template|function
+             * @type_function_param1 dragInfo:object
+             * @type_function_param1_field1 itemData:any
+             * @type_function_param1_field2 itemElement:dxElement
+             * @type_function_param2 containerElement:dxElement
              * @type_function_return string|Node|jQuery
              * @default undefined
              */
-            template: undefined,
+            dragTemplate: undefined,
             /**
              * @name DraggableBaseOptions.contentTemplate
              * @type template|function
@@ -513,7 +517,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         let result = $element,
             clone = this.option("clone"),
             container = this._getContainer(),
-            template = this.option("template");
+            template = this.option("dragTemplate");
 
         if(template) {
             template = this._getTemplate(template);
@@ -906,7 +910,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             case "onDrop":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
-            case "template":
+            case "dragTemplate":
             case "contentTemplate":
             case "container":
             case "clone":
