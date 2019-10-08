@@ -108,7 +108,7 @@ QUnit.test("Drag and drop node", function(assert) {
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
     assert.notOk($placeholderElement.hasClass("dx-sortable-placeholder-inside"), "placeholder for dropping inward");
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.hasClass("dx-treelist"), "dragging element is treelist");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 
     // act
