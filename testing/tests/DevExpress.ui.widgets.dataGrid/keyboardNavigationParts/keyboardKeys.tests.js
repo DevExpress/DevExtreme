@@ -1155,6 +1155,27 @@ QUnit.module("Keyboard keys", {
         }
     });
 
+    QUnit.test("DataGrid - Should not generate exception if handle not valid cell by tab key press (T817348)", function(assert) {
+        // arrange
+        setupModules(
+            this,
+            { initViews: true },
+            ["adaptivity"]
+        );
+
+        this.gridView.render($('#container'));
+
+        try {
+            // act
+            this.triggerKeyDown("tab", false, false, dataGridWrapper.rowsView.getElement());
+        } catch(e) {
+            // assert
+            assert.ok(false, e.message);
+        }
+
+        assert.ok(true, "No exceptions if focus not cell element by tab");
+    });
+
     // T448310
     QUnit.testInActiveWindow("Navigation using tab inside edit form in the first row", function(assert) {
         // arrange
