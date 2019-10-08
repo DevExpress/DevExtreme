@@ -3621,7 +3621,7 @@ declare module DevExpress.ui {
         /** @name dxFormSimpleItem.editorOptions */
         editorOptions?: any;
         /** @name dxFormSimpleItem.editorType */
-        editorType?: 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
+        editorType?: 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox' | 'dxHtmlEditor';
         /** @name dxFormSimpleItem.helpText */
         helpText?: string;
         /** @name dxFormSimpleItem.isRequired */
