@@ -3,8 +3,6 @@ import DropDownButton from "ui/drop_down_button";
 import typeUtils from "core/utils/type";
 import eventsEngine from "events/core/events_engine";
 import keyboardMock from "../../helpers/keyboardMock.js";
-import windowUtils from "core/utils/window";
-const Window = windowUtils.getWindow();
 
 import "common.css!";
 
