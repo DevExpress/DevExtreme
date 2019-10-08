@@ -2,7 +2,6 @@ import { find } from "../../../core/utils/array";
 import { ensureDefined } from "../../../core/utils/common";
 import { compileGetter, compileSetter } from "../../../core/utils/data";
 import Guid from "../../../core/guid";
-import { each } from "../../../core/utils/iterator";
 import typeUtils from "../../../core/utils/type";
 import { errors } from "../../../data/errors";
 
@@ -63,13 +62,7 @@ class ArrayFileProvider extends FileProvider {
         }
         this._nameSetter(item.dataItem, name);
         item.name = name;
-
-        let key = this._keyGetter(item.dataItem);
-        if(!key) {
-            key = String(new Guid());
-            this._keySetter(item.dataItem, key);
-            item.key = key;
-        }
+        item.key = this._ensureDataObjectKey(item.dataItem);
     }
 
     createFolder(parentDir, name) {
@@ -80,7 +73,7 @@ class ArrayFileProvider extends FileProvider {
             };
         }
 
-        let newDir = { };
+        const newDir = { };
         this._nameSetter(newDir, name);
         this._getIsDirSetter(newDir, true);
 
@@ -89,54 +82,60 @@ class ArrayFileProvider extends FileProvider {
         const array = this._getDirectoryDataItems(parentDir.dataItem);
         array.push(newDir);
 
-        if(parentDir && !parentDir.isRoot) {
-            parentDir.hasSubDirs = this._hasSubDirs(parentDir.dataItem);
-        }
+        this._updateHasSubDirs(parentDir);
     }
 
     deleteItems(items) {
-        each(items, (_, item) => this._deleteItem(item));
+        items.forEach(item => this._deleteItem(item));
     }
 
     moveItems(items, destinationDir) {
-        let array = this._getDirectoryDataItems(destinationDir.dataItem);
-        each(items, (_, item) => {
+        const array = this._getDirectoryDataItems(destinationDir.dataItem);
+        items.forEach(item => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
             this._deleteItem(item);
             array.push(item.dataItem);
         });
+        this._updateHasSubDirs(destinationDir);
     }
 
     copyItems(items, destinationDir) {
         const array = this._getDirectoryDataItems(destinationDir.dataItem);
-        each(items, (_, item) => {
+        items.forEach(item => {
             this._checkAbilityToMoveOrCopyItem(item, destinationDir);
 
             const copiedItem = this._createCopy(item.dataItem);
             array.push(copiedItem);
         });
-        destinationDir.hasSubDirs = this._hasSubDirs(destinationDir.dataItem);
+        this._updateHasSubDirs(destinationDir);
     }
 
     _checkAbilityToMoveOrCopyItem(item, destinationDir) {
-        const newItemPath = pathCombine(destinationDir.relativeName, item.name);
-        if(newItemPath.indexOf(item.relativeName) === 0) {
-            throw {
-                errorId: ErrorCode.Other,
-                fileItem: item
-            };
-        }
+        const itemKey = this._getKeyFromDataObject(item.dataItem, item.parentPath);
+        const pathInfo = destinationDir.getFullPathInfo();
+        let currentPath = "";
+
+        pathInfo.forEach(info => {
+            currentPath = pathCombine(currentPath, info.name);
+            const pathKey = this._getDataObjectKey(info.key, currentPath);
+            if(pathKey === itemKey) {
+                throw {
+                    errorId: ErrorCode.Other,
+                    fileItem: item
+                };
+            }
+        });
     }
 
     _createCopy(dataObj) {
-        let copyObj = { };
+        const copyObj = { };
         this._nameSetter(copyObj, this._nameGetter(dataObj));
         this._getIsDirSetter(copyObj, this._isDirGetter(dataObj));
 
         const items = this._subFileItemsGetter(dataObj);
         if(Array.isArray(items)) {
-            let itemsCopy = [];
-            each(items, (_, childItem) => {
+            const itemsCopy = [];
+            items.forEach(childItem => {
                 const childCopy = this._createCopy(childItem);
                 itemsCopy.push(childCopy);
             });
@@ -155,7 +154,7 @@ class ArrayFileProvider extends FileProvider {
         }
 
         const parentDirDataObj = this._findFileItemObj(fileItem.pathInfo);
-        let array = this._getDirectoryDataItems(parentDirDataObj);
+        const array = this._getDirectoryDataItems(parentDirDataObj);
         const index = array.indexOf(fileItemObj);
         array.splice(index, 1);
     }
@@ -180,7 +179,25 @@ class ArrayFileProvider extends FileProvider {
             const directoryEntry = this._findFileItemObj(pathInfo);
             dirFileObjects = directoryEntry && this._subFileItemsGetter(directoryEntry) || [];
         }
+
+        this._ensureKeysForDuplicateNameItems(dirFileObjects);
+
         return this._convertDataObjectsToFileItems(dirFileObjects, pathInfo);
+    }
+
+    _ensureKeysForDuplicateNameItems(dataObjects) {
+        const dirNames = {};
+        const fileNames = {};
+
+        dataObjects.forEach(obj => {
+            const names = this._isDirGetter(obj) ? dirNames : fileNames;
+            const name = this._nameGetter(obj);
+            if(names[name]) {
+                this._ensureDataObjectKey(obj);
+            } else {
+                names[name] = true;
+            }
+        });
     }
 
     _findFileItemObj(pathInfo) {
@@ -192,11 +209,10 @@ class ArrayFileProvider extends FileProvider {
         let fileItemObj = null;
         let fileItemObjects = this._data;
         for(let i = 0; i < pathInfo.length && (i === 0 || fileItemObj); i++) {
-            const that = this;
             fileItemObj = find(fileItemObjects, item => {
-                const hasCorrectFileItemType = that._isDirGetter(item) || i === pathInfo.length - 1;
-                return that._getKeyFromDataObject(item, currentPath) === pathInfo[i].key &&
-                    that._nameGetter(item) === pathInfo[i].name && hasCorrectFileItemType;
+                const hasCorrectFileItemType = this._isDirGetter(item) || i === pathInfo.length - 1;
+                return this._getKeyFromDataObject(item, currentPath) === pathInfo[i].key &&
+                    this._nameGetter(item) === pathInfo[i].name && hasCorrectFileItemType;
             });
             if(fileItemObj) {
                 currentPath = pathCombine(currentPath, this._nameGetter(fileItemObj));
@@ -207,11 +223,28 @@ class ArrayFileProvider extends FileProvider {
     }
 
     _getKeyFromDataObject(dataObj, defaultKeyPrefix) {
+        const key = this._keyGetter(dataObj);
+        const relativeName = pathCombine(defaultKeyPrefix, this._nameGetter(dataObj));
+        return this._getDataObjectKey(key, relativeName);
+    }
+
+    _getDataObjectKey(key, relativeName) {
+        return key ? key : relativeName;
+    }
+
+    _ensureDataObjectKey(dataObj) {
         let key = this._keyGetter(dataObj);
         if(!key) {
-            key = pathCombine(defaultKeyPrefix, this._nameGetter(dataObj));
+            key = String(new Guid());
+            this._keySetter(dataObj, key);
         }
         return key;
+    }
+
+    _updateHasSubDirs(dir) {
+        if(dir && !dir.isRoot) {
+            dir.hasSubDirs = this._hasSubDirs(dir.dataItem);
+        }
     }
 
     _hasSubDirs(dataObj) {
