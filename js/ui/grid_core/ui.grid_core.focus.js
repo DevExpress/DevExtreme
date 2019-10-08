@@ -317,8 +317,8 @@ exports.FocusController = core.ViewController.inherit((function() {
             });
         },
         _clearPreviousFocusedRow: function($tableElement, focusedRowIndex) {
-            const isNotMasterDetailFocusedRow = (_, $focusedRow) => {
-                const $focusedRowTable = $focusedRow.closest(DATA_GRID_TABLE_SELECTOR);
+            const isNotMasterDetailFocusedRow = (_, focusedRow) => {
+                const $focusedRowTable = $(focusedRow).closest(DATA_GRID_TABLE_SELECTOR);
                 return $tableElement.is($focusedRowTable);
             };
 
