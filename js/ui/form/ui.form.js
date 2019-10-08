@@ -1543,16 +1543,14 @@ const Form = Widget.inherit({
     },
 
     _resetValues: function() {
-        var validationGroup = this._getValidationGroup(),
-            validationGroupConfig = ValidationEngine.getGroupConfig(validationGroup);
-
-        validationGroupConfig && validationGroupConfig.reset();
         this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
             if(isDefined(itemRunTimeInfo.widgetInstance) && isDefined(itemRunTimeInfo.item) && itemRunTimeInfo.item.itemType !== "button") {
                 itemRunTimeInfo.widgetInstance.reset();
                 itemRunTimeInfo.widgetInstance.option("isValid", true);
             }
         });
+
+        ValidationEngine.resetGroup(this._getValidationGroup());
     },
 
     _updateData: function(data, value, isComplexData) {
