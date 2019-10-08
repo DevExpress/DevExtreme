@@ -53,7 +53,7 @@ const TagBox = SelectBox.inherit({
         const parent = this.callBase();
         const sendToList = (e) => this._list._keyboardProcessor.process(e);
 
-        return extend(parent, {
+        return extend({}, parent, {
             backspace: function(e) {
                 if(!this._isCaretAtTheStart()) {
                     return;
@@ -77,8 +77,14 @@ const TagBox = SelectBox.inherit({
                 this._removeTagElement($tagToDelete);
                 delete this._preserveFocusedTag;
             },
-            upArrow: sendToList,
-            downArrow: sendToList,
+            upArrow: (e) => {
+                const handler = e.altKey || !this._list ? parent.upArrow : sendToList;
+                return handler.apply(this, arguments);
+            },
+            downArrow: (e) => {
+                const handler = e.altKey || !this._list ? parent.downArrow : sendToList;
+                return handler.apply(this, arguments);
+            },
             del: function(e) {
                 if(!this._$focusedTag || !this._isCaretAtTheStart()) {
                     return;
@@ -744,12 +750,12 @@ const TagBox = SelectBox.inherit({
     _renderInputSize: function() {
         const $input = this._input();
         const value = $input.val();
+        const isEmptyInput = isString(value) && value;
         const cursorWidth = 5;
         let width = "";
         let size = "";
-        const canTypeText = this.option("searchEnabled") || this.option("editEnabled");
-
-        if(value && canTypeText) {
+        const canTypeText = this.option("searchEnabled") || this.option("acceptCustomValue");
+        if(isEmptyInput && canTypeText) {
             const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
 
             $calculationElement.insertAfter($input);

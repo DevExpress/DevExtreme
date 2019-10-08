@@ -2,20 +2,23 @@ import $ from "../../../core/renderer";
 import { TooltipStrategyBase, createDefaultTooltipTemplate } from './tooltipStrategyBase';
 import Tooltip from "../../tooltip";
 import translator from "../../../animation/translator";
-import dragEvents from "../../../events/drag";
-import eventsEngine from "../../../events/core/events_engine";
 import { FunctionTemplate } from "../../../core/templates/function_template";
 import { touch } from "../../../core/utils/support";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
 const MAX_TOOLTIP_HEIGHT = 200;
 
+const LIST_ITEM_DATA_KEY = "dxListItemData";
+
+const FIXED_CONTAINER_CLASS = "dx-scheduler-fixed-appointments";
+const LIST_ITEM_CLASS = "dx-list-item";
+
 class TooltipBehaviorBase {
     constructor(scheduler) {
         this.scheduler = scheduler;
     }
 
-    onListItemRendered(e) {
+    onListRendered(e) {
     }
 
     onListItemClick(e) {
@@ -54,13 +57,42 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         };
     }
 
-    onListItemRendered(e) {
-        if(this.scheduler._allowDragging()) {
-            const data = e.itemData.data;
+    onListRendered(e) {
+        let dragElement,
+            $element = $(e.element);
 
-            eventsEngine.on(e.itemElement, dragEvents.start, e => this._onDragStart(e, data));
-            eventsEngine.on(e.itemElement, dragEvents.move, e => this._onDragMove(e));
-            eventsEngine.on(e.itemElement, dragEvents.end, e => this._onDragEnd(e, data));
+        if(this.scheduler._allowDragging()) {
+            const dragBehavior = this._getWorkspaceInstance().dragBehavior;
+
+            dragBehavior && dragBehavior.addTo($element, {
+                filter: `.${LIST_ITEM_CLASS}`,
+                container: this.scheduler.$element().find(`.${FIXED_CONTAINER_CLASS}`),
+                cursorOffset: (options) => {
+                    const event = options.event,
+                        $dragElement = $(dragElement),
+                        offset = $(options.itemElement).offset();
+
+                    return {
+                        x: event.pageX - offset.left - ($dragElement.width() / 2),
+                        y: event.pageY - offset.top - ($dragElement.height() / 2)
+                    };
+                },
+                dragTemplate: () => {
+                    return dragElement;
+                },
+                onDragStart: (e) => {
+                    const event = e.event,
+                        itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+
+                    if(itemData) {
+                        event.data = event.data || {};
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.data.settings);
+
+                        dragBehavior.initialPosition = translator.locate($(dragElement));
+                        this.scheduler.hideAppointmentTooltip();
+                    }
+                }
+            });
         }
     }
 
@@ -97,6 +129,10 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
         return this.scheduler.getAppointmentsInstance();
     }
 
+    _getWorkspaceInstance() {
+        return this.scheduler.getWorkSpace();
+    }
+
     _createDragAppointment(itemData, settings) {
         const appointments = this._getAppointmentsInstance();
         const appointmentIndex = appointments.option("items").length;
@@ -129,34 +165,6 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
             top: mousePosition.top - dragAndDropContainerRect.top - appointment.height() / 2,
             left: mousePosition.left - dragAndDropContainerRect.left - appointment.width() / 2
         };
-    }
-
-    _onDragStart(e, itemData) {
-        this.state.appointment = this._createDragAppointment(itemData, itemData.settings);
-        this.state.initPosition = this._createInitPosition(this.state.appointment, { top: e.pageY, left: e.pageX });
-
-        translator.move(this.state.appointment, this.state.initPosition);
-
-        const appointments = this._getAppointmentsInstance();
-        appointments.dragBehavior.onDragStartCore(this.state.appointment, false);
-    }
-
-    _onDragMove(e) {
-        this._getAppointmentsInstance().dragBehavior.onDragMoveCore(this.state.appointment, e.offset);
-    }
-
-    _onDragEnd(e, itemData) {
-        this._getAppointmentsInstance().dragBehavior.onDragEndCore(this.state.appointment, e);
-        this._removeAppointmentIfDragEndOnCurrentCell(itemData);
-    }
-
-    _removeAppointmentIfDragEndOnCurrentCell(itemData) {
-        const newCellIndex = this.scheduler._workSpace.getDroppableCellIndex();
-        const oldCellIndex = this.scheduler._workSpace.getCellIndexByCoordinates(this.state.initPosition);
-
-        if(newCellIndex === oldCellIndex) {
-            this._getAppointmentsInstance()._clearItem({ itemData: itemData });
-        }
     }
 }
 
@@ -254,8 +262,8 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         return $("<div>").appendTo(this.scheduler.$element()).addClass(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
     }
 
-    _onListItemRendered(e) {
-        this.behavior.onListItemRendered(e);
+    _onListRendered(e) {
+        this.behavior.onListRendered(e);
     }
 
     _canRaiseClickEvent() {

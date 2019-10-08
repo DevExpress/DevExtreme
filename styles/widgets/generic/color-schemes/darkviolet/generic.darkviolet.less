@@ -46,12 +46,7 @@
 * @name 40. Border color
 * @type color
 */
-@base-border-color: fade(#9e9ec5, 22%);
-@base-border-color-without-alpha: rgb(
-    red(@base-border-color) * alpha(@base-border-color) + (1 - alpha(@base-border-color)) * red(@base-bg),
-    green(@base-border-color) * alpha(@base-border-color) + (1 - alpha(@base-border-color)) * green(@base-bg),
-    blue(@base-border-color) * alpha(@base-border-color) + (1 - alpha(@base-border-color)) * blue(@base-bg)
-);
+@base-border-color: #343840;
 
 /**
 * @name 120. Border radius
@@ -1032,7 +1027,7 @@
 
 @datagrid-base-color: @base-text-color;
 @datagrid-base-background-color: @base-bg;
-@datagrid-border-color: @base-border-color-without-alpha;
+@datagrid-border-color: @base-border-color;
 @datagrid-border: 1px solid @datagrid-border-color;
 
 /**
@@ -1065,7 +1060,7 @@
 * @name 55. Selected row background color
 * @type color
 */
-@datagrid-selection-bg: fade(@base-accent, 46%);
+@datagrid-selection-bg: @base-select-bg;
 
 /**
 * @name 60. Selected row border color
@@ -1201,7 +1196,7 @@
 
 @treelist-base-color: @base-text-color;
 @treelist-base-background-color: @base-bg;
-@treelist-border-color: @base-border-color-without-alpha;
+@treelist-border-color: @base-border-color;
 @treelist-border: 1px solid @treelist-border-color;
 @treelist-columnchooser-item-color: @datagrid-columnchooser-item-color;
 @treelist-columnchooser-font-weight: @datagrid-columnchooser-font-weight;
@@ -1265,7 +1260,7 @@
 
 // dxPivotGrid
 @PIVOTGRID_AREA_BACKGROUND: @base-bg;
-@PIVOTGRID_BORDER_COLOR: @base-border-color-without-alpha;
+@PIVOTGRID_BORDER_COLOR: @base-border-color;
 
 /**
 * @name 20. Header text color
@@ -1322,7 +1317,7 @@
 * @name 10. Border color
 * @type color
 */
-@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color-without-alpha, 60%);
+@SCHEDULER_BASE_BORDER_COLOR: fade(@base-border-color, 60%);
 
 @scheduler-cell-active-bg: fade(darken(@base-bg, 13.3%), 70%);
 @scheduler-cell-hover-bg: @base-hover-bg;

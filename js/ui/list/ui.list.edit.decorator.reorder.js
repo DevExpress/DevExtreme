@@ -24,11 +24,12 @@ registerDecorator(
             this._lockedDrag = false;
 
             this._sortable = list._createComponent(list._scrollView.$content(), Sortable, extend({
+                contentTemplate: null,
                 filter: ".dx-list-item",
                 container: list.$element(),
                 dragDirection: list.option("itemDragging.group") ? "both" : "vertical",
                 handle: "." + REORDER_HANDLE_CLASS,
-                template: this._dragTemplate,
+                dragTemplate: this._dragTemplate,
                 onDragStart: this._dragStartHandler.bind(this),
                 onDragChange: this._dragChangeHandler.bind(this),
                 onDragEnd: this._dragEndHandler.bind(this)

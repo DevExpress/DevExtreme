@@ -355,7 +355,7 @@ class FileUploader extends Editor {
             * @name dxFileUploaderOptions.uploadFile
             * @type function
             * @type_function_param1 file:File
-            * @type_function_param2 progressCallback(loadedBytes):any
+            * @type_function_param2 progressCallback:Function
             * @type_function_return Promise<any>|any
             */
             uploadFile: null,

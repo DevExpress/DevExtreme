@@ -1859,8 +1859,6 @@ declare module DevExpress.ui {
         scrollSensitivity?: number;
         /** @name DraggableBase.Options.scrollSpeed */
         scrollSpeed?: number;
-        /** @name DraggableBase.Options.template */
-        template?: DevExpress.core.template | (() => string | Element | JQuery);
     }
     /** @name DraggableBase */
     export class DraggableBase extends DOMComponent {
@@ -3186,6 +3184,8 @@ declare module DevExpress.ui {
     export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
         /** @name dxDraggable.Options.clone */
         clone?: boolean;
+        /** @name dxDraggable.Options.dragTemplate */
+        dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxDraggable.Options.onDragEnd */
         onDragEnd?: ((e: { component?: dxDraggable, element?: DevExpress.core.dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
         /** @name dxDraggable.Options.onDragMove */
@@ -3568,7 +3568,7 @@ declare module DevExpress.ui {
         /** @name dxFileUploader.Options.uploadFailedMessage */
         uploadFailedMessage?: string;
         /** @name dxFileUploader.Options.uploadFile */
-        uploadFile?: ((file: File, progressCallback(loadedBytes): any) => Promise<any> | JQueryPromise<any> | any);
+        uploadFile?: ((file: File, progressCallback: Function) => Promise<any> | JQueryPromise<any> | any);
         /** @name dxFileUploader.Options.uploadHeaders */
         uploadHeaders?: any;
         /** @name dxFileUploader.Options.uploadMethod */
@@ -5444,6 +5444,8 @@ declare module DevExpress.ui {
         allowDropInsideItem?: boolean;
         /** @name dxSortable.Options.allowReordering */
         allowReordering?: boolean;
+        /** @name dxSortable.Options.dragTemplate */
+        dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxSortable.Options.dropFeedbackMode */
         dropFeedbackMode?: 'push' | 'indicate';
         /** @name dxSortable.Options.filter */
@@ -7790,6 +7792,8 @@ declare module DevExpress.viz {
         color?: string;
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
         customizeTooltip?: ((annotationItem: dxChartAnnotationConfig | any) => any);
+        /** @name dxChartCommonAnnotationConfig.data */
+        data?: any;
         /** @name dxChartCommonAnnotationConfig.description */
         description?: string;
         /** @name dxChartCommonAnnotationConfig.font */

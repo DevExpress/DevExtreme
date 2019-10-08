@@ -94,7 +94,7 @@ const compareDateWithStartDayHour = (startDate, endDate, startDayHour, allDay, s
     return result;
 };
 
-const compareDateWithEndDayHour = (startDate, endDate, startDayHour, endDayHour, allDay, max) => {
+const compareDateWithEndDayHour = (startDate, endDate, startDayHour, endDayHour, allDay, severalDays, max, min) => {
     var hiddenInterval = (24 - endDayHour + startDayHour) * toMs("hour"),
         apptDuration = endDate.getTime() - startDate.getTime(),
         delta = (hiddenInterval - apptDuration) / toMs("hour"),
@@ -102,9 +102,13 @@ const compareDateWithEndDayHour = (startDate, endDate, startDayHour, endDayHour,
         apptStartMinutes = startDate.getMinutes(),
         result;
 
-    var endTime = dateUtils.dateTimeFromDecimal(endDayHour);
+    var endTime = dateUtils.dateTimeFromDecimal(endDayHour),
+        startTime = dateUtils.dateTimeFromDecimal(startDayHour);
 
-    result = (apptStartHour < endTime.hours) || (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) || allDay && startDate <= max;
+    result = (apptStartHour < endTime.hours) ||
+        (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) ||
+        (allDay && startDate <= max) ||
+        (severalDays && (startDate < max && endDate > min) && (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60));
 
     if(apptDuration < hiddenInterval) {
         if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
@@ -292,7 +296,7 @@ class AppointmentModel {
             }
 
             if(result && endDayHour !== undefined) {
-                result = compareDateWithEndDayHour(comparableStartDate, comparableEndDate, startDayHour, endDayHour, appointmentTakesAllDay, max);
+                result = compareDateWithEndDayHour(comparableStartDate, comparableEndDate, startDayHour, endDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays, max, min);
             }
 
             if(result && useRecurrence && !recurrenceRule) {
@@ -526,7 +530,7 @@ class AppointmentModel {
     }
 
     _isEndDateWrong(appointment, startDate, endDate) {
-        return !endDate || isNaN(endDate.getTime()) || startDate.getTime() >= endDate.getTime();
+        return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 
     add(data, tz) {

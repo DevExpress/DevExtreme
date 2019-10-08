@@ -383,6 +383,44 @@ QUnit.testInActiveWindow("Global column index should be unique for the different
     assert.equal($detailGridHeaders.find(getGlobalColumnIdSelector(firstColumnIndex + 3)).text(), "Field 4");
 });
 
+QUnit.testInActiveWindow("DataGrid - focused row changing should not affect on focused row in master detail (T818808)", function(assert) {
+    // arrange
+    var rowsViewWrapper = new RowsViewWrapper(".detail-grid"),
+        masterDetailDataGrids = [],
+        dataGrid = createDataGrid({
+            dataSource: [{ id: 0, text: "0" }, { id: 1, text: "1" }],
+            keyExpr: "id",
+            focusedRowEnabled: true,
+            masterDetail: {
+                enabled: true,
+                template: function(container, e) {
+                    masterDetailDataGrids.push($("<div class='detail-grid'>").dxDataGrid({
+                        loadingTimeout: undefined,
+                        keyExpr: "id",
+                        focusedRowEnabled: true,
+                        dataSource: [{ id: 3, text: "3" }]
+                    }).appendTo(container).dxDataGrid("instance"));
+                }
+            },
+        });
+
+    this.clock.tick();
+
+    $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.down);
+    this.clock.tick();
+
+    dataGrid.expandRow(0);
+    this.clock.tick();
+
+    masterDetailDataGrids[0].option("focusedRowKey", 3);
+    this.clock.tick();
+
+    $(dataGrid.getCellElement(2, 1)).trigger(pointerEvents.down);
+    this.clock.tick();
+
+    assert.ok(rowsViewWrapper.hasFocusedRow(), "master detail has focused row");
+});
+
 QUnit.test("Command column accessibility structure", function(assert) {
     // arrange
     createDataGrid({
@@ -837,6 +875,87 @@ QUnit.test("Change row expand state on row click", function(assert) {
         .eq(0)
         .trigger("dxclick");
 
+});
+
+QUnit.test("DataGrid - CustomStore.load should contain the 'select' parameter after grouping operations (T817511)", function(assert) {
+    // arrange
+    var arrayStore = new ArrayStore({
+        key: "id",
+        data: [
+            { id: 0, text: "Text", countryId: 0, cityId: 0 },
+            { id: 1, text: "Text", countryId: 0, cityId: 1 },
+            { id: 2, text: "Text", countryId: 1, cityId: 0 },
+            { id: 3, text: "Text", countryId: 1, cityId: 1 },
+        ]
+    });
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: {
+            key: "id",
+            select: ["id", "text", "countryId", "cityId"],
+            load: function(options) {
+                var d = $.Deferred();
+
+                // assert
+                assert.notEqual(options.select, undefined, "options.select is defined");
+
+                setTimeout(function() {
+                    var result = {};
+                    arrayStore.load(options).done(function(data) {
+                        result.data = data;
+
+                        if(options.group) {
+                            data.forEach(item => {
+                                item.count = item.items.length;
+                                item.items = null;
+                            });
+                        }
+                    });
+                    if(options.requireGroupCount) {
+                        arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                            result.groupCount = groupedData.length;
+                        });
+                    }
+                    if(options.requireTotalCount) {
+                        arrayStore.totalCount(options).done(function(totalCount) {
+                            result.totalCount = totalCount;
+                        });
+                    }
+
+                    d.resolve(result);
+                });
+
+                return d;
+            },
+            group: [{
+                selector: "countryId",
+                isExpanded: false
+            }, {
+                selector: "cityId",
+                isExpanded: false
+            }]
+        },
+        remoteOperations: {
+            groupPaging: true
+        },
+        groupPanel: {
+            visible: true
+        },
+        grouping: {
+            autoExpandAll: false
+        }
+    }).dxDataGrid("instance");
+    this.clock.tick();
+
+    // act
+    dataGrid.expandRow([0]);
+    this.clock.tick();
+
+    dataGrid.expandRow([0, 0]);
+    this.clock.tick();
+
+    dataGrid.columnOption("cityId", "groupIndex", undefined);
+    this.clock.tick();
 });
 
 // T553981
@@ -2263,7 +2382,7 @@ QUnit.test("Change column width via columnOption method (T628065)", function(ass
     assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
-QUnit.test("Change column sortOrder via option method with canceling in onOptionChanged handler", function(assert) {
+QUnit.skip("Change column sortOrder via option method with canceling in onOptionChanged handler", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
         loadingTimeout: undefined,
@@ -2285,7 +2404,7 @@ QUnit.test("Change column sortOrder via option method with canceling in onOption
 });
 
 // T734761
-QUnit.test("Change column sortOrder via columnOption method with canceling in onOptionChanged handler", function(assert) {
+QUnit.skip("Change column sortOrder via columnOption method with canceling in onOptionChanged handler", function(assert) {
     // arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
         loadingTimeout: undefined,
@@ -7253,6 +7372,41 @@ QUnit.test("No error after ungrouping with custom store and column reordering", 
     assert.strictEqual($($(dataGrid.$element()).find(".dx-error-row")).length, 0, "no errors");
 });
 
+// T819729
+QUnit.test("correct cellInfo is passed to cellTemplate function after ungrouping", function(assert) {
+    // arrange
+    var columnController,
+        cellTemplateCallCount = 0,
+        dataGrid = createDataGrid({
+            dataSource: [{ field1: "some", field2: "some" }, { field1: "some", field2: "some" }],
+            allowColumnReordering: true,
+            columns: [{
+                dataField: "field1",
+                groupIndex: 0,
+                cellTemplate: function(cellElement, cellInfo) {
+                    // assert
+                    cellTemplateCallCount++;
+                    assert.notOk(cellInfo.data.key);
+                    assert.notOk(cellInfo.data.items);
+                    assert.ok(cellInfo.data.field1);
+                    assert.ok(cellInfo.data.field2);
+                }
+            }, "field2"]
+        });
+
+    this.clock.tick();
+
+    columnController = dataGrid.getController("columns");
+
+    // act
+    columnController.moveColumn(0, 1, "group", "headers");
+    cellTemplateCallCount = 0;
+    this.clock.tick();
+
+    // assert
+    assert.equal(cellTemplateCallCount, 2, "cellTemplate call count");
+});
+
 // T719938
 QUnit.test("No error after adding row and virtual scrolling", function(assert) {
     // act
@@ -7725,6 +7879,41 @@ QUnit.test("search text when scrolling mode virtual and one column is not define
     );
 
     assert.equal(dataGrid.getVisibleRows().length, 1, "items were filtered");
+});
+
+// T820316
+QUnit.test("Error should not be thrown when searching text in calculated column with lookup", function(assert) {
+    var visibleRows,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
+            searchPanel: {
+                visible: true
+            },
+            columns: [{
+                calculateCellValue: function(rowData) {
+                    return rowData.num;
+                },
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }, "text"]
+        });
+
+    try {
+        dataGrid.option("searchPanel.text", "one");
+        this.clock.tick();
+    } catch(e) {
+        assert.ok(false, "error was thrown");
+    }
+
+    visibleRows = dataGrid.getVisibleRows();
+
+    assert.equal(visibleRows.length, 1, "one row is visible");
+    assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, "visible row's data");
 });
 
 // T583229
@@ -13657,6 +13846,144 @@ QUnit.test("The calculateCellValue arguments should be correct after resetting t
 
     // assert
     assert.deepEqual(calculateCellValue.getCall(0).args[0], { field1: "test1", field2: "test2" }, "calculateCellValue - first call arguments");
+});
+
+// T817555
+QUnit.test("State reset should save default grouping", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, "field2"],
+        dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was not reset");
+});
+
+// T817555
+QUnit.test("State reset should save default grouping if sorting was applied", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
+        dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was not reset");
+});
+
+// T817555
+QUnit.test("State reset should return default grouping and sorting after their changes", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
+        dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.columnOption(0, "groupIndex", undefined);
+    dataGrid.columnOption(1, "sortOrder", undefined);
+
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was returned to default");
+    assert.equal(dataGrid.columnOption(1, "sortOrder"), "asc", "sortOrder was returned to default");
+});
+
+// T817555
+QUnit.test("Double reset should work correctly when rows are grouped", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", sortOrder: "asc" }],
+        dataSource: [{ field1: "test1", field2: "test2" }, { field1: "test3", field2: "test4" }]
+    });
+
+    this.clock.tick(0);
+
+    // act
+    dataGrid.columnOption(0, "groupIndex", undefined);
+    dataGrid.columnOption(1, "sortOrder", undefined);
+
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.columnOption(0, "groupIndex"), 0, "groupIndex was returned to default");
+    assert.equal(dataGrid.columnOption(1, "sortOrder"), "asc", "sortOrder was returned to default");
+});
+
+// T818434
+QUnit.test("State reset should reset filtering", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+            columns: [{ dataField: "field1" }, { dataField: "field2" }],
+            filterPanel: { visible: true },
+            dataSource: [{ field1: "test1", field2: 1 }, { field1: "test2", field2: 2 }]
+        }),
+        filter;
+
+    this.clock.tick(0);
+
+    // act
+    filter = ["field1", "=", "test1"];
+    dataGrid.option("filterValue", filter);
+
+    // assert
+    assert.deepEqual(dataGrid.option("filterValue"), filter, "dataGrid's filter");
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.option("filterValue"), undefined, "dataGrid's filter");
+
+    // act
+    filter = ["field2", "=", 1];
+    dataGrid.option("filterValue", filter);
+
+    // assert
+    assert.deepEqual(dataGrid.option("filterValue"), filter, "dataGrid's filter");
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.option("filterValue"), undefined, "dataGrid's filter");
+
+    // act
+    filter = [["field1", "=", "test1"], "and", ["field2", "=", 1]];
+    dataGrid.option("filterValue", filter);
+
+    // assert
+    assert.deepEqual(dataGrid.option("filterValue"), filter, "dataGrid's filter");
+
+    // act
+    dataGrid.state(null);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(dataGrid.option("filterValue"), undefined, "dataGrid's filter");
 });
 
 QUnit.test("Clear state when initial options is defined in dataSource", function(assert) {

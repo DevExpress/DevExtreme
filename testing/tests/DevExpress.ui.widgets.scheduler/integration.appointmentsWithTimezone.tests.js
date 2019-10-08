@@ -886,9 +886,9 @@ QUnit.test("Appointment with custom tz that isn't equal to scheduler tz should b
         $cell = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(6),
         initialAppointmentHeight = $appointment.outerHeight();
 
-    $appointment.trigger(dragEvents.start);
+    let pointer = pointerMock($appointment).start().down().move(10, 10);
     $cell.trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.end);
+    pointer.up();
 
     $appointment = this.instance.$element().find("." + APPOINTMENT_CLASS).first();
 
@@ -933,9 +933,9 @@ QUnit.test("Appointment with 'Etc/UTC' tz should be rendered correctly(T394991)"
         assert.roughEqual($appointment.position().top, $cell.outerHeight() * 2, 2.001, "Appointment top is OK");
         assert.roughEqual($appointment.outerHeight(), $cell.outerHeight(), 2.001, "Appointment height is OK");
 
-        $appointment.trigger(dragEvents.start);
+        let pointer = pointerMock($appointment).start().down().move(10, 10);
         $cell.trigger(dragEvents.enter);
-        $appointment.trigger(dragEvents.end);
+        pointer.up();
 
         $appointment = this.instance.$element().find("." + APPOINTMENT_CLASS).first();
 
@@ -1262,9 +1262,9 @@ QUnit.test("Recurrence appointment with 'Etc/UTC' tz should be updated correctly
             $cell = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(21),
             initialAppointmentHeight = $appointment.outerHeight();
 
-        $appointment.trigger(dragEvents.start);
+        let pointer = pointerMock($appointment).start().down().move(10, 10);
         $cell.trigger(dragEvents.enter);
-        $appointment.trigger(dragEvents.end);
+        pointer.up();
 
         $appointment = this.instance.$element().find("." + APPOINTMENT_CLASS).not(".dx-scheduler-appointment-recurrence");
 
@@ -1314,9 +1314,9 @@ QUnit.test("Task dragging when custom timeZone is set", function(assert) {
         allDay: false
     };
 
-    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.start);
+    let pointer = pointerMock($(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0)).start().down().move(10, 10);
     $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).eq(2).trigger(dragEvents.enter);
-    $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0).trigger(dragEvents.end);
+    pointer.up();
 
     var dataSourceItem = this.instance.option("dataSource").items()[0];
 

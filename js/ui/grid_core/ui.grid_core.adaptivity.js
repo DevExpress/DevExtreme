@@ -1140,11 +1140,11 @@ module.exports = {
 
                 _handleTabKeyOnMasterDetailCell: function(eventTarget, direction) {
                     var result = this.callBase(eventTarget, direction),
-                        $currentCell = this._getFocusedCell();
+                        $currentCell = this._getFocusedCell(),
+                        $row = $currentCell && $currentCell.parent();
 
-                    if(!result && $currentCell) {
-                        var $row = $currentCell.parent(),
-                            $dataCells = getDataCellElements($row),
+                    if(!result && $row && $row.length) {
+                        var $dataCells = getDataCellElements($row),
                             $targetCell = direction === "next" ? $dataCells.last() : $dataCells.first(),
                             rowIndex = $row.get(0).rowIndex,
                             adaptiveController = this._adaptiveController,

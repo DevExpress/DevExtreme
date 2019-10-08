@@ -1808,6 +1808,45 @@ QUnit.module("keyboard navigation", {
         assert.equal($tags.text(), "1", "rendered first item");
     });
 
+    QUnit.test("control keys test", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        this.reinit({
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+
+        const altDown = $.Event("keydown", { key: "ArrowDown", altKey: true });
+        const altUp = $.Event("keydown", { key: "ArrowUp", altKey: true });
+
+        assert.ok(!this.instance.option("opened"), "overlay is hidden on first show");
+
+        this.$input.trigger(altDown);
+        assert.ok(this.instance.option("opened"), "overlay is visible on alt+down press");
+
+        this.$input.trigger(altUp);
+        assert.notOk(this.instance.option("opened"), "overlay is invisible on alt+up press");
+    });
+
+    QUnit.test("up and down keys should work correctly in dxTagBox", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "test does not actual for mobile devices");
+            return;
+        }
+
+        this.reinit({
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        });
+
+        this.keyboard.press("down");
+        this.keyboard.press("up");
+        assert.ok(true, "there is no exceptions");
+    });
+
     QUnit.test("tagBox selects item on space key", (assert) => {
         if(devices.real().deviceType !== "desktop") {
             assert.ok(true, "test does not actual for mobile devices");
@@ -2566,24 +2605,26 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.ok($input.width() > inputWidth, "input size increase");
     });
 
-    QUnit.test("width of input is enougth for all content", assert => {
-        const $tagBox = $("#tagBox").dxTagBox({
-            searchEnabled: true,
-            width: 300
+    ["searchEnabled", "acceptCustomValue"].forEach((option) => {
+        QUnit.test(`width of input is enougth for all content with ${option} option (T807069)`, assert => {
+            const $tagBox = $("#tagBox").dxTagBox({
+                width: 300,
+                [option]: true
+            });
+
+            const text = "wwwwwwwwwwwwwwwwwwww";
+            const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+            $input.css("padding", "0 10px");
+
+            keyboardMock($input).type(text);
+            const inputWidth = $input.width();
+
+            var inputCopy = createTextElementHiddenCopy($input, text);
+            inputCopy.appendTo("#qunit-fixture");
+
+            assert.ok(inputWidth >= inputCopy.width());
+            inputCopy.remove();
         });
-        const text = "wwwwwwwwwwwwww";
-        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
-
-        $input.css("padding", "0 10px");
-
-        keyboardMock($input).type(text);
-        const inputWidth = $input.width();
-
-        var inputCopy = createTextElementHiddenCopy($input, text);
-        inputCopy.appendTo("#qunit-fixture");
-
-        assert.ok(inputWidth >= inputCopy.width(), "correctWidth");
-        inputCopy.remove();
     });
 
     QUnit.test("size of input is reset after selecting item", assert => {
@@ -2599,10 +2640,10 @@ QUnit.module("searchEnabled", moduleSetup, () => {
         assert.roughEqual($tagBox.find(`.${TEXTBOX_CLASS}`).width(), initInputWidth, 0.1, "input width is not changed after selecting item");
     });
 
-    QUnit.test("size of input is 1 when searchEnabled and editEnabled is false", assert => {
+    QUnit.test("size of input is 1 when searchEnabled and acceptCustomValue is false", assert => {
         const $tagBox = $("#tagBox").dxTagBox({
             searchEnabled: false,
-            editEnabled: false
+            acceptCustomValue: false
         });
 
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
@@ -4800,6 +4841,35 @@ QUnit.module("dataSource integration", moduleSetup, () => {
 
         const tagText = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).text();
         assert.strictEqual(tagText, "Test1 changed", "Tag text contains an updated data");
+    });
+
+    QUnit.test("Tagbox should not try to update size if input is empty(T818690)", (assert) => {
+        const instance = $("#tagBox").dxTagBox({
+            multiline: false,
+            searchEnabled: true,
+            showDropDownButton: true,
+            showSelectionControls: true,
+            valueExpr: "ID"
+        }).dxTagBox("instance");
+
+        setTimeout(() => {
+            instance.beginUpdate();
+            try {
+                instance.option("displayExpr", "Label");
+
+                instance.option("items", [
+                    { ID: 1, Label: "Test 1" }
+                ]);
+
+                instance.endUpdate();
+            } catch(e) {
+                assert.ok(false, "Сannot update tagbox size bacause of input value is initRender[] object");
+            }
+            instance.endUpdate();
+        }, 1000);
+        this.clock.tick(1000);
+
+        assert.ok(true, "TagBox rendered");
     });
 
     QUnit.test("TagBox should correctly handle disposing on data loading", (assert) => {

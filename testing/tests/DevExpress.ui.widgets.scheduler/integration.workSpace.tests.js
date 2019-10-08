@@ -382,7 +382,6 @@ QUnit.test("WorkSpace should have a correct 'endDayHour' option", function(asser
 });
 
 QUnit.test("drop and dragenter handlers should be different for date table and allDay table, T245137", function(assert) {
-    var guid = 0;
     var log = {};
 
     log[dragEvents.drop] = {};
@@ -396,31 +395,31 @@ QUnit.test("drop and dragenter handlers should be different for date table and a
         var $element = $(spyCall.args[0]);
         var eventName = spyCall.args[1];
         var logByEvent = log[eventName.split(".")[0]];
+        var namespace = eventName.split(".")[1];
 
-        if(!logByEvent) {
+        if(!logByEvent || namespace !== "dxSchedulerDateTable") {
             return;
         }
 
-        if($element.hasClass("dx-scheduler-date-table")) {
-            logByEvent["dateTable"] = guid++;
-        }
-        if($element.hasClass("dx-scheduler-all-day-table")) {
-            logByEvent["allDayTable"] = guid++;
+        if($element.hasClass("dx-scheduler-work-space")) {
+            logByEvent["selector"] = spyCall.args[2];
         }
     });
 
-    assert.ok(log[dragEvents.drop].allDayTable > log[dragEvents.drop].dateTable, "AllDay drop handler was created after dateTable drop handler");
-    assert.ok(log[dragEvents.enter].allDayTable > log[dragEvents.enter].dateTable, "AllDay dragenter handler was created after dateTable dragenter handler");
+    assert.strictEqual(log[dragEvents.drop].selector, ".dx-scheduler-date-table td, .dx-scheduler-all-day-table td", "Drop event: selector is correct");
+    assert.strictEqual(log[dragEvents.enter].selector, ".dx-scheduler-date-table td, .dx-scheduler-all-day-table td", "Drag enter event: selector is correct");
 
     eventsEngine.on.restore();
 });
 
 QUnit.test("event handlers should be reattached after changing allDayExpanded", function(assert) {
     var onSpy = sinon.spy(eventsEngine, "on").withArgs(sinon.match(function(element) {
-        return $(element).hasClass("dx-scheduler-date-table");
+        return $(element).hasClass("dx-scheduler-work-space");
     }), sinon.match(function(eventName) {
+        let namespace = eventName.split(".")[1];
         eventName = eventName.split(".")[0];
-        return eventName === dragEvents.drop;
+
+        return eventName === dragEvents.drop && namespace === "dxSchedulerDateTable";
     }));
 
     this.createInstance();

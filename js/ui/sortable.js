@@ -60,6 +60,17 @@ var Sortable = Draggable.inherit({
              */
             moveItemOnDrop: false,
             /**
+             * @name dxSortableOptions.dragTemplate
+             * @type template|function
+             * @type_function_param1 dragInfo:object
+             * @type_function_param1_field1 itemData:any
+             * @type_function_param1_field2 itemElement:dxElement
+             * @type_function_param1_field3 fromIndex:number
+             * @type_function_param2 containerElement:dxElement
+             * @type_function_return string|Node|jQuery
+             * @default undefined
+             */
+            /**
              * @name dxSortableOptions.onDragStart
              * @type function(e)
              * @extends Action
@@ -367,7 +378,7 @@ var Sortable = Draggable.inherit({
     _getItems: function() {
         let itemsSelector = this._getItemsSelector();
 
-        return this.$element()
+        return this._$content()
             .find(itemsSelector)
             .not("." + this._addWidgetPrefix(PLACEHOLDER_CLASS))
             .not("." + this._addWidgetPrefix(CLONE_CLASS))
@@ -464,9 +475,11 @@ var Sortable = Draggable.inherit({
     },
 
     _getDragTemplateArgs: function($element) {
-        return extend(this.callBase.apply(this, arguments), {
-            index: this._getElementIndex($element)
-        });
+        let args = this.callBase.apply(this, arguments);
+
+        args.model.fromIndex = this._getElementIndex($element);
+
+        return args;
     },
 
     _togglePlaceholder: function(value) {

@@ -1932,19 +1932,28 @@ QUnit.test("Disable the option for the Email rule", function(assert) {
 });
 
 QUnit.test("Use the option for the Async rule", function(assert) {
-    const result = ValidationEngine.validate("", [{
+    const customCallback1 = sinon.spy(function() { return false; }),
+        customCallback2 = sinon.spy(function() { return new Deferred().resolve().promise(); }),
+        result = ValidationEngine.validate("", [{
             type: "async",
             message: "A message",
-            validationCallback: function() {
-                return false;
-            },
+            validationCallback: customCallback1,
             ignoreEmptyValue: true
+        }, {
+            type: "async",
+            message: "A message",
+            validationCallback: customCallback2
         }]),
         done = assert.async();
+
     assert.ok(result, "Result is defined");
     assert.ok(result.isValid, "IsValid");
+    assert.equal(result.status, "pending", "result.status === 'pending'");
+    assert.equal(result.pendingRules.length, 1, "result.pendingRules contains only a single rule");
+    assert.notOk(customCallback1.called, "customCallback1 should not be called");
+    assert.ok(customCallback2.called, "customCallback2 should be called");
+
     result.complete.then((res) => {
-        assert.strictEqual(res.status, "valid", "result.status === 'valid'");
         done();
     });
 });
