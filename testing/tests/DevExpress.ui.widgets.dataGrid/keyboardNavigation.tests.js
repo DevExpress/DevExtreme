@@ -954,7 +954,7 @@ QUnit.test("Element is not focused when it is html tag is not cell", function(as
     assert.ok(!_$focusElement, "element has not focused");
 });
 
-function setupModules(that, modulesOptions) {
+function setupModules(that, modulesOptions, gridModules) {
     var defaultSetCellValue = function(data, value) {
         if(this.serializeValue) {
             value = this.serializeValue(value);
@@ -1009,7 +1009,14 @@ function setupModules(that, modulesOptions) {
         ]
     };
 
-    setupDataGridModules(that, ['data', 'columns', "editorFactory", 'gridView', 'columnHeaders', 'rows', "grouping", "headerPanel", "search", "editing", "keyboardNavigation", "summary", "masterDetail", "virtualScrolling"], modulesOptions || {
+    gridModules = (gridModules || []).concat([
+        'data', 'columns', "editorFactory",
+        'gridView', 'columnHeaders', 'rows', "grouping",
+        "headerPanel", "search", "editing", "keyboardNavigation",
+        "summary", "masterDetail", "virtualScrolling"
+    ]);
+
+    setupDataGridModules(that, gridModules, modulesOptions || {
         initViews: true,
         controllers: {
             selection: new MockSelectionController(that.selectionOptions),
@@ -2152,6 +2159,27 @@ QUnit.testInActiveWindow("Focus next cell after tab on last form button", functi
         assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
         assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) + 1, testElement.find("[tabIndex]").index($nextCell), "next focusable element");
     }
+});
+
+QUnit.test("DataGrid - Should not generate exception if handle not valid cell by tab key press (T817348)", function(assert) {
+    // arrange
+    setupModules(
+        this,
+        { initViews: true },
+        ["adaptivity"]
+    );
+
+    this.gridView.render($('#container'));
+
+    try {
+        // act
+        this.triggerKeyDown("tab", false, false, dataGridWrapper.rowsView.getElement());
+    } catch(e) {
+        // assert
+        assert.ok(false, e.message);
+    }
+
+    assert.ok(true, "No exceptions if focus not cell element by tab");
 });
 
 // T448310
