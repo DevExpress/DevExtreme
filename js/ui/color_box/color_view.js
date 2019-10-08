@@ -368,6 +368,7 @@ var ColorView = Editor.inherit({
             .addClass(COLOR_VIEW_PALETTE_HANDLE_CLASS)
             .appendTo(this._$palette);
         this._createComponent(this._$paletteHandle, Draggable, {
+            contentTemplate: null,
             boundary: this._$palette,
             allowMoveByClick: true,
             boundOffset: (function() {
@@ -437,6 +438,7 @@ var ColorView = Editor.inherit({
             .addClass(COLOR_VIEW_HUE_SCALE_HANDLE_CLASS)
             .appendTo(this._$hueScaleWrapper);
         this._createComponent(this._$hueScaleHandle, Draggable, {
+            contentTemplate: null,
             boundary: this._$hueScaleWrapper,
             allowMoveByClick: true,
             dragDirection: "vertical",
@@ -696,6 +698,7 @@ var ColorView = Editor.inherit({
             .addClass(COLOR_VIEW_ALPHA_CHANNEL_HANDLE_CLASS)
             .appendTo($parent);
         this._createComponent(this._$alphaChannelHandle, Draggable, {
+            contentTemplate: null,
             boundary: $parent,
             allowMoveByClick: true,
             dragDirection: "horizontal",
