@@ -2537,7 +2537,7 @@ const topTranslation = ($item) => {
 QUnit.test("sortable options", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
 
     var sortable = $list.find(".dx-sortable").dxSortable("instance");
@@ -2547,10 +2547,29 @@ QUnit.test("sortable options", (assert) => {
     assert.equal(sortable.option("handle"), ".dx-list-reorder-handle", "handle");
 });
 
-QUnit.test("passing itemDragging options to sortable", (assert) => {
+QUnit.test("no sortable without allowReordering", (assert) => {
+    const $list = $("#templated-list").dxList({
+        items: ["0"]
+    });
+
+    assert.strictEqual($list.find(".dx-sortable").length, 0, "no sortable");
+});
+
+QUnit.test("sortable should be created with deprecated option allowItemReordering", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0"],
-        allowItemReordering: true,
+        allowItemReordering: true
+    });
+
+    var sortable = $list.find(".dx-sortable").dxSortable("instance");
+
+    assert.ok(sortable, "sortable is created");
+    assert.equal(sortable.option("allowReordering"), true, "allowReordering is true");
+});
+
+QUnit.test("passing itemDragging options to sortable if group is defined", (assert) => {
+    const $list = $("#templated-list").dxList({
+        items: ["0"],
         itemDragging: {
             group: "myGroup"
         }
@@ -2559,13 +2578,14 @@ QUnit.test("passing itemDragging options to sortable", (assert) => {
     var sortable = $list.find(".dx-sortable").dxSortable("instance");
 
     assert.equal(sortable.option("group"), "myGroup", "group parameter is passed");
+    assert.strictEqual(sortable.option("allowReordering"), false, "allowReordering is false by default");
     assert.equal(sortable.option("dragDirection"), "both", "dragDirection is both if group is defined");
 });
 
 QUnit.test("reordering class should be present on item during drag", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -2581,7 +2601,7 @@ QUnit.test("reordering class should be present on item during drag", (assert) =>
 QUnit.test("reordering should not be possible if item disabled", (assert) => {
     const $list = $("#templated-list").dxList({
         items: [{ text: "0", disabled: true }],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -2594,7 +2614,7 @@ QUnit.test("reordering should not be possible if item disabled", (assert) => {
 QUnit.test("list item should be duplicated on drag start", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -2616,7 +2636,7 @@ QUnit.test("list item should be duplicated on drag start", (assert) => {
 QUnit.test("cached items doesn't contains a ghost item after reordering", (assert) => {
     const $list = $("#list").dxList({
         items: ["0", "1", "2"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const list = $list.dxList("instance");
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
@@ -2635,7 +2655,7 @@ QUnit.test("cached items doesn't contains a ghost item after reordering", (asser
 QUnit.test("ghost item should be moved by drag", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -2656,7 +2676,7 @@ QUnit.test("ghost item should be moved by drag", (assert) => {
 QUnit.test("item position should be reset after drag", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item = $items.eq(0);
@@ -2669,7 +2689,7 @@ QUnit.test("item position should be reset after drag", (assert) => {
 QUnit.test("next item should be moved", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0", "1", "2"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item0 = $items.eq(0);
@@ -2692,7 +2712,7 @@ QUnit.test("next item should be moved", (assert) => {
 QUnit.test("prev item should be moved", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0", "1", "2"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item0 = $items.eq(0);
@@ -2715,7 +2735,7 @@ QUnit.test("prev item should be moved", (assert) => {
 QUnit.test("next item should be moved back if item moved to start position", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0", "1", "2"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item0 = $items.eq(0);
@@ -2733,7 +2753,7 @@ QUnit.test("next item should be moved back if item moved to start position", (as
 QUnit.test("prev item should be moved back if item moved to start position", (assert) => {
     const $list = $("#templated-list").dxList({
         items: ["0", "1", "2"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item0 = $items.eq(0);
@@ -2759,7 +2779,7 @@ QUnit.test("item should be moved with animation", (assert) => {
     try {
         const $list = $("#templated-list").dxList({
             items: ["0", "1", "2"],
-            allowItemReordering: true
+            itemDragging: { allowReordering: true }
         });
         const $items = $list.find(toSelector(LIST_ITEM_CLASS));
         const $item1 = $items.eq(1);
@@ -2775,7 +2795,7 @@ QUnit.test("item should be moved with animation", (assert) => {
 QUnit.test("drop item should reorder list items with correct indexes", (assert) => {
     const $list = $("#list").dxList({
         items: ["0", "1", "2"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const list = $list.dxList("instance");
 
@@ -2797,7 +2817,7 @@ QUnit.test("drop item should reorder list items with correct indexes", (assert) 
 QUnit.test("items should reset positions after dragend", (assert) => {
     const $list = $("#list").dxList({
         items: ["0", "1", "2"],
-        allowItemReordering: true
+        itemDragging: { allowReordering: true }
     });
     const $items = $list.find(toSelector(LIST_ITEM_CLASS));
     const $item1 = $items.eq(1);
