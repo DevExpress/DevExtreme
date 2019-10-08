@@ -293,7 +293,7 @@ var DropDownBox = DropDownEditor.inherit({
         switch(args.name) {
             case "width":
                 this.callBase(args);
-                this._updatePopupWidth();
+                this._popup && this._popup.repaint();
                 break;
             case "dataSource":
                 this._renderInputValue();

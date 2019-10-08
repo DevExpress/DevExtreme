@@ -15,8 +15,10 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
 
 QUnit.testStart(() => {
     const markup = '' +
-        '<div id="dropDownButton"></div>' +
-        '<div id="dropDownButton2"></div>';
+        '<div id="container">' +
+            '<div id="dropDownButton"></div>' +
+            '<div id="dropDownButton2"></div>' +
+        '</div>';
     $("#qunit-fixture").html(markup);
 });
 
@@ -80,17 +82,16 @@ QUnit.module("markup", {
         assert.strictEqual($listItemText, "", "item text is empty");
     });
 
-    QUnit.test("width option should be transfered to buttonGroup", (assert) => {
+    QUnit.test("width option should change dropDownButton width", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             text: "Item 1",
             icon: "box",
             width: 235
         });
 
-        assert.strictEqual(getButtonGroup(dropDownButton).option("width"), 235, "width was successfully transfered");
-
+        assert.strictEqual(dropDownButton.option("width"), 235, "width is right");
         dropDownButton.option("width", 135);
-        assert.strictEqual(getButtonGroup(dropDownButton).option("width"), 135, "width was successfully changed");
+        assert.strictEqual(dropDownButton.option("width"), 135, "width was successfully changed");
     });
 
     QUnit.test("stylingMode option should be transfered to buttonGroup", (assert) => {
@@ -224,13 +225,28 @@ QUnit.module("popup integration", {
     });
 
     QUnit.test("popup width shoud be equal to dropDownButton width", (assert) => {
-        const instance = $("#dropDownButton").dxDropDownButton({
-            width: 150,
+        const $dropDownButton = $("#dropDownButton").dxDropDownButton({
             opened: true,
-        }).dxDropDownButton("instance");
+            items: ["1", "2", "3"],
+            width: 500
+        });
 
-        const popupContentElement = getPopup(instance).content();
-        assert.equal(Window.getComputedStyle(popupContentElement).width, "150px", "popup has special class");
+        const instance = $dropDownButton.dxDropDownButton("instance");
+        const $popupContent = $(getPopup(instance).content());
+        assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal on init");
+        assert.equal($popupContent.outerWidth(), 500, "width are equal on init");
+
+        instance.option("width", 700);
+        assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal after option change");
+        assert.equal($popupContent.outerWidth(), 700, "width are equal after option change");
+
+        instance.option("width", "90%");
+        $("#container").get(0).style.width = "900px";
+        instance.option("opened", false);
+        instance.option("opened", true);
+        assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal after option change");
+        assert.equal($popupContent.outerWidth(), 810, "width are equal after option change");
+
     });
 
     QUnit.test("popup should have correct options after rendering", (assert) => {

@@ -398,8 +398,8 @@ let DropDownButton = Widget.inherit({
             focusStateEnabled: this.option("focusStateEnabled"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
             onItemClick: this._buttonGroupItemClick.bind(this),
-            width: this.option("width"),
-            height: this.option("height"),
+            width: "100%",
+            height: "100%",
             stylingMode: this.option("stylingMode"),
             selectionMode: "none",
             buttonTemplate: ({ text, icon }, buttonContent) => {
@@ -429,14 +429,6 @@ let DropDownButton = Widget.inherit({
             container: domUtils.getPublicElement($content),
             model: this.option("items") || this._dataSource
         });
-    },
-
-    _setPopupOption: function(optionName, value) {
-        this._setWidgetOption("_popup", arguments);
-    },
-
-    _updatePopupWidth: function() {
-        this._setPopupOption("width", this.$element().outerWidth());
     },
 
     _popupOptions() {
@@ -691,11 +683,12 @@ let DropDownButton = Widget.inherit({
                 this._buttonGroup.repaint();
                 this._popup && this._popup.repaint();
                 break;
-            case "stylingMode":
             case "width":
-            case "height":
+                this.callBase(args);
+                this._popup && this._popup.repaint();
+                break;
+            case "stylingMode":
                 this._buttonGroup.option(name, value);
-                this._updatePopupWidth();
                 break;
             case "itemTemplate":
             case "grouped":
