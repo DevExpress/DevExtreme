@@ -46,6 +46,7 @@ var RowDraggingExtender = {
 
         if(allowReordering) {
             that._sortable = that._createComponent($content, Sortable, extend({
+                contentTemplate: null,
                 filter: "> table > tbody > .dx-data-row",
                 dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
