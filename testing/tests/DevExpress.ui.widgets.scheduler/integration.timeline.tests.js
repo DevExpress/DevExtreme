@@ -389,7 +389,7 @@ QUnit.test("Scheduler timeline groupTable should have right height if widget has
 
 QUnit.test("Appointment has correct render with timelineWeek view & endHour outside of view bounds", function(assert) {
     var data = [{
-        startDate: new Date("2014-07-14T12:00:00.000Z"),
+        startDate: new Date("2014-07-14T09:00:00.000Z"),
         endDate: new Date("2014-07-14T23:01:00.000Z"),
         text: "blah",
     }, {
@@ -401,12 +401,6 @@ QUnit.test("Appointment has correct render with timelineWeek view & endHour outs
     let scheduler = createInstance({
         dataSource: data,
         views: [{
-            type: "timelineDay",
-            intervalCount: "1",
-            cellDuration: 30,
-            startDayHour: 7,
-            endDayHour: 18
-        }, {
             type: "timelineWeek",
             cellDuration: 660,
             startDayHour: 7,
@@ -414,7 +408,6 @@ QUnit.test("Appointment has correct render with timelineWeek view & endHour outs
         }],
         currentView: "timelineWeek",
         firstDayOfWeek: 1,
-        cellDuration: 1440,
         currentDate: new Date(2014, 6, 14),
         crossScrollingEnabled: true,
         width: 1500,
