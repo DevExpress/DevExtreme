@@ -148,7 +148,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1_field1 appointmentData:object
                 * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:dxElement
+                * @type_function_param3 contentElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -160,7 +160,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1_field1 appointmentData:object
                 * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:dxElement
+                * @type_function_param3 contentElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
