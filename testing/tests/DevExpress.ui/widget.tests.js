@@ -1473,12 +1473,13 @@ QUnit.module("dataHelperMixin", {}, () => {
         const TestWidget = Widget.inherit({
             NAME: "TestWidget",
 
-            _setDefaultOptions() {
-                this.callBase();
-
-                this.option({
-                    dataSource: null
-                });
+            _getDefaultOptions() {
+                return $.extend(
+                    this.callBase(),
+                    {
+                        dataSource: null
+                    }
+                );
             },
 
             _init() {

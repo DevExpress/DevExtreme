@@ -1,11 +1,11 @@
 var getKeyHash = require("./common").getKeyHash,
-    equalByValue = require("./common").equalByValue,
+    equalByComplexValue = require("./data").equalByComplexValue,
     typeUtils = require("./type");
 
 var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
     this.getLocalFilter = function(keyGetter, equalKeys, equalByReference, keyExpr) {
-        equalKeys = equalKeys === undefined ? equalByValue : equalKeys;
+        equalKeys = equalKeys === undefined ? equalByComplexValue : equalKeys;
         return functionFilter.bind(this, equalKeys, keyGetter, equalByReference, keyExpr);
     };
 

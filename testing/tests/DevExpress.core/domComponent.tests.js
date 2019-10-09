@@ -35,12 +35,14 @@ QUnit.module("default", {
                 };
             },
 
-            _setDefaultOptions: function() {
-                this.callBase();
-                this.option({
-                    opt1: "default",
-                    opt2: "default"
-                });
+            _getDefaultOptions: function() {
+                return $.extend(
+                    this.callBase(),
+                    {
+                        opt1: "default",
+                        opt2: "default"
+                    }
+                );
             },
 
             _optionChanged: function(name, value, prevValue) {
@@ -229,8 +231,6 @@ QUnit.test("component lifecycle, changing a couple of options", function(assert)
         // "beginUpdate", // optionByDevice options applying
         // "endUpdate",
 
-        "beginUpdate", // user options applying
-        "endUpdate",
         "endUpdate",
         "_init",
         "_render",
