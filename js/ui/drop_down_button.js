@@ -392,8 +392,8 @@ let DropDownButton = Widget.inherit({
             focusStateEnabled: this.option("focusStateEnabled"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
             onItemClick: this._buttonGroupItemClick.bind(this),
-            width: this.option("width"),
-            height: this.option("height"),
+            width: "100%",
+            height: "100%",
             stylingMode: this.option("stylingMode"),
             selectionMode: "none"
         }, this._getInnerOptionsCache("buttonGroupOptions"));
@@ -432,7 +432,9 @@ let DropDownButton = Widget.inherit({
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
                 hide: { type: "fade", duration: 400, from: 1, to: 0 }
             },
-            width: "auto",
+            width: function() {
+                return this.$element().outerWidth();
+            }.bind(this),
             height: "auto",
             shading: false,
             visible: this.option("opened"),
