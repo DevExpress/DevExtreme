@@ -1906,6 +1906,8 @@ declare module DevExpress.ui {
         allowColumnReordering?: boolean;
         /** @name GridBase.Options.allowColumnResizing */
         allowColumnResizing?: boolean;
+        /** @name GridBase.Options.autoNavigateToFocusedRow */
+        autoNavigateToFocusedRow?: boolean;
         /** @name GridBase.Options.cacheEnabled */
         cacheEnabled?: boolean;
         /** @name GridBase.Options.cellHintEnabled */
