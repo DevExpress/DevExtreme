@@ -6,6 +6,7 @@ import { extend } from "../../core/utils/extend";
 const FIXED_CONTAINER_PROP_NAME = "fixedContainer";
 
 const APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment";
+const LIST_ITEM_DATA_KEY = "dxListItemData";
 
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
@@ -47,38 +48,74 @@ export default class AppointmentDragBehavior {
         this.scheduler.notifyObserver("hideAppointmentTooltip");
     }
 
-    onDragEnd(e) {
+    getAppointmentElement(e) {
         const itemElement = e.event.data && e.event.data.itemElement || e.itemElement;
 
-        this.onDragEndCore($(itemElement), e);
+        return $(itemElement);
     }
 
-    onDragEndCore(appointment, e) {
-        const container = this.scheduler._getAppointmentContainer(this.isAllDay(appointment));
-        container.append(appointment);
+    onDragEnd(e) {
+        const $appointment = this.getAppointmentElement(e);
+        const container = this.scheduler._getAppointmentContainer(this.isAllDay($appointment));
+        container.append($appointment);
 
-        this.currentAppointment = appointment;
+        this.currentAppointment = $appointment;
 
         if(this.scheduler._escPressed) {
             e.event.cancel = true;
         } else {
             this.scheduler.notifyObserver("updateAppointmentAfterDrag", {
                 event: e,
-                data: this.scheduler._getItemData(appointment),
-                $appointment: appointment,
+                data: this.scheduler._getItemData($appointment),
+                $appointment: $appointment,
                 coordinates: this.initialPosition
             });
         }
     }
 
-    addTo(appointment, options) {
-        this.scheduler._createComponent(appointment, Draggable, extend({
-            contentTemplate: null,
-            filter: `.${APPOINTMENT_ITEM_CLASS}`,
-            immediate: false,
-            onDragStart: this.onDragStart.bind(this),
-            onDragEnd: this.onDragEnd.bind(this)
-        }, options));
+    getItemData(appointment) {
+        let itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
+        return itemData && itemData.data || this.scheduler._getItemData(appointment);
+    }
+
+    getDragEventHandler(eventName, options, appointmentDragging) {
+        return function(e) {
+            let handler = appointmentDragging && appointmentDragging[eventName];
+
+            if(eventName === "onDragStart") {
+                e.itemData = this.getItemData(e.itemElement);
+            } else if(eventName === "onAdd") {
+                e.itemData = extend({}, e.itemData, this.scheduler.invoke("getUpdatedData", {
+                    data: e.itemData
+                }));
+            }
+
+            handler && handler.call(this, e);
+
+            if(!e.cancel) {
+                options[eventName] && options[eventName].call(this, e);
+                if(eventName === "onDragEnd" && e.fromComponent !== e.toComponent) {
+                    appointmentDragging["onRemove"] && appointmentDragging["onRemove"].call(this, e);
+                }
+            }
+        }.bind(this);
+    }
+
+    addTo(appointment, config) {
+        let appointmentDragging = this.scheduler.option("appointmentDragging"),
+            options = extend({
+                contentTemplate: null,
+                filter: `.${APPOINTMENT_ITEM_CLASS}`,
+                immediate: false,
+                onDragStart: this.onDragStart.bind(this),
+                onDragEnd: this.onDragEnd.bind(this)
+            }, config);
+
+        this.scheduler._createComponent(appointment, Draggable, extend({}, options, appointmentDragging, {
+            onDragStart: this.getDragEventHandler("onDragStart", options, appointmentDragging),
+            onDragEnd: this.getDragEventHandler("onDragEnd", options, appointmentDragging),
+            onDrop: this.getDragEventHandler("onAdd", options, appointmentDragging),
+        }));
     }
 
     moveBack() {

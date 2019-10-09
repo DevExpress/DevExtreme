@@ -150,6 +150,10 @@ const subscribes = {
         }).bind(this));
     },
 
+    getUpdatedData: function(options) {
+        return this._getUpdatedData({ data: options.data });
+    },
+
     updateAppointmentAfterDrag: function(options) {
         let target = options.data,
             updatedData = this._getUpdatedData(options),

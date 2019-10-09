@@ -408,4 +408,239 @@ module("Drag and drop appointments", moduleConfig, () => {
         assert.deepEqual(data.startDate, new Date(2015, 1, 1, 1), "start date is correct");
         assert.deepEqual(data.endDate, new Date(2015, 1, 1, 2), "end date is correct");
     });
+
+    module("appointmentDragging customization", () => {
+        const createScheduler = options => {
+            return createWrapper($.extend(true, {}, {
+                dataSource: [{
+                    text: "App 1",
+                    startDate: new Date(2018, 4, 21, 9, 30),
+                    endDate: new Date(2018, 4, 21, 11, 30)
+                }, {
+                    text: "App 2",
+                    startDate: new Date(2018, 4, 21, 9, 30),
+                    endDate: new Date(2018, 4, 21, 11, 30)
+                }],
+                width: 800,
+                height: 600,
+                views: [{ type: "day", maxAppointmentsPerCell: 1 }],
+                currentDate: new Date(2018, 4, 21),
+                startDayHour: 9,
+                endDayHour: 16
+            }, options));
+        };
+
+        const createDraggable = (group, data) => {
+            return $("<div>")
+                .css({ width: 100, height: 100 })
+                .appendTo("#qunit-fixture")
+                .dxDraggable({
+                    group,
+                    onDragStart: function(e) {
+                        e.itemData = data;
+                    }
+                });
+        };
+
+        test("Event calls on appointment drag", assert => {
+            const appointmentDragging = {
+                onDragStart: sinon.spy(),
+                onDragEnd: sinon.spy(),
+                onAdd: sinon.spy(),
+                onRemove: sinon.spy()
+            };
+
+            const scheduler = createScheduler({
+                appointmentDragging
+            });
+
+            const dataSource = scheduler.instance.option("dataSource");
+            const appointment = scheduler.appointments.find("App 1");
+            const positionBeforeDrag = getAbsolutePosition(appointment);
+            const pointer = pointerMock(appointment).start();
+
+            pointer
+                .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                .move(0, 50);
+
+            const positionAfterDrag = getAbsolutePosition(appointment);
+
+            pointer.up();
+
+            assert.strictEqual(positionAfterDrag.top - positionBeforeDrag.top, 50, "appointment position is changed correctly");
+
+            assert.deepEqual(dataSource[0].startDate, new Date(2018, 4, 21, 10, 0), "startDate is changed");
+            assert.strictEqual(appointmentDragging.onDragStart.callCount, 1, "onDragStart is called once");
+            assert.strictEqual(appointmentDragging.onDragStart.getCall(0).args[0].itemData, dataSource[0], "onDragStart itemData param");
+            assert.strictEqual(appointmentDragging.onDragEnd.callCount, 1, "onDragEnd is called once");
+            assert.strictEqual(appointmentDragging.onAdd.callCount, 0, "onAdd is not called");
+            assert.strictEqual(appointmentDragging.onRemove.callCount, 0, "onRemove is not called");
+        });
+
+        test("Cancel onDragStart event", assert => {
+            const appointmentDragging = {
+                onDragStart: sinon.spy(e => {
+                    e.cancel = true;
+                }),
+                onDragEnd: sinon.spy()
+            };
+
+            const scheduler = createScheduler({
+                appointmentDragging
+            });
+
+            const dataSource = scheduler.instance.option("dataSource");
+            const appointment = scheduler.appointments.find("App 1");
+            const positionBeforeDrag = getAbsolutePosition(appointment);
+            const pointer = pointerMock(appointment).start();
+
+            pointer
+                .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                .move(0, 50);
+
+            const positionAfterDrag = getAbsolutePosition(appointment);
+
+            pointer.up();
+
+            assert.strictEqual(positionAfterDrag.top, positionBeforeDrag.top, "appointment position is not changed");
+            assert.deepEqual(dataSource[0].startDate, new Date(2018, 4, 21, 9, 30), "startDate is not changed");
+            assert.strictEqual(appointmentDragging.onDragStart.callCount, 1, "onDragStart is called once");
+            assert.strictEqual(appointmentDragging.onDragEnd.callCount, 0, "onDragEnd is not called");
+        });
+
+        test("Cancel onDragEnd event", assert => {
+            const appointmentDragging = {
+                onDragEnd: e => {
+                    e.cancel = true;
+                }
+            };
+
+            const scheduler = createScheduler({
+                appointmentDragging
+            });
+
+            const dataSource = scheduler.instance.option("dataSource");
+            const appointment = scheduler.appointments.find("App 1");
+            const positionBeforeDrag = getAbsolutePosition(appointment);
+            const pointer = pointerMock(appointment).start();
+
+            pointer
+                .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                .move(0, 50);
+
+            const positionAfterDrag = getAbsolutePosition(appointment);
+
+            pointer.up();
+
+            assert.strictEqual(positionAfterDrag.top - positionBeforeDrag.top, 50, "appointment position is changed correctly");
+            assert.deepEqual(dataSource[0].startDate, new Date(2018, 4, 21, 9, 30), "startDate is not changed");
+        });
+
+        test("Move appointment from Draggable", assert => {
+            const group = "testGroup";
+
+            const appointmentDragging = {
+                group,
+                onAdd: e => {
+                    scheduler.instance.addAppointment(e.itemData);
+                }
+            };
+
+            const scheduler = createScheduler({
+                appointmentDragging
+            });
+
+            const draggableData = { text: "App from Draggable" };
+
+            const draggable = createDraggable(group, draggableData);
+
+            const appointment = scheduler.appointments.find("App 1");
+            const appointmentPosition = getAbsolutePosition(appointment);
+            const draggablePosition = getAbsolutePosition(draggable);
+            const dataSource = scheduler.instance.option("dataSource");
+
+            const pointer = pointerMock(draggable).start();
+
+            pointer
+                .down(draggablePosition.left, draggablePosition.top)
+                .move(appointmentPosition.left - draggablePosition.left, appointmentPosition.top - draggablePosition.top)
+                .up();
+
+            assert.strictEqual(dataSource.length, 3, "appointment is added");
+            delete dataSource[2].settings;
+            assert.deepEqual(dataSource[2], {
+                text: "App from Draggable",
+                allDay: false,
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 10, 0)
+            }, "added appointment data");
+            assert.deepEqual(draggableData, { text: "App from Draggable" }, "draggable data is not changed");
+        });
+
+        test("Move appointment to Draggable", assert => {
+            const group = "testGroup";
+
+            const appointmentDragging = {
+                group,
+                onRemove: sinon.spy(e => {
+                    scheduler.instance.deleteAppointment(e.itemData);
+                })
+            };
+
+            const scheduler = createScheduler({
+                appointmentDragging
+            });
+
+            const draggable = createDraggable(group);
+
+            const appointment = scheduler.appointments.find("App 1");
+            const appointmentPosition = getAbsolutePosition(appointment);
+            const draggablePosition = getAbsolutePosition(draggable);
+            const dataSource = scheduler.instance.option("dataSource");
+
+            const pointer = pointerMock(appointment).start();
+
+            pointer
+                .down(appointmentPosition.left, appointmentPosition.top)
+                .move(draggablePosition.left - appointmentPosition.left, draggablePosition.top - appointmentPosition.top)
+                .up();
+
+            assert.strictEqual(dataSource.length, 1, "appointment is removed");
+            assert.strictEqual(appointmentDragging.onRemove.getCall(0).args[0].itemData.text, "App 1", "onRemove itemData parameter");
+        });
+
+        test("Move appointment to Draggable from tooltip", assert => {
+            const group = "testGroup";
+
+            const appointmentDragging = {
+                group,
+                onRemove: sinon.spy(e => {
+                    scheduler.instance.deleteAppointment(e.itemData);
+                })
+            };
+
+            const scheduler = createScheduler({
+                appointmentDragging
+            });
+
+            const draggable = createDraggable(group);
+
+            scheduler.appointments.compact.click(0);
+
+            const appointment = scheduler.appointments.compact.getAppointment();
+            const appointmentPosition = getAbsolutePosition(appointment);
+            const draggablePosition = getAbsolutePosition(draggable);
+            const dataSource = scheduler.instance.option("dataSource");
+
+            const pointer = pointerMock(appointment).start();
+
+            pointer
+                .down(appointmentPosition.left, appointmentPosition.top)
+                .move(draggablePosition.left - appointmentPosition.left, draggablePosition.top - appointmentPosition.top)
+                .up();
+
+            assert.strictEqual(dataSource.length, 1, "appointment is removed");
+            assert.strictEqual(appointmentDragging.onRemove.getCall(0).args[0].itemData.text, "App 2", "onRemove itemData parameter");
+        });
+    });
 });
