@@ -494,11 +494,12 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
         const { itemData, container, index } = renderArgs;
+        const recurrenceRule = this.invoke("getField", "recurrenceRule", itemData);
 
         return itemTemplate.render({
             model: {
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, $(container).parent(), true)
+                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, $(container).parent(), !!recurrenceRule)
             },
             container: container,
             index: index
