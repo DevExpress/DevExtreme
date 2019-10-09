@@ -40,20 +40,6 @@ function getOffset() {
     }
 }
 
-// TODO remove
-// function isDeviceDesktop() {
-//     return devices.current().deviceType === "desktop";
-// }
-
-// TODO remove
-// function skipTestOnMobile(assert) {
-//     const isMobile = !isDeviceDesktop();
-//     if(isMobile) {
-//         assert.ok(true, "Test skipped on mobile");
-//     }
-//     return isMobile;
-// }
-
 QUnit.module("T712431", () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
     const APPOINTMENT_WIDTH = 941;
@@ -3736,25 +3722,134 @@ QUnit.test("Multi-day appointment should be rendered when started after endDayHo
     assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, "Appointments are rendered");
 });
 
-QUnit.test("Appointment with equal startDate and endDate should render with 1 minute duration (T817857)", function(assert) {
-    this.createInstance({
-        dataSource: [{
-            text: "Zero minute appointment",
-            startDate: new Date(2019, 8, 1, 10, 0),
-            endDate: new Date(2019, 8, 1, 10, 0),
-        }, {
-            text: "One minute appointment",
-            startDate: new Date(2019, 8, 1, 11, 0),
-            endDate: new Date(2019, 8, 1, 11, 1),
-        }],
-        views: ["day"],
-        currentView: "day",
-        currentDate: new Date(2019, 8, 1, 10, 0),
-        startDayHour: 7,
-        endDayHour: 18,
-        height: 580,
+QUnit.module("Appointments", {
+    beforeEach() {
+        fx.off = true;
+    },
+    afterEach() {
+        fx.off = false;
+    }
+}, () => {
+    let eventCallCount = 0;
+
+    const createScheduler = (data, options) => {
+        const config = {
+            dataSource: data,
+            views: ["month"],
+            currentView: "month",
+            currentDate: new Date(2017, 4, 25),
+            startDayHour: 9,
+            width: 600,
+            height: 600
+        };
+
+        return createWrapper($.extend(config, options));
+    };
+
+    const createTestForCommonData = (assert, skipCallCount = false) => {
+        eventCallCount = 0;
+
+        return (model, index, container) => {
+            const { appointmentData, targetedAppointmentData } = model;
+
+            if(!skipCallCount) {
+                assert.equal(index, eventCallCount, "index argument should be equal current index of appointment");
+            }
+            assert.deepEqual(appointmentData, targetedAppointmentData, "appointmentData and targetedAppointmentData should be equivalents");
+
+            eventCallCount++;
+        };
+    };
+
+    const createTestForRecurrenceData = (assert) => {
+        eventCallCount = 0;
+
+        return (model, index, container) => {
+            const { appointmentData, targetedAppointmentData } = model;
+
+            const expectedStartDate = appointmentData.startDate.getDate() + eventCallCount;
+            const expectedEndDate = appointmentData.endDate.getDate() + eventCallCount;
+
+            assert.equal(targetedAppointmentData.startDate.getDate(), expectedStartDate, `start date of targetedAppointmentData should be equal ${expectedStartDate}`);
+            assert.equal(targetedAppointmentData.endDate.getDate(), expectedEndDate, `edn date of targetedAppointmentData should be equal ${expectedEndDate}`);
+
+            assert.equal(index, 0, "index argument should be 0");
+            assert.equal(appointmentData.text, targetedAppointmentData.text, "appointmentData.text and targetedAppointmentData.text arguments should be equal");
+
+            eventCallCount++;
+        };
+    };
+
+    const commonData = [{
+        text: "Website Re-Design Plan",
+        startDate: new Date(2017, 4, 22, 9, 30),
+        endDate: new Date(2017, 4, 22, 11, 30)
+    }, {
+        text: "Website Re-Design Plan",
+        startDate: new Date(2017, 4, 23, 9, 30),
+        endDate: new Date(2017, 4, 23, 11, 30)
+    }, {
+        text: "Website Re-Design Plan",
+        startDate: new Date(2017, 4, 24, 9, 30),
+        endDate: new Date(2017, 4, 24, 11, 30)
+    }, {
+        text: "Website Re-Design Plan",
+        startDate: new Date(2017, 4, 25, 9, 30),
+        endDate: new Date(2017, 4, 25, 11, 30)
+    }, {
+        text: "Website Re-Design Plan",
+        startDate: new Date(2017, 4, 26, 9, 30),
+        endDate: new Date(2017, 4, 26, 11, 30)
+    }];
+
+    const recurrenceData = [{
+        text: "Website Re-Design Plan",
+        startDate: new Date(2017, 4, 22, 9, 30),
+        endDate: new Date(2017, 4, 22, 11, 30),
+        recurrenceRule: "FREQ=DAILY;COUNT=5"
+    }];
+
+    QUnit.module("appointmentTemplate", () => {
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data", assert => {
+            createScheduler(commonData, {
+                appointmentTemplate: createTestForCommonData(assert)
+            });
+
+            assert.ok(eventCallCount === 5, "appointmentTemplate should be raised");
+        });
+
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence", assert => {
+            createScheduler(recurrenceData, {
+                appointmentTemplate: createTestForRecurrenceData(assert)
+            });
+
+            assert.ok(eventCallCount === 5, "appointmentTemplate should be raised");
+        });
     });
 
-    assert.strictEqual(this.scheduler.appointments.getAppointmentCount(), 2, "Appointments are rendered");
-    assert.equal(this.scheduler.appointments.getAppointmentHeight(0), this.scheduler.appointments.getAppointmentHeight(1), "Appointment heights are equal");
+    QUnit.module("appointmentTooltipTemplate", () => {
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data", assert => {
+            const scheduler = createScheduler(commonData, {
+                appointmentTooltipTemplate: createTestForCommonData(assert, true)
+            });
+
+            for(let i = 0; i < 5; i++) {
+                scheduler.appointments.click(i);
+            }
+
+            assert.ok(eventCallCount === 5, "appointmentTemplate should be raised");
+        });
+
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence", assert => {
+            const scheduler = createScheduler(recurrenceData, {
+                appointmentTooltipTemplate: createTestForRecurrenceData(assert)
+            });
+
+            for(let i = 0; i < 5; i++) {
+                scheduler.appointments.click(i);
+            }
+
+            assert.ok(eventCallCount === 5, "appointmentTooltipTemplate should be raised");
+        });
+    });
 });
