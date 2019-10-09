@@ -32,7 +32,8 @@ function coreAnnotation(options, contentTemplate) {
         offsetX: options.offsetX,
         offsetY: options.offsetY,
         draw: function(widget, group) {
-            const annotationGroup = widget._renderer.g().append(group);
+            const annotationGroup = widget._renderer.g().append(group)
+                .css(patchFontOptions(options.font));
             this.plaque = new Plaque(options, widget, annotationGroup, contentTemplate, isDefined(options.value) || isDefined(options.argument));
             this.plaque.draw(widget._getAnnotationCoords(this));
 
@@ -72,7 +73,6 @@ function getTemplateFunction(options, widget) {
         template = function(item, groupElement) {
             const text = widget._renderer
                 .text(item.text)
-                .css(patchFontOptions(item.font))
                 .attr({ "class": item.cssClass })
                 .append({ element: groupElement });
 
