@@ -3745,14 +3745,7 @@ QUnit.test("Appointment with equal startDate and endDate should render with 1 mi
     assert.equal(this.scheduler.appointments.getAppointmentHeight(0), this.scheduler.appointments.getAppointmentHeight(1), "Appointment heights are equal");
 });
 
-QUnit.module("Appointments", {
-    beforeEach() {
-        fx.off = true;
-    },
-    afterEach() {
-        fx.off = false;
-    }
-}, () => {
+QUnit.module("Appointments", () => {
     let eventCallCount = 0;
 
     const createScheduler = (data, options) => {
