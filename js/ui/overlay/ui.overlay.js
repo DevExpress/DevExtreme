@@ -554,10 +554,14 @@ var Overlay = Widget.inherit({
                 e.preventDefault();
             }
 
-            this.hide();
+            this._outsideClickHandler();
         }
 
         return this.option("propagateOutsideClick");
+    },
+
+    _outsideClickHandler() {
+        this.hide();
     },
 
     _initTemplates: function() {
