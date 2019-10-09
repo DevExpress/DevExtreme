@@ -186,11 +186,9 @@ class ArrayFileProvider extends FileProvider {
     }
 
     _ensureKeysForDuplicateNameItems(dataObjects) {
-        const dirNames = {};
-        const fileNames = {};
+        const names = {};
 
         dataObjects.forEach(obj => {
-            const names = this._isDirGetter(obj) ? dirNames : fileNames;
             const name = this._nameGetter(obj);
             if(names[name]) {
                 this._ensureDataObjectKey(obj);
