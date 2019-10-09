@@ -77,6 +77,9 @@ QUnit.testStart(function() {
         <div id="overlayWithWrongTemplateName">\
             <div data-options="dxTemplate: { name: \'wrongName\' }">testContent</div>\
         </div>\
+        <div id="containerT821559" style="height:300px; width:200px;">\
+        </div>\
+        </div>\
         \
         <div id="widget"></div>\
         \
@@ -2180,6 +2183,24 @@ testModule("container", moduleConfig, () => {
         assert.ok(Math.abs(Math.round($shader.offset().top) - Math.round($container.offset().top)) <= 1, "shader top position is correct");
         assert.strictEqual($shader.width(), $container.width(), "shader width is correct");
         assert.strictEqual($shader.height(), $container.height(), "shader height is correct");
+    });
+
+    test("shader should stretch across container when target is container", (assert) => {
+        const $container = $("#containerT821559");
+
+        const $overlay = $("#overlay").dxOverlay({
+            container: $container,
+            shading: true,
+            position: {
+                of: $container
+            }
+        });
+
+        $overlay.dxOverlay("show");
+
+        const $shader = $container.find(toSelector(OVERLAY_SHADER_CLASS));
+        assert.strictEqual($shader.height(), $container.height(), "shader height is correct");
+        assert.strictEqual($shader.width(), $container.width(), "shader width is correct");
     });
 
     test("wrong position targeted container (B236074)", (assert) => {
