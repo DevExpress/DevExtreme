@@ -339,3 +339,19 @@ QUnit.test("changing action option does not cause render", function(assert) {
     testAction("onBounce");
     testAction("onUpdated");
 });
+
+QUnit.test("onStop action is called on `scrollable` stop (T818446)", function(assert) {
+    var stopCalled = false;
+    var $scrollable = $("#scrollable").dxScrollable({
+        useNative: false,
+        onStop: function(e) {
+            stopCalled = true;
+        }
+    });
+
+    pointerMock($scrollable).start()
+        .down()
+        .up();
+
+    assert.ok(stopCalled, "onStop is called");
+});
