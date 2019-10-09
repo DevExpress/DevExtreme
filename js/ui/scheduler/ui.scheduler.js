@@ -144,7 +144,9 @@ const Scheduler = Widget.inherit({
                 * @pseudo AppointmentTemplate
                 * @type template|function
                 * @default "item"
-                * @type_function_param1 itemData:object
+                * @type_function_param1 model:object
+                * @type_function_param1_field1 appointmentData:object
+                * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:dxElement
                 * @type_function_return string|Node|jQuery
@@ -154,10 +156,11 @@ const Scheduler = Widget.inherit({
                 * @pseudo AppointmentTooltipTemplate
                 * @type template|function
                 * @default "appointmentTooltip"
-                * @type_function_param1 appointmentData:object
-                * @type_function_param2 contentElement:dxElement
-                * @type_function_param3 targetedAppointmentData:object
-                * @type_function_param4 itemIndex:number
+                * @type_function_param1 model:object
+                * @type_function_param1_field1 appointmentData:object
+                * @type_function_param1_field2 targetedAppointmentData:object
+                * @type_function_param2 itemIndex:number
+                * @type_function_param3 itemElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
