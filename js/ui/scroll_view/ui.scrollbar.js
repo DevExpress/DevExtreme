@@ -1,25 +1,25 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    ready = require("../../core/utils/ready_callbacks").add,
-    translator = require("../../animation/translator"),
-    Widget = require("../widget/ui.widget"),
-    eventUtils = require("../../events/utils"),
-    commonUtils = require("../../core/utils/common"),
-    isPlainObject = require("../../core/utils/type").isPlainObject,
-    extend = require("../../core/utils/extend").extend,
-    pointerEvents = require("../../events/pointer");
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import readyCallback from "../../core/utils/ready_callbacks";
+import translator from "../../animation/translator";
+import Widget from "../widget/ui.widget";
+import eventUtils from "../../events/utils";
+import commonUtils from "../../core/utils/common";
+import { isPlainObject } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import pointerEvents from "../../events/pointer";
 
-var SCROLLBAR = "dxScrollbar",
-    SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar",
-    SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = SCROLLABLE_SCROLLBAR_CLASS + "-active",
-    SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll",
-    SCROLLABLE_SCROLL_CONTENT_CLASS = "dx-scrollable-scroll-content",
-    HOVER_ENABLED_STATE = "dx-scrollbar-hoverable",
-    HORIZONTAL = "horizontal",
-    THUMB_MIN_SIZE = 15;
+const SCROLLBAR = "dxScrollbar";
+const SCROLLABLE_SCROLLBAR_CLASS = "dx-scrollable-scrollbar";
+const SCROLLABLE_SCROLLBAR_ACTIVE_CLASS = `${SCROLLABLE_SCROLLBAR_CLASS}-active`;
+const SCROLLABLE_SCROLL_CLASS = "dx-scrollable-scroll";
+const SCROLLABLE_SCROLL_CONTENT_CLASS = "dx-scrollable-scroll-content";
+const HOVER_ENABLED_STATE = "dx-scrollbar-hoverable";
+const HORIZONTAL = "horizontal";
+const THUMB_MIN_SIZE = 15;
 
-var SCROLLBAR_VISIBLE = {
+const SCROLLBAR_VISIBLE = {
     onScroll: "onScroll",
     onHover: "onHover",
     always: "always",
@@ -101,7 +101,9 @@ var Scrollbar = Widget.inherit({
 
     cursorEnter: function() {
         this._isHovered = true;
-        this.option("visible", true);
+        if(this._needScrollbar()) {
+            this.option("visible", true);
+        }
     },
 
     cursorLeave: function() {
@@ -249,7 +251,7 @@ var Scrollbar = Widget.inherit({
 
 var activeScrollbar = null;
 
-ready(function() {
+readyCallback.add(function() {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
         if(activeScrollbar) {
             activeScrollbar.feedbackOff();
