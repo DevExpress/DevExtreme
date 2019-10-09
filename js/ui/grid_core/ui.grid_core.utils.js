@@ -507,6 +507,14 @@ module.exports = (function() {
             }
 
             return lastColumnIndex;
+        },
+
+        isElementInCurrentGrid: function(controller, $element) {
+            if($element && $element.length) {
+                var $grid = $element.closest("." + controller.getWidgetContainerClass()).parent();
+                return $grid.is(controller.component.$element());
+            }
+            return false;
         }
     };
 })();
