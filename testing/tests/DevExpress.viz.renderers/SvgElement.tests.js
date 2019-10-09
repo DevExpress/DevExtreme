@@ -6241,5 +6241,17 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.ok(result.textChanged);
             assert.equal(domAdapter.querySelectorAll(text.element, "title").length, 1);
         });
+
+        QUnit.test("T820606. call setMaxHeight for detached text element", function(assert) {
+            var text = this.createText().attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "200K" });
+
+            this.prepareRenderBeforeEllipsis();
+            text.setMaxSize(-103, undefined, {
+                wordWrap: "normal",
+                textOverflow: "hide"
+            });
+
+            assert.equal(text.element.textContent, "200K");
+        });
     }
 })();

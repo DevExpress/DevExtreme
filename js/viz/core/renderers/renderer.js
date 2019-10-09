@@ -850,7 +850,7 @@ function setMaxSize(maxWidth, maxHeight, options = {}) {
 
     const { width, height } = that._getElementBBox();
 
-    if(width > maxWidth || maxHeight && height > maxHeight) {
+    if((width || height) && (width > maxWidth || maxHeight && height > maxHeight)) {
         if(maxWidth - ellipsisWidth < 0) {
             ellipsisMaxWidth = 0;
         } else {
