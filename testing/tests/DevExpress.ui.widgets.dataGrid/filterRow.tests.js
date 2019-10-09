@@ -1,8 +1,8 @@
 QUnit.testStart(function() {
     var markup =
 '<div>\
-    <div class="dx-datagrid">\
-        <div id="container"></div>\
+    <div id="container">\
+        <div class="dx-datagrid"></div>\
     </div>\
 </div>';
 
@@ -38,6 +38,8 @@ setTemplateEngine('hogan');
 
 QUnit.module('Filter Row', {
     beforeEach: function() {
+        this.$element = () => $("#container");
+        this.gridContainer = $("#container > .dx-datagrid");
 
         this.columns = [];
         this.options = {
@@ -802,7 +804,7 @@ QUnit.test('Draw filterRow when all columns grouped', function(assert) {
     ]);
 
     // act
-    this.columnHeadersView.render(testElement);
+    this.columnHeadersView.render(".dx-datagrid");
 
     filterRow = testElement.find('.dx-datagrid-filter-row');
 
@@ -1375,6 +1377,9 @@ QUnit.test("The filter menu should be rendered correctly when specified headerCe
 
 QUnit.module('Filter Row with real dataController and columnsController', {
     beforeEach: function() {
+        this.$element = () => $("#container");
+        this.gridContainer = $("#container > .dx-datagrid");
+
         this.items = [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 16 },
@@ -1384,10 +1389,6 @@ QUnit.module('Filter Row with real dataController and columnsController', {
             { name: 'Kate', age: 20 },
             { name: 'Dan', age: 21 }
         ];
-
-        this.element = function() {
-            return $("#container");
-        };
 
         this.options = {
             filterRow: {
@@ -1568,20 +1569,21 @@ QUnit.testInActiveWindow('Filter row with menu: focus behavior', function(assert
 // T189448
 QUnit.test('Filter row - focus editor', function(assert) {
     // arrange
-    var that = this,
-        $testElement = $('#container').addClass("dx-datagrid-borders");
+    var that = this;
+
+    $('#container').addClass("dx-datagrid-borders");
 
     setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
         initViews: true
     });
 
-    that.columnHeadersView.render($testElement);
+    that.columnHeadersView.render($(".dx-datagrid"));
 
     // act
-    that.editorFactoryController.focus($testElement.find("td").first());
+    that.editorFactoryController.focus($('.dx-datagrid').find("td").first());
     that.clock.tick();
 
-    assert.roughEqual($testElement.find(".dx-datagrid-focus-overlay").outerHeight(), $testElement.find("td").first().outerHeight(), 1.01, "height focus overlay");
+    assert.roughEqual($('#container').find(".dx-datagrid-focus-overlay").outerHeight(), $('.dx-datagrid').find("td").first().outerHeight(), 1.01, "height focus overlay");
 });
 
 QUnit.test("Filter row with menu for number column", function(assert) {

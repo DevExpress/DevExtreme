@@ -509,18 +509,10 @@ module.exports = (function() {
             return lastColumnIndex;
         },
 
-        isEventInCurrentGrid: function(controller, event) {
-            var $target = event && $(event.target);
-            if($target) {
-                let gridSelector = `.${controller.getWidgetContainerClass()}`,
-                    $grid = controller.component.$element(),
-                    $closestGrid = $target.closest(gridSelector);
-
-                if($grid && !$grid.is(gridSelector)) {
-                    $grid = $grid.find(gridSelector).first();
-                }
-
-                return $closestGrid.is($grid);
+        isElementInCurrentGrid: function(controller, $element) {
+            if($element && $element.length) {
+                var $grid = $element.closest("." + controller.getWidgetContainerClass()).parent();
+                return $grid.is(controller.component.$element());
             }
             return false;
         }

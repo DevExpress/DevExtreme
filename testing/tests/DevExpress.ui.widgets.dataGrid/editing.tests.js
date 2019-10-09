@@ -9311,7 +9311,7 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
         rowsView = that.rowsView,
         $testElement = renderer("#container");
 
-    rowsView.render($testElement);
+    rowsView.render(that.gridContainer);
     that.applyOptions({
         editing: {
             mode: "batch",
@@ -11188,8 +11188,7 @@ QUnit.test("Cell edit mode - The validation should not work for column with 'sho
     // arrange
     var that = this,
         $cellElement,
-        rowsView = this.rowsView,
-        $testElement = $('#container');
+        rowsView = this.rowsView;
 
     that.applyOptions({
         dataSource: [{ name: "", test: true }],
@@ -11206,7 +11205,7 @@ QUnit.test("Cell edit mode - The validation should not work for column with 'sho
             validationRules: [{ type: "required" }]
         }]
     });
-    rowsView.render($testElement);
+    rowsView.render(that.gridContainer);
 
     // act
     that.addRow();
