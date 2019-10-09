@@ -171,9 +171,7 @@ class FileManager extends Widget {
         const $breadcrumbs = $("<div>").appendTo($container);
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
             rootFolderDisplayName: this.option("rootFolderName"),
-            onCurrentDirectoryChanged: e => { // TODO: check name
-                this._setCurrentDirectory(e.currentDirectory);
-            },
+            onCurrentDirectoryChanging: ({ currentDirectory }) => this._setCurrentDirectory(currentDirectory),
             onOutsideClick: () => this._clearSelection()
         });
         this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());

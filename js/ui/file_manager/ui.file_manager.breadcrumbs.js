@@ -127,13 +127,13 @@ class FileManagerBreadcrumbs extends Widget {
 
     _initActions() {
         this._actions = {
-            onCurrentDirectoryChanged: this._createActionByOption("onCurrentDirectoryChanged"),
+            onCurrentDirectoryChanging: this._createActionByOption("onCurrentDirectoryChanging"),
             onOutsideClick: this._createActionByOption("onOutsideClick")
         };
     }
 
     _raiseCurrentDirectoryChanged(currentDirectory) {
-        this._actions.onCurrentDirectoryChanged({ currentDirectory });
+        this._actions.onCurrentDirectoryChanging({ currentDirectory });
     }
 
     _raiseOutsideClick() {
@@ -143,7 +143,7 @@ class FileManagerBreadcrumbs extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             rootFolderDisplayName: "Files",
-            onCurrentDirectoryChanged: null,
+            onCurrentDirectoryChanging: null,
             onOutsideClick: null
         });
     }
@@ -155,7 +155,7 @@ class FileManagerBreadcrumbs extends Widget {
             case "rootFolderDisplayName":
                 this.repaint();
                 break;
-            case "onCurrentDirectoryChanged":
+            case "onCurrentDirectoryChanging":
             case "onOutsideClick":
                 this._actions[name] = this._createActionByOption(name);
                 break;
