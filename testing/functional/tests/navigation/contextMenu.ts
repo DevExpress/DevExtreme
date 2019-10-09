@@ -1,30 +1,13 @@
 import url from '../../helpers/getPageUrl';
-import { Selector, ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
 import { createWidget } from '../../helpers/testHelper';
 import ContextMenu from '../../model/contextMenu';
+import { appendElementTo } from './helpers/domUtils';
 
 fixture `ContextMenu`
     .page(url(__dirname, '../container.html')); 
 
-interface IOptions {
-    id: string,
-    width: number,
-    height: number,
-    backgroundColor: string
-}
-
-const appendElementTo = ClientFunction((selector: string, tagName: string, options: IOptions) => {
-    const container = document.querySelector(selector);
-    const element = document.createElement(tagName);
-    const { id, width, height, backgroundColor } = options;
-
-    element.setAttribute("id", id);
-    element.style.cssText = `width: ${width}px; height: ${height}px; background-color: ${backgroundColor};`;
-    element.innerText = id;
-
-    container.appendChild(element);
-});
-
+// T755681
 test("Context menu should be shown in the same position when item was added in runtime", async t => {
     const contextMenu = new ContextMenu('#container');
     const target = Selector('#menuTarget');
