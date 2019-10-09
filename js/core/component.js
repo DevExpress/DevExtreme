@@ -369,9 +369,9 @@ var Component = Class.inherit({
         optionName = optionName.replace(/\[/g, ".").replace(/\]/g, "");
         const fullPath = optionName.split(".");
         let value;
-        for(const path of fullPath) {
+        fullPath.forEach((path) => {
             value = value ? value[path] : this._initialOptions[path];
-        }
+        });
 
         value = typeUtils.isObject(value) ? Object.assign({}, value) : value;
 
