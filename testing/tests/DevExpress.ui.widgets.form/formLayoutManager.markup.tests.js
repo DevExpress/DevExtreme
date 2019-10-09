@@ -2550,9 +2550,11 @@ QUnit.module("Accessibility", () => {
             const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
 
             if(inArray(editorClassName, editorClassesRequiringIdForLabel) !== -1) {
-                assert.ok($ariaTarget.attr("aria-labelledby"), `aria-labeledby attribute ${editorClassName}`);
-                assert.ok($label.attr("id"), `label id attribute for ${editorClassName}`);
-                assert.strictEqual($ariaTarget.attr("aria-labelledby"), $label.attr("id"), "attributes aria-labelledby and labelID are equal");
+                if(!(!windowUtils.hasWindow() && editorType === "dxHtmlEditor")) {
+                    assert.ok($ariaTarget.attr("aria-labelledby"), `aria-labeledby attribute ${editorClassName}`);
+                    assert.ok($label.attr("id"), `label id attribute for ${editorClassName}`);
+                    assert.strictEqual($ariaTarget.attr("aria-labelledby"), $label.attr("id"), "attributes aria-labelledby and labelID are equal");
+                }
             } else {
                 assert.equal($ariaTarget.eq(0).attr("aria-labelledby"), null, `aria-labeledby attribute ${editorClassName}`);
                 assert.equal($label.attr("id"), null, `label id attribute for ${editorClassName}`);
@@ -3157,9 +3159,11 @@ QUnit.module("Supported editors", () => {
         }).dxLayoutManager("instance");
 
         assert.equal(layoutManager.getEditor("description").option("value"), expectedText, "value of editor");
-        assert.equal($(".dx-htmleditor-content").html(), "<p>This <strong>text</strong> for testing the <em>Html Editor</em></p>", "HtmlEditor content");
-        assert.equal($(".dx-undo-format.dx-button").length, 1, "the undo button of toolbar is rendered");
-        assert.equal($(".dx-redo-format.dx-button").length, 1, "the redo button of toolbar is rendered");
+        if(windowUtils.hasWindow()) {
+            assert.equal($(".dx-htmleditor-content").html(), "<p>This <strong>text</strong> for testing the <em>Html Editor</em></p>", "HtmlEditor content");
+            assert.equal($(".dx-undo-format.dx-button").length, 1, "the undo button of toolbar is rendered");
+            assert.equal($(".dx-redo-format.dx-button").length, 1, "the redo button of toolbar is rendered");
+        }
     });
 
     test("Check updating the layoutData when the value of the HtmlEditor is changed", (assert) => {
@@ -3182,6 +3186,8 @@ QUnit.module("Supported editors", () => {
         editor.option("value", "new <b>value</b>");
 
         assert.deepEqual(layoutManager.option("layoutData"), { description: "new <b>value</b>" }, "layoutData");
-        assert.equal($(".dx-htmleditor-content").html(), "<p>new <strong>value</strong></p>", "HtmlEditor content");
+        if(windowUtils.hasWindow()) {
+            assert.equal($(".dx-htmleditor-content").html(), "<p>new <strong>value</strong></p>", "HtmlEditor content");
+        }
     });
 });
