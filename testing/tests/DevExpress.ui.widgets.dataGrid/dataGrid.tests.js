@@ -5104,6 +5104,32 @@ QUnit.test("Freespace row have the correct height when using master-detail with 
     assert.roughEqual($dataGrid.find(".dx-freespace-row").eq(2).height(), expectedFreeSpaceRowHeight, 1, "Height of the freeSpace row");
 });
 
+QUnit.test("DataGrid should apply columns that are dynamically added to a band (T815945)", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [{ name: "Alex", age: 22 }, { name: "Sahra", age: 22 }],
+        columns: [{
+            caption: "Band",
+        }]
+    }).dxDataGrid("instance");
+    this.clock.tick();
+
+    // act
+    dataGrid.option("columns[0].columns", [{ dataField: "name", ownerBand: 0 }]);
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGridWrapper.headers.getHeaderItemTextContent(1, 0), "Name", "name is applied");
+
+    // act
+    dataGrid.columnOption("Band", "columns", [{ dataField: "name", ownerBand: 0 }, { dataField: "age", ownerBand: 0 }]);
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGridWrapper.headers.getHeaderItemTextContent(1, 0), "Name", "name is applied");
+    assert.equal(dataGridWrapper.headers.getHeaderItemTextContent(1, 1), "Age", "age is applied");
+});
+
 QUnit.test("scroll position should not be reseted if virtual scrolling and cell template cause relayout", function(assert) {
     // arrange
     var array = [];
