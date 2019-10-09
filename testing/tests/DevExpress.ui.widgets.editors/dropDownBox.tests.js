@@ -12,8 +12,10 @@ import "common.css!";
 QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture" class="qunit-fixture-visible">\
-            <div id="dropDownBox"></div>\
-            <div id="dropDownBoxAnonymous"><div id="inner">Test</div></div>\
+            <div id="container">\
+                <div id="dropDownBox"></div>\
+                <div id="dropDownBoxAnonymous"><div id="inner">Test</div></div>\
+            </div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -221,7 +223,22 @@ QUnit.test("popup and editor width should be equal", function(assert) {
     assert.equal($(instance.content()).outerWidth(), 700, "width are equal after option change");
 });
 
-QUnit.test("popup and editor width should be eual when the editor rendered in the hidden content", function(assert) {
+QUnit.test("popup and editor width should be equal when container resizes after runtime width change", function(assert) {
+    const instance = new DropDownBox(this.$element, {
+        width: "100%",
+        opened: true
+    });
+
+    instance.option("width", "90%");
+    $("#container").get(0).style.width = "900px";
+    instance.close();
+    instance.open();
+
+    assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), "width are equal after option change");
+    assert.equal($(instance.content()).outerWidth(), 810, "width are equal after option change");
+});
+
+QUnit.test("popup and editor width should be equal when the editor rendered in the hidden content", function(assert) {
     this.$element.hide();
     var instance = new DropDownBox(this.$element, {
         deferRendering: false,
