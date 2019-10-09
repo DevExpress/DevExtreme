@@ -713,6 +713,7 @@ var SimulatedStrategy = Class.inherit({
     handleStop: function() {
         this._resetActive();
         this._eventHandler("stop");
+        this._stopAction();
     },
 
     handleScroll: function() {
