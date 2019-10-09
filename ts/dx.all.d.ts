@@ -5890,7 +5890,7 @@ declare module DevExpress.ui {
         /** @name dxTreeList.Options.expandedRowKeys */
         expandedRowKeys?: Array<any>;
         /** @name dxTreeList.Options.filterMode */
-        filterMode?: 'fullBranch' | 'withAncestors';
+        filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
         /** @name dxTreeList.Options.hasItemsExpr */
         hasItemsExpr?: string | Function;
         /** @name dxTreeList.Options.itemsExpr */
