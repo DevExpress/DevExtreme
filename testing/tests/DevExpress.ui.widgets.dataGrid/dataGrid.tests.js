@@ -3947,6 +3947,36 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
     assert.equal(focusedRowChangedArgs[0].rowIndex, 149, "focusedRowChanged event has correct rowElement");
 });
 
+QUnit.test("DataGrid - navigateToRow method should work if rowRenderingMode is 'virtual' and paging is disabled (T820359)", function(assert) {
+    // arrange
+    var data = [];
+
+    for(var i = 0; i < 30; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    var navigateRowKey = 25;
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        keyExpr: "id",
+        dataSource: data,
+        paging: {
+            enabled: false
+        },
+        scrolling: {
+            rowRenderingMode: "virtual",
+        }
+    }).dxDataGrid("instance");
+    this.clock.tick();
+
+    // act
+    dataGrid.navigateToRow(navigateRowKey);
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, "navigated row is visible");
+});
+
 // T803784
 QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed", function(assert) {
     // arrange
