@@ -1306,7 +1306,9 @@ module.exports = {
 
             var fireColumnsChanged = function(that) {
                 var onColumnsChanging = that.option("onColumnsChanging"),
-                    columnChanges = that._columnChanges;
+                    columnChanges = that._columnChanges,
+                    reinitOptionNames = ["dataField", "lookup", "dataType", "columns"],
+                    needReinit = (options) => options && reinitOptionNames.some(name => options[name]);
 
                 if(that.isInitialized() && !that._updateLockCount && columnChanges) {
                     if(onColumnsChanging) {
@@ -1315,7 +1317,7 @@ module.exports = {
                         that._updateLockCount--;
                     }
                     that._columnChanges = undefined;
-                    if(columnChanges.optionNames && (columnChanges.optionNames.dataField || columnChanges.optionNames.lookup || columnChanges.optionNames.dataType)) {
+                    if(needReinit(columnChanges.optionNames)) {
                         that.reinit();
                     } else {
                         that.columnsChanged.fire(columnChanges);
