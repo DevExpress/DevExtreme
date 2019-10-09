@@ -48,7 +48,10 @@ const TestComponent = Component.inherit({
                 opt2: "default",
                 opt4: "default",
                 opt5: {
-                    subOpt1: "default"
+                    subOpt1: "default",
+                    subOpt2: {
+                        value: ""
+                    }
                 },
                 opt6: [{
                     subOpt: "default"
@@ -1322,23 +1325,35 @@ QUnit.module("defaultOptions", {
         instance.option({
             opt4: "someValue",
             "opt5.subOpt1": "someValue",
-            "opt5.subOpt2": "someValue",
+            "opt5.subOpt2": {
+                value: "someValue",
+                opt: "someValue"
+            },
+            "opt5.subOpt3": "someValue",
             "opt6[0].subOpt": "someValue"
         });
 
         assert.equal(instance.option("opt4"), "someValue");
         assert.equal(instance.option("opt5.subOpt1"), "someValue");
-        assert.equal(instance.option("opt5.subOpt2"), "someValue");
+        assert.deepEqual(instance.option("opt5.subOpt2"), {
+            value: "someValue",
+            opt: "someValue"
+        });
+        assert.equal(instance.option("opt5.subOpt3"), "someValue");
         assert.equal(instance.option("opt6[0].subOpt"), "someValue");
 
         instance.resetOption("opt4");
         instance.resetOption("opt5.subOpt1");
         instance.resetOption("opt5.subOpt2");
+        instance.resetOption("opt5.subOpt3");
         instance.resetOption("opt6[0].subOpt");
 
         assert.equal(instance.option("opt4"), "default");
         assert.equal(instance.option("opt5.subOpt1"), "default");
-        assert.equal(instance.option("opt5.subOpt2"), undefined);
+        assert.deepEqual(instance.option("opt5.subOpt2"), {
+            value: ""
+        });
+        assert.equal(instance.option("opt5.subOpt3"), undefined);
         assert.equal(instance.option("opt6[0].subOpt"), "default");
     });
 
@@ -1353,6 +1368,28 @@ QUnit.module("defaultOptions", {
         } finally {
             assert.equal(error, false);
         }
+    });
+
+    QUnit.test("reset option after setting initialOption", (assert) => {
+        const instance = new TestComponent();
+
+        instance.resetOption("opt5.subOpt2");
+
+        instance.option({
+            "opt5.subOpt2": {
+                value: "someValue",
+                opt: "someValue"
+            },
+            opt4: "someValue",
+        });
+
+        instance.resetOption("opt5.subOpt2");
+        instance.resetOption("opt4");
+
+        assert.equal(instance.option("opt4"), "default");
+        assert.deepEqual(instance.option("opt5.subOpt2"), {
+            value: ""
+        });
     });
 });
 

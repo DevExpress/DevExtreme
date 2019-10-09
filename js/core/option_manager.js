@@ -168,12 +168,12 @@ export class OptionManager {
         return this._getValue(this._options, this._normalizeName(name));
     }
 
-    setValue(options) {
+    setValue(options, merge) {
         for(const optionName in options) {
             this._prepareRelevantNames(options, optionName, options[optionName]);
         }
         for(const optionName in options) {
-            this._setPreparedValue(optionName, options[optionName]);
+            this._setPreparedValue(optionName, options[optionName], merge);
         }
     }
 

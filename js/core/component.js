@@ -373,6 +373,8 @@ var Component = Class.inherit({
             value = value ? value[path] : this._initialOptions[path];
         }
 
+        value = typeUtils.isObject(value) ? Object.assign({}, value) : value;
+
         return value;
     },
 
@@ -551,9 +553,9 @@ var Component = Class.inherit({
         if(!name) {
             return;
         }
-        const defaultValue = this.initialOption(name);
+        let defaultValue = this.initialOption(name);
         this.beginUpdate();
-        this._optionManager.setValue(normalizeOptions(name, defaultValue));
+        this._optionManager.setValue(normalizeOptions(name, defaultValue), false);
         this.endUpdate();
     }
 }).include(EventsMixin);
