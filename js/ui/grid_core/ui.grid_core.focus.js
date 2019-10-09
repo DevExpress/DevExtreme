@@ -149,8 +149,9 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this,
                 dataController = this.getController("data"),
                 rowIndex = this.option("focusedRowIndex"),
+                isVirtualRowRenderingMode = that.option("scrolling.rowRenderingMode") === "virtual",
                 result = new Deferred(),
-                navigateTo = (key, result) => {
+                navigateInRowsView = (key, result) => {
                     if(needFocusRow) {
                         that._triggerUpdateFocusedRow(key, result);
                     } else {
@@ -158,6 +159,15 @@ exports.FocusController = core.ViewController.inherit((function() {
                             rowIndex = that.getController("data").getRowIndexByKey(key),
                             rowElement = rowsView.getRow(rowIndex);
                         rowsView._scrollToElement(rowElement);
+                    }
+                },
+                navigateTo = (key, result) => {
+                    if(isVirtualRowRenderingMode) {
+                        setTimeout(function() {
+                            that._navigateToVirtualRow(key, result, needFocusRow);
+                        });
+                    } else {
+                        navigateInRowsView(key, result);
                     }
                 };
 
@@ -183,19 +193,12 @@ exports.FocusController = core.ViewController.inherit((function() {
                             if(that.isRowFocused(key)) {
                                 result.resolve(that._getFocusedRowIndexByKey(key));
                             } else {
-                                navigateTo(key, result);
+                                navigateInRowsView(key, result);
                             }
                         }).fail(result.reject);
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
-                            if(that.option("scrolling.rowRenderingMode") === "virtual") {
-                                setTimeout(function() {
-                                    that._navigateToVirtualRow(key, result, needFocusRow);
-                                });
-                            } else {
-                                navigateTo(key, result);
-                            }
-
+                            navigateTo(key, result);
                         }).fail(result.reject);
                     }
                 })
