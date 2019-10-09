@@ -238,11 +238,11 @@ var NumberBoxBase = TextEditor.inherit({
         dxEvent.delta > 0 ? this._spinValueChange(1, dxEvent) : this._spinValueChange(-1, dxEvent);
     },
 
-    _renderValue: function() {
+    _renderValue: function(options) {
         var inputValue = this._input().val();
 
         if(!inputValue.length || Number(inputValue) !== this.option("value")) {
-            this._forceValueRender();
+            this._forceValueRender(options);
             this._toggleEmptinessEventHandler();
         }
 
@@ -253,12 +253,12 @@ var NumberBoxBase = TextEditor.inherit({
         return new Deferred().resolve();
     },
 
-    _forceValueRender: function() {
+    _forceValueRender: function(options) {
         var value = this.option("value"),
             number = Number(value),
             formattedValue = isNaN(number) ? "" : this._applyDisplayValueFormatter(value);
 
-        this._renderDisplayText(formattedValue);
+        this._renderDisplayText(formattedValue, options);
     },
 
     _applyDisplayValueFormatter: function(value) {
@@ -418,8 +418,8 @@ var NumberBoxBase = TextEditor.inherit({
         return isNumberMode && validityState && validityState.badInput;
     },
 
-    _renderDisplayText: function(text) {
-        if(this._inputIsInvalid()) {
+    _renderDisplayText: function(text, options) {
+        if(this._inputIsInvalid() && !(options && options.forceRender)) {
             return;
         }
 
@@ -441,7 +441,7 @@ var NumberBoxBase = TextEditor.inherit({
 
     _validateValue: function(value) {
         var inputValue = this._normalizeText(),
-            isValueValid = this._isValueValid(),
+            isInputValueValid = this._isValueValid(),
             isValid = true,
             isNumber = this._isNumber(inputValue);
 
@@ -449,9 +449,9 @@ var NumberBoxBase = TextEditor.inherit({
             isValid = false;
         }
 
-        if(!value && isValueValid) {
+        if(!value && isInputValueValid) {
             isValid = true;
-        } else if(!isNumber && !isValueValid) {
+        } else if(!isNumber && !isInputValueValid) {
             isValid = false;
         }
 
@@ -489,10 +489,12 @@ var NumberBoxBase = TextEditor.inherit({
     reset: function() {
         if(this.option("value") === null) {
             this.option("text", "");
-            this._renderValue();
         } else {
             this.option("value", null);
         }
+
+        this._renderValue({ forceRender: true });
+        this._validateValue();
     },
 
     _optionChanged: function(args) {

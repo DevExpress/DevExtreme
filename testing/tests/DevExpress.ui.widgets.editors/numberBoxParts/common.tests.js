@@ -591,6 +591,23 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual($input.val(), "", "value is still cleared");
     });
 
+    QUnit.test("clearButton should clear the text and reset the validation with forceRender options (T818673)", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            mode: "number",
+            showClearButton: true,
+            value: 1
+        });
+
+        const instance = $element.dxNumberBox("instance");
+
+        const $clearButton = $element.find(".dx-clear-button-area");
+        sinon.spy(instance, "_renderDisplayText");
+        $clearButton.trigger("dxclick");
+
+        const args = instance._renderDisplayText.getCall(1).args;
+        assert.ok(args.length === 2 && args[1] && args[1].forceRender);
+    });
+
     QUnit.test("T220209 - the 'displayValueFormatter' option", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({
             value: 5,
