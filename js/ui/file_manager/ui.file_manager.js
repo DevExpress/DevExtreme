@@ -171,10 +171,12 @@ class FileManager extends Widget {
         const $breadcrumbs = $("<div>").appendTo($container);
         this._breadcrumbs = this._createComponent($breadcrumbs, FileManagerBreadcrumbs, {
             rootFolderDisplayName: this.option("rootFolderName"),
-            path: "",
-            onPathChanged: e => this._setCurrentPath(e.newPath),
+            onCurrentDirectoryChanged: e => { // TODO: check name
+                this._setCurrentDirectory(e.currentDirectory);
+            },
             onOutsideClick: () => this._clearSelection()
         });
+        this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
     }
 
     _createContextMenu() {
@@ -641,7 +643,7 @@ class FileManager extends Widget {
 
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
-        this._breadcrumbs.option("path", currentPath);
+        this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
 
         this.option("currentPath", currentPath);
         this._onCurrentDirectoryChangedAction();
@@ -658,7 +660,7 @@ class FileManager extends Widget {
     /**
      * @name dxFileManagerMethods.refresh
      * @publicName refresh()
-     * @return Promise<any>
+     * @return Promise<any>this._getCurrentDirectory()
      */
     refresh() {
         return this.executeCommand("refresh");
