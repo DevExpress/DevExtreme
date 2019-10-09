@@ -530,6 +530,8 @@ var Scroller = Class.inherit({
     },
 
     _cursorEnterHandler: function() {
+        this._updateScrollbar();
+
         this._scrollbar.cursorEnter();
     },
 

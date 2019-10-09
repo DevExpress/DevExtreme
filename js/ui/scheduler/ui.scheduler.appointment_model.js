@@ -530,7 +530,7 @@ class AppointmentModel {
     }
 
     _isEndDateWrong(appointment, startDate, endDate) {
-        return !endDate || isNaN(endDate.getTime()) || startDate.getTime() >= endDate.getTime();
+        return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 
     add(data, tz) {

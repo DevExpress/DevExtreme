@@ -286,12 +286,24 @@ var Draggable = DOMComponentWithTemplate.inherit({
              */
             container: undefined,
             /**
-             * @name DraggableBaseOptions.template
+             * @name dxDraggableOptions.dragTemplate
              * @type template|function
+             * @type_function_param1 dragInfo:object
+             * @type_function_param1_field1 itemData:any
+             * @type_function_param1_field2 itemElement:dxElement
+             * @type_function_param2 containerElement:dxElement
              * @type_function_return string|Node|jQuery
              * @default undefined
              */
-            template: undefined,
+            dragTemplate: undefined,
+            /**
+             * @name DraggableBaseOptions.contentTemplate
+             * @type template|function
+             * @type_function_return string|Node|jQuery
+             * @hidden
+             * @default "content"
+             */
+            contentTemplate: "content",
             /**
              * @name DraggableBaseOptions.handle
              * @type string
@@ -378,8 +390,6 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this.verticalScrollHelper = new ScrollHelper("vertical", this);
     },
 
-    _initTemplates: noop,
-
     _normalizeCursorOffset: function(offset, options) {
         if(typeUtils.isFunction(offset)) {
             offset = offset.call(this, options);
@@ -444,12 +454,19 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return this.option("filter") || "";
     },
 
+    _$content: function() {
+        var $element = this.$element(),
+            $wrapper = $element.children(".dx-template-wrapper");
+
+        return $wrapper.length ? $wrapper : $element;
+    },
+
     _attachEventHandlers: function() {
         if(this.option("disabled")) {
             return;
         }
 
-        var $element = this.$element(),
+        var $element = this._$content(),
             itemsSelector = this._getItemsSelector(),
             allowMoveByClick = this.option("allowMoveByClick"),
             data = {
@@ -500,13 +517,13 @@ var Draggable = DOMComponentWithTemplate.inherit({
         let result = $element,
             clone = this.option("clone"),
             container = this._getContainer(),
-            template = this.option("template");
+            template = this.option("dragTemplate");
 
         if(template) {
             template = this._getTemplate(template);
             result = $(template.render(this._getDragTemplateArgs($element)));
         } else if(clone) {
-            result = $element.clone().appendTo(container);
+            result = $element.clone().outerWidth($element.outerWidth()).appendTo(container);
         }
 
         return result.toggleClass(this._addWidgetPrefix(CLONE_CLASS), result.get(0) !== $element.get(0));
@@ -527,7 +544,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _detachEventHandlers: function() {
-        eventsEngine.off(this.$element(), "." + DRAGGABLE);
+        eventsEngine.off(this._$content(), "." + DRAGGABLE);
         eventsEngine.off(this._getArea(), "." + DRAGGABLE);
     },
 
@@ -551,7 +568,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
             itemsSelector = this._getItemsSelector();
 
         if(itemsSelector[0] === ">") {
-            var $items = this.$element().find(itemsSelector);
+            var $items = this._$content().find(itemsSelector);
             if(!$items.is($target)) {
                 $target = $target.closest($items);
             }
@@ -858,9 +875,29 @@ var Draggable = DOMComponentWithTemplate.inherit({
         return this["_" + name + "Action"] || this._createActionByOption(name);
     },
 
+    _getAnonymousTemplateName: function() {
+        return "content";
+    },
+
+    _initTemplates: function() {
+        if(!this.option("contentTemplate")) return;
+
+        this.callBase.apply(this, arguments);
+    },
+
     _render: function() {
         this.callBase();
         this.$element().addClass(this._addWidgetPrefix());
+
+        const transclude = this._getAnonymousTemplateName() === this.option("contentTemplate"),
+            template = this._getTemplateByOption("contentTemplate");
+
+        if(template) {
+            $(template.render({
+                container: this.element(),
+                transclude
+            }));
+        }
     },
 
     _optionChanged: function(args) {
@@ -873,7 +910,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
             case "onDrop":
                 this["_" + name + "Action"] = this._createActionByOption(name);
                 break;
-            case "template":
+            case "dragTemplate":
+            case "contentTemplate":
             case "container":
             case "clone":
                 this._resetDragElement();

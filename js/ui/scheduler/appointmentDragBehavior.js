@@ -73,6 +73,7 @@ export default class AppointmentDragBehavior {
 
     addTo(appointment, options) {
         this.scheduler._createComponent(appointment, Draggable, extend({
+            contentTemplate: null,
             filter: `.${APPOINTMENT_ITEM_CLASS}`,
             immediate: false,
             onDragStart: this.onDragStart.bind(this),

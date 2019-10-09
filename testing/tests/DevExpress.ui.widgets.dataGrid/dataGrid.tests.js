@@ -7881,6 +7881,41 @@ QUnit.test("search text when scrolling mode virtual and one column is not define
     assert.equal(dataGrid.getVisibleRows().length, 1, "items were filtered");
 });
 
+// T820316
+QUnit.test("Error should not be thrown when searching text in calculated column with lookup", function(assert) {
+    var visibleRows,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
+            searchPanel: {
+                visible: true
+            },
+            columns: [{
+                calculateCellValue: function(rowData) {
+                    return rowData.num;
+                },
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }, "text"]
+        });
+
+    try {
+        dataGrid.option("searchPanel.text", "one");
+        this.clock.tick();
+    } catch(e) {
+        assert.ok(false, "error was thrown");
+    }
+
+    visibleRows = dataGrid.getVisibleRows();
+
+    assert.equal(visibleRows.length, 1, "one row is visible");
+    assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, "visible row's data");
+});
+
 // T583229
 QUnit.test("The same page should not load when scrolling in virtual mode", function(assert) {
     var dataGrid,
@@ -16842,6 +16877,40 @@ QUnit.test("Focus row element", function(assert) {
         columnIndex: 0,
         rowIndex: 2
     }, "Check that correct cell is focused");
+});
+
+QUnit.testInActiveWindow("DataGrid - Master grid should not render it's overlay in detail grid (T818373)", function(assert) {
+    // arrange
+    var detailGrid,
+        detailRowsViewWrapper = new RowsViewWrapper(".internal-grid");
+
+    this.dataGrid.option({
+        dataSource: [{ id: 0, value: "value 1", text: "Awesome" }],
+        keyExpr: "id",
+        masterDetail: {
+            enabled: true,
+            template: function(container) {
+                detailGrid = $("<div>")
+                    .addClass("internal-grid")
+                    .dxDataGrid({
+                        dataSource: [{ field1: "test1", field2: "test2" }],
+                        onFocusedCellChanging: e => e.isHighlighted = true
+                    })
+                    .appendTo(container).dxDataGrid("instance");
+            }
+        }
+    });
+    this.clock.tick();
+
+    // act
+    this.dataGrid.expandRow(0);
+    this.clock.tick();
+    $(detailGrid.getCellElement(0, 0)).focus();
+    this.clock.tick();
+
+    // assert
+    assert.equal(detailRowsViewWrapper.findFocusOverlay().length, 1, "Detail grid has one focus overlay");
+    assert.ok(detailRowsViewWrapper.isFocusOverlayVisible(), "Detail grid focus overlay is visible");
 });
 
 QUnit.test("Focus row element should support native DOM", function(assert) {

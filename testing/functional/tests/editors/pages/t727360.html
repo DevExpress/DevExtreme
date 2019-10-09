@@ -18,7 +18,9 @@
                         store: employees,
                         group: 'group'
                     }),
-                    allowItemReordering: true,
+                    itemDragging: {
+                        allowReordering: true
+                    },
                     collapsibleGroups: true,
                     grouped: true,
                     itemTemplate: ({ value }, _, el) => el.append($('<b>').text(value))

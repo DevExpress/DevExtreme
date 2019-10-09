@@ -31,7 +31,7 @@ const ListEdit = ListBase.inherit({
                 return;
             }
 
-            if(e.shiftKey && that.option("allowItemReordering")) {
+            if(e.shiftKey && that.option("itemDragging.allowReordering")) {
                 const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
                 const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
@@ -86,6 +86,14 @@ const ListEdit = ListBase.inherit({
         if(excludedSelectors.length) {
             this._itemElementsCache = this._itemElementsCache.not(excludedSelectors);
         }
+    },
+
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            allowItemReordering: { since: "19.2", alias: "itemDragging.allowReordering" }
+        });
     },
 
     _getDefaultOptions() {
@@ -171,6 +179,7 @@ const ListEdit = ListBase.inherit({
             * @name dxListOptions.allowItemReordering
             * @type boolean
             * @default false
+            * @deprecated dxListOptions.itemDragging
             */
             allowItemReordering: false,
 

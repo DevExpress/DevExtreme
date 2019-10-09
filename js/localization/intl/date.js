@@ -143,7 +143,7 @@ module.exports = {
 
         const monthFormat = intlFormats[format || "wide"];
 
-        type = type || "standalone";
+        type = type === "format" ? type : "standalone";
 
         return Array.apply(null, new Array(12)).map((_, monthIndex) => {
             return monthNameStrategies[type](monthIndex, monthFormat);

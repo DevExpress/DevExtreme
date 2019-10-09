@@ -17,7 +17,7 @@ export const createScheduler = (options = {}) =>
 
 export const scroll = (horizontal: number, vertical: number) => {
     return ClientFunction(
-        () => { debugger; window.scroll(horizontal, vertical) } ,
+        () => { window.scroll(horizontal, vertical) } ,
         { dependencies: { horizontal, vertical }}
     )();
 }

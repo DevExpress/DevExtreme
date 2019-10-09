@@ -46,8 +46,9 @@ var RowDraggingExtender = {
 
         if(allowReordering) {
             that._sortable = that._createComponent($content, Sortable, extend({
+                contentTemplate: null,
                 filter: "> table > tbody > .dx-data-row",
-                template: that._getDraggableRowTemplate(),
+                dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
                 dropFeedbackMode: "indicate"
             }, rowDragging));
@@ -91,14 +92,14 @@ var RowDraggingExtender = {
     },
 
     _getDraggableRowTemplate: function() {
-        return (options, index) => {
+        return (options) => {
             let $rootElement = this.component.$element(),
                 $dataGridContainer = $("<div>").width($rootElement.width()),
                 items = this._dataController.items(),
-                row = items && items[index],
+                row = items && items[options.fromIndex],
                 gridOptions = this._getDraggableGridOptions(row);
 
-            this._createComponent($dataGridContainer, "dxDataGrid", gridOptions);
+            this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
 
             return $dataGridContainer;
         };

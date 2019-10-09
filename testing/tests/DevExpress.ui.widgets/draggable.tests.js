@@ -1065,16 +1065,16 @@ QUnit.test("Remove element from the container when disposing", function(assert) 
 });
 
 
-QUnit.module("template", moduleConfig);
+QUnit.module("dragTemplate", moduleConfig);
 
-QUnit.test("Set template", function(assert) {
+QUnit.test("Set dragTemplate", function(assert) {
     // arrange
     var template = sinon.spy(function() {
         return $("<div id='myDragElement'/>").text("test");
     });
 
     this.createDraggable({
-        template: template
+        dragTemplate: template
     });
 
     // act
@@ -1090,7 +1090,7 @@ QUnit.test("Set template", function(assert) {
 QUnit.test("Remove my element after the drop end", function(assert) {
     // arrange
     this.createDraggable({
-        template: function() {
+        dragTemplate: function() {
             return $("<div id='myDragElement'/>").text("test");
         }
     });
@@ -1110,7 +1110,7 @@ QUnit.test("Remove my element after the drop end", function(assert) {
 QUnit.test("Remove my element when disposing", function(assert) {
     // arrange
     this.createDraggable({
-        template: function() {
+        dragTemplate: function() {
             return $("<div id='myDragElement'/>").text("test");
         }
     });
