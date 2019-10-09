@@ -1038,7 +1038,7 @@
 
 /**
  * @typedef {string} Enums.TreeListFilterMode
- * @enum {'fullBranch'|'withAncestors'}
+ * @enum {'fullBranch'|'withAncestors'|'matchOnly'}
  */
 
 /**
