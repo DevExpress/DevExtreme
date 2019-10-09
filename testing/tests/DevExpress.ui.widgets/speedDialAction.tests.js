@@ -369,47 +369,54 @@ QUnit.module("check action buttons events", (hooks) => {
     }),
 
     test("trigger and args", (assert) => {
+        const contentReadyStub = sinon.stub();
+        const initializedStub = sinon.stub();
+        const clickStub = sinon.stub();
+
         $("#fab-one")
             .dxSpeedDialAction()
             .dxSpeedDialAction("instance")
-            .on("contentReady", (e) => {
-                assert.equal(e.component.NAME, "dxSpeedDialAction", "right first SDA content ready component in args");
-                assert.ok(e.actionElement.hasClass("dx-overlay"), "right first SDA content ready actionElement in args");
-                assert.equal($(e.element).attr("id"), "fab-one", "right first SDA content ready element in args");
-            })
-            .on("disposing", (e) => {
-                assert.equal(e.component.NAME, "dxSpeedDialAction", "right first SDA disposing component in args");
-                assert.ok(e.actionElement, "first SDA disposing actionElement in args");
-                assert.ok(e.element, "first SDA disposing element in args");
-            })
-            .on("initialized", (e) => {
-                assert.equal(e.component.NAME, "dxSpeedDialAction", "right first SDA initialized component in args");
-                assert.ok(e.actionElement.hasClass("dx-overlay"), "right first SDA initialized actionElement in args");
-                assert.equal($(e.element).attr("id"), "fab-one", "right first SDA initialized element in args");
-            })
-            .on("click", (e) => {
-                assert.equal(e.component.NAME, "dxSpeedDialAction", "right first SDA click component in args");
-                assert.ok($(e.actionElement).hasClass("dx-overlay"), "right first SDA click actionElement in args");
-                assert.equal($(e.element).attr("id"), "fab-one", "right first SDA click element in args");
-                assert.ok(e.event, "first SDA click event in args");
-            });
+            .on("contentReady", contentReadyStub)
+            .on("initialized", initializedStub)
+            .on("click", clickStub);
+
 
         let $fabMainContent = $("." + FAB_MAIN_CLASS).find(".dx-overlay-content");
 
         $fabMainContent.trigger("dxclick");
 
+        const clickArgs = clickStub.getCall(0).args;
+
+        assert.equal(clickArgs[0].component.NAME, "dxSpeedDialAction", "right first SDA click component in args");
+        assert.ok($(clickArgs[0].actionElement).hasClass("dx-overlay"), "right first SDA click actionElement in args");
+        assert.equal($(clickArgs[0].element).attr("id"), "fab-one", "right first SDA click element in args");
+        assert.ok(clickArgs[0].event, "first SDA click event in args");
+
+
+        const contentReadyTwoStub = sinon.stub();
         $("#fab-two")
             .dxSpeedDialAction()
             .dxSpeedDialAction("instance")
-            .on("contentReady", (e) => {
-                assert.equal(e.component.NAME, "dxSpeedDialAction", "right second SDA content ready component in args");
-                assert.ok(e.actionElement.hasClass("dx-overlay"), "right second SDA content ready actionElement in args");
-                assert.equal($(e.element).attr("id"), "fab-two", "right second SDA content ready element in args");
-            });
+            .on("contentReady", contentReadyTwoStub);
 
         $fabMainContent = $("." + FAB_MAIN_CLASS).find(".dx-overlay-content");
 
         $fabMainContent.trigger("dxclick");
+
+        const contentReadyArgs = contentReadyStub.getCall(0).args;
+        assert.equal(contentReadyArgs[0].component.NAME, "dxSpeedDialAction", "right first SDA content ready component in args");
+        assert.ok(contentReadyArgs[0].actionElement.hasClass("dx-overlay"), "right first SDA content ready actionElement in args");
+        assert.equal($(contentReadyArgs[0].element).attr("id"), "fab-one", "right first SDA content ready element in args");
+
+        const contentReadyTwoArgs = contentReadyTwoStub.getCall(0).args;
+        assert.equal(contentReadyTwoArgs[0].component.NAME, "dxSpeedDialAction", "right second SDA content ready component in args");
+        assert.ok(contentReadyTwoArgs[0].actionElement.hasClass("dx-overlay"), "right second SDA content ready actionElement in args");
+        assert.equal($(contentReadyTwoArgs[0].element).attr("id"), "fab-two", "right second SDA content ready element in args");
+
+        const initializedArgs = initializedStub.getCall(0).args;
+        assert.equal(initializedArgs[0].component.NAME, "dxSpeedDialAction", "right first SDA initialized component in args");
+        assert.ok(initializedArgs[0].actionElement.hasClass("dx-overlay"), "right first SDA initialized actionElement in args");
+        assert.equal($(initializedArgs[0].element).attr("id"), "fab-one", "right first SDA initialized element in args");
     });
 });
 

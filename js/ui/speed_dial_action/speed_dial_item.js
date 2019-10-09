@@ -86,7 +86,7 @@ class SpeedDialItem extends Overlay {
 
         actionEvents.forEach((actionEvent) => {
             this.on(actionEvent, () => {
-                const actionOption = "on" + actionEvent.charAt(0).toUpperCase() + actionEvent.substr(1);
+                const actionOption = `on${actionEvent.charAt(0).toUpperCase() + actionEvent.substr(1)}`;
                 this._getActionComponent()._createActionByOption(actionOption, {}, true)({ actionElement: this.$element() });
             });
         });
