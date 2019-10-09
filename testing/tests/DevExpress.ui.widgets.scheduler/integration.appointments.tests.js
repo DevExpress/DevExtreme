@@ -3761,20 +3761,24 @@ QUnit.module("Appointments", {
         };
     };
 
-    const createTestForRecurrenceData = (assert) => {
+    const createTestForRecurrenceData = (assert, scheduler) => {
         eventCallCount = 0;
 
         return (model, index, container) => {
             const { appointmentData, targetedAppointmentData } = model;
 
-            const expectedStartDate = appointmentData.startDate.getDate() + eventCallCount;
-            const expectedEndDate = appointmentData.endDate.getDate() + eventCallCount;
+            const startDateExpr = scheduler.option("startDateExpr");
+            const endDateExpr = scheduler.option("endDateExpr");
+            const textExpr = scheduler.option("textExpr");
 
-            assert.equal(targetedAppointmentData.startDate.getDate(), expectedStartDate, `start date of targetedAppointmentData should be equal ${expectedStartDate}`);
-            assert.equal(targetedAppointmentData.endDate.getDate(), expectedEndDate, `edn date of targetedAppointmentData should be equal ${expectedEndDate}`);
+            const expectedStartDate = appointmentData[startDateExpr].getDate() + eventCallCount;
+            const expectedEndDate = appointmentData[endDateExpr].getDate() + eventCallCount;
+
+            assert.equal(targetedAppointmentData[startDateExpr].getDate(), expectedStartDate, `start date of targetedAppointmentData should be equal ${expectedStartDate}`);
+            assert.equal(targetedAppointmentData[endDateExpr].getDate(), expectedEndDate, `edn date of targetedAppointmentData should be equal ${expectedEndDate}`);
 
             assert.equal(index, 0, "index argument should be 0");
-            assert.equal(appointmentData.text, targetedAppointmentData.text, "appointmentData.text and targetedAppointmentData.text arguments should be equal");
+            assert.equal(appointmentData[textExpr], targetedAppointmentData[textExpr], "appointmentData.text and targetedAppointmentData.text arguments should be equal");
 
             eventCallCount++;
         };
@@ -3809,19 +3813,35 @@ QUnit.module("Appointments", {
         recurrenceRule: "FREQ=DAILY;COUNT=5"
     }];
 
+    const recurrenceDataWithCustomNames = [{
+        textCustom: "Website Re-Design Plan",
+        startDateCustom: new Date(2017, 4, 22, 9, 30),
+        endDateCustom: new Date(2017, 4, 22, 11, 30),
+        recurrenceRule: "FREQ=DAILY;COUNT=5"
+    }];
+
     QUnit.module("appointmentTemplate", () => {
         QUnit.test("model.targetedAppointmentData argument should have current appointment data", assert => {
-            createScheduler(commonData, {
-                appointmentTemplate: createTestForCommonData(assert)
-            });
+            const scheduler = createScheduler(commonData);
+            scheduler.option({ appointmentTemplate: createTestForCommonData(assert) });
 
             assert.ok(eventCallCount === 5, "appointmentTemplate should be raised");
         });
 
         QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence", assert => {
-            createScheduler(recurrenceData, {
-                appointmentTemplate: createTestForRecurrenceData(assert)
+            const scheduler = createScheduler(recurrenceData);
+            scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
+
+            assert.ok(eventCallCount === 5, "appointmentTemplate should be raised");
+        });
+
+        QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties", assert => {
+            const scheduler = createScheduler(recurrenceDataWithCustomNames, {
+                textExpr: "textCustom",
+                startDateExpr: "startDateCustom",
+                endDateExpr: "endDateCustom"
             });
+            scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
 
             assert.ok(eventCallCount === 5, "appointmentTemplate should be raised");
         });
@@ -3829,9 +3849,8 @@ QUnit.module("Appointments", {
 
     QUnit.module("appointmentTooltipTemplate", () => {
         QUnit.test("model.targetedAppointmentData argument should have current appointment data", assert => {
-            const scheduler = createScheduler(commonData, {
-                appointmentTooltipTemplate: createTestForCommonData(assert, true)
-            });
+            const scheduler = createScheduler(commonData);
+            scheduler.option({ appointmentTooltipTemplate: createTestForCommonData(assert, true) });
 
             for(let i = 0; i < 5; i++) {
                 scheduler.appointments.click(i);
@@ -3841,9 +3860,8 @@ QUnit.module("Appointments", {
         });
 
         QUnit.test("model.targetedAppointmentData argument should have current appointment data in case recurrence", assert => {
-            const scheduler = createScheduler(recurrenceData, {
-                appointmentTooltipTemplate: createTestForRecurrenceData(assert)
-            });
+            const scheduler = createScheduler(recurrenceData);
+            scheduler.option({ appointmentTooltipTemplate: createTestForRecurrenceData(assert, scheduler) });
 
             for(let i = 0; i < 5; i++) {
                 scheduler.appointments.click(i);
