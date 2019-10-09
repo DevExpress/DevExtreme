@@ -2185,7 +2185,7 @@ testModule("container", moduleConfig, () => {
         assert.strictEqual($shader.height(), $container.height(), "shader height is correct");
     });
 
-    test("shader should stretch across container when target is container", (assert) => {
+    test("shader should stretch across container when target is container(T821559)", (assert) => {
         const $container = $("#containerT821559");
 
         const $overlay = $("#overlay").dxOverlay({
@@ -2201,6 +2201,53 @@ testModule("container", moduleConfig, () => {
         const $shader = $container.find(toSelector(OVERLAY_SHADER_CLASS));
         assert.strictEqual($shader.height(), $container.height(), "shader height is correct");
         assert.strictEqual($shader.width(), $container.width(), "shader width is correct");
+    });
+
+    test("overlay should stretch across container when target is set by option('container')", (assert) => {
+        const $container = $("#containerT821559");
+
+        $("#container").dxOverlay({
+            container: $container,
+            shading: false,
+            width: "50%",
+            height: "50%",
+            visible: true
+        });
+
+        const containerRect = $container.get(0).getBoundingClientRect();
+        const containerLeft = containerRect.left;
+        const containerRight = containerRect.right;
+        const containerTop = containerRect.top;
+        const containerBottom = containerRect.bottom;
+
+        const overlayContentRect = $(".dx-overlay-content").get(0).getBoundingClientRect();
+        const overlayContentLeft = overlayContentRect.left;
+        const overlayContentRight = overlayContentRect.right;
+        const overlayContentTop = overlayContentRect.top;
+        const overlayContentBottom = overlayContentRect.bottom;
+
+        const isOverlayInContainer = containerLeft < overlayContentLeft && containerRight > overlayContentRight && containerTop < overlayContentTop
+            && containerBottom > overlayContentBottom;
+
+        assert.ok(isOverlayInContainer, "overlay is in container");
+    });
+
+    test("overlay should stretch across container when target is container(T821559)", (assert) => {
+        const $container = $("#containerT821559");
+
+        const $overlay = $("#overlay").dxOverlay({
+            container: $container,
+            shading: false,
+            position: {
+                of: $container
+            }
+        });
+
+        $overlay.dxOverlay("show");
+
+        const $wrapper = $container.find(toSelector(OVERLAY_WRAPPER_CLASS));
+        assert.strictEqual($wrapper.height(), $container.height(), "wrapper height is correct");
+        assert.strictEqual($wrapper.width(), $container.width(), "wrapper width is correct");
     });
 
     test("wrong position targeted container (B236074)", (assert) => {

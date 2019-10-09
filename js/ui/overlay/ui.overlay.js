@@ -456,6 +456,9 @@ var Overlay = Widget.inherit({
     _initOptions: function(options) {
         this._initTarget(options.target);
         var container = options.container === undefined ? this.option("container") : options.container;
+        if(!this.option("position").of) {
+            this.option("position", { of: container });
+        }
         this._initContainer(container);
         this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
@@ -1272,28 +1275,19 @@ var Overlay = Widget.inherit({
 
     _renderShading: function() {
         this._fixWrapperPosition();
-        if(this.option("shading")) {
-            this._renderShadingDimensions();
-        }
+        this._renderShadingDimensions();
         this._renderShadingPosition();
     },
 
     _renderShadingDimensions: function() {
-        var wrapperWidth, wrapperHeight;
-
-        if(this.option("shading")) {
-            var $container = this._getContainer();
-
-            wrapperWidth = this._isWindow($container) ? "100%" : $container.outerWidth(),
-            wrapperHeight = this._isWindow($container) ? "100%" : $container.outerHeight();
-        } else {
-            wrapperWidth = "";
-            wrapperHeight = "";
+        var $container = this._getContainer();
+        if(this._isWindow($container)) {
+            return;
         }
 
         this._$wrapper.css({
-            width: wrapperWidth,
-            height: wrapperHeight
+            width: $container.outerWidth(),
+            height: $container.outerHeight()
         });
     },
 
@@ -1301,13 +1295,9 @@ var Overlay = Widget.inherit({
         return !!$element && typeUtils.isWindow($element.get(0));
     },
 
-
     _renderShadingPosition: function() {
-        if(this.option("shading")) {
-            var $container = this._getContainer();
-
-            positionUtils.setup(this._$wrapper, { my: "top left", at: "top left", of: $container });
-        }
+        var $container = this._getContainer();
+        positionUtils.setup(this._$wrapper, { my: "top left", at: "top left", of: $container });
     },
 
     _getContainer: function() {
