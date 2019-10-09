@@ -91,6 +91,7 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
         this.columns = this.columns || ["name", "phone", "room"];
 
         this.options = $.extend(true, {
+            autoNavigateToFocusedRow: true,
             keyboardNavigation: {
                 enabled: true
             },

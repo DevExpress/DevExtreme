@@ -18,6 +18,10 @@ exports.FocusController = core.ViewController.inherit((function() {
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
             this.component._optionsByReference.focusedRowKey = true;
+
+            if(!this.option("autoNavigateToFocusedRow")) {
+                this.option("skipFocusedRowNavigation", true);
+            }
         },
 
         optionChanged: function(args) {
@@ -32,6 +36,8 @@ exports.FocusController = core.ViewController.inherit((function() {
             } else if(args.name === "focusedRowEnabled") {
                 args.handled = true;
             } else if(args.name === "skipFocusedRowNavigation") {
+                args.handled = true;
+            } else if(args.name === "autoNavigateToFocusedRow") {
                 args.handled = true;
             } else {
                 this.callBase(args);
@@ -199,7 +205,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                         }).fail(result.reject);
                     }
                 })
-                    .always(() => that.option("skipFocusedRowNavigation", false))
+                    .always(() => that.option("skipFocusedRowNavigation", !this.option("autoNavigateToFocusedRow")))
                     .fail(result.reject);
             }
 
@@ -391,6 +397,13 @@ module.exports = {
              * @default false
              */
             focusedRowEnabled: false,
+
+            /**
+             * @name GridBaseOptions.autoNavigateToFocusedRow
+             * @type boolean
+             * @default true
+             */
+            autoNavigateToFocusedRow: true,
 
             /**
              * @name GridBaseOptions.focusedRowKey
