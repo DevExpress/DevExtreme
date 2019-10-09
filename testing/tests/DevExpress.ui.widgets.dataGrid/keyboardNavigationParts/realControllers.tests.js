@@ -26,6 +26,7 @@ QUnit.module("Real DataController and ColumnsController", {
         this.$element = () => $("#container");
 
         this.options = $.extend(true, {
+            autoNavigateToFocusedRow: true,
             keyboardNavigation: {
                 enabled: true
             },
