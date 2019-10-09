@@ -678,8 +678,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _isLabelNeedId: function(item) {
-        const editorsRequiringIdForLabel = ["dxRadioGroup", "dxCheckBox", "dxLookup", "dxSlider", "dxRangeSlider", "dxSwitch"]; // TODO: support "dxCalendar"
-
+        const editorsRequiringIdForLabel = ["dxRadioGroup", "dxCheckBox", "dxLookup", "dxSlider", "dxRangeSlider", "dxSwitch", "dxHtmlEditor"]; // TODO: support "dxCalendar"
         return inArray(item.editorType, editorsRequiringIdForLabel) !== -1;
     },
 

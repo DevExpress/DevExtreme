@@ -34,6 +34,26 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
+const supportedEditors = [
+    "dxAutocomplete",
+    "dxCalendar",
+    "dxCheckBox",
+    "dxColorBox",
+    "dxDateBox",
+    "dxDropDownBox",
+    "dxLookup",
+    "dxNumberBox",
+    "dxRadioGroup",
+    "dxRangeSlider",
+    "dxSelectBox",
+    "dxSlider",
+    "dxSwitch",
+    "dxTagBox",
+    "dxTextArea",
+    "dxTextBox",
+    "dxHtmlEditor"
+];
+
 const createTestObject = () => ({
     "ID": 1,
     "FirstName": "John",
@@ -2519,19 +2539,15 @@ QUnit.module("Accessibility", () => {
     });
 
     test("Check aria-labelledby attribute for ariaTarget and id attr for label (T813296)", (assert) => {
-        const editorTypes = ["dxTextBox", "dxAutocomplete", "dxCalendar", "dxCheckBox", "dxColorBox", "dxDateBox", "dxDropDownBox", "dxLookup", "dxNumberBox", "dxRadioGroup", "dxSlider", "dxRangeSlider", "dxSelectBox", "dxSwitch", "dxTagBox", "dxTextArea"];
-        let items = editorTypes.map((editorType, index) => { return { dataField: `test${index}`, editorType: editorType }; });
+        const items = supportedEditors.map((editorType, index) => ({ dataField: `test${index}`, editorType: editorType }));
+        const layoutManager = $("#container").dxLayoutManager({ items }).dxLayoutManager("instance");
+        const editorClassesRequiringIdForLabel = ["dx-radiogroup", "dx-checkbox", "dx-lookup", "dx-slider", "dx-rangeslider", "dx-switch", "dx-htmleditor"]; // TODO: support "dx-calendar"
 
-        const $testContainer = $("#container").dxLayoutManager({
-            items: items
-        });
-
-        const editorClassesRequiringIdForLabel = ["dx-radiogroup", "dx-checkbox", "dx-lookup", "dx-slider", "dx-rangeslider", "dx-switch"]; // TODO: support "dx-calendar"
-        editorTypes.forEach((editorType) => {
+        items.forEach(({ dataField, editorType }) => {
+            const editor = layoutManager.getEditor(dataField);
+            const $ariaTarget = editor._getAriaTarget();
+            const $label = editor.$element().closest(`.${internals.FIELD_ITEM_CLASS}`).children().first();
             const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
-            const $editor = $testContainer.find(`.${editorClassName}`).eq(0);
-            const $ariaTarget = $editor[editorType]("instance")._getAriaTarget();
-            const $label = $editor.closest(`.${internals.FIELD_ITEM_CLASS}`).children().first();
 
             if(inArray(editorClassName, editorClassesRequiringIdForLabel) !== -1) {
                 assert.ok($ariaTarget.attr("aria-labelledby"), `aria-labeledby attribute ${editorClassName}`);
@@ -2739,26 +2755,6 @@ QUnit.module("Button item", () => {
 });
 
 QUnit.module("Supported editors", () => {
-    const supportedEditors = [
-        "dxAutocomplete",
-        "dxCalendar",
-        "dxCheckBox",
-        "dxColorBox",
-        "dxDateBox",
-        "dxDropDownBox",
-        "dxLookup",
-        "dxNumberBox",
-        "dxRadioGroup",
-        "dxRangeSlider",
-        "dxSelectBox",
-        "dxSlider",
-        "dxSwitch",
-        "dxTagBox",
-        "dxTextArea",
-        "dxTextBox",
-        "dxHtmlEditor"
-    ];
-
     const createFormWithSupportedEditors = commonEditorOptions =>
         $("#container").dxLayoutManager({
             items: supportedEditors.map(supportedEditor => ({
