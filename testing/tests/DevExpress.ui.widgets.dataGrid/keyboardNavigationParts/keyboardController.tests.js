@@ -169,11 +169,7 @@ QUnit.module("Keyboard navigation", {
             },
             $element: function() {
                 return $("#container").parent();
-            },
-
-            _suppressDeprecatedWarnings: commonUtils.noop,
-
-            _resumeDeprecatedWarnings: commonUtils.noop
+            }
         };
 
         that.getView = function(name) {

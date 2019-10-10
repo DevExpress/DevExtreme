@@ -12,6 +12,8 @@ import pointerEvents from "../../events/pointer";
 import { noop } from "../../core/utils/common";
 import { selectView } from "../shared/accessibility";
 import { isElementInCurrentGrid } from "./ui.grid_core.utils";
+import browser from "../../core/utils/browser";
+
 
 var ROWS_VIEW_CLASS = "rowsview",
     EDIT_FORM_CLASS = "edit-form",
@@ -132,16 +134,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 needUpdateFocus = false,
                 isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
                 clickSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`,
-                $focusedElement;
+                $focusedElement = $(":focus"),
+                isFocusedElementCorrect = !$focusedElement.length || $focusedElement.closest($element).length || (browser.msie && $focusedElement.is("body"));
 
             eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickAction);
             eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.up, "dxDataGridKeyboardNavigation"), clickSelector, clickAction);
 
             that._initKeyDownProcessor(that, $element, that._keyDownHandler);
 
-            $focusedElement = $(":focus");
-
-            if(isFocusedViewCorrect && (!$focusedElement.length || $focusedElement.closest($element).length)) {
+            if(isFocusedViewCorrect && isFocusedElementCorrect) {
                 needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
                 needUpdateFocus && that._updateFocus(true);
             }

@@ -1,12 +1,13 @@
 var Config = require("./config"),
-    domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
+    optionManager = require("./option_manager").OptionManager,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
-    coreDataUtils = require("./utils/data"),
     commonUtils = require("./utils/common"),
+    dataUtils = require("./utils/data"),
     typeUtils = require("./utils/type"),
+    objectUtils = require("./utils/object"),
     deferredUtils = require("../core/utils/deferred"),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
@@ -16,9 +17,6 @@ var Config = require("./config"),
     devices = require("./devices"),
     isFunction = typeUtils.isFunction,
     noop = commonUtils.noop;
-
-var cachedGetters = {};
-var cachedSetters = {};
 
 /**
 * @name Component
@@ -65,6 +63,14 @@ class PostponedOperations {
         this._postponedOperations = {};
     }
 }
+
+const normalizeOptions = (options, value) => {
+    if(typeof options !== "string") return options;
+
+    const result = {};
+    result[options] = value;
+    return result;
+};
 
 var Component = Class.inherit({
 
@@ -120,30 +126,24 @@ var Component = Class.inherit({
         };
     },
 
-    _setDefaultOptions: function() {
-        this._options = this._getDefaultOptions();
-    },
-
     _defaultOptionsRules: function() {
         return [];
     },
 
-    _setOptionsByDevice: function(customRules) {
+    _getOptionByRules: function(customRules) {
         var rules = this._defaultOptionsRules();
 
         if(Array.isArray(customRules)) {
             rules = rules.concat(customRules);
         }
 
-        var rulesOptions = this._convertRulesToOptions(rules);
+        return this._convertRulesToOptions(rules);
+    },
 
-        extend(true, this._options, rulesOptions);
+    _setOptionsByDevice: function(customRules) {
+        var rulesOptions = this._getOptionByRules(customRules);
 
-        for(var fieldName in this._optionsByReference) {
-            if(Object.prototype.hasOwnProperty.call(rulesOptions, fieldName)) {
-                this._options[fieldName] = rulesOptions[fieldName];
-            }
-        }
+        this._setOptionByStealth(rulesOptions);
     },
 
     _convertRulesToOptions: function(rules) {
@@ -179,7 +179,7 @@ var Component = Class.inherit({
     _isInitialOptionValue: function(name) {
         var optionValue = this.option(name),
             initialOptionValue = this.initialOption(name),
-            isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
+            isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : dataUtils.equalByComplexValue(optionValue, initialOptionValue);
 
         return isInitialOption;
     },
@@ -205,7 +205,6 @@ var Component = Class.inherit({
             this.setEventsStrategy(options.eventsStrategy);
         }
         this._options = {};
-
         this._updateLockCount = 0;
 
         this._optionChangedCallbacks = options._optionChangedCallbacks || Callbacks();
@@ -215,15 +214,32 @@ var Component = Class.inherit({
         this.beginUpdate();
 
         try {
-            this._suppressDeprecatedWarnings();
             this._setOptionsByReference();
             this._setDeprecatedOptions();
-            this._setDefaultOptions();
+            this._options = this._getDefaultOptions();
+            this._optionManager = new optionManager(
+                this._options,
+                this._getOptionsByReference(),
+                this._deprecatedOptions);
+
+            this._optionManager.onChanging((name, previousValue, value) => {
+                if(this._initialized) {
+                    this._optionChanging(name, previousValue, value);
+                }
+            });
+
+            this._optionManager.onDeprecated((option, info) => {
+                this._logDeprecatedWarning(option, info);
+            });
+
+            this._optionManager.onChanged((name, value, previousValue) => {
+                this._notifyOptionChanged(name, value, previousValue);
+            });
+
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
             }
             this._setOptionsByDevice(options.defaultOptionsRules);
-            this._resumeDeprecatedWarnings();
 
             this._initOptions(options);
         } finally {
@@ -235,33 +251,17 @@ var Component = Class.inherit({
         this.option(options);
     },
 
-    _optionValuesEqual: function(name, oldValue, newValue) {
-        oldValue = coreDataUtils.toComparable(oldValue, true);
-        newValue = coreDataUtils.toComparable(newValue, true);
-
-        if(oldValue && newValue && typeUtils.isRenderer(oldValue) && typeUtils.isRenderer(newValue)) {
-            return newValue.is(oldValue);
-        }
-
-        var oldValueIsNaN = oldValue !== oldValue,
-            newValueIsNaN = newValue !== newValue;
-        if(oldValueIsNaN && newValueIsNaN) {
-            return true;
-        }
-
-        if(oldValue === null || typeof oldValue !== "object" || domAdapter.isElementNode(oldValue)) {
-            return oldValue === newValue;
-        }
-
-        return false;
-    },
-
     _init: function() {
         this._createOptionChangedAction();
 
         this.on("disposing", function(args) {
             this._disposingCallbacks.fireWith(this, [args]);
         }.bind(this));
+    },
+
+    _logDeprecatedWarning(option, info) {
+        var message = info.message || ("Use the '" + info.alias + "' option instead");
+        errors.log("W0001", this.NAME, option, info.since, message);
     },
 
     _createOptionChangedAction: function() {
@@ -290,6 +290,7 @@ var Component = Class.inherit({
         this._createDisposingAction();
         this._disposingAction();
         this._disposeEvents();
+        this._optionManager.dispose();
         this._disposed = true;
     },
 
@@ -333,29 +334,6 @@ var Component = Class.inherit({
         }
     },
 
-    _logWarningIfDeprecated: function(option) {
-        var info = this._deprecatedOptions[option];
-        if(info && !this._deprecatedOptionsSuppressed) {
-            this._logDeprecatedWarning(option, info);
-        }
-    },
-
-    _logDeprecatedWarningCount: 0,
-
-    _logDeprecatedWarning: function(option, info) {
-        var message = info.message || ("Use the '" + info.alias + "' option instead");
-        errors.log("W0001", this.NAME, option, info.since, message);
-        ++this._logDeprecatedWarningCount;
-    },
-
-    _suppressDeprecatedWarnings: function() {
-        this._deprecatedOptionsSuppressed = true;
-    },
-
-    _resumeDeprecatedWarnings: function() {
-        this._deprecatedOptionsSuppressed = false;
-    },
-
     _optionChanging: noop,
 
     _notifyOptionChanged: function(option, value, previousValue) {
@@ -383,21 +361,22 @@ var Component = Class.inherit({
     },
 
     initialOption: function(optionName) {
-        var currentOptions,
-            currentInitialized = this._initialized;
         if(!this._initialOptions) {
-            currentOptions = this._options;
-            this._options = {};
-            this._initialized = false;
-            this._setDefaultOptions();
-            this._setOptionsByDevice(currentOptions.defaultOptionsRules);
-
-            this._initialOptions = this._options;
-            this._options = currentOptions;
-            this._initialized = currentInitialized;
+            this._initialOptions = this._getDefaultOptions();
+            const rulesOptions = this._getOptionByRules(this._getOptionByStealth("defaultOptionsRules"));
+            this._optionManager.setValueByReference(this._initialOptions, rulesOptions);
         }
 
-        return this._initialOptions[optionName];
+        optionName = optionName.replace(/\[/g, ".").replace(/\]/g, "");
+        const fullPath = optionName.split(".");
+        let value;
+        fullPath.forEach((path) => {
+            value = value ? value[path] : this._initialOptions[path];
+        });
+
+        value = typeUtils.isObject(value) ? objectUtils.clone(value) : value;
+
+        return value;
     },
 
     _defaultActionConfig: function() {
@@ -468,9 +447,7 @@ var Component = Class.inherit({
                     beforeExecute && beforeExecute.apply(that, arguments);
                     that.fireEvent(eventName, args.args);
                 };
-                that._suppressDeprecatedWarnings();
                 action = that._createAction(actionFunc, config);
-                that._resumeDeprecatedWarnings();
             }
 
             if(Config().wrapActionsBeforeExecute) {
@@ -488,6 +465,14 @@ var Component = Class.inherit({
         }
 
         return result;
+    },
+
+    _getOptionByStealth: function(name) {
+        return this._optionManager.getValueSilently(name);
+    },
+
+    _setOptionByStealth: function(options, value) {
+        this._optionManager.setValueSilently(normalizeOptions(options, value));
     },
 
     _getEventName: function(actionName) {
@@ -508,6 +493,16 @@ var Component = Class.inherit({
         this._cancelOptionChange = name;
         this.option(name, value);
         this._cancelOptionChange = false;
+    },
+
+    _getOptionValue: function(name, context) {
+        var value = this.option(name);
+
+        if(isFunction(value)) {
+            return value.bind(context)();
+        }
+
+        return value;
     },
 
     /**
@@ -532,173 +527,37 @@ var Component = Class.inherit({
      * @publicName option(options)
      * @param1 options:object
      */
-    option: (function() {
-        var normalizeOptionName = function(that, name) {
-            var deprecate;
-            if(name) {
-                if(!that._cachedDeprecateNames) {
-                    that._cachedDeprecateNames = [];
-                    for(var optionName in that._deprecatedOptions) {
-                        that._cachedDeprecateNames.push(optionName);
-                    }
-                }
-                for(var i = 0; i < that._cachedDeprecateNames.length; i++) {
-                    if(that._cachedDeprecateNames[i] === name) {
-                        deprecate = that._deprecatedOptions[name];
-                        break;
-                    }
-                }
-                if(deprecate) {
-                    that._logWarningIfDeprecated(name);
-                    var alias = deprecate.alias;
-
-                    if(alias) {
-                        name = alias;
-                    }
-                }
-            }
-
-            return name;
-        };
-
-        var getPreviousName = function(fullName) {
-            var splitNames = fullName.split('.');
-            splitNames.pop();
-            return splitNames.join('.');
-        };
-
-        var getFieldName = function(fullName) {
-            var splitNames = fullName.split('.');
-            return splitNames[splitNames.length - 1];
-        };
-
-        var getOptionValue = function(options, name, unwrapObservables) {
-            var getter = cachedGetters[name];
-            if(!getter) {
-                getter = cachedGetters[name] = coreDataUtils.compileGetter(name);
-            }
-
-            return getter(options, { functionsAsIs: true, unwrapObservables: unwrapObservables });
-        };
-
-        var clearOptionsField = function(options, name) {
-            delete options[name];
-
-            var previousFieldName = getPreviousName(name),
-                fieldName = getFieldName(name),
-                fieldObject = previousFieldName ? getOptionValue(options, previousFieldName, false) : options;
-
-            if(fieldObject) {
-                delete fieldObject[fieldName];
-            }
-        };
-
-        var setOptionsField = function(options, fullName, value) {
-            var fieldName = "",
-                fieldObject;
-
-            do {
-                if(fieldName) {
-                    fieldName = "." + fieldName;
-                }
-
-                fieldName = getFieldName(fullName) + fieldName;
-                fullName = getPreviousName(fullName);
-                fieldObject = fullName ? getOptionValue(options, fullName, false) : options;
-
-            } while(!fieldObject);
-
-            fieldObject[fieldName] = value;
-        };
-
-        var normalizeOptionValue = function(that, options, name, value) {
-            if(name) {
-                var alias = normalizeOptionName(that, name);
-
-                if(alias && alias !== name) {
-                    setOptionsField(options, alias, value);
-                    clearOptionsField(options, name);
-                }
-            }
-        };
-
-        var prepareOption = function(that, options, name, value) {
-            if(typeUtils.isPlainObject(value)) {
-                for(var valueName in value) {
-                    prepareOption(that, options, name + "." + valueName, value[valueName]);
-                }
-            }
-
-            normalizeOptionValue(that, options, name, value);
-        };
-
-        var setOptionValue = function(that, name, value) {
-            if(!cachedSetters[name]) {
-                cachedSetters[name] = coreDataUtils.compileSetter(name);
-            }
-
-            var path = name.split(/[.[]/);
-
-            cachedSetters[name](that._options, value, {
-                functionsAsIs: true,
-                merge: !that._getOptionsByReference()[name],
-                unwrapObservables: path.length > 1 && !!that._getOptionsByReference()[path[0]]
-            });
-        };
-
-        var setOption = function(that, name, value) {
-            var previousValue = getOptionValue(that._options, name, false);
-
-            if(that._optionValuesEqual(name, previousValue, value)) {
-                return;
-            }
-
-            if(that._initialized) {
-                that._optionChanging(name, previousValue, value);
-            }
-
-            setOptionValue(that, name, value);
-            that._notifyOptionChanged(name, value, previousValue);
-        };
-
-        return function(options, value) {
-            var that = this,
-                name = options;
-
-            if(arguments.length < 2 && typeUtils.type(name) !== "object") {
-                name = normalizeOptionName(that, name);
-                return getOptionValue(that._options, name);
-            }
-
-            if(typeof name === "string") {
-                options = {};
-                options[name] = value;
-            }
-
-            that.beginUpdate();
-
-            try {
-                var optionName;
-                for(optionName in options) {
-                    prepareOption(that, options, optionName, options[optionName]);
-                }
-                for(optionName in options) {
-                    setOption(that, optionName, options[optionName]);
-                }
-            } finally {
-                that.endUpdate();
-            }
-        };
-    })(),
-
-    _getOptionValue: function(name, context) {
-        var value = this.option(name);
-
-        if(isFunction(value)) {
-            return value.bind(context)();
+    option: function(options, value) {
+        if(arguments.length < 2 && typeUtils.type(options) !== "object") {
+            return this._optionManager.getValue(options);
         }
 
-        return value;
+        this.beginUpdate();
+
+        try {
+            this._optionManager.setValue(normalizeOptions(options, value));
+        } finally {
+            this.endUpdate();
+        }
+    },
+
+    /**
+     * @name componentmethods.resetOption
+     * @publicName resetOption()
+     */
+    /**
+     * @name componentmethods.resetOption
+     * @publicName resetOption(optionName)
+     * @param1 optionName:string
+     */
+    resetOption: function(name) {
+        if(!name) {
+            return;
+        }
+        let defaultValue = this.initialOption(name);
+        this.beginUpdate();
+        this._optionManager.setValue(normalizeOptions(name, defaultValue), false);
+        this.endUpdate();
     }
 }).include(EventsMixin);
 

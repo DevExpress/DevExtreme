@@ -339,23 +339,23 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
     });
 
     test("Scheduler appointment tooltip should has right content when appointmentTooltipTemplate is used", function(assert) {
-        var tasks = getSampleData();
-        var data = new DataSource({
+        const tasks = getSampleData();
+        const data = new DataSource({
             store: tasks
         });
 
         const scheduler = createScheduler({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
-            appointmentTooltipTemplate: function() {
-                assert.deepEqual(arguments[0], tasks[1], "data is right");
+            appointmentTooltipTemplate: model => {
+                assert.deepEqual(model.appointmentData, tasks[1], "data is right");
                 return $("<div>").addClass("new-scheduler-tooltip-template");
             }
         });
 
         scheduler.appointments.click(1);
 
-        var $tooltip = $(".new-scheduler-tooltip-template");
+        const $tooltip = $(".new-scheduler-tooltip-template");
 
         assert.equal($tooltip.length, 1, "one tooltip with template was shown");
     });
@@ -867,8 +867,8 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
             currentDate: new Date(2015, 4, 24),
             currentView: "month",
             views: ["month"],
-            appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
-                assert.deepEqual(targetedAppointmentData, {
+            appointmentTooltipTemplate: model => {
+                assert.deepEqual(model.targetedAppointmentData, {
                     allDay: true,
                     endDate: new Date(2015, 4, 25, 11),
                     recurrenceRule: "FREQ=DAILY;COUNT=3",
@@ -892,8 +892,8 @@ module("Integration: Appointment tooltip", moduleConfig, () => {
             currentDate: new Date(2015, 4, 24),
             currentView: "month",
             views: ["month"],
-            appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
-                assert.deepEqual(targetedAppointmentData, {
+            appointmentTooltipTemplate: model => {
+                assert.deepEqual(model.targetedAppointmentData, {
                     startDate: new Date(2015, 4, 24, 9),
                     endDate: new Date(2015, 4, 24, 11),
                     text: "Task 1"
@@ -914,8 +914,8 @@ QUnit.module("Appointment tooltip template", moduleConfig, () => {
             currentDate: currentDate,
             currentView: "month",
             views: ["month"],
-            appointmentTooltipTemplate: appointmentData => {
-                assert.equal(dataSource.indexOf(appointmentData), 0, "appointment data contains in the data source");
+            appointmentTooltipTemplate: model => {
+                assert.equal(dataSource.indexOf(model.appointmentData), 0, "appointment data contains in the data source");
             }
         });
 
@@ -1152,9 +1152,9 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
     test("appointmentTooltipTemplate method should pass valid arguments", function(assert) {
         let templateCallCount = 0;
         const scheduler = createScheduler({
-            appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
+            appointmentTooltipTemplate: (model, index, contentElement) => {
                 assert.ok($(contentElement).hasClass("dx-list-item-content"), "Content element should be list item");
-                assert.equal(targetedAppointmentData.text, appointmentData.text, "targetedAppointmentData should be not empty");
+                assert.equal(model.targetedAppointmentData.text, model.appointmentData.text, "targetedAppointmentData should be not empty");
                 assert.equal(index, templateCallCount, "Index should be correct pass in template callback");
 
                 templateCallCount++;
@@ -1320,10 +1320,10 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
             views: ["month"],
             currentView: "month",
             currentDate: new Date(2017, 4, 25),
-            appointmentTooltipTemplate: (appointmentData, container, targetedAppointmentData, itemIndex) => {
-                const div = $("<div>").attr("id", `button-${itemIndex}`);
+            appointmentTooltipTemplate: (model, index, container) => {
+                const div = $("<div>").attr("id", `button-${index}`);
                 $(container).append(div);
-                $(`#button-${itemIndex}`).dxButton({ text: `test-${itemIndex}` });
+                $(`#button-${index}`).dxButton({ text: `test-${index}` });
             },
             startDayHour: 9,
             height: 600

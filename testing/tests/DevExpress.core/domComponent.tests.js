@@ -37,12 +37,14 @@ QUnit.module("default", {
                 };
             },
 
-            _setDefaultOptions() {
-                this.callBase();
-                this.option({
-                    opt1: "default",
-                    opt2: "default"
-                });
+            _getDefaultOptions() {
+                return $.extend(
+                    this.callBase(),
+                    {
+                        opt1: "default",
+                        opt2: "default"
+                    }
+                );
             },
 
             _optionChanged(name, value, prevValue) {
@@ -234,8 +236,6 @@ QUnit.module("default", {
             // "beginUpdate", // optionByDevice options applying
             // "endUpdate",
 
-            "beginUpdate", // user options applying
-            "endUpdate",
             "endUpdate",
             "_init",
             "_render",

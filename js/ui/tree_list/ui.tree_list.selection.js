@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import treeListCore from './ui.tree_list.core';
-import commonUtils from '../../core/utils/common';
+import { equalByComplexValue } from '../../core/utils/data';
 import { noop } from '../../core/utils/common';
 import selectionModule from '../grid_core/ui.grid_core.selection';
 import errors from '../widget/ui.errors';
@@ -175,7 +175,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                             keys: value || []
                         }, !isDeselect);
 
-                    if(normalizedArgs && !commonUtils.equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
+                    if(normalizedArgs && !equalByComplexValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
                         that._isSelectionNormalizing = true;
                         return this.callBase(normalizedArgs.selectedRowKeys, false, false, false)
                             .always(function() {

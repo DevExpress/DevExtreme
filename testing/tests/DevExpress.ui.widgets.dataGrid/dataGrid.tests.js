@@ -3878,6 +3878,59 @@ QUnit.test("Test skipFocusedRowNavigation option using focusedRowKey", function(
     assert.equal(count, 1, "skipFocusedRowNavigation invokes count");
 });
 
+QUnit.test("Test 'autoNavigateToFocusedRow' option", function(assert) {
+    // arrange
+    var data = [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 },
+            { name: "Ben", phone: "454333", room: 4 },
+            { name: "Sean", phone: "454555", room: 3 },
+            { name: "Smith", phone: "454666", room: 2 },
+            { name: "Zeb", phone: "454777", room: 1 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 80,
+            dataSource: data,
+            keyExpr: "name",
+            autoNavigateToFocusedRow: false,
+            focusedRowEnabled: true,
+            focusedRowKey: "Smith",
+            paging: {
+                pageSize: 2
+            }
+        }).dxDataGrid("instance");
+
+    // act, assert - focusedRowKey
+    dataGrid.option("focusedRowKey", "Smith");
+    this.clock.tick();
+    assert.equal(dataGrid.pageIndex(), 0, "Page index not changed");
+    assert.equal(dataGrid.option("focusedRowKey"), "Smith", "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+
+    // act, assert - paging
+    dataGrid.pageIndex(1);
+    this.clock.tick();
+    assert.equal(dataGrid.pageIndex(), 1, "Page index");
+    assert.equal(dataGrid.option("focusedRowKey"), "Smith", "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+
+    // act, assert - sorting
+    dataGrid.columnOption("phone", { sortOrder: "desc" });
+    this.clock.tick();
+    assert.equal(dataGrid.pageIndex(), 1, "Page index");
+    assert.equal(dataGrid.option("focusedRowKey"), "Smith", "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+
+    // arrange
+    dataGrid.clearSorting();
+    // act, assert - filtering
+    dataGrid.filter(["phone", "startsWith", "454"]);
+    this.clock.tick();
+    assert.equal(dataGrid.pageIndex(), 0, "Page index changed");
+    assert.equal(dataGrid.option("focusedRowKey"), "Smith", "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+});
+
 QUnit.test("Focused row should be visible if it's on the first page and page height larger than container one (T756177)", function(assert) {
     // arrange
     var data = [
@@ -3945,6 +3998,41 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
     assert.equal(focusedRowChangedArgs.length, 1, "focusedRowChanged event is called once");
     assert.ok($(focusedRowChangedArgs[0].rowElement).hasClass("dx-row-focused"), "focusedRowChanged event has correct rowElement");
     assert.equal(focusedRowChangedArgs[0].rowIndex, 149, "focusedRowChanged event has correct rowElement");
+});
+
+QUnit.test("DataGrid - navigateToRow method should work if rowRenderingMode is 'virtual' and paging is disabled (T820359)", function(assert) {
+    // arrange
+    this.clock.restore();
+
+    var data = [],
+        navigateRowKey = 25,
+        done = assert.async();
+
+    for(var i = 0; i < 30; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        keyExpr: "id",
+        dataSource: data,
+        paging: {
+            enabled: false
+        },
+        scrolling: {
+            rowRenderingMode: "virtual",
+        },
+        loadingTimeout: undefined
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.navigateToRow(navigateRowKey);
+
+    // assert
+    setTimeout(() => {
+        assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, "navigated row is visible");
+        done();
+    });
 });
 
 // T803784

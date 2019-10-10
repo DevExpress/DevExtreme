@@ -2,7 +2,6 @@ import config from "../config";
 import Guid from "../guid";
 import { when, Deferred } from "../utils/deferred";
 import { each } from "./iterator";
-import { toComparable } from "./data";
 import { isDefined, isFunction, isString, isObject } from "./type";
 
 const ensureDefined = function(value, defaultValue) {
@@ -200,39 +199,6 @@ const denormalizeKey = function(key) {
     return key;
 };
 
-const isArraysEqualByValue = function(array1, array2, deep) {
-    if(array1.length !== array2.length) {
-        return false;
-    }
-
-    for(let i = 0; i < array1.length; i++) {
-        if(!equalByValue(array1[i], array2[i], deep + 1)) {
-            return false;
-        }
-    }
-
-    return true;
-};
-
-const isObjectsEqualByValue = function(object1, object2, deep) {
-    for(const propertyName in object1) {
-        if(
-            Object.prototype.hasOwnProperty.call(object1, propertyName) &&
-            !equalByValue(object1[propertyName], object2[propertyName], deep + 1)
-        ) {
-            return false;
-        }
-    }
-
-    for(const propertyName in object2) {
-        if(!(propertyName in object1)) {
-            return false;
-        }
-    }
-
-    return true;
-};
-
 const pairToObject = function(raw, preventRound) {
     const pair = splitPair(raw);
     let h = preventRound ? parseFloat(pair && pair[0]) : parseInt(pair && pair[0], 10);
@@ -246,27 +212,6 @@ const pairToObject = function(raw, preventRound) {
     }
 
     return { h, v };
-};
-
-const maxEqualityDeep = 3;
-
-const equalByValue = function(object1, object2, deep) {
-    deep = deep || 0;
-
-    object1 = toComparable(object1, true);
-    object2 = toComparable(object2, true);
-
-    if(object1 === object2 || deep >= maxEqualityDeep) {
-        return true;
-    }
-
-    if(isObject(object1) && isObject(object2)) {
-        return isObjectsEqualByValue(object1, object2, deep);
-    } else if(Array.isArray(object1) && Array.isArray(object2)) {
-        return isArraysEqualByValue(object1, object2, deep);
-    }
-
-    return false;
 };
 
 const getKeyHash = function(key) {
@@ -332,7 +277,6 @@ exports.findBestMatches = findBestMatches;
 
 exports.normalizeKey = normalizeKey;
 exports.denormalizeKey = denormalizeKey;
-exports.equalByValue = equalByValue;
 exports.getKeyHash = getKeyHash;
 
 exports.escapeRegExp = escapeRegExp;
