@@ -1,16 +1,29 @@
-import { equalByValue, getKeyHash } from "../../core/utils/common";
+import { getKeyHash } from "../../core/utils/common";
+import { equalByComplexValue } from "../../core/utils/data";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import stateStoringCore from "./ui.grid_core.state_storing_core";
 import { Deferred } from "../../core/utils/deferred";
+
+var getDataState = function(that) {
+    var pagerView = that.getView("pagerView"),
+        dataController = that.getController("data"),
+        state = {
+            allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined,
+            filterPanel: { filterEnabled: that.option("filterPanel.filterEnabled") },
+            filterValue: that.option("filterValue"),
+            focusedRowKey: that.option("focusedRowEnabled") ? that.option("focusedRowKey") : undefined
+        };
+
+    return extend(state, dataController.getUserState());
+};
 
 // TODO move processLoadState to target modules (data, columns, pagerView)
 var processLoadState = function(that) {
     var columnsController = that.getController("columns"),
         selectionController = that.getController("selection"),
         exportController = that.getController("export"),
-        dataController = that.getController("data"),
-        pagerView = that.getView("pagerView");
+        dataController = that.getController("data");
 
     if(columnsController) {
         columnsController.columnsChanged.add(function() {
@@ -31,13 +44,9 @@ var processLoadState = function(that) {
 
     if(dataController) {
         that._initialPageSize = that.option("paging.pageSize");
+
         dataController.changed.add(function() {
-            var state = extend({
-                allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined,
-                filterPanel: { filterEnabled: that.option("filterPanel.filterEnabled") },
-                filterValue: that.option("filterValue"),
-                focusedRowKey: that.option("focusedRowEnabled") ? that.option("focusedRowKey") : undefined
-            }, dataController.getUserState());
+            var state = getDataState(that);
 
             that.updateState(state);
         });
@@ -147,9 +156,11 @@ module.exports = {
                 },
                 state: function(state) {
                     var result = this.callBase.apply(this, arguments);
+
                     if(state !== undefined) {
                         this.applyState(extend({}, state));
                     }
+
                     return result;
                 },
                 updateState: function(state) {
@@ -159,7 +170,7 @@ module.exports = {
                             oldStateHash = getKeyHash(oldState),
                             newStateHash = getKeyHash(newState);
 
-                        if(!equalByValue(oldStateHash, newStateHash)) {
+                        if(!equalByComplexValue(oldStateHash, newStateHash)) {
                             extend(this._state, state);
                             this.save();
                         }

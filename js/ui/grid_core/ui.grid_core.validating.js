@@ -2,7 +2,8 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import modules from "./ui.grid_core.modules";
 import { createObjectWithChanges, getIndexByKey } from "./ui.grid_core.utils";
-import { equalByValue, grep, deferUpdate } from "../../core/utils/common";
+import { grep, deferUpdate } from "../../core/utils/common";
+import { equalByComplexValue } from "../../core/utils/data";
 import { each } from "../../core/utils/iterator";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
@@ -252,7 +253,10 @@ const ValidatingController = modules.Controller.inherit((function() {
                         applyValidationResults: defaultValidationResult
                     },
                     dataGetter: function() {
-                        return createObjectWithChanges(editData.oldData, editData.data);
+                        return {
+                            data: createObjectWithChanges(editData.oldData, editData.data),
+                            column
+                        };
                     }
                 });
 
@@ -366,7 +370,7 @@ module.exports = {
                                 key = editData.key;
 
                             each(items, function(i, item) {
-                                if(equalByValue(key, isInsert ? item : dataController.keyOf(item))) {
+                                if(equalByComplexValue(key, isInsert ? item : dataController.keyOf(item))) {
                                     index = i;
                                     return false;
                                 }

@@ -806,7 +806,7 @@ module.exports = {
                         keyExpr = that._dataController.store() && that._dataController.store().key();
 
                     keyExpr && rows.some(function(row) {
-                        if(row.rowType === "data" && row.key === undefined && !("key" in row.data && "items" in row.data)) {
+                        if(row.rowType === "data" && row.key === undefined) {
                             that._dataController.fireError("E1046", keyExpr);
                             return true;
                         }

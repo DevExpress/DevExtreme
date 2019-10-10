@@ -3932,20 +3932,6 @@ QUnit.test('Enable borders at runtime', function(assert) {
     assert.ok(tableElement.hasClass("dx-pivotgrid-border"));
 });
 
-QUnit.test("Set dataSource instance two times", function(assert) {
-    // arrange
-    var dataSourceInstance = new PivotGridDataSource({}),
-        pivot = createPivotGrid({
-            dataSource: dataSourceInstance
-        }, assert);
-
-    sinon.spy(dataSourceInstance, "load");
-    // act
-    pivot.option("dataSource", dataSourceInstance);
-    // assert
-    assert.ok(!dataSourceInstance.load.called);
-});
-
 QUnit.test("DataController - scrollChanged event", function(assert) {
     var widget = createPivotGrid({
             dataSource: this.testOptions.dataSource,

@@ -8,13 +8,16 @@ import "common.css!";
 
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
+const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = "dx-dropdownbutton-popup-wrapper";
 const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
 
 QUnit.testStart(() => {
     const markup = '' +
-        '<div id="dropDownButton"></div>' +
-        '<div id="dropDownButton2"></div>';
+        '<div id="container">' +
+            '<div id="dropDownButton"></div>' +
+            '<div id="dropDownButton2"></div>' +
+        '</div>';
     $("#qunit-fixture").html(markup);
 });
 
@@ -78,17 +81,16 @@ QUnit.module("markup", {
         assert.strictEqual($listItemText, "", "item text is empty");
     });
 
-    QUnit.test("width option should be transfered to buttonGroup", (assert) => {
+    QUnit.test("width option should change dropDownButton width", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             text: "Item 1",
             icon: "box",
             width: 235
         });
 
-        assert.strictEqual(getButtonGroup(dropDownButton).option("width"), 235, "width was successfully transfered");
-
+        assert.strictEqual(dropDownButton.option("width"), 235, "width is right");
         dropDownButton.option("width", 135);
-        assert.strictEqual(getButtonGroup(dropDownButton).option("width"), 135, "width was successfully changed");
+        assert.strictEqual(dropDownButton.option("width"), 135, "width was successfully changed");
     });
 
     QUnit.test("stylingMode option should be transfered to buttonGroup", (assert) => {
@@ -205,8 +207,9 @@ QUnit.module("popup integration", {
         this.popup = getPopup(this.instance);
     }
 }, () => {
-    QUnit.test("popup content should have special class", (assert) => {
-        assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
+    QUnit.test("popup should have special classes", (assert) => {
+        assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has a special class");
+        assert.ok($(this.popup._wrapper()).hasClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS), "popup wrapper has a special class");
     });
 
     QUnit.test("popup content should have special class when custom template is used", (assert) => {
@@ -221,6 +224,31 @@ QUnit.module("popup integration", {
         assert.ok($popupContent.hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
     });
 
+    QUnit.test("popup width shoud be equal to dropDownButton width", (assert) => {
+        const $dropDownButton = $("#dropDownButton").dxDropDownButton({
+            opened: true,
+            items: ["1", "2", "3"],
+            width: 500
+        });
+
+        const instance = $dropDownButton.dxDropDownButton("instance");
+        const $popupContent = $(getPopup(instance).content());
+        assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal on init");
+        assert.equal($popupContent.outerWidth(), 500, "width are equal on init");
+
+        instance.option("width", 700);
+        assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal after option change");
+        assert.equal($popupContent.outerWidth(), 700, "width are equal after option change");
+
+        instance.option("width", "90%");
+        $("#container").get(0).style.width = "900px";
+        instance.option("opened", false);
+        instance.option("opened", true);
+        assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal after option change");
+        assert.equal($popupContent.outerWidth(), 810, "width are equal after option change");
+
+    });
+
     QUnit.test("popup should have correct options after rendering", (assert) => {
         const options = {
             deferRendering: this.instance.option("deferRendering"),
@@ -231,7 +259,6 @@ QUnit.module("popup integration", {
                 show: { type: "fade", duration: 0, from: 0, to: 1 },
                 hide: { type: "fade", duration: 400, from: 1, to: 0 }
             },
-            width: "auto",
             height: "auto",
             shading: false,
             position: {

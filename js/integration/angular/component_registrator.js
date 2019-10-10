@@ -163,7 +163,7 @@ let ComponentBuilder = Class.inherit({
                 this._component.option(optionPath, newValue);
                 updateWatcher();
 
-                if(this._component._optionValuesEqual(optionPath, oldValue, newValue) && this._ngLocker.locked(optionPath)) {
+                if(dataUtils.equals(oldValue, newValue) && this._ngLocker.locked(optionPath)) {
                     this._ngLocker.release(optionPath);
                 }
             };

@@ -11,20 +11,27 @@ fx.off = true;
 QUnit.testStart(function() {
     let markup =
         `<div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-            <div id="item1" class="draggable" style="width: 300px; height: 30px; background: yellow;">item1</div>
-            <div id="item2" class="draggable" style="width: 300px; height: 30px; background: red;">item2</div>
-            <div id="item3" class="draggable" style="width: 300px; height: 30px; background: blue;">item3</div>
+            <div id="item1" class="draggable" style="height: 30px; background: yellow;">item1</div>
+            <div id="item2" class="draggable" style="height: 30px; background: red;">item2</div>
+            <div id="item3" class="draggable" style="height: 30px; background: blue;">item3</div>
         </div>
         <div id="items2" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-            <div id="item4" class="draggable" style="width: 300px; height: 30px; background: yellow;">item4</div>
-            <div id="item5" class="draggable" style="width: 300px; height: 30px; background: red;">item5</div>
-            <div id="item6" class="draggable" style="width: 300px; height: 30px; background: blue;">item6</div>
+            <div id="item4" class="draggable" style="height: 30px; background: yellow;">item4</div>
+            <div id="item5" class="draggable" style="height: 30px; background: red;">item5</div>
+            <div id="item6" class="draggable" style="height: 30px; background: blue;">item6</div>
         </div>
         <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
         <div id="itemsHorizontal" style="width: 250px; height: 300px;">
             <div style="width: 30px; height: 300px; float: left;">item1</div>
             <div style="width: 30px; height: 300px; float: left;">item2</div>
             <div style="width: 30px; height: 300px; float: left;">item3</div>
+        </div>
+        <div id="itemsWithContentTemplate" style="width: 300px; height: 250px; position: relative; background: grey;">
+            <div data-options="dxTemplate:{ name:'content' }">
+                <div id="item11" class="draggable" style="height: 30px; background: yellow;">item1</div>
+                <div id="item12" class="draggable" style="height: 30px; background: red;">item2</div>
+                <div id="item13" class="draggable" style="height: 30px; background: blue;">item3</div>
+            </div>
         </div>
         `;
 
@@ -85,7 +92,7 @@ QUnit.test("Drag template - check args", function(assert) {
 
     this.createSortable({
         filter: ".draggable",
-        template: dragTemplate
+        dragTemplate: dragTemplate
     });
 
     items = this.$element.children();
@@ -95,11 +102,30 @@ QUnit.test("Drag template - check args", function(assert) {
 
     // assert
     assert.strictEqual(dragTemplate.callCount, 1, "drag template is called");
-    assert.deepEqual($(dragTemplate.getCall(0).args[0].itemElement).get(0), items.get(0), "first arg");
-    assert.strictEqual(dragTemplate.getCall(0).args[1], 0, "second arg");
-    assert.deepEqual($(dragTemplate.getCall(0).args[2]).get(0), $("body").get(0), "third arg");
+    assert.strictEqual($(dragTemplate.getCall(0).args[0].itemElement).get(0), items.get(0), "itemElement arg");
+    assert.strictEqual(dragTemplate.getCall(0).args[0].fromIndex, 0, "fromIndex arg");
+    assert.strictEqual($(dragTemplate.getCall(0).args[1]).get(0), $("body").get(0), "second arg");
 });
 
+QUnit.test("Default drag template", function(assert) {
+    // arrange
+    this.createSortable({
+    });
+
+    var $items = this.$element.children();
+
+    // act
+    pointerMock($items.eq(0)).start().down().move(10, 0);
+
+    // assert
+    var $draggingElement = $(".dx-sortable-dragging");
+    assert.ok($draggingElement.hasClass("dx-sortable-clone"), "clone class");
+    assert.strictEqual($draggingElement.text(), "item1", "text is correct");
+    assert.strictEqual($draggingElement.outerWidth(), $items.eq(0).outerWidth(), "width is correct");
+    assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), "height is correct");
+    assert.strictEqual($items.get(0).style.width, "", "width style does not exist in item");
+    assert.strictEqual($draggingElement.get(0).style.width, "300px", "width style exists in dragging item");
+});
 
 QUnit.module("allowReordering", moduleConfig);
 
@@ -187,6 +213,37 @@ QUnit.test("allowReordering = false when allowDropInsideItem is true", function(
     assert.strictEqual($(".dx-sortable-placeholder.dx-sortable-placeholder-inside").length, 1, "placeholder exists");
 });
 
+QUnit.test("Move to root if allowReordering is false and allowDropInsideItem is true", function(assert) {
+    // arrange
+    let onDragChangeSpy = sinon.spy();
+
+    this.createSortable({
+        allowReordering: false,
+        allowDropInsideItem: true,
+        onDragChange: onDragChangeSpy
+    });
+
+    // act
+    let pointer = pointerMock(this.$element.children().eq(1)).start().down(15, 45).move(0, -30);
+
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 1, "onDragChange event is not called");
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].dropInsideItem, true, "onDragChange dropInsideItem arg is true");
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].fromIndex, 1, "onDragChange from arg");
+    assert.strictEqual(onDragChangeSpy.getCall(0).args[0].toIndex, 0, "onDragChange toIndex arg");
+    assert.strictEqual($(".dx-sortable-placeholder").length, 1, "inside placeholder exists");
+
+    // act
+    pointer.move(0, -10);
+
+    // assert
+    assert.strictEqual(onDragChangeSpy.callCount, 2, "onDragChange event is called");
+    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].dropInsideItem, false, "onDragChange dropInsideItem arg is false");
+    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].fromIndex, 1, "onDragChange from arg");
+    assert.strictEqual(onDragChangeSpy.getCall(1).args[0].toIndex, 0, "onDragChange toIndex arg");
+    assert.strictEqual($(".dx-sortable-placeholder:not(.dx-sortable-placeholder-inside)").length, 1, "placeholder exists");
+});
+
 QUnit.test("option changing", function(assert) {
     // arrange
     var sortable = this.createSortable({
@@ -228,6 +285,30 @@ QUnit.test("Source item if filter is not defined", function(assert) {
 
     // assert
     $items = this.$element.children();
+    let $source = $items.eq(0);
+    assert.strictEqual($items.length, 3, "item count");
+    assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
+});
+
+QUnit.test("Source item if content template is defined", function(assert) {
+    // arrange
+    this.$element = $("#itemsWithContentTemplate");
+
+    this.createSortable({
+        dropFeedbackMode: "push"
+    });
+
+    let $items = this.$element.children().children();
+    let $dragItemElement = $items.eq(0);
+
+    // assert
+    assert.strictEqual($items.length, 3, "item count");
+
+    // act
+    pointerMock($dragItemElement).start().down().move(10, 0);
+
+    // assert
+    $items = this.$element.children().children();
     let $source = $items.eq(0);
     assert.strictEqual($items.length, 3, "item count");
     assert.ok($source.hasClass("dx-sortable-source-hidden"), "source item is hidden");
@@ -418,6 +499,39 @@ QUnit.test("Move items during dragging", function(assert) {
     assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
     assert.strictEqual(items[1].style.transform, "translate(0px, -30px)", "items 2 is moved up");
     assert.strictEqual(items[2].style.transform, "", "items 3 is not moved");
+});
+
+QUnit.test("Move items during dragging if content tempalte is defined", function(assert) {
+    // arrange
+    let items,
+        $item,
+        $dragItemElement;
+
+    this.$element = $("#itemsWithContentTemplate");
+
+    this.createSortable({
+        dropFeedbackMode: "push"
+    });
+
+    items = this.$element.children().children();
+    $dragItemElement = items.eq(0);
+
+    // assert
+    assert.strictEqual(items.length, 3, "item count");
+
+    // act
+    pointerMock($dragItemElement).start().down(15, 15).move(15, 1000);
+
+    // assert
+    items = this.$element.children().children();
+    $item = items.eq(0);
+    assert.strictEqual(items.length, 3, "item count");
+    assert.strictEqual($item.attr("id"), "item11", "first item is a source");
+    assert.ok($item.hasClass("dx-sortable-source-hidden"), "has source-hidden class");
+
+    assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
+    assert.strictEqual(items[1].style.transform, "translate(0px, -30px)", "items 2 is moved up");
+    assert.strictEqual(items[2].style.transform, "translate(0px, -30px)", "items 3 is moved up");
 });
 
 QUnit.test("Drop when dropFeedbackMode is push", function(assert) {
@@ -1280,14 +1394,14 @@ QUnit.test("Dragging item to another the sortable widget when allowReordering is
     assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
 });
 
-QUnit.test("Dragging item to another the sortable widget if template contains scrollable", function(assert) {
+QUnit.test("Dragging item to another the sortable widget if dragTemplate contains scrollable", function(assert) {
     // arrange
     let items1, items2;
 
     let sortable1 = this.createSortable({
         dropFeedbackMode: "push",
         filter: ".draggable",
-        template: function() {
+        dragTemplate: function() {
             return $("<div>").css({
                 width: 100,
                 height: 100

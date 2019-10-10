@@ -1,5 +1,4 @@
 import $ from "../../core/renderer";
-import { equalByValue } from "../../core/utils/common";
 import { isDefined, isFunction } from "../../core/utils/type";
 import { when } from "../../core/utils/deferred";
 import { getGroupInterval } from "../shared/filtering";
@@ -7,7 +6,7 @@ import { format } from "../../core/utils/string";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import { extendFromObject } from "../../core/utils/extend";
-import { toComparable } from "../../core/utils/data";
+import { toComparable, equalByComplexValue } from "../../core/utils/data";
 import LoadPanel from "../load_panel";
 import { normalizeSortingInfo } from "../../data/utils";
 import formatHelper from "../../format_helper";
@@ -158,7 +157,7 @@ module.exports = (function() {
                 for(var i = 0; i < items.length; i++) {
                     item = isDefined(keyName) ? items[i][keyName] : items[i];
 
-                    if(equalByValue(key, item)) {
+                    if(equalByComplexValue(key, item)) {
                         index = i;
                         break;
                     }
@@ -507,6 +506,14 @@ module.exports = (function() {
             }
 
             return lastColumnIndex;
+        },
+
+        isElementInCurrentGrid: function(controller, $element) {
+            if($element && $element.length) {
+                var $grid = $element.closest("." + controller.getWidgetContainerClass()).parent();
+                return $grid.is(controller.component.$element());
+            }
+            return false;
         }
     };
 })();

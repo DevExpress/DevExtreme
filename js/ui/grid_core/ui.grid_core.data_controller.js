@@ -4,7 +4,8 @@ import gridCoreUtils from "./ui.grid_core.utils";
 import ArrayStore from "../../data/array_store";
 import CustomStore from "../../data/custom_store";
 import errors from "../widget/ui.errors";
-import { noop, deferRender, equalByValue } from "../../core/utils/common";
+import { noop, deferRender } from "../../core/utils/common";
+import { equalByComplexValue } from "../../core/utils/data";
 import { each } from "../../core/utils/iterator";
 import typeUtils from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
@@ -685,7 +686,7 @@ module.exports = {
                     change.changeTypes = [];
 
                     var equalItems = function(item1, item2, strict) {
-                        var result = item1 && item2 && equalByValue(item1.key, item2.key);
+                        var result = item1 && item2 && equalByComplexValue(item1.key, item2.key);
                         if(result && strict) {
                             result = item1.rowType === item2.rowType && (item2.rowType !== "detail" || item1.isEditing === item2.isEditing);
                         }

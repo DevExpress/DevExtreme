@@ -8,7 +8,10 @@ QUnit.testStart(function() {
     }\
 </style>\
 <div>\
-    <div id="container"  class="dx-datagrid dx-widget" style = "width: 400px;"></div>\
+    <div id="container" class="dx-widget" style="width: 400px;">\
+        <div class="dx-datagrid">\
+        </div>\
+    </div>\
 </div>';
 
     $("#qunit-fixture").html(markup);
@@ -27,7 +30,7 @@ window.Hogan = hogan;
 import $ from "jquery";
 import browser from "core/utils/browser";
 import devices from "core/devices";
-import { setTemplateEngine } from "core/templates/template_engine_registry";
+import setTemplateEngine from "ui/set_template_engine";
 import nativePointerMock from "../../helpers/nativePointerMock.js";
 import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
 import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
@@ -58,6 +61,9 @@ setTemplateEngine("hogan");
 QUnit.module("Fixed columns", {
     beforeEach: function() {
         var that = this;
+
+        that.$element = () => $("#container");
+        that.gridContainer = $("#container > .dx-datagrid");
 
         that.items = [{ values: ["test4", "test1", "test3", "test5", "test2"], rowType: "data" },
             { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" }];
@@ -409,11 +415,10 @@ QUnit.test("RowsView - set column width for fixed table when has scroll", functi
 QUnit.testInActiveWindow("Not reset scrollTop by fixed table for rowsView", function(assert) {
     // arrange
     var that = this,
-        done = assert.async(),
-        $testElement = $("#container");
+        done = assert.async();
 
     that.setupDataGrid();
-    that.rowsView.render($testElement);
+    that.rowsView.render(that.gridContainer);
     that.rowsView.height(20);
 
     // act
@@ -900,19 +905,18 @@ QUnit.test("Update free space row for fixed table", function(assert) {
     // arrange
     var that = this,
         $table,
-        $fixTable,
-        $testElement = $("#container");
+        $fixTable;
 
     that.setupDataGrid();
-    that.rowsView.render($testElement);
+    that.rowsView.render(that.gridContainer);
     that.rowsView.height(50);
 
     // act
     that.rowsView.resize();
 
     // assert
-    $table = $testElement.find(".dx-datagrid-rowsview").children(":not(.dx-datagrid-content-fixed)").find("table");
-    $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    $table = that.gridContainer.find(".dx-datagrid-rowsview").children(":not(.dx-datagrid-content-fixed)").find("table");
+    $fixTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
 
     assert.ok($table.length, "has main table");
     assert.ok($table.find("tbody > tr").last().hasClass("dx-freespace-row"), "has free space row");
@@ -1240,8 +1244,7 @@ QUnit.test("Synchronize position fixed table with main table", function(assert) 
     var that = this,
         done = assert.async(),
         $fixTable,
-        scrollableInstance,
-        $testElement = $("#container");
+        scrollableInstance;
 
     that.items = [{ values: ["test4", "test1", "test3", "test5", "test2"], rowType: "data" },
         { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
@@ -1251,18 +1254,18 @@ QUnit.test("Synchronize position fixed table with main table", function(assert) 
         { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
 
     that.setupDataGrid();
-    that.rowsView.render($testElement);
+    that.rowsView.render(that.gridContainer);
     that.rowsView.height(50);
     that.rowsView.resize();
 
     scrollableInstance = that.rowsView.element().dxScrollable("instance");
-    $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    $fixTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
 
     // assert
     assert.ok(scrollableInstance, "has scrollable");
     assert.equal(that.rowsView.element().outerHeight(), 50, "height rowsView");
-    assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
-    assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
+    assert.equal(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
+    assert.ok(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
     assert.equal($fixTable.position().top, 0, "fixed table - position top");
 
     var scrollChanged = function() {
@@ -1284,8 +1287,7 @@ QUnit.test("Synchronize position fixed table with main table when scrolling mode
         done = assert.async(),
         $table,
         $fixTable,
-        scrollableInstance,
-        $testElement = $("#container");
+        scrollableInstance;
 
     var dataOptions = {
         virtualItemsCount: {
@@ -1300,19 +1302,19 @@ QUnit.test("Synchronize position fixed table with main table when scrolling mode
         mode: "virtual"
     };
 
-    that.rowsView.render($testElement);
+    that.rowsView.render(that.gridContainer);
     that.rowsView.height(50);
     that.rowsView.resize();
 
     scrollableInstance = that.rowsView.element().dxScrollable("instance");
-    $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
-    $table = $testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find("table").first();
+    $fixTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    $table = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find("table").first();
 
     // assert
     assert.ok(scrollableInstance, "has scrollable");
     assert.equal(that.rowsView.element().outerHeight(), 50, "height rowsView");
-    assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
-    assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
+    assert.equal(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
+    assert.ok(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
     assert.equal($fixTable.position().top, 0, "fixed table - position top");
 
     var scrollChanged = function(e) {
@@ -1376,8 +1378,7 @@ if(device.deviceType === "desktop") {
         var that = this,
             $fixTable,
             scrollableInstance,
-            countCallScrollOffsetChanged = 0,
-            $testElement = $("#container");
+            countCallScrollOffsetChanged = 0;
 
         that.items = [{ values: ["test4", "test1", "test3", "test5", "test2"], rowType: "data" },
             { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
@@ -1387,12 +1388,12 @@ if(device.deviceType === "desktop") {
             { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
 
         that.setupDataGrid();
-        that.rowsView.render($testElement);
+        that.rowsView.render(that.gridContainer);
         that.rowsView.height(50);
         that.rowsView.resize();
 
 
-        $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+        $fixTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
         scrollableInstance = that.rowsView.element().dxScrollable("instance");
 
         that.editorFactoryController.focus($fixTable.find("tr").eq(1).find("td").first());
@@ -1402,8 +1403,8 @@ if(device.deviceType === "desktop") {
         // assert
         assert.ok(scrollableInstance, "has scrollable");
         assert.equal(that.rowsView.element().outerHeight(), 50, "height rowsView");
-        assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
-        assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
+        assert.equal(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
+        assert.ok(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
         assert.equal($fixTable.position().top, 0, "fixed table - position top");
         assert.equal(scrollableInstance.scrollTop(), 0, "scroll top of the main table");
 
@@ -1414,7 +1415,7 @@ if(device.deviceType === "desktop") {
         });
 
         // act
-        nativePointerMock($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed")).start().wheel(-30);
+        nativePointerMock(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed")).start().wheel(-30);
         that.clock.tick();
 
         // assert
@@ -1423,7 +1424,7 @@ if(device.deviceType === "desktop") {
         assert.equal(scrollableInstance.scrollTop(), 30, "scroll top of the main table");
 
         // T342451
-        assert.roughEqual($testElement.find(".dx-datagrid-focus-overlay").offset().top, that.editorFactoryController.focus().offset().top, 2, "focus overlay top position");
+        assert.roughEqual(that.gridContainer.find(".dx-datagrid-focus-overlay").offset().top, that.editorFactoryController.focus().offset().top, 2, "focus overlay top position");
     });
 
     // T241973
@@ -1434,7 +1435,6 @@ if(device.deviceType === "desktop") {
             scrollableInstance,
             countCallWheelEventOnDocument = 0,
             countCallScrollOffsetChanged = 0,
-            $testElement = $("#container"),
             wheelHandler = function() {
                 countCallWheelEventOnDocument++;
             };
@@ -1447,18 +1447,18 @@ if(device.deviceType === "desktop") {
             { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
 
         that.setupDataGrid();
-        that.rowsView.render($testElement);
+        that.rowsView.render(that.gridContainer);
         that.rowsView.height(50);
         that.rowsView.resize();
 
-        $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+        $fixTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
         scrollableInstance = that.rowsView.element().dxScrollable("instance");
 
         // assert
         assert.ok(scrollableInstance, "has scrollable");
         assert.equal(that.rowsView.element().outerHeight(), 50, "height rowsView");
-        assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
-        assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
+        assert.equal(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
+        assert.ok(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
         assert.equal($fixTable.position().top, 0, "fixed table - position top");
         assert.equal(scrollableInstance.scrollTop(), 0, "scroll top of the main table");
 
@@ -1471,7 +1471,7 @@ if(device.deviceType === "desktop") {
         $(document).on("dxmousewheel", wheelHandler);
 
         // act
-        nativePointerMock($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed")).start().wheel(-30);
+        nativePointerMock(that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed")).start().wheel(-30);
 
         // assert
         assert.equal(countCallScrollOffsetChanged, 1, "count call scrollChanged");
@@ -1885,17 +1885,16 @@ QUnit.test("Updating position of the fixed table on refresh grid", function(asse
     // arrange
     var that = this,
         $fixedTable,
-        done = assert.async(),
-        $testElement = $("#container");
+        done = assert.async();
 
     that.items = generateData(20);
     that.setupDataGrid();
-    that.rowsView.render($testElement);
+    that.rowsView.render(that.gridContainer);
     that.rowsView.height(100);
     that.rowsView.resize();
 
     // assert
-    $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    $fixedTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     assert.equal($fixedTable.position().top, 0, "fixed table - position top");
 
     // arrange
@@ -1904,11 +1903,11 @@ QUnit.test("Updating position of the fixed table on refresh grid", function(asse
     that.clock.restore();
     setTimeout(function() {
         // act
-        that.rowsView.render($testElement);
+        that.rowsView.render(that.gridContainer);
         that.rowsView.resize();
 
         // assert
-        $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+        $fixedTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
         assert.equal($fixedTable.parent().scrollTop(), 500, "scroll top of the fixed table");
         done();
     });
@@ -1921,8 +1920,7 @@ QUnit.testInActiveWindow("Scrolling to focused cell when it is fixed", function(
         $cell,
         scrollTop,
         $fixedTable,
-        done = assert.async(),
-        $testElement = $("#container");
+        done = assert.async();
 
     that.clock.restore();
     that.items = generateData(20);
@@ -1930,11 +1928,11 @@ QUnit.testInActiveWindow("Scrolling to focused cell when it is fixed", function(
         pushBackValue: 0 // for ios devices
     };
     that.setupDataGrid();
-    that.rowsView.render($testElement);
+    that.rowsView.render(that.gridContainer);
     that.rowsView.height(100);
     that.rowsView.resize();
 
-    $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    $fixedTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     $cell = $fixedTable.find("tbody > tr:not(.dx-freespace-row)").last().children().first();
 
     var scrollChanged = function(e) {
@@ -1956,8 +1954,7 @@ if(browser.mozilla) {
         var that = this,
             $cell,
             $fixedTable,
-            done = assert.async(),
-            $testElement = $("#container");
+            done = assert.async();
 
         that.clock.restore();
         that.items = generateData(20);
@@ -1965,11 +1962,11 @@ if(browser.mozilla) {
             pushBackValue: 0 // for ios devices
         };
         that.setupDataGrid();
-        that.rowsView.render($testElement);
+        that.rowsView.render(that.gridContainer);
         that.rowsView.height(100);
         that.rowsView.resize();
 
-        $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+        $fixedTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
         $cell = $fixedTable.find("tbody > tr:not(.dx-freespace-row)").last().children().first();
 
         var dateStart = new Date(),
@@ -2011,17 +2008,16 @@ QUnit.test("Updating position of the fixed table (when scrollbar at the bottom) 
     var that = this,
         $fixedTable,
         positionTop,
-        done = assert.async(),
-        $testElement = $("#container");
+        done = assert.async();
 
     that.items = generateData(20);
     that.setupDataGrid();
-    that.rowsView.render($testElement);
+    that.rowsView.render(that.gridContainer);
     that.rowsView.height(100);
     that.rowsView.resize();
 
     // assert
-    $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    $fixedTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     assert.equal($fixedTable.position().top, 0, "fixed table - position top");
 
     // arrange
@@ -2032,8 +2028,8 @@ QUnit.test("Updating position of the fixed table (when scrollbar at the bottom) 
         positionTop = $fixedTable.position().top;
 
         // act
-        $testElement.find(".dx-data-row").eq(1).remove(); // remove second row of the main table
-        $testElement.find(".dx-data-row").eq(20).remove(); // remove second row of the fixed table
+        that.gridContainer.find(".dx-data-row").eq(1).remove(); // remove second row of the main table
+        that.gridContainer.find(".dx-data-row").eq(20).remove(); // remove second row of the fixed table
         that.rowsView.resize();
 
         // assert
@@ -2046,11 +2042,10 @@ QUnit.test("Updating position of the fixed table (when scrollbar at the bottom) 
 QUnit.test("Elastic scrolling should be applied for fixed table", function(assert) {
     // arrange
     var that = this,
-        $fixedTable,
-        $testElement = $("#container");
+        $fixedTable;
 
     that.setupDataGrid();
-    that.rowsView.render($testElement);
+    that.rowsView.render(that.gridContainer);
     that.rowsView.resize();
     that.rowsView.height(50);
 
@@ -2064,7 +2059,7 @@ QUnit.test("Elastic scrolling should be applied for fixed table", function(asser
     });
 
     // assert
-    $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    $fixedTable = that.gridContainer.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     assert.roughEqual(translator.getTranslate($fixedTable).y, -330, 10);
 
     // act
@@ -2082,6 +2077,9 @@ QUnit.test("Elastic scrolling should be applied for fixed table", function(asser
 QUnit.module("Headers reordering and resizing with fixed columns", {
     beforeEach: function() {
         var that = this;
+
+        that.$element = () => $("#container");
+        that.gridContainer = $("#container > .dx-datagrid");
 
         that.columns = [
             {
@@ -2128,12 +2126,13 @@ QUnit.module("Headers reordering and resizing with fixed columns", {
 QUnit.test('Reordering - get points by columns for columns fixed to the left', function(assert) {
     // arrange
     var that = this,
-        pointsByColumns,
-        testElement = $("#container").width(925);
+        pointsByColumns;
+
+    that.$element().width(925);
 
     that.setupDataGrid();
 
-    that.columnHeadersView.render(testElement);
+    that.columnHeadersView.render(that.gridContainer);
 
     // act
     pointsByColumns = that.draggingHeaderController._generatePointsByColumns({
@@ -2154,12 +2153,13 @@ QUnit.test('Reordering - get points by columns for columns fixed to the left', f
 QUnit.test('Reordering - get points by columns for not fixed columns', function(assert) {
     // arrange
     var that = this,
-        pointsByColumns,
-        testElement = $("#container").width(925);
+        pointsByColumns;
+
+    that.$element().width(925);
 
     that.setupDataGrid();
 
-    that.columnHeadersView.render(testElement);
+    that.columnHeadersView.render(that.gridContainer);
 
     // act
     pointsByColumns = that.draggingHeaderController._generatePointsByColumns({
@@ -2365,11 +2365,12 @@ QUnit.test("Reordering - set rows opacity for fixed column", function(assert) {
 QUnit.test('Resizing -  get points by columns', function(assert) {
     // arrange
     var that = this,
-        pointsByColumns,
-        testElement = $("#container").width(800);
+        pointsByColumns;
+
+    that.$element().width(800);
 
     that.setupDataGrid();
-    that.columnHeadersView.render(testElement);
+    that.columnHeadersView.render(that.gridContainer);
     that.columnHeadersView.element().children(":not(.dx-datagrid-content-fixed)").scrollLeft(50);
 
     // act
@@ -2575,6 +2576,9 @@ QUnit.test("Resizing -  get points by fixed columns when columnResizingMode is '
 QUnit.module("Fixed columns with band columns", {
     beforeEach: function() {
         var that = this;
+
+        that.$element = () => $("#container");
+        that.gridContainer = $("#container > .dx-datagrid");
 
         that.options = {
             showColumnHeaders: true,
@@ -2989,6 +2993,9 @@ QUnit.test("Draw fixed band columns with master detail", function(assert) {
 QUnit.module("Fixed columns with real dataController and columnController", {
     beforeEach: function() {
         var that = this;
+
+        that.$element = () => $("#container");
+        that.gridContainer = $("#container > .dx-datagrid");
 
         that.options = {
             loadingTimeout: undefined,

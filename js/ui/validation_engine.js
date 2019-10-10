@@ -235,6 +235,8 @@ class CustomRuleValidator extends BaseRuleValidator {
      * @type_function_param1_field2 rule:object
      * @type_function_param1_field3 validator:object
      * @type_function_param1_field4 data:object
+     * @type_function_param1_field5 column:object
+     * @type_function_param1_field6 formItem:object
      */
     /**
      * @name CustomRule.message
@@ -257,14 +259,14 @@ class CustomRuleValidator extends BaseRuleValidator {
         }
         const validator = rule.validator,
             dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
-            data = typeUtils.isFunction(dataGetter) && dataGetter(),
+            extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
             params = {
                 value: value,
                 validator: validator,
                 rule: rule
             };
-        if(data) {
-            params.data = data;
+        if(extraParams) {
+            extend(params, extraParams);
         }
         return rule.validationCallback(params);
     }
@@ -289,6 +291,8 @@ class AsyncRuleValidator extends CustomRuleValidator {
      * @type_function_param1_field2 rule:object
      * @type_function_param1_field3 validator:object
      * @type_function_param1_field4 data:object
+     * @type_function_param1_field5 column:object
+     * @type_function_param1_field6 formItem:object
      */
     /**
      * @name AsyncRule.message
@@ -310,20 +314,18 @@ class AsyncRuleValidator extends CustomRuleValidator {
             extend(rule, { reevaluate: true });
         }
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
-            return new Promise(function(resolve) {
-                resolve(true);
-            });
+            return true;
         }
         const validator = rule.validator,
             dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
-            data = typeUtils.isFunction(dataGetter) && dataGetter(),
+            extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
             params = {
                 value: value,
                 validator: validator,
                 rule: rule
             };
-        if(data) {
-            params.data = data;
+        if(extraParams) {
+            extend(params, extraParams);
         }
         const callbackResult = rule.validationCallback(params);
         if(!typeUtils.isPromise(callbackResult)) {
@@ -937,27 +939,41 @@ const ValidationEngine = {
 
     _validateAsyncRules({ result, value, items, name }) {
         const asyncResults = [];
-        result.pendingRules = [];
         each(items, (_, item) => {
-            result.pendingRules.push(item.rule);
-            const asyncResult = item.ruleValidator.validate(value, item.rule).then((res) => {
-                const ruleResult = this._getPatchedRuleResult(res);
+            const validateResult = item.ruleValidator.validate(value, item.rule);
+            if(!typeUtils.isPromise(validateResult)) {
                 this._updateRuleConfig({
                     rule: item.rule,
-                    ruleResult,
+                    ruleResult: this._getPatchedRuleResult(validateResult),
                     validator: item.ruleValidator,
                     name
                 });
-                return ruleResult;
-            });
-            asyncResults.push(asyncResult);
+            } else {
+                if(!result.pendingRules) {
+                    result.pendingRules = [];
+                }
+                result.pendingRules.push(item.rule);
+                const asyncResult = validateResult.then((res) => {
+                    const ruleResult = this._getPatchedRuleResult(res);
+                    this._updateRuleConfig({
+                        rule: item.rule,
+                        ruleResult,
+                        validator: item.ruleValidator,
+                        name
+                    });
+                    return ruleResult;
+                });
+                asyncResults.push(asyncResult);
+            }
         });
-        result.complete = Promise.all(asyncResults).then((values) => {
-            return this._getAsyncRulesResult({
-                result,
-                values
+        if(asyncResults.length) {
+            result.complete = Promise.all(asyncResults).then((values) => {
+                return this._getAsyncRulesResult({
+                    result,
+                    values
+                });
             });
-        });
+        }
         return result;
     },
 

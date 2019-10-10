@@ -110,9 +110,10 @@ module("Mobile tooltip", moduleConfig, () => {
         const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = "appointment-tooltip-template-marker";
 
         const scheduler = createInstance({
-            appointmentTooltipTemplate: (appointmentData, contentElement, targetedAppointmentData, index) => {
-                assert.equal(targetedAppointmentData.text, appointmentData.text, "targetedAppointmentData should be not empty");
+            appointmentTooltipTemplate: (model, index, contentElement) => {
+                assert.equal(model.targetedAppointmentData.text, model.appointmentData.text, "targetedAppointmentData should be not empty");
                 assert.equal(index, templateCallCount, "Index should be correct pass in template callback");
+                assert.ok($(contentElement).length === 1, "contentElement should be DOM element");
                 templateCallCount++;
 
                 return $('<div />').addClass(TOOLTIP_TEMPLATE_MARKER_CLASS_NAME).text(`template item index - ${index}`);

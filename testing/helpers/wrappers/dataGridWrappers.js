@@ -1,5 +1,7 @@
 import { WrapperBase } from './wrapperBase.js';
 
+const FOCUS_OVERLAY_CLASS = "dx-datagrid-focus-overlay";
+
 export class DataGridWrapper {
     constructor(containerSelector) {
         this.pager = new PagerWrapper(containerSelector);
@@ -72,8 +74,13 @@ export class RowsViewWrapper extends WrapperBase {
         return this.getCellElement(rowIndex, columnIndex).hasClass("dx-focused");
     }
 
+    findFocusOverlay() {
+        return this.getElement().find(`.${FOCUS_OVERLAY_CLASS}`);
+    }
+
     isFocusOverlayVisible() {
-        return !!this.getElement().find(".dx-datagrid-focus-overlay:visible").length;
+        const $focusOverlay = this.findFocusOverlay();
+        return $focusOverlay.length && !this.findFocusOverlay().hasClass("dx-hidden");
     }
 
     getFocusedRow() {

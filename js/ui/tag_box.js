@@ -4,7 +4,8 @@ import dataUtils from "../core/element_data";
 import eventsEngine from "../events/core/events_engine";
 import registerComponent from "../core/component_registrator";
 import browser from "../core/utils/browser";
-import { noop, ensureDefined, equalByValue } from "../core/utils/common";
+import { noop, ensureDefined } from "../core/utils/common";
+import { equalByComplexValue } from "../core/utils/data";
 import { SelectionFilterCreator as FilterCreator } from "../core/utils/selection_filter";
 import { Deferred, when } from "../core/utils/deferred";
 import { getPublicElement, createTextElementHiddenCopy } from "../core/utils/dom";
@@ -754,7 +755,7 @@ const TagBox = SelectBox.inherit({
         const cursorWidth = 5;
         let width = "";
         let size = "";
-        const canTypeText = this.option("searchEnabled") || this.option("editEnabled");
+        const canTypeText = this.option("searchEnabled") || this.option("acceptCustomValue");
         if(isEmptyInput && canTypeText) {
             const $calculationElement = createTextElementHiddenCopy($input, value, { includePaddings: true });
 
@@ -1080,7 +1081,7 @@ const TagBox = SelectBox.inherit({
             const $tag = $tags[i],
                 tagData = dataUtils.data($tag, TAGBOX_TAG_DATA_KEY);
 
-            if(value === tagData || (equalByValue(value, tagData))) {
+            if(value === tagData || (equalByComplexValue(value, tagData))) {
                 result = $($tag);
                 break;
             }

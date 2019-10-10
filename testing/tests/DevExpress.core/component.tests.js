@@ -40,24 +40,36 @@ const TestComponent = Component.inherit({
         });
     },
 
-    _setDefaultOptions() {
-        this.callBase();
-        this.option({
-            opt1: "default",
-            opt2: "default",
-            deprecatedOption: "test",
-            secondLevel: {
-                deprecatedOption: 1
-            },
-            thirdLevel: {
-                option: {
-                    deprecatedAlias: "deprecatedValue"
+    _getDefaultOptions() {
+        return $.extend(
+            this.callBase(),
+            {
+                opt1: "default",
+                opt2: "default",
+                opt4: "default",
+                opt5: {
+                    subOpt1: "default",
+                    subOpt2: {
+                        value: ""
+                    }
+                },
+                opt6: [{
+                    subOpt: "default"
+                }],
+                deprecatedOption: "test",
+                secondLevel: {
+                    deprecatedOption: 1
+                },
+                thirdLevel: {
+                    option: {
+                        deprecatedAlias: "deprecatedValue"
+                    }
+                },
+                funcOption() {
+                    return this;
                 }
-            },
-            funcOption() {
-                return this;
             }
-        });
+        );
     },
 
     _optionChanged(name, value, prevValue) {
@@ -255,9 +267,6 @@ QUnit.module("default", {}, () => {
             "beginUpdate",
             "endUpdate",
 
-            "beginUpdate",
-            "endUpdate",
-
             // "beginUpdate", // optionByDevice options applying
             // "endUpdate",
             "endUpdate",
@@ -310,16 +319,16 @@ QUnit.module("default", {}, () => {
         let component1 = Component.inherit({
             NAME: "component1",
 
-            _setDefaultOptions() {
-                this.callBase();
-
-                this.option({
-                    plain: {
-                        a: {
-                            b: "b"
+            _getDefaultOptions() {
+                return $.extend(
+                    this.callBase(), {
+                        plain: {
+                            a: {
+                                b: "b"
+                            }
                         }
                     }
-                });
+                );
             }
         });
 
@@ -464,6 +473,23 @@ QUnit.module("default", {}, () => {
         assert.strictEqual(instance.option("optionWithUndefinedValue"), undefined);
     });
 
+    QUnit.test("set and get option silently", (assert) => {
+        const instance = new TestComponent();
+        let warningCount = 0;
+        const _logDeprecatedWarningMock = option => {
+            ++warningCount;
+        };
+
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+
+        instance._setOptionByStealth({
+            deprecatedOption: true,
+        });
+
+        assert.equal(instance._getOptionByStealth("deprecatedOption"), true);
+        assert.equal(warningCount, 0);
+    });
+
     QUnit.test("reading & writing a deprecated option must invoke the _logDeprecatedWarning method and pass the option name as a parameter", (assert) => {
         const instance = new TestComponent();
         const deprecatedOption = "deprecatedOption";
@@ -525,32 +551,19 @@ QUnit.module("default", {}, () => {
         assert.strictEqual(warningCount, 0);
     });
 
-    QUnit.test("_suppressDeprecatedWarnings should suppress the _logDeprecatedWarning method call", (assert) => {
-        const instance = new TestComponent();
-        const deprecatedOption = "deprecatedOption";
-
-        instance._suppressDeprecatedWarnings();
-        instance.option(deprecatedOption);
-        assert.strictEqual(instance._logDeprecatedWarningCount, 0);
-    });
-
-    QUnit.test("_resumeDeprecatedWarnings should restore the _logDeprecatedWarning method calling", (assert) => {
-        const instance = new TestComponent();
-        const deprecatedOption = "deprecatedOption";
-
-        instance._suppressDeprecatedWarnings();
-        instance._resumeDeprecatedWarnings();
-        instance.option(deprecatedOption);
-        assert.strictEqual(instance._logDeprecatedWarningCount, 1);
-    });
-
     QUnit.test("component should _suppressDeprecatedWarnings while initializing _defaultOptions in the constructor and _resumeDeprecatedWarnings afterwards", (assert) => {
         const instance = new TestComponent();
         const deprecatedOption = "deprecatedOption";
+        let warningCount = 0;
+        const _logDeprecatedWarningMock = option => {
+            ++warningCount;
+        };
 
-        assert.strictEqual(instance._logDeprecatedWarningCount, 0);
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
+
+        assert.strictEqual(warningCount, 0);
         instance.option(deprecatedOption);
-        assert.strictEqual(instance._logDeprecatedWarningCount, 1);
+        assert.strictEqual(warningCount, 1);
     });
 
     QUnit.test("deprecated options api syntactic sugar for options having aliases", (assert) => {
@@ -760,6 +773,21 @@ QUnit.module("default", {}, () => {
         }
     });
 
+    QUnit.test("dispose optionManager", (assert) => {
+        const component = new TestComponent();
+        const callbacks = ["_changedCallbacks", "_changingCallbacks", "_deprecatedCallbacks"];
+
+        callbacks.forEach((callback) => {
+            assert.equal(component._optionManager[callback]._list.length, 1);
+        });
+
+        component._dispose();
+
+        callbacks.forEach((callback) => {
+            assert.equal(component._optionManager[callback]._list.length, 0);
+        });
+    });
+
     QUnit.test("T320061 - third level of nesting option deprecated message on option change using string", (assert) => {
         const originalLog = errors.log;
         const log = [];
@@ -791,20 +819,6 @@ QUnit.module("default", {}, () => {
         } finally {
             errors.log = originalLog;
         }
-    });
-
-    QUnit.test("option overriding to undefined value (T115847)", (assert) => {
-        const inheritor = TestComponent.inherit({
-            _setDefaultOptions() {
-                this.callBase();
-                this.option({
-                    opt1: undefined
-                });
-            }
-        });
-
-        const inheritorInstance = new inheritor();
-        assert.strictEqual(inheritorInstance.option("opt1"), undefined);
     });
 
     QUnit.test("'onDisposing' action and event should be fired on component disposing", (assert) => {
@@ -1211,19 +1225,21 @@ QUnit.module("defaultOptions", {
 
     QUnit.test("initial option test", (assert) => {
         const TestComponent = Component.inherit({
-            _setDefaultOptions() {
+            _getDefaultOptions() {
                 return {
                     test: "parent"
                 };
             }
         });
         const ChildComponent = TestComponent.inherit({
-            _setDefaultOptions() {
-                this.callBase();
-                this.option({
-                    anotherTest: "default",
-                    test: "initial"
-                });
+            _getDefaultOptions() {
+                return $.extend(
+                    this.callBase(),
+                    {
+                        anotherTest: "default",
+                        test: "initial"
+                    }
+                );
             },
             _defaultOptionsRules() {
                 return this.callBase().slice(0).concat([{
@@ -1301,6 +1317,79 @@ QUnit.module("defaultOptions", {
         assert.equal(options.a, 2);
         assert.equal(options.b, 2);
         assert.equal(options.c, 3);
+    });
+
+    QUnit.test("reset option", (assert) => {
+        const instance = new TestComponent();
+
+        instance.option({
+            opt4: "someValue",
+            "opt5.subOpt1": "someValue",
+            "opt5.subOpt2": {
+                value: "someValue",
+                opt: "someValue"
+            },
+            "opt5.subOpt3": "someValue",
+            "opt6[0].subOpt": "someValue"
+        });
+
+        assert.equal(instance.option("opt4"), "someValue");
+        assert.equal(instance.option("opt5.subOpt1"), "someValue");
+        assert.deepEqual(instance.option("opt5.subOpt2"), {
+            value: "someValue",
+            opt: "someValue"
+        });
+        assert.equal(instance.option("opt5.subOpt3"), "someValue");
+        assert.equal(instance.option("opt6[0].subOpt"), "someValue");
+
+        instance.resetOption("opt4");
+        instance.resetOption("opt5.subOpt1");
+        instance.resetOption("opt5.subOpt2");
+        instance.resetOption("opt5.subOpt3");
+        instance.resetOption("opt6[0].subOpt");
+
+        assert.equal(instance.option("opt4"), "default");
+        assert.equal(instance.option("opt5.subOpt1"), "default");
+        assert.deepEqual(instance.option("opt5.subOpt2"), {
+            value: ""
+        });
+        assert.equal(instance.option("opt5.subOpt3"), undefined);
+        assert.equal(instance.option("opt6[0].subOpt"), "default");
+    });
+
+    QUnit.test("reset option with empty option name", (assert) => {
+        const instance = new TestComponent();
+        let error = false;
+
+        try {
+            instance.resetOption('');
+        } catch(e) {
+            error = true;
+        } finally {
+            assert.equal(error, false);
+        }
+    });
+
+    QUnit.test("reset option after setting initialOption", (assert) => {
+        const instance = new TestComponent();
+
+        instance.resetOption("opt5.subOpt2");
+
+        instance.option({
+            "opt5.subOpt2": {
+                value: "someValue",
+                opt: "someValue"
+            },
+            opt4: "someValue",
+        });
+
+        instance.resetOption("opt5.subOpt2");
+        instance.resetOption("opt4");
+
+        assert.equal(instance.option("opt4"), "default");
+        assert.deepEqual(instance.option("opt5.subOpt2"), {
+            value: ""
+        });
     });
 });
 
@@ -1414,10 +1503,16 @@ QUnit.module("action API", {}, () => {
     QUnit.test("_createActionByOption should call _suppressDeprecatedWarnings before reading the action option value and then call _resumeDeprecatedWarnings", (assert) => {
         const instance = new TestComponent();
         const deprecatedOption = "deprecatedOption";
+        let warningCount = 0;
+        const _logDeprecatedWarningMock = option => {
+            ++warningCount;
+        };
+
+        instance._logDeprecatedWarning = _logDeprecatedWarningMock;
         instance._createActionByOption(deprecatedOption, {});
-        assert.strictEqual(instance._logDeprecatedWarningCount, 0);
+        assert.strictEqual(warningCount, 0);
         instance.option(deprecatedOption);
-        assert.strictEqual(instance._logDeprecatedWarningCount, 1);
+        assert.strictEqual(warningCount, 1);
     });
 
     QUnit.test("action executing should fire event handlers with same arguments and context", (assert) => {

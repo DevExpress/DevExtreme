@@ -261,6 +261,37 @@ QUnit.test("Editor should display pending indicator after repaint", function(ass
     assert.ok(indicator.option("visible"), "indicator is shown after repainting");
 });
 
+QUnit.test("Editor should not display valid mark after resetting a value", function(assert) {
+    // arrange
+    const editor = this.fixture.createTextEditor({
+            value: "test"
+        }),
+        validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: [
+                {
+                    type: "async",
+                    ignoreEmptyValue: true,
+                    validationCallback: function() {
+                        return new Deferred().resolve().promise();
+                    }
+                }
+            ]
+        }),
+        done = assert.async();
+
+    const result = validator.validate();
+    result.complete.then(() => {
+        assert.ok(editor.$element().hasClass("dx-valid"), "editor has the 'dx-valid' CSS after validating");
+
+        validator.reset();
+
+        assert.notOk(editor.$element().hasClass("dx-valid"), "editor does not have the 'dx-valid' CSS after resetting a value");
+
+        done();
+    });
+});
+
 QUnit.test("Editor - validation options should be synchrnoized on init", function(assert) {
     const err1 = { message: "1" },
         err2 = { message: "2" };

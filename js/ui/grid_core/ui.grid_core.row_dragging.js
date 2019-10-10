@@ -46,8 +46,9 @@ var RowDraggingExtender = {
 
         if(allowReordering) {
             that._sortable = that._createComponent($content, Sortable, extend({
+                contentTemplate: null,
                 filter: "> table > tbody > .dx-data-row",
-                template: that._getDraggableRowTemplate(),
+                dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
                 dropFeedbackMode: "indicate"
             }, rowDragging));
@@ -91,14 +92,14 @@ var RowDraggingExtender = {
     },
 
     _getDraggableRowTemplate: function() {
-        return (options, index) => {
+        return (options) => {
             let $rootElement = this.component.$element(),
                 $dataGridContainer = $("<div>").width($rootElement.width()),
                 items = this._dataController.items(),
-                row = items && items[index],
+                row = items && items[options.fromIndex],
                 gridOptions = this._getDraggableGridOptions(row);
 
-            this._createComponent($dataGridContainer, "dxDataGrid", gridOptions);
+            this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
 
             return $dataGridContainer;
         };
@@ -168,7 +169,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions.rowDragging.boundary
                  * @type string|Node|jQuery
-                 * @default window
+                 * @default undefined
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.container
@@ -176,8 +177,12 @@ module.exports = {
                  * @default undefined
                  */
                 /**
-                 * @name GridBaseOptions.rowDragging.template
+                 * @name GridBaseOptions.rowDragging.dragTemplate
                  * @type template|function
+                 * @type_function_param1 dragInfo:object
+                 * @type_function_param1_field1 itemData:any
+                 * @type_function_param1_field2 itemElement:dxElement
+                 * @type_function_param2 containerElement:dxElement
                  * @type_function_return string|Node|jQuery
                  * @default undefined
                  */
@@ -204,6 +209,11 @@ module.exports = {
                 /**
                  * @name GridBaseOptions.rowDragging.group
                  * @type string
+                 * @default undefined
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.data
+                 * @type any
                  * @default undefined
                  */
                 /**
@@ -290,9 +300,9 @@ module.exports = {
                  * @type_function_param1_field5 toIndex:number
                  * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
                  * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field9 fromData:any
-                 * @type_function_param1_field10 toData:any
-                 * @type_function_param1_field11 dropInsideItem:boolean
+                 * @type_function_param1_field8 fromData:any
+                 * @type_function_param1_field9 toData:any
+                 * @type_function_param1_field10 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onRemove

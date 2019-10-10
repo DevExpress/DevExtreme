@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import core from "./ui.grid_core.modules";
 import { each } from "../../core/utils/iterator";
 import { combineFilters } from "./ui.grid_core.utils";
-import { equalByValue } from "../../core/utils/common";
+import { equalByComplexValue } from "../../core/utils/data";
 import { isDefined, isBoolean } from "../../core/utils/type";
 import { Deferred, when } from "../../core/utils/deferred";
 import { getIndexByKey } from "./ui.grid_core.utils";
@@ -18,6 +18,10 @@ exports.FocusController = core.ViewController.inherit((function() {
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
             this.component._optionsByReference.focusedRowKey = true;
+
+            if(!this.option("autoNavigateToFocusedRow")) {
+                this.option("skipFocusedRowNavigation", true);
+            }
         },
 
         optionChanged: function(args) {
@@ -32,6 +36,8 @@ exports.FocusController = core.ViewController.inherit((function() {
             } else if(args.name === "focusedRowEnabled") {
                 args.handled = true;
             } else if(args.name === "skipFocusedRowNavigation") {
+                args.handled = true;
+            } else if(args.name === "autoNavigateToFocusedRow") {
                 args.handled = true;
             } else {
                 this.callBase(args);
@@ -149,8 +155,9 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this,
                 dataController = this.getController("data"),
                 rowIndex = this.option("focusedRowIndex"),
+                isVirtualRowRenderingMode = that.option("scrolling.rowRenderingMode") === "virtual",
                 result = new Deferred(),
-                navigateTo = (key, result) => {
+                navigateInRowsView = (key, result) => {
                     if(needFocusRow) {
                         that._triggerUpdateFocusedRow(key, result);
                     } else {
@@ -158,6 +165,15 @@ exports.FocusController = core.ViewController.inherit((function() {
                             rowIndex = that.getController("data").getRowIndexByKey(key),
                             rowElement = rowsView.getRow(rowIndex);
                         rowsView._scrollToElement(rowElement);
+                    }
+                },
+                navigateTo = (key, result) => {
+                    if(isVirtualRowRenderingMode) {
+                        setTimeout(function() {
+                            that._navigateToVirtualRow(key, result, needFocusRow);
+                        });
+                    } else {
+                        navigateInRowsView(key, result);
                     }
                 };
 
@@ -183,23 +199,16 @@ exports.FocusController = core.ViewController.inherit((function() {
                             if(that.isRowFocused(key)) {
                                 result.resolve(that._getFocusedRowIndexByKey(key));
                             } else {
-                                navigateTo(key, result);
+                                navigateInRowsView(key, result);
                             }
                         }).fail(result.reject);
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
-                            if(that.option("scrolling.rowRenderingMode") === "virtual") {
-                                setTimeout(function() {
-                                    that._navigateToVirtualRow(key, result, needFocusRow);
-                                });
-                            } else {
-                                navigateTo(key, result);
-                            }
-
+                            navigateTo(key, result);
                         }).fail(result.reject);
                     }
                 })
-                    .always(() => that.option("skipFocusedRowNavigation", false))
+                    .always(() => that.option("skipFocusedRowNavigation", !this.option("autoNavigateToFocusedRow")))
                     .fail(result.reject);
             }
 
@@ -296,7 +305,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             var focusedRowKey = this.option("focusedRowKey");
 
             if(focusedRowKey !== undefined) {
-                return equalByValue(key, this.option("focusedRowKey"));
+                return equalByComplexValue(key, this.option("focusedRowKey"));
             }
         },
 
@@ -318,8 +327,8 @@ exports.FocusController = core.ViewController.inherit((function() {
             });
         },
         _clearPreviousFocusedRow: function($tableElement, focusedRowIndex) {
-            const isNotMasterDetailFocusedRow = (_, $focusedRow) => {
-                const $focusedRowTable = $focusedRow.closest(DATA_GRID_TABLE_SELECTOR);
+            const isNotMasterDetailFocusedRow = (_, focusedRow) => {
+                const $focusedRowTable = $(focusedRow).closest(DATA_GRID_TABLE_SELECTOR);
                 return $tableElement.is($focusedRowTable);
             };
 
@@ -391,6 +400,13 @@ module.exports = {
              * @default false
              */
             focusedRowEnabled: false,
+
+            /**
+             * @name GridBaseOptions.autoNavigateToFocusedRow
+             * @type boolean
+             * @default true
+             */
+            autoNavigateToFocusedRow: true,
 
             /**
              * @name GridBaseOptions.focusedRowKey

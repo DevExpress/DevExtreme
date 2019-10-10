@@ -8,9 +8,9 @@ import {
     deferRenderer,
     applyServerDecimalSeparator,
     grep,
-    equalByValue,
     getKeyHash
 } from "core/utils/common";
+import { equalByComplexValue } from "core/utils/data";
 import Guid from "core/guid";
 import config from "core/config";
 
@@ -464,15 +464,15 @@ module("grep", () => {
 });
 
 
-module("equalByValue", () => {
-    test("The `equalByValue` should compare GUIDs by values", (assert) => {
+module("equalByComplexValue", () => {
+    test("The `equalByComplexValue` should compare GUIDs by values", (assert) => {
         const guid1 = new Guid('1111');
         const guid2 = new Guid('1111');
 
         guid1.changed = true;
         guid2.changed = false;
 
-        assert.ok(equalByValue(guid1, guid2));
+        assert.ok(equalByComplexValue(guid1, guid2));
     });
 });
 

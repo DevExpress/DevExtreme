@@ -10,7 +10,7 @@ import Form from "../form";
 import gridCoreUtils from "./ui.grid_core.utils";
 import themes from "../themes";
 import { getWindow } from "../../core/utils/window";
-import { equalByValue } from "../../core/utils/common";
+import { equalByComplexValue } from "../../core/utils/data";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import { Deferred, when } from "../../core/utils/deferred";
@@ -315,7 +315,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(this._isRowEditMode()) {
             var editRowKey = this._editingController.getEditRowKey();
-            if(equalByValue(editRowKey, this._dataController.adaptiveExpandedKey())) {
+            if(equalByComplexValue(editRowKey, this._dataController.adaptiveExpandedKey())) {
                 return true;
             }
         } else {
@@ -662,7 +662,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
      * @return boolean
      */
     isAdaptiveDetailRowExpanded: function(key) {
-        return this._dataController.adaptiveExpandedKey() && equalByValue(this._dataController.adaptiveExpandedKey(), key);
+        return this._dataController.adaptiveExpandedKey() && equalByComplexValue(this._dataController.adaptiveExpandedKey(), key);
     },
 
     /**
@@ -1140,11 +1140,11 @@ module.exports = {
 
                 _handleTabKeyOnMasterDetailCell: function(eventTarget, direction) {
                     var result = this.callBase(eventTarget, direction),
-                        $currentCell = this._getFocusedCell();
+                        $currentCell = this._getFocusedCell(),
+                        $row = $currentCell && $currentCell.parent();
 
-                    if(!result && $currentCell) {
-                        var $row = $currentCell.parent(),
-                            $dataCells = getDataCellElements($row),
+                    if(!result && $row && $row.length) {
+                        var $dataCells = getDataCellElements($row),
                             $targetCell = direction === "next" ? $dataCells.last() : $dataCells.first(),
                             rowIndex = $row.get(0).rowIndex,
                             adaptiveController = this._adaptiveController,

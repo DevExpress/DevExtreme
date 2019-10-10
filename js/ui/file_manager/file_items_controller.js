@@ -67,6 +67,10 @@ export default class FileItemsController {
     }
 
     setCurrentPath(path) {
+        if(this.getCurrentDirectory().fileItem.relativeName === path) {
+            return;
+        }
+
         const pathParts = getPathParts(path);
         return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts)
             .then(directoryInfo => {
