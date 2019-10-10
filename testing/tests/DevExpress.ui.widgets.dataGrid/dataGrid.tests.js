@@ -3949,13 +3949,16 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
 
 QUnit.test("DataGrid - navigateToRow method should work if rowRenderingMode is 'virtual' and paging is disabled (T820359)", function(assert) {
     // arrange
-    var data = [];
+    this.clock.restore();
+
+    var data = [],
+        navigateRowKey = 25,
+        done = assert.async();
 
     for(var i = 0; i < 30; i++) {
         data.push({ id: i + 1 });
     }
 
-    var navigateRowKey = 25;
     var dataGrid = $("#dataGrid").dxDataGrid({
         height: 200,
         keyExpr: "id",
@@ -3965,16 +3968,18 @@ QUnit.test("DataGrid - navigateToRow method should work if rowRenderingMode is '
         },
         scrolling: {
             rowRenderingMode: "virtual",
-        }
+        },
+        loadingTimeout: undefined
     }).dxDataGrid("instance");
-    this.clock.tick();
 
     // act
     dataGrid.navigateToRow(navigateRowKey);
-    this.clock.tick();
 
     // assert
-    assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, "navigated row is visible");
+    setTimeout(() => {
+        assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, "navigated row is visible");
+        done();
+    });
 });
 
 // T803784
