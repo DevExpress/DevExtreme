@@ -10,14 +10,22 @@ const MAX_EXCEL_COLUMN_WIDTH = 255;
 function exportDataGrid(options) {
     if(!isDefined(options)) return;
 
-    let { customizeCell, component, worksheet, topLeftCell = { row: 1, column: 1 }, excelFilterEnabled, keepColumnWidths = true, selectedRowsOnly = false } = options;
+    let {
+        customizeCell,
+        component,
+        worksheet,
+        topLeftCell = { row: 1, column: 1 },
+        excelFilterEnabled = false,
+        keepColumnWidths = true,
+        selectedRowsOnly = false
+    } = options;
 
     worksheet.properties.outlineProperties = {
         summaryBelow: false,
         summaryRight: false
     };
 
-    let result = {
+    let cellsRange = {
         from: { row: topLeftCell.row, column: topLeftCell.column },
         to: { row: topLeftCell.row, column: topLeftCell.column }
     };
@@ -31,34 +39,37 @@ function exportDataGrid(options) {
             let dataRowsCount = dataProvider.getRowsCount();
 
             if(keepColumnWidths) {
-                _setColumnsWidth(worksheet, columns, result.from.column);
+                _setColumnsWidth(worksheet, columns, cellsRange.from.column);
             }
 
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
-                const row = worksheet.getRow(result.from.row + rowIndex);
-                _exportRow(rowIndex, columns.length, row, result.from.column, dataProvider, customizeCell);
+                const row = worksheet.getRow(cellsRange.from.row + rowIndex);
+
+                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
                 }
                 if(rowIndex >= 1) {
-                    result.to.row++;
+                    cellsRange.to.row++;
                 }
             }
 
-            result.to.column += columns.length > 0 ? columns.length - 1 : 0;
+            cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
             if(excelFilterEnabled === true) {
-                if(dataRowsCount > 0) worksheet.autoFilter = result;
-                worksheet.views = [{ state: 'frozen', ySplit: result.from.row + dataProvider.getFrozenArea().y - 1 }];
+                if(dataRowsCount > 0) worksheet.autoFilter = cellsRange;
+                worksheet.views = [{ state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 }];
             }
 
-            resolve(result);
+            resolve(cellsRange);
         });
     });
 }
 
 function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell) {
+    const styles = dataProvider.getStyles();
+
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const gridCell = cellData.cellSourceData;
@@ -66,7 +77,12 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         const excelCell = row.getCell(startColumnIndex + cellIndex);
         excelCell.value = cellData.value;
 
-        _setPredefinedFont(gridCell, excelCell);
+        if(isDefined(excelCell.value)) {
+            const { bold, alignment, wrapText } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+
+            _setFont(excelCell, bold);
+            _setAlignment(excelCell, wrapText, alignment);
+        }
 
         if(isDefined(customizeCell)) {
             customizeCell({
@@ -78,14 +94,20 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
     }
 }
 
-function _setPredefinedFont(gridCell, excelCell) {
-    if(!isDefined(excelCell.value)) {
-        return;
-    }
-
-    if(gridCell.rowType !== "data") {
+function _setFont(excelCell, bold) {
+    if(isDefined(bold)) {
         excelCell.font = excelCell.font || {};
-        excelCell.font.bold = true;
+        excelCell.font.bold = bold;
+    }
+}
+
+function _setAlignment(excelCell, wrapText, horizontalAlignment) {
+    excelCell.alignment = excelCell.alignment || {};
+    if(isDefined(wrapText)) {
+        excelCell.alignment.wrapText = wrapText;
+    }
+    if(isDefined(horizontalAlignment)) {
+        excelCell.alignment.horizontal = horizontalAlignment;
     }
 }
 
