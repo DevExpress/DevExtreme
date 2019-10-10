@@ -672,7 +672,7 @@ const LayoutManager = Widget.inherit({
         return item.dataField || item.name;
     },
 
-    _isLabelNeedBaselineAlign(item) {
+    _isLabelNeedBaselineAlign: function(item) {
         const largeEditors = ["dxTextArea", "dxRadioGroup", "dxCalendar", "dxHtmlEditor"];
         return (!!item.helpText && !this._hasBrowserFlex()) || inArray(item.editorType, largeEditors) !== -1;
     },
