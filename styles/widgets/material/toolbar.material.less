@@ -190,7 +190,10 @@
 
 .dx-toolbar-button {
     .dx-button-has-text:not(.dx-button-back) {
-        .dx-button-sizing(@MATERIAL_BUTTON_PADDING, @MATERIAL_BUTTON_ICON_SIZE, 6px);
+        .dx-icon {
+            .dx-icon-sizing(@MATERIAL_BUTTON_ICON_SIZE);
+            .dx-icon-margin(6px);
+        }
     }
 
     &.dx-toolbar-text-auto-hide .dx-button {
