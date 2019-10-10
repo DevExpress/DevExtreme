@@ -79,7 +79,7 @@ export default class AppointmentDragBehavior {
     }
 
     getDragEventHandler(eventName, options, appointmentDragging) {
-        return function(e) {
+        return (e) => {
             let handler = appointmentDragging && appointmentDragging[eventName];
 
             if(eventName === "onDragStart") {
@@ -98,7 +98,7 @@ export default class AppointmentDragBehavior {
                     appointmentDragging["onRemove"] && appointmentDragging["onRemove"].call(this, e);
                 }
             }
-        }.bind(this);
+        };
     }
 
     addTo(appointment, config) {
