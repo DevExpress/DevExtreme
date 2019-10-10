@@ -3,7 +3,7 @@ import eventsEngine from "../../events/core/events_engine";
 import Guid from "../../core/guid";
 import { default as FormItemsRunTimeInfo } from "./ui.form.items_runtime_info";
 import registerComponent from "../../core/component_registrator";
-import typeUtils from "../../core/utils/type";
+import { isDefined, isEmptyObject, isFunction, isObject, type } from "../../core/utils/type";
 import domUtils from "../../core/utils/dom";
 import { isWrapped, isWritableWrapped, unwrap } from "../../core/utils/variable_wrapper";
 import windowUtils from "../../core/utils/window";
@@ -127,7 +127,7 @@ const LayoutManager = Widget.inherit({
         var that = this,
             userItems = that.option("items");
 
-        if(typeUtils.isDefined(userItems)) {
+        if(isDefined(userItems)) {
             each(userItems, function(index, item) {
                 var value;
                 if(item.dataField && that._getDataByField(item.dataField) === undefined) {
@@ -149,10 +149,10 @@ const LayoutManager = Widget.inherit({
         var layoutData = this.option("layoutData"),
             newValue = value;
 
-        if(!isWrapped(layoutData[dataField]) && typeUtils.isDefined(dataField)) {
+        if(!isWrapped(layoutData[dataField]) && isDefined(dataField)) {
             this.option("layoutData." + dataField, newValue);
         } else if(isWritableWrapped(layoutData[dataField])) {
-            newValue = typeUtils.isFunction(newValue) ? newValue() : newValue;
+            newValue = isFunction(newValue) ? newValue() : newValue;
 
             layoutData[dataField](newValue);
         }
@@ -167,13 +167,13 @@ const LayoutManager = Widget.inherit({
     _updateItems: function(layoutData) {
         var that = this,
             userItems = this.option("items"),
-            isUserItemsExist = typeUtils.isDefined(userItems),
+            isUserItemsExist = isDefined(userItems),
             customizeItem = that.option("customizeItem"),
             items,
             processedItems;
 
         items = isUserItemsExist ? userItems : this._generateItemsByData(layoutData);
-        if(typeUtils.isDefined(items)) {
+        if(isDefined(items)) {
             processedItems = [];
 
             each(items, function(index, item) {
@@ -182,7 +182,7 @@ const LayoutManager = Widget.inherit({
 
                     customizeItem && customizeItem(item);
 
-                    if(typeUtils.isObject(item) && unwrap(item.visible) !== false) {
+                    if(isObject(item) && unwrap(item.visible) !== false) {
                         processedItems.push(item);
                     }
                 }
@@ -210,7 +210,7 @@ const LayoutManager = Widget.inherit({
             watch = that._getWatch();
 
         items.forEach(function(item) {
-            if(typeUtils.isObject(item) && typeUtils.isDefined(item.visible) && typeUtils.isFunction(watch)) {
+            if(isObject(item) && isDefined(item.visible) && isFunction(watch)) {
 
                 that._itemWatchers.push(
                     watch(
@@ -230,7 +230,7 @@ const LayoutManager = Widget.inherit({
     _generateItemsByData: function(layoutData) {
         var result = [];
 
-        if(typeUtils.isDefined(layoutData)) {
+        if(isDefined(layoutData)) {
             each(layoutData, function(dataField) {
                 result.push({
                     dataField: dataField
@@ -245,7 +245,7 @@ const LayoutManager = Widget.inherit({
         var itemField = item.dataField || item,
             itemData = this._getDataByField(itemField);
 
-        return !(typeUtils.isFunction(itemData) && !isWrapped(itemData));
+        return !(isFunction(itemData) && !isWrapped(itemData));
     },
 
     _processItem: function(item) {
@@ -257,10 +257,10 @@ const LayoutManager = Widget.inherit({
             item.itemType = SIMPLE_ITEM_TYPE;
         }
 
-        if(!typeUtils.isDefined(item.editorType) && typeUtils.isDefined(item.dataField)) {
+        if(!isDefined(item.editorType) && isDefined(item.dataField)) {
             var value = this._getDataByField(item.dataField);
 
-            item.editorType = typeUtils.isDefined(value) ? this._getEditorTypeByDataType(typeUtils.type(value)) : FORM_EDITOR_BY_DEFAULT;
+            item.editorType = isDefined(value) ? this._getEditorTypeByDataType(type(value)) : FORM_EDITOR_BY_DEFAULT;
         }
 
         return item;
@@ -338,10 +338,10 @@ const LayoutManager = Widget.inherit({
     _extendItemsWithDefaultTemplateOptions: function(targetItems, sourceItems) {
         sourceItems.forEach(function(item) {
             if(!item.merged) {
-                if(typeUtils.isDefined(item.disabled)) {
+                if(isDefined(item.disabled)) {
                     targetItems[item.visibleIndex].disabled = item.disabled;
                 }
-                if(typeUtils.isDefined(item.visible)) {
+                if(isDefined(item.visible)) {
                     targetItems[item.visibleIndex].visible = item.visible;
                 }
             }
@@ -523,10 +523,10 @@ const LayoutManager = Widget.inherit({
                         col: this._getColByIndex(i, colCount)
                     }
                 };
-                if(typeUtils.isDefined(item.colSpan)) {
+                if(isDefined(item.colSpan)) {
                     generatedItem.location.colspan = item.colSpan;
                 }
-                if(typeUtils.isDefined(item.rowSpan)) {
+                if(isDefined(item.rowSpan)) {
                     generatedItem.location.rowspan = item.rowSpan;
                 }
                 result.push(generatedItem);
@@ -543,11 +543,11 @@ const LayoutManager = Widget.inherit({
     },
 
     _getButtonHorizontalAlignment: function(item) {
-        if(typeUtils.isDefined(item.horizontalAlignment)) {
+        if(isDefined(item.horizontalAlignment)) {
             return item.horizontalAlignment;
         }
 
-        if(typeUtils.isDefined(item.alignment)) {
+        if(isDefined(item.alignment)) {
             errors.log("W0001", "dxForm", "alignment", "18.1", "Use the 'horizontalAlignment' option in button items instead.");
             return item.alignment;
         }
@@ -595,14 +595,14 @@ const LayoutManager = Widget.inherit({
         $item
             .addClass(FIELD_ITEM_CLASS)
             .addClass(this.option("cssItemClass"))
-            .addClass(typeUtils.isDefined(column) ? "dx-col-" + column : "");
+            .addClass(isDefined(column) ? "dx-col-" + column : "");
     },
 
     _renderFieldItem: function(item, $container) {
         var that = this,
             name = that._getName(item),
             id = that.getItemID(name),
-            isRequired = typeUtils.isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules),
+            isRequired = isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules),
             labelOptions = that._getLabelOptions(item, id, isRequired),
             $editor = $("<div>"),
             helpID = item.helpText ? ("dx-" + new Guid()) : null,
@@ -683,14 +683,12 @@ const LayoutManager = Widget.inherit({
     },
 
     _isLabelNeedBaselineAlign: function(item) {
-        var largeEditors = ["dxTextArea", "dxRadioGroup", "dxCalendar"];
-
+        const largeEditors = ["dxTextArea", "dxRadioGroup", "dxCalendar", "dxHtmlEditor"];
         return (!!item.helpText && !this._hasBrowserFlex()) || inArray(item.editorType, largeEditors) !== -1;
     },
 
     _isLabelNeedId: function(item) {
-        const editorsRequiringIdForLabel = ["dxRadioGroup", "dxCheckBox", "dxLookup", "dxSlider", "dxRangeSlider", "dxSwitch"]; // TODO: support "dxCalendar"
-
+        const editorsRequiringIdForLabel = ["dxRadioGroup", "dxCheckBox", "dxLookup", "dxSlider", "dxRangeSlider", "dxSwitch", "dxHtmlEditor"]; // TODO: support "dxCalendar"
         return inArray(item.editorType, editorsRequiringIdForLabel) !== -1;
     },
 
@@ -724,7 +722,7 @@ const LayoutManager = Widget.inherit({
     _renderLabel: function(options) {
         const { text, id, location, alignment, isRequired, labelID = null } = options;
 
-        if(typeUtils.isDefined(text) && text.length > 0) {
+        if(isDefined(text) && text.length > 0) {
             const labelClasses = FIELD_ITEM_LABEL_CLASS + " " + FIELD_ITEM_LABEL_LOCATION_CLASS + location;
             const $label = $("<label>")
                 .addClass(labelClasses)
@@ -942,7 +940,7 @@ const LayoutManager = Widget.inherit({
         var that = this,
             watch = that._getWatch();
 
-        if(!typeUtils.isFunction(watch)) {
+        if(!isFunction(watch)) {
             return;
         }
 
@@ -963,7 +961,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _getWatch: function() {
-        if(!typeUtils.isDefined(this._watch)) {
+        if(!isDefined(this._watch)) {
             var formInstance = this.option("form");
 
             this._watch = formInstance && formInstance.option("integrationOptions.watchMethod");
@@ -998,7 +996,7 @@ const LayoutManager = Widget.inherit({
         readOnlyState && instance.option("readOnly", readOnlyState);
 
         that.on("optionChanged", function(args) {
-            if(args.name === "readOnly" && !typeUtils.isDefined(editorOptions.readOnly)) {
+            if(args.name === "readOnly" && !isDefined(editorOptions.readOnly)) {
                 instance.option(args.name, args.value);
             }
         });
@@ -1086,12 +1084,12 @@ const LayoutManager = Widget.inherit({
     _updateReferencedOptions: function(newLayoutData) {
         var layoutData = this.option("layoutData");
 
-        if(typeUtils.isObject(layoutData)) {
+        if(isObject(layoutData)) {
             Object.getOwnPropertyNames(layoutData)
                 .forEach(property => delete this._optionsByReference['layoutData.' + property]);
         }
 
-        if(typeUtils.isObject(newLayoutData)) {
+        if(isObject(newLayoutData)) {
             Object.getOwnPropertyNames(newLayoutData)
                 .forEach(property => this._optionsByReference['layoutData.' + property] = true);
         }
@@ -1120,12 +1118,12 @@ const LayoutManager = Widget.inherit({
                 this._updateReferencedOptions(args.value);
 
                 if(this.option("items")) {
-                    if(!typeUtils.isEmptyObject(args.value)) {
+                    if(!isEmptyObject(args.value)) {
                         this._itemsRunTimeInfo.each((_, itemRunTimeInfo) => {
-                            if(typeUtils.isDefined(itemRunTimeInfo.item)) {
+                            if(isDefined(itemRunTimeInfo.item)) {
                                 const dataField = itemRunTimeInfo.item.dataField;
 
-                                if(dataField && typeUtils.isDefined(itemRunTimeInfo.widgetInstance)) {
+                                if(dataField && isDefined(itemRunTimeInfo.widgetInstance)) {
                                     const valueGetter = dataUtils.compileGetter(dataField);
                                     const dataValue = valueGetter(args.value);
 
@@ -1186,53 +1184,17 @@ const LayoutManager = Widget.inherit({
         this._invalidate();
     },
 
-    linkEditorToDataField: function(editorInstance, dataField, editorType) {
-        var fullFieldName = "layoutData." + dataField,
-            that = this,
-            isDataUpdating;
-
-        that.on("optionChanged", function(args) {
-            if(args.fullName === fullFieldName) {
-                isDataUpdating = true;
-                if(typeof args.value === "object") {
-                    that._managedUpdateEditorOption(editorInstance, "value", args.value);
-                } else {
-                    editorInstance.option("value", args.value);
-                }
-                isDataUpdating = false;
+    linkEditorToDataField(editorInstance, dataField) {
+        this.on("optionChanged", args => {
+            if(args.fullName === `layoutData.${dataField}`) {
+                editorInstance._setOptionSilent("value", args.value);
             }
         });
-
-        editorInstance.on("valueChanged", function(args) {
-            var isObjectValue = typeof args.value === "object",
-                isSameObjectValue = isObjectValue && args.value === args.previousValue;
-
-            if(!isDataUpdating && !isSameObjectValue) {
-                if(isObjectValue) {
-                    that._managedUpdateFieldValue(dataField, args.value);
-                } else {
-                    that._updateFieldValue(dataField, args.value);
-                }
+        editorInstance.on("valueChanged", args => {
+            if(!(isObject(args.value) && args.value === args.previousValue)) {
+                this._updateFieldValue(dataField, args.value);
             }
         });
-    },
-
-    _managedUpdateEditorOption: function(editorInstance, optionName, value) {
-        if(!this._isValueChangedCalled) {
-            this._isFieldValueChanged = true;
-            editorInstance.option(optionName, value);
-            this._isFieldValueChanged = false;
-        }
-    },
-
-    _managedUpdateFieldValue: function(dataField, value) {
-        this._isValueChangedCalled = true;
-
-        if(!this._isFieldValueChanged) {
-            this._updateFieldValue(dataField, value);
-        }
-
-        this._isValueChangedCalled = false;
     },
 
     _dimensionChanged: function() {
@@ -1249,7 +1211,7 @@ const LayoutManager = Widget.inherit({
     updateData: function(data, value) {
         var that = this;
 
-        if(typeUtils.isObject(data)) {
+        if(isObject(data)) {
             each(data, function(dataField, fieldValue) {
                 that._updateFieldValue(dataField, fieldValue);
             });
