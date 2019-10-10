@@ -464,13 +464,6 @@ const Scheduler = Widget.inherit({
             appointmentTemplate: "item",
 
             /**
-                * @name dxSchedulerOptions.dropDownAppointmentTemplate
-                * @default "dropDownAppointment"
-                * @extends AppointmentTemplate
-                */
-            dropDownAppointmentTemplate: "dropDownAppointment",
-
-            /**
                 * @name dxSchedulerOptions.appointmentCollectorTemplate
                 * @default "appointmentCollector"
                 * @extends AppointmentCollectorTemplate
@@ -1118,7 +1111,12 @@ const Scheduler = Widget.inherit({
              * @deprecated dxSchedulerOptions.onAppointmentFormOpening
              */
             onAppointmentFormCreated: { since: "18.2", alias: "onAppointmentFormOpening" },
-            dropDownAppointmentTemplate: { since: "19.2", message: "Use the 'dxSchedulerOptions.appointmentTooltipTemplate' option instead" }
+            /**
+            * @name dxSchedulerOptions.dropDownAppointmentTemplate
+            * @default "dropDownAppointment"
+            * @extends AppointmentTemplate
+            */
+            dropDownAppointmentTemplate: { since: "20.1", message: "Use the 'dxSchedulerOptions.appointmentTooltipTemplate' option instead" }
         });
     },
 
