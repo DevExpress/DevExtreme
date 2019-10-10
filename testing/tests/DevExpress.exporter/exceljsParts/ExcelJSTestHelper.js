@@ -8,7 +8,7 @@ class ExcelJSTestHelper {
     checkCustomizeCell(eventArgs, expectedCells, callIndex) {
         const { gridCell, excelCell } = eventArgs;
 
-        const currentRowIndex = Math.trunc(callIndex / expectedCells[0].length);
+        const currentRowIndex = Math.floor(callIndex / expectedCells[0].length);
         const currentCellIndex = callIndex % expectedCells[currentRowIndex].length;
         const expectedCell = expectedCells[currentRowIndex][currentCellIndex];
 
