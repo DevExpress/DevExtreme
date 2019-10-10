@@ -1119,7 +1119,7 @@ const Scheduler = Widget.inherit({
              * @deprecated dxSchedulerOptions.onAppointmentFormOpening
              */
             onAppointmentFormCreated: { since: "18.2", alias: "onAppointmentFormOpening" },
-            dropDownAppointmentTemplate: { since: "20.1", message: "appointmentTooltipTemplate" }
+            dropDownAppointmentTemplate: { since: "19.2", message: "appointmentTooltipTemplate" }
         });
     },
 
