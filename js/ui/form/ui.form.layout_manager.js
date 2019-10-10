@@ -833,7 +833,12 @@ const LayoutManager = Widget.inherit({
         if(Array.isArray(validationRules) && validationRules.length) {
             this._createComponent($editor, Validator, {
                 validationRules: validationRules,
-                validationGroup: this.option("validationGroup")
+                validationGroup: this.option("validationGroup"),
+                dataGetter: function() {
+                    return {
+                        formItem: item
+                    };
+                }
             });
         }
     },

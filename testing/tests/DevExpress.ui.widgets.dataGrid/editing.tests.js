@@ -11185,6 +11185,86 @@ QUnit.test("Only valid data is saved (async)", function(assert) {
     assert.equal($formRow.find(".dx-validation-pending").length, 1, "There is one pending editor in first row");
 });
 
+QUnit.test("AsyncRule.validationCallback accepts extra parameters", function(assert) {
+    // arrange
+    let rowsView = this.rowsView,
+        testElement = $("#container"),
+        inputElement;
+    const validationCallback = sinon.spy(function() { return new Deferred().resolve().promise(); });
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "form",
+            allowUpdating: true,
+        },
+        columns: [{
+            dataField: "age",
+            validationRules: [{
+                type: "async",
+                validationCallback: validationCallback
+            }]
+        }]
+    });
+
+    // act
+    this.editRow(0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger("change");
+
+    assert.equal(validationCallback.callCount, 1, "valdiationCallback should be called once");
+
+    const params = validationCallback.getCall(0).args[0];
+
+    assert.ok(params.data, "data should be passed");
+    assert.strictEqual(params.column.dataField, "age", "column.dataField === 'age'");
+    assert.ok(params.column.validationRules, "column.validationRules !== null");
+});
+
+QUnit.test("CustomRule.validationCallback accepts extra parameters", function(assert) {
+    // arrange
+    let rowsView = this.rowsView,
+        testElement = $("#container"),
+        inputElement;
+    const validationCallback = sinon.spy(function() { return true; });
+
+    rowsView.render(testElement);
+
+    this.applyOptions({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "form",
+            allowUpdating: true,
+        },
+        columns: [{
+            dataField: "age",
+            validationRules: [{
+                type: "custom",
+                validationCallback: validationCallback
+            }]
+        }]
+    });
+
+    // act
+    this.editRow(0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement.val("");
+    inputElement.trigger("change");
+
+    assert.equal(validationCallback.callCount, 1, "valdiationCallback should be called once");
+
+    const params = validationCallback.getCall(0).args[0];
+
+    assert.ok(params.data, "data should be passed");
+    assert.strictEqual(params.column.dataField, "age", "column.dataField === 'age'");
+    assert.ok(params.column.validationRules, "column.validationRules !== null");
+});
+
 // T506863
 QUnit.testInActiveWindow("Show the revert button when a row updating is canceled", function(assert) {
     // arrange

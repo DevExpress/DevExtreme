@@ -235,6 +235,8 @@ class CustomRuleValidator extends BaseRuleValidator {
      * @type_function_param1_field2 rule:object
      * @type_function_param1_field3 validator:object
      * @type_function_param1_field4 data:object
+     * @type_function_param1_field5 column:object
+     * @type_function_param1_field6 formItem:object
      */
     /**
      * @name CustomRule.message
@@ -257,14 +259,14 @@ class CustomRuleValidator extends BaseRuleValidator {
         }
         const validator = rule.validator,
             dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
-            data = typeUtils.isFunction(dataGetter) && dataGetter(),
+            extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
             params = {
                 value: value,
                 validator: validator,
                 rule: rule
             };
-        if(data) {
-            params.data = data;
+        if(extraParams) {
+            extend(params, extraParams);
         }
         return rule.validationCallback(params);
     }
@@ -289,6 +291,8 @@ class AsyncRuleValidator extends CustomRuleValidator {
      * @type_function_param1_field2 rule:object
      * @type_function_param1_field3 validator:object
      * @type_function_param1_field4 data:object
+     * @type_function_param1_field5 column:object
+     * @type_function_param1_field6 formItem:object
      */
     /**
      * @name AsyncRule.message
@@ -314,14 +318,14 @@ class AsyncRuleValidator extends CustomRuleValidator {
         }
         const validator = rule.validator,
             dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
-            data = typeUtils.isFunction(dataGetter) && dataGetter(),
+            extraParams = typeUtils.isFunction(dataGetter) && dataGetter(),
             params = {
                 value: value,
                 validator: validator,
                 rule: rule
             };
-        if(data) {
-            params.data = data;
+        if(extraParams) {
+            extend(params, extraParams);
         }
         const callbackResult = rule.validationCallback(params);
         if(!typeUtils.isPromise(callbackResult)) {

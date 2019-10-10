@@ -805,10 +805,9 @@ QUnit.test("Custom validation rule when value is array", function(assert) {
     assert.deepEqual(customCallback.getCall(0).args[0].value, value, "value is correct");
 });
 
-QUnit.test("Validation callback must have the 'data' in arguments when validator has 'dataGetter' option", function(assert) {
-    var params,
-        customCallback = sinon.spy(function() { return true; }),
-        data = { test: "test" },
+QUnit.test("Validation callback must have extra parameters in arguments when validator has 'dataGetter' option", function(assert) {
+    const customCallback = sinon.spy(function() { return true; }),
+        data = { field1: "test1", field2: "test2" },
         validator = {
             option: function(optionName) {
                 if(optionName === "dataGetter") {
@@ -830,11 +829,12 @@ QUnit.test("Validation callback must have the 'data' in arguments when validator
     assert.ok(result, "Result is defined");
     assert.ok(customCallback.calledOnce, "Validation callback was called");
 
-    params = customCallback.getCall(0).args[0];
+    const params = customCallback.getCall(0).args[0];
     assert.equal(params.value, value, "Correct value should be passed");
     assert.strictEqual(params.validator, validator, "Validator should be passed");
     assert.strictEqual(params.rule, rule, "Rule should be passed");
-    assert.strictEqual(params.data, data, "Data should be passed");
+    assert.strictEqual(params.field1, "test1", "Extra field1 should be passed");
+    assert.strictEqual(params.field2, "test2", "Extra field2 should be passed");
 });
 
 
@@ -1383,8 +1383,7 @@ QUnit.test("One rule is reevaluated", function(assert) {
     });
 });
 
-QUnit.test("Validation callback must have the 'data' in arguments when validator has 'dataGetter' option", function(assert) {
-    let params;
+QUnit.test("Validation callback must have extra parameters in arguments when validator has 'dataGetter' option", function(assert) {
     const customCallback = sinon.spy(function() {
             const d = new Deferred();
             d.resolve({
@@ -1392,7 +1391,7 @@ QUnit.test("Validation callback must have the 'data' in arguments when validator
             });
             return d.promise();
         }),
-        data = { test: "test" },
+        data = { field1: "test1", field2: "test2" },
         validator = {
             option: function(optionName) {
                 if(optionName === "dataGetter") {
@@ -1413,11 +1412,12 @@ QUnit.test("Validation callback must have the 'data' in arguments when validator
     assert.ok(result, "Result is defined");
     assert.ok(customCallback.calledOnce, "Validation callback was called");
 
-    params = customCallback.getCall(0).args[0];
+    const params = customCallback.getCall(0).args[0];
     assert.equal(params.value, value, "Correct value should be passed");
     assert.strictEqual(params.validator, validator, "Validator should be passed");
     assert.strictEqual(params.rule, rule, "Rule should be passed");
-    assert.strictEqual(params.data, data, "Data should be passed");
+    assert.strictEqual(params.field1, "test1", "Extra field1 should be passed");
+    assert.strictEqual(params.field2, "test2", "Extra field2 should be passed");
 });
 
 
