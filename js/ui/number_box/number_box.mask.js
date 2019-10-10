@@ -662,13 +662,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
-    _renderValue: function(options) {
+    _renderValue: function() {
         if(this._useMaskBehavior()) {
             this._parsedValue = this.option("value");
             this._setTextByParsedValue();
         }
 
-        return this.callBase.apply(this, arguments);
+        return this.callBase();
     },
 
     _adjustParsedValue: function() {
