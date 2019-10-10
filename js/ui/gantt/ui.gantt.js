@@ -10,23 +10,21 @@ import { hasWindow } from "../../core/utils/window";
 import DataOption from "./ui.gantt.data.option";
 import SplitterControl from "../splitter";
 import { GanttDialog } from "./ui.gantt.dialogs";
+import LoadPanel from "../load_panel";
 
 const GANTT_CLASS = "dx-gantt";
 const GANTT_VIEW_CLASS = "dx-gantt-view";
 const GANTT_COLLAPSABLE_ROW = "dx-gantt-collapsable-row";
 const GANTT_TREE_LIST_WRAPPER = "dx-gantt-treelist-wrapper";
 
+const GANTT_TASKS = "tasks";
+const GANTT_DEPENDENCIES = "dependencies";
+const GANTT_RESOURCES = "resources";
+const GANTT_RESOURCE_ASSIGNMENTS = "resourceAssignments";
+
 const GANTT_DEFAULT_ROW_HEIGHT = 34;
 
 class Gantt extends Widget {
-    _init() {
-        super._init();
-        this._refreshDataSource("tasks");
-        this._refreshDataSource("dependencies");
-        this._refreshDataSource("resources");
-        this._refreshDataSource("resourceAssignments");
-    }
-
     _initMarkup() {
         super._initMarkup();
         this.$element().addClass(GANTT_CLASS);
@@ -43,6 +41,13 @@ class Gantt extends Widget {
             .appendTo(this.$element());
         this._$dialog = $("<div>")
             .appendTo(this.$element());
+        this._$loadPanel = $("<div>")
+            .appendTo(this.$element());
+
+        this._refreshDataSource(GANTT_TASKS);
+        this._refreshDataSource(GANTT_DEPENDENCIES);
+        this._refreshDataSource(GANTT_RESOURCES);
+        this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
     }
 
     _render() {
@@ -50,7 +55,7 @@ class Gantt extends Widget {
         this._renderSplitter();
     }
     _renderTreeList() {
-        const { keyExpr, parentIdExpr } = this.option("tasks");
+        const { keyExpr, parentIdExpr } = this.option(GANTT_TASKS);
         this._treeList = this._createComponent(this._$treeList, dxTreeList, {
             dataSource: this._tasksRaw,
             keyExpr: keyExpr,
@@ -105,7 +110,8 @@ class Gantt extends Widget {
             editing: this.option("editing"),
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this),
-            onDialogShowing: this._showDialog.bind(this)
+            onDialogShowing: this._showDialog.bind(this),
+            modelChangesListener: this._createModelChangesListener()
         });
     }
 
@@ -206,11 +212,26 @@ class Gantt extends Widget {
             delete this[`_${name}`];
         }
         if(this.option(`${name}.dataSource`)) {
-            dataOption = new DataOption(name, (name, data) => { this._dataSourceChanged(name, data); });
-            dataOption.option("dataSource", this.option(`${name}.dataSource`));
+            dataOption = new DataOption(name, this._getLoadPanel(), (name, data) => {
+                this._dataSourceChanged(name, data);
+            });
+            dataOption.option("dataSource", this._getSpecificDataSourceOption(name));
             dataOption._refreshDataSource();
             this[`_${name}Option`] = dataOption;
         }
+    }
+    _getSpecificDataSourceOption(name) {
+        var dataSource = this.option(`${name}.dataSource`);
+        if(Array.isArray(dataSource)) {
+            return {
+                store: {
+                    type: "array",
+                    data: dataSource,
+                    key: this.option(`${name}.keyExpr`)
+                }
+            };
+        }
+        return dataSource;
     }
     _compileGettersByOption(optionName) {
         const getters = {};
@@ -222,6 +243,27 @@ class Gantt extends Widget {
             }
         }
         return getters;
+    }
+    _compileSettersByOption(optionName) {
+        const setters = {};
+        const optionValue = this.option(optionName);
+        for(let field in optionValue) {
+            const exprMatches = field.match(/(\w*)Expr/);
+            if(exprMatches) {
+                setters[exprMatches[1]] = dataCoreUtils.compileSetter(optionValue[exprMatches[0]]);
+            }
+        }
+        return setters;
+    }
+    _getStoreObject(optionName, modelObject) {
+        const setters = this._compileSettersByOption(optionName);
+        return Object.keys(setters)
+            .reduce((previous, key) => {
+                if(key !== "key") {
+                    setters[key](previous, modelObject[key]);
+                }
+                return previous;
+            }, {});
     }
     _prepareMapHandler(getters) {
         return (data) => {
@@ -239,10 +281,64 @@ class Gantt extends Widget {
 
         this[`_${dataSourceName}`] = mappedData;
         this._setGanttViewOption(dataSourceName, mappedData);
-        if(dataSourceName === "tasks") {
+        if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = data;
             this._setTreeListOption("dataSource", data);
         }
+    }
+
+    _createModelChangesListener() {
+        return {
+            NotifyTaskCreated: (task) => { this._onRecordInserted(GANTT_TASKS, task); },
+            NotifyTaskRemoved: (task) => { this._onRecordRemoved(GANTT_TASKS, task); },
+            NotifyTaskTitleChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "title", newValue); },
+            NotifyTaskDescriptionChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "description", newValue); },
+            NotifyTaskStartChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "start", newValue); },
+            NotifyTaskEndChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "end", newValue); },
+            NotifyTaskProgressChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "progress", newValue); },
+
+            NotifyDependencyInserted: (dependency) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency); },
+            NotifyDependencyRemoved: (dependency) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependency); },
+
+            NotifyResourceCreated: (resource) => { this._onRecordInserted(GANTT_RESOURCES, resource); },
+            NotifyResourceRemoved: (resource) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
+
+            NotifyResourceAssigned: (assignment) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment); },
+            NotifyResourceUnassigned: (assignment) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignment); }
+        };
+    }
+    _onRecordInserted(optionName, record) {
+        const dataOption = this[`_${optionName}Option`];
+        if(dataOption) {
+            const data = this._getStoreObject(optionName, record);
+            dataOption.insert(data);
+        }
+    }
+    _onRecordRemoved(optionName, record) {
+        const dataOption = this[`_${optionName}Option`];
+        if(dataOption) {
+            dataOption.remove(record.id);
+        }
+    }
+    _onRecordUpdated(optionName, key, fieldName, value) {
+        const dataOption = this[`_${optionName}Option`];
+        if(dataOption) {
+            const setter = dataCoreUtils.compileSetter(this.option(`${optionName}.${fieldName}Expr`));
+            const data = {};
+            setter(data, value);
+            dataOption.update(key, data);
+        }
+    }
+
+    _getLoadPanel() {
+        if(!this._loadPanel) {
+            this._loadPanel = this._createComponent(this._$loadPanel, LoadPanel, {
+                position: {
+                    of: this.$element()
+                }
+            });
+        }
+        return this._loadPanel;
     }
 
     _createSelectionChangedAction() {
@@ -547,16 +643,16 @@ class Gantt extends Widget {
     _optionChanged(args) {
         switch(args.name) {
             case "tasks":
-                this._refreshDataSource("tasks");
+                this._refreshDataSource(GANTT_TASKS);
                 break;
             case "dependencies":
-                this._refreshDataSource("dependencies");
+                this._refreshDataSource(GANTT_DEPENDENCIES);
                 break;
             case "resources":
-                this._refreshDataSource("resources");
+                this._refreshDataSource(GANTT_RESOURCES);
                 break;
             case "resourceAssignments":
-                this._refreshDataSource("resourceAssignments");
+                this._refreshDataSource(GANTT_RESOURCE_ASSIGNMENTS);
                 break;
             case "columns":
                 this._setTreeListOption("columns", this.option(args.name));
