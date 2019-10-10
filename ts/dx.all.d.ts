@@ -1694,16 +1694,16 @@ declare module DevExpress.fileProvider {
     export class FileProvider {
         constructor(options?: FileProviderOptions)
     }
-    /** @name WebApiFileProvider.Options */
-    export interface WebApiFileProviderOptions extends FileProviderOptions<WebApiFileProvider> {
-        /** @name WebApiFileProvider.Options.endpointUrl */
+    /** @name RemoteFileProvider.Options */
+    export interface RemoteFileProviderOptions extends FileProviderOptions<RemoteFileProvider> {
+        /** @name RemoteFileProvider.Options.endpointUrl */
         endpointUrl?: string;
-        /** @name WebApiFileProvider.Options.hasSubDirectoriesExpr */
+        /** @name RemoteFileProvider.Options.hasSubDirectoriesExpr */
         hasSubDirectoriesExpr?: string | Function;
     }
-    /** @name WebApiFileProvider */
-    export class WebApiFileProvider extends FileProvider {
-        constructor(options?: WebApiFileProviderOptions)
+    /** @name RemoteFileProvider */
+    export class RemoteFileProvider extends FileProvider {
+        constructor(options?: RemoteFileProviderOptions)
     }
 }
 declare module DevExpress.fx {

@@ -357,9 +357,9 @@
     }
   },
   {
-    "name": "ui/file_manager/file_provider/webapi",
+    "name": "ui/file_manager/file_provider/remote",
     "exports": {
-      "default": { "path": "fileProvider.WebApiFileProvider" }
+      "default": { "path": "fileProvider.RemoteFileProvider" }
     }
   },
   {
