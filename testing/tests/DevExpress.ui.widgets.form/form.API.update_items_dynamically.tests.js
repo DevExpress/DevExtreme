@@ -42,6 +42,22 @@ class FormTestWrapper {
         this._form.endUpdate();
     }
 
+    checkValidationSummaryContent(expectedMessages) {
+        const $itemsContent = this._form.$element().find(".dx-validationsummary-item-content");
+
+        this._assert.equal($itemsContent.length, expectedMessages.length, "validation summary items");
+        $itemsContent.toArray().forEach((item, index) => {
+            this._assert.strictEqual($(item).text(), expectedMessages[index], `${index} item text of the validation summary`);
+        });
+    }
+
+    checkValidationResult(isValid, brokenRulesCount, validatorsCount) {
+        const result = this._form.validate();
+        this._assert.equal(result.isValid, isValid, "isValid of validation result");
+        this._assert.equal(result.brokenRules.length, brokenRulesCount, "brokenRules count of validation result");
+        this._assert.equal(result.validators.length, validatorsCount, "validators count of validation result");
+    }
+
     checkFormsReRender(message = "") {
         this._assert.equal(this._formContentReadyStub.callCount, 0, `${message}, form is not re-render`);
         this._formContentReadyStub.reset();
@@ -1486,5 +1502,226 @@ module("Tabbed item. Use the itemOption method", () => {
         testWrapper.checkSimpleItem("dataField2", "DataField2", "Data Field 2");
         testWrapper.checkItemElement(".test-tab", true, "tabbed item element");
         testWrapper.checkTabTitle(".test-tab", "Test Title");
+    });
+});
+
+module("Validation", () => {
+    test("Rendering new item with validation rules", assert => {
+        const testWrapper = new FormTestWrapper({
+            formData: {
+                dataField1: "DataField1"
+            },
+            items: ["dataField1",
+                {
+                    itemType: "group",
+                    items: [{
+                        dataField: "dataField2"
+                    }]
+                }
+            ]
+        }, assert);
+
+        testWrapper.setItemOption("dataField2", "validationRules", [{ type: "required" }]);
+        testWrapper.checkValidationResult(false, 1, 1);
+    });
+
+    test("Rendering new simple item instead of a simple item with validation rules", assert => {
+        const testWrapper = new FormTestWrapper({
+            formData: {
+                dataField1: "DataField1"
+            },
+            items: ["dataField1",
+                {
+                    itemType: "group",
+                    name: "group1",
+                    items: [{
+                        dataField: "dataField2",
+                        validationRules: [{ type: "required" }]
+                    }]
+                }
+            ]
+        }, assert);
+
+        testWrapper.setItemOption("group1", "items", [{ dataField: "dataField3" }]);
+        testWrapper.checkValidationResult(true, 0, 0);
+    });
+
+    test("Rendering new items with validation rules", assert => {
+        const testWrapper = new FormTestWrapper({
+            formData: {
+                dataField1: "DataField1"
+            },
+            items: ["dataField1",
+                {
+                    itemType: "group",
+                    items: [{
+                        dataField: "dataField2"
+                    }, {
+                        dataField: "dataField3"
+                    }]
+                }
+            ]
+        }, assert);
+
+        testWrapper.setItemOption("dataField2", "validationRules", [{ type: "required" }]);
+        testWrapper.setItemOption("dataField3", "validationRules", [{ type: "required" }]);
+        testWrapper.checkValidationResult(false, 2, 2);
+    });
+
+    test("Rendering new items with validation rules instead of items without validation rules in the group and check the validation summary", assert => {
+        const testWrapper = new FormTestWrapper({
+            formData: {
+                dataField1: "DataField1"
+            },
+            showValidationSummary: true,
+            items: ["dataField1",
+                {
+                    itemType: "group",
+                    items: [{
+                        dataField: "dataField2"
+                    }, {
+                        dataField: "dataField3"
+                    }]
+                }
+            ]
+        }, assert);
+
+        testWrapper.setItemOption("dataField2", "validationRules", [{ type: "required", message: "dataField2 is required" }]);
+        testWrapper.setItemOption("dataField3", "validationRules", [{ type: "required", message: "dataField3 is required" }]);
+        testWrapper.checkValidationResult(false, 2, 2);
+        testWrapper.checkValidationSummaryContent(["dataField2 is required", "dataField3 is required"]);
+    });
+
+    test("Rendering new simple item without validation rules instead of items with validation rules in the group and check the validation summary", assert => {
+        const testWrapper = new FormTestWrapper({
+            formData: {
+                dataField1: "DataField1"
+            },
+            showValidationSummary: true,
+            items: ["dataField1",
+                {
+                    itemType: "group",
+                    name: "group1",
+                    items: [{
+                        dataField: "dataField2",
+                        validationRules: [{ type: "required", message: "dataField2 is required" }]
+                    }, {
+                        dataField: "dataField3",
+                        validationRules: [{ type: "required", message: "dataField3 is required" }]
+                    }]
+                }
+            ]
+        }, assert);
+
+        testWrapper.checkValidationResult(false, 2, 2);
+        testWrapper.checkValidationSummaryContent(["dataField2 is required", "dataField3 is required"]);
+        testWrapper.setItemOption("group1", "items", [{ dataField: "dataField2" }, { dataField: "dataField3" }]);
+        testWrapper.checkValidationResult(true, 0, 0);
+        testWrapper.checkValidationSummaryContent([]);
+    });
+
+    test("Add new validator of simple item after validating form with the validation summary", assert => {
+        const testWrapper = new FormTestWrapper({
+            formData: {
+                dataField1: "DataField1"
+            },
+            showValidationSummary: true,
+            items: ["dataField1",
+                {
+                    itemType: "group",
+                    name: "group1",
+                    items: [{
+                        dataField: "dataField2",
+                        validationRules: [{ type: "required", message: "dataField2 is required" }]
+                    }]
+                }
+            ]
+        }, assert);
+
+        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationSummaryContent(["dataField2 is required"]);
+        testWrapper.setItemOption("group1", "items", [{
+            dataField: "dataField2",
+            validationRules: [{ type: "required", message: "dataField2 is required" }]
+        }, {
+            dataField: "dataField3",
+            validationRules: [{ type: "required", message: "dataField3 is required" }]
+        }]);
+        testWrapper.checkValidationResult(false, 2, 2);
+        testWrapper.checkValidationSummaryContent(["dataField2 is required", "dataField3 is required"]);
+    });
+
+    test("Change the isRequired option of the simple item", assert => {
+        const testWrapper = new FormTestWrapper({
+            formData: {
+                dataField1: "DataField1"
+            },
+            items: ["dataField1",
+                {
+                    itemType: "group",
+                    items: [{
+                        dataField: "dataField2"
+                    }]
+                }
+            ]
+        }, assert);
+
+        testWrapper.setItemOption("dataField2", "isRequired", true);
+        testWrapper.checkValidationResult(false, 1, 1);
+
+        testWrapper.setItemOption("dataField2", "isRequired", false);
+        testWrapper.checkValidationResult(true, 0, 0);
+    });
+
+    test("Change the visible option of the simple item", assert => {
+        const testWrapper = new FormTestWrapper({
+            formData: {
+                dataField1: "DataField1"
+            },
+            items: ["dataField1",
+                {
+                    itemType: "group",
+                    items: [{
+                        dataField: "dataField2",
+                        validationRules: [{ type: "required" }]
+                    }]
+                }
+            ]
+        }, assert);
+
+        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.setItemOption("dataField2", "visible", false);
+        testWrapper.checkValidationResult(true, 0, 0);
+        testWrapper.setItemOption("dataField2", "visible", true);
+        testWrapper.checkValidationResult(false, 1, 1);
+    });
+
+    test("Change the visible option of the simple item with validationSummary", assert => {
+        const testWrapper = new FormTestWrapper({
+            formData: {
+                dataField1: "DataField1"
+            },
+            showValidationSummary: true,
+            items: ["dataField1",
+                {
+                    itemType: "group",
+                    items: [{
+                        dataField: "dataField2",
+                        validationRules: [{ type: "required" }]
+                    }]
+                }
+            ]
+        }, assert);
+
+        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationSummaryContent(["Required"]);
+
+        testWrapper.setItemOption("dataField2", "visible", false);
+        testWrapper.checkValidationResult(true, 0, 0);
+        testWrapper.checkValidationSummaryContent([]);
+
+        testWrapper.setItemOption("dataField2", "visible", true);
+        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationSummaryContent(["Required"]);
     });
 });

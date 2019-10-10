@@ -21,7 +21,14 @@ import Scrollable from "../scroll_view/ui.scrollable";
 import { Deferred } from "../../core/utils/deferred";
 import themes from "../themes";
 import tryCreateItemOptionAction from "./ui.form.item_options_actions";
-import { concatPaths, createItemPathByIndex, getFullOptionName, getOptionNameFromFullName, getTextWithoutSpaces, isExpectedItem } from "./ui.form.utils";
+import {
+    concatPaths,
+    createItemPathByIndex,
+    getFullOptionName,
+    getOptionNameFromFullName,
+    getTextWithoutSpaces,
+    isExpectedItem
+} from "./ui.form.utils";
 
 import "../validation_summary";
 import "../validation_group";
@@ -44,6 +51,8 @@ const FORM_VALIDATION_SUMMARY = "dx-form-validation-summary";
 
 const WIDGET_CLASS = "dx-widget";
 const FOCUSED_STATE_CLASS = "dx-state-focused";
+
+const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ["items", "isRequired", "validationRules", "visible"];
 
 const Form = Widget.inherit({
     _init: function() {
@@ -883,9 +892,13 @@ const Form = Widget.inherit({
         }
 
         if(this.option("showValidationSummary")) {
-            $("<div>").addClass(FORM_VALIDATION_SUMMARY).dxValidationSummary({
-                validationGroup: this._getValidationGroup()
-            }).appendTo(this._getContent());
+            this._validationSummary = $("<div>")
+                .addClass(FORM_VALIDATION_SUMMARY)
+                .dxValidationSummary({
+                    validationGroup: this._getValidationGroup()
+                })
+                .appendTo(this._getContent())
+                .dxValidationSummary("instance");
         }
     },
 
@@ -1278,6 +1291,16 @@ const Form = Widget.inherit({
         return action && action.tryExecute();
     },
 
+    _updateValidationGroupAndSummaryIfNeeded(fullName) {
+        const optionName = getOptionNameFromFullName(fullName);
+        if(ITEM_OPTIONS_FOR_VALIDATION_UPDATING.indexOf(optionName) > -1) {
+            ValidationEngine.addGroup(this._getValidationGroup());
+            if(this.option("showValidationSummary")) {
+                this._validationSummary && this._validationSummary._initGroupRegistration();
+            }
+        }
+    },
+
     _setLayoutManagerItemOption(layoutManager, optionName, value, path) {
         if(this._updateLockCount > 0) {
             !layoutManager._updateLockCount && layoutManager.beginUpdate();
@@ -1288,6 +1311,7 @@ const Form = Widget.inherit({
             });
         }
         layoutManager.option(optionName, value);
+        this._updateValidationGroupAndSummaryIfNeeded(optionName);
     },
 
     _tryChangeLayoutManagerItemOption(fullName, value) {
