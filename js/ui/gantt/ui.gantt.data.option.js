@@ -2,37 +2,53 @@ import Component from "../../core/component";
 import DataHelperMixin from "../../data_helper";
 
 class DataOption extends Component {
-    constructor(optionName, dataSourceChangedCallback) {
+    constructor(optionName, loadPanel, dataSourceChangedCallback) {
         super();
         this._optionName = optionName;
+        this._loadPanel = loadPanel;
         this._dataSourceChangedCallback = dataSourceChangedCallback;
     }
-    insert(data, callback) {
-        this._dataSource.store().insert(data).done(
-            function(data) {
-                if(callback) {
-                    callback(data);
-                }
+    insert(data, callback, errorCallback) {
+        this._showLoadPanel();
+        this._getStore().insert(data).done((response) => {
+            if(callback) {
+                callback(response);
             }
-        );
+            this._hideLoadPanel();
+        }).fail((error) => {
+            if(errorCallback) {
+                errorCallback(error);
+            }
+            this._hideLoadPanel();
+        });
     }
-    update(key, data, callback) {
-        this._dataSource.store().update(key, data).done(
-            function(data, key) {
-                if(callback) {
-                    callback(key, data);
-                }
+    update(key, data, callback, errorCallback) {
+        this._showLoadPanel();
+        this._getStore().update(key, data).done((data, key) => {
+            if(callback) {
+                callback(data, key);
             }
-        );
+            this._hideLoadPanel();
+        }).fail((error) => {
+            if(errorCallback) {
+                errorCallback(error);
+            }
+            this._hideLoadPanel();
+        });
     }
-    remove(key, callback) {
-        this._dataSource.store().remove(key).done(
-            function(key) {
-                if(callback) {
-                    callback(key);
-                }
+    remove(key, callback, errorCallback) {
+        this._showLoadPanel();
+        this._getStore().remove(key).done((key) => {
+            if(callback) {
+                callback(key);
             }
-        );
+            this._hideLoadPanel();
+        }).fail((error) => {
+            if(errorCallback) {
+                errorCallback(error);
+            }
+            this._hideLoadPanel();
+        });
     }
 
     _dataSourceChangedHandler(newItems, e) {
@@ -42,6 +58,22 @@ class DataOption extends Component {
         return {
             paginate: false
         };
+    }
+    _dataSourceLoadingChangedHandler(isLoading) {
+        if(isLoading && !this._dataSource.isLoaded()) {
+            this._showLoadPanel();
+        } else {
+            this._hideLoadPanel();
+        }
+    }
+    _showLoadPanel() {
+        this._loadPanel.show();
+    }
+    _hideLoadPanel() {
+        this._loadPanel.hide();
+    }
+    _getStore() {
+        return this._dataSource.store();
     }
 }
 DataOption.include(DataHelperMixin);

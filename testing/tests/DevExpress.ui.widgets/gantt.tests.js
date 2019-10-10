@@ -501,6 +501,8 @@ QUnit.module("Dialogs", moduleConfig, () => {
         $resources = $dialog.find(".dx-list-item");
         assert.equal($resources.length, resources.length - 1, "first resource removed from list");
 
+        const secondResourceText = resources[1].text;
+        const thirdResourceText = resources[2].text;
         const newResourceText = "newResource";
         const textBox = $dialog.find(".dx-textbox").eq(0).dxTextBox("instance");
         textBox.option("text", newResourceText);
@@ -513,13 +515,59 @@ QUnit.module("Dialogs", moduleConfig, () => {
         const $okButton = $dialog.find(".dx-popup-bottom").find(".dx-button").eq(0);
         $okButton.trigger("dxclick");
         this.clock.tick();
-        const modelResources = getGanttViewCore(this.instance).viewModel.resources.items;
-        assert.equal(modelResources[0].text, resources[1].text, "first resource removed from model");
-        assert.equal(modelResources[1].text, resources[2].text, "second resource moved");
-        assert.equal(modelResources[2].text, newResourceText, "new resource added");
+        assert.equal(resources[0].text, secondResourceText, "first resource removed from ds");
+        assert.equal(resources[1].text, thirdResourceText, "second resource ds");
+        assert.equal(resources[2].text, newResourceText, "new resource ds");
+    });
+});
 
-        this.instance.option("editing.enabled", false);
-        getGanttViewCore(this.instance).commandManager.showResourcesDialog.execute();
-        assert.equal($dialog.find(".dx-popup-bottom").find(".dx-button").length, 1, "only cancel button in toolbar");
+QUnit.module("DataSources", moduleConfig, () => {
+    test("inserting", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.instance.option("editing.enabled", true);
+        this.clock.tick();
+
+        const tasksCount = tasks.length;
+        const newStart = new Date("2019-02-21");
+        const newEnd = new Date("2019-02-22");
+        const newTitle = "New";
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0);
+        this.clock.tick();
+        assert.equal(tasks.length, tasksCount + 1, "new task was created in ds");
+        const createdTask = tasks[tasks.length - 1];
+        assert.equal(createdTask.title, newTitle, "new task title is right");
+        assert.equal(createdTask.start, newStart, "new task start is right");
+        assert.equal(createdTask.end, newEnd, "new task end is right");
+    });
+    test("updating", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.instance.option("editing.enabled", true);
+        this.clock.tick();
+
+        const updatedTaskId = 3;
+        const updatedStart = new Date("2019-02-21");
+        const updatedEnd = new Date("2019-02-22");
+        const updatedTitle = "New";
+        getGanttViewCore(this.instance).commandManager.changeTaskTitleCommand.execute(updatedTaskId.toString(), updatedTitle);
+        getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
+        getGanttViewCore(this.instance).commandManager.changeTaskEndCommand.execute(updatedTaskId.toString(), updatedEnd);
+        this.clock.tick();
+        const updatedTask = tasks.find((t) => t.id === updatedTaskId);
+        assert.equal(updatedTask.title, updatedTitle, "task title is updated");
+        assert.equal(updatedTask.start, updatedStart, "new task start is updated");
+        assert.equal(updatedTask.end, updatedEnd, "new task end is updated");
+    });
+    test("removing", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.instance.option("editing.enabled", true);
+        this.clock.tick();
+
+        const removedTaskId = 3;
+        const tasksCount = tasks.length;
+        getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(removedTaskId.toString());
+        this.clock.tick();
+        assert.equal(tasks.length, tasksCount - 1, "tasks less");
+        const removedTask = tasks.find((t) => t.id === removedTaskId);
+        assert.equal(removedTask, undefined, "task removed");
     });
 });
