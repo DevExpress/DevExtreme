@@ -4133,7 +4133,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 4, 24),
             views: [{
                 type: "week",
-                appointmentTooltipTemplate: function(item, container) {
+                appointmentTooltipTemplate: function(model, index, container) {
                     assert.equal(isRenderer(container), !!config().useJQuery, "element is correct");
                     countCallTemplate2++;
                 }
