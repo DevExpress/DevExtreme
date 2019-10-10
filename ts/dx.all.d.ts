@@ -5077,6 +5077,7 @@ declare module DevExpress.ui {
         dateSerializationFormat?: string;
         /** @name dxScheduler.Options.descriptionExpr */
         descriptionExpr?: string;
+        /** @deprecated */
         /** @name dxScheduler.Options.dropDownAppointmentTemplate */
         dropDownAppointmentTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxScheduler.Options.editing */
