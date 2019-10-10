@@ -493,7 +493,7 @@
 
 /**
  * @typedef {string} Enums.FormItemEditorType
- * @enum {'dxAutocomplete'|'dxCalendar'|'dxCheckBox'|'dxColorBox'|'dxDateBox'|'dxDropDownBox'|'dxLookup'|'dxNumberBox'|'dxRadioGroup'|'dxRangeSlider'|'dxSelectBox'|'dxSlider'|'dxSwitch'|'dxTagBox'|'dxTextArea'|'dxTextBox'}
+ * @enum {'dxAutocomplete'|'dxCalendar'|'dxCheckBox'|'dxColorBox'|'dxDateBox'|'dxDropDownBox'|'dxHtmlEditor'|'dxLookup'|'dxNumberBox'|'dxRadioGroup'|'dxRangeSlider'|'dxSelectBox'|'dxSlider'|'dxSwitch'|'dxTagBox'|'dxTextArea'|'dxTextBox'}
  */
 
 /**
