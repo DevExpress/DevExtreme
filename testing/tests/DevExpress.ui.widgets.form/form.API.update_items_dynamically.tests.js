@@ -9,12 +9,11 @@ const FORM_LAYOUT_MANAGER_CLASS = "dx-layout-manager";
 const { testStart, module, test } = QUnit;
 
 class FormTestWrapper {
-    constructor(options, assert) {
+    constructor(options) {
         this._form = $("#form").dxForm(options).dxForm("instance");
         this._formContentReadyStub = sinon.stub();
         this._form.on("contentReady", this._formContentReadyStub);
         this._contentReadyStubs = this._createLayoutManagerStubs(this._form.$element());
-        this._assert = assert;
     }
 
     _createLayoutManagerStubs($form) {
@@ -45,21 +44,21 @@ class FormTestWrapper {
     checkValidationSummaryContent(expectedMessages) {
         const $itemsContent = this._form.$element().find(".dx-validationsummary-item-content");
 
-        this._assert.equal($itemsContent.length, expectedMessages.length, "validation summary items");
+        QUnit.assert.equal($itemsContent.length, expectedMessages.length, "validation summary items");
         $itemsContent.toArray().forEach((item, index) => {
-            this._assert.strictEqual($(item).text(), expectedMessages[index], `${index} item text of the validation summary`);
+            QUnit.assert.strictEqual($(item).text(), expectedMessages[index], `${index} item text of the validation summary`);
         });
     }
 
-    checkValidationResult(isValid, brokenRulesCount, validatorsCount) {
+    checkValidationResult({ isValid, brokenRulesCount, validatorsCount }) {
         const result = this._form.validate();
-        this._assert.equal(result.isValid, isValid, "isValid of validation result");
-        this._assert.equal(result.brokenRules.length, brokenRulesCount, "brokenRules count of validation result");
-        this._assert.equal(result.validators.length, validatorsCount, "validators count of validation result");
+        QUnit.assert.equal(result.isValid, isValid, "isValid of validation result");
+        QUnit.assert.equal(result.brokenRules.length, brokenRulesCount, "brokenRules count of validation result");
+        QUnit.assert.equal(result.validators.length, validatorsCount, "validators count of validation result");
     }
 
     checkFormsReRender(message = "") {
-        this._assert.equal(this._formContentReadyStub.callCount, 0, `${message}, form is not re-render`);
+        QUnit.assert.equal(this._formContentReadyStub.callCount, 0, `${message}, form is not re-render`);
         this._formContentReadyStub.reset();
     }
 
@@ -67,9 +66,9 @@ class FormTestWrapper {
         this._contentReadyStubs.forEach((stub, index) => {
             const expected = expectedRenderingArray[index];
             if(stub.callCount > 2) {
-                this._assert.equal(stub.callCount, 2, "the content ready event is many times thrown");
+                QUnit.assert.equal(stub.callCount, 2, "the content ready event is many times thrown");
             }
-            this._assert.equal(stub.callCount > 0 && stub.callCount <= 2, expected, `${message}, ${index} layoutManager is ${expected ? "" : "not"} re-render`);
+            QUnit.assert.equal(stub.callCount > 0 && stub.callCount <= 2, expected, `${message}, ${index} layoutManager is ${expected ? "" : "not"} re-render`);
         });
         this._contentReadyStubs.forEach(stub => stub.reset());
     }
@@ -78,30 +77,30 @@ class FormTestWrapper {
         const editor = this._form.getEditor(id);
         const attrID = editor.option("inputAttr.id");
         const labelText = $(`[for='${attrID}'] .dx-field-item-label-text`).text();
-        this._assert.equal(editor.option("value"), expectedValue, `editor value of ${id}`);
-        this._assert.strictEqual(labelText, `${expectedLabel}:`, `label of ${id}`);
+        QUnit.assert.equal(editor.option("value"), expectedValue, `editor value of ${id}`);
+        QUnit.assert.strictEqual(labelText, `${expectedLabel}:`, `label of ${id}`);
     }
 
     checkLabelText(itemSelector, expectedText) {
         const labelText = $(itemSelector).find(".dx-field-item-label-text").text();
-        this._assert.strictEqual(labelText, `${expectedText}:`, "text of label");
+        QUnit.assert.strictEqual(labelText, `${expectedText}:`, "text of label");
     }
 
     checkHelpText(itemSelector, expectedText) {
         const helpText = $(itemSelector).find(".dx-field-item-help-text").text();
-        this._assert.strictEqual(helpText, `${expectedText}`, "text of helpText");
+        QUnit.assert.strictEqual(helpText, `${expectedText}`, "text of helpText");
     }
 
     checkItemElement(selector, expected, message) {
-        this._assert.equal(this._form.$element().find(selector).length > 0, expected, message || "item element");
+        QUnit.assert.equal(this._form.$element().find(selector).length > 0, expected, message || "item element");
     }
 
     checkGroupCaption(groupSelector, expectedCaption) {
-        this._assert.strictEqual(this._form.$element().find(`${groupSelector} .dx-form-group-caption`).text(), expectedCaption, "caption of group");
+        QUnit.assert.strictEqual(this._form.$element().find(`${groupSelector} .dx-form-group-caption`).text(), expectedCaption, "caption of group");
     }
 
     checkTabTitle(tabSelector, expectedTitle) {
-        this._assert.strictEqual(this._form.$element().find(`${tabSelector} .dx-tab-text`).text(), expectedTitle, "caption of tab");
+        QUnit.assert.strictEqual(this._form.$element().find(`${tabSelector} .dx-tab-text`).text(), expectedTitle, "caption of tab");
     }
 }
 
@@ -126,7 +125,7 @@ module("Group item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1].items[0]", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, true], "visible: false");
@@ -154,7 +153,7 @@ module("Group item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1].items[0]", "editorOptions", { value: "test value" });
         testWrapper.checkLayoutManagerRendering([false, false], "editorOptions: { value: 'test value' }");
@@ -177,7 +176,7 @@ module("Group item. Use the option method", () => {
                     items: ["dataField2"]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1]", "items",
             ["dataField11", "dataField12"].map(dataField => ({
@@ -219,7 +218,7 @@ module("Group item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1].items[0]", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, true, false], "visible: false");
@@ -251,7 +250,7 @@ module("Group item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         const items = ["dataField11", "dataField12"].map((dataField, index) => ({
             itemType: "group",
@@ -302,7 +301,7 @@ module("Group item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1].items[0].items[0]", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, false, true], "visible: false");
@@ -333,7 +332,7 @@ module("Group item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1].items[0].items[0]", "editorOptions", { value: "test value" });
         testWrapper.checkLayoutManagerRendering([false, false, false], "editorOptions: { value: 'test value' }");
@@ -359,7 +358,7 @@ module("Group item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         const items = ["dataField11", "dataField12"].map(dataField => ({
             dataField,
@@ -403,7 +402,7 @@ module("Group item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1].items[0]", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, true, false], "visible: false in the first group");
@@ -445,7 +444,7 @@ module("Group item. Use the option method", () => {
                     items: ["dataField3"]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1]", "items",
             ["dataField11", "dataField12"].map(dataField => ({
@@ -493,7 +492,7 @@ module("Group item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.beginUpdate();
 
@@ -534,7 +533,7 @@ module("Tabbed item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1].tabs[0].items[0]", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, true], "visible: false");
@@ -562,7 +561,7 @@ module("Tabbed item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1].tabs[0]", "items",
             ["dataField11", "dataField12"].map(dataField => ({
@@ -600,7 +599,7 @@ module("Tabbed item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setOption("items[1].tabs[0].items[0]", "editorOptions", { value: "test value" });
         testWrapper.checkLayoutManagerRendering([false, false], "editorOptions: { value: 'test value' }");
@@ -631,7 +630,7 @@ module("Tabbed item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         const id = "items[1].tabs[0].items[0].items[0]";
         testWrapper.setOption(id, "visible", false);
@@ -663,7 +662,7 @@ module("Tabbed item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         const id = "items[1].tabs[0].items[0]";
         testWrapper.setOption(id, "items",
@@ -705,7 +704,7 @@ module("Tabbed item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         const id = "items[1].tabs[0].items[0].items[0]";
         testWrapper.setOption(id, "editorOptions", { value: "test value" });
@@ -736,7 +735,7 @@ module("Tabbed item. Use the option method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         const id = "items[1].items[0]";
         testWrapper.setOption(id, "visible", false);
@@ -769,7 +768,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, true], "visible: false");
@@ -798,7 +797,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", {
             label: { text: "Test Label" },
@@ -825,7 +824,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", "editorOptions", { value: "test value" });
         testWrapper.checkLayoutManagerRendering([false, false], "editorOptions: { value: 'test value' }");
@@ -849,7 +848,7 @@ module("Group item. Use the itemOption method", () => {
                     items: ["dataField2"]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("group1", "items",
             ["dataField11", "dataField12"].map(dataField => ({
@@ -884,7 +883,7 @@ module("Group item. Use the itemOption method", () => {
                     items: ["dataField2"]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("group1", "items",
             ["dataField11", "dataField12"].map((dataField, index) => ({
@@ -923,7 +922,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("TestCaption", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, true, false], "visible: false");
@@ -956,7 +955,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         const items = ["dataField11", "dataField12"].map((dataField, index) => ({
             itemType: "group",
@@ -1007,7 +1006,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, false, true], "visible: false");
@@ -1040,7 +1039,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("group2", "items",
             ["dataField11", "dataField12"].map((dataField, index) => ({
@@ -1074,7 +1073,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", "editorOptions", { value: "test value" });
         testWrapper.checkLayoutManagerRendering([false, false, false], "editorOptions: { value: 'test value' }");
@@ -1101,7 +1100,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         const items = ["dataField11", "dataField12"].map(dataField => ({
             dataField,
@@ -1145,7 +1144,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, true, false], "visible: false in the first group");
@@ -1189,7 +1188,7 @@ module("Group item. Use the itemOption method", () => {
                     items: ["dataField3"]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("group1", "items",
             ["dataField11", "dataField12"].map(dataField => ({
@@ -1237,7 +1236,7 @@ module("Group item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", {
             label: { text: "Test Label 2" },
@@ -1280,7 +1279,7 @@ module("Tabbed item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("tab1.dataField2", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, true], "visible: false");
@@ -1309,7 +1308,7 @@ module("Tabbed item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("tab1", "items",
             ["dataField11", "dataField12"].map(dataField => ({
@@ -1348,7 +1347,7 @@ module("Tabbed item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("tab1.dataField2", "editorOptions", { value: "test value" });
         testWrapper.checkLayoutManagerRendering([false, false], "editorOptions: { value: 'test value' }");
@@ -1381,7 +1380,7 @@ module("Tabbed item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("tab1.group1.dataField2", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, false, true], "visible: false");
@@ -1414,7 +1413,7 @@ module("Tabbed item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("tab1.group1", "items",
             ["dataField11", "dataField12"].map(dataField => ({
@@ -1457,7 +1456,7 @@ module("Tabbed item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("tab1.group1.dataField2", "editorOptions", { value: "test value" });
         testWrapper.checkLayoutManagerRendering([false, false, false], "editorOptions: { value: 'test value' }");
@@ -1489,7 +1488,7 @@ module("Tabbed item. Use the itemOption method", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("group1.tabbedItem", "visible", false);
         testWrapper.checkLayoutManagerRendering([false, true, false], "visible: false");
@@ -1519,10 +1518,10 @@ module("Validation", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", "validationRules", [{ type: "required" }]);
-        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
     });
 
     test("Rendering new simple item instead of a simple item with validation rules", assert => {
@@ -1540,10 +1539,10 @@ module("Validation", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("group1", "items", [{ dataField: "dataField3" }]);
-        testWrapper.checkValidationResult(true, 0, 0);
+        testWrapper.checkValidationResult({ isValid: true, brokenRulesCount: 0, validatorsCount: 0 });
     });
 
     test("Rendering new items with validation rules", assert => {
@@ -1561,11 +1560,11 @@ module("Validation", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", "validationRules", [{ type: "required" }]);
         testWrapper.setItemOption("dataField3", "validationRules", [{ type: "required" }]);
-        testWrapper.checkValidationResult(false, 2, 2);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 2, validatorsCount: 2 });
     });
 
     test("Rendering new items with validation rules instead of items without validation rules in the group and check the validation summary", assert => {
@@ -1584,11 +1583,11 @@ module("Validation", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", "validationRules", [{ type: "required", message: "dataField2 is required" }]);
         testWrapper.setItemOption("dataField3", "validationRules", [{ type: "required", message: "dataField3 is required" }]);
-        testWrapper.checkValidationResult(false, 2, 2);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 2, validatorsCount: 2 });
         testWrapper.checkValidationSummaryContent(["dataField2 is required", "dataField3 is required"]);
     });
 
@@ -1611,12 +1610,12 @@ module("Validation", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
-        testWrapper.checkValidationResult(false, 2, 2);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 2, validatorsCount: 2 });
         testWrapper.checkValidationSummaryContent(["dataField2 is required", "dataField3 is required"]);
         testWrapper.setItemOption("group1", "items", [{ dataField: "dataField2" }, { dataField: "dataField3" }]);
-        testWrapper.checkValidationResult(true, 0, 0);
+        testWrapper.checkValidationResult({ isValid: true, brokenRulesCount: 0, validatorsCount: 0 });
         testWrapper.checkValidationSummaryContent([]);
     });
 
@@ -1636,9 +1635,9 @@ module("Validation", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
-        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
         testWrapper.checkValidationSummaryContent(["dataField2 is required"]);
         testWrapper.setItemOption("group1", "items", [{
             dataField: "dataField2",
@@ -1647,7 +1646,7 @@ module("Validation", () => {
             dataField: "dataField3",
             validationRules: [{ type: "required", message: "dataField3 is required" }]
         }]);
-        testWrapper.checkValidationResult(false, 2, 2);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 2, validatorsCount: 2 });
         testWrapper.checkValidationSummaryContent(["dataField2 is required", "dataField3 is required"]);
     });
 
@@ -1664,13 +1663,13 @@ module("Validation", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
         testWrapper.setItemOption("dataField2", "isRequired", true);
-        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
 
         testWrapper.setItemOption("dataField2", "isRequired", false);
-        testWrapper.checkValidationResult(true, 0, 0);
+        testWrapper.checkValidationResult({ isValid: true, brokenRulesCount: 0, validatorsCount: 0 });
     });
 
     test("Change the visible option of the simple item", assert => {
@@ -1687,13 +1686,13 @@ module("Validation", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
-        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
         testWrapper.setItemOption("dataField2", "visible", false);
-        testWrapper.checkValidationResult(true, 0, 0);
+        testWrapper.checkValidationResult({ isValid: true, brokenRulesCount: 0, validatorsCount: 0 });
         testWrapper.setItemOption("dataField2", "visible", true);
-        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
     });
 
     test("Change the visible option of the simple item with validationSummary", assert => {
@@ -1711,17 +1710,17 @@ module("Validation", () => {
                     }]
                 }
             ]
-        }, assert);
+        });
 
-        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
         testWrapper.checkValidationSummaryContent(["Required"]);
 
         testWrapper.setItemOption("dataField2", "visible", false);
-        testWrapper.checkValidationResult(true, 0, 0);
+        testWrapper.checkValidationResult({ isValid: true, brokenRulesCount: 0, validatorsCount: 0 });
         testWrapper.checkValidationSummaryContent([]);
 
         testWrapper.setItemOption("dataField2", "visible", true);
-        testWrapper.checkValidationResult(false, 1, 1);
+        testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
         testWrapper.checkValidationSummaryContent(["Required"]);
     });
 });

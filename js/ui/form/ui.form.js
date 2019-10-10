@@ -892,13 +892,13 @@ const Form = Widget.inherit({
         }
 
         if(this.option("showValidationSummary")) {
-            this._validationSummary = $("<div>")
+            const $validationSummary = $("<div>")
                 .addClass(FORM_VALIDATION_SUMMARY)
-                .dxValidationSummary({
-                    validationGroup: this._getValidationGroup()
-                })
-                .appendTo(this._getContent())
-                .dxValidationSummary("instance");
+                .appendTo(this._getContent());
+
+            this._validationSummary = $validationSummary.dxValidationSummary({
+                validationGroup: this._getValidationGroup()
+            }).dxValidationSummary("instance");
         }
     },
 
@@ -1291,7 +1291,7 @@ const Form = Widget.inherit({
         return action && action.tryExecute();
     },
 
-    _updateValidationGroupAndSummaryIfNeeded(fullName) {
+    _updateValidationGroupAndSummaryIfNeeded: function(fullName) {
         const optionName = getOptionNameFromFullName(fullName);
         if(ITEM_OPTIONS_FOR_VALIDATION_UPDATING.indexOf(optionName) > -1) {
             ValidationEngine.addGroup(this._getValidationGroup());
