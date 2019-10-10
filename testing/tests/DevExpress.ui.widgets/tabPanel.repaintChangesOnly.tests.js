@@ -441,5 +441,51 @@ QUnit.module("repaintChangesOnly", {
             this.checkNotContainsElements(assert, [item1.content, item2.text, item2.content]);
             this.checkContainsEmptyMessage(assert, false);
         });
+
+        // T817099
+        QUnit.test("modify and assign item" + testContext, function(assert) {
+            if(dataSourcePropertyName === "dataSource") {
+                assert.ok(true, "this test is not actual for dataSource");
+                return;
+            }
+
+            const item1 = { text: "1a", content: "1a_" };
+            const item2 = { text: "2a", content: "2a_" };
+            this.createTabPanel({ items: [item1, item2] });
+
+            item1.text = "1a_modified";
+            this.tabPanel.option(dataSourcePropertyName + "[0]", item1);
+            this.clock.tick(1);
+
+            this.checkTitleRendered(assert, [item1]);
+            this.checkItemRendered(assert, [{ data: item1, index: 0 }]);
+            this.checkItemDeleted(assert, []);
+
+            this.checkContainsElements(assert, [item1.text, item1.content]);
+            this.checkNotContainsElements(assert, ["1a"]);
+            this.checkContainsEmptyMessage(assert, false);
+        });
+
+        // T817099
+        QUnit.test("modify item field" + testContext, function(assert) {
+            if(dataSourcePropertyName === "dataSource") {
+                assert.ok(true, "this test is not actual for dataSource");
+                return;
+            }
+            const item1 = { text: "1a", content: "1a_" };
+            const item2 = { text: "2a", content: "2a_" };
+            this.createTabPanel({ items: [item1, item2] });
+
+            this.tabPanel.option(dataSourcePropertyName + "[0].text", "1a_modified");
+            this.clock.tick(1);
+
+            this.checkTitleRendered(assert, [item1]);
+            this.checkItemRendered(assert, [{ data: item1, index: 0 }]);
+            this.checkItemDeleted(assert, []);
+
+            this.checkContainsElements(assert, [item1.text, item1.content]);
+            this.checkNotContainsElements(assert, ["1a"]);
+            this.checkContainsEmptyMessage(assert, false);
+        });
     });
 });

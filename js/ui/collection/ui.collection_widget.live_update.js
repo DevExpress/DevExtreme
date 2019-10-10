@@ -9,6 +9,8 @@ import { findChanges } from "../../core/utils/array_compare";
 import { insertElement } from "../../core/dom_adapter";
 import { noop } from "../../core/utils/common";
 
+const PRIVATE_KEY_FIELD = "__dx_key__";
+
 export default CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -61,6 +63,9 @@ export default CollectionWidget.inherit({
     },
 
     _isItemEquals: function(item1, item2) {
+        if(item1 && item1[PRIVATE_KEY_FIELD]) {
+            item1 = item1.data;
+        }
         try {
             return JSON.stringify(item1) === JSON.stringify(item2);
         } catch(e) {
@@ -70,7 +75,13 @@ export default CollectionWidget.inherit({
 
     _partialRefresh: function() {
         if(this.option("repaintChangesOnly")) {
-            let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), this.keyOf.bind(this), this._isItemEquals);
+            const keyOf = (data) => {
+                if(data && data[PRIVATE_KEY_FIELD] !== undefined) {
+                    return data[PRIVATE_KEY_FIELD];
+                }
+                return this.keyOf(data);
+            };
+            let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemEquals);
             if(result && this._itemsCache.length) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
@@ -84,10 +95,19 @@ export default CollectionWidget.inherit({
 
     _refreshItemsCache: function() {
         if(this.option("repaintChangesOnly")) {
+            const items = this._editStrategy.itemsGetter();
             try {
-                this._itemsCache = extend(true, [], this._editStrategy.itemsGetter());
+                this._itemsCache = extend(true, [], items);
+                if(!this.key()) {
+                    this._itemsCache = this._itemsCache.map((itemCache, index) => {
+                        return {
+                            [PRIVATE_KEY_FIELD]: items[index],
+                            data: itemCache
+                        };
+                    });
+                }
             } catch(e) {
-                this._itemsCache = extend([], this._editStrategy.itemsGetter());
+                this._itemsCache = extend([], items);
             }
         }
     },
