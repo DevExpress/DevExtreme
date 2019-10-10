@@ -14,25 +14,25 @@ const window = getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
 
 /**
-* @name WebApiFileProvider
+* @name RemoteFileProvider
 * @inherits FileProvider
 * @type object
-* @module ui/file_manager/file_provider/webapi
+* @module ui/file_manager/file_provider/remote
 * @namespace DevExpress.fileProvider
 * @export default
 */
-class WebApiFileProvider extends FileProvider {
+class RemoteFileProvider extends FileProvider {
 
     constructor(options) {
         options = ensureDefined(options, { });
         super(options);
         /**
-         * @name WebApiFileProviderOptions.endpointUrl
+         * @name RemoteFileProviderOptions.endpointUrl
          * @type string
          */
         this._endpointUrl = options.endpointUrl;
         /**
-         * @name WebApiFileProviderOptions.hasSubDirectoriesExpr
+         * @name RemoteFileProviderOptions.hasSubDirectoriesExpr
          * @type string|function(fileItem)
          */
         this._hasSubDirsGetter = compileGetter(options.hasSubDirectoriesExpr || "hasSubDirectories");
@@ -264,4 +264,4 @@ class WebApiFileProvider extends FileProvider {
 
 }
 
-module.exports = WebApiFileProvider;
+module.exports = RemoteFileProvider;

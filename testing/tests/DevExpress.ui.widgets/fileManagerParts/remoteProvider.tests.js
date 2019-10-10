@@ -1,7 +1,7 @@
 import "ui/file_manager";
 import { FileManagerItem } from "ui/file_manager/file_provider/file_provider";
 
-import WebApiFileProvider from "ui/file_manager/file_provider/webapi";
+import RemoteFileProvider from "ui/file_manager/file_provider/remote";
 import ajaxMock from "../../../helpers/ajaxMock.js";
 import { createSampleFileItems } from "../../../helpers/fileManagerHelpers.js";
 import { when } from "core/utils/deferred";
@@ -17,7 +17,7 @@ const moduleConfig = {
             endpointUrl: "/api/endpoint"
         };
 
-        this.provider = new WebApiFileProvider(this.options);
+        this.provider = new RemoteFileProvider(this.options);
     },
 
     afterEach: function() {
@@ -26,7 +26,7 @@ const moduleConfig = {
 
 };
 
-QUnit.module("Web API Provider", moduleConfig, () => {
+QUnit.module("Remote Provider", moduleConfig, () => {
 
     test("get directory file items", function(assert) {
         const done = assert.async();
@@ -173,12 +173,12 @@ QUnit.module("Web API Provider", moduleConfig, () => {
     });
 
     test("generation end point", function(assert) {
-        let provider = new WebApiFileProvider({
+        let provider = new RemoteFileProvider({
             endpointUrl: "myEndpoint"
         });
         assert.ok(provider._getEndpointUrl("myCommand", { }).indexOf("myEndpoint?command=myCommand") !== -1);
 
-        provider = new WebApiFileProvider({
+        provider = new RemoteFileProvider({
             endpointUrl: "myEndpoint?param1=value"
         });
         assert.ok(provider._getEndpointUrl("myCommand", { }).indexOf("myEndpoint?param1=value&command=myCommand") !== -1);

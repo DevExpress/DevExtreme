@@ -1,8 +1,8 @@
 import DevExpress from "./core";
-import WebApiFileProvider from "../../ui/file_manager/file_provider/webapi";
+import RemoteFileProvider from "../../ui/file_manager/file_provider/remote";
 import CustomFileProvider from "../../ui/file_manager/file_provider/custom";
 
 module.exports = DevExpress.fileProviders = DevExpress.fileProviders || {};
 
-DevExpress.fileProviders.WebApi = WebApiFileProvider;
+DevExpress.fileProviders.Remote = RemoteFileProvider;
 DevExpress.fileProviders.Custom = CustomFileProvider;
