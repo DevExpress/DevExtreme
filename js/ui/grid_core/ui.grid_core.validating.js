@@ -253,7 +253,10 @@ const ValidatingController = modules.Controller.inherit((function() {
                         applyValidationResults: defaultValidationResult
                     },
                     dataGetter: function() {
-                        return createObjectWithChanges(editData.oldData, editData.data);
+                        return {
+                            data: createObjectWithChanges(editData.oldData, editData.data),
+                            column
+                        };
                     }
                 });
 

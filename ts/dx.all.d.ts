@@ -1726,7 +1726,7 @@ declare module DevExpress.ui {
         /** @name AsyncRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /** @name AsyncRule.validationCallback */
-        validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any }) => Promise<any> | JQueryPromise<any>);
+        validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => Promise<any> | JQueryPromise<any>);
     }
     /** @name ColCountResponsible */
     export interface ColCountResponsible {
@@ -1818,7 +1818,7 @@ declare module DevExpress.ui {
         /** @name CustomRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /** @name CustomRule.validationCallback */
-        validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any }) => boolean);
+        validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => boolean);
     }
     /** @name DataExpressionMixin.Options */
     export interface DataExpressionMixinOptions<T = DataExpressionMixin> {

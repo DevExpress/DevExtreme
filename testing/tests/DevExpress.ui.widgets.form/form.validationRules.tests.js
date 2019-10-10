@@ -2,6 +2,7 @@ import $ from "jquery";
 import { extend } from "core/utils/extend";
 import { logger } from "core/utils/console";
 import ValidationEngine from "ui/validation_engine";
+import { Deferred } from "core/utils/deferred";
 
 import "ui/form/ui.form";
 import "ui/text_area";
@@ -155,6 +156,70 @@ QUnit.test("Validate with template wrapper", assert => {
 
     // assert
     assert.equal(validationSpy.callCount, 1, "invalid editors count");
+});
+
+QUnit.test("CustomRule.validationCallback accepts formItem", assert => {
+    // arrange
+    const validationSpy = sinon.spy(),
+        form = $("#form").dxForm({
+            formData: {
+                name: ""
+            },
+            items: [{
+                dataField: "name",
+                itemType: "simple",
+                validationRules: [{
+                    type: "custom",
+                    message: "Name is required",
+                    validationCallback: validationSpy
+                }]
+            }]
+        }).dxForm("instance");
+
+    // act
+    form.validate();
+
+    // assert
+    assert.equal(validationSpy.callCount, 1, "valdiationCallback should be called once");
+
+    const params = validationSpy.getCall(0).args[0];
+
+    assert.ok(params.formItem, "formItem should be passed");
+    assert.strictEqual(params.formItem.dataField, "name", "formItem.dataField === 'name'");
+    assert.strictEqual(params.formItem.itemType, "simple", "formItem.itemType === 'simple'");
+    assert.ok(params.formItem.validationRules, "formItem.validationRule !== null");
+});
+
+QUnit.test("AsyncRule.validationCallback accepts formItem", assert => {
+    // arrange
+    const validationSpy = sinon.spy(function() { return new Deferred().resolve().promise(); }),
+        form = $("#form").dxForm({
+            formData: {
+                name: ""
+            },
+            items: [{
+                dataField: "name",
+                itemType: "simple",
+                validationRules: [{
+                    type: "async",
+                    message: "Name is required",
+                    validationCallback: validationSpy
+                }]
+            }]
+        }).dxForm("instance");
+
+    // act
+    form.validate();
+
+    // assert
+    assert.equal(validationSpy.callCount, 1, "valdiationCallback should be called once");
+
+    const params = validationSpy.getCall(0).args[0];
+
+    assert.ok(params.formItem, "formItem should be passed");
+    assert.strictEqual(params.formItem.dataField, "name", "formItem.dataField === 'name'");
+    assert.strictEqual(params.formItem.itemType, "simple", "formItem.itemType === 'simple'");
+    assert.ok(params.formItem.validationRules, "formItem.validationRule !== null");
 });
 
 QUnit.test("Validate with a custom validation group", assert => {
