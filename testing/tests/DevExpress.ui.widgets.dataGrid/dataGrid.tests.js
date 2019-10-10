@@ -3979,7 +3979,7 @@ QUnit.test("DataGrid - navigateToRow method should work if rowRenderingMode is '
     setTimeout(() => {
         assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, "navigated row is visible");
         done();
-    }, 50);
+    }, 100);
 });
 
 // T803784
