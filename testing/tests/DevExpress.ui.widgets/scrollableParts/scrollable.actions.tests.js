@@ -349,7 +349,7 @@ QUnit.test("onStop action is called on `scrollable` stop (T818446)", function(as
         }
     });
 
-    pointerMock($scrollable).start()
+    pointerMock($scrollable.find("." + SCROLLABLE_CONTENT_CLASS)).start()
         .down()
         .up();
 
