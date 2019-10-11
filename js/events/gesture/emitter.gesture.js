@@ -175,6 +175,10 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _toggleGestureCover: function(toggle) {
+        this._toggleGestureCoverImpl(toggle);
+    },
+
+    _toggleGestureCoverImpl: function(toggle) {
         var isStarted = this._stage === STARTED;
 
         if(isStarted) {
