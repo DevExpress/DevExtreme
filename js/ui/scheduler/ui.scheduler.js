@@ -467,7 +467,7 @@ const Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions.dropDownAppointmentTemplate
                 * @default "dropDownAppointment"
                 * @extends AppointmentTemplate
-                * @deprecated dxSchedulerOptions.dropDownAppointmentTemplate
+                * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
                 */
             dropDownAppointmentTemplate: "dropDownAppointment",
 
