@@ -3567,8 +3567,6 @@ QUnit.test("Mixed series with negative and positive values", function(assert) {
 
     createSeriesFamily("fullstackedarea", series);
 
-    checkStackedPoints(assert, points1, points3);
-    checkStackedPoints(assert, points2, points4);
     assert.strictEqual(series1._prevSeries, undefined);
     assert.strictEqual(series2._prevSeries, undefined);
     assert.strictEqual(series3._prevSeries, series1);
