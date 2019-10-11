@@ -356,7 +356,7 @@ QUnit.module("basics", {}, () => {
             useLargeSpinButtons: false
         });
 
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${INPUT_CLASS}`);
         const $spinButton = $element.find(".dx-numberbox-spin-up");
 
         assert.ok(!$input.is(":focus"), "input is not focused before click on spin button");
@@ -447,7 +447,7 @@ QUnit.module("basics", {}, () => {
         });
 
         const numberBox = $numberBox.dxNumberBox("instance");
-        const $numberBoxInput = $numberBox.find(".dx-texteditor-input");
+        const $numberBoxInput = $numberBox.find(`.${INPUT_CLASS}`);
         const mouse = pointerMock($numberBoxInput);
 
         $numberBoxInput.focus();
@@ -471,7 +471,7 @@ QUnit.module("basics", {}, () => {
         });
 
         const numberBox = $numberBox.dxNumberBox("instance");
-        const $numberBoxInput = $(".dx-texteditor-input", $numberBox);
+        const $numberBoxInput = $(`.${INPUT_CLASS}`, $numberBox);
         const mouse = pointerMock($numberBoxInput).start();
 
         $numberBoxInput.get(0).focus();
@@ -483,7 +483,7 @@ QUnit.module("basics", {}, () => {
     QUnit.test("mousewheel action should not work if widget is not focused", (assert) => {
         const $numberBox = $("#numberbox").dxNumberBox({ value: 100 });
         const numberBox = $numberBox.dxNumberBox("instance");
-        const input = $(".dx-texteditor-input", $numberBox).get(0);
+        const input = $(`.${INPUT_CLASS}`, $numberBox).get(0);
         const mouse = pointerMock(input).start();
 
         mouse.wheel(10);
@@ -501,7 +501,7 @@ QUnit.module("basics", {}, () => {
             useLargeSpinButtons: true
         });
 
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${INPUT_CLASS}`);
         const $spinButton = $element.find(".dx-numberbox-spin-up");
 
         assert.ok(!$input.is(":focus"), "input is not focused before click on spin button");
@@ -580,7 +580,7 @@ QUnit.module("basics", {}, () => {
             value: null
         });
 
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${INPUT_CLASS}`);
         const kb = keyboardMock($input);
 
         assert.strictEqual($input.val(), "", "value was cleared");
@@ -598,20 +598,19 @@ QUnit.module("basics", {}, () => {
             value: null
         });
         const instance = $element.dxNumberBox("instance");
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${INPUT_CLASS}`);
         const kb = keyboardMock($input);
 
         kb.type("11");
 
-        const origInputIsInvalid = instance._inputIsInvalid;
-        instance._inputIsInvalid = () => true;
+        sinon.stub(instance, "_inputIsInvalid", () => true);
 
         try {
             const $clearButton = $element.find(`.${CLEAR_BUTTON_CLASS}`);
             $clearButton.trigger("dxclick");
             assert.strictEqual($input.val(), "", "value is still cleared");
         } finally {
-            instance._inputIsInvalid = origInputIsInvalid;
+            instance._inputIsInvalid.restore();
         }
     });
 
@@ -624,7 +623,7 @@ QUnit.module("basics", {}, () => {
         });
 
         assert.equal($numberBox.dxNumberBox("option", "value"), 5, "value is correct");
-        assert.equal($numberBox.find(".dx-texteditor-input").val(), "05", "input value is correct");
+        assert.equal($numberBox.find(`.${INPUT_CLASS}`).val(), "05", "input value is correct");
     });
 
     QUnit.test("T220209 - the 'displayValueFormatter' option when value is changed using keyboard", (assert) => {
@@ -641,7 +640,7 @@ QUnit.module("basics", {}, () => {
         });
         const instance = $numberBox.dxNumberBox("instance");
 
-        const $input = $numberBox.find(".dx-texteditor-input");
+        const $input = $numberBox.find(`.${INPUT_CLASS}`);
 
         keyboardMock($input)
             .press('end')
@@ -651,7 +650,7 @@ QUnit.module("basics", {}, () => {
         instance.blur();
 
         assert.equal(instance.option("value"), 50, "value is correct");
-        assert.equal($numberBox.find(".dx-texteditor-input").val(), "50", "input value is correct");
+        assert.equal($numberBox.find(`.${INPUT_CLASS}`).val(), "50", "input value is correct");
     });
 
     QUnit.test("T220209 - the 'displayValueFormatter' option when value is changed using spin buttons", (assert) => {
@@ -668,7 +667,7 @@ QUnit.module("basics", {}, () => {
         $spinUpButton.trigger("dxpointerdown");
 
         assert.equal($numberBox.dxNumberBox("option", "value"), 6, "value is correct");
-        assert.equal($numberBox.find(".dx-texteditor-input").val(), "06", "input value is correct");
+        assert.equal($numberBox.find(`.${INPUT_CLASS}`).val(), "06", "input value is correct");
     });
 
     QUnit.test("T351846 - the value should not be changed after the 'change' input event is fired if value is null", (assert) => {
@@ -1919,7 +1918,7 @@ QUnit.module("number validation", {}, () => {
         });
 
         const numberBox = $numberBox.dxNumberBox("instance");
-        const $input = $numberBox.find(".dx-texteditor-input");
+        const $input = $numberBox.find(`.${INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -2071,7 +2070,7 @@ QUnit.module("number validation", {}, () => {
 QUnit.module("aria accessibility", {}, () => {
     QUnit.test("default render", (assert) => {
         const $element = $("#numberbox").dxNumberBox({});
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${INPUT_CLASS}`);
         const inputElement = $input.get(0);
 
         assert.equal($input.attr("role"), "spinbutton", "aria role is correct");
@@ -2085,7 +2084,7 @@ QUnit.module("aria accessibility", {}, () => {
             value: null
         });
 
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${INPUT_CLASS}`);
         assert.strictEqual($input.attr("aria-valuenow"), "", "attribute is defined");
     });
 
@@ -2096,7 +2095,7 @@ QUnit.module("aria accessibility", {}, () => {
             value: 25
         });
 
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${INPUT_CLASS}`);
 
         assert.equal($input.attr("aria-valuemin"), 12, "aria min is correct");
         assert.equal($input.attr("aria-valuemax"), 30, "aria max is correct");
@@ -2109,7 +2108,7 @@ QUnit.module("aria accessibility", {}, () => {
             max: 0
         });
 
-        const $input = $element.find(".dx-texteditor-input");
+        const $input = $element.find(`.${INPUT_CLASS}`);
 
         assert.strictEqual($input.attr("aria-valuemin"), "0", "aria min is correct");
         assert.strictEqual($input.attr("aria-valuemax"), "0", "aria max is correct");
@@ -2121,7 +2120,7 @@ QUnit.module("aria accessibility", {}, () => {
             value: 25
         });
         const numberBox = $element.dxNumberBox("instance");
-        const $input = $element.find(".dx-texteditor-input").get(0);
+        const $input = $element.find(`.${INPUT_CLASS}`).get(0);
 
         assert.ok($input.hasAttribute("aria-valuemin"), "there is valuemin");
 
