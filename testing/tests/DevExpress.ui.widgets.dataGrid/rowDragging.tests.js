@@ -43,6 +43,9 @@ function createRowsView() {
         },
         $element: function() {
             return $(".dx-datagrid");
+        },
+        element: function() {
+            return this.$element();
         }
     };
 
@@ -109,6 +112,33 @@ QUnit.test("Dragging row", function(assert) {
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
+});
+
+QUnit.test("Dragging events", function(assert) {
+    // arrange
+    let $testElement = $("#container");
+
+    this.options.rowDragging = {
+        allowReordering: true,
+        onDragStart: sinon.spy(),
+        onReorder: sinon.spy()
+    };
+
+    let rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70).up();
+
+    // assert
+    const onDragStart = this.options.rowDragging.onDragStart;
+    assert.strictEqual(onDragStart.callCount, 1, "onDragStart called once");
+    assert.strictEqual(onDragStart.getCall(0).args[0].itemData, this.options.dataSource[0], "onDragStart itemData param");
+    assert.strictEqual(onDragStart.getCall(0).args[0].component, this.dataGrid, "onDragStart component param");
+
+    const onReorder = this.options.rowDragging.onReorder;
+    assert.strictEqual(onReorder.callCount, 1, "onReorder called once");
+    assert.strictEqual(onReorder.getCall(0).args[0].component, this.dataGrid, "onReorder component param");
 });
 
 QUnit.test("Draggable element (grid) - checking options", function(assert) {

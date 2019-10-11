@@ -46,12 +46,21 @@ var RowDraggingExtender = {
 
         if(allowReordering) {
             that._sortable = that._createComponent($content, Sortable, extend({
+                component: that.component,
                 contentTemplate: null,
                 filter: "> table > tbody > .dx-data-row",
                 dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
                 dropFeedbackMode: "indicate"
-            }, rowDragging));
+            }, rowDragging, {
+                onDragStart: function(e) {
+                    const row = e.component.getVisibleRows()[e.fromIndex];
+                    e.itemData = row && row.data;
+
+                    const onDragStart = rowDragging.onDragStart;
+                    onDragStart && onDragStart(e);
+                }
+            }));
         }
 
         return $content;
