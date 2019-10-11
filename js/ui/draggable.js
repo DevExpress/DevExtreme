@@ -473,10 +473,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
             data = {
                 direction: this.option("dragDirection"),
                 immediate: this.option("immediate"),
-                checkDropTarget: ($target) => {
-                    var sourceGroup = this.option("group"),
-                        targetComponent = $target.data("dxDraggable") || $target.data("dxSortable"),
-                        targetGroup = targetComponent && targetComponent.option("group");
+                checkDropTarget: () => {
+                    var targetGroup = this.option("group"),
+                        sourceGroup = this._getSourceDraggable().option("group");
 
                     return sourceGroup && sourceGroup === targetGroup;
                 }
