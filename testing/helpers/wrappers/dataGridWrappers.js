@@ -182,6 +182,10 @@ export class HeadersWrapper extends WrapperBase {
         return this.getElement().find(".dx-header-row").eq(rowIndex).find("td").eq(columnIndex);
     }
 
+    getHeaderItemTextContent(rowIndex, columnIndex) {
+        return this.getHeaderItem(rowIndex, columnIndex).find(".dx-datagrid-text-content").eq(0).text();
+    }
+
     getHeaderFilterItem(rowIndex, columnIndex) {
         return this.getHeaderItem(rowIndex, columnIndex).find(".dx-header-filter");
     }
