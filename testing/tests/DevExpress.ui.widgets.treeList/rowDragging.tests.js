@@ -46,6 +46,9 @@ function createRowsView() {
         },
         $element: function() {
             return $(".dx-treelist");
+        },
+        element: function() {
+            return this.$element();
         }
     };
 
