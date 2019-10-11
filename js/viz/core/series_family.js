@@ -2,6 +2,7 @@ var isNumeric = require("../../core/utils/type").isNumeric,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
+    sign = require("../../core/utils/math").sign,
     _math = Math,
     _round = _math.round,
     _abs = _math.abs,
@@ -163,6 +164,20 @@ function adjustBarSeriesDimensions() {
     adjustBarSeriesDimensionsCore(series, this._options, getSeriesStackIndexCallback(isInverted(series)));
 }
 
+function getFirstValueSign(series) {
+    const points = series.getPoints();
+    let value;
+    for(let i = 0; i < points.length; i++) {
+        let point = points[i];
+        value = point.initialValue && point.initialValue.valueOf();
+        if(Math.abs(value) > 0) {
+            break;
+        }
+    }
+
+    return sign(value);
+}
+
 function adjustStackedSeriesValues() {
     var that = this,
         negativesAsZeroes = that._options.negativesAsZeroes,
@@ -175,14 +190,17 @@ function adjustStackedSeriesValues() {
             left: {},
             right: {}
         },
-        lastSeriesInStack = {};
+        lastSeriesInPositiveStack = {},
+        lastSeriesInNegativeStack = {};
 
     series.forEach(function(singleSeries) {
-        var stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup(),
-            hole = false;
+        const stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup();
+        let hole = false;
 
-        singleSeries._prevSeries = lastSeriesInStack[stackName];
-        lastSeriesInStack[stackName] = singleSeries;
+        const stack = getFirstValueSign(singleSeries) < 0 ? lastSeriesInNegativeStack : lastSeriesInPositiveStack;
+
+        singleSeries._prevSeries = stack[stackName];
+        stack[stackName] = singleSeries;
 
         singleSeries.holes = extend(true, {}, holesStack);
 
