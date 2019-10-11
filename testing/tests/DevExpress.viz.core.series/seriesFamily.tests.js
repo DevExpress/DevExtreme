@@ -3539,6 +3539,42 @@ QUnit.test("Set two series - matching points", function(assert) {
     checkStackedPoints(assert, mixedPoints1, mixedPoints2);
 });
 
+QUnit.test("Mixed series with negative and positive values", function(assert) {
+    var points1 = pointsForStacking.points1(),
+        points2 = pointsForStacking.negativePoints1(),
+        points3 = pointsForStacking.points2(),
+        points4 = pointsForStacking.negativePoints2();
+
+    points1[0].initialValue = 0;
+    points1[1].initialValue = undefined;
+
+    points2[0].initialValue = null;
+    points2[1].initialValue = 0;
+
+    var series1 = createSeries({
+            points: points1,
+        }),
+        series2 = createSeries({
+            points: points2,
+        }),
+        series3 = createSeries({
+            points: points3,
+        }),
+        series4 = createSeries({
+            points: points4,
+        }),
+        series = [series1, series2, series3, series4];
+
+    createSeriesFamily("fullstackedarea", series);
+
+    checkStackedPoints(assert, points1, points3);
+    checkStackedPoints(assert, points2, points4);
+    assert.strictEqual(series1._prevSeries, undefined);
+    assert.strictEqual(series2._prevSeries, undefined);
+    assert.strictEqual(series3._prevSeries, series1);
+    assert.strictEqual(series4._prevSeries, series2);
+});
+
 QUnit.test("Set three series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
