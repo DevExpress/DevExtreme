@@ -228,16 +228,16 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
             items: [
                 "move",
                 {
-                    commandName: "create",
+                    name: "create",
                     icon: "upload"
                 },
                 "rename", "upload", "rename", "copy",
                 {
-                    commandName: "delete",
+                    name: "delete",
                     text: "Destruct"
                 },
                 {
-                    commandName: "refresh",
+                    name: "refresh",
                     onClick: testClick
                 }
             ]
@@ -274,7 +274,6 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
                     ID: 42,
                     text: "New commnand text",
                     icon: "upload",
-                    visible: true,
                     onClick: testClick
                 }
             ]
@@ -299,7 +298,6 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
                 "create",
                 {
                     text: "New commnand text",
-                    visible: true,
                     disabled: true,
                     onClick: testClick
                 }
@@ -323,8 +321,7 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
             items: [
                 "create", "upload",
                 {
-                    commandName: "rename",
-                    visibilityMode: "manual",
+                    name: "rename",
                     visible: true
                 },
                 "move", "copy", "delete", "refresh"
@@ -346,7 +343,6 @@ QUnit.module("Cutomize context menu", moduleConfig, () => {
             items: [
                 {
                     text: "Edit",
-                    visible: true,
                     items: [
                         "move", "rename", "copy", "delete"
                     ]

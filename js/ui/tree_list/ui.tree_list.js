@@ -22,3 +22,4 @@ import './ui.tree_list.search';
 import './ui.tree_list.keyboard_navigation';
 import './ui.tree_list.virtual_columns';
 import './ui.tree_list.focus';
+import "./ui.tree_list.row_dragging";

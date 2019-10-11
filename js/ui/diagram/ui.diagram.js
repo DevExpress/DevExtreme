@@ -167,7 +167,7 @@ class Diagram extends Widget {
                 .html($target.attr("title"))
                 .appendTo($container);
             this._createComponent($tooltip, Tooltip, {
-                target: $target,
+                target: $target.get(0),
                 showEvent: "mouseenter",
                 hideEvent: "mouseleave",
                 position: "top",

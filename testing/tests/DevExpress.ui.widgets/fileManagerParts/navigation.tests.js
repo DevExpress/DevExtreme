@@ -107,6 +107,42 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root");
     });
 
+    test("navigate by breadcrumbs items", function(assert) {
+        const inst = this.wrapper.getInstance();
+        inst.option("currentPath", "Folder 1/Folder 1.1");
+        this.clock.tick(800);
+
+        this.wrapper.getBreadcrumbsItemByText("Folder 1").trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1", "parent folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/Folder 1", "breadcrumbs refrers to the parent folder");
+
+        this.wrapper.getBreadcrumbsItemByText("Files").trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root folder");
+    });
+
+    test("navigate by breadcrumbs parent directory item", function(assert) {
+        const inst = this.wrapper.getInstance();
+        inst.option("currentPath", "Folder 1/Folder 1.1");
+        this.clock.tick(800);
+
+        this.wrapper.getBreadcrumbsParentDirectoryItem().trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Folder 1", "parent folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/Folder 1", "breadcrumbs refrers to the parent folder");
+
+        this.wrapper.getBreadcrumbsParentDirectoryItem().trigger("dxclick");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root folder");
+    });
+
     test("change current directory by public API", function(assert) {
         const inst = this.wrapper.getInstance();
         assert.equal("", inst.option("currentPath"));

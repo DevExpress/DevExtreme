@@ -16,6 +16,7 @@ const READONLY_STATE_CLASS = "dx-state-readonly",
     INVALID_MESSAGE_CONTENT = "dx-invalid-message-content",
     INVALID_MESSAGE_AUTO = "dx-invalid-message-auto",
     INVALID_MESSAGE_ALWAYS = "dx-invalid-message-always",
+    DX_INVALID_BADGE_CLASS = "dx-show-invalid-badge",
 
     VALIDATION_TARGET = "dx-validation-target",
 
@@ -61,6 +62,7 @@ const Editor = Widget.inherit({
         this._initInnerOptionCache("validationTooltipOptions");
 
         var $element = this.$element();
+        $element.addClass(DX_INVALID_BADGE_CLASS);
 
         if($element) {
             dataUtils.data($element[0], VALIDATION_TARGET, this);

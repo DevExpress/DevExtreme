@@ -91,13 +91,14 @@ QUnit.test("Set bounds when data ready called. Without bounds in options", funct
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
+        getBoundsFromData: true,
         layers: layers
     });
 
     spy.lastCall.args[0].dataReady();
 
     assert.strictEqual(this.projection.setBounds.callCount, 2);
-    assert.deepEqual(this.projection.setBounds.lastCall.args, [[-200, 10, 10, -10], true]);
+    assert.deepEqual(this.projection.setBounds.lastCall.args, [[-200, 10, 10, -10]]);
 });
 
 QUnit.test("Projection by data. Default bounds are include common bounds", function(assert) {
@@ -165,13 +166,14 @@ QUnit.test("Projection by data. Projection in options", function(assert) {
     assert.strictEqual(this.projection.setEngine.callCount, 1);
 });
 
-QUnit.test("Projection by data. Empty bbox", function(assert) {
+QUnit.test("Bounds by data. Empty bbox", function(assert) {
     var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
     var layers = [];
 
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
+        getBoundsFromData: true,
         layers: layers
     });
 
@@ -198,6 +200,7 @@ QUnit.test("Set bounds when data ready called. With bounds in options", function
     this.layerCollection.stub("items").returns(layers);
 
     this.createMap({
+        getBoundsFromData: true,
         bounds: [10, 10, 10, 10],
         layers: [{ tag: "layer-1", dataSource: "data-1" }]
     });
@@ -412,6 +415,41 @@ QUnit.test('Disposing - elements disposing order', function(assert) {
 });
 
 QUnit.module('Map - API', stubLayersEnvironment);
+
+QUnit.test("Applying bounds by data", function(assert) {
+    var layers = [{
+        proxy: {
+            tag: "p1",
+            getBounds: function() {
+                return [0, 0, 10, 10];
+            }
+        },
+        getData: function() {
+            return { count: function() { return 0; } };
+        }
+    }, {
+        proxy: {
+            tag: "p2",
+            getBounds: function() {
+                return [-10, -10, 10, 10];
+            }
+        },
+        getData: function() {
+            return {
+                count: function() { return 0; }
+            };
+        }
+    }];
+    var spy = sinon.spy(mapLayerModule, "MapLayerCollection");
+    this.createMap({
+        getBoundsFromData: true
+    });
+    this.layerCollection.stub("items").returns(layers);
+
+    spy.lastCall.args[0].dataReady();
+
+    assert.deepEqual(this.projection.setBounds.lastCall.args[0], [ -10, 10, 10, -10]);
+});
 
 QUnit.test("getLayers", function(assert) {
     var layers = [{ proxy: { tag: "p1" } }, { proxy: { tag: "p2" } }, { proxy: { tag: "p3" } }];

@@ -710,3 +710,56 @@ QUnit.module("add direction option", (hooks) => {
     });
 });
 
+QUnit.module("add index option", (hooks) => {
+    hooks.beforeEach(() => {
+        fx.off = true;
+    }),
+    hooks.afterEach(() => {
+        fx.off = false;
+    }),
+    test("check rendering", (assert) => {
+        const firstSDA = $("#fab-one").dxSpeedDialAction({
+            index: 1,
+            icon: "add"
+        }).dxSpeedDialAction("instance");
+        const secondSDA = $("#fab-two").dxSpeedDialAction({
+            index: 2,
+            icon: "trash"
+        }).dxSpeedDialAction("instance");
+
+        let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
+        let $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        const fabDimensions = 30;
+
+        $fabMainContent.trigger("dxclick");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "add action is first");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 120, "trash action is second");
+
+
+        firstSDA.option("index", 2);
+        secondSDA.option("index", 1);
+
+        $fabMainContent.trigger("dxclick");
+
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 120, "trash action is first");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 80, "add action is second");
+
+        firstSDA.option("index", 5);
+        secondSDA.option("index", -1);
+
+        $fabMainContent.trigger("dxclick");
+
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 120, "trash action is first");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 80, "add action is second");
+
+
+        firstSDA.dispose();
+        secondSDA.dispose();
+    });
+});

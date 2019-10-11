@@ -239,6 +239,12 @@ var dxChart = {
     */
     defaultPane: undefined,
     /**
+    * @name dxChartOptions.resizePanesOnZoom
+    * @type boolean
+    * @default false
+    */
+    resizePanesOnZoom: false,
+    /**
     * @name dxChartOptions.adjustOnZoom
     * @type boolean
     * @default true

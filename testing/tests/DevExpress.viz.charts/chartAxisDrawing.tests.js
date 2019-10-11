@@ -1831,8 +1831,99 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
     assert.ok(argAxisStub.prepareAnimation.called);
 });
 
-// T690411
 QUnit.test("Recalculate canvas on zooming - draw axes in new canvas", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs(),
+        scrollBar = this.setupScrollBar();
+
+    argAxis
+        .getMargins.returns({ left: 10, top: 7, right: 20, bottom: 13 });
+
+    valAxis
+        .getMargins.returns({ left: 18, top: 15, right: 10, bottom: 9 });
+
+    scrollBar
+        .getMargins.returns({ left: 0, top: 15, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis, valAxis]);
+
+    var chart = new dxChart(this.container, {
+        scrollBar: { visible: true },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false },
+        resizePanesOnZoom: true
+    });
+
+    var argAxisStub = this.axisStub.getCall(0).returnValue;
+
+    argAxisStub.draw.reset();
+    argAxisStub.getMargins.reset();
+    argAxisStub.estimateMargins.reset();
+    argAxisStub.updateSize.reset();
+    argAxisStub.shift.reset();
+    argAxisStub.createTicks.reset();
+    argAxisStub.drawScaleBreaks.reset();
+
+    var valAxisStub = this.axisStub.getCall(1).returnValue;
+
+    valAxisStub.draw.reset();
+    valAxisStub.getMargins.reset();
+    valAxisStub.estimateMargins.reset();
+    valAxisStub.updateSize.reset();
+    valAxisStub.shift.reset();
+    valAxisStub.createTicks.reset();
+    valAxisStub.drawScaleBreaks.reset();
+
+    scrollBar.updateSize.reset();
+
+    // act
+    chart.zoomArgument(2, 9);
+
+    // assert
+    assert.deepEqual(valAxisStub.createTicks_test_arg, {
+        left: 0,
+        right: 0,
+        top: 15,
+        bottom: 0,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 0,
+        width: 800,
+        height: 600
+    }, "createTicks valAxis canvas");
+
+    assert.equal(valAxisStub.draw.lastCall.args[0], false, "draw valAxis");
+
+    assert.deepEqual(argAxisStub.draw_test_arg, {
+        left: 18,
+        right: 10,
+        top: 15,
+        bottom: 9,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 0,
+        width: 800,
+        height: 600
+    }, "draw argAxis canvas");
+
+    assert.equal(argAxisStub.updateSize.called, true);
+    assert.equal(valAxisStub.updateSize.called, true);
+    assert.equal(scrollBar.updateSize.called, true);
+
+    assert.equal(argAxisStub.shift.called, true);
+    assert.equal(valAxisStub.shift.called, true);
+
+    assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
+    assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
+
+    assert.ok(!valAxisStub.prepareAnimation.called);
+    assert.ok(!argAxisStub.prepareAnimation.called);
+});
+
+QUnit.test("Recalculate canvas on zooming - draw axes in new canvas (support of adjustAxesOnZoom)", function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs(),
         scrollBar = this.setupScrollBar();

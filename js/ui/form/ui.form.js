@@ -21,6 +21,7 @@ import Scrollable from "../scroll_view/ui.scrollable";
 import { Deferred } from "../../core/utils/deferred";
 import themes from "../themes";
 import tryCreateItemOptionAction from "./ui.form.item_options_actions";
+import { concatPaths, createItemPathByIndex, getFullOptionName, getOptionNameFromFullName, getTextWithoutSpaces, isExpectedItem } from "./ui.form.utils";
 
 import "../validation_summary";
 import "../validation_group";
@@ -888,19 +889,19 @@ const Form = Widget.inherit({
         }
     },
 
-    _prepareItems: function(items, parentIsTabbedItem) {
+    _prepareItems(items, parentIsTabbedItem, currentPath, isTabs) {
         if(items) {
-            var result = [];
-
-            for(var i = 0; i < items.length; i++) {
-                var item = items[i];
-                var guid = this._itemsRunTimeInfo.add(item);
+            let result = [];
+            for(let i = 0; i < items.length; i++) {
+                const item = items[i];
+                const path = concatPaths(currentPath, createItemPathByIndex(i, isTabs));
+                const guid = this._itemsRunTimeInfo.add({ item, path });
 
                 if(isObject(item)) {
-                    var itemCopy = extend({}, item);
+                    const itemCopy = extend({}, item);
                     itemCopy.guid = guid;
                     this._tryPrepareGroupItem(itemCopy);
-                    this._tryPrepareTabbedItem(itemCopy);
+                    this._tryPrepareTabbedItem(itemCopy, path);
                     this._tryPrepareItemTemplate(itemCopy);
 
                     if(parentIsTabbedItem) {
@@ -908,7 +909,7 @@ const Form = Widget.inherit({
                     }
 
                     if(itemCopy.items) {
-                        itemCopy.items = this._prepareItems(itemCopy.items, parentIsTabbedItem);
+                        itemCopy.items = this._prepareItems(itemCopy.items, parentIsTabbedItem, path);
                     }
                     result.push(itemCopy);
                 } else {
@@ -932,10 +933,10 @@ const Form = Widget.inherit({
         }
     },
 
-    _tryPrepareTabbedItem: function(item) {
+    _tryPrepareTabbedItem: function(item, path) {
         if(item.itemType === "tabbed") {
             item.template = this._itemTabbedTemplate.bind(this, item);
-            item.tabs = this._prepareItems(item.tabs, true);
+            item.tabs = this._prepareItems(item.tabs, true, path, true);
         }
     },
 
@@ -985,47 +986,45 @@ const Form = Widget.inherit({
         return item.items || [];
     },
 
-    _itemTabbedTemplate: function(item, e, $container) {
-        var that = this,
-            $tabPanel = $("<div>").appendTo($container),
-            tabPanelOptions = extend({}, item.tabPanelOptions, {
-                dataSource: item.tabs,
-                onItemRendered: function(args) {
-                    triggerShownEvent(args.itemElement);
-                },
-                itemTemplate: function(itemData, e, container) {
-                    var layoutManager,
-                        $container = $(container),
-                        alignItemLabels = ensureDefined(itemData.alignItemLabels, true);
+    _itemTabbedTemplate(item, e, $container) {
+        const $tabPanel = $("<div>").appendTo($container);
+        const tabPanelOptions = extend({}, item.tabPanelOptions, {
+            dataSource: item.tabs,
+            onItemRendered: args => triggerShownEvent(args.itemElement),
+            itemTemplate: (itemData, e, container) => {
+                const $container = $(container);
+                const alignItemLabels = ensureDefined(itemData.alignItemLabels, true);
 
-                    layoutManager = that._renderLayoutManager(that._tryGetItemsForTemplate(itemData), $container, {
-                        colCount: itemData.colCount,
-                        alignItemLabels: alignItemLabels,
-                        screenByWidth: this.option("screenByWidth"),
-                        colCountByScreen: itemData.colCountByScreen,
-                        cssItemClass: itemData.cssItemClass,
-                        onLayoutChanged: function(inOneColumn) {
-                            that._alignLabelsInColumn.bind(that)({
-                                $container: $container,
-                                layoutManager: layoutManager,
-                                items: itemData.items,
-                                inOneColumn: inOneColumn
-                            });
-                        }
-                    });
-
-                    if(alignItemLabels) {
-                        that._alignLabelsInColumn.bind(that)({
+                const layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(itemData), $container, {
+                    colCount: itemData.colCount,
+                    alignItemLabels: alignItemLabels,
+                    screenByWidth: this.option("screenByWidth"),
+                    colCountByScreen: itemData.colCountByScreen,
+                    cssItemClass: itemData.cssItemClass,
+                    onLayoutChanged: inOneColumn => {
+                        this._alignLabelsInColumn.bind(this)({
                             $container: $container,
                             layoutManager: layoutManager,
                             items: itemData.items,
-                            inOneColumn: layoutManager.isSingleColumnMode()
+                            inOneColumn: inOneColumn
                         });
                     }
-                }
-            });
+                });
 
-        that._createComponent($tabPanel, TabPanel, tabPanelOptions);
+                this._itemsRunTimeInfo && this._itemsRunTimeInfo.addLayoutManagerToItemByKey(layoutManager, itemData.guid);
+
+                if(alignItemLabels) {
+                    this._alignLabelsInColumn.bind(this)({
+                        $container: $container,
+                        layoutManager: layoutManager,
+                        items: itemData.items,
+                        inOneColumn: layoutManager.isSingleColumnMode()
+                    });
+                }
+            }
+        });
+
+        this._createComponent($tabPanel, TabPanel, tabPanelOptions);
     },
 
     _itemGroupTemplate: function(item, e, $container) {
@@ -1064,6 +1063,8 @@ const Form = Widget.inherit({
                 alignItemLabels: item.alignItemLabels,
                 cssItemClass: item.cssItemClass
             });
+
+            this._itemsRunTimeInfo && this._itemsRunTimeInfo.addLayoutManagerToItemByKey(layoutManager, item.guid);
 
             colCount = layoutManager._getColCount();
             if(inArray(colCount, this._groupsColCount) === -1) {
@@ -1277,6 +1278,59 @@ const Form = Widget.inherit({
         return action && action.tryExecute();
     },
 
+    _setLayoutManagerItemOption(layoutManager, optionName, value, path) {
+        if(this._updateLockCount > 0) {
+            !layoutManager._updateLockCount && layoutManager.beginUpdate();
+            const key = this._itemsRunTimeInfo.getKeyByPath(path);
+            this.postponedOperations.add(key, () => {
+                layoutManager.endUpdate();
+                return new Deferred().resolve();
+            });
+        }
+        layoutManager.option(optionName, value);
+    },
+
+    _tryChangeLayoutManagerItemOption(fullName, value) {
+        const nameParts = fullName.split(".");
+        const optionName = getOptionNameFromFullName(fullName);
+
+        if(optionName === "items" && nameParts.length > 1) {
+            const itemPath = this._getItemPath(nameParts);
+            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
+
+            if(layoutManager) {
+                this._itemsRunTimeInfo.removeItemsByItems(layoutManager.getItemsRunTimeInfo());
+                const items = this._prepareItems(value, false, itemPath);
+                this._setLayoutManagerItemOption(layoutManager, optionName, items, itemPath);
+                return true;
+            }
+        } else if(nameParts.length > 2) {
+            const endPartIndex = nameParts.length - 2;
+            const itemPath = this._getItemPath(nameParts.slice(0, endPartIndex));
+            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
+
+            if(layoutManager) {
+                const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
+                this._setLayoutManagerItemOption(layoutManager, fullOptionName, value, itemPath);
+                return true;
+            }
+        }
+        return false;
+    },
+
+    _tryChangeLayoutManagerItemOptions(itemPath, options) {
+        let result;
+        this.beginUpdate();
+        each(options, (optionName, optionValue) => {
+            result = this._tryChangeLayoutManagerItemOption(getFullOptionName(itemPath, optionName), optionValue);
+            if(!result) {
+                return false;
+            }
+        });
+        this.endUpdate();
+        return result;
+    },
+
     _customHandlerOfComplexOption: function(args, rootOptionName) {
         const nameParts = args.fullName.split(".");
         const value = args.value;
@@ -1288,10 +1342,12 @@ const Form = Widget.inherit({
             const simpleOptionName = optionNameWithoutPath.split(".")[0].replace(/\[\d+]/, "");
             const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue);
 
-            if(!this._tryExecuteItemOptionAction(itemAction) && item) {
-                this._changeItemOption(item, optionNameWithoutPath, value);
-                const items = this._generateItemsFromData(this.option("items"));
-                this.option("items", items);
+            if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(args.fullName, value)) {
+                if(item) {
+                    this._changeItemOption(item, optionNameWithoutPath, value);
+                    const items = this._generateItemsFromData(this.option("items"));
+                    this.option("items", items);
+                }
             }
         }
 
@@ -1311,7 +1367,7 @@ const Form = Widget.inherit({
             i;
 
         for(i = 1; i < nameParts.length; i++) {
-            if(nameParts[i].search("items|tabs") !== -1) {
+            if(nameParts[i].search(/items\[\d+]|tabs\[\d+]/) !== -1) {
                 itemPath += "." + nameParts[i];
             } else {
                 break;
@@ -1392,7 +1448,7 @@ const Form = Widget.inherit({
                     var path = fieldPath.slice();
 
                     item = that._getItemByFieldPath(path, fieldName, item);
-                } else if(itemType === "group" && !(item.caption || item.name) || itemType === "tabbed") {
+                } else if(itemType === "group" && !(item.caption || item.name) || itemType === "tabbed" && !item.name) {
                     var subItemsField = that._getSubItemField(itemType);
 
                     item.items = that._generateItemsFromData(item.items);
@@ -1400,7 +1456,7 @@ const Form = Widget.inherit({
                     item = that._getItemByField({ fieldName: fieldName, fieldPath: fieldPath }, item[subItemsField]);
                 }
 
-                if(that._isExpectedItem(item, fieldName)) {
+                if(isExpectedItem(item, fieldName)) {
                     resultItem = item;
                     return false;
                 }
@@ -1440,7 +1496,7 @@ const Form = Widget.inherit({
             if(isItemWithSubItems) {
                 var name = item.name || item.caption || item.title,
                     isGroupWithName = isDefined(name),
-                    nameWithoutSpaces = that._getTextWithoutSpaces(name),
+                    nameWithoutSpaces = getTextWithoutSpaces(name),
                     pathNode;
 
                 item[subItemsField] = that._generateItemsFromData(item[subItemsField]);
@@ -1490,15 +1546,6 @@ const Form = Widget.inherit({
         }
 
         return result;
-    },
-
-    _getTextWithoutSpaces: function(text) {
-        return text ? text.replace(/\s/g, '') : undefined;
-    },
-
-    _isExpectedItem: function(item, fieldName) {
-        return item && (item.dataField === fieldName || item.name === fieldName || this._getTextWithoutSpaces(item.title) === fieldName ||
-            (item.itemType === "group" && this._getTextWithoutSpaces(item.caption) === fieldName));
     },
 
     _changeItemOption: function(item, option, value) {
@@ -1674,9 +1721,10 @@ const Form = Widget.inherit({
      * @param1 id:string
      * @return any
      */
-    itemOption: function(id, option, value) {
+    itemOption(id, option, value) {
         const items = this._generateItemsFromData(this.option("items"));
         const item = this._getItemByField(id, items);
+        const path = this._itemsRunTimeInfo.getPathFromItem(item);
 
         switch(arguments.length) {
             case 1:
@@ -1684,22 +1732,25 @@ const Form = Widget.inherit({
             case 3: {
                 const itemAction = this._tryCreateItemOptionAction(option, item, value, item[option]);
                 this._changeItemOption(item, option, value);
-                if(!this._tryExecuteItemOptionAction(itemAction)) {
+                const fullName = getFullOptionName(path, option);
+                if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(fullName, value)) {
                     this.option("items", items);
                 }
                 break;
             }
             default: {
                 if(isObject(option)) {
-                    let allowUpdateItems;
-                    each(option, (optionName, optionValue) => {
-                        const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName]);
-                        this._changeItemOption(item, optionName, optionValue);
-                        if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
-                            allowUpdateItems = true;
-                        }
-                    });
-                    allowUpdateItems && this.option("items", items);
+                    if(!this._tryChangeLayoutManagerItemOptions(path, option)) {
+                        let allowUpdateItems;
+                        each(option, (optionName, optionValue) => {
+                            const itemAction = this._tryCreateItemOptionAction(optionName, item, optionValue, item[optionName]);
+                            this._changeItemOption(item, optionName, optionValue);
+                            if(!allowUpdateItems && !this._tryExecuteItemOptionAction(itemAction)) {
+                                allowUpdateItems = true;
+                            }
+                        });
+                        allowUpdateItems && this.option("items", items);
+                    }
                 }
                 break;
             }

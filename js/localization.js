@@ -97,3 +97,12 @@ exports.parseDate = date.parse.bind(date);
 exports.message = message;
 exports.number = number;
 exports.date = date;
+
+exports.disableIntl = () => {
+    if(number.engine() === "intl") {
+        number.resetInjection();
+    }
+    if(date.engine() === "intl") {
+        date.resetInjection();
+    }
+};

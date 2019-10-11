@@ -1,6 +1,5 @@
 var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
-    hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
     fx = require("animation/fx"),
     setViewPort = require("core/utils/view_port").value,
     Toast = require("ui/toast");
@@ -273,20 +272,6 @@ QUnit.test("toast should stay opened after change content template", function(as
     this.clock.tick();
     assert.equal(hideSpy.callCount, 0, "Toast didn't hide");
 });
-
-
-QUnit.module("back button handling", moduleConfig);
-
-QUnit.test("toast should not be hidden on back button press", function(assert) {
-    var toast = this.instance;
-
-    assert.equal(toast.option("closeOnBackButton"), false, "'closeOnBackButton is false by default'");
-
-    toast.show();
-    hideTopOverlayCallback.fire();
-    assert.equal(toast.option("visible"), true, "is not hidden after back button event");
-});
-
 
 QUnit.module("base z-index");
 

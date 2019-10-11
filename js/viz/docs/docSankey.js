@@ -249,6 +249,7 @@ var dxSankey = {
         * @type_function_param1_field1 title:string
         * @type_function_param1_field2 weightIn:Number
         * @type_function_param1_field3 weightOut:Number
+        * @type_function_param2 element:dxElement
         * @type_function_return string|Node|jQuery
         * @default undefined
         */
