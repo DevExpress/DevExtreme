@@ -1097,7 +1097,6 @@ var Overlay = Widget.inherit({
             getDirection: function() {
                 return "both";
             },
-            _toggleGestureCover: noop,
             _clearSelection: noop,
             isNative: true
         }, function(e) {
