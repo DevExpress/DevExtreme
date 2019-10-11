@@ -1,7 +1,7 @@
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
 import treeListCore from './ui.tree_list.core';
-import { equalByComplexValue } from '../../core/utils/data';
+import { equalByValue } from '../../core/utils/common';
 import dataSourceAdapterProvider from './ui.tree_list.data_source_adapter';
 import dataControllerModule from '../grid_core/ui.grid_core.data_controller';
 
@@ -148,7 +148,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                     break;
                 case "expandedRowKeys":
                 case "onNodesInitialized":
-                    if(this._dataSource && !this._dataSource._isNodesInitializing && !equalByComplexValue(args.value, args.previousValue)) {
+                    if(this._dataSource && !this._dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
                         this._loadOnOptionChange();
                     }
                     args.handled = true;

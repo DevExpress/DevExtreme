@@ -6,7 +6,8 @@ import { format } from "../../core/utils/string";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import { extendFromObject } from "../../core/utils/extend";
-import { toComparable, equalByComplexValue } from "../../core/utils/data";
+import { toComparable } from "../../core/utils/data";
+import { equalByValue } from "../../core/utils/common";
 import LoadPanel from "../load_panel";
 import { normalizeSortingInfo } from "../../data/utils";
 import formatHelper from "../../format_helper";
@@ -157,7 +158,7 @@ module.exports = (function() {
                 for(var i = 0; i < items.length; i++) {
                     item = isDefined(keyName) ? items[i][keyName] : items[i];
 
-                    if(equalByComplexValue(key, item)) {
+                    if(equalByValue(key, item)) {
                         index = i;
                         break;
                     }
