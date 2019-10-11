@@ -291,8 +291,13 @@ const Scheduler = Widget.inherit({
 
             /**
                 * @name dxSchedulerOptions.views.dropDownAppointmentTemplate
+                * @type template|function
                 * @default "dropDownAppointment"
-                * @extends AppointmentTemplate
+                * @type_function_param1 itemData:object
+                * @type_function_param2 itemIndex:number
+                * @type_function_param3 contentElement:dxElement
+                * @type_function_return string|Node|jQuery
+                * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
                 */
 
             /**
@@ -465,8 +470,12 @@ const Scheduler = Widget.inherit({
 
             /**
                 * @name dxSchedulerOptions.dropDownAppointmentTemplate
+                * @type template|function
                 * @default "dropDownAppointment"
-                * @extends AppointmentTemplate
+                * @type_function_param1 itemData:object
+                * @type_function_param2 itemIndex:number
+                * @type_function_param3 contentElement:dxElement
+                * @type_function_return string|Node|jQuery
                 * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
                 */
             dropDownAppointmentTemplate: "dropDownAppointment",
