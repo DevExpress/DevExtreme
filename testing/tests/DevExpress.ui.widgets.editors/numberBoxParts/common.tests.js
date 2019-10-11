@@ -22,6 +22,7 @@ const CONTAINER_CLASS = "dx-texteditor-container";
 const SPIN_TOUCH_FRIENDLY_CLASS = "dx-numberbox-spin-touch-friendly";
 const PLACEHOLDER_CLASS = "dx-placeholder";
 const ACTIVE_STATE_CLASS = "dx-state-active";
+const CLEAR_BUTTON_CLASS = "dx-clear-button-area";
 
 QUnit.module("basics", {}, () => {
     QUnit.test("markup init", (assert) => {
@@ -525,7 +526,7 @@ QUnit.module("basics", {}, () => {
         });
         const $buttons = $element.find(".dx-texteditor-buttons-container").children();
 
-        assert.ok($buttons.eq(0).hasClass("dx-clear-button-area"), "clear button is the first");
+        assert.ok($buttons.eq(0).hasClass(CLEAR_BUTTON_CLASS), "clear button is the first");
         assert.ok($buttons.eq(1).hasClass("dx-numberbox-spin-container"), "spin buttons are the second");
     });
 
@@ -540,7 +541,7 @@ QUnit.module("basics", {}, () => {
 
         const $buttons = $element.find(".dx-texteditor-buttons-container").children();
 
-        assert.ok($buttons.eq(0).hasClass("dx-clear-button-area"), "clear button is the first");
+        assert.ok($buttons.eq(0).hasClass(CLEAR_BUTTON_CLASS), "clear button is the first");
         assert.ok($buttons.eq(1).hasClass("dx-numberbox-spin-container"), "spin buttons are the second");
     });
 
@@ -554,7 +555,7 @@ QUnit.module("basics", {}, () => {
         instance.option("showSpinButtons", true);
 
         const $buttons = $element.find(".dx-texteditor-buttons-container").children();
-        assert.ok($buttons.eq(0).hasClass("dx-clear-button-area"), "clear button is the first");
+        assert.ok($buttons.eq(0).hasClass(CLEAR_BUTTON_CLASS), "clear button is the first");
         assert.ok($buttons.eq(1).hasClass("dx-numberbox-spin-container"), "spin buttons are the second");
     });
 
@@ -566,7 +567,7 @@ QUnit.module("basics", {}, () => {
             onValueChanged: valueChangedHandler
         });
 
-        const $clearButton = $element.find(".dx-clear-button-area");
+        const $clearButton = $element.find(`.${CLEAR_BUTTON_CLASS}`);
         $clearButton.trigger("dxclick");
 
         assert.equal(valueChangedHandler.callCount, 1, "valueChangedHandler has been called");
@@ -585,10 +586,33 @@ QUnit.module("basics", {}, () => {
         assert.strictEqual($input.val(), "", "value was cleared");
 
         kb.type("123");
-        const $clearButton = $element.find(".dx-clear-button-area");
+        const $clearButton = $element.find(`.${CLEAR_BUTTON_CLASS}`);
         $clearButton.trigger("dxclick");
 
         assert.strictEqual($input.val(), "", "value is still cleared");
+    });
+
+    QUnit.test("clearButton should clear the text and reset incorrect value (T818673)", (assert) => {
+        const $element = $("#numberbox").dxNumberBox({
+            showClearButton: true,
+            value: null
+        });
+        const instance = $element.dxNumberBox("instance");
+        const $input = $element.find(".dx-texteditor-input");
+        const kb = keyboardMock($input);
+
+        kb.type("11");
+
+        const origInputIsInvalid = instance._inputIsInvalid;
+        instance._inputIsInvalid = () => true;
+
+        try {
+            const $clearButton = $element.find(`.${CLEAR_BUTTON_CLASS}`);
+            $clearButton.trigger("dxclick");
+            assert.strictEqual($input.val(), "", "value is still cleared");
+        } finally {
+            instance._inputIsInvalid = origInputIsInvalid;
+        }
     });
 
     QUnit.test("T220209 - the 'displayValueFormatter' option", (assert) => {
