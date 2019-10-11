@@ -1,6 +1,7 @@
 import config from "../config";
 import Guid from "../guid";
 import { when, Deferred } from "../utils/deferred";
+import { toComparable } from "./data";
 import { each } from "./iterator";
 import { isDefined, isFunction, isString, isObject } from "./type";
 
@@ -260,6 +261,60 @@ const grep = function(elements, checkFunction, invert) {
     return result;
 };
 
+const arraysEqualByValue = function(array1, array2, depth) {
+    if(array1.length !== array2.length) {
+        return false;
+    }
+
+    for(let i = 0; i < array1.length; i++) {
+        if(!equalByValue(array1[i], array2[i], depth + 1)) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+const objectsEqualByValue = function(object1, object2, depth) {
+    for(const propertyName in object1) {
+        if(
+            Object.prototype.hasOwnProperty.call(object1, propertyName) &&
+            !equalByValue(object1[propertyName], object2[propertyName], depth + 1)
+        ) {
+            return false;
+        }
+    }
+
+    for(const propertyName in object2) {
+        if(!(propertyName in object1)) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+const maxEqualityDepth = 3;
+
+const equalByValue = function(object1, object2, depth) {
+    depth = depth || 0;
+
+    object1 = toComparable(object1, true);
+    object2 = toComparable(object2, true);
+
+    if(object1 === object2 || depth >= maxEqualityDepth) {
+        return true;
+    }
+
+    if(isObject(object1) && isObject(object2)) {
+        return objectsEqualByValue(object1, object2, depth);
+    } else if(Array.isArray(object1) && Array.isArray(object2)) {
+        return arraysEqualByValue(object1, object2, depth);
+    }
+
+    return false;
+};
+
 exports.ensureDefined = ensureDefined;
 
 exports.executeAsync = executeAsync;
@@ -268,7 +323,6 @@ exports.deferRender = deferRender;
 exports.deferRenderer = deferRenderer;
 exports.deferUpdate = deferUpdate;
 exports.deferUpdater = deferUpdater;
-
 
 exports.pairToObject = pairToObject;
 exports.splitPair = splitPair;
@@ -286,3 +340,4 @@ exports.applyServerDecimalSeparator = applyServerDecimalSeparator;
 exports.noop = noop;
 exports.asyncNoop = asyncNoop;
 exports.grep = grep;
+exports.equalByValue = equalByValue;

@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import core from "./ui.grid_core.modules";
 import { each } from "../../core/utils/iterator";
 import { combineFilters } from "./ui.grid_core.utils";
-import { equalByComplexValue } from "../../core/utils/data";
+import { equalByValue } from "../../core/utils/common";
 import { isDefined, isBoolean } from "../../core/utils/type";
 import { Deferred, when } from "../../core/utils/deferred";
 import { getIndexByKey } from "./ui.grid_core.utils";
@@ -305,7 +305,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             var focusedRowKey = this.option("focusedRowKey");
 
             if(focusedRowKey !== undefined) {
-                return equalByComplexValue(key, this.option("focusedRowKey"));
+                return equalByValue(key, this.option("focusedRowKey"));
             }
         },
 

@@ -1,4 +1,5 @@
 import coreDataUtils from "./utils/data";
+import { equals } from "./utils/comparator";
 import typeUtils from "./utils/type";
 import createCallBack from "./utils/callbacks";
 import { extend } from "./utils/extend";
@@ -78,7 +79,7 @@ export class OptionManager {
     _setPreparedValue(name, value, merge) {
         const previousValue = this._getValue(this._options, name, false);
 
-        if(coreDataUtils.equals(previousValue, value)) {
+        if(equals(previousValue, value)) {
             return;
         }
 

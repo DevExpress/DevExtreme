@@ -1,6 +1,5 @@
 var dataQuery = require("../../data/query"),
     commonUtils = require("../../core/utils/common"),
-    dataUtils = require("../../core/utils/data"),
     typeUtils = require("../../core/utils/type"),
     getKeyHash = commonUtils.getKeyHash,
     Class = require("../../core/class"),
@@ -54,7 +53,7 @@ module.exports = Class.inherit({
             }
         }
 
-        return dataUtils.equalByComplexValue(key1, key2);
+        return commonUtils.equalByValue(key1, key2);
     },
 
     getSelectableItems: function(items) {

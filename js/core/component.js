@@ -5,7 +5,6 @@ var Config = require("./config"),
     Action = require("./action"),
     errors = require("./errors"),
     commonUtils = require("./utils/common"),
-    dataUtils = require("./utils/data"),
     typeUtils = require("./utils/type"),
     objectUtils = require("./utils/object"),
     deferredUtils = require("../core/utils/deferred"),
@@ -179,7 +178,7 @@ var Component = Class.inherit({
     _isInitialOptionValue: function(name) {
         var optionValue = this.option(name),
             initialOptionValue = this.initialOption(name),
-            isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : dataUtils.equalByComplexValue(optionValue, initialOptionValue);
+            isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
 
         return isInitialOption;
     },

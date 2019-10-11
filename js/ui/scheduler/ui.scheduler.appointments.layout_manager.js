@@ -1,4 +1,4 @@
-import { equalByComplexValue } from "../../core/utils/data";
+import { equalByValue } from "../../core/utils/common";
 import VerticalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.vertical";
 import HorizontalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal";
 import HorizontalMonthLineAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line";
@@ -92,7 +92,7 @@ class AppointmentLayoutManager {
                 oldSettings.sortedIndex = newSettings.sortedIndex;
             }
 
-            if(!equalByComplexValue(newSettings, oldSettings)) {
+            if(!equalByValue(newSettings, oldSettings)) {
                 return true;
             }
         }

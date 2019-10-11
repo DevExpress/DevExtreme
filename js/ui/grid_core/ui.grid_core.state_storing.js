@@ -1,5 +1,4 @@
-import { getKeyHash } from "../../core/utils/common";
-import { equalByComplexValue } from "../../core/utils/data";
+import { getKeyHash, equalByValue } from "../../core/utils/common";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import stateStoringCore from "./ui.grid_core.state_storing_core";
@@ -170,7 +169,7 @@ module.exports = {
                             oldStateHash = getKeyHash(oldState),
                             newStateHash = getKeyHash(newState);
 
-                        if(!equalByComplexValue(oldStateHash, newStateHash)) {
+                        if(!equalByValue(oldStateHash, newStateHash)) {
                             extend(this._state, state);
                             this.save();
                         }
