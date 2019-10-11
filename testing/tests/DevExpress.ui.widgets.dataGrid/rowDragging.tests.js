@@ -7,9 +7,8 @@ QUnit.testStart(function() {
                 top: 0 !important;
             }
         </style>
-        <div class="dx-widget">
-            <div class="dx-datagrid dx-gridbase-container">
-                <div id="container"></div>
+        <div class="dx-widget" id="grid">
+            <div class="dx-datagrid dx-gridbase-container" id="container">
             </div>
         </div>`;
 
@@ -303,6 +302,24 @@ QUnit.test("Sortable should have height if dataSource is empty", function(assert
 
     // assert
     assert.equal($("#container").find(".dx-sortable").height(), 100);
+});
+
+QUnit.test("Sortable should have height if dataSource is empty and grid has height", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    this.options.dataSource = [];
+    this.options.columnAutoWidth = true;
+
+    rowsView = this.createRowsView();
+
+    $("#grid").height(300);
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    assert.equal($("#container").find(".dx-sortable").height(), 300);
 });
 
 QUnit.test("Dragging row when allowDropInsideItem is true", function(assert) {
