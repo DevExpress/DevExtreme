@@ -17,6 +17,8 @@ let speedDialMainItem = null;
 const SpeedDialMainItem = SpeedDialItem.inherit({
     _actionItems: [],
 
+    _isShadingShown: false,
+
     _getDefaultOptions() {
         const defaultOptions = {
             icon: "add",
@@ -39,7 +41,8 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             indent: 55,
             childIndent: 40,
             childOffset: 9,
-            callOverlayRenderShading: true
+            callOverlayRenderShading: true,
+            closeOnOutsideClick: true
         };
 
         return extend(
@@ -131,10 +134,24 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             actions[i].toggle();
         }
 
-        if(config().floatingActionButtonConfig.shading) this.option("shading", !this.option("shading"));
+        this._isShadingShown = !this.option("shading");
+
+        if(config().floatingActionButtonConfig.shading) this.option("shading", this._isShadingShown);
 
         this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
         this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
+    },
+
+    _updateZIndexStackPosition() {
+        this.callBase();
+
+        const overlayStack = this._overlayStack();
+
+        overlayStack.push(this);
+    },
+
+    _outsideClickHandler() {
+        this._isShadingShown && this._clickHandler();
     },
 
     _renderActions() {

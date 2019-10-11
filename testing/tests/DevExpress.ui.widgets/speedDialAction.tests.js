@@ -638,6 +638,10 @@ QUnit.module("add shading option", (hooks) => {
 
         assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 1, "there is shading after FAB click");
 
+        $("body").trigger("dxpointerdown");
+
+        assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading if set value in true before outside click");
+
         config({
             floatingActionButtonConfig: {
                 shading: false
