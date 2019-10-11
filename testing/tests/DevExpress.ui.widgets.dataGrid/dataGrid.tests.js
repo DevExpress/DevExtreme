@@ -11056,6 +11056,50 @@ QUnit.testInActiveWindow("First cell of added row should be focused after adding
     assert.ok($insertedCell.hasClass("dx-focused"), "inserted row's cell is focused");
 });
 
+QUnit.test("DataGrid should update editor values in Popup Edit Form if its data was reloaded (T815443)", function(assert) {
+    // arrange
+    var $popupEditorInput,
+        loadCallCount = 0,
+        changeEditorValue,
+        data = [{ "name": "Alex", "age": 22 }],
+        dataGrid = createDataGrid({
+            dataSource: {
+                key: "name",
+                load: () => {
+                    if(loadCallCount > 0) {
+                        data[0]["name"] = "foo";
+                    }
+                    loadCallCount++;
+                    return data;
+                }
+            },
+            editing: {
+                mode: "popup",
+                allowUpdating: true
+            },
+            onEditorPreparing: function(args) {
+                if(args.parentType === "dataRow" && args.dataField === "age") {
+                    changeEditorValue = () => {
+                        args.setValue(30);
+                        args.component.getDataSource().reload();
+                    };
+                }
+            },
+        });
+    this.clock.tick();
+
+    // act
+    dataGrid.editRow(0);
+    this.clock.tick();
+
+    changeEditorValue();
+    this.clock.tick();
+
+    // assert
+    $popupEditorInput = $(".dx-popup-content").find(".dx-texteditor").eq(0).find("input").eq(0);
+    assert.equal($popupEditorInput.val(), "foo", "value changed");
+});
+
 QUnit.module("API methods", baseModuleConfig);
 
 QUnit.test("get methods for grid without options", function(assert) {
