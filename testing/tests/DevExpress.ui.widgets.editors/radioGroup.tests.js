@@ -182,8 +182,7 @@ module("layout", moduleConfig, () => {
             createRadioGroup({ items });
         });
 
-        const $radioGroup = $("#radioGroup");
-        const itemsCount = $radioGroup.find(`.${RADIO_BUTTON_CLASS}`).length;
+        const itemsCount = $("#radioGroup").find(`.${RADIO_BUTTON_CLASS}`).length;
 
         assert.strictEqual(itemsCount, items.length, `items with the "${RADIO_BUTTON_CLASS}" were render`);
     });
