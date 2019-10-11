@@ -165,50 +165,29 @@ QUnit.test("'onDragMove' option changing", function(assert) {
     assert.deepEqual($(onDragMoveSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
 });
 
-QUnit.test("onDragMove - check args when cross-component dragging", function(assert) {
-    // arrange
-    let onDragMoveSpy = sinon.spy();
+["same", "another"].forEach(function(group) {
+    QUnit.test("onDragMove - check args when cross-component dragging to " + group + " group", function(assert) {
+        // arrange
+        let onDragMoveSpy = sinon.spy();
 
-    let draggable1 = this.createDraggable({
-        onDragMove: onDragMoveSpy,
-        group: "shared"
+        let draggable1 = this.createDraggable({
+            onDragMove: onDragMoveSpy,
+            group: "shared"
+        });
+
+        let draggable2 = this.createDraggable({
+            group: group === "same" ? "shared" : "another"
+        }, $("#items"));
+
+        // act
+        this.pointer.down().move(0, 300).move(0, 10);
+
+        // assert
+        assert.strictEqual(onDragMoveSpy.callCount, 2, "event was called twice");
+        assert.deepEqual($(onDragMoveSpy.getCall(1).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+        assert.deepEqual(onDragMoveSpy.getCall(1).args[0].fromComponent, draggable1, "fromComponent");
+        assert.deepEqual(onDragMoveSpy.getCall(1).args[0].toComponent, group === "same" ? draggable2 : draggable1, "toComponent");
     });
-
-    let draggable2 = this.createDraggable({
-        group: "shared"
-    }, $("#items"));
-
-    // act
-    this.pointer.down().move(0, 300).move(0, 10);
-
-    // assert
-    assert.strictEqual(onDragMoveSpy.callCount, 2, "event was called twice");
-    assert.deepEqual($(onDragMoveSpy.getCall(1).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
-    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].fromComponent, draggable1, "fromComponent");
-    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].toComponent, draggable2, "toComponent");
-});
-
-QUnit.test("onDragMove - check args when cross-component dragging to another group", function(assert) {
-    // arrange
-    let onDragMoveSpy = sinon.spy();
-
-    let draggable1 = this.createDraggable({
-        onDragMove: onDragMoveSpy,
-        group: "shared1"
-    });
-
-    this.createDraggable({
-        group: "shared2"
-    }, $("#items"));
-
-    // act
-    this.pointer.down().move(0, 300).move(0, 10);
-
-    // assert
-    assert.strictEqual(onDragMoveSpy.callCount, 2, "event was called twice");
-    assert.deepEqual($(onDragMoveSpy.getCall(1).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
-    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].fromComponent, draggable1, "fromComponent");
-    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].toComponent, draggable1, "toComponent");
 });
 
 QUnit.test("onDragEnd - check args", function(assert) {
