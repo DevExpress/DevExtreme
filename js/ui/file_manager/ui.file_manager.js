@@ -658,7 +658,7 @@ class FileManager extends Widget {
     /**
      * @name dxFileManagerMethods.refresh
      * @publicName refresh()
-     * @return Promise<any>this._getCurrentDirectory()
+     * @return Promise<any>
      */
     refresh() {
         return this.executeCommand("refresh");
