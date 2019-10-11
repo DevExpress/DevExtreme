@@ -28,6 +28,11 @@ var isPercentWidth = function(width) {
     return typeUtils.isString(width) && width.slice(-1) === "%";
 };
 
+var isPixelWidth = function(width) {
+    return typeUtils.isString(width) && width.slice(-2) === "px";
+};
+
+
 var mergeArraysByMaxValue = function(values1, values2) {
     var result = [],
         i;
@@ -278,7 +283,7 @@ var ResizingController = modules.ViewController.inherit({
                 var width = this.width;
                 if(width !== "auto") {
                     if(typeUtils.isDefined(width)) {
-                        resultWidths[index] = typeUtils.isNumeric(width) ? parseFloat(width) : width;
+                        resultWidths[index] = typeUtils.isNumeric(width) || isPixelWidth(width) ? parseFloat(width) : width;
                     } else if(!columnAutoWidth) {
                         resultWidths[index] = undefined;
                     }
