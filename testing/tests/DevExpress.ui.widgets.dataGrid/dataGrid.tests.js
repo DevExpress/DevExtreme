@@ -4434,6 +4434,39 @@ QUnit.test("Freespace row have the correct height when using master-detail with 
     this.clock.restore();
 });
 
+QUnit.test("DataGrid should apply columns that are dynamically added to a band (T815945)", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+
+    var $headerCells,
+        dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [{ name: "Alex", age: 22 }, { name: "Sahra", age: 22 }],
+            columns: [{
+                caption: "Band",
+            }]
+        }).dxDataGrid("instance");
+    clock.tick();
+
+    // act
+    dataGrid.option("columns[0].columns", [{ dataField: "name", ownerBand: 0 }]);
+    clock.tick();
+
+    // assert
+    $headerCells = $(dataGrid.element()).find(".dx-header-row").eq(1).children();
+    assert.equal($headerCells.eq(0).find(".dx-datagrid-text-content").eq(0).text(), "Name", "name is applied");
+
+    // act
+    dataGrid.columnOption("Band", "columns", [{ dataField: "name", ownerBand: 0 }, { dataField: "age", ownerBand: 0 }]);
+    clock.tick();
+
+    // assert
+    $headerCells = $(dataGrid.element()).find(".dx-header-row").eq(1).children();
+    assert.equal($headerCells.eq(0).find(".dx-datagrid-text-content").eq(0).text(), "Name", "name is applied");
+    assert.equal($headerCells.eq(1).find(".dx-datagrid-text-content").eq(0).text(), "Age", "age is applied");
+
+    clock.restore();
+});
+
 QUnit.test("scroll position should not be reseted if virtual scrolling and cell template cause relayout", function(assert) {
     // arrange
     var array = [];
