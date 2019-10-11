@@ -218,7 +218,7 @@ class FileManager extends Widget {
     _refreshAndShowProgress() {
         this._notificationControl.tryShowProgressPanel();
 
-        this._controller.refresh()
+        return this._controller.refresh()
             .then(() => this._redrawComponent());
     }
 
@@ -351,13 +351,6 @@ class FileManager extends Widget {
             * @default ""
             */
             currentPath: "",
-
-            /**
-            * @name dxFileManagerOptions.currentDirectory
-            * @type object
-            * @default null
-            */
-            currentDirectory: null,
 
             /**
             * @name dxFileManagerOptions.rootFolderName
@@ -589,8 +582,6 @@ class FileManager extends Widget {
         const name = args.name;
 
         switch(name) {
-            case "currentDirectory":
-                break;
             case "currentPath":
                 this._setCurrentPath(args.value);
                 break;
@@ -634,7 +625,7 @@ class FileManager extends Widget {
     }
 
     executeCommand(commandName) {
-        this._commandManager.executeCommand(commandName);
+        return this._commandManager.executeCommand(commandName);
     }
 
     _setCurrentDirectory(directoryInfo) {
@@ -646,15 +637,12 @@ class FileManager extends Widget {
     }
 
     _onSelectedDirectoryChanged() {
-        const directoryInfo = this._controller.getCurrentDirectory();
-        const directoryItem = directoryInfo && directoryInfo.fileItem || null;
         const currentPath = this._controller.getCurrentPath();
 
         this._filesTreeView.updateCurrentDirectory();
         this._itemView.refresh();
         this._breadcrumbs.option("path", currentPath);
 
-        this.option("currentDirectory", directoryItem);
         this.option("currentPath", currentPath);
         this._onCurrentDirectoryChangedAction();
     }
@@ -665,6 +653,25 @@ class FileManager extends Widget {
 
     _getSelectedItemInfos() {
         return this._itemView.getSelectedItems();
+    }
+
+    /**
+     * @name dxFileManagerMethods.refresh
+     * @publicName refresh()
+     * @return Promise<any>
+     */
+    refresh() {
+        return this.executeCommand("refresh");
+    }
+
+    /**
+     * @name dxFileManagerMethods.getCurrentDirectory
+     * @publicName getCurrentDirectory()
+     * @return object
+     */
+    getCurrentDirectory() {
+        const directoryInfo = this._getCurrentDirectory();
+        return directoryInfo && directoryInfo.fileItem || null;
     }
 
     /**
