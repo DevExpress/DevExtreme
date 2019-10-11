@@ -951,7 +951,12 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _setTargetDraggable: function() {
-        targetDraggable = this;
+        let currentGroup = this.option("group"),
+            sourceDraggable = this._getSourceDraggable();
+
+        if(currentGroup && currentGroup === sourceDraggable.option("group")) {
+            targetDraggable = this;
+        }
     },
 
     _setSourceDraggable: function() {
