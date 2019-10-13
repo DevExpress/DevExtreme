@@ -2,6 +2,7 @@ import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
 import "ui/sortable";
 import fx from "animation/fx";
+import browser from "core/utils/browser";
 
 import "common.css!";
 
@@ -1739,8 +1740,8 @@ QUnit.test("items should not be moved after leave and enter", function(assert) {
     // assert
     let items1 = $(sortable1.$element()).children();
     assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
-    assert.strictEqual(items1[1].style.transform, "translate(0px, 0px)", "items1 2 is not moved");
-    assert.strictEqual(items1[2].style.transform, "translate(0px, 0px)", "items1 3 is not moved");
+    assert.strictEqual(items1[1].style.transform, browser.mozilla ? "translate(0px)" : "translate(0px, 0px)", "items1 2 is not moved");
+    assert.strictEqual(items1[2].style.transform, browser.mozilla ? "translate(0px)" : "translate(0px, 0px)", "items1 3 is not moved");
 });
 
 QUnit.test("Items should be moved after leave sortable if group is defined", function(assert) {
