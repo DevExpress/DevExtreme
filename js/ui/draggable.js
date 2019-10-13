@@ -877,7 +877,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
     _dragLeaveHandler: function(e) {
         this._resetTargetDraggable();
 
-        this.reset();
+        if(this !== this._getSourceDraggable()) {
+            this.reset();
+        }
 
         let sourceDraggable = this._getSourceDraggable();
         sourceDraggable.dragLeave(e);
