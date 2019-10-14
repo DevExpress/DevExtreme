@@ -6,6 +6,7 @@ import { extend } from "../../core/utils/extend";
 const FIXED_CONTAINER_PROP_NAME = "fixedContainer";
 
 const APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment";
+const LIST_ITEM_DATA_KEY = "dxListItemData";
 
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
@@ -47,38 +48,88 @@ export default class AppointmentDragBehavior {
         this.scheduler.notifyObserver("hideAppointmentTooltip");
     }
 
-    onDragEnd(e) {
+    getAppointmentElement(e) {
         const itemElement = e.event.data && e.event.data.itemElement || e.itemElement;
 
-        this.onDragEndCore($(itemElement), e);
+        return $(itemElement);
     }
 
-    onDragEndCore(appointment, e) {
-        const container = this.scheduler._getAppointmentContainer(this.isAllDay(appointment));
-        container.append(appointment);
+    onDragEnd(e) {
+        const $appointment = this.getAppointmentElement(e);
+        const container = this.scheduler._getAppointmentContainer(this.isAllDay($appointment));
+        container.append($appointment);
 
-        this.currentAppointment = appointment;
+        this.currentAppointment = $appointment;
 
         if(this.scheduler._escPressed) {
             e.event.cancel = true;
         } else {
             this.scheduler.notifyObserver("updateAppointmentAfterDrag", {
                 event: e,
-                data: this.scheduler._getItemData(appointment),
-                $appointment: appointment,
+                data: this.scheduler._getItemData($appointment),
+                $appointment: $appointment,
                 coordinates: this.initialPosition
             });
         }
     }
 
-    addTo(appointment, options) {
-        this.scheduler._createComponent(appointment, Draggable, extend({
-            contentTemplate: null,
-            filter: `.${APPOINTMENT_ITEM_CLASS}`,
-            immediate: false,
-            onDragStart: this.onDragStart.bind(this),
-            onDragEnd: this.onDragEnd.bind(this)
-        }, options));
+    getItemData(appointment) {
+        let itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
+        return itemData && itemData.data || this.scheduler._getItemData(appointment);
+    }
+
+    createDragStartHandler(options, appointmentDragging) {
+        return (e) => {
+            e.itemData = this.getItemData(e.itemElement);
+
+            appointmentDragging.onDragStart && appointmentDragging.onDragStart(e);
+
+            if(!e.cancel) {
+                options.onDragStart(e);
+            }
+        };
+    }
+
+    createDragEndHandler(options, appointmentDragging) {
+        return (e) => {
+            appointmentDragging.onDragEnd && appointmentDragging.onDragEnd(e);
+
+            if(!e.cancel) {
+                options.onDragEnd(e);
+                if(e.fromComponent !== e.toComponent) {
+                    appointmentDragging.onRemove && appointmentDragging.onRemove(e);
+                }
+            }
+        };
+    }
+
+    createDropHandler(appointmentDragging) {
+        return (e) => {
+            e.itemData = extend({}, e.itemData, this.scheduler.invoke("getUpdatedData", {
+                data: e.itemData
+            }));
+
+            if(e.fromComponent !== e.toComponent) {
+                appointmentDragging.onAdd && appointmentDragging.onAdd(e);
+            }
+        };
+    }
+
+    addTo(appointment, config) {
+        let appointmentDragging = this.scheduler.option("appointmentDragging") || {},
+            options = extend({
+                contentTemplate: null,
+                filter: `.${APPOINTMENT_ITEM_CLASS}`,
+                immediate: false,
+                onDragStart: this.onDragStart.bind(this),
+                onDragEnd: this.onDragEnd.bind(this)
+            }, config);
+
+        this.scheduler._createComponent(appointment, Draggable, extend({}, options, appointmentDragging, {
+            onDragStart: this.createDragStartHandler(options, appointmentDragging),
+            onDragEnd: this.createDragEndHandler(options, appointmentDragging),
+            onDrop: this.createDropHandler(appointmentDragging),
+        }));
     }
 
     moveBack() {

@@ -567,6 +567,106 @@ const Scheduler = Widget.inherit({
                 * @type boolean
                 * @default true
                 */
+
+            /**
+                * @name dxSchedulerOptions.appointmentDragging
+                * @type object
+                */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.autoScroll
+               * @type boolean
+               * @default true
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.scrollSpeed
+               * @type number
+               * @default 60
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.scrollSensitivity
+               * @type number
+               * @default 60
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.group
+               * @type string
+               * @default undefined
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.data
+               * @type any
+               * @default undefined
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onDragStart
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 cancel:boolean
+               * @type_function_param1_field3 itemData:any
+               * @type_function_param1_field4 itemElement:dxElement
+               * @type_function_param1_field5 fromIndex:number
+               * @type_function_param1_field6 fromData:any
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onDragMove
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 cancel:boolean
+               * @type_function_param1_field3 itemData:any
+               * @type_function_param1_field4 itemElement:dxElement
+               * @type_function_param1_field5 fromIndex:number
+               * @type_function_param1_field6 toIndex:number
+               * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field9 fromData:any
+               * @type_function_param1_field10 toData:any
+               * @type_function_param1_field11 dropInsideItem:boolean
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onDragEnd
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 cancel:boolean
+               * @type_function_param1_field3 itemData:any
+               * @type_function_param1_field4 itemElement:dxElement
+               * @type_function_param1_field5 fromIndex:number
+               * @type_function_param1_field6 toIndex:number
+               * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field9 fromData:any
+               * @type_function_param1_field10 toData:any
+               * @type_function_param1_field11 dropInsideItem:boolean
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onAdd
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 itemData:any
+               * @type_function_param1_field3 itemElement:dxElement
+               * @type_function_param1_field4 fromIndex:number
+               * @type_function_param1_field5 toIndex:number
+               * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field9 fromData:any
+               * @type_function_param1_field10 toData:any
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onRemove
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 itemData:any
+               * @type_function_param1_field3 itemElement:dxElement
+               * @type_function_param1_field4 fromIndex:number
+               * @type_function_param1_field5 toIndex:number
+               * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field8 fromData:any
+               */
             showAllDayPanel: true,
 
             /**
@@ -1344,6 +1444,7 @@ const Scheduler = Widget.inherit({
                 this._updateOption("workSpace", name, value);
                 this.repaint();
                 break;
+            case "appointmentDragging":
             case "appointmentTooltipTemplate":
             case "appointmentPopupTemplate":
             case "recurrenceEditMode":
@@ -1943,6 +2044,7 @@ const Scheduler = Widget.inherit({
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled"),
             allowDrag: this._allowDragging(),
+            appointmentDragging: this.option("appointmentDragging"),
             allowDelete: this._editing.allowUpdating && this._editing.allowDeleting,
             allowResize: this._allowResizing(),
             allowAllDayResize: this._allowAllDayResizing(),
