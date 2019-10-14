@@ -58,7 +58,7 @@ class ScrollHelper {
         }
     }
 
-    findScrollable(elements, mousePosition) {
+    updateScrollable(elements, mousePosition) {
         var that = this;
 
         if(!elements.some(element => that._trySetScrollable(element, mousePosition))) {
@@ -120,7 +120,7 @@ class ScrollHelper {
             sensitivity = component.option("scrollSensitivity"),
             maxSpeed = component.option("scrollSpeed");
 
-        return Math.round((sensitivity - distance) / sensitivity * maxSpeed);
+        return Math.ceil(Math.pow((sensitivity - distance) / sensitivity, 2) * maxSpeed);
     }
 
     scrollByStep() {
@@ -154,6 +154,7 @@ class ScrollHelper {
     reset() {
         this._$scrollable = null;
         this._scrollSpeed = 0;
+        this._preventScroll = true;
     }
 }
 
@@ -328,9 +329,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
             /**
              * @name DraggableBaseOptions.scrollSpeed
              * @type number
-             * @default 60
+             * @default 30
              */
-            scrollSpeed: 60,
+            scrollSpeed: 30,
             /**
              * @name DraggableBaseOptions.scrollSensitivity
              * @type number
@@ -732,7 +733,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         });
 
         if(this.option("autoScroll")) {
-            this._findScrollable(e);
+            this._updateScrollable(e);
         }
 
         let eventArgs = this._getEventArgs(e);
@@ -746,7 +747,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         targetDraggable.dragMove(e);
     },
 
-    _findScrollable: function(e) {
+    _updateScrollable: function(e) {
         var that = this,
             $dragElement = that._$dragElement,
             ownerDocument = $dragElement.get(0).ownerDocument,
@@ -769,8 +770,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
             allObjects = ownerDocument.elementsFromPoint(mousePosition.x, mousePosition.y);
         }
 
-        that.verticalScrollHelper && that.verticalScrollHelper.findScrollable(allObjects, mousePosition);
-        that.horizontalScrollHelper && that.horizontalScrollHelper.findScrollable(allObjects, mousePosition);
+        that.verticalScrollHelper && that.verticalScrollHelper.updateScrollable(allObjects, mousePosition);
+        that.horizontalScrollHelper && that.horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
     },
 
     _getEventArgs: function(e) {
