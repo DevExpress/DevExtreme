@@ -24,6 +24,7 @@
 @MATERIAL_SWITCH_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 @MATERIAL_ON_VALUE_SWITCH_SHADOW: 0 0 0 @MATERIAL_SWITCH_SHADOW_BLUR_RADIUS fade(@switch-handle-on-bg, 10%);
 @MATERIAL_SWITCH_SHADOW: 0 0 0 @MATERIAL_SWITCH_SHADOW_BLUR_RADIUS fade(@base-text-color, 10%);
+@MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 @MATERIAL_SWITCH_SHADOW_BLUR_RADIUS fade(@switch-invalid-handle-bg, 10%);
 
 .dx-switch-wrapper {
     position: relative;
@@ -178,14 +179,19 @@
 
 .dx-invalid {
     .dx-switch-container {
-        &:before {
+        .dx-switch&:before {
             background-color: @switch-invalid-container-bg;
         }
-    }
 
-    &.dx-switch-on-value {
         .dx-switch-handle:before {
-            background-color: @switch-invalid-handle-bg;
+            .dx-switch-on-value:not(.dx-state-readonly):not(.dx-state-disabled)& {
+                background-color: @switch-invalid-handle-bg;
+
+                .dx-state-active&,
+                .dx-state-focused& {
+                    box-shadow: @MATERIAL_INVALID_SWITCH_SHADOW;
+                }
+            }
         }
     }
 }

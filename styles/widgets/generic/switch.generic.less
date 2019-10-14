@@ -164,11 +164,12 @@
 }
 
 .dx-invalid {
-    .dx-switch-container {
+    &.dx-switch .dx-switch-container {
         border-color: @base-invalid-faded-border-color;
     }
 
-    &.dx-state-focused {
+    &.dx-state-focused,
+    &.dx-state-hover {
         .dx-switch-container {
             border-color: @base-invalid-color;
         }
