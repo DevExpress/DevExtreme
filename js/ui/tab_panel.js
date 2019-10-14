@@ -310,7 +310,6 @@ var TabPanel = MultiView.inherit({
             }).bind(this),
             onItemRendered: this._titleRenderedAction.bind(this),
             itemTemplate: this._getTemplateByOption("itemTitleTemplate"),
-
             items: this.option("items"),
             noDataText: null,
             scrollingEnabled: this.option("scrollingEnabled"),
@@ -346,6 +345,11 @@ var TabPanel = MultiView.inherit({
         if(e.target === this._tabs._focusTarget().get(0)) {
             this._toggleFocusClass(isFocused, this._focusTarget());
         }
+    },
+
+    _focusOutHandler: function() {
+        this.callBase.apply(this, arguments);
+        this._tabs.option("focusedElement", null);
     },
 
     _setTabsOption: function(name, value) {
