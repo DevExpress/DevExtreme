@@ -143,9 +143,11 @@ QUnit.test("Dragging events", function(assert) {
 QUnit.test("Draggable element (grid) - checking options", function(assert) {
     // arrange
     $.extend(this.options, {
+        columns: [{ dataField: "field1", width: 100 }, { dataField: "field2", width: 150 }, { dataField: "field3", width: 200 }],
         showColumnHeaders: true,
         showBorders: false,
         showColumnLines: true,
+        columnAutoWidth: true,
         pager: {
             visible: true
         },
@@ -163,8 +165,19 @@ QUnit.test("Draggable element (grid) - checking options", function(assert) {
 
     // assert
     assert.deepEqual(processedOptions, {
-        dataSource: [this.options.dataSource[0]],
-        columns: this.options.columns,
+        dataSource: [{ id: 1, parentId: 0 }],
+        columns: [
+            {
+                "width": 100
+            },
+            {
+                "width": 150
+            },
+            {
+                "width": 200
+            }
+        ],
+        columnAutoWidth: true,
         showColumnHeaders: false,
         showBorders: true,
         showColumnLines: true,
@@ -175,11 +188,7 @@ QUnit.test("Draggable element (grid) - checking options", function(assert) {
             useNative: false,
             showScrollbar: false
         },
-        loadingTimeout: undefined,
-        rowDragging: {
-            allowReordering: true,
-            showDragIcons: undefined
-        }
+        loadingTimeout: undefined
     }, "options");
 });
 
@@ -375,6 +384,49 @@ QUnit.test("Dragging row when allowDropInsideItem is true", function(assert) {
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
+});
+
+QUnit.test("Dragging row when the lookup column is specified with a remote source", function(assert) {
+    // arrange
+    let rowsView,
+        $draggableElement,
+        clock = sinon.useFakeTimers(),
+        $testElement = $("#container");
+
+    this.options.columns[2] = {
+        dataField: "field3",
+        lookup: {
+            dataSource: {
+                load: function() {
+                    let d = $.Deferred();
+
+                    setTimeout(function() {
+                        d.resolve([{
+                            id: "test2",
+                            text: "lookup"
+                        }]);
+                    }, 200);
+
+                    return d.promise();
+                }
+            },
+            displayExpr: "text",
+            valueExpr: "id"
+        }
+    };
+
+    rowsView = this.createRowsView();
+    clock.tick(200);
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+
+    // assert
+    $draggableElement = $("body").children(".dx-sortable-dragging");
+    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
+    clock.restore();
 });
 
 

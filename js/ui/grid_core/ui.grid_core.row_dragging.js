@@ -67,10 +67,12 @@ var RowDraggingExtender = {
     },
 
     _getDraggableGridOptions: function(options) {
-        let gridOptions = this.option();
+        let gridOptions = this.option(),
+            columns = this.getColumns(),
+            $rowElement = $(this.getRowElement(options.rowIndex)).clone();
 
         return {
-            dataSource: [options.data],
+            dataSource: [{ id: 1, parentId: 0 }],
             showBorders: true,
             showColumnHeaders: false,
             scrolling: {
@@ -80,23 +82,11 @@ var RowDraggingExtender = {
             pager: {
                 visible: false
             },
-            rowDragging: {
-                allowReordering: true,
-                showDragIcons: gridOptions.rowDragging.showDragIcons
-            },
             loadingTimeout: undefined,
-            columns: gridOptions.columns,
-            customizeColumns: function(columns) {
-                gridOptions.customizeColumns && gridOptions.customizeColumns.apply(this, arguments);
-
-                columns.forEach((column) => {
-                    column.groupIndex = undefined;
-                });
-            },
+            columnAutoWidth: gridOptions.columnAutoWidth,
             showColumnLines: gridOptions.showColumnLines,
-            rowTemplate: gridOptions.rowTemplate,
-            onCellPrepared: gridOptions.onCellPrepared,
-            onRowPrepared: gridOptions.onRowPrepared
+            columns: columns.map((column) => { return { width: column.width || column.visibleWidth }; }),
+            onRowPrepared: (e) => { $(e.rowElement).replaceWith($rowElement); }
         };
     },
 
