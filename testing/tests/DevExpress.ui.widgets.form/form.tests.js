@@ -2274,7 +2274,7 @@ QUnit.test("resetValues - clear formData and editors", function(assert) {
     assert.strictEqual(form.getEditor("dxCheckBox").option("value"), dxCheckBoxResetValue, "form.getEditor.dxCheckBox");
     assert.strictEqual(form.getEditor("dxDateBox").option("value"), defaultResetValue, "form.getEditor.dxDateBox");
     assert.strictEqual(form.getEditor("dxDropDownBox").option("value"), defaultResetValue, "form.getEditor.dxDropDownBox");
-    assert.strictEqual(form.getEditor("dxHtmlEditor").option("value"), stringEditorResetValue, "form.getEditor.dxHtmlEditor");
+    assert.strictEqual(form.getEditor("dxHtmlEditor").option("value"), defaultResetValue, "form.getEditor.dxHtmlEditor");
     assert.strictEqual(form.getEditor("dxLookup").option("value"), defaultResetValue, "form.getEditor.dxLookup");
     assert.strictEqual(form.getEditor("dxNumberBox").option("value"), defaultResetValue, "form.getEditor.dxNumberBox");
     assert.strictEqual(form.getEditor("dxRadioGroup").option("value"), defaultResetValue, "form.getEditor.dxRadioGroup");

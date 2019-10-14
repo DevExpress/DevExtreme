@@ -229,6 +229,9 @@ export class SchedulerTestWrapper {
     }
 
     option(name, value) {
+        if(value === undefined) {
+            return this.instance.option(name);
+        }
         this.instance.option(name, value);
     }
 

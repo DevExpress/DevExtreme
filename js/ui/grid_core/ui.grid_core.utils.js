@@ -1,5 +1,4 @@
 import $ from "../../core/renderer";
-import { equalByValue } from "../../core/utils/common";
 import { isDefined, isFunction } from "../../core/utils/type";
 import { when } from "../../core/utils/deferred";
 import { getGroupInterval } from "../shared/filtering";
@@ -8,6 +7,7 @@ import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import { extendFromObject } from "../../core/utils/extend";
 import { toComparable } from "../../core/utils/data";
+import { equalByValue } from "../../core/utils/common";
 import LoadPanel from "../load_panel";
 import { normalizeSortingInfo } from "../../data/utils";
 import formatHelper from "../../format_helper";

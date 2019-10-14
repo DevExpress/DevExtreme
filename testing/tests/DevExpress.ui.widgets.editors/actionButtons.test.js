@@ -106,6 +106,14 @@ module("button collection", () => {
                 assert.notOk($before.length);
                 assert.strictEqual($after.length, 2);
             });
+
+            test("custom button should skip content template from the integrationOptions", (assert) => {
+                const $textBox = $("<div>").dxTextBox({ buttons: [{ name: "name1" }] });
+                const buttons = getTextEditorButtons($textBox);
+                const button = buttons.$after.eq(0).dxButton("instance");
+
+                assert.deepEqual(button.option("integrationOptions.skipTemplates"), ["content"], "content is skipped");
+            });
         });
     });
 });

@@ -7,9 +7,8 @@ QUnit.testStart(function() {
                 top: 0 !important;
             }
         </style>
-        <div class="dx-widget">
-            <div class="dx-datagrid dx-gridbase-container">
-                <div id="container"></div>
+        <div class="dx-widget" id="grid">
+            <div class="dx-datagrid dx-gridbase-container" id="container">
             </div>
         </div>`;
 
@@ -43,6 +42,9 @@ function createRowsView() {
         },
         $element: function() {
             return $(".dx-datagrid");
+        },
+        element: function() {
+            return this.$element();
         }
     };
 
@@ -109,6 +111,33 @@ QUnit.test("Dragging row", function(assert) {
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
+});
+
+QUnit.test("Dragging events", function(assert) {
+    // arrange
+    let $testElement = $("#container");
+
+    this.options.rowDragging = {
+        allowReordering: true,
+        onDragStart: sinon.spy(),
+        onReorder: sinon.spy()
+    };
+
+    let rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70).up();
+
+    // assert
+    const onDragStart = this.options.rowDragging.onDragStart;
+    assert.strictEqual(onDragStart.callCount, 1, "onDragStart called once");
+    assert.strictEqual(onDragStart.getCall(0).args[0].itemData, this.options.dataSource[0], "onDragStart itemData param");
+    assert.strictEqual(onDragStart.getCall(0).args[0].component, this.dataGrid, "onDragStart component param");
+
+    const onReorder = this.options.rowDragging.onReorder;
+    assert.strictEqual(onReorder.callCount, 1, "onReorder called once");
+    assert.strictEqual(onReorder.getCall(0).args[0].component, this.dataGrid, "onReorder component param");
 });
 
 QUnit.test("Draggable element (grid) - checking options", function(assert) {
@@ -303,6 +332,24 @@ QUnit.test("Sortable should have height if dataSource is empty", function(assert
 
     // assert
     assert.equal($("#container").find(".dx-sortable").height(), 100);
+});
+
+QUnit.test("Sortable should have height if dataSource is empty and grid has height", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    this.options.dataSource = [];
+    this.options.columnAutoWidth = true;
+
+    rowsView = this.createRowsView();
+
+    $("#grid").height(300);
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    assert.equal($("#container").find(".dx-sortable").height(), 300);
 });
 
 QUnit.test("Dragging row when allowDropInsideItem is true", function(assert) {

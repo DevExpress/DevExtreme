@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import modules from "./ui.grid_core.modules";
 import { createObjectWithChanges, getIndexByKey } from "./ui.grid_core.utils";
-import { equalByValue, grep, deferUpdate } from "../../core/utils/common";
+import { grep, deferUpdate, equalByValue } from "../../core/utils/common";
 import { each } from "../../core/utils/iterator";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
@@ -252,7 +252,10 @@ const ValidatingController = modules.Controller.inherit((function() {
                         applyValidationResults: defaultValidationResult
                     },
                     dataGetter: function() {
-                        return createObjectWithChanges(editData.oldData, editData.data);
+                        return {
+                            data: createObjectWithChanges(editData.oldData, editData.data),
+                            column
+                        };
                     }
                 });
 

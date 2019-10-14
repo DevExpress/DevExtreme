@@ -1,4 +1,4 @@
-import { equalByValue, getKeyHash } from "../../core/utils/common";
+import { getKeyHash, equalByValue } from "../../core/utils/common";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import stateStoringCore from "./ui.grid_core.state_storing_core";

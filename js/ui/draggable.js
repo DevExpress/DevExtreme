@@ -374,6 +374,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this.callBase.apply(this, arguments);
 
         extend(this._optionsByReference, {
+            component: true,
             group: true,
             itemData: true,
             data: true
@@ -472,10 +473,9 @@ var Draggable = DOMComponentWithTemplate.inherit({
             data = {
                 direction: this.option("dragDirection"),
                 immediate: this.option("immediate"),
-                checkDropTarget: ($target) => {
-                    var sourceGroup = this.option("group"),
-                        targetComponent = $target.data("dxDraggable") || $target.data("dxSortable"),
-                        targetGroup = targetComponent && targetComponent.option("group");
+                checkDropTarget: () => {
+                    var targetGroup = this.option("group"),
+                        sourceGroup = this._getSourceDraggable().option("group");
 
                     return sourceGroup && sourceGroup === targetGroup;
                 }
@@ -775,6 +775,18 @@ var Draggable = DOMComponentWithTemplate.inherit({
 
         that.verticalScrollHelper && that.verticalScrollHelper.findScrollable(allObjects, mousePosition);
         that.horizontalScrollHelper && that.horizontalScrollHelper.findScrollable(allObjects, mousePosition);
+    },
+
+    _defaultActionArgs: function() {
+        let args = this.callBase.apply(this, arguments),
+            component = this.option("component");
+
+        if(component) {
+            args.component = component;
+            args.element = component.element();
+        }
+
+        return args;
     },
 
     _getEventArgs: function(e) {

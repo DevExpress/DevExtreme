@@ -89,11 +89,38 @@ QUnit.test("'immediate' option", function(assert) {
 
 QUnit.module("Events", moduleConfig);
 
+QUnit.test("component arg in events if component option is defined", function(assert) {
+    // arrange
+    const myComponent = $("<div>").dxScrollView().dxScrollView("instance");
+
+    const options = {
+        component: myComponent,
+        onDragStart: sinon.spy(),
+        onDragMove: sinon.spy(),
+        onDragEnd: sinon.spy()
+    };
+
+    this.createDraggable(options);
+
+    // act
+    this.pointer.down().move(0, 20).up();
+
+    // assert
+    assert.strictEqual(options.onDragStart.getCall(0).args[0].component, myComponent, "onDragStart component");
+    assert.strictEqual(options.onDragStart.getCall(0).args[0].element, myComponent.element(), "onDragStart element");
+
+    assert.strictEqual(options.onDragMove.getCall(0).args[0].component, myComponent, "onDragMove component");
+    assert.strictEqual(options.onDragMove.getCall(0).args[0].element, myComponent.element(), "onDragMove element");
+
+    assert.strictEqual(options.onDragEnd.getCall(0).args[0].component, myComponent, "onDragEnd component");
+    assert.strictEqual(options.onDragEnd.getCall(0).args[0].element, myComponent.element(), "onDragEnd element");
+});
+
 QUnit.test("onDragStart - check args", function(assert) {
     // arrange
     let onDragStartSpy = sinon.spy();
 
-    this.createDraggable({
+    let draggable = this.createDraggable({
         onDragStart: onDragStartSpy
     });
 
@@ -103,6 +130,7 @@ QUnit.test("onDragStart - check args", function(assert) {
     // assert
     assert.ok(onDragStartSpy.calledOnce, "event fired");
     assert.deepEqual($(onDragStartSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.strictEqual(onDragStartSpy.getCall(0).args[0].component, draggable, "component");
 });
 
 QUnit.test("'onDragStart' option changing", function(assert) {
@@ -165,27 +193,29 @@ QUnit.test("'onDragMove' option changing", function(assert) {
     assert.deepEqual($(onDragMoveSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
 });
 
-QUnit.test("onDragMove - check args when cross-component dragging", function(assert) {
-    // arrange
-    let onDragMoveSpy = sinon.spy();
+["same", "another"].forEach(function(group) {
+    QUnit.test("onDragMove - check args when cross-component dragging to " + group + " group", function(assert) {
+        // arrange
+        let onDragMoveSpy = sinon.spy();
 
-    let draggable1 = this.createDraggable({
-        onDragMove: onDragMoveSpy,
-        group: "shared"
+        let draggable1 = this.createDraggable({
+            onDragMove: onDragMoveSpy,
+            group: "shared"
+        });
+
+        let draggable2 = this.createDraggable({
+            group: group === "same" ? "shared" : "another"
+        }, $("#items"));
+
+        // act
+        this.pointer.down().move(0, 300).move(0, 10);
+
+        // assert
+        assert.strictEqual(onDragMoveSpy.callCount, 2, "event was called twice");
+        assert.deepEqual($(onDragMoveSpy.getCall(1).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+        assert.deepEqual(onDragMoveSpy.getCall(1).args[0].fromComponent, draggable1, "fromComponent");
+        assert.deepEqual(onDragMoveSpy.getCall(1).args[0].toComponent, group === "same" ? draggable2 : draggable1, "toComponent");
     });
-
-    let draggable2 = this.createDraggable({
-        group: "shared"
-    }, $("#items"));
-
-    // act
-    this.pointer.down().move(0, 300).move(0, 10);
-
-    // assert
-    assert.strictEqual(onDragMoveSpy.callCount, 2, "event was called twice");
-    assert.deepEqual($(onDragMoveSpy.getCall(1).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
-    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].fromComponent, draggable1, "fromComponent");
-    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].toComponent, draggable2, "toComponent");
 });
 
 QUnit.test("onDragEnd - check args", function(assert) {
