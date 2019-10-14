@@ -540,6 +540,11 @@ var ListBase = CollectionWidget.inherit({
         }
     },
 
+    _modifyByChanges: function() {
+        this.callBase.apply(this, arguments);
+        this._refreshItemElements();
+    },
+
     reorderItem: function(itemElement, toItemElement) {
         var promise = this.callBase(itemElement, toItemElement);
 
