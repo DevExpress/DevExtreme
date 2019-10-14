@@ -3,6 +3,7 @@ import devices from "core/devices";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import { DataSource } from "data/data_source/data_source";
+import { deferUpdate } from "core/utils/common";
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import "ui/radio_group";
@@ -169,6 +170,21 @@ module("layout", moduleConfig, () => {
             isHorizontalLayout = getInstance($radioGroup).option("layout") === "horizontal";
 
         assert.ok(isHorizontalLayout, "radio group on tablet have horizontal layout");
+    });
+
+    test("RadioGroup items should have the 'dx-radio-button' class after render on deferUpdate (T820582)", (assert) => {
+        const items = [
+            { text: "test 1" },
+            { text: "test 2" }
+        ];
+
+        deferUpdate(() => {
+            createRadioGroup({ items });
+        });
+
+        const itemsCount = $("#radioGroup").find(`.${RADIO_BUTTON_CLASS}`).length;
+
+        assert.strictEqual(itemsCount, items.length, `items with the "${RADIO_BUTTON_CLASS}" class were rendered`);
     });
 });
 

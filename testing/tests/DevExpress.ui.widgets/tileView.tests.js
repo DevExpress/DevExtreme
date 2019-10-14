@@ -3,6 +3,7 @@ import globalConfig from "core/config";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import { DataSource } from "data/data_source/data_source";
 import { isRenderer } from "core/utils/type";
+import { deferUpdate } from "core/utils/common";
 
 import "ui/tile_view";
 import "common.css!";
@@ -258,6 +259,22 @@ QUnit.test("rendering vertical in RTL mode", function(assert) {
     assert.equal(getPosition($items.eq(6), "cross"), width - DEFAULT_ITEMOFFSET, "item 7");
 });
 
+QUnit.test("Tiles should have the correct dimensions after rendered as a part of react template", function(assert) {
+    deferUpdate(() => {
+        this.element.dxTileView({
+            items: [
+                { text: "test 1" }
+            ]
+        });
+    });
+
+    const $tile = this.element.find(`.${TILEVIEW_ITEM_CLASS}`);
+
+    assert.strictEqual($tile.outerHeight(), DEFAULT_ITEMSIZE, "Tile height updated correctly");
+    assert.strictEqual($tile.outerWidth(), DEFAULT_ITEMSIZE, "Tile width updated correctly");
+});
+
+
 $.each(configs, function(direction, config) {
 
     QUnit.module("API " + direction, {
@@ -290,7 +307,6 @@ $.each(configs, function(direction, config) {
         scrollView.scrollBy(scrollPosition);
         assert.equal(instance.scrollPosition(), 20, "scrolling to backward");
     });
-
 });
 
 

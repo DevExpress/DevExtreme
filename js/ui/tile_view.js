@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     windowUtils = require("../core/utils/window"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
+    deferRender = require("../core/utils/common").deferRender,
     ScrollView = require("./scroll_view"),
     CollectionWidget = require("./collection/ui.collection_widget.edit");
 
@@ -250,11 +251,13 @@ var TileView = CollectionWidget.inherit({
     _initMarkup: function() {
         this.callBase();
 
-        this._cellsPerDimension = 1;
+        deferRender(function() {
+            this._cellsPerDimension = 1;
 
-        this._renderGeometry();
-        this._updateScrollView();
-        this._fireContentReadyAction();
+            this._renderGeometry();
+            this._updateScrollView();
+            this._fireContentReadyAction();
+        }.bind(this));
     },
 
     _updateScrollView: function() {
