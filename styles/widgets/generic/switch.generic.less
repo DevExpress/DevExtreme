@@ -162,3 +162,15 @@
         margin: 0 0 0 -@GENERIC_SWITCH_CONTAINER_ADJUSTMENT;
     }
 }
+
+.dx-invalid {
+    .dx-switch-container {
+        border-color: @base-invalid-faded-border-color;
+    }
+
+    &.dx-state-focused {
+        .dx-switch-container {
+            border-color: @base-invalid-color;
+        }
+    }
+}

@@ -175,3 +175,17 @@
         margin: 0 0 0 -@MATERIAL_SWITCH_CONTAINER_ADJUSTMENT;
     }
 }
+
+.dx-invalid {
+    .dx-switch-container {
+        &:before {
+            background-color: @switch-invalid-container-bg;
+        }
+    }
+
+    &.dx-switch-on-value {
+        .dx-switch-handle:before {
+            background-color: @switch-invalid-handle-bg;
+        }
+    }
+}
