@@ -149,67 +149,66 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this,
                 dataController = this.getController("data"),
                 rowIndex = this.option("focusedRowIndex"),
-                isVirtualRowRenderingMode = that.option("scrolling.rowRenderingMode") === "virtual",
-                result = new Deferred(),
-                navigateInRowsView = (key, result) => {
-                    if(needFocusRow) {
-                        that._triggerUpdateFocusedRow(key, result);
-                    } else {
-                        let rowsView = that.getView("rowsView"),
-                            rowIndex = that.getController("data").getRowIndexByKey(key),
-                            rowElement = rowsView.getRow(rowIndex);
-                        rowsView._scrollToElement(rowElement);
-                    }
-                },
-                navigateTo = (key, result) => {
-                    if(isVirtualRowRenderingMode) {
-                        setTimeout(function() {
-                            that._navigateToVirtualRow(key, result, needFocusRow);
-                        });
-                    } else {
-                        navigateInRowsView(key, result);
-                    }
-                };
+                d = new Deferred();
 
             that.option("skipFocusedRowNavigation", !needFocusRow);
 
             if(key === undefined || !dataController.dataSource()) {
-                return result.reject().promise();
+                return d.reject().promise();
             }
 
             let rowIndexByKey = that._getFocusedRowIndexByKey(key),
                 isPaginate = dataController.getDataSource().paginate();
 
             if(!isPaginate || rowIndex >= 0 && rowIndex === rowIndexByKey) {
-                navigateTo(key, result);
+                that._navigateTo(key, d, needFocusRow);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
                     if(pageIndex < 0) {
-                        result.resolve(-1);
+                        d.resolve(-1);
                         return;
                     }
                     if(pageIndex === dataController.pageIndex()) {
                         dataController.reload().done(function() {
                             if(that.isRowFocused(key)) {
-                                result.resolve(that._getFocusedRowIndexByKey(key));
+                                d.resolve(that._getFocusedRowIndexByKey(key));
                             } else {
-                                navigateInRowsView(key, result);
+                                that._navigateToVisibleRow(key, d, needFocusRow);
                             }
-                        }).fail(result.reject);
+                        }).fail(d.reject);
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
-                            navigateTo(key, result);
-                        }).fail(result.reject);
+                            that._navigateTo(key, d, needFocusRow);
+                        }).fail(d.reject);
                     }
                 })
                     .always(() => that.option("skipFocusedRowNavigation", false))
-                    .fail(result.reject);
+                    .fail(d.reject);
             }
 
-            return result.promise();
+            return d.promise();
         },
+        _navigateTo: function(key, deferred, needFocusRow) {
+            const visibleRowIndex = this.getController("data").getRowIndexByKey(key);
+            const isVirtualRowRenderingMode = this.option("scrolling.rowRenderingMode") === "virtual";
 
-        _navigateToVirtualRow: function(key, result, needFocusRow) {
+            if(isVirtualRowRenderingMode && visibleRowIndex < 0) {
+                this._navigateToVirtualRow(key, deferred, needFocusRow);
+            } else {
+                this._navigateToVisibleRow(key, deferred, needFocusRow);
+            }
+        },
+        _navigateToVisibleRow: function(key, deferred, needFocusRow) {
+            if(needFocusRow) {
+                this._triggerUpdateFocusedRow(key, deferred);
+            } else {
+                let rowsView = this.getView("rowsView"),
+                    rowIndex = this.getController("data").getRowIndexByKey(key),
+                    rowElement = rowsView.getRow(rowIndex);
+                rowsView._scrollToElement(rowElement);
+            }
+        },
+        _navigateToVirtualRow: function(key, deferred, needFocusRow) {
             var that = this,
                 dataController = this.getController("data"),
                 rowsScrollController = dataController._rowsScrollController,
@@ -223,7 +222,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 if(needFocusRow) {
                     var triggerUpdateFocusedRow = function() {
                         that.component.off("contentReady", triggerUpdateFocusedRow);
-                        that._triggerUpdateFocusedRow(key, result);
+                        that._triggerUpdateFocusedRow(key, deferred);
                     };
                     that.component.on("contentReady", triggerUpdateFocusedRow);
                 }
@@ -232,7 +231,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
-        _triggerUpdateFocusedRow: function(key, result) {
+        _triggerUpdateFocusedRow: function(key, deferred) {
             var dataController = this.getController("data"),
                 focusedRowIndex = this._getFocusedRowIndexByKey(key);
 
@@ -250,9 +249,9 @@ exports.FocusController = core.ViewController.inherit((function() {
                     rowsView._scrollToElement(rowsView.getRow(rowIndex));
                 }
 
-                result && result.resolve(focusedRowIndex);
+                deferred && deferred.resolve(focusedRowIndex);
             } else {
-                result && result.resolve(-1);
+                deferred && deferred.resolve(-1);
             }
         },
 
