@@ -254,6 +254,10 @@ var Sortable = Draggable.inherit({
     _dragEnterHandler: function() {
         this.callBase.apply(this, arguments);
 
+        if(this === this._getSourceDraggable()) {
+            return;
+        }
+
         this._updateItemPoints();
         this.option("fromIndex", -1);
 
@@ -293,11 +297,19 @@ var Sortable = Draggable.inherit({
     },
 
     dragEnter: function() {
-        this.option("toIndex", -1);
+        if(this === this._getTargetDraggable()) {
+            this.option("toIndex", this.option("fromIndex"));
+        } else {
+            this.option("toIndex", -1);
+        }
     },
 
     dragLeave: function() {
-        this.option("toIndex", null);
+        if(this === this._getTargetDraggable()) {
+            this.option("toIndex", -1);
+        } else {
+            this.option("toIndex", this.option("fromIndex"));
+        }
     },
 
     dragEnd: function(sourceEvent) {
@@ -723,6 +735,7 @@ var Sortable = Draggable.inherit({
                 position = positions[i];
 
             if(toIndex === null || fromIndex === null) {
+                fx.stop($item);
                 translator.resetPosition($item);
             } else if(prevPosition !== position) {
                 fx.stop($item);

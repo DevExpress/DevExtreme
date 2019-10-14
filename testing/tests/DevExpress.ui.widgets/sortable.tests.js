@@ -2,6 +2,7 @@ import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
 import "ui/sortable";
 import fx from "animation/fx";
+import browser from "core/utils/browser";
 
 import "common.css!";
 
@@ -1680,6 +1681,102 @@ QUnit.test("Dragging items between sortable widgets", function(assert) {
     assert.strictEqual(items1.eq(1).attr("id"), "item4", "first list - second item");
     assert.strictEqual(items2.eq(0).attr("id"), "item1", "second list - first item");
     assert.strictEqual(items2.eq(1).attr("id"), "item5", "second list - second item");
+});
+
+QUnit.test("Animation should be stopped for target sortable items after leave", function(assert) {
+    // arrange
+    let items2;
+
+    let sortable1 = this.createSortable({
+        group: "shared",
+        dropFeedbackMode: "push"
+    }, $("#items"));
+
+    let sortable2 = this.createSortable({
+        group: "shared",
+        dropFeedbackMode: "push"
+    }, $("#items2"));
+
+    // act
+    let pointer = pointerMock(sortable1.$element().children().eq(0));
+    pointer.start().down().move(350, 0).move(50, 0);
+
+    // assert
+    items2 = $(sortable2.$element()).children();
+    assert.strictEqual(items2[0].style.transform, "translate(0px, 30px)", "items2 1 is moved down");
+    assert.strictEqual(items2[1].style.transform, "translate(0px, 30px)", "items2 2 is moved down");
+    assert.strictEqual(items2[2].style.transform, "translate(0px, 30px)", "items2 3 is moved down");
+
+    // act
+    sinon.spy(fx, "stop");
+    pointer.move(300, 0);
+
+    // assert
+    assert.strictEqual(items2[0].style.transform, "none", "items2 1 is moved down");
+    assert.strictEqual(items2[1].style.transform, "none", "items2 2 is moved down");
+    assert.strictEqual(items2[2].style.transform, "none", "items2 3 is moved down");
+    assert.strictEqual(fx.stop.callCount, 3, "fx.stop call count");
+    assert.strictEqual(fx.stop.getCall(0).args[0].get(0), items2[0], "fx.stop called for items2 1");
+    assert.strictEqual(fx.stop.getCall(1).args[0].get(0), items2[1], "fx.stop called for items2 1");
+    assert.strictEqual(fx.stop.getCall(2).args[0].get(0), items2[2], "fx.stop called for items2 1");
+});
+
+QUnit.test("items should not be moved after leave and enter", function(assert) {
+    // arrange
+    let sortable1 = this.createSortable({
+        group: "shared",
+        dropFeedbackMode: "push"
+    }, $("#items"));
+
+    this.createSortable({
+        group: "shared",
+        dropFeedbackMode: "push"
+    }, $("#items2"));
+
+    // act
+    let pointer = pointerMock(sortable1.$element().children().eq(0));
+    pointer.start().down().move(350, 0).move(50, 0).move(-50).move(-350);
+
+    // assert
+    let items1 = $(sortable1.$element()).children();
+    assert.strictEqual(items1[0].style.transform, "", "items1 1 is not moved");
+    assert.strictEqual(items1[1].style.transform, browser.mozilla ? "translate(0px)" : "translate(0px, 0px)", "items1 2 is not moved");
+    assert.strictEqual(items1[2].style.transform, browser.mozilla ? "translate(0px)" : "translate(0px, 0px)", "items1 3 is not moved");
+});
+
+QUnit.test("Items should be moved after leave sortable if group is defined", function(assert) {
+    // arrange
+    let sortable = this.createSortable({
+        group: "shared",
+        dropFeedbackMode: "push"
+    }, $("#items"));
+
+    // act
+    let pointer = pointerMock(sortable.$element().children().eq(0));
+    pointer.start().down(0, 0).move(0, 1).move(0, -10);
+
+    // assert
+    let items = $(sortable.$element()).children();
+    assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
+    assert.strictEqual(items[1].style.transform, "translate(0px, -30px)", "items 2 is moved up");
+    assert.strictEqual(items[2].style.transform, "translate(0px, -30px)", "items 3 is moved up");
+});
+
+QUnit.test("Items should not be moved after leave sortable if group is not defined", function(assert) {
+    // arrange
+    let sortable = this.createSortable({
+        dropFeedbackMode: "push"
+    }, $("#items"));
+
+    // act
+    let pointer = pointerMock(sortable.$element().children().eq(0));
+    pointer.start().down(0, 0).move(0, 1).move(0, -10);
+
+    // assert
+    let items = $(sortable.$element()).children();
+    assert.strictEqual(items[0].style.transform, "", "items 1 is not moved");
+    assert.strictEqual(items[1].style.transform, "", "items 2 is moved up");
+    assert.strictEqual(items[2].style.transform, "", "items 3 is moved up");
 });
 
 QUnit.test("Update item points when dragging an item to another the sortable widget if dropFeedbackMode is push", function(assert) {

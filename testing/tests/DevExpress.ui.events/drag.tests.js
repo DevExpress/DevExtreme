@@ -461,7 +461,7 @@ QUnit.test("dxdragleave and dxdragenter should be fired when draggable moves fro
     assert.equal(dragEnterFired, 1);
 });
 
-QUnit.test("dxdragenter should not be fired on drag element", function(assert) {
+QUnit.test("dxdragenter should be fired on drag element", function(assert) {
     var $element = $("#element"),
         pointer = pointerMock($element),
         dragEnterFired = 0;
@@ -473,7 +473,7 @@ QUnit.test("dxdragenter should not be fired on drag element", function(assert) {
     $element.on(dragEvents.start, noop);
 
     pointer.start().down().move(50, 50).up();
-    assert.equal(dragEnterFired, 0);
+    assert.equal(dragEnterFired, 1);
 });
 
 QUnit.test("drop targets should be overridden by e.targetElements (array of jQuery)", function(assert) {
