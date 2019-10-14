@@ -184,7 +184,7 @@ module("layout", moduleConfig, () => {
 
         const itemsCount = $("#radioGroup").find(`.${RADIO_BUTTON_CLASS}`).length;
 
-        assert.strictEqual(itemsCount, items.length, `items with the "${RADIO_BUTTON_CLASS}" were render`);
+        assert.strictEqual(itemsCount, items.length, `items with the "${RADIO_BUTTON_CLASS}" class were rendered`);
     });
 });
 
