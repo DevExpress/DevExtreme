@@ -208,7 +208,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions.rowDragging.scrollSpeed
                  * @type number
-                 * @default 60
+                 * @default 30
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.scrollSensitivity
