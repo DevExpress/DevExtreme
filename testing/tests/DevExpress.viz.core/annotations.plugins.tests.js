@@ -92,6 +92,9 @@ QUnit.module("Coordinates calculation. Chart plugin", {
             },
             panes: [{ name: "p1" }],
             series: [{ }],
+            dataSource: [
+                { arg: new Date(2018, 1, 3), val: new Date(2018, 1, 3) }
+            ],
             argumentAxis: {
                 argumentType: "datetime",
                 visualRange: [new Date(2018, 1, 1), new Date(2018, 1, 3)]
