@@ -2203,7 +2203,7 @@ testModule("container", moduleConfig, () => {
         assert.strictEqual($shader.width(), $container.width(), "shader width is correct");
     });
 
-    test("overlay should stretch across container when target is container(T821559)", (assert) => {
+    test("overlay should render inside of container when target is container(T821559)", (assert) => {
         const $container = $("#containerT821559");
 
         const $overlay = $("#overlay").dxOverlay({
@@ -2211,14 +2211,16 @@ testModule("container", moduleConfig, () => {
             shading: false,
             position: {
                 of: $container
-            }
+            },
+            width: "50%",
+            height: "50%"
         });
 
         $overlay.dxOverlay("show");
 
-        const $wrapper = $container.find(toSelector(OVERLAY_WRAPPER_CLASS));
-        assert.strictEqual($wrapper.height(), $container.height(), "wrapper height is correct");
-        assert.strictEqual($wrapper.width(), $container.width(), "wrapper width is correct");
+        const $content = $container.find(toSelector(OVERLAY_CONTENT_CLASS));
+        assert.strictEqual($content.height(), $container.height() * 0.5, "overlay height is correct");
+        assert.strictEqual($content.width(), $container.width() * 0.5, "overlay width is correct");
     });
 
     test("wrong position targeted container (B236074)", (assert) => {
