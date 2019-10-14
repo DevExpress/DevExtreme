@@ -341,6 +341,7 @@ QUnit.test("Sortable should have height if dataSource is empty and grid has heig
 
     this.options.dataSource = [];
     this.options.columnAutoWidth = true;
+    this.options.scrolling = { useNative: false };
 
     rowsView = this.createRowsView();
 
