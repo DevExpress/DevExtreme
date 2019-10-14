@@ -4,7 +4,9 @@ import Sortable from "../sortable";
 
 let COMMAND_HANDLE_CLASS = "dx-command-drag",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    HANDLE_ICON_CLASS = "drag-icon";
+    HANDLE_ICON_CLASS = "drag-icon",
+    ROW_DRAGGING_CLASS = "row-dragging",
+    ROW_PLACEHOLDER_CLASS = "row-placeholder";
 
 var RowDraggingExtender = {
     init: function() {
@@ -44,14 +46,17 @@ var RowDraggingExtender = {
             allowReordering = this._allowReordering(),
             $content = that.callBase.apply(that, arguments);
 
-        if(allowReordering) {
+        if(allowReordering && $content.length) {
             that._sortable = that._createComponent($content, Sortable, extend({
                 component: that.component,
                 contentTemplate: null,
                 filter: "> table > tbody > .dx-data-row",
                 dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
-                dropFeedbackMode: "indicate"
+                dropFeedbackMode: "indicate",
+                onPlaceholderPrepared: function(e) {
+                    $(e.placeholderElement).addClass(that.addWidgetPrefix(ROW_PLACEHOLDER_CLASS));
+                }
             }, rowDragging, {
                 onDragStart: function(e) {
                     const row = e.component.getVisibleRows()[e.fromIndex];
@@ -83,17 +88,27 @@ var RowDraggingExtender = {
                 visible: false
             },
             loadingTimeout: undefined,
+            columnFixing: gridOptions.columnFixing,
             columnAutoWidth: gridOptions.columnAutoWidth,
             showColumnLines: gridOptions.showColumnLines,
-            columns: columns.map((column) => { return { width: column.width || column.visibleWidth }; }),
-            onRowPrepared: (e) => { $(e.rowElement).replaceWith($rowElement); }
+            columns: columns.map((column) => {
+                return {
+                    width: column.width || column.visibleWidth,
+                    fixed: column.fixed,
+                    fixedPosition: column.fixedPosition
+                };
+            }),
+            onRowPrepared: (e) => {
+                let rowsView = e.component.getView("rowsView");
+                $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0));
+            }
         };
     },
 
     _getDraggableRowTemplate: function() {
         return (options) => {
             let $rootElement = this.component.$element(),
-                $dataGridContainer = $("<div>").width($rootElement.width()),
+                $dataGridContainer = $("<div>").addClass(this.addWidgetPrefix(ROW_DRAGGING_CLASS)).width($rootElement.width()),
                 items = this._dataController.items(),
                 row = items && items[options.fromIndex],
                 gridOptions = this._getDraggableGridOptions(row);

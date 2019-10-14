@@ -48,7 +48,7 @@ function createRowsView() {
         }
     };
 
-    setupDataGridModules(mockDataGrid, ["data", "columns", "rows", "rowDragging" ], {
+    setupDataGridModules(mockDataGrid, ["data", "columns", "rows", "rowDragging", "columnFixing"], {
         initViews: true
     });
 
@@ -109,6 +109,8 @@ QUnit.test("Dragging row", function(assert) {
     $placeholderElement = $("body").children(".dx-sortable-placeholder");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
+    assert.ok($draggableElement.hasClass("dx-datagrid-row-dragging"), "dragging element has the 'dx-datagrid-row-dragging' class");
+    assert.ok($placeholderElement.hasClass("dx-datagrid-row-placeholder"), "placeholder has the 'dx-datagrid-row-placeholder' class");
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
@@ -143,7 +145,7 @@ QUnit.test("Dragging events", function(assert) {
 QUnit.test("Draggable element (grid) - checking options", function(assert) {
     // arrange
     $.extend(this.options, {
-        columns: [{ dataField: "field1", width: 100 }, { dataField: "field2", width: 150 }, { dataField: "field3", width: 200 }],
+        columns: [{ dataField: "field1", width: 100, fixed: true, fixedPosition: "right" }, { dataField: "field2", width: 150 }, { dataField: "field3", width: 200 }],
         showColumnHeaders: true,
         showBorders: false,
         showColumnLines: true,
@@ -154,6 +156,9 @@ QUnit.test("Draggable element (grid) - checking options", function(assert) {
         scrolling: {
             useNative: true,
             showScrollbar: true
+        },
+        columnFixing: {
+            enabled: true
         }
     });
 
@@ -166,15 +171,24 @@ QUnit.test("Draggable element (grid) - checking options", function(assert) {
     // assert
     assert.deepEqual(processedOptions, {
         dataSource: [{ id: 1, parentId: 0 }],
+        columnFixing: {
+            enabled: true
+        },
         columns: [
             {
-                "width": 100
+                width: 150,
+                fixed: undefined,
+                fixedPosition: undefined
             },
             {
-                "width": 150
+                width: 200,
+                fixed: undefined,
+                fixedPosition: undefined
             },
             {
-                "width": 200
+                width: 100,
+                fixed: true,
+                fixedPosition: "right"
             }
         ],
         columnAutoWidth: true,
@@ -427,6 +441,32 @@ QUnit.test("Dragging row when the lookup column is specified with a remote sourc
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
     clock.restore();
+});
+
+QUnit.test("Dragging row when there are fixed columns", function(assert) {
+    // arrange
+    let rowsView,
+        $testElement = $("#container");
+
+    this.options.columns[2] = {
+        dataField: "field3",
+        fixed: true
+    };
+
+    rowsView = this.createRowsView();
+    rowsView.render($testElement);
+
+    // act
+    pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+
+    // assert
+    let $draggableElement = $("body").children(".dx-sortable-dragging"),
+        $table = $draggableElement.find(".dx-datagrid-rowsview").children(":not(.dx-datagrid-content-fixed)").find("table"),
+        $fixTable = $draggableElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+
+    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.strictEqual($table.find(".dx-data-row").length, 1, "row count in main table");
+    assert.strictEqual($fixTable.find(".dx-data-row").length, 1, "row count in fixed table");
 });
 
 
