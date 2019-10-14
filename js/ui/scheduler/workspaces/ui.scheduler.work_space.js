@@ -2518,7 +2518,8 @@ var SchedulerWorkSpace = Widget.inherit({
     initDragBehavior: function(appointments) {
         if(!this.dragBehavior && appointments) {
             this.dragBehavior = new AppointmentDragBehavior(appointments);
-            this.dragBehavior.addTo(this.$element());
+            this.dragBehavior.addTo(this.getAllDayContainer());
+            this.dragBehavior.addTo(this._dateTableScrollable.$content());
         }
     },
 
