@@ -1342,6 +1342,58 @@ QUnit.test("Expand adaptive detail row after scrolling if scrolling mode is virt
     assert.strictEqual(dataGrid.getVisibleRows()[2].key, 1, "row 2 key");
 });
 
+QUnit.test("Expand/Collapse adaptive detail row after scrolling if scrolling mode and rowRendering are virtual and paging.enabled is false (T815886)", function(assert) {
+    var array = [],
+        visibleRows,
+        expandedRowVisibleIndex;
+
+    for(var i = 0; i < 100; i++) {
+        array.push({ id: i, value: "text" + i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            width: 200,
+            height: 200,
+            dataSource: array,
+            keyExpr: "id",
+            columnHidingEnabled: true,
+            paging: {
+                enabled: false
+            },
+            scrolling: {
+                mode: "virtual",
+                rowRenderingMode: "virtual"
+            },
+            columns: [
+                "value",
+                { dataField: "hidden", width: 1000 }
+            ],
+        }).dxDataGrid("instance"),
+        dataController = dataGrid.getController("data");
+
+    // act
+    dataGrid.navigateToRow(42);
+    dataController.toggleExpandAdaptiveDetailRow(42);
+
+    // arrange
+    visibleRows = dataController.getVisibleRows();
+    expandedRowVisibleIndex = dataController.getRowIndexByKey(42);
+    // assert
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].rowType, "detailAdaptive", "Adaptive row");
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].key, 42, "Check adaptive row key");
+
+    // act
+    dataController.toggleExpandAdaptiveDetailRow(42);
+
+    // arrange
+    visibleRows = dataController.getVisibleRows();
+    expandedRowVisibleIndex = dataController.getRowIndexByKey(42);
+    // assert
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].rowType, "data", "Adaptive row");
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].key, 43, "Check next row key");
+});
+
 // T315857
 QUnit.test("Editing should work with classes as data objects", function(assert) {
     // arrange
