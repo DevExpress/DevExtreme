@@ -78,31 +78,45 @@ export default class AppointmentDragBehavior {
         return itemData && itemData.data || this.scheduler._getItemData(appointment);
     }
 
-    getDragEventHandler(eventName, options, appointmentDragging) {
+    createDragStartHandler(options, appointmentDragging) {
         return (e) => {
-            let handler = appointmentDragging && appointmentDragging[eventName];
+            e.itemData = this.getItemData(e.itemElement);
 
-            if(eventName === "onDragStart") {
-                e.itemData = this.getItemData(e.itemElement);
-            } else if(eventName === "onAdd") {
-                e.itemData = extend({}, e.itemData, this.scheduler.invoke("getUpdatedData", {
-                    data: e.itemData
-                }));
-            }
-
-            handler && handler.call(this, e);
+            appointmentDragging.onDragStart && appointmentDragging.onDragStart(e);
 
             if(!e.cancel) {
-                options[eventName] && options[eventName].call(this, e);
-                if(eventName === "onDragEnd" && e.fromComponent !== e.toComponent) {
-                    appointmentDragging["onRemove"] && appointmentDragging["onRemove"].call(this, e);
+                options.onDragStart(e);
+            }
+        };
+    }
+
+    createDragEndHandler(options, appointmentDragging) {
+        return (e) => {
+            appointmentDragging.onDragEnd && appointmentDragging.onDragEnd(e);
+
+            if(!e.cancel) {
+                options.onDragEnd(e);
+                if(e.fromComponent !== e.toComponent) {
+                    appointmentDragging.onRemove && appointmentDragging.onRemove(e);
                 }
             }
         };
     }
 
+    createDropHandler(appointmentDragging) {
+        return (e) => {
+            e.itemData = extend({}, e.itemData, this.scheduler.invoke("getUpdatedData", {
+                data: e.itemData
+            }));
+
+            if(e.fromComponent !== e.toComponent) {
+                appointmentDragging.onAdd && appointmentDragging.onAdd(e);
+            }
+        };
+    }
+
     addTo(appointment, config) {
-        let appointmentDragging = this.scheduler.option("appointmentDragging"),
+        let appointmentDragging = this.scheduler.option("appointmentDragging") || {},
             options = extend({
                 contentTemplate: null,
                 filter: `.${APPOINTMENT_ITEM_CLASS}`,
@@ -112,9 +126,9 @@ export default class AppointmentDragBehavior {
             }, config);
 
         this.scheduler._createComponent(appointment, Draggable, extend({}, options, appointmentDragging, {
-            onDragStart: this.getDragEventHandler("onDragStart", options, appointmentDragging),
-            onDragEnd: this.getDragEventHandler("onDragEnd", options, appointmentDragging),
-            onDrop: this.getDragEventHandler("onAdd", options, appointmentDragging),
+            onDragStart: this.createDragStartHandler(options, appointmentDragging),
+            onDragEnd: this.createDragEndHandler(options, appointmentDragging),
+            onDrop: this.createDropHandler(appointmentDragging),
         }));
     }
 
