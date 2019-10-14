@@ -1501,8 +1501,6 @@ var SchedulerWorkSpace = Widget.inherit({
             groupCount: groupCount,
             groupByDate: this.option("groupByDate")
         });
-
-        this._attachTablesEvents();
     },
 
     _insertAllDayRowsIntoDateTable: function() {
@@ -2515,12 +2513,15 @@ var SchedulerWorkSpace = Widget.inherit({
         return false;
     },
 
-    initDragBehavior: function(appointments) {
-        if(!this.dragBehavior && appointments) {
-            this.dragBehavior = new AppointmentDragBehavior(appointments);
-            this.dragBehavior.addTo(this.getAllDayContainer());
-            this.dragBehavior.addTo(this._dateTableScrollable.$content());
+    initDragBehavior: function(scheduler) {
+        if(!this.dragBehavior && scheduler) {
+            this.dragBehavior = new AppointmentDragBehavior(scheduler);
+
+            this.dragBehavior.addTo(this.getWorkArea());
+            this.dragBehavior.addTo(this._$allDayPanel);
+            this.dragBehavior.addTo(this._$allDayContainer);
         }
+        this._attachTablesEvents();
     },
 
     _supportCompactDropDownAppointments: function() {

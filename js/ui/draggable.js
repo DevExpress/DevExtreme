@@ -798,21 +798,11 @@ var Draggable = DOMComponentWithTemplate.inherit({
             event: e,
             itemData: sourceDraggable.option("itemData"),
             itemElement: getPublicElement(sourceDraggable._$sourceElement),
-            fromComponent: sourceDraggable,
-            toComponent: targetDraggable,
+            fromComponent: sourceDraggable.option("component") || sourceDraggable,
+            toComponent: targetDraggable.option("component") || targetDraggable,
             fromData: sourceDraggable.option("data"),
             toData: targetDraggable.option("data"),
         };
-    },
-
-    _getDragEndAndDropArgs: function(e) {
-        let targetDraggable = this._getTargetDraggable();
-
-        return extend(this._getEventArgs(e), {
-            fromComponent: this,
-            toComponent: targetDraggable,
-            toData: targetDraggable.option("data")
-        });
     },
 
     _getDragStartArgs: function(e, $itemElement) {
@@ -831,8 +821,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
     },
 
     _dragEndHandler: function(e) {
-        let dragEndEventArgs = this._getDragEndAndDropArgs(e),
-            dropEventArgs = this._getDragEndAndDropArgs(e),
+        let dragEndEventArgs = this._getEventArgs(e),
+            dropEventArgs = this._getEventArgs(e),
             targetDraggable = this._getTargetDraggable(),
             needRevertPosition = true;
 

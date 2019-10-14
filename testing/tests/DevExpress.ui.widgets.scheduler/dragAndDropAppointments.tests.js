@@ -543,7 +543,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             const appointmentDragging = {
                 group,
                 onAdd: e => {
-                    scheduler.instance.addAppointment(e.itemData);
+                    e.component.addAppointment(e.itemData);
                 }
             };
 
@@ -584,7 +584,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             const appointmentDragging = {
                 group,
                 onRemove: sinon.spy(e => {
-                    scheduler.instance.deleteAppointment(e.itemData);
+                    e.component.deleteAppointment(e.itemData);
                 })
             };
 
@@ -616,7 +616,7 @@ module("Drag and drop appointments", moduleConfig, () => {
             const appointmentDragging = {
                 group,
                 onRemove: sinon.spy(e => {
-                    scheduler.instance.deleteAppointment(e.itemData);
+                    e.component.deleteAppointment(e.itemData);
                 })
             };
 
