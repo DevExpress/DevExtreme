@@ -7,8 +7,7 @@ interface IOptions {
     backgroundColor: string
 }
 
-const appendElementTo = ClientFunction((selector: string, tagName: string, options: IOptions) => {
-    const container = document.querySelector(selector);
+const createInsertedElement = (tagName: string, options: IOptions) => {
     const element = document.createElement(tagName);
     const { id, width, height, backgroundColor } = options;
 
@@ -16,9 +15,23 @@ const appendElementTo = ClientFunction((selector: string, tagName: string, optio
     element.style.cssText = `width: ${width}px; height: ${height}px; background-color: ${backgroundColor};`;
     element.innerText = id;
 
-    container.appendChild(element);
-});
+    return element;
+};
+
+const appendElementTo = ClientFunction((selector: string, tagName: string, options: IOptions) => {
+    const container = document.querySelector(selector);
+
+    container.appendChild(createInsertedElement(tagName, options));
+}, { dependencies: { createInsertedElement }});
+
+const insertElementBefore = ClientFunction((selector: string, referenceElementSelector: string, tagName: string, options: IOptions) => {
+    const container = document.querySelector(selector);
+    const referenceElement = document.querySelector(referenceElementSelector);
+
+    container.insertBefore(createInsertedElement(tagName, options), referenceElement);
+}, { dependencies: { createInsertedElement }});
 
 export {
-    appendElementTo
+    appendElementTo,
+    insertElementBefore
 }
