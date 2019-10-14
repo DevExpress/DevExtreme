@@ -552,7 +552,7 @@ QUnit.module("DataSources", moduleConfig, () => {
         getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(updatedTaskId.toString(), updatedStart);
         getGanttViewCore(this.instance).commandManager.changeTaskEndCommand.execute(updatedTaskId.toString(), updatedEnd);
         this.clock.tick();
-        const updatedTask = tasks.find((t) => t.id === updatedTaskId);
+        const updatedTask = tasks.filter((t) => t.id === updatedTaskId)[0];
         assert.equal(updatedTask.title, updatedTitle, "task title is updated");
         assert.equal(updatedTask.start, updatedStart, "new task start is updated");
         assert.equal(updatedTask.end, updatedEnd, "new task end is updated");
@@ -567,7 +567,7 @@ QUnit.module("DataSources", moduleConfig, () => {
         getGanttViewCore(this.instance).commandManager.removeTaskCommand.execute(removedTaskId.toString());
         this.clock.tick();
         assert.equal(tasks.length, tasksCount - 1, "tasks less");
-        const removedTask = tasks.find((t) => t.id === removedTaskId);
-        assert.equal(removedTask, undefined, "task removed");
+        const removedTask = tasks.filter((t) => t.id === removedTaskId)[0];
+        assert.equal(removedTask, undefined, "task was removed");
     });
 });
