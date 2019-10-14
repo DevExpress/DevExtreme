@@ -436,6 +436,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 .appendTo("#qunit-fixture")
                 .dxDraggable({
                     group,
+                    clone: true,
                     onDragStart: function(e) {
                         e.itemData = data;
                     }
