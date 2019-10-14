@@ -568,6 +568,6 @@ QUnit.module("DataSources", moduleConfig, () => {
         this.clock.tick();
         assert.equal(tasks.length, tasksCount - 1, "tasks less");
         const removedTask = tasks.filter((t) => t.id === removedTaskId)[0];
-        assert.equal(removedTask, undefined, "task removed");
+        assert.equal(removedTask, undefined, "task was removed");
     });
 });
