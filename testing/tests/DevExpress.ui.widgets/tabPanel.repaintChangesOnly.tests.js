@@ -298,12 +298,7 @@ QUnit.module("repaintChangesOnly", {
             this.checkContainsEmptyMessage(assert, false);
         });
 
-        QUnit.test("[{1, text: 1a, content: 1a_}, {2}] -> [{1, text: 1aupd, content: 1a_}, {2}]" + testContext, function(assert) {
-            if(dataSourcePropertyName === "dataSource") {
-                assert.ok(true, "Not supported for dataSource");
-                return;
-            }
-
+        QUnit.skip("[{1, text: 1a, content: 1a_}, {2}] -> [{1, text: 1aupd, content: 1a_}, {2}]" + testContext, function(assert) {
             const item1 = { text: "1a", content: "1a_" };
             const item2 = { text: "2a", content: "2a_" };
             this.createTabPanel({ items: [item1, item2] });
