@@ -2518,8 +2518,8 @@ var SchedulerWorkSpace = Widget.inherit({
             this.dragBehavior = new AppointmentDragBehavior(scheduler);
 
             this.dragBehavior.addTo(this.getWorkArea());
+            this.dragBehavior.addTo(this.getAllDayContainer());
             this.dragBehavior.addTo(this._$allDayPanel);
-            this.dragBehavior.addTo(this._$allDayContainer);
         }
         this._attachTablesEvents();
     },
