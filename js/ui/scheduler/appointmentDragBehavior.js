@@ -116,7 +116,7 @@ export default class AppointmentDragBehavior {
         };
     }
 
-    addTo(appointment, config) {
+    addTo(container, config) {
         let appointmentDragging = this.scheduler.option("appointmentDragging") || {},
             options = extend({
                 component: this.scheduler,
@@ -127,7 +127,7 @@ export default class AppointmentDragBehavior {
                 onDragEnd: this.onDragEnd.bind(this)
             }, config);
 
-        this.appointments._createComponent(appointment, Draggable, extend({}, options, appointmentDragging, {
+        this.appointments._createComponent(container, Draggable, extend({}, options, appointmentDragging, {
             onDragStart: this.createDragStartHandler(options, appointmentDragging),
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
