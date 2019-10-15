@@ -1,5 +1,9 @@
 import { WrapperBase } from './wrapperBase.js';
 
+const FOCUS_OVERLAY_CLASS = "dx-datagrid-focus-overlay";
+const COMMAND_ADAPTIVE_CLASS = "dx-command-adaptive";
+const COMMAND_ADAPTIVE_HIDDEN_CLASS = "dx-command-adaptive-hidden";
+
 export class DataGridWrapper {
     constructor(containerSelector) {
         this.pager = new PagerWrapper(containerSelector);
@@ -46,6 +50,14 @@ export class RowsViewWrapper extends WrapperBase {
         return this.getElement().find(".dx-data-row").eq(rowIndex);
     }
 
+    getRowAdaptiveElement(rowIndex) {
+        return this.getDataRowElement(rowIndex).find(`.${COMMAND_ADAPTIVE_CLASS}`);
+    }
+
+    isRowAdaptiveVisible(rowIndex) {
+        return !this.getRowAdaptiveElement(rowIndex).hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
+    }
+
     getEditorInputElement(rowIndex, columnIndex) {
         return this.getCellElement(rowIndex, columnIndex).find(".dx-texteditor-input");
     }
@@ -72,8 +84,13 @@ export class RowsViewWrapper extends WrapperBase {
         return this.getCellElement(rowIndex, columnIndex).hasClass("dx-focused");
     }
 
+    findFocusOverlay() {
+        return this.getElement().find(`.${FOCUS_OVERLAY_CLASS}`);
+    }
+
     isFocusOverlayVisible() {
-        return !!this.getElement().find(".dx-datagrid-focus-overlay:visible").length;
+        const $focusOverlay = this.findFocusOverlay();
+        return $focusOverlay.length && !this.findFocusOverlay().hasClass("dx-hidden");
     }
 
     getFocusedRow() {
@@ -181,6 +198,10 @@ export class HeadersWrapper extends WrapperBase {
 
     getHeaderItem(rowIndex, columnIndex) {
         return this.getElement().find(".dx-header-row").eq(rowIndex).find("td").eq(columnIndex);
+    }
+
+    getHeaderItemTextContent(rowIndex, columnIndex) {
+        return this.getHeaderItem(rowIndex, columnIndex).find(".dx-datagrid-text-content").eq(0).text();
     }
 
     getHeaderFilterItem(rowIndex, columnIndex) {

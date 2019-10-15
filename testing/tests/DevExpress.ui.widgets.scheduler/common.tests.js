@@ -2910,7 +2910,7 @@ QUnit.testStart(function() {
             currentView: "week"
         });
 
-        assert.equal(workSpaceSpy.callCount, 1, "Resources aren't required");
+        assert.equal(workSpaceSpy.callCount, 2, "Resources aren't required");
     });
 
     QUnit.test("onAppointmentClick should fires when appointment is clicked", function(assert) {
@@ -4133,7 +4133,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 4, 24),
             views: [{
                 type: "week",
-                appointmentTooltipTemplate: function(item, container) {
+                appointmentTooltipTemplate: function(model, index, container) {
                     assert.equal(isRenderer(container), !!config().useJQuery, "element is correct");
                     countCallTemplate2++;
                 }

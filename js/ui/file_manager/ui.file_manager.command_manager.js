@@ -99,7 +99,7 @@ export class FileManagerCommandManager {
         const commandName = isString(command) ? command : command.name;
         const action = this._actions[commandName];
         if(action) {
-            action(arg);
+            return action(arg);
         }
     }
 

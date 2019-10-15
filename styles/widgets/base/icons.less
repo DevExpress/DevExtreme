@@ -144,6 +144,7 @@
     .dx-icon-percent { .dx-font-icon("\f039"); }
     .dx-icon-photo { .dx-font-icon("\f03a"); }
     .dx-icon-plus { .dx-font-icon("\f00b"); }
+    .dx-icon-minus { .dx-font-icon("\f074"); }
     .dx-icon-preferences { .dx-font-icon("\f03b"); }
     .dx-icon-product { .dx-font-icon("\f03c"); }
     .dx-icon-pulldown { .dx-font-icon("\f062"); }
@@ -198,7 +199,7 @@
     .dx-icon-chevrondown { .dx-font-icon("\f016"); }
     .dx-icon-chevronup { .dx-font-icon("\f014"); }
     .dx-icon-chevrondoubleleft { .dx-font-icon("\f042"); }
-    .dx-icon-chevrondoubleright { .dx-font-icon("\f043"); }
+    .dx-icon-chevrondoubleright { .dx-font-icon("\f03f"); }
 
     .dx-icon-equal { .dx-font-icon("\f044"); }
     .dx-icon-notequal { .dx-font-icon("\f045"); }
@@ -263,11 +264,14 @@
     .dx-icon-underline { .dx-font-icon("\f079"); }
     .dx-icon-strike { .dx-font-icon("\f07a"); }
     .dx-icon-indent { .dx-font-icon("\f07b"); }
+    .dx-icon-font { .dx-font-icon("\f11b"); }
     .dx-icon-fontsize { .dx-font-icon("\f07c"); }
     .dx-icon-shrinkfont { .dx-font-icon("\f07d"); }
     .dx-icon-growfont { .dx-font-icon("\f07e"); }
     .dx-icon-color { .dx-font-icon("\f07f"); }
     .dx-icon-background { .dx-font-icon("\f080"); }
+    .dx-icon-fill { .dx-font-icon("\f10d"); }
+    .dx-icon-palette { .dx-font-icon("\f120"); }
     .dx-icon-superscript { .dx-font-icon("\f081"); }
     .dx-icon-subscript { .dx-font-icon("\f082"); }
     .dx-icon-header { .dx-font-icon("\f083"); }
@@ -278,6 +282,8 @@
     .dx-icon-bulletlist { .dx-font-icon("\f087"); }
     .dx-icon-increaseindent { .dx-font-icon("\f088"); }
     .dx-icon-decreaseindent { .dx-font-icon("\f089"); }
+    .dx-icon-increaselinespacing { .dx-icon-indent; }
+    .dx-icon-decreaselinespacing { .dx-font-icon("\f106"); }
     .dx-icon-alignleft { .dx-font-icon("\f08a"); }
     .dx-icon-alignright { .dx-font-icon("\f08b"); }
     .dx-icon-aligncenter { .dx-font-icon("\f08c"); }
@@ -287,6 +293,36 @@
     .dx-icon-mention { .dx-font-icon("\f090"); }
     .dx-icon-variable { .dx-font-icon("\f091"); }
     .dx-icon-clearformat { .dx-font-icon("\f092"); }
+    .dx-icon-fullscreen { .dx-font-icon("\f11a"); }
+    .dx-icon-hierarchy { .dx-font-icon("\f124"); }
+
+    .dx-icon-file { .dx-icon-doc; }
+    .dx-icon-docfile { .dx-font-icon("\f111"); }
+    .dx-icon-docxfile { .dx-font-icon("\f110"); }
+    .dx-icon-pdffile { .dx-font-icon("\f118"); }
+    .dx-icon-pptfile { .dx-font-icon("\f114"); }
+    .dx-icon-pptxfile { .dx-font-icon("\f115"); }
+    .dx-icon-rtffile { .dx-font-icon("\f112"); }
+    .dx-icon-txtfile { .dx-font-icon("\f113"); }
+    .dx-icon-xlsfile { .dx-font-icon("\f116"); }
+    .dx-icon-xlsxfile { .dx-font-icon("\f117"); }
+
+    .dx-icon-copy { .dx-font-icon("\f107"); }
+    .dx-icon-cut { .dx-font-icon("\f10a"); }
+    .dx-icon-paste { .dx-font-icon("\f108"); }
+    .dx-icon-share { .dx-font-icon("\f11f"); }
+
+    .dx-icon-activefolder { .dx-icon-folder; }
+    .dx-icon-inactivefolder { .dx-font-icon("\f105"); }
+    .dx-icon-newfolder { .dx-font-icon("\f123"); }
+    .dx-icon-movetofolder { .dx-font-icon("\f121"); }
+    .dx-icon-parentfolder { .dx-font-icon("\f122"); }
+
+    .dx-icon-detailslayout { .dx-font-icon("\f10b"); }
+    .dx-icon-contentlayout { .dx-font-icon("\f11e"); }
+    .dx-icon-smalliconslayout { .dx-font-icon("\f119"); }
+    .dx-icon-mediumiconslayout { .dx-font-icon("\f10c"); }
+
 
     .dx-icon-undo {
         .dx-font-icon("\f04c");
@@ -296,5 +332,15 @@
     .dx-icon-redo {
         .dx-font-icon("\f093");
         .dx-rtl &:before { content: "\f04c"; } // undo icon
+    }
+
+    .dx-icon-hidepanel {
+        .dx-font-icon("\f11c");
+        .dx-rtl &:before { content: "\f11d"; } // showpanel icon
+    }
+
+    .dx-icon-showpanel {
+        .dx-font-icon("\f11d");
+        .dx-rtl &:before { content: "\f11c"; } // hidepanel icon
     }
 }

@@ -14,6 +14,7 @@ import { noop } from "../../core/utils/common";
 import typeUtils from "../../core/utils/type";
 import devices from "../../core/devices";
 import config from "../../core/config";
+import dataCoreUtils from "../../core/utils/data";
 import registerComponent from "../../core/component_registrator";
 import messageLocalization from "../../localization/message";
 import dateSerialization from "../../core/utils/date_serialization";
@@ -143,9 +144,11 @@ const Scheduler = Widget.inherit({
                 * @pseudo AppointmentTemplate
                 * @type template|function
                 * @default "item"
-                * @type_function_param1 itemData:object
+                * @type_function_param1 model:object
+                * @type_function_param1_field1 appointmentData:object
+                * @type_function_param1_field2 targetedAppointmentData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:dxElement
+                * @type_function_param3 contentElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -153,10 +156,11 @@ const Scheduler = Widget.inherit({
                 * @pseudo AppointmentTooltipTemplate
                 * @type template|function
                 * @default "appointmentTooltip"
-                * @type_function_param1 appointmentData:object
-                * @type_function_param2 contentElement:dxElement
-                * @type_function_param3 targetedAppointmentData:object
-                * @type_function_param4 itemIndex:number
+                * @type_function_param1 model:object
+                * @type_function_param1_field1 appointmentData:object
+                * @type_function_param1_field2 targetedAppointmentData:object
+                * @type_function_param2 itemIndex:number
+                * @type_function_param3 contentElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -287,8 +291,13 @@ const Scheduler = Widget.inherit({
 
             /**
                 * @name dxSchedulerOptions.views.dropDownAppointmentTemplate
+                * @type template|function
                 * @default "dropDownAppointment"
-                * @extends AppointmentTemplate
+                * @type_function_param1 itemData:object
+                * @type_function_param2 itemIndex:number
+                * @type_function_param3 contentElement:dxElement
+                * @type_function_return string|Node|jQuery
+                * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
                 */
 
             /**
@@ -461,8 +470,13 @@ const Scheduler = Widget.inherit({
 
             /**
                 * @name dxSchedulerOptions.dropDownAppointmentTemplate
+                * @type template|function
                 * @default "dropDownAppointment"
-                * @extends AppointmentTemplate
+                * @type_function_param1 itemData:object
+                * @type_function_param2 itemIndex:number
+                * @type_function_param3 contentElement:dxElement
+                * @type_function_return string|Node|jQuery
+                * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
                 */
             dropDownAppointmentTemplate: "dropDownAppointment",
 
@@ -553,6 +567,106 @@ const Scheduler = Widget.inherit({
                 * @type boolean
                 * @default true
                 */
+
+            /**
+                * @name dxSchedulerOptions.appointmentDragging
+                * @type object
+                */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.autoScroll
+               * @type boolean
+               * @default true
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.scrollSpeed
+               * @type number
+               * @default 60
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.scrollSensitivity
+               * @type number
+               * @default 60
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.group
+               * @type string
+               * @default undefined
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.data
+               * @type any
+               * @default undefined
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onDragStart
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 cancel:boolean
+               * @type_function_param1_field3 itemData:any
+               * @type_function_param1_field4 itemElement:dxElement
+               * @type_function_param1_field5 fromIndex:number
+               * @type_function_param1_field6 fromData:any
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onDragMove
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 cancel:boolean
+               * @type_function_param1_field3 itemData:any
+               * @type_function_param1_field4 itemElement:dxElement
+               * @type_function_param1_field5 fromIndex:number
+               * @type_function_param1_field6 toIndex:number
+               * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field9 fromData:any
+               * @type_function_param1_field10 toData:any
+               * @type_function_param1_field11 dropInsideItem:boolean
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onDragEnd
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 cancel:boolean
+               * @type_function_param1_field3 itemData:any
+               * @type_function_param1_field4 itemElement:dxElement
+               * @type_function_param1_field5 fromIndex:number
+               * @type_function_param1_field6 toIndex:number
+               * @type_function_param1_field7 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field8 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field9 fromData:any
+               * @type_function_param1_field10 toData:any
+               * @type_function_param1_field11 dropInsideItem:boolean
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onAdd
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 itemData:any
+               * @type_function_param1_field3 itemElement:dxElement
+               * @type_function_param1_field4 fromIndex:number
+               * @type_function_param1_field5 toIndex:number
+               * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field9 fromData:any
+               * @type_function_param1_field10 toData:any
+               */
+            /**
+               * @name dxSchedulerOptions.appointmentDragging.onRemove
+               * @type function(e)
+               * @type_function_param1 e:object
+               * @type_function_param1_field1 event:event
+               * @type_function_param1_field2 itemData:any
+               * @type_function_param1_field3 itemElement:dxElement
+               * @type_function_param1_field4 fromIndex:number
+               * @type_function_param1_field5 toIndex:number
+               * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
+               * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
+               * @type_function_param1_field8 fromData:any
+               */
             showAllDayPanel: true,
 
             /**
@@ -1114,6 +1228,7 @@ const Scheduler = Widget.inherit({
              * @deprecated dxSchedulerOptions.onAppointmentFormOpening
              */
             onAppointmentFormCreated: { since: "18.2", alias: "onAppointmentFormOpening" },
+            dropDownAppointmentTemplate: { since: "19.2", message: "appointmentTooltipTemplate" }
         });
     },
 
@@ -1329,6 +1444,7 @@ const Scheduler = Widget.inherit({
                 this._updateOption("workSpace", name, value);
                 this.repaint();
                 break;
+            case "appointmentDragging":
             case "appointmentTooltipTemplate":
             case "appointmentPopupTemplate":
             case "recurrenceEditMode":
@@ -1604,27 +1720,34 @@ const Scheduler = Widget.inherit({
         this._initAppointmentTemplate();
 
         this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate();
-        this._defaultTemplates["appointmentPopup"] = new EmptyTemplate();
         this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate();
     },
 
     _initAppointmentTemplate: function() {
-        var that = this;
+        const { expr } = this._dataAccessors;
+        const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
 
-        this._defaultTemplates["item"] = new BindableTemplate(function($container, data, model) {
-            var appointmentsInst = that.getAppointmentsInstance();
-            appointmentsInst._renderAppointmentTemplate.call(appointmentsInst, $container, data, model);
+        this._defaultTemplates["item"] = new BindableTemplate(($container, data, model) => {
+            this.getAppointmentsInstance()._renderAppointmentTemplate($container, data, model);
         }, [
             "html",
-            "text", "startDate", "endDate", "allDay", "description", "recurrenceRule", "recurrenceException", "startDateTimeZone", "endDateTimeZone"
+            "text",
+            "startDate",
+            "endDate",
+            "allDay",
+            "description",
+            "recurrenceRule",
+            "recurrenceException",
+            "startDateTimeZone",
+            "endDateTimeZone"
         ], this.option("integrationOptions.watchMethod"), {
-            "text": this._dataAccessors.getter["text"],
-            "startDate": this._dataAccessors.getter["startDate"],
-            "endDate": this._dataAccessors.getter["endDate"],
-            "startDateTimeZone": this._dataAccessors.getter["startDateTimeZone"],
-            "endDateTimeZone": this._dataAccessors.getter["endDateTimeZone"],
-            "allDay": this._dataAccessors.getter["allDay"],
-            "recurrenceRule": this._dataAccessors.getter["recurrenceRule"]
+            "text": createGetter(expr.textExpr),
+            "startDate": createGetter(expr.startDateExpr),
+            "endDate": createGetter(expr.endDateExpr),
+            "startDateTimeZone": createGetter(expr.startDateTimeZoneExpr),
+            "endDateTimeZone": createGetter(expr.endDateTimeZoneExpr),
+            "allDay": createGetter(expr.allDayExpr),
+            "recurrenceRule": createGetter(expr.recurrenceRuleExpr)
         });
     },
 
@@ -1675,10 +1798,9 @@ const Scheduler = Widget.inherit({
     },
 
     _initExpressions: function(fields) {
-        var dataCoreUtils = require("../../core/utils/data"),
-            isDateField = function(field) {
-                return field === "startDate" || field === "endDate";
-            };
+        var isDateField = function(field) {
+            return field === "startDate" || field === "endDate";
+        };
 
         if(!this._dataAccessors) {
             this._dataAccessors = {
@@ -1979,7 +2101,7 @@ const Scheduler = Widget.inherit({
 
         var countConfig = this._getViewCountConfig();
         this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this._getCurrentViewType()].workSpace, this._workSpaceConfig(groups, countConfig));
-        this._allowDragging() && this._workSpace.initDragBehavior(this._appointments);
+        this._allowDragging() && this._workSpace.initDragBehavior(this);
         this._workSpace.getWorkArea().append(this._appointments.$element());
 
         this._recalculateWorkspace();
@@ -2396,7 +2518,7 @@ const Scheduler = Widget.inherit({
         this._appointmentPopup.triggerResize();
     },
 
-    _getSingleAppointmentData: function(appointmentData, options) {
+    _getSingleAppointmentData: function(appointmentData, options, skipCheckUpdate) {
         options = options || {};
 
         var $appointment = options.$appointment,
@@ -2410,7 +2532,7 @@ const Scheduler = Widget.inherit({
             updatedStartDate,
             appointmentStartDate;
 
-        if(typeUtils.isDefined($appointment) && this._needUpdateAppointmentData($appointment)) {
+        if(typeUtils.isDefined($appointment) && (skipCheckUpdate === true || this._needUpdateAppointmentData($appointment))) {
             var apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
             if(typeUtils.isFunction(apptDataCalculator)) {
@@ -2457,17 +2579,6 @@ const Scheduler = Widget.inherit({
 
     _needUpdateAppointmentData: function($appointment) {
         return $appointment.hasClass("dx-scheduler-appointment-compact") || $appointment.hasClass("dx-scheduler-appointment-recurrence");
-    },
-
-    _getNormalizedTemplateArgs: function(options) {
-        var args = this.callBase(options);
-        if("targetedAppointmentData" in options) {
-            args.push(options.targetedAppointmentData);
-        }
-        if("currentIndex" in options) {
-            args.push(options.currentIndex);
-        }
-        return args;
     },
 
     subscribe: function(subject, action) {

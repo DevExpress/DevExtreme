@@ -1,6 +1,6 @@
 import treeListCore from './ui.tree_list.core';
 import errors from '../widget/ui.errors';
-import commonUtils from '../../core/utils/common';
+import { equalByValue } from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import dataCoreUtils from '../../core/utils/data';
@@ -674,7 +674,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 keyExpr = this.option("keyExpr");
 
             if(typeUtils.isDefined(key) && typeUtils.isDefined(keyExpr)) {
-                if(!commonUtils.equalByValue(key, keyExpr)) {
+                if(!equalByValue(key, keyExpr)) {
                     throw errors.Error("E1044");
                 }
             }

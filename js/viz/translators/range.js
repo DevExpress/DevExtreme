@@ -127,7 +127,9 @@ _Range.prototype = {
         }
 
         if(Array.isArray(sort)) {
-            this.categories = sort.slice(0).concat(this.categories.filter(item => item && sort.indexOf(item.valueOf()) === -1));
+            const sortValues = sort.map(item => item.valueOf());
+            const filteredSeriesCategories = this.categories.filter(item => sortValues.indexOf(item.valueOf()) === -1);
+            this.categories = sort.concat(filteredSeriesCategories);
         } else {
             let notAFunction = !_isFunction(sort);
 

@@ -1,6 +1,6 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
+    equalByValue = require("../../core/utils/common").equalByValue,
     abstract = Class.abstract;
 
 
@@ -28,7 +28,7 @@ var EditStrategy = Class.inherit({
 
     _equalKeys: function(key1, key2) {
         if(this._collectionWidget._isKeySpecified()) {
-            return commonUtils.equalByValue(key1, key2);
+            return equalByValue(key1, key2);
         } else {
             return key1 === key2;
         }

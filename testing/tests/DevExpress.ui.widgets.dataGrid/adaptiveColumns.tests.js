@@ -22,10 +22,12 @@ import typeUtils from "core/utils/type";
 import config from "core/config";
 import renderer from "core/renderer";
 import themes from "ui/themes";
+import { DataGridWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var device = devices.real();
 
 const CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity";
+const dataGridWrapper = new DataGridWrapper(".dx-datagrid");
 
 function setupDataGrid(that, $dataGridContainer) {
     that.$element = function() {
@@ -1536,6 +1538,30 @@ QUnit.test("Calculate an average width of column when column has width as string
 
     // assert
     assert.equal($(".dx-data-row .dx-command-adaptive.dx-command-adaptive-hidden").length, 2, "command adaptive element should be hidden");
+});
+
+QUnit.test("Column hiding should work if width is set as string (T817146)", function(assert) {
+    // arrange
+    $(".dx-datagrid").width(390);
+
+    this.items = [
+        { firstName: 'Alex', lastName: "Singer", },
+        { firstName: 'Bob', lastName: "Marley", }
+    ];
+
+    this.columns = [
+        { dataField: 'firstName', index: 0, width: "200px" },
+        { dataField: 'lastName', index: 1, width: "200" }
+    ];
+
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // assert
+    assert.ok(dataGridWrapper.rowsView.isRowAdaptiveVisible(0), "Command adaptive element is visible");
+    assert.ok(dataGridWrapper.rowsView.isRowAdaptiveVisible(1), "Command adaptive element is visible");
 });
 
 QUnit.test("Calculate correct an average width of column when some columns has percent width", function(assert) {

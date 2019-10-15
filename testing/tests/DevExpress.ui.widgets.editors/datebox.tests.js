@@ -58,6 +58,8 @@ const LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 const STATE_FOCUSED_CLASS = "dx-state-focused";
 const BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
 const TODAY_CELL_CLASS = "dx-calendar-today";
+const GESTURE_COVER_CLASS = "dx-gesture-cover";
+
 const widgetName = "dxDateBox";
 
 const getShortDate = date => {
@@ -1322,6 +1324,35 @@ QUnit.module("dateView integration", {
         assert.equal(value.getMinutes(), 0, "minutes component is 0");
         assert.equal(value.getSeconds(), 0, "seconds component is 0");
         assert.equal(value.getMilliseconds(), 0, "milliseconds component is 0");
+    });
+
+    QUnit.test("Gesture cover should be hidden after wheel event processed by Overlay emitter (T820405)", (assert) => {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "gesture cover element is specific for desktop");
+            return;
+        }
+
+        const pointer = pointerMock($(".dx-dateviewroller").eq(0).find(".dx-scrollable-container"));
+
+        assert.equal($(".dx-dateviewroller-current").length, 0, "no rollers are chosen after widget is opened first time");
+
+        pointer
+            .start()
+            .move(1)
+            .wheel(-20);
+
+        const $gestureCover = $(`.${GESTURE_COVER_CLASS}`);
+        const initialPointerEvents = $gestureCover.css("pointerEvents");
+
+        assert.strictEqual($gestureCover.length, 1, "gesture cover element created");
+        assert.strictEqual(initialPointerEvents, "none", "correct default state");
+
+        pointer
+            .down()
+            .move(1)
+            .wheel(-20);
+
+        assert.strictEqual($gestureCover.css("pointerEvents"), initialPointerEvents, "correct default state");
     });
 });
 

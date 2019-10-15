@@ -179,14 +179,20 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         });
     });
 
-    test("currentDirectory option", function(assert) {
+    test("getCurrentDirectory method", function(assert) {
         const inst = this.wrapper.getInstance();
+        let dir = inst.getCurrentDirectory();
+        assert.strictEqual(dir.relativeName, "", "directory has empty relative name");
+        assert.ok(dir.isDirectory, "directory has directory flag");
+        assert.ok(dir.isRoot, "directory has root flag");
+
         inst.option("currentPath", "Folder 1/Folder 1.1");
         this.clock.tick(800);
 
-        const dir = inst.option("currentDirectory");
+        dir = inst.getCurrentDirectory();
         assert.strictEqual(dir.relativeName, "Folder 1/Folder 1.1", "directory has correct relative name");
         assert.ok(dir.isDirectory, "directory has directory flag");
+        assert.notOk(dir.isRoot, "directory has not root flag");
     });
 
     test("change current directory by public API", function(assert) {
@@ -210,6 +216,16 @@ QUnit.module("Navigation operations", moduleConfig, () => {
 
         const $folder11Node = that.wrapper.getFolderNode(2);
         assert.equal($folder11Node.find("span").text(), "Folder 1.1");
+    });
+
+    test("during navigation internal current directory updated only once", function(assert) {
+        const inst = this.wrapper.getInstance();
+        const setCurrentDirSpy = sinon.spy(inst._controller, "setCurrentDirectory");
+
+        this.wrapper.findThumbnailsItem("Folder 1").trigger("dxdblclick");
+        this.clock.tick(400);
+
+        assert.strictEqual(setCurrentDirSpy.callCount, 1, "internal method called once");
     });
 
     test("change root file name by public API", function(assert) {

@@ -159,7 +159,14 @@ var moduleOptions = {
 
         this.workspaceInstance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({}).dxSchedulerWorkSpaceWeek("instance");
         this.workspaceInstance.getWorkArea().append(this.instance.$element());
-        this.workspaceInstance.initDragBehavior(this.instance);
+
+        var schedulerMock = {
+            _appointments: this.instance,
+            option: $.noop,
+            element: $.noop,
+        };
+
+        this.workspaceInstance.initDragBehavior(schedulerMock);
     },
     afterEach: function() {
         this.clock.restore();

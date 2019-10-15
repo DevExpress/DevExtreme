@@ -156,6 +156,6 @@ export class GanttView extends Widget {
         });
     }
     getModelChangesListener() {
-        return null;
+        return this.option("modelChangesListener");
     }
 }

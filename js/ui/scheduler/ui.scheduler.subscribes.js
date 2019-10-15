@@ -150,6 +150,10 @@ const subscribes = {
         }).bind(this));
     },
 
+    getUpdatedData: function(options) {
+        return this._getUpdatedData({ data: options.data });
+    },
+
     updateAppointmentAfterDrag: function(options) {
         let target = options.data,
             updatedData = this._getUpdatedData(options),
@@ -746,15 +750,15 @@ const subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement) {
-        let $appointmentElement = $(appointmentElement),
-            appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey()),
-            recurringData = this._getSingleAppointmentData(appointmentData, {
-                skipDateCalculation: true,
-                $appointment: $appointmentElement,
-                skipHoursProcessing: true
-            }),
-            result = {};
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, skipCheckUpdate) {
+        const $appointmentElement = $(appointmentElement);
+        const appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
+        const recurringData = this._getSingleAppointmentData(appointmentData, {
+            skipDateCalculation: true,
+            $appointment: $appointmentElement,
+            skipHoursProcessing: true
+        }, skipCheckUpdate);
+        let result = {};
 
         extend(true, result, appointmentData, recurringData);
 

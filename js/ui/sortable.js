@@ -60,6 +60,17 @@ var Sortable = Draggable.inherit({
              */
             moveItemOnDrop: false,
             /**
+             * @name dxSortableOptions.dragTemplate
+             * @type template|function
+             * @type_function_param1 dragInfo:object
+             * @type_function_param1_field1 itemData:any
+             * @type_function_param1_field2 itemElement:dxElement
+             * @type_function_param1_field3 fromIndex:number
+             * @type_function_param2 containerElement:dxElement
+             * @type_function_return string|Node|jQuery
+             * @default undefined
+             */
+            /**
              * @name dxSortableOptions.onDragStart
              * @type function(e)
              * @extends Action
@@ -243,6 +254,10 @@ var Sortable = Draggable.inherit({
     _dragEnterHandler: function() {
         this.callBase.apply(this, arguments);
 
+        if(this === this._getSourceDraggable()) {
+            return;
+        }
+
         this._updateItemPoints();
         this.option("fromIndex", -1);
 
@@ -282,11 +297,19 @@ var Sortable = Draggable.inherit({
     },
 
     dragEnter: function() {
-        this.option("toIndex", -1);
+        if(this === this._getTargetDraggable()) {
+            this.option("toIndex", this.option("fromIndex"));
+        } else {
+            this.option("toIndex", -1);
+        }
     },
 
     dragLeave: function() {
-        this.option("toIndex", null);
+        if(this === this._getTargetDraggable()) {
+            this.option("toIndex", -1);
+        } else {
+            this.option("toIndex", this.option("fromIndex"));
+        }
     },
 
     dragEnd: function(sourceEvent) {
@@ -388,7 +411,7 @@ var Sortable = Draggable.inherit({
     _isValidPoint: function($items, itemPointIndex, dropInsideItem) {
         let allowReordering = dropInsideItem || this._allowReordering();
 
-        if(!allowReordering) {
+        if(!allowReordering && itemPointIndex !== 0) {
             return false;
         }
 
@@ -468,9 +491,11 @@ var Sortable = Draggable.inherit({
     },
 
     _getDragTemplateArgs: function($element) {
-        return extend(this.callBase.apply(this, arguments), {
-            index: this._getElementIndex($element)
-        });
+        let args = this.callBase.apply(this, arguments);
+
+        args.model.fromIndex = this._getElementIndex($element);
+
+        return args;
     },
 
     _togglePlaceholder: function(value) {
@@ -721,6 +746,7 @@ var Sortable = Draggable.inherit({
                 position = positions[i];
 
             if(toIndex === null || fromIndex === null) {
+                fx.stop($item);
                 translator.resetPosition($item);
             } else if(prevPosition !== position) {
                 fx.stop($item);

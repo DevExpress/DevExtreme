@@ -154,7 +154,6 @@
                 padding-right: @GRID_SORT_INDEX_OFFSET;
                 margin-left: -@GRID_SORT_INDEX_OFFSET;
                 width: @GRID_SORT_INDEX_WIDTH + @GRID_SORT_INDEX_OFFSET;
-                font-weight: 500;
             }
 
             .dx-sort,
@@ -817,6 +816,10 @@
 
         &.dx-empty {
             height: 100px;
+
+            .dx-scrollable-content {
+                height: 100%;
+            }
         }
 
         &.dx-fixed-columns {

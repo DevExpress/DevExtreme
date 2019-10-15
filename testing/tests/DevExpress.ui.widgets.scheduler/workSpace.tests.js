@@ -221,6 +221,7 @@ QUnit.testStart(function() {
                 }
 
                 this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay("instance");
+                this.instance.initDragBehavior();
                 stubInvokeMethod(this.instance, options);
             };
 
@@ -2224,6 +2225,7 @@ QUnit.testStart(function() {
             onContentReady: function(e) {
                 var scrollable = e.component.getScrollable();
                 scrollable.option("scrollByContent", false);
+                e.component.initDragBehavior();
             }
         });
 
@@ -2248,7 +2250,10 @@ QUnit.testStart(function() {
             startDayHour: 3,
             endDayHour: 7,
             hoursInterval: 0.5,
-            currentDate: new Date(2015, 3, 1)
+            currentDate: new Date(2015, 3, 1),
+            onContentReady: function(e) {
+                e.component.initDragBehavior();
+            }
         });
 
         var cells = $element.find("." + CELL_CLASS),
@@ -2276,6 +2281,7 @@ QUnit.testStart(function() {
             onContentReady: function(e) {
                 var scrollable = e.component.getScrollable();
                 scrollable.option("scrollByContent", false);
+                e.component.initDragBehavior();
             }
         });
 
@@ -2321,6 +2327,7 @@ QUnit.testStart(function() {
                 onContentReady: function(e) {
                     var scrollable = e.component.getScrollable();
                     scrollable.option("scrollByContent", false);
+                    e.component.initDragBehavior();
                 }
             }),
             instance = $element.dxSchedulerWorkSpaceWeek("instance");
@@ -2369,6 +2376,7 @@ QUnit.testStart(function() {
                 onContentReady: function(e) {
                     var scrollable = e.component.getScrollable();
                     scrollable.option("scrollByContent", false);
+                    e.component.initDragBehavior();
                 }
             }),
             instance = $element.dxSchedulerWorkSpaceMonth("instance");

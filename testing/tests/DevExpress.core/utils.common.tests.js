@@ -8,9 +8,9 @@ import {
     deferRenderer,
     applyServerDecimalSeparator,
     grep,
-    equalByValue,
     getKeyHash
 } from "core/utils/common";
+import { equalByValue } from "core/utils/common";
 import Guid from "core/guid";
 import config from "core/config";
 

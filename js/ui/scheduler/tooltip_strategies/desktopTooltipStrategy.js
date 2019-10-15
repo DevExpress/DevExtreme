@@ -77,7 +77,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
                         y: event.pageY - offset.top - ($dragElement.height() / 2)
                     };
                 },
-                template: () => {
+                dragTemplate: () => {
                     return dragElement;
                 },
                 onDragStart: (e) => {

@@ -345,7 +345,7 @@ var EditingController = modules.ViewController.inherit((function() {
             }
 
             if(args.changeType === "refresh" && getEditMode(that) === EDIT_MODE_POPUP && editForm && editForm.option("visible")) {
-                editForm.repaint();
+                this._repaintEditPopup();
             }
         },
 
@@ -552,10 +552,7 @@ var EditingController = modules.ViewController.inherit((function() {
         optionChanged: function(args) {
             if(args.name === "editing") {
                 if(this._editPopup && this._editPopup.option("visible") && args.fullName.indexOf("editing.form") === 0) {
-                    var rowIndex = this._getVisibleEditRowIndex();
-                    if(rowIndex >= 0) {
-                        this._showEditPopup(rowIndex, true);
-                    }
+                    this._repaintEditPopup();
                 } else {
                     this.init();
                 }
@@ -1036,6 +1033,18 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that._editPopup.option(popupOptions);
             that._editPopup.show();
+        },
+
+        _repaintEditPopup: function() {
+            const rowIndex = this._getVisibleEditRowIndex();
+
+            if(this._editPopup && this._editPopup.option("visible") && rowIndex >= 0) {
+                const defaultAnimation = this._editPopup.option("animation");
+
+                this._editPopup.option("animation", null);
+                this._showEditPopup(rowIndex, true);
+                this._editPopup.option("animation", defaultAnimation);
+            }
         },
 
         _getEditPopupHiddenHandler: function() {

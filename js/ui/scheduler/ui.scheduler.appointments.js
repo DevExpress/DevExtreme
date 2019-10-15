@@ -341,8 +341,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointmentTemplate: function($container, data, model) {
-        var startDate = model.settings ? new Date(this.invoke("getField", "startDate", model.settings)) : data.startDate,
-            endDate = model.settings ? new Date(this.invoke("getField", "endDate", model.settings)) : data.endDate;
+        var startDate = model.appointmentData.settings ? new Date(this.invoke("getField", "startDate", model.appointmentData.settings)) : data.startDate,
+            endDate = model.appointmentData.settings ? new Date(this.invoke("getField", "endDate", model.appointmentData.settings)) : data.endDate;
 
         if(isNaN(startDate) || isNaN(endDate)) {
             startDate = data.startDate;
@@ -402,7 +402,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             action({
                 appointmentElement: itemElement,
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, itemElement, index)
+                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, itemElement)
             });
         }
         delete this._currentAppointmentSettings;
@@ -493,10 +493,16 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
+        const { itemData, container, index } = renderArgs;
+        const recurrenceRule = this.invoke("getField", "recurrenceRule", itemData);
+
         return itemTemplate.render({
-            model: renderArgs.itemData,
-            container: renderArgs.container,
-            index: renderArgs.index
+            model: {
+                appointmentData: itemData,
+                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, $(container).parent(), !!recurrenceRule)
+            },
+            container: container,
+            index: index
         });
     },
 

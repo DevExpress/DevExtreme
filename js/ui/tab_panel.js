@@ -384,7 +384,7 @@ var TabPanel = MultiView.inherit({
                 this.callBase(args);
                 break;
             case "items":
-                this._setTabsOption(fullName, value);
+                this._setTabsOption(name, this.option(name));
                 this._updateLayout();
                 if(!this.option("repaintChangesOnly")) {
                     this._tabs.repaint();

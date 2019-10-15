@@ -554,10 +554,14 @@ var Overlay = Widget.inherit({
                 e.preventDefault();
             }
 
-            this.hide();
+            this._outsideClickHandler();
         }
 
         return this.option("propagateOutsideClick");
+    },
+
+    _outsideClickHandler() {
+        this.hide();
     },
 
     _initTemplates: function() {
@@ -1097,7 +1101,11 @@ var Overlay = Widget.inherit({
             getDirection: function() {
                 return "both";
             },
-            _toggleGestureCover: noop,
+            _toggleGestureCover: function(toggle) {
+                if(!toggle) {
+                    this._toggleGestureCoverImpl(toggle);
+                }
+            },
             _clearSelection: noop,
             isNative: true
         }, function(e) {

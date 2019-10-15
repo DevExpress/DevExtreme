@@ -44,23 +44,35 @@ var RowDraggingExtender = {
             allowReordering = this._allowReordering(),
             $content = that.callBase.apply(that, arguments);
 
-        if(allowReordering) {
+        if(allowReordering && $content.length) {
             that._sortable = that._createComponent($content, Sortable, extend({
+                component: that.component,
+                contentTemplate: null,
                 filter: "> table > tbody > .dx-data-row",
-                template: that._getDraggableRowTemplate(),
+                dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
                 dropFeedbackMode: "indicate"
-            }, rowDragging));
+            }, rowDragging, {
+                onDragStart: function(e) {
+                    const row = e.component.getVisibleRows()[e.fromIndex];
+                    e.itemData = row && row.data;
+
+                    const onDragStart = rowDragging.onDragStart;
+                    onDragStart && onDragStart(e);
+                }
+            }));
         }
 
         return $content;
     },
 
     _getDraggableGridOptions: function(options) {
-        let gridOptions = this.option();
+        let gridOptions = this.option(),
+            columns = this.getColumns(),
+            $rowElement = $(this.getRowElement(options.rowIndex));
 
         return {
-            dataSource: [options.data],
+            dataSource: [{ id: 1, parentId: 0 }],
             showBorders: true,
             showColumnHeaders: false,
             scrolling: {
@@ -70,35 +82,33 @@ var RowDraggingExtender = {
             pager: {
                 visible: false
             },
-            rowDragging: {
-                allowReordering: true,
-                showDragIcons: gridOptions.rowDragging.showDragIcons
-            },
             loadingTimeout: undefined,
-            columns: gridOptions.columns,
-            customizeColumns: function(columns) {
-                gridOptions.customizeColumns && gridOptions.customizeColumns.apply(this, arguments);
-
-                columns.forEach((column) => {
-                    column.groupIndex = undefined;
-                });
-            },
+            columnFixing: gridOptions.columnFixing,
+            columnAutoWidth: gridOptions.columnAutoWidth,
             showColumnLines: gridOptions.showColumnLines,
-            rowTemplate: gridOptions.rowTemplate,
-            onCellPrepared: gridOptions.onCellPrepared,
-            onRowPrepared: gridOptions.onRowPrepared
+            columns: columns.map((column) => {
+                return {
+                    width: column.width || column.visibleWidth,
+                    fixed: column.fixed,
+                    fixedPosition: column.fixedPosition
+                };
+            }),
+            onRowPrepared: (e) => {
+                const rowsView = e.component.getView("rowsView");
+                $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
+            }
         };
     },
 
     _getDraggableRowTemplate: function() {
-        return (options, index) => {
+        return (options) => {
             let $rootElement = this.component.$element(),
                 $dataGridContainer = $("<div>").width($rootElement.width()),
                 items = this._dataController.items(),
-                row = items && items[index],
+                row = items && items[options.fromIndex],
                 gridOptions = this._getDraggableGridOptions(row);
 
-            this._createComponent($dataGridContainer, "dxDataGrid", gridOptions);
+            this._createComponent($dataGridContainer, this.component.NAME, gridOptions);
 
             return $dataGridContainer;
         };
@@ -168,7 +178,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions.rowDragging.boundary
                  * @type string|Node|jQuery
-                 * @default window
+                 * @default undefined
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.container
@@ -176,8 +186,12 @@ module.exports = {
                  * @default undefined
                  */
                 /**
-                 * @name GridBaseOptions.rowDragging.template
+                 * @name GridBaseOptions.rowDragging.dragTemplate
                  * @type template|function
+                 * @type_function_param1 dragInfo:object
+                 * @type_function_param1_field1 itemData:any
+                 * @type_function_param1_field2 itemElement:dxElement
+                 * @type_function_param2 containerElement:dxElement
                  * @type_function_return string|Node|jQuery
                  * @default undefined
                  */
@@ -194,7 +208,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions.rowDragging.scrollSpeed
                  * @type number
-                 * @default 60
+                 * @default 30
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.scrollSensitivity
@@ -204,6 +218,11 @@ module.exports = {
                 /**
                  * @name GridBaseOptions.rowDragging.group
                  * @type string
+                 * @default undefined
+                 */
+                /**
+                 * @name GridBaseOptions.rowDragging.data
+                 * @type any
                  * @default undefined
                  */
                 /**
@@ -290,9 +309,9 @@ module.exports = {
                  * @type_function_param1_field5 toIndex:number
                  * @type_function_param1_field6 fromComponent:dxSortable|dxDraggable
                  * @type_function_param1_field7 toComponent:dxSortable|dxDraggable
-                 * @type_function_param1_field9 fromData:any
-                 * @type_function_param1_field10 toData:any
-                 * @type_function_param1_field11 dropInsideItem:boolean
+                 * @type_function_param1_field8 fromData:any
+                 * @type_function_param1_field9 toData:any
+                 * @type_function_param1_field10 dropInsideItem:boolean
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.onRemove

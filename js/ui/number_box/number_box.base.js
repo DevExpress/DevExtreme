@@ -486,6 +486,14 @@ var NumberBoxBase = TextEditor.inherit({
         return mathUtils.fitIntoRange(number, this.option("min"), this.option("max"));
     },
 
+    _clearValue: function() {
+        if(this._inputIsInvalid()) {
+            this._input().val("");
+            this._validateValue();
+        }
+        this.callBase();
+    },
+
     reset: function() {
         if(this.option("value") === null) {
             this.option("text", "");

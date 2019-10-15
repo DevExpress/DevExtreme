@@ -660,10 +660,14 @@ const TextEditorBase = Editor.inherit({
         e.stopPropagation();
 
         this._saveValueChangeEvent(e);
-        this.reset();
+        this._clearValue();
 
         !this._isFocused() && eventsEngine.trigger($input, "focus");
         eventsEngine.trigger($input, "input");
+    },
+
+    _clearValue: function() {
+        this.reset();
     },
 
     _renderEvents: function() {

@@ -91,6 +91,7 @@ QUnit.module("FocusedRow with real dataController and columnsController", {
         this.columns = this.columns || ["name", "phone", "room"];
 
         this.options = $.extend(true, {
+            autoNavigateToFocusedRow: true,
             keyboardNavigation: {
                 enabled: true
             },
@@ -5575,4 +5576,35 @@ QUnit.testInActiveWindow("DataGrid - click by cell should not generate exception
         // assert
         assert.ok(false, e.message);
     }
+});
+
+QUnit.testInActiveWindow("autoNavigateToFocusedRow should affect skipFocusedRowNavigation", function(assert) {
+    // arrange
+    this.$element = () => $("#container");
+
+    this.options = {
+        // act
+        autoNavigateToFocusedRow: false
+    };
+
+    this.setupModule();
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // assert
+    assert.ok(this.option("skipFocusedRowNavigation"), "skipFocusedRowNavigation is true");
+
+    // act, assert
+    this.getController("focus").optionChanged({
+        name: "autoNavigateToFocusedRow",
+        value: true
+    });
+    assert.notOk(this.option("skipFocusedRowNavigation"), "skipFocusedRowNavigation is false");
+
+    // act, assert
+    this.getController("focus").optionChanged({
+        name: "autoNavigateToFocusedRow",
+        value: false
+    });
+    assert.ok(this.option("skipFocusedRowNavigation"), "skipFocusedRowNavigation is true");
 });

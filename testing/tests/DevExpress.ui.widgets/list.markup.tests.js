@@ -400,7 +400,9 @@ QUnit.module("decorators markup", {}, () => {
     QUnit.test("list item markup should be correct, reordering decorator", assert => {
         const $list = $($("#templated-list").dxList({
             items: ["0"],
-            allowItemReordering: true
+            itemDragging: {
+                allowReordering: true
+            }
         }));
 
         const $items = $list.find(toSelector(LIST_ITEM_CLASS));

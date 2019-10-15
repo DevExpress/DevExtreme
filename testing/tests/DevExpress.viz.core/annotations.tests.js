@@ -104,7 +104,7 @@ QUnit.test("Merge customizeAnnotation result and common+item options", function(
 });
 
 QUnit.test("Draw image inside a plaque with borders and arrow", function(assert) {
-    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 } }], {
+    const annotation = this.createAnnotations([{ type: "image", image: { url: "some_url", width: 20, height: 13 }, font: { color: "red" } }], {
         border: {
             width: 2,
             color: "#000000",
@@ -123,7 +123,8 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
             offsetY: 4,
             blur: 5,
             color: "#111111"
-        }
+        },
+        font: { size: 20 }
     })[0];
     this.renderer.g.reset();
 
@@ -132,7 +133,8 @@ QUnit.test("Draw image inside a plaque with borders and arrow", function(assert)
     // assert
     assert.equal(this.renderer.g.callCount, 4);
     const wrapperGroup = this.renderer.g.getCall(0).returnValue;
-    assert.deepEqual(wrapperGroup.append.firstCall.args, [this.group]);
+    assert.equal(wrapperGroup.append.firstCall.args[0], this.group);
+    assert.deepEqual(wrapperGroup.css.lastCall.args[0], { "font-size": 20, fill: "red" });
 
     const annotationGroup = this.renderer.g.getCall(1).returnValue;
     assert.deepEqual(annotationGroup.attr.firstCall.args, [{ class: "dxc-image-annotation" }]);
@@ -991,7 +993,7 @@ QUnit.test("Round x, y", function(assert) {
 QUnit.module("Text annotaion", environment);
 
 QUnit.test("Draw text inside plaque", function(assert) {
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: {} } ], {})[0];
+    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: {}, cssClass: "annotation_class" } ], {})[0];
     this.renderer.g.reset();
 
     annotation.draw(this.widget, this.group);
@@ -1002,27 +1004,9 @@ QUnit.test("Draw text inside plaque", function(assert) {
     assert.strictEqual(this.renderer.text.callCount, 1);
     const text = this.renderer.text.firstCall.returnValue;
     assert.deepEqual(text.append.firstCall.args[0].element, this.renderer.g.getCall(3).returnValue.element);
-    assert.ok(!text.setMaxSize.called);
-});
-
-QUnit.test("Text params", function(assert) {
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 }, cssClass: "annotation_class" } ], {})[0];
-
-    annotation.draw(this.widget, this.group);
-
     assert.deepEqual(this.renderer.text.firstCall.args, ["some text"]);
-    assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ "font-size": 20 }]);
-    assert.strictEqual(this.renderer.text.firstCall.returnValue.attr.lastCall.args[0]["class"], "annotation_class");
-});
-
-QUnit.test("Merge common and item options", function(assert) {
-    const annotation = this.createAnnotations([{ x: 0, y: 0, type: "text", text: "some text", font: { size: 20 } } ], {
-        font: { color: "red" }
-    })[0];
-
-    annotation.draw(this.widget, this.group);
-
-    assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ "font-size": 20, "fill": "red" }]);
+    assert.strictEqual(text.attr.lastCall.args[0]["class"], "annotation_class");
+    assert.ok(!text.setMaxSize.called);
 });
 
 QUnit.test("Draw text with width/height", function(assert) {

@@ -493,7 +493,7 @@
 
 /**
  * @typedef {string} Enums.FormItemEditorType
- * @enum {'dxAutocomplete'|'dxCalendar'|'dxCheckBox'|'dxColorBox'|'dxDateBox'|'dxDropDownBox'|'dxLookup'|'dxNumberBox'|'dxRadioGroup'|'dxRangeSlider'|'dxSelectBox'|'dxSlider'|'dxSwitch'|'dxTagBox'|'dxTextArea'|'dxTextBox'}
+ * @enum {'dxAutocomplete'|'dxCalendar'|'dxCheckBox'|'dxColorBox'|'dxDateBox'|'dxDropDownBox'|'dxHtmlEditor'|'dxLookup'|'dxNumberBox'|'dxRadioGroup'|'dxRangeSlider'|'dxSelectBox'|'dxSlider'|'dxSwitch'|'dxTagBox'|'dxTextArea'|'dxTextBox'}
  */
 
 /**
@@ -1038,7 +1038,7 @@
 
 /**
  * @typedef {string} Enums.TreeListFilterMode
- * @enum {'fullBranch'|'withAncestors'}
+ * @enum {'fullBranch'|'withAncestors'|'matchOnly'}
  */
 
 /**
@@ -1092,7 +1092,7 @@
 
 /**
  * @typedef {string} Enums.DiagramShapeType
- * @enum {'text'|'rectangle'|'ellipsis'|'cross'|'triangle'|'diamond'|'heart'|'pentagon'|'octagon'|'star'|'arrowLeft'|'arrowTop'|'arrowRight'|'arrowBottom'|'arrowNorthSouth'|'arrowEastWest'|'process'|'decision'|'terminator'|'predefinedProcess'|'document'|'multipleDocuments'|'manualInput'|'preparation'|'data'|'database'|'hardDisk'|'internalStorage'|'paperTape'|'manualOperation'|'delay'|'storedData'|'display'|'merge'|'or'|'summingJunction'|'verticalContainer'|'horizontalContainer'|'cardWithImageOnLeft'|'cardWithImageOnTop'|'cardWithImageOnRight'}
+ * @enum {'text'|'rectangle'|'ellipse'|'cross'|'triangle'|'diamond'|'heart'|'pentagon'|'octagon'|'star'|'arrowLeft'|'arrowTop'|'arrowRight'|'arrowBottom'|'arrowNorthSouth'|'arrowEastWest'|'process'|'decision'|'terminator'|'predefinedProcess'|'document'|'multipleDocuments'|'manualInput'|'preparation'|'data'|'database'|'hardDisk'|'internalStorage'|'paperTape'|'manualOperation'|'delay'|'storedData'|'display'|'merge'|'or'|'summingJunction'|'verticalContainer'|'horizontalContainer'|'cardWithImageOnLeft'|'cardWithImageOnTop'|'cardWithImageOnRight'}
  */
 
 /**

@@ -11,6 +11,14 @@ import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHe
 import domAdapter from "core/dom_adapter";
 
 import "ui/text_area";
+import "ui/autocomplete";
+import "ui/calendar";
+import "ui/date_box";
+import "ui/drop_down_box";
+import "ui/html_editor";
+import "ui/lookup";
+import "ui/radio_group";
+import "ui/tag_box";
 
 import "common.css!";
 import "generic_light.css!";
@@ -2179,7 +2187,7 @@ QUnit.test("Changing the item's option via the itemOption when these options are
     assert.strictEqual($("#form").find(".test-class").length, 1, "cssClass of item");
 });
 
-QUnit.test("Reset editor's value", function(assert) {
+QUnit.test("resetValues - old test", function(assert) {
     // arrange
     var form = $("#form").dxForm({
         formData: {
@@ -2199,6 +2207,81 @@ QUnit.test("Reset editor's value", function(assert) {
     assert.strictEqual(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
     assert.strictEqual(form.getEditor("room").option("value"), null, "editor for the room dataField");
     assert.strictEqual(form.getEditor("isDeveloper").option("value"), false, "editor for the isDeveloper dataField");
+});
+
+QUnit.test("resetValues - clear formData and editors", function(assert) {
+    var formData = {
+        dxAutocomplete: "a",
+        dxCalendar: new Date(2019, 1, 1),
+        dxCheckBox: true,
+        dxColorBox: "a",
+        dxDateBox: new Date(2019, 1, 1),
+        dxDropDownBox: "1",
+        dxHtmlEditor: "a",
+        dxLookup: "1",
+        dxNumberBox: 1,
+        dxRadioGroup: "1",
+        dxSelectBox: "1",
+        dxTagBox: ["1"],
+        dxTextArea: "a",
+        dxTextBox: "a",
+    };
+
+    var formItems = [
+        { dataField: "dxAutocomplete", editorType: "dxAutocomplete" },
+        { dataField: "dxCalendar", editorType: "dxCalendar" },
+        { dataField: "dxCheckBox", editorType: "dxCheckBox" },
+        { dataField: "dxDateBox", editorType: "dxDateBox" },
+        { dataField: "dxDropDownBox", editorType: "dxDropDownBox", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxHtmlEditor", editorType: "dxHtmlEditor" },
+        { dataField: "dxLookup", editorType: "dxLookup", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxNumberBox", editorType: "dxNumberBox" },
+        { dataField: "dxRadioGroup", editorType: "dxRadioGroup", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxSelectBox", editorType: "dxSelectBox", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxTagBox", editorType: "dxTagBox", editorOptions: { dataSource: ["1"] } },
+        { dataField: "dxTextArea", editorType: "dxTextArea" },
+        { dataField: "dxTextBox", editorType: "dxTextBox" },
+    ];
+
+    var form = $("#form").dxForm({
+        formData,
+        items: formItems
+    }).dxForm("instance");
+
+    form.resetValues();
+
+    var defaultResetValue = null;
+    var stringEditorResetValue = "";
+    var dxCheckBoxResetValue = false;
+    var dxTagBoxResetValue = [];
+
+    assert.strictEqual(formData.dxAutocomplete, defaultResetValue, "formData.dxAutocomplete");
+    assert.strictEqual(formData.dxCalendar, defaultResetValue, "formData.dxCalendar");
+    assert.strictEqual(formData.dxCheckBox, dxCheckBoxResetValue, "formData.dxCheckBox");
+    assert.strictEqual(formData.dxDateBox, defaultResetValue, "formData.dxDateBox");
+    assert.strictEqual(formData.dxDropDownBox, defaultResetValue, "formData.dxDropDownBox");
+    assert.strictEqual(formData.dxHtmlEditor, defaultResetValue, "formData.dxHtmlEditor");
+    assert.strictEqual(formData.dxLookup, defaultResetValue, "formData.dxLookup");
+    assert.strictEqual(formData.dxNumberBox, defaultResetValue, "formData.dxNumberBox");
+    assert.strictEqual(formData.dxRadioGroup, defaultResetValue, "formData.dxRadioGroup");
+    assert.strictEqual(formData.dxSelectBox, defaultResetValue, "formData.dxSelectBox");
+    assert.strictEqual(formData.dxTagBox.length, dxTagBoxResetValue.length, "formData.dxTagBox.length");
+    assert.strictEqual(formData.dxTextArea, stringEditorResetValue, "formData.dxTextArea");
+    assert.strictEqual(formData.dxTextBox, stringEditorResetValue, "formData.dxTextBox");
+
+    assert.strictEqual(form.getEditor("dxAutocomplete").option("value"), defaultResetValue, "form.getEditor.dxAutocomplete");
+    assert.strictEqual(form.getEditor("dxCalendar").option("value"), defaultResetValue, "form.getEditor.dxCalendar");
+    assert.strictEqual(form.getEditor("dxCheckBox").option("value"), dxCheckBoxResetValue, "form.getEditor.dxCheckBox");
+    assert.strictEqual(form.getEditor("dxDateBox").option("value"), defaultResetValue, "form.getEditor.dxDateBox");
+    assert.strictEqual(form.getEditor("dxDropDownBox").option("value"), defaultResetValue, "form.getEditor.dxDropDownBox");
+    assert.strictEqual(form.getEditor("dxHtmlEditor").option("value"), defaultResetValue, "form.getEditor.dxHtmlEditor");
+    assert.strictEqual(form.getEditor("dxLookup").option("value"), defaultResetValue, "form.getEditor.dxLookup");
+    assert.strictEqual(form.getEditor("dxNumberBox").option("value"), defaultResetValue, "form.getEditor.dxNumberBox");
+    assert.strictEqual(form.getEditor("dxRadioGroup").option("value"), defaultResetValue, "form.getEditor.dxRadioGroup");
+    assert.strictEqual(form.getEditor("dxSelectBox").option("value"), defaultResetValue, "form.getEditor.dxSelectBox");
+    assert.strictEqual(form.getEditor("dxTagBox").option("value").length, dxTagBoxResetValue.length, "form.getEditor.dxTagBox");
+    assert.strictEqual(form.getEditor("dxTextArea").option("value"), stringEditorResetValue, "form.getEditor.dxTextArea");
+    assert.strictEqual(form.getEditor("dxTextBox").option("value"), stringEditorResetValue, "form.getEditor.dxTextBox");
 });
 
 const formatTestValue = value => Array.isArray(value) ? "[]" : value;

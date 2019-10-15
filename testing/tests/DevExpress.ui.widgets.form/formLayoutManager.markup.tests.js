@@ -19,8 +19,11 @@ import "ui/text_area";
 import "ui/radio_group";
 import "ui/range_slider";
 import "ui/slider";
+import "ui/html_editor";
 
 import "common.css!";
+
+const READONLY_STATE_CLASS = "dx-state-readonly";
 
 const { test } = QUnit;
 
@@ -31,21 +34,39 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
-const createTestObject = () => {
-    return {
-        "ID": 1,
-        "FirstName": "John",
-        "LastName": "Heart",
-        "Prefix": "Mr.",
-        "Position": "CEO",
-        "Picture": "images/employees/01.png",
-        "BirthDate": "1964/03/16",
-        "HireDate": "1995/01/15",
-        "Notes": "John has been in the Audio/Video industry since 1990. He has led DevAv as its CEO since 2003.\r\n\r\nWhen not working hard as the CEO, John loves to golf and bowl. He once bowled a perfect game of 300.",
-        "Address": "351 S Hill St.",
-        "StateID": 5
-    };
-};
+const supportedEditors = [
+    "dxAutocomplete",
+    "dxCalendar",
+    "dxCheckBox",
+    "dxColorBox",
+    "dxDateBox",
+    "dxDropDownBox",
+    "dxLookup",
+    "dxNumberBox",
+    "dxRadioGroup",
+    "dxRangeSlider",
+    "dxSelectBox",
+    "dxSlider",
+    "dxSwitch",
+    "dxTagBox",
+    "dxTextArea",
+    "dxTextBox",
+    "dxHtmlEditor"
+];
+
+const createTestObject = () => ({
+    "ID": 1,
+    "FirstName": "John",
+    "LastName": "Heart",
+    "Prefix": "Mr.",
+    "Position": "CEO",
+    "Picture": "images/employees/01.png",
+    "BirthDate": "1964/03/16",
+    "HireDate": "1995/01/15",
+    "Notes": "John has been in the Audio/Video industry since 1990. He has led DevAv as its CEO since 2003.\r\n\r\nWhen not working hard as the CEO, John loves to golf and bowl. He once bowled a perfect game of 300.",
+    "Address": "351 S Hill St.",
+    "StateID": 5
+});
 
 QUnit.module("Layout manager", () => {
     test("Default render", (assert) => {
@@ -65,7 +86,7 @@ QUnit.module("Layout manager", () => {
         assert.equal($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).length, 1, "label is rendered");
         assert.ok($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).hasClass(internals.FIELD_ITEM_LABEL_LOCATION_CLASS + "left"), "label's location is left by default");
         assert.equal($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").length, 1, "editor is rendered");
-        assert.ok(!$testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is not read only");
+        assert.ok(!$testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass(READONLY_STATE_CLASS), "editor is not read only");
         assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + "> ." + internals.FIELD_ITEM_CONTENT_CLASS).hasClass(internals.FIELD_ITEM_CONTENT_LOCATION_CLASS + "right"), 1, "Field item content has a right css class");
         assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + "> ." + internals.FIELD_ITEM_CONTENT_CLASS + "> .dx-texteditor").length, 1, "editor has field-item-content class");
     });
@@ -276,61 +297,7 @@ QUnit.module("Layout manager", () => {
         });
 
         // assert
-        assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
-    });
-
-    test("Check that inner widgets change readOnly option at layoutManager optionChange", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container").dxLayoutManager({
-            items: [{
-                dataField: "name",
-                editorType: "dxTextBox"
-            }]
-        });
-
-        assert.ok(!$testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is not read only");
-
-        $testContainer.dxLayoutManager("instance").option("readOnly", true);
-
-        // assert
-        assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
-    });
-
-    test("Check readOnly state for editor when readOnly is enabled in the editorOptions", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container").dxLayoutManager({
-            items: [{
-                dataField: "name",
-                editorType: "dxTextBox",
-                editorOptions: {
-                    readOnly: true
-                }
-            }]
-        });
-
-        // assert
-        assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
-    });
-
-    test("Editor's read only state should not be reset on the dxForm 'readOnly' option changing", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container").dxLayoutManager({
-                items: [{
-                    dataField: "name",
-                    editorType: "dxTextBox",
-                    editorOptions: {
-                        readOnly: true
-                    }
-                }]
-            }),
-            layoutManager = $testContainer.dxLayoutManager("instance");
-
-        layoutManager.option("readOnly", true);
-        layoutManager.option("readOnly", false);
-
-        // assert
-        let $textEditor = $testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor");
-        assert.ok($textEditor.hasClass("dx-state-readonly"), "editor is read only");
+        assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass(READONLY_STATE_CLASS), "editor is read only");
     });
 
     test("Render label by default", (assert) => {
@@ -357,74 +324,44 @@ QUnit.module("Layout manager", () => {
         assert.ok($label.parent().hasClass(internals.LABEL_HORIZONTAL_ALIGNMENT_CLASS), "field item contains label has horizontal align class");
     });
 
-    test("Check label alignment classes when browser is supported flex", (assert) => {
-        // arrange, act
-        let items = [{
-                dataField: "test1",
-                editorType: "dxTextBox"
-            }, {
-                dataField: "test2",
-                editorType: "dxTextBox",
-                helpText: "help"
-            }, {
-                dataField: "test3",
-                editorType: "dxRadioGroup"
-            }, {
-                dataField: "test4",
-                editorType: "dxCalendar"
-            }, {
-                dataField: "test5",
-                editorType: "dxTextArea"
-            }],
-            $testContainer = $("#container").dxLayoutManager(),
-            layoutManager = $testContainer.dxLayoutManager("instance"),
-            $items;
+    test("Baseline align of label for large editors is applied when browser is supported flex", (assert) => {
+        const largeEditors = ["dxTextArea", "dxRadioGroup", "dxCalendar", "dxHtmlEditor"];
+        const customItems = ["item", "itemWithHelpText"];
+        const items = [...customItems, ...largeEditors].map(item => ({
+            dataField: item,
+            editorType: customItems.indexOf(item) > -1 ? "dxTextBox" : item,
+            helpText: item === "itemWithHelpText" ? "Test help text" : null
+        }));
+        const $testContainer = $("#container").dxLayoutManager();
+        const layoutManager = $testContainer.dxLayoutManager("instance");
 
-        // act
-        layoutManager._hasBrowserFlex = () => {
-            return true;
-        };
+        layoutManager._hasBrowserFlex = () => true;
         layoutManager.option("items", items);
-        $items = $testContainer.find("." + internals.FIELD_ITEM_CLASS);
+        const $items = $testContainer.find(`.${internals.FIELD_ITEM_CLASS}`);
 
-        // assert
-        assert.ok(!$items.eq(0).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), "item doesn't have baseline alignment class");
-        assert.ok(!$items.eq(1).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), "item have baseline alignment class");
-        assert.ok($items.eq(2).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), "item have baseline alignment class");
-        assert.ok($items.eq(3).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), "item have baseline alignment class");
-        assert.ok($items.eq(4).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), "item have baseline alignment class");
+        $items.toArray().forEach((item, index) => {
+            const hasBaseLine = index > 1;
+            assert.equal($(item).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), hasBaseLine, `item ${!hasBaseLine ? "doesn't" : ""} have baseline alignment class`);
+        });
     });
 
-    test("Check label alignment classes when label location is 'top'", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container").dxLayoutManager({
-                labelLocation: "top",
-                items: [{
-                    dataField: "test1",
-                    editorType: "dxTextBox"
-                }, {
-                    dataField: "test2",
-                    editorType: "dxTextBox",
-                    helpText: "help"
-                }, {
-                    dataField: "test3",
-                    editorType: "dxRadioGroup"
-                }, {
-                    dataField: "test4",
-                    editorType: "dxCalendar"
-                }, {
-                    dataField: "test5",
-                    editorType: "dxTextArea"
-                }]
-            }),
-            $labels = $testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS);
+    test("Baseline align of label for large editors is not applied when label location is top", (assert) => {
+        const largeEditors = ["dxTextArea", "dxRadioGroup", "dxCalendar", "dxHtmlEditor"];
+        const customItems = ["item", "itemWithHelpText"];
+        const $testContainer = $("#container").dxLayoutManager({
+            labelLocation: "top",
+            items: [...customItems, ...largeEditors].map(item => ({
+                dataField: item,
+                editorType: customItems.indexOf(item) > -1 ? "dxTextBox" : item,
+                helpText: item === "itemWithHelpText" ? "Test help text" : null
+            }))
+        });
 
-        // assert
-        assert.ok(!$labels.eq(0).hasClass(internals.FIELD_ITEM_LABEL_BASELINE_CLASS), "label doesn't have baseline alignment class");
-        assert.ok(!$labels.eq(1).hasClass(internals.FIELD_ITEM_LABEL_BASELINE_CLASS), "label doesn't have baseline alignment class");
-        assert.ok(!$labels.eq(2).hasClass(internals.FIELD_ITEM_LABEL_BASELINE_CLASS), "label doesn't have baseline alignment class");
-        assert.ok(!$labels.eq(3).hasClass(internals.FIELD_ITEM_LABEL_BASELINE_CLASS), "label doesn't have baseline alignment class");
-        assert.ok(!$labels.eq(4).hasClass(internals.FIELD_ITEM_LABEL_BASELINE_CLASS), "label doesn't have baseline alignment class");
+        const $items = $testContainer.find(`.${internals.FIELD_ITEM_CLASS}`);
+
+        $items.toArray().forEach(item => {
+            assert.notOk($(item).hasClass(internals.FIELD_ITEM_LABEL_ALIGN_CLASS), "item doesn't have baseline alignment class");
+        });
     });
 
     test("Render label for item without name or dateField", (assert) => {
@@ -940,28 +877,6 @@ QUnit.module("Layout manager", () => {
             },
             "Correct Data"
         );
-    });
-
-    test("Render RangeSlider", (assert) => {
-        // arrange, act
-        let layoutManager = $("#container").dxLayoutManager({
-            layoutData: {
-                range: [1, 5]
-            },
-            items: [{
-                dataField: "range",
-                editorType: "dxRangeSlider"
-            }, {
-                dataField: "noRange",
-                editorType: "dxRangeSlider"
-            }]
-        }).dxLayoutManager("instance");
-
-        // assert
-        assert.deepEqual(layoutManager.getEditor("range").option("value"), [1, 5], "Editor's value correct");
-
-        layoutManager.getEditor("noRange").option("value", [2, 6]);
-        assert.deepEqual(layoutManager.option("layoutData.noRange"), [2, 6], "data updated");
     });
 
     test("Check data when generate items from layoutData and items with initial value", (assert) => {
@@ -1626,370 +1541,6 @@ QUnit.module("Layout manager", () => {
         assert.equal($inputs.eq(1).val(), "Yes", "Second input value");
         assert.equal($inputs.eq(2).val(), "Alex", "Second input value");
         assert.equal($inputs.eq(3).val(), "male", "Second input value");
-    });
-
-    test("Editor type for items where this option is not defined", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container"),
-            layoutManager,
-            consoleErrorStub = sinon.stub(consoleUtils.logger, "error");
-
-        layoutManager = $testContainer.dxLayoutManager({
-            layoutData: {
-                name: "Patti"
-            },
-            items: [{
-                dataField: "name"
-            }, {
-                name: "Test Name"
-            }]
-        }).dxLayoutManager("instance");
-
-        // assert
-        assert.equal(layoutManager._items.length, 2, "items count");
-        assert.equal(layoutManager._items[0].editorType, "dxTextBox", "1 item");
-        assert.equal(layoutManager._items[1].editorType, undefined, "2 item has no dataField");
-        assert.equal(consoleErrorStub.callCount, 1, "error was raised for item without dataField and editorType");
-        consoleErrorStub.restore();
-    });
-
-    test("Error is displayed in console when editorType is unsupported", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container"),
-            errorMessage,
-            _error = consoleUtils.logger.log;
-
-        consoleUtils.logger.error = (message) => {
-            errorMessage = message;
-        };
-
-        $testContainer.dxLayoutManager({
-            layoutData: createTestObject(),
-            items: [{
-                dataField: "Position"
-            }, {
-                name: "test"
-            }]
-        }).dxLayoutManager("instance");
-
-        // assert
-        assert.equal(errorMessage.indexOf("E1035 - The editor cannot be created because of an internal error"), 0);
-        assert.ok(errorMessage.indexOf("See:\nhttp://js.devexpress.com/error/") > 0);
-
-        consoleUtils.logger.error = _error;
-    });
-
-    test("Form with dxRadioGroup that items are defined via 'dataSource' option renders without error", (assert) => {
-        // arrange
-        let $testContainer = $("#container"),
-            errorMessage,
-            _error = consoleUtils.logger.log;
-
-        // act
-        try {
-            consoleUtils.logger.error = (message) => {
-                errorMessage = message;
-            };
-
-            $testContainer.dxLayoutManager({
-                items: [{
-                    dataField: "test1",
-                    editorType: "dxRadioGroup",
-                    editorOptions: {
-                        dataSource: [1, 2, 3]
-                    }
-                }]
-            });
-
-            // assert
-            assert.ok(!errorMessage, "There is no error");
-        } finally {
-            consoleUtils.logger.error = _error;
-        }
-    });
-
-    test("Set value to the dxSelectBox editor from data option", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container"),
-            selectBox;
-
-        $testContainer.dxLayoutManager({
-            layoutData: {
-                simpleProducts: "SuperLCD 70"
-            },
-            customizeItem: (item) => {
-                item.editorType = "dxSelectBox";
-                item.editorOptions = {
-                    dataSource: [
-                        "HD Video Player",
-                        "SuperHD Video Player",
-                        "SuperPlasma 50",
-                        "SuperLED 50",
-                        "SuperLED 42",
-                        "SuperLCD 55",
-                        "SuperLCD 42",
-                        "SuperPlasma 65",
-                        "SuperLCD 70"
-                    ]
-                };
-            }
-        });
-
-        selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
-
-        // assert
-        assert.deepEqual(selectBox.option("value"), "SuperLCD 70");
-    });
-
-    test("Set default value to the dxSelectBox editor when dataField is not contained in a formData", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container"),
-            selectBox;
-
-        $testContainer.dxLayoutManager({
-            layoutData: {
-                name: "Test"
-            },
-            items: ["Test", {
-                dataField: "simpleProducts",
-                editorType: "dxSelectBox",
-                editorOptions: {
-                    dataSource: [
-                        "HD Video Player",
-                        "SuperHD Video Player",
-                        "SuperPlasma 50",
-                        "SuperLED 50",
-                        "SuperLED 42",
-                        "SuperLCD 55",
-                        "SuperLCD 42",
-                        "SuperPlasma 65",
-                        "SuperLCD 70"
-                    ]
-                }
-            }]
-        });
-
-        selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
-
-        // assert
-        assert.deepEqual(selectBox.option("value"), null);
-    });
-
-    test("Update value in dxSelectBox editor when data option is changed", (assert) => {
-        // arrange
-        let $testContainer = $("#container"),
-            selectBox,
-            layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
-            layoutData: {
-                simpleProducts: "SuperLCD 70"
-            },
-            customizeItem: (item) => {
-                item.editorType = "dxSelectBox";
-                item.editorOptions = {
-                    dataSource: [
-                        "HD Video Player",
-                        "SuperHD Video Player",
-                        "SuperPlasma 50",
-                        "SuperLED 50",
-                        "SuperLED 42",
-                        "SuperLCD 55",
-                        "SuperLCD 42",
-                        "SuperPlasma 65",
-                        "SuperLCD 70"
-                    ]
-                };
-            }
-        }).dxLayoutManager("instance");
-
-        // act
-        layoutManager.updateData("simpleProducts", "SuperLED 50");
-
-        selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
-
-        // assert
-        assert.deepEqual(selectBox.option("value"), "SuperLED 50");
-        assert.ok(!layoutManager._isFieldValueChanged);
-    });
-
-    test("Update data option of layout manager when value is changed in the dxSelectBox editor", (assert) => {
-        // arrange
-        let $testContainer = $("#container"),
-            selectBox,
-            layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
-            layoutData: {
-                simpleProducts: "SuperLCD 70"
-            },
-            customizeItem: (item) => {
-                item.editorType = "dxSelectBox";
-                item.editorOptions = {
-                    dataSource: [
-                        "HD Video Player",
-                        "SuperHD Video Player",
-                        "SuperPlasma 50",
-                        "SuperLED 50",
-                        "SuperLED 42",
-                        "SuperLCD 55",
-                        "SuperLCD 42",
-                        "SuperPlasma 65",
-                        "SuperLCD 70"
-                    ]
-                };
-            }
-        }).dxLayoutManager("instance");
-
-        // act
-        selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
-        selectBox.option("value", "SuperPlasma 50");
-
-        // assert
-        assert.deepEqual(layoutManager.option("layoutData.simpleProducts"), "SuperPlasma 50");
-        assert.ok(!layoutManager._isValueChangedCalled);
-    });
-
-    test("Set value to the dxTagBox editor from data option", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container"),
-            tagBox;
-
-        $testContainer.dxLayoutManager({
-            layoutData: {
-                simpleProducts: ["HD Video Player", "SuperLCD 70"]
-            },
-            customizeItem: (item) => {
-                item.editorType = "dxTagBox";
-                item.editorOptions = {
-                    dataSource: [
-                        "HD Video Player",
-                        "SuperHD Video Player",
-                        "SuperPlasma 50",
-                        "SuperLED 50",
-                        "SuperLED 42",
-                        "SuperLCD 55",
-                        "SuperLCD 42",
-                        "SuperPlasma 65",
-                        "SuperLCD 70"
-                    ]
-                };
-            }
-        });
-
-        tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
-
-        // assert
-        assert.deepEqual(tagBox.option("value"), ["HD Video Player", "SuperLCD 70"]);
-    });
-
-    test("Set default value to the dxTagBox editor when dataField is not contained in a formData", (assert) => {
-        // arrange, act
-        let $testContainer = $("#container"),
-            tagBox;
-
-        $testContainer.dxLayoutManager({
-            layoutData: {
-                name: "Test"
-            },
-            items: ["Test", {
-                dataField: "simpleProducts",
-                editorType: "dxTagBox",
-                editorOptions: {
-                    dataSource: [
-                        "HD Video Player",
-                        "SuperHD Video Player",
-                        "SuperPlasma 50",
-                        "SuperLED 50",
-                        "SuperLED 42",
-                        "SuperLCD 55",
-                        "SuperLCD 42",
-                        "SuperPlasma 65",
-                        "SuperLCD 70"
-                    ]
-                }
-            }]
-        });
-
-        tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
-
-        // assert
-        assert.deepEqual(tagBox.option("value"), []);
-    });
-
-    test("Update value in dxTagBox editor when data option is changed", (assert) => {
-        // arrange
-        let $testContainer = $("#container"),
-            tagBox,
-            layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
-            layoutData: {
-                simpleProducts: ["HD Video Player", "SuperLCD 70"]
-            },
-            customizeItem: (item) => {
-                item.editorType = "dxTagBox";
-                item.editorOptions = {
-                    dataSource: [
-                        "HD Video Player",
-                        "SuperHD Video Player",
-                        "SuperPlasma 50",
-                        "SuperLED 50",
-                        "SuperLED 42",
-                        "SuperLCD 55",
-                        "SuperLCD 42",
-                        "SuperPlasma 65",
-                        "SuperLCD 70"
-                    ]
-                };
-            }
-        }).dxLayoutManager("instance");
-
-        // act
-        layoutManager.updateData("simpleProducts", ["SuperLED 50", "SuperLCD 70", "SuperLCD 55"]);
-
-        tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
-
-        // assert
-        assert.deepEqual(tagBox.option("value"), ["SuperLED 50", "SuperLCD 70", "SuperLCD 55"]);
-        assert.ok(!layoutManager._isFieldValueChanged);
-    });
-
-    test("Update data option of layout manager when value is changed in the dxTagBox editor", (assert) => {
-        // arrange
-        let $testContainer = $("#container"),
-            tagBox,
-            layoutManager;
-
-        layoutManager = $testContainer.dxLayoutManager({
-            layoutData: {
-                simpleProducts: ["HD Video Player", "SuperLCD 70"]
-            },
-            customizeItem: (item) => {
-                item.editorType = "dxTagBox";
-                item.editorOptions = {
-                    dataSource: [
-                        "HD Video Player",
-                        "SuperHD Video Player",
-                        "SuperPlasma 50",
-                        "SuperLED 50",
-                        "SuperLED 42",
-                        "SuperLCD 55",
-                        "SuperLCD 42",
-                        "SuperPlasma 65",
-                        "SuperLCD 70"
-                    ]
-                };
-            }
-        }).dxLayoutManager("instance");
-
-        // act
-        tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
-        tagBox.option("value", ["SuperLCD 42", "SuperPlasma 50"]);
-
-        // assert
-        assert.deepEqual(layoutManager.option("layoutData.simpleProducts"), ["SuperLCD 42", "SuperPlasma 50"]);
-        assert.ok(!layoutManager._isValueChangedCalled);
     });
 
     test("Update editor with nested dataField when layoutData changed", (assert) => {
@@ -2988,24 +2539,22 @@ QUnit.module("Accessibility", () => {
     });
 
     test("Check aria-labelledby attribute for ariaTarget and id attr for label (T813296)", (assert) => {
-        const editorTypes = ["dxTextBox", "dxAutocomplete", "dxCalendar", "dxCheckBox", "dxColorBox", "dxDateBox", "dxDropDownBox", "dxLookup", "dxNumberBox", "dxRadioGroup", "dxSlider", "dxRangeSlider", "dxSelectBox", "dxSwitch", "dxTagBox", "dxTextArea"];
-        let items = editorTypes.map((editorType, index) => { return { dataField: `test${index}`, editorType: editorType }; });
+        const items = supportedEditors.map((editorType, index) => ({ dataField: `test${index}`, editorType: editorType }));
+        const layoutManager = $("#container").dxLayoutManager({ items }).dxLayoutManager("instance");
+        const editorClassesRequiringIdForLabel = ["dx-radiogroup", "dx-checkbox", "dx-lookup", "dx-slider", "dx-rangeslider", "dx-switch", "dx-htmleditor"]; // TODO: support "dx-calendar"
 
-        const $testContainer = $("#container").dxLayoutManager({
-            items: items
-        });
-
-        const editorClassesRequiringIdForLabel = ["dx-radiogroup", "dx-checkbox", "dx-lookup", "dx-slider", "dx-rangeslider", "dx-switch"]; // TODO: support "dx-calendar"
-        editorTypes.forEach((editorType) => {
+        items.forEach(({ dataField, editorType }) => {
+            const editor = layoutManager.getEditor(dataField);
+            const $ariaTarget = editor._getAriaTarget();
+            const $label = editor.$element().closest(`.${internals.FIELD_ITEM_CLASS}`).children().first();
             const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
-            const $editor = $testContainer.find(`.${editorClassName}`).eq(0);
-            const $ariaTarget = $editor[editorType]("instance")._getAriaTarget();
-            const $label = $editor.closest(`.${internals.FIELD_ITEM_CLASS}`).children().first();
 
             if(inArray(editorClassName, editorClassesRequiringIdForLabel) !== -1) {
-                assert.ok($ariaTarget.attr("aria-labelledby"), `aria-labeledby attribute ${editorClassName}`);
-                assert.ok($label.attr("id"), `label id attribute for ${editorClassName}`);
-                assert.strictEqual($ariaTarget.attr("aria-labelledby"), $label.attr("id"), "attributes aria-labelledby and labelID are equal");
+                if(!(!windowUtils.hasWindow() && editorType === "dxHtmlEditor")) {
+                    assert.ok($ariaTarget.attr("aria-labelledby"), `aria-labeledby attribute ${editorClassName}`);
+                    assert.ok($label.attr("id"), `label id attribute for ${editorClassName}`);
+                    assert.strictEqual($ariaTarget.attr("aria-labelledby"), $label.attr("id"), "attributes aria-labelledby and labelID are equal");
+                }
             } else {
                 assert.equal($ariaTarget.eq(0).attr("aria-labelledby"), null, `aria-labeledby attribute ${editorClassName}`);
                 assert.equal($label.attr("id"), null, `label id attribute for ${editorClassName}`);
@@ -3155,6 +2704,7 @@ QUnit.module("Button item", () => {
             "18.1",
             "Use the 'horizontalAlignment' option in button items instead."
         ], "Check warning parameters");
+        logStub.restore();
     });
 
     test("Horizontal alignment", (assert) => {
@@ -3203,5 +2753,441 @@ QUnit.module("Button item", () => {
         assert.equal($buttonItems.first().parent().css("justifyContent"), "flex-start", "By default buttons align by the center");
         assert.equal($buttonItems.eq(1).parent().css("justifyContent"), "center", "Top alignment accepted");
         assert.equal($buttonItems.last().parent().css("justifyContent"), "flex-end", "Bottom alignment accepted");
+    });
+});
+
+QUnit.module("Supported editors", () => {
+    const createFormWithSupportedEditors = commonEditorOptions =>
+        $("#container").dxLayoutManager({
+            items: supportedEditors.map(supportedEditor => ({
+                name: supportedEditor,
+                editorType: supportedEditor,
+                editorOptions: commonEditorOptions
+            }))
+        }).dxLayoutManager("instance");
+    const getEditorClassName = editorName => `dx-${editorName.substr(2, editorName.length - 1).toLowerCase()}`;
+    const checkSupportedEditors = callBack => supportedEditors.forEach(supportedEditor => callBack(supportedEditor, getEditorClassName(supportedEditor)));
+
+    test("Render supported editors with default options", (assert) => {
+        const layoutManager = createFormWithSupportedEditors();
+
+        checkSupportedEditors((supportedEditor, className) => {
+            const editorInstance = layoutManager.getEditor(supportedEditor);
+            assert.equal(editorInstance.NAME, supportedEditor, `editor's name of the ${supportedEditor}`);
+            assert.ok(editorInstance.$element().hasClass(className), `editor's css class of ${supportedEditor}`);
+        });
+    });
+
+    test("Editor type for items where this option is not defined", (assert) => {
+        const consoleErrorStub = sinon.stub(consoleUtils.logger, "error");
+        const layoutManager = $("#container").dxLayoutManager({
+            layoutData: {
+                name: "Patti"
+            },
+            items: [{
+                dataField: "name"
+            }, {
+                name: "Test Name"
+            }]
+        }).dxLayoutManager("instance");
+
+        assert.equal(layoutManager._items.length, 2, "items count");
+        assert.equal(layoutManager._items[0].editorType, "dxTextBox", "1 item");
+        assert.equal(layoutManager._items[1].editorType, undefined, "2 item has no dataField");
+
+        const errorMessage = consoleErrorStub.getCall(0).args[0];
+        assert.equal(consoleErrorStub.callCount, 1, "error was raised for item without dataField and editorType");
+        assert.equal(errorMessage.indexOf("E1035 - The editor cannot be created because of an internal error"), 0);
+        assert.ok(errorMessage.indexOf("See:\nhttp://js.devexpress.com/error/") > 0);
+        consoleErrorStub.restore();
+    });
+
+    test("Render RangeSlider", (assert) => {
+        const layoutManager = $("#container").dxLayoutManager({
+            layoutData: {
+                range: [1, 5]
+            },
+            items: [{
+                dataField: "range",
+                editorType: "dxRangeSlider"
+            }, {
+                dataField: "noRange",
+                editorType: "dxRangeSlider"
+            }]
+        }).dxLayoutManager("instance");
+
+        assert.deepEqual(layoutManager.getEditor("range").option("value"), [1, 5], "Editor's value correct");
+
+        layoutManager.getEditor("noRange").option("value", [2, 6]);
+        assert.deepEqual(layoutManager.option("layoutData.noRange"), [2, 6], "data updated");
+    });
+
+    test("Form with dxRadioGroup that items are defined via 'dataSource' option renders without error", (assert) => {
+        const $testContainer = $("#container");
+        let errorMessage;
+        let _error = consoleUtils.logger.log;
+
+        try {
+            consoleUtils.logger.error = (message) => {
+                errorMessage = message;
+            };
+
+            $testContainer.dxLayoutManager({
+                items: [{
+                    dataField: "test1",
+                    editorType: "dxRadioGroup",
+                    editorOptions: {
+                        dataSource: [1, 2, 3]
+                    }
+                }]
+            });
+
+            assert.ok(!errorMessage, "There is no error");
+        } finally {
+            consoleUtils.logger.error = _error;
+        }
+    });
+
+    test("Set value to the dxSelectBox editor from data option", (assert) => {
+        const $testContainer = $("#container");
+        $testContainer.dxLayoutManager({
+            layoutData: {
+                simpleProducts: "SuperLCD 70"
+            },
+            customizeItem: (item) => {
+                item.editorType = "dxSelectBox";
+                item.editorOptions = {
+                    dataSource: [
+                        "HD Video Player",
+                        "SuperHD Video Player",
+                        "SuperPlasma 50",
+                        "SuperLED 50",
+                        "SuperLED 42",
+                        "SuperLCD 55",
+                        "SuperLCD 42",
+                        "SuperPlasma 65",
+                        "SuperLCD 70"
+                    ]
+                };
+            }
+        });
+
+        const selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
+        assert.deepEqual(selectBox.option("value"), "SuperLCD 70");
+    });
+
+    test("Set default value to the dxSelectBox editor when dataField is not contained in a formData", (assert) => {
+        const $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            layoutData: {
+                name: "Test"
+            },
+            items: ["Test", {
+                dataField: "simpleProducts",
+                editorType: "dxSelectBox",
+                editorOptions: {
+                    dataSource: [
+                        "HD Video Player",
+                        "SuperHD Video Player",
+                        "SuperPlasma 50",
+                        "SuperLED 50",
+                        "SuperLED 42",
+                        "SuperLCD 55",
+                        "SuperLCD 42",
+                        "SuperPlasma 65",
+                        "SuperLCD 70"
+                    ]
+                }
+            }]
+        });
+
+        const selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
+        assert.deepEqual(selectBox.option("value"), null);
+    });
+
+    test("Update value in dxSelectBox editor when data option is changed", (assert) => {
+        const $testContainer = $("#container");
+        const layoutManager = $testContainer.dxLayoutManager({
+            layoutData: {
+                simpleProducts: "SuperLCD 70"
+            },
+            customizeItem: (item) => {
+                item.editorType = "dxSelectBox";
+                item.editorOptions = {
+                    dataSource: [
+                        "HD Video Player",
+                        "SuperHD Video Player",
+                        "SuperPlasma 50",
+                        "SuperLED 50",
+                        "SuperLED 42",
+                        "SuperLCD 55",
+                        "SuperLCD 42",
+                        "SuperPlasma 65",
+                        "SuperLCD 70"
+                    ]
+                };
+            }
+        }).dxLayoutManager("instance");
+
+        layoutManager.updateData("simpleProducts", "SuperLED 50");
+
+        const selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
+
+        assert.deepEqual(selectBox.option("value"), "SuperLED 50");
+        assert.ok(!layoutManager._isFieldValueChanged);
+    });
+
+    test("Set value to the dxTagBox editor from data option", (assert) => {
+        const $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            layoutData: {
+                simpleProducts: ["HD Video Player", "SuperLCD 70"]
+            },
+            customizeItem: (item) => {
+                item.editorType = "dxTagBox";
+                item.editorOptions = {
+                    dataSource: [
+                        "HD Video Player",
+                        "SuperHD Video Player",
+                        "SuperPlasma 50",
+                        "SuperLED 50",
+                        "SuperLED 42",
+                        "SuperLCD 55",
+                        "SuperLCD 42",
+                        "SuperPlasma 65",
+                        "SuperLCD 70"
+                    ]
+                };
+            }
+        });
+
+        const tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
+
+        assert.deepEqual(tagBox.option("value"), ["HD Video Player", "SuperLCD 70"]);
+    });
+
+    test("Set default value to the dxTagBox editor when dataField is not contained in a formData", (assert) => {
+        const $testContainer = $("#container");
+
+        $testContainer.dxLayoutManager({
+            layoutData: {
+                name: "Test"
+            },
+            items: ["Test", {
+                dataField: "simpleProducts",
+                editorType: "dxTagBox",
+                editorOptions: {
+                    dataSource: [
+                        "HD Video Player",
+                        "SuperHD Video Player",
+                        "SuperPlasma 50",
+                        "SuperLED 50",
+                        "SuperLED 42",
+                        "SuperLCD 55",
+                        "SuperLCD 42",
+                        "SuperPlasma 65",
+                        "SuperLCD 70"
+                    ]
+                }
+            }]
+        });
+
+        const tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
+
+        assert.deepEqual(tagBox.option("value"), []);
+    });
+
+    test("Update value in dxTagBox editor when data option is changed", (assert) => {
+        const $testContainer = $("#container");
+        const layoutManager = $testContainer.dxLayoutManager({
+            layoutData: {
+                simpleProducts: ["HD Video Player", "SuperLCD 70"]
+            },
+            customizeItem: (item) => {
+                item.editorType = "dxTagBox";
+                item.editorOptions = {
+                    dataSource: [
+                        "HD Video Player",
+                        "SuperHD Video Player",
+                        "SuperPlasma 50",
+                        "SuperLED 50",
+                        "SuperLED 42",
+                        "SuperLCD 55",
+                        "SuperLCD 42",
+                        "SuperPlasma 65",
+                        "SuperLCD 70"
+                    ]
+                };
+            }
+        }).dxLayoutManager("instance");
+
+        layoutManager.updateData("simpleProducts", ["SuperLED 50", "SuperLCD 70", "SuperLCD 55"]);
+
+        const tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
+
+        assert.deepEqual(tagBox.option("value"), ["SuperLED 50", "SuperLCD 70", "SuperLCD 55"]);
+        assert.ok(!layoutManager._isFieldValueChanged);
+    });
+
+    test("Update data option of layout manager when value is changed in the dxSelectBox editor", (assert) => {
+        // arrange
+        let $testContainer = $("#container"),
+            selectBox,
+            layoutManager;
+
+        layoutManager = $testContainer.dxLayoutManager({
+            layoutData: {
+                simpleProducts: "SuperLCD 70"
+            },
+            customizeItem: (item) => {
+                item.editorType = "dxSelectBox";
+                item.editorOptions = {
+                    dataSource: [
+                        "HD Video Player",
+                        "SuperHD Video Player",
+                        "SuperPlasma 50",
+                        "SuperLED 50",
+                        "SuperLED 42",
+                        "SuperLCD 55",
+                        "SuperLCD 42",
+                        "SuperPlasma 65",
+                        "SuperLCD 70"
+                    ]
+                };
+            }
+        }).dxLayoutManager("instance");
+
+        // act
+        selectBox = $testContainer.find(".dx-selectbox").first().dxSelectBox("instance");
+        selectBox.option("value", "SuperPlasma 50");
+
+        // assert
+        assert.deepEqual(layoutManager.option("layoutData.simpleProducts"), "SuperPlasma 50");
+        assert.ok(!layoutManager._isValueChangedCalled);
+    });
+
+    test("Update data option of layout manager when value is changed in the dxTagBox editor", (assert) => {
+        // arrange
+        let $testContainer = $("#container"),
+            tagBox,
+            layoutManager;
+
+        layoutManager = $testContainer.dxLayoutManager({
+            layoutData: {
+                simpleProducts: ["HD Video Player", "SuperLCD 70"]
+            },
+            customizeItem: (item) => {
+                item.editorType = "dxTagBox";
+                item.editorOptions = {
+                    dataSource: [
+                        "HD Video Player",
+                        "SuperHD Video Player",
+                        "SuperPlasma 50",
+                        "SuperLED 50",
+                        "SuperLED 42",
+                        "SuperLCD 55",
+                        "SuperLCD 42",
+                        "SuperPlasma 65",
+                        "SuperLCD 70"
+                    ]
+                };
+            }
+        }).dxLayoutManager("instance");
+
+        // act
+        tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
+        tagBox.option("value", ["SuperLCD 42", "SuperPlasma 50"]);
+
+        // assert
+        assert.deepEqual(layoutManager.option("layoutData.simpleProducts"), ["SuperLCD 42", "SuperPlasma 50"]);
+        assert.ok(!layoutManager._isValueChangedCalled);
+    });
+
+    test("Check that inner widgets change readOnly option at layoutManager optionChange", (assert) => {
+        const layoutManager = createFormWithSupportedEditors();
+        const $testContainer = layoutManager.$element();
+
+        checkSupportedEditors((editor, className) => {
+            assert.notOk($testContainer.find(`.${internals.FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is not read only`);
+        });
+
+        layoutManager.option("readOnly", true);
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok($testContainer.find(`.${internals.FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is read only`);
+        });
+    });
+
+    test("Check readOnly state for editor when readOnly is enabled in the editorOptions", (assert) => {
+        const layoutManager = createFormWithSupportedEditors({ readOnly: true });
+        const $testContainer = layoutManager.$element();
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok($testContainer.find(`.${internals.FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is read only`);
+        });
+    });
+
+    test("Editor's read only state should not be reset on the dxForm 'readOnly' option changing", (assert) => {
+        const layoutManager = createFormWithSupportedEditors({ readOnly: true });
+        const $testContainer = layoutManager.$element();
+
+        layoutManager.option("readOnly", true);
+        layoutManager.option("readOnly", false);
+
+        checkSupportedEditors((editor, className) => {
+            assert.ok($testContainer.find(`.${internals.FIELD_ITEM_CLASS} .${className}`).hasClass(READONLY_STATE_CLASS), `${editor}: editor is read only`);
+        });
+    });
+
+    test("Check the Html Editor with a value and toolbar items", (assert) => {
+        const expectedText = "This <b>text</b> for testing the <i>Html Editor</i>";
+        const layoutManager = $("#container").dxLayoutManager({
+            layoutData: {
+                description: expectedText
+            },
+            items: [{
+                dataField: "description",
+                editorType: "dxHtmlEditor",
+                editorOptions: {
+                    toolbar: {
+                        items: ["undo", "redo"]
+                    }
+                }
+            }]
+        }).dxLayoutManager("instance");
+
+        assert.equal(layoutManager.getEditor("description").option("value"), expectedText, "value of editor");
+        if(windowUtils.hasWindow()) {
+            assert.equal($(".dx-htmleditor-content").html(), "<p>This <strong>text</strong> for testing the <em>Html Editor</em></p>", "HtmlEditor content");
+            assert.equal($(".dx-undo-format.dx-button").length, 1, "the undo button of toolbar is rendered");
+            assert.equal($(".dx-redo-format.dx-button").length, 1, "the redo button of toolbar is rendered");
+        }
+    });
+
+    test("Check updating the layoutData when the value of the HtmlEditor is changed", (assert) => {
+        const layoutManager = $("#container").dxLayoutManager({
+            layoutData: {
+                description: "This <b>text</b> for testing the <i>Html Editor</i>"
+            },
+            items: [{
+                dataField: "description",
+                editorType: "dxHtmlEditor",
+                editorOptions: {
+                    toolbar: {
+                        items: ["undo", "redo"]
+                    }
+                }
+            }]
+        }).dxLayoutManager("instance");
+
+        const editor = layoutManager.getEditor("description");
+        editor.option("value", "new <b>value</b>");
+
+        assert.deepEqual(layoutManager.option("layoutData"), { description: "new <b>value</b>" }, "layoutData");
+        if(windowUtils.hasWindow()) {
+            assert.equal($(".dx-htmleditor-content").html(), "<p>new <strong>value</strong></p>", "HtmlEditor content");
+        }
     });
 });

@@ -1342,6 +1342,59 @@ QUnit.test("Expand adaptive detail row after scrolling if scrolling mode is virt
     assert.strictEqual(dataGrid.getVisibleRows()[2].key, 1, "row 2 key");
 });
 
+QUnit.test("Expand/Collapse adaptive detail row after scrolling if scrolling mode and rowRendering are virtual and paging.enabled is false (T815886)", function(assert) {
+    var array = [],
+        visibleRows,
+        expandedRowVisibleIndex;
+
+    for(var i = 0; i < 100; i++) {
+        array.push({ id: i, value: "text" + i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            width: 200,
+            height: 200,
+            dataSource: array,
+            keyExpr: "id",
+            columnHidingEnabled: true,
+            paging: {
+                enabled: false
+            },
+            scrolling: {
+                mode: "virtual",
+                rowRenderingMode: "virtual",
+                useNative: false
+            },
+            columns: [
+                "value",
+                { dataField: "hidden", width: 1000 }
+            ],
+        }).dxDataGrid("instance"),
+        dataController = dataGrid.getController("data");
+
+    // act
+    dataGrid.navigateToRow(42);
+    dataController.toggleExpandAdaptiveDetailRow(42);
+
+    // arrange
+    visibleRows = dataController.getVisibleRows();
+    expandedRowVisibleIndex = dataController.getRowIndexByKey(42);
+    // assert
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].rowType, "detailAdaptive", "Adaptive row");
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].key, 42, "Check adaptive row key");
+
+    // act
+    dataController.toggleExpandAdaptiveDetailRow(42);
+
+    // arrange
+    visibleRows = dataController.getVisibleRows();
+    expandedRowVisibleIndex = dataController.getRowIndexByKey(42);
+    // assert
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].rowType, "data", "Adaptive row");
+    assert.equal(visibleRows[expandedRowVisibleIndex + 1].key, 43, "Check next row key");
+});
+
 // T315857
 QUnit.test("Editing should work with classes as data objects", function(assert) {
     // arrange
@@ -3878,6 +3931,59 @@ QUnit.test("Test skipFocusedRowNavigation option using focusedRowKey", function(
     assert.equal(count, 1, "skipFocusedRowNavigation invokes count");
 });
 
+QUnit.test("Test 'autoNavigateToFocusedRow' option", function(assert) {
+    // arrange
+    var data = [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 },
+            { name: "Ben", phone: "454333", room: 4 },
+            { name: "Sean", phone: "454555", room: 3 },
+            { name: "Smith", phone: "454666", room: 2 },
+            { name: "Zeb", phone: "454777", room: 1 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 80,
+            dataSource: data,
+            keyExpr: "name",
+            autoNavigateToFocusedRow: false,
+            focusedRowEnabled: true,
+            focusedRowKey: "Smith",
+            paging: {
+                pageSize: 2
+            }
+        }).dxDataGrid("instance");
+
+    // act, assert - focusedRowKey
+    dataGrid.option("focusedRowKey", "Smith");
+    this.clock.tick();
+    assert.equal(dataGrid.pageIndex(), 0, "Page index not changed");
+    assert.equal(dataGrid.option("focusedRowKey"), "Smith", "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+
+    // act, assert - paging
+    dataGrid.pageIndex(1);
+    this.clock.tick();
+    assert.equal(dataGrid.pageIndex(), 1, "Page index");
+    assert.equal(dataGrid.option("focusedRowKey"), "Smith", "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+
+    // act, assert - sorting
+    dataGrid.columnOption("phone", { sortOrder: "desc" });
+    this.clock.tick();
+    assert.equal(dataGrid.pageIndex(), 1, "Page index");
+    assert.equal(dataGrid.option("focusedRowKey"), "Smith", "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+
+    // arrange
+    dataGrid.clearSorting();
+    // act, assert - filtering
+    dataGrid.filter(["phone", "startsWith", "454"]);
+    this.clock.tick();
+    assert.equal(dataGrid.pageIndex(), 0, "Page index changed");
+    assert.equal(dataGrid.option("focusedRowKey"), "Smith", "focusedRowKey");
+    assert.equal(dataGrid.option("focusedRowIndex"), -1, "focusedRowIndex");
+});
+
 QUnit.test("Focused row should be visible if it's on the first page and page height larger than container one (T756177)", function(assert) {
     // arrange
     var data = [
@@ -3945,6 +4051,71 @@ QUnit.test("Focused row should be visible if scrolling mode is virtual and rowRe
     assert.equal(focusedRowChangedArgs.length, 1, "focusedRowChanged event is called once");
     assert.ok($(focusedRowChangedArgs[0].rowElement).hasClass("dx-row-focused"), "focusedRowChanged event has correct rowElement");
     assert.equal(focusedRowChangedArgs[0].rowIndex, 149, "focusedRowChanged event has correct rowElement");
+});
+
+QUnit.test("DataGrid - navigateToRow method should work if rowRenderingMode is 'virtual' and paging is disabled (T820359)", function(assert) {
+    // arrange
+    var data = [],
+        navigateRowKey = 25;
+
+    for(var i = 0; i < 30; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 200,
+        keyExpr: "id",
+        dataSource: data,
+        paging: {
+            enabled: false
+        },
+        scrolling: {
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        loadingTimeout: undefined
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.navigateToRow(navigateRowKey);
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, "navigated row is visible");
+});
+
+QUnit.test("DataGrid - Focus row by visible content in 'rowRenderingMode' should not render rows (T820296)", function(assert) {
+    // arrange
+    var data = [];
+
+    for(var i = 0; i < 30; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 300,
+        keyExpr: "id",
+        dataSource: data,
+        focusedRowEnabled: true,
+        paging: {
+            enabled: false
+        },
+        scrolling: {
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+    }).dxDataGrid("instance");
+
+    this.clock.tick();
+
+    // act
+    $(dataGrid.getCellElement(7, 0))
+        .trigger("dxpointerdown");
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].key, 1, "Visible row is not changed");
 });
 
 // T803784
@@ -5067,6 +5238,32 @@ QUnit.test("Freespace row have the correct height when using master-detail with 
 
     // assert
     assert.roughEqual($dataGrid.find(".dx-freespace-row").eq(2).height(), expectedFreeSpaceRowHeight, 1, "Height of the freeSpace row");
+});
+
+QUnit.test("DataGrid should apply columns that are dynamically added to a band (T815945)", function(assert) {
+    // arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [{ name: "Alex", age: 22 }, { name: "Sahra", age: 22 }],
+        columns: [{
+            caption: "Band",
+        }]
+    }).dxDataGrid("instance");
+    this.clock.tick();
+
+    // act
+    dataGrid.option("columns[0].columns", [{ dataField: "name", ownerBand: 0 }]);
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGridWrapper.headers.getHeaderItemTextContent(1, 0), "Name", "name is applied");
+
+    // act
+    dataGrid.columnOption("Band", "columns", [{ dataField: "name", ownerBand: 0 }, { dataField: "age", ownerBand: 0 }]);
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGridWrapper.headers.getHeaderItemTextContent(1, 0), "Name", "name is applied");
+    assert.equal(dataGridWrapper.headers.getHeaderItemTextContent(1, 1), "Age", "age is applied");
 });
 
 QUnit.test("scroll position should not be reseted if virtual scrolling and cell template cause relayout", function(assert) {
@@ -7879,6 +8076,41 @@ QUnit.test("search text when scrolling mode virtual and one column is not define
     );
 
     assert.equal(dataGrid.getVisibleRows().length, 1, "items were filtered");
+});
+
+// T820316
+QUnit.test("Error should not be thrown when searching text in calculated column with lookup", function(assert) {
+    var visibleRows,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ text: 'text', num: 1 }, { text: 'text', num: 2 }],
+            searchPanel: {
+                visible: true
+            },
+            columns: [{
+                calculateCellValue: function(rowData) {
+                    return rowData.num;
+                },
+                allowFiltering: true,
+                lookup: {
+                    dataSource: [{ id: 1, name: 'one' }, { id: 2, name: 'two' }],
+                    valueExpr: 'id',
+                    displayExpr: 'name'
+                }
+            }, "text"]
+        });
+
+    try {
+        dataGrid.option("searchPanel.text", "one");
+        this.clock.tick();
+    } catch(e) {
+        assert.ok(false, "error was thrown");
+    }
+
+    visibleRows = dataGrid.getVisibleRows();
+
+    assert.equal(visibleRows.length, 1, "one row is visible");
+    assert.deepEqual(visibleRows[0].data, { text: 'text', num: 1 }, "visible row's data");
 });
 
 // T583229
@@ -10931,6 +11163,50 @@ QUnit.testInActiveWindow("First cell of added row should be focused after adding
     // assert
     assert.ok($insertedCell.hasClass("dx-editor-cell"), "inserted row's cell has editor");
     assert.ok($insertedCell.hasClass("dx-focused"), "inserted row's cell is focused");
+});
+
+QUnit.test("DataGrid should update editor values in Popup Edit Form if its data was reloaded (T815443)", function(assert) {
+    // arrange
+    var $popupEditorInput,
+        loadCallCount = 0,
+        changeEditorValue,
+        data = [{ "name": "Alex", "age": 22 }],
+        dataGrid = createDataGrid({
+            dataSource: {
+                key: "name",
+                load: () => {
+                    if(loadCallCount > 0) {
+                        data[0]["name"] = "foo";
+                    }
+                    loadCallCount++;
+                    return data;
+                }
+            },
+            editing: {
+                mode: "popup",
+                allowUpdating: true
+            },
+            onEditorPreparing: function(args) {
+                if(args.parentType === "dataRow" && args.dataField === "age") {
+                    changeEditorValue = () => {
+                        args.setValue(30);
+                        args.component.getDataSource().reload();
+                    };
+                }
+            },
+        });
+    this.clock.tick();
+
+    // act
+    dataGrid.editRow(0);
+    this.clock.tick();
+
+    changeEditorValue();
+    this.clock.tick();
+
+    // assert
+    $popupEditorInput = $(".dx-popup-content").find(".dx-texteditor").eq(0).find("input").eq(0);
+    assert.equal($popupEditorInput.val(), "foo", "value changed");
 });
 
 QUnit.module("API methods", baseModuleConfig);
@@ -16842,6 +17118,40 @@ QUnit.test("Focus row element", function(assert) {
         columnIndex: 0,
         rowIndex: 2
     }, "Check that correct cell is focused");
+});
+
+QUnit.testInActiveWindow("DataGrid - Master grid should not render it's overlay in detail grid (T818373)", function(assert) {
+    // arrange
+    var detailGrid,
+        detailRowsViewWrapper = new RowsViewWrapper(".internal-grid");
+
+    this.dataGrid.option({
+        dataSource: [{ id: 0, value: "value 1", text: "Awesome" }],
+        keyExpr: "id",
+        masterDetail: {
+            enabled: true,
+            template: function(container) {
+                detailGrid = $("<div>")
+                    .addClass("internal-grid")
+                    .dxDataGrid({
+                        dataSource: [{ field1: "test1", field2: "test2" }],
+                        onFocusedCellChanging: e => e.isHighlighted = true
+                    })
+                    .appendTo(container).dxDataGrid("instance");
+            }
+        }
+    });
+    this.clock.tick();
+
+    // act
+    this.dataGrid.expandRow(0);
+    this.clock.tick();
+    $(detailGrid.getCellElement(0, 0)).focus();
+    this.clock.tick();
+
+    // assert
+    assert.equal(detailRowsViewWrapper.findFocusOverlay().length, 1, "Detail grid has one focus overlay");
+    assert.ok(detailRowsViewWrapper.isFocusOverlayVisible(), "Detail grid focus overlay is visible");
 });
 
 QUnit.test("Focus row element should support native DOM", function(assert) {

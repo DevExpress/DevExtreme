@@ -2283,22 +2283,23 @@ testModule("target", moduleConfig, () => {
                 return [];
             },
 
-            _setDefaultOptions: function() {
-                this.callBase();
-
-                this.option({
-                    position: { of: $(window) },
-                    animation: {
-                        show: {
-                            to: { position: { of: $(window) } },
-                            from: { position: { of: $(window) } }
-                        },
-                        hide: {
-                            to: { position: { of: $(window) } },
-                            from: { position: { of: $(window) } }
+            _getDefaultOptions: function() {
+                return $.extend(
+                    this.callBase(),
+                    {
+                        position: { of: $(window) },
+                        animation: {
+                            show: {
+                                to: { position: { of: $(window) } },
+                                from: { position: { of: $(window) } }
+                            },
+                            hide: {
+                                to: { position: { of: $(window) } },
+                                from: { position: { of: $(window) } }
+                            }
                         }
                     }
-                });
+                );
             }
 
         });

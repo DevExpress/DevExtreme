@@ -555,4 +555,21 @@ QUnit.module("live update", {
 
         assert.equal(contentReadySpy.callCount, 2);
     });
+
+    QUnit.test("repaintChangesOnly, item selection after selected item removing (T821093)", function(assert) {
+        const list = this.createList({
+            repaintChangesOnly: true,
+            selectionMode: "single",
+            selectedItemKeys: [0]
+        });
+        const store = list.getDataSource().store();
+
+        store.push([{
+            type: "remove",
+            key: 0
+        }]);
+
+        $(".dx-list-item:eq(0)").trigger("dxclick");
+        assert.deepEqual(list.option("selectedItemKeys"), [1]);
+    });
 });

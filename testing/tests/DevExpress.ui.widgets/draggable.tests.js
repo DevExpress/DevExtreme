@@ -89,11 +89,40 @@ QUnit.test("'immediate' option", function(assert) {
 
 QUnit.module("Events", moduleConfig);
 
+QUnit.test("component arg in events if component option is defined", function(assert) {
+    // arrange
+    const myComponent = $("<div>").dxScrollView().dxScrollView("instance");
+
+    const options = {
+        component: myComponent,
+        onDragStart: sinon.spy(),
+        onDragMove: sinon.spy(),
+        onDragEnd: sinon.spy()
+    };
+
+    this.createDraggable(options);
+
+    // act
+    this.pointer.down().move(0, 20).up();
+
+    // assert
+    assert.strictEqual(options.onDragStart.getCall(0).args[0].component, myComponent, "onDragStart component");
+    assert.strictEqual(options.onDragStart.getCall(0).args[0].element, myComponent.element(), "onDragStart element");
+
+    assert.strictEqual(options.onDragMove.getCall(0).args[0].component, myComponent, "onDragMove component");
+    assert.strictEqual(options.onDragMove.getCall(0).args[0].element, myComponent.element(), "onDragMove element");
+
+    assert.strictEqual(options.onDragEnd.getCall(0).args[0].component, myComponent, "onDragEnd component");
+    assert.strictEqual(options.onDragEnd.getCall(0).args[0].fromComponent, myComponent, "onDragEnd fromComponent");
+    assert.strictEqual(options.onDragEnd.getCall(0).args[0].toComponent, myComponent, "onDragEnd toComponent");
+    assert.strictEqual(options.onDragEnd.getCall(0).args[0].element, myComponent.element(), "onDragEnd element");
+});
+
 QUnit.test("onDragStart - check args", function(assert) {
     // arrange
     let onDragStartSpy = sinon.spy();
 
-    this.createDraggable({
+    let draggable = this.createDraggable({
         onDragStart: onDragStartSpy
     });
 
@@ -103,6 +132,7 @@ QUnit.test("onDragStart - check args", function(assert) {
     // assert
     assert.ok(onDragStartSpy.calledOnce, "event fired");
     assert.deepEqual($(onDragStartSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+    assert.strictEqual(onDragStartSpy.getCall(0).args[0].component, draggable, "component");
 });
 
 QUnit.test("'onDragStart' option changing", function(assert) {
@@ -165,27 +195,29 @@ QUnit.test("'onDragMove' option changing", function(assert) {
     assert.deepEqual($(onDragMoveSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
 });
 
-QUnit.test("onDragMove - check args when cross-component dragging", function(assert) {
-    // arrange
-    let onDragMoveSpy = sinon.spy();
+["same", "another"].forEach(function(group) {
+    QUnit.test("onDragMove - check args when cross-component dragging to " + group + " group", function(assert) {
+        // arrange
+        let onDragMoveSpy = sinon.spy();
 
-    let draggable1 = this.createDraggable({
-        onDragMove: onDragMoveSpy,
-        group: "shared"
+        let draggable1 = this.createDraggable({
+            onDragMove: onDragMoveSpy,
+            group: "shared"
+        });
+
+        let draggable2 = this.createDraggable({
+            group: group === "same" ? "shared" : "another"
+        }, $("#items"));
+
+        // act
+        this.pointer.down().move(0, 300).move(0, 10);
+
+        // assert
+        assert.strictEqual(onDragMoveSpy.callCount, 2, "event was called twice");
+        assert.deepEqual($(onDragMoveSpy.getCall(1).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
+        assert.deepEqual(onDragMoveSpy.getCall(1).args[0].fromComponent, draggable1, "fromComponent");
+        assert.deepEqual(onDragMoveSpy.getCall(1).args[0].toComponent, group === "same" ? draggable2 : draggable1, "toComponent");
     });
-
-    let draggable2 = this.createDraggable({
-        group: "shared"
-    }, $("#items"));
-
-    // act
-    this.pointer.down().move(0, 300).move(0, 10);
-
-    // assert
-    assert.strictEqual(onDragMoveSpy.callCount, 2, "event was called twice");
-    assert.deepEqual($(onDragMoveSpy.getCall(1).args[0].itemElement).get(0), this.$element.get(0), "itemElement");
-    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].fromComponent, draggable1, "fromComponent");
-    assert.deepEqual(onDragMoveSpy.getCall(1).args[0].toComponent, draggable2, "toComponent");
 });
 
 QUnit.test("onDragEnd - check args", function(assert) {
@@ -562,8 +594,8 @@ QUnit.test("'boundary' option as element", function(assert) {
 
 QUnit.test("'boundary' option as window", function(assert) {
     var $area = $(window),
-        areaWidth = $area.width(),
-        areaHeight = $area.height();
+        areaWidth = $area.outerWidth(),
+        areaHeight = $area.outerHeight();
 
     this.createDraggable({
         autoScroll: false,
@@ -897,6 +929,7 @@ QUnit.test("Clone an element when dragging", function(assert) {
     assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "original element hasn't dragging class");
     assert.notOk($cloneElement.hasClass("dx-draggable-source"), "cloned element hasn't source class");
     assert.ok($cloneElement.hasClass("dx-draggable-clone"), "cloned element has dragging class");
+    assert.strictEqual($cloneElement.css("z-index"), "10000", "z-index of the cloned element");
     this.checkPosition(10, 10, assert, $cloneElement);
     this.checkPosition(0, 0, assert);
 });
@@ -1065,16 +1098,16 @@ QUnit.test("Remove element from the container when disposing", function(assert) 
 });
 
 
-QUnit.module("template", moduleConfig);
+QUnit.module("dragTemplate", moduleConfig);
 
-QUnit.test("Set template", function(assert) {
+QUnit.test("Set dragTemplate", function(assert) {
     // arrange
     var template = sinon.spy(function() {
         return $("<div id='myDragElement'/>").text("test");
     });
 
     this.createDraggable({
-        template: template
+        dragTemplate: template
     });
 
     // act
@@ -1090,7 +1123,7 @@ QUnit.test("Set template", function(assert) {
 QUnit.test("Remove my element after the drop end", function(assert) {
     // arrange
     this.createDraggable({
-        template: function() {
+        dragTemplate: function() {
             return $("<div id='myDragElement'/>").text("test");
         }
     });
@@ -1110,7 +1143,7 @@ QUnit.test("Remove my element after the drop end", function(assert) {
 QUnit.test("Remove my element when disposing", function(assert) {
     // arrange
     this.createDraggable({
-        template: function() {
+        dragTemplate: function() {
             return $("<div id='myDragElement'/>").text("test");
         }
     });
@@ -1245,12 +1278,6 @@ QUnit.module("autoScroll", $.extend({}, moduleConfig, {
 
 QUnit.test("Vertical scrolling", function(assert) {
     // arrange
-    var etalonScrollTop = 0,
-        scrollSensitivity = 10,
-        scrollSpeed = 20,
-        speedIncreasePerPixel = scrollSpeed / scrollSensitivity,
-        speed = 0;
-
     this.createDraggable({
         scrollSensitivity: 10,
         scrollSpeed: 20
@@ -1264,39 +1291,37 @@ QUnit.test("Vertical scrolling", function(assert) {
 
     assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
 
-    for(let i = 1; i < 10; i++) {
-        this.pointer.move(0, 1);
-        this.clock.tick(10);
-
-        speed += speedIncreasePerPixel;
-        etalonScrollTop += speed;
-
-        assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
-    }
-
-    this.pointer.down().move(0, 1);
+    this.pointer.move(0, 1);
     this.clock.tick(10);
 
-    assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
+    assert.equal($("#scrollable").scrollTop(), 1, "scrollTop");
 
-    speed = 0;
-
-    this.pointer.move(0, -240);
+    this.pointer.down().move(0, 4);
     this.clock.tick(10);
 
-    assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
+    assert.equal($("#scrollable").scrollTop(), 6, "scrollTop");
 
-    for(let i = 1; i < 10; i++) {
-        this.pointer.move(0, -1);
-        this.clock.tick(10);
+    this.pointer.down().move(0, 4);
+    this.clock.tick(10);
 
-        speed += speedIncreasePerPixel;
-        etalonScrollTop -= speed;
+    assert.equal($("#scrollable").scrollTop(), 23, "scrollTop");
 
-        assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
-    }
+    this.pointer.move(0, -239);
+    this.clock.tick(10);
 
-    this.pointer.down().move(0, -1);
+    assert.equal($("#scrollable").scrollTop(), 23, "scrollTop");
+
+    this.pointer.move(0, -1);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), 22, "scrollTop");
+
+    this.pointer.down().move(0, -4);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), 17, "scrollTop");
+
+    this.pointer.down().move(0, -4);
     this.clock.tick(10);
 
     assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
@@ -1304,12 +1329,7 @@ QUnit.test("Vertical scrolling", function(assert) {
 
 QUnit.test("onDragMove should be fired during scrolling", function(assert) {
     // arrange
-    var etalonScrollTop = 0,
-        scrollSensitivity = 10,
-        scrollSpeed = 20,
-        speedIncreasePerPixel = scrollSpeed / scrollSensitivity,
-        onDragMoveSpy = sinon.spy(),
-        speed = speedIncreasePerPixel;
+    var onDragMoveSpy = sinon.spy();
 
     this.createDraggable({
         scrollSensitivity: 10,
@@ -1330,19 +1350,12 @@ QUnit.test("onDragMove should be fired during scrolling", function(assert) {
     for(let i = 1; i < 10; i++) {
         this.clock.tick(10);
 
-        etalonScrollTop += speed;
-
-        assert.equal($("#scrollable").scrollTop(), etalonScrollTop, "scrollTop");
         assert.equal(onDragMoveSpy.callCount, i + 2, "onDragMove called");
     }
 });
 
 QUnit.test("Horizontal scrolling", function(assert) {
     // arrange
-    var etalonScrollLeft = 0,
-        speedIncreasePerPixel = 2,
-        speed = 0;
-
     this.createDraggable({
         scrollSensitivity: 10,
         scrollSpeed: 20
@@ -1356,39 +1369,37 @@ QUnit.test("Horizontal scrolling", function(assert) {
 
     assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
 
-    for(let i = 1; i < 10; i++) {
-        this.pointer.move(1, 0);
-        this.clock.tick(10);
-
-        speed += speedIncreasePerPixel;
-        etalonScrollLeft += speed;
-
-        assert.equal($("#scrollable").scrollLeft(), etalonScrollLeft, "scrollLeft");
-    }
-
-    this.pointer.down().move(1, 0);
+    this.pointer.move(1, 0);
     this.clock.tick(10);
 
-    assert.equal($("#scrollable").scrollLeft(), etalonScrollLeft, "scrollLeft");
+    assert.equal($("#scrollable").scrollLeft(), 1, "scrollLeft");
 
-    speed = 0;
-
-    this.pointer.move(-240, 0);
+    this.pointer.down().move(4, 0);
     this.clock.tick(10);
 
-    assert.equal($("#scrollable").scrollLeft(), etalonScrollLeft, "scrollLeft");
+    assert.equal($("#scrollable").scrollLeft(), 6, "scrollLeft");
 
-    for(let i = 1; i < 10; i++) {
-        this.pointer.move(-1, 0);
-        this.clock.tick(10);
+    this.pointer.down().move(4, 0);
+    this.clock.tick(10);
 
-        speed += speedIncreasePerPixel;
-        etalonScrollLeft -= speed;
+    assert.equal($("#scrollable").scrollLeft(), 23, "scrollLeft");
 
-        assert.equal($("#scrollable").scrollLeft(), etalonScrollLeft, "scrollLeft");
-    }
+    this.pointer.move(-239, 0);
+    this.clock.tick(10);
 
-    this.pointer.down().move(-1, 0);
+    assert.equal($("#scrollable").scrollLeft(), 23, "scrollLeft");
+
+    this.pointer.move(-1, 0);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 22, "scrollLeft");
+
+    this.pointer.down().move(-4, 0);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 17, "scrollLeft");
+
+    this.pointer.down().move(-4, 0);
     this.clock.tick(10);
 
     assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
@@ -1396,69 +1407,65 @@ QUnit.test("Horizontal scrolling", function(assert) {
 
 QUnit.test("Horizontal and vertical scrolling", function(assert) {
     // arrange
-    var etalonScrollValue = 0,
-        speedIncreasePerPixel = 2,
-        speed = 2;
-
     this.createDraggable({
         scrollSensitivity: 10,
         scrollSpeed: 20
     });
 
     // act, assert
-    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
     assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
 
     this.pointer.down().move(240, 240);
     this.clock.tick(10);
 
-    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
     assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
-
-    for(let i = 1; i < 10; i++) {
-        this.pointer.move(1, 1);
-        this.clock.tick(10);
-
-        etalonScrollValue += speed;
-        speed += speedIncreasePerPixel;
-
-        assert.equal($("#scrollable").scrollLeft(), etalonScrollValue, "scrollLeft");
-        assert.equal($("#scrollable").scrollTop(), etalonScrollValue, "scrollTop");
-    }
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
 
     this.pointer.move(1, 1);
     this.clock.tick(10);
 
-    assert.equal($("#scrollable").scrollLeft(), etalonScrollValue, "scrollLeft");
-    assert.equal($("#scrollable").scrollTop(), etalonScrollValue, "scrollTop");
+    assert.equal($("#scrollable").scrollTop(), 1, "scrollTop");
+    assert.equal($("#scrollable").scrollLeft(), 1, "scrollLeft");
 
-    speed = 0;
-
-    this.pointer.move(-240, -240);
+    this.pointer.down().move(4, 4);
     this.clock.tick(10);
 
-    assert.equal($("#scrollable").scrollLeft(), etalonScrollValue, "scrollLeft");
-    assert.equal($("#scrollable").scrollTop(), etalonScrollValue, "scrollTop");
+    assert.equal($("#scrollable").scrollTop(), 6, "scrollTop");
+    assert.equal($("#scrollable").scrollLeft(), 6, "scrollLeft");
 
-    for(let i = 1; i < 10; i++) {
-        this.pointer.move(-1, -1);
-        this.clock.tick(10);
+    this.pointer.down().move(4, 4);
+    this.clock.tick(10);
 
-        speed += speedIncreasePerPixel;
-        etalonScrollValue -= speed;
+    assert.equal($("#scrollable").scrollTop(), 23, "scrollTop");
+    assert.equal($("#scrollable").scrollLeft(), 23, "scrollLeft");
 
-        assert.equal($("#scrollable").scrollLeft(), etalonScrollValue, "scrollLeft");
-        assert.equal($("#scrollable").scrollTop(), etalonScrollValue, "scrollTop");
-    }
+    this.pointer.move(-239, -239);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), 23, "scrollTop");
+    assert.equal($("#scrollable").scrollLeft(), 23, "scrollLeft");
 
     this.pointer.move(-1, -1);
     this.clock.tick(10);
 
-    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 22, "scrollTop");
+    assert.equal($("#scrollable").scrollLeft(), 22, "scrollLeft");
+
+    this.pointer.down().move(-4, -4);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollTop(), 17, "scrollTop");
+    assert.equal($("#scrollable").scrollLeft(), 17, "scrollLeft");
+
+    this.pointer.down().move(-4, -4);
+    this.clock.tick(10);
+
     assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
 });
 
-QUnit.test("Vertical scrolling should not start if on drag start cursor ", function(assert) {
+QUnit.test("Vertical scrolling should not start if on drag start cursor is close to the scrollable border", function(assert) {
     this.createDraggable({
         scrollSensitivity: 10,
         scrollSpeed: 20
@@ -1475,7 +1482,7 @@ QUnit.test("Vertical scrolling should not start if on drag start cursor ", funct
     assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
 });
 
-QUnit.test("Horizontal scrolling should not start if on drag start cursor ", function(assert) {
+QUnit.test("Horizontal scrolling should not start if on drag start cursor is close to the scrollable border", function(assert) {
     this.createDraggable({
         scrollSensitivity: 10,
         scrollSpeed: 20
@@ -1511,12 +1518,12 @@ QUnit.test("Scrolling with scrollView", function(assert) {
     this.pointer.move(1, 1);
     this.clock.tick(10);
 
-    assert.deepEqual(scrollView.scrollOffset(), { top: 2, left: 2 }, "scrollOffset");
+    assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, "scrollOffset");
 
     this.pointer.move(-1, -1);
     this.clock.tick(10);
 
-    assert.deepEqual(scrollView.scrollOffset(), { top: 2, left: 2 }, "scrollOffset");
+    assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, "scrollOffset");
 });
 
 QUnit.test("Autoscroll should work fine if element was dropped and dragged again", function(assert) {
@@ -1530,17 +1537,35 @@ QUnit.test("Autoscroll should work fine if element was dropped and dragged again
     assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
     assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
 
-    this.pointer.down().move(240, 240);
+    this.pointer.move(245, 245).down();
     this.clock.tick(10);
 
     assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
     assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
 
-    this.pointer.up().down().move(1, 1);
+    this.pointer.move(-5, -5);
     this.clock.tick(10);
 
-    assert.equal($("#scrollable").scrollLeft(), 4, "scrollLeft");
-    assert.equal($("#scrollable").scrollTop(), 4, "scrollTop");
+    assert.equal($("#scrollable").scrollLeft(), 0, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 0, "scrollTop");
+
+    this.pointer.move(1, 1);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 1, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 1, "scrollTop");
+
+    this.pointer.up().move(1, 1);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 1, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 1, "scrollTop");
+
+    this.pointer.down().move(3, 3);
+    this.clock.tick(10);
+
+    assert.equal($("#scrollable").scrollLeft(), 1, "scrollLeft");
+    assert.equal($("#scrollable").scrollTop(), 1, "scrollTop");
 });
 
 QUnit.module("cursorOffset", moduleConfig);
