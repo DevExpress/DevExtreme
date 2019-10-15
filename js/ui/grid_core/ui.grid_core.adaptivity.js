@@ -276,7 +276,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             colWidth;
 
         if(widthOption && widthOption !== "auto" && !this._isPercentWidth(widthOption)) {
-            return widthOption;
+            return parseFloat(widthOption);
         }
 
         colWidth = this._calculateColumnWidth(column, containerWidth, contentColumns, columnsCanFit);
