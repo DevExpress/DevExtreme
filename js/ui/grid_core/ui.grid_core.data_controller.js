@@ -673,7 +673,7 @@ module.exports = {
                     rowIndices.sort(function(a, b) { return a - b; });
 
                     for(var i = 0; i < rowIndices.length; i++) {
-                        if(rowIndices[i] < 0) {
+                        if(rowIndices[i] + rowIndexDelta < 0) {
                             rowIndices.splice(i, 1);
                             i--;
                         }

@@ -1096,9 +1096,11 @@ module.exports = {
                         newExpandRowIndex++;
                     }
 
+                    var rowIndexDelta = that.getRowIndexDelta();
+
                     that.updateItems({
                         changeType: "update",
-                        rowIndices: [oldExpandRowIndex, newExpandRowIndex]
+                        rowIndices: [oldExpandRowIndex - rowIndexDelta, newExpandRowIndex - rowIndexDelta]
                     });
                 },
 
