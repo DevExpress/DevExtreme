@@ -4,9 +4,7 @@ import Sortable from "../sortable";
 
 let COMMAND_HANDLE_CLASS = "dx-command-drag",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    HANDLE_ICON_CLASS = "drag-icon",
-    ROW_DRAGGING_CLASS = "row-dragging",
-    ROW_PLACEHOLDER_CLASS = "row-placeholder";
+    HANDLE_ICON_CLASS = "drag-icon";
 
 var RowDraggingExtender = {
     init: function() {
@@ -53,10 +51,7 @@ var RowDraggingExtender = {
                 filter: "> table > tbody > .dx-data-row",
                 dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
-                dropFeedbackMode: "indicate",
-                onPlaceholderPrepared: function(e) {
-                    $(e.placeholderElement).addClass(that.addWidgetPrefix(ROW_PLACEHOLDER_CLASS));
-                }
+                dropFeedbackMode: "indicate"
             }, rowDragging, {
                 onDragStart: function(e) {
                     const row = e.component.getVisibleRows()[e.fromIndex];
@@ -74,7 +69,7 @@ var RowDraggingExtender = {
     _getDraggableGridOptions: function(options) {
         let gridOptions = this.option(),
             columns = this.getColumns(),
-            $rowElement = $(this.getRowElement(options.rowIndex)).clone();
+            $rowElement = $(this.getRowElement(options.rowIndex));
 
         return {
             dataSource: [{ id: 1, parentId: 0 }],
@@ -99,8 +94,8 @@ var RowDraggingExtender = {
                 };
             }),
             onRowPrepared: (e) => {
-                let rowsView = e.component.getView("rowsView");
-                $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0));
+                const rowsView = e.component.getView("rowsView");
+                $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
             }
         };
     },
@@ -108,7 +103,7 @@ var RowDraggingExtender = {
     _getDraggableRowTemplate: function() {
         return (options) => {
             let $rootElement = this.component.$element(),
-                $dataGridContainer = $("<div>").addClass(this.addWidgetPrefix(ROW_DRAGGING_CLASS)).width($rootElement.width()),
+                $dataGridContainer = $("<div>").width($rootElement.width()),
                 items = this._dataController.items(),
                 row = items && items[options.fromIndex],
                 gridOptions = this._getDraggableGridOptions(row);

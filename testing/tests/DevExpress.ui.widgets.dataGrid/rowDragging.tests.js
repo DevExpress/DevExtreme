@@ -109,8 +109,6 @@ QUnit.test("Dragging row", function(assert) {
     $placeholderElement = $("body").children(".dx-sortable-placeholder");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
-    assert.ok($draggableElement.hasClass("dx-datagrid-row-dragging"), "dragging element has the 'dx-datagrid-row-dragging' class");
-    assert.ok($placeholderElement.hasClass("dx-datagrid-row-placeholder"), "placeholder has the 'dx-datagrid-row-placeholder' class");
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
@@ -466,7 +464,9 @@ QUnit.test("Dragging row when there are fixed columns", function(assert) {
 
     assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($table.find(".dx-data-row").length, 1, "row count in main table");
+    assert.strictEqual($table.find(".dx-data-row").children(".dx-pointer-events-none").length, 0, "main table hasn't transparent column");
     assert.strictEqual($fixTable.find(".dx-data-row").length, 1, "row count in fixed table");
+    assert.strictEqual($fixTable.find(".dx-data-row").children(".dx-pointer-events-none").length, 1, "fixed table has transparent column");
 });
 
 
