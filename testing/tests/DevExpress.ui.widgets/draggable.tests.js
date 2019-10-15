@@ -594,8 +594,8 @@ QUnit.test("'boundary' option as element", function(assert) {
 
 QUnit.test("'boundary' option as window", function(assert) {
     var $area = $(window),
-        areaWidth = $area.width(),
-        areaHeight = $area.height();
+        areaWidth = $area.outerWidth(),
+        areaHeight = $area.outerHeight();
 
     this.createDraggable({
         autoScroll: false,
@@ -929,6 +929,7 @@ QUnit.test("Clone an element when dragging", function(assert) {
     assert.notOk(this.$element.hasClass("dx-draggable-dragging"), "original element hasn't dragging class");
     assert.notOk($cloneElement.hasClass("dx-draggable-source"), "cloned element hasn't source class");
     assert.ok($cloneElement.hasClass("dx-draggable-clone"), "cloned element has dragging class");
+    assert.strictEqual($cloneElement.css("z-index"), "10000", "z-index of the cloned element");
     this.checkPosition(10, 10, assert, $cloneElement);
     this.checkPosition(0, 0, assert);
 });

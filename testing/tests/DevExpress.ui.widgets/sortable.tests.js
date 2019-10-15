@@ -121,6 +121,7 @@ QUnit.test("Default drag template", function(assert) {
     // assert
     var $draggingElement = $(".dx-sortable-dragging");
     assert.ok($draggingElement.hasClass("dx-sortable-clone"), "clone class");
+    assert.strictEqual($draggingElement.css("z-index"), "10000", "z-index");
     assert.strictEqual($draggingElement.text(), "item1", "text is correct");
     assert.strictEqual($draggingElement.outerWidth(), $items.eq(0).outerWidth(), "width is correct");
     assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), "height is correct");
@@ -369,6 +370,7 @@ QUnit.test("Initial placeholder if dropFeedbackMode is indicate", function(asser
     $placeholder = $(".dx-sortable-placeholder");
     assert.strictEqual(items.length, 3, "item count is not changed");
     assert.equal($placeholder.length, 1, "placeholder exists");
+    assert.strictEqual($placeholder.css("z-index"), "10000", "z-index");
     assert.ok($placeholder.next().hasClass("dx-sortable-dragging"), "palceholder is before dragging");
     assert.equal($placeholder.get(0).style.height, "", "placeholder height");
     assert.equal($placeholder.get(0).style.width, "300px", "placeholder width");

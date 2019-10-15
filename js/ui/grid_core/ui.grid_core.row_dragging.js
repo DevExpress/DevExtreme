@@ -44,7 +44,7 @@ var RowDraggingExtender = {
             allowReordering = this._allowReordering(),
             $content = that.callBase.apply(that, arguments);
 
-        if(allowReordering) {
+        if(allowReordering && $content.length) {
             that._sortable = that._createComponent($content, Sortable, extend({
                 component: that.component,
                 contentTemplate: null,
@@ -67,10 +67,12 @@ var RowDraggingExtender = {
     },
 
     _getDraggableGridOptions: function(options) {
-        let gridOptions = this.option();
+        let gridOptions = this.option(),
+            columns = this.getColumns(),
+            $rowElement = $(this.getRowElement(options.rowIndex));
 
         return {
-            dataSource: [options.data],
+            dataSource: [{ id: 1, parentId: 0 }],
             showBorders: true,
             showColumnHeaders: false,
             scrolling: {
@@ -80,23 +82,21 @@ var RowDraggingExtender = {
             pager: {
                 visible: false
             },
-            rowDragging: {
-                allowReordering: true,
-                showDragIcons: gridOptions.rowDragging.showDragIcons
-            },
             loadingTimeout: undefined,
-            columns: gridOptions.columns,
-            customizeColumns: function(columns) {
-                gridOptions.customizeColumns && gridOptions.customizeColumns.apply(this, arguments);
-
-                columns.forEach((column) => {
-                    column.groupIndex = undefined;
-                });
-            },
+            columnFixing: gridOptions.columnFixing,
+            columnAutoWidth: gridOptions.columnAutoWidth,
             showColumnLines: gridOptions.showColumnLines,
-            rowTemplate: gridOptions.rowTemplate,
-            onCellPrepared: gridOptions.onCellPrepared,
-            onRowPrepared: gridOptions.onRowPrepared
+            columns: columns.map((column) => {
+                return {
+                    width: column.width || column.visibleWidth,
+                    fixed: column.fixed,
+                    fixedPosition: column.fixedPosition
+                };
+            }),
+            onRowPrepared: (e) => {
+                const rowsView = e.component.getView("rowsView");
+                $(e.rowElement).replaceWith($rowElement.eq(rowsView._isFixedTableRendering ? 1 : 0).clone());
+            }
         };
     },
 
