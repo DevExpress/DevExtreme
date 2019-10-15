@@ -1206,6 +1206,23 @@ QUnit.module("format: percent format", moduleConfig, () => {
 
         assert.equal(this.input.val(), "450%", "text is correct");
     });
+
+    QUnit.test("dot should not be ignored in percent format when the value has been parsed correctly", (assert) => {
+        const oldDecimalSeparator = config().decimalSeparator;
+
+        config({ decimalSeparator: "," });
+
+        try {
+            this.instance.option("format", "#0.00%");
+            this.instance.option("value", 0.256);
+
+            this.keyboard.caret(2).type(".5");
+
+            assert.equal(this.input.val(), "25,56%", "text is correct");
+        } finally {
+            config({ decimalSeparator: oldDecimalSeparator });
+        }
+    });
 });
 
 QUnit.module("format: removing", moduleConfig, () => {

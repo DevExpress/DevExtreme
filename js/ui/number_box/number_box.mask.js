@@ -194,13 +194,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var enteredChar = this._lastKeyName === MINUS_KEY ? "" : this._lastKey,
             newValue = this._tryParse(normalizedText, caret, enteredChar);
 
+        if(this._shouldMoveCaret(normalizedText, caret)) {
+            this._moveCaret(1);
+            e.originalEvent.preventDefault();
+        }
+
         if(newValue === undefined) {
             if(this._lastKeyName !== MINUS_KEY) {
                 e.originalEvent.preventDefault();
-            }
-
-            if(this._shouldMoveCaret(normalizedText, caret)) {
-                this._moveCaret(1);
             }
         } else {
             this._parsedValue = newValue;
