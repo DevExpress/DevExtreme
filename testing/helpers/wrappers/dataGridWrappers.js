@@ -1,6 +1,8 @@
 import { WrapperBase } from './wrapperBase.js';
 
 const FOCUS_OVERLAY_CLASS = "dx-datagrid-focus-overlay";
+const COMMAND_ADAPTIVE_CLASS = "dx-command-adaptive";
+const COMMAND_ADAPTIVE_HIDDEN_CLASS = "dx-command-adaptive-hidden";
 
 export class DataGridWrapper {
     constructor(containerSelector) {
@@ -46,6 +48,14 @@ export class RowsViewWrapper extends WrapperBase {
 
     getDataRowElement(rowIndex) {
         return this.getElement().find(".dx-data-row").eq(rowIndex);
+    }
+
+    getRowAdaptiveElement(rowIndex) {
+        return this.getDataRowElement(rowIndex).find(`.${COMMAND_ADAPTIVE_CLASS}`);
+    }
+
+    isRowAdaptiveVisible(rowIndex) {
+        return !this.getRowAdaptiveElement(rowIndex).hasClass(COMMAND_ADAPTIVE_HIDDEN_CLASS);
     }
 
     getEditorInputElement(rowIndex, columnIndex) {
