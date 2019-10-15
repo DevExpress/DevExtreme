@@ -2279,6 +2279,8 @@ QUnit.testStart(function() {
             hoursInterval: 0.5,
             currentDate: new Date(2015, 3, 1),
             onContentReady: function(e) {
+                var scrollable = e.component.getScrollable();
+                scrollable.option("scrollByContent", false);
                 e.component.initDragBehavior();
             }
         });
