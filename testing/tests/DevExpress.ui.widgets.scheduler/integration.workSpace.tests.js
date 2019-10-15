@@ -389,7 +389,9 @@ QUnit.test("drop and dragenter handlers should be different for date table and a
 
     var onSpy = sinon.spy(eventsEngine, "on");
 
-    this.createInstance();
+    this.createInstance({
+        editing: true
+    });
 
     onSpy.getCalls().forEach(function(spyCall) {
         var $element = $(spyCall.args[0]);

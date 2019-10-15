@@ -113,6 +113,8 @@ QUnit.test("component arg in events if component option is defined", function(as
     assert.strictEqual(options.onDragMove.getCall(0).args[0].element, myComponent.element(), "onDragMove element");
 
     assert.strictEqual(options.onDragEnd.getCall(0).args[0].component, myComponent, "onDragEnd component");
+    assert.strictEqual(options.onDragEnd.getCall(0).args[0].fromComponent, myComponent, "onDragEnd fromComponent");
+    assert.strictEqual(options.onDragEnd.getCall(0).args[0].toComponent, myComponent, "onDragEnd toComponent");
     assert.strictEqual(options.onDragEnd.getCall(0).args[0].element, myComponent.element(), "onDragEnd element");
 });
 

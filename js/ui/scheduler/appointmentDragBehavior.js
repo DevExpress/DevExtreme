@@ -11,6 +11,7 @@ const LIST_ITEM_DATA_KEY = "dxListItemData";
 export default class AppointmentDragBehavior {
     constructor(scheduler) {
         this.scheduler = scheduler;
+        this.appointments = scheduler._appointments;
 
         this.initialPosition = {
             left: 0,
@@ -26,13 +27,13 @@ export default class AppointmentDragBehavior {
 
     getDraggableArea() {
         let result = null;
-        this.scheduler.notifyObserver("getDraggableAppointmentArea", { callback: appointmentArea => result = appointmentArea });
+        this.appointments.notifyObserver("getDraggableAppointmentArea", { callback: appointmentArea => result = appointmentArea });
         return result;
     }
 
     getContainerShift(isAllDay) {
-        const appointmentContainer = this.scheduler._getAppointmentContainer(isAllDay);
-        const dragAndDropContainer = this.scheduler.option(FIXED_CONTAINER_PROP_NAME);
+        const appointmentContainer = this.appointments._getAppointmentContainer(isAllDay);
+        const dragAndDropContainer = this.appointments.option(FIXED_CONTAINER_PROP_NAME);
 
         const appointmentContainerRect = appointmentContainer[0].getBoundingClientRect();
         const dragAndDropContainerRect = dragAndDropContainer[0].getBoundingClientRect();
@@ -45,7 +46,7 @@ export default class AppointmentDragBehavior {
 
     onDragStart(e) {
         this.initialPosition = translator.locate($(e.itemElement));
-        this.scheduler.notifyObserver("hideAppointmentTooltip");
+        this.appointments.notifyObserver("hideAppointmentTooltip");
     }
 
     getAppointmentElement(e) {
@@ -56,17 +57,17 @@ export default class AppointmentDragBehavior {
 
     onDragEnd(e) {
         const $appointment = this.getAppointmentElement(e);
-        const container = this.scheduler._getAppointmentContainer(this.isAllDay($appointment));
+        const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
         container.append($appointment);
 
         this.currentAppointment = $appointment;
 
-        if(this.scheduler._escPressed) {
+        if(this.appointments._escPressed) {
             e.event.cancel = true;
         } else {
-            this.scheduler.notifyObserver("updateAppointmentAfterDrag", {
+            this.appointments.notifyObserver("updateAppointmentAfterDrag", {
                 event: e,
-                data: this.scheduler._getItemData($appointment),
+                data: this.appointments._getItemData($appointment),
                 $appointment: $appointment,
                 coordinates: this.initialPosition
             });
@@ -75,7 +76,7 @@ export default class AppointmentDragBehavior {
 
     getItemData(appointment) {
         let itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
-        return itemData && itemData.data || this.scheduler._getItemData(appointment);
+        return itemData && itemData.data || this.appointments._getItemData(appointment);
     }
 
     createDragStartHandler(options, appointmentDragging) {
@@ -105,7 +106,7 @@ export default class AppointmentDragBehavior {
 
     createDropHandler(appointmentDragging) {
         return (e) => {
-            e.itemData = extend({}, e.itemData, this.scheduler.invoke("getUpdatedData", {
+            e.itemData = extend({}, e.itemData, this.appointments.invoke("getUpdatedData", {
                 data: e.itemData
             }));
 
@@ -115,9 +116,10 @@ export default class AppointmentDragBehavior {
         };
     }
 
-    addTo(appointment, config) {
+    addTo(container, config) {
         let appointmentDragging = this.scheduler.option("appointmentDragging") || {},
             options = extend({
+                component: this.scheduler,
                 contentTemplate: null,
                 filter: `.${APPOINTMENT_ITEM_CLASS}`,
                 immediate: false,
@@ -125,7 +127,7 @@ export default class AppointmentDragBehavior {
                 onDragEnd: this.onDragEnd.bind(this)
             }, config);
 
-        this.scheduler._createComponent(appointment, Draggable, extend({}, options, appointmentDragging, {
+        this.appointments._createComponent(container, Draggable, extend({}, options, appointmentDragging, {
             onDragStart: this.createDragStartHandler(options, appointmentDragging),
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
