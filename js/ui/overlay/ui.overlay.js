@@ -100,10 +100,6 @@ var getElement = function(value) {
     return value && $(value.target || value);
 };
 
-function isPercent(size) {
-    return !!size && (size.toString().slice(-1) === '%');
-}
-
 ready(function() {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, function(e) {
         for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
@@ -1274,18 +1270,6 @@ var Overlay = Widget.inherit({
         }
     },
 
-    _getActualDimension(dimensionName) {
-        var dimensionFunctionName = "outer" + dimensionName.charAt(0).toUpperCase() + dimensionName.substr(1);
-        var $container = this._getContainer();
-        var dimensionSize = this.option(dimensionName);
-
-        if(isPercent(dimensionSize) && $container) {
-            return $container[dimensionFunctionName]() * parseInt(dimensionSize.slice(0, -1)) / 100;
-        }
-
-        return parseFloat(dimensionSize);
-    },
-
     _renderShading: function() {
         this._fixWrapperPosition();
         this._renderShadingDimensions();
@@ -1294,13 +1278,14 @@ var Overlay = Widget.inherit({
 
     _renderShadingDimensions: function() {
         var $container = this._getContainer();
-        if(!this.option("shading") || this._isWindow($container)) {
-            return;
-        }
+        var isWindow = this._isWindow($container);
+        var width = isWindow ? null : $container.outerWidth();
+        var height = isWindow ? null : $container.outerHeight();
+
 
         this._$wrapper.css({
-            width: $container.outerWidth(),
-            height: $container.outerHeight()
+            width,
+            height
         });
     },
 
@@ -1330,16 +1315,14 @@ var Overlay = Widget.inherit({
 
     _renderDimensions: function() {
         var content = this._$content.get(0);
-        var curWidth = this._getActualDimension("width") || this._getOptionValue("width", content);
-        var curHeight = this._getActualDimension("height") || this._getOptionValue("height", content);
 
         this._$content.css({
             minWidth: this._getOptionValue("minWidth", content),
             maxWidth: this._getOptionValue("maxWidth", content),
             minHeight: this._getOptionValue("minHeight", content),
             maxHeight: this._getOptionValue("maxHeight", content),
-            width: curWidth,
-            height: curHeight
+            width: this._getOptionValue("width", content),
+            height: this._getOptionValue("height", content)
         });
     },
 
