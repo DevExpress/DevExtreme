@@ -4084,6 +4084,40 @@ QUnit.test("DataGrid - navigateToRow method should work if rowRenderingMode is '
     assert.equal(dataGrid.getVisibleRows().filter(row => row.key === navigateRowKey).length, 1, "navigated row is visible");
 });
 
+QUnit.test("DataGrid - Focus row by visible content in 'rowRenderingMode' should not render rows (T820296)", function(assert) {
+    // arrange
+    var data = [];
+
+    for(var i = 0; i < 30; i++) {
+        data.push({ id: i + 1 });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 300,
+        keyExpr: "id",
+        dataSource: data,
+        focusedRowEnabled: true,
+        paging: {
+            enabled: false
+        },
+        scrolling: {
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+    }).dxDataGrid("instance");
+
+    this.clock.tick();
+
+    // act
+    $(dataGrid.getCellElement(7, 0))
+        .trigger("dxpointerdown");
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].key, 1, "Visible row is not changed");
+});
+
 // T803784
 QUnit.test("Command cell should not have dx-hidden-cell class if it is not fixed", function(assert) {
     // arrange
