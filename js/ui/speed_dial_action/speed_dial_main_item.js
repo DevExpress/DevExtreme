@@ -309,6 +309,8 @@ exports.initAction = function(newAction) {
             }
         });
 
+        delete speedDialMainItem._options.position;
+
         if(!isActionExist) {
             if(speedDialMainItem._getVisibleActions(savedActions).length >= speedDialMainItem.option("maxSpeedDialActionCount")) {
                 newAction.dispose();
