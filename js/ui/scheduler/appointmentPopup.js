@@ -49,8 +49,10 @@ export default class AppointmentPopup {
             this._popup = this._createPopup();
         }
 
-        this._popup.option("toolbarItems", showButtons ? this._getPopupToolbarItems() : []);
-        this._popup.option("showCloseButton", showButtons ? this._popup.initialOption("showCloseButton") : true);
+        this._popup.option({
+            toolbarItems: showButtons ? this._getPopupToolbarItems() : [],
+            showCloseButton: showButtons ? this._popup.initialOption("showCloseButton") : true
+        });
 
         this._popup.option("onShowing", () => {
             this._updateForm(data, processTimeZone);

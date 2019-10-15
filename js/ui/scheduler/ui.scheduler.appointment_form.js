@@ -40,9 +40,8 @@ const SchedulerAppointmentForm = {
     },
 
     _updateLabelLocation: function(formWidth) {
-        const form = this._appointmentForm;
-        if(form._initialized && form.isReady()) {
-            form.option("labelLocation", formWidth < SCREEN_SIZE_OF_TOP_LABEL_LOCATION ? "top" : "left");
+        if(formWidth > 0 && this._appointmentForm._rootLayoutManager._contentReadyAction) {
+            this._appointmentForm.option("labelLocation", formWidth < SCREEN_SIZE_OF_TOP_LABEL_LOCATION ? "top" : "left");
         }
     },
 
