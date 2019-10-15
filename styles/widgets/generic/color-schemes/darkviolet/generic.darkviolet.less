@@ -57,7 +57,7 @@
 @base-border-radius-exsmall: @base-border-radius - 2px;
 @base-inverted-bg: lighten(@base-bg, 100%);
 @base-element-bg: @base-bg;
-@base-shadow-color: @base-inverted-bg;
+@base-shadow-color: #000;
 
 /**
 * @name 50. Success color
@@ -652,7 +652,7 @@
 @list-item-chevron-icon-color: @base-icon-color;
 
 // Overlay
-@overlay-content-shadow-color: fade(darken(@base-shadow-color, 100%), 30%);
+@overlay-content-shadow-color: fade(@base-shadow-color, 30%);
 @overlay-border-color: @base-border-color;
 
 /**
@@ -767,7 +767,7 @@
 * @type color
 */
 @selectbox-list-bg: @base-bg;
-@selectbox-shadow-color: fade(darken(@base-shadow-color, 100%), 17.5%);
+@selectbox-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // Tabs
 
@@ -1346,7 +1346,7 @@
 * @name 50. Start appointment color
 * @type color
 */
-@SCHEDULER_APPOINTMENT_START_COLOR: fade(darken(@base-shadow-color, 100%), 30%);
+@SCHEDULER_APPOINTMENT_START_COLOR: fade(@base-shadow-color, 30%);
 
 /**
 * @name 60. First day of month separator color
@@ -1427,7 +1427,7 @@
 @menu-item-selected-color: @base-text-color;
 @menu-item-focused-bg: @base-focus-bg;
 @menu-item-focused-selected-bg: fade(@base-focus-bg, 70%);
-@menu-container-shadow-color: fade(darken(@base-shadow-color, 100%), 17.5%);
+@menu-container-shadow-color: fade(@base-shadow-color, 17.5%);
 
 // Calendar
 
@@ -1686,7 +1686,7 @@
 @filemanager-custom-thumbnail-color: @base-border-color;
 @filemanager-file-item-select-color: @base-text-color;
 @filemanager-file-item-select-bg: @base-select-bg;
-@filemanager-progressbox-shadow-color: fade(darken(@base-shadow-color, 100%), 30%);
+@filemanager-progressbox-shadow-color: fade(@base-shadow-color, 30%);
 
 // SpeedDialAction
 @speed-dial-action-bg: lighten(@base-bg, 3%);
