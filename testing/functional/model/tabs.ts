@@ -1,5 +1,4 @@
 import Widget from './internal/widget';
-import { Selector, ClientFunction } from 'testcafe';
 
 const CLASS = {
     tabs: "dx-tabs",
@@ -10,7 +9,6 @@ const CLASS = {
 class Item {
     element: Selector;
     isFocused: Promise<boolean>;
-    text: Promise<string>;
 
     constructor (element: Selector) {
         this.element = element;
@@ -19,21 +17,13 @@ class Item {
 };
 
 export default class Tabs extends Widget {
-    element: Selector;
-    items: Selector;
-    isFocused: Promise<boolean>;
-
     name: string = 'dxTabs';
 
-    constructor (id: string|Selector) {
+    constructor(id: string) {
         super(id);
-
-        this.element = Selector(`.${CLASS.tabs}`);
-        this.isFocused = this.element.hasClass(CLASS.focused);
-        this.items = this.element.find(`.${CLASS.item}`);
     }
 
     getItem (index: number = 0): Item {
-        return new Item(this.items.nth(index));
+        return new Item(this.element.find(`.${CLASS.item}`).nth(index));
     }
 }

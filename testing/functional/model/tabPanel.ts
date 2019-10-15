@@ -1,11 +1,12 @@
 import Widget from './internal/widget';
-import { Selector, ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
 import Tabs from './tabs'
 import MultiView from './multiView'
 
 const CLASS = {
     tabPanel: "dx-tabpanel",
-    focused: "dx-state-focused"
+    tabs: "dx-tabs",
+    multiview: "dx-multiview"
 };
 
 export default class TabPanel extends Widget {
@@ -15,13 +16,12 @@ export default class TabPanel extends Widget {
 
     name: string = 'dxTabPanel';
 
-    constructor (id: string|Selector) {
+    constructor (id: string) {
         super(id);
 
         this.element = Selector(`.${CLASS.tabPanel}`);
-        this.isFocused = this.element.hasClass(CLASS.focused);
 
-        this.tabs = new Tabs("#tabs");
-        this.multiview = new MultiView("#multiView");
+        this.tabs = new Tabs(`.${CLASS.tabs}`);
+        this.multiview = new MultiView(`.${CLASS.multiview}`);
     }
 }
