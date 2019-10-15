@@ -1,11 +1,13 @@
-var $ = require("jquery"),
-    Tooltip = require("ui/tooltip"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    fx = require("animation/fx");
+import $ from "jquery";
+import Tooltip from "ui/tooltip";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import fx from "animation/fx";
 
-require("ui/range_slider");
-require("ui/number_box/number_box");
+import "ui/range_slider";
+import "ui/number_box/number_box";
+import "ui/validator";
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -13,8 +15,6 @@ QUnit.testStart(function() {
 
     $("#qunit-fixture").html(markup);
 });
-
-require("common.css!");
 
 var SLIDER_CLASS = "dx-slider",
     SLIDER_WRAPPER_CLASS = SLIDER_CLASS + "-wrapper",
@@ -1149,4 +1149,72 @@ QUnit.test("reset method should set value to default", function(assert) {
     instance.reset();
 
     assert.deepEqual(instance.option("value"), [40, 60], "value was reset to default");
+});
+
+QUnit.module("Validation", () => {
+    [false, true].forEach((isValid) => {
+        QUnit.test(`initial state - isValid = ${isValid}, change the "value" option`, (assert) => {
+            const instance = $("#slider").dxRangeSlider({
+                value: [10, 30],
+                isValid
+            }).dxRangeSlider("instance");
+            const validatorStub = sinon.stub().returns(!isValid);
+
+            $("#slider").dxValidator({
+                validationRules: [{
+                    type: "custom",
+                    validationCallback: validatorStub
+                }]
+            });
+
+            instance.option("value", [15, 20]);
+
+            assert.strictEqual(instance.option("isValid"), !isValid, `"isValid" option is ${!isValid}`);
+
+            const { value } = validatorStub.lastCall.args[0];
+            assert.deepEqual(value, [15, 20], "'value' argument of the validation callback is correct");
+        });
+
+        QUnit.test(`initial state - isValid = ${isValid}, change the "start" option`, (assert) => {
+            const instance = $("#slider").dxRangeSlider({
+                value: [10, 30],
+                isValid
+            }).dxRangeSlider("instance");
+            const validatorStub = sinon.stub().returns(!isValid);
+
+            $("#slider").dxValidator({
+                validationRules: [{
+                    type: "custom",
+                    validationCallback: validatorStub
+                }]
+            });
+            instance.option("start", 15);
+
+            assert.strictEqual(instance.option("isValid"), !isValid, `"isValid" option is ${!isValid}`);
+
+            const { value } = validatorStub.lastCall.args[0];
+            assert.deepEqual(value, [15, 30], "'value' argument of the validation callback is correct");
+        });
+
+        QUnit.test(`initial state - isValid = ${isValid}, change the "end" option`, (assert) => {
+            const instance = $("#slider").dxRangeSlider({
+                value: [10, 30],
+                isValid
+            }).dxRangeSlider("instance");
+            const validatorStub = sinon.stub().returns(!isValid);
+
+            $("#slider").dxValidator({
+                validationRules: [{
+                    type: "custom",
+                    validationCallback: validatorStub
+                }]
+            });
+            instance.option("end", 15);
+
+            assert.strictEqual(instance.option("isValid"), !isValid, `"isValid" option is ${!isValid}`);
+
+            const { value } = validatorStub.lastCall.args[0];
+            assert.deepEqual(value, [10, 15], "'value' argument of the validation callback is correct");
+        });
+    });
 });
