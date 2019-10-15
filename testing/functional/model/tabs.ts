@@ -19,10 +19,6 @@ class Item {
 export default class Tabs extends Widget {
     name: string = 'dxTabs';
 
-    constructor(id: string) {
-        super(id);
-    }
-
     getItem (index: number = 0): Item {
         return new Item(this.element.find(`.${CLASS.item}`).nth(index));
     }
