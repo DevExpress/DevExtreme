@@ -1720,3 +1720,67 @@ QUnit.test("cursorOffset should be correct when the 'x' coordinate is zero", fun
     assert.strictEqual($dragElement.length, 1, "there is a drag element");
     assert.deepEqual($dragElement.offset(), { left: 10, top: 30 }, "drag element offset");
 });
+
+QUnit.test("cursorOffset should be correct when the dragTemplate is specified", function(assert) {
+    // arrange
+    this.$element.width(150).height(150);
+
+    this.createDraggable({
+        cursorOffset: {
+            x: 20,
+            y: 20
+        },
+        dragTemplate: function(options) {
+            return $(options.itemElement).clone().width(50).height(50);
+        }
+    });
+
+    // act
+    this.pointer.down(100, 100).move(10, 10);
+
+    // assert
+    const $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.deepEqual($dragElement.offset(), { left: 130, top: 130 }, "drag element offset");
+});
+
+QUnit.test("cursorOffset should be correct when 'y' coordinate isn't set and dragTemplate is specified", function(assert) {
+    // arrange
+    this.$element.width(150).height(150);
+
+    this.createDraggable({
+        cursorOffset: {
+            x: 20
+        },
+        dragTemplate: function(options) {
+            return $(options.itemElement).clone().width(50).height(50);
+        }
+    });
+
+    // act
+    this.pointer.down(100, 100).move(10, 10);
+
+    // assert
+    const $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.deepEqual($dragElement.offset(), { left: 130, top: 10 }, "drag element offset");
+});
+
+QUnit.test("cursorOffset should be correct when 'x' coordinate isn't set and dragTemplate is specified", function(assert) {
+    // arrange
+    this.$element.width(150).height(150);
+
+    this.createDraggable({
+        cursorOffset: {
+            y: 20
+        },
+        dragTemplate: function(options) {
+            return $(options.itemElement).clone().width(50).height(50);
+        }
+    });
+
+    // act
+    this.pointer.down(100, 100).move(10, 10);
+
+    // assert
+    const $dragElement = $("body").children(".dx-draggable-dragging");
+    assert.deepEqual($dragElement.offset(), { left: 10, top: 130 }, "drag element offset");
+});
