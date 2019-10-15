@@ -1363,7 +1363,8 @@ QUnit.test("Expand/Collapse adaptive detail row after scrolling if scrolling mod
             },
             scrolling: {
                 mode: "virtual",
-                rowRenderingMode: "virtual"
+                rowRenderingMode: "virtual",
+                useNative: false
             },
             columns: [
                 "value",
