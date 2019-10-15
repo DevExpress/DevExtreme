@@ -38,6 +38,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             } else if(args.name === "skipFocusedRowNavigation") {
                 args.handled = true;
             } else if(args.name === "autoNavigateToFocusedRow") {
+                this.option("skipFocusedRowNavigation", !args.value);
                 args.handled = true;
             } else {
                 this.callBase(args);
