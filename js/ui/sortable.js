@@ -657,15 +657,18 @@ var Sortable = Draggable.inherit({
 
     _isPositionVisible: function(position) {
         var $element = this.$element(),
-            $parents = $element.add($element.parents()),
             scrollContainer;
 
-        $parents.each(function() {
-            if($(this).css("overflow") !== "visible") {
-                scrollContainer = this;
-                return false;
-            }
-        });
+        if($element.css("overflow") !== "hidden") {
+            scrollContainer = $element.get(0);
+        } else {
+            $element.parents().each(function() {
+                if($(this).css("overflow") !== "visible") {
+                    scrollContainer = this;
+                    return false;
+                }
+            });
+        }
 
         if(scrollContainer) {
             let clientRect = scrollContainer.getBoundingClientRect(),
