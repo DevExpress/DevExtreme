@@ -95,18 +95,22 @@ export class FileManagerWrapper {
     }
 
     getBreadcrumbsPath() {
+        this.breadcrumbsWrapper.setElement(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
         return this.breadcrumbsWrapper.getPath();
     }
 
     getBreadcrumbsItems() {
+        this.breadcrumbsWrapper.setElement(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
         return this.breadcrumbsWrapper.getItems();
     }
 
     getBreadcrumbsItemByText(text) {
+        this.breadcrumbsWrapper.setElement(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
         return this.breadcrumbsWrapper.getItemByText(text);
     }
 
     getBreadcrumbsParentDirectoryItem() {
+        this.breadcrumbsWrapper.setElement(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
         return this.breadcrumbsWrapper.getParentDirectoryItem();
     }
 
@@ -376,6 +380,10 @@ export class FileManagerProgressPanelProgressBoxWrapper {
 export class FileManagerBreadcrumbsWrapper {
 
     constructor($element) {
+        this._$element = $element;
+    }
+
+    setElement($element) {
         this._$element = $element;
     }
 
