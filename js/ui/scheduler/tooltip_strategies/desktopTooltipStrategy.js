@@ -67,14 +67,12 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
             dragBehavior && dragBehavior.addTo($element, {
                 filter: `.${LIST_ITEM_CLASS}`,
                 container: this.scheduler.$element().find(`.${FIXED_CONTAINER_CLASS}`),
-                cursorOffset: (options) => {
-                    const event = options.event,
-                        $dragElement = $(dragElement),
-                        offset = $(options.itemElement).offset();
+                cursorOffset: () => {
+                    const $dragElement = $(dragElement);
 
                     return {
-                        x: event.pageX - offset.left - ($dragElement.width() / 2),
-                        y: event.pageY - offset.top - ($dragElement.height() / 2)
+                        x: -$dragElement.width() / 2,
+                        y: -$dragElement.height() / 2
                     };
                 },
                 dragTemplate: () => {
