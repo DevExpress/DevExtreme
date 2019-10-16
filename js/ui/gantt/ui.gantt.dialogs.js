@@ -95,7 +95,7 @@ class DialogInfoBase {
 }
 
 class TaskEditDialogInfo extends DialogInfoBase {
-    getTitle() { return "Task Information"; }
+    getTitle() { return "Task Details"; }
     _getFormItems() {
         const readOnly = !this._editingOptions.enabled || !this._editingOptions.allowTaskUpdating;
         return [{

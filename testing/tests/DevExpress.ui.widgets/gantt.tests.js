@@ -26,6 +26,8 @@ const TREELIST_SELECTOR = ".dx-treelist",
     SPLITTER_SELECTOR = ".dx-splitter",
     POPUP_SELECTOR = ".dx-popup-normal",
     GANTT_VIEW_HORIZONTAL_BORDER_SELECTOR = ".dx-gantt-hb",
+    OVERLAY_WRAPPER_SELECTOR = ".dx-overlay-wrapper",
+    CONTEXT_MENU_SELECTOR = ".dx-context-menu",
     INPUT_TEXT_EDITOR_SELECTOR = ".dx-texteditor-input";
 
 
@@ -569,5 +571,19 @@ QUnit.module("DataSources", moduleConfig, () => {
         assert.equal(tasks.length, tasksCount - 1, "tasks less");
         const removedTask = tasks.filter((t) => t.id === removedTaskId)[0];
         assert.equal(removedTask, undefined, "task was removed");
+    });
+});
+
+QUnit.module("Context Menu", moduleConfig, () => {
+    test("showing", (assert) => {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $("body").find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        assert.equal(getContextMenuElement().length, 0, "menu is hidden on create");
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        assert.equal(getContextMenuElement().length, 1, "menu is visible after right click");
     });
 });
