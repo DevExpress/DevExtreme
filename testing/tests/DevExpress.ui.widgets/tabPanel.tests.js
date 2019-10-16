@@ -30,7 +30,6 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
-const TABPANEL_CLASS = "dx-tabpanel";
 const TABS_CLASS = "dx-tabs";
 const MULTIVIEW_ITEM_CLASS = "dx-multiview-item";
 const TABS_ITEM_CLASS = "dx-tab";
@@ -531,19 +530,6 @@ QUnit.test("tabPanels focusedElement dependence on tabs focusedElement", functio
     assert.equal(isRenderer(this.instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.equal(tabsFocusedIndex, 1, "second tabs element has been focused");
     assert.equal(tabsFocusedIndex, $(this.instance.option("focusedElement")).index(), "multiView focused element is equal tabs focused element");
-});
-
-QUnit.testInActiveWindow("tabs focusedElement lose focused class", function(assert) {
-    assert.expect(6);
-
-    this.$element.find(toSelector(TABS_CLASS)).get(0).focus();
-    assert.ok($(toSelector(TABS_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem obtained focused class after focus");
-    assert.ok($(toSelector(TABPANEL_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem obtained focused class after focus");
-    assert.ok($(toSelector(MULTIVIEW_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem obtained focused class after focus");
-    this.$element.find(toSelector(TABS_CLASS)).get(0).blur();
-    assert.ok(!$(toSelector(TABS_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
-    assert.ok(!$(toSelector(TABPANEL_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
-    assert.ok(!$(toSelector(MULTIVIEW_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
 });
 
 if(devices.current().deviceType === "desktop") {
