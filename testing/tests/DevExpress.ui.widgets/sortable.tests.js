@@ -2085,7 +2085,7 @@ QUnit.test("Placeholder should work correctly during autoscroll", function(asser
         this.clock.tick(10);
         currentPlaceholderOffsetTop = $(PLACEHOLDER_SELECTOR).offset().top;
 
-        assert.ok(currentPlaceholderOffsetTop !== previousPlaceholderOffsetTop, `placeholder was moved from ${previousPlaceholderOffsetTop} to ${currentPlaceholderOffsetTop}`);
+        assert.ok(currentPlaceholderOffsetTop !== previousPlaceholderOffsetTop, "placeholder was moved");
 
         previousPlaceholderOffsetTop = currentPlaceholderOffsetTop;
     }
