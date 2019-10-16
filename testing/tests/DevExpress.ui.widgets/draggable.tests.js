@@ -68,10 +68,11 @@ var moduleConfig = {
 };
 
 
-QUnit.module("rendering", moduleConfig);
+QUnit.module("Initialization", moduleConfig);
 
-QUnit.test("element has class", function(assert) {
-    assert.ok(this.createDraggable().$element().hasClass(DRAGGABLE_CLASS));
+QUnit.test("Initialize draggable component", function(assert) {
+    assert.ok(this.createDraggable().$element().hasClass(DRAGGABLE_CLASS), "element has the 'dx-draggable' class");
+    assert.strictEqual(this.$element.text(), "", "element is empty");
 });
 
 QUnit.test("'immediate' option", function(assert) {
