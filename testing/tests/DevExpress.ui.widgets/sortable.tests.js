@@ -6,7 +6,6 @@ import animationFrame from "animation/frame";
 import browser from "core/utils/browser";
 
 import "common.css!";
-import "ui/scroll_view";
 
 fx.off = true;
 
@@ -2072,7 +2071,7 @@ QUnit.test("Placeholder should work correctly during autoscroll", function(asser
 
     items = this.$element.find("#scrollableContainer").children();
 
-    // act
+    // act, assert
     pointer = pointerMock(items.eq(0)).start().down().move(0, 189);
     this.clock.tick(10);
 
@@ -2090,6 +2089,5 @@ QUnit.test("Placeholder should work correctly during autoscroll", function(asser
         previousPlaceholderOffsetTop = currentPlaceholderOffsetTop;
     }
 
-    // assert
     pointer.up();
 });
