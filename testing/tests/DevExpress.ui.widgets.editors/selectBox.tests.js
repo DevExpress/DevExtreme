@@ -356,6 +356,7 @@ QUnit.module("functionality", moduleSetup, () => {
             width: 40
         });
 
+        assert.strictEqual($element.attr("title"), undefined, "tooltip should not be added");
     });
 
     QUnit.test("show hint when tooltip is not enabled", (assert) => {
