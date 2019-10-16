@@ -1,5 +1,4 @@
 import Widget from './internal/widget';
-import { Selector } from 'testcafe';
 import Tabs from './tabs'
 import MultiView from './multiView'
 
@@ -9,7 +8,6 @@ const CLASS = {
 };
 
 export default class TabPanel extends Widget {
-    element: Selector;
     tabs: Tabs;
     multiview: MultiView;
 

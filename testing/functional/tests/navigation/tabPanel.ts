@@ -8,7 +8,7 @@ fixture `TabPanel`
     .page(url(__dirname, '../container.html'));
 
 // T821726
-test(`Focus state: click on tab item-> focusout`, async t => {
+test(`[{0: selected}, {1}] -> click to tabs[1] -> click to external button`, async t => {
     const tabPanel = new TabPanel('#container');
     
     await appendElementTo("body", "button", { id: "focusoutButton", width: 150, height: 50, backgroundColor: 'steelblue' });
@@ -17,23 +17,27 @@ test(`Focus state: click on tab item-> focusout`, async t => {
         .click(tabPanel.tabs.getItem(1).element)
         .expect(tabPanel.isFocused).ok()
         .expect(tabPanel.tabs.isFocused).ok()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
         .expect(tabPanel.tabs.getItem(1).isFocused).ok()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(1).isFocused).ok()
 
     await t
         .click(Selector("#focusoutButton"))
         .expect(tabPanel.isFocused).notOk()
         .expect(tabPanel.tabs.isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
         .expect(tabPanel.tabs.getItem(1).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(1).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
 
 }).before(async t => {
     return createWidget("dxTabPanel", {
-        items: ["Item 1", "Item 2", "Item 3"]
+        items: ["Item 1", "Item 2"]
     });
 });
 
-test(`Focus state: click on multiview item -> focusout`, async t => {
+test(`[{0: selected}] -> click to multiView -> click to external button`, async t => {
     const tabPanel = new TabPanel('#container');
     
     await appendElementTo("body", "button", { id: "focusoutButton", width: 150, height: 50, backgroundColor: 'steelblue' });
@@ -54,11 +58,11 @@ test(`Focus state: click on multiview item -> focusout`, async t => {
 
 }).before(async t => {
     return createWidget("dxTabPanel", {
-        items: ["Item 1", "Item 2", "Item 3"]
+        items: ["Item 1"]
     });
 });
 
-test(`Focus state: click on tab item -> press "right" key -> focusout`, async t => {
+test(`[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> click to external button`, async t => {
     const tabPanel = new TabPanel('#container');
     
     await appendElementTo("body", "button", { id: "focusoutButton", width: 150, height: 50, backgroundColor: 'steelblue' });
@@ -67,20 +71,34 @@ test(`Focus state: click on tab item -> press "right" key -> focusout`, async t 
         .click(tabPanel.tabs.getItem(1).element)
         .expect(tabPanel.isFocused).ok()
         .expect(tabPanel.tabs.isFocused).ok()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
         .expect(tabPanel.tabs.getItem(1).isFocused).ok()
+        .expect(tabPanel.tabs.getItem(2).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(1).isFocused).ok()
+        .expect(tabPanel.multiview.getItem(2).isFocused).notOk()
         .pressKey("right")
         .expect(tabPanel.isFocused).ok()
         .expect(tabPanel.tabs.isFocused).ok()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(1).isFocused).notOk()
         .expect(tabPanel.tabs.getItem(2).isFocused).ok()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(1).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(2).isFocused).ok()
 
     await t
         .click(Selector("#focusoutButton"))
         .expect(tabPanel.isFocused).notOk()
         .expect(tabPanel.tabs.isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(1).isFocused).notOk()
         .expect(tabPanel.tabs.getItem(2).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(1).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(2).isFocused).notOk()
+       
+        
 
 }).before(async t => {
     return createWidget("dxTabPanel", {
@@ -88,7 +106,7 @@ test(`Focus state: click on tab item -> press "right" key -> focusout`, async t 
     });
 });
 
-test(`Focus state: click on multiview item -> press "right" key -> focusout`, async t => {
+test(`[{0: selected}, {1}] -> click to multiview -> navigate to tabs[1] -> click to external button`, async t => {
     const tabPanel = new TabPanel('#container');
     
     await appendElementTo("body", "button", { id: "focusoutButton", width: 150, height: 50, backgroundColor: 'steelblue' });
@@ -98,27 +116,33 @@ test(`Focus state: click on multiview item -> press "right" key -> focusout`, as
         .expect(tabPanel.isFocused).ok()
         .expect(tabPanel.tabs.isFocused).notOk()
         .expect(tabPanel.tabs.getItem(0).isFocused).ok()
+        .expect(tabPanel.tabs.getItem(1).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(0).isFocused).ok()
+        .expect(tabPanel.multiview.getItem(1).isFocused).notOk()
         .pressKey("right")
         .expect(tabPanel.isFocused).ok()
         .expect(tabPanel.tabs.isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
         .expect(tabPanel.tabs.getItem(1).isFocused).ok()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(1).isFocused).ok()
 
     await t
         .click(Selector("#focusoutButton"))
         .expect(tabPanel.isFocused).notOk()
         .expect(tabPanel.tabs.isFocused).notOk()
+        .expect(tabPanel.tabs.getItem(0).isFocused).notOk()
         .expect(tabPanel.tabs.getItem(1).isFocused).notOk()
+        .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(1).isFocused).notOk()
 
 }).before(async t => {
     return createWidget("dxTabPanel", {
-        items: ["Item 1", "Item 2", "Item 3"]
+        items: ["Item 1", "Item 2"]
     });
 });
 
-test(`Focus state: click on multiview item -> press "tab" -> focusout by press "tab" key`, async t => {
+test(`[{0: selected}] -> click to multiview -> press "tab" -> press "tab"`, async t => {
     const tabPanel = new TabPanel('#container');
 
     await t
@@ -144,11 +168,11 @@ test(`Focus state: click on multiview item -> press "tab" -> focusout by press "
 
 }).before(async t => {
     return createWidget("dxTabPanel", {
-        items: ["Item 1", "Item 2", "Item 3"]
+        items: ["Item 1"]
     });
 });
 
-test(`Focus state: focus by press "tab" key -> focusout by press "tab" key`, async t => {
+test(`[{0: selected}] -> focusin by press "tab" -> press "tab"`, async t => {
     const tabPanel = new TabPanel('#container');
 
     await t
@@ -170,7 +194,7 @@ test(`Focus state: focus by press "tab" key -> focusout by press "tab" key`, asy
     await insertElementBefore("body", "#container", "button", { id: "firstButton", width: 150, height: 50, backgroundColor: 'steelblue' });
 
     return createWidget("dxTabPanel", {
-        items: ["Item 1", "Item 2", "Item 3"]
+        items: ["Item 1"]
     });
 });
 
