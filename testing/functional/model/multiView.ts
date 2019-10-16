@@ -16,9 +16,16 @@ class Item {
 };
 
 export default class MultiView extends Widget {
+    itemElements: Selector;
     name: string = 'dxMultiView';
 
+    constructor(id: string) {
+        super(id);
+
+        this.itemElements = this.element.find(`.${CLASS.item}`);
+    }
+
     getItem (index: number = 0): Item {
-        return new Item(this.element.find(`.${CLASS.item}`).nth(index));
+        return new Item(this.itemElements.nth(index));
     }
 }
