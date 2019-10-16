@@ -6,6 +6,7 @@ import animationFrame from "animation/frame";
 import browser from "core/utils/browser";
 
 import "common.css!";
+import "ui/scroll_view";
 
 fx.off = true;
 
@@ -2068,6 +2069,11 @@ QUnit.test("Placeholder should work correctly during autoscroll", function(asser
         previousPlaceholderOffsetTop,
         currentPlaceholderOffsetTop;
 
+    $("#itemsWithScroll").dxScrollView({
+        direction: 'both',
+        useNative: false
+    }).dxScrollView("instance");
+
     this.createSortable({
         filter: ".draggable",
         dropFeedbackMode: "indicate",
@@ -2090,7 +2096,7 @@ QUnit.test("Placeholder should work correctly during autoscroll", function(asser
         this.clock.tick(10);
         currentPlaceholderOffsetTop = $(PLACEHOLDER_SELECTOR).offset().top;
 
-        assert.ok(currentPlaceholderOffsetTop !== previousPlaceholderOffsetTop, "placeholder was moved");
+        assert.ok(currentPlaceholderOffsetTop !== previousPlaceholderOffsetTop, `placeholder was moved from ${previousPlaceholderOffsetTop} to ${currentPlaceholderOffsetTop}`);
 
         previousPlaceholderOffsetTop = currentPlaceholderOffsetTop;
     }
