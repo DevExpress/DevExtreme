@@ -9,6 +9,7 @@ export class GanttView extends Widget {
         this._onSelectionChanged = this._createActionByOption("onSelectionChanged");
         this._onScroll = this._createActionByOption("onScroll");
         this._onDialogShowing = this._createActionByOption("onDialogShowing");
+        this._onPopupMenuShowing = this._createActionByOption("onPopupMenuShowing");
     }
     _initMarkup() {
         const { GanttView } = getGanttViewCore();
@@ -26,6 +27,15 @@ export class GanttView extends Widget {
 
     getTaskAreaContainer() {
         return this._ganttViewCore.taskAreaContainer;
+    }
+    getBarManager() {
+        return this._ganttViewCore.barManager;
+    }
+    executeCoreCommand(id) {
+        const command = this._ganttViewCore.commandManager.getCommand(id);
+        if(command) {
+            command.execute();
+        }
     }
     changeTaskExpanded(rowIndex, value) {
         const model = this._ganttViewCore.viewModel;
@@ -118,6 +128,9 @@ export class GanttView extends Widget {
     }
 
     // IGanttOwner
+    get bars() {
+        return this.option("bars");
+    }
     getRowHeight() {
         return this.option("rowHeight");
     }
@@ -157,5 +170,10 @@ export class GanttView extends Widget {
     }
     getModelChangesListener() {
         return this.option("modelChangesListener");
+    }
+    showPopupMenu(position) {
+        this._onPopupMenuShowing({
+            position: position
+        });
     }
 }

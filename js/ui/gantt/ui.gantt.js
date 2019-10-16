@@ -4,6 +4,7 @@ import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
 import dataCoreUtils from '../../core/utils/data';
 import { GanttView } from "./ui.gantt.view";
+import GanttContextMenuBar from "./ui.gantt.contextmenu";
 import dxTreeList from "../tree_list";
 import { extend } from "../../core/utils/extend";
 import { hasWindow } from "../../core/utils/window";
@@ -43,6 +44,8 @@ class Gantt extends Widget {
             .appendTo(this.$element());
         this._$loadPanel = $("<div>")
             .appendTo(this.$element());
+        this._$contextMenu = $("<div>")
+            .appendTo(this.$element());
 
         this._refreshDataSource(GANTT_TASKS);
         this._refreshDataSource(GANTT_DEPENDENCIES);
@@ -53,6 +56,7 @@ class Gantt extends Widget {
     _render() {
         this._renderTreeList();
         this._renderSplitter();
+        this._renderBars();
     }
     _renderTreeList() {
         const { keyExpr, parentIdExpr } = this.option(GANTT_TASKS);
@@ -88,6 +92,10 @@ class Gantt extends Widget {
         this._setInnerElementsWidth();
         this._splitter.option("initialLeftPanelWidth", this.option("taskListWidth"));
     }
+    _renderBars() {
+        this._contextMenuBar = new GanttContextMenuBar(this._$contextMenu, this);
+        this._bars = [this._contextMenuBar];
+    }
 
     _initGanttView() {
         if(this._ganttView) {
@@ -108,9 +116,11 @@ class Gantt extends Widget {
             showRowLines: this.option("showRowLines"),
             scaleType: this.option("scaleType"),
             editing: this.option("editing"),
+            bars: this._bars,
             onSelectionChanged: this._onGanttViewSelectionChanged.bind(this),
             onScroll: this._onGanttViewScroll.bind(this),
             onDialogShowing: this._showDialog.bind(this),
+            onPopupMenuShowing: this._showPopupMenu.bind(this),
             modelChangesListener: this._createModelChangesListener()
         });
     }
@@ -362,6 +372,13 @@ class Gantt extends Widget {
             this._dialogInstance = new GanttDialog(this, this._$dialog);
         }
         this._dialogInstance.show(e.name, e.parameters, e.callback, this.option("editing"));
+    }
+    _showPopupMenu(e) {
+        this._ganttView.getBarManager().updateContextMenu();
+        this._contextMenuBar.show(e.position);
+    }
+    _executeCoreCommand(id) {
+        this._ganttView.executeCoreCommand(id);
     }
 
     _clean() {
