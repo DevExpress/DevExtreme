@@ -368,7 +368,7 @@ var Sortable = Draggable.inherit({
             this._updatePlaceholderPosition(e, itemPoint);
 
             if(this.verticalScrollHelper.isScrolling()) {
-                this._movePlaceholder(itemPoint.index);
+                this._movePlaceholder();
             }
         }
     },
@@ -655,6 +655,32 @@ var Sortable = Draggable.inherit({
         }
     },
 
+    _isPositionVisible: function(position) {
+        var $element = this.$element(),
+            $parents = $element.add($element.parents()),
+            scrollContainer;
+
+        $parents.each(function() {
+            if($(this).css("overflow") !== "visible") {
+                scrollContainer = this;
+                return false;
+            }
+        });
+
+        if(scrollContainer) {
+            let clientRect = scrollContainer.getBoundingClientRect(),
+                isVerticalOrientation = this._isVerticalOrientation(),
+                start = isVerticalOrientation ? "top" : "left",
+                end = isVerticalOrientation ? "bottom" : "right";
+
+            if(position[start] < clientRect[start] || position[start] > clientRect[end]) {
+                return false;
+            }
+        }
+
+        return true;
+    },
+
     _optionChangedToIndex: function(args) {
         let toIndex = args.value;
 
@@ -664,20 +690,21 @@ var Sortable = Draggable.inherit({
             this._togglePlaceholder(showPlaceholder);
 
             if(showPlaceholder) {
-                this._movePlaceholder(toIndex);
+                this._movePlaceholder();
             }
         } else {
             this._moveItems(args.previousValue, args.value);
         }
     },
 
-    _movePlaceholder: function(toIndex) {
+    _movePlaceholder: function() {
         let $placeholderElement = this._$placeholderElement || this._createPlaceholder(),
             items = this._getItems(),
+            toIndex = this.option("toIndex"),
             itemElement = items[toIndex],
             prevItemElement = items[toIndex - 1],
             isVerticalOrientation = this._isVerticalOrientation(),
-            position;
+            position = null;
 
         this._updatePlaceholderSizes($placeholderElement, itemElement);
 
@@ -686,6 +713,10 @@ var Sortable = Draggable.inherit({
         } else if(prevItemElement) {
             position = $(prevItemElement).offset();
             position.top += isVerticalOrientation ? $(prevItemElement).outerHeight(true) : $(prevItemElement).outerWidth(true);
+        }
+
+        if(position && !this._isPositionVisible(position)) {
+            position = null;
         }
 
         if(position) {
