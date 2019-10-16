@@ -77,6 +77,8 @@ test(`[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> cl
         .expect(tabPanel.multiview.getItem(0).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(1).isFocused).ok()
         .expect(tabPanel.multiview.getItem(2).isFocused).notOk()
+
+    await t
         .pressKey("right")
         .expect(tabPanel.isFocused).ok()
         .expect(tabPanel.tabs.isFocused).ok()
@@ -119,6 +121,8 @@ test(`[{0: selected}, {1}] -> click to multiview -> navigate to tabs[1] -> click
         .expect(tabPanel.tabs.getItem(1).isFocused).notOk()
         .expect(tabPanel.multiview.getItem(0).isFocused).ok()
         .expect(tabPanel.multiview.getItem(1).isFocused).notOk()
+    
+    await t
         .pressKey("right")
         .expect(tabPanel.isFocused).ok()
         .expect(tabPanel.tabs.isFocused).notOk()
