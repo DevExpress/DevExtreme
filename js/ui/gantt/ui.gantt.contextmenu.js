@@ -26,10 +26,12 @@ class GanttContextMenuBar { // IBar
             createSubTask: 1,
             removeTask: 2,
             removeDependency: 3,
-            showTasksDialog: 4
+            showTasksDialog: 4,
+            addTask: 5
         };
         this._items = [
             { text: "Add",
+                commandId: commandIds.addTask,
                 items: [
                     { text: "Task", commandId: commandIds.createTask },
                     { text: "Subtask", commandId: commandIds.createSubTask }
