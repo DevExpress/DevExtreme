@@ -442,8 +442,8 @@ var Draggable = DOMComponentWithTemplate.inherit({
             }
 
             dragElementOffset = $dragElement.offset();
-            elementOffset.top -= dragElementOffset.top - (normalizedCursorOffset.top || 0) - currentLocate.top;
-            elementOffset.left -= dragElementOffset.left - (normalizedCursorOffset.left || 0) - currentLocate.left;
+            elementOffset.top -= dragElementOffset.top + (normalizedCursorOffset.top || 0) - currentLocate.top;
+            elementOffset.left -= dragElementOffset.left + (normalizedCursorOffset.left || 0) - currentLocate.left;
         }
 
         return elementOffset;

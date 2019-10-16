@@ -71,8 +71,8 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
                     const $dragElement = $(dragElement);
 
                     return {
-                        x: -$dragElement.width() / 2,
-                        y: -$dragElement.height() / 2
+                        x: $dragElement.width() / 2,
+                        y: $dragElement.height() / 2
                     };
                 },
                 dragTemplate: () => {
