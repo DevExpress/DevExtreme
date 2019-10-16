@@ -118,6 +118,16 @@ export default class AppointmentPopup {
         return formElement;
     }
 
+    _createAppointmentFormData(appointmentData) {
+        const result = extend(true, {}, appointmentData);
+
+        each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (resourceName, resourceValue) => {
+            result[resourceName] = resourceValue;
+        });
+
+        return result;
+    }
+
     _createForm(element) {
         const { expr } = this.scheduler._dataAccessors;
         const resources = this.scheduler.option("resources");
@@ -144,7 +154,7 @@ export default class AppointmentPopup {
             this.scheduler._createComponent.bind(this.scheduler),
             element,
             isReadOnly,
-            this.state.appointment.data
+            this._createAppointmentFormData(this.state.appointment.data)
         );
     }
 
@@ -153,11 +163,8 @@ export default class AppointmentPopup {
             startDate = this.scheduler.fire("getField", "startDate", appointmentData),
             endDate = this.scheduler.fire("getField", "endDate", appointmentData);
 
-        each(this.scheduler._resourcesManager.getResourcesFromItem(appointmentData, true) || {}, (resourceName, resourceValue) => {
-            appointmentData[resourceName] = resourceValue;
-        });
 
-        const formData = extend(true, {}, appointmentData);
+        const formData = this._createAppointmentFormData(appointmentData);
 
         this.state.appointment.isEmptyText = appointmentData === undefined || appointmentData.text === undefined;
         this.state.appointment.isEmptyDescription = appointmentData === undefined || appointmentData.description === undefined;
