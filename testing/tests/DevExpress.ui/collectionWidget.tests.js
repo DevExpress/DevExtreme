@@ -2085,3 +2085,48 @@ module("default template", {
         assert.strictEqual($item.text(), "Item 1", "displayExpr works");
     });
 });
+
+module("selection", {
+    beforeEach: () => {
+        this.createWidget = (options) => {
+            options.items = options.items || [1, 2, 3];
+
+            return new TestWidget($("#cmp"), options);
+        };
+    }
+}, () => {
+    ["single", "multiple"].forEach((selectionMode) => {
+        test(`selectedItemKeys should be updates properly with the ${selectionMode} selection mode`, assert => {
+            const instance = this.createWidget({
+                selectionMode
+            });
+            const originalKeys = instance.option("selectedItemKeys");
+
+            instance.selectItem(instance.itemElements().eq(1));
+            const newKeys = instance.option("selectedItemKeys");
+
+            assert.deepEqual(originalKeys, [], "there is no selected items after widget creating");
+            assert.deepEqual(newKeys, [2], "after selection 'selectedItemKeys' container correct item key");
+        });
+
+        test(`selectedItemKeys === null should not throw an error with the ${selectionMode} selection mode`, assert => {
+            let isOK = true;
+            let selectedItemKeys;
+
+            try {
+                const instance = this.createWidget({
+                    selectedItemKeys: null,
+                    selectionMode
+                });
+
+                instance.selectItem(instance.itemElements().eq(1));
+                selectedItemKeys = instance.option("selectedItemKeys");
+            } catch(e) {
+                isOK = false;
+            }
+
+            assert.ok(isOK, "selectedItemKeys === null handled correctly");
+            assert.deepEqual(selectedItemKeys, [2], "after selection 'selectedItemKeys' container correct item key");
+        });
+    });
+});

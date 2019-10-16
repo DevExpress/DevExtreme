@@ -768,7 +768,9 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         if(this.option("selectionMode") === "single") {
             this._selection.setSelection([key]);
         } else {
-            var selectedItemKeys = this.option("selectedItemKeys");
+            var selectedItemKeys = this.option("selectedItemKeys") || [];
+
+            selectedItemKeys = selectedItemKeys.slice();
             selectedItemKeys.push(key);
             this._selection.setSelection(selectedItemKeys);
         }
