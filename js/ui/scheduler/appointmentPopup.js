@@ -120,10 +120,7 @@ export default class AppointmentPopup {
 
     _createAppointmentFormData(appointmentData) {
         const result = extend(true, {}, appointmentData);
-
-        each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (resourceName, resourceValue) => {
-            result[resourceName] = resourceValue;
-        });
+        each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;
     }
