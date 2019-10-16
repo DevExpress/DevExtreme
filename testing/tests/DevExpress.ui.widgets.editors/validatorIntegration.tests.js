@@ -6,18 +6,31 @@ var $ = require("jquery"),
 
 require("common.css!");
 require("generic_light.css!");
+
 require("ui/text_box");
 require("ui/date_box");
 require("ui/number_box");
+require("ui/autocomplete");
+require("ui/calendar");
+require("ui/check_box");
+require("ui/drop_down_box");
+require("ui/html_editor");
+require("ui/lookup");
+require("ui/radio_group");
+require("ui/select_box");
+require("ui/tag_box");
+require("ui/text_area");
+
 
 var Fixture = Class.inherit({
-    createInstance: function(editor, editorOptions, validatorOptions) {
+    createInstance: function(editor, editorOptions, validatorOptions, keyboard = true) {
         var $element = $("<div/>")[editor](editorOptions).dxValidator(validatorOptions);
         this.$element = $element;
 
         this.$input = $element.find(".dx-texteditor-input");
-
-        this.keyboard = keyboardMock(this.$input);
+        if(keyboard) {
+            this.keyboard = keyboardMock(this.$input);
+        }
         this.editor = $element[editor]("instance");
         this.validator = Validator.getInstance($element);
 
@@ -31,7 +44,7 @@ var Fixture = Class.inherit({
     },
 
     teardown: function() {
-        this.$element.remove();
+        this.$element && this.$element.remove();
         ValidationEngine.initGroups();
     }
 });
@@ -91,6 +104,33 @@ var Fixture = Class.inherit({
         assert.ok(editorValidationError, "Editor should have specific validation error");
         assert.strictEqual(editorValidationError.editorSpecific, undefined, "editorSpecific flag should not be set");
         assert.strictEqual(editorValidationError.message, "Required", "Message should came from dxValidator");
+    });
+
+    QUnit.test("Editor/Validator.reset should not validate null value", function(assert) {
+        const editors = [
+            "dxAutocomplete", "dxCalendar", "dxCheckBox", "dxDateBox",
+            "dxDropDownBox", "dxHtmlEditor", "dxLookup", "dxNumberBox",
+            "dxRadioGroup", "dxSelectBox", "dxTagBox", "dxTextArea", "dxTextBox"];
+
+        const validationCallback = sinon.spy();
+        editors.forEach(editor => {
+            this.fixture.createInstance(editor, { }, {
+                validationRules: [{
+                    type: "custom",
+                    validationCallback: validationCallback
+                }]
+            }, false);
+
+            this.fixture.editor.reset();
+
+            assert.notOk(validationCallback.called, `validationCallback should not be called for ${editor} after ${editor}.reset`);
+
+            this.fixture.validator.reset();
+
+            assert.notOk(validationCallback.called, `validationCallback should not be called for ${editor} after dxValidator.reset`);
+
+            this.fixture.teardown();
+        });
     });
 
     QUnit.test("T525700: numberBox and Validator - validation on focusout with validation rule range", function(assert) {
