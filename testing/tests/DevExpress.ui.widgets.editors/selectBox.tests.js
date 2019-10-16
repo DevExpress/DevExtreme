@@ -3820,6 +3820,67 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         assert.strictEqual($list.find(".dx-list-item").text(), "1234", "all previous list items are loaded");
     });
 
+    QUnit.test("downArrow should not add new items", (assert) => {
+        const $element = $("#selectBox").dxSelectBox({
+            items: [1, 2, 3],
+            opened: false
+        });
+
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const instance = $element.dxSelectBox("instance");
+        const keyboard = keyboardMock($input);
+
+        keyboard.press("tab");
+        for(let i = 0; i < 20; ++i) {
+            keyboard.press("down");
+        }
+
+        const $list = $(instance.content()).find(toSelector(LIST_CLASS));
+
+        assert.equal($list.find(toSelector(LIST_ITEM_CLASS)).text(), "123", "downArrow works correct");
+    });
+
+    [144, 145].forEach((testHeight) => {
+        QUnit.test(`downArrow should load next page if popup container has ${testHeight % 2 ? "odd" : "even"} height`, (assert) => {
+            this.clock.restore();
+            assert.expect(1);
+            const done = assert.async();
+            const testContainer = $("#test-container").height(testHeight);
+
+            const $element = $("#selectBox").dxSelectBox({
+                    dataSource: {
+                        store: [1, 2, 3, 4, 5, 6],
+                        paginate: true,
+                        pageSize: 4
+                    },
+                    value: null,
+                    focusStateEnabled: true,
+                    opened: false,
+                    deferRendering: true,
+                    dropDownOptions: {
+                        container: testContainer
+                    }
+                }),
+                $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+                instance = $element.dxSelectBox("instance"),
+                $dropDownButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON)),
+                keyboard = keyboardMock($input);
+
+            $dropDownButton.trigger("dxclick");
+            keyboard.press("down");
+            keyboard.press("down");
+            keyboard.press("down");
+            keyboard.press("down");
+
+            setTimeout(() => {
+                const $list = $(instance.content()).find(`.${LIST_CLASS}`);
+                assert.strictEqual($list.find(`.${LIST_ITEM_CLASS}`).text(), "123456", "all list items are loaded");
+                testContainer.height("auto");
+                done();
+            }, TIME_TO_WAIT);
+        });
+    });
+
     QUnit.test("value should be correctly changed via arrow keys when grouped datasource is used", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
             dataSource: new DataSource({
