@@ -2,8 +2,10 @@ import $ from "jquery";
 import renderer from "core/renderer";
 const { test } = QUnit;
 import "ui/file_manager";
+import FileItemsController from "ui/file_manager/file_items_controller";
+import FileManagerBreadcrumbs from "ui/file_manager/ui.file_manager.breadcrumbs";
 import fx from "animation/fx";
-import { FileManagerWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
+import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
 
 const moduleConfig = {
 
@@ -40,6 +42,57 @@ const moduleConfig = {
         fx.off = false;
     }
 
+};
+
+const createBreadcrumbs = (context, controller) => {
+    const $breadcrumbs = $("<div>").appendTo(context.$element);
+    context.breadcrumbs = new FileManagerBreadcrumbs($breadcrumbs, {
+        onCurrentDirectoryChanging: e => {
+            controller.setCurrentDirectory(e.currentDirectory);
+        }
+    });
+    context.clock.tick(400);
+
+    context.breadcrumbsWrapper = new FileManagerBreadcrumbsWrapper($breadcrumbs);
+};
+
+const createFileProviderWithIncorrectName = (incorrectName) => {
+    const newItem = {
+        name: incorrectName,
+        isDirectory: true,
+        items: [
+            {
+                name: "About",
+                isDirectory: true,
+                items: []
+            },
+            {
+                name: " ",
+                isDirectory: true,
+                items: [
+                    {
+                        name: "Folder inside",
+                        isDirectory: true,
+                        items: []
+                    },
+                    {
+                        name: " ",
+                        isDirectory: true,
+                        items: []
+                    }
+                ]
+            },
+            {
+                name: "File.txt",
+                isDirectory: false,
+                size: 3072000
+            }
+        ]
+    };
+
+    let fileProvider = createTestFileSystem();
+    fileProvider.push(newItem);
+    return fileProvider;
 };
 
 QUnit.module("Navigation operations", moduleConfig, () => {
@@ -297,6 +350,86 @@ QUnit.module("Navigation operations", moduleConfig, () => {
 
         assert.strictEqual(this.wrapper.getThumbnailsItems().length, 4, "only items with allow extensions are shown");
         assert.strictEqual(this.wrapper.getThumbnailsItemName(3), "File 3.xml", "item name has allowed extension");
+    });
+
+    test("slashes in directory name must be processed correctly", function(assert) {
+        const incorrectName = "Docu\\/me\\/nts";
+        const fileProvider = createFileProviderWithIncorrectName(incorrectName);
+        let controller = new FileItemsController({
+            fileProvider,
+            rootText: "Files",
+            currentPath: "",
+            onSelectedDirectoryChanged: () => { this.breadcrumbs.setCurrentDirectory(controller.getCurrentDirectory()); }
+        });
+
+        createBreadcrumbs(this, controller);
+
+        const rootDirectory = controller.getCurrentDirectory();
+        controller
+            .getDirectoryContents(rootDirectory)
+            .then(items => {
+                controller.setCurrentDirectory(items[6]);
+                assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName, "breadcrumbs refrers to the target folder");
+            });
+        this.clock.tick(400);
+
+        controller
+            .getDirectoryContents(controller.getCurrentDirectory())
+            .then(items => {
+                controller.setCurrentDirectory(items[0]);
+                assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/About", "breadcrumbs refrers to the target folder");
+            });
+        this.clock.tick(400);
+
+        this.breadcrumbsWrapper.getItemByText(incorrectName).trigger("dxclick");
+        this.clock.tick(400);
+        assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName, "breadcrumbs refrers to the target folder");
+
+        this.breadcrumbsWrapper.getItemByText("Files").trigger("dxclick");
+        this.clock.tick(400);
+        assert.equal(this.breadcrumbsWrapper.getPath(), "Files", "breadcrumbs refrers to the root folder");
+    });
+
+    test("whitespace as directory name must be processed correctly", function(assert) {
+        const incorrectName = "Docu\\/me\\/nts";
+        const fileProvider = createFileProviderWithIncorrectName(incorrectName);
+        let controller = new FileItemsController({
+            fileProvider,
+            rootText: "Files",
+            currentPath: "",
+            onSelectedDirectoryChanged: () => { this.breadcrumbs.setCurrentDirectory(controller.getCurrentDirectory()); }
+        });
+
+        createBreadcrumbs(this, controller);
+
+        const rootDirectory = controller.getCurrentDirectory();
+        controller
+            .getDirectoryContents(rootDirectory)
+            .then(items => controller.getDirectoryContents(items[6]))
+            .then(items => controller.getDirectoryContents(items[1]))
+            .then(items => {
+                controller.setCurrentDirectory(items[0]);
+                assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/ /Folder inside", "breadcrumbs refrers to the target folder");
+            });
+        this.clock.tick(400);
+
+        this.breadcrumbsWrapper.getItemByText(" ").trigger("dxclick");
+        this.clock.tick(400);
+        assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/ ", "breadcrumbs refrers to the target folder");
+
+        controller
+            .getDirectoryContents(rootDirectory)
+            .then(items => controller.getDirectoryContents(items[6]))
+            .then(items => controller.getDirectoryContents(items[1]))
+            .then(items => {
+                controller.setCurrentDirectory(items[1]);
+                assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/ / ", "breadcrumbs refrers to the target folder");
+            });
+        this.clock.tick(400);
+
+        this.breadcrumbsWrapper.getParentDirectoryItem().trigger("dxclick");
+        this.clock.tick(400);
+        assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/ ", "breadcrumbs refrers to the target folder");
     });
 
 });

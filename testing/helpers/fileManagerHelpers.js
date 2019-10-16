@@ -93,29 +93,24 @@ export class FileManagerWrapper {
         return this._findActionButton($folderNode);
     }
 
+    getBreadcrumbsWrapper() {
+        return new FileManagerBreadcrumbsWrapper(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
+    }
+
     getBreadcrumbsPath() {
-        let result = "";
-        const $elements = this.getBreadcrumbsItems();
-        $elements.each((_, element) => {
-            const name = $(element).text();
-            result = result ? `${result}/${name}` : name;
-        });
-        return result;
+        return this.getBreadcrumbsWrapper().getPath();
     }
 
     getBreadcrumbsItems() {
-        return this._$element.find(`.${Consts.BREADCRUMBS_CLASS} .${Consts.MENU_ITEM_WITH_TEXT_CLASS}`);
+        return this.getBreadcrumbsWrapper().getItems();
     }
 
     getBreadcrumbsItemByText(text) {
-        return this.getBreadcrumbsItems().filter(function() {
-            const content = $(this).text();
-            return $.trim(content) === text;
-        }).first();
+        return this.getBreadcrumbsWrapper().getItemByText(text);
     }
 
     getBreadcrumbsParentDirectoryItem() {
-        return this._$element.find(`.${Consts.BREADCRUMBS_CLASS} .${Consts.BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS}`);
+        return this.getBreadcrumbsWrapper().getParentDirectoryItem();
     }
 
     getToolbar() {
@@ -377,6 +372,39 @@ export class FileManagerProgressPanelProgressBoxWrapper {
 
     get hasError() {
         return this.$error.length !== 0;
+    }
+
+}
+
+export class FileManagerBreadcrumbsWrapper {
+
+    constructor($element) {
+        this._$element = $element;
+    }
+
+    getItems() {
+        return this._$element.find(`.${Consts.MENU_ITEM_WITH_TEXT_CLASS}`);
+    }
+
+    getItemByText(text) {
+        return this.getItems().filter(function() {
+            const content = $(this).text();
+            return content === text;
+        }).first();
+    }
+
+    getPath() {
+        let result = "";
+        const $elements = this.getItems();
+        $elements.each((_, element) => {
+            const name = $(element).text();
+            result = result ? `${result}/${name}` : name;
+        });
+        return result;
+    }
+
+    getParentDirectoryItem() {
+        return this._$element.find(`.${Consts.BREADCRUMBS_PARENT_DIRECOTRY_ITEM_CLASS}`);
     }
 
 }

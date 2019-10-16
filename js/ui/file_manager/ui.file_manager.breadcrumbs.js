@@ -6,8 +6,6 @@ import { addNamespace } from "../../events/utils";
 import Widget from "../widget/ui.widget";
 import Menu from "../menu/ui.menu";
 
-import { getPathParts, getParentPath, getName } from "./ui.file_manager.utils";
-
 const FILE_MANAGER_BREADCRUMBS_CLASS = "dx-filemanager-breadcrumbs";
 const FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS = FILE_MANAGER_BREADCRUMBS_CLASS + "-parent-folder-item";
 const FILE_MANAGER_BREADCRUMBS_SEPARATOR_ITEM_CLASS = FILE_MANAGER_BREADCRUMBS_CLASS + "-separator-item";
@@ -18,11 +16,31 @@ const FILE_MANAGER_BREADCRUMBS_EVENT_NAMESPACE = "dxFileManager_breadcrubms";
 
 class FileManagerBreadcrumbs extends Widget {
 
+    _init() {
+        super._init();
+        this._currentDirectory = null;
+    }
+
     _initMarkup() {
         super._initMarkup();
 
         this._initActions();
 
+        if(this._currentDirectory) {
+            this._renderMenu();
+        }
+
+        this.$element().addClass(FILE_MANAGER_BREADCRUMBS_CLASS);
+    }
+
+    setCurrentDirectory(directory) {
+        if(!this._areDirsEqual(this._currentDirectory, directory)) {
+            this._currentDirectory = directory;
+            this.repaint();
+        }
+    }
+
+    _renderMenu() {
         const $menu = $("<div>").appendTo(this.$element());
         this._menu = this._createComponent($menu, Menu, {
             dataSource: this._getMenuItems(),
@@ -32,20 +50,15 @@ class FileManagerBreadcrumbs extends Widget {
 
         const clickEvent = addNamespace("click", FILE_MANAGER_BREADCRUMBS_EVENT_NAMESPACE);
         eventsEngine.on($menu, clickEvent, this._onClick.bind(this));
-
-        this.$element().addClass(FILE_MANAGER_BREADCRUMBS_CLASS);
     }
 
     _getMenuItems() {
-        const path = this.option("path");
-        const parts = path ? getPathParts(path, true) : [];
-        const rootFolder = this.option("rootFolderDisplayName");
-        rootFolder && parts.unshift(rootFolder);
+        const dirLine = this._getParentDirsLine();
 
         const result = [
             {
                 icon: "arrowup",
-                path: getParentPath(path),
+                directory: this._currentDirectory.parentDirectory,
                 isPathItem: true,
                 cssClass: FILE_MANAGER_BREADCRUMBS_PARENT_FOLDER_ITEM_CLASS
             },
@@ -54,22 +67,20 @@ class FileManagerBreadcrumbs extends Widget {
             }
         ];
 
-        for(let i = 0; i < parts.length; i++) {
-            const part = parts[i];
-
+        dirLine.forEach((dir, index) => {
             result.push({
-                text: getName(part),
-                path: i === 0 ? "" : part,
+                text: dir.fileItem.name,
+                directory: dir,
                 isPathItem: true
             });
 
-            if(i !== parts.length - 1) {
+            if(index !== dirLine.length - 1) {
                 result.push({
                     icon: "spinnext",
                     cssClass: FILE_MANAGER_BREADCRUMBS_PATH_SEPARATOR_ITEM_CLASS
                 });
             }
-        }
+        });
 
         return result;
     }
@@ -79,11 +90,9 @@ class FileManagerBreadcrumbs extends Widget {
             return;
         }
 
-        const path = this.option("path");
-        const newPath = itemData.path;
-
-        if(newPath !== path) {
-            this._raisePathChanged(newPath);
+        const newDir = itemData.directory;
+        if(!this._areDirsEqual(newDir, this._currentDirectory)) {
+            this._raiseCurrentDirectoryChanged(newDir);
         }
     }
 
@@ -100,15 +109,31 @@ class FileManagerBreadcrumbs extends Widget {
         }
     }
 
+    _getParentDirsLine() {
+        let currentDirectory = this._currentDirectory;
+        const result = [];
+
+        while(currentDirectory) {
+            result.unshift(currentDirectory);
+            currentDirectory = currentDirectory.parentDirectory;
+        }
+
+        return result;
+    }
+
+    _areDirsEqual(dir1, dir2) {
+        return dir1 && dir2 && dir1 === dir2 && dir1.fileItem.key === dir2.fileItem.key;
+    }
+
     _initActions() {
         this._actions = {
-            onPathChanged: this._createActionByOption("onPathChanged"),
+            onCurrentDirectoryChanging: this._createActionByOption("onCurrentDirectoryChanging"),
             onOutsideClick: this._createActionByOption("onOutsideClick")
         };
     }
 
-    _raisePathChanged(newPath) {
-        this._actions.onPathChanged({ newPath });
+    _raiseCurrentDirectoryChanged(currentDirectory) {
+        this._actions.onCurrentDirectoryChanging({ currentDirectory });
     }
 
     _raiseOutsideClick() {
@@ -118,8 +143,7 @@ class FileManagerBreadcrumbs extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             rootFolderDisplayName: "Files",
-            path: "",
-            onPathChanged: null,
+            onCurrentDirectoryChanging: null,
             onOutsideClick: null
         });
     }
@@ -129,10 +153,9 @@ class FileManagerBreadcrumbs extends Widget {
 
         switch(name) {
             case "rootFolderDisplayName":
-            case "path":
                 this.repaint();
                 break;
-            case "onPathChanged":
+            case "onCurrentDirectoryChanging":
             case "onOutsideClick":
                 this._actions[name] = this._createActionByOption(name);
                 break;
