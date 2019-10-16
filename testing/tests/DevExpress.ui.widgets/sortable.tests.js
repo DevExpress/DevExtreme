@@ -36,7 +36,7 @@ QUnit.testStart(function() {
                 <div id="item13" class="draggable" style="height: 30px; background: blue;">item3</div>
             </div>
         </div>
-        <div id="itemsWithScroll" style="height: 350px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
+        <div id="itemsWithScroll" style="height: 250px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
             <div id="scrollableContainer" style="width: 300px;">
                 <div id="item21" class="draggable" style="width: 300px; height: 50px; background: yellow;">item1</div>
                 <div id="item22" class="draggable" style="width: 300px; height: 50px; background: red;">item2</div>
@@ -48,12 +48,6 @@ QUnit.testStart(function() {
                 <div id="item28" class="draggable" style="width: 300px; height: 50px; background: red;">item8</div>
                 <div id="item31" class="draggable" style="width: 300px; height: 50px; background: yellow;">item9</div>
                 <div id="item32" class="draggable" style="width: 300px; height: 50px; background: red;">item10</div>
-                <div id="item33" class="draggable" style="width: 300px; height: 50px; background: blue;">item11</div>
-                <div id="item34" class="draggable" style="width: 300px; height: 50px; background: yellow;">item12</div>
-                <div id="item35" class="draggable" style="width: 300px; height: 50px; background: red;">item13</div>
-                <div id="item36" class="draggable" style="width: 300px; height: 50px; background: blue;">item14</div>
-                <div id="item37" class="draggable" style="width: 300px; height: 50px; background: yellow;">item15</div>
-                <div id="item38" class="draggable" style="width: 300px; height: 50px; background: red;">item16</div>
             </div>
         </div>
         `;
@@ -2069,11 +2063,6 @@ QUnit.test("Placeholder should work correctly during autoscroll", function(asser
         previousPlaceholderOffsetTop,
         currentPlaceholderOffsetTop;
 
-    $("#itemsWithScroll").dxScrollView({
-        direction: 'both',
-        useNative: false
-    }).dxScrollView("instance");
-
     this.createSortable({
         filter: ".draggable",
         dropFeedbackMode: "indicate",
@@ -2084,10 +2073,10 @@ QUnit.test("Placeholder should work correctly during autoscroll", function(asser
     items = this.$element.find("#scrollableContainer").children();
 
     // act
-    pointer = pointerMock(items.eq(0)).start().down().move(0, 280);
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 189);
     this.clock.tick(10);
 
-    pointer.move(0, 20);
+    pointer.move(0, 10);
     this.clock.tick(10);
 
     previousPlaceholderOffsetTop = $(PLACEHOLDER_SELECTOR).offset().top;
