@@ -366,6 +366,10 @@ var Sortable = Draggable.inherit({
         }
         if(itemPoint) {
             this._updatePlaceholderPosition(e, itemPoint);
+
+            if(this.verticalScrollHelper.isScrolling()) {
+                this._movePlaceholder(itemPoint.index);
+            }
         }
     },
 
@@ -658,30 +662,37 @@ var Sortable = Draggable.inherit({
             let showPlaceholder = toIndex !== null && toIndex >= 0;
 
             this._togglePlaceholder(showPlaceholder);
+
             if(showPlaceholder) {
-                let $placeholderElement = this._$placeholderElement || this._createPlaceholder(),
-                    items = this._getItems(),
-                    itemElement = items[toIndex],
-                    prevItemElement = items[toIndex - 1],
-                    isVerticalOrientation = this._isVerticalOrientation(),
-                    position;
-
-                this._updatePlaceholderSizes($placeholderElement, itemElement);
-
-                if(itemElement) {
-                    position = $(itemElement).offset();
-                } else if(prevItemElement) {
-                    position = $(prevItemElement).offset();
-                    position.top += isVerticalOrientation ? $(prevItemElement).outerHeight(true) : $(prevItemElement).outerWidth(true);
-                }
-                if(position) {
-                    this._move(position, $placeholderElement);
-                }
-                $placeholderElement.toggle(!!position);
+                this._movePlaceholder(toIndex);
             }
         } else {
             this._moveItems(args.previousValue, args.value);
         }
+    },
+
+    _movePlaceholder: function(toIndex) {
+        let $placeholderElement = this._$placeholderElement || this._createPlaceholder(),
+            items = this._getItems(),
+            itemElement = items[toIndex],
+            prevItemElement = items[toIndex - 1],
+            isVerticalOrientation = this._isVerticalOrientation(),
+            position;
+
+        this._updatePlaceholderSizes($placeholderElement, itemElement);
+
+        if(itemElement) {
+            position = $(itemElement).offset();
+        } else if(prevItemElement) {
+            position = $(prevItemElement).offset();
+            position.top += isVerticalOrientation ? $(prevItemElement).outerHeight(true) : $(prevItemElement).outerWidth(true);
+        }
+
+        if(position) {
+            this._move(position, $placeholderElement);
+        }
+
+        $placeholderElement.toggle(!!position);
     },
 
     _getPositions: function(items, elementSize, fromIndex, toIndex) {

@@ -2,6 +2,7 @@ import $ from "jquery";
 import pointerMock from "../../helpers/pointerMock.js";
 import "ui/sortable";
 import fx from "animation/fx";
+import animationFrame from "animation/frame";
 import browser from "core/utils/browser";
 
 import "common.css!";
@@ -34,12 +35,28 @@ QUnit.testStart(function() {
                 <div id="item13" class="draggable" style="height: 30px; background: blue;">item3</div>
             </div>
         </div>
+        <div id="itemsWithScroll" style="height: 250px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
+            <div id="scrollableContainer" style="width: 300px;">
+                <div id="item21" class="draggable" style="width: 300px; height: 50px; background: yellow;">item1</div>
+                <div id="item22" class="draggable" style="width: 300px; height: 50px; background: red;">item2</div>
+                <div id="item23" class="draggable" style="width: 300px; height: 50px; background: blue;">item3</div>
+                <div id="item24" class="draggable" style="width: 300px; height: 50px; background: yellow;">item4</div>
+                <div id="item25" class="draggable" style="width: 300px; height: 50px; background: red;">item5</div>
+                <div id="item26" class="draggable" style="width: 300px; height: 50px; background: blue;">item6</div>
+                <div id="item27" class="draggable" style="width: 300px; height: 50px; background: yellow;">item7</div>
+                <div id="item28" class="draggable" style="width: 300px; height: 50px; background: red;">item8</div>
+                <div id="item31" class="draggable" style="width: 300px; height: 50px; background: yellow;">item9</div>
+                <div id="item32" class="draggable" style="width: 300px; height: 50px; background: red;">item10</div>
+            </div>
+        </div>
         `;
 
     $("#qunit-fixture").html(markup);
 });
 
-var SORTABLE_CLASS = "dx-sortable";
+var SORTABLE_CLASS = "dx-sortable",
+    PLACEHOLDER_CLASS = "dx-sortable-placeholder",
+    PLACEHOLDER_SELECTOR = `.${PLACEHOLDER_CLASS}`;
 
 var moduleConfig = {
     beforeEach: function() {
@@ -1989,4 +2006,88 @@ QUnit.test("Dragging an item to another sortable and back when it is alone in th
     assert.strictEqual(items1.length, 3, "first list - item count");
     assert.strictEqual(items2.length, 1, "second list - item count");
     assert.strictEqual(items2.first().attr("id"), "item7", "second list - first item");
+});
+
+QUnit.module("With scroll", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.originalRAF = animationFrame.requestAnimationFrame;
+        animationFrame.requestAnimationFrame = function(callback) {
+            return window.setTimeout(callback, 10);
+        };
+
+        $("#qunit-fixture").addClass("qunit-fixture-visible");
+        this.$element = $("#itemsWithScroll");
+
+        $("#itemsWithScroll").show();
+
+        $("#itemsWithScroll").scrollTop(0);
+        $("#itemsWithScroll").scrollLeft(0);
+
+        $("#items").hide();
+        $("#items2").hide();
+        $("#items3").hide();
+        $("#itemsWithContentTemplate").hide();
+        $("#itemsHorizontal").hide();
+
+        this.createSortable = (options) => {
+            return this.sortableInstance = this.$element.dxSortable(options).dxSortable("instance");
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+        this.clock.reset();
+
+        animationFrame.requestAnimationFrame = this.originalRAF;
+
+        $("#qunit-fixture").removeClass("qunit-fixture-visible");
+        this.sortableInstance && this.sortableInstance.dispose();
+
+
+        $("#itemsWithScroll").hide();
+
+        $("#items").show();
+        $("#items2").show();
+        $("#items3").show();
+        $("#itemsWithContentTemplate").show();
+        $("#itemsHorizontal").show();
+    }
+});
+
+QUnit.test("Placeholder position should be updated during autoscroll", function(assert) {
+    // arrange
+    let pointer,
+        items,
+        previousPlaceholderOffsetTop,
+        currentPlaceholderOffsetTop;
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate",
+        moveItemOnDrop: true,
+        scrollSpeed: 10
+    });
+
+    items = this.$element.find("#scrollableContainer").children();
+
+    // act, assert
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 189);
+    this.clock.tick(10);
+
+    pointer.move(0, 10);
+    this.clock.tick(10);
+
+    previousPlaceholderOffsetTop = $(PLACEHOLDER_SELECTOR).offset().top;
+
+    for(let i = 0; i < 3; i++) {
+        this.clock.tick(10);
+        currentPlaceholderOffsetTop = $(PLACEHOLDER_SELECTOR).offset().top;
+
+        assert.ok(currentPlaceholderOffsetTop !== previousPlaceholderOffsetTop, "placeholder was updated");
+
+        previousPlaceholderOffsetTop = currentPlaceholderOffsetTop;
+    }
+
+    pointer.up();
 });

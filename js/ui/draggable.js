@@ -68,6 +68,10 @@ class ScrollHelper {
         }
     }
 
+    isScrolling() {
+        return !!this._scrollSpeed;
+    }
+
     _trySetScrollable(element, mousePosition) {
         var that = this,
             $element = $(element),
