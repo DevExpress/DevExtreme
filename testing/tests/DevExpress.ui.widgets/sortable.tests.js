@@ -60,7 +60,9 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var SORTABLE_CLASS = "dx-sortable";
+var SORTABLE_CLASS = "dx-sortable",
+    PLACEHOLDER_CLASS = "dx-sortable-placeholder",
+    PLACEHOLDER_SELECTOR = `.${PLACEHOLDER_CLASS}`;
 
 var moduleConfig = {
     beforeEach: function() {
@@ -2082,13 +2084,15 @@ QUnit.test("Placeholder should work correctly during autoscroll", function(asser
     pointer.move(0, 20);
     this.clock.tick(10);
 
-    previousPlaceholderOffsetTop = $(".dx-sortable-placeholder").offset().top;
+    previousPlaceholderOffsetTop = $(PLACEHOLDER_SELECTOR).offset().top;
 
     for(let i = 0; i < 3; i++) {
         this.clock.tick(10);
-        currentPlaceholderOffsetTop = $(".dx-sortable-placeholder").offset().top;
+        currentPlaceholderOffsetTop = $(PLACEHOLDER_SELECTOR).offset().top;
 
         assert.ok(currentPlaceholderOffsetTop !== previousPlaceholderOffsetTop, "placeholder was moved");
+
+        previousPlaceholderOffsetTop = currentPlaceholderOffsetTop;
     }
 
     // assert
