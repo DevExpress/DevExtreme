@@ -1,7 +1,6 @@
 import Widget from './internal/widget';
 
 const CLASS = {
-    tabs: "dx-tabs",
     item: "dx-tab",
     focused: "dx-state-focused"
 };

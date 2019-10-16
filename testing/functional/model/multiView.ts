@@ -1,7 +1,6 @@
 import Widget from './internal/widget';
 
 const CLASS = {
-    multiview: "dx-multiview",
     item: "dx-multiview-item",
     focused: "dx-state-focused"
 };
