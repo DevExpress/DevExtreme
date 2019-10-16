@@ -432,4 +432,35 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/ ", "breadcrumbs refrers to the target folder");
     });
 
+    test("special symbols in 'currentPath' option must be processed correctly", function(assert) {
+        const inst = this.wrapper.getInstance();
+        const incorrectName = "Docu\\/me\\/nts";
+        const fileProvider = createFileProviderWithIncorrectName(incorrectName);
+        inst.option("fileProvider", fileProvider);
+
+        inst.option("currentPath", incorrectName);
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), incorrectName, "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName, "breadcrumbs refrers to the target folder");
+
+        inst.option("currentPath", incorrectName + "/About");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "About", "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/About", "breadcrumbs refrers to the target folder");
+
+        inst.option("currentPath", incorrectName + "/ ");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), " ", "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/ ", "breadcrumbs refrers to the target folder");
+
+        inst.option("currentPath", incorrectName + "/ / ");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), " ", "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/ / ", "breadcrumbs refrers to the target folder");
+    });
+
 });

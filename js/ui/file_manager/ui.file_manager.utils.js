@@ -1,6 +1,7 @@
 import { each } from "../../core/utils/iterator";
 
 const PATH_SEPARATOR = "/";
+const ESCAPE_SYMBOL = "\\";
 
 const getFileExtension = path => {
     const index = path.lastIndexOf(".");
@@ -18,10 +19,26 @@ const getParentPath = path => {
 };
 
 const getPathParts = (path, includeFullPath) => {
-    const result = (path || "")
-        .split(PATH_SEPARATOR)
-        .map(p => p.trim())
-        .filter(p => p);
+    path = path || "";
+    const result = [];
+    let isEscaped = false;
+    let buffer = "";
+    for(let i = 0; i < path.length; i++) {
+        const char = path.charAt(i);
+        if(char === PATH_SEPARATOR) {
+            if(!isEscaped) {
+                result.push(buffer);
+                buffer = "";
+                continue;
+            }
+        }
+        isEscaped = (char === ESCAPE_SYMBOL);
+        buffer += char;
+    }
+
+    if(buffer || !result.length) {
+        result.push(buffer);
+    }
 
     if(includeFullPath) {
         for(let i = 0; i < result.length; i++) {
