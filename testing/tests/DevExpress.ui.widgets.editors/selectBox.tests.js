@@ -356,7 +356,6 @@ QUnit.module("functionality", moduleSetup, () => {
             width: 40
         });
 
-        assert.strictEqual($element.attr("title"), undefined, "tooltip should not be added");
     });
 
     QUnit.test("show hint when tooltip is not enabled", (assert) => {
@@ -3839,7 +3838,7 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
 
         assert.equal($list.find(toSelector(LIST_ITEM_CLASS)).text(), "123", "downArrow works correct");
     });
-    
+
     QUnit.test("value should be correctly changed via arrow keys when grouped datasource is used", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
             dataSource: new DataSource({
