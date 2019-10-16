@@ -17,7 +17,8 @@ var $ = require("../core/renderer"),
     typeUtils = require("../core/utils/type"),
     noop = require("../core/utils/common").noop,
     viewPortUtils = require("../core/utils/view_port"),
-    commonUtils = require("../core/utils/common");
+    commonUtils = require("../core/utils/common"),
+    EmptyTemplate = require("../core/templates/empty_template").EmptyTemplate;
 
 var DRAGGABLE = "dxDraggable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE),
@@ -915,6 +916,7 @@ var Draggable = DOMComponentWithTemplate.inherit({
         if(!this.option("contentTemplate")) return;
 
         this.callBase.apply(this, arguments);
+        this._defaultTemplates["content"] = new EmptyTemplate();
     },
 
     _render: function() {
