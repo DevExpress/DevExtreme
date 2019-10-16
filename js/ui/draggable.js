@@ -392,45 +392,69 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this.verticalScrollHelper = new ScrollHelper("vertical", this);
     },
 
-    _normalizeCursorOffset: function(offset, options) {
-        if(typeUtils.isFunction(offset)) {
-            offset = offset.call(this, options);
-        }
-
+    _normalizeCursorOffset: function(offset) {
         if(typeUtils.isObject(offset)) {
             offset = {
                 h: offset.x,
                 v: offset.y
             };
         }
-
-        let result = commonUtils.pairToObject(offset);
+        offset = commonUtils.splitPair(offset).map((value) => parseFloat(value));
 
         return {
-            left: result.h,
-            top: result.v
+            left: offset[0],
+            top: offset.length === 1 ? offset[0] : offset[1]
         };
     },
 
-    _initPosition: function(options, initialOffset) {
+    _getNormalizedCursorOffset: function(offset, options) {
+        if(typeUtils.isFunction(offset)) {
+            offset = offset.call(this, options);
+        }
+
+        return this._normalizeCursorOffset(offset);
+    },
+
+    _calculateElementOffset: function(options) {
         let elementOffset,
             dragElementOffset,
+            event = options.event,
             $element = $(options.itemElement),
             $dragElement = $(options.dragElement),
             isCloned = this._dragElementIsCloned(),
             cursorOffset = this.option("cursorOffset"),
-            normalizedCursorOffset = this._normalizeCursorOffset(cursorOffset, options),
+            normalizedCursorOffset = { left: 0, top: 0 },
             currentLocate = this._initialLocate = translator.locate($dragElement);
 
-        if(isCloned || initialOffset) {
-            elementOffset = initialOffset || $element.offset();
+        if(isCloned || options.initialOffset || cursorOffset) {
+            elementOffset = options.initialOffset || $element.offset();
+
+            if(cursorOffset) {
+                normalizedCursorOffset = this._getNormalizedCursorOffset(cursorOffset, options);
+
+                if(isFinite(normalizedCursorOffset.left)) {
+                    elementOffset.left = event.pageX;
+                }
+
+                if(isFinite(normalizedCursorOffset.top)) {
+                    elementOffset.top = event.pageY;
+                }
+            }
+
             dragElementOffset = $dragElement.offset();
-            elementOffset.top -= dragElementOffset.top - normalizedCursorOffset.top - currentLocate.top;
-            elementOffset.left -= dragElementOffset.left - normalizedCursorOffset.left - currentLocate.left;
+            elementOffset.top -= dragElementOffset.top + (normalizedCursorOffset.top || 0) - currentLocate.top;
+            elementOffset.left -= dragElementOffset.left + (normalizedCursorOffset.left || 0) - currentLocate.left;
         }
 
-        if(elementOffset || cursorOffset) {
-            this._move(elementOffset || normalizedCursorOffset, $dragElement);
+        return elementOffset;
+    },
+
+    _initPosition: function(options) {
+        let $dragElement = $(options.dragElement),
+            elementOffset = this._calculateElementOffset(options);
+
+        if(elementOffset) {
+            this._move(elementOffset, $dragElement);
         }
 
         this._startPosition = translator.locate($dragElement);
@@ -652,7 +676,10 @@ var Draggable = DOMComponentWithTemplate.inherit({
         this._toggleDragSourceClass(true);
         isFixedPosition = $dragElement.css("position") === "fixed";
 
-        this._initPosition(extend({}, dragStartArgs, { dragElement: $dragElement.get(0) }), isFixedPosition && initialOffset);
+        this._initPosition(extend({}, dragStartArgs, {
+            dragElement: $dragElement.get(0),
+            initialOffset: isFixedPosition && initialOffset
+        }));
 
         var $area = this._getArea(),
             areaOffset = this._getAreaOffset($area),
