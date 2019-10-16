@@ -18,10 +18,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
             this.component._optionsByReference.focusedRowKey = true;
-
-            if(!this.option("autoNavigateToFocusedRow")) {
-                this.option("skipFocusedRowNavigation", true);
-            }
         },
 
         optionChanged: function(args) {
@@ -53,7 +49,9 @@ exports.FocusController = core.ViewController.inherit((function() {
             index = index !== undefined ? index : this.option("focusedRowIndex");
 
             if(index < 0) {
-                this._resetFocusedRow();
+                if(this.option("autoNavigateToFocusedRow")) {
+                    this._resetFocusedRow();
+                }
             } else {
                 this._focusRowByIndexCore(index);
             }
@@ -156,6 +154,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this,
                 dataController = this.getController("data"),
                 rowIndex = this.option("focusedRowIndex"),
+                isAutoNavigate = that.option("autoNavigateToFocusedRow"),
                 d = new Deferred();
 
             that.option("skipFocusedRowNavigation", !needFocusRow);
@@ -167,7 +166,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             let rowIndexByKey = that._getFocusedRowIndexByKey(key),
                 isPaginate = dataController.getDataSource().paginate();
 
-            if(!isPaginate || rowIndex >= 0 && rowIndex === rowIndexByKey) {
+            if(!isAutoNavigate || !isPaginate || rowIndex >= 0 && rowIndex === rowIndexByKey) {
                 that._navigateTo(key, d, needFocusRow);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
@@ -198,8 +197,9 @@ exports.FocusController = core.ViewController.inherit((function() {
         _navigateTo: function(key, deferred, needFocusRow) {
             const visibleRowIndex = this.getController("data").getRowIndexByKey(key);
             const isVirtualRowRenderingMode = this.option("scrolling.rowRenderingMode") === "virtual";
+            const isAutoNavigate = this.option("autoNavigateToFocusedRow");
 
-            if(isVirtualRowRenderingMode && visibleRowIndex < 0) {
+            if(isAutoNavigate && isVirtualRowRenderingMode && visibleRowIndex < 0) {
                 this._navigateToVirtualRow(key, deferred, needFocusRow);
             } else {
                 this._navigateToVisibleRow(key, deferred, needFocusRow);
