@@ -3817,6 +3817,26 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
         assert.strictEqual($list.find(".dx-list-item").text(), "1234", "all previous list items are loaded");
     });
 
+    QUnit.test("downArrow should not add new items", (assert) => {
+        const $element = $("#selectBox").dxSelectBox({
+            items: [1, 2, 3],
+            opened: false
+        });
+
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const instance = $element.dxSelectBox("instance");
+        const keyboard = keyboardMock($input);
+
+        keyboard.press("tab");
+        for(let i = 0; i < 20; ++i) {
+            keyboard.press("down");
+        }
+
+        const $list = $(instance.content()).find(toSelector(LIST_CLASS));
+
+        assert.equal($list.find(toSelector(LIST_ITEM_CLASS)).text(), "123", "downArrow works correct");
+    });
+
     [144, 145].forEach((testHeight) => {
         QUnit.test(`downArrow should load next page if popup container has ${testHeight % 2 ? "odd" : "even"} height`, (assert) => {
             this.clock.restore();
