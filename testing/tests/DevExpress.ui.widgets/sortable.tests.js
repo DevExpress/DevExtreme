@@ -2008,7 +2008,7 @@ QUnit.test("Dragging an item to another sortable and back when it is alone in th
     assert.strictEqual(items2.first().attr("id"), "item7", "second list - first item");
 });
 
-QUnit.module("with scroll", {
+QUnit.module("With scroll", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
@@ -2055,7 +2055,7 @@ QUnit.module("with scroll", {
     }
 });
 
-QUnit.test("Placeholder should work correctly during autoscroll", function(assert) {
+QUnit.test("Placeholder position should be updated during autoscroll", function(assert) {
     // arrange
     let pointer,
         items,
@@ -2084,7 +2084,7 @@ QUnit.test("Placeholder should work correctly during autoscroll", function(asser
         this.clock.tick(10);
         currentPlaceholderOffsetTop = $(PLACEHOLDER_SELECTOR).offset().top;
 
-        assert.ok(currentPlaceholderOffsetTop !== previousPlaceholderOffsetTop, "placeholder was moved");
+        assert.ok(currentPlaceholderOffsetTop !== previousPlaceholderOffsetTop, "placeholder was updated");
 
         previousPlaceholderOffsetTop = currentPlaceholderOffsetTop;
     }
