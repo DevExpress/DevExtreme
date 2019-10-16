@@ -365,6 +365,12 @@ var RangeSlider = Slider.inherit({
                     value: [start, end],
                     event: this._valueChangeEventInstance
                 });
+
+                this.validationRequest.fire({
+                    value: [start, end],
+                    editor: this
+                });
+
                 this._saveValueChangeEvent(undefined);
                 break;
             case "startName":
