@@ -79,8 +79,6 @@ QUnit.testStart(function() {
         </div>\
         <div id="containerT821559" style="height:300px; width:200px;">\
         </div>\
-        </div>\
-        \
         <div id="widget"></div>\
         \
         <script type="text/html" id="focusableTemplate">\
