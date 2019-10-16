@@ -542,10 +542,6 @@ var Component = Class.inherit({
 
     /**
      * @name componentmethods.resetOption
-     * @publicName resetOption()
-     */
-    /**
-     * @name componentmethods.resetOption
      * @publicName resetOption(optionName)
      * @param1 optionName:string
      */

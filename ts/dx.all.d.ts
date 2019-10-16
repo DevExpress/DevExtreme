@@ -614,8 +614,6 @@ declare module DevExpress {
         option(optionName: string, optionValue: any): void;
         /** @name Component.option(options) */
         option(options: any): void;
-        /** @name Component.resetOption() */
-        resetOption(): void;
         /** @name Component.resetOption(optionName) */
         resetOption(optionName: string): void;
     }
@@ -1894,8 +1892,6 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: EditorOptions)
         /** @name Editor.reset() */
         reset(): void;
-        /** @name Component.resetOption() */
-        resetOption(): void;
         /** @name Component.resetOption(optionName) */
         resetOption(optionName: string): void;
     }
@@ -3382,8 +3378,6 @@ declare module DevExpress.ui {
         open(): void;
         /** @name dxDropDownEditor.reset() */
         reset(): void;
-        /** @name Component.resetOption() */
-        resetOption(): void;
         /** @name Component.resetOption(optionName) */
         resetOption(optionName: string): void;
     }
@@ -4977,8 +4971,6 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxRangeSliderOptions)
         /** @name dxRangeSlider.reset() */
         reset(): void;
-        /** @name Component.resetOption() */
-        resetOption(): void;
         /** @name Component.resetOption(optionName) */
         resetOption(optionName: string): void;
     }
@@ -6251,8 +6243,6 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxValidationGroupOptions)
         /** @name dxValidationGroup.reset() */
         reset(): void;
-        /** @name Component.resetOption() */
-        resetOption(): void;
         /** @name Component.resetOption(optionName) */
         resetOption(optionName: string): void;
         /** @name dxValidationGroup.validate() */
@@ -6302,8 +6292,6 @@ declare module DevExpress.ui {
         focus(): void;
         /** @name dxValidator.reset() */
         reset(): void;
-        /** @name Component.resetOption() */
-        resetOption(): void;
         /** @name Component.resetOption(optionName) */
         resetOption(optionName: string): void;
         /** @name dxValidator.validate() */
