@@ -56,7 +56,7 @@ const createBreadcrumbs = (context, controller) => {
     context.breadcrumbsWrapper = new FileManagerBreadcrumbsWrapper($breadcrumbs);
 };
 
-const makeFileProviderWithIncorrectName = (incorrectName) => {
+const createFileProviderWithIncorrectName = (incorrectName) => {
     const newItem = {
         name: incorrectName,
         isDirectory: true,
@@ -354,7 +354,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
 
     test("slashes in directory name must be processed correctly", function(assert) {
         const incorrectName = "Docu\\/me\\/nts";
-        const fileProvider = makeFileProviderWithIncorrectName(incorrectName);
+        const fileProvider = createFileProviderWithIncorrectName(incorrectName);
         let controller = new FileItemsController({
             fileProvider,
             rootText: "Files",
@@ -367,16 +367,16 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         const rootDirectory = controller.getCurrentDirectory();
         controller
             .getDirectoryContents(rootDirectory)
-            .then(directories => {
-                controller.setCurrentDirectory(directories[6]);
+            .then(items => {
+                controller.setCurrentDirectory(items[6]);
                 assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName, "breadcrumbs refrers to the target folder");
             });
         this.clock.tick(400);
 
         controller
             .getDirectoryContents(controller.getCurrentDirectory())
-            .then(directories => {
-                controller.setCurrentDirectory(directories[0]);
+            .then(items => {
+                controller.setCurrentDirectory(items[0]);
                 assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/About", "breadcrumbs refrers to the target folder");
             });
         this.clock.tick(400);
@@ -392,7 +392,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
 
     test("whitespace as directory name must be processed correctly", function(assert) {
         const incorrectName = "Docu\\/me\\/nts";
-        const fileProvider = makeFileProviderWithIncorrectName(incorrectName);
+        const fileProvider = createFileProviderWithIncorrectName(incorrectName);
         let controller = new FileItemsController({
             fileProvider,
             rootText: "Files",
@@ -405,14 +405,10 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         const rootDirectory = controller.getCurrentDirectory();
         controller
             .getDirectoryContents(rootDirectory)
-            .then(directories => {
-                return controller.getDirectoryContents(directories[6]);
-            })
-            .then(directories => {
-                return controller.getDirectoryContents(directories[1]);
-            })
-            .then(directories => {
-                controller.setCurrentDirectory(directories[0]);
+            .then(items => controller.getDirectoryContents(items[6]))
+            .then(items => controller.getDirectoryContents(items[1]))
+            .then(items => {
+                controller.setCurrentDirectory(items[0]);
                 assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/ /Folder inside", "breadcrumbs refrers to the target folder");
             });
         this.clock.tick(400);
@@ -423,14 +419,10 @@ QUnit.module("Navigation operations", moduleConfig, () => {
 
         controller
             .getDirectoryContents(rootDirectory)
-            .then(directories => {
-                return controller.getDirectoryContents(directories[6]);
-            })
-            .then(directories => {
-                return controller.getDirectoryContents(directories[1]);
-            })
-            .then(directories => {
-                controller.setCurrentDirectory(directories[1]);
+            .then(items => controller.getDirectoryContents(items[6]))
+            .then(items => controller.getDirectoryContents(items[1]))
+            .then(items => {
+                controller.setCurrentDirectory(items[1]);
                 assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/ / ", "breadcrumbs refrers to the target folder");
             });
         this.clock.tick(400);

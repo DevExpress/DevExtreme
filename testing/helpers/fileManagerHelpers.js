@@ -51,7 +51,6 @@ export class FileManagerWrapper {
 
     constructor($element) {
         this._$element = $element;
-        this.breadcrumbsWrapper = new FileManagerBreadcrumbsWrapper(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
     }
 
     getInstance() {
@@ -94,24 +93,24 @@ export class FileManagerWrapper {
         return this._findActionButton($folderNode);
     }
 
+    getBreadcrumbsWrapper() {
+        return new FileManagerBreadcrumbsWrapper(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
+    }
+
     getBreadcrumbsPath() {
-        this.breadcrumbsWrapper.setElement(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
-        return this.breadcrumbsWrapper.getPath();
+        return this.getBreadcrumbsWrapper().getPath();
     }
 
     getBreadcrumbsItems() {
-        this.breadcrumbsWrapper.setElement(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
-        return this.breadcrumbsWrapper.getItems();
+        return this.getBreadcrumbsWrapper().getItems();
     }
 
     getBreadcrumbsItemByText(text) {
-        this.breadcrumbsWrapper.setElement(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
-        return this.breadcrumbsWrapper.getItemByText(text);
+        return this.getBreadcrumbsWrapper().getItemByText(text);
     }
 
     getBreadcrumbsParentDirectoryItem() {
-        this.breadcrumbsWrapper.setElement(this._$element.find(`.${Consts.BREADCRUMBS_CLASS}`));
-        return this.breadcrumbsWrapper.getParentDirectoryItem();
+        return this.getBreadcrumbsWrapper().getParentDirectoryItem();
     }
 
     getToolbar() {
@@ -380,10 +379,6 @@ export class FileManagerProgressPanelProgressBoxWrapper {
 export class FileManagerBreadcrumbsWrapper {
 
     constructor($element) {
-        this._$element = $element;
-    }
-
-    setElement($element) {
         this._$element = $element;
     }
 
