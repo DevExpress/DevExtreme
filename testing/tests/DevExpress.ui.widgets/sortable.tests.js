@@ -2059,7 +2059,7 @@ QUnit.module("with scroll", {
     }
 });
 
-QUnit.test("hehehe", function(assert) {
+QUnit.test("Placeholder should work correctly during autoscroll", function(assert) {
     // arrange
     let pointer,
         items,
