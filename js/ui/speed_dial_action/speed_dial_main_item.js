@@ -235,6 +235,14 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         };
     },
 
+    _outsideClickHandler(e) {
+        if(this._isShadingShown) {
+            const isShadingClick = $(e.target)[0] === this._$wrapper[0];
+
+            if(isShadingClick) this._clickHandler();
+        }
+    },
+
     _setPosition() {
         if(this.option("visible")) {
             this._hide();

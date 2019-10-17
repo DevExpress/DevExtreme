@@ -649,13 +649,13 @@ QUnit.module("add shading option", (hooks) => {
 
         $fabContent.eq(1).trigger("dxclick");
 
-        assert.ok(firstClickHandler.calledOnce, "First action handler should be called when there is shading");
+        assert.ok(firstClickHandler.calledOnce, "first action handler should be called when there is shading");
 
         $fabContent.eq(2).trigger("dxclick");
 
-        assert.ok(secondClickHandler.calledOnce, "Second action handler should be called when there is shading");
+        assert.ok(secondClickHandler.calledOnce, "second action handler should be called when there is shading");
 
-        $("body").trigger("dxpointerdown");
+        $(".dx-overlay-shader").trigger("dxpointerdown");
 
         assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading if set value in true before outside click");
 
@@ -683,11 +683,11 @@ QUnit.module("add shading option", (hooks) => {
 
         $fabContent.eq(1).trigger("dxclick");
 
-        assert.ok(firstClickHandler.calledOnce, "First action handler should be called when there is not shading");
+        assert.ok(firstClickHandler.calledOnce, "first action handler should be called when there is not shading");
 
         $fabContent.eq(2).trigger("dxclick");
 
-        assert.ok(secondClickHandler.calledOnce, "Second action handler should be called when there is not shading");
+        assert.ok(secondClickHandler.calledOnce, "second action handler should be called when there is not shading");
 
         firstSDA.dispose();
         secondSDA.dispose();

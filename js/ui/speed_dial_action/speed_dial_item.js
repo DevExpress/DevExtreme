@@ -131,14 +131,6 @@ const SpeedDialItem = Overlay.inherit({
         });
     },
 
-    _outsideClickHandler(e) {
-        if(this._isShadingShown) {
-            const isActionOverlay = $(e.target).closest(OVERLAY_CONTENT_SELECTOR).closest("." + FAB_CLASS).length;
-
-            if(!isActionOverlay) this._clickHandler();
-        }
-    },
-
     _defaultActionArgs() {
         return {
             component: this.option('actionComponent')
