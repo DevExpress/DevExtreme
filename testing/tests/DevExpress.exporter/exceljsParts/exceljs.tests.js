@@ -97,15 +97,14 @@ QUnit.module("API", moduleConfig, () => {
 
                 const dataGrid = $("#dataGrid").dxDataGrid({}).dxDataGrid("instance");
 
-                let expectedArgs = [];
+                let expectedCells = [];
 
-                exportDataGrid(getOptions(dataGrid, expectedArgs)).then((cellsRange) => {
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
                     helper.checkColumnWidths([undefined], topLeft.column);
                     helper.checkAutoFilter(false);
+                    helper.checkValues(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
-                    assert.deepEqual(cellsRange.from, topLeft, "cellsRange.from");
-                    assert.deepEqual(cellsRange.to, topLeft, "cellsRange.to");
                     done();
                 });
             });
@@ -188,6 +187,48 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAutoFilter(false);
                     assert.deepEqual(cellsRange.from, topLeft, "cellsRange.from");
                     assert.deepEqual(cellsRange.to, topLeft, "cellsRange.to");
+                    done();
+                });
+            });
+
+            QUnit.test("Header - 1 column, column.visible: false" + testCaption, (assert) => {
+                const done = assert.async();
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [{ caption: "f1", visible: false }]
+                }).dxDataGrid("instance");
+
+                const expectedCells = [];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
+                    helper.checkColumnWidths([undefined], topLeft.column);
+                    helper.checkAutoFilter(false);
+                    helper.checkValues(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Header - 1 column, column.allowExporting: false" + testCaption, (assert) => {
+                const done = assert.async();
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [{ caption: "f1", allowExporting: false }]
+                }).dxDataGrid("instance");
+
+                const expectedCells = [];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
+                    helper.checkColumnWidths([undefined], topLeft.column);
+                    helper.checkAutoFilter(false);
+                    helper.checkValues(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
                     done();
                 });
             });
@@ -519,6 +560,63 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
+            QUnit.test("Header - column.visibleIndex, { caption: f1, visible: false, allowExporting: true }" + testCaption, (assert) => {
+                const done = assert.async();
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    width: 500,
+                    columns: [
+                        { caption: "f1", visibleIndex: 2, width: 500, visible: false },
+                        { caption: "f2", visibleIndex: 0, width: 200 },
+                        { caption: "f3", visibleIndex: 1, width: 300 }
+                    ]
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "f2" }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "f3" }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
+                    helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkValues(expectedCells, topLeft);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Header - column.visibleIndex, { caption: f1, visible: false }, { caption: f2, allowExporting: false }" + testCaption, (assert) => {
+                const done = assert.async();
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    width: 500,
+                    columns: [
+                        { caption: "f1", visibleIndex: 2, width: 500, visible: false },
+                        { caption: "f2", visibleIndex: 0, width: 200, allowExporting: false },
+                        { caption: "f3", visibleIndex: 1, width: 300 }
+                    ]
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "f3" }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
+                    helper.checkColumnWidths([excelColumnWidthFromColumn300Pixels], topLeft.column);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkValues(expectedCells, topLeft);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                    done();
+                });
+            });
+
             QUnit.test("Header - column.visibleIndex, { caption: f2, visible: false }" + testCaption, (assert) => {
                 const done = assert.async();
 
@@ -527,6 +625,35 @@ QUnit.module("API", moduleConfig, () => {
                     columns: [
                         { caption: "f1", visibleIndex: 2, width: 300 },
                         { caption: "f2", visibleIndex: 0, width: 500, visible: false },
+                        { caption: "f3", visibleIndex: 1, width: 200 }
+                    ]
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "f3" }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "f1" }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
+                    helper.checkColumnWidths([excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn300Pixels, undefined], topLeft.column);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkValues(expectedCells, topLeft);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Header - column.visibleIndex, { caption: f2, allowExporting: false }" + testCaption, (assert) => {
+                const done = assert.async();
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    width: 500,
+                    columns: [
+                        { caption: "f1", visibleIndex: 2, width: 300 },
+                        { caption: "f2", visibleIndex: 0, width: 500, allowExporting: false },
                         { caption: "f3", visibleIndex: 1, width: 200 }
                     ]
                 }).dxDataGrid("instance");
