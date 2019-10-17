@@ -554,7 +554,7 @@ var Overlay = Widget.inherit({
                 e.preventDefault();
             }
 
-            this._outsideClickHandler();
+            this._outsideClickHandler(e);
         }
 
         return this.option("propagateOutsideClick");

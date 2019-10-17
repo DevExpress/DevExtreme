@@ -134,9 +134,10 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
             actions[i].toggle();
         }
 
-        this._isShadingShown = !this.option("shading");
-
-        if(config().floatingActionButtonConfig.shading) this.option("shading", this._isShadingShown);
+        if(config().floatingActionButtonConfig.shading) {
+            this._isShadingShown = !this.option("shading");
+            this.option("shading", this._isShadingShown);
+        }
 
         this._$icon.toggleClass(INVISIBLE_STATE_CLASS);
         this._$closeIcon.toggleClass(INVISIBLE_STATE_CLASS);
@@ -148,10 +149,6 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
         const overlayStack = this._overlayStack();
 
         overlayStack.push(this);
-    },
-
-    _outsideClickHandler() {
-        this._isShadingShown && this._clickHandler();
     },
 
     _renderActions() {
@@ -238,6 +235,14 @@ const SpeedDialMainItem = SpeedDialItem.inherit({
                 y: actionOffsetY
             }
         };
+    },
+
+    _outsideClickHandler(e) {
+        if(this._isShadingShown) {
+            const isShadingClick = $(e.target)[0] === this._$wrapper[0];
+
+            if(isShadingClick) this._clickHandler();
+        }
     },
 
     _setPosition() {

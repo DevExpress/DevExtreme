@@ -611,8 +611,15 @@ QUnit.module("add shading option", (hooks) => {
         fx.off = false;
     }),
     test("check rendering", (assert) => {
-        const firstSDA = $("#fab-one").dxSpeedDialAction().dxSpeedDialAction("instance");
-        const secondSDA = $("#fab-two").dxSpeedDialAction().dxSpeedDialAction("instance");
+        let firstClickHandler = sinon.spy();
+        let secondClickHandler = sinon.spy();
+
+        const firstSDA = $("#fab-one").dxSpeedDialAction({
+            onClick: firstClickHandler
+        }).dxSpeedDialAction("instance");
+        const secondSDA = $("#fab-two").dxSpeedDialAction({
+            onClick: secondClickHandler
+        }).dxSpeedDialAction("instance");
 
         let $fabMainContent = $(FAB_MAIN_SELECTOR).find(".dx-overlay-content");
 
@@ -638,7 +645,17 @@ QUnit.module("add shading option", (hooks) => {
 
         assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 1, "there is shading after FAB click");
 
-        $("body").trigger("dxpointerdown");
+        let $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        $fabContent.eq(1).trigger("dxclick");
+
+        assert.ok(firstClickHandler.calledOnce, "first action handler should be called when there is shading");
+
+        $fabContent.eq(2).trigger("dxclick");
+
+        assert.ok(secondClickHandler.calledOnce, "second action handler should be called when there is shading");
+
+        $(".dx-overlay-shader").trigger("dxpointerdown");
 
         assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading if set value in true before outside click");
 
@@ -655,6 +672,22 @@ QUnit.module("add shading option", (hooks) => {
         $fabMainContent.trigger("dxclick");
 
         assert.equal($fabMainContent.closest(".dx-overlay-shader").length, 0, "there is not shading if set value in false after repaint");
+
+        firstClickHandler = sinon.spy();
+        secondClickHandler = sinon.spy();
+
+        firstSDA.option("onClick", firstClickHandler);
+        secondSDA.option("onClick", secondClickHandler);
+
+        $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
+
+        $fabContent.eq(1).trigger("dxclick");
+
+        assert.ok(firstClickHandler.calledOnce, "first action handler should be called when there is not shading");
+
+        $fabContent.eq(2).trigger("dxclick");
+
+        assert.ok(secondClickHandler.calledOnce, "second action handler should be called when there is not shading");
 
         firstSDA.dispose();
         secondSDA.dispose();
