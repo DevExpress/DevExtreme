@@ -212,7 +212,8 @@
             min-width: @GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH;
 
             .dx-@{widgetName}-drag-icon {
-                .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
+                vertical-align: middle;
+                .dx-icon-sizing(@GRID_BASE_ICON_SIZE);
             }
         }
     }
@@ -643,7 +644,7 @@
     }
 
     .dx-@{widgetName}-adaptive-more {
-        .dx-icon-sizing(@GENERIC_BASE_MORE_ADAPTIVE_ICON_SIZE);
+        .dx-icon-sizing(@GRID_BASE_ICON_SIZE);
     }
 
     .dx-@{widgetName}-rowsview {
