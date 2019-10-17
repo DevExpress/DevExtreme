@@ -63,15 +63,15 @@ const koDxValidator = Class.inherit({
     reset() {
         this.target(null);
         const result = {
+            id: null,
             isValid: true,
             brokenRule: null,
             pendingRules: null,
             status: VALIDATION_STATUS_VALID,
             complete: null
         };
-        if(!this._validationInfo.result || this._validationInfo.result.status !== VALIDATION_STATUS_PENDING) {
-            this._applyValidationResult(result);
-        }
+
+        this._applyValidationResult(result);
         return result;
     },
 
