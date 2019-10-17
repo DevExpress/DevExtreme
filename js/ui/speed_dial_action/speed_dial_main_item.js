@@ -17,6 +17,8 @@ let speedDialMainItem = null;
 const SpeedDialMainItem = SpeedDialItem.inherit({
     _actionItems: [],
 
+    _isShadingShown: false,
+
     _getDefaultOptions() {
         const defaultOptions = {
             icon: "add",

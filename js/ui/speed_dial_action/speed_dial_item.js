@@ -16,8 +16,6 @@ const FAB_CONTENT_REVERSE_CLASS = "dx-fa-button-content-reverse";
 const OVERLAY_CONTENT_SELECTOR = ".dx-overlay-content";
 
 const SpeedDialItem = Overlay.inherit({
-    _isShadingShown: false,
-
     _getDefaultOptions() {
         return extend(this.callBase(), {
             shading: false,
