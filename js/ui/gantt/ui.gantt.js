@@ -298,36 +298,53 @@ class Gantt extends Widget {
     }
 
     _createModelChangesListener() {
-        return {
-            NotifyTaskCreated: (task) => { this._onRecordInserted(GANTT_TASKS, task); },
-            NotifyTaskRemoved: (task) => { this._onRecordRemoved(GANTT_TASKS, task); },
+        return { // IModelChangesListener
+            NotifyTaskCreated: (task, callback) => { this._onRecordInserted(GANTT_TASKS, task, callback); },
+            NotifyTaskRemoved: (taskId) => { this._onRecordRemoved(GANTT_TASKS, taskId); },
             NotifyTaskTitleChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "title", newValue); },
             NotifyTaskDescriptionChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "description", newValue); },
             NotifyTaskStartChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "start", newValue); },
             NotifyTaskEndChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "end", newValue); },
             NotifyTaskProgressChanged: (taskId, newValue) => { this._onRecordUpdated(GANTT_TASKS, taskId, "progress", newValue); },
 
-            NotifyDependencyInserted: (dependency) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency); },
-            NotifyDependencyRemoved: (dependency) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependency); },
+            NotifyDependencyInserted: (dependency, callback) => { this._onRecordInserted(GANTT_DEPENDENCIES, dependency, callback); },
+            NotifyDependencyRemoved: (dependencyId) => { this._onRecordRemoved(GANTT_DEPENDENCIES, dependencyId); },
 
-            NotifyResourceCreated: (resource) => { this._onRecordInserted(GANTT_RESOURCES, resource); },
+            NotifyResourceCreated: (resource, callback) => { this._onRecordInserted(GANTT_RESOURCES, resource, callback); },
             NotifyResourceRemoved: (resource) => { this._onRecordRemoved(GANTT_RESOURCES, resource); },
 
-            NotifyResourceAssigned: (assignment) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment); },
-            NotifyResourceUnassigned: (assignment) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignment); }
+            NotifyResourceAssigned: (assignment, callback) => { this._onRecordInserted(GANTT_RESOURCE_ASSIGNMENTS, assignment, callback); },
+            NotifyResourceUnassigned: (assignmentId) => { this._onRecordRemoved(GANTT_RESOURCE_ASSIGNMENTS, assignmentId); }
         };
     }
-    _onRecordInserted(optionName, record) {
+    _onRecordInserted(optionName, record, callback) {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
             const data = this._getStoreObject(optionName, record);
-            dataOption.insert(data);
+            dataOption.insert(data, (response) => {
+                const keyGetter = dataCoreUtils.compileGetter(this.option(`${optionName}.keyExpr`));
+                const insertedId = keyGetter(response);
+                callback(insertedId);
+                if(optionName === GANTT_TASKS) {
+                    this._updateTreeListDataSource();
+                    const parentId = record.parentId;
+                    if(parentId !== undefined) {
+                        const expandedRowKeys = this._treeList.option("expandedRowKeys");
+                        expandedRowKeys.push(parentId);
+                        this._treeList.option("expandedRowKeys", expandedRowKeys);
+                    }
+                }
+            });
         }
     }
-    _onRecordRemoved(optionName, record) {
+    _onRecordRemoved(optionName, key) {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
-            dataOption.remove(record.id);
+            dataOption.remove(key, () => {
+                if(optionName === GANTT_TASKS) {
+                    this._updateTreeListDataSource();
+                }
+            });
         }
     }
     _onRecordUpdated(optionName, key, fieldName, value) {
@@ -336,8 +353,15 @@ class Gantt extends Widget {
             const setter = dataCoreUtils.compileSetter(this.option(`${optionName}.${fieldName}Expr`));
             const data = {};
             setter(data, value);
-            dataOption.update(key, data);
+            dataOption.update(key, data, () => {
+                if(optionName === GANTT_TASKS) {
+                    this._updateTreeListDataSource();
+                }
+            });
         }
+    }
+    _updateTreeListDataSource() {
+        this._setTreeListOption("dataSource", this.option("tasks.dataSource"));
     }
 
     _getLoadPanel() {

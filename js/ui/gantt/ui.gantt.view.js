@@ -37,11 +37,8 @@ export class GanttView extends Widget {
             command.execute();
         }
     }
-    changeTaskExpanded(rowIndex, value) {
-        const model = this._ganttViewCore.viewModel;
-        model.beginUpdate();
-        model.changeTaskExpanded(rowIndex, value);
-        model.endUpdate();
+    changeTaskExpanded(id, value) {
+        this._ganttViewCore.changeTaskExpanded(id, value);
     }
     updateView() {
         this._ganttViewCore.updateView();
@@ -51,11 +48,7 @@ export class GanttView extends Widget {
     }
 
     _selectTask(id) {
-        if(this.lastSelectedId !== undefined) {
-            this._ganttViewCore.unselectTask(this.lastSelectedId);
-        }
-        this._ganttViewCore.selectTask(id);
-        this.lastSelectedId = id;
+        this._ganttViewCore.selectTaskById(id);
     }
     _update() {
         this._ganttViewCore.loadOptionsFromGanttOwner();
