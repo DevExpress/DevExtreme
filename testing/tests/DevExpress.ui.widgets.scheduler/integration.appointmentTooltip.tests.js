@@ -1175,31 +1175,58 @@ QUnit.module("New common tooltip for compact and cell appointments", moduleConfi
     });
 
     if(devices.current().deviceType === "desktop") {
-        test("Keyboard navigation in tooltip", function(assert) {
-            const scheduler = createScheduler();
+        module("Keyboard navigation in tooltip", () => {
             const ITEM_FOCUSED_STATE_CLASS_NAME = "dx-state-focused";
 
-            const checkFocusedState = index => scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
+            test("List should be navigate by keyboard", assert => {
+                const scheduler = createScheduler();
 
-            scheduler.appointments.click();
+                const checkFocusedState = index => scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
 
-            assert.notOk(checkFocusedState(0), "On first show tooltip, list item shouldn't focused");
+                scheduler.appointments.click();
 
-            const keyboard = keyboardMock(scheduler.tooltip.getContentElement());
-            keyboard.keyDown("down");
+                assert.notOk(checkFocusedState(0), "On first show tooltip, list item shouldn't focused");
 
-            assert.ok(checkFocusedState(0), "After press key down, list item should focused");
+                const keyboard = keyboardMock(scheduler.tooltip.getContentElement());
+                keyboard.keyDown("down");
 
-            const buttonCount = scheduler.appointments.compact.getButtonCount();
-            scheduler.appointments.compact.click(buttonCount - 1);
+                assert.ok(checkFocusedState(0), "After press key down, list item should focused");
 
-            assert.notOk(checkFocusedState(0), "After tooltip showed, list item shouldn't focused");
+                const buttonCount = scheduler.appointments.compact.getButtonCount();
+                scheduler.appointments.compact.click(buttonCount - 1);
 
-            keyboard.keyDown("down");
-            assert.ok(checkFocusedState(0), "After press key down, first list item should focused");
+                assert.notOk(checkFocusedState(0), "After tooltip showed, list item shouldn't focused");
 
-            keyboard.keyDown("down");
-            assert.ok(checkFocusedState(1), "After press key down, second list item should focused");
+                keyboard.keyDown("down");
+                assert.ok(checkFocusedState(0), "After press key down, first list item should focused");
+
+                keyboard.keyDown("down");
+                assert.ok(checkFocusedState(1), "After press key down, second list item should focused");
+            });
+
+            test("focusStateEnabled property should disable or enable navigate in list", assert => {
+                const scheduler = createScheduler();
+
+                scheduler.appointments.click();
+
+                const buttonCount = scheduler.appointments.compact.getButtonCount();
+                const keyboard = keyboardMock(scheduler.tooltip.getContentElement());
+                const checkFocusedState = index => scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
+
+                scheduler.option("focusStateEnabled", false);
+                scheduler.appointments.compact.click(buttonCount - 1);
+
+                keyboard.keyDown("down");
+                assert.notOk(checkFocusedState(0));
+
+                scheduler.instance.hideAppointmentTooltip();
+
+                scheduler.option("focusStateEnabled", true);
+                scheduler.appointments.compact.click(buttonCount - 1);
+
+                keyboard.keyDown("down");
+                assert.ok(checkFocusedState(0));
+            });
         });
     }
 
