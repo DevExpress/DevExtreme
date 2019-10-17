@@ -213,7 +213,9 @@
 
             .dx-@{widgetName}-drag-icon {
                 vertical-align: middle;
-                .dx-icon-sizing(@GRID_BASE_ICON_SIZE);
+                .dx-icon-sizing(@GENERIC_BASE_ICON_SIZE);
+
+                line-height: @GENERIC_BASE_INLINE_BLOCK_HEIGHT;
             }
         }
     }
@@ -644,7 +646,7 @@
     }
 
     .dx-@{widgetName}-adaptive-more {
-        .dx-icon-sizing(@GRID_BASE_ICON_SIZE);
+        .dx-icon-sizing(@GENERIC_BASE_MORE_ADAPTIVE_ICON_SIZE);
     }
 
     .dx-@{widgetName}-rowsview {
