@@ -303,7 +303,7 @@ var DateBox = DropDownEditor.inherit({
         this._initStrategy();
         this.option(extend({}, this._strategy.getDefaultOptions(), this._userOptions));
         delete this._userOptions;
-
+        this._skipCustomValidation = false;
         this.callBase();
     },
 
@@ -612,7 +612,10 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _validateValue: function(value) {
-        return this._applyInternalValidation(value) && this._applyCustomValidation(value);
+        const internalResult = this._applyInternalValidation(value),
+            customResult = !this._skipCustomValidation ? this._applyCustomValidation(value) : true;
+        this._skipCustomValidation = false;
+        return internalResult && customResult;
     },
 
     _applyInternalValidation(value) {
@@ -852,6 +855,8 @@ var DateBox = DropDownEditor.inherit({
     },
 
     reset: function() {
+        const defaultOptions = this._getDefaultOptions();
+        this._skipCustomValidation = defaultOptions.value === this.dateOption("value");
         this.callBase();
         this._updateValue(this.dateOption("value"));
     }

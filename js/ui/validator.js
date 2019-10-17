@@ -119,7 +119,8 @@ const Validator = DOMComponent.inherit({
         this._initAdapter();
         this._validationInfo = {
             result: null,
-            deferred: null
+            deferred: null,
+            skipValidation: false
         };
     },
 
@@ -153,6 +154,9 @@ const Validator = DOMComponent.inherit({
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
                 adapter.validationRequestsCallbacks.add((args) => {
+                    if(this._validationInfo.skipValidation) {
+                        return;
+                    }
                     this.validate(args);
                 });
                 this.option("adapter", adapter);
@@ -265,6 +269,7 @@ const Validator = DOMComponent.inherit({
     reset() {
         const adapter = this.option("adapter"),
             result = {
+                id: null,
                 isValid: true,
                 brokenRule: null,
                 brokenRules: null,
@@ -272,11 +277,12 @@ const Validator = DOMComponent.inherit({
                 status: VALIDATION_STATUS_VALID,
                 complete: null
             };
+
+        this._validationInfo.skipValidation = true;
         adapter.reset();
+        this._validationInfo.skipValidation = false;
         this._resetValidationRules();
-        if(!this._validationInfo.result || this._validationInfo.result.status !== VALIDATION_STATUS_PENDING) {
-            this._applyValidationResult(result, adapter);
-        }
+        this._applyValidationResult(result, adapter);
     },
 
     _updateValidationResult(result) {
