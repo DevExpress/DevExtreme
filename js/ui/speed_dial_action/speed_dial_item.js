@@ -131,7 +131,7 @@ const SpeedDialItem = Overlay.inherit({
 
     _defaultActionArgs() {
         return {
-            component: this.option('actionComponent')
+            component: this.option("actionComponent")
         };
     },
 
