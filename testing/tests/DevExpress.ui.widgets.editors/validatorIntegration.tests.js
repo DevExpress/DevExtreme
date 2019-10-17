@@ -6,18 +6,34 @@ var $ = require("jquery"),
 
 require("common.css!");
 require("generic_light.css!");
+
 require("ui/text_box");
 require("ui/date_box");
 require("ui/number_box");
+require("ui/autocomplete");
+require("ui/calendar");
+require("ui/check_box");
+require("ui/drop_down_box");
+require("ui/html_editor");
+require("ui/lookup");
+require("ui/radio_group");
+require("ui/select_box");
+require("ui/tag_box");
+require("ui/text_area");
+require("ui/slider");
+require("ui/range_slider");
+require("ui/switch");
+
 
 var Fixture = Class.inherit({
-    createInstance: function(editor, editorOptions, validatorOptions) {
+    createInstance: function(editor, editorOptions, validatorOptions, keyboard = true) {
         var $element = $("<div/>")[editor](editorOptions).dxValidator(validatorOptions);
         this.$element = $element;
 
         this.$input = $element.find(".dx-texteditor-input");
-
-        this.keyboard = keyboardMock(this.$input);
+        if(keyboard) {
+            this.keyboard = keyboardMock(this.$input);
+        }
         this.editor = $element[editor]("instance");
         this.validator = Validator.getInstance($element);
 
@@ -91,6 +107,71 @@ var Fixture = Class.inherit({
         assert.ok(editorValidationError, "Editor should have specific validation error");
         assert.strictEqual(editorValidationError.editorSpecific, undefined, "editorSpecific flag should not be set");
         assert.strictEqual(editorValidationError.message, "Required", "Message should came from dxValidator");
+    });
+
+    [
+        "dxAutocomplete", "dxCalendar", "dxCheckBox", "dxDateBox",
+        "dxDropDownBox", "dxHtmlEditor", "dxLookup", "dxRadioGroup",
+        "dxRangeSlider", "dxSelectBox", "dxSlider", "dxSwitch",
+        "dxTagBox", "dxTextArea", "dxTextBox"
+    ].forEach(editor => {
+        QUnit.test(`${editor}.reset should not validate the default value`, function(assert) {
+            const validationCallback = sinon.spy();
+            this.fixture.createInstance(editor, { }, {
+                validationRules: [{
+                    type: "custom",
+                    validationCallback
+                }]
+            }, false);
+
+            this.fixture.editor.reset();
+
+            assert.notOk(validationCallback.called, "validationCallback should not be called");
+        });
+
+        QUnit.test(`Validator.reset should not validate the default value for ${editor}`, function(assert) {
+            const validationCallback = sinon.spy();
+            this.fixture.createInstance(editor, { }, {
+                validationRules: [{
+                    type: "custom",
+                    validationCallback
+                }]
+            }, false);
+
+            this.fixture.validator.reset();
+
+            assert.notOk(validationCallback.called, "validationCallback should not be called");
+        });
+    });
+
+
+    QUnit.test("NumberBox.reset should validate the default value", function(assert) {
+        const validationCallback = sinon.spy();
+        this.fixture.createInstance("dxNumberBox", { }, {
+            validationRules: [{
+                type: "custom",
+                validationCallback
+            }]
+        }, false);
+
+        this.fixture.editor.reset();
+        // This happens because the default dxNumberBox.value is 0, but the dxNumberBox.reset method resets it to null.
+        // Validation is executed due to the valueChanged event.
+        // When we decide to break this behavior, we can add "dxNumberBox" to the editors array in the test case above and delete this test.
+        assert.ok(validationCallback.called, `validationCallback should be called after dxNumberBox.reset`);
+    });
+    QUnit.test("Validator.reset should not validate the default NumberBox value", function(assert) {
+        const validationCallback = sinon.spy();
+        this.fixture.createInstance("dxNumberBox", { }, {
+            validationRules: [{
+                type: "custom",
+                validationCallback
+            }]
+        }, false);
+
+        this.fixture.validator.reset();
+
+        assert.notOk(validationCallback.called, "validationCallback should not be called");
     });
 
     QUnit.test("T525700: numberBox and Validator - validation on focusout with validation rule range", function(assert) {

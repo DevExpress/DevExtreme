@@ -104,9 +104,9 @@ var Validator = DOMComponent.inherit({
         this.callBase();
         this._initGroupRegistration();
 
+        this._skipValidation = false;
         this.focused = Callbacks();
         this._initAdapter();
-
     },
 
     _initGroupRegistration: function() {
@@ -147,6 +147,9 @@ var Validator = DOMComponent.inherit({
                 adapter = new DefaultAdapter(dxStandardEditor, this);
 
                 adapter.validationRequestsCallbacks.add(function(args) {
+                    if(that._skipValidation) {
+                        return;
+                    }
                     that.validate(args);
                 });
 
@@ -256,7 +259,9 @@ var Validator = DOMComponent.inherit({
                 brokenRule: null
             };
 
+        this._skipValidation = true;
         adapter.reset();
+        this._skipValidation = false;
         this._resetValidationRules();
         this._applyValidationResult(result, adapter);
     },
