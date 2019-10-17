@@ -20,6 +20,9 @@ require("ui/radio_group");
 require("ui/select_box");
 require("ui/tag_box");
 require("ui/text_area");
+require("ui/slider");
+require("ui/range_slider");
+require("ui/switch");
 
 
 var Fixture = Class.inherit({
@@ -109,15 +112,17 @@ var Fixture = Class.inherit({
     QUnit.test("Editor/Validator.reset should not validate null value", function(assert) {
         const editors = [
             "dxAutocomplete", "dxCalendar", "dxCheckBox", "dxDateBox",
-            "dxDropDownBox", "dxHtmlEditor", "dxLookup", "dxNumberBox",
-            "dxRadioGroup", "dxSelectBox", "dxTagBox", "dxTextArea", "dxTextBox"];
+            "dxDropDownBox", "dxHtmlEditor", "dxLookup", "dxRadioGroup",
+            "dxRangeSlider", "dxSelectBox", "dxSlider", "dxSwitch",
+            "dxTagBox", "dxTextArea", "dxTextBox"];
 
-        const validationCallback = sinon.spy();
+
         editors.forEach(editor => {
+            const validationCallback = sinon.spy();
             this.fixture.createInstance(editor, { }, {
                 validationRules: [{
                     type: "custom",
-                    validationCallback: validationCallback
+                    validationCallback
                 }]
             }, false);
 
@@ -131,6 +136,26 @@ var Fixture = Class.inherit({
 
             this.fixture.teardown();
         });
+    });
+
+    QUnit.test("NumberBox.reset should validate value", function(assert) {
+        const validationCallback = sinon.spy();
+        this.fixture.createInstance("dxNumberBox", { }, {
+            validationRules: [{
+                type: "custom",
+                validationCallback
+            }]
+        }, false);
+
+        this.fixture.editor.reset();
+        // This happens because the default dxNumberBox.value is 0, but the dxNumberBox.reset method resets it to null.
+        // Validation is executed due to the valueChanged event.
+        // When we decide to break this behavior, we can add "dxNumberBox" to the editors array in the test case above and delete this test.
+        assert.ok(validationCallback.calledOnce, `validationCallback should be called after dxNumberBox.reset`);
+
+        this.fixture.validator.reset();
+        // Since the value is reset to null by the editor.reset method, the validator.reset method should not execute validationCallback.
+        assert.ok(validationCallback.calledOnce, `validationCallback should not be called after dxValidator.reset`);
     });
 
     QUnit.test("T525700: numberBox and Validator - validation on focusout with validation rule range", function(assert) {

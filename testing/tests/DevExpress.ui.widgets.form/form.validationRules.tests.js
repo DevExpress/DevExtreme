@@ -382,7 +382,7 @@ QUnit.test("validate -> resetValues when there are invalid validation rules", fu
     formItems.forEach(item => assert.strictEqual(form.getEditor(item.dataField).option("isValid"), true, "form.getEditor." + item.dataField));
     assert.equal(findInvalidElements$(form).length, 0, "There are no invalid elements");
     assert.equal(findInvalidSummaryElements$(form).length, 0, "There are no validation summary items");
-    assert.equal(validationCallbackLog.length, /* TODO: avoid all the calls */ 3, "validationCallbackLog on resetValues: " + JSON.stringify(validationCallbackLog));
+    assert.equal(validationCallbackLog.length, /* TODO: avoid all the calls */ 1, "validationCallbackLog on resetValues: " + JSON.stringify(validationCallbackLog));
 
     form.dispose();
 });

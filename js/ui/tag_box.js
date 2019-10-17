@@ -271,6 +271,7 @@ const TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions.value
             * @type Array<string,number,Object>
+            * @default []
             */
             value: [],
 
@@ -1394,6 +1395,11 @@ const TagBox = SelectBox.inherit({
 
     reset: function() {
         this._restoreInputText();
+        const defaultValue = this._getDefaultOptions().value,
+            currentValue = this.option("value");
+        if(defaultValue && defaultValue.length === 0 && currentValue && defaultValue.length === currentValue.length) {
+            return;
+        }
         this.callBase();
     },
 
