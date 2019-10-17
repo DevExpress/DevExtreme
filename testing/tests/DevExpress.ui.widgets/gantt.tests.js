@@ -533,7 +533,7 @@ QUnit.module("DataSources", moduleConfig, () => {
         const newStart = new Date("2019-02-21");
         const newEnd = new Date("2019-02-22");
         const newTitle = "New";
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0);
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, "1");
         this.clock.tick();
         assert.equal(tasks.length, tasksCount + 1, "new task was created in ds");
         const createdTask = tasks[tasks.length - 1];
