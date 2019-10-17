@@ -367,7 +367,7 @@ var Sortable = Draggable.inherit({
         if(itemPoint) {
             this._updatePlaceholderPosition(e, itemPoint);
 
-            if(this.verticalScrollHelper.isScrolling()) {
+            if(this.verticalScrollHelper.isScrolling() && this._isIndicateMode()) {
                 this._movePlaceholder();
             }
         }
