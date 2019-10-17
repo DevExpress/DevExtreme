@@ -35,8 +35,8 @@ QUnit.testStart(function() {
                 <div id="item13" class="draggable" style="height: 30px; background: blue;">item3</div>
             </div>
         </div>
-        <div id="itemsWithScroll" style="height: 250px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
-            <div id="scrollableContainer" style="width: 300px;">
+        <div id="scroll" style="height: 250px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
+            <div id="itemsWithScroll" style="width: 300px;">
                 <div id="item21" class="draggable" style="width: 300px; height: 50px; background: yellow;">item1</div>
                 <div id="item22" class="draggable" style="width: 300px; height: 50px; background: red;">item2</div>
                 <div id="item23" class="draggable" style="width: 300px; height: 50px; background: blue;">item3</div>
@@ -2019,17 +2019,7 @@ QUnit.module("With scroll", {
 
         $("#qunit-fixture").addClass("qunit-fixture-visible");
         this.$element = $("#itemsWithScroll");
-
-        $("#itemsWithScroll").show();
-
-        $("#itemsWithScroll").scrollTop(0);
-        $("#itemsWithScroll").scrollLeft(0);
-
-        $("#items").hide();
-        $("#items2").hide();
-        $("#items3").hide();
-        $("#itemsWithContentTemplate").hide();
-        $("#itemsHorizontal").hide();
+        this.$scroll = $("#scroll");
 
         this.createSortable = (options) => {
             return this.sortableInstance = this.$element.dxSortable(options).dxSortable("instance");
@@ -2043,15 +2033,6 @@ QUnit.module("With scroll", {
 
         $("#qunit-fixture").removeClass("qunit-fixture-visible");
         this.sortableInstance && this.sortableInstance.dispose();
-
-
-        $("#itemsWithScroll").hide();
-
-        $("#items").show();
-        $("#items2").show();
-        $("#items3").show();
-        $("#itemsWithContentTemplate").show();
-        $("#itemsHorizontal").show();
     }
 });
 
@@ -2065,11 +2046,10 @@ QUnit.test("Placeholder position should be updated during autoscroll", function(
     this.createSortable({
         filter: ".draggable",
         dropFeedbackMode: "indicate",
-        moveItemOnDrop: true,
         scrollSpeed: 10
     });
 
-    items = this.$element.find("#scrollableContainer").children();
+    items = this.$element.children();
 
     // act, assert
     pointer = pointerMock(items.eq(0)).start().down().move(0, 189);
@@ -2088,6 +2068,88 @@ QUnit.test("Placeholder position should be updated during autoscroll", function(
 
         previousPlaceholderOffsetTop = currentPlaceholderOffsetTop;
     }
+});
 
-    pointer.up();
+QUnit.test("Placeholder should not be visible outside bottom of scroll container", function(assert) {
+    // arrange
+    let pointer,
+        items;
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate"
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 250);
+
+    // assert
+    assert.ok($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is visisble");
+
+    // act
+    pointer.move(0, 50);
+
+    // assert
+    assert.notOk($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is not visible");
+});
+
+QUnit.test("Placeholder should not be visible outside bottom of scroll container if overflow on sortable", function(assert) {
+    // arrange
+    let pointer,
+        items;
+
+    this.$scroll.css("overflow", "");
+    this.$element.css({
+        overflow: "auto",
+        height: 250
+    });
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate"
+    });
+
+    items = this.$element.children();
+
+    // act
+    pointer = pointerMock(items.eq(0)).start().down().move(0, 250);
+
+    // assert
+    assert.ok($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is visisble");
+
+    // act
+    pointer.move(0, 50);
+
+    // assert
+    assert.notOk($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is not visible");
+});
+
+QUnit.test("Placeholder should not be visible outside top of scroll container", function(assert) {
+    // arrange
+    let pointer,
+        items;
+
+    this.createSortable({
+        filter: ".draggable",
+        dropFeedbackMode: "indicate",
+        autoScroll: false
+    });
+
+    items = this.$element.children();
+
+    this.$scroll.scrollTop(50);
+
+    // act
+    pointer = pointerMock(items.eq(2)).start().down(0, 100).move(0, -100);
+
+    // assert
+    assert.ok($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is visisble");
+
+    // act
+    pointer.move(0, -50);
+
+    // assert
+    assert.notOk($(PLACEHOLDER_SELECTOR).is(":visible"), "placeholder is not visible");
 });
