@@ -47,7 +47,7 @@ var Fixture = Class.inherit({
     },
 
     teardown: function() {
-        this.$element && this.$element.remove();
+        this.$element.remove();
         ValidationEngine.initGroups();
     }
 });
@@ -109,15 +109,13 @@ var Fixture = Class.inherit({
         assert.strictEqual(editorValidationError.message, "Required", "Message should came from dxValidator");
     });
 
-    QUnit.test("Editor/Validator.reset should not validate null value", function(assert) {
-        const editors = [
-            "dxAutocomplete", "dxCalendar", "dxCheckBox", "dxDateBox",
-            "dxDropDownBox", "dxHtmlEditor", "dxLookup", "dxRadioGroup",
-            "dxRangeSlider", "dxSelectBox", "dxSlider", "dxSwitch",
-            "dxTagBox", "dxTextArea", "dxTextBox"];
-
-
-        editors.forEach(editor => {
+    [
+        "dxAutocomplete", "dxCalendar", "dxCheckBox", "dxDateBox",
+        "dxDropDownBox", "dxHtmlEditor", "dxLookup", "dxRadioGroup",
+        "dxRangeSlider", "dxSelectBox", "dxSlider", "dxSwitch",
+        "dxTagBox", "dxTextArea", "dxTextBox"
+    ].forEach(editor => {
+        QUnit.test(`${editor}.reset should not validate the default value`, function(assert) {
             const validationCallback = sinon.spy();
             this.fixture.createInstance(editor, { }, {
                 validationRules: [{
@@ -128,17 +126,26 @@ var Fixture = Class.inherit({
 
             this.fixture.editor.reset();
 
-            assert.notOk(validationCallback.called, `validationCallback should not be called for ${editor} after ${editor}.reset`);
+            assert.notOk(validationCallback.called, "validationCallback should not be called");
+        });
+
+        QUnit.test(`Validator.reset should not validate the default value for ${editor}`, function(assert) {
+            const validationCallback = sinon.spy();
+            this.fixture.createInstance(editor, { }, {
+                validationRules: [{
+                    type: "custom",
+                    validationCallback
+                }]
+            }, false);
 
             this.fixture.validator.reset();
 
-            assert.notOk(validationCallback.called, `validationCallback should not be called for ${editor} after dxValidator.reset`);
-
-            this.fixture.teardown();
+            assert.notOk(validationCallback.called, "validationCallback should not be called");
         });
     });
 
-    QUnit.test("NumberBox.reset should validate value", function(assert) {
+
+    QUnit.test("NumberBox.reset should validate the default value", function(assert) {
         const validationCallback = sinon.spy();
         this.fixture.createInstance("dxNumberBox", { }, {
             validationRules: [{
@@ -151,11 +158,20 @@ var Fixture = Class.inherit({
         // This happens because the default dxNumberBox.value is 0, but the dxNumberBox.reset method resets it to null.
         // Validation is executed due to the valueChanged event.
         // When we decide to break this behavior, we can add "dxNumberBox" to the editors array in the test case above and delete this test.
-        assert.ok(validationCallback.calledOnce, `validationCallback should be called after dxNumberBox.reset`);
+        assert.ok(validationCallback.called, `validationCallback should be called after dxNumberBox.reset`);
+    });
+    QUnit.test("Validator.reset should not validate the default NumberBox value", function(assert) {
+        const validationCallback = sinon.spy();
+        this.fixture.createInstance("dxNumberBox", { }, {
+            validationRules: [{
+                type: "custom",
+                validationCallback
+            }]
+        }, false);
 
         this.fixture.validator.reset();
-        // Since the value is reset to null by the editor.reset method, the validator.reset method should not execute validationCallback.
-        assert.ok(validationCallback.calledOnce, `validationCallback should not be called after dxValidator.reset`);
+
+        assert.notOk(validationCallback.called, "validationCallback should not be called");
     });
 
     QUnit.test("T525700: numberBox and Validator - validation on focusout with validation rule range", function(assert) {
