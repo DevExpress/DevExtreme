@@ -42,13 +42,15 @@ export class TooltipStrategyBase {
     _showCore(target, dataList, isSingleItemBehavior) {
         if(!this.tooltip) {
             this.tooltip = this._createTooltip(target);
-
-            this.tooltip.option("contentTemplate", container => {
-                if(!this.list) {
-                    const listElement = $("<div>");
-                    $(container).append(listElement);
-                    this.list = this._createList(listElement, dataList);
-                }
+            this.tooltip.option({
+                contentTemplate: container => {
+                    if(!this.list) {
+                        const listElement = $("<div>");
+                        $(container).append(listElement);
+                        this.list = this._createList(listElement, dataList);
+                    }
+                },
+                onShown: () => this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"))
             });
         } else {
             this._shouldUseTarget() && this.tooltip.option("target", target);
@@ -56,7 +58,6 @@ export class TooltipStrategyBase {
         }
 
         this.tooltip.option("visible", true);
-        this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"));
     }
 
     dispose() {
