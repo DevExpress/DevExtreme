@@ -52,7 +52,7 @@ export class TooltipStrategyBase {
                         this.list = this._createList(listElement, dataList);
                     }
                 },
-                onShowing: () => this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"))
+                onShown: () => this.list.option("focusStateEnabled", this.scheduler.option("focusStateEnabled"))
             });
         } else {
             this._shouldUseTarget() && this.tooltip.option("target", target);
