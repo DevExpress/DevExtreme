@@ -93,6 +93,7 @@ function baseOperation(grid) {
                 apply: function() {
                     setValue(this.filterValues);
                     headerFilterController.hideHeaderFilterMenu();
+                    conditionInfo.closeEditor();
                 },
                 onHidden: function() {
                     conditionInfo.closeEditor();
