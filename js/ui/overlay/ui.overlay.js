@@ -1277,6 +1277,10 @@ var Overlay = Widget.inherit({
     },
 
     _renderShadingDimensions: function() {
+        if(!windowUtils.hasWindow()) {
+            return;
+        }
+
         var $container = this._getContainer();
         var isWindow = this._isWindow($container);
 
