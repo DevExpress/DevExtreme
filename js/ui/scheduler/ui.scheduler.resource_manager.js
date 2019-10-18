@@ -193,7 +193,7 @@ var ResourceManager = Class.inherit({
                 var tmp = {};
                 tmp[fieldName] = fieldValue;
                 var resourceData = that.getDataAccessors(field, "getter")(tmp);
-                if(resourceData) {
+                if(resourceData !== undefined) {
                     if(!result) {
                         result = {};
                     }
