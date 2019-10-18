@@ -1281,7 +1281,7 @@ var Overlay = Widget.inherit({
         var isWindow = this._isWindow($container);
         var isOverlayInDrawer = this.$element().hasClass("dx-drawer-panel-content");
 
-        if(this.storedWidth === undefined) {
+        if(this.storedWidth === undefined && isOverlayInDrawer) {
             this.storedWidth = this._$wrapper.outerWidth();
             this.storedHeight = this._$wrapper.outerHeight();
         }
