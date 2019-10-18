@@ -1,7 +1,6 @@
 import { each } from "../../core/utils/iterator";
 
 const PATH_SEPARATOR = "/";
-const ESCAPE_SYMBOL = "\\";
 
 const getFileExtension = path => {
     const index = path.lastIndexOf(".");
@@ -32,8 +31,8 @@ const getPathParts = (path, includeFullPath) => {
                 continue;
             }
         }
-        isEscaped = (char === ESCAPE_SYMBOL);
-        buffer += char;
+        isEscaped = (char === PATH_SEPARATOR);
+        buffer += char; // TODO: Remove escape symbols from result array
     }
 
     if(buffer || !result.length) {
