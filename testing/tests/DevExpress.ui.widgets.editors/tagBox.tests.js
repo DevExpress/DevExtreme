@@ -169,33 +169,6 @@ QUnit.module("list selection", moduleSetup, () => {
         assert.equal($listItems.eq(3).hasClass(LIST_ITEM_SELECTED_CLASS), true, "fourth item has selected class");
     });
 
-    QUnit.test("Widget selects current value in the dropDown list if dxTagBox with async data is opened on initialization", (assert) => {
-        const tagBox = $("#tagBox").dxTagBox({
-            deferRendering: true,
-            dataSource: {
-                load: () => {
-                    const d = $.Deferred();
-
-                    setTimeout(() => {
-                        d.resolve([1, 2, 3]);
-                    }, TIME_TO_WAIT / 4);
-
-                    return d.promise();
-                },
-                byKey: () => {
-                    return 1;
-                }
-            },
-            value: [1, 2],
-            opened: true
-        }).dxTagBox("instance");
-
-        this.clock.tick(TIME_TO_WAIT);
-        const list = $(tagBox.content()).find(`.${LIST_CLASS}`).dxList("instance");
-
-        assert.deepEqual(list.option("selectedItems"), [1, 2], "first item has selected class");
-    });
-
     QUnit.test("Selected item should be unselected on click", assert => {
         const $tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],

@@ -455,7 +455,6 @@ var DropDownList = DropDownEditor.inherit({
     _setSelectedItem: function(item) {
         var displayValue = this._displayValue(item);
         this.option("selectedItem", commonUtils.ensureDefined(item, null));
-        this._setListOption("selectedItem", this.option("selectedItem"));
         this.option("displayValue", displayValue);
     },
 
