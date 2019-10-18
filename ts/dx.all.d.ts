@@ -7248,7 +7248,7 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.crosshair */
         crosshair?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', enabled?: boolean, horizontalLine?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: DevExpress.ui.format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: DevExpress.ui.format, visible?: boolean }, opacity?: number, verticalLine?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: DevExpress.ui.format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, width?: number };
         /** @name dxChart.Options.customizeAnnotation */
-        customizeAnnotation?: ((annotationItem: dxChartAnnotationConfig | any) => dxChartAnnotationConfig);
+        customizeAnnotation?: ((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig);
         /** @name dxChart.Options.dataPrepareSettings */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /** @name dxChart.Options.defaultPane */
@@ -7811,7 +7811,7 @@ declare module DevExpress.viz {
         /** @name dxChartCommonAnnotationConfig.color */
         color?: string;
         /** @name dxChartCommonAnnotationConfig.customizeTooltip */
-        customizeTooltip?: ((annotationItem: dxChartAnnotationConfig | any) => any);
+        customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any);
         /** @name dxChartCommonAnnotationConfig.data */
         data?: any;
         /** @name dxChartCommonAnnotationConfig.description */
@@ -7837,7 +7837,7 @@ declare module DevExpress.viz {
         /** @name dxChartCommonAnnotationConfig.shadow */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
         /** @name dxChartCommonAnnotationConfig.template */
-        template?: DevExpress.core.template | ((annotationItem: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+        template?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /** @name dxChartCommonAnnotationConfig.text */
         text?: string;
         /** @name dxChartCommonAnnotationConfig.textOverflow */
@@ -7845,7 +7845,7 @@ declare module DevExpress.viz {
         /** @name dxChartCommonAnnotationConfig.tooltipEnabled */
         tooltipEnabled?: boolean;
         /** @name dxChartCommonAnnotationConfig.tooltipTemplate */
-        tooltipTemplate?: DevExpress.core.template | ((annotationItem: dxChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
+        tooltipTemplate?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /** @name dxChartCommonAnnotationConfig.type */
         type?: 'text' | 'image' | 'custom';
         /** @name dxChartCommonAnnotationConfig.value */
