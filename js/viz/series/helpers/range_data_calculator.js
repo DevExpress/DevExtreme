@@ -51,21 +51,22 @@ function processCategories(range) {
     }
 }
 
-function getValueForArgument(point, extraPoint, x) {
+function getValueForArgument(point, extraPoint, x, range) {
     if(extraPoint && _isDefined(extraPoint.value)) {
         var y1 = point.value,
             y2 = extraPoint.value,
             x1 = point.argument,
             x2 = extraPoint.argument;
 
-        return ((x - x1) * (y2 - y1)) / (x2 - x1) + y1;
+        const r = ((x - x1) * (y2.valueOf() - y1.valueOf())) / (x2 - x1) + y1.valueOf();
+        return range.dataType === "datetime" ? new Date(r) : r;
     } else {
         return point.value;
     }
 }
 
 function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, bound) {
-    var value = getValueForArgument(point, prevPoint, bound);
+    var value = getValueForArgument(point, prevPoint, bound, range);
     rangeCalculator(range, value, value);
 }
 

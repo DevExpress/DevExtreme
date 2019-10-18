@@ -2422,6 +2422,22 @@ QUnit.test("Numeric. zooming args between points.", function(assert) {
     assert.equal(rangeData.max, 40, "max y");
 });
 
+QUnit.test("Datetime values.", function(assert) {
+    var data = [{ arg: 1, val: new Date(2016, 6, 1) }, { arg: 2, val: new Date(2016, 6, 2) }, { arg: 3, val: new Date(2016, 6, 3) }, { arg: 4, val: new Date(2016, 6, 4) }, { arg: 5, val: new Date(2016, 6, 5) }, { arg: 6, val: 60 }],
+        rangeData,
+        series = createSeries($.extend(true, {}, this.defaultOptions, { valueType: "datetime", valueAxisType: "continuous" }), { argumentAxis: this.argumentAxis });
+
+    series.updateData(data);
+    series.createPoints();
+
+    this.zoom(3, 4.5);
+
+    rangeData = series.getViewport();
+
+    assert.ok(rangeData, "Returned object");
+    assert.equal(rangeData.min.getTime(), new Date(2016, 6, 3).getTime(), "min y");
+    assert.equal(rangeData.max.getTime(), new Date(2016, 6, 4, 12).getTime(), "max y");
+});
 
 // T583086
 QUnit.test("Zooming points with null values", function(assert) {
