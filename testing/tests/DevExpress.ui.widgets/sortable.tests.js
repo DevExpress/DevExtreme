@@ -12,15 +12,20 @@ fx.off = true;
 
 QUnit.testStart(function() {
     let markup =
-        `<div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-            <div id="item1" class="draggable" style="height: 30px; background: yellow;">item1</div>
-            <div id="item2" class="draggable" style="height: 30px; background: red;">item2</div>
-            <div id="item3" class="draggable" style="height: 30px; background: blue;">item3</div>
+        `<style>
+            .draggable {
+                height: 30px;
+            }
+        </style>
+        <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+            <div id="item1" class="draggable" style="background: yellow;">item1</div>
+            <div id="item2" class="draggable" style="background: red;">item2</div>
+            <div id="item3" class="draggable" style="background: blue;">item3</div>
         </div>
         <div id="items2" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-            <div id="item4" class="draggable" style="height: 30px; background: yellow;">item4</div>
-            <div id="item5" class="draggable" style="height: 30px; background: red;">item5</div>
-            <div id="item6" class="draggable" style="height: 30px; background: blue;">item6</div>
+            <div id="item4" class="draggable" style="background: yellow;">item4</div>
+            <div id="item5" class="draggable" style="background: red;">item5</div>
+            <div id="item6" class="draggable" style="background: blue;">item6</div>
         </div>
         <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
         <div id="itemsHorizontal" style="width: 250px; height: 300px;">
@@ -30,23 +35,23 @@ QUnit.testStart(function() {
         </div>
         <div id="itemsWithContentTemplate" style="width: 300px; height: 250px; position: relative; background: grey;">
             <div data-options="dxTemplate:{ name:'content' }">
-                <div id="item11" class="draggable" style="height: 30px; background: yellow;">item1</div>
-                <div id="item12" class="draggable" style="height: 30px; background: red;">item2</div>
-                <div id="item13" class="draggable" style="height: 30px; background: blue;">item3</div>
+                <div id="item11" class="draggable" style="background: yellow;">item1</div>
+                <div id="item12" class="draggable" style="background: red;">item2</div>
+                <div id="item13" class="draggable" style="background: blue;">item3</div>
             </div>
         </div>
         <div id="scroll" style="height: 250px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
             <div id="itemsWithScroll" style="width: 300px;">
-                <div id="item21" class="draggable" style="width: 300px; height: 50px; background: yellow;">item1</div>
-                <div id="item22" class="draggable" style="width: 300px; height: 50px; background: red;">item2</div>
-                <div id="item23" class="draggable" style="width: 300px; height: 50px; background: blue;">item3</div>
-                <div id="item24" class="draggable" style="width: 300px; height: 50px; background: yellow;">item4</div>
-                <div id="item25" class="draggable" style="width: 300px; height: 50px; background: red;">item5</div>
-                <div id="item26" class="draggable" style="width: 300px; height: 50px; background: blue;">item6</div>
-                <div id="item27" class="draggable" style="width: 300px; height: 50px; background: yellow;">item7</div>
-                <div id="item28" class="draggable" style="width: 300px; height: 50px; background: red;">item8</div>
-                <div id="item31" class="draggable" style="width: 300px; height: 50px; background: yellow;">item9</div>
-                <div id="item32" class="draggable" style="width: 300px; height: 50px; background: red;">item10</div>
+                <div id="item21" class="draggable" style="height: 50px; background: yellow;">item1</div>
+                <div id="item22" class="draggable" style="height: 50px; background: red;">item2</div>
+                <div id="item23" class="draggable" style="height: 50px; background: blue;">item3</div>
+                <div id="item24" class="draggable" style="height: 50px; background: yellow;">item4</div>
+                <div id="item25" class="draggable" style="height: 50px; background: red;">item5</div>
+                <div id="item26" class="draggable" style="height: 50px; background: blue;">item6</div>
+                <div id="item27" class="draggable" style="height: 50px; background: yellow;">item7</div>
+                <div id="item28" class="draggable" style="height: 50px; background: red;">item8</div>
+                <div id="item31" class="draggable" style="height: 50px; background: yellow;">item9</div>
+                <div id="item32" class="draggable" style="height: 50px; background: red;">item10</div>
             </div>
         </div>
         `;
@@ -144,6 +149,7 @@ QUnit.test("Default drag template", function(assert) {
     assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), "height is correct");
     assert.strictEqual($items.get(0).style.width, "", "width style does not exist in item");
     assert.strictEqual($draggingElement.get(0).style.width, "300px", "width style exists in dragging item");
+    assert.strictEqual($draggingElement.get(0).style.height, "30px", "height style exists in dragging item");
 });
 
 QUnit.module("allowReordering", moduleConfig);
