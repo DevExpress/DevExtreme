@@ -1948,8 +1948,8 @@ var dxChart = {
     annotations: [{}],
     /**
     * @name dxChartOptions.customizeAnnotation
-    * @type function(annotationItem)
-    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type function(annotation)
+    * @type_function_param1 annotation:dxChartAnnotationConfig|any
     * @type_function_return dxChartAnnotationConfig
     * @default undefined
     * @notUsedInTheme
@@ -3810,7 +3810,7 @@ var dxChartCommonAnnotationConfig = {
     * @name dxChartCommonAnnotationConfig.template
     * @type template|function
     * @default undefined
-    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type_function_param1 annotation:dxChartAnnotationConfig|any
     * @type_function_param2 element:SVGGElement
     * @type_function_return string|SVGElement|jQuery
     */
@@ -3835,8 +3835,8 @@ var dxChartCommonAnnotationConfig = {
     height: undefined,
     /**
     * @name dxChartCommonAnnotationConfig.customizeTooltip
-    * @type function(annotationItem)
-    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type function(annotation)
+    * @type_function_param1 annotation:dxChartAnnotationConfig|any
     * @type_function_return object
     * @default undefined
     * @notUsedInTheme
@@ -3844,8 +3844,8 @@ var dxChartCommonAnnotationConfig = {
     customizeTooltip: undefined,
     /**
     * @name dxChartCommonAnnotationConfig.tooltipTemplate
-    * @type template|function(annotationItem, element)
-    * @type_function_param1 annotationItem:dxChartAnnotationConfig|any
+    * @type template|function(annotation, element)
+    * @type_function_param1 annotation:dxChartAnnotationConfig|any
     * @type_function_param2 element:dxElement
     * @type_function_return string|Node|jQuery
     * @default undefined
