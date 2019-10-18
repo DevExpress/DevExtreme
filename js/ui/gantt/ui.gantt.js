@@ -361,7 +361,8 @@ class Gantt extends Widget {
         }
     }
     _updateTreeListDataSource() {
-        this._setTreeListOption("dataSource", this.option("tasks.dataSource"));
+        const storeArray = this._tasksOption._getStore()._array;
+        this._setTreeListOption("dataSource", storeArray ? storeArray : this.option("tasks.dataSource"));
     }
 
     _getLoadPanel() {
