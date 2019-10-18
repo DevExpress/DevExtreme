@@ -799,8 +799,6 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._dateTableScrollable.scrollTo({
                     left: e.scrollOffset.left
                 });
-            }).bind(this),
-            onStop: (function(e) {
                 this._dateTableScrollable.option("onScroll", dateTableScrollableOnScroll);
             }).bind(this),
             onEnd: (function(e) {
