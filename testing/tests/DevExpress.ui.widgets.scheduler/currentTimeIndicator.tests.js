@@ -1,6 +1,6 @@
-var $ = require("jquery"),
-    SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager"),
-    resizeCallbacks = require("core/utils/resize_callbacks");
+import $ from "jquery";
+import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
+import resizeCallbacks from "core/utils/resize_callbacks";
 
 var SCHEDULER_DATE_TIME_SHADER_CLASS = "dx-scheduler-date-time-shader",
     SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS = "dx-scheduler-date-time-shader-all-day",
@@ -8,15 +8,16 @@ var SCHEDULER_DATE_TIME_SHADER_CLASS = "dx-scheduler-date-time-shader",
     SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS = "dx-scheduler-date-time-shader-bottom",
     SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator";
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/scheduler/workspaces/ui.scheduler.work_space_day");
-require("ui/scheduler/workspaces/ui.scheduler.work_space_week");
-require("ui/scheduler/workspaces/ui.scheduler.timeline_day"),
-require("ui/scheduler/workspaces/ui.scheduler.timeline_week"),
-require("ui/scheduler/workspaces/ui.scheduler.timeline_work_week"),
-require("ui/scheduler/workspaces/ui.scheduler.timeline_month"),
+import "ui/scheduler/workspaces/ui.scheduler.work_space_day";
+import "ui/scheduler/workspaces/ui.scheduler.work_space_week";
+import "ui/scheduler/workspaces/ui.scheduler.timeline_day";
+import "ui/scheduler/workspaces/ui.scheduler.timeline_week";
+import "ui/scheduler/workspaces/ui.scheduler.timeline_work_week";
+import "ui/scheduler/workspaces/ui.scheduler.timeline_month";
+
 QUnit.testStart(function() {
     $("#qunit-fixture").html('</div><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space">');
 });

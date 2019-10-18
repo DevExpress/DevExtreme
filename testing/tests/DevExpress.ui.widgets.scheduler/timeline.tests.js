@@ -1,19 +1,19 @@
-require("common.css!");
-require("generic_light.css!");
-require("ui/scheduler/workspaces/ui.scheduler.timeline");
-require("ui/scheduler/workspaces/ui.scheduler.timeline_day");
-require("ui/scheduler/workspaces/ui.scheduler.timeline_week");
-require("ui/scheduler/workspaces/ui.scheduler.timeline_work_week");
-require("ui/scheduler/workspaces/ui.scheduler.timeline_month");
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/workspaces/ui.scheduler.timeline";
+import "ui/scheduler/workspaces/ui.scheduler.timeline_day";
+import "ui/scheduler/workspaces/ui.scheduler.timeline_week";
+import "ui/scheduler/workspaces/ui.scheduler.timeline_work_week";
+import "ui/scheduler/workspaces/ui.scheduler.timeline_month";
 
-var pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import pointerMock from "../../helpers/pointerMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
-var $ = require("jquery"),
-    SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager"),
-    domUtils = require("core/utils/dom"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    dateUtils = require("core/utils/date");
+import $ from "jquery";
+import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
+import domUtils from "core/utils/dom";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import dateUtils from "core/utils/date";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-timeline"></div>\
