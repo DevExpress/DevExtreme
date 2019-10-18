@@ -58,7 +58,7 @@ function getValueForArgument(point, extraPoint, x, range) {
             x1 = point.argument,
             x2 = extraPoint.argument;
 
-        const r = ((x - x1) * (y2.valueOf() - y1.valueOf())) / (x2 - x1) + y1.valueOf();
+        const r = ((x - x1) * (y2 - y1)) / (x2 - x1) + y1.valueOf();
         return range.dataType === "datetime" ? new Date(r) : r;
     } else {
         return point.value;
