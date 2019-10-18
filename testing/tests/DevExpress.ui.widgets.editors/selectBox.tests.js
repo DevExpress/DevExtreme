@@ -594,13 +594,9 @@ QUnit.module("functionality", moduleSetup, () => {
         }).dxSelectBox("instance");
 
         this.clock.tick(TIME_TO_WAIT);
-
-        const $popupContent = $(selectBox.content());
-        const list = $popupContent.find(toSelector(LIST_CLASS)).dxList("instance");
-        const $selectedListItem = $popupContent.find(toSelector(LIST_ITEM_SELECTED_CLASS));
+        const list = $(selectBox.content()).find(toSelector(LIST_CLASS)).dxList("instance");
 
         assert.ok(list.option("selectedItem") === 1, "list item is selected");
-        assert.ok($selectedListItem.length === 1, "list item has css selected class");
     });
 
     QUnit.test("dxSelectBox scrolls to the top when paging is enabled and selectbox is editable and item is out of page", (assert) => {
