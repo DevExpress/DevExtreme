@@ -149,6 +149,7 @@ QUnit.test("Default drag template", function(assert) {
     assert.strictEqual($draggingElement.outerHeight(), $items.eq(0).outerHeight(), "height is correct");
     assert.strictEqual($items.get(0).style.width, "", "width style does not exist in item");
     assert.strictEqual($draggingElement.get(0).style.width, "300px", "width style exists in dragging item");
+    assert.strictEqual($items.get(0).style.height, "", "height style does not exist in item");
     assert.strictEqual($draggingElement.get(0).style.height, "30px", "height style exists in dragging item");
 });
 
