@@ -201,8 +201,8 @@ var baseFixedColumns = {
             isFixedTableRendering = that._isFixedTableRendering,
             isGroupCell = options.rowType === "group" && isDefined(column.groupIndex);
 
-        // T747718
-        if(isFixedTableRendering && isGroupCell && !column.command) {
+        // T747718, T824508, T821252
+        if(isFixedTableRendering && isGroupCell && !column.command && !column.groupCellTemplate) {
             $cell.css("pointerEvents", "none");
         }
 

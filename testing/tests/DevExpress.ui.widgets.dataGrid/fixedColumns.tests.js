@@ -564,6 +564,35 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
     assert.strictEqual($fixTable.find("tbody > .dx-data-row").first().find("td").eq(2).text(), "test2", "text a third cell in data row");
 });
 
+// T824508, T821252
+QUnit.test("The pointer-events none style should not be assigned to group cell if groupCellTemplate is defined", function(assert) {
+    // arrange
+    var that = this,
+        $testElement = $("#container");
+
+    that.items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: ["test4"] }];
+
+    $.extend(that.columns[0], {
+        groupIndex: 0,
+        command: "expand",
+        groupCellTemplate: function(container, options) {
+            $(container).addClass("my-group-cell");
+            $(container).text(options.text);
+        }
+    });
+
+    that.setupDataGrid();
+
+    // act
+    that.rowsView.render($testElement);
+
+    var $groupCells = $testElement.find(".my-group-cell");
+    // assert
+    assert.equal($groupCells.length, 2, "group cell count");
+    assert.notEqual($groupCells.eq(0).css("pointer-events"), "none", "pointer-events is auto for first cell");
+    assert.notEqual($groupCells.eq(1).css("pointer-events"), "none", "pointer-events is auto for second cell");
+});
+
 // T270455
 QUnit.test("Draw fixed table when scrolling mode infinite", function(assert) {
     // arrange
