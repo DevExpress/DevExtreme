@@ -173,5 +173,19 @@
         .dx-switch-container {
             border-color: @base-invalid-color;
         }
+
+        .dx-switch-handle:before {
+            background-color: @base-invalid-color;
+        }
+    }
+
+    .dx-switch-handle:before {
+        background-color: @base-invalid-faded-border-color;
+    }
+
+    &.dx-switch-on-value {
+        .dx-switch-handle:before {
+            background-color: @base-invalid-color;
+        }
     }
 }
