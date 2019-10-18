@@ -10,12 +10,8 @@ import dataCoreUtils from "../../core/utils/data";
 import DataSourceModule from "../../data/data_source/data_source";
 import { when, Deferred } from "../../core/utils/deferred";
 
-var getValueExpr = function(resource) {
-        return resource.valueExpr || "id";
-    },
-    getDisplayExpr = function(resource) {
-        return resource.displayExpr || "text";
-    };
+const getValueExpr = resource => resource.valueExpr || "id";
+const getDisplayExpr = resource => resource.displayExpr || "text";
 
 export default class ResourceManager {
     constructor(resources) {
@@ -182,12 +178,12 @@ export default class ResourceManager {
             wrapOnlyMultipleResources = false;
         }
 
-        iteratorUtils.each(this._resourceFields, (index, field) => {
+        this._resourceFields.forEach(field => {
             iteratorUtils.each(itemData, (fieldName, fieldValue) => {
-                let tmp = {};
-                tmp[fieldName] = fieldValue;
+                let tempObject = {};
+                tempObject[fieldName] = fieldValue;
 
-                var resourceData = this.getDataAccessors(field, "getter")(tmp);
+                let resourceData = this.getDataAccessors(field, "getter")(tempObject);
                 if(isDefined(resourceData)) {
                     if(!result) {
                         result = {};
@@ -196,12 +192,12 @@ export default class ResourceManager {
                         resourceData = resourceData[0];
                     }
                     if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && this._isMultipleResource(field))) {
-                        this.getDataAccessors(field, "setter")(tmp, arrayUtils.wrapToArray(resourceData));
+                        this.getDataAccessors(field, "setter")(tempObject, arrayUtils.wrapToArray(resourceData));
                     } else {
-                        this.getDataAccessors(field, "setter")(tmp, resourceData);
+                        this.getDataAccessors(field, "setter")(tempObject, resourceData);
                     }
 
-                    extend(result, tmp);
+                    extend(result, tempObject);
 
                     return true;
                 }
