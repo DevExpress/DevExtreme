@@ -39,7 +39,7 @@ class OverlapStrategy extends DrawerStrategy {
             },
             visible: true,
             propagateOutsideClick: true,
-            isWrapperSizeConst: true
+            _isWrapperSizeConst: true
         });
     }
 
