@@ -1,7 +1,7 @@
-var $ = require("jquery"),
-    dxSchedulerResourceManager = require("ui/scheduler/ui.scheduler.resource_manager"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store");
+import $ from "jquery";
+import dxSchedulerResourceManager from "ui/scheduler/ui.scheduler.resource_manager";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
 
 var testData = {
     rooms: [{
