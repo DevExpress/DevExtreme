@@ -1279,9 +1279,20 @@ var Overlay = Widget.inherit({
     _renderShadingDimensions: function() {
         var $container = this._getContainer();
         var isWindow = this._isWindow($container);
+        var isOverlayInDrawer = this.$element().hasClass("dx-drawer-panel-content");
+
+        if(this.storedWidth === undefined) {
+            this.storedWidth = this._$wrapper.outerWidth();
+            this.storedHeight = this._$wrapper.outerHeight();
+        }
+
+
         var width = isWindow ? null : $container.outerWidth();
         var height = isWindow ? null : $container.outerHeight();
-
+        if(isOverlayInDrawer) {
+            width = this.storedWidth;
+            height = this.storedHeight;
+        }
 
         this._$wrapper.css({
             width,
