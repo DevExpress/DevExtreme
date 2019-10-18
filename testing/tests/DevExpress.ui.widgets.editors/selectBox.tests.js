@@ -568,7 +568,6 @@ QUnit.module("functionality", moduleSetup, () => {
 
     QUnit.test("Widget selects current value in the dropDownList if dxSelectBox with async data is opened on initialization (T822930)", (assert) => {
         const selectBox = $("#selectBox").dxSelectBox({
-            opened: true,
             deferRendering: true,
             dataSource: {
                 load: () => {
@@ -593,6 +592,7 @@ QUnit.module("functionality", moduleSetup, () => {
             value: 1
         }).dxSelectBox("instance");
 
+        selectBox.open();
         this.clock.tick(TIME_TO_WAIT);
         const list = $(selectBox.content()).find(toSelector(LIST_CLASS)).dxList("instance");
 
