@@ -3200,13 +3200,11 @@ QUnit.module("API", moduleConfig, () => {
             QUnit.test("Total summary, total_col_1.customizeText: (cell) => 'custom'" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [
-                    { f1: "f1_1", f2: "f2_1" },
-                    { f1: "f1_2", f2: "f2_2" }
+                    { f1: "f1_1" }
                 ];
                 const dataGrid = $("#dataGrid").dxDataGrid({
                     columns: [
-                        { dataField: "f1", caption: "f1", dataType: "string" },
-                        { dataField: "f2", caption: "f2", dataType: "string" },
+                        { dataField: "f1", caption: "f1", dataType: "string" }
                     ],
                     dataSource: ds,
                     summary: {
@@ -3219,14 +3217,9 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "f1_1" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: "f2_1" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                    { excelCell: { value: "f1_1" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } }
                 ], [
-                    { excelCell: { value: "f1_2" }, gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: "f2_2" }, gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } }
-                ], [
-                    { excelCell: { value: "custom" }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[1].f1, totalSummaryItemName: "TotalSummary 1" } },
-                    { excelCell: { value: undefined }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(1), totalSummaryItemName: "TotalSummary 3" } }
+                    { excelCell: { value: "custom" }, gridCell: { rowType: "totalFooter", column: dataGrid.columnOption(0), value: ds[0].f1, totalSummaryItemName: "TotalSummary 1" } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
