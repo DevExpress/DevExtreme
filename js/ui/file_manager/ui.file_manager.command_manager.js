@@ -15,24 +15,27 @@ export class FileManagerCommandManager {
             {
                 name: "create",
                 text: "New folder",
-                icon: "plus",
+                icon: "newfolder",
                 enabled: this._permissions.create,
                 noFileItemRequired: true
             },
             {
                 name: "rename",
                 text: "Rename",
+                icon: "edit",
                 enabled: this._permissions.rename,
                 isSingleFileItemCommand: true
             },
             {
                 name: "move",
                 text: "Move",
+                icon: "movetofolder",
                 enabled: this._permissions.move
             },
             {
                 name: "copy",
                 text: "Copy",
+                icon: "copy",
                 enabled: this._permissions.copy
             },
             {
