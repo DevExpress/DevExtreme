@@ -1480,6 +1480,7 @@ class Diagram extends Widget {
                  * @name dxDiagramOptions.export.proxyUrl
                  * @type string
                  * @default undefined
+                 * @deprecated
                  */
                 proxyUrl: undefined
             }

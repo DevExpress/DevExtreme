@@ -145,6 +145,9 @@ exports.fileSaver = {
         /* if(commonUtils.isDefined(window.cordova)) {
             return this._cordovaDownloader(fileName, this._getDataUri(format, data), linkClick);
         } */
+        if(typeUtils.isDefined(proxyURL)) {
+            errors.log("W0001", "Export", "proxyURL", "19.2", "This option is no longer required");
+        }
 
         if(forceProxy) {
             this._saveByProxy(proxyURL, fileName, format, data);

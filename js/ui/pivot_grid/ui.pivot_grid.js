@@ -442,6 +442,7 @@ var PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions.export.proxyUrl
                  * @type string
                  * @default undefined
+                 * @deprecated
                  */
                 proxyUrl: undefined,
                 /**
