@@ -182,6 +182,10 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
         this.behavior = this._createBehavior(isSingleBehavior, target);
         super._showCore(target, dataList, isSingleBehavior);
         this.tooltip.option("position", this._getTooltipPosition(dataList));
+    }
+
+    _onShown() {
+        super._onShown();
         this.list.focus();
         this.list.option("focusedElement", null);
     }
