@@ -24,6 +24,7 @@ registerDecorator(
             this._lockedDrag = false;
 
             this._sortable = list._createComponent(list._scrollView.$content(), Sortable, extend({
+                component: list,
                 contentTemplate: null,
                 allowReordering: false,
                 filter: ".dx-list-item",
@@ -33,7 +34,7 @@ registerDecorator(
                 dragTemplate: this._dragTemplate,
                 onDragStart: this._dragStartHandler.bind(this),
                 onDragChange: this._dragChangeHandler.bind(this),
-                onDragEnd: this._dragEndHandler.bind(this)
+                onReorder: this._reorderHandler.bind(this)
             }, list.option("itemDragging")));
         },
 
@@ -66,7 +67,7 @@ registerDecorator(
             return $over.parent().get(0) === $dragging.parent().get(0);
         },
 
-        _dragEndHandler: function(e) {
+        _reorderHandler: function(e) {
             var $targetElement = this._list.getItemElementByFlatIndex(e.toIndex);
             this._list.reorderItem($(e.itemElement), $targetElement);
         },
