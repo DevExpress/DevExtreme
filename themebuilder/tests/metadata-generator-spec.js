@@ -216,7 +216,7 @@ describe("Metadata generator - meta normalizer", () => {
             "Validation": [ "Form", "ResponsiveBox", "TabPanel" ]
         };
 
-        assert.deepEqual(generator.removeDependenciesInternals(withoutDuplicates), result);
+        assert.deepEqual(generator.removeInternalDependencies(withoutDuplicates), result);
     });
 });
 

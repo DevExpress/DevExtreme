@@ -85,7 +85,7 @@ const resolveDependencies = (dependencies) => {
     return dependencies;
 };
 
-const removeDependenciesInternals = (dependencies) => {
+const removeInternalDependencies = (dependencies) => {
     for(var widget in dependencies) {
         if(Object.prototype.hasOwnProperty.call(dependencies, widget)) {
             if(publicWidgets.includes(widget.toLowerCase())) {
@@ -155,7 +155,7 @@ const generate = (version, lessCompiler) => {
 
     return Promise.all(promises).then(() => {
         metadata["_metadata_version"] = version;
-        metadata["dependencies"] = removeDependenciesInternals(resolveDependencies(dependencies));
+        metadata["dependencies"] = removeInternalDependencies(resolveDependencies(dependencies));
         const meta = "module.exports = " + JSON.stringify(metadata) + ";";
         fs.mkdirSync(path.dirname(resultPath), { recursive: true });
         fs.writeFileSync(resultPath, meta);
@@ -168,5 +168,5 @@ module.exports = {
     parseComments,
     parseImports,
     resolveDependencies,
-    removeDependenciesInternals
+    removeInternalDependencies
 };
