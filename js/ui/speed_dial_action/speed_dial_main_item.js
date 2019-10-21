@@ -384,10 +384,10 @@ exports.repaint = function() {
 
     speedDialMainItem.option({
         actions: speedDialMainItem.option("actions"),
-        icon: icon,
+        icon,
         closeIcon: speedDialMainItem._getDefaultOptions().closeIcon,
         position: speedDialMainItem._getPosition(),
-        label: label,
+        label,
         maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount,
         direction: speedDialMainItem._getDefaultOptions().direction
     });
