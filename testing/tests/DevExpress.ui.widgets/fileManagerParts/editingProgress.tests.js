@@ -154,7 +154,7 @@ const createTestData = () => {
                 operationId: 1,
                 details: [
                     { commonText: "Folder 3", imageUrl: "folder" },
-                    { commonText: "File 1.txt", imageUrl: "doc" },
+                    { commonText: "File 1.txt", imageUrl: "txtfile" },
                     { commonText: "File 2.jpg", imageUrl: "image" }
                 ],
                 type: "progress-addOperationDetails"
@@ -179,7 +179,7 @@ const createTestData = () => {
                 operationId: 1,
                 details: [
                     { commonText: "Folder 3", imageUrl: "folder" },
-                    { commonText: "File 1.txt", imageUrl: "doc" },
+                    { commonText: "File 1.txt", imageUrl: "txtfile" },
                     { commonText: "File 2.jpg", imageUrl: "image" }
                 ],
                 type: "progress-addOperationDetails"
@@ -213,7 +213,7 @@ const createTestData = () => {
             {
                 operationId: 1,
                 details: [
-                    { commonText: "File 1.txt", imageUrl: "doc" },
+                    { commonText: "File 1.txt", imageUrl: "txtfile" },
                     { commonText: "File 2.jpg", imageUrl: "image" }
                 ],
                 type: "progress-addOperationDetails"
@@ -221,7 +221,7 @@ const createTestData = () => {
             { operationId: 1, index: 0, errorText: "Unspecified error.", type: "progress-addOperationDetailsError" },
             { errorText: "Unspecified error.", type: "progress-renderError" },
             {
-                item: { commonText: "File 1.txt", imageUrl: "doc" },
+                item: { commonText: "File 1.txt", imageUrl: "txtfile" },
                 errorText: "Unspecified error.",
                 type: "progress-createErrorDetailsProgressBox"
             },
@@ -302,8 +302,8 @@ const createTestData = () => {
             {
                 operationId: 1,
                 details: [
-                    { commonText: "Upload file 0.txt", imageUrl: "doc" },
-                    { commonText: "Upload file 1.txt", imageUrl: "doc" }
+                    { commonText: "Upload file 0.txt", imageUrl: "txtfile" },
+                    { commonText: "Upload file 1.txt", imageUrl: "txtfile" }
                 ],
                 allowCancel: true,
                 type: "progress-addOperationDetails"
@@ -328,8 +328,8 @@ const createTestData = () => {
             {
                 operationId: 1,
                 details: [
-                    { commonText: "Upload file 0.txt", imageUrl: "doc" },
-                    { commonText: "Upload file 1.txt", imageUrl: "doc" }
+                    { commonText: "Upload file 0.txt", imageUrl: "txtfile" },
+                    { commonText: "Upload file 1.txt", imageUrl: "txtfile" }
                 ],
                 allowCancel: true, type: "progress-addOperationDetails"
             },
@@ -338,7 +338,7 @@ const createTestData = () => {
             { operationId: 1, index: 1, errorText: "Unspecified error.", type: "progress-addOperationDetailsError" },
             { errorText: "Unspecified error.", type: "progress-renderError" },
             {
-                item: { commonText: "Upload file 1.txt", imageUrl: "doc" },
+                item: { commonText: "Upload file 1.txt", imageUrl: "txtfile" },
                 errorText: "Unspecified error.",
                 type: "progress-createErrorDetailsProgressBox"
             },
@@ -359,8 +359,8 @@ const createTestData = () => {
             {
                 operationId: 1,
                 details: [
-                    { commonText: "Upload file 0.txt", imageUrl: "doc" },
-                    { commonText: "Upload file 1.txt", imageUrl: "doc" }
+                    { commonText: "Upload file 0.txt", imageUrl: "txtfile" },
+                    { commonText: "Upload file 1.txt", imageUrl: "txtfile" }
                 ],
                 allowCancel: true, type: "progress-addOperationDetails"
             },
@@ -368,13 +368,13 @@ const createTestData = () => {
             { operationId: 1, itemIndex: 1, itemProgress: 40, commonProgress: 50, type: "progress-updateOperationItemProgress" },
             { operationId: 1, index: 0, errorText: "Unspecified error.", type: "progress-addOperationDetailsError" },
             { errorText: "Unspecified error.", type: "progress-renderError" },
-            { item: { commonText: "Upload file 0.txt", imageUrl: "doc" }, errorText: "Unspecified error.", type: "progress-createErrorDetailsProgressBox" },
+            { item: { commonText: "Upload file 0.txt", imageUrl: "txtfile" }, errorText: "Unspecified error.", type: "progress-createErrorDetailsProgressBox" },
             { errorText: "Unspecified error.", type: "progress-renderError" },
             { errorMode: true, commonText: "Item wasn't uploaded", detailsText: "Upload file 0.txtUnspecified error.", type: "notification-_showPopup" },
             { message: "Item wasn't uploaded", status: "error", type: "notification-onActionProgress" },
             { operationId: 1, index: 1, errorText: "Unspecified error.", type: "progress-addOperationDetailsError" },
             { errorText: "Unspecified error.", type: "progress-renderError" },
-            { item: { commonText: "Upload file 1.txt", imageUrl: "doc" }, errorText: "Unspecified error.", type: "progress-createErrorDetailsProgressBox" },
+            { item: { commonText: "Upload file 1.txt", imageUrl: "txtfile" }, errorText: "Unspecified error.", type: "progress-createErrorDetailsProgressBox" },
             { errorText: "Unspecified error.", type: "progress-renderError" },
             { errorMode: true, commonText: "2 items weren't uploaded", detailsText: "Upload file 1.txtUnspecified error.", type: "notification-_showPopup" },
             { message: "2 items weren't uploaded", status: "error", type: "notification-onActionProgress" },
@@ -389,8 +389,8 @@ const createTestData = () => {
             {
                 operationId: 1,
                 details: [
-                    { commonText: "Upload file 0.txt", imageUrl: "doc" },
-                    { commonText: "Upload file 1.txt", imageUrl: "doc" }
+                    { commonText: "Upload file 0.txt", imageUrl: "txtfile" },
+                    { commonText: "Upload file 1.txt", imageUrl: "txtfile" }
                 ],
                 allowCancel: true, type: "progress-addOperationDetails"
             },
@@ -411,8 +411,8 @@ const createTestData = () => {
             {
                 operationId: 1,
                 details: [
-                    { commonText: "Upload file 0.txt", imageUrl: "doc" },
-                    { commonText: "Upload file 1.txt", imageUrl: "doc" }
+                    { commonText: "Upload file 0.txt", imageUrl: "txtfile" },
+                    { commonText: "Upload file 1.txt", imageUrl: "txtfile" }
                 ],
                 allowCancel: true,
                 type: "progress-addOperationDetails"
@@ -431,8 +431,8 @@ const createTestData = () => {
             {
                 operationId: 1,
                 details: [
-                    { commonText: "Upload file 0.txt", imageUrl: "doc" },
-                    { commonText: "Upload file 1.txt", imageUrl: "doc" }
+                    { commonText: "Upload file 0.txt", imageUrl: "txtfile" },
+                    { commonText: "Upload file 1.txt", imageUrl: "txtfile" }
                 ],
                 allowCancel: true,
                 type: "progress-addOperationDetails"
@@ -451,8 +451,8 @@ const createTestData = () => {
             {
                 operationId: 1,
                 details: [
-                    { commonText: "Upload file 0.txt", imageUrl: "doc" },
-                    { commonText: "Upload file 1.txt", imageUrl: "doc" }
+                    { commonText: "Upload file 0.txt", imageUrl: "txtfile" },
+                    { commonText: "Upload file 1.txt", imageUrl: "txtfile" }
                 ],
                 allowCancel: true,
                 type: "progress-addOperationDetails"
@@ -461,7 +461,7 @@ const createTestData = () => {
             { operationId: 1, itemIndex: 1, itemProgress: 40, commonProgress: 50, type: "progress-updateOperationItemProgress" },
             { operationId: 1, index: 1, errorText: "Unspecified error.", type: "progress-addOperationDetailsError" },
             { errorText: "Unspecified error.", type: "progress-renderError" },
-            { item: { commonText: "Upload file 1.txt", imageUrl: "doc" }, errorText: "Unspecified error.", type: "progress-createErrorDetailsProgressBox" },
+            { item: { commonText: "Upload file 1.txt", imageUrl: "txtfile" }, errorText: "Unspecified error.", type: "progress-createErrorDetailsProgressBox" },
             { errorText: "Unspecified error.", type: "progress-renderError" },
             { errorMode: true, commonText: "Item wasn't uploaded", detailsText: "Upload file 1.txtUnspecified error.", type: "notification-_showPopup" },
             { message: "Item wasn't uploaded", status: "error", type: "notification-onActionProgress" },

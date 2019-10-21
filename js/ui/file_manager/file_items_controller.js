@@ -21,6 +21,8 @@ export default class FileItemsController {
 
         this._currentDirectoryInfo = this._rootDirectoryInfo;
 
+        this._defaultIconMap = this._createDefaultIconMap();
+
         this._securityController = new FileSecurityController({
             allowedFileExtensions: this._options.allowedFileExtensions,
             maxFileSize: this._options.maxUploadFileSize
@@ -418,34 +420,28 @@ export default class FileItemsController {
         }
 
         const extension = fileItem.getExtension();
-        switch(extension) {
-            case ".txt":
-                return "doc"; // TODO change icon
-            case ".rtf":
-            case ".doc":
-            case ".docx":
-            case ".odt":
-                return "doc";
-            case ".xls":
-            case ".xlsx":
-            case ".ods":
-                return "exportxlsx";
-            case ".ppt":
-            case ".pptx":
-            case ".odp":
-                return "doc"; // TODO change icon
-            case ".pdf":
-                return "exportpdf";
-            case ".png":
-            case ".gif":
-            case ".jpg":
-            case ".jpeg":
-            case ".ico":
-            case ".bmp":
-                return "image";
-            default:
-                return "doc"; // TODO change icon
-        }
+        const icon = this._defaultIconMap[extension];
+        return icon || "doc";
+    }
+
+    _createDefaultIconMap() {
+        const result = {
+            ".txt": "txtfile",
+            ".rtf": "rtffile",
+            ".doc": "docfile",
+            ".docx": "docxfile",
+            ".xls": "xlsfile",
+            ".xlsx": "xlsxfile",
+            ".ppt": "pptfile",
+            ".pptx": "pptxfile",
+            ".pdf": "pdffile"
+        };
+
+        [".png", ".gif", ".jpg", ".jpeg", ".ico", ".bmp"].forEach(extension => {
+            result[extension] = "image";
+        });
+
+        return result;
     }
 
     _createRootDirectory(text) {
