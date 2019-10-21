@@ -1,26 +1,26 @@
-var pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import pointerMock from "../../helpers/pointerMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager"),
-    domUtils = require("core/utils/dom"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    dateUtils = require("core/utils/date"),
-    dateLocalization = require("localization/date"),
-    dragEvents = require("events/drag"),
-    memoryLeaksHelper = require("../../helpers/memoryLeaksHelper.js"),
-    devices = require("core/devices");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
+import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
+import domUtils from "core/utils/dom";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import dateUtils from "core/utils/date";
+import dateLocalization from "localization/date";
+import dragEvents from "events/drag";
+import memoryLeaksHelper from "../../helpers/memoryLeaksHelper.js";
+import devices from "core/devices";
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/scheduler/workspaces/ui.scheduler.work_space_day");
-require("ui/scheduler/workspaces/ui.scheduler.work_space_week");
-require("ui/scheduler/workspaces/ui.scheduler.work_space_work_week");
-require("ui/scheduler/workspaces/ui.scheduler.work_space_month");
+import "ui/scheduler/workspaces/ui.scheduler.work_space_day";
+import "ui/scheduler/workspaces/ui.scheduler.work_space_week";
+import "ui/scheduler/workspaces/ui.scheduler.work_space_work_week";
+import "ui/scheduler/workspaces/ui.scheduler.work_space_month";
 
 var CELL_CLASS = "dx-scheduler-date-table-cell",
     DROPPABLE_CELL_CLASS = "dx-scheduler-date-table-droppable-cell",

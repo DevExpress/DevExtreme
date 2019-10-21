@@ -1,7 +1,7 @@
-var $ = require("jquery"),
-    SchedulerAgenda = require("ui/scheduler/workspaces/ui.scheduler.agenda"),
-    dateLocalization = require("localization/date"),
-    ResourceManager = require("ui/scheduler/ui.scheduler.resource_manager");
+import $ from "jquery";
+import SchedulerAgenda from "ui/scheduler/workspaces/ui.scheduler.agenda";
+import dateLocalization from "localization/date";
+import ResourceManager from "ui/scheduler/ui.scheduler.resource_manager";
 
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell";
 var formatDateAndWeekday = function(date) {

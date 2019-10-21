@@ -8,6 +8,7 @@ import fx from "animation/fx";
 import { DataSource } from "data/data_source/data_source";
 import CustomStore from "data/custom_store";
 import Color from "color";
+import translator from "animation/translator";
 
 import "ui/scheduler/ui.scheduler";
 
@@ -28,6 +29,99 @@ const moduleConfig = {
 };
 
 QUnit.module("Integration: Resources", moduleConfig, () => {
+    QUnit.test("Grouping by value = 0 in case nested groups shouldn't ignore(T821935)", assert => {
+        const views = ["timelineDay", "day"];
+        const expectedValues = [
+            {
+                "appointment1": {
+                    top: 26,
+                    left: 0
+                },
+                "appointment2": {
+                    top: 190,
+                    left: 431
+                }
+            }, {
+                "appointment1": {
+                    top: 0,
+                    left: 100
+                },
+                "appointment2": {
+                    top: 100,
+                    left: 406
+                }
+            }
+        ];
+
+        const banquetResource = [{
+            text: "Hall 1",
+            id: 0
+        }, {
+            text: "Hall 2",
+            id: 2
+        }];
+
+        const bookingResource = [{
+            id: 1,
+            text: "Confirmed",
+            status_code: "CN",
+        }, {
+            id: 2,
+            text: "Tentative",
+            status_code: "TN"
+        }, {
+            id: 3,
+            text: "Waitlisted",
+            status_code: "WL"
+        }];
+
+        const data = [{
+            text: "appointment1",
+            banquetId: 0,
+            status: 1,
+            startDate: new Date(2015, 4, 25, 10, 0),
+            endDate: new Date(2015, 4, 25, 10, 30)
+        }, {
+            text: "appointment2",
+            banquetId: 0,
+            status: 3,
+            startDate: new Date(2015, 4, 25, 11, 0),
+            endDate: new Date(2015, 4, 25, 11, 30)
+        }];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: views,
+            currentView: views[0],
+            currentDate: new Date(2015, 4, 25),
+            startDayHour: 10,
+            endDayHour: 12,
+            height: 600,
+            width: 1024,
+            groups: ["banquetId", "status"],
+            resources: [{
+                fieldExpr: "banquetId",
+                dataSource: banquetResource
+            }, {
+                fieldExpr: "status",
+                dataSource: bookingResource
+            }]
+        });
+
+        views.forEach((view, index) => {
+            scheduler.option("currentView", view);
+
+            const expectedValue = expectedValues[index];
+            ["appointment1", "appointment2"].forEach(appointmentName => {
+                const expectedPosition = expectedValue[appointmentName];
+                const position = translator.locate(scheduler.appointments.find(appointmentName));
+
+                assert.roughEqual(position.top, expectedPosition.top, 2, `top position of ${appointmentName} should be valid in ${view}`);
+                assert.roughEqual(position.left, expectedPosition.left, 2, `left position of ${appointmentName} should be valid in ${view}`);
+            });
+        });
+    });
+
     QUnit.test("Resource editors should have valid value after show appointment form", assert => {
         const dataSource = [{
             text: "Task 1",
