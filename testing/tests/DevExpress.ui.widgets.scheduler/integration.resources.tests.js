@@ -13,6 +13,7 @@ import "generic_light.css!";
 import fx from "animation/fx";
 import { DataSource } from "data/data_source/data_source";
 import CustomStore from "data/custom_store";
+import translator from "animation/translator";
 import Color from "color";
 
 import "ui/scheduler/ui.scheduler";
@@ -32,6 +33,105 @@ QUnit.module("Integration: Resources", {
         fx.off = false;
         this.clock.restore();
     }
+});
+
+QUnit.test("Grouping by value = 0 in case nested groups shouldn't ignore(T821935)", function(assert) {
+    const views = ["timelineDay", "day"];
+    const expectedValues = [
+        {
+            "appointment1": {
+                top: 26,
+                left: 0
+            },
+            "appointment2": {
+                top: 190,
+                left: 431
+            }
+        }, {
+            "appointment1": {
+                top: 0,
+                left: 100
+            },
+            "appointment2": {
+                top: 100,
+                left: 406
+            }
+        }
+    ];
+
+    const banquetResource = [{
+        text: "Hall 1",
+        id: 0
+    }, {
+        text: "Hall 2",
+        id: 2
+    }];
+
+    const bookingResource = [{
+        id: 1,
+        text: "Confirmed",
+        status_code: "CN",
+    }, {
+        id: 2,
+        text: "Tentative",
+        status_code: "TN"
+    }, {
+        id: 3,
+        text: "Waitlisted",
+        status_code: "WL"
+    }];
+
+    const data = [{
+        text: "appointment1",
+        banquetId: 0,
+        status: 1,
+        startDate: new Date(2015, 4, 25, 10, 0),
+        endDate: new Date(2015, 4, 25, 10, 30)
+    }, {
+        text: "appointment2",
+        banquetId: 0,
+        status: 3,
+        startDate: new Date(2015, 4, 25, 11, 0),
+        endDate: new Date(2015, 4, 25, 11, 30)
+    }];
+
+    const findAppointment = (instance, text) => {
+        return instance.$element()
+            .find(".dx-scheduler-appointment")
+            .filter((index, element) => $(element).find(".dx-scheduler-appointment-title").text() === text);
+    };
+
+    this.createInstance({
+        dataSource: data,
+        views: views,
+        currentView: views[0],
+        currentDate: new Date(2015, 4, 25),
+        startDayHour: 10,
+        endDayHour: 12,
+        height: 600,
+        width: 1024,
+        groups: ["banquetId", "status"],
+        resources: [{
+            fieldExpr: "banquetId",
+            dataSource: banquetResource
+        }, {
+            fieldExpr: "status",
+            dataSource: bookingResource
+        }]
+    });
+
+    views.forEach((view, index) => {
+        this.instance.option("currentView", view);
+
+        const expectedValue = expectedValues[index];
+        ["appointment1", "appointment2"].forEach(appointmentName => {
+            const expectedPosition = expectedValue[appointmentName];
+            const position = translator.locate(findAppointment(this.instance, appointmentName));
+
+            assert.roughEqual(position.top, expectedPosition.top, 2, `top position of ${appointmentName} should be valid in ${view}`);
+            assert.roughEqual(position.left, expectedPosition.left, 2, `left position of ${appointmentName} should be valid in ${view}`);
+        });
+    });
 });
 
 QUnit.test("Editor for resource should be passed to details view", function(assert) {
