@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    domUtils = require("core/utils/dom"),
-    devices = require("core/devices"),
-    SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager");
+import $ from "jquery";
+import domUtils from "core/utils/dom";
+import devices from "core/devices";
+import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/scheduler/ui.scheduler");
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-work-space"></div>');

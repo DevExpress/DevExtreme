@@ -168,8 +168,8 @@ class FileManagerEditingControl extends Widget {
                 action: arg => this._download(arg)
             },
 
-            getItemsContent: {
-                action: arg => this._getItemsContent(arg)
+            getItemContent: {
+                action: arg => this._getItemContent(arg)
             }
 
         };
@@ -303,9 +303,9 @@ class FileManagerEditingControl extends Widget {
         return this._controller.downloadItems(itemInfos);
     }
 
-    _getItemsContent(itemInfos) {
+    _getItemContent(itemInfos) {
         itemInfos = itemInfos || this._model.getMultipleSelectedItems();
-        return this._controller.getItemsContent(itemInfos);
+        return this._controller.getItemContent(itemInfos);
     }
 
     _completeAction(operationInfo, context) {

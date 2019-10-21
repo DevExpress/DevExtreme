@@ -120,6 +120,106 @@ describe("Metadata generator - getMetaItems (several item)", () => {
     });
 });
 
+describe("Metadata generator - parse imports", () => {
+    it("different import types", () => {
+        const data = [{
+            import: "@import (less) \"dataGrid.less\";",
+            expected: ["DataGrid"]
+        }, {
+            import: "@import (less) \"dataGrid.material.less\";",
+            expected: ["DataGrid"]
+        }, {
+            import: "@import (less) \"dataGrid.generic.less\";",
+            expected: ["DataGrid"]
+        }, {
+            import: "@import \"dataGrid.generic.less\";",
+            expected: ["DataGrid"]
+        }, {
+            import: "@import      \"dataGrid.generic.less\"   ;    ",
+            expected: ["DataGrid"]
+        }, {
+            import: "@import (once) \"dataGrid.generic.less\";",
+            expected: ["DataGrid"]
+        }, {
+            import: "@import (reference) \"dataGrid.generic.less\";",
+            expected: ["DataGrid"]
+        }, {
+            import: "@import (reference) \"../scrollView.generic.less\";",
+            expected: ["ScrollView"]
+        }, {
+            import: "@import (reference) \"../../button.generic.less\";",
+            expected: ["Button"]
+        }];
+
+        data.forEach((testItem) => {
+            assert.deepEqual(generator.parseImports(testItem.import), testItem.expected);
+        });
+    });
+
+    it("multiple imports", () => {
+        const data = [{
+            import: "@import (less) \"dataGrid.less\";@import (less) \"dataGrid.material.less\";@import (less) \"dataGrid.generic.less\";",
+            expected: ["DataGrid"]
+        }, {
+            import: "@import (less) \"dataGrid.material.less\";@import (less) \"treeList.material.less\";",
+            expected: ["DataGrid", "TreeList"]
+        }, {
+            import: "@import (less) \"dataGrid.generic.less\";\n@import (less) \"treeList.material.less\";",
+            expected: ["DataGrid", "TreeList"]
+        }, {
+            import: "@import (less) \"dataGrid.generic.less\";\nsome string\n\n@import (reference) \"treeList.material.less\";",
+            expected: ["DataGrid", "TreeList"]
+        }];
+
+        data.forEach((testItem) => {
+            assert.deepEqual(generator.parseImports(testItem.import), testItem.expected);
+        });
+    });
+});
+
+describe("Metadata generator - meta normalizer", () => {
+    it("normalize", () => {
+        var raw = {
+            "DataGrid": ["DataGrid", "GridBase"],
+            "GridBase": ["Form", "Button", "TreeView", "Popup", "ContextMenu"],
+            "ContextMenu": ["Overlay", "MenuBase"],
+            "MenuBase": ["Menu"],
+            "Form": ["ResponsiveBox", "TabPanel", "Validation"],
+            "Validation": [ "Form" ]
+        };
+
+        var normalized = {
+            "DataGrid": ["GridBase", "Form", "Button", "TreeView", "Popup", "ContextMenu", "ResponsiveBox", "TabPanel", "Validation", "Overlay", "MenuBase", "Menu"],
+            "GridBase": ["Form", "Button", "TreeView", "Popup", "ContextMenu", "ResponsiveBox", "TabPanel", "Validation", "Overlay", "MenuBase", "Menu"],
+            "ContextMenu": ["Overlay", "MenuBase", "Menu"],
+            "MenuBase": ["Menu"],
+            "Form": ["ResponsiveBox", "TabPanel", "Validation"],
+            "Validation": [ "Form", "ResponsiveBox", "TabPanel"]
+        };
+
+        assert.deepEqual(generator.resolveDependencies(raw), normalized);
+    });
+
+    it("exclude non-public widgets", () => {
+        var withoutDuplicates = {
+            "DataGrid": ["GridBase", "Form", "Button", "TreeView", "Popup", "ContextMenu", "Overlay", "MenuBase", "ResponsiveBox", "TabPanel", "Validation"],
+            "GridBase": ["Form", "Button", "TreeView", "Popup", "ContextMenu", "Overlay", "MenuBase", "ResponsiveBox", "TabPanel", "Validation"],
+            "ContextMenu": ["Overlay", "MenuBase"],
+            "Form": ["ResponsiveBox", "TabPanel", "Validation"],
+            "Validation": [ "Form", "ResponsiveBox", "TabPanel" ]
+        };
+
+        var result = {
+            "DataGrid": ["Form", "Button", "TreeView", "Popup", "ContextMenu", "ResponsiveBox", "TabPanel", "Validation"],
+            "ContextMenu": [],
+            "Form": ["ResponsiveBox", "TabPanel", "Validation"],
+            "Validation": [ "Form", "ResponsiveBox", "TabPanel" ]
+        };
+
+        assert.deepEqual(generator.removeInternalDependencies(withoutDuplicates), result);
+    });
+});
+
 describe("generate", () => {
     const genericLightLess =
 `
@@ -129,7 +229,7 @@ describe("generate", () => {
 */
 @base-accent: #000;
 `;
-    const expectedMeta = `module.exports = {"generic_light_metadata":[{"Key":"@base-accent","Name":"Base accent","Type":"color"}],"_metadata_version":"0.0.0"};`;
+    const expectedMeta = `module.exports = {"generic_light_metadata":[{"Key":"@base-accent","Name":"Base accent","Type":"color"}],"_metadata_version":"0.0.0","dependencies":{}};`;
     let resultMetadata;
     beforeEach(() => {
         mock("fs", {

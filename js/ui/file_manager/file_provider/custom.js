@@ -129,7 +129,7 @@ export default class CustomFileProvider extends FileProvider {
         return this._downloadItemsFunction(items);
     }
 
-    getItemsContent(items) {
+    getItemContent(items) {
         return this._getItemsContentFunction(items);
     }
 

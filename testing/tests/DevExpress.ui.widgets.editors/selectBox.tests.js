@@ -566,6 +566,39 @@ QUnit.module("functionality", moduleSetup, () => {
         assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible after search");
     });
 
+    QUnit.test("Widget selects current value in the dropDownList if dxSelectBox with async data is opened on initialization (T822930)", (assert) => {
+        const selectBox = $("#selectBox").dxSelectBox({
+            deferRendering: true,
+            dataSource: {
+                load: () => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve([1, 2, 3]);
+                    }, TIME_TO_WAIT / 4);
+
+                    return d.promise();
+                },
+                byKey: () => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => {
+                        d.resolve(1);
+                    }, TIME_TO_WAIT / 4);
+
+                    return d.promise();
+                }
+            },
+            value: 1
+        }).dxSelectBox("instance");
+
+        selectBox.open();
+        this.clock.tick(TIME_TO_WAIT);
+        const list = $(selectBox.content()).find(toSelector(LIST_CLASS)).dxList("instance");
+
+        assert.ok(list.option("selectedItem") === 1, "list item is selected");
+    });
+
     QUnit.test("dxSelectBox scrolls to the top when paging is enabled and selectbox is editable and item is out of page", (assert) => {
         const items = [];
         for(let i = 0; i <= 200; i++) {
