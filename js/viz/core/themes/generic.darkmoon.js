@@ -1,5 +1,6 @@
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
+    registerThemeAlias = themeModule.registerThemeAlias,
     ACCENT_COLOR = "#3debd3",
     BACKGROUND_COLOR = "#465672",
     TITLE_COLOR = "#fff",
@@ -173,3 +174,5 @@ registerTheme({
         }
     }
 }, "generic.dark");
+
+registerThemeAlias("generic.darkmoon.compact", "generic.darkmoon");

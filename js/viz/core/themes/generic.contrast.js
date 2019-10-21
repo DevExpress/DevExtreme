@@ -1,6 +1,6 @@
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
-
+    registerThemeAlias = themeModule.registerThemeAlias,
     WHITE = "#ffffff",
     BLACK = "#000000",
     CONTRAST_ACTIVE = "#cf00da",
@@ -337,6 +337,4 @@ registerTheme({
     }
 }, "generic.light");
 
-registerTheme({
-    name: "generic.contrast.compact"
-}, "generic.contrast");
+registerThemeAlias("generic.contrast.compact", "generic.contrast");
