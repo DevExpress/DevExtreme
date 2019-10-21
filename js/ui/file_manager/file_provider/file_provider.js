@@ -79,7 +79,13 @@ class FileProvider {
     downloadItems(items) {
     }
 
-    getItemsContent(items) {
+    /**
+     * @name FileProviderMethods.getItemContent
+     * @publicName getItemContent()
+     * @param1 items:Array<object>
+     * @return Promise<object>
+     */
+    getItemContent(items) {
     }
 
     getFileUploadChunkSize() {
