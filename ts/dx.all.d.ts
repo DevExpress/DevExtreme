@@ -6689,6 +6689,7 @@ declare module DevExpress.viz {
         margin?: number;
         /** @name BaseWidget.Options.export.printingEnabled */
         printingEnabled?: boolean;
+        /** @deprecated */
         /** @name BaseWidget.Options.export.proxyUrl */
         proxyUrl?: string;
         /** @name BaseWidget.Options.export.svgToCanvas */

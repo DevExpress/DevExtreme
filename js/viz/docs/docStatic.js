@@ -78,7 +78,7 @@ var staticMethods = {
     * @param2_field5 gridLayout:boolean
     * @param2_field6 verticalAlignment:Enums.VerticalAlignment
     * @param2_field7 horizontalAlignment:Enums.HorizontalAlignment
-    * @param2_field8 proxyUrl:string
+    * @param2_field8 proxyUrl:string:deprecated
     * @param2_field9 onExporting:function(e)
     * @param2_field10 onExported:function
     * @param2_field11 onFileSaving:function(e)
@@ -96,7 +96,7 @@ var staticMethods = {
     * @param2_field1 fileName:string
     * @param2_field2 format:string
     * @param2_field3 backgroundColor:string
-    * @param2_field4 proxyUrl:string
+    * @param2_field4 proxyUrl:string:deprecated
     * @param2_field5 width:number
     * @param2_field6 height:number
     * @param2_field7 onExporting:function(e)

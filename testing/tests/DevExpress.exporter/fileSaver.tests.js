@@ -238,3 +238,19 @@ QUnit.test("Force using proxy", function(assert) {
         eventsEngine.trigger.restore();
     }
 });
+
+QUnit.test("Using proxyUrl is now deprecated", function(assert) {
+    sinon.stub(eventsEngine, "trigger");
+    sinon.stub(errors, "log");
+    try {
+        // act
+        fileSaver.saveAs("test", "EXCEl", undefined, "http://localhost/", undefined, true);
+
+        // assert
+        assert.equal(errors.log.callCount, 1);
+        assert.equal(errors.log.getCall(0).args[0], "W0001");
+    } finally {
+        eventsEngine.trigger.restore();
+        errors.log.restore();
+    }
+});

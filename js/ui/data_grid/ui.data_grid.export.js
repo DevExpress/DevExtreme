@@ -692,6 +692,7 @@ dataGridCore.registerModule("export", {
                  * @name dxDataGridOptions.export.proxyUrl
                  * @type string
                  * @default undefined
+                 * @deprecated
                  */
                 proxyUrl: undefined,
                 /**

@@ -350,6 +350,7 @@ var BaseWidget = {
         * @name BaseWidgetOptions.export.proxyUrl
         * @type string
         * @default undefined
+        * @deprecated
         */
         proxyUrl: undefined,
         /**
