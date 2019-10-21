@@ -79,6 +79,12 @@ class FileProvider {
     downloadItems(items) {
     }
 
+    /**
+     * @name FileProviderMethods.getItemsContent
+     * @publicName getItemsContent()
+     * @param1 items:Array<object>
+     * @return Promise<object>
+     */
     getItemsContent(items) {
     }
 
