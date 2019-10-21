@@ -24,6 +24,7 @@ registerDecorator(
             this._lockedDrag = false;
 
             this._sortable = list._createComponent(list._scrollView.$content(), Sortable, extend({
+                component: list,
                 contentTemplate: null,
                 allowReordering: false,
                 filter: ".dx-list-item",

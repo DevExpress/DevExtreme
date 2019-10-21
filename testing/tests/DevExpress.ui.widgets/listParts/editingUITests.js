@@ -2545,6 +2545,7 @@ QUnit.test("sortable options", (assert) => {
     assert.equal(sortable.option("dragDirection"), "vertical", "dragDirection");
     assert.equal(sortable.option("filter"), ".dx-list-item", "filter");
     assert.equal(sortable.option("handle"), ".dx-list-reorder-handle", "handle");
+    assert.equal(sortable.option("component"), $list.dxList("instance"), "component");
 });
 
 QUnit.test("no sortable without allowReordering", (assert) => {
