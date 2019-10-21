@@ -18,7 +18,8 @@ var WHITE = "#ffffff",
     OUTSIDE = "outside",
 
     themeModule = require("../../themes"),
-    registerTheme = themeModule.registerTheme;
+    registerTheme = themeModule.registerTheme,
+    registerThemeAlias = themeModule.registerThemeAlias;
 
 registerTheme({
     name: "generic.light",
@@ -1744,6 +1745,4 @@ registerTheme({
     }
 });
 
-registerTheme({
-    name: "generic.light.compact"
-}, "generic.light");
+registerThemeAlias("generic.light.compact", "generic.light");

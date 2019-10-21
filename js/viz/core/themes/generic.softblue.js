@@ -1,5 +1,6 @@
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
+    registerThemeAlias = themeModule.registerThemeAlias,
     ACCENT_COLOR = "#7ab8eb",
     BACKGROUND_COLOR = "#fff",
     TITLE_COLOR = "#333",
@@ -131,3 +132,5 @@ registerTheme({
         }
     }
 }, "generic.light");
+
+registerThemeAlias("generic.softblue.compact", "generic.softblue");
