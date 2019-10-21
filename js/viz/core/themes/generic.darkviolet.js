@@ -1,5 +1,6 @@
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
+    registerThemeAlias = themeModule.registerThemeAlias,
     ACCENT_COLOR = "#9c63ff",
     BACKGROUND_COLOR = "#17171f",
     TITLE_COLOR = "#f5f6f7",
@@ -156,3 +157,5 @@ registerTheme({
         }
     }
 }, "generic.dark");
+
+registerThemeAlias("generic.darkviolet.compact", "generic.darkviolet");
