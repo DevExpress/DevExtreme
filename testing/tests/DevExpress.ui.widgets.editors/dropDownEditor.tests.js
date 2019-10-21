@@ -525,6 +525,18 @@ QUnit.test("focusout should not be fired after click on the dropDownButton", fun
     assert.ok(e.isDefaultPrevented(), "focusout was prevented");
 });
 
+QUnit.test("Event propagation should be stopped after click on the dropDownButton (T823431)", function(assert) {
+    var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        focusStateEnabled: true
+    });
+    var $dropDownButton = $dropDownEditor.find(".dx-dropdowneditor-button");
+
+    var e = $.Event("mousedown");
+    $dropDownButton.trigger(e);
+
+    assert.ok(e.isPropagationStopped(), "event propagation has been stopped");
+});
+
 QUnit.test("focusout should not be fired on valueChanged", function(assert) {
     var onFocusOutStub = sinon.stub();
     var textBoxOnFocusOutStub = sinon.stub();
