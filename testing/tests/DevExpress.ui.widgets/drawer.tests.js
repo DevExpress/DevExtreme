@@ -1049,39 +1049,12 @@ QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl
     }).dxDrawer("instance");
 
     const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
-    const $panelContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
 
     assert.equal($panel.position().left, -150, "panel has correct left when minSize and max size are set");
-    assert.equal($panelContent.position().left, 0, "panel has correct left when minSize and max size are set");
+
     drawer.toggle();
 
     assert.equal($panel.position().left, 100, "panel has correct left when minSize and max size are set");
-    assert.equal($panelContent.position().left, 0, "panel has correct left when minSize and max size are set");
-
-    fx.off = false;
-});
-
-QUnit.test("drawer panel should be repositioned correctly after dimension changed in overlap mode rtl, slide", assert => {
-    fx.off = true;
-
-    const $element = $("#drawer").dxDrawer({
-        opened: true,
-        rtlEnabled: true,
-        revealMode: "slide",
-        openedStateMode: "overlap",
-        template: function($content) {
-            var $div = $("<div/>");
-            $div.css("height", 600);
-            $div.css("width", 200);
-
-            return $div;
-        }
-    });
-    const $panelOverlayContent = $element.find(".dx-overlay-content");
-
-    resizeCallbacks.fire();
-
-    assert.equal($panelOverlayContent.css("transform"), "matrix(1, 0, 0, 1, 0, 0)", "panel overlay content position is OK");
 
     fx.off = false;
 });

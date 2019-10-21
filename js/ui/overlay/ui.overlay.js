@@ -1277,26 +1277,16 @@ var Overlay = Widget.inherit({
     },
 
     _renderShadingDimensions: function() {
+        var wrapperWidth, wrapperHeight;
         var $container = this._getContainer();
-        if(!$container) {
-            return;
-        }
-
-        if(this._storedWidth === undefined && this._$wrapper) {
-            this._storedWidth = this._$wrapper.outerWidth();
-            this._storedHeight = this._$wrapper.outerHeight();
-        }
         var isWindow = this._isWindow($container);
-        var width = isWindow ? null : $container.outerWidth();
-        var height = isWindow ? null : $container.outerHeight();
-        if(this.option("_isWrapperSizeConst")) {
-            width = this._storedWidth;
-            height = this._storedHeight;
-        }
+
+        wrapperWidth = isWindow ? null : $container.outerWidth(),
+        wrapperHeight = isWindow ? null : $container.outerHeight();
 
         this._$wrapper.css({
-            width,
-            height
+            width: wrapperWidth,
+            height: wrapperHeight
         });
     },
 
