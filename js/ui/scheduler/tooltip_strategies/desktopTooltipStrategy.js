@@ -170,14 +170,19 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
     constructor(scheduler) {
         super(scheduler);
         this.skipHidingOnScroll = false;
+        this.isSingleBehavior = false;
     }
 
     _showCore(target, dataList, isSingleBehavior) {
+        this.isSingleBehavior = isSingleBehavior;
         this.behavior = this._createBehavior(isSingleBehavior);
         super._showCore(target, dataList, isSingleBehavior);
         this.tooltip.option("position", this._getTooltipPosition(dataList));
+    }
 
-        if(!isSingleBehavior) {
+    _onShown() {
+        super._onShown();
+        if(!this.isSingleBehavior) {
             this.list.focus();
             this.list.option("focusedElement", null);
         }
