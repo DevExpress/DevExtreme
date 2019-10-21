@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { extend } from "core/utils/extend";
 import devices from "core/devices";
+import "ui/scheduler/ui.scheduler";
 
 export const TOOLBAR_TOP_LOCATION = "top";
 export const TOOLBAR_BOTTOM_LOCATION = "bottom";
@@ -8,11 +9,11 @@ export const TOOLBAR_BOTTOM_LOCATION = "bottom";
 const SCHEDULER_ID = "scheduler";
 const TEST_ROOT_ELEMENT_ID = "qunit-fixture";
 
-export const isDesktopEnvironment = () => devices.real().deviceType === "desktop";
-
 export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 
 export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler("instance"));
+
+export const isDesktopEnvironment = () => devices.real().deviceType === "desktop";
 
 export class SchedulerTestWrapper {
     constructor(instance) {
@@ -69,6 +70,12 @@ export class SchedulerTestWrapper {
             getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
 
+            find: (text) => {
+                return this.appointments
+                    .getAppointments()
+                    .filter((index, element) => $(element).find(".dx-scheduler-appointment-title").text() === text);
+            },
+
             click: (index = 0) => {
                 this.clock = sinon.useFakeTimers();
                 this.appointments.getAppointment(index).trigger("dxclick");
@@ -84,15 +91,42 @@ export class SchedulerTestWrapper {
                 getButtons: () => $(".dx-scheduler-appointment-collector"),
                 getButtonCount: () => this.appointments.compact.getButtons().length,
                 getLastButtonIndex: () => this.appointments.compact.getButtonCount() - 1,
+
                 getButton: (index = 0) => $(this.appointments.compact.getButtons().get(index)),
                 getButtonText: (index = 0) => this.appointments.compact.getButton(index).find("span").text(),
-                click: (index = 0) => this.appointments.compact.getButton(index).trigger("dxclick"),
                 getButtonWidth: (index = 0) => this.appointments.compact.getButton(index).get(0).getBoundingClientRect().width,
                 getButtonHeight: (index = 0) => this.appointments.compact.getButton(index).get(0).getBoundingClientRect().height,
+
+                click: (index = 0) => this.appointments.compact.getButton(index).trigger("dxclick"),
+
+                getAppointment: (index = 0) => $(".dx-list-item").eq(index),
+
+                getFakeAppointment: () => $(".dx-scheduler-fixed-appointments .dx-scheduler-appointment")
             }
         };
 
         this.appointmentPopup = {
+            form: {
+                getSubjectTextBox: () => {
+                    const subjectElement = this.appointmentPopup.getPopup().find(".dx-textbox").eq(0);
+                    return subjectElement.dxTextBox("instance");
+                },
+                setSubject: (text) => {
+                    const textBox = this.appointmentPopup.form.getSubjectTextBox();
+                    textBox.option("value", text);
+                },
+                getSubject: () => {
+                    const textBox = this.appointmentPopup.form.getSubjectTextBox();
+                    return textBox.option("value");
+                },
+                isRecurrenceEditorVisible: () => $(".dx-recurrence-editor-container").is(":visible")
+            },
+
+            dialog: {
+                clickEditSeries: () => $(".dx-dialog").find(".dx-dialog-button").eq(0).trigger("dxclick"),
+                clickEditAppointment: () => $(".dx-dialog").find(".dx-dialog-button").eq(1).trigger("dxclick")
+            },
+
             getPopup: () => $(".dx-overlay-wrapper.dx-scheduler-appointment-popup"),
             hasVerticalScroll: () => {
                 const scrollableContainer = this.appointmentPopup.getPopup().find(".dx-scrollable-container").get(0);
@@ -101,10 +135,10 @@ export class SchedulerTestWrapper {
             getPopupInstance: () => $(".dx-scheduler-appointment-popup.dx-widget").dxPopup("instance"),
             isVisible: () => this.appointmentPopup.getPopup().length !== 0,
             hide: () => this.appointmentPopup.getPopup().find(".dx-closebutton.dx-button").trigger("dxclick"),
-            setInitialPopupSize: (size) => {
-                const popupConfig = this.instance._popupConfig;
-                this.instance._popupConfig = appointmentData => {
-                    const config = popupConfig.call(this.instance, appointmentData);
+            setInitialPopupSize: size => {
+                const _createPopupConfig = this.instance._appointmentPopup._createPopupConfig;
+                this.instance._appointmentPopup._createPopupConfig = () => {
+                    const config = _createPopupConfig.call(this.instance._appointmentPopup);
                     return extend(config, size);
                 };
             },
@@ -118,8 +152,13 @@ export class SchedulerTestWrapper {
                 const $buttons = $toolbar.find(`.dx-toolbar-${sectionName} .dx-button`);
                 return buttonNames.every((name, index) => $buttons.eq(index).hasClass(`dx-popup-${name}`));
             },
+
             getDoneButton: () => this.appointmentPopup.getPopup().find(".dx-popup-done"),
-            clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger("dxclick")
+            clickDoneButton: () => this.appointmentPopup.getDoneButton().trigger("dxclick"),
+
+            getCancelButton: () => this.appointmentPopup.getPopup().find(".dx-popup-cancel"),
+            clickCancelButton: () => this.appointmentPopup.getCancelButton().trigger("dxclick"),
+            saveAppointmentData: () => this.instance._appointmentPopup.saveEditData.call(this.instance._appointmentPopup),
         };
 
         this.appointmentForm = {
@@ -130,11 +169,16 @@ export class SchedulerTestWrapper {
             hasFormSingleColumn: () => this.appointmentPopup.getPopup().find(".dx-responsivebox").hasClass("dx-responsivebox-screen-xs"),
             getRecurrentAppointmentFormDialogButtons: () => $(".dx-dialog-buttons .dx-button"),
             clickFormDialogButton: (index = 0) => this.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(index).trigger("dxclick"),
+            getPendingEditorsCount: () => $(this.appointmentForm.getFormInstance().element()).find(".dx-validation-pending").length,
+            getInvalidEditorsCount: () => $(this.appointmentForm.getFormInstance().element()).find(".dx-invalid").length
         };
 
         this.workSpace = {
             getWorkSpace: () => $(".dx-scheduler-work-space"),
+
             getDateTableScrollable: () => $(".dx-scheduler-date-table-scrollable"),
+            getHeaderScrollable: () => $(".dx-scheduler-header-scrollable"),
+
             getDateTable: () => $(".dx-scheduler-date-table"),
             getDateTableHeight: () => this.workSpace.getDateTable().height(),
             getCells: () => $(".dx-scheduler-date-table-cell"),
@@ -146,6 +190,18 @@ export class SchedulerTestWrapper {
             getAllDayCellWidth: () => this.workSpace.getAllDayCells().eq(0).outerWidth(),
             getAllDayCellHeight: () => this.workSpace.getAllDayCells().eq(0).outerHeight(),
             getCurrentTimeIndicator: () => $(".dx-scheduler-date-time-indicator"),
+
+            getDataTableScrollableContainer: () => this.workSpace.getDateTableScrollable().find(".dx-scrollable-container"),
+            getScrollPosition: () => {
+                const element = this.workSpace.getDataTableScrollableContainer();
+                return { left: element.scrollLeft(), top: element.scrollTop() };
+            },
+            groups: {
+                getGroupsContainer: () => $(".dx-scheduler-group-flex-container"),
+                getGroup: (index = 0) => $(".dx-scheduler-group-row").eq(index),
+                getGroupHeaders: (index) => this.workSpace.groups.getGroup(index).find(".dx-scheduler-group-header"),
+                getGroupHeader: (index, groupRow = 0) => this.workSpace.groups.getGroupHeaders(groupRow).eq(index),
+            },
         };
 
         this.navigator = {
@@ -173,6 +229,9 @@ export class SchedulerTestWrapper {
     }
 
     option(name, value) {
+        if(value === undefined) {
+            return this.instance.option(name);
+        }
         this.instance.option(name, value);
     }
 
