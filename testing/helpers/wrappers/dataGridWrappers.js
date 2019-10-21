@@ -3,6 +3,13 @@ import { WrapperBase } from './wrapperBase.js';
 const FOCUS_OVERLAY_CLASS = "dx-datagrid-focus-overlay";
 const COMMAND_ADAPTIVE_CLASS = "dx-command-adaptive";
 const COMMAND_ADAPTIVE_HIDDEN_CLASS = "dx-command-adaptive-hidden";
+const FILTER_BUILDER_CLASS = "dx-filterbuilder";
+const FILTER_BUILDER_GROUP_CLASS = "dx-filterbuilder-group";
+const FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text";
+const FILTER_BUILDER_TEXT_PART_CLASS = "dx-filterbuilder-text-part";
+const HEADER_FILTER_MENU_CLASS = "dx-header-filter-menu";
+const LIST_ITEM_CLASS = "dx-list-item";
+const BUTTON_CLASS = "dx-button";
 
 export class DataGridWrapper {
     constructor(containerSelector) {
@@ -12,6 +19,7 @@ export class DataGridWrapper {
         this.headers = new HeadersWrapper(containerSelector);
         this.filterRow = new FilterRowWrapper(containerSelector);
         this.rowsView = new RowsViewWrapper(containerSelector);
+        this.filterBuilder = new FilterBuilderWrapper("BODY");
     }
 
     isEditorCell($cell) {
@@ -209,3 +217,35 @@ export class HeadersWrapper extends WrapperBase {
     }
 }
 
+export class FilterBuilderWrapper extends WrapperBase {
+    constructor(containerSelector) {
+        super(containerSelector);
+        this.headerFilterMenu = new HeaderFilterMenu(containerSelector);
+    }
+
+    getElement() {
+        return this.getContainer().find(`.${FILTER_BUILDER_CLASS}.dx-widget`);
+    }
+
+    getItemValueTextElement(index = 0) {
+        return this.getElement().find(`.${FILTER_BUILDER_GROUP_CLASS}:nth-child(${index + 1})`).find(`.${FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS}`);
+    }
+
+    getItemValueTextParts(index = 0) {
+        return this.getItemValueTextElement(index).find(`.${FILTER_BUILDER_TEXT_PART_CLASS}`);
+    }
+}
+
+export class HeaderFilterMenu extends WrapperBase {
+    getElement() {
+        return this.getContainer().find(`.${HEADER_FILTER_MENU_CLASS}`);
+    }
+
+    getDropDownListItem(index) {
+        return this.getElement().find(`.${LIST_ITEM_CLASS}:nth-child(${index + 1})`);
+    }
+
+    getButtonOK() {
+        return this.getElement().find(`.${BUTTON_CLASS}[aria-label='OK']`);
+    }
+}
