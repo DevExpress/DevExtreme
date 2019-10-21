@@ -17407,3 +17407,36 @@ QUnit.test("Popup should apply data changes after editorOptions changing (T81788
     assert.equal($popupEditors.eq(0).find("input").eq(0).val(), "new name", "value changed");
     assert.equal($popupEditors.eq(1).get(0).style.height, "100px", "editorOptions applied");
 });
+
+QUnit.test("Filter builder custom operations should update filterValue immediately (T817973)", function(assert) {
+    // arrange
+    const data = [
+        { id: 0, name: "Alex" },
+        { id: 1, name: "Ben" },
+        { id: 1, name: "John" }
+    ];
+    const filterBuilder = dataGridWrapper.filterBuilder;
+    const headerFilterMenu = filterBuilder.headerFilterMenu;
+
+    createDataGrid({
+        dataSource: data,
+        filterPanel: { visible: true },
+        columns: ["id", "name"],
+        filterValue: ["name", "anyof", ["Alex"]],
+        filterBuilderPopup: { width: 300, height: 300 }
+    });
+
+    // act
+    this.clock.tick();
+    dataGridWrapper.filterPanel.getPanelText().trigger("click");
+    this.clock.tick();
+    filterBuilder.getItemValueTextElement(0).trigger("dxclick");
+    this.clock.tick();
+    headerFilterMenu.getDropDownListItem(1).trigger("dxclick");
+    this.clock.tick();
+    headerFilterMenu.getButtonOK().trigger("dxclick");
+    this.clock.tick();
+
+    // assert
+    assert.equal(filterBuilder.getItemValueTextParts().length, 2, "IsAnyOf operation applyed");
+});
