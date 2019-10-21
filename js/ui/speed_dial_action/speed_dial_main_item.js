@@ -372,7 +372,7 @@ exports.disposeAction = function(actionId) {
 exports.repaint = function() {
     if(!speedDialMainItem) return;
 
-    const icon = speedDialMainItem.option("actions").length === 1 ?
+    const icon = speedDialMainItem._getVisibleActions().length === 1 ?
         speedDialMainItem.option("actions")[0].option("icon") :
         speedDialMainItem._getDefaultOptions().icon;
 
@@ -382,6 +382,7 @@ exports.repaint = function() {
         closeIcon: speedDialMainItem._getDefaultOptions().closeIcon,
         position: speedDialMainItem._getPosition(),
         label: speedDialMainItem._getDefaultOptions().label,
-        maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount
+        maxSpeedDialActionCount: speedDialMainItem._getDefaultOptions().maxSpeedDialActionCount,
+        direction: speedDialMainItem._getDefaultOptions().direction
     });
 };
