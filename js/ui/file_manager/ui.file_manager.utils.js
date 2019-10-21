@@ -24,15 +24,18 @@ const getPathParts = (path, includeFullPath) => {
     let buffer = "";
     for(let i = 0; i < path.length; i++) {
         const char = path.charAt(i);
-        if(char === PATH_SEPARATOR) {
-            if(!isEscaped) {
+        const nextChar = path.charAt(i + 1);
+        isEscaped = (char === PATH_SEPARATOR);
+        if(isEscaped) {
+            if(!(nextChar === PATH_SEPARATOR)) {
                 result.push(buffer);
                 buffer = "";
                 continue;
+            } else {
+                i++;
             }
         }
-        isEscaped = (char === PATH_SEPARATOR);
-        buffer += char; // TODO: Remove escape symbols from result array
+        buffer += char;
     }
 
     if(buffer || !result.length) {
