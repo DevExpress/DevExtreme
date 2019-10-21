@@ -3271,15 +3271,13 @@ var dxPolarChart = {
     * @type function(e)
     * @type_function_param1 e:object
     * @type_function_param1_field4 event:event
-    * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
-    * @type_function_param1_field6 rangeEnd:Date|Number:deprecated(range)
-    * @type_function_param1_field7 axis:chartAxisObject
-    * @type_function_param1_field8 range:VizRange
-    * @type_function_param1_field9 previousRange:VizRange
-    * @type_function_param1_field10 cancel:boolean
-    * @type_function_param1_field11 actionType:Enums.ChartZoomPanActionType
-    * @type_function_param1_field12 zoomFactor:Number
-    * @type_function_param1_field13 shift:Number
+    * @type_function_param1_field5 axis:chartAxisObject
+    * @type_function_param1_field6 range:VizRange
+    * @type_function_param1_field7 previousRange:VizRange
+    * @type_function_param1_field8 cancel:boolean
+    * @type_function_param1_field9 actionType:Enums.ChartZoomPanActionType
+    * @type_function_param1_field10 zoomFactor:Number
+    * @type_function_param1_field11 shift:Number
     * @notUsedInTheme
     * @action
     */
