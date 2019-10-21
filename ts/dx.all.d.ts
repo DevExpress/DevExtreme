@@ -1691,8 +1691,8 @@ declare module DevExpress.fileProvider {
     /** @name FileProvider */
     export class FileProvider {
         constructor(options?: FileProviderOptions)
-        /** @name FileProvider.getItemsContent() */
-        getItemsContent(items: Array<any>): Promise<any> & JQueryPromise<any>;
+        /** @name FileProvider.getItemContent() */
+        getItemContent(items: Array<any>): Promise<any> & JQueryPromise<any>;
     }
     /** @name RemoteFileProvider.Options */
     export interface RemoteFileProviderOptions extends FileProviderOptions<RemoteFileProvider> {

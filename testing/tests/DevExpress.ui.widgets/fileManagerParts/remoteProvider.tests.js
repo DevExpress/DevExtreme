@@ -165,7 +165,7 @@ QUnit.module("Remote Provider", moduleConfig, () => {
         });
 
         const item = new FileManagerItem(filesPathInfo, "Article.txt");
-        this.provider.getItemsContent([ item ])
+        this.provider.getItemContent([ item ])
             .done(result => {
                 assert.strictEqual(result.byteLength, 5, "item content acquired");
                 done();

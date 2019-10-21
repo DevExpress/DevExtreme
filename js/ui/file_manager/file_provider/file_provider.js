@@ -80,12 +80,12 @@ class FileProvider {
     }
 
     /**
-     * @name FileProviderMethods.getItemsContent
-     * @publicName getItemsContent()
+     * @name FileProviderMethods.getItemContent
+     * @publicName getItemContent()
      * @param1 items:Array<object>
      * @return Promise<object>
      */
-    getItemsContent(items) {
+    getItemContent(items) {
     }
 
     getFileUploadChunkSize() {

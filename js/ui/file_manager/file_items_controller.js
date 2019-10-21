@@ -251,9 +251,9 @@ export default class FileItemsController {
         this._fileProvider.downloadItems(items);
     }
 
-    getItemsContent(itemInfos) {
+    getItemContent(itemInfos) {
         const items = itemInfos.map(i => i.fileItem);
-        return when(this._fileProvider.getItemsContent(items));
+        return when(this._fileProvider.getItemContent(items));
     }
 
     _processEditAction(actionInfo, action, completeAction) {
