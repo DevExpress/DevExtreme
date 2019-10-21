@@ -1,5 +1,6 @@
 import Popup from "../popup";
 import Form from "../form";
+import "../tag_box";
 
 export class GanttDialog {
     constructor(owner, $element) {
