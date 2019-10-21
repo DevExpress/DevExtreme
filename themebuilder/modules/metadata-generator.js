@@ -111,7 +111,7 @@ const dependenciesPlugin = (dependencies) => {
                             dependencies[widget] = [];
                         }
 
-                        dependencies[widget] = dependencies[widget].concat(parseImports(less));
+                        dependencies[widget].push(...parseImports(less));
                     }
                     return less;
                 }
