@@ -22,7 +22,7 @@ export class FileManagerCommandManager {
             {
                 name: "rename",
                 text: "Rename",
-                icon: "edit",
+                icon: "rename",
                 enabled: this._permissions.rename,
                 isSingleFileItemCommand: true
             },
