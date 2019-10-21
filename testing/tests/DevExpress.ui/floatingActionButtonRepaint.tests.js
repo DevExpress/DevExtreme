@@ -27,7 +27,7 @@ QUnit.module("apply current config options", (hooks) => {
     hooks.afterEach(() => {
         config({
             floatingActionButtonConfig: {
-                duration: "top",
+                direction: "top",
                 position: {
                     at: "right bottom",
                     my: "right bottom",
