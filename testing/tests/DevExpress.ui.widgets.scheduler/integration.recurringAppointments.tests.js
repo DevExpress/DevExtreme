@@ -1298,7 +1298,7 @@ QUnit.test("Prerender filter by recurrence rule determines renderable appointmen
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "Appt is filtered on prerender and not rendered");
 });
 
-QUnit.test("", function(assert) {
+QUnit.test("Recurring appointment with interval > 1 rendered correctly (T823073)", function(assert) {
     var data = [
         {
             text: "5-week recur",
