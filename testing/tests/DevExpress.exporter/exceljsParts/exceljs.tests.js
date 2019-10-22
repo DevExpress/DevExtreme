@@ -129,6 +129,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
@@ -207,6 +208,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([undefined], topLeft.column);
                     helper.checkAutoFilter(false);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
                     done();
                 });
@@ -228,6 +230,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([undefined], topLeft.column);
                     helper.checkAutoFilter(false);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
                     done();
                 });
@@ -728,6 +731,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -876,6 +880,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -906,6 +911,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
                 });
@@ -937,6 +943,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     done();
                 });
             });
@@ -964,6 +971,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
@@ -1003,6 +1011,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
                     done();
@@ -1037,6 +1046,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                     done();
@@ -1073,6 +1083,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
                     done();
@@ -1106,6 +1117,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "number", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1135,6 +1147,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
                 });
@@ -1177,6 +1190,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 7 }, topLeft);
 
@@ -1215,6 +1229,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
@@ -1248,6 +1263,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1278,6 +1294,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
                 });
@@ -1310,6 +1327,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).type`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1344,6 +1362,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1380,6 +1399,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
@@ -1422,6 +1442,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
                     done();
@@ -1467,6 +1488,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
                     done();
@@ -1509,6 +1531,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1551,6 +1574,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1593,6 +1617,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1634,6 +1659,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -1670,6 +1696,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     done();
                 });
             });
@@ -1713,6 +1740,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -1758,6 +1786,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -1793,6 +1822,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                     done();
@@ -1828,6 +1858,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                     done();
@@ -1865,6 +1896,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
                     done();
@@ -1904,6 +1936,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -1941,6 +1974,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1976,6 +2010,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                     done();
@@ -2019,6 +2054,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 1 }, topLeft);
                     done();
@@ -2058,6 +2094,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     done();
                 });
             });
@@ -2105,6 +2142,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
                     done();
@@ -2155,6 +2193,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
                     done();
@@ -2207,6 +2246,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -2257,6 +2297,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2303,6 +2344,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 2, 0, 1, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
                     done();
@@ -2349,6 +2391,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -2408,6 +2451,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 11, column: 1 }, topLeft);
                     done();
@@ -2481,6 +2525,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 11, column: 2 }, topLeft);
                     done();
@@ -2542,6 +2587,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 3 }, topLeft);
                     done();
@@ -2591,6 +2637,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
@@ -2640,6 +2687,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
@@ -2686,6 +2734,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2732,6 +2781,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2778,6 +2828,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2834,6 +2885,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
                     done();
@@ -2886,6 +2938,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
@@ -2938,6 +2991,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -2990,6 +3044,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3039,6 +3094,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3091,6 +3147,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3140,6 +3197,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3191,6 +3249,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3226,6 +3285,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     done();
                 });
             });
@@ -3278,6 +3338,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     done();
                 });
             });
@@ -3330,6 +3391,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     done();
                 });
             });
@@ -3378,6 +3440,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3426,6 +3489,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3474,6 +3538,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3521,6 +3586,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3569,6 +3635,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3617,6 +3684,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3664,7 +3732,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
-                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3694,10 +3762,6 @@ QUnit.module("API", moduleConfig, () => {
                     { excelCell: { value: null }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
                 ]];
 
-                const expectedMergedCells = [
-                    [1, 1, 1, 1], [1, 2, 1, 2]
-                ];
-
                 helper._extendExpectedCells(expectedCells, topLeft);
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
@@ -3706,15 +3770,14 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
-                    helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedMergedCells, topLeft);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Bands, col_band x 1_col" + testCaption, (assert) => {
+            QUnit.test("Bands, [f1, band[empty]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "f1_1" }];
 
@@ -3739,10 +3802,6 @@ QUnit.module("API", moduleConfig, () => {
                     { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
                 ]];
 
-                const expectedMergedCells = [
-                    [1, 1, 1, 1], [1, 2, 1, 2]
-                ];
-
                 helper._extendExpectedCells(expectedCells, topLeft);
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
@@ -3752,14 +3811,14 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedMergedCells, topLeft);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Bands, col_2_band x 2_col" + testCaption, (assert) => {
+            QUnit.test("Bands, [f1, band[f2, f3]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1" }];
 
@@ -3779,11 +3838,11 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
                 ], [
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
                     { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
                     { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } }
                 ], [
@@ -3791,11 +3850,6 @@ QUnit.module("API", moduleConfig, () => {
                     { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
                     { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } }
                 ]];
-
-                const expectedMergedCells = [
-                    // top, left, bottom, right
-                    [1, 1, 2, 1], [1, 2, 1, 3]
-                ];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
@@ -3805,14 +3859,14 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedMergedCells, topLeft);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Bands, col_2_band x 3_col" + testCaption, (assert) => {
+            QUnit.test("Bands, [f1, band[f2, f3, f4]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [];
 
@@ -3833,20 +3887,16 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
                 ], [
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
                     { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
                     { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
                     { excelCell: { value: "F4", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
                 ]];
-
-                const expectedMergedCells = [
-                    [1, 1, 2, 1], [1, 2, 1, 4]
-                ];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
@@ -3857,14 +3907,14 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedMergedCells, topLeft);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 4 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Bands, col_2_band x 2_col, col_5_band x 2_col" + testCaption, (assert) => {
+            QUnit.test("Bands, [f1, band[f2, f3], band[f4, f5]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1" }];
 
@@ -3891,13 +3941,13 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: "Band2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } },
-                    { excelCell: { value: "Band2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band2", masterAddress: [1, 4], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } },
+                    { excelCell: { value: "Band2", masterAddress: [1, 4], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
                 ], [
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
                     { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
                     { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
                     { excelCell: { value: "F4", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(5) } },
@@ -3910,10 +3960,6 @@ QUnit.module("API", moduleConfig, () => {
                     { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(6) } }
                 ]];
 
-                const expectedMergedCells = [
-                    [1, 1, 2, 1], [1, 2, 1, 3], [1, 4, 1, 5]
-                ];
-
                 helper._extendExpectedCells(expectedCells, topLeft);
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
@@ -3923,14 +3969,14 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedMergedCells, topLeft);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 5 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Bands, col_2_band x 3_col, col_6_band x 3_col, col_4.visible: false, col_7.visible: false" + testCaption, (assert) => {
+            QUnit.test("Bands, [f1, band[f2, f3.visible:false, f4], band[f5.visible: false, f6, f7]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "1" }];
 
@@ -3959,13 +4005,13 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: "Band2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(5) } },
-                    { excelCell: { value: "Band2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(5) } }
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band2", masterAddress: [1, 4], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(5) } },
+                    { excelCell: { value: "Band2", masterAddress: [1, 4], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(5) } }
                 ], [
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
                     { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
                     { excelCell: { value: "F4", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } },
                     { excelCell: { value: "F6", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(7) } },
@@ -3978,10 +4024,6 @@ QUnit.module("API", moduleConfig, () => {
                     { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(8) } }
                 ]];
 
-                const expectedMergedCells = [
-                    [1, 1, 2, 1], [1, 2, 1, 3], [1, 4, 1, 5]
-                ];
-
                 helper._extendExpectedCells(expectedCells, topLeft);
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
@@ -3991,14 +4033,14 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedMergedCells, topLeft);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 5 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Bands, showColumnHeaders: false, col_2_band x 3_col" + testCaption, (assert) => {
+            QUnit.test("Bands, showColumnHeaders: false, [f1, band[f2, f3, f4]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" } ];
 
@@ -4035,13 +4077,14 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 4 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Bands, showColumnHeaders: false, col_2_band x 3_col, col_3.visible: false" + testCaption, (assert) => {
+            QUnit.test("Bands, showColumnHeaders: false, [f1, band[f2.visible: false, f3, f4]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" } ];
 
@@ -4077,13 +4120,14 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Bands, showColumnHeaders: false, col_2_band x 3_col, col_3.allowExporting: false" + testCaption, (assert) => {
+            QUnit.test("Bands, showColumnHeaders: false, [f1, band[f2.allowExporting: false, f3, f4]]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" } ];
 
@@ -4119,13 +4163,14 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Bands, col_2_band x 2_col, col_2_band.visible: false" + testCaption, (assert) => {
+            QUnit.test("Bands, [f1, band[f2, f3].visible: false, f4]" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
 
@@ -4162,6 +4207,141 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2, f3].allowExporting: false, f4]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            allowExporting: false,
+                            columns: [
+                                { dataField: "f2", width: 50 },
+                                { dataField: "f3", width: 200 },
+                            ]
+                        },
+                        { dataField: "f4", width: 200 },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F4", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: "F1", masterAddress: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F4", masterAddress: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f4, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row + 1 });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2.visible: false, f3.visible: false], f4.visible: false]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 50, visible: false },
+                                { dataField: "f3", width: 200, visible: false },
+                            ]
+                        },
+                        { dataField: "f4", visible: false, width: 200 },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: null }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            // TODO: reanimate
+            QUnit.skip("Bands, [f1, band[f2.allowExporting: false, f3.allowExporting: false], f4]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 50, allowExporting: false },
+                                { dataField: "f3", width: 200, allowExporting: false },
+                            ]
+                        },
+                        { dataField: "f4", width: 200 },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: null }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();

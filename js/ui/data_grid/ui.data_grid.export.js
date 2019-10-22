@@ -3,6 +3,7 @@ import Class from "../../core/class";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { getDefaultAlignment } from "../../core/utils/position";
+import iteratorUtils from "../../core/utils/iterator";
 import arrayUtils from "../../core/utils/array";
 import dataGridCore from "./ui.data_grid.core";
 import exportMixin from "../grid_core/ui.grid_core.export_mixin";
@@ -399,7 +400,24 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     },
 
     _needColumnExporting: function(column) {
-        return !column.command && (column.allowExporting || column.allowExporting === undefined);
+        return this._isColumnExporting(column) && !column.command && (column.allowExporting || column.allowExporting === undefined);
+    },
+
+    _isColumnExporting: function(column) {
+        return column.allowExporting && this._isParentColumnExporting(column.index);
+    },
+
+    _isParentColumnExporting: function(columnIndex) {
+        let result = true,
+            bandColumnsCache = this._columnsController.getBandColumnsCache(),
+            bandColumns = columnIndex >= 0 && this._columnsController.getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex);
+
+        bandColumns && iteratorUtils.each(bandColumns, function(_, bandColumn) {
+            result = result && bandColumn.allowExporting;
+            return result;
+        });
+
+        return result;
     },
 
     _getFooterSummaryItems: function(summaryCells, isTotal) {

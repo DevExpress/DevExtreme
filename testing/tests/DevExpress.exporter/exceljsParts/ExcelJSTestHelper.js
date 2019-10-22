@@ -1,3 +1,5 @@
+import { isDefined } from "core/utils/type";
+
 const { assert } = QUnit;
 
 class ExcelJSTestHelper {
@@ -125,20 +127,20 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkMergeCells(mergedCells, topLeft) {
-        mergedCells.forEach((range) => { // range: [top, left, bottom, right]
-            let top, left, bottom, right;
-            [top, left, bottom, right] = range.map((value, index) => value + topLeft[index % 2 === 0 ? "row" : "column"] - 1);
+    checkMergeCells(argsArray, topLeft) {
+        this._iterateCells(argsArray, (cellArgs) => {
+            const { excelCell } = cellArgs;
+            const { row, column } = excelCell.address;
+            const currentCell = this.worksheet.getCell(row, column);
 
-            var master = this.worksheet.getCell(top, left);
-            for(var row = top; row <= bottom; row++) {
-                for(var column = left; column <= right; column++) {
-                    if(row > top || column > left) {
-                        const currentCell = this.worksheet.getCell(row, column);
+            if(!isDefined(excelCell.masterAddress)) {
+                assert.strictEqual(currentCell.isMerged, false, `cell: ${currentCell.address}.isMerged`);
+                assert.strictEqual(currentCell.master, currentCell, `cell: ${currentCell.address}.master`);
+            } else {
+                const master = this.worksheet.getCell(excelCell.masterAddress[0] + topLeft.row - 1, excelCell.masterAddress[1] + topLeft.column - 1);
 
-                        assert.strictEqual(this.worksheet.getCell(row, column).master, master, `cell: ${currentCell.address}.master`);
-                    }
-                }
+                assert.strictEqual(currentCell.isMerged, true, `cell: ${currentCell.address}.isMerged`);
+                assert.strictEqual(currentCell.master, master, `cell: ${currentCell.address}.master`);
             }
         });
     }

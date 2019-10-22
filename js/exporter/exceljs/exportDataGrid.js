@@ -158,10 +158,8 @@ function _tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider) {
 }
 
 function _mergeCells(worksheet, topLeftCell, mergeRanges) {
-    const { row: startRowIndex, column: startColumnIndex } = topLeftCell;
-
     mergeRanges.forEach((mergeRange) => {
-        worksheet.mergeCells(mergeRange.start.row + startRowIndex, mergeRange.start.column + startColumnIndex, mergeRange.end.row + startRowIndex, mergeRange.end.column + startColumnIndex);
+        worksheet.mergeCells(mergeRange.start.row + topLeftCell.row, mergeRange.start.column + topLeftCell.column, mergeRange.end.row + topLeftCell.row, mergeRange.end.column + topLeftCell.column);
     });
 }
 
