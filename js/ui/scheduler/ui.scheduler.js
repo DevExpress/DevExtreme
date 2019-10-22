@@ -2430,7 +2430,7 @@ const Scheduler = Widget.inherit({
             occurrenceText = messageLocalization.format(isDeleted ? "dxScheduler-confirmRecurrenceDeleteOccurrence" : "dxScheduler-confirmRecurrenceEditOccurrence");
 
         return dialog.custom({
-            message: message,
+            messageHtml: message,
             showCloseButton: true,
             showTitle: true,
             buttons: [
