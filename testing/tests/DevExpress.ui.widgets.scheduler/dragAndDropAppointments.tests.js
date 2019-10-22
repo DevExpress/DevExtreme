@@ -430,17 +430,16 @@ module("Drag and drop appointments", moduleConfig, () => {
             }, options));
         };
 
-        const createDraggable = (group, data) => {
+        const createDraggable = (options, data) => {
             return $("<div>")
                 .css({ width: 100, height: 100 })
                 .appendTo("#qunit-fixture")
-                .dxDraggable({
-                    group,
+                .dxDraggable($.extend({
                     clone: true,
                     onDragStart: function(e) {
                         e.itemData = data;
                     }
-                });
+                }, options));
         };
 
         test("Event calls on appointment drag", assert => {
@@ -553,7 +552,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
             const draggableData = { text: "App from Draggable" };
 
-            const draggable = createDraggable(group, draggableData);
+            const draggable = createDraggable({ group: group }, draggableData);
 
             const appointment = scheduler.appointments.find("App 1");
             const appointmentPosition = getAbsolutePosition(appointment);
@@ -592,7 +591,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 appointmentDragging
             });
 
-            const draggable = createDraggable(group);
+            const draggable = createDraggable({ group: group });
 
             const appointment = scheduler.appointments.find("App 1");
             const appointmentPosition = getAbsolutePosition(appointment);
@@ -624,7 +623,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                 appointmentDragging
             });
 
-            const draggable = createDraggable(group);
+            const draggable = createDraggable({ group: group });
 
             scheduler.appointments.compact.click(0);
 
@@ -642,6 +641,43 @@ module("Drag and drop appointments", moduleConfig, () => {
 
             assert.strictEqual(dataSource.length, 1, "appointment is removed");
             assert.strictEqual(appointmentDragging.onRemove.getCall(0).args[0].itemData.text, "App 2", "onRemove itemData parameter");
+        });
+
+        test("The external appointment should move in the month view", function(assert) {
+            const group = "shared";
+            const itemData = { text: "Test" };
+            const $dragElement = createDraggable({ clone: false, group: group }, itemData);
+            const scheduler = createScheduler({
+                views: ["month"],
+                currentView: "month",
+                appointmentDragging: {
+                    group: group,
+                    onAdd: (e) => {
+                        e.component.addAppointment(e.itemData);
+                        e.itemElement.remove();
+                    }
+                }
+            });
+
+            const appointment = scheduler.appointments.find("App 1");
+            const appointmentPosition = getAbsolutePosition(appointment);
+            const draggablePosition = getAbsolutePosition($dragElement);
+            const dataSource = scheduler.instance.option("dataSource");
+
+            const pointer = pointerMock($dragElement).start();
+
+            pointer
+                .down(draggablePosition.left, draggablePosition.top)
+                .move(appointmentPosition.left - draggablePosition.left, appointmentPosition.top - draggablePosition.top)
+                .up();
+
+            assert.strictEqual(dataSource.length, 3, "appointment is added");
+            delete dataSource[2].settings;
+            assert.deepEqual(dataSource[2], {
+                text: "Test",
+                startDate: new Date(2018, 4, 21, 9, 0),
+                endDate: new Date(2018, 4, 21, 9, 30)
+            }, "added appointment data");
         });
     });
 });
