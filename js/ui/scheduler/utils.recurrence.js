@@ -51,14 +51,15 @@ var dateSetterMap = {
         }
     },
     "byday": function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
-        var dayOfWeek = byDay;
+        var dayOfWeek = byDay,
+            appointmentDayOfWeek = date.getDay();
 
-        if((frequency === "DAILY" || frequency === "WEEKLY") && ((firstDayOfWeek && byDay !== 0) || (!firstDayOfWeek && byDay === 0))) {
+        if((frequency === "DAILY" || frequency === "WEEKLY") && (((firstDayOfWeek <= dayOfWeek) === (dayOfWeek < appointmentDayOfWeek)) || (!firstDayOfWeek && byDay === 0))) {
             dayOfWeek = 7;
         }
 
         byDay += days[appointmentWeekStart] > dayOfWeek ? 7 : 0;
-        date.setDate(date.getDate() - date.getDay() + byDay);
+        date.setDate(date.getDate() - appointmentDayOfWeek + byDay);
     },
     "byweekno": function(date, weekNumber, weekStart) {
         var initialDate = new Date(date),
@@ -622,12 +623,12 @@ var getAsciiStringByDate = function(date) {
 var splitDateRules = function(rule, firstDayOfWeek = null) {
     var result = [];
 
-    if(firstDayOfWeek) {
+    if(firstDayOfWeek !== null) {
         rule["fdow"] = firstDayOfWeek;
     }
 
     if(!rule["wkst"]) {
-        if(firstDayOfWeek) {
+        if(firstDayOfWeek !== null) {
             rule["wkst"] = daysNames[firstDayOfWeek];
         } else {
             rule["wkst"] = "MO";
@@ -761,7 +762,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
 var prepareDate = function(startDate, dateRules) {
     var date = new Date(startDate);
 
-    if(dateRules.length && dateRules[0]["byday"]) {
+    if(dateRules.length && dateRules[0]["byday"] >= 0) {
         date.setDate(date.getDate() - date.getDay() + dateRules[0]["byday"]);
     } else {
         date.setDate(1);
