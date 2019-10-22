@@ -3,14 +3,15 @@ import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import readyCallbacks from "../../core/utils/ready_callbacks";
 import Widget from "../widget/ui.widget";
+import { noop } from "../../core/utils/common";
 import { initAction, disposeAction } from "./speed_dial_main_item";
 import { getSwatchContainer } from "../widget/swatch_container";
 
 const ready = readyCallbacks.add;
 
-const SpeedDialAction = Widget.inherit({
+class SpeedDialAction extends Widget {
     _getDefaultOptions() {
-        return extend(this.callBase(), {
+        return extend(super._getDefaultOptions(), {
             /**
             * @name dxSpeedDialActionOptions.icon
             * @type string
@@ -83,8 +84,7 @@ const SpeedDialAction = Widget.inherit({
             },
             id: new Guid()
         });
-    },
-
+    }
     _optionChanged(args) {
         switch(args.name) {
             case "onClick":
@@ -95,23 +95,24 @@ const SpeedDialAction = Widget.inherit({
             case "id":
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
-
+    }
+    _createActionByOption(optionName, config, isExecute) {
+        return !!isExecute || (optionName !== "onInitialized" && optionName !== "onDisposing") ? super._createActionByOption(optionName, config) : noop;
+    }
     _render() {
         if(!getSwatchContainer(this.$element())) {
             ready(() => initAction(this));
         } else {
             initAction(this);
         }
-    },
-
+    }
     _dispose() {
         disposeAction(this._options.id);
-        this.callBase();
+        super._dispose();
     }
-});
+}
 
 registerComponent("dxSpeedDialAction", SpeedDialAction);
 
