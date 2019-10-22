@@ -2449,7 +2449,7 @@ const Scheduler = Widget.inherit({
             date = cellData.date || targetStartDate,
             duration = targetEndDate.getTime() - targetStartDate.getTime();
 
-        if(this._workSpace.keepOriginalHours()) {
+        if(this._workSpace.keepOriginalHours() && !isNaN(targetStartDate.getTime())) {
             var diff = targetStartDate.getTime() - dateUtils.trimTime(targetStartDate).getTime();
             date = new Date(dateUtils.trimTime(date).getTime() + diff);
         }
