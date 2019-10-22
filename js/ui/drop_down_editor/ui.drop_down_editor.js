@@ -456,7 +456,7 @@ var DropDownEditor = TextBox.inherit({
         $button
             .removeClass("dx-button");
 
-        eventsEngine.on($button.$element(), "mousedown", (e) => {
+        eventsEngine.on($button, "mousedown", (e) => {
             if(this.$element().is(".dx-state-focused")) {
                 e.preventDefault();
             }
