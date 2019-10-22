@@ -4,6 +4,7 @@ const { test } = QUnit;
 import "ui/file_manager";
 import FileItemsController from "ui/file_manager/file_items_controller";
 import FileManagerBreadcrumbs from "ui/file_manager/ui.file_manager.breadcrumbs";
+import { getPathParts } from "ui/file_manager/ui.file_manager.utils";
 import fx from "animation/fx";
 import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
 
@@ -442,29 +443,50 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         const fileProvider = createFileProviderWithIncorrectName(incorrectName);
         inst.option("fileProvider", fileProvider);
 
+        let counter = 0;
+        inst.option("onOptionChanged", (e) => { e.name === "currentPath" && counter++; e.name === "currentPath"; });
+
         inst.option("currentPath", incorrectOptionValue);
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getFocusedItemText(), incorrectName, "target folder selected");
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName, "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue, "currentPath option is correct");
+        assert.equal(counter, 1, "setCurrentPath() called once");
 
         inst.option("currentPath", incorrectOptionValue + "/About");
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getFocusedItemText(), "About", "target folder selected");
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/About", "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue + "/About", "currentPath option is correct");
+        assert.equal(counter, 2, "setCurrentPath() called once");
 
         inst.option("currentPath", incorrectOptionValue + "/ ");
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getFocusedItemText(), " ", "target folder selected");
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/ ", "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue + "/ ", "currentPath option is correct");
+        assert.equal(counter, 3, "setCurrentPath() called once");
 
         inst.option("currentPath", incorrectOptionValue + "/ / ");
         this.clock.tick(400);
 
         assert.equal(this.wrapper.getFocusedItemText(), " ", "target folder selected");
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/ / ", "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue + "/ / ", "currentPath option is correct");
+        assert.equal(counter, 4, "setCurrentPath() called once");
+
+        inst.option("currentPath", inst.option("currentPath"));
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), " ", "target folder has not changed");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/ / ", "breadcrumbs has not changed");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue + "/ / ", "currentPath option has not changed");
+        assert.equal(counter, 4, "setCurrentPath() was not call");
+
+        assert.equal(inst.getCurrentDirectory().relativeName, incorrectName + "/ / ");
     });
 
     test("triple slash in 'currentPath' option must be processed correctly", function(assert) {
@@ -481,6 +503,31 @@ QUnit.module("Navigation operations", moduleConfig, () => {
 
         assert.equal(this.wrapper.getFocusedItemText(), "About", "target folder selected");
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectPartialName + "/About", "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue, "currentPath option is correct");
+    });
+
+    test("getPathParts() function must correctly separate path string", function(assert) {
+        const testData = {
+            "Files/Documents": ["Files", "Documents"],
+            "Files/Documents/ ": ["Files", "Documents", " "],
+            "Files/ /Documents": ["Files", " ", "Documents"],
+            "Files/// /Documents": ["Files/", " ", "Documents"],
+            "Files///Documents": ["Files/", "Documents"],
+            "": [],
+            "/": [],
+            "//": ["/"],
+            "///": ["/"],
+            "////": ["//"],
+            "/////": ["//"],
+            "/// /Documents": ["/", " ", "Documents"],
+            "Test/": ["Test"],
+            "Test//": ["Test/"],
+            "/Test": ["Test"],
+            "//Test": ["/Test"]
+        };
+        for(const key in testData) {
+            assert.deepEqual(getPathParts(key), testData[key]);
+        }
     });
 
 });

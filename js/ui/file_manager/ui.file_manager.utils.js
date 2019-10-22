@@ -19,27 +19,29 @@ const getParentPath = path => {
 
 const getPathParts = (path, includeFullPath) => {
     path = path || "";
+    if(path === "" || path === "/") {
+        return [];
+    }
     const result = [];
-    let isEscaped = false;
-    let buffer = "";
-    for(let i = 0; i < path.length; i++) {
-        const char = path.charAt(i);
-        const nextChar = path.charAt(i + 1);
-        isEscaped = (char === PATH_SEPARATOR);
-        if(isEscaped) {
-            if(!(nextChar === PATH_SEPARATOR)) {
-                result.push(buffer);
-                buffer = "";
-                continue;
-            } else {
-                i++;
+    let pathPart = "";
+    let i = path.charAt(0) === PATH_SEPARATOR && path.charAt(1) !== PATH_SEPARATOR ? 1 : 0;
+
+    for(; i < path.length; i++) {
+        let char = path.charAt(i);
+        if(char === PATH_SEPARATOR) {
+            const nextChar = path.charAt(i + 1);
+            if(nextChar !== PATH_SEPARATOR) {
+                result.push(pathPart);
+                pathPart = "";
+                char = nextChar;
             }
+            i++;
         }
-        buffer += char;
+        pathPart += char;
     }
 
-    if(buffer || !result.length) {
-        result.push(buffer);
+    if(pathPart || !result.length) {
+        result.push(pathPart);
     }
 
     if(includeFullPath) {
