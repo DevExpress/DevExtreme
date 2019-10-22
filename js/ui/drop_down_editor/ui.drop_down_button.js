@@ -18,7 +18,7 @@ export default class ClearButton extends TextEditorButton {
         });
 
         eventsEngine.on(instance.$element(), "mousedown", (e) => {
-            if($(editor.element()).is(".dx-state-focused")) {
+            if(editor.$element().is(".dx-state-focused")) {
                 e.preventDefault();
             }
         });
