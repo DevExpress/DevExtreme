@@ -31,7 +31,7 @@ test("Value change on dataGrid row should be fired after clicking on editor (T82
     await t
         .click(dataGrid.getDataCell(0, 0).element)
         .typeText(dataGrid.getDataCell(0, 0).element, "new_value")
-        .click(selectBox.getDropDownButton())
+        .click(selectBox.dropDownButton)
         .expect(dataGrid.getDataCell(0, 0).element.textContent).eql("new_value");
 
 }).before(() => {
