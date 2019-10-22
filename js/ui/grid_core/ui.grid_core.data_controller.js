@@ -800,7 +800,8 @@ module.exports = {
                             return false;
                         }
 
-                        if(item1.modified !== item2.modified || item1.isNewRow !== item2.isNewRow || item1.removed !== item2.removed) {
+                        const compareFields = ["modified", "isNewRow", "removed", "isEditing"];
+                        if(compareFields.some(field => item1[field] !== item2[field])) {
                             return false;
                         }
 

@@ -15224,6 +15224,30 @@ QUnit.test("cancelEditData in onRowUpdating event for boolean column if repaintC
     assert.strictEqual($(dataGrid.getCellElement(1, 1)).get(0), $secondCheckBoxCell.get(0), "second checkbox cell is not changed");
 });
 
+QUnit.test("DataGrid should repaint editors on cancelEditData method if repaintChangesOnly is true (T820847)", function(assert) {
+    // arrange
+    var rowsViewWrapper = dataGridWrapper.rowsView;
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1 }, { id: 2 }],
+        repaintChangesOnly: true,
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        loadingTimeout: undefined
+    });
+
+    // act
+    dataGrid.editCell(0, 0);
+    // assert
+    assert.ok(rowsViewWrapper.hasEditorInputElement(0, 0), "cell has editor");
+
+    // act
+    dataGrid.cancelEditData();
+    // assert
+    assert.notOk(rowsViewWrapper.hasEditorInputElement(0, 0), "cell has no editor");
+});
+
 QUnit.test("Using watch in cellPrepared event for editor if repaintChangesOnly", function(assert) {
     // arrange
     var dataSource = new DataSource({
