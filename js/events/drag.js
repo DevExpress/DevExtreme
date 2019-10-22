@@ -265,6 +265,11 @@ var DragEmitter = GestureEmitter.inherit({
     },
 
     _checkDropTarget: function(config, $target, e) {
+        var isDraggingElement = $target.get(0) === $(e.target).get(0);
+        if(isDraggingElement) {
+            return false;
+        }
+
         var targetPosition = getItemPosition(config, $target);
         if(e.pageX < targetPosition.left) {
             return false;
