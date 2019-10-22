@@ -4,7 +4,6 @@ const { test } = QUnit;
 import "ui/file_manager";
 import FileItemsController from "ui/file_manager/file_items_controller";
 import FileManagerBreadcrumbs from "ui/file_manager/ui.file_manager.breadcrumbs";
-import { getPathParts } from "ui/file_manager/ui.file_manager.utils";
 import fx from "animation/fx";
 import { FileManagerWrapper, FileManagerBreadcrumbsWrapper, createTestFileSystem } from "../../../helpers/fileManagerHelpers.js";
 
@@ -510,30 +509,6 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "About", "target folder selected");
         assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectPartialName + "/About", "breadcrumbs refrers to the target folder");
         assert.equal(inst.option("currentPath"), incorrectOptionValue, "currentPath option is correct");
-    });
-
-    test("getPathParts() function must correctly separate path string", function(assert) {
-        const testData = {
-            "Files/Documents": ["Files", "Documents"],
-            "Files/Documents/ ": ["Files", "Documents", " "],
-            "Files/ /Documents": ["Files", " ", "Documents"],
-            "Files/// /Documents": ["Files/", " ", "Documents"],
-            "Files///Documents": ["Files/", "Documents"],
-            "": [],
-            "/": [],
-            "//": ["/"],
-            "///": ["/"],
-            "////": ["//"],
-            "/////": ["//"],
-            "/// /Documents": ["/", " ", "Documents"],
-            "Test/": ["Test"],
-            "Test//": ["Test/"],
-            "/Test": ["Test"],
-            "//Test": ["/Test"]
-        };
-        for(const key in testData) {
-            assert.deepEqual(getPathParts(key), testData[key]);
-        }
     });
 
 });

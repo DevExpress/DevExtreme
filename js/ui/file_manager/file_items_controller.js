@@ -3,7 +3,7 @@ import ArrayFileProvider from "./file_provider/array";
 import AjaxFileProvider from "./file_provider/ajax";
 import RemoteFileProvider from "./file_provider/remote";
 import CustomFileProvider from "./file_provider/custom";
-import { pathCombine, getPathParts, getFileExtension } from "./ui.file_manager.utils";
+import { pathCombine, getEscapedFileName, getPathParts, getFileExtension } from "./ui.file_manager.utils";
 import whenSome, { ErrorCode } from "./ui.file_manager.common";
 
 import { Deferred, when } from "../../core/utils/deferred";
@@ -69,11 +69,12 @@ export default class FileItemsController {
     }
 
     setCurrentPath(path) {
-        if(this.getCurrentDirectory().fileItem.relativeName === path) {
+        const pathParts = getPathParts(path);
+        const rawPath = pathCombine(...pathParts);
+        if(this.getCurrentDirectory().fileItem.relativeName === rawPath) {
             return;
         }
 
-        const pathParts = getPathParts(path);
         return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts)
             .then(directoryInfo => {
                 for(let info = directoryInfo.parentDirectory; info; info = info.parentDirectory) {
@@ -87,7 +88,7 @@ export default class FileItemsController {
         let currentPath = "";
         let directory = this.getCurrentDirectory();
         while(directory && !directory.fileItem.isRoot) {
-            const escapedName = directory.fileItem.name.replace(/\//g, "//");
+            const escapedName = getEscapedFileName(directory.fileItem.name);
             currentPath = pathCombine(escapedName, currentPath);
             directory = directory.parentDirectory;
         }

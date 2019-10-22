@@ -54,6 +54,10 @@ const getPathParts = (path, includeFullPath) => {
     return result;
 };
 
+const getEscapedFileName = function(fileName) {
+    return fileName.replace(/\//g, "//");
+};
+
 const pathCombine = function() {
     let result = "";
 
@@ -86,6 +90,7 @@ module.exports.getFileExtension = getFileExtension;
 module.exports.getName = getName;
 module.exports.getParentPath = getParentPath;
 module.exports.getPathParts = getPathParts;
+module.exports.getEscapedFileName = getEscapedFileName;
 module.exports.pathCombine = pathCombine;
 module.exports.getDisplayFileSize = getDisplayFileSize;
 module.exports.PATH_SEPARATOR = PATH_SEPARATOR;
