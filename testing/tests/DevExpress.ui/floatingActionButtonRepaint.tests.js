@@ -19,6 +19,7 @@ QUnit.testStart(() => {
 
 const FAB_MAIN_CLASS = "dx-fa-button-main";
 const FAB_SELECTOR = ".dx-fa-button";
+const FAB_LABEL_SELECTOR = ".dx-fa-button-label";
 
 QUnit.module("apply current config options", (hooks) => {
     hooks.beforeEach(() => {
@@ -45,19 +46,19 @@ QUnit.module("apply current config options", (hooks) => {
 
         let $fabMainContent = $("." + FAB_MAIN_CLASS).find(".dx-overlay-content");
         let $fabContent = $(FAB_SELECTOR).find(".dx-overlay-content");
-        let fabDimensions = 64;
+        const fabMainDimensions = 64;
 
-        assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
-        assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
+        assert.equal($fabMainContent.offset().top, $(window).height() - fabMainDimensions, "default position top");
+        assert.equal($fabMainContent.offset().left, $(window).width() - fabMainDimensions, "default position left");
         assert.equal($fabMainContent.find(".dx-icon-add").length, 1, "default icon");
         assert.equal($fabMainContent.find(".dx-icon-close").length, 1, "default close icon");
 
-        fabDimensions = 30;
+        const fabItemDimensions = 30;
 
         $fabMainContent.trigger("dxclick");
 
-        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabDimensions, 80, "right first action position");
-        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabDimensions, 120, "right second action position");
+        assert.equal($(window).height() - $fabContent.eq(1).offset().top - fabItemDimensions, 80, "right first action position");
+        assert.equal($(window).height() - $fabContent.eq(2).offset().top - fabItemDimensions, 120, "right second action position");
 
         config({
             floatingActionButtonConfig: {
@@ -90,16 +91,17 @@ QUnit.module("apply current config options", (hooks) => {
     });
 
     test("repaint with one action", (assert) => {
-        $("#fab-one").dxSpeedDialAction({ icon: "trash" });
+        $("#fab-one").dxSpeedDialAction({ icon: "trash", label: "Delete" });
         $("#fab-two").dxSpeedDialAction({ visible: false });
 
         const $fabMainElement = $("." + FAB_MAIN_CLASS);
         const $fabMainContent = $fabMainElement.find(".dx-overlay-content");
-        const fabDimensions = 64;
+        const fabOffset = 16;
 
-        assert.equal($fabMainContent.offset().top, $(window).height() - fabDimensions, "default position top");
-        assert.equal($fabMainContent.offset().left, $(window).width() - fabDimensions, "default position left");
+        assert.equal($fabMainContent.offset().top, $(window).height() - $fabMainContent.height() - fabOffset, "default position top");
+        assert.equal($fabMainContent.offset().left, Math.round($(window).width() - $fabMainContent.width() - fabOffset), "default position left");
         assert.equal($fabMainContent.find(".dx-icon-trash").length, 1, "icon is from SDA options");
+        assert.equal($fabMainContent.find(FAB_LABEL_SELECTOR).eq(0).text(), "Delete", "label is from SDA options");
 
         config({
             floatingActionButtonConfig: {
@@ -111,7 +113,8 @@ QUnit.module("apply current config options", (hooks) => {
 
         repaintFloatingActionButton();
 
-        assert.equal($fabMainContent.find(".dx-icon-trash").length, 1, "icon is also from SDA options ");
+        assert.equal($fabMainContent.find(FAB_LABEL_SELECTOR).eq(0).text(), "Delete", "label is also from SDA options");
+        assert.equal($fabMainContent.find(".dx-icon-trash").length, 1, "icon is also from SDA options");
         assert.equal($fabMainContent.find(".dx-icon-cancel").length, 1, "close icon is changed");
         assert.equal($fabMainContent.offset().top, 0, "position top is changed");
         assert.equal($fabMainContent.offset().left, 0, "position left is changed");
