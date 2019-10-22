@@ -6698,6 +6698,44 @@ if(!devices.win8) {
         assert.equal($cell.text(), "state 2", "display text");
     });
 
+    // T822553
+    QUnit.test("Clear lookup editor with calculateDisplayValue", function(assert) {
+        // arrange
+        var that = this,
+            rowsView = that.rowsView,
+            testElement = $('#container');
+
+        that.options.columns.push({
+            dataField: "stateId",
+            calculateDisplayValue: "state.name",
+            lookup: {
+                dataSource: [{ id: 1, name: "state 1" }, { id: 2, name: "state 2" }],
+                displayExpr: "name",
+                valueExpr: "id"
+            }
+        });
+        that.options.editing = {
+            allowUpdating: true,
+            mode: 'batch'
+        };
+        rowsView.render(testElement);
+        that.columnsController.init();
+
+        // act
+        that.editCell(0, 5);
+        that.clock.tick();
+        var $selectBox = $(rowsView.getCellElement(0, 5)).find(".dx-selectbox");
+        $selectBox.dxSelectBox("instance").reset();
+        that.closeEditCell();
+        that.clock.tick();
+
+        // assert
+        var $cell = testElement.find(".dx-row").first().children("td").eq(5);
+
+        assert.ok($cell.hasClass("dx-cell-modified"), "cell is modified");
+        assert.equal($cell.text(), "\u00A0", "display text is empty space");
+    });
+
     QUnit.test("Lookup editor in row mode do not update row", function(assert) {
         // arrange
         var that = this,
