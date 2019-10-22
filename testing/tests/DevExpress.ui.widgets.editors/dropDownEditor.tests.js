@@ -512,7 +512,7 @@ QUnit.test("native focus event should not be triggered if dropdown button clicke
     assert.equal(focusinHandler.callCount, 0, "native focus should not be triggered");
 });
 
-QUnit.test("focusout should not be fired after click on the dropDownButton when editor is focused", function(assert) {
+QUnit.testInActiveWindow("focusout should not be fired after click on the dropDownButton when editor is focused", function(assert) {
     var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
             focusStateEnabled: true
         }),
@@ -526,7 +526,7 @@ QUnit.test("focusout should not be fired after click on the dropDownButton when 
     assert.ok(e.isDefaultPrevented(), "focusout was prevented");
 });
 
-QUnit.test("focusout should be fired after click on the dropDownButton when editor isn't focused (T823431)", function(assert) {
+QUnit.testInActiveWindow("focusout should be fired after click on the dropDownButton when editor isn't focused (T823431)", function(assert) {
     var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
             focusStateEnabled: true
         }),
@@ -535,7 +535,7 @@ QUnit.test("focusout should be fired after click on the dropDownButton when edit
     var e = $.Event("mousedown");
     $dropDownButton.trigger(e);
 
-    assert.notOk(e.isDefaultPrevented(), "focusout was prevented");
+    assert.notOk(e.isDefaultPrevented(), "focusout was not prevented");
 });
 
 QUnit.test("focusout should not be fired on valueChanged", function(assert) {
