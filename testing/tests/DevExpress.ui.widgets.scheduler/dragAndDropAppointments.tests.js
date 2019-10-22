@@ -672,7 +672,6 @@ module("Drag and drop appointments", moduleConfig, () => {
                 .up();
 
             assert.strictEqual(dataSource.length, 3, "appointment is added");
-            delete dataSource[2].settings;
             assert.deepEqual(dataSource[2], {
                 text: "Test",
                 startDate: new Date(2018, 4, 21, 9, 0),
