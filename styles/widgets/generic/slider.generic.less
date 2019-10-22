@@ -108,6 +108,13 @@
     .dx-slider-bar {
         background-color: fade(@base-invalid-color, 40%);
     }
+
+    .dx-state-hover,
+    .dx-state-focused {
+        &.dx-slider-handle:not(.dx-state-active) {
+            background: @slider-invalid-handle-accent-bg;
+        }
+    }
 }
 
 .dx-rtl .dx-slider-handle {
