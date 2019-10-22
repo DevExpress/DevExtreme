@@ -120,7 +120,7 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
     }
 
     _isEmptyDropDownAppointmentTemplate() {
-        return this.scheduler.option("dropDownAppointmentTemplate") === "dropDownAppointment";
+        return this.scheduler.option().dropDownAppointmentTemplate === "dropDownAppointment";
     }
 
     _getAppointmentsInstance() {
