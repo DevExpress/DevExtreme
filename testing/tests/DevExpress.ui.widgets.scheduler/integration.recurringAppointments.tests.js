@@ -1320,5 +1320,5 @@ QUnit.test("Recurring appointment with interval > 1 rendered correctly (T823073)
     });
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, "Appointment is rendered");
-    assert.deepEqual(this.scheduler.appointments.getAppointment(0).position(), { top: 855, left: 190 }, "Appointment is positioned correctly");
+    assert.deepEqual(this.scheduler.appointments.getAppointment(0).position(), { top: 190, left: 855 }, "Appointment is positioned correctly");
 });
