@@ -3127,7 +3127,6 @@ module.exports = {
 
                     return result;
                 },
-                getParentBandColumns: getParentBandColumns,
                 isParentColumnVisible: function(columnIndex) {
                     var result = true,
                         bandColumnsCache = this.getBandColumnsCache(),
