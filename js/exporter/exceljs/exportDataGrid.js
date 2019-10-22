@@ -42,10 +42,13 @@ function exportDataGrid(options) {
                 _setColumnsWidth(worksheet, columns, cellsRange.from.column);
             }
 
+            let mergedCells = [];
+            let mergeRanges = [];
+
             for(let rowIndex = 0; rowIndex < dataRowsCount; rowIndex++) {
                 const row = worksheet.getRow(cellsRange.from.row + rowIndex);
 
-                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell);
+                _exportRow(rowIndex, columns.length, row, cellsRange.from.column, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges);
 
                 if(rowIndex >= headerRowCount) {
                     row.outlineLevel = dataProvider.getGroupLevel(rowIndex);
@@ -54,6 +57,8 @@ function exportDataGrid(options) {
                     cellsRange.to.row++;
                 }
             }
+
+            _mergeCells(worksheet, topLeftCell, mergeRanges);
 
             cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
@@ -67,7 +72,8 @@ function exportDataGrid(options) {
     });
 }
 
-function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell) {
+
+function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges) {
     const styles = dataProvider.getStyles();
 
     for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
@@ -90,6 +96,13 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
                 excelCell: excelCell,
                 gridCell: gridCell
             });
+        }
+
+        if(rowIndex < headerRowCount) {
+            const mergeRange = _tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
+            if(isDefined(mergeRange)) {
+                mergeRanges.push(mergeRange);
+            }
         }
     }
 }
@@ -122,6 +135,34 @@ function _setColumnsWidth(worksheet, columns, startColumnIndex) {
                 Math.min(MAX_EXCEL_COLUMN_WIDTH, Math.floor(columnWidth / MAX_DIGIT_WIDTH_IN_PIXELS * 100) / 100);
         }
     }
+}
+
+function _tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider) {
+    if(!mergedCells[rowIndex] || !mergedCells[rowIndex][cellIndex]) {
+        let cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
+        if(cellMerge.colspan || cellMerge.rowspan) {
+            for(let i = rowIndex; i <= rowIndex + cellMerge.rowspan || 0; i++) {
+                for(let j = cellIndex; j <= cellIndex + cellMerge.colspan || 0; j++) {
+                    if(!mergedCells[i]) {
+                        mergedCells[i] = [];
+                    }
+                    mergedCells[i][j] = true;
+                }
+            }
+            return {
+                start: { row: rowIndex, column: cellIndex },
+                end: { row: rowIndex + (cellMerge.rowspan || 0), column: cellIndex + (cellMerge.colspan || 0) }
+            };
+        }
+    }
+}
+
+function _mergeCells(worksheet, topLeftCell, mergeRanges) {
+    const { row: startRowIndex, column: startColumnIndex } = topLeftCell;
+
+    mergeRanges.forEach((mergeRange) => {
+        worksheet.mergeCells(mergeRange.start.row + startRowIndex, mergeRange.start.column + startColumnIndex, mergeRange.end.row + startRowIndex, mergeRange.end.column + startColumnIndex);
+    });
 }
 
 export { exportDataGrid, MAX_EXCEL_COLUMN_WIDTH };

@@ -124,6 +124,24 @@ class ExcelJSTestHelper {
             }
         }
     }
+
+    checkMergeCells(mergedCells, topLeft) {
+        mergedCells.forEach((range) => { // range: [top, left, bottom, right]
+            let top, left, bottom, right;
+            [top, left, bottom, right] = range.map((value, index) => value + topLeft[index % 2 === 0 ? "row" : "column"] - 1);
+
+            var master = this.worksheet.getCell(top, left);
+            for(var row = top; row <= bottom; row++) {
+                for(var column = left; column <= right; column++) {
+                    if(row > top || column > left) {
+                        const currentCell = this.worksheet.getCell(row, column);
+
+                        assert.strictEqual(this.worksheet.getCell(row, column).master, master, `cell: ${currentCell.address}.master`);
+                    }
+                }
+            }
+        });
+    }
 }
 
 export default ExcelJSTestHelper;
