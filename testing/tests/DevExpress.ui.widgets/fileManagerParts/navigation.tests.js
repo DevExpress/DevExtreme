@@ -260,19 +260,25 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         let onCurrentDirectoryChangedCounter = 0;
         inst.option("onCurrentDirectoryChanged", function() {
             onCurrentDirectoryChangedCounter++;
-            assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"), "The option 'currentPath' was changed");
         });
 
         inst.option("currentPath", "Folder 1/Folder 1.1");
         this.clock.tick(800);
 
         assert.equal(onCurrentDirectoryChangedCounter, 1);
+        assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"), "The option 'currentPath' was changed");
 
         const $folder1Node = that.wrapper.getFolderNode(1);
         assert.equal($folder1Node.find("span").text(), "Folder 1");
 
         const $folder11Node = that.wrapper.getFolderNode(2);
         assert.equal($folder11Node.find("span").text(), "Folder 1.1");
+
+        inst.option("currentPath", "");
+        this.clock.tick(800);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root folder");
     });
 
     test("during navigation internal current directory updated only once", function(assert) {
@@ -444,7 +450,7 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         inst.option("fileProvider", fileProvider);
 
         let counter = 0;
-        inst.option("onOptionChanged", (e) => { e.name === "currentPath" && counter++; e.name === "currentPath"; });
+        inst.option("onOptionChanged", (e) => { e.name === "currentPath" && counter++; });
 
         inst.option("currentPath", incorrectOptionValue);
         this.clock.tick(400);

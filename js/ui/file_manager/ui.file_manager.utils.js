@@ -24,15 +24,16 @@ const getPathParts = (path, includeFullPath) => {
     }
     const result = [];
     let pathPart = "";
-    let i = path.charAt(0) === PATH_SEPARATOR && path.charAt(1) !== PATH_SEPARATOR ? 1 : 0;
 
-    for(; i < path.length; i++) {
+    for(let i = 0; i < path.length; i++) {
         let char = path.charAt(i);
         if(char === PATH_SEPARATOR) {
             const nextChar = path.charAt(i + 1);
             if(nextChar !== PATH_SEPARATOR) {
-                result.push(pathPart);
-                pathPart = "";
+                if(i !== 0) {
+                    result.push(pathPart);
+                    pathPart = "";
+                }
                 char = nextChar;
             }
             i++;

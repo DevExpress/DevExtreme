@@ -10,7 +10,6 @@ import registerComponent from "../../core/component_registrator";
 import Widget from "../widget/ui.widget";
 import notify from "../notify";
 
-import { pathCombine, getPathParts } from "./ui.file_manager.utils";
 import FileItemsController from "./file_items_controller";
 import { FileManagerCommandManager } from "./ui.file_manager.command_manager";
 import FileManagerContextMenu from "./ui.file_manager.context_menu";
@@ -644,9 +643,7 @@ class FileManager extends Widget {
         this._itemView.refresh();
         this._breadcrumbs.setCurrentDirectory(this._getCurrentDirectory());
 
-        if(currentPath !== pathCombine(...getPathParts(this.option("currentPath")))) {
-            this.option("currentPath", currentPath);
-        }
+        this.option("currentPath", currentPath);
         this._onCurrentDirectoryChangedAction();
     }
 

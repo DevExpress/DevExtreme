@@ -87,7 +87,8 @@ export default class FileItemsController {
         let currentPath = "";
         let directory = this.getCurrentDirectory();
         while(directory && !directory.fileItem.isRoot) {
-            currentPath = pathCombine(directory.fileItem.name, currentPath);
+            const escapedName = directory.fileItem.name.replace(/\//g, "//");
+            currentPath = pathCombine(escapedName, currentPath);
             directory = directory.parentDirectory;
         }
         return currentPath;
