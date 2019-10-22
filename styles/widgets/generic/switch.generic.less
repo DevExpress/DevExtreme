@@ -174,4 +174,16 @@
             border-color: @base-invalid-color;
         }
     }
+
+    &.dx-state-focused,
+    &.dx-state-hover,
+    &.dx-switch-on-value {
+        .dx-switch-handle:before {
+            background-color: @base-invalid-color;
+        }
+    }
+
+    .dx-switch-handle:before {
+        background-color: @base-invalid-faded-border-color;
+    }
 }
