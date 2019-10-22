@@ -17,7 +17,7 @@ import "./fileManagerParts/editingProgress.tests.js";
 import "./fileManagerParts/progressPanel.tests.js";
 import "./fileManagerParts/fileItemsController.tests.js";
 
-import "./fileManagerParts/commands.tests.js";
+import "./fileManagerParts/common.tests.js";
 
 import "./fileManagerParts/ajaxProvider.tests.js";
 import "./fileManagerParts/arrayProvider.tests.js";

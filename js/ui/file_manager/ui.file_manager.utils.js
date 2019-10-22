@@ -18,8 +18,7 @@ const getParentPath = path => {
 };
 
 const getPathParts = (path, includeFullPath) => {
-    path = path || "";
-    if(path === "" || path === "/") {
+    if(!path || path === "/") {
         return [];
     }
     const result = [];
@@ -30,7 +29,7 @@ const getPathParts = (path, includeFullPath) => {
         if(char === PATH_SEPARATOR) {
             const nextChar = path.charAt(i + 1);
             if(nextChar !== PATH_SEPARATOR) {
-                if(i !== 0) {
+                if(pathPart) {
                     result.push(pathPart);
                     pathPart = "";
                 }
@@ -41,7 +40,7 @@ const getPathParts = (path, includeFullPath) => {
         pathPart += char;
     }
 
-    if(pathPart || !result.length) {
+    if(pathPart) {
         result.push(pathPart);
     }
 
