@@ -6,6 +6,10 @@ const ATTR = {
     popupId: 'aria-controls'
 };
 
+const CLASS = {
+    dropDownButton: 'dx-dropdowneditor-button'
+};
+
 export default abstract class DropDownList extends TextBox {
     opened: Promise<boolean>;
 
@@ -24,6 +28,10 @@ export default abstract class DropDownList extends TextBox {
 
     getPopupIdAttr () {
         return ATTR.popupId;
+    }
+
+    getDropDownButton() {
+        return this.element.find(`.${CLASS.dropDownButton}`);
     }
 
     async getList(): Promise<List> {
