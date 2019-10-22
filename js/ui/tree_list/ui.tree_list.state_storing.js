@@ -10,7 +10,7 @@ treeListCore.registerModule("stateStoring", extend(true, {}, stateStoringModule,
                 applyState: function(state) {
                     origApplyState.apply(this, arguments);
                     if(Object.prototype.hasOwnProperty.call(state, "expandedRowKeys")) {
-                        this.option("expandedRowKeys", state.expandedRowKeys);
+                        this.option("expandedRowKeys", state.expandedRowKeys && state.expandedRowKeys.slice());
                     }
                 }
             },
