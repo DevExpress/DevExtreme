@@ -283,7 +283,7 @@ class AppointmentModel {
                     recurrenceRule: recurrenceRule,
                     recurrenceException: recurrenceException,
                     allDay: appointmentTakesAllDay
-                }, min, max, startDayHour, endDayHour, firstDayOfWeek);
+                }, min, max, startDayHour, endDayHour, firstDayOfWeek || 0);
             }
 
             // NOTE: Long appointment part without allDay field and recurrence rule should be filtered by min

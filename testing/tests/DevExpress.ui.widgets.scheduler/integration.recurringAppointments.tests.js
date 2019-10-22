@@ -1261,7 +1261,7 @@ QUnit.test("Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,
         firstDayOfWeek: 3,
     });
 
-    assert.equal(this.scheduler.appointments.getAppointmentCount(), 8, "Appointment has right count of occurences");
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 9, "Appointment has right count of occurences");
 
     var firstAppointmentCoords = translator.locate($(this.scheduler.appointments.getAppointment(0)));
 
@@ -1296,4 +1296,29 @@ QUnit.test("Prerender filter by recurrence rule determines renderable appointmen
     });
 
     assert.equal(this.scheduler.appointments.getAppointmentCount(), 0, "Appt is filtered on prerender and not rendered");
+});
+
+QUnit.test("Recurring appointment with interval > 1 rendered correctly (T823073)", function(assert) {
+    var data = [
+        {
+            text: "5-week recur",
+            startDate: new Date(2019, 9, 20, 7, 0),
+            endDate: new Date(2019, 9, 20, 9, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU;INTERVAL=5;COUNT=3"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2019, 9, 20),
+        firstDayOfWeek: 1,
+        startDayHour: 6,
+        height: 600
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, "Appointment is rendered");
+    assert.deepEqual(this.scheduler.appointments.getAppointment(0).position(), { top: 855, left: 190 }, "Appointment is positioned correctly");
 });
