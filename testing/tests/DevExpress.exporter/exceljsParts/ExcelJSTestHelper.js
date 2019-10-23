@@ -128,8 +128,8 @@ class ExcelJSTestHelper {
     }
 
     _iterateWorksheetCells(callback) {
-        this.worksheet.eachRow((row) => {
-            row.eachCell((cell) => {
+        this.worksheet.eachRow({ includeEmpty: true }, (row) => {
+            row.eachCell({ includeEmpty: true }, (cell) => {
                 callback(cell);
             });
         });
@@ -137,6 +137,10 @@ class ExcelJSTestHelper {
 
     checkMergeCells(cellsArray, topLeft) {
         this._iterateWorksheetCells((excelCell) => {
+            if(excelCell.col < topLeft.column) { // skip empty cells before range
+                return;
+            }
+
             const expectedExcelCell = cellsArray[excelCell.row - topLeft.row][excelCell.col - topLeft.column].excelCell;
 
             if(!isDefined(expectedExcelCell.masterAddress)) {
