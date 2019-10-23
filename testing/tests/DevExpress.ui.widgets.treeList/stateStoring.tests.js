@@ -142,3 +142,49 @@ QUnit.test("The expandRowKeys state should not persist when autoExpandAll is ena
     // assert
     assert.notOk(Object.prototype.hasOwnProperty.call(state, "expandedRowKeys"), "state doesn't have expandedRowKeys");
 });
+
+// T811724, T824333
+QUnit.test("customSave should be fired after expand", function(assert) {
+    // arrange
+    var state = {
+            columns: [
+                { visibleIndex: 0, dataField: "name", dataType: "string", visible: true },
+                { visibleIndex: 1, dataField: "age", dataType: "number", visible: true }
+            ],
+            filterPanel: {},
+            filterValue: null,
+            expandedRowKeys: [1],
+            pageIndex: 0,
+            pageSize: 20,
+            searchText: ""
+        },
+        customSaveCallCount = 0;
+
+    // act
+    this.setupDataGridModules({
+        expandedRowKeys: [],
+        stateStoring: {
+            enabled: true,
+            type: "custom",
+            customLoad: function() {
+                return state;
+            },
+            customSave: function(arg) {
+                customSaveCallCount++;
+                state = arg;
+            },
+            savingTimeout: 0
+        }
+    });
+
+    this.clock.tick();
+    assert.strictEqual(customSaveCallCount, 0, "customSave is not called");
+
+    // act
+    this.expandRow(2);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(customSaveCallCount, 1, "customSave is called once after expandRow");
+    assert.deepEqual(state.expandedRowKeys, [1, 2], "expandedRowKeys in state is correct");
+});
