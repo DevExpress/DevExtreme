@@ -56,7 +56,8 @@ const createBreadcrumbs = (context, controller) => {
     context.breadcrumbsWrapper = new FileManagerBreadcrumbsWrapper($breadcrumbs);
 };
 
-const createFileProviderWithIncorrectName = (incorrectName) => {
+const createFileProviderWithIncorrectName = (incorrectName, isOnlyNewItem) => {
+    let fileProvider = [];
     const newItem = {
         name: incorrectName,
         isDirectory: true,
@@ -90,7 +91,9 @@ const createFileProviderWithIncorrectName = (incorrectName) => {
         ]
     };
 
-    let fileProvider = createTestFileSystem();
+    if(!isOnlyNewItem) {
+        fileProvider = createTestFileSystem();
+    }
     fileProvider.push(newItem);
     return fileProvider;
 };
@@ -256,19 +259,25 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         let onCurrentDirectoryChangedCounter = 0;
         inst.option("onCurrentDirectoryChanged", function() {
             onCurrentDirectoryChangedCounter++;
-            assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"), "The option 'currentPath' was changed");
         });
 
         inst.option("currentPath", "Folder 1/Folder 1.1");
         this.clock.tick(800);
 
         assert.equal(onCurrentDirectoryChangedCounter, 1);
+        assert.equal("Folder 1/Folder 1.1", inst.option("currentPath"), "The option 'currentPath' was changed");
 
         const $folder1Node = that.wrapper.getFolderNode(1);
         assert.equal($folder1Node.find("span").text(), "Folder 1");
 
         const $folder11Node = that.wrapper.getFolderNode(2);
         assert.equal($folder11Node.find("span").text(), "Folder 1.1");
+
+        inst.option("currentPath", "");
+        this.clock.tick(800);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "Files", "root folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files", "breadcrumbs refrers to the root folder");
     });
 
     test("during navigation internal current directory updated only once", function(assert) {
@@ -430,6 +439,76 @@ QUnit.module("Navigation operations", moduleConfig, () => {
         this.breadcrumbsWrapper.getParentDirectoryItem().trigger("dxclick");
         this.clock.tick(400);
         assert.equal(this.breadcrumbsWrapper.getPath(), "Files/" + incorrectName + "/ ", "breadcrumbs refrers to the target folder");
+    });
+
+    test("special symbols in 'currentPath' option must be processed correctly", function(assert) {
+        const inst = this.wrapper.getInstance();
+        const incorrectOptionValue = "Docu//me//nts";
+        const incorrectName = "Docu/me/nts";
+        const fileProvider = createFileProviderWithIncorrectName(incorrectName);
+        inst.option("fileProvider", fileProvider);
+
+        let counter = 0;
+        inst.option("onOptionChanged", (e) => { e.name === "currentPath" && counter++; });
+
+        inst.option("currentPath", incorrectOptionValue);
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), incorrectName, "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName, "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue, "currentPath option is correct");
+        assert.equal(counter, 1, "setCurrentPath() called once");
+
+        inst.option("currentPath", incorrectOptionValue + "/About");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "About", "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/About", "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue + "/About", "currentPath option is correct");
+        assert.equal(counter, 2, "setCurrentPath() called once");
+
+        inst.option("currentPath", incorrectOptionValue + "/ ");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), " ", "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/ ", "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue + "/ ", "currentPath option is correct");
+        assert.equal(counter, 3, "setCurrentPath() called once");
+
+        inst.option("currentPath", incorrectOptionValue + "/ / ");
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), " ", "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/ / ", "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue + "/ / ", "currentPath option is correct");
+        assert.equal(counter, 4, "setCurrentPath() called once");
+
+        inst.option("currentPath", inst.option("currentPath"));
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), " ", "target folder has not changed");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectName + "/ / ", "breadcrumbs has not changed");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue + "/ / ", "currentPath option has not changed");
+        assert.equal(counter, 4, "setCurrentPath() was not call");
+
+        assert.equal(inst.getCurrentDirectory().relativeName, incorrectName + "/ / ");
+    });
+
+    test("triple slash in 'currentPath' option must be processed correctly", function(assert) {
+        const inst = this.wrapper.getInstance();
+        const incorrectOptionValue = "Docu///About";
+        const incorrectName = "Docu/me/nts";
+        const incorrectPartialName = "Docu/";
+        let fileProvider = createFileProviderWithIncorrectName(incorrectName);
+        fileProvider = fileProvider.concat(createFileProviderWithIncorrectName(incorrectPartialName, true));
+        inst.option("fileProvider", fileProvider);
+
+        inst.option("currentPath", incorrectOptionValue);
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), "About", "target folder selected");
+        assert.equal(this.wrapper.getBreadcrumbsPath(), "Files/" + incorrectPartialName + "/About", "breadcrumbs refrers to the target folder");
+        assert.equal(inst.option("currentPath"), incorrectOptionValue, "currentPath option is correct");
     });
 
 });
