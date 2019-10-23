@@ -1,3 +1,5 @@
+import { isDefined } from "core/utils/type";
+
 const { assert } = QUnit;
 
 class ExcelJSTestHelper {
@@ -47,8 +49,8 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkValues(argsArray) {
-        this._iterateCells(argsArray, (cellArgs) => {
+    checkValues(cellsArray) {
+        this._iterateCells(cellsArray, (cellArgs) => {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
 
@@ -68,8 +70,8 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkFont(argsArray) {
-        this._iterateCells(argsArray, (cellArgs) => {
+    checkFont(cellsArray) {
+        this._iterateCells(cellsArray, (cellArgs) => {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
 
@@ -77,8 +79,8 @@ class ExcelJSTestHelper {
         });
     }
 
-    checkAlignment(argsArray) {
-        this._iterateCells(argsArray, (cellArgs) => {
+    checkAlignment(cellsArray) {
+        this._iterateCells(cellsArray, (cellArgs) => {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
 
@@ -102,8 +104,8 @@ class ExcelJSTestHelper {
         }
     }
 
-    _extendExpectedCells(argsArray, topLeft) {
-        this._iterateCells(argsArray, (cellArgs, rowIndex, columnIndex) => {
+    _extendExpectedCells(cellsArray, topLeft) {
+        this._iterateCells(cellsArray, (cellArgs, rowIndex, columnIndex) => {
             cellArgs.excelCell.address = {
                 row: rowIndex + topLeft.row,
                 column: columnIndex + topLeft.column
@@ -123,6 +125,35 @@ class ExcelJSTestHelper {
                 callback(currentCell, rowIndex, columnIndex);
             }
         }
+    }
+
+    _iterateWorksheetCells(callback) {
+        this.worksheet.eachRow({ includeEmpty: true }, (row) => {
+            row.eachCell({ includeEmpty: true }, (cell) => {
+                callback(cell);
+            });
+        });
+    }
+
+    checkMergeCells(cellsArray, topLeft) {
+        this._iterateWorksheetCells((excelCell) => {
+            if(excelCell.col < topLeft.column) {
+                assert.strictEqual(excelCell.isMerged, false, `cell: ${excelCell.address}.isMerged`);
+                assert.strictEqual(excelCell.master, excelCell, `cell: ${excelCell.address}.master`);
+            } else {
+                const expectedExcelCell = cellsArray[excelCell.row - topLeft.row][excelCell.col - topLeft.column].excelCell;
+
+                if(!isDefined(expectedExcelCell.master)) {
+                    assert.strictEqual(excelCell.isMerged, false, `cell: ${excelCell.address}.isMerged`);
+                    assert.strictEqual(excelCell.master, excelCell, `cell: ${excelCell.address}.master`);
+                } else {
+                    const master = this.worksheet.getCell(expectedExcelCell.master[0] + topLeft.row - 1, expectedExcelCell.master[1] + topLeft.column - 1);
+
+                    assert.strictEqual(excelCell.isMerged, true, `cell: ${excelCell.address}.isMerged`);
+                    assert.strictEqual(excelCell.master, master, `cell: ${excelCell.address}.master`);
+                }
+            }
+        });
     }
 }
 
