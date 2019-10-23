@@ -1703,7 +1703,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
                 options.value = value;
                 options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
-                if(text && options.column.displayValueMap) {
+                if(typeUtils.isString(text) && options.column.displayValueMap) {
                     options.column.displayValueMap[value] = text;
                 }
                 if(options.values) {
