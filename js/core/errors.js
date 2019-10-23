@@ -140,7 +140,7 @@ module.exports = errorUtils({
     /**
     * @name ErrorsCore.E0103
     */
-    E0103: "validationCallback of an asynchronous rule should return jQuery or a native promise",
+    E0103: "validationCallback of an asynchronous rule should return a jQuery or a native promise",
 
     /**
     * @name ErrorsCore.E0110
