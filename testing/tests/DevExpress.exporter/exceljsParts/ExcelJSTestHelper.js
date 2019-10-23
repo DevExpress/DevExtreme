@@ -49,8 +49,8 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkValues(argsArray) {
-        this._iterateCells(argsArray, (cellArgs) => {
+    checkValues(cellsArray) {
+        this._iterateCells(cellsArray, (cellArgs) => {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
 
@@ -70,8 +70,8 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkFont(argsArray) {
-        this._iterateCells(argsArray, (cellArgs) => {
+    checkFont(cellsArray) {
+        this._iterateCells(cellsArray, (cellArgs) => {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
 
@@ -79,8 +79,8 @@ class ExcelJSTestHelper {
         });
     }
 
-    checkAlignment(argsArray) {
-        this._iterateCells(argsArray, (cellArgs) => {
+    checkAlignment(cellsArray) {
+        this._iterateCells(cellsArray, (cellArgs) => {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
 
@@ -104,8 +104,8 @@ class ExcelJSTestHelper {
         }
     }
 
-    _extendExpectedCells(argsArray, topLeft) {
-        this._iterateCells(argsArray, (cellArgs, rowIndex, columnIndex) => {
+    _extendExpectedCells(cellsArray, topLeft) {
+        this._iterateCells(cellsArray, (cellArgs, rowIndex, columnIndex) => {
             cellArgs.excelCell.address = {
                 row: rowIndex + topLeft.row,
                 column: columnIndex + topLeft.column
@@ -127,8 +127,8 @@ class ExcelJSTestHelper {
         }
     }
 
-    checkMergeCells(argsArray, topLeft) {
-        this._iterateCells(argsArray, (cellArgs) => {
+    checkMergeCells(cellsArray, topLeft) {
+        this._iterateCells(cellsArray, (cellArgs) => {
             const { excelCell } = cellArgs;
             const { row, column } = excelCell.address;
             const currentCell = this.worksheet.getCell(row, column);
