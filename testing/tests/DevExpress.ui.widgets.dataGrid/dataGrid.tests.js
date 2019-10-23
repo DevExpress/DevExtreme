@@ -12798,6 +12798,7 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
                     target: $target,
                     preventDefault: commonUtils.noop,
                     stopPropagation: commonUtils.noop,
+                    shiftKey: !!isShiftPressed,
                     isDefaultPrevented: function() { return false; }
                 }
             }, true);
@@ -12865,6 +12866,7 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
                 shift: !!isShiftPressed,
                 originalEvent: {
                     target: $target,
+                    shiftKey: !!isShiftPressed,
                     preventDefault: commonUtils.noop,
                     stopPropagation: commonUtils.noop,
                     isDefaultPrevented: function() { return false; }

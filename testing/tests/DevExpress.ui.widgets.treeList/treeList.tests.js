@@ -275,14 +275,14 @@ QUnit.testInActiveWindow("Ctrl + left/right keys should collapse/expand row", fu
     this.clock.tick();
 
     // act
-    navigationController._keyDownHandler({ keyName: "rightArrow", key: "ArrowRight", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0) }) });
+    navigationController._keyDownHandler({ keyName: "rightArrow", key: "ArrowRight", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
     this.clock.tick();
 
     // assert
     assert.ok(treeList.isRowExpanded(2), "second row is expanded");
 
     // act
-    navigationController._keyDownHandler({ keyName: "leftArrow", key: "ArrowLeft", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrl: true }) });
+    navigationController._keyDownHandler({ keyName: "leftArrow", key: "ArrowLeft", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
     this.clock.tick();
 
     // assert
