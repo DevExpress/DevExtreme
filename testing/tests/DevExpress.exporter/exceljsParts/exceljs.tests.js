@@ -129,6 +129,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
@@ -207,6 +208,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([undefined], topLeft.column);
                     helper.checkAutoFilter(false);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
                     done();
                 });
@@ -228,6 +230,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([undefined], topLeft.column);
                     helper.checkAutoFilter(false);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
                     done();
                 });
@@ -728,6 +731,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -876,6 +880,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -906,6 +911,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
                 });
@@ -937,6 +943,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -964,6 +971,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
@@ -1003,6 +1011,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
                     done();
@@ -1037,6 +1046,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                     done();
@@ -1073,6 +1083,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
                     done();
@@ -1106,6 +1117,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "number", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1135,6 +1147,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
                 });
@@ -1177,6 +1190,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 7 }, topLeft);
 
@@ -1215,6 +1229,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
@@ -1248,6 +1263,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1278,6 +1294,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
                 });
@@ -1310,6 +1327,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).type`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1344,6 +1362,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1380,6 +1399,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
@@ -1422,6 +1442,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
                     done();
@@ -1467,6 +1488,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
                     done();
@@ -1509,6 +1531,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1551,6 +1574,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1593,6 +1617,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1634,6 +1659,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -1670,6 +1696,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -1713,6 +1740,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -1758,6 +1786,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -1793,6 +1822,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                     done();
@@ -1828,6 +1858,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                     done();
@@ -1865,6 +1896,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
                     done();
@@ -1904,6 +1936,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -1941,6 +1974,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1976,6 +2010,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                     done();
@@ -2019,6 +2054,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 1 }, topLeft);
                     done();
@@ -2058,6 +2094,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -2105,6 +2142,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
                     done();
@@ -2155,6 +2193,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
                     done();
@@ -2207,6 +2246,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -2257,6 +2297,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2303,6 +2344,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 0, 1, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
                     done();
@@ -2349,6 +2391,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -2408,6 +2451,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 11, column: 1 }, topLeft);
                     done();
@@ -2481,6 +2525,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 11, column: 2 }, topLeft);
                     done();
@@ -2542,6 +2587,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 3 }, topLeft);
                     done();
@@ -2591,6 +2637,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
@@ -2640,6 +2687,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
@@ -2686,6 +2734,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2732,6 +2781,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2778,6 +2828,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2834,6 +2885,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
                     done();
@@ -2886,6 +2938,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
@@ -2938,6 +2991,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -2990,6 +3044,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3039,6 +3094,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3091,6 +3147,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3140,6 +3197,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3191,6 +3249,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3226,6 +3285,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -3278,6 +3338,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -3330,6 +3391,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -3378,6 +3440,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3426,6 +3489,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3474,6 +3538,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3521,6 +3586,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3569,6 +3635,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3617,6 +3684,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3664,9 +3732,1212 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
-                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, col2_band x without columns" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1', width: 200
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: null }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[empty]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f1", width: 100 },
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column }, { x: 0, y: topLeft.row + 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2, f3]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "1" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        'f1',
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                'f2',
+                                'f3',
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 2 }, { x: 0, y: topLeft.row + 1 });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2, f3, f4]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 150 },
+                                { dataField: "f3", width: 200 },
+                                { dataField: "f4", width: 200 },
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "F4", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 4 }, { row: 2, column: 4 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 3 }, { x: 0, y: topLeft.row + 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 4 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2, f3], band[f4, f5]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "1" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 150 },
+                                { dataField: "f3", width: 200 },
+                            ]
+                        },
+                        {
+                            caption: 'Band2',
+                            columns: [
+                                { dataField: "f4", width: 100 },
+                                { dataField: "f5", width: 200 },
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band2", master: [1, 4], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } },
+                    { excelCell: { value: "Band2", master: [1, 4], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "F4", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(5) } },
+                    { excelCell: { value: "F5", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(6) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(5) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(6) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 4 }, { x: 0, y: topLeft.row + 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 3, column: 5 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2, f3.visible:false, f4], band[f5.visible: false, f6, f7]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "1" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 150 },
+                                { dataField: "f3", width: 200, visible: false },
+                                { dataField: "f4", width: 100 },
+                            ]
+                        },
+                        {
+                            caption: 'Band2',
+                            columns: [
+                                { dataField: "f5", width: 100, visible: false },
+                                { dataField: "f6", width: 150 },
+                                { dataField: "f7", width: 200 },
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band2", master: [1, 4], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(5) } },
+                    { excelCell: { value: "Band2", master: [1, 4], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(5) } }
+                ], [
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "F4", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } },
+                    { excelCell: { value: "F6", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(7) } },
+                    { excelCell: { value: "F7", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(8) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(7) } },
+                    { excelCell: { value: "", alignment: alignLeftNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(8) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 4 }, { x: 0, y: topLeft.row + 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 3, column: 5 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, showColumnHeaders: false, [f1, band[f2, f3, f4]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" } ];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 150 },
+                                { dataField: "f3", width: 200 },
+                                { dataField: "f4", width: 200 },
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f4, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 4 }, { row: 1, column: 4 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 3 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 4 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, showColumnHeaders: false, [f1, band[f2.visible: false, f3, f4]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" } ];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 150, visible: false },
+                                { dataField: "f3", width: 200 },
+                                { dataField: "f4", width: 200 },
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f4, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, showColumnHeaders: false, [f1, band[f2.allowExporting: false, f3, f4]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" } ];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 150, allowExporting: false },
+                                { dataField: "f3", width: 200 },
+                                { dataField: "f4", width: 100 },
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f4, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 3 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 2 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2, f3].visible: false, f4]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            visible: false,
+                            columns: [
+                                { dataField: "f2", width: 50 },
+                                { dataField: "f3", width: 200 },
+                            ]
+                        },
+                        { dataField: "f4", width: 200 },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F4", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f4, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.skip("Bands, [f1, band[f2, f3].allowExporting: false, f4] is NOT SUPPORTED" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            allowExporting: false,
+                            columns: [
+                                { dataField: "f2", width: 50 },
+                                { dataField: "f3", width: 200 },
+                            ]
+                        },
+                        { dataField: "f4", width: 200 },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F4", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F4", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f4, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 2 }, { row: 3, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row + 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2.visible: false, f3.visible: false], f4.visible: false]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            width: 250,
+                            columns: [
+                                { dataField: "f2", width: 50, visible: false, allowExporting: true },
+                                { dataField: "f3", width: 200, visible: false, allowExporting: true }
+                            ]
+                        },
+                        { dataField: "f4", visible: false, width: 150 }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: null }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn250Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.skip("Bands, [f1, band[f2.allowExporting: false, f3.allowExporting: false], f4] is NOT SUPPORTED" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 50, allowExporting: false },
+                                { dataField: "f3", width: 200, allowExporting: false },
+                            ]
+                        },
+                        { dataField: "f4", width: 200 },
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: null }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2.visible: false(allowExporting: true), f3, f4]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 100, visible: false, allowExporting: true },
+                                { dataField: "f3", width: 200 },
+                                { dataField: "f4", width: 250 },
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "F4", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f4, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 2 }, { x: 0, y: topLeft.row + 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn250Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [f1, band[f2.allowExporting: false, f3, f4]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3", f4: "f1_4" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", width: 100 },
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f2", width: 100, visible: true, allowExporting: false },
+                                { dataField: "f3", width: 200 },
+                                { dataField: "f4", width: 150 },
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1", master: [1, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "F4", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f4, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 2 }, { x: 0, y: topLeft.row + 1 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [band[band[f1, f2, f3]]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [
+                                        { dataField: "f1", width: 100 },
+                                        { dataField: "f2", width: 150 },
+                                        { dataField: "f3", width: 200 },
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 2 }, { x: 0, y: topLeft.row + 2 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [band[band[f1.visible: false, f2, f3]]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [
+                                        { dataField: "f1", width: 100, visible: false },
+                                        { dataField: "f2", width: 150 },
+                                        { dataField: "f3", width: 200 },
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row + 2 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [band[band[f1, f2.allowExporting: false, f3.visible: false]]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [
+                                        { dataField: "f1", width: 100 },
+                                        { dataField: "f2", width: 150, allowExporting: false },
+                                        { dataField: "f3", width: 200, visible: false },
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "Band1_1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column }, { x: 0, y: topLeft.row + 2 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 4, column: 1 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [band[f1, band[f2, f3]]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f1", width: 100 },
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [
+                                        { dataField: "f2", width: 150 },
+                                        { dataField: "f3", width: 200 },
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "F1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1_1", master: [2, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "Band1_1", master: [2, 2], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } }
+                ], [
+                    { excelCell: { value: "F1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 2 }, { x: 0, y: topLeft.row + 2 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [band[f1.visible: false, band[f2, f3]]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f1", width: 100, visible: false },
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [
+                                        { dataField: "f2", width: 150 },
+                                        { dataField: "f3", width: 200 },
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } }
+                ], [
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "F3", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row + 2 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.skip("Bands, [band[f1.allowExporting: false, band[f2, f3.visible: false]]] is NOT SUPPORTED" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                { dataField: "f1", width: 100, allowExporting: false },
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [
+                                        { dataField: "f2", width: 150 },
+                                        { dataField: "f3", width: 200, visible: false },
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "Band1_1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column }, { x: 0, y: topLeft.row + 2 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 4, column: 1 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [band[band[f1, f2], f3]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [
+                                        { dataField: "f1", width: 150 },
+                                        { dataField: "f2", width: 200 },
+                                    ]
+                                },
+                                { dataField: "f3", width: 100 }
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "F3", master: [2, 3], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "F3", master: [2, 3], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(4) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f3, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 2 }, { x: 0, y: topLeft.row + 2 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Bands, [band[band[f1, f2], f3.visible: false]]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [
+                                        { dataField: "f1", width: 150 },
+                                        { dataField: "f2", width: 200 },
+                                    ]
+                                },
+                                { dataField: "f3", width: 100, visible: false }
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row + 2 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.skip("Bands, [band[band[f1, f2], f3.allowExporting: false]] is NOT SUPPORTED" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1", f2: "f1_2", f3: "f1_3" }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        {
+                            caption: 'Band1',
+                            columns: [
+                                {
+                                    caption: 'Band1_1',
+                                    columns: [
+                                        { dataField: "f1", width: 150 },
+                                        { dataField: "f2", width: 200 },
+                                    ]
+                                },
+                                { dataField: "f3", width: 100, allowExporting: false }
+                            ]
+                        }
+                    ],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "Band1", master: [1, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: "Band1_1", master: [2, 1], alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(3) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 3, column: topLeft.column + 1 }, { x: 0, y: topLeft.row + 2 });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
                 });
             });
