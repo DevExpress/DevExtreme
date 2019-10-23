@@ -137,20 +137,21 @@ class ExcelJSTestHelper {
 
     checkMergeCells(cellsArray, topLeft) {
         this._iterateWorksheetCells((excelCell) => {
-            if(excelCell.col < topLeft.column) { // skip empty cells before range
-                return;
-            }
-
-            const expectedExcelCell = cellsArray[excelCell.row - topLeft.row][excelCell.col - topLeft.column].excelCell;
-
-            if(!isDefined(expectedExcelCell.masterAddress)) {
+            if(excelCell.col < topLeft.column) {
                 assert.strictEqual(excelCell.isMerged, false, `cell: ${excelCell.address}.isMerged`);
                 assert.strictEqual(excelCell.master, excelCell, `cell: ${excelCell.address}.master`);
             } else {
-                const master = this.worksheet.getCell(expectedExcelCell.masterAddress[0] + topLeft.row - 1, expectedExcelCell.masterAddress[1] + topLeft.column - 1);
+                const expectedExcelCell = cellsArray[excelCell.row - topLeft.row][excelCell.col - topLeft.column].excelCell;
 
-                assert.strictEqual(excelCell.isMerged, true, `cell: ${excelCell.address}.isMerged`);
-                assert.strictEqual(excelCell.master, master, `cell: ${excelCell.address}.master`);
+                if(!isDefined(expectedExcelCell.masterAddress)) {
+                    assert.strictEqual(excelCell.isMerged, false, `cell: ${excelCell.address}.isMerged`);
+                    assert.strictEqual(excelCell.master, excelCell, `cell: ${excelCell.address}.master`);
+                } else {
+                    const master = this.worksheet.getCell(expectedExcelCell.masterAddress[0] + topLeft.row - 1, expectedExcelCell.masterAddress[1] + topLeft.column - 1);
+
+                    assert.strictEqual(excelCell.isMerged, true, `cell: ${excelCell.address}.isMerged`);
+                    assert.strictEqual(excelCell.master, master, `cell: ${excelCell.address}.master`);
+                }
             }
         });
     }
