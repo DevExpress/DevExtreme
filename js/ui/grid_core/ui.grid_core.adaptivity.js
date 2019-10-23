@@ -37,6 +37,7 @@ var COLUMN_HEADERS_VIEW = "columnHeadersView",
     LAST_DATA_CELL_CLASS = "dx-last-data-cell",
     ADAPTIVE_COLUMN_NAME = "adaptive",
     EDIT_MODE_BATCH = "batch",
+    EDIT_MODE_CELL = "cell",
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
     EDIT_MODE_POPUP = "popup",
@@ -68,7 +69,7 @@ function adaptiveCellTemplate(container, options) {
 
 var AdaptiveColumnsController = modules.ViewController.inherit({
     _isRowEditMode: function() {
-        var editMode = this._editingController.getEditMode();
+        var editMode = this._getEditMode();
         return editMode === EDIT_MODE_ROW;
     },
 
@@ -93,8 +94,11 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(column.allowEditing && that.getController("keyboardNavigation").isKeyboardEnabled()) {
             $container.attr("tabIndex", that.option("tabIndex"));
-            eventsEngine.off($container, "focus", focusAction);
-            eventsEngine.on($container, "focus", focusAction);
+
+            if(this.isCellOrBatchMode()) {
+                eventsEngine.off($container, "focus", focusAction);
+                eventsEngine.on($container, "focus", focusAction);
+            }
         }
 
         if(column.cellTemplate) {
@@ -415,10 +419,20 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
+    _getEditMode: function() {
+        return this._editingController.getEditMode();
+    },
+
     isFormEditMode: function() {
-        var editMode = this._editingController.getEditMode();
+        var editMode = this._getEditMode();
 
         return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
+    },
+
+    isCellOrBatchMode: function() {
+        var editMode = this._getEditMode();
+
+        return editMode === EDIT_MODE_BATCH || editMode === EDIT_MODE_CELL;
     },
 
     hideRedundantColumns: function(resultWidths, visibleColumns, hiddenQueue) {
@@ -1131,7 +1145,10 @@ module.exports = {
                 _processNextCellInMasterDetail: function($nextCell) {
                     this.callBase($nextCell);
 
-                    if(!this._isInsideEditForm($nextCell) && $nextCell) {
+                    var editMode = this._editingController.getEditMode(),
+                        isCellOrBatchMode = editMode === EDIT_MODE_BATCH || editMode === EDIT_MODE_CELL;
+
+                    if(!this._isInsideEditForm($nextCell) && $nextCell && isCellOrBatchMode) {
                         var focusHandler = function() {
                             eventsEngine.off($nextCell, "focus", focusHandler);
                             eventsEngine.trigger($nextCell, "dxclick");
