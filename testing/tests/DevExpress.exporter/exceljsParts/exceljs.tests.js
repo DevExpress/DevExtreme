@@ -129,7 +129,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
@@ -208,7 +208,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([undefined], topLeft.column);
                     helper.checkAutoFilter(false);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
                     done();
                 });
@@ -230,7 +230,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkColumnWidths([undefined], topLeft.column);
                     helper.checkAutoFilter(false);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
                     done();
                 });
@@ -731,7 +731,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -880,7 +880,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -911,7 +911,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
                 });
@@ -943,7 +943,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -971,7 +971,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
@@ -1011,7 +1011,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
                     done();
@@ -1046,7 +1046,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
                     done();
@@ -1083,7 +1083,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 3 }, topLeft);
                     done();
@@ -1117,7 +1117,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "number", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1147,7 +1147,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells, { keepColumnWidths: false })).then(() => {
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
                 });
@@ -1190,7 +1190,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 7 }, topLeft);
 
@@ -1229,7 +1229,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
@@ -1263,7 +1263,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row + 1, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1294,7 +1294,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
                 });
@@ -1327,7 +1327,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).type`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1362,7 +1362,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
@@ -1399,7 +1399,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     assert.equal(typeof this.worksheet.getCell(topLeft.row, topLeft.column + 1).value, "string", `typeof this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
                     done();
@@ -1442,7 +1442,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
                     done();
@@ -1488,7 +1488,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 3 }, topLeft);
                     done();
@@ -1531,7 +1531,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1574,7 +1574,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1617,7 +1617,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -1659,7 +1659,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -1696,7 +1696,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -1740,7 +1740,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -1786,7 +1786,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -1822,7 +1822,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                     done();
@@ -1858,7 +1858,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                     done();
@@ -1896,7 +1896,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
                     done();
@@ -1936,7 +1936,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -1974,7 +1974,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
@@ -2010,7 +2010,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
                     done();
@@ -2054,7 +2054,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 1 }, topLeft);
                     done();
@@ -2094,7 +2094,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then(() => {
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -2142,7 +2142,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
                     done();
@@ -2193,7 +2193,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
                     done();
@@ -2246,7 +2246,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 0, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -2297,7 +2297,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2344,7 +2344,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 0, 1, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 6, column: 1 }, topLeft);
                     done();
@@ -2391,7 +2391,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 1 }, topLeft);
                     done();
@@ -2451,7 +2451,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 11, column: 1 }, topLeft);
                     done();
@@ -2525,7 +2525,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 11, column: 2 }, topLeft);
                     done();
@@ -2587,7 +2587,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 2, 1, 2], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 5, column: 3 }, topLeft);
                     done();
@@ -2637,7 +2637,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
@@ -2687,7 +2687,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
@@ -2734,7 +2734,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2781,7 +2781,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2828,7 +2828,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -2885,7 +2885,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 3 }, topLeft);
                     done();
@@ -2938,7 +2938,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 3 }, topLeft);
                     done();
@@ -2991,7 +2991,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3044,7 +3044,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3094,7 +3094,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3147,7 +3147,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3197,7 +3197,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 1, 1], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3249,7 +3249,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 4, column: 2 }, topLeft);
                     done();
@@ -3285,7 +3285,7 @@ QUnit.module("API", moduleConfig, () => {
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -3338,7 +3338,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -3391,7 +3391,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     done();
                 });
             });
@@ -3440,7 +3440,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3489,7 +3489,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3538,7 +3538,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3586,7 +3586,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3635,7 +3635,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3684,7 +3684,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
@@ -3732,7 +3732,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
-                    helper.checkMergeCells(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 3, column: 2 }, topLeft);
                     done();
