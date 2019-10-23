@@ -88,6 +88,25 @@ QUnit.module("typing", moduleConfig, () => {
         assert.equal($input.val(), "x");
     });
 
+    QUnit.test("accept when maskChar is empty", (assert) => {
+        const $textEditor = $("#texteditor").dxTextEditor({
+            mask: '99999',
+            maskChar: ''
+        });
+
+        const $input = $textEditor.find(".dx-texteditor-input");
+        const keyboard = keyboardMock($input, true);
+
+        caretWorkaround($input);
+
+        keyboard.type("1");
+        assert.equal($input.val(), "1");
+        keyboard.type("1");
+        assert.equal($input.val(), "11");
+        keyboard.type("1");
+        assert.equal($input.val(), "111");
+    });
+
     QUnit.test("prevent typing at the end", (assert) => {
         const $textEditor = $("#texteditor").dxTextEditor({
             mask: "X",

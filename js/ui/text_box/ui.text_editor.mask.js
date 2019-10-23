@@ -257,6 +257,11 @@ var TextEditorMask = TextEditorBase.inherit({
         return result;
     },
 
+    _getMaskChar: function() {
+        var currentMaskChar = this.option("maskChar");
+        return currentMaskChar === "" ? " " : currentMaskChar;
+    },
+
     _getMaskRule: function(pattern) {
         var ruleConfig;
 
@@ -271,7 +276,7 @@ var TextEditorMask = TextEditorBase.inherit({
         });
 
         return isDefined(ruleConfig)
-            ? new MaskRules.MaskRule(extend({ maskChar: this.option("maskChar") }, ruleConfig))
+            ? new MaskRules.MaskRule(extend({ maskChar: this._getMaskChar() }, ruleConfig))
             : new MaskRules.StubMaskRule({ maskChar: pattern });
     },
 
@@ -393,7 +398,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _replaceMaskCharWithEmpty: function(text) {
-        return text.replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
+        return text.replace(new RegExp(this._getMaskChar(), "g"), EMPTY_CHAR);
     },
 
     _maskKeyHandler: function(e, keyHandler) {
