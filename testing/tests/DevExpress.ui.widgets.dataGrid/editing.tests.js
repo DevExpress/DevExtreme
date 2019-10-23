@@ -14263,6 +14263,7 @@ QUnit.module('Editing - "popup" mode', {
         this.$testElement = $("#container");
 
         this.setupModules = function(that) {
+
             setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editorFactory', 'errorHandling', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
                 initViews: true
             });
@@ -15088,6 +15089,29 @@ QUnit.test("The editCellTemplate should be called once for the form when adding 
     assert.strictEqual(editCellTemplate.callCount, 1, "editCellTemplate call count");
     assert.strictEqual($(this.getRowElement(0)).find(".myEditor").length, 0, "row hasn't custom editor");
     assert.strictEqual($(this.getEditPopupContent()).find(".myEditor").length, 1, "form has custom editor");
+});
+
+QUnit.test("Popup edit form repainting should be affected by beginUpdate / endUpdate (T819475)", function(assert) {
+    const spy = sinon.spy();
+
+    this.setupModules(this);
+    this.renderRowsView();
+
+    // act
+    this.editRow(1);
+    this.clock.tick();
+
+    // arrange
+    this.editingController._editForm.repaint = spy;
+
+    // act
+    this.editingController.beginUpdate();
+    this.cellValue(1, "name", "test_name");
+    this.cellValue(1, "lastName", "test_lastName");
+    this.editingController.endUpdate();
+
+    // assert
+    assert.equal(spy.callCount, 1, "Edit form has repainted only once");
 });
 
 QUnit.module("Promises in callbacks and events", {
