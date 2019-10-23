@@ -510,6 +510,31 @@ QUnit.test("onDragEnd - the position should be reset if an error occurs during d
     }
 });
 
+QUnit.test("The onDrop event should be called regardless of the order to subscribe to drag event", function(assert) {
+    // arrange
+    let onDropSpy = sinon.spy();
+
+    const draggable2 = this.createDraggable({
+        group: "shared",
+        onDrop: onDropSpy
+    }, $("#items"));
+
+    const draggable1 = this.createDraggable({
+        group: "shared"
+    });
+    const dragElementOffset1 = $(draggable1.element()).offset();
+    const dragElementOffset2 = $(draggable2.element()).offset();
+
+    // act
+    this.pointer
+        .down(dragElementOffset1.left, dragElementOffset1.top)
+        .move(dragElementOffset2.left - dragElementOffset1.left, dragElementOffset2.top - dragElementOffset1.top)
+        .up();
+
+    // assert
+    assert.strictEqual(onDropSpy.callCount, 1, "onDrop is called");
+});
+
 
 QUnit.module("'dragDirection' option", moduleConfig);
 
