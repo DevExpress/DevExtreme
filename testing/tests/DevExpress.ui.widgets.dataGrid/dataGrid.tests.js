@@ -11264,6 +11264,23 @@ QUnit.test("DataGrid should update editor values in Popup Edit Form if its data 
     assert.equal($popupEditorInput.val(), "foo", "value changed");
 });
 
+QUnit.test("The onOptionChanged event should be called once when changing column option", function(assert) {
+    // arrange
+    var onOptionChanged = sinon.spy(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ field1: 1, field2: 2 }],
+            columns: [{ dataField: "field1" }, { dataField: "field2" }],
+            onOptionChanged: onOptionChanged
+        });
+
+    // act
+    dataGrid.option("columns[1].caption", "test");
+
+    // assert
+    assert.strictEqual(onOptionChanged.callCount, 1, "onOptionChanged is called once");
+});
+
 QUnit.module("API methods", baseModuleConfig);
 
 QUnit.test("get methods for grid without options", function(assert) {
