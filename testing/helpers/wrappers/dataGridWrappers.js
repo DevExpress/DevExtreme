@@ -66,6 +66,10 @@ export class RowsViewWrapper extends WrapperBase {
         return this.getDataRowElement(rowIndex).find("td").eq(columnIndex).find(".dx-texteditor-input");
     }
 
+    hasEditorInputElement(rowIndex, columnIndex) {
+        return this.getEditorInputElement(rowIndex, columnIndex).length > 0;
+    }
+
     getSelectionCheckBoxElement(rowIndex) {
         return this.getDataRowElement(rowIndex).find(".dx-select-checkbox");
     }
