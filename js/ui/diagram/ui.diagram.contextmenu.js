@@ -27,7 +27,6 @@ class DiagramContextMenu extends Widget {
             .appendTo(this.$element());
 
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
-            target: this.option("container"),
             items: this._getItems(this._commands),
 
             onItemClick: ({ itemData }) => this._onItemClick(itemData),
@@ -35,9 +34,6 @@ class DiagramContextMenu extends Widget {
                 if(this._tempState === true) return;
 
                 this._tempState = true;
-                if(e.jQEvent) {
-                    this.clickPosition = { x: e.jQEvent.clientX, y: e.jQEvent.clientY };
-                }
                 this._onVisibleChangedAction({ visible: true, component: this });
                 this._contextMenuInstance.option("items", this._getItems(this._commands, true));
                 delete this._tempState;
@@ -66,6 +62,14 @@ class DiagramContextMenu extends Widget {
             }
         });
         return items;
+    }
+    _show(x, y, isTouch) {
+        this.clickPosition = { x, y };
+        this._contextMenuInstance.option("position", { offset: x + " " + y });
+        this._contextMenuInstance.option("visible", true);
+    }
+    _hide() {
+        this._contextMenuInstance.option("visible", false);
     }
     _onItemClick(itemData) {
         var processed = false;

@@ -303,6 +303,8 @@ class Diagram extends Widget {
         this._diagramInstance.onToolboxDragStart = this._raiseToolboxDragStart.bind(this);
         this._diagramInstance.onToolboxDragEnd = this._raiseToolboxDragEnd.bind(this);
         this._diagramInstance.onToggleFullscreen = this._onToggleFullScreen.bind(this);
+        this._diagramInstance.onShowContextMenu = this._onShowContextMenu.bind(this);
+        this._diagramInstance.onHideContextMenu = this._onHideContextMenu.bind(this);
 
         this._updateUnitItems();
         this._updateFormatUnitsMethod();
@@ -711,6 +713,12 @@ class Diagram extends Widget {
             this._unsubscribeFullscreenNativeChanged();
             this._onToggleFullScreen(false);
         }
+    }
+    _onShowContextMenu(x, y, isTouch) {
+        this._contextMenu._show(x, y, isTouch);
+    }
+    _onHideContextMenu() {
+        this._contextMenu._hide();
     }
 
     _getDiagramUnitValue(value) {
