@@ -4313,7 +4313,10 @@ QUnit.module("Keyboard navigation", {
         $fieldItemContent = $(".dx-field-item-content").eq(0);
 
         pointerMock($fieldItemContent).start().down().up();
+
+        // browser will focus element with tabIndex, if it was clicked
         $fieldItemContent.focus();
+
         this.clock.tick();
 
         // assert
