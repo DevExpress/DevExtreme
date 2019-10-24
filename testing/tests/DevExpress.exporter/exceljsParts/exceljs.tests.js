@@ -214,6 +214,61 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
+            QUnit.test("Header - 1 column, width: 300, column.visible: false, show on export" + testCaption, (assert) => {
+                const done = assert.async();
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [{ caption: "f1", width: 300, visible: false }]
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "f1" }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                dataGrid.beginUpdate();
+                dataGrid.columnOption('f1', 'visible', true);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
+                    helper.checkColumnWidths([excelColumnWidthFromColumn300Pixels], topLeft.column);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                }).then(() => {
+                    dataGrid.columnOption('f1', 'visible', false);
+                    dataGrid.endUpdate();
+                    done();
+                });
+            });
+
+            QUnit.test("Header - 1 column, column.visible: true, hide on export" + testCaption, (assert) => {
+                const done = assert.async();
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [{ caption: "f1", visible: true }]
+                }).dxDataGrid("instance");
+
+                const expectedCells = [];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                dataGrid.beginUpdate();
+                dataGrid.columnOption('f1', 'visible', false);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 0, column: 0 }, { row: 0, column: 0 }, topLeft);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkCellsRange(cellsRange, { row: 0, column: 0 }, topLeft);
+                }).then(() => {
+                    dataGrid.columnOption('f1', 'visible', true);
+                    dataGrid.endUpdate();
+                    done();
+                });
+            });
+
             QUnit.test("Header - 1 column, column.allowExporting: false" + testCaption, (assert) => {
                 const done = assert.async();
 
@@ -734,6 +789,119 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkMergeCells(expectedCells, topLeft);
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - 2 column & 2 rows, col_1.visible: false, show on export using beginUpdate/endUpdate, width is NOT SUPPORTED" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "1", f2: "2" }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    columns: [{ dataField: "f1", width: 250, visible: false }, { dataField: "f2", width: 150 }],
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                dataGrid.beginUpdate();
+                dataGrid.columnOption('f1', 'visible', true);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    // helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                }).then(() => {
+                    dataGrid.columnOption('f1', 'visible', false);
+                    dataGrid.endUpdate();
+                    done();
+                });
+            });
+
+            QUnit.test("Data - 2 column & 2 rows, col_1.visible: false, show on export without beginUpdate/endUpdate" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "1", f2: "2" }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    columns: [{ dataField: "f1", width: 250, visible: false }, { dataField: "f2", width: 150 }],
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                dataGrid.columnOption('f1', 'visible', true);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkColumnWidths([excelColumnWidthFromColumn250Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+                }).then(() => {
+                    dataGrid.columnOption('f1', 'visible', false);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - 2 column & 2 rows, col_1.visible: true, hide on export using beginUpdate/endUpdate, width is NOT SUPPORTED" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "1", f2: "2" }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    columns: [{ dataField: "f1", width: 250, visible: true }, { dataField: "f2", width: 150 }],
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f2, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                dataGrid.beginUpdate();
+                dataGrid.columnOption('f1', 'visible', false);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    // helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels], topLeft.column);
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                }).then(() => {
+                    dataGrid.columnOption('f1', 'visible', true);
+                    dataGrid.endUpdate();
                     done();
                 });
             });
