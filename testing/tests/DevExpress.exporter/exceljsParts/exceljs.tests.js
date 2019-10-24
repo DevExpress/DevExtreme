@@ -139,17 +139,16 @@ QUnit.module("API", moduleConfig, () => {
 
             QUnit.test("Header - 1 column, paging.enabled: true" + testCaption, (assert) => {
                 const done = assert.async();
-                const ds = [{ f1: "f1_1" }, { f1: "f2_1" }, { f1: "f3_1" }];
+
                 const dataGrid = $("#dataGrid").dxDataGrid({
-                    dataSource: ds,
+                    columns: [{ caption: "f1" }],
                     paging: {
                         enabled: true
-                    },
-                    loadingTimeout: undefined
+                    }
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "f1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } }
+                    { excelCell: { value: "f1"}, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
@@ -1755,6 +1754,72 @@ QUnit.module("API", moduleConfig, () => {
                     { excelCell: { value: "f1: custom" }, gridCell: { rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0), value: ds[1].f1 } }
                 ], [
                     { excelCell: { value: "f2_2" }, gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Grouping - 1 level, col_1_group.calculateGroupValue: () => 'custom'" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [
+                    { f1: "f1_1", f2: "f2_1" },
+                    { f1: "f1_2", f2: "f2_2" }
+                ];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", caption: "f1", dataType: "string", groupIndex: 0, calculateGroupValue: () => "custom" },
+                        { dataField: "f2", caption: "f2", dataType: "string" },
+                    ],
+                    dataSource: ds,
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "f1: custom" }, gridCell: { value: "custom", rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "f2_1" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "f2_2" }, gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Grouping - 1 level, col_1_group.calculateDisplayValue: () => 'custom', col_2.calculateDisplayValue: () => 'custom_2'" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [
+                    { f1: "f1_1", f2: "f2_1" },
+                    { f1: "f1_2", f2: "f2_2" }
+                ];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", caption: "f1", dataType: "string", groupIndex: 0, calculateDisplayValue: () => "custom" },
+                        { dataField: "f2", caption: "f2", dataType: "string", calculateDisplayValue: () => "custom_2" },
+                    ],
+                    dataSource: ds,
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "f1: custom" }, gridCell: { value: "custom", rowType: "group", groupIndex: 0, column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "custom_2" }, gridCell: { value: "f2_1", rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: "custom_2" }, gridCell: { value: "f2_2", rowType: "data", data: ds[1], column: dataGrid.columnOption(1) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
