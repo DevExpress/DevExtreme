@@ -187,6 +187,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._focusView(data.view, data.viewIndex);
             $(focusedViewElement).removeClass(FOCUS_STATE_CLASS);
 
+            this._updateRowCommandButtonsTabIndex(this._getFocusedCell(), -1);
+
             if($parent.hasClass(FREESPACE_ROW_CLASS)) {
                 this._updateFocusedCellPosition($target);
                 this._focusedView.element().attr("tabindex", 0);
@@ -497,9 +499,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($cell);
         }
 
-        $prevFocusedCell && $prevFocusedCell.is("td") && $prevFocusedCell.not($focusElement).removeAttr("tabIndex");
-
+        if($prevFocusedCell && $prevFocusedCell.length) {
+            $prevFocusedCell.is("td") && $prevFocusedCell.not($focusElement).removeAttr("tabIndex");
+            this._updateRowCommandButtonsTabIndex($prevFocusedCell, -1);
+        }
         if($focusElement) {
+            if($focusElement.is(".dx-command-edit")) {
+                this._updateRowCommandButtonsTabIndex($focusElement);
+            }
+
             if(!isInteractiveElement) {
                 this._applyTabIndexToElement($focusElement);
                 eventsEngine.trigger($focusElement, "focus");
@@ -512,6 +520,29 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 this.getController("editorFactory").focus($focusElement);
             }
         }
+    },
+    _updateRowCommandButtonsTabIndex: function($element, tabIndex) {
+        if($element && $element.length) {
+            const $row = $element.is("tr") ? $element : $element.closest("tr");
+            if($row.length) {
+                const $commandButtons = $row.find(".dx-command-edit > .dx-link");
+                if(tabIndex) {
+                    $commandButtons.attr("tabindex", tabIndex);
+                } else {
+                    $commandButtons.removeAttr("tabindex");
+                }
+            }
+        }
+    },
+
+    _getCurrentRow: function() {
+        const rowIndex = this.getVisibleRowIndex();
+        return this.getController("data").getVisibleRows()[rowIndex];
+    },
+
+    _getCurrentColumn: function() {
+        const visibleColumns = this.getController("columns").getVisibleColumns();
+        return visibleColumns[this._focusedCellPosition.columnIndex];
     },
 
     _hasSkipRow: function($row) {
