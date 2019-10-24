@@ -473,6 +473,12 @@ var EditingController = modules.ViewController.inherit((function() {
             return FORM_BASED_MODES.indexOf(editMode) !== -1;
         },
 
+        isCellOrBatchEditMode: function() {
+            var editMode = this.getEditMode();
+
+            return editMode === EDIT_MODE_BATCH || editMode === EDIT_MODE_CELL;
+        },
+
         getEditMode: function() {
             return getEditMode(this);
         },
