@@ -18,10 +18,12 @@ import ODataStore from "data/odata/store";
 import TagBox from "ui/tag_box";
 
 import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="tagBox"></div>';
+        '<div id="tagBox"></div>\
+         <div id="anotherContainer"></div>';
 
     $("#qunit-fixture").html(markup);
 });
@@ -45,6 +47,7 @@ const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 const KEY_ENTER = "Enter";
 const KEY_DOWN = "ArrowDown";
 const KEY_SPACE = " ";
+const CLEAR_BUTTON_AREA = "dx-clear-button-area";
 
 const TIME_TO_WAIT = 500;
 
@@ -526,6 +529,26 @@ QUnit.module("tags", moduleSetup, () => {
 
         assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "tags are cleared");
         assert.equal($input.val(), "", "input is also cleared");
+    });
+
+    QUnit.test("clear button should have sizes similar as the other editors have", assert => {
+        const $tagBox = $("#tagBox").dxTagBox({
+            showClearButton: true,
+            dataSource: ['1'],
+            value: ["1"]
+        });
+
+        const $textBox = $("#anotherContainer").dxTextBox({
+            mode: "number",
+            value: '1',
+            showClearButton: true
+        });
+
+        const clearButtonAreaSelector = `.${CLEAR_BUTTON_AREA}`;
+        const textBoxClearButtonWidth = $textBox.find(clearButtonAreaSelector).width();
+        const tagBoxClearButtonWidth = $tagBox.find(clearButtonAreaSelector).width();
+
+        assert.equal(tagBoxClearButtonWidth, textBoxClearButtonWidth, "clear button's width is ok");
     });
 
     QUnit.test("Tag should have empty text if display value is empty", assert => {
