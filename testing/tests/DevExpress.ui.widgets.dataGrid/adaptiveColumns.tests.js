@@ -17,6 +17,7 @@ import $ from "jquery";
 import devices from "core/devices";
 import { noop as noop } from "core/utils/common";
 import dataGridMocks from "../../helpers/dataGridMocks.js";
+import pointerMock from "../../helpers/pointerMock.js";
 import eventsEngine from "events/core/events_engine";
 import typeUtils from "core/utils/type";
 import config from "core/config";
@@ -4287,6 +4288,67 @@ QUnit.module("Keyboard navigation", {
 
         // assert
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 });
+    });
+
+    // T821699
+    QUnit.test("The onRowClick event is not called after focusing adaptive panel item", function(assert) {
+        // arrange
+        var rowClickCounter = 0;
+
+        this.options = {
+            keyboardNavigation: {
+                enabled: true
+            },
+            columnHidingEnabled: true,
+            onRowClick: function() {
+                rowClickCounter++;
+            },
+            editing: {
+                mode: "row"
+            }
+        };
+
+        this.setupModule();
+
+        $(".dx-field-item-content").eq(0).focus();
+        this.clock.tick();
+
+        // assert
+        assert.equal(rowClickCounter, 0, "onRowClick event was not thrown");
+    });
+
+    // T821699
+    QUnit.test("The onRowDblClick event is not called after click on adaptive panel item", function(assert) {
+        // arrange
+        var rowDblClickCounter = 0,
+            $fieldItemContent;
+
+        this.options = {
+            keyboardNavigation: {
+                enabled: true
+            },
+            columnHidingEnabled: true,
+            onRowDblClick: function() {
+                rowDblClickCounter++;
+            },
+            editing: {
+                mode: "row"
+            }
+        };
+
+        this.setupModule();
+
+        $fieldItemContent = $(".dx-field-item-content").eq(0);
+
+        pointerMock($fieldItemContent).start().down().up();
+
+        // browser will focus element with tabIndex, if it was clicked
+        $fieldItemContent.focus();
+
+        this.clock.tick();
+
+        // assert
+        assert.equal(rowDblClickCounter, 0, "onRowDblClick was not called");
     });
 
     if(device.deviceType === "desktop") {
