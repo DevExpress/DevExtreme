@@ -148,7 +148,7 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "f1"}, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } }
+                    { excelCell: { value: "f1" }, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
