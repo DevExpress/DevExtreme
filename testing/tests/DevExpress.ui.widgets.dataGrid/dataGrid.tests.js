@@ -2587,8 +2587,11 @@ QUnit.test("Columns hiding - hidingPriority", function(assert) {
     assert.equal($visibleColumns.eq(1).text(), "Last Name", "Second is 'lastName' column");
     assert.equal(adaptiveColumnsController.getHiddenColumns().length, 0, "There is no hidden columns");
     assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 2, "There is 2 columns in hiding queue");
+
     // T824145
-    assert.equal($(instance.getCellElement(0, 0)).css("border-right-width"), "0px", "no right border");
+    if(!browser.mozilla) {
+        assert.equal($(instance.getCellElement(0, 0)).css("border-right-width"), "0px", "no right border");
+    }
 });
 
 QUnit.test("Columns hiding - grouping with hidingPriority", function(assert) {
