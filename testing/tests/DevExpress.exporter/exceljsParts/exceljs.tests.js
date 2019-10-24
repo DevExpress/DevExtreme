@@ -137,6 +137,34 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
+            QUnit.test("Header - 1 column, paging.enabled: true" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1" }, { f1: "f2_1" }, { f1: "f3_1" }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    paging: {
+                        enabled: true
+                    },
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "f1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0], topLeft.row);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+                    done();
+                });
+            });
+
             QUnit.test("Header - 1 column, width: 1700" + testCaption, (assert) => {
                 const done = assert.async();
 
@@ -703,6 +731,43 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
                     helper.checkValues(expectedCells, topLeft);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - 1 column & 3 rows, paging[enabled: true; pageSize: 1]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "f1_1" }, { f1: "f2_1" }, { f1: "f3_1" }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    paging: {
+                        enabled: true,
+                        pageSize: 1,
+                        pageIndex: 2
+                    },
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: ds[1].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[1], column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: ds[2].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[2], column: dataGrid.columnOption(0) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 2, column: topLeft.column }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 3, column: 1 }, topLeft);
                     done();
                 });
             });
