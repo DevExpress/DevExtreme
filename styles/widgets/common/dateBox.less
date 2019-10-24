@@ -9,6 +9,15 @@
 .dx-datebox-native {
     .dx-texteditor-buttons-container {
         pointer-events: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+    }
+
+    &.dx-rtl .dx-texteditor-buttons-container {
+        right: auto;
+        left: 0;
     }
 
     &.dx-state-focused.dx-texteditor-empty {
