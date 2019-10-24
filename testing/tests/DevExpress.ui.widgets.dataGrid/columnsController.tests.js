@@ -6773,6 +6773,7 @@ QUnit.test('Apply user state for dynamically added band column', function(assert
         caption: 'TestField2',
         allowSorting: false,
         isBand: true,
+        hasColumns: true,
         added: { caption: "TestField2", columns: ["TestField21", "TestField22"] }
     });
     assert.deepEqual(columns[2], {
@@ -8468,6 +8469,54 @@ QUnit.test("getVisibleColumns after resetting state adding several baand columns
     assert.strictEqual(visibleColumns[3].dataField, "TestField4", "dataField of the fourth column");
 });
 
+// T824018
+QUnit.test("Change the column option via option method when band columns are specified as a flat list", function(assert) {
+    // arrange
+    this.applyOptions({
+        columns: [
+            { dataField: "field1" },
+            { dataField: "field2" },
+            { dataField: "field3", ownerBand: 3 },
+            { caption: 'Band column 1', isBand: true }
+        ]
+    });
+
+    // act
+    this.columnsController.optionChanged({ name: "columns", fullName: "columns[2].caption", value: "test" });
+
+    // assert
+    assert.strictEqual(this.columnOption("field3", "caption"), "test", "column caption is changed");
+});
+
+// T824176
+QUnit.test("The deleteColumn method should work correctly when band columns are specified as a flat list", function(assert) {
+    // arrange
+    var visibleColumns;
+
+    this.applyOptions({
+        columns: [
+            { dataField: "field1" },
+            { dataField: "field2" },
+            { dataField: "field3", ownerBand: 3 },
+            { caption: 'Band column 1', isBand: true }
+        ]
+    });
+
+    // assert
+    assert.strictEqual(this.columnsController.getVisibleColumns().length, 3, "count data column");
+
+    // act
+    this.deleteColumn(1);
+
+    // assert
+    visibleColumns = this.columnsController.getVisibleColumns();
+    assert.strictEqual(visibleColumns.length, 2, "count data column");
+    assert.strictEqual(visibleColumns[0].dataField, "field1", "first column");
+    assert.strictEqual(visibleColumns[1].dataField, "field3", "second column");
+    assert.strictEqual(visibleColumns[1].ownerBand, 2, "ownerBand of the second column");
+});
+
+
 QUnit.module("onOptionChanged", {
     beforeEach: function() {
         setupModule.apply(this, ["adaptivity"]);
@@ -8569,6 +8618,25 @@ QUnit.module("onOptionChanged", {
         this.columnOption("command:adaptive", "adaptiveHidden", false, true);
 
         assert.strictEqual(this._notifyOptionChanged.callCount, 0, "onOptionChanged is not fired");
+    });
+
+    // T824178
+    QUnit.test("Checking arguments when band columns are specified as a flat list", function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { caption: 'Band column 1', isBand: true },
+                { dataField: "field1", ownerBand: 0 },
+                { caption: 'Band column 2', isBand: true, ownerBand: 0 },
+                { dataField: "field2", ownerBand: 2 }
+            ]
+        });
+
+        // act
+        this.columnOption(1, "caption", "test");
+
+        // assert
+        assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[1].caption", "test", "Field 1"], "onOptionChanged args");
     });
 });
 
