@@ -247,7 +247,7 @@ QUnit.module("API", moduleConfig, () => {
                 const done = assert.async();
 
                 const dataGrid = $("#dataGrid").dxDataGrid({
-                    columns: [{ caption: "f1", visible: false }]
+                    columns: [{ caption: "f1", visible: true }]
                 }).dxDataGrid("instance");
 
                 const expectedCells = [];
@@ -874,7 +874,7 @@ QUnit.module("API", moduleConfig, () => {
                 const ds = [{ f1: "1", f2: "2" }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
                     dataSource: ds,
-                    columns: [{ dataField: "f1", width: 250 }, { dataField: "f2", width: 150 }],
+                    columns: [{ dataField: "f1", width: 250, visible: true }, { dataField: "f2", width: 150 }],
                     loadingTimeout: undefined
                 }).dxDataGrid("instance");
 
