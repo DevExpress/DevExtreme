@@ -263,6 +263,7 @@ function setupCanvasStub(drawnElements, paths) {
     // translation
     sinon.stub(prototype, "translate");
     sinon.stub(prototype, "rotate");
+    sinon.stub(prototype, "scale");
 
     // line dash
     sinon.stub(prototype, "setLineDash");
@@ -304,6 +305,7 @@ function teardownCanvasStub() {
     // translation
     prototype.translate.restore();
     prototype.rotate.restore();
+    prototype.scale.restore();
 
     // line dash
     prototype.setLineDash.restore();
@@ -1923,7 +1925,7 @@ QUnit.test("Pattern canvas has same siza as pattern", function(assert) {
 
 QUnit.test("Rotated elements", function(assert) {
     var done = assert.async(),
-        markup = testingMarkupStart + '<text x="0" y="0" transform="translate(-100.5,10.5) rotate(-270,-100.5,10.5)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Test text</text><path d="M 150 125 L 300 125" transform="translate(0.5,0.5) rotate(330,300,125)" stroke="#d3d3d3" stroke-width="1"></path>' + testingMarkupEnd,
+        markup = testingMarkupStart + '<text x="0" y="0" transform="translate(-70.5,90.5) rotate(-270,-100.5,10.5)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Test text</text><path d="M 150 125 L 300 125" transform="translate(0.5,0.5) rotate(330,300,125)" stroke="#d3d3d3" stroke-width="1"></path>' + testingMarkupEnd,
         imageBlob = getData(markup),
         context = window.CanvasRenderingContext2D.prototype;
 
@@ -1932,7 +1934,7 @@ QUnit.test("Rotated elements", function(assert) {
         try {
             assert.equal(context.translate.callCount, 8, "translate call count");
 
-            assert.deepEqual(context.translate.getCall(1).args, [-100.5, 10.5], "first translate args");
+            assert.deepEqual(context.translate.getCall(1).args, [-70.5, 90.5], "first translate args");
             assert.deepEqual(context.translate.getCall(2).args, [-100.5, 10.5], "second translate args");
             assert.deepEqual(context.translate.getCall(3).args, [100.5, -10.5], "third translate args");
             assert.deepEqual(context.translate.getCall(4).args, [0, 0], "fourth translate args");
@@ -1943,13 +1945,34 @@ QUnit.test("Rotated elements", function(assert) {
             assert.ok(context.translate.getCall(2).calledBefore(context.rotate.getCall(0)), "1 step - translate");
             assert.ok(context.rotate.getCall(0).calledBefore(context.translate.getCall(3)), "2 step - rotate and translate");
 
-            assert.ok(context.translate.getCall(5).calledBefore(context.rotate.getCall(1)), "3 step - translate");
+            assert.ok(context.translate.getCall(6).calledBefore(context.rotate.getCall(1)), "3 step - translate");
             assert.ok(context.rotate.getCall(1).calledBefore(context.translate.getCall(7)), "4 step - rotate and translate");
 
             assert.equal(context.rotate.callCount, 2, "rotate call count");
 
             assert.equal(context.rotate.getCall(0).args[0], (-270 * Math.PI) / 180, "first rotate args");
             assert.equal(context.rotate.getCall(1).args[0], (330 * Math.PI) / 180, "second rotate args");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Scaled elements", function(assert) {
+    var done = assert.async(),
+        markup = testingMarkupStart + '<text x="0" y="0" transform="translate(-70.5,90.5) rotate(-270,-100.5,10.5) scale(2)" style="fill:#767676;font-size:16px;font-family:\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana;font-weight:400;" text-anchor="middle">Test text</text><path d="M 150 125 L 300 125" transform="translate(0.5,0.5) rotate(330,300,125) scale(3, 0.5)" stroke="#d3d3d3" stroke-width="1"></path>' + testingMarkupEnd,
+        imageBlob = getData(markup),
+        context = window.CanvasRenderingContext2D.prototype;
+
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(context.scale.callCount, 2, "scale call count");
+
+            assert.deepEqual(context.scale.getCall(0).args, [2, 2]);
+            assert.deepEqual(context.scale.getCall(1).args, [3, 0.5]);
+
+            assert.ok(context.rotate.getCall(0).calledBefore(context.scale.getCall(0)));
+            assert.ok(context.rotate.getCall(1).calledBefore(context.scale.getCall(1)));
         } finally {
             done();
         }
