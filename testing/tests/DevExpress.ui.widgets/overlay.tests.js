@@ -2122,6 +2122,45 @@ testModule("container", moduleConfig, () => {
         assert.ok(!$wrapper.hasClass(OVERLAY_CLASS), "only user-defined classes added to wrapper");
     });
 
+    test("css classes from the overlay elementAttr should be duplicated to the wrapper", (assert) => {
+        const instance = $("#overlay").dxOverlay({
+            visible: true,
+            elementAttr: {
+                class: "something another"
+            }
+        }).dxOverlay("instance");
+        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+
+        assert.ok($wrapper.hasClass("something"), "class added to the wrapper");
+        assert.ok($wrapper.hasClass("another"), "another class added to wrapper");
+        assert.ok($(instance.element()).hasClass("something"), "classes does not removed from the element");
+        assert.ok($wrapper.hasClass(OVERLAY_WRAPPER_CLASS), "classes does not removed from the wrapper");
+        assert.ok(!$wrapper.hasClass(OVERLAY_CLASS), "only user-defined classes added to the wrapper");
+    });
+
+    test("changed css classes from the overlay elementAttr should be used for the wrapper", (assert) => {
+        const instance = $("#overlay").dxOverlay({
+            visible: true,
+            elementAttr: {
+                class: "something"
+            }
+        }).dxOverlay("instance");
+
+        instance.option("elementAttr", {
+            class: "another"
+        });
+
+        const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+
+        assert.notOk($wrapper.hasClass("something"), "class removed from the wrapper");
+        assert.ok($wrapper.hasClass("another"), "another class added to the wrapper");
+
+        instance.option("elementAttr.class", "third");
+
+        assert.notOk($wrapper.hasClass("another"), "class removed from the wrapper");
+        assert.ok($wrapper.hasClass("third"), "third class added to the wrapper");
+    });
+
     test("defaultTargetContainer should be .dx-viewport by default", (assert) => {
         const overlay = $("#overlay").dxOverlay().dxOverlay("instance");
         overlay.show();

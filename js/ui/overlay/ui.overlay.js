@@ -408,7 +408,8 @@ var Overlay = Widget.inherit({
         this.callBase();
 
         extend(this._optionsByReference, {
-            animation: true
+            animation: true,
+            elementAttr: true
         });
     },
 
@@ -440,7 +441,9 @@ var Overlay = Widget.inherit({
         this._initInnerOverlayClass();
 
         var $element = this.$element();
-        this._$wrapper.addClass($element.attr("class"));
+
+        this._moveElementClassesToWrapper({ forcedClass: $element.attr("class") });
+
         $element.addClass(OVERLAY_CLASS);
 
         this._$wrapper.attr("data-bind", "dxControlsDescendantBindings: true");
@@ -1118,6 +1121,40 @@ var Overlay = Widget.inherit({
         });
     },
 
+    _renderElementAttributes: function(args) {
+        this.callBase();
+        this._moveElementClassesToWrapper(args);
+    },
+
+    _moveElementClassesToWrapper: function(options) {
+        let newClass = "";
+
+        if(options) {
+            if(options.valueChangedArgs) {
+                let oldClass;
+
+                if(options.valueChangedArgs.name === options.valueChangedArgs.fullName) {
+                    newClass = options.valueChangedArgs.value.class;
+                    oldClass = options.valueChangedArgs.previousValue.class;
+                } else {
+                    newClass = options.valueChangedArgs.value;
+                    oldClass = options.valueChangedArgs.previousValue;
+                }
+
+                this._$wrapper.removeClass(oldClass);
+            }
+
+            if(options.forcedClass) {
+                newClass += (newClass ? " " : "") + options.forcedClass;
+            }
+        } else {
+            const elementAttr = this.option("elementAttr");
+            newClass = elementAttr && elementAttr.class || "";
+        }
+
+        this._$wrapper.addClass(newClass);
+    },
+
     _getDragTarget: function() {
         return this.$content();
     },
@@ -1511,6 +1548,9 @@ var Overlay = Widget.inherit({
                 break;
             case "closeOnTargetScroll":
                 this._toggleParentsScrollSubscription(this.option("visible"));
+                break;
+            case "elementAttr":
+                this._renderElementAttributes({ valueChangedArgs: args });
                 break;
             case "closeOnOutsideClick":
             case "animation":
