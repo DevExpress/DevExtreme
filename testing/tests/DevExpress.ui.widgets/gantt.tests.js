@@ -472,7 +472,7 @@ QUnit.module("Dialogs", moduleConfig, () => {
         assert.equal($inputs.eq(0).val(), tasks[0].title, "title text is shown");
         assert.equal((new Date($inputs.eq(1).val())).getTime(), tasks[0].start.getTime(), "start task text is shown");
         assert.equal((new Date($inputs.eq(2).val())).getTime(), tasks[0].end.getTime(), "end task text is shown");
-        assert.equal($inputs.eq(3).val(), tasks[0].progress, "progress text is shown");
+        assert.equal($inputs.eq(3).val(), tasks[0].progress + "%", "progress text is shown");
 
         const testTitle = "text";
         const titleTextBox = $dialog.find(".dx-textbox").eq(0).dxTextBox("instance");

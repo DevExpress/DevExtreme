@@ -127,9 +127,12 @@ class TaskEditDialogInfo extends DialogInfoBase {
             editorType: "dxNumberBox",
             label: { text: "Progress" },
             editorOptions: {
+                value: this._parameters.progress / 100,
                 showSpinButtons: true,
                 min: 0,
-                max: 100,
+                max: 1,
+                format: "#0%",
+                step: 0.01,
                 readOnly: readOnly
             }
         }, {
@@ -158,7 +161,7 @@ class TaskEditDialogInfo extends DialogInfoBase {
         this._parameters.title = formData.title;
         this._parameters.start = formData.start;
         this._parameters.end = formData.end;
-        this._parameters.progress = formData.progress;
+        this._parameters.progress = formData.progress * 100;
         this._parameters.assigned = formData.assigned;
     }
 }
