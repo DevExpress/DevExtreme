@@ -1752,7 +1752,40 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - columns.dataType: object, col_2.lookup " + testCaption, (assert) => {
+            QUnit.test("Data - columns.dataType: object" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: { value: "f1_1" } }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [{
+                        dataField: "f1",
+                        dataType: "object"
+                    }],
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
+                ], [
+                    { excelCell: { value: "[object Object]", alignment: alignLeftNoWrap }, gridCell: { value: ds[0].f1, rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - 2 columns, col_2.lookup " + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "f1_1", f2: 0 }, { f1: "f1_2", f2: 1 }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
