@@ -857,7 +857,7 @@ QUnit.module("API", moduleConfig, () => {
                 });
             });
 
-            QUnit.test("Data - 2 column & 2 rows, grid.rowTemplate: () => {} is NOT SUPPORTED" + testCaption, (assert) => {
+            QUnit.test("Data - 2 column & 2 rows, grid.rowTemplate: () => {}" + testCaption, (assert) => {
                 const done = assert.async();
                 const ds = [{ f1: "f1_1", f2: "f1_2" }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
@@ -870,8 +870,8 @@ QUnit.module("API", moduleConfig, () => {
                     { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
                     { excelCell: { value: "F2", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
                 ], [
-                    { excelCell: { value: "f1_1" /* "row" */, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: "f1_2" /* "template" */, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                    { excelCell: { value: "f1_1", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "f1_2", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
