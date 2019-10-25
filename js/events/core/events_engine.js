@@ -27,7 +27,7 @@ var NATIVE_EVENTS_TO_TRIGGER = {
 };
 var NO_BUBBLE_EVENTS = ["blur", "focus", "load"];
 
-var forcePassiveFalseEventNames = ["touchmove", "wheel", "mousewheel"]; // "touchstart"?
+var forcePassiveFalseEventNames = ["touchmove", "wheel", "mousewheel", "touchstart"];
 
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && domAdapter.elementMatches(target, selector);
