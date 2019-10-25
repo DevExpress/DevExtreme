@@ -207,12 +207,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var isEditing = this._editingController.isEditing(),
             needStopPropagation = true,
             originalEvent = e.originalEvent,
-            args = {
-                handled: false,
-                event: originalEvent
-            };
+            isHandled;
 
-        this.executeAction("onKeyDown", args);
+        isHandled = this._processOnKeyDown(e);
 
         if(originalEvent.isDefaultPrevented()) {
             return;
@@ -221,9 +218,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        this._updateFocusedCellPosition(this._getCellElementFromTarget(args.event.target));
+        this._updateFocusedCellPosition(this._getCellElementFromTarget(originalEvent.target));
 
-        if(!args.handled) {
+        if(!isHandled) {
             switch(e.keyName) {
                 case "leftArrow":
                 case "rightArrow":
@@ -283,12 +280,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 case "del":
                 case "backspace":
                     if(this._isFastEditingAllowed() && !this._isFastEditingStarted()) {
-                        this._beginFastEditing(e.originalEvent, true);
+                        this._beginFastEditing(originalEvent, true);
                     }
                     break;
 
                 default:
-                    if(!this._beginFastEditing(e.originalEvent)) {
+                    if(!this._beginFastEditing(originalEvent)) {
                         this._isNeedFocus = false;
                         this._isNeedScroll = false;
                         needStopPropagation = false;
@@ -300,6 +297,21 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 originalEvent.stopPropagation();
             }
         }
+    },
+    _processOnKeyDown: function(eventArgs) {
+        const originalEvent = eventArgs.originalEvent;
+        const args = {
+            handled: false,
+            event: originalEvent
+        };
+
+        this.executeAction("onKeyDown", args);
+
+        eventArgs.ctrl = originalEvent.ctrlKey;
+        eventArgs.alt = originalEvent.altKey;
+        eventArgs.shift = originalEvent.shiftKey;
+
+        return !!args.handled;
     },
 
     _leftRightKeysHandler: function(eventArgs, isEditing) {
