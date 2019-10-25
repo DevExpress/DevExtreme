@@ -3,7 +3,7 @@ import eventsEngine from "../../events/core/events_engine";
 import commonUtils from "../../core/utils/common";
 import { getPublicElement, getElementOptions } from "../../core/utils/dom";
 import domAdapter from "../../core/dom_adapter";
-import { isPlainObject, isFunction } from "../../core/utils/type";
+import { isPlainObject, isFunction, isDefined } from "../../core/utils/type";
 import { when } from "../../core/utils/deferred";
 import { extend } from "../../core/utils/extend";
 import { inArray } from "../../core/utils/array";
@@ -488,12 +488,12 @@ var CollectionWidget = Widget.inherit({
         if($target.length) {
             this._toggleFocusClass(false, $target);
             $target.removeAttr("id");
+            this._refreshActiveDescendant();
         }
     },
 
-    _refreshActiveDescendant: function() {
-        this.setAria("activedescendant", "");
-        this.setAria("activedescendant", this.getFocusedItemId());
+    _refreshActiveDescendant: function($target) {
+        this.setAria("activedescendant", isDefined(this.option("focusedElement")) ? this.getFocusedItemId() : null, $target);
     },
 
     _setFocusedItem: function($target) {

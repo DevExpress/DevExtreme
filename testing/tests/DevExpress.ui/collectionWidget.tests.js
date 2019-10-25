@@ -1914,6 +1914,83 @@ module("aria accessibility", {
         this.items = [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }];
     }
 }, () => {
+    test("aria-activedescendant on initialize", assert => {
+        const $element = $("#cmp");
+
+        new TestWidget($element, {
+            focusStateEnabled: true,
+            items: this.items
+        });
+
+        assert.strictEqual($element.attr("aria-activedescendant"), undefined, "activedescendant");
+    });
+
+    test("aria-activedescendant, focusedElement: item_1", assert => {
+        const $element = $("#cmp");
+
+        const widget = new TestWidget($element, {
+            focusStateEnabled: true,
+            items: this.items
+        });
+
+        assert.strictEqual($element.attr("aria-activedescendant"), undefined, "activedescendant");
+
+        const $focusedItem = $($element).find(`.${ITEM_CLASS}`).eq(1);
+
+        widget.option("focusedElement", $focusedItem);
+
+        assert.strictEqual(!!$element.attr("aria-activedescendant"), true, "widget.activedescendant");
+        assert.strictEqual(!!$focusedItem.attr("id"), true, "item.id");
+        assert.strictEqual($focusedItem.attr("id"), $element.attr("aria-activedescendant"), "item.id and widget.activedescendant have the same value");
+    });
+
+    test("aria-activedescendant, clean focusedElement", assert => {
+        const $element = $("#cmp");
+
+        const widget = new TestWidget($element, {
+            focusStateEnabled: true,
+            items: this.items
+        });
+
+        assert.strictEqual($element.attr("aria-activedescendant"), undefined, "activedescendant");
+
+        const $focusedItem = $($element).find(`.${ITEM_CLASS}`).eq(1);
+
+        widget.option("focusedElement", $focusedItem);
+
+        assert.strictEqual(!!$element.attr("aria-activedescendant"), true, "widget.activedescendant");
+        assert.strictEqual(!!$focusedItem.attr("id"), true, "item.id");
+        assert.strictEqual($focusedItem.attr("id"), $element.attr("aria-activedescendant"), "item.id and widget.activedescendant have the same value");
+
+        widget.option("focusedElement", null);
+
+        assert.strictEqual($element.attr("aria-activedescendant"), undefined, "widget.activedescendant");
+        assert.strictEqual($focusedItem.attr("id"), undefined, "item.id");
+    });
+
+    test("aria-activedescendant, select item_0 on focus -> focusout", assert => {
+        const $element = $("#cmp");
+
+        new TestWidget($element, {
+            focusStateEnabled: true,
+            items: this.items
+        });
+
+        assert.strictEqual($element.attr("aria-activedescendant"), undefined, "activedescendant");
+
+        $element.focus();
+        const $focusedItem = $($element).find(`.${ITEM_CLASS}`).eq(0);
+
+        assert.strictEqual(!!$element.attr("aria-activedescendant"), true, "widget.activedescendant");
+        assert.strictEqual(!!$focusedItem.attr("id"), true, "item.id");
+        assert.strictEqual($focusedItem.attr("id"), $element.attr("aria-activedescendant"), "item.id and widget.activedescendant have the same value");
+
+        $element.focusout();
+
+        assert.strictEqual(!!$element.attr("aria-activedescendant"), true, "widget.activedescendant");
+        assert.strictEqual(!!$focusedItem.attr("id"), true, "item.id");
+    });
+
     test("aria-activedescendant should be refreshed when focused item changed", assert => {
         assert.expect(1);
 

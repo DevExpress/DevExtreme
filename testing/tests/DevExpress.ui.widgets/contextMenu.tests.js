@@ -1608,19 +1608,65 @@ QUnit.module("Aria accessibility", moduleConfig, () => {
         assert.equal($itemsContainer.attr("role"), "menu", "role of overlay exists after open");
     });
 
-    QUnit.test("aria-activedescendant should have correct target", (assert) => {
+    QUnit.test("aria-activedescendant on initialize", (assert) => {
         const instance = new ContextMenu(this.$element, {
-            items: [1, 2, 3],
             focusStateEnabled: true,
+            items: [1, 2, 3]
         });
 
-        let $itemsContainer;
+        instance.show();
+        const $itemsContainer = instance.itemsContainer();
+
+        assert.equal($itemsContainer.attr("aria-activedescendant"), undefined, "aria-activedescendant is on the overlay");
+        assert.equal(this.$element.attr("aria-activedescendant"), undefined, "no aria-activedescendant on the element");
+    });
+
+    QUnit.test("aria-activedescendant, set focusedElement -> clean focusedElement", (assert) => {
+        const instance = new ContextMenu(this.$element, {
+            focusStateEnabled: true,
+            items: [1, 2, 3]
+        });
 
         instance.show();
-        $itemsContainer = instance.itemsContainer();
+        const $itemsContainer = instance.itemsContainer();
 
-        assert.notEqual($itemsContainer.attr("aria-activedescendant"), undefined, "aria-activedescendant is on the overlay");
+        const $focusedItem = instance._overlay.$content().find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+        instance.option("focusedElement", $focusedItem);
+
         assert.equal(this.$element.attr("aria-activedescendant"), undefined, "no aria-activedescendant on the element");
+        assert.equal(!!$itemsContainer.attr("aria-activedescendant"), true, "aria-activedescendant is on the overlay");
+        assert.equal(!!$focusedItem.attr("id"), true, "item.id");
+        assert.equal($focusedItem.attr("id"), $itemsContainer.attr("aria-activedescendant"), "item.id and widget.activedescendant have the same value");
+
+        instance.option("focusedElement", null);
+
+        assert.equal(this.$element.attr("aria-activedescendant"), undefined, "no aria-activedescendant on the element");
+        assert.equal($itemsContainer.attr("aria-activedescendant"), undefined, "aria-activedescendant is on the overlay");
+        assert.equal($focusedItem.attr("id"), undefined, "item.id");
+    });
+
+    QUnit.test("aria-activedescendant, set focusedElement by keyboard on inner level", (assert) => {
+        const instance = new ContextMenu(this.$element, {
+            focusStateEnabled: true,
+            items: [{ text: "Item1_1", items: [{ text: "Item2_1" }, { text: "Item2_2" }] }, { text: "item1_2" }]
+        });
+
+        instance.show();
+        const $itemsContainer = instance.itemsContainer();
+
+        assert.equal($itemsContainer.attr("aria-activedescendant"), undefined, "aria-activedescendant");
+
+        keyboardMock($itemsContainer).keyDown("down");
+
+        assert.equal(!!$itemsContainer.attr("aria-activedescendant"), true, "element.aria-activedescendant");
+        assert.equal(!!instance.option("focusedElement").id, true, "item.id");
+        assert.equal(instance.option("focusedElement").id, $itemsContainer.attr("aria-activedescendant"), "item.id and widget.activedescendant have the same value");
+
+        keyboardMock($itemsContainer).keyDown("right");
+
+        assert.equal(!!$itemsContainer.attr("aria-activedescendant"), true, "element.aria-activedescendant");
+        assert.equal(!!instance.option("focusedElement").id, true, "item.id");
+        assert.equal(instance.option("focusedElement").id, $itemsContainer.attr("aria-activedescendant"), "item.id and widget.activedescendant have the same value");
     });
 });
 

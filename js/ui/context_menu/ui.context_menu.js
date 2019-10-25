@@ -351,14 +351,10 @@ class ContextMenu extends MenuBase {
     }
 
     _refreshActiveDescendant() {
-        if(!this._overlay) {
-            return;
+        if(isDefined(this._overlay)) {
+            const $target = this._overlay.$content();
+            super._refreshActiveDescendant($target);
         }
-
-        const id = this.getFocusedItemId();
-
-        this.setAria("activedescendant", "", this._overlay.$content());
-        this.setAria("activedescendant", id, this._overlay.$content());
     }
 
     _hideSubmenuHandler() {
