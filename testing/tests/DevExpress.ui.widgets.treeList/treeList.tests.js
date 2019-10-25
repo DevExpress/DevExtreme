@@ -1515,3 +1515,26 @@ QUnit.test("TreeList should not reshape data after expand row (T815367)", functi
     // assert
     assert.equal(onNodesInitializedSpy.callCount, 1, "data did not reshape");
 });
+
+QUnit.test("TreeList should filter data with unreachable items (T816921)", function(assert) {
+    // arrange
+    var treeList = createTreeList({
+        dataSource: [
+            { ID: 1, Head_ID: 0, Name: "John" },
+            { ID: 2, Head_ID: 1, Name: "Alex" },
+            { ID: 3, Head_ID: 100, Name: "Alex" }
+        ],
+        keyExpr: "ID",
+        parentIdExpr: "Head_ID",
+        loadingTimeout: undefined,
+        searchPanel: {
+            visible: true,
+
+            // act
+            text: "Alex"
+        }
+    });
+
+    // assert
+    assert.equal(treeList.getVisibleRows().length, 2, "filtered row count");
+});
