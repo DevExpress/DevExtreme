@@ -210,6 +210,7 @@ var EditingController = modules.ViewController.inherit((function() {
             that._dataController = that.getController("data");
             that._rowsView = that.getView("rowsView");
             that._editForm = null;
+            that._updateEditFormDeferred = null;
 
             if(that._deferreds) {
                 that._deferreds.forEach(d => d.reject("cancel"));
@@ -1913,8 +1914,11 @@ var EditingController = modules.ViewController.inherit((function() {
             if(editMode === EDIT_MODE_POPUP) {
                 if(that.option("repaintChangesOnly")) {
                     row.update && row.update(row);
-                } else {
-                    editForm && editForm.repaint();
+                } else if(editForm) {
+                    that._updateEditFormDeferred = new Deferred().done(() => editForm.repaint());
+                    if(!that._updateLockCount) {
+                        that._updateEditFormDeferred.resolve();
+                    }
                 }
             } else {
                 that._dataController.updateItems({
@@ -1926,6 +1930,10 @@ var EditingController = modules.ViewController.inherit((function() {
             if(isCustomSetCellValue && that._editForm) {
                 that._editForm.validate();
             }
+        },
+
+        _endUpdateCore: function() {
+            this._updateEditFormDeferred && this._updateEditFormDeferred.resolve();
         },
 
         _updateEditRow: function(row, forceUpdateRow, isCustomSetCellValue) {
