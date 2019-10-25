@@ -260,6 +260,67 @@ QUnit.test("Get options", function(assert) {
     }, "Options should be correct");
 });
 
+QUnit.test("Get options - axis type and data types are in lower case", function(assert) {
+    this.updateOptions({
+        type: "TYPE_TYPE",
+        argumentType: "ARGUMENT_TYPE",
+        valueType: "VALUE_TYPE"
+    });
+
+    assert.deepEqual(this.axis.getOptions(), {
+        type: "type_type",
+        argumentType: "argument_type",
+        valueType: "value_type",
+        isHorizontal: true,
+        hoverMode: "none",
+        label: {
+            minSpacing: 5,
+            visible: true
+        },
+        position: "bottom",
+        grid: {},
+        minorGrid: {},
+        tick: {},
+        minorTick: {},
+        title: {},
+        marker: {},
+        _customVisualRange: undefined
+    }, "Options should be correct");
+});
+
+QUnit.test("Get options after resetTypes - axis type and data types are in lower case", function(assert) {
+    this.updateOptions({
+        type: "TYPE_TYPE",
+        argumentType: "ARGUMENT_TYPE",
+        valueType: "VALUE_TYPE"
+    });
+
+    this.axis.setTypes("NEW_TYPE", "NEW_ARGUMENT_TYPE", "argumentType");
+    this.axis.setTypes("NEW_TYPE", "NEW_VALUE_TYPE", "valueType");
+    this.axis.resetTypes("argumentType");
+    this.axis.resetTypes("valueType");
+
+    assert.deepEqual(this.axis.getOptions(), {
+        type: "type_type",
+        argumentType: "argument_type",
+        valueType: "value_type",
+        isHorizontal: true,
+        hoverMode: "none",
+        label: {
+            minSpacing: 5,
+            visible: true
+        },
+        position: "bottom",
+        grid: {},
+        minorGrid: {},
+        tick: {},
+        minorTick: {},
+        title: {},
+        marker: {},
+        _customVisualRange: undefined
+    }, "Options should be correct");
+});
+
 QUnit.test("GetMarginOptions when they are not set", function(assert) {
     this.updateOptions({});
 
@@ -643,7 +704,7 @@ QUnit.test("Validate, argumentType - numeric, max and min is wrong specified", f
     assert.equal(secondIdError, "E2106");
     assert.equal(dxErrors[secondIdError], "Invalid visible range");
 
-    assert.equal(this.axis.getOptions().dataType, "wrongType");
+    assert.equal(this.axis.getOptions().dataType, "wrongtype");
     assert.deepEqual(this.axis.getOptions().min, undefined);
     assert.deepEqual(this.axis.getOptions().max, undefined);
 });
