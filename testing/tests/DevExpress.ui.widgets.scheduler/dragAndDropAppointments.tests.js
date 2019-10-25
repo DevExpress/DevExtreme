@@ -654,7 +654,7 @@ module("Drag and drop appointments", moduleConfig, () => {
                     group: group,
                     onAdd: (e) => {
                         e.component.addAppointment(e.itemData);
-                        e.itemElement.remove();
+                        $(e.itemElement).remove();
                     }
                 }
             });
