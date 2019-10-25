@@ -1169,15 +1169,13 @@ QUnit.module("dateView integration", {
         assert.equal(this.popupTitle(), messageLocalization.format("dxDateBox-simulatedDataPickerTitleTime"), "title set successfully when 'placeholder' option set to ''");
     });
 
-    QUnit.test("Native datebox should have specific class & button should have pointer-events:none", assert => {
+    QUnit.test("Native datebox should have specific class", assert => {
         const $element = $("#dateBox").dxDateBox({
             pickerType: "native"
         });
 
         assert.ok($element.hasClass("dx-datebox-native"), "class is correct");
         assert.equal($element.dxDateBox("instance")._strategy.NAME, "Native", "correct strategy is chosen");
-
-        assert.equal($element.find(".dx-texteditor-buttons-container").css("pointerEvents"), "none");
     });
 
     QUnit.test("pickerType should be 'rollers' on android < 4.4 (Q588373, Q588012)", (assert) => {
