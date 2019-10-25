@@ -79,7 +79,9 @@ class Gantt extends Widget {
             onSelectionChanged: (e) => { this._onTreeListSelectionChanged(e); },
             onRowCollapsed: (e) => this._ganttView.changeTaskExpanded(e.key, false),
             onRowExpanded: (e) => this._ganttView.changeTaskExpanded(e.key, true),
-            onRowPrepared: (e) => { this._onTreeListRowPrepared(e); }
+            onRowPrepared: (e) => { this._onTreeListRowPrepared(e); },
+            onContextMenuPreparing: (e) => { this._onTreeListContextMenuPreparing(e); },
+            onRowDblClick: () => { this._onTreeListRowDblClick(); }
         });
     }
     _renderSplitter() {
@@ -139,6 +141,16 @@ class Gantt extends Widget {
         if(e.rowType === "data" && e.node.children.length > 0) {
             $(e.rowElement).addClass(GANTT_COLLAPSABLE_ROW);
         }
+    }
+    _onTreeListContextMenuPreparing(e) {
+        if(e.row.rowType === "data") {
+            this._setTreeListOption("selectedRowKeys", [e.row.data.id]);
+            e.items = [];
+            this._showPopupMenu({ position: { x: e.event.clientX, y: e.event.clientY } });
+        }
+    }
+    _onTreeListRowDblClick() {
+        this._ganttView._ganttViewCore.commandManager.showTaskEditDialog.execute();
     }
     _onTreeListSelectionChanged(e) {
         const selectedRowKey = e.currentSelectedRowKeys[0];
