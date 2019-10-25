@@ -96,6 +96,17 @@ function getElementOptions(element) {
             options.rotationX = coords[1] && _number(coords[1]);
             options.rotationY = coords[2] && _number(coords[2]);
         }
+
+        coords = transform.match(/scale\(-*\d+([.]\d+)*(,*\s*-*\d+([.]\d+)*)*/);
+        if(coords) {
+            coords = coords[0].match(/-*\d+([.]\d+)*/g);
+            options.scaleX = _number(coords[0]);
+            if(coords.length > 1) {
+                options.scaleY = _number(coords[1]);
+            } else {
+                options.scaleY = options.scaleX;
+            }
+        }
     }
 
     parseStyles(element, options);
@@ -456,16 +467,22 @@ function applyFilter(context, options, shared) {
 // translate and clip are the special attributtes, they should not be inherited by child nodes
 function transformElement(context, options) {
     context.translate(options.translateX || 0, options.translateY || 0);
-    delete options.translateX;
-    delete options.translateY;
+    options.translateX = undefined;
+    options.translateY = undefined;
 
     if(options.rotationAngle) {
         context.translate(options.rotationX || 0, options.rotationY || 0);
         context.rotate(options.rotationAngle * PI / 180);
         context.translate(-(options.rotationX || 0), -(options.rotationY || 0));
-        delete options.rotationAngle;
-        delete options.rotationX;
-        delete options.rotationY;
+        options.rotationAngle = undefined;
+        options.rotationX = undefined;
+        options.rotationY = undefined;
+    }
+
+    if(isFinite(options.scaleX)) {
+        context.scale(options.scaleX, options.scaleY);
+        options.scaleX = undefined;
+        options.scaleY = undefined;
     }
 }
 
@@ -473,7 +490,7 @@ function clipElement(context, options, shared) {
     if(options["clip-path"]) {
         drawElement(shared.clipPaths[parseUrl(options["clip-path"])], context, {}, shared);
         context.clip();
-        delete options["clip-path"];
+        options["clip-path"] = undefined;
     }
 }
 
