@@ -25,7 +25,8 @@ var DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
     DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button",
     DROP_DOWN_EDITOR_OVERLAY = "dx-dropdowneditor-overlay",
     DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active",
-    TEXT_EDITOR_INPUT_CLASS = "dx-texteditor-input";
+    TEXT_EDITOR_INPUT_CLASS = "dx-texteditor-input",
+    DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = "dx-dropdowneditor-field-template-wrapper";
 
 var TAB_KEY_CODE = "Tab",
     ESC_KEY_CODE = "Escape";
@@ -1031,6 +1032,45 @@ QUnit.testInActiveWindow("widget should detach focus events before fieldTemplate
     assert.strictEqual(focusOutSpy.callCount, 0, "there's no focus outs from deleted field container");
 });
 
+QUnit.testInActiveWindow("fieldTemplate item element should have 100% width (T826516)", (assert) => {
+    const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        dataSource: [1, 2],
+        width: 500,
+        fieldTemplate: function(value, container) {
+            const $textBoxContainer = $("<div>").appendTo(container);
+            $("<div>").dxTextBox().appendTo($textBoxContainer);
+        }
+    });
+
+    const $fieldTemplateWrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
+    const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+    assert.roughEqual($fieldTemplateWrapper.width(), $input.width(), 1);
+});
+
+QUnit.testInActiveWindow("fieldTemplate item element should have 100% width with field template wrapper (T826516)", (assert) => {
+    const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        dataSource: [1, 2],
+        width: 500,
+        fieldTemplate: "field",
+        integrationOptions: {
+            templates: {
+                "field": {
+                    render(args) {
+                        const $element = $("<div>")
+                            .addClass("dx-template-wrapper");
+                        $("<div>").dxTextBox().appendTo($element);
+                        $element.appendTo(args.container);
+                    }
+                }
+            }
+        },
+    });
+
+    const $fieldTemplateWrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
+    const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+    assert.roughEqual($fieldTemplateWrapper.width(), $input.width(), 1);
+});
 
 QUnit.module("options");
 
