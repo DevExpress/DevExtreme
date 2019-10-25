@@ -5,6 +5,7 @@ import $ from "jquery";
 import dataUtils from "core/element_data";
 import { setTemplateEngine } from "core/templates/template_engine_registry";
 import typeUtils from "core/utils/type";
+import browser from "core/utils/browser";
 import config from "core/config";
 import devices from "core/devices";
 import { DataSource } from "data/data_source/data_source";
@@ -2713,6 +2714,10 @@ function checkHeaderWidths(assert, that, options, widthDiffs) {
     $headerCell = $testElement.find(".dx-header-row").children().eq(0);
     headerCellTextWidth = $headerCell.find(".dx-datagrid-text-content").eq(0).width();
     headerCellWidth = $headerCell.width();
+
+    if(browser.msie && parseInt(browser.version) === 11) {
+        etalonHeaderCellWidth--;
+    }
 
     // assert
     assert.equal(Math.floor(headerCellWidth), Math.floor(etalonHeaderCellWidth + widthDiffs.cellWidthDiff), "header cell width");
