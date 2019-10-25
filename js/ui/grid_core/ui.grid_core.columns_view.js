@@ -170,9 +170,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             column.headerId && this.setAria("describedby", column.headerId, $cell);
         }
 
-        if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
+        if(column.cssClass) {
             $cell.addClass(column.cssClass);
         }
+
         if(column.command === "expand") {
             $cell.addClass(column.cssClass);
             $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
