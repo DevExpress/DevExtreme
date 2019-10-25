@@ -834,9 +834,10 @@ module.exports = {
                             }
                             result.push(column);
 
-                            if(column.isBand) {
+                            if(column.columns) {
                                 result = result.concat(createColumnsFromOptions(that, column.columns, column));
                                 delete column.columns;
+                                column.hasColumns = true;
                             }
                         }
                     });
@@ -880,17 +881,24 @@ module.exports = {
 
             var getColumnByIndexes = function(that, columnIndexes) {
                 var result,
+                    columns,
+                    bandColumnsCache = that.getBandColumnsCache(),
                     callbackFilter = function(column) {
                         var ownerBand = result ? result.index : undefined;
                         return column.ownerBand === ownerBand;
-                    },
+                    };
+
+                if(bandColumnsCache.isPlain) {
+                    result = that._columns[columnIndexes[0]];
+                } else {
                     columns = that._columns.filter(callbackFilter);
 
-                for(var i = 0; i < columnIndexes.length; i++) {
-                    result = columns[columnIndexes[i]];
+                    for(var i = 0; i < columnIndexes.length; i++) {
+                        result = columns[columnIndexes[i]];
 
-                    if(result) {
-                        columns = that._columns.filter(callbackFilter);
+                        if(result) {
+                            columns = that._columns.filter(callbackFilter);
+                        }
                     }
                 }
 
@@ -899,17 +907,27 @@ module.exports = {
 
             var getColumnFullPath = function(that, column) {
                 var result = [],
+                    columns,
                     bandColumnsCache = that.getBandColumnsCache(),
                     callbackFilter = function(item) {
                         return item.ownerBand === column.ownerBand;
-                    },
+                    };
+
+                if(bandColumnsCache.isPlain) {
+                    const columnIndex = that._columns.indexOf(column);
+
+                    if(columnIndex >= 0) {
+                        result = [`columns[${columnIndex}]`];
+                    }
+                } else {
                     columns = that._columns.filter(callbackFilter);
 
-                while(columns.length && columns.indexOf(column) !== -1) {
-                    result.unshift("columns[" + columns.indexOf(column) + "]");
+                    while(columns.length && columns.indexOf(column) !== -1) {
+                        result.unshift(`columns[${columns.indexOf(column)}]`);
 
-                    column = bandColumnsCache.columnParentByIndex[column.index];
-                    columns = column ? that._columns.filter(callbackFilter) : [];
+                        column = bandColumnsCache.columnParentByIndex[column.index];
+                        columns = column ? that._columns.filter(callbackFilter) : [];
+                    }
                 }
 
                 return result.join(".");
@@ -1260,6 +1278,8 @@ module.exports = {
                 updateColumnIndexes(that);
                 updateColumnGroupIndexes(that, column);
                 updateColumnSortIndexes(that, column);
+
+                resetBandColumnsCache(that);
                 updateColumnVisibleIndexes(that, column);
             };
 
@@ -1571,6 +1591,16 @@ module.exports = {
 
             var isColumnFixed = (that, column) => isDefined(column.fixed) || !column.type ? column.fixed : that._isColumnFixing();
 
+            var convertOwnerBandToColumnReference = (columns) => {
+                columns.forEach((column) => {
+                    if(isDefined(column.ownerBand)) {
+                        column.ownerBand = columns[column.ownerBand];
+                    }
+                });
+            };
+
+            var resetBandColumnsCache = (that) => that._bandColumnsCache = undefined;
+
             return {
                 _getExpandColumnOptions: function() {
                     return {
@@ -1794,7 +1824,7 @@ module.exports = {
                     that._visibleColumns = undefined;
                     that._fixedColumns = undefined;
                     that._rowCount = undefined;
-                    that._bandColumnsCache = undefined;
+                    resetBandColumnsCache(that);
                 },
                 reinit: function() {
                     this._columnsUserState = this.getUserState();
@@ -2026,11 +2056,16 @@ module.exports = {
                     if(!this._bandColumnsCache) {
                         var columns = this._columns,
                             columnChildrenByIndex = {},
-                            columnParentByIndex = {};
+                            columnParentByIndex = {},
+                            isPlain = true;
 
                         columns.forEach(function(column) {
                             var parentIndex = column.ownerBand,
                                 parent = columns[parentIndex];
+
+                            if(column.hasColumns) {
+                                isPlain = false;
+                            }
 
                             if(column.colspan) {
                                 column.colspan = undefined;
@@ -2051,6 +2086,7 @@ module.exports = {
                         });
 
                         this._bandColumnsCache = {
+                            isPlain: isPlain,
                             columnChildrenByIndex: columnChildrenByIndex,
                             columnParentByIndex: columnParentByIndex
                         };
@@ -2858,6 +2894,7 @@ module.exports = {
                         column = that.columnOption(id);
 
                     if(column && column.index >= 0) {
+                        convertOwnerBandToColumnReference(that._columns);
                         that._columns.splice(column.index, 1);
 
                         if(column.isBand) {
