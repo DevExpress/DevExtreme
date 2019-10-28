@@ -543,7 +543,7 @@ QUnit.module("hidden input", {}, () => {
 
         $element
             .find(`.${TEXTEDITOR_INPUT_CLASS}`)
-            .on("dxclick", clickSpy);
+            .on("click", clickSpy);
 
         $element
             .find(`.${DROP_DOWN_BUTTON_CLASS}`)
