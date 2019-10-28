@@ -1,4 +1,5 @@
 import $ from "jquery";
+import { isDefined } from "core/utils/type";
 
 const { assert } = QUnit;
 
@@ -33,12 +34,12 @@ class ariaAccessibilityTestHelper {
         assert.strictEqual($item.get(0).getAttribute("aria-selected"), ariaSelected, `item[${index}].aria-selected`);
     }
 
-    checkItemsAttributes(selectedIndexes, options) {
-        const { isFocusedElement, ariaSelected } = options;
+    checkItemsAttributes(selectedIndexes, options = {}) {
+        const { focusedItemIndex, ariaSelected } = options;
 
         selectedIndexes.forEach((index) => {
             this.checkItemAttributes(this.$items.eq(index), index, {
-                id: isFocusedElement ? this.focusedItemId : null,
+                id: isDefined(focusedItemIndex) && index === focusedItemIndex ? this.focusedItemId : null,
                 role: "option",
                 ariaSelected: "true"
             });

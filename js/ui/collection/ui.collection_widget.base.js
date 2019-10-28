@@ -379,7 +379,7 @@ var CollectionWidget = Widget.inherit({
 
         const $target = $(this.option("focusedElement"));
 
-        this._removeFocusedItem($target);
+        this._updateFocusedItemState($target, false);
     },
 
     _getActiveItem: function(last) {
@@ -482,12 +482,13 @@ var CollectionWidget = Widget.inherit({
         this.selectItem($target);
     },
 
-    _removeFocusedItem: function(target) {
-        var $target = $(target);
+    _updateFocusedItemState: function(target, isFocused, cleanId) {
+        const $target = $(target);
+
         if($target.length) {
-            this._toggleFocusClass(false, $target);
-            this._refreshItemId($target);
             this._refreshActiveDescendant();
+            this._refreshItemId($target, cleanId);
+            this._toggleFocusClass(isFocused, $target);
         }
     },
 
@@ -495,8 +496,12 @@ var CollectionWidget = Widget.inherit({
         this.setAria("activedescendant", isDefined(this.option("focusedElement")) ? this.getFocusedItemId() : null, $target);
     },
 
-    _refreshItemId: function($target) {
-        this.setAria("id", isDefined(this.option("focusedElement")) ? this.getFocusedItemId() : null, $target);
+    _refreshItemId: function($target, cleanId) {
+        if(!cleanId && this.option("focusedElement")) {
+            this.setAria("id", this.getFocusedItemId(), $target);
+        } else {
+            this.setAria("id", null, $target);
+        }
     },
 
     _setFocusedItem: function($target) {
@@ -504,9 +509,7 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        this._refreshActiveDescendant();
-        this._refreshItemId($target);
-        this._toggleFocusClass(true, $target);
+        this._updateFocusedItemState($target, true);
         this.onFocusedItemChanged(this.getFocusedItemId());
 
         if(this.option("selectOnFocus")) {
@@ -607,7 +610,7 @@ var CollectionWidget = Widget.inherit({
             case "focusOnSelectedItem":
                 break;
             case "focusedElement":
-                this._removeFocusedItem(args.previousValue);
+                this._updateFocusedItemState(args.previousValue, false, true);
                 this._setFocusedItem($(args.value));
                 break;
             case "displayExpr":
