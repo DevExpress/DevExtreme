@@ -1,5 +1,4 @@
 import $ from "jquery";
-import { isDefined } from "core/utils/type";
 
 const { assert } = QUnit;
 
@@ -11,7 +10,6 @@ class ariaAccessibilityTestHelper {
 
         this.createWidget = (options = {}) => {
             this.$widget = $("<div>").appendTo("#qunit-fixture");
-            debugger
             this.widget = createWidget(this.$widget, options);
             this.$itemContainer = this.widget._itemContainer();
             this.focusedItemId = this.widget.getFocusedItemId();
