@@ -1270,7 +1270,7 @@ module.exports = {
                     prevValue = options.prevValue,
                     fullOptionName = options.fullOptionName;
 
-                if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
+                if(!IGNORE_COLUMN_OPTION_NAMES[optionName] && !that._skipProcessingColumnsChange) {
                     that._skipProcessingColumnsChange = true;
                     that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
                     that._skipProcessingColumnsChange = false;
@@ -1605,6 +1605,8 @@ module.exports = {
                 },
 
                 optionChanged: function(args) {
+                    let needUpdateRequireResize;
+
                     switch(args.name) {
                         case "adaptColumnWidthByRatio":
                             args.handled = true;
@@ -1615,7 +1617,9 @@ module.exports = {
                             }
                             break;
                         case "columns":
+                            needUpdateRequireResize = this._skipProcessingColumnsChange;
                             args.handled = true;
+
                             if(!this._skipProcessingColumnsChange) {
                                 if(args.name === args.fullName) {
                                     this._columnsUserState = null;
@@ -1623,8 +1627,11 @@ module.exports = {
                                     this.init();
                                 } else {
                                     this._columnOptionChanged(args);
+                                    needUpdateRequireResize = true;
                                 }
-                            } else {
+                            }
+
+                            if(needUpdateRequireResize) {
                                 this._updateRequireResize(args);
                             }
                             break;
@@ -1671,7 +1678,9 @@ module.exports = {
                         } else {
                             columnOptionValue = args.value;
                         }
+                        this._skipProcessingColumnsChange = true;
                         this.columnOption(column.index, columnOptionValue);
+                        this._skipProcessingColumnsChange = false;
                     }
                 },
 
