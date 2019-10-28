@@ -4718,6 +4718,38 @@ QUnit.test('Rows with cssClass', function(assert) {
     assert.ok(!freeSpaceRow.find("td").last().hasClass("customCssClass"), "not has class customCssClass");
 });
 
+// T821255
+QUnit.test('Rows with cssClass for grouped column with showWhenGrouped', function(assert) {
+    // arrange
+    var that = this,
+        testElement = $("#container");
+
+    that.options.columns = [{ dataField: "name", cssClass: "customCssClass", groupIndex: 0, showWhenGrouped: true }, "age"];
+
+    that.options.grouping = { autoExpandAll: true };
+    that.options.dataSource.store = [
+        { name: "Alex", age: 15 },
+        { name: "Dan", age: 16 },
+        { name: "Vadim", age: 17 }
+    ];
+
+    this.setupDataGridModules();
+
+    // act
+    that.rowsView.render(testElement);
+
+    var rows = that.rowsView._getRowElements();
+
+    // assert
+    assert.equal(rows.eq(0).find("td").length, 2, "cell count in group row");
+    assert.strictEqual(rows.eq(0).find(".customCssClass").length, 0, "no cells with customCssClass in group row");
+
+    assert.equal(rows.eq(1).find("td").length, 3, "cell count in data row");
+    assert.ok(!rows.eq(1).find("td").eq(0).hasClass("customCssClass"), "groupExpand column not has class customCssClass");
+    assert.ok(rows.eq(1).find("td").eq(1).hasClass("customCssClass"), "first data column has class customCssClass");
+    assert.ok(!rows.eq(1).find("td").eq(2).hasClass("customCssClass"), "second data column not has class customCssClass");
+});
+
 QUnit.test('Add class dx-data-row on rows with type data', function(assert) {
     // arrange
     var that = this,
