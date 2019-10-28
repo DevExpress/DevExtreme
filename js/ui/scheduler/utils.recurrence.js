@@ -2,7 +2,6 @@ var errors = require("../../core/errors"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
-    isDefined = require("../../core/utils/type").isDefined,
     dateUtils = require("../../core/utils/date");
 
 var toMs = dateUtils.dateToMilliseconds;
@@ -52,15 +51,14 @@ var dateSetterMap = {
         }
     },
     "byday": function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
-        var dayOfWeek = byDay,
-            appointmentDayOfWeek = date.getDay();
+        var dayOfWeek = byDay;
 
-        if((frequency === "DAILY" || frequency === "WEEKLY") && (((firstDayOfWeek <= dayOfWeek) === (dayOfWeek < appointmentDayOfWeek)) || (!firstDayOfWeek && byDay === 0))) {
+        if((frequency === "DAILY" || frequency === "WEEKLY") && ((firstDayOfWeek && byDay !== 0) || (!firstDayOfWeek && byDay === 0))) {
             dayOfWeek = 7;
         }
 
         byDay += days[appointmentWeekStart] > dayOfWeek ? 7 : 0;
-        date.setDate(date.getDate() - appointmentDayOfWeek + byDay);
+        date.setDate(date.getDate() - date.getDay() + byDay);
     },
     "byweekno": function(date, weekNumber, weekStart) {
         var initialDate = new Date(date),
@@ -624,12 +622,16 @@ var getAsciiStringByDate = function(date) {
 var splitDateRules = function(rule, firstDayOfWeek = null) {
     var result = [];
 
-    if(isDefined(firstDayOfWeek)) {
+    if(firstDayOfWeek) {
         rule["fdow"] = firstDayOfWeek;
     }
 
     if(!rule["wkst"]) {
-        rule["wkst"] = isDefined(firstDayOfWeek) ? daysNames[firstDayOfWeek] : "MO";
+        if(firstDayOfWeek) {
+            rule["wkst"] = daysNames[firstDayOfWeek];
+        } else {
+            rule["wkst"] = "MO";
+        }
     }
 
     if(rule["byweekno"] && !rule["byday"]) {
@@ -759,7 +761,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
 var prepareDate = function(startDate, dateRules) {
     var date = new Date(startDate);
 
-    if(dateRules.length && isDefined(dateRules[0]["byday"])) {
+    if(dateRules.length && dateRules[0]["byday"]) {
         date.setDate(date.getDate() - date.getDay() + dateRules[0]["byday"]);
     } else {
         date.setDate(1);
