@@ -433,8 +433,12 @@ module.exports = {
 
                 _createInvisibleColumnValidators: function(editData) {
                     var validatingController = this.getController("validating"),
-                        invisibleColumns = grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; }),
+                        columnsController = this.getController("columns"),
+                        invisibleColumns = grep(columnsController.getInvisibleColumns(), function(column) { return !column.isBand; }),
+                        groupColumns = grep(columnsController.getGroupColumns(), function(column) { return invisibleColumns.indexOf(column) === -1; }),
                         invisibleColumnValidators = [];
+
+                    invisibleColumns.push(...groupColumns);
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
                         each(invisibleColumns, function(_, column) {
