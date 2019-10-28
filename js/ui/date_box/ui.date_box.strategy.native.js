@@ -42,6 +42,15 @@ var NativeStrategy = DateBoxStrategy.inherit({
         return type;
     },
 
+    customizeButtons: function() {
+        var dropDownButton = this.dateBox.getButton("dropDown");
+        if(dropDownButton) {
+            dropDownButton.on("click", function() {
+                this.dateBox._input().get(0).click();
+            }.bind(this));
+        }
+    },
+
     getDefaultOptions: function() {
         return {
             mode: this._getDateBoxType()

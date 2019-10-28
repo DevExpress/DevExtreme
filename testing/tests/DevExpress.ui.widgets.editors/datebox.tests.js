@@ -59,6 +59,7 @@ const STATE_FOCUSED_CLASS = "dx-state-focused";
 const BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
 const TODAY_CELL_CLASS = "dx-calendar-today";
 const GESTURE_COVER_CLASS = "dx-gesture-cover";
+const DROP_DOWN_BUTTON_CLASS = "dx-dropdowneditor-button";
 
 const widgetName = "dxDateBox";
 
@@ -198,7 +199,7 @@ QUnit.module("datebox tests", moduleConfig, () => {
             pickerType: "native"
         });
 
-        const $dropDownButton = $dateBox.find(".dx-dropdowneditor-button");
+        const $dropDownButton = $dateBox.find(`.${DROP_DOWN_BUTTON_CLASS}`);
         const expectedButtonsNumber = devices.real().deviceType === "desktop" ? 0 : 1;
 
         assert.equal($dropDownButton.length, expectedButtonsNumber, "correct readOnly value");
@@ -531,6 +532,24 @@ QUnit.module("hidden input", {}, () => {
 
         instance.option("value", expectedDateValue);
         assert.equal($hiddenInput.val(), expectedStringValue, "input value is correct after widget value change");
+    });
+
+    QUnit.test("click on drop-down button should call click on input to show native picker (T824701)", assert => {
+        const clickSpy = sinon.spy();
+        const $element = $("#dateBox").dxDateBox({
+            pickerType: "native",
+            showDropDownButton: true
+        });
+
+        $element
+            .find(`.${TEXTEDITOR_INPUT_CLASS}`)
+            .on("dxclick", clickSpy);
+
+        $element
+            .find(`.${DROP_DOWN_BUTTON_CLASS}`)
+            .trigger("dxclick");
+
+        assert.ok(clickSpy.calledOnce);
     });
 });
 
@@ -1150,15 +1169,13 @@ QUnit.module("dateView integration", {
         assert.equal(this.popupTitle(), messageLocalization.format("dxDateBox-simulatedDataPickerTitleTime"), "title set successfully when 'placeholder' option set to ''");
     });
 
-    QUnit.test("Native datebox should have specific class & button should have pointer-events:none", assert => {
+    QUnit.test("Native datebox should have specific class", assert => {
         const $element = $("#dateBox").dxDateBox({
             pickerType: "native"
         });
 
         assert.ok($element.hasClass("dx-datebox-native"), "class is correct");
         assert.equal($element.dxDateBox("instance")._strategy.NAME, "Native", "correct strategy is chosen");
-
-        assert.equal($element.find(".dx-texteditor-buttons-container").css("pointerEvents"), "none");
     });
 
     QUnit.test("pickerType should be 'rollers' on android < 4.4 (Q588373, Q588012)", (assert) => {
@@ -1463,7 +1480,7 @@ QUnit.module("datebox and calendar integration", () => {
             type: "date",
             value: new Date(2016, 1, 25)
         });
-        $($dateBox.find(".dx-dropdowneditor-button")).trigger("dxclick");
+        $($dateBox.find(`.${DROP_DOWN_BUTTON_CLASS}`)).trigger("dxclick");
 
         const dateBox = $dateBox.dxDateBox("instance");
         const calendar = $(".dx-calendar").dxCalendar("instance");
@@ -2596,7 +2613,7 @@ QUnit.module("datebox w/ calendar", {
         });
 
         const instance = $dateBox.dxDateBox("instance");
-        const $dropDownButton = $dateBox.find(".dx-dropdowneditor-button");
+        const $dropDownButton = $dateBox.find(`.${DROP_DOWN_BUTTON_CLASS}`);
 
         $($dropDownButton).trigger("dxclick");
 
@@ -3961,7 +3978,7 @@ QUnit.module("datebox validation", {}, () => {
         });
 
         const $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
-        const $button = $dateBox.find(".dx-dropdowneditor-button");
+        const $button = $dateBox.find(`.${DROP_DOWN_BUTTON_CLASS}`);
 
         $input.val("");
         $($input).trigger("change");
