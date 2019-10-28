@@ -341,8 +341,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointmentTemplate: function($container, data, model) {
-        var startDate = model.appointmentData.settings ? new Date(this.invoke("getField", "startDate", model.appointmentData.settings)) : data.startDate,
-            endDate = model.appointmentData.settings ? new Date(this.invoke("getField", "endDate", model.appointmentData.settings)) : data.endDate;
+        var startDate = model.appointmentData.settings ? new Date(this.invoke("getField", "startDate", model.appointmentData.settings)) : (model.targetedAppointmentData ? model.targetedAppointmentData.startDate : data.startDate),
+            endDate = model.appointmentData.settings ? new Date(this.invoke("getField", "endDate", model.appointmentData.settings)) : (model.targetedAppointmentData ? model.targetedAppointmentData.endDate : data.endDate);
 
         if(isNaN(startDate) || isNaN(endDate)) {
             startDate = data.startDate;
