@@ -862,7 +862,7 @@ QUnit.module("API", moduleConfig, () => {
                 const ds = [{ f1: "f1_1", f2: "f1_2" }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
                     dataSource: ds,
-                    rowTemplate: (container) => { container.append("<tbody class='dx-row'><tr><td>row</td><td>template</td></tr></tbody>"); },
+                    rowTemplate: (container) => { $(container).append("<tbody class='dx-row'><tr><td>row</td><td>template</td></tr></tbody>"); },
                     loadingTimeout: undefined
                 }).dxDataGrid("instance");
 
