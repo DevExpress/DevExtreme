@@ -1045,7 +1045,7 @@ QUnit.testInActiveWindow("fieldTemplate item element should have 100% width (T82
     const $fieldTemplateWrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
     const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-    assert.roughEqual($fieldTemplateWrapper.width(), $input.width(), 1);
+    assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth(), 1);
 });
 
 QUnit.testInActiveWindow("fieldTemplate item element should have 100% width with field template wrapper (T826516)", (assert) => {
@@ -1069,7 +1069,7 @@ QUnit.testInActiveWindow("fieldTemplate item element should have 100% width with
 
     const $fieldTemplateWrapper = $dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
     const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-    assert.roughEqual($fieldTemplateWrapper.width(), $input.width(), 1);
+    assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth(), 1);
 });
 
 QUnit.module("options");
