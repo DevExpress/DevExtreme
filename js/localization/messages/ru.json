@@ -265,6 +265,7 @@
         "dxFileManager-errorDirectoryNotFoundFormat": "Каталог '{0}' не найден",
         "dxFileManager-errorWrongFileExtension": "Неверное расширение файла",
         "dxFileManager-errorMaxFileSizeExceeded": "Размер файла превышает допустимое значение",
+        "dxFileManager-errorInvalidSymbols": "Введённое имя содержит недопустимые символы",
         "dxFileManager-errorDefault": "Неизвестная ошибка",
 
         "dxDiagram-categoryGeneral": "Общие",

@@ -10,6 +10,7 @@ const ErrorCode = {
     DirectoryNotFound: 4,
     WrongFileExtension: 5,
     MaxFileSizeExceeded: 6,
+    InvalidSymbols: 7,
     Other: 32767
 };
 

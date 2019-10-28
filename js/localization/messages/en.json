@@ -298,6 +298,7 @@
         "dxFileManager-errorDirectoryNotFoundFormat": "Directory '{0}' not found",
         "dxFileManager-errorWrongFileExtension": "File extension is not allowed",
         "dxFileManager-errorMaxFileSizeExceeded": "File size exceeds the maximum allowed size",
+        "dxFileManager-errorInvalidSymbols": "This name contains invalid characters",
         "dxFileManager-errorDefault": "Unspecified error.",
 
         "dxDiagram-categoryGeneral": "General",

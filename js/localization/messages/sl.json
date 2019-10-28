@@ -297,6 +297,7 @@
         "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
         "dxFileManager-errorWrongFileExtension": "TODO",
         "dxFileManager-errorMaxFileSizeExceeded": "TODO",
+        "dxFileManager-errorInvalidSymbols": "TODO",
     
         "dxDiagram-categoryGeneral": "TODO",
         "dxDiagram-categoryFlowchart": "TODO",
