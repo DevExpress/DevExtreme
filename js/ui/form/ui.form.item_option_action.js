@@ -1,17 +1,15 @@
 export default class ItemOptionAction {
     constructor(options) {
-        const { item, itemsRunTimeInfo, value } = options;
-        this.item = item;
-        this.itemsRunTimeInfo = itemsRunTimeInfo;
-        this.value = value;
+        this._options = options;
+        this._itemsRunTimeInfo = this._options.itemsRunTimeInfo;
     }
 
     getInstance() {
-        return this.itemsRunTimeInfo.findWidgetInstanceByItem(this.item);
+        return this._itemsRunTimeInfo.findWidgetInstanceByItem(this._options.item);
     }
 
     getItemContainer() {
-        return this.itemsRunTimeInfo.findItemContainerByItem(this.item);
+        return this._itemsRunTimeInfo.findItemContainerByItem(this._options.item);
     }
 
     tryExecute() {

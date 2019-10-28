@@ -1024,7 +1024,9 @@ const Form = Widget.inherit({
                     }
                 });
 
-                this._itemsRunTimeInfo && this._itemsRunTimeInfo.addLayoutManagerToItemByKey(layoutManager, itemData.guid);
+                if(this._itemsRunTimeInfo) {
+                    this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(itemData.guid, { layoutManager });
+                }
 
                 if(alignItemLabels) {
                     this._alignLabelsInColumn.bind(this)({
@@ -1037,7 +1039,10 @@ const Form = Widget.inherit({
             }
         });
 
-        this._createComponent($tabPanel, TabPanel, tabPanelOptions);
+        const tabPanel = this._createComponent($tabPanel, TabPanel, tabPanelOptions);
+        if(item.tabs) {
+            item.tabs.forEach(tab => this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(tab.guid, { widgetInstance: tabPanel }));
+        }
     },
 
     _itemGroupTemplate: function(item, e, $container) {
@@ -1077,7 +1082,7 @@ const Form = Widget.inherit({
                 cssItemClass: item.cssItemClass
             });
 
-            this._itemsRunTimeInfo && this._itemsRunTimeInfo.addLayoutManagerToItemByKey(layoutManager, item.guid);
+            this._itemsRunTimeInfo && this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, { layoutManager });
 
             colCount = layoutManager._getColCount();
             if(inArray(colCount, this._groupsColCount) === -1) {

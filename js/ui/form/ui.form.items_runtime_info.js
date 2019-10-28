@@ -1,5 +1,6 @@
 import Guid from "../../core/guid";
 import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
 
 export default class FormItemsRunTimeInfo {
     constructor() {
@@ -47,13 +48,6 @@ export default class FormItemsRunTimeInfo {
         return key;
     }
 
-    addLayoutManagerToItemByKey(layoutManager, key) {
-        const item = this._map[key];
-        if(item) {
-            item.layoutManager = layoutManager;
-        }
-    }
-
     addItemsOrExtendFrom(itemsRunTimeInfo) {
         itemsRunTimeInfo.each((key, itemRunTimeInfo) => {
             if(this._map[key]) {
@@ -68,6 +62,10 @@ export default class FormItemsRunTimeInfo {
                 });
             }
         });
+    }
+
+    extendRunTimeItemInfoByKey(key, options) {
+        this._map[key] = extend(this._map[key], options);
     }
 
     findWidgetInstanceByItem(item) {
