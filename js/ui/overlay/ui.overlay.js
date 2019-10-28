@@ -1127,32 +1127,37 @@ var Overlay = Widget.inherit({
     },
 
     _moveElementClassesToWrapper: function(options) {
-        let newClass = "";
+        let classOptions = {};
 
         if(options) {
-            if(options.valueChangedArgs) {
-                let oldClass;
-
-                if(options.valueChangedArgs.name === options.valueChangedArgs.fullName) {
-                    newClass = options.valueChangedArgs.value.class;
-                    oldClass = options.valueChangedArgs.previousValue.class;
-                } else {
-                    newClass = options.valueChangedArgs.value;
-                    oldClass = options.valueChangedArgs.previousValue;
-                }
-
-                this._$wrapper.removeClass(oldClass);
-            }
-
-            if(options.forcedClass) {
-                newClass += (newClass ? " " : "") + options.forcedClass;
-            }
+            classOptions = this._getClassChangesByArgs(options);
         } else {
             const elementAttr = this.option("elementAttr");
-            newClass = elementAttr && elementAttr.class || "";
+            classOptions.newClass = elementAttr && elementAttr.class || "";
         }
 
-        this._$wrapper.addClass(newClass);
+        this._$wrapper.removeClass(classOptions.oldClass);
+        this._$wrapper.addClass(classOptions.newClass);
+    },
+
+    _getClassChangesByArgs: function(args) {
+        let classOptions = {};
+        const valueChangedArgs = args.valueChangedArgs;
+
+        if(valueChangedArgs) {
+            const isRootOptionChanged = valueChangedArgs.name === valueChangedArgs.fullName;
+
+            classOptions = {
+                newClass: isRootOptionChanged ? valueChangedArgs.value.class : valueChangedArgs.value,
+                oldClass: isRootOptionChanged ? valueChangedArgs.previousValue.class : valueChangedArgs.previousValue
+            };
+        }
+
+        if(args.forcedClass) {
+            classOptions.newClass = (classOptions.newClass ? classOptions.newClass + " " : "") + args.forcedClass;
+        }
+
+        return classOptions;
     },
 
     _getDragTarget: function() {
