@@ -2575,8 +2575,10 @@ QUnit.test("Columns hiding - hidingPriority", function(assert) {
     assert.equal($visibleColumns.eq(1).text(), "Last Name", "it is 'lastName' column");
     assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, "firstName", "'firstName' column is hidden");
     // T824145
-    assert.equal(parseInt($hiddenColumn.css("border-right-width")), 0, "no right border");
-    assert.equal(parseInt($hiddenColumn.css("border-left-width")), 0, "no left border");
+    if(browser.msie && parseInt(browser.version) === 11 || browser.chrome) {
+        assert.equal(parseInt($hiddenColumn.css("border-right-width")), 0, "no right border");
+        assert.equal(parseInt($hiddenColumn.css("border-left-width")), 0, "no left border");
+    }
 
     $("#container").width(450);
     instance.updateDimensions();
