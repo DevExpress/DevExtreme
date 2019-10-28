@@ -49,7 +49,7 @@ QUnit.testStart(function() {
         \
         <div id="container"></div>\
         \
-        <div id="overlayWithClass" class="something another"></div>\
+        <div id="overlayWithClass" class="first-class second-class"></div>\
         \
         <div id="overlayWithAnonymousTmpl">\
             <div id="content"></div>\
@@ -2116,49 +2116,55 @@ testModule("container", moduleConfig, () => {
         }).dxOverlay("instance");
         const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
 
-        assert.ok($wrapper.hasClass("something"), "class added to wrapper");
-        assert.ok($wrapper.hasClass("another"), "another class added to wrapper");
+        assert.ok($wrapper.hasClass("first-class"), "first class added to wrapper");
+        assert.ok($wrapper.hasClass("second-class"), "second class added to wrapper");
         assert.ok($wrapper.hasClass(OVERLAY_WRAPPER_CLASS), "classes does not removed from wrapper");
         assert.ok(!$wrapper.hasClass(OVERLAY_CLASS), "only user-defined classes added to wrapper");
     });
 
-    test("css classes from the overlay elementAttr should be duplicated to the wrapper", (assert) => {
+    test("css classes from the overlay elementAttr should be duplicated to the wrapper(T824150)", (assert) => {
         const instance = $("#overlay").dxOverlay({
             visible: true,
             elementAttr: {
-                class: "something another"
+                class: "first-class second-class"
             }
         }).dxOverlay("instance");
         const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
 
-        assert.ok($wrapper.hasClass("something"), "class added to the wrapper");
-        assert.ok($wrapper.hasClass("another"), "another class added to wrapper");
-        assert.ok($(instance.element()).hasClass("something"), "classes does not removed from the element");
+        assert.ok($wrapper.hasClass("first-class"), "class added to the wrapper");
+        assert.ok($wrapper.hasClass("second-class"), "second class added to wrapper");
+        assert.ok($(instance.element()).hasClass("first-class"), "classes does not removed from the element");
         assert.ok($wrapper.hasClass(OVERLAY_WRAPPER_CLASS), "classes does not removed from the wrapper");
         assert.ok(!$wrapper.hasClass(OVERLAY_CLASS), "only user-defined classes added to the wrapper");
     });
 
-    test("changed css classes from the overlay elementAttr should be used for the wrapper", (assert) => {
+    test("CSS classes changes via elementAttr should be applied to the wrapper(T824150)", (assert) => {
         const instance = $("#overlay").dxOverlay({
             visible: true,
             elementAttr: {
-                class: "something"
+                class: "first-class"
             }
         }).dxOverlay("instance");
 
         instance.option("elementAttr", {
-            class: "another"
+            class: "second-class"
         });
 
         const $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
 
-        assert.notOk($wrapper.hasClass("something"), "class removed from the wrapper");
-        assert.ok($wrapper.hasClass("another"), "another class added to the wrapper");
+        assert.notOk($wrapper.hasClass("first-class"), "class removed from the wrapper");
+        assert.ok($wrapper.hasClass("second-class"), "second class added to the wrapper");
 
-        instance.option("elementAttr.class", "third");
+        instance.option("elementAttr.class", "third-class");
 
-        assert.notOk($wrapper.hasClass("another"), "class removed from the wrapper");
-        assert.ok($wrapper.hasClass("third"), "third class added to the wrapper");
+        assert.notOk($wrapper.hasClass("second-class"), "class removed from the wrapper");
+        assert.ok($wrapper.hasClass("third-class"), "third class added to the wrapper");
+
+        instance.option("elementAttr.id", "third-class");
+        instance.option("elementAttr.id", "third-id");
+
+        assert.notOk($wrapper.hasClass("third-id"), "id value does not applied as a class");
+        assert.ok($wrapper.hasClass("third-class"), "third class is still added to the wrapper");
     });
 
     test("defaultTargetContainer should be .dx-viewport by default", (assert) => {

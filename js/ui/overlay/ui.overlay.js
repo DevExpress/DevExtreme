@@ -442,7 +442,7 @@ var Overlay = Widget.inherit({
 
         var $element = this.$element();
 
-        this._moveElementClassesToWrapper({ forcedClass: $element.attr("class") });
+        this._copyElementClassesToWrapper({ forcedClass: $element.attr("class") });
 
         $element.addClass(OVERLAY_CLASS);
 
@@ -1123,10 +1123,10 @@ var Overlay = Widget.inherit({
 
     _renderElementAttributes: function(args) {
         this.callBase();
-        this._moveElementClassesToWrapper(args);
+        this._copyElementClassesToWrapper(args);
     },
 
-    _moveElementClassesToWrapper: function(options) {
+    _copyElementClassesToWrapper: function(options) {
         let classOptions = {};
 
         if(options) {
@@ -1147,10 +1147,12 @@ var Overlay = Widget.inherit({
         if(valueChangedArgs) {
             const isRootOptionChanged = valueChangedArgs.name === valueChangedArgs.fullName;
 
-            classOptions = {
-                newClass: isRootOptionChanged ? valueChangedArgs.value.class : valueChangedArgs.value,
-                oldClass: isRootOptionChanged ? valueChangedArgs.previousValue.class : valueChangedArgs.previousValue
-            };
+            if(isRootOptionChanged || valueChangedArgs.fullName.split(".").pop() === "class") {
+                classOptions = {
+                    newClass: isRootOptionChanged ? valueChangedArgs.value.class : valueChangedArgs.value,
+                    oldClass: isRootOptionChanged ? valueChangedArgs.previousValue.class : valueChangedArgs.previousValue
+                };
+            }
         }
 
         if(args.forcedClass) {
