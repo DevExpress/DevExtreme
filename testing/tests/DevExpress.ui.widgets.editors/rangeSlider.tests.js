@@ -1104,6 +1104,19 @@ QUnit.test("onValueChanged event should be fired with correct arguments", functi
     instance.option("value", [start, end]);
 });
 
+QUnit.test("onValueChanged should be called once when value is changed one time", function(assert) {
+    var onValueChangedStub = sinon.stub();
+
+    var instance = $("#slider").dxRangeSlider({
+        value: [10, 30],
+        onValueChanged: onValueChangedStub
+    }).dxRangeSlider("instance");
+
+    instance.option("value", [15, 20]);
+
+    assert.strictEqual(onValueChangedStub.callCount, 1);
+});
+
 QUnit.test("Exception shouldn't be throw when start value more than end value", function(assert) {
     try {
         var $rangeSlider = $("#slider").dxRangeSlider({
