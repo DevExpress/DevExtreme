@@ -243,7 +243,7 @@ class AppointmentModel {
             min = new Date(filterOptions.min),
             max = new Date(filterOptions.max),
             resources = filterOptions.resources,
-            firstDayOfWeek = filterOptions.firstDayOfWeek,
+            firstDayOfWeek = filterOptions.firstDayOfWeek || 0,
             getRecurrenceException = filterOptions.recurrenceException,
             that = this;
 
@@ -283,7 +283,7 @@ class AppointmentModel {
                     recurrenceRule: recurrenceRule,
                     recurrenceException: recurrenceException,
                     allDay: appointmentTakesAllDay
-                }, min, max, startDayHour, endDayHour, firstDayOfWeek || 0);
+                }, min, max, startDayHour, endDayHour, firstDayOfWeek);
             }
 
             // NOTE: Long appointment part without allDay field and recurrence rule should be filtered by min

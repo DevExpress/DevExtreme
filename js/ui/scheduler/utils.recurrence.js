@@ -2,6 +2,7 @@ var errors = require("../../core/errors"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
+    isDefined = require("../../core/utils/type").isDefined,
     dateUtils = require("../../core/utils/date");
 
 var toMs = dateUtils.dateToMilliseconds;
@@ -623,16 +624,12 @@ var getAsciiStringByDate = function(date) {
 var splitDateRules = function(rule, firstDayOfWeek = null) {
     var result = [];
 
-    if(firstDayOfWeek !== null) {
+    if(isDefined(firstDayOfWeek)) {
         rule["fdow"] = firstDayOfWeek;
     }
 
     if(!rule["wkst"]) {
-        if(firstDayOfWeek !== null) {
-            rule["wkst"] = daysNames[firstDayOfWeek];
-        } else {
-            rule["wkst"] = "MO";
-        }
+        rule["wkst"] = isDefined(firstDayOfWeek) ? daysNames[firstDayOfWeek] : "MO";
     }
 
     if(rule["byweekno"] && !rule["byday"]) {
@@ -762,7 +759,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
 var prepareDate = function(startDate, dateRules) {
     var date = new Date(startDate);
 
-    if(dateRules.length && dateRules[0]["byday"] >= 0) {
+    if(dateRules.length && isDefined(dateRules[0]["byday"])) {
         date.setDate(date.getDate() - date.getDay() + dateRules[0]["byday"]);
     } else {
         date.setDate(1);
