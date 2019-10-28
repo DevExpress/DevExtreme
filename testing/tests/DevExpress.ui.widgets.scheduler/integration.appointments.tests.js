@@ -3664,38 +3664,38 @@ QUnit.test("Appointment should be rendered without compact ones if only one per 
 //     }
 // });
 
-// QUnit.test("Long term appoinment inflict index shift in other appointments (T737780)", function(assert) {
-//     var data = [
-//         {
-//             text: "Website Re-Design Plan",
-//             startDate: new Date(2017, 4, 2, 9, 30),
-//             endDate: new Date(2017, 4, 12, 11, 30)
-//         }, {
-//             text: "Book Flights to San Fran for Sales Trip",
-//             startDate: new Date(2017, 4, 4, 12, 0),
-//             endDate: new Date(2017, 4, 4, 13, 0),
-//             allDay: true
-//         }, {
-//             text: "Approve Personal Computer Upgrade Plan",
-//             startDate: new Date(2017, 4, 10, 10, 0),
-//             endDate: new Date(2017, 4, 10, 11, 0)
-//         }
-//     ];
+QUnit.test("Long term appoinment inflict index shift in other appointments (T737780)", function(assert) {
+    var data = [
+        {
+            text: "Website Re-Design Plan",
+            startDate: new Date(2017, 4, 2, 9, 30),
+            endDate: new Date(2017, 4, 12, 11, 30)
+        }, {
+            text: "Book Flights to San Fran for Sales Trip",
+            startDate: new Date(2017, 4, 4, 12, 0),
+            endDate: new Date(2017, 4, 4, 13, 0),
+            allDay: true
+        }, {
+            text: "Approve Personal Computer Upgrade Plan",
+            startDate: new Date(2017, 4, 10, 10, 0),
+            endDate: new Date(2017, 4, 10, 11, 0)
+        }
+    ];
 
-//     this.createInstance({
-//         dataSource: data,
-//         views: ["month"],
-//         currentView: "month",
-//         currentDate: new Date(2017, 4, 25),
-//         startDayHour: 9,
-//         height: 600
-//     });
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2017, 4, 25),
+        startDayHour: 9,
+        height: 600
+    });
 
-//     let appointments = this.instance._getAppointmentsToRepaint();
-//     assert.ok(appointments[0].settings[1].index === 0, "Long term appointment tail has right index");
-//     assert.ok(appointments[1].settings[0].index === 1, "Appointment next to long term appointment head has right index");
-//     assert.ok(appointments[2].settings[0].index === 1, "Appointment next to long term appointment tail has right index");
-// });
+    let appointments = this.instance._getAppointmentsToRepaint();
+    assert.ok(appointments[0].settings[1].index === 0, "Long term appointment tail has right index");
+    assert.ok(appointments[1].settings[0].index === 1, "Appointment next to long term appointment head has right index");
+    assert.ok(appointments[2].settings[0].index === 1, "Appointment next to long term appointment tail has right index");
+});
 
 QUnit.test("Multi-day appointment should be rendered when started after endDayHour (T819852)", function(assert) {
     var data = [{
