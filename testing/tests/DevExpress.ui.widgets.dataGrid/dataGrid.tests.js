@@ -2560,10 +2560,12 @@ QUnit.test("Columns hiding - hidingPriority", function(assert) {
         }),
         instance = dataGrid.dxDataGrid("instance"),
         adaptiveColumnsController = instance.getController("adaptiveColumns"),
-        $visibleColumns;
+        $visibleColumns,
+        $hiddenColumn;
 
     this.clock.tick();
     $visibleColumns = $(instance.$element().find(".dx-header-row td"));
+    $hiddenColumn = $(".dx-datagrid-hidden-column").eq(0);
 
     // act
     assert.ok(isColumnHidden(dataGrid, 0), "first column is hidden");
@@ -2572,6 +2574,9 @@ QUnit.test("Columns hiding - hidingPriority", function(assert) {
     assert.equal($visibleColumns.length, 3, "only 1 column is visible");
     assert.equal($visibleColumns.eq(1).text(), "Last Name", "it is 'lastName' column");
     assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, "firstName", "'firstName' column is hidden");
+    // T824145
+    assert.equal(parseInt($hiddenColumn.css("border-right-width")), 0, "no right border");
+    assert.equal(parseInt($hiddenColumn.css("border-left-width")), 0, "no left border");
 
     $("#container").width(450);
     instance.updateDimensions();
