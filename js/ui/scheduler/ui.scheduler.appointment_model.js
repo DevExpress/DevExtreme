@@ -229,7 +229,7 @@ var AppointmentModel = Class.inherit({
             min = new Date(filterOptions.min),
             max = new Date(filterOptions.max),
             resources = filterOptions.resources,
-            firstDayOfWeek = filterOptions.firstDayOfWeek,
+            firstDayOfWeek = filterOptions.firstDayOfWeek || 0,
             getRecurrenceException = filterOptions.recurrenceException,
             that = this;
 

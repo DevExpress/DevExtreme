@@ -1302,3 +1302,31 @@ QUnit.test("Prerender filter by recurrence rule determines renderable appointmen
 
     assert.equal($appointment.length, 0, "Appt is filtered on prerender and not rendered");
 });
+
+QUnit.test("Recurring appointment with interval > 1 rendered correctly (T823073)", function(assert) {
+    var data = [
+        {
+            text: "5-week recur",
+            startDate: new Date(2019, 9, 20, 7, 0),
+            endDate: new Date(2019, 9, 20, 9, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU;INTERVAL=5;COUNT=3"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2019, 9, 20),
+        firstDayOfWeek: 1,
+        startDayHour: 6,
+        height: 600
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 1, "Appointment is rendered");
+
+    let position = this.scheduler.appointments.getAppointment(0).position();
+    assert.roughEqual(position.left, 855, 0.5, "Appointment's left is correct");
+    assert.roughEqual(position.top, 190, 0.5, "Appointment's top is correct");
+});
