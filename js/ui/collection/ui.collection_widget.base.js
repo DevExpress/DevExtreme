@@ -377,10 +377,9 @@ var CollectionWidget = Widget.inherit({
     _focusOutHandler: function() {
         this.callBase.apply(this, arguments);
 
-        var $target = $(this.option("focusedElement"));
-        if($target.length) {
-            this._toggleFocusClass(false, $target);
-        }
+        const $target = $(this.option("focusedElement"));
+
+        this._removeFocusedItem($target);
     },
 
     _getActiveItem: function(last) {
@@ -487,7 +486,7 @@ var CollectionWidget = Widget.inherit({
         var $target = $(target);
         if($target.length) {
             this._toggleFocusClass(false, $target);
-            $target.removeAttr("id");
+            this._refreshItemId($target);
             this._refreshActiveDescendant();
         }
     },
@@ -496,16 +495,19 @@ var CollectionWidget = Widget.inherit({
         this.setAria("activedescendant", isDefined(this.option("focusedElement")) ? this.getFocusedItemId() : null, $target);
     },
 
+    _refreshItemId: function($target) {
+        this.setAria("id", isDefined(this.option("focusedElement")) ? this.getFocusedItemId() : null, $target);
+    },
+
     _setFocusedItem: function($target) {
         if(!$target || !$target.length) {
             return;
         }
 
-        $target.attr("id", this.getFocusedItemId());
+        this._refreshActiveDescendant();
+        this._refreshItemId($target);
         this._toggleFocusClass(true, $target);
         this.onFocusedItemChanged(this.getFocusedItemId());
-
-        this._refreshActiveDescendant();
 
         if(this.option("selectOnFocus")) {
             this._selectFocusedItem($target);

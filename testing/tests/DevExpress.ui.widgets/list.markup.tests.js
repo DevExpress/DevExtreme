@@ -3,9 +3,12 @@ import { isRenderer } from "core/utils/type";
 import config from "core/config";
 import devices from "core/devices";
 import List from "ui/list";
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
+import eventsEngine from "events/core/events_engine";
 
 import "ui/list";
 import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(() => {
     const markup =
@@ -247,53 +250,99 @@ QUnit.module("nested rendering", {}, () => {
     });
 });
 
-QUnit.module("aria accessibility", () => {
-    class ariaAccessibilityTestHelper {
-        constructor(searchEnabled) {
-            this.element = $("#list").dxList({
-                items: [1, 2, 3],
-                searchEnabled: searchEnabled
-            }).dxList("instance");
-            this.$element = this.element.$element();
-            this.$itemContainer = this.element._itemContainer();
-        }
-
-        checkAsserts(expectedValues) {
-            let { role, isActiveDescendant, tabIndex, $target } = expectedValues;
-
-            QUnit.assert.strictEqual($target.attr("role"), role, "role");
-            QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
-            QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
-        }
-    }
-
+if(devices.real().deviceType === "desktop") {
     [true, false].forEach((searchEnabled) => {
-        if(devices.real().deviceType === "desktop") {
-            QUnit.test(`aria role on initialize, searchEnabled: ${searchEnabled}`, () => {
-                let helper = new ariaAccessibilityTestHelper(searchEnabled);
+        QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
+            beforeEach: () => {
+                this.helper = new ariaAccessibilityTestHelper({
+                    createWidget: ($element, options) => $element.dxList(
+                        $.extend({
+                            items: [{ text: "Item_1" }, { text: "Item_2" }, { text: "Item_3" }],
+                            searchEnabled: searchEnabled
+                        }, options)).dxList("instance")
+                });
+            },
+            afterEach: () => {
+                this.helper.$widget.remove();
+            }
+        }, () => {
+            QUnit.test(`Selected: [], selectionMode: "none"`, () => {
+                this.helper.createWidget();
 
-                helper.checkAsserts({ $target: searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
-                helper.checkAsserts({ $target: searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
+                this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
+                this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.$itemContainer, { role: null, activeDescendant: null, tabIndex: null });
+                this.helper.checkItemsAttributes([], { isFocusedElement: false, ariaSelected: null });
             });
 
-            QUnit.test(`aria role after initialize, searchEnabled: ${searchEnabled}`, () => {
-                let helper = new ariaAccessibilityTestHelper(searchEnabled);
-                helper.element.option("searchEnabled", !searchEnabled);
+            QUnit.test(`Selected: ["Item_2"], selectionMode: "single"`, () => {
+                this.helper.createWidget({ selectedItemKeys: ["Item_2"], keyExpr: "text", selectionMode: "single" });
 
-                helper.checkAsserts({ $target: !searchEnabled ? helper.$itemContainer : helper.$element, role: "listbox", isActiveDescendant: true, tabIndex: '0' });
-                helper.checkAsserts({ $target: !searchEnabled ? helper.$element : helper.$itemContainer, role: undefined, isActiveDescendant: false, tabIndex: undefined });
+                this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
+                this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.$itemContainer, { role: null, activeDescendant: null, tabIndex: null });
+                this.helper.checkItemsAttributes([1], { isFocusedElement: false });
             });
-        }
 
-        QUnit.test("list item", () => {
-            let helper = new ariaAccessibilityTestHelper(searchEnabled);
+            QUnit.test(`Selected: ["Item_2", "Item_3"], selectionMode: "multiple"`, () => {
+                this.helper.createWidget({ selectedItemKeys: ["Item_2", "Item_3"], keyExpr: "text", selectionMode: "multiple" });
 
-            helper.$element.find(`.${LIST_ITEM_CLASS}`).each((i, item) => {
-                helper.checkAsserts({ $target: $(item), role: "option", isActiveDescendant: false, tabIndex: undefined });
+                this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
+                this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.$itemContainer, { role: null, activeDescendant: null, tabIndex: null });
+                this.helper.checkItemsAttributes([1, 2], { isFocusedElement: false });
+            });
+
+            QUnit.test(`Change searchEnabled after initialize`, () => {
+                this.helper.createWidget({ selectedItemKeys: ["Item_2"], keyExpr: "text", selectionMode: "single" });
+                this.helper.widget.option("searchEnabled", !searchEnabled);
+
+                this.helper.checkAttributes(!searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
+                this.helper.checkAttributes(!searchEnabled ? this.helper.$widget : this.helper.$itemContainer, { role: null, activeDescendant: null, tabIndex: null });
+            });
+
+            QUnit.test(`Selected: ["Item_3"] -> focusin -> focusout`, () => {
+                this.helper.createWidget({ selectedItemKeys: ["Item_3"], keyExpr: "text", selectionMode: "single" });
+
+                if(searchEnabled) {
+                    $(this.helper.$itemContainer).focusin();
+                } else {
+                    this.helper.$widget.focusin();
+                }
+
+                this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: this.helper.focusedItemId, tabIndex: '0' });
+                this.helper.checkItemsAttributes([2], { isFocusedElement: true });
+
+                this.helper.$widget.focusout();
+                this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: this.helper.focusedItemId, tabIndex: '0' });
+                this.helper.checkItemsAttributes([2], { isFocusedElement: true });
+            });
+
+            QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> clean focusedElement`, () => {
+                this.helper.createWidget({ selectedItemKeys: ["Item_1"], keyExpr: "text", selectionMode: "single" });
+
+                this.helper.widget.option("focusedElement", this.helper.$items.eq(0));
+                this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: this.helper.focusedItemId, tabIndex: '0' });
+                this.helper.checkItemsAttributes([0], { isFocusedElement: true });
+
+                this.helper.widget.option("focusedElement", null);
+                this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
+                this.helper.checkItemsAttributes([0], { isFocusedElement: false });
+            });
+
+            QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> change by click`, () => {
+                this.helper.createWidget({ selectedItemKeys: ["Item_1"], keyExpr: "text", selectionMode: "single" });
+
+                this.helper.widget.option("focusedElement", this.helper.$items.eq(0));
+                eventsEngine.trigger($(this.helper.$items.eq(2)), "dxclick");
+
+                this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: this.helper.focusedItemId, tabIndex: '0' });
+                this.helper.checkItemsAttributes([2], { isFocusedElement: true });
+
+                this.helper.widget.option("focusedElement", null);
+                this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
+                this.helper.checkItemsAttributes([2], { isFocusedElement: false });
             });
         });
     });
-});
+}
 
 QUnit.module("searching", {}, () => {
     QUnit.test("searchEnabled", assert => {
