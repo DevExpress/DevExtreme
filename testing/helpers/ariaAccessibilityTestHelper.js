@@ -12,18 +12,39 @@ class ariaAccessibilityTestHelper {
         this.createWidget = (options = {}) => {
             this.$widget = $("<div>").appendTo("#qunit-fixture");
             this.widget = createWidget(this.$widget, options);
-            this.$itemContainer = this.widget._itemContainer(this.widget.option("searchEnabled"));
-            this.focusedItemId = this.widget.getFocusedItemId();
-            this.$items = this.$itemContainer.find(`.${ITEM_CLASS}`);
+
+            if(this.widget._itemContainer) {
+                this.$itemContainer = this.widget._itemContainer(this.widget.option("searchEnabled"));
+                this.$items = this.$itemContainer.find(`.${ITEM_CLASS}`);
+                this.focusedItemId = this.widget.getFocusedItemId();
+            }
         };
     }
 
-    checkAttributes($target, expectedAttributes) {
-        const { role, activeDescendant, tabIndex } = expectedAttributes;
+    checkAttributes($target, expectedAttributes, prefix) {
+        const element = $target.get(0);
+        const attributeNames = element.getAttributeNames();
 
-        assert.strictEqual($target.get(0).getAttribute("role"), role, "role");
-        assert.strictEqual($target.get(0).getAttribute("aria-activedescendant"), activeDescendant, "activedescendant");
-        assert.strictEqual($target.get(0).getAttribute("tabIndex"), tabIndex, "tabIndex");
+        const skipAttributes = ["class", "style"];
+        const sliceAriaPrefix = (name) => name.indexOf("aria-") === -1 ? name : name.slice(5);
+
+        attributeNames.forEach((attributeName) => {
+            if(skipAttributes.indexOf(attributeName) === -1) {
+                const shortAttributeName = sliceAriaPrefix(attributeName);
+
+                assert.strictEqual(element.getAttribute(attributeName), shortAttributeName in expectedAttributes ? expectedAttributes[shortAttributeName] : null, `${prefix || ''}.${attributeName}`);
+            }
+        });
+
+        // const { id, role, activeDescendant, tabIndex, owns, ariaControls, ariaExpanded } = expectedAttributes;
+
+        // assert.strictEqual($target.get(0).getAttribute("id"), "id" in expectedAttributes ? id : null, `${postfix || ''}.id`);
+        // assert.strictEqual($target.get(0).getAttribute("role"), "role" in expectedAttributes ? role : null, `${postfix || ''}.role`);
+        // assert.strictEqual($target.get(0).getAttribute("aria-activedescendant"), "activeDescendant" in expectedAttributes ? activeDescendant : null, `${postfix || ''}.activedescendant`);
+        // assert.strictEqual($target.get(0).getAttribute("tabIndex"), "tabIndex" in expectedAttributes ? tabIndex : null, `${postfix || ''}.tabIndex`);
+        // assert.strictEqual($target.get(0).getAttribute("aria-owns"), "owns" in expectedAttributes ? owns : null, `${postfix || ''}.owns`);
+        // assert.strictEqual($target.get(0).getAttribute("aria-controls"), "ariaControls" in expectedAttributes ? ariaControls : null, `${postfix || ''}.controls`);
+        // assert.strictEqual($target.get(0).getAttribute("aria-expanded"), "ariaExpanded" in expectedAttributes ? ariaExpanded : null, `${postfix || ''}.expanded`);
     }
 
     checkItemAttributes($item, index, expectedAttributes) {

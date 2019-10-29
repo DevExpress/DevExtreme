@@ -1,6 +1,7 @@
 import $ from "jquery";
 // import eventsEngine from "events/core/events_engine";
 // import TreeViewTestWrapper from "../../../helpers/TreeViewTestHelper.js";
+import TreeView from "ui/tree_view/ui.tree_view.search";
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 import eventsEngine from "events/core/events_engine";
 
@@ -13,12 +14,12 @@ var helper;
         beforeEach: () => {
             this.items = [{ id: 1, text: "Item_1", expanded: true, items: [{ id: 3, text: "Item_1_1" }, { id: 4, text: "Item_1_2" }] }, { id: 2, text: "Item_2", expanded: false }];
             helper = new ariaAccessibilityTestHelper({
-                createWidget: ($element, options) => $element.dxTreeView(
+                createWidget: ($element, options) => new TreeView($element,
                     $.extend({
                         animationEnabled: false,
                         showCheckBoxesMode: "normal",
                         searchEnabled: searchEnabled
-                    }, options)).dxTreeView("instance")
+                    }, options))
             });
             this.clock = sinon.useFakeTimers();
         },
@@ -27,17 +28,15 @@ var helper;
             helper.$widget.remove();
         }
     }, () => {
-        // Todo: change names
-
         test(`Selected: [], selectionMode: "single"`, () => {
             helper.createWidget({ items: this.items, selectionMode: "single" });
 
             if(searchEnabled) {
-                helper.checkAttributes(helper.$itemContainer, { role: "tree", activeDescendant: null, tabIndex: '0' });
-                helper.checkAttributes(helper.$widget, { role: null, activeDescendant: null, tabIndex: null });
+                helper.checkAttributes(helper.$itemContainer, { role: "tree", activedescendant: null, tabindex: '0' });
+                helper.checkAttributes(helper.$widget, { role: null, activedescendant: null, tabindex: null });
             } else {
-                helper.checkAttributes(helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-                helper.checkAttributes(helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+                helper.checkAttributes(helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
+                helper.checkAttributes(helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
             }
 
             helper.checkItemsAttributes([], { role: null, isCheckBoxMode: true });
@@ -48,11 +47,11 @@ var helper;
             helper.widget.option("searchEnabled", !searchEnabled);
 
             if(searchEnabled) {
-                helper.checkAttributes(helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-                helper.checkAttributes(helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+                helper.checkAttributes(helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
+                helper.checkAttributes(helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
             } else {
-                helper.checkAttributes(helper.widget._itemContainer(true), { role: "tree", activeDescendant: null, tabIndex: '0' });
-                helper.checkAttributes(helper.$widget, { role: null, activeDescendant: null, tabIndex: null });
+                helper.checkAttributes(helper.widget._itemContainer(true), { role: "tree", activedescendant: null, tabindex: '0' });
+                helper.checkAttributes(helper.$widget, { role: null, activedescendant: null, tabindex: null });
             }
 
             helper.checkItemsAttributes([], { role: null, isCheckBoxMode: true });
@@ -63,8 +62,8 @@ var helper;
 
             helper.createWidget({ items: this.items, selectionMode: "single" });
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
         });
 
@@ -75,15 +74,15 @@ var helper;
             helper.widget.collapseItem(1);
             this.clock.tick();
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
 
             helper.widget.expandItem(1);
             this.clock.tick();
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
         });
 
@@ -95,15 +94,15 @@ var helper;
             helper.widget.expandItem(1);
             this.clock.tick();
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
 
             helper.widget.collapseItem(1);
             this.clock.tick();
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
         });
 
@@ -114,15 +113,15 @@ var helper;
             helper.widget.collapseItem(1);
             this.clock.tick();
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
 
             helper.widget.expandItem(1);
             this.clock.tick();
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
         });
 
@@ -130,8 +129,8 @@ var helper;
             helper.createWidget({ items: this.items, selectionMode: "single" });
             helper.widget.selectItem(1);
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
         });
 
@@ -140,14 +139,14 @@ var helper;
 
             eventsEngine.trigger(helper.$items.eq(0).prev(), "dxclick");
             eventsEngine.trigger(helper.$items.eq(0).prev(), "dxpointerdown");
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", focusedNodeIndex: 0, isCheckBoxMode: true });
 
             eventsEngine.trigger(helper.$items.eq(1).prev(), "dxclick");
             eventsEngine.trigger(helper.$items.eq(1).prev(), "dxpointerdown");
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", focusedNodeIndex: 1, isCheckBoxMode: true });
         });
 
@@ -156,14 +155,14 @@ var helper;
 
             eventsEngine.trigger(helper.$items.eq(0).prev(), "dxclick");
             eventsEngine.trigger(helper.$items.eq(0).prev(), "dxpointerdown");
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([0, 1, 2], { role: null, ariaSelected: "false", focusedNodeIndex: 0, isCheckBoxMode: true });
 
             eventsEngine.trigger(helper.$items.eq(1).prev(), "dxclick");
             eventsEngine.trigger(helper.$items.eq(1).prev(), "dxpointerdown");
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([0, 2], { role: null, ariaSelected: "false", focusedNodeIndex: 1, selectionMode: "multiple" });
         });
 
@@ -174,13 +173,13 @@ var helper;
             helper.createWidget({ items: this.items, selectionMode: "multiple", selectNodesRecursive: false });
 
             helper.widget.unselectItem(1);
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
 
             helper.widget.selectItem(4);
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([1, 2], { role: null, ariaSelected: "false", selectionMode: "multiple" });
         });
 
@@ -193,13 +192,13 @@ var helper;
                 helper.$widget.focusin();
             }
 
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([], { role: null, focusedNodeIndex: 0, ariaSelected: "false", isCheckBoxMode: true });
 
             helper.$widget.focusout();
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([], { role: null, focusedNodeIndex: 0, ariaSelected: "false" });
         });
 
@@ -207,13 +206,13 @@ var helper;
             helper.createWidget({ items: this.items, selectionMode: "single" });
 
             helper.widget.option("focusedElement", helper.$items.eq(2).closest(".dx-treeview-node"));
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([], { role: null, focusedNodeIndex: 2, ariaSelected: "false", isCheckBoxMode: true });
 
             helper.widget.option("focusedElement", null);
-            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: null, tabindex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activedescendant: null, tabindex: null });
             helper.checkItemsAttributes([], { role: null, ariaSelected: "false" });
         });
     });
