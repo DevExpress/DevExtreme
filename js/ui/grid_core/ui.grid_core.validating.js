@@ -402,7 +402,7 @@ module.exports = {
                     var validatingController = this.getController("validating"),
                         columnsController = this.getController("columns"),
                         invisibleColumns = grep(columnsController.getInvisibleColumns(), function(column) { return !column.isBand; }),
-                        groupColumns = grep(columnsController.getGroupColumns(), function(column) { return invisibleColumns.indexOf(column) === -1; }),
+                        groupColumns = grep(columnsController.getGroupColumns(), function(column) { return !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1; }),
                         invisibleColumnValidators = [];
 
                     invisibleColumns.push(...groupColumns);

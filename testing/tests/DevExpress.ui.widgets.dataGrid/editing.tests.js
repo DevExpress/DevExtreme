@@ -8548,6 +8548,11 @@ QUnit.test("Insert row when grouped column is required", function(assert) {
             validationRules: [{ type: "required" }],
             visible: false,
             groupIndex: 0
+        }, {
+            dataField: "showWhenGrouped",
+            groupIndex: 2,
+            showWhenGrouped: true,
+            validationRules: [{ type: "required" }]
         }]
     });
 
