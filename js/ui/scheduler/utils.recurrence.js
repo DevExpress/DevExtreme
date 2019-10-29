@@ -720,7 +720,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
     var result = [],
         count = rule.count,
         counter = 0,
-        date = prepareDate(startDate, dateRules);
+        date = prepareDate(startDate, dateRules, rule["wkst"]);
 
     while(counter < count) {
         var dates = getDatesByRules(dateRules, date, rule);
@@ -756,11 +756,11 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
     return result;
 };
 
-var prepareDate = function(startDate, dateRules) {
+var prepareDate = function(startDate, dateRules, weekStartRule) {
     var date = new Date(startDate);
 
     if(dateRules.length && isDefined(dateRules[0]["byday"])) {
-        date.setDate(date.getDate() - date.getDay() + dateRules[0]["byday"]);
+        date.setDate(date.getDate() - date.getDay() + days[weekStartRule] + dateRules[0]["byday"]);
     } else {
         date.setDate(1);
     }
