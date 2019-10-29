@@ -298,6 +298,7 @@
         "dxFileManager-errorDirectoryNotFoundFormat": "Thư mục '{0}' không tìm thấy",
         "dxFileManager-errorWrongFileExtension": "Phần mở rộng của tập tin không cho phép",
         "dxFileManager-errorMaxFileSizeExceeded": "Kích thước của tập tin vượt quá kích thước tối đa cho phép",
+        "dxFileManager-errorInvalidSymbols": "TODO",
         "dxFileManager-errorDefault": "Lỗi không xác định.",
 
         "dxDiagram-categoryGeneral": "Chung",

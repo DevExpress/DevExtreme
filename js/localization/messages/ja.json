@@ -266,6 +266,7 @@
         "dxFileManager-errorDirectoryNotFoundFormat": "TODO",
         "dxFileManager-errorWrongFileExtension": "TODO",
         "dxFileManager-errorMaxFileSizeExceeded": "TODO",
+        "dxFileManager-errorInvalidSymbols": "TODO",
         "dxFileManager-errorDefault": "特定できないエラー",
       
         "dxDiagram-categoryGeneral": "一般",
