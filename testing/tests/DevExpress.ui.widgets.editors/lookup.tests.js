@@ -3028,7 +3028,7 @@ if(devices.real().deviceType === "desktop") {
                 helper.checkAttributes(helper.$widget, { owns: helper.widget._popupContentId }, "widget");
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, "popupContent");
                 if($input.length) {
-                    helper.checkAttributes($input, { autocomplete: "off", type: "text", spellcheck: "false", tabindex: "0", role: "textbox" }, "input");
+                    helper.checkAttributes($input, { autocomplete: "off", type: "text", spellcheck: "false", role: "textbox" }, "input");
                 }
             });
 
