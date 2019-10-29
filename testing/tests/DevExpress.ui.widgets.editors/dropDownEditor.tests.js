@@ -1032,7 +1032,7 @@ QUnit.testInActiveWindow("widget should detach focus events before fieldTemplate
     assert.strictEqual(focusOutSpy.callCount, 0, "there's no focus outs from deleted field container");
 });
 
-QUnit.testInActiveWindow("fieldTemplate item element should have 100% width (T826516)", (assert) => {
+QUnit.test("fieldTemplate item element should have 100% width (T826516)", (assert) => {
     const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
         dataSource: [1, 2],
         width: 500,
@@ -1048,7 +1048,7 @@ QUnit.testInActiveWindow("fieldTemplate item element should have 100% width (T82
     assert.roughEqual($fieldTemplateWrapper.outerWidth(), $input.outerWidth(), 1);
 });
 
-QUnit.testInActiveWindow("fieldTemplate item element should have 100% width with field template wrapper (T826516)", (assert) => {
+QUnit.test("fieldTemplate item element should have 100% width with field template wrapper (T826516)", (assert) => {
     const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
         dataSource: [1, 2],
         width: 500,

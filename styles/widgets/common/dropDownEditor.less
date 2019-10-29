@@ -36,16 +36,8 @@
 .dx-dropdowneditor-field-template-wrapper {
     .dx-editor-content-wrapper();
 
-    > div:not(.dx-template-wrapper) {
-        width: 100%;
-    }
-
-    > .dx-template-wrapper {
-        .dx-editor-content-wrapper();
-
-        > div {
-            width: 100%;
-        }
+    > * {
+        flex-grow: 1;
     }
 }
 
