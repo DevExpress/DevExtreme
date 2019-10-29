@@ -1,7 +1,7 @@
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="treeView"></div>';
 
     $("#qunit-fixture").html(markup);

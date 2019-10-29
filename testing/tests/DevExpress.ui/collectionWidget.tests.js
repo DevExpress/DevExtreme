@@ -1909,7 +1909,7 @@ module("Data layer integration", {
     });
 });
 
-module("aria accessibility", {
+module("Aria accessibility", {
     beforeEach: () => {
         this.items = [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }];
     }
