@@ -7,23 +7,21 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("ui/tree_view");
+import "ui/tree_view";
 
-var WIDGET_CLASS = "dx-treeview",
-    NODE_CONTAINER_CLASS = "dx-treeview-node-container",
-    OPENED_NODE_CONTAINER_CLASS = "dx-treeview-node-container-opened",
-    NODE_CLASS = "dx-treeview-node",
-    ITEM_CLASS = "dx-treeview-item",
-    SELECTED_STATE_CLASS = "dx-state-selected",
-    ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox",
-    ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox",
-    IS_LEAF = "dx-treeview-node-is-leaf",
-    TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility",
-    SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item";
+const WIDGET_CLASS = "dx-treeview";
+const NODE_CONTAINER_CLASS = "dx-treeview-node-container";
+const OPENED_NODE_CONTAINER_CLASS = "dx-treeview-node-container-opened";
+const NODE_CLASS = "dx-treeview-node";
+const ITEM_CLASS = "dx-treeview-item";
+const SELECTED_STATE_CLASS = "dx-state-selected";
+const ITEM_WITH_CHECKBOX_CLASS = "dx-treeview-item-with-checkbox";
+const ITEM_WITHOUT_CHECKBOX_CLASS = "dx-treeview-item-without-checkbox";
+const IS_LEAF = "dx-treeview-node-is-leaf";
+const TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility";
+const SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item";
 
-var initTree = function(options) {
-    return $("#treeView").dxTreeView(options);
-};
+const initTree = (options) => $("#treeView").dxTreeView(options);
 
 QUnit.module("aria accessibility", {
     beforeEach: function() {

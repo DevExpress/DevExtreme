@@ -892,6 +892,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
+    _setAriaSelected: function() {},
+
     _renderChildren: function($node, node) {
         if(!this._hasChildren(node)) {
             this._addLeafClass($node);

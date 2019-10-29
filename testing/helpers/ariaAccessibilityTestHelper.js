@@ -12,6 +12,11 @@ class ariaAccessibilityTestHelper {
         this.createWidget = (options = {}) => {
             this.$widget = $("<div>").appendTo("#qunit-fixture");
             this.widget = createWidget(this.$widget, options);
+            this.isCheckBoxMode = this.widget.option("showCheckBoxesMode") === "normal";
+
+            if(this.widget.itemElements) {
+                this.$items = this.widget.itemElements();
+            }
 
             if(this.widget._itemContainer) {
                 this.$itemContainer = this.widget._itemContainer(this.widget.option("searchEnabled"));
@@ -33,31 +38,32 @@ class ariaAccessibilityTestHelper {
             const attrName = sliceAriaPrefixIfNeed(attributeName);
             assert.strictEqual(element.getAttribute(attributeName), attrName in expectedAttributes ? expectedAttributes[attrName] : null, `${prefix || ''}.${attributeName}`);
         });
-
-        // const { id, role, activeDescendant, tabIndex, owns, ariaControls, ariaExpanded } = expectedAttributes;
-
-        // assert.strictEqual($target.get(0).getAttribute("id"), "id" in expectedAttributes ? id : null, `${postfix || ''}.id`);
-        // assert.strictEqual($target.get(0).getAttribute("role"), "role" in expectedAttributes ? role : null, `${postfix || ''}.role`);
-        // assert.strictEqual($target.get(0).getAttribute("aria-activedescendant"), "activeDescendant" in expectedAttributes ? activeDescendant : null, `${postfix || ''}.activedescendant`);
-        // assert.strictEqual($target.get(0).getAttribute("tabIndex"), "tabIndex" in expectedAttributes ? tabIndex : null, `${postfix || ''}.tabIndex`);
-        // assert.strictEqual($target.get(0).getAttribute("aria-owns"), "owns" in expectedAttributes ? owns : null, `${postfix || ''}.owns`);
-        // assert.strictEqual($target.get(0).getAttribute("aria-controls"), "ariaControls" in expectedAttributes ? ariaControls : null, `${postfix || ''}.controls`);
-        // assert.strictEqual($target.get(0).getAttribute("aria-expanded"), "ariaExpanded" in expectedAttributes ? ariaExpanded : null, `${postfix || ''}.expanded`);
     }
 
-    checkItemAttributes($item, index, expectedAttributes) {
-        const { id, role, ariaSelected } = expectedAttributes;
+    _checkItemAttributes(options, index, defaultValue) {
+        const { attributes, focusedItemIndex, role } = options;
 
-        assert.strictEqual($item.get(0).getAttribute("id"), id, `item[${index}].id`);
-        assert.strictEqual($item.get(0).getAttribute("role"), role, `item[${index}].role`);
-        assert.strictEqual($item.get(0).getAttribute("aria-selected"), ariaSelected, `item[${index}].aria-selected`);
+        let itemAttributes = {};
+        attributes && attributes.forEach((attrName) => {
+            itemAttributes[attrName] = defaultValue;
+        });
+        if(isDefined(focusedItemIndex) && index === focusedItemIndex) {
+            itemAttributes.id = this.focusedItemId;
+        }
+        if("role" in options) {
+            itemAttributes.role = role;
+        }
+
+        this.checkAttributes(this.$items.eq(index), itemAttributes, `item[${index}]`);
     }
 
-    checkCheckboxAttributes($item, index, expectedAttributes) {
-        const { role, ariaChecked } = expectedAttributes;
+    _checkCheckboxAttributes(options, index, defaultValue) {
+        const $checkBox = this.$items.eq(index).prev();
 
-        assert.strictEqual($item.get(0).getAttribute("role"), role, `checkbox[${index}].role`);
-        assert.strictEqual($item.get(0).getAttribute("aria-checked"), ariaChecked, `checkbox[${index}].aria-checked`);
+        this.checkAttributes($checkBox, {
+            role: "checkbox",
+            checked: $checkBox.hasClass("dx-state-indeterminate") ? "mixed" : defaultValue
+        }, `checkbox[${index}]`);
     }
 
     checkNodeAttributes($node, index, expectedAttributes) {
@@ -77,7 +83,7 @@ class ariaAccessibilityTestHelper {
     }
 
     checkItemsAttributes(selectedIndexes, options = {}) {
-        const { focusedItemIndex, focusedNodeIndex, ariaSelected, role, isCheckBoxMode, checkboxRole, selectionMode } = options;
+        const { focusedNodeIndex, selectionMode } = options;
 
         selectedIndexes.forEach((index) => {
             const checkBoxCount = this.$items.eq(index).closest(".dx-treeview-node").find(".dx-checkbox").length;
@@ -96,16 +102,11 @@ class ariaAccessibilityTestHelper {
                 });
                 this.checkGroupNodeAttributes(this.$items.eq(index).closest(".dx-treeview-node-container").eq(0));
             }
-            this.checkItemAttributes(this.$items.eq(index), index, {
-                id: isDefined(focusedItemIndex) && index === focusedItemIndex ? this.focusedItemId : null,
-                role: "role" in options ? role : "option",
-                ariaSelected: "ariaSelected" in options ? ariaSelected : "true"
-            });
-            if(isCheckBoxMode) {
-                this.checkCheckboxAttributes(this.$items.eq(index).prev(), index, {
-                    role: checkboxRole || "checkbox",
-                    ariaChecked: !allCheckBoxSelected && selectionMode === "multiple" ? "mixed" : "true"
-                });
+
+            this._checkItemAttributes(options, index, "true");
+
+            if(this.isCheckBoxMode) {
+                this._checkCheckboxAttributes(options, index, "true");
             }
         });
 
@@ -123,16 +124,11 @@ class ariaAccessibilityTestHelper {
                     });
                     this.checkGroupNodeAttributes(this.$items.eq(index).closest(".dx-treeview-node-container").eq(0));
                 }
-                this.checkItemAttributes(this.$items.eq(index), index, {
-                    id: null,
-                    role: "role" in options ? role : "option",
-                    ariaSelected: "ariaSelected" in options ? ariaSelected : "false"
-                });
-                if(isCheckBoxMode) {
-                    this.checkCheckboxAttributes(this.$items.eq(index).prev(), index, {
-                        role: "checkbox",
-                        ariaChecked: "false"
-                    });
+
+                this._checkItemAttributes(options, index, "false");
+
+                if(this.isCheckBoxMode) {
+                    this._checkCheckboxAttributes(options, index, "false");
                 }
             }
         });

@@ -274,7 +274,7 @@ if(devices.real().deviceType === "desktop") {
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
                 helper.checkAttributes(searchEnabled ? helper.$widget : helper.$itemContainer, { });
-                helper.checkItemsAttributes([], { ariaSelected: null });
+                helper.checkItemsAttributes([], { role: "option" });
             });
 
             QUnit.test(`Selected: ["Item_2"], change searchEnabled after initialize`, () => {
@@ -282,15 +282,16 @@ if(devices.real().deviceType === "desktop") {
                 helper.widget.option("searchEnabled", !searchEnabled);
 
                 helper.checkAttributes(!searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
-                helper.checkAttributes(!searchEnabled ? helper.$widget : helper.$itemContainer, { });
+                helper.checkAttributes(!searchEnabled ? helper.$widget : helper.$itemContainer, {});
+                helper.checkItemsAttributes([1], { attributes: ["selected"], role: "option" });
             });
 
             QUnit.test(`Selected: ["Item_2"], selectionMode: "single"`, () => {
                 helper.createWidget({ selectedItemKeys: ["Item_2"], keyExpr: "text", selectionMode: "single" });
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
-                helper.checkAttributes(searchEnabled ? helper.$widget : helper.$itemContainer, { });
-                helper.checkItemsAttributes([1]);
+                helper.checkAttributes(searchEnabled ? helper.$widget : helper.$itemContainer, {});
+                helper.checkItemsAttributes([1], { attributes: ["selected"], role: "option" });
             });
 
             QUnit.test(`Selected: ["Item_2", "Item_3"], selectionMode: "multiple"`, () => {
@@ -298,7 +299,7 @@ if(devices.real().deviceType === "desktop") {
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
                 helper.checkAttributes(searchEnabled ? helper.$widget : helper.$itemContainer, { });
-                helper.checkItemsAttributes([1, 2]);
+                helper.checkItemsAttributes([1, 2], { attributes: ["selected"], role: "option" });
             });
 
             QUnit.test(`Selected: ["Item_3"] -> focusin -> focusout`, () => {
@@ -311,11 +312,11 @@ if(devices.real().deviceType === "desktop") {
                 }
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
-                helper.checkItemsAttributes([2], { focusedItemIndex: 2 });
+                helper.checkItemsAttributes([2], { attributes: ["selected"], focusedItemIndex: 2, role: "option" });
 
                 helper.$widget.focusout();
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
-                helper.checkItemsAttributes([2], { focusedItemIndex: 2 });
+                helper.checkItemsAttributes([2], { attributes: ["selected"], focusedItemIndex: 2, role: "option" });
             });
 
             QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> clean focusedElement`, () => {
@@ -323,11 +324,11 @@ if(devices.real().deviceType === "desktop") {
 
                 helper.widget.option("focusedElement", helper.$items.eq(0));
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
-                helper.checkItemsAttributes([0], { focusedItemIndex: 0 });
+                helper.checkItemsAttributes([0], { attributes: ["selected"], focusedItemIndex: 0, role: "option" });
 
                 helper.widget.option("focusedElement", null);
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: null, tabindex: "0" });
-                helper.checkItemsAttributes([0]);
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
+                helper.checkItemsAttributes([0], { attributes: ["selected"], role: "option" });
             });
 
             QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> change by click`, () => {
@@ -345,18 +346,18 @@ if(devices.real().deviceType === "desktop") {
                 this.clock.tick();
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
-                helper.checkItemsAttributes([2], { focusedItemIndex: 2 });
+                helper.checkItemsAttributes([2], { attributes: ["selected"], focusedItemIndex: 2, role: "option" });
 
                 helper.widget.option("focusedElement", null);
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
-                helper.checkItemsAttributes([2]);
+                helper.checkItemsAttributes([2], { attributes: ["selected"], role: "option" });
             });
 
             QUnit.test(`Selected: ["Item_1", "Item_3"] -> select "Item_2" by click`, () => {
                 helper.createWidget({ selectedItemKeys: ["Item_1", "Item_3"], keyExpr: "text", selectionMode: "multiple" });
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
-                helper.checkItemsAttributes([0, 2]);
+                helper.checkItemsAttributes([0, 2], { attributes: ["selected"], role: "option" });
 
                 const $item_1 = $(helper.$items.eq(1));
                 eventsEngine.trigger($item_1, "dxclick");
@@ -364,7 +365,7 @@ if(devices.real().deviceType === "desktop") {
                 this.clock.tick();
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
-                helper.checkItemsAttributes([0, 1, 2], { focusedItemIndex: 1 });
+                helper.checkItemsAttributes([0, 1, 2], { attributes: ["selected"], focusedItemIndex: 1, role: "option" });
             });
         });
     });
