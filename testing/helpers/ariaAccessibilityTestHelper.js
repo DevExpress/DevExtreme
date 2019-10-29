@@ -23,17 +23,15 @@ class ariaAccessibilityTestHelper {
 
     checkAttributes($target, expectedAttributes, prefix) {
         const element = $target.get(0);
-        const attributeNames = element.getAttributeNames();
-
         const skipAttributes = ["class", "style"];
-        const sliceAriaPrefix = (name) => name.indexOf("aria-") === -1 ? name : name.slice(5);
+        const attributeNames = element.getAttributeNames().filter(name => name !== skipAttributes[0] && name !== skipAttributes[1]);
 
+        const sliceAriaPrefixIfNeed = (name) => name === "aria-autocomplete" || name.indexOf("aria-") === -1 ? name : name.slice(5);
+
+        assert.equal(attributeNames.length === Object.keys(expectedAttributes).length, true, "attributes.count");
         attributeNames.forEach((attributeName) => {
-            if(skipAttributes.indexOf(attributeName) === -1) {
-                const shortAttributeName = sliceAriaPrefix(attributeName);
-
-                assert.strictEqual(element.getAttribute(attributeName), shortAttributeName in expectedAttributes ? expectedAttributes[shortAttributeName] : null, `${prefix || ''}.${attributeName}`);
-            }
+            const attrName = sliceAriaPrefixIfNeed(attributeName);
+            assert.strictEqual(element.getAttribute(attributeName), attrName in expectedAttributes ? expectedAttributes[attrName] : null, `${prefix || ''}.${attributeName}`);
         });
 
         // const { id, role, activeDescendant, tabIndex, owns, ariaControls, ariaExpanded } = expectedAttributes;

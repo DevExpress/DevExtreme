@@ -146,6 +146,7 @@
                     "firefox",
                     "msie",
                     "odata",      // OData
+                    "readonly",
                     "rtl",        // Right-to-Left
                     "scss",
                     "semver",     // The semantic versioner for npm
