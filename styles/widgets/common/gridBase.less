@@ -933,6 +933,12 @@
         white-space: nowrap;
     }
 
+    // ie11
+    .dx-@{widgetName} .dx-row .dx-@{widgetName}-hidden-column {
+        border-right-width: 0;
+        border-left-width: 0;
+    }
+
     .dx-@{widgetName}-hidden-column > * {
         display: none !important; // stylelint-disable-line declaration-no-important
     }
