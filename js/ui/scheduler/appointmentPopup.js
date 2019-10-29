@@ -9,6 +9,7 @@ import dateUtils from "../../core/utils/date";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
 import { Deferred, when } from "../../core/utils/deferred";
+import fx from "../../animation/fx";
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -56,11 +57,25 @@ export default class AppointmentPopup {
 
         this._popup.option("onShowing", () => {
             this._updateForm(data, processTimeZone);
-            this.updatePopupFullScreenMode();
 
-            this.scheduler._actions["onAppointmentFormOpening"]({
+            const arg = {
                 form: this._appointmentForm,
-                appointmentData: data
+                appointmentData: data,
+                cancel: false
+            };
+
+            this.scheduler._actions["onAppointmentFormOpening"](arg);
+            this.scheduler._processActionResult(arg, canceled => {
+                if(canceled) {
+                    const savedFxValue = fx.off; // TODO: temporary workaround until popup implemented e.cancel in onShowing event
+                    fx.off = true;
+
+                    this.hide();
+
+                    fx.off = savedFxValue;
+                } else {
+                    this.updatePopupFullScreenMode();
+                }
             });
         });
 

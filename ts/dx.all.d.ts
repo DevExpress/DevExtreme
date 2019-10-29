@@ -5122,7 +5122,7 @@ declare module DevExpress.ui {
         /** @name dxScheduler.Options.onAppointmentFormCreated */
         onAppointmentFormCreated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
         /** @name dxScheduler.Options.onAppointmentFormOpening */
-        onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
+        onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm, cancel?: boolean }) => any);
         /** @name dxScheduler.Options.onAppointmentRendered */
         onAppointmentRendered?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement }) => any);
         /** @name dxScheduler.Options.onAppointmentUpdated */

@@ -879,6 +879,7 @@ const Scheduler = Widget.inherit({
                 * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 form:dxForm
+                * @type_function_param1_field6 cancel:Boolean
                 * @action
                */
             onAppointmentFormOpening: null,
