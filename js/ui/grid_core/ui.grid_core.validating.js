@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import modules from "./ui.grid_core.modules";
 import { createObjectWithChanges, getIndexByKey } from "./ui.grid_core.utils";
-import { grep, deferUpdate, equalByValue } from "../../core/utils/common";
+import { deferUpdate, equalByValue } from "../../core/utils/common";
 import { each } from "../../core/utils/iterator";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
@@ -434,8 +434,8 @@ module.exports = {
                 _createInvisibleColumnValidators: function(editData) {
                     var validatingController = this.getController("validating"),
                         columnsController = this.getController("columns"),
-                        invisibleColumns = grep(columnsController.getInvisibleColumns(), function(column) { return !column.isBand; }),
-                        groupColumns = grep(columnsController.getGroupColumns(), function(column) { return !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1; }),
+                        invisibleColumns = columnsController.getInvisibleColumns().filter((column) => !column.isBand),
+                        groupColumns = columnsController.getGroupColumns().filter((column) => !column.showWhenGrouped && invisibleColumns.indexOf(column) === -1),
                         invisibleColumnValidators = [];
 
                     invisibleColumns.push(...groupColumns);
