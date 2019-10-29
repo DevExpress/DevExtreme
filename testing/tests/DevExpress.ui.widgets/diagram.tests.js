@@ -96,7 +96,16 @@ QUnit.module("Diagram DOM Layout", {
     }
 });
 
-QUnit.module("Diagram Toolbar", moduleConfig, () => {
+QUnit.module("Diagram Toolbar", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach();
+    },
+    afterEach: () => {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test("should not render if toolbar.visible is false", (assert) => {
         this.instance.option("toolbar.visible", false);
         let $toolbar = this.$element.find(TOOLBAR_SELECTOR);
@@ -261,7 +270,16 @@ QUnit.module("Diagram Properties Panel", moduleConfig, () => {
     });
 });
 
-QUnit.module("Context Menu", moduleConfig, () => {
+QUnit.module("Context Menu", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+        moduleConfig.beforeEach();
+    },
+    afterEach: () => {
+        this.clock.restore();
+        this.clock.reset();
+    }
+}, () => {
     test("should not render if contextMenu.enabled is false", (assert) => {
         let $contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR);
         assert.equal($contextMenu.length, 1);
