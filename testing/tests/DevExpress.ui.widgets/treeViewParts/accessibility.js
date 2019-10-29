@@ -7,11 +7,12 @@ import eventsEngine from "events/core/events_engine";
 // const createInstance = (options) => new TreeViewTestWrapper(options);
 const { module, test } = QUnit;
 
+var helper;
 [true, false].forEach((searchEnabled) => {
     module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
         beforeEach: () => {
             this.items = [{ id: 1, text: "Item_1", expanded: true, items: [{ id: 3, text: "Item_1_1" }, { id: 4, text: "Item_1_2" }] }, { id: 2, text: "Item_2", expanded: false }];
-            this.helper = new ariaAccessibilityTestHelper({
+            helper = new ariaAccessibilityTestHelper({
                 createWidget: ($element, options) => $element.dxTreeView(
                     $.extend({
                         animationEnabled: false,
@@ -19,237 +20,201 @@ const { module, test } = QUnit;
                         searchEnabled: searchEnabled
                     }, options)).dxTreeView("instance")
             });
+            this.clock = sinon.useFakeTimers();
         },
         afterEach: () => {
-            this.helper.clock.restore();
-            this.helper.$widget.remove();
+            this.clock.restore();
+            helper.$widget.remove();
         }
     }, () => {
+        // Todo: change names
+
         test(`Selected: [], selectionMode: "single"`, () => {
-            this.helper.createWidget({ items: this.items, selectionMode: "single" });
+            helper.createWidget({ items: this.items, selectionMode: "single" });
 
             if(searchEnabled) {
-                this.helper.checkAttributes(this.helper.$itemContainer, { role: "tree", activeDescendant: null, tabIndex: '0' });
-                this.helper.checkAttributes(this.helper.$widget, { role: null, activeDescendant: null, tabIndex: null });
+                helper.checkAttributes(helper.$itemContainer, { role: "tree", activeDescendant: null, tabIndex: '0' });
+                helper.checkAttributes(helper.$widget, { role: null, activeDescendant: null, tabIndex: null });
             } else {
-                this.helper.checkAttributes(this.helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-                this.helper.checkAttributes(this.helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+                helper.checkAttributes(helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+                helper.checkAttributes(helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
             }
 
-            this.helper.checkItemsAttributes([], { role: null, isCheckBoxMode: true });
+            helper.checkItemsAttributes([], { role: null, isCheckBoxMode: true });
         });
 
         test(`Selected: [], change searchEnabled after initialize"`, () => {
-            this.helper.createWidget({ items: this.items, selectionMode: "single" });
-            this.helper.widget.option("searchEnabled", !searchEnabled);
+            helper.createWidget({ items: this.items, selectionMode: "single" });
+            helper.widget.option("searchEnabled", !searchEnabled);
 
             if(searchEnabled) {
-                this.helper.checkAttributes(this.helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-                this.helper.checkAttributes(this.helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+                helper.checkAttributes(helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+                helper.checkAttributes(helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
             } else {
-                this.helper.checkAttributes(this.helper.widget._itemContainer(true), { role: "tree", activeDescendant: null, tabIndex: '0' });
-                this.helper.checkAttributes(this.helper.$widget, { role: null, activeDescendant: null, tabIndex: null });
+                helper.checkAttributes(helper.widget._itemContainer(true), { role: "tree", activeDescendant: null, tabIndex: '0' });
+                helper.checkAttributes(helper.$widget, { role: null, activeDescendant: null, tabIndex: null });
             }
 
-            this.helper.checkItemsAttributes([], { role: null, isCheckBoxMode: true });
+            helper.checkItemsAttributes([], { role: null, isCheckBoxMode: true });
         });
 
         test(`Selected: ["Item_1"], selectionMode: "single"`, () => {
             this.items[0].selected = true;
 
-            this.helper.createWidget({ items: this.items, selectionMode: "single" });
+            helper.createWidget({ items: this.items, selectionMode: "single" });
 
-            this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-            this.helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
         });
 
-        test(`Selected: ["Item_1_1"], selectionMode: "single", collapseItem(["Item_1"])`, () => {
+        test(`Selected: ["Item_1_1"], selectionMode: "single", Item_1.expanded: true, collapseItem(["Item_1"]) -> expand(["Item_1"])`, () => {
             this.items[0].items[0].selected = true;
 
-            this.helper.createWidget({ items: this.items, selectionMode: "single" });
-            this.helper.widget.collapseItem(1);
-            this.helper.clock.tick();
+            helper.createWidget({ items: this.items, selectionMode: "single" });
+            helper.widget.collapseItem(1);
+            this.clock.tick();
 
-            this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-            this.helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+
+            helper.widget.expandItem(1);
+            this.clock.tick();
+
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+        });
+
+        test(`Selected: ["Item_1"], selectionMode: "single", Item_1.expanded: false, expand(["Item_1"]) -> collapseItem(["Item_1"])`, () => {
+            this.items[0].selected = true;
+            this.items[0].expanded = false;
+
+            helper.createWidget({ items: this.items, selectionMode: "single" });
+            helper.widget.expandItem(1);
+            this.clock.tick();
+
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+
+            helper.widget.collapseItem(1);
+            this.clock.tick();
+
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+        });
+
+        test(`Selected: ["Item_1_1"], selectionMode: "single", collapseItem(["Item_1"]) -> expand(["Item_1"])`, () => {
+            this.items[0].items[0].selected = true;
+
+            helper.createWidget({ items: this.items, selectionMode: "single" });
+            helper.widget.collapseItem(1);
+            this.clock.tick();
+
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+
+            helper.widget.expandItem(1);
+            this.clock.tick();
+
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
         });
 
         test(`Selected: [], selectionMode: "single", selectItem(["Item_1"])`, () => {
-            this.helper.createWidget({ items: this.items, selectionMode: "single" });
-            this.helper.widget.selectItem(1);
+            helper.createWidget({ items: this.items, selectionMode: "single" });
+            helper.widget.selectItem(1);
 
-            this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-            this.helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
         });
 
-        test(`Selected: [], selectionMode: "single", click checkbox ["Item_1"], click checkbox ["Item_1_1"]`, () => {
-            this.helper.createWidget({ items: this.items, selectionMode: "single" });
+        test(`Selected: [], selectionMode: "single", click checkbox ["Item_1"] -> ["Item_1_1"]`, () => {
+            helper.createWidget({ items: this.items, selectionMode: "single" });
 
-            eventsEngine.trigger(this.helper.$items.eq(0).prev(), "dxclick");
-            this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-            this.helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+            eventsEngine.trigger(helper.$items.eq(0).prev(), "dxclick");
+            eventsEngine.trigger(helper.$items.eq(0).prev(), "dxpointerdown");
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([0], { role: null, ariaSelected: "false", focusedNodeIndex: 0, isCheckBoxMode: true });
 
-            eventsEngine.trigger(this.helper.$items.eq(1).prev(), "dxclick");
-            this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-            this.helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+            eventsEngine.trigger(helper.$items.eq(1).prev(), "dxclick");
+            eventsEngine.trigger(helper.$items.eq(1).prev(), "dxpointerdown");
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", focusedNodeIndex: 1, isCheckBoxMode: true });
         });
 
-        test(`Selected: [], selectionMode: "multiple", selectNodesRecursive: true, click checkbox ["Item_1"], click checkbox ["Item_1_1"]`, () => {
-            this.helper.createWidget({ items: this.items, selectionMode: "multiple", selectNodesRecursive: true });
+        test(`Selected: [], selectionMode: "multiple", selectNodesRecursive: true, click checkbox ["Item_1"] -> ["Item_1_1"]`, () => {
+            helper.createWidget({ items: this.items, selectionMode: "multiple", selectNodesRecursive: true });
 
-            eventsEngine.trigger(this.helper.$items.eq(0).prev(), "dxclick");
-            this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-            this.helper.checkItemsAttributes([0, 1, 2], { role: null, ariaSelected: "false", isCheckBoxMode: true });
+            eventsEngine.trigger(helper.$items.eq(0).prev(), "dxclick");
+            eventsEngine.trigger(helper.$items.eq(0).prev(), "dxpointerdown");
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([0, 1, 2], { role: null, ariaSelected: "false", focusedNodeIndex: 0, isCheckBoxMode: true });
 
-            eventsEngine.trigger(this.helper.$items.eq(1).prev(), "dxclick");
-            this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
-            this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
-            this.helper.checkItemsAttributes([0, 2], { role: null, ariaSelected: "false", selectionMode: "multiple" });
+            eventsEngine.trigger(helper.$items.eq(1).prev(), "dxclick");
+            eventsEngine.trigger(helper.$items.eq(1).prev(), "dxpointerdown");
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([0, 2], { role: null, ariaSelected: "false", focusedNodeIndex: 1, selectionMode: "multiple" });
         });
 
-        //         test("aria selected for items via UI", function(assert) {
-        //             let helper = new ariaAccessibilityTestHelper(searchEnabled);
+        test(`Selected: ["Item_1", "Item_1_1"], selectionMode: "multiple", selectNodesRecursive: false, unselectItem(["Item_1"]) -> selectItem(["Item_1_2"])`, () => {
+            this.items[0].items[0].selected = true;
+            this.items[0].selected = true;
 
-        //             let $nodes = helper.treeView.getNodes();
-        //             let $checkboxes = helper.treeView.getCheckBoxes();
+            helper.createWidget({ items: this.items, selectionMode: "multiple", selectNodesRecursive: false });
 
-        //             assert.equal($nodes.eq(0).attr("aria-selected"), "false", "item is unselected by default");
+            helper.widget.unselectItem(1);
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([1], { role: null, ariaSelected: "false", isCheckBoxMode: true });
 
-        //             $checkboxes.eq(0).trigger("dxclick");
-        //             assert.equal($nodes.eq(0).attr("aria-selected"), "true", "item is selected");
-        //             assert.equal($nodes.eq(1).attr("aria-selected"), "true", "item is selected");
+            helper.widget.selectItem(4);
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([1, 2], { role: null, ariaSelected: "false", selectionMode: "multiple" });
+        });
 
-        //             $checkboxes.eq(1).trigger("dxclick");
-        //             assert.notOk($nodes.eq(0).attr("aria-selected"), "item is unselected");
-        //             assert.equal($nodes.eq(1).attr("aria-selected"), "false", "item is unselected");
-        //         });
+        test(`Selected: [], selectionMode: "single" -> focusin -> focusout`, () => {
+            helper.createWidget({ items: this.items, selectionMode: "single" });
 
-        // test(`Selected: ["Item_2", "Item_3"], selectionMode: "multiple"`, () => {
-        //     this.helper.createWidget({ selectedItemKeys: ["Item_2", "Item_3"], keyExpr: "text", selectionMode: "multiple" });
+            if(searchEnabled) {
+                $(helper.widget._itemContainer(true)).focusin();
+            } else {
+                helper.$widget.focusin();
+            }
 
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$widget : this.helper.$itemContainer, { role: null, activeDescendant: null, tabIndex: null });
-        //     this.helper.checkItemsAttributes([1, 2]);
-        // });
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([], { role: null, focusedNodeIndex: 0, ariaSelected: "false", isCheckBoxMode: true });
 
-        // QUnit.test(`Change searchEnabled after initialize`, () => {
-        //     this.helper.createWidget({ selectedItemKeys: ["Item_2"], keyExpr: "text", selectionMode: "single" });
-        //     this.helper.widget.option("searchEnabled", !searchEnabled);
+            helper.$widget.focusout();
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([], { role: null, focusedNodeIndex: 0, ariaSelected: "false" });
+        });
 
-        //     this.helper.checkAttributes(!searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
-        //     this.helper.checkAttributes(!searchEnabled ? this.helper.$widget : this.helper.$itemContainer, { role: null, activeDescendant: null, tabIndex: null });
-        // });
+        test(`Selected: [], selectionMode: "single" -> set focusedElement -> clean focusedElement`, () => {
+            helper.createWidget({ items: this.items, selectionMode: "single" });
 
-        // QUnit.test(`Selected: ["Item_3"] -> focusin -> focusout`, () => {
-        //     this.helper.createWidget({ selectedItemKeys: ["Item_3"], keyExpr: "text", selectionMode: "single" });
+            helper.widget.option("focusedElement", helper.$items.eq(2).closest(".dx-treeview-node"));
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: helper.focusedItemId, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([], { role: null, focusedNodeIndex: 2, ariaSelected: "false", isCheckBoxMode: true });
 
-        //     if(searchEnabled) {
-        //         $(this.helper.$itemContainer).focusin();
-        //     } else {
-        //         this.helper.$widget.focusin();
-        //     }
-
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: this.helper.focusedItemId, tabIndex: '0' });
-        //     this.helper.checkItemsAttributes([2], { focusedItemIndex: 2 });
-
-        //     this.helper.$widget.focusout();
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: this.helper.focusedItemId, tabIndex: '0' });
-        //     this.helper.checkItemsAttributes([2], { focusedItemIndex: 2 });
-        // });
-
-        // QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> clean focusedElement`, () => {
-        //     this.helper.createWidget({ selectedItemKeys: ["Item_1"], keyExpr: "text", selectionMode: "single" });
-
-        //     this.helper.widget.option("focusedElement", this.helper.$items.eq(0));
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: this.helper.focusedItemId, tabIndex: '0' });
-        //     this.helper.checkItemsAttributes([0], { focusedItemIndex: 0 });
-
-        //     this.helper.widget.option("focusedElement", null);
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
-        //     this.helper.checkItemsAttributes([0]);
-        // });
-
-        // QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> change by click`, () => {
-        //     this.helper.createWidget({ selectedItemKeys: ["Item_1"], keyExpr: "text", selectionMode: "single" });
-
-        //     const clock = sinon.useFakeTimers();
-
-        //     if(searchEnabled) {
-        //         $(this.helper.$itemContainer).focusin();
-        //     } else {
-        //         this.helper.$widget.focusin();
-        //     }
-
-        //     const $item_2 = $(this.helper.$items.eq(2));
-        //     eventsEngine.trigger($item_2, "dxclick");
-        //     eventsEngine.trigger($item_2, "dxpointerdown");
-        //     clock.tick();
-
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: this.helper.focusedItemId, tabIndex: '0' });
-        //     this.helper.checkItemsAttributes([2], { focusedItemIndex: 2 });
-
-        //     this.helper.widget.option("focusedElement", null);
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
-        //     this.helper.checkItemsAttributes([2]);
-        //     clock.restore();
-        // });
-
-        // test(`Selected: ["Item_1", "Item_3"] -> select "Item_2" by click`, () => {
-        //     this.helper.createWidget({ selectedItemKeys: ["Item_1", "Item_3"], keyExpr: "text", selectionMode: "multiple" });
-
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: null, tabIndex: '0' });
-        //     this.helper.checkItemsAttributes([0, 2]);
-
-        //     const clock = sinon.useFakeTimers();
-
-        //     const $item_1 = $(this.helper.$items.eq(1));
-        //     eventsEngine.trigger($item_1, "dxclick");
-        //     eventsEngine.trigger($item_1, "dxpointerdown");
-        //     clock.tick();
-
-        //     this.helper.checkAttributes(searchEnabled ? this.helper.$itemContainer : this.helper.$widget, { role: "listbox", activeDescendant: this.helper.focusedItemId, tabIndex: '0' });
-        //     this.helper.checkItemsAttributes([0, 1, 2], { focusedItemIndex: 1 });
-
-        //     clock.restore();
-        // });
+            helper.widget.option("focusedElement", null);
+            helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activeDescendant: null, tabIndex: '0' });
+            helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { role: null, activeDescendant: null, tabIndex: null });
+            helper.checkItemsAttributes([], { role: null, ariaSelected: "false" });
+        });
     });
 });
-
-// module("aria accessibility", () => {
-//     [true, false].forEach((searchEnabled) => {
-
-//         test("'Expanded' attr should be applied correctly when item was expanded on the second time", function(assert) {
-//             let helper = new ariaAccessibilityTestHelper(searchEnabled);
-
-//             const $firstItem = helper.treeView.getNodes().eq(0);
-//             const $itemElements = helper.element.itemElements();
-
-//             helper.element.collapseItem($itemElements[0]);
-//             helper.clock.tick(0);
-//             helper.element.expandItem($itemElements[0]);
-//             helper.clock.tick(0);
-
-//             assert.equal($firstItem.attr("aria-expanded"), "true", "aria-expanded changing on item expanding");
-//         });
-
-//         test("'Expanded' attr should be applied correctly when item was expanded on the first time", function(assert) {
-//             let helper = new ariaAccessibilityTestHelper(searchEnabled);
-//             helper.element.option("items", [{ id: 1, text: "a", items: [{ id: 2, text: "b" }] }]);
-
-//             const $firstItem = helper.treeView.getNodes().eq(0);
-
-//             helper.element.expandItem(helper.element.itemElements()[0]);
-//             helper.clock.tick(0);
-
-//             assert.equal($firstItem.attr("aria-expanded"), "true", "aria-expanded changing on item expanding");
-//         });
-//     });
-// });
-
-

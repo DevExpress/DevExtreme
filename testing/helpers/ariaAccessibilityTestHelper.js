@@ -15,7 +15,6 @@ class ariaAccessibilityTestHelper {
             this.$itemContainer = this.widget._itemContainer(this.widget.option("searchEnabled"));
             this.focusedItemId = this.widget.getFocusedItemId();
             this.$items = this.$itemContainer.find(`.${ITEM_CLASS}`);
-            this.clock = sinon.useFakeTimers();
         };
     }
 
@@ -59,7 +58,7 @@ class ariaAccessibilityTestHelper {
     }
 
     checkItemsAttributes(selectedIndexes, options = {}) {
-        const { focusedItemIndex, ariaSelected, role, isCheckBoxMode, checkboxRole, selectionMode } = options;
+        const { focusedItemIndex, focusedNodeIndex, ariaSelected, role, isCheckBoxMode, checkboxRole, selectionMode } = options;
 
         selectedIndexes.forEach((index) => {
             const checkBoxCount = this.$items.eq(index).closest(".dx-treeview-node").find(".dx-checkbox").length;
@@ -68,7 +67,7 @@ class ariaAccessibilityTestHelper {
 
             if(this.$items.eq(index).closest(".dx-treeview-node").length) {
                 this.checkNodeAttributes(this.$items.eq(index).closest(".dx-treeview-node"), index, {
-                    id: isDefined(focusedItemIndex) && index === focusedItemIndex ? this.focusedItemId : null,
+                    id: isDefined(focusedNodeIndex) && index === focusedNodeIndex ? this.focusedItemId : null,
                     dataItemId: this.widget._getNode(this.$items.eq(index)).id.toString(),
                     role: "treeitem",
                     ariaLabel: this.$items.eq(index).text(),
@@ -95,7 +94,7 @@ class ariaAccessibilityTestHelper {
             if(selectedIndexes.indexOf(index) === -1) {
                 if(this.$items.eq(index).closest(".dx-treeview-node").length) {
                     this.checkNodeAttributes(this.$items.eq(index).closest(".dx-treeview-node"), index, {
-                        id: isDefined(focusedItemIndex) && index === focusedItemIndex ? this.focusedItemId : null,
+                        id: isDefined(focusedNodeIndex) && index === focusedNodeIndex ? this.focusedItemId : null,
                         dataItemId: this.widget._getNode(this.$items.eq(index)).id.toString(),
                         role: "treeitem",
                         ariaLabel: this.$items.eq(index).text(),
