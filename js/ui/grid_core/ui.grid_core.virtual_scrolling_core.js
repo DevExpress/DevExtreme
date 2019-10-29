@@ -665,6 +665,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
 
         reset: function(isRefresh) {
+            this._loadingPageIndexes = {};
             this._cache = [];
             if(!isRefresh) {
                 this._itemSizes = {};

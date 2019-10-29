@@ -58,6 +58,10 @@ export class RowsViewWrapper extends WrapperBase {
         return this.getElement().find(".dx-data-row").eq(rowIndex);
     }
 
+    getDataRowElementCount() {
+        return this.getElement().find(".dx-data-row").length;
+    }
+
     getRowAdaptiveElement(rowIndex) {
         return this.getDataRowElement(rowIndex).find(`.${COMMAND_ADAPTIVE_CLASS}`);
     }
