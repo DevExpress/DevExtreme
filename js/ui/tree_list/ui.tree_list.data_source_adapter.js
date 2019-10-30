@@ -498,7 +498,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         _applyRemove: function(change) {
             var baseChanges = [];
             var node = this.getNodeByKey(change.key);
-            var parentNode = node.parent;
+            var parentNode = node && node.parent;
 
             if(parentNode) {
                 var index = parentNode.children.indexOf(node);
