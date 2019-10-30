@@ -5052,6 +5052,34 @@ QUnit.test("DataGrid should not load same page multiple times when scroll positi
     assert.deepEqual(skips, [0, 10, 20, 30, 40], "all skips");
 });
 
+QUnit.test("DataGrid should expand the row in the onContentReady method in virtual scroll mode (T826930)", function(assert) {
+    // arrange
+    var rowsView = dataGridWrapper.rowsView;
+    $("#dataGrid").dxDataGrid({
+        dataSource: [{ id: 1, name: 'Sahra' }, { id: 1, name: 'John' }],
+        grouping: {
+            autoExpandAll: false
+        },
+        onContentReady: function(e) {
+            // act
+            e.component.expandRow([1]);
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        columns: [{
+            dataField: "id",
+            groupIndex: 0
+        }, "name"]
+    }).dxDataGrid("instance");
+    this.clock.tick();
+
+    // assert
+    assert.equal(rowsView.getDataRowElementCount(), 2, "row is expanded");
+});
+
 QUnit.test("virtual columns", function(assert) {
     // arrange, act
     var columns = [];
