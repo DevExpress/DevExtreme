@@ -2335,9 +2335,10 @@ const formatTestValue = value => Array.isArray(value) ? "[]" : value;
 [false, true].forEach(useItemOption => {
     QUnit.module(`Public API: Tab options are changed via ${useItemOption ? "itemOption" : "option"} method`, () => {
         class FormTestWrapper {
-            constructor(useItemOption) {
+            constructor(useItemOption, onInitializedHandler) {
                 this._useItemOption = useItemOption;
                 this._form = $("#form").dxForm({
+                    onInitialized: onInitializedHandler,
                     items: [{
                         itemType: "tabbed",
                         tabs: [{
@@ -2365,8 +2366,8 @@ const formatTestValue = value => Array.isArray(value) ? "[]" : value;
                 $(".dx-tabpanel").dxTabPanel("instance").option("selectedIndex", tabIndex);
             }
 
-            checkFormsReRender(isReRender) {
-                QUnit.assert.equal(this._contentReadyStub.callCount, Number(!!isReRender), "form is rendered once");
+            checkFormsReRender() {
+                QUnit.assert.equal(this._contentReadyStub.callCount, 0, "form is rendered once");
                 this._contentReadyStub.reset();
             }
 
@@ -2481,6 +2482,19 @@ const formatTestValue = value => Array.isArray(value) ? "[]" : value;
             testWrapper.setTabOption(1, "title", "TestTitle2");
             testWrapper.checkFormsReRender();
             testWrapper.checkTabTitle(1, "TestTitle2");
+        });
+
+        QUnit.test("Title is set correctly when it is changed on the onInitialized event", () => {
+            const testWrapper = new FormTestWrapper(useItemOption, ({ component }) => {
+                if(useItemOption) {
+                    component.itemOption("title0", "title", "New Title");
+                } else {
+                    component.option("items[0].tabs[0].title", "New Title");
+                }
+            });
+
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTitle(0, "New Title");
         });
     });
 });

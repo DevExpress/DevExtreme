@@ -1,18 +1,20 @@
+import { abstract } from "../../core/class";
+
 export default class ItemOptionAction {
     constructor(options) {
         this._options = options;
         this._itemsRunTimeInfo = this._options.itemsRunTimeInfo;
     }
 
-    getInstance() {
+    findInstance() {
         return this._itemsRunTimeInfo.findWidgetInstanceByItem(this._options.item);
     }
 
-    getItemContainer() {
+    findItemContainer() {
         return this._itemsRunTimeInfo.findItemContainerByItem(this._options.item);
     }
 
     tryExecute() {
-        return true;
+        abstract();
     }
 }

@@ -21,11 +21,11 @@ export default class FormItemsRunTimeInfo {
         return result;
     }
 
-    _findFieldByCondition(callback, field) {
+    _findFieldByCondition(callback, valueExpr) {
         let result;
         each(this._map, function(key, value) {
             if(callback(value)) {
-                result = field === "guid" ? key : value[field];
+                result = valueExpr === "guid" ? key : value[valueExpr];
                 return false;
             }
         });
@@ -72,16 +72,16 @@ export default class FormItemsRunTimeInfo {
         return this._findWidgetInstance(storedItem => storedItem === item);
     }
 
-    getGroupOrTabLayoutManagerByPath(path) {
-        return this._findFieldByCondition(value => value.path === path, "layoutManager");
+    getGroupOrTabLayoutManagerByPath(targetPath) {
+        return this._findFieldByCondition(({ path }) => path === targetPath, "layoutManager");
     }
 
-    getKeyByPath(path) {
-        return this._findFieldByCondition(value => value.path === path, "guid");
+    getKeyByPath(targetPath) {
+        return this._findFieldByCondition(({ path }) => path === targetPath, "guid");
     }
 
     getPathFromItem(targetItem) {
-        return this._findFieldByCondition(value => value.item === targetItem, "path");
+        return this._findFieldByCondition(({ item }) => item === targetItem, "path");
     }
 
     findWidgetInstanceByName(name) {
@@ -99,6 +99,10 @@ export default class FormItemsRunTimeInfo {
             }
         }
         return null;
+    }
+
+    findItemIndexByItem(targetItem) {
+        return this._findFieldByCondition(({ item }) => item === targetItem, "itemIndex");
     }
 
     getItems() {

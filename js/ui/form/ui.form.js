@@ -908,7 +908,7 @@ const Form = Widget.inherit({
             for(let i = 0; i < items.length; i++) {
                 const item = items[i];
                 const path = concatPaths(currentPath, createItemPathByIndex(i, isTabs));
-                const guid = this._itemsRunTimeInfo.add({ item, path });
+                const guid = this._itemsRunTimeInfo.add({ item, itemIndex: i, path });
 
                 if(isObject(item)) {
                     const itemCopy = extend({}, item);
