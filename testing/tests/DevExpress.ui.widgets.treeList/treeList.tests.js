@@ -18,8 +18,8 @@ import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import { DataSource } from "data/data_source/data_source";
-import { ColumnWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 import ArrayStore from 'data/array_store';
+import { TreeListWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 fx.off = true;
 
@@ -31,6 +31,8 @@ QUnit.module("Initialization", {
         this.clock.restore();
     }
 });
+
+const treeListWrapper = new TreeListWrapper("#container");
 
 var createTreeList = function(options) {
     var treeList,
@@ -574,7 +576,7 @@ QUnit.test("Aria accessibility", function(assert) {
 
 QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
     // arrange
-    var wrapper = new ColumnWrapper(".dx-treelist"),
+    var columnsWrapper = treeListWrapper.columns,
         clock = sinon.useFakeTimers(),
         treeList = createTreeList({
             dataSource: [
@@ -598,7 +600,7 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
     clock.tick();
 
     // assert
-    wrapper.getCommandButtons().each((_, button) => {
+    columnsWrapper.getCommandButtons().each((_, button) => {
         var ariaLabel = $(button).attr("aria-label");
         assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
     });
@@ -606,7 +608,7 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
     // act
     treeList.editRow(0);
     // assert
-    wrapper.getCommandButtons().each((_, button) => {
+    columnsWrapper.getCommandButtons().each((_, button) => {
         var ariaLabel = $(button).attr("aria-label");
         assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
     });
@@ -1193,7 +1195,7 @@ QUnit.test("TreeList with remoteOperations(filtering, sorting, grouping) and foc
     assert.equal(childrenNodes[0].key, 3, "children node key");
 });
 
-QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
+QUnit.testInActiveWindow("TreeList should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
     // arrange
     var treeList = createTreeList({
         keyExpr: "id",
@@ -1213,6 +1215,27 @@ QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if g
     // assert
     assert.equal(treeList.isRowExpanded(3), false, "parent node collapsed");
     assert.equal(treeList.option("focusedRowKey"), 3, "parent node focused");
+});
+
+QUnit.test("TreeList should focus only one focused row (T827201)", function(assert) {
+    // arrange
+    const rowsViewWrapper = treeListWrapper.rowsView;
+    const treeList = createTreeList({
+        keyExpr: "id",
+        dataSource: generateData(10),
+        focusedRowEnabled: true,
+        focusedRowKey: 3
+    });
+
+    this.clock.tick();
+
+    // act
+    $(treeList.getCellElement(4, 1)).trigger("dxpointerdown");
+    this.clock.tick();
+
+    // assert
+    assert.equal(rowsViewWrapper.getFocusedRow().length, 1, "Only one row is focused");
+    assert.ok(rowsViewWrapper.isRowFocused(treeList.getRowIndexByKey(9)), "Row with key 9 is focused");
 });
 
 QUnit.test("TreeList navigateTo", function(assert) {
