@@ -34,7 +34,7 @@ class ariaAccessibilityTestHelper {
 
         const sliceAriaPrefixIfNeed = (name) => name === "aria-autocomplete" || name.indexOf("aria-") === -1 ? name : name.slice(5);
 
-        assert.equal(attributeNames.length === Object.keys(expectedAttributes).length, true, "attributes.count");
+        assert.equal(attributeNames.length === Object.keys(expectedAttributes).length, true, `${prefix || ''}.attributes.count`);
         attributeNames.forEach((attributeName) => {
             const attrName = sliceAriaPrefixIfNeed(attributeName);
             assert.strictEqual(element.getAttribute(attributeName), attrName in expectedAttributes ? expectedAttributes[attrName] : null, `${prefix || ''}.${attributeName}`);
@@ -104,10 +104,10 @@ class ariaAccessibilityTestHelper {
             this._checkGroupNodeAttributes(index);
         }
 
-        this._checkItemAttributes(options, index, "true");
+        this._checkItemAttributes(options, index, defaultValue);
 
         if(this.isCheckBoxMode) {
-            this._checkCheckboxAttributes(options, index, "true");
+            this._checkCheckboxAttributes(options, index, defaultValue);
         }
     }
 

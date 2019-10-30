@@ -1,5 +1,4 @@
 import $ from "jquery";
-// import eventsEngine from "events/core/events_engine";
 import TreeView from "ui/tree_view/ui.tree_view.search";
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 import eventsEngine from "events/core/events_engine";

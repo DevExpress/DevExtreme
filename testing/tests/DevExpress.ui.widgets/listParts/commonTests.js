@@ -20,7 +20,7 @@ import KeyboardProcessor from "ui/widget/ui.keyboard_processor";
 import List from "ui/list";
 import ScrollView from "ui/scroll_view";
 import eventsEngine from "events/core/events_engine";
-import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
+import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 
 const LIST_ITEM_CLASS = "dx-list-item";
 const LIST_GROUP_CLASS = "dx-list-group";
