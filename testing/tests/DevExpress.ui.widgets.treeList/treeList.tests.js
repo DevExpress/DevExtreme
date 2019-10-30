@@ -19,6 +19,7 @@ import devices from 'core/devices';
 import fx from 'animation/fx';
 import { DataSource } from "data/data_source/data_source";
 import { ColumnWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import ArrayStore from 'data/array_store';
 
 fx.off = true;
 
@@ -1514,6 +1515,34 @@ QUnit.test("TreeList should not reshape data after expand row (T815367)", functi
 
     // assert
     assert.equal(onNodesInitializedSpy.callCount, 1, "data did not reshape");
+});
+
+QUnit.test("TreeList should not occur an exception on an attempt to remove the non-existing key from the store (T827142)", function(assert) {
+    // arrange
+    var store = new ArrayStore({
+        data: [
+            { id: 1, parentId: 0, age: 19 },
+            { id: 2, parentId: 1, age: 16 }
+        ],
+        key: "id",
+        reshapeOnPush: true
+    });
+
+    createTreeList({
+        dataSource: {
+            store: store
+        },
+        keyExpr: "id",
+        parentIdExpr: "parentId",
+    });
+    this.clock.tick();
+
+    // act
+    store.push([{ type: 'remove', key: 100 }]);
+    this.clock.tick();
+
+    // assert
+    assert.ok(true, "exception does not occur");
 });
 
 QUnit.test("TreeList should filter data with unreachable items (T816921)", function(assert) {
