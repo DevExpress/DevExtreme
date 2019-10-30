@@ -55,7 +55,7 @@ export default class AppointmentPopup {
             showCloseButton: showButtons ? this._popup.initialOption("showCloseButton") : true
         });
 
-        this._popup.option("onShowing", () => {
+        this._popup.option("onShowing", e => {
             this._updateForm(data, processTimeZone);
 
             const arg = {
@@ -70,7 +70,8 @@ export default class AppointmentPopup {
                     const savedFxValue = fx.off; // TODO: temporary workaround until popup implemented e.cancel in onShowing event
                     fx.off = true;
 
-                    this.hide();
+                    // this.hide();
+                    e.component.option("visible", false);
 
                     fx.off = savedFxValue;
                 } else {

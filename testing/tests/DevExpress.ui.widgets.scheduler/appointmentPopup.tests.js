@@ -39,9 +39,9 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
         }
     ];
 
-    const createScheduler = () => {
-        return createWrapper({
-            dataSource: defaultData,
+    const createScheduler = (options = {}) => {
+        const defaultOption = {
+            dataSource: defaultData, // TODO
             views: ["month"],
             currentView: "month",
             currentDate: new Date(2017, 4, 25),
@@ -49,8 +49,41 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
             startDayHour: 9,
             height: 600,
             width: 600
-        });
+        };
+
+        return createWrapper($.extend(defaultOption, options));
     };
+
+    QUnit.test("e.cancel", assert => {
+        var data = [{
+            text: "Website Re-Design Plan",
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }, {
+            text: "Book Flights to San Fran for Sales Trip",
+            startDate: new Date(2017, 4, 22, 12, 0),
+            endDate: new Date(2017, 4, 22, 13, 0),
+            allDay: true
+        }];
+
+        const scheduler = createScheduler({ dataSource: data });
+
+        scheduler.option("onAppointmentFormOpening", e => e.cancel = true);
+
+        scheduler.drawControl(); // TODO
+
+        scheduler.appointments.click();
+        scheduler.tooltip.clickOnItem();
+
+        assert.notOk(scheduler.appointmentPopup.isVisible(), "");
+
+        scheduler.option("onAppointmentFormOpening", e => e.cancel = false);
+
+        scheduler.appointments.click(1);
+        scheduler.tooltip.clickOnItem(0);
+
+        assert.ok(scheduler.appointmentPopup.isVisible(), "");
+    });
 
     QUnit.test("Appointment popup should work properly", assert => {
         const NEW_EXPECTED_SUBJECT = "NEW SUBJECT";
