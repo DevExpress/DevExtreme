@@ -23,14 +23,14 @@ class ariaAccessibilityTestHelper {
     }
 
     getItems() {
-        if(this.widget.itemElements) {
-            return this.widget.itemElements();
-        }
-
         if(this.widget._itemContainer) {
             this.$itemContainer = this.widget._itemContainer(this.widget.option("searchEnabled"));
 
             return this.$itemContainer.find(`.${ITEM_CLASS}`);
+        }
+
+        if(this.widget.itemElements) {
+            return this.widget.itemElements();
         }
     }
 
