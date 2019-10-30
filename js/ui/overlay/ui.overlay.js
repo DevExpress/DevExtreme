@@ -441,9 +441,7 @@ var Overlay = Widget.inherit({
         this._initInnerOverlayClass();
 
         var $element = this.$element();
-
-        this._copyElementClassesToWrapper({ forcedClass: $element.attr("class") });
-
+        this._$wrapper.addClass($element.attr("class"));
         $element.addClass(OVERLAY_CLASS);
 
         this._$wrapper.attr("data-bind", "dxControlsDescendantBindings: true");
@@ -1121,45 +1119,19 @@ var Overlay = Widget.inherit({
         });
     },
 
-    _renderElementAttributes: function(args) {
+    _renderElementAttributes: function() {
         this.callBase();
-        this._copyElementClassesToWrapper(args);
+
+        const elementAttr = this.option("elementAttr");
+        const elementClasses = elementAttr && elementAttr.class || "";
+        this._copyElementClassesToWrapper(elementClasses);
+        this._elementClasses = elementClasses;
     },
 
-    _copyElementClassesToWrapper: function(options) {
-        let classOptions = {};
-
-        if(options) {
-            classOptions = this._getClassChangesByArgs(options);
-        } else {
-            const elementAttr = this.option("elementAttr");
-            classOptions.newClass = elementAttr && elementAttr.class || "";
-        }
-
-        this._$wrapper.removeClass(classOptions.oldClass);
-        this._$wrapper.addClass(classOptions.newClass);
-    },
-
-    _getClassChangesByArgs: function(args) {
-        let classOptions = {};
-        const valueChangedArgs = args.valueChangedArgs;
-
-        if(valueChangedArgs) {
-            const isRootOptionChanged = valueChangedArgs.name === valueChangedArgs.fullName;
-
-            if(isRootOptionChanged || valueChangedArgs.fullName.split(".").pop() === "class") {
-                classOptions = {
-                    newClass: isRootOptionChanged ? valueChangedArgs.value.class : valueChangedArgs.value,
-                    oldClass: isRootOptionChanged ? valueChangedArgs.previousValue.class : valueChangedArgs.previousValue
-                };
-            }
-        }
-
-        if(args.forcedClass) {
-            classOptions.newClass = (classOptions.newClass ? classOptions.newClass + " " : "") + args.forcedClass;
-        }
-
-        return classOptions;
+    _copyElementClassesToWrapper: function(classes) {
+        this._wrapper()
+            .removeClass(this._elementClasses)
+            .addClass(classes);
     },
 
     _getDragTarget: function() {
@@ -1555,9 +1527,6 @@ var Overlay = Widget.inherit({
                 break;
             case "closeOnTargetScroll":
                 this._toggleParentsScrollSubscription(this.option("visible"));
-                break;
-            case "elementAttr":
-                this._renderElementAttributes({ valueChangedArgs: args });
                 break;
             case "closeOnOutsideClick":
             case "animation":
