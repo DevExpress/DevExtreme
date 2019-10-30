@@ -159,29 +159,6 @@ QUnit.module("TabPanel items", () => {
             assert.strictEqual($itemElements.eq(1).find(".dx-icon").length, 0, "item.icon");
         });
     });
-
-    QUnit.test("itemTitleTemplate rendering test", (assert) => {
-        const items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
-
-        const $tabPanel = $("#tabPanel").dxTabPanel({
-            items: items,
-            itemTitleTemplate: $("<span>Template</span>")
-        });
-        const tabPanelInstance = $tabPanel.dxTabPanel("instance");
-        const tabWidgetInstance = $tabPanel.find(toSelector(TABS_CLASS)).dxTabs("instance");
-
-        assert.deepEqual(tabWidgetInstance.itemElements().eq(0).text(),
-            "Template",
-            "option <itemTitleTemplate> successfully passed to nested tabs widget");
-
-        tabPanelInstance.option("itemTitleTemplate", $("<span>Changed template</span>"));
-
-        assert.deepEqual(tabWidgetInstance.itemElements().eq(0).text(),
-            "Changed template",
-            "option <itemTitleTemplate> of nested tabs widget successfully changed");
-    });
-
 });
 
 QUnit.module("aria accessibility", () => {
