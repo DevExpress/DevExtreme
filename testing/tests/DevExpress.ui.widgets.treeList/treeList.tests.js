@@ -18,7 +18,7 @@ import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
 import { DataSource } from "data/data_source/data_source";
-import { ColumnWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import { TreeListWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 import ArrayStore from 'data/array_store';
 
 fx.off = true;
@@ -31,6 +31,8 @@ QUnit.module("Initialization", {
         this.clock.restore();
     }
 });
+
+const treeListWrapper = new TreeListWrapper("#container");
 
 var createTreeList = function(options) {
     var treeList,
@@ -574,7 +576,7 @@ QUnit.test("Aria accessibility", function(assert) {
 
 QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
     // arrange
-    var wrapper = new ColumnWrapper(".dx-treelist"),
+    var columnsWrapper = treeListWrapper.columns,
         clock = sinon.useFakeTimers(),
         treeList = createTreeList({
             dataSource: [
@@ -598,7 +600,7 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
     clock.tick();
 
     // assert
-    wrapper.getCommandButtons().each((_, button) => {
+    columnsWrapper.getCommandButtons().each((_, button) => {
         var ariaLabel = $(button).attr("aria-label");
         assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
     });
@@ -606,7 +608,7 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
     // act
     treeList.editRow(0);
     // assert
-    wrapper.getCommandButtons().each((_, button) => {
+    columnsWrapper.getCommandButtons().each((_, button) => {
         var ariaLabel = $(button).attr("aria-label");
         assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
     });
