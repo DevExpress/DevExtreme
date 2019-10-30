@@ -13,7 +13,7 @@ import eventUtils from "../events/utils";
 import CollectionWidget from "./collection/ui.collection_widget.live_update";
 import { when, Deferred } from "../core/utils/deferred";
 import { BindableTemplate } from "../core/templates/bindable_template";
-import iconUtils from "../core/utils/icon";
+import { getImageContainer } from "../core/utils/icon";
 import themes from "./themes";
 
 const ACCORDION_CLASS = "dx-accordion";
@@ -208,18 +208,16 @@ var Accordion = CollectionWidget.inherit({
         * @type String
         */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
-            var $templateContainer = $("<div>")
-                .addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS)
-                .appendTo($container);
-
             if(isPlainObject(data)) {
-                if(data.title) {
-                    $templateContainer.text(data.title);
-                }
-                $templateContainer.append(iconUtils.getImageContainer(data.icon));
+                $container.text(isDefined(data.title) ? data.title : String(data));
+
+                const $iconElement = getImageContainer(data.icon);
+                $iconElement && $iconElement.appendTo($container);
             } else {
-                $templateContainer.text(String(data));
+                $container.text(String(data));
             }
+
+            $container.wrapInner($("<div>").addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS));
         }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
     },
 

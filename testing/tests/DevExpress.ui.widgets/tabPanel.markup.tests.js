@@ -1,6 +1,6 @@
 import $ from "jquery";
-import "ui/tab_panel";
-
+import TabPanel from "ui/tab_panel";
+import { isDefined } from "core/utils/type";
 
 QUnit.testStart(() => {
     const markup =
@@ -126,6 +126,62 @@ QUnit.module("TabPanel items", () => {
         assert.ok($disabledItem.hasClass("dx-state-disabled"), "Item is disabled");
         assert.notEqual($tabs.length, 0, "Tabs are rendered");
     });
+
+    ["titleValue", null, undefined, "", 0, 1, new Date(), { value: "title" }].forEach((title) => {
+        QUnit.test(`DefaultTemplate: title template property - ${title}`, (assert) => {
+            const items = [
+                { text: "Tab text 1", icon: "comment", title: title },
+                { text: "", icon: "", title: title }
+            ];
+            const $element = $("<div>").appendTo("#qunit-fixture");
+
+            new TabPanel($element, { items: items });
+
+            const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs("instance").itemElements();
+            const expectedTitleValue = isDefined(title) ? String(title) : "[object Object]";
+
+            assert.strictEqual($itemElements.eq(0).find(".dx-tab-text").text(), expectedTitleValue, "item.title");
+            assert.strictEqual($itemElements.eq(1).find(".dx-tab-text").text(), expectedTitleValue, "item.title");
+
+            assert.strictEqual($itemElements.eq(0).find(".dx-icon-comment").length, 1, "item.icon");
+            assert.strictEqual($itemElements.eq(1).find(".dx-icon").length, 0, "item.icon");
+        });
+
+        QUnit.test(`DefaultTemplate: items["${title}"] as primitive`, (assert) => {
+            const items = [ title ];
+            const $element = $("<div>").appendTo("#qunit-fixture");
+
+            new TabPanel($element, { items: items });
+
+            const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs("instance").itemElements();
+
+            assert.strictEqual($itemElements.eq(0).find(".dx-tab-text").text(), String(title), "item.title");
+            assert.strictEqual($itemElements.eq(1).find(".dx-icon").length, 0, "item.icon");
+        });
+    });
+
+    QUnit.test("itemTitleTemplate rendering test", (assert) => {
+        const items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
+            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
+
+        const $tabPanel = $("#tabPanel").dxTabPanel({
+            items: items,
+            itemTitleTemplate: $("<span>Template</span>")
+        });
+        const tabPanelInstance = $tabPanel.dxTabPanel("instance");
+        const tabWidgetInstance = $tabPanel.find(toSelector(TABS_CLASS)).dxTabs("instance");
+
+        assert.deepEqual(tabWidgetInstance.itemElements().eq(0).text(),
+            "Template",
+            "option <itemTitleTemplate> successfully passed to nested tabs widget");
+
+        tabPanelInstance.option("itemTitleTemplate", $("<span>Changed template</span>"));
+
+        assert.deepEqual(tabWidgetInstance.itemElements().eq(0).text(),
+            "Changed template",
+            "option <itemTitleTemplate> of nested tabs widget successfully changed");
+    });
+
 });
 
 QUnit.module("aria accessibility", () => {

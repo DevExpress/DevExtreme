@@ -1,8 +1,9 @@
-var $ = require("jquery"),
-    Accordion = require("ui/accordion");
+import $ from "jquery";
+import Accordion from "ui/accordion";
+import { isDefined } from "core/utils/type";
 
 QUnit.testStart(function() {
-    var markup =
+    const markup =
         '<div id="container">\
             <div id="accordion"></div>\
         </div>\
@@ -20,13 +21,13 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var ACCORDION_CLASS = "dx-accordion",
-    ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper",
-    ACCORDION_ITEM_CLASS = "dx-accordion-item",
-    ACCORDION_ITEM_TITLE_CLASS = "dx-accordion-item-title",
-    ACCORDION_ITEM_BODY_CLASS = "dx-accordion-item-body",
-    ACCORDION_ITEM_OPENED_CLASS = "dx-accordion-item-opened",
-    ACCORDION_ITEM_CLOSED_CLASS = "dx-accordion-item-closed";
+const ACCORDION_CLASS = "dx-accordion";
+const ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper";
+const ACCORDION_ITEM_CLASS = "dx-accordion-item";
+const ACCORDION_ITEM_TITLE_CLASS = "dx-accordion-item-title";
+const ACCORDION_ITEM_BODY_CLASS = "dx-accordion-item-body";
+const ACCORDION_ITEM_OPENED_CLASS = "dx-accordion-item-opened";
+const ACCORDION_ITEM_CLOSED_CLASS = "dx-accordion-item-closed";
 
 var moduleSetup = {
     beforeEach: function() {
@@ -350,4 +351,37 @@ QUnit.test("template should be rendered correctly with title with html", functio
     });
 
     assert.equal($content.text(), "test");
+});
+
+["titleValue", null, undefined, "", 0, 1, new Date(), { value: "title" }].forEach((title) => {
+    QUnit.test(`DefaultTemplate: title template property - ${title}`, (assert) => {
+        const items = [
+            { text: "Tab text 1", icon: "comment", title: title },
+            { text: "", icon: "", title: title }
+        ];
+
+        const $element = $("<div>").appendTo("#qunit-fixture");
+        const widget = new Accordion($element, { items: items });
+
+        const $itemElements = widget._itemElements();
+        const expectedTitleValue = isDefined(title) ? String(title) : "[object Object]";
+
+        assert.strictEqual($itemElements.eq(0).find(`.${ACCORDION_ITEM_TITLE_CLASS}`).text(), expectedTitleValue, "item.title");
+        assert.strictEqual($itemElements.eq(1).find(`.${ACCORDION_ITEM_TITLE_CLASS}`).text(), expectedTitleValue, "item.title");
+
+        assert.strictEqual($itemElements.eq(0).find(".dx-icon-comment").length, 1, "item.icon");
+        assert.strictEqual($itemElements.eq(1).find(".dx-icon").length, 0, "item.icon");
+    });
+
+    QUnit.test(`DefaultTemplate: items["${title}"] as primitive`, (assert) => {
+        const items = [ title ];
+
+        const $element = $("<div>").appendTo("#qunit-fixture");
+        const widget = new Accordion($element, { items: items });
+
+        const $itemElements = widget._itemElements();
+
+        assert.strictEqual($itemElements.eq(0).find(`.${ACCORDION_ITEM_TITLE_CLASS}`).text(), String(title), "item.title");
+        assert.strictEqual($itemElements.eq(1).find(".dx-icon").length, 0, "item.icon");
+    });
 });
