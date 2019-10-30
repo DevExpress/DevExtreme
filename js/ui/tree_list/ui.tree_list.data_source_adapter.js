@@ -364,7 +364,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return d.resolve(data);
             }
 
-            var cachedNodes = keys.map(id => this.getNodeByKey(id)).filter(node => node);
+            var cachedNodes = keys.map(id => this.getNodeByKey(id)).filter(node => node && node.data);
 
             if(cachedNodes.length === keys.length) {
                 if(needChildren) {
