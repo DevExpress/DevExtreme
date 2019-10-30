@@ -304,7 +304,7 @@ if(devices.real().deviceType === "desktop") {
             QUnit.test(`Selected: ["Item_1"] -> set focusedElement -> clean focusedElement`, () => {
                 helper.createWidget({ selectedItemKeys: ["Item_1"], keyExpr: "text", selectionMode: "single" });
 
-                helper.widget.option("focusedElement", helper.$items.eq(0));
+                helper.widget.option("focusedElement", helper.getItems().eq(0));
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
                 helper.checkItemsAttributes([0], { attributes: ["selected"], focusedItemIndex: 0, role: "option" });
 

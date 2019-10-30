@@ -14,17 +14,24 @@ class ariaAccessibilityTestHelper {
             this.$widget = $("<div>").appendTo("#qunit-fixture");
             this.widget = createWidget(this.$widget, options);
             this.isCheckBoxMode = this.widget.option("showCheckBoxesMode") === "normal";
+            this.$items = this.getItems();
 
-            if(this.widget.itemElements) {
-                this.$items = this.widget.itemElements();
-            }
-
-            if(this.widget._itemContainer) {
-                this.$itemContainer = this.widget._itemContainer(this.widget.option("searchEnabled"));
-                this.$items = this.$itemContainer.find(`.${ITEM_CLASS}`);
+            if(this.widget.getFocusedItemId) {
                 this.focusedItemId = this.widget.getFocusedItemId();
             }
         };
+    }
+
+    getItems() {
+        if(this.widget.itemElements) {
+            return this.widget.itemElements();
+        }
+
+        if(this.widget._itemContainer) {
+            this.$itemContainer = this.widget._itemContainer(this.widget.option("searchEnabled"));
+
+            return this.$itemContainer.find(`.${ITEM_CLASS}`);
+        }
     }
 
     checkAttributes($target, expectedAttributes, prefix) {
@@ -42,7 +49,7 @@ class ariaAccessibilityTestHelper {
     }
 
     _checkItemAttributes(options, index, defaultValue) {
-        const { attributes, focusedItemIndex, role } = options;
+        const { attributes, focusedItemIndex, role, tabindex } = options;
 
         let itemAttributes = {};
         attributes && attributes.forEach((attrName) => {
@@ -54,12 +61,15 @@ class ariaAccessibilityTestHelper {
         if("role" in options) {
             itemAttributes.role = role;
         }
+        if("tabindex" in options) {
+            itemAttributes.tabindex = tabindex;
+        }
 
-        this.checkAttributes(this.$items.eq(index), itemAttributes, `item[${index}]`);
+        this.checkAttributes(this.getItems().eq(index), itemAttributes, `item[${index}]`);
     }
 
     _checkCheckboxAttributes(options, index, defaultValue) {
-        const $checkBox = this.$items.eq(index).prev();
+        const $checkBox = this.getItems().eq(index).prev();
 
         this.checkAttributes($checkBox, {
             role: "checkbox",
@@ -69,7 +79,7 @@ class ariaAccessibilityTestHelper {
 
     _checkNodeAttributes(options, $node, index) {
         const { focusedNodeIndex } = options;
-        const $item = this.$items.eq(index);
+        const $item = this.getItems().eq(index);
         const node = this.widget._getNode($item);
 
         let nodeAttributes = {
@@ -92,13 +102,13 @@ class ariaAccessibilityTestHelper {
     }
 
     _checkGroupNodeAttributes(index) {
-        const $nodeContainer = this.$items.eq(index).closest(".dx-treeview-node-container").eq(0);
+        const $nodeContainer = this.getItems().eq(index).closest(".dx-treeview-node-container").eq(0);
 
         this.checkAttributes($nodeContainer, { role: "group" }, `nodeContainer[${index}]`);
     }
 
     _checkAttribute(options, index, defaultValue) {
-        const $node = this.$items.eq(index).closest(`.${TREEVIEW_NODE_CLASS}`);
+        const $node = this.getItems().eq(index).closest(`.${TREEVIEW_NODE_CLASS}`);
         if($node.length) {
             this._checkNodeAttributes(options, $node, index);
             this._checkGroupNodeAttributes(index);
@@ -116,7 +126,7 @@ class ariaAccessibilityTestHelper {
             this._checkAttribute(options, index, "true");
         });
 
-        this.$items.each((index) => {
+        this.getItems().each((index) => {
             if(selectedIndexes.indexOf(index) === -1) {
                 this._checkAttribute(options, index, "false");
             }

@@ -134,14 +134,14 @@ var helper;
         test(`Selected: [], selectionMode: "single", click checkbox ["Item_1"] -> ["Item_1_1"]`, () => {
             helper.createWidget({ items: this.items, selectionMode: "single" });
 
-            eventsEngine.trigger(helper.$items.eq(0).prev(), "dxclick");
-            eventsEngine.trigger(helper.$items.eq(0).prev(), "dxpointerdown");
+            eventsEngine.trigger(helper.getItems().eq(0).prev(), "dxclick");
+            eventsEngine.trigger(helper.getItems().eq(0).prev(), "dxpointerdown");
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([0], { focusedNodeIndex: 0, });
 
-            eventsEngine.trigger(helper.$items.eq(1).prev(), "dxclick");
-            eventsEngine.trigger(helper.$items.eq(1).prev(), "dxpointerdown");
+            eventsEngine.trigger(helper.getItems().eq(1).prev(), "dxclick");
+            eventsEngine.trigger(helper.getItems().eq(1).prev(), "dxpointerdown");
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([1], { focusedNodeIndex: 1, });
@@ -150,14 +150,14 @@ var helper;
         test(`Selected: [], selectionMode: "multiple", selectNodesRecursive: true, click checkbox ["Item_1"] -> ["Item_1_1"]`, () => {
             helper.createWidget({ items: this.items, selectionMode: "multiple", selectNodesRecursive: true });
 
-            eventsEngine.trigger(helper.$items.eq(0).prev(), "dxclick");
-            eventsEngine.trigger(helper.$items.eq(0).prev(), "dxpointerdown");
+            eventsEngine.trigger(helper.getItems().eq(0).prev(), "dxclick");
+            eventsEngine.trigger(helper.getItems().eq(0).prev(), "dxpointerdown");
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([0, 1, 2], { focusedNodeIndex: 0, });
 
-            eventsEngine.trigger(helper.$items.eq(1).prev(), "dxclick");
-            eventsEngine.trigger(helper.$items.eq(1).prev(), "dxpointerdown");
+            eventsEngine.trigger(helper.getItems().eq(1).prev(), "dxclick");
+            eventsEngine.trigger(helper.getItems().eq(1).prev(), "dxpointerdown");
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([0, 2], { focusedNodeIndex: 1, selectionMode: "multiple" });
@@ -202,7 +202,7 @@ var helper;
         test(`Selected: [], selectionMode: "single" -> set focusedElement -> clean focusedElement`, () => {
             helper.createWidget({ items: this.items, selectionMode: "single" });
 
-            helper.widget.option("focusedElement", helper.$items.eq(2).closest(".dx-treeview-node"));
+            helper.widget.option("focusedElement", helper.getItems().eq(2).closest(".dx-treeview-node"));
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "tree", activedescendant: helper.focusedItemId, tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([], { focusedNodeIndex: 2, });

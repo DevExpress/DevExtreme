@@ -300,7 +300,7 @@ QUnit.module(`Aria accessibility`, {
     QUnit.test(`Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement`, () => {
         helper.createWidget({ items: [1, 2, 3], value: 1 });
 
-        helper.widget.option("focusedElement", helper.$items.eq(0));
+        helper.widget.option("focusedElement", helper.getItems().eq(0));
         helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
         helper.checkItemsAttributes([0], { attributes: ["selected", "checked"], role: "radio" });
 

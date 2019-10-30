@@ -2933,7 +2933,7 @@ if(devices.real().deviceType === "desktop") {
                     helper.$widget.focusin();
                 }
 
-                const $item_2 = $(helper.$items.eq(2));
+                const $item_2 = $(helper.getItems().eq(2));
                 eventsEngine.trigger($item_2, "dxclick");
                 eventsEngine.trigger($item_2, "dxpointerdown");
                 this.clock.tick();
@@ -2952,7 +2952,7 @@ if(devices.real().deviceType === "desktop") {
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
                 helper.checkItemsAttributes([0, 2], { attributes: ["selected"], role: "option" });
 
-                const $item_1 = $(helper.$items.eq(1));
+                const $item_1 = $(helper.getItems().eq(1));
                 eventsEngine.trigger($item_1, "dxclick");
                 eventsEngine.trigger($item_1, "dxpointerdown");
                 this.clock.tick();
