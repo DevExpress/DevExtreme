@@ -53,18 +53,21 @@ const DEFAULT_ITEM_CONFIGS = {
     move: {
         location: "before",
         compactMode: {
+            showText: "inMenu",
             locateInMenu: "auto"
         }
     },
     copy: {
         location: "before",
         compactMode: {
+            showText: "inMenu",
             locateInMenu: "auto"
         }
     },
     rename: {
         location: "before",
         compactMode: {
+            showText: "inMenu",
             locateInMenu: "auto"
         }
     },

@@ -1,5 +1,6 @@
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
+    registerThemeAlias = themeModule.registerThemeAlias,
     ACCENT_COLOR = "#3cbab2",
     BACKGROUND_COLOR = "#f5f5f5",
     TITLE_COLOR = "#28484f",
@@ -141,3 +142,5 @@ registerTheme({
         }
     }
 }, "generic.light");
+
+registerThemeAlias("generic.greenmist.compact", "generic.greenmist");

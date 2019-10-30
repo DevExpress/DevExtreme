@@ -150,7 +150,7 @@ class RemoteFileProvider extends FileProvider {
         setTimeout(() => $form.remove());
     }
 
-    getItemsContent(items) {
+    getItemContent(items) {
         const args = this._getDownloadArgs(items);
 
         const formData = new window.FormData();
