@@ -17,6 +17,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
+import pointerEvents from "events/pointer";
 import { DataSource } from "data/data_source/data_source";
 import { TreeListWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 import ArrayStore from 'data/array_store';
@@ -1195,7 +1196,7 @@ QUnit.test("TreeList with remoteOperations(filtering, sorting, grouping) and foc
     assert.equal(childrenNodes[0].key, 3, "children node key");
 });
 
-QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
+QUnit.testInActiveWindow("TreeList should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
     // arrange
     var treeList = createTreeList({
         keyExpr: "id",
@@ -1215,6 +1216,27 @@ QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if g
     // assert
     assert.equal(treeList.isRowExpanded(3), false, "parent node collapsed");
     assert.equal(treeList.option("focusedRowKey"), 3, "parent node focused");
+});
+
+QUnit.test("TreeList should focus only one focused row (T827201)", function(assert) {
+    // arrange
+    const rowsViewWrapper = treeListWrapper.rowsView;
+    const treeList = createTreeList({
+        keyExpr: "id",
+        dataSource: generateData(10),
+        focusedRowEnabled: true,
+        focusedRowKey: 3
+    });
+
+    this.clock.tick();
+
+    // act
+    $(treeList.getCellElement(4, 1)).trigger(pointerEvents.up);
+    this.clock.tick();
+
+    // assert
+    assert.equal(rowsViewWrapper.getFocusedRow().length, 1, "Only one row is focused");
+    assert.ok(rowsViewWrapper.isRowFocused(treeList.getRowIndexByKey(9)), "Row with key 9 is focused");
 });
 
 QUnit.test("TreeList navigateTo", function(assert) {
