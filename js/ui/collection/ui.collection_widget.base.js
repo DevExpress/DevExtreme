@@ -401,12 +401,6 @@ var CollectionWidget = Widget.inherit({
         return activeElements.eq(index);
     },
 
-    _renderFocusTarget: function() {
-        this.callBase.apply(this, arguments);
-
-        this._refreshActiveDescendant();
-    },
-
     _moveFocus: function(location) {
         var $items = this._getAvailableItems(),
             $newTarget;
@@ -482,12 +476,12 @@ var CollectionWidget = Widget.inherit({
         this.selectItem($target);
     },
 
-    _updateFocusedItemState: function(target, isFocused, cleanId) {
+    _updateFocusedItemState: function(target, isFocused, needCleanItemId) {
         const $target = $(target);
 
         if($target.length) {
             this._refreshActiveDescendant();
-            this._refreshItemId($target, cleanId);
+            this._refreshItemId($target, needCleanItemId);
             this._toggleFocusClass(isFocused, $target);
         }
     },
@@ -496,8 +490,8 @@ var CollectionWidget = Widget.inherit({
         this.setAria("activedescendant", isDefined(this.option("focusedElement")) ? this.getFocusedItemId() : null, $target);
     },
 
-    _refreshItemId: function($target, cleanId) {
-        if(!cleanId && this.option("focusedElement")) {
+    _refreshItemId: function($target, needCleanItemId) {
+        if(!needCleanItemId && this.option("focusedElement")) {
             this.setAria("id", this.getFocusedItemId(), $target);
         } else {
             this.setAria("id", null, $target);
@@ -664,7 +658,6 @@ var CollectionWidget = Widget.inherit({
 
             this._forgetNextPageLoading();
             this._refreshContent();
-            this._renderFocusTarget();
         } else {
             this.option("items", newItems.slice());
         }

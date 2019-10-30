@@ -336,7 +336,6 @@ var TabPanel = MultiView.inherit({
 
     _renderFocusTarget: function() {
         this._focusTarget().attr("tabIndex", -1);
-        this._refreshActiveDescendant();
     },
 
     _updateFocusState: function(e, isFocused) {
