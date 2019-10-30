@@ -72,7 +72,7 @@ import pointerMock from "../../helpers/pointerMock.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
 import pointerEvents from "events/pointer";
-import { ColumnWrapper, FilterPanelWrapper, PagerWrapper, FilterRowWrapper, RowsViewWrapper, DataGridWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import { DataGridWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -182,7 +182,7 @@ QUnit.test("Accessibility columns id should not set for columns editors (T710132
 
 QUnit.test("DataGrid - Should hide filter row menu after losing it's focus", function(assert) {
     // arrange
-    var filterRowWrapper = new FilterRowWrapper(".dx-datagrid"),
+    var filterRowWrapper = dataGridWrapper.filterRow,
         $menu,
         $root,
         menuInstance,
@@ -263,8 +263,8 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
         getGlobalColumnIdSelector = function(index) {
             return "[id=dx-col-" + index + "]";
         },
-        filterPanel = new FilterPanelWrapper(".dx-datagrid"),
-        pager = new PagerWrapper(".dx-datagrid");
+        filterPanel = dataGridWrapper.filterPanel,
+        pagerWrapper = dataGridWrapper.pager;
 
     createDataGrid({
         columns: ["field1", "field2"],
@@ -321,17 +321,17 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
     assert.equal(filterPanel.getClearFilterButton().attr("tabindex"), 0, "Filter panel clear button tabindex");
 
     // arrange, assert
-    var $pageSizes = pager.getPagerPageSizeElements();
+    var $pageSizes = pagerWrapper.getPagerPageSizeElements();
     assert.equal($pageSizes.length, 5, "pageSize count");
     $pageSizes.each((_, pageSize) => assert.equal($(pageSize).attr("tabindex"), 0, "pagesize tabindex"));
 
     // arrange, assert
-    var $pages = pager.getPagerPagesElements();
+    var $pages = pagerWrapper.getPagerPagesElements();
     assert.equal($pages.length, 1, "pages count");
     assert.equal($pages.attr("tabindex"), 0, "page tabindex");
 
     // arrange, assert
-    var $buttons = pager.getPagerButtonsElements();
+    var $buttons = pagerWrapper.getPagerButtonsElements();
     assert.equal($buttons.length, 2, "buttons count");
     $buttons.each((_, button) => assert.equal($(button).attr("tabindex"), 0, "button tabindex"));
 });
@@ -385,7 +385,7 @@ QUnit.testInActiveWindow("Global column index should be unique for the different
 
 QUnit.testInActiveWindow("DataGrid - focused row changing should not affect on focused row in master detail (T818808)", function(assert) {
     // arrange
-    var rowsViewWrapper = new RowsViewWrapper(".detail-grid"),
+    var rowsViewWrapper = dataGridWrapper.rowsView,
         masterDetailDataGrids = [],
         dataGrid = createDataGrid({
             dataSource: [{ id: 0, text: "0" }, { id: 1, text: "1" }],
@@ -436,7 +436,7 @@ QUnit.test("Command column accessibility structure", function(assert) {
 
 QUnit.test("Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)", function(assert) {
     // arrange
-    var wrapper = new ColumnWrapper(".dx-datagrid"),
+    var wrapper = dataGridWrapper.columns,
         dataGrid = createDataGrid({
             dataSource: [{ id: 0, c0: "c0" }],
             columns: [
@@ -472,7 +472,7 @@ QUnit.test("Command buttons should contains aria-label accessibility attribute i
 
 QUnit.test("Undelete command buttons should contains aria-label accessibility attribute if rendered as icon and batch edit mode (T755185)", function(assert) {
     // arrange
-    var wrapper = new ColumnWrapper(".dx-datagrid"),
+    var wrapper = dataGridWrapper.columns,
         dataGrid = createDataGrid({
             dataSource: [{ id: 0, c0: "c0" }],
             columns: [
@@ -503,7 +503,7 @@ QUnit.test("Undelete command buttons should contains aria-label accessibility at
 
 QUnit.test("Command buttons should contains tabindex=-1 (T805341)", function(assert) {
     // arrange
-    var wrapper = new ColumnWrapper(".dx-datagrid"),
+    var wrapper = dataGridWrapper.columns,
         dataGrid = createDataGrid({
             dataSource: [{ id: 0, c0: "c0" }],
             columns: [
@@ -537,7 +537,7 @@ QUnit.test("Command buttons should contains tabindex=-1 (T805341)", function(ass
 
 QUnit.test("Undelete command button should contains tabindex=-1 (T805341)", function(assert) {
     // arrange
-    var wrapper = new ColumnWrapper(".dx-datagrid"),
+    var wrapper = dataGridWrapper.columns,
         dataGrid = createDataGrid({
             dataSource: [{ id: 0, c0: "c0" }],
             columns: [
@@ -17028,7 +17028,7 @@ QUnit.test("Focus row element should support native DOM", function(assert) {
 QUnit.testInActiveWindow("DataGrid - Master grid should not render it's overlay in detail grid (T818373)", function(assert) {
     // arrange
     var detailGrid,
-        detailRowsViewWrapper = new RowsViewWrapper(".internal-grid");
+        detailRowsViewWrapper = dataGridWrapper.rowsView;
 
     this.dataGrid.option({
         dataSource: [{ id: 0, value: "value 1", text: "Awesome" }],
@@ -17360,7 +17360,7 @@ QUnit.test("The edited cell should be closed on click inside another dataGrid", 
 
 QUnit.test("onFocusedRowChanging, onFocusedRowChanged event if click selection checkBox (T812681)", function(assert) {
     // arrange
-    var rowsViewWrapper = new RowsViewWrapper("#dataGrid"),
+    var rowsViewWrapper = dataGridWrapper.rowsView,
         focusedRowChangingFiresCount = 0,
         focusedRowChangedFiresCount = 0,
         dataGrid = createDataGrid({
@@ -17389,7 +17389,7 @@ QUnit.test("onFocusedRowChanging, onFocusedRowChanged event if click selection c
 
 QUnit.test("Cancel focused row if click selection checkBox (T812681)", function(assert) {
     // arrange
-    var rowsViewWrapper = new RowsViewWrapper("#dataGrid"),
+    var rowsViewWrapper = dataGridWrapper.rowsView,
         focusedRowChangingFiresCount = 0,
         focusedRowChangedFiresCount = 0,
         dataGrid = createDataGrid({
