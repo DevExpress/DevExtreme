@@ -718,6 +718,9 @@ testModule("visibility", moduleConfig, () => {
     });
 
     test("overlay should not be shown if e.cancel == true in the onShowing event handler (T825865)", (assert) => {
+        // e.cancel is a temporary solution and it is not documented.
+        // That is why it should not be used in overlays with integrations such as Knockout, Angular etc,
+        // until we reconsider onShowing implementation in future versions
         fx.off = false;
         let showingCounter = 0;
         const onHidingCounter = sinon.stub(),
