@@ -1,5 +1,6 @@
 import { extend } from "../../core/utils/extend";
 import { isString } from "../../core/utils/type";
+import messageLocalization from "../../localization/message";
 
 export class FileManagerCommandManager {
 
@@ -11,74 +12,74 @@ export class FileManagerCommandManager {
     }
 
     _initCommands() {
-        this._commands = [
+        this._commands = [ // TODO: locale
             {
                 name: "create",
-                text: "New folder",
+                text: messageLocalization.format("dxFileManager-commandCreate"),
                 icon: "newfolder",
                 enabled: this._permissions.create,
                 noFileItemRequired: true
             },
             {
                 name: "rename",
-                text: "Rename",
+                text: messageLocalization.format("dxFileManager-commandRename"),
                 icon: "rename",
                 enabled: this._permissions.rename,
                 isSingleFileItemCommand: true
             },
             {
                 name: "move",
-                text: "Move",
+                text: messageLocalization.format("dxFileManager-commandMove"),
                 icon: "movetofolder",
                 enabled: this._permissions.move
             },
             {
                 name: "copy",
-                text: "Copy",
+                text: messageLocalization.format("dxFileManager-commandCopy"),
                 icon: "copy",
                 enabled: this._permissions.copy
             },
             {
                 name: "delete",
-                text: "Delete",
+                text: messageLocalization.format("dxFileManager-commandDelete"),
                 icon: "trash",
                 enabled: this._permissions.remove,
             },
             {
                 name: "download",
-                text: "Download",
+                text: messageLocalization.format("dxFileManager-commandDownload"),
                 icon: "download",
                 enabled: this._permissions.download
             },
             {
                 name: "upload",
-                text: "Upload files",
+                text: messageLocalization.format("dxFileManager-commandUpload"),
                 icon: "upload",
                 enabled: this._permissions.upload,
                 noFileItemRequired: true
             },
             {
                 name: "refresh",
-                text: "Refresh",
+                text: messageLocalization.format("dxFileManager-commandRefresh"),
                 icon: "dx-filemanager-i dx-filemanager-i-refresh",
                 enabled: true,
                 noFileItemRequired: true
             },
             {
                 name: "thumbnails",
-                text: "Thumbnails View",
+                text: messageLocalization.format("dxFileManager-commandThumbnails"),
                 enabled: true,
                 noFileItemRequired: true
             },
             {
                 name: "details",
-                text: "Details View",
+                text: messageLocalization.format("dxFileManager-commandDetails"),
                 enabled: true,
                 noFileItemRequired: true
             },
             {
                 name: "clear",
-                text: "Clear selection",
+                text: messageLocalization.format("dxFileManager-commandClear"),
                 icon: "remove",
                 enabled: true
             },

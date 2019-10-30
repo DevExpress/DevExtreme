@@ -140,7 +140,7 @@ export default class FileManagerNotificationControl extends Widget {
 
     _notifyError(errorInfo) {
         this._showPopupError(errorInfo);
-        this._updateActionProgress(errorInfo.commonErrorText, "error");
+        this._updateActionProgress(errorInfo.commonErrorText, "error"); // TODO: locale ?? not sure
     }
 
     _onProgressPanelOperationClosed(info) {

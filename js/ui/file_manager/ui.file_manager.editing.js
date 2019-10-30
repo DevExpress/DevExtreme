@@ -31,8 +31,12 @@ class FileManagerEditingControl extends Widget {
         this._model = this.option("model");
         this._uploadOperationInfoMap = {};
 
-        this._renameItemDialog = this._createEnterNameDialog("Rename", "Save");
-        this._createFolderDialog = this._createEnterNameDialog("New folder", "Create");
+        this._renameItemDialog = this._createEnterNameDialog(
+            messageLocalization.format("dxFileManager-dialogRenameItemTitle"),
+            messageLocalization.format("dxFileManager-dialogRenameItemButtonText")); // TODO: locale
+        this._createFolderDialog = this._createEnterNameDialog(
+            messageLocalization.format("dxFileManager-dialogCreateFolderTitle"),
+            messageLocalization.format("dxFileManager-dialogCreateFolderButtonText")); // TODO: locale
 
         const $chooseFolderDialog = $("<div>").appendTo(this.$element());
         this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
@@ -99,69 +103,69 @@ class FileManagerEditingControl extends Widget {
     }
 
     _createMetadataMap() {
-        this._metadataMap = {
+        this._metadataMap = { // TODO: locale
 
             create: {
                 action: arg => this._tryCreate(arg),
                 affectsAllItems: true,
-                singleItemProcessingMessage: "Creating a folder inside {0}",
-                singleItemSuccessMessage: "Created a folder inside {0}",
-                singleItemErrorMessage: "Folder wasn't created",
-                commonErrorMessage: "Folder wasn't created"
+                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingCreateSingleItemProcessingMessage"),
+                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingCreateSingleItemSuccessMessage"),
+                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingCreateSingleItemErrorMessage"),
+                commonErrorMessage: messageLocalization.format("dxFileManager-editingCreateCommonErrorMessage")
             },
 
             rename: {
                 action: arg => this._tryRename(arg),
-                singleItemProcessingMessage: "Renaming an item inside {0}",
-                singleItemSuccessMessage: "Renamed an item inside {0}",
-                singleItemErrorMessage: "Item wasn't renamed",
-                commonErrorMessage: "Item wasn't renamed"
+                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingRenameSingleItemProcessingMessage"),
+                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingRenameSingleItemSuccessMessage"),
+                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingRenameSingleItemErrorMessage"),
+                commonErrorMessage: messageLocalization.format("dxFileManager-editingRenameCommonErrorMessage")
             },
 
             delete: {
                 action: arg => this._tryDelete(arg),
-                singleItemProcessingMessage: "Deleting an item from {0}",
-                multipleItemsProcessingMessage: "Deleting {0} items from {1}",
-                singleItemSuccessMessage: "Deleted an item from {0}",
-                multipleItemsSuccessMessage: "Deleted {0} items from {1}",
-                singleItemErrorMessage: "Item wasn't deleted",
-                multipleItemsErrorMessage: "{0} items weren't deleted",
-                commonErrorMessage: "Some items weren't deleted"
+                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingDeleteSingleItemProcessingMessage"),
+                multipleItemsProcessingMessage: messageLocalization.format("dxFileManager-editingDeleteMultipleItemsProcessingMessage"),
+                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingDeleteSingleItemSuccessMessage"),
+                multipleItemsSuccessMessage: messageLocalization.format("dxFileManager-editingDeleteMultipleItemsSuccessMessage"),
+                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingDeleteSingleItemErrorMessage"),
+                multipleItemsErrorMessage: messageLocalization.format("dxFileManager-editingDeleteMultipleItemsErrorMessage"),
+                commonErrorMessage: messageLocalization.format("dxFileManager-editingDeleteCommonErrorMessage")
             },
 
             move: {
                 action: arg => this._tryMove(arg),
-                singleItemProcessingMessage: "Moving an item to {0}",
-                multipleItemsProcessingMessage: "Moving {0} items to {1}",
-                singleItemSuccessMessage: "Moved an item to {0}",
-                multipleItemsSuccessMessage: "Moved {0} items to {1}",
-                singleItemErrorMessage: "Item wasn't moved",
-                multipleItemsErrorMessage: "{0} items weren't moved",
-                commonErrorMessage: "Some items weren't moved"
+                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingMoveSingleItemProcessingMessage"),
+                multipleItemsProcessingMessage: messageLocalization.format("dxFileManager-editingMoveMultipleItemsProcessingMessage"),
+                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingMoveSingleItemSuccessMessage"),
+                multipleItemsSuccessMessage: messageLocalization.format("dxFileManager-editingMoveMultipleItemsSuccessMessage"),
+                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingMoveSingleItemErrorMessage"),
+                multipleItemsErrorMessage: messageLocalization.format("dxFileManager-editingMoveMultipleItemsErrorMessage"),
+                commonErrorMessage: messageLocalization.format("dxFileManager-editingMoveCommonErrorMessage")
             },
 
             copy: {
                 action: arg => this._tryCopy(arg),
-                singleItemProcessingMessage: "Coping an item to {0}",
-                multipleItemsProcessingMessage: "Coping {0} items to {1}",
-                singleItemSuccessMessage: "Copied an item to {0}",
-                multipleItemsSuccessMessage: "Copied {0} items to {1}",
-                singleItemErrorMessage: "Item wasn't copied",
-                multipleItemsErrorMessage: "{0} items weren't copied",
-                commonErrorMessage: "Some items weren't copied"
+                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingCopySingleItemProcessingMessage"),
+                multipleItemsProcessingMessage: messageLocalization.format("dxFileManager-editingCopyMultipleItemsProcessingMessage"),
+                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingCopySingleItemSuccessMessage"),
+                multipleItemsSuccessMessage: messageLocalization.format("dxFileManager-editingCopyMultipleItemsSuccessMessage"),
+                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingCopySingleItemErrorMessage"),
+                multipleItemsErrorMessage: messageLocalization.format("dxFileManager-editingCopyMultipleItemsErrorMessage"),
+                commonErrorMessage: messageLocalization.format("dxFileManager-editingCopyCommonErrorMessage")
             },
 
             upload: {
                 action: () => this._tryUpload(),
                 allowCancel: true,
                 allowItemProgress: true,
-                singleItemProcessingMessage: "Uploading an item to {0}",
-                multipleItemsProcessingMessage: "Uploading {0} items to {1}",
-                singleItemSuccessMessage: "Uploaded an item to {0}",
-                multipleItemsSuccessMessage: "Uploaded {0} items to {1}",
-                singleItemErrorMessage: "Item wasn't uploaded",
-                multipleItemsErrorMessage: "{0} items weren't uploaded",
-                canceledMessage: "Canceled"
+                singleItemProcessingMessage: messageLocalization.format("dxFileManager-editingUploadSingleItemProcessingMessage"),
+                multipleItemsProcessingMessage: messageLocalization.format("dxFileManager-editingUploadMultipleItemsProcessingMessage"),
+                singleItemSuccessMessage: messageLocalization.format("dxFileManager-editingUploadSingleItemSuccessMessage"),
+                multipleItemsSuccessMessage: messageLocalization.format("dxFileManager-editingUploadMultipleItemsSuccessMessage"),
+                singleItemErrorMessage: messageLocalization.format("dxFileManager-editingUploadSingleItemErrorMessage"),
+                multipleItemsErrorMessage: messageLocalization.format("dxFileManager-editingUploadMultipleItemsErrorMessage"),
+                canceledMessage: messageLocalization.format("dxFileManager-editingUploadCanceledMessage")
             },
 
             download: {

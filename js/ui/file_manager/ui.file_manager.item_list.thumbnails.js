@@ -5,6 +5,7 @@ import eventsEngine from "../../events/core/events_engine";
 import { addNamespace } from "../../events/utils";
 import { name as contextMenuEventName } from "../../events/contextmenu";
 import { getDisplayFileSize } from "./ui.file_manager.utils.js";
+import messageLocalization from "../../localization/message";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
 
@@ -362,7 +363,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         fileItemInfo._state.$element = $item;
     }
 
-    _getTooltipText(fileItemInfo) {
+    _getTooltipText(fileItemInfo) { // TODO: locale
         const item = fileItemInfo.fileItem;
         if(item.tooltipText) {
             return item.tooltipText;
@@ -370,9 +371,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         let text = `${item.name}\r\n`;
         if(!item.isDirectory) {
-            text += `Size: ${getDisplayFileSize(item.size)}\r\n`;
+            text += `${messageLocalization.format("dxFileManager-listThumbnailsTooltipTextSize")}: ${getDisplayFileSize(item.size)}\r\n`;
         }
-        text += `Date Modified: ${item.dateModified}`;
+        text += `${messageLocalization.format("dxFileManager-listThumbnailsTooltipTextDateModified")}: ${item.dateModified}`;
         return text;
     }
 

@@ -1,6 +1,8 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 
+import messageLocalization from "../../localization/message";
+
 import FileManagerDialogBase from "./ui.file_manager.dialog.js";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 
@@ -15,9 +17,9 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _getDialogOptions() {
-        return extend(super._getDialogOptions(), {
-            title: "Select Destination Folder",
-            buttonText: "Select",
+        return extend(super._getDialogOptions(), { // TODO: locale
+            title: messageLocalization.format("dxFileManager-dialogFolderChooserTitle"),
+            buttonText: messageLocalization.format("dxFileManager-dialogFolderChooserButtonText"),
             contentCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER,
             popupCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER_POPUP
         });

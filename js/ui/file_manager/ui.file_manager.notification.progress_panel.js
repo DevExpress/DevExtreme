@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { ensureDefined } from "../../core/utils/common";
 import { getImageContainer } from "../../core/utils/icon";
+import messageLocalization from "../../localization/message";
 
 import Widget from "../widget/ui.widget";
 import ProgressBar from "../progress_bar";
@@ -55,7 +56,7 @@ class FileManagerProgressPanel extends Widget {
             .appendTo($container);
 
         $("<div>")
-            .text("Progress")
+            .text(messageLocalization.format("dxFileManager-notificationProgressPanelTitle")) // TODO: locale
             .addClass(FILE_MANAGER_PROGRESS_PANEL_TITLE_TEXT_CLASS)
             .appendTo($title);
 
@@ -70,7 +71,7 @@ class FileManagerProgressPanel extends Widget {
         });
 
         this._$infosContainer = $("<div>")
-            .text("No operations")
+            .text(messageLocalization.format("dxFileManager-notificationProgressPanelEmptyListText")) // TODO: locale
             .addClass(FILE_MANAGER_PROGRESS_PANEL_INFOS_CONTAINER_CLASS)
             .appendTo($container);
     }
@@ -324,12 +325,12 @@ class FileManagerProgressPanel extends Widget {
     }
 
     _displayClosedOperationItem(itemInfo) {
-        this._setProgressBarText(itemInfo, "Canceled");
+        this._setProgressBarText(itemInfo, messageLocalization.format("dxFileManager-notificationProgressPanelOperationCanceled")); // TODO: locale
         this._setCloseButtonVisible(itemInfo, false);
     }
 
     _getStatusString(ratio, value) {
-        return ratio === 1 ? "Done" : (Math.round(ratio * 100) + "%");
+        return ratio === 1 ? messageLocalization.format("Done") : (Math.round(ratio * 100) + "%"); // TODO: locale (Already exists in messages)
     }
 
     _raiseOperationClosed(info) {
