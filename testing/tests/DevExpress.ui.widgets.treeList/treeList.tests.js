@@ -1235,7 +1235,7 @@ QUnit.test("TreeList should focus only one focused row (T827201)", function(asse
 
     // assert
     assert.equal(rowsViewWrapper.getFocusedRow().length, 1, "Only one row is focused");
-    assert.ok(rowsViewWrapper.isRowFocused(treeList.getRowIndexByKey(9)), "Row with key 9 is focused");
+    assert.ok(rowsViewWrapper.isFocusedRow(treeList.getRowIndexByKey(9)), "Row with key 9 is focused");
 });
 
 QUnit.test("TreeList navigateTo", function(assert) {
