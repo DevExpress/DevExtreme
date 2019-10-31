@@ -1,6 +1,5 @@
 import $ from "jquery";
-import "ui/tab_panel";
-
+import TabPanel from "ui/tab_panel";
 
 QUnit.testStart(() => {
     const markup =
@@ -125,6 +124,37 @@ QUnit.module("TabPanel items", () => {
 
         assert.ok($disabledItem.hasClass("dx-state-disabled"), "Item is disabled");
         assert.notEqual($tabs.length, 0, "Tabs are rendered");
+    });
+
+    [
+        { title: "text", expected: "text" },
+        { title: null, expected: "" },
+        { title: undefined, expected: "" },
+        { title: "", expected: "" },
+        { title: 0, expected: "0" },
+        { title: 1, expected: "1" },
+        { title: new Date(2019, 10, 13), expected: String(new Date(2019, 10, 13)) },
+        { title: { value: "title" }, expected: "" }
+    ].forEach((value) => {
+        QUnit.test(`DefaultTemplate: title template property - ${value.title}`, (assert) => {
+            const $element = $("<div>").appendTo("#qunit-fixture");
+
+            new TabPanel($element, { items: [ { title: value.title }] });
+
+            const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs("instance").itemElements();
+
+            assert.strictEqual($itemElements.eq(0).find(".dx-tab-text").text(), value.expected, "item.title");
+        });
+
+        QUnit.test(`DefaultTemplate: items["${value.title}"] as primitive`, (assert) => {
+            const $element = $("<div>").appendTo("#qunit-fixture");
+
+            new TabPanel($element, { items: [ value.title ] });
+
+            const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs("instance").itemElements();
+
+            assert.strictEqual($itemElements.eq(0).find(".dx-tab-text").text(), value.expected, "item.title");
+        });
     });
 });
 
