@@ -715,6 +715,48 @@ testModule("visibility", moduleConfig, () => {
             domUtils.triggerResizeEvent = triggerFunction;
         }
     });
+
+    test("overlay should not be shown if e.cancel == true in the onShowing event handler (T825865)", (assert) => {
+        // e.cancel is a temporary solution and it is not documented.
+        // That is why it should not be used in overlays with integrations such as Knockout, Angular etc,
+        // until we reconsider onShowing implementation in future versions
+        fx.off = false;
+        let showingCounter = 0;
+        const onHidingCounter = sinon.stub(),
+            onHiddenCounter = sinon.stub(),
+            onShownCounter = sinon.stub(),
+            $overlay = $("#overlay").dxOverlay({
+                onShowing: function(e) {
+                    showingCounter++;
+                    e.cancel = true;
+                },
+                onShown: onShownCounter,
+                onHiding: onHidingCounter,
+                onHidden: onHiddenCounter
+            }),
+            overlay = $overlay.dxOverlay("instance"),
+            $content = $(overlay.$content()),
+            $wrapper = $content.parent(),
+            done = assert.async();
+
+        overlay.on("shown", onShownCounter)
+            .on("hiding", onHidingCounter)
+            .on("hidden", onHiddenCounter);
+
+        overlay.show().done(function() {
+
+            assert.ok($wrapper.is(":hidden"));
+            assert.ok($content.is(":hidden"));
+            assert.ok($overlay.is(":hidden"));
+            assert.notOk(overlay.option("visible"), "visible === false");
+            assert.equal(showingCounter, 1, "onShowing should be called only once");
+            assert.notOk(onShownCounter.called, "onShown should not be called");
+            assert.notOk(onHidingCounter.called, "onHiding should not be called");
+            assert.notOk(onHiddenCounter.called, "onHidden should not be called");
+
+            done();
+        });
+    });
 });
 
 
