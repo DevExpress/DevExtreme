@@ -1,6 +1,5 @@
 import $ from "jquery";
 import TabPanel from "ui/tab_panel";
-import { isDefined } from "core/utils/type";
 
 QUnit.testStart(() => {
     const markup =
@@ -127,36 +126,34 @@ QUnit.module("TabPanel items", () => {
         assert.notEqual($tabs.length, 0, "Tabs are rendered");
     });
 
-    ["titleValue", null, undefined, "", 0, 1, new Date(), { value: "title" }].forEach((title) => {
-        QUnit.test(`DefaultTemplate: title template property - ${title}`, (assert) => {
-            const items = [
-                { text: "Tab text 1", icon: "comment", title: title },
-                { text: "", icon: "", title: title }
-            ];
+    [
+        { title: "text", expected: "text" },
+        { title: null, expected: "" },
+        { title: undefined, expected: "" },
+        { title: "", expected: "" },
+        { title: 0, expected: "0" },
+        { title: 1, expected: "1" },
+        { title: new Date(2019, 10, 13), expected: String(new Date(2019, 10, 13)) },
+        { title: { value: "title" }, expected: "" }
+    ].forEach((value) => {
+        QUnit.test(`DefaultTemplate: title template property - ${value.title}`, (assert) => {
             const $element = $("<div>").appendTo("#qunit-fixture");
 
-            new TabPanel($element, { items: items });
+            new TabPanel($element, { items: [ { title: value.title }] });
 
             const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs("instance").itemElements();
-            const expectedTitleValue = isDefined(title) ? String(title) : "[object Object]";
 
-            assert.strictEqual($itemElements.eq(0).find(".dx-tab-text").text(), expectedTitleValue, "item.title");
-            assert.strictEqual($itemElements.eq(1).find(".dx-tab-text").text(), expectedTitleValue, "item.title");
-
-            assert.strictEqual($itemElements.eq(0).find(".dx-icon-comment").length, 1, "item.icon");
-            assert.strictEqual($itemElements.eq(1).find(".dx-icon").length, 0, "item.icon");
+            assert.strictEqual($itemElements.eq(0).find(".dx-tab-text").text(), value.expected, "item.title");
         });
 
-        QUnit.test(`DefaultTemplate: items["${title}"] as primitive`, (assert) => {
-            const items = [ title ];
+        QUnit.test(`DefaultTemplate: items["${value.title}"] as primitive`, (assert) => {
             const $element = $("<div>").appendTo("#qunit-fixture");
 
-            new TabPanel($element, { items: items });
+            new TabPanel($element, { items: [ value.title ] });
 
             const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs("instance").itemElements();
 
-            assert.strictEqual($itemElements.eq(0).find(".dx-tab-text").text(), String(title), "item.title");
-            assert.strictEqual($itemElements.eq(1).find(".dx-icon").length, 0, "item.icon");
+            assert.strictEqual($itemElements.eq(0).find(".dx-tab-text").text(), value.expected, "item.title");
         });
     });
 });

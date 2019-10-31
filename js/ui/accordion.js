@@ -209,12 +209,16 @@ var Accordion = CollectionWidget.inherit({
         */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
             if(isPlainObject(data)) {
-                $container.text(isDefined(data.title) ? data.title : String(data));
+                if(isDefined(data.title) && !isPlainObject(data.title)) {
+                    $container.text(data.title);
+                }
 
                 const $iconElement = getImageContainer(data.icon);
                 $iconElement && $iconElement.appendTo($container);
             } else {
-                $container.text(String(data));
+                if(isDefined(data)) {
+                    $container.text(String(data));
+                }
             }
 
             $container.wrapInner($("<div>").addClass(ACCORDION_ITEM_TITLE_CAPTION_CLASS));
