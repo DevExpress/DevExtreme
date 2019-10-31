@@ -1,41 +1,27 @@
-var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    iconUtils = require("../core/utils/icon"),
-    domUtils = require("../core/utils/dom"),
-    devices = require("../core/devices"),
-    registerComponent = require("../core/component_registrator"),
-    extend = require("../core/utils/extend").extend,
-    ValidationMixin = require("./validation/validation_mixin"),
-    ValidationEngine = require("./validation_engine"),
-    Widget = require("./widget/ui.widget"),
-    inkRipple = require("./widget/utils.ink_ripple"),
-    eventUtils = require("../events/utils"),
-    themes = require("./themes"),
-    clickEvent = require("../events/click"),
-    FunctionTemplate = require("../core/templates/function_template").FunctionTemplate;
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import iconUtils from '../core/utils/icon';
+import domUtils from '../core/utils/dom';
+import devices from '../core/devices';
+import registerComponent from '../core/component_registrator';
+import ValidationMixin from './validation/validation_mixin';
+import ValidationEngine from './validation_engine';
+import Widget from './widget/ui.widget';
+import inkRipple from './widget/utils.ink_ripple';
+import eventUtils from '../events/utils';
+import themes from './themes';
+import clickEvent from '../events/click';
+import { extend } from '../core/utils/extend';
+import { FunctionTemplate } from '../core/templates/function_template';
 
-var BUTTON_CLASS = "dx-button",
-    BUTTON_CONTENT_CLASS = "dx-button-content",
-    BUTTON_HAS_TEXT_CLASS = "dx-button-has-text",
-    BUTTON_HAS_ICON_CLASS = "dx-button-has-icon",
-    BUTTON_ICON_RIGHT_CLASS = "dx-button-icon-right",
-    ICON_RIGHT_CLASS = "dx-icon-right",
-    BUTTON_STYLING_MODE_CLASS_PREFIX = "dx-button-mode-",
-    ALLOWED_STYLE_CLASSES = [
-        BUTTON_STYLING_MODE_CLASS_PREFIX + "contained",
-        BUTTON_STYLING_MODE_CLASS_PREFIX + "text",
-        BUTTON_STYLING_MODE_CLASS_PREFIX + "outlined"
-    ],
-
-    TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
-
-    BUTTON_TEXT_CLASS = "dx-button-text",
-
-    ANONYMOUS_TEMPLATE_NAME = "content",
-
-    BUTTON_LEFT_ICON_POSITION = "left",
-
-    BUTTON_FEEDBACK_HIDE_TIMEOUT = 100;
+const BUTTON_CONTENT_CLASS = 'dx-button-content';
+const BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon';
+const BUTTON_STYLING_MODE_CLASS_PREFIX = 'dx-button-mode-';
+const ALLOWED_STYLE_CLASSES = [
+    BUTTON_STYLING_MODE_CLASS_PREFIX + 'contained',
+    BUTTON_STYLING_MODE_CLASS_PREFIX + 'text',
+    BUTTON_STYLING_MODE_CLASS_PREFIX + 'outlined'
+];
 
 /**
 * @name dxButton
@@ -44,27 +30,24 @@ var BUTTON_CLASS = "dx-button",
 * @module ui/button
 * @export default
 */
-var Button = Widget.inherit({
+export default class Button extends Widget {
+    constructor(...args) {
+        super(...args);
 
-    _supportedKeys: function() {
-        var that = this,
-            click = function(e) {
-                e.preventDefault();
-                that._executeClickAction(e);
-            };
-        return extend(this.callBase(), {
-            space: click,
-            enter: click
-        });
-    },
+        this._feedbackHideTimeout = 100;
+    }
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
+    _supportedKeys() {
+        const click = e => {
+            e.preventDefault();
+            this._executeClickAction(e);
+        };
 
-    },
+        return extend(super._supportedKeys(), { space: click, enter: click });
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
 
             /**
              * @name dxButtonOptions.hoverStateEnabled
@@ -90,14 +73,14 @@ var Button = Widget.inherit({
             * @type Enums.ButtonType
             * @default 'normal'
             */
-            type: "normal",
+            type: 'normal',
 
             /**
             * @name dxButtonOptions.text
             * @type string
             * @default ""
             */
-            text: "",
+            text: '',
 
             /**
             * @name dxButtonOptions.icon
@@ -106,7 +89,7 @@ var Button = Widget.inherit({
             */
             icon: "",
 
-            iconPosition: BUTTON_LEFT_ICON_POSITION,
+            iconPosition: 'left',
 
             /**
             * @name dxButtonOptions.validationGroup
@@ -132,7 +115,7 @@ var Button = Widget.inherit({
             * @type_function_param2 contentElement:dxElement
             * @type_function_return string|Node|jQuery
             */
-            template: "content",
+            template: 'content',
 
             /**
             * @name dxButtonOptions.useSubmitBehavior
@@ -149,7 +132,7 @@ var Button = Widget.inherit({
             * @type Enums.ButtonStylingMode
             * @default 'contained'
             */
-            stylingMode: "contained"
+            stylingMode: 'contained'
 
             /**
             * @name dxButtonDefaultTemplate
@@ -164,14 +147,12 @@ var Button = Widget.inherit({
             * @type String
             */
         });
-    },
+    }
 
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
+    _defaultOptionsRules() {
+        return super._defaultOptionsRules().concat([
             {
-                device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
-                },
+                device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
                 options: {
                     /**
                     * @name dxButtonOptions.focusStateEnabled
@@ -182,63 +163,56 @@ var Button = Widget.inherit({
                 }
             },
             {
-                device: function() {
-                    var themeName = themes.current();
-                    return themes.isMaterial(themeName);
-                },
-                options: {
-                    useInkRipple: true
-                }
+                device: () => themes.isMaterial(themes.current()),
+                options: { useInkRipple: true }
             }
         ]);
-    },
+    }
 
-    _getAnonymousTemplateName: function() {
-        return ANONYMOUS_TEMPLATE_NAME;
-    },
+    _getAnonymousTemplateName() {
+        return 'content';
+    }
 
-    _feedbackHideTimeout: BUTTON_FEEDBACK_HIDE_TIMEOUT,
+    _initTemplates() {
+        super._initTemplates();
 
-    _initTemplates: function() {
-        this.callBase();
-        var that = this;
-
-        this._defaultTemplates["content"] = new FunctionTemplate(function(options) {
-            var data = options.model,
-                $iconElement = iconUtils.getImageContainer(data && data.icon),
-                $textContainer = data && data.text ? $("<span>").text(data.text).addClass(BUTTON_TEXT_CLASS) : undefined,
-                $container = $(options.container);
+        this._defaultTemplates['content'] = new FunctionTemplate(({ model = {}, container }) => {
+            const { text, icon } = model;
+            const $icon = iconUtils.getImageContainer(icon);
+            const $textContainer = text && $('<span>').text(text).addClass('dx-button-text');
+            const $container = $(container);
 
             $container.append($textContainer);
 
-            if(that.option("iconPosition") === BUTTON_LEFT_ICON_POSITION) {
-                $container.prepend($iconElement);
+            if(this.option('iconPosition') === 'left') {
+                $container.prepend($icon);
             } else {
-                $iconElement.addClass(ICON_RIGHT_CLASS);
-                $container.append($iconElement);
+                $icon.addClass('dx-icon-right');
+                $container.append($icon);
             }
         });
-    },
+    }
 
-    _initMarkup: function() {
-        this.$element().addClass(BUTTON_CLASS);
+    _initMarkup() {
+        this.$element().addClass('dx-button');
         this._renderType();
         this._renderStylingMode();
 
-        this.option("useInkRipple") && this._renderInkRipple();
+        this.option('useInkRipple') && this._renderInkRipple();
         this._renderClick();
 
-        this.setAria("role", "button");
+        this.setAria('role', 'button');
         this._updateAriaLabel();
 
-        this.callBase();
+        super._initMarkup();
 
         this._updateContent();
-    },
+    }
 
-    _renderInkRipple: function() {
-        var isOnlyIconButton = (!this.option("text") && this.option("icon")) || (this.option("type") === "back"),
-            config = {};
+    _renderInkRipple() {
+        const { text, icon, type } = this.options();
+        const isOnlyIconButton = !text && icon || type === 'back';
+        const config = {};
 
         if(isOnlyIconButton) {
             extend(config, {
@@ -249,243 +223,223 @@ var Button = Widget.inherit({
         }
 
         this._inkRipple = inkRipple.render(config);
-    },
+    }
 
-    _toggleActiveState: function($element, value, e) {
-        this.callBase.apply(this, arguments);
+    _toggleActiveState($el, value, event) {
+        super._toggleActiveState($el, value, event);
 
-        if(!this._inkRipple) {
-            return;
+        if(this._inkRipple) {
+            const config = { element: this._$content, event };
+
+            value ? this._inkRipple.showWave(config) : this._inkRipple.hideWave(config);
         }
+    }
 
-        var config = {
-            element: this._$content,
-            event: e
-        };
+    _updateContent() {
+        const $element = this.$element();
+        const data = this._getContentData();
+        const { icon, text } = data;
 
-        if(value) {
-            this._inkRipple.showWave(config);
-        } else {
-            this._inkRipple.hideWave(config);
-        }
-    },
-
-    _updateContent: function() {
-        const $element = this.$element(),
-            data = this._getContentData();
-
-        if(this._$content) {
-            this._$content.empty();
-        } else {
-            this._$content = $("<div>")
-                .addClass(BUTTON_CONTENT_CLASS)
-                .appendTo($element);
-        }
+        this._$content ? this._$content.empty() : this._$content = $('<div>')
+            .addClass(BUTTON_CONTENT_CLASS)
+            .appendTo($element);
 
         $element
-            .toggleClass(BUTTON_HAS_ICON_CLASS, !!data.icon)
-            .toggleClass(BUTTON_ICON_RIGHT_CLASS, !!data.icon && this.option("iconPosition") !== BUTTON_LEFT_ICON_POSITION)
-            .toggleClass(BUTTON_HAS_TEXT_CLASS, !!data.text);
+            .toggleClass(BUTTON_HAS_ICON_CLASS, !!icon)
+            .toggleClass('dx-button-icon-right', !!icon && this.option('iconPosition') !== 'left')
+            .toggleClass('dx-button-has-text', !!text);
 
-        const transclude = this._getAnonymousTemplateName() === this.option("template"),
-            template = this._getTemplateByOption("template"),
-            $result = $(template.render({
-                model: data,
-                container: domUtils.getPublicElement(this._$content),
-                transclude
-            }));
+        const transclude = this._getAnonymousTemplateName() === this.option('template');
+        const template = this._getTemplateByOption('template');
+        const $result = $(template.render({
+            model: data,
+            container: domUtils.getPublicElement(this._$content),
+            transclude
+        }));
 
-        if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
+        if($result.hasClass('dx-template-wrapper')) {
             this._$content.replaceWith($result);
             this._$content = $result;
             this._$content.addClass(BUTTON_CONTENT_CLASS);
         }
 
-        if(this.option("useSubmitBehavior")) {
-            this._renderSubmitInput();
-        }
-    },
+        this.option('useSubmitBehavior') && this._renderSubmitInput();
+    }
 
-    _setDisabled: function(value) {
-        this.option("disabled", value);
-    },
+    _setDisabled(value) {
+        this.option('disabled', value);
+    }
 
-    _waitForValidationCompleting: function(complete) {
-        complete.then((result) => {
+    _waitForValidationCompleting(complete) {
+        complete.then(result => {
             this._validationStatus = result.status;
             this._setDisabled(false);
-            if(this._validationStatus === "valid") {
-                this._$submitInput.get(0).click();
-            }
+            this._validationStatus === 'valid' && this._$submitInput.get(0).click();
+
             return result;
         });
-    },
+    }
 
-    _getSubmitAction: function() {
+    _getSubmitAction() {
         return this._createAction(({ event: e }) => {
             if(this._needValidate) {
                 const validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
+
                 if(validationGroup) {
-                    const result = validationGroup.validate();
-                    this._validationStatus = result.status;
-                    if(this._validationStatus === "pending") {
+                    const { status, complete } = validationGroup.validate();
+
+                    this._validationStatus = status;
+
+                    if(status === 'pending') {
                         this._needValidate = false;
                         this._setDisabled(true);
-                        this._waitForValidationCompleting(result.complete);
+                        this._waitForValidationCompleting(complete);
                     }
                 }
             } else {
                 this._needValidate = true;
             }
-            this._validationStatus !== "valid" && e.preventDefault();
+            this._validationStatus !== 'valid' && e.preventDefault();
             e.stopPropagation();
         });
-    },
+    }
 
-    _renderSubmitInput: function() {
+    _renderSubmitInput() {
         const submitAction = this._getSubmitAction();
+
         this._needValidate = true;
-        this._validationStatus = "valid";
-        this._$submitInput = $("<input>")
-            .attr("type", "submit")
-            .attr("tabindex", -1)
-            .addClass("dx-button-submit-input")
+        this._validationStatus = 'valid';
+        this._$submitInput = $('<input>')
+            .attr('type', 'submit')
+            .attr('tabindex', -1)
+            .addClass('dx-button-submit-input')
             .appendTo(this._$content);
 
-        eventsEngine.on(this._$submitInput, "click", function(e) {
-            submitAction({ event: e });
-        });
-    },
+        eventsEngine.on(this._$submitInput, 'click', e => submitAction({ event: e }));
+    }
 
-    _getContentData: function() {
-        var icon = this.option("icon"),
-            text = this.option("text"),
-            back = this.option("type") === "back";
-
-        if(back && !icon) {
-            icon = "back";
-        }
+    _getContentData() {
+        const { icon, text, type } = this.options();
 
         return extend({
-            icon: icon,
-            text: text
-        }, this.option("_templateData"));
-    },
+            icon: (type === 'back' && !icon) ? 'back' : icon,
+            text
+        }, this.option('_templateData'));
+    }
 
-    _renderClick: function() {
-        var that = this,
-            eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            actionConfig = { excludeValidators: ["readOnly"] };
+    _renderClick() {
+        const actionConfig = { excludeValidators: ['readOnly'] };
 
-        if(this.option("useSubmitBehavior")) {
-            actionConfig.afterExecute = function(e) {
-                setTimeout(function() {
-                    e.component._$submitInput.get(0).click();
-                });
+        if(this.option('useSubmitBehavior')) {
+            actionConfig.afterExecute = ({ component }) => {
+                setTimeout(() => component._$submitInput.get(0).click());
             };
         }
 
-        this._clickAction = this._createActionByOption("onClick", actionConfig);
+        this._clickAction = this._createActionByOption('onClick', actionConfig);
 
-        eventsEngine.off(this.$element(), eventName);
-        eventsEngine.on(this.$element(), eventName, function(e) {
-            that._executeClickAction(e);
+        const $element = this.$element();
+        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+
+        eventsEngine.off($element, eventName);
+        eventsEngine.on($element, eventName, this._executeClickAction.bind(this));
+    }
+
+    _executeClickAction(e) {
+        this._clickAction({
+            event: e,
+            validationGroup: ValidationEngine.getGroupConfig(this._findGroup())
         });
-    },
+    }
 
-    _executeClickAction: function(e) {
-        this._clickAction({ event: e, validationGroup: ValidationEngine.getGroupConfig(this._findGroup()) });
-    },
+    _updateAriaLabel() {
+        let { icon, text } = this.options();
 
-    _updateAriaLabel: function() {
-        var icon = this.option("icon"),
-            text = this.option("text");
-
-        if(iconUtils.getImageSourceType(icon) === "image") {
-            if(icon.indexOf("base64") === -1) {
-                icon = icon.replace(/.+\/([^.]+)\..+$/, "$1");
-            } else {
-                icon = "Base64";
-            }
+        if(iconUtils.getImageSourceType(icon) === 'image') {
+            icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, "$1") : 'Base64';
         }
 
-        var ariaLabel = text || icon || "";
+        let ariaLabel = text || icon || '';
+
         ariaLabel = ariaLabel.toString().trim();
 
-        this.setAria("label", ariaLabel.length ? ariaLabel : null);
-    },
+        this.setAria('label', ariaLabel.length ? ariaLabel : null);
+    }
 
-    _renderType: function() {
-        var type = this.option("type");
-        if(type) {
-            this.$element().addClass("dx-button-" + type);
-        }
-    },
+    _renderType() {
+        const type = this.option('type');
 
-    _renderStylingMode: function() {
-        const optionName = "stylingMode";
-        ALLOWED_STYLE_CLASSES.forEach(className => this.$element().removeClass(className));
+        type && this.$element().addClass(`dx-button-${type}`);
+    }
+
+    _renderStylingMode() {
+        const optionName = 'stylingMode';
+        const $element = this.$element();
         let stylingModeClass = BUTTON_STYLING_MODE_CLASS_PREFIX + this.option(optionName);
+
+        ALLOWED_STYLE_CLASSES.forEach($element.removeClass.bind($element));
+
         if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
             const defaultOptionValue = this._getDefaultOptions()[optionName];
+
             stylingModeClass = BUTTON_STYLING_MODE_CLASS_PREFIX + defaultOptionValue;
         }
-        this.$element().addClass(stylingModeClass);
-    },
 
-    _refreshType: function(prevType) {
-        var type = this.option("type");
+        $element.addClass(stylingModeClass);
+    }
 
-        prevType && this.$element()
-            .removeClass("dx-button-" + prevType)
-            .addClass("dx-button-" + type);
+    _refreshType(prevType) {
+        const type = this.option('type');
+        const $element = this.$element();
 
-        if(!this.$element().hasClass(BUTTON_HAS_ICON_CLASS) && type === "back") {
+        prevType && $element
+            .removeClass(`dx-button-${prevType}`)
+            .addClass(`dx-button-${type}`);
+
+        if(!$element.hasClass(BUTTON_HAS_ICON_CLASS) && type === 'back') {
             this._updateContent();
         }
-    },
+    }
 
-    _optionChanged: function(args) {
+    _optionChanged(args) {
         switch(args.name) {
-            case "onClick":
+            case 'onClick':
                 this._renderClick();
                 break;
-            case "icon":
-            case "text":
+            case 'icon':
+            case 'text':
                 this._updateContent();
                 this._updateAriaLabel();
                 break;
-            case "type":
+            case 'type':
                 this._refreshType(args.previousValue);
                 this._updateContent();
                 this._updateAriaLabel();
                 break;
-            case "_templateData":
+            case '_templateData':
                 break;
-            case "template":
-            case "iconPosition":
+            case 'template':
+            case 'iconPosition':
                 this._updateContent();
                 break;
-            case "stylingMode":
+            case 'stylingMode':
                 this._renderStylingMode();
                 break;
-            case "useInkRipple":
-            case "useSubmitBehavior":
+            case 'useInkRipple':
+            case 'useSubmitBehavior':
                 this._invalidate();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
-
-    _clean: function() {
-        delete this._inkRipple;
-        this.callBase();
-        delete this._$content;
     }
 
-}).include(ValidationMixin);
+    _clean() {
+        delete this._inkRipple;
+        super._clean();
+        delete this._$content;
+    }
+}
 
-registerComponent("dxButton", Button);
-
-module.exports = Button;
+Button.include(ValidationMixin);
+registerComponent('dxButton', Button);
