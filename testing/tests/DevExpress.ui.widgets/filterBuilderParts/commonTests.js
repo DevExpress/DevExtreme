@@ -1169,6 +1169,27 @@ QUnit.module("on value changed", function() {
         assert.equal(getFilterBuilderItems(container).length, 1);
     });
 
+    // T824147
+    QUnit.test("Add-condition popup should be closed on scroll", function(assert) {
+        // arrange
+        var container = $("#container"),
+            value = [["CompanyName", "K&S Music"]],
+            popupInstance;
+
+        container.dxFilterBuilder({
+            value: value,
+            fields: fields
+        });
+
+        // act
+        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
+
+        popupInstance = container.children(".dx-filterbuilder-overlay").dxPopup("instance");
+
+        // assert
+        assert.equal(popupInstance.option("closeOnTargetScroll"), true, "popup's closeOnTargetScroll");
+    });
+
     // T804262
     QUnit.test("Deleting of condition doesn't cause group deleting in controlled mode (React)", function(assert) {
         var container = $("#container"),
