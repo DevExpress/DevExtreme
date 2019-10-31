@@ -408,8 +408,7 @@ var Overlay = Widget.inherit({
         this.callBase();
 
         extend(this._optionsByReference, {
-            animation: true,
-            elementAttr: true
+            animation: true
         });
     },
 
@@ -1121,17 +1120,16 @@ var Overlay = Widget.inherit({
 
     _renderElementAttributes: function() {
         this.callBase();
-
-        const elementAttr = this.option("elementAttr");
-        const elementClasses = elementAttr && elementAttr.class || "";
-        this._copyElementClassesToWrapper(elementClasses);
-        this._elementClasses = elementClasses;
+        this._copyElementClassesToWrapper();
     },
 
-    _copyElementClassesToWrapper: function(classes) {
+    _copyElementClassesToWrapper: function() {
+        const elementAttr = this.option("elementAttr");
+        const elementClasses = elementAttr && elementAttr.class || "";
         this._wrapper()
             .removeClass(this._elementClasses)
-            .addClass(classes);
+            .addClass(elementClasses);
+        this._elementClasses = elementClasses;
     },
 
     _getDragTarget: function() {
