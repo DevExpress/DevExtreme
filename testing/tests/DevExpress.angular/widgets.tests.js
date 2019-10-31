@@ -835,7 +835,7 @@ QUnit.test("item height is correct in animation config (T520346)", function(asse
     var controller = function($scope) {
         $scope.accordionOptions = {
             dataSource: [{ "Value": "1" }],
-            width: 150,
+            width: 200,
             collapsible: true,
             selectedItems: []
         };
@@ -846,7 +846,7 @@ QUnit.test("item height is correct in animation config (T520346)", function(asse
     this.clock.tick();
 
     fx.animate = function($element, config) {
-        assert.roughEqual(config.to.height, 68, 0.5);
+        assert.roughEqual(config.to.height, 92, 0.5);
 
         return originalAnimate($element, config);
     };
