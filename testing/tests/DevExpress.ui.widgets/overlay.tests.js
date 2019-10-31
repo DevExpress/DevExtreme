@@ -743,7 +743,7 @@ testModule("visibility", moduleConfig, () => {
         overlay.on("shown", onShownCounter)
             .on("hiding", onHidingCounter)
             .on("hidden", onHiddenCounter);
-            
+
         overlay.show().done(function(result) {
 
             assert.notOk(result, "result === false");
