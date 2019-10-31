@@ -1070,7 +1070,7 @@ const ValidationEngine = {
             syncOptions.forEach((prop) => {
                 if(prop in options) {
                     Object.assign(initedOptions,
-                        this._synchronizeValidationOptions({ name: prop, value: options[prop] }, options)
+                        this.synchronizeValidationOptions({ name: prop, value: options[prop] }, options)
                     );
                 }
             });
