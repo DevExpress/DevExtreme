@@ -1,27 +1,18 @@
 import $ from '../core/renderer';
-import eventsEngine from '../events/core/events_engine';
-import iconUtils from '../core/utils/icon';
-import domUtils from '../core/utils/dom';
 import devices from '../core/devices';
-import registerComponent from '../core/component_registrator';
-import ValidationMixin from './validation/validation_mixin';
-import ValidationEngine from './validation_engine';
-import Widget from './widget/ui.widget';
+import eventsEngine from '../events/core/events_engine';
 import inkRipple from './widget/utils.ink_ripple';
-import eventUtils from '../events/utils';
+import registerComponent from '../core/component_registrator';
 import themes from './themes';
-import clickEvent from '../events/click';
+import ValidationEngine from './validation_engine';
+import ValidationMixin from './validation/validation_mixin';
+import Widget from './widget/ui.widget';
+import { addNamespace } from '../events/utils';
 import { extend } from '../core/utils/extend';
 import { FunctionTemplate } from '../core/templates/function_template';
-
-const BUTTON_CONTENT_CLASS = 'dx-button-content';
-const BUTTON_HAS_ICON_CLASS = 'dx-button-has-icon';
-const BUTTON_STYLING_MODE_CLASS_PREFIX = 'dx-button-mode-';
-const ALLOWED_STYLE_CLASSES = [
-    BUTTON_STYLING_MODE_CLASS_PREFIX + 'contained',
-    BUTTON_STYLING_MODE_CLASS_PREFIX + 'text',
-    BUTTON_STYLING_MODE_CLASS_PREFIX + 'outlined'
-];
+import { getImageContainer, getImageSourceType } from '../core/utils/icon';
+import { getPublicElement } from '../core/utils/dom';
+import { name as clickEventName } from '../events/click';
 
 /**
 * @name dxButton
@@ -37,13 +28,50 @@ export default class Button extends Widget {
         this._feedbackHideTimeout = 100;
     }
 
-    _supportedKeys() {
-        const click = e => {
-            e.preventDefault();
-            this._executeClickAction(e);
-        };
+    _clean() {
+        delete this._inkRipple;
+        delete this._$content;
+        super._clean();
+    }
 
-        return extend(super._supportedKeys(), { space: click, enter: click });
+    _defaultOptionsRules() {
+        return super._defaultOptionsRules().concat([
+            {
+                device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
+                options: {
+                    /**
+                    * @name dxButtonOptions.focusStateEnabled
+                    * @type boolean
+                    * @default true @for desktop
+                    */
+                    focusStateEnabled: true
+                }
+            },
+            {
+                device: () => themes.isMaterial(themes.current()),
+                options: { useInkRipple: true }
+            }
+        ]);
+    }
+
+    _executeClickAction(event) {
+        this._clickAction({
+            validationGroup: ValidationEngine.getGroupConfig(this._findGroup()),
+            event
+        });
+    }
+
+    _getAnonymousTemplateName() {
+        return 'content';
+    }
+
+    _getContentData() {
+        const { icon, text, type, _templateData } = this.option();
+
+        return extend({
+            icon: (type === 'back' && !icon) ? 'back' : icon,
+            text
+        }, _templateData);
     }
 
     _getDefaultOptions() {
@@ -87,7 +115,7 @@ export default class Button extends Widget {
             * @type string
             * @default ""
             */
-            icon: "",
+            icon: '',
 
             iconPosition: 'left',
 
@@ -149,137 +177,6 @@ export default class Button extends Widget {
         });
     }
 
-    _defaultOptionsRules() {
-        return super._defaultOptionsRules().concat([
-            {
-                device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
-                options: {
-                    /**
-                    * @name dxButtonOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    */
-                    focusStateEnabled: true
-                }
-            },
-            {
-                device: () => themes.isMaterial(themes.current()),
-                options: { useInkRipple: true }
-            }
-        ]);
-    }
-
-    _getAnonymousTemplateName() {
-        return 'content';
-    }
-
-    _initTemplates() {
-        super._initTemplates();
-
-        this._defaultTemplates['content'] = new FunctionTemplate(({ model = {}, container }) => {
-            const { text, icon } = model;
-            const $icon = iconUtils.getImageContainer(icon);
-            const $textContainer = text && $('<span>').text(text).addClass('dx-button-text');
-            const $container = $(container);
-
-            $container.append($textContainer);
-
-            if(this.option('iconPosition') === 'left') {
-                $container.prepend($icon);
-            } else {
-                $icon.addClass('dx-icon-right');
-                $container.append($icon);
-            }
-        });
-    }
-
-    _initMarkup() {
-        this.$element().addClass('dx-button');
-        this._renderType();
-        this._renderStylingMode();
-
-        this.option('useInkRipple') && this._renderInkRipple();
-        this._renderClick();
-
-        this.setAria('role', 'button');
-        this._updateAriaLabel();
-
-        super._initMarkup();
-
-        this._updateContent();
-    }
-
-    _renderInkRipple() {
-        const { text, icon, type } = this.options();
-        const isOnlyIconButton = !text && icon || type === 'back';
-        const config = {};
-
-        if(isOnlyIconButton) {
-            extend(config, {
-                waveSizeCoefficient: 1,
-                useHoldAnimation: false,
-                isCentered: true
-            });
-        }
-
-        this._inkRipple = inkRipple.render(config);
-    }
-
-    _toggleActiveState($el, value, event) {
-        super._toggleActiveState($el, value, event);
-
-        if(this._inkRipple) {
-            const config = { element: this._$content, event };
-
-            value ? this._inkRipple.showWave(config) : this._inkRipple.hideWave(config);
-        }
-    }
-
-    _updateContent() {
-        const $element = this.$element();
-        const data = this._getContentData();
-        const { icon, text } = data;
-
-        this._$content ? this._$content.empty() : this._$content = $('<div>')
-            .addClass(BUTTON_CONTENT_CLASS)
-            .appendTo($element);
-
-        $element
-            .toggleClass(BUTTON_HAS_ICON_CLASS, !!icon)
-            .toggleClass('dx-button-icon-right', !!icon && this.option('iconPosition') !== 'left')
-            .toggleClass('dx-button-has-text', !!text);
-
-        const transclude = this._getAnonymousTemplateName() === this.option('template');
-        const template = this._getTemplateByOption('template');
-        const $result = $(template.render({
-            model: data,
-            container: domUtils.getPublicElement(this._$content),
-            transclude
-        }));
-
-        if($result.hasClass('dx-template-wrapper')) {
-            this._$content.replaceWith($result);
-            this._$content = $result;
-            this._$content.addClass(BUTTON_CONTENT_CLASS);
-        }
-
-        this.option('useSubmitBehavior') && this._renderSubmitInput();
-    }
-
-    _setDisabled(value) {
-        this.option('disabled', value);
-    }
-
-    _waitForValidationCompleting(complete) {
-        complete.then(result => {
-            this._validationStatus = result.status;
-            this._setDisabled(false);
-            this._validationStatus === 'valid' && this._$submitInput.get(0).click();
-
-            return result;
-        });
-    }
-
     _getSubmitAction() {
         return this._createAction(({ event: e }) => {
             if(this._needValidate) {
@@ -304,105 +201,46 @@ export default class Button extends Widget {
         });
     }
 
-    _renderSubmitInput() {
-        const submitAction = this._getSubmitAction();
+    _initMarkup() {
+        this.$element().addClass('dx-button');
+        this._renderType();
+        this._renderStylingMode();
 
-        this._needValidate = true;
-        this._validationStatus = 'valid';
-        this._$submitInput = $('<input>')
-            .attr('type', 'submit')
-            .attr('tabindex', -1)
-            .addClass('dx-button-submit-input')
-            .appendTo(this._$content);
+        this.option('useInkRipple') && this._renderInkRipple();
+        this._renderClick();
 
-        eventsEngine.on(this._$submitInput, 'click', e => submitAction({ event: e }));
+        this.setAria('role', 'button');
+        this._updateAriaLabel();
+
+        super._initMarkup();
+
+        this._updateContent();
     }
 
-    _getContentData() {
-        const { icon, text, type } = this.options();
+    _initTemplates() {
+        super._initTemplates();
 
-        return extend({
-            icon: (type === 'back' && !icon) ? 'back' : icon,
-            text
-        }, this.option('_templateData'));
-    }
+        this._defaultTemplates['content'] = new FunctionTemplate(({ model = {}, container }) => {
+            const { text, icon } = model;
+            const $icon = getImageContainer(icon);
+            const $textContainer = text && $('<span>').text(text).addClass('dx-button-text');
+            const $container = $(container);
 
-    _renderClick() {
-        const actionConfig = { excludeValidators: ['readOnly'] };
+            $container.append($textContainer);
 
-        if(this.option('useSubmitBehavior')) {
-            actionConfig.afterExecute = ({ component }) => {
-                setTimeout(() => component._$submitInput.get(0).click());
-            };
-        }
-
-        this._clickAction = this._createActionByOption('onClick', actionConfig);
-
-        const $element = this.$element();
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-
-        eventsEngine.off($element, eventName);
-        eventsEngine.on($element, eventName, this._executeClickAction.bind(this));
-    }
-
-    _executeClickAction(e) {
-        this._clickAction({
-            event: e,
-            validationGroup: ValidationEngine.getGroupConfig(this._findGroup())
+            if(this.option('iconPosition') === 'left') {
+                $container.prepend($icon);
+            } else {
+                $icon.addClass('dx-icon-right');
+                $container.append($icon);
+            }
         });
     }
 
-    _updateAriaLabel() {
-        let { icon, text } = this.options();
-
-        if(iconUtils.getImageSourceType(icon) === 'image') {
-            icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, "$1") : 'Base64';
-        }
-
-        let ariaLabel = text || icon || '';
-
-        ariaLabel = ariaLabel.toString().trim();
-
-        this.setAria('label', ariaLabel.length ? ariaLabel : null);
-    }
-
-    _renderType() {
-        const type = this.option('type');
-
-        type && this.$element().addClass(`dx-button-${type}`);
-    }
-
-    _renderStylingMode() {
-        const optionName = 'stylingMode';
-        const $element = this.$element();
-        let stylingModeClass = BUTTON_STYLING_MODE_CLASS_PREFIX + this.option(optionName);
-
-        ALLOWED_STYLE_CLASSES.forEach($element.removeClass.bind($element));
-
-        if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
-            const defaultOptionValue = this._getDefaultOptions()[optionName];
-
-            stylingModeClass = BUTTON_STYLING_MODE_CLASS_PREFIX + defaultOptionValue;
-        }
-
-        $element.addClass(stylingModeClass);
-    }
-
-    _refreshType(prevType) {
-        const type = this.option('type');
-        const $element = this.$element();
-
-        prevType && $element
-            .removeClass(`dx-button-${prevType}`)
-            .addClass(`dx-button-${type}`);
-
-        if(!$element.hasClass(BUTTON_HAS_ICON_CLASS) && type === 'back') {
-            this._updateContent();
-        }
-    }
-
     _optionChanged(args) {
-        switch(args.name) {
+        const { name, previousValue } = args;
+
+        switch(name) {
             case 'onClick':
                 this._renderClick();
                 break;
@@ -412,7 +250,7 @@ export default class Button extends Widget {
                 this._updateAriaLabel();
                 break;
             case 'type':
-                this._refreshType(args.previousValue);
+                this._refreshType(previousValue);
                 this._updateContent();
                 this._updateAriaLabel();
                 break;
@@ -434,10 +272,165 @@ export default class Button extends Widget {
         }
     }
 
-    _clean() {
-        delete this._inkRipple;
-        super._clean();
-        delete this._$content;
+    _refreshType(prevType) {
+        const type = this.option('type');
+        const $element = this.$element();
+
+        prevType && $element
+            .removeClass(`dx-button-${prevType}`)
+            .addClass(`dx-button-${type}`);
+
+        if(!$element.hasClass('dx-button-has-icon') && type === 'back') {
+            this._updateContent();
+        }
+    }
+
+    _renderClick() {
+        const actionConfig = { excludeValidators: ['readOnly'] };
+
+        if(this.option('useSubmitBehavior')) {
+            actionConfig.afterExecute = ({ component }) =>
+                setTimeout(() => component._$submitInput.get(0).click());
+        }
+
+        this._clickAction = this._createActionByOption('onClick', actionConfig);
+
+        const $element = this.$element();
+        const eventName = addNamespace(clickEventName, this.NAME);
+
+        eventsEngine.off($element, eventName);
+        eventsEngine.on($element, eventName, this._executeClickAction.bind(this));
+    }
+
+    _renderInkRipple() {
+        const { text, icon, type } = this.option();
+        const isOnlyIconButton = !text && icon || type === 'back';
+        const config = {};
+
+        if(isOnlyIconButton) {
+            extend(config, {
+                waveSizeCoefficient: 1,
+                useHoldAnimation: false,
+                isCentered: true
+            });
+        }
+
+        this._inkRipple = inkRipple.render(config);
+    }
+
+    _renderStylingMode() {
+        const $element = this.$element();
+        const stylingMode = this.option('stylingMode');
+        let stylingModeClass = `dx-button-mode-${stylingMode}`;
+
+        ['dx-button-mode-contained', 'dx-button-mode-text', 'dx-button-mode-outlined']
+            .forEach($element.removeClass.bind($element));
+
+        if(!['contained', 'text', 'outlined'].includes(stylingMode)) {
+            const defaultOptionValue = this._getDefaultOptions()['stylingMode'];
+
+            stylingModeClass = `dx-button-mode-${defaultOptionValue}`;
+        }
+
+        $element.addClass(stylingModeClass);
+    }
+
+    _renderSubmitInput() {
+        const submitAction = this._getSubmitAction();
+
+        this._needValidate = true;
+        this._validationStatus = 'valid';
+        this._$submitInput = $('<input>')
+            .attr('type', 'submit')
+            .attr('tabindex', -1)
+            .addClass('dx-button-submit-input')
+            .appendTo(this._$content);
+
+        eventsEngine.on(this._$submitInput, 'click', e => submitAction({ event: e }));
+    }
+
+    _renderType() {
+        const type = this.option('type');
+
+        type && this.$element().addClass(`dx-button-${type}`);
+    }
+
+    _setDisabled(value) {
+        this.option('disabled', value);
+    }
+
+    _supportedKeys() {
+        const click = e => {
+            e.preventDefault();
+            this._executeClickAction(e);
+        };
+
+        return extend(super._supportedKeys(), { space: click, enter: click });
+    }
+
+    _toggleActiveState($el, value, event) {
+        super._toggleActiveState($el, value, event);
+
+        if(this._inkRipple) {
+            const config = { element: this._$content, event };
+
+            value ? this._inkRipple.showWave(config) : this._inkRipple.hideWave(config);
+        }
+    }
+
+    _updateAriaLabel() {
+        let { icon, text } = this.option();
+
+        if(getImageSourceType(icon) === 'image') {
+            icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, "$1") : 'Base64';
+        }
+
+        let ariaLabel = text || icon || '';
+
+        ariaLabel = ariaLabel.toString().trim();
+
+        this.setAria('label', ariaLabel.length ? ariaLabel : null);
+    }
+
+    _updateContent() {
+        const $element = this.$element();
+        const data = this._getContentData();
+        const { icon, text } = data;
+
+        this._$content ? this._$content.empty() : this._$content = $('<div>')
+            .addClass('dx-button-content')
+            .appendTo($element);
+
+        $element
+            .toggleClass('dx-button-has-icon', !!icon)
+            .toggleClass('dx-button-icon-right', !!icon && this.option('iconPosition') !== 'left')
+            .toggleClass('dx-button-has-text', !!text);
+
+        const transclude = this._getAnonymousTemplateName() === this.option('template');
+        const template = this._getTemplateByOption('template');
+        const $result = $(template.render({
+            model: data,
+            container: getPublicElement(this._$content),
+            transclude
+        }));
+
+        if($result.hasClass('dx-template-wrapper')) {
+            this._$content.replaceWith($result);
+            this._$content = $result;
+            this._$content.addClass('dx-button-content');
+        }
+
+        this.option('useSubmitBehavior') && this._renderSubmitInput();
+    }
+
+    _waitForValidationCompleting(complete) {
+        complete.then(result => {
+            this._validationStatus = result.status;
+            this._setDisabled(false);
+            this._validationStatus === 'valid' && this._$submitInput.get(0).click();
+
+            return result;
+        });
     }
 }
 
