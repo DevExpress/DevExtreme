@@ -4315,41 +4315,41 @@ QUnit.module("Keyboard navigation", {
         assert.equal(rowClickCounter, 0, "onRowClick event was not thrown");
     });
 
-    // T821699
-    QUnit.test("The onRowDblClick event is not called after click on adaptive panel item", function(assert) {
-        // arrange
-        var rowDblClickCounter = 0,
-            $fieldItemContent;
-
-        this.options = {
-            keyboardNavigation: {
-                enabled: true
-            },
-            columnHidingEnabled: true,
-            onRowDblClick: function() {
-                rowDblClickCounter++;
-            },
-            editing: {
-                mode: "row"
-            }
-        };
-
-        this.setupModule();
-
-        $fieldItemContent = $(".dx-field-item-content").eq(0);
-
-        pointerMock($fieldItemContent).start().down().up();
-
-        // browser will focus element with tabIndex, if it was clicked
-        $fieldItemContent.focus();
-
-        this.clock.tick();
-
-        // assert
-        assert.equal(rowDblClickCounter, 0, "onRowDblClick was not called");
-    });
-
     if(device.deviceType === "desktop") {
+        // T821699
+        QUnit.testInActiveWindow("The onRowDblClick event is not called after click on adaptive panel item", function(assert) {
+            // arrange
+            var rowDblClickCounter = 0,
+                $fieldItemContent;
+
+            this.options = {
+                keyboardNavigation: {
+                    enabled: true
+                },
+                columnHidingEnabled: true,
+                onRowDblClick: function() {
+                    rowDblClickCounter++;
+                },
+                editing: {
+                    mode: "row"
+                }
+            };
+
+            this.setupModule();
+
+            $fieldItemContent = $(".dx-field-item-content").eq(0);
+
+            pointerMock($fieldItemContent).start().down().up();
+
+            // browser will focus element with tabIndex, if it was clicked
+            $fieldItemContent.focus();
+
+            this.clock.tick();
+
+            // assert
+            assert.equal(rowDblClickCounter, 0, "onRowDblClick was not called");
+        });
+
         QUnit.testInActiveWindow("Skip editing via 'shift + tab' key before entry to adaptive detail form", function(assert) {
             // arrange
             this.setupModule();
