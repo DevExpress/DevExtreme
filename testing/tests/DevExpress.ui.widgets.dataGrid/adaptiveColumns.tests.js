@@ -4319,6 +4319,11 @@ QUnit.module("Keyboard navigation", {
 
     // T821699
     QUnit.test("The onRowDblClick event is not called after click on adaptive panel item", function(assert) {
+        if(device.deviceType !== "desktop") {
+            assert.ok(true, "test is not actual for mobile devices");
+            return;
+        }
+
         // arrange
         var rowDblClickCounter = 0,
             $fieldItemContent;
@@ -4351,36 +4356,44 @@ QUnit.module("Keyboard navigation", {
         assert.equal(rowDblClickCounter, 0, "onRowDblClick was not called");
     });
 
-    if(device.deviceType === "desktop") {
-        QUnit.testInActiveWindow("Skip editing via 'shift + tab' key before entry to adaptive detail form", function(assert) {
-            // arrange
-            this.setupModule();
-            this.editingController.editCell(2, 0);
-            this.clock.tick();
+    QUnit.testInActiveWindow("Skip editing via 'shift + tab' key before entry to adaptive detail form", function(assert) {
+        if(device.deviceType !== "desktop") {
+            assert.ok(true, "test is not actual for mobile devices");
+            return;
+        }
 
-            // act
-            var e = $.Event('keydown');
-            e.key = "Tab";
-            e.shiftKey = true;
-            this.getActiveInputElement().trigger(e);
+        // arrange
+        this.setupModule();
+        this.editingController.editCell(2, 0);
+        this.clock.tick();
 
-            // assert
-            assert.equal(this.getActiveInputElement().val(), "Super");
-        });
+        // act
+        var e = $.Event('keydown');
+        e.key = "Tab";
+        e.shiftKey = true;
+        this.getActiveInputElement().trigger(e);
 
-        QUnit.testInActiveWindow("Skip editing via 'tab' key before entry to adaptive detail form", function(assert) {
-            // arrange
-            this.setupModule();
-            this.editingController.editCell(0, 0);
-            this.clock.tick();
+        // assert
+        assert.equal(this.getActiveInputElement().val(), "Super");
+    });
 
-            // act
-            var e = $.Event('keydown');
-            e.key = "Tab";
-            this.getActiveInputElement().trigger(e);
+    QUnit.testInActiveWindow("Skip editing via 'tab' key before entry to adaptive detail form", function(assert) {
+        if(device.deviceType !== "desktop") {
+            assert.ok(true, "test is not actual for mobile devices");
+            return;
+        }
 
-            // assert
-            assert.equal(this.getActiveInputElement().val(), "Blablablablablablablablablabla");
-        });
-    }
+        // arrange
+        this.setupModule();
+        this.editingController.editCell(0, 0);
+        this.clock.tick();
+
+        // act
+        var e = $.Event('keydown');
+        e.key = "Tab";
+        this.getActiveInputElement().trigger(e);
+
+        // assert
+        assert.equal(this.getActiveInputElement().val(), "Blablablablablablablablablabla");
+    });
 });
