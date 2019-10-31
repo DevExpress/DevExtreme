@@ -557,7 +557,7 @@ QUnit.test("exportFromMarkup method. Defaults", function(assert) {
         fileSavingAction: undefined,
         exportingAction: undefined,
         exportedAction: undefined,
-        backgroundColor: undefined
+        backgroundColor: "#ffffff"
     }, "Export options");
 });
 
@@ -669,6 +669,28 @@ QUnit.test("exportFromMarkup. backgroundColor from markup", function(assert) {
     }, "Export options");
 });
 
+QUnit.test("exportFromMarkup. backgroundColor from current theme", function(assert) {
+    // arrange
+    var options = {
+            width: 600,
+            height: 400
+        },
+        markup = 'testMarkup',
+        currentTheme = themeModule.currentTheme();
+
+    themeModule.currentTheme("someTheme.light");
+
+    try {
+        // act
+        exportModule.exportFromMarkup(markup, options);
+
+        // assert
+        assert.equal(clientExporter.export.getCall(0).args[1].backgroundColor, "some_theme_color");
+    } finally {
+        themeModule.currentTheme(currentTheme);
+    }
+});
+
 QUnit.test("exportWidgets method. Defaults", function(assert) {
     // arrange
     exportModule.combineMarkups.returns({ markup: "testMarkup", width: 600, height: 400 });
@@ -696,7 +718,7 @@ QUnit.test("exportWidgets method. Defaults", function(assert) {
         fileSavingAction: undefined,
         exportingAction: undefined,
         exportedAction: undefined,
-        backgroundColor: undefined
+        backgroundColor: "#ffffff"
     }, "Export options");
 });
 

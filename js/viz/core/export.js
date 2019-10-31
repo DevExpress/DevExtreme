@@ -231,7 +231,7 @@ export const exportFromMarkup = function(markup, options) {
     options.exportedAction = options.onExported;
     options.fileSavingAction = options.onFileSaving;
     options.margin = isDefined(options.margin) ? options.margin : MARGIN;
-    options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup);
+    options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : (getBackgroundColorFromMarkup(markup) || themeModule.getTheme().backgroundColor);
     clientExporter.export(markup, options, getCreatorFunc(options.format));
 };
 
