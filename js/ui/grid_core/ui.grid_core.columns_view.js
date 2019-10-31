@@ -24,6 +24,7 @@ var SCROLL_CONTAINER_CLASS = "scroll-container",
     TABLE_FIXED_CLASS = "table-fixed",
     CONTENT_FIXED_CLASS = "content-fixed",
     ROW_CLASS = "dx-row",
+    FIXED_COL_CLASS = "dx-col-fixed",
     GROUP_ROW_CLASS = "dx-group-row",
     DETAIL_ROW_CLASS = "dx-master-detail-row",
     FILTER_ROW_CLASS = "filter-row",
@@ -188,6 +189,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             if(column.width) {
                 setCellWidth(cell, column, getWidthStyle(column.width));
             }
+        }
+
+        // T823783
+        if(browser.mozilla && options.column.fixed) {
+            $cell.addClass(FIXED_COL_CLASS);
         }
 
         return $cell;
