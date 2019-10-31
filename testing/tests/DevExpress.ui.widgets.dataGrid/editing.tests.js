@@ -8525,6 +8525,45 @@ QUnit.test("Save edit data for inserted row when set validate in column and edit
     assert.ok(!cells.eq(11).children().first().hasClass("dx-highlight-outline"), "not has highlight");
 });
 
+// T823583
+QUnit.test("Insert row when grouped column is required", function(assert) {
+    // arrange
+    var that = this;
+
+    that.rowsView.render($('#container'));
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: [{
+            dataField: "some",
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: "group",
+            validationRules: [{ type: "required" }],
+            groupIndex: 1
+        }, {
+            dataField: "hiddenGroup",
+            validationRules: [{ type: "required" }],
+            visible: false,
+            groupIndex: 0
+        }, {
+            dataField: "showWhenGrouped",
+            groupIndex: 2,
+            showWhenGrouped: true,
+            validationRules: [{ type: "required" }]
+        }]
+    });
+
+    // act
+    that.addRow();
+    that.saveEditData();
+
+    // assert
+    assert.equal($(".dx-error-message").text(), "Hidden Group is required, Group is required", "error text");
+});
+
 // T420231
 QUnit.test("Invalid date cell must be highlighted in batch editing mode for inserted row", function(assert) {
     // arrange
