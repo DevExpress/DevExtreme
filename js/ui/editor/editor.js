@@ -53,7 +53,7 @@ const Editor = Widget.inherit({
 
     _initOptions: function(options) {
         this.callBase.apply(this, arguments);
-        this.options(ValidationEngine.initValidationOptions(options));
+        this.option(ValidationEngine.initValidationOptions(options));
     },
 
     _init: function() {

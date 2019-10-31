@@ -25,7 +25,7 @@ const VALIDATOR_CLASS = "dx-validator",
 const Validator = DOMComponent.inherit({
     _initOptions: function(options) {
         this.callBase.apply(this, arguments);
-        this.options(ValidationEngine.initValidationOptions(options));
+        this.option(ValidationEngine.initValidationOptions(options));
     },
 
     _getDefaultOptions() {
