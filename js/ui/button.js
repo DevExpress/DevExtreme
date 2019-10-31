@@ -5,7 +5,6 @@ import inkRipple from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import themes from './themes';
 import ValidationEngine from './validation_engine';
-import ValidationMixin from './validation/validation_mixin';
 import Widget from './widget/ui.widget';
 import { addNamespace } from '../events/utils';
 import { extend } from '../core/utils/extend';
@@ -26,6 +25,14 @@ class Button extends Widget {
         super(...args);
 
         this._feedbackHideTimeout = 100;
+    }
+
+    get _validationGroupConfig() {
+        const $element = this.$element();
+        const group = this.option('validationGroup') ||
+            ValidationEngine.findGroup($element, this._modelByElement($element));
+
+        return ValidationEngine.getGroupConfig(group);
     }
 
     _clean() {
@@ -56,7 +63,7 @@ class Button extends Widget {
 
     _executeClickAction(event) {
         this._clickAction({
-            validationGroup: ValidationEngine.getGroupConfig(this._findGroup()),
+            validationGroup: this._validationGroupConfig,
             event
         });
     }
@@ -180,7 +187,7 @@ class Button extends Widget {
     _getSubmitAction() {
         return this._createAction(({ event: e }) => {
             if(this._needValidate) {
-                const validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
+                const validationGroup = this._validationGroupConfig;
 
                 if(validationGroup) {
                     const { status, complete } = validationGroup.validate();
@@ -433,8 +440,6 @@ class Button extends Widget {
         });
     }
 }
-
-Button.include(ValidationMixin);
 
 registerComponent('dxButton', Button);
 

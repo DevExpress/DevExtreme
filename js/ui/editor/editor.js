@@ -7,8 +7,8 @@ import { getDefaultAlignment } from "../../core/utils/position";
 import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
-import ValidationMixin from "../validation/validation_mixin";
 import Overlay from "../overlay";
+import ValidationEngine from "./validation_engine";
 
 const READONLY_STATE_CLASS = "dx-state-readonly",
     INVALID_CLASS = "dx-invalid",
@@ -53,7 +53,7 @@ const Editor = Widget.inherit({
 
     _initOptions: function(options) {
         this.callBase.apply(this, arguments);
-        this._initValidationOptions(options);
+        this.options(ValidationEngine.initValidationOptions(options));
     },
 
     _init: function() {
@@ -377,11 +377,11 @@ const Editor = Widget.inherit({
                 break;
             case "isValid":
             case "validationError":
-                this._synchronizeValidationOptions(args);
+                this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
                 break;
             case "validationErrors":
             case "validationStatus":
-                this._synchronizeValidationOptions(args);
+                this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
                 this._renderValidationState();
                 break;
             case "validationBoundary":
@@ -427,6 +427,6 @@ const Editor = Widget.inherit({
         var defaultOptions = this._getDefaultOptions();
         this.option("value", defaultOptions.value);
     }
-}).include(ValidationMixin);
+});
 
 module.exports = Editor;
