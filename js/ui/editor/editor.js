@@ -8,7 +8,7 @@ import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
 import Overlay from "../overlay";
-import ValidationEngine from "./validation_engine";
+import ValidationEngine from "../validation_engine";
 
 const READONLY_STATE_CLASS = "dx-state-readonly",
     INVALID_CLASS = "dx-invalid",
