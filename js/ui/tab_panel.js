@@ -6,9 +6,10 @@ import registerComponent from "../core/component_registrator";
 import MultiView from "./multi_view";
 import Tabs from "./tabs";
 import { default as TabPanelItem } from "./tab_panel/item";
-import iconUtils from "../core/utils/icon";
+import { getImageContainer } from "../core/utils/icon";
 import { getPublicElement } from "../core/utils/dom";
 import BindableTemplate from "./widget/bindable_template";
+import { isPlainObject, isDefined } from "../core/utils/type";
 import windowUtils from "../core/utils/window";
 
 const TABPANEL_CLASS = "dx-tabpanel";
@@ -207,12 +208,20 @@ var TabPanel = MultiView.inherit({
         this.callBase();
 
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
-            $container.text(data.title || String(data));
+            if(isPlainObject(data)) {
+                if(isDefined(data.title) && !isPlainObject(data.title)) {
+                    $container.text(data.title);
+                }
 
-            var $iconElement = iconUtils.getImageContainer(data.icon);
+                const $iconElement = getImageContainer(data.icon);
+                $iconElement && $iconElement.prependTo($container);
+            } else {
+                if(isDefined(data)) {
+                    $container.text(String(data));
+                }
+            }
 
             $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
-            $iconElement && $iconElement.prependTo($container);
         }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
     },
 
