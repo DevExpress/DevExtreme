@@ -17,11 +17,10 @@ import {
     setupModules,
     triggerKeyDown,
     focusCell,
-    callViewsRenderCompleted } from "../../../helpers/grid/keyboardNavigationHelper.js";
-import { DataGridWrapper } from "../../../helpers/wrappers/dataGridWrappers.js";
+    callViewsRenderCompleted,
+    dataGridWrapper } from "../../../helpers/grid/keyboardNavigationHelper.js";
 
 const device = devices.real();
-const dataGridWrapper = new DataGridWrapper("#container");
 
 function generateItems(itemCount) {
     var items = [];

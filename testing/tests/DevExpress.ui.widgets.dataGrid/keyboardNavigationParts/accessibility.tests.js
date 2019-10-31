@@ -6,17 +6,12 @@ import "ui/data_grid/ui.data_grid";
 import $ from "jquery";
 import { setupDataGridModules } from "../../../helpers/dataGridMocks.js";
 import {
-    PagerWrapper,
-    HeaderPanelWrapper,
-    FilterPanelWrapper,
-    DataGridWrapper,
-    HeadersWrapper } from "../../../helpers/wrappers/dataGridWrappers.js";
-import {
     CLICK_EVENT,
     testInDesktop,
     triggerKeyDown,
     fireKeyDown,
-    focusCell } from "../../../helpers/grid/keyboardNavigationHelper.js";
+    focusCell,
+    dataGridWrapper } from "../../../helpers/grid/keyboardNavigationHelper.js";
 
 import fx from "animation/fx";
 
@@ -314,7 +309,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Enter, Space key down by group panel", function(assert) {
-        var headerPanelWrapper = new HeaderPanelWrapper("#container"),
+        var headerPanelWrapper = dataGridWrapper.headerPanel,
             keyDownFiresCount = 0;
 
         // arrange
@@ -354,7 +349,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Enter, Space key down by header cell", function(assert) {
-        var headersWrapper = new HeadersWrapper("#container"),
+        var headersWrapper = dataGridWrapper.headers,
             keyDownFiresCount = 0;
 
         // arrange
@@ -387,7 +382,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Enter, Space key down by header filter indicator", function(assert) {
-        var headersWrapper = new HeadersWrapper("#container"),
+        var headersWrapper = dataGridWrapper.headers,
             keyDownFiresCount = 0,
             headerFilterShownCount = 0;
 
@@ -425,7 +420,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Enter, Space key down by pager", function(assert) {
-        var pagerWrapper = new PagerWrapper("#container"),
+        var pagerWrapper = dataGridWrapper.pager,
             keyDownFiresCount = 0;
 
         // arrange
@@ -465,7 +460,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Enter, Space key down by header filter indicator", function(assert) {
-        var headersWrapper = new HeadersWrapper("#container");
+        var headersWrapper = dataGridWrapper.headers;
 
         // arrange
         this.options = {
@@ -491,7 +486,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Enter, Space key down on filter panel elements", function(assert) {
-        var filterPanelWrapper = new FilterPanelWrapper("#container"),
+        var filterPanelWrapper = dataGridWrapper.filterPanel,
             filterBuilderShownCount = 0;
 
         // arrange
@@ -535,7 +530,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Enter, Space key down on pager elements", function(assert) {
-        var pagerWrapper = new PagerWrapper("#container");
+        var pagerWrapper = dataGridWrapper.pager;
 
         this.options = {
             pager: {
@@ -591,7 +586,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Group panel focus state", function(assert) {
-        var headerPanelWrapper = new HeaderPanelWrapper("#container");
+        var headerPanelWrapper = dataGridWrapper.headerPanel;
 
         // arrange
         this.columns = [
@@ -634,7 +629,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Header row focus state", function(assert) {
-        var headersWrapper = new HeadersWrapper("#container");
+        var headersWrapper = dataGridWrapper.headers;
 
         // arrange
         this.setupModule();
@@ -686,7 +681,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Filter panel focus state", function(assert) {
-        var filterPanelWrapper = new FilterPanelWrapper("#container");
+        var filterPanelWrapper = dataGridWrapper.filterPanel;
 
         this.options = {
             filterPanel: {
@@ -718,7 +713,7 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("Pager focus state", function(assert) {
-        var pagerWrapper = new PagerWrapper("#container");
+        var pagerWrapper = dataGridWrapper.pager;
 
         this.options = {
             pager: {
@@ -757,8 +752,6 @@ QUnit.module("Keyboard navigation accessibility", {
     });
 
     testInDesktop("View selector", function(assert) {
-        var dataGridWrapper = new DataGridWrapper("#container");
-
         this.options = {
             headerFilter: { visible: true },
             filterRow: { visible: true },

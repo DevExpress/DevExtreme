@@ -6,12 +6,12 @@ import "ui/data_grid/ui.data_grid";
 import $ from "jquery";
 import { setupDataGridModules } from "../../../helpers/dataGridMocks.js";
 import keyboardMock from "../../../helpers/keyboardMock.js";
-import { RowsViewWrapper } from "../../../helpers/wrappers/dataGridWrappers.js";
 import {
     testInDesktop,
     triggerKeyDown,
     fireKeyDown,
     focusCell,
+    dataGridWrapper,
     getTextSelection } from "../../../helpers/grid/keyboardNavigationHelper.js";
 
 QUnit.module("Customize keyboard navigation", {
@@ -2014,7 +2014,7 @@ QUnit.module("Customize keyboard navigation", {
 
     testInDesktop("Input should have a correct value in fast editing mode in Microsoft Edge Browser (T808348)", function(assert) {
         // arrange
-        let rowsViewWrapper = new RowsViewWrapper("#container"),
+        let rowsViewWrapper = dataGridWrapper.rowsView,
             $input;
 
         this.options = {
