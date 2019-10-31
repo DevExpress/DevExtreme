@@ -349,6 +349,8 @@ var FilterBuilder = Widget.inherit({
              */
             customOperations: [],
 
+            closePopupOnTargetScroll: true,
+
             /**
              * @name dxFilterBuilderCustomOperation
              * @type object
@@ -1149,6 +1151,7 @@ var FilterBuilder = Widget.inherit({
             },
             visible: true,
             focusStateEnabled: false,
+            closeOnTargetScroll: this.option("closePopupOnTargetScroll"),
             closeOnOutsideClick: true,
             onShown: options.popup.onShown,
             shading: false,
