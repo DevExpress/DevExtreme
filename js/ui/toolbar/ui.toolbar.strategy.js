@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     errors = require("../../core/errors"),
     compileGetter = require("../../core/utils/data").compileGetter,
     Class = require("../../core/class"),
-    Button = require("../button"),
+    Button = require("../button").default,
     abstract = Class.abstract;
 
 var TOOLBAR_MENU_CONTAINER_CLASS = "dx-toolbar-menu-container",

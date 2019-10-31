@@ -1,7 +1,7 @@
 var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     Widget = require("../widget/ui.widget"),
-    Button = require("../button");
+    Button = require("../button").default;
 
 var CALENDAR_NAVIGATOR_CLASS = "dx-calendar-navigator",
     CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS = "dx-calendar-navigator-previous-month",

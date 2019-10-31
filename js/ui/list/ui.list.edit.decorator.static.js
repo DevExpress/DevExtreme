@@ -1,5 +1,5 @@
 var $ = require("../../core/renderer"),
-    Button = require("../button"),
+    Button = require("../button").default,
     registerDecorator = require("./ui.list.edit.decorator_registry").register,
     EditDecorator = require("./ui.list.edit.decorator");
 
