@@ -21,7 +21,7 @@ import { name as clickEventName } from '../events/click';
 * @module ui/button
 * @export default
 */
-export default class Button extends Widget {
+class Button extends Widget {
     constructor(...args) {
         super(...args);
 
@@ -435,4 +435,7 @@ export default class Button extends Widget {
 }
 
 Button.include(ValidationMixin);
+
 registerComponent('dxButton', Button);
+
+module.exports = Button;

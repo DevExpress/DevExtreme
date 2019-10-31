@@ -1,6 +1,6 @@
 var $ = require("../../core/renderer"),
     fx = require("../../animation/fx"),
-    Button = require("../button").default,
+    Button = require("../button"),
     messageLocalization = require("../../localization/message"),
     registerDecorator = require("./ui.list.edit.decorator_registry").register,
     SwitchableEditDecorator = require("./ui.list.edit.decorator.switchable");
