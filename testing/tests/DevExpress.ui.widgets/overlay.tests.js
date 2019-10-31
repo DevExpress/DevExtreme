@@ -737,22 +737,26 @@ testModule("visibility", moduleConfig, () => {
             }),
             overlay = $overlay.dxOverlay("instance"),
             $content = $(overlay.$content()),
-            $wrapper = $content.parent();
+            $wrapper = $content.parent(),
+            done = assert.async();
 
         overlay.on("shown", onShownCounter)
             .on("hiding", onHidingCounter)
             .on("hidden", onHiddenCounter);
-        overlay.show();
+        overlay.show().done(function(result) {
 
-        assert.ok($wrapper.is(":hidden"));
-        assert.ok($content.is(":hidden"));
-        assert.ok($overlay.is(":hidden"));
-        assert.notOk(overlay.option("visible"), "visible === false");
-        assert.equal(showingCounter, 1, "onShowing should be called only once");
-        assert.notOk(onShownCounter.called, "onShown should not be called");
-        assert.notOk(onHidingCounter.called, "onHiding should not be called");
-        assert.notOk(onHiddenCounter.called, "onHidden should not be called");
+            assert.notOk(result, "result === false");
+            assert.ok($wrapper.is(":hidden"));
+            assert.ok($content.is(":hidden"));
+            assert.ok($overlay.is(":hidden"));
+            assert.notOk(overlay.option("visible"), "visible === false");
+            assert.equal(showingCounter, 1, "onShowing should be called only once");
+            assert.notOk(onShownCounter.called, "onShown should not be called");
+            assert.notOk(onHidingCounter.called, "onHiding should not be called");
+            assert.notOk(onHiddenCounter.called, "onHidden should not be called");
 
+            done();
+        });
     });
 });
 
