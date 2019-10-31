@@ -507,6 +507,8 @@ var FilterBuilder = Widget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case "closePopupOnTargetScroll":
+                break;
             case "onEditorPreparing":
             case "onEditorPrepared":
             case "onValueChanged":
