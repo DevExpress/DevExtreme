@@ -271,7 +271,7 @@
 		"dxFileManager-commandCreate": "Новая папка",
 		"dxFileManager-commandRename": "Переименовать",
 		"dxFileManager-commandMove": "Переместить",
-		"dxFileManager-commandCopy": "Копироваь",
+		"dxFileManager-commandCopy": "Копировать",
 		"dxFileManager-commandDelete": "Удалить",
 		"dxFileManager-commandDownload": "Скачать",
 		"dxFileManager-commandUpload": "Загрузить файлы",
@@ -299,7 +299,7 @@
 
 		"dxFileManager-editingDeleteSingleItemProcessingMessage": "Элемент удаляется из {0}",
 		"dxFileManager-editingDeleteMultipleItemsProcessingMessage": "Удаление {0} элементов из {1}",
-		"dxFileManager-editingDeleteSingleItemSuccessMessage": "Удалён элемент из {0}",
+		"dxFileManager-editingDeleteSingleItemSuccessMessage": "Элемент удалён из {0}",
 		"dxFileManager-editingDeleteMultipleItemsSuccessMessage": "{0} элементов удалено из {1}",
 		"dxFileManager-editingDeleteSingleItemErrorMessage": "Не удалось удалить элемент",
 		"dxFileManager-editingDeleteMultipleItemsErrorMessage": "{0} элементов не были удалены",
