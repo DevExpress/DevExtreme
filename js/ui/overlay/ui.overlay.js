@@ -810,6 +810,7 @@ var Overlay = Widget.inherit({
                 this._toggleVisibility(false);
                 this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
                 this._updateZIndexStackPosition(false);
+                this._moveFromContainer();
                 this._isShowingActionCanceled = true;
                 this.option("visible", false);
                 return;
