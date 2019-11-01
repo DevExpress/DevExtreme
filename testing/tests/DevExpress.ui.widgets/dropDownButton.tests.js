@@ -249,30 +249,20 @@ QUnit.module("popup integration", {
 
     });
 
-    QUnit.test("popup width shoud change if content is truncated", (assert) => {
+    QUnit.test("popup width should change if content is truncated", (assert) => {
         const $dropDownButton = $("#dropDownButton").dxDropDownButton({
-            items: [null, null, null, null, null, null, null, null, null, null, null, null],
             icon: "square",
             opened: true,
             dropDownContentTemplate: function(data, $container) {
-                var $colorPicker = $("<div>")
+                $("<div>")
                     .addClass("custom-color-picker")
                     .appendTo($container);
-
-                data.forEach(function(color) {
-                    var $button = $("<i>")
-                        .addClass("color dx-icon dx-icon-square");
-
-                    $colorPicker.append($button);
-                });
             }
         });
 
         const colorPickerStyle = $(".custom-color-picker").get(0).style;
         colorPickerStyle.width = "82px";
         colorPickerStyle.padding = "5px";
-
-        $(".color").get(0).style.fontSize = "18px";
 
         const instance = $dropDownButton.dxDropDownButton("instance");
         const $popupContent = $(getPopup(instance).content());
