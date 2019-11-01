@@ -1,5 +1,6 @@
 import Guid from "../../core/guid";
 import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
 
 export default class FormItemsRunTimeInfo {
     constructor() {
@@ -24,11 +25,10 @@ export default class FormItemsRunTimeInfo {
         this._map = {};
     }
 
-    add(item, widgetInstance, guid, $itemContainer) {
-        guid = guid || new Guid();
-        this._map[guid] = { item, widgetInstance, $itemContainer };
-
-        return guid;
+    add(options) {
+        const key = options.guid || new Guid();
+        this._map[key] = options;
+        return key;
     }
 
     addItemsOrExtendFrom(itemsRunTimeInfo) {
@@ -37,9 +37,18 @@ export default class FormItemsRunTimeInfo {
                 this._map[key].widgetInstance = itemRunTimeInfo.widgetInstance;
                 this._map[key].$itemContainer = itemRunTimeInfo.$itemContainer;
             } else {
-                this.add(itemRunTimeInfo.item, itemRunTimeInfo.widgetInstance, key, itemRunTimeInfo.$itemContainer);
+                this.add({
+                    item: itemRunTimeInfo.item,
+                    widgetInstance: itemRunTimeInfo.widgetInstance,
+                    guid: key,
+                    $itemContainer: itemRunTimeInfo.$itemContainer
+                });
             }
         });
+    }
+
+    extendRunTimeItemInfoByKey(key, options) {
+        this._map[key] = extend(this._map[key], options);
     }
 
     findWidgetInstanceByItem(item) {
@@ -58,6 +67,15 @@ export default class FormItemsRunTimeInfo {
         for(let key in this._map) {
             if(this._map[key].item === item) {
                 return this._map[key].$itemContainer;
+            }
+        }
+        return null;
+    }
+
+    findItemIndexByItem(targetItem) {
+        for(let key in this._map) {
+            if(this._map[key].item === targetItem) {
+                return this._map[key].itemIndex;
             }
         }
         return null;

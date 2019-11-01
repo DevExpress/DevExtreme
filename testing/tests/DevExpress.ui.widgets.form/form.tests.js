@@ -2321,6 +2321,173 @@ const formatTestValue = value => Array.isArray(value) ? "[]" : value;
     });
 });
 
+[false, true].forEach(useItemOption => {
+    QUnit.module(`Public API: Tab options are changed via ${useItemOption ? "itemOption" : "option"} method`, () => {
+        class FormTestWrapper {
+            constructor(useItemOption, onInitializedHandler) {
+                this._useItemOption = useItemOption;
+                this._form = $("#form").dxForm({
+                    onInitialized: onInitializedHandler,
+                    items: [{
+                        itemType: "tabbed",
+                        tabs: [{
+                            title: "title0",
+                            items: ["name"]
+                        }, {
+                            title: "title1",
+                            items: ["lastName"]
+                        }]
+                    }]
+                }).dxForm("instance");
+                this._contentReadyStub = sinon.stub();
+                this._form.on("contentReady", this._contentReadyStub);
+            }
+
+            setTabOption(tabIndex, optionName, value) {
+                if(this._useItemOption) {
+                    this._form.itemOption(`title${tabIndex}`, optionName, value);
+                } else {
+                    this._form.option(`items[0].tabs[${tabIndex}].${optionName}`, value);
+                }
+            }
+
+            selectTab(tabIndex) {
+                $(".dx-tabpanel").dxTabPanel("instance").option("selectedIndex", tabIndex);
+            }
+
+            checkFormsReRender() {
+                QUnit.assert.equal(this._contentReadyStub.callCount, 0, "form is rendered once");
+                this._contentReadyStub.reset();
+            }
+
+            checkTabBadge(tabIndex, expectedText) {
+                QUnit.assert.equal($(".dx-tabs-item-badge").eq(tabIndex).text(), expectedText, `${tabIndex} tab badge`);
+            }
+
+            checkTabDisabled(tabIndex, expectedValue) {
+                const $tabItems = $(".dx-tab");
+                QUnit.assert.equal($tabItems.eq(tabIndex).hasClass("dx-state-disabled"), expectedValue, `${tabIndex} tab disabled`);
+            }
+
+            checkTabIcon(tabIndex, expectedIcon) {
+                const $icon = $(".dx-tab .dx-icon").eq(tabIndex);
+                QUnit.assert.ok($icon.hasClass(`dx-icon-${expectedIcon}`), `${tabIndex} tab icon`);
+            }
+
+            checkTabContentTemplate(tabIndex, $expectedTemplate) {
+                const $multiViewItemContent = $(".dx-multiview-item-content").eq(tabIndex);
+                QUnit.assert.equal($multiViewItemContent.html(), $("<div>").append($expectedTemplate).html(), `${tabIndex} tab template`);
+            }
+
+            checkTabTemplate(tabIndex, $expectedTemplate) {
+                const $multiViewItemContent = $(".dx-tab-content").eq(tabIndex);
+                QUnit.assert.equal($multiViewItemContent.html(), $("<div>").append($expectedTemplate).html(), `${tabIndex} tab template`);
+            }
+
+            checkTabTitle(tabIndex, expectedText) {
+                const $title = $(".dx-tab-content .dx-tab-text").eq(tabIndex);
+                QUnit.assert.strictEqual($title.text(), expectedText, `${tabIndex} tab title`);
+            }
+        }
+
+        QUnit.test("Change the badge option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+            testWrapper.setTabOption(0, "badge", "TestBadge1");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabBadge(0, "TestBadge1");
+
+            testWrapper.setTabOption(1, "badge", "TestBadge2");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabBadge(1, "TestBadge2");
+        });
+
+        QUnit.test("Change the disabled option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+            testWrapper.setTabOption(0, "disabled", true);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabDisabled(0, true);
+
+            testWrapper.setTabOption(1, "disabled", true);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabDisabled(1, true);
+
+            testWrapper.setTabOption(0, "disabled", false);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabDisabled(0, false);
+
+            testWrapper.setTabOption(1, "disabled", false);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabDisabled(1, false);
+        });
+
+        QUnit.test("Change the icon option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+
+            testWrapper.setTabOption(0, "icon", "plus");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabIcon(0, "plus");
+
+            testWrapper.setTabOption(1, "icon", "trash");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabIcon(1, "trash");
+        });
+
+        QUnit.test("Change the template option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+
+            const template1 = "<div class='custom-template-1'></div>";
+            testWrapper.setTabOption(0, "template", template1);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabContentTemplate(0, $(template1));
+
+            const template2 = "<div class='custom-template-2'></div>";
+            testWrapper.setTabOption(1, "template", template2);
+            testWrapper.selectTab(1);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabContentTemplate(1, $(template2));
+        });
+
+        QUnit.test("Change the tab template option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+
+            const template1 = "<div class='custom-tab-template-1'></div>";
+            testWrapper.setTabOption(0, "tabTemplate", template1);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTemplate(0, $(template1));
+
+            const template2 = "<div class='custom-tab-template-2'></div>";
+            testWrapper.setTabOption(1, "tabTemplate", template2);
+            testWrapper.selectTab(1);
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTemplate(1, $(template2));
+        });
+
+        QUnit.test("Change the title option", () => {
+            const testWrapper = new FormTestWrapper(useItemOption);
+            testWrapper.setTabOption(0, "title", "TestTitle1");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTitle(0, "TestTitle1");
+
+            testWrapper.setTabOption(1, "title", "TestTitle2");
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTitle(1, "TestTitle2");
+        });
+
+        QUnit.test("Title is set correctly when it is changed on the onInitialized event", () => {
+            const testWrapper = new FormTestWrapper(useItemOption, ({ component }) => {
+                if(useItemOption) {
+                    component.itemOption("title0", "title", "New Title");
+                } else {
+                    component.option("items[0].tabs[0].title", "New Title");
+                }
+            });
+
+            testWrapper.checkFormsReRender();
+            testWrapper.checkTabTitle(0, "New Title");
+        });
+    });
+});
+
 QUnit.module("Adaptivity");
 
 QUnit.test("One column screen should be customizable with screenByWidth option on init", function(assert) {
