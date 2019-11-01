@@ -12,7 +12,7 @@ export class FileManagerCommandManager {
     }
 
     _initCommands() {
-        this._commands = [ // TODO: locale
+        this._commands = [
             {
                 name: "create",
                 text: messageLocalization.format("dxFileManager-commandCreate"),

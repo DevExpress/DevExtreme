@@ -281,7 +281,7 @@ class FileManager extends Widget {
         notify({
             message: message,
             width: 450
-        }, isSuccess ? "success" : "error", 5000); // TODO: locale ?? not sure
+        }, isSuccess ? "success" : "error", 5000);
     }
 
     _redrawComponent(onlyFileItemsView) {

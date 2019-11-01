@@ -33,10 +33,10 @@ class FileManagerEditingControl extends Widget {
 
         this._renameItemDialog = this._createEnterNameDialog(
             messageLocalization.format("dxFileManager-dialogRenameItemTitle"),
-            messageLocalization.format("dxFileManager-dialogRenameItemButtonText")); // TODO: locale
+            messageLocalization.format("dxFileManager-dialogRenameItemButtonText"));
         this._createFolderDialog = this._createEnterNameDialog(
             messageLocalization.format("dxFileManager-dialogCreateFolderTitle"),
-            messageLocalization.format("dxFileManager-dialogCreateFolderButtonText")); // TODO: locale
+            messageLocalization.format("dxFileManager-dialogCreateFolderButtonText"));
 
         const $chooseFolderDialog = $("<div>").appendTo(this.$element());
         this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
@@ -103,7 +103,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _createMetadataMap() {
-        this._metadataMap = { // TODO: locale
+        this._metadataMap = {
 
             create: {
                 action: arg => this._tryCreate(arg),

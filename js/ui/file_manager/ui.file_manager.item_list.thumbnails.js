@@ -363,7 +363,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         fileItemInfo._state.$element = $item;
     }
 
-    _getTooltipText(fileItemInfo) { // TODO: locale
+    _getTooltipText(fileItemInfo) {
         const item = fileItemInfo.fileItem;
         if(item.tooltipText) {
             return item.tooltipText;

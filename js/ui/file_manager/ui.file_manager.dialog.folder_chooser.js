@@ -17,7 +17,7 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _getDialogOptions() {
-        return extend(super._getDialogOptions(), { // TODO: locale
+        return extend(super._getDialogOptions(), {
             title: messageLocalization.format("dxFileManager-dialogFolderChooserTitle"),
             buttonText: messageLocalization.format("dxFileManager-dialogFolderChooserButtonText"),
             contentCssClass: FILE_MANAGER_DIALOG_FOLDER_CHOOSER,

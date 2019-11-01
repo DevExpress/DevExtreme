@@ -56,7 +56,7 @@ class FileManagerProgressPanel extends Widget {
             .appendTo($container);
 
         $("<div>")
-            .text(messageLocalization.format("dxFileManager-notificationProgressPanelTitle")) // TODO: locale
+            .text(messageLocalization.format("dxFileManager-notificationProgressPanelTitle"))
             .addClass(FILE_MANAGER_PROGRESS_PANEL_TITLE_TEXT_CLASS)
             .appendTo($title);
 
@@ -71,7 +71,7 @@ class FileManagerProgressPanel extends Widget {
         });
 
         this._$infosContainer = $("<div>")
-            .text(messageLocalization.format("dxFileManager-notificationProgressPanelEmptyListText")) // TODO: locale
+            .text(messageLocalization.format("dxFileManager-notificationProgressPanelEmptyListText"))
             .addClass(FILE_MANAGER_PROGRESS_PANEL_INFOS_CONTAINER_CLASS)
             .appendTo($container);
     }
@@ -325,12 +325,12 @@ class FileManagerProgressPanel extends Widget {
     }
 
     _displayClosedOperationItem(itemInfo) {
-        this._setProgressBarText(itemInfo, messageLocalization.format("dxFileManager-notificationProgressPanelOperationCanceled")); // TODO: locale
+        this._setProgressBarText(itemInfo, messageLocalization.format("dxFileManager-notificationProgressPanelOperationCanceled"));
         this._setCloseButtonVisible(itemInfo, false);
     }
 
     _getStatusString(ratio, value) {
-        return ratio === 1 ? messageLocalization.format("Done") : (Math.round(ratio * 100) + "%"); // TODO: locale (Already exists in messages)
+        return ratio === 1 ? messageLocalization.format("Done") : (Math.round(ratio * 100) + "%");
     }
 
     _raiseOperationClosed(info) {

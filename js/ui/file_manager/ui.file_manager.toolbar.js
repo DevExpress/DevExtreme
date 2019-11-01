@@ -415,7 +415,7 @@ class FileManagerToolbar extends Widget {
             generalToolbarOptions = {
                 showText: "inMenu",
                 options: {
-                    text: messageLocalization.format("dxFileManager-commandRefresh"), // TODO: locale
+                    text: messageLocalization.format("dxFileManager-commandRefresh"),
                     icon: REFRESH_ICON_MAP.default
                 }
             };

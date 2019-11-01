@@ -55,7 +55,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     }
 
     _createColumns() {
-        let columns = [ // TODO: locale
+        let columns = [
             {
                 dataField: "isDirectory",
                 caption: "",
