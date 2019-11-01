@@ -260,13 +260,12 @@ QUnit.module("popup integration", {
             }
         });
 
-        const colorPickerStyle = $(".custom-color-picker").get(0).style;
-        colorPickerStyle.width = "82px";
-        colorPickerStyle.padding = "5px";
+        const colorPicker = $(".custom-color-picker");
+        colorPicker.css("width:82px; padding:5px;");
 
         const instance = $dropDownButton.dxDropDownButton("instance");
         const $popupContent = $(getPopup(instance).content());
-        assert.equal(`${$popupContent.outerWidth()}px`, colorPickerStyle.width, "width is right");
+        assert.equal(`${$popupContent.outerWidth()}px`, colorPicker.css("width"), "width is right");
     });
 
     QUnit.test("popup should have correct options after rendering", (assert) => {
