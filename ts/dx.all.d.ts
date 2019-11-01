@@ -5501,7 +5501,13 @@ declare module DevExpress.ui {
         /** @name dxSpeedDialAction.Options.label */
         label?: string;
         /** @name dxSpeedDialAction.Options.onClick */
-        onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement }) => any);
+        onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, actionElement?: DevExpress.core.dxElement }) => any);
+        /** @name dxSpeedDialAction.Options.onContentReady */
+        onContentReady?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
+        /** @name dxSpeedDialAction.Options.onDisposing */
+        onDisposing?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
+        /** @name dxSpeedDialAction.Options.onInitialized */
+        onInitialized?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
         /** @name dxSpeedDialAction.Options.visible */
         visible?: boolean;
     }
