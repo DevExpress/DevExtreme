@@ -26,6 +26,7 @@ class SpeedDialAction extends Widget {
             * @type_function_param1_field1 event:event
             * @type_function_param1_field2 component:this
             * @type_function_param1_field3 element:dxElement
+            * @type_function_param1_field4 actionElement:dxElement
             * @action
             */
 
@@ -51,6 +52,37 @@ class SpeedDialAction extends Widget {
             * @name dxSpeedDialActionOptions.disabled
             * @hidden
             */
+
+
+            /**
+            * @name dxSpeedDialActionOptions.onContentReady
+            * @type function
+            * @extends Action
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 actionElement:dxElement
+            * @action
+            */
+            onContentReady: null,
+
+            /**
+            * @name dxSpeedDialActionOptions.onInitialized
+            * @type function
+            * @extends Action
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 actionElement:dxElement
+            * @action
+            */
+            onInitialized: null,
+
+            /**
+            * @name dxSpeedDialActionOptions.onDisposing
+            * @type function
+            * @extends Action
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 actionElement:dxElement
+            * @action
+            */
+            onDisposing: null,
 
             activeStateEnabled: true,
             hoverStateEnabled: true,
