@@ -2839,8 +2839,10 @@ module.exports = {
                         if(!commonColumnSettings.allowGrouping) ignoreColumnOptionNames.push("groupIndex");
                         if(!commonColumnSettings.allowFixing) ignoreColumnOptionNames.push("fixed", "fixedPosition");
                         if(!commonColumnSettings.allowResizing) ignoreColumnOptionNames.push("width", "visibleWidth");
-                        if(!that.option("filterRow.visible")) ignoreColumnOptionNames.push("filterValue", "selectedFilterOperation");
-                        if(!that.option("headerFilter.visible")) ignoreColumnOptionNames.push("filterValues", "filterType");
+
+                        const isFilterPanelHidden = !that.option("filterPanel.visible");
+                        if(!that.option("filterRow.visible") && isFilterPanelHidden) ignoreColumnOptionNames.push("filterValue", "selectedFilterOperation");
+                        if(!that.option("headerFilter.visible") && isFilterPanelHidden) ignoreColumnOptionNames.push("filterValues", "filterType");
                     }
 
                     that._columnsUserState = state;
