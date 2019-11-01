@@ -360,7 +360,11 @@ const Drawer = Widget.inherit({
 
     getRealPanelWidth() {
         if(hasWindow()) {
-            return this.getElementWidth(this._strategy.getPanelContent());
+            if(typeUtils.isDefined(this.option("templateSize"))) {
+                return this.option("templateSize"); // number is expected
+            } else {
+                return this.getElementWidth(this._strategy.getPanelContent());
+            }
         } else {
             return 0;
         }
@@ -374,7 +378,11 @@ const Drawer = Widget.inherit({
 
     getRealPanelHeight() {
         if(hasWindow()) {
-            return this.getElementHeight(this._strategy.getPanelContent());
+            if(typeUtils.isDefined(this.option("templateSize"))) {
+                return this.option("templateSize"); // number is expected
+            } else {
+                return this.getElementHeight(this._strategy.getPanelContent());
+            }
         } else {
             return 0;
         }
@@ -505,7 +513,9 @@ const Drawer = Widget.inherit({
     },
 
     _cleanPanel() {
-        this._$panel.remove();
+        if(this._$panel) {
+            this._$panel.remove();
+        }
 
         if(this._overlay) {
             this._overlay.dispose();
