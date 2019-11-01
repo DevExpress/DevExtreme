@@ -111,10 +111,7 @@ QUnit.module("Aria accessibility", {
     beforeEach: () => {
         this.items = [{ text: "Item_1" }, { text: "Item_2" }, { text: "Item_3" }];
         helper = new ariaAccessibilityTestHelper({
-            createWidget: ($element, options) => new Tabs($element,
-                $.extend({
-                    items: this.items
-                }, options))
+            createWidget: ($element, options) => new Tabs($element, options)
         });
     },
     afterEach: () => {
@@ -122,21 +119,21 @@ QUnit.module("Aria accessibility", {
     }
 }, () => {
     QUnit.test(`3 items`, () => {
-        helper.createWidget({ });
+        helper.createWidget({ items: this.items });
 
         helper.checkAttributes(helper.$widget, { role: "tablist", tabindex: "0" }, "widget");
         helper.checkItemsAttributes([], { attributes: ["aria-selected"], role: "tab" });
     });
 
     QUnit.test(`3 items, selectedIndex: 1`, () => {
-        helper.createWidget({ selectedIndex: 1 });
+        helper.createWidget({ items: this.items, selectedIndex: 1 });
 
         helper.checkAttributes(helper.$widget, { role: "tablist", tabindex: "0" }, "widget");
         helper.checkItemsAttributes([1], { attributes: ["aria-selected"], role: "tab" });
     });
 
     QUnit.test(`3 items, selectedIndex: 1, set focusedElement: items[1] -> clean focusedElement`, () => {
-        helper.createWidget({ selectedIndex: 1 });
+        helper.createWidget({ items: this.items, selectedIndex: 1 });
 
         helper.widget.option("focusedElement", helper.getItems().eq(1));
         helper.checkAttributes(helper.$widget, { role: "tablist", "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" }, "widget");

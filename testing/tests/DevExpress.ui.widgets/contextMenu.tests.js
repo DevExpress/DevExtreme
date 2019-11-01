@@ -1591,10 +1591,7 @@ var helper;
 QUnit.module("Aria accessibility", {
     beforeEach: () => {
         helper = new ariaAccessibilityTestHelper({
-            createWidget: ($element, options) => new ContextMenu($element,
-                $.extend({
-                    items: [1, 2, 3]
-                }, options))
+            createWidget: ($element, options) => new ContextMenu($element, options)
         });
     },
     afterEach: () => {
@@ -1617,7 +1614,7 @@ QUnit.module("Aria accessibility", {
     });
 
     QUnit.test(`Items: [1, 2, 3] -> show() -> hide()`, () => {
-        helper.createWidget({ });
+        helper.createWidget({ items: [1, 2, 3] });
         helper.checkAttributes(helper.$widget, { }, "widget");
         helper.checkItemsAttributes([], { });
 
@@ -1632,7 +1629,7 @@ QUnit.module("Aria accessibility", {
     });
 
     QUnit.test(`Items: [1, 2, 3] -> set focusedElement: item[0] -> clean focusedElement`, () => {
-        helper.createWidget({ });
+        helper.createWidget({ items: [1, 2, 3] });
         helper.checkAttributes(helper.$widget, { }, "widget");
         helper.checkItemsAttributes([], { });
 

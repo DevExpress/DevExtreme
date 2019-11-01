@@ -132,10 +132,7 @@ var helper;
 QUnit.module("Aria accessibility", {
     beforeEach: () => {
         helper = new ariaAccessibilityTestHelper({
-            createWidget: ($element, options) => new Menu($element,
-                $.extend({
-                    items: options.items || []
-                }, options))
+            createWidget: ($element, options) => new Menu($element, options)
         });
     },
     afterEach: () => {
@@ -143,7 +140,7 @@ QUnit.module("Aria accessibility", {
     }
 }, () => {
     QUnit.test(`Items: []`, () => {
-        helper.createWidget({ });
+        helper.createWidget({ items: [] });
         helper.checkAttributes(helper.$widget, { role: "menubar", tabindex: "0" }, "widget");
         helper.checkItemsAttributes([], { role: "menuitem", tabindex: "-1" });
     });
