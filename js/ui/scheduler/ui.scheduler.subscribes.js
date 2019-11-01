@@ -42,7 +42,7 @@ const subscribes = {
             startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0],
             originalStartDate = options.originalStartDate || startDate,
             renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance(),
-            firstDayOfWeek = this.option("firstDayOfWeek");
+            firstDayOfWeek = this.option("firstDayOfWeek") || 0;
 
         let recurrenceOptions = {
             rule: recurrenceRule,
