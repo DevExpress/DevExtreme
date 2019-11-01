@@ -736,8 +736,6 @@ testModule("visibility", moduleConfig, () => {
                 onHidden: onHiddenCounter
             }),
             overlay = $overlay.dxOverlay("instance"),
-            $content = $(overlay.$content()),
-            $wrapper = $content.parent(),
             done = assert.async();
 
         overlay.on("shown", onShownCounter)
@@ -745,8 +743,11 @@ testModule("visibility", moduleConfig, () => {
             .on("hidden", onHiddenCounter);
 
         overlay.show().done(function(result) {
+            const $content = $(overlay.$content()),
+                $wrapper = $content.parent();
 
             assert.notOk(result, "result === false");
+            assert.ok($wrapper.closest("#overlay").length === 1, "overlay wrapper is inside the overlay root element");
             assert.ok($wrapper.is(":hidden"));
             assert.ok($content.is(":hidden"));
             assert.ok($overlay.is(":hidden"));
