@@ -1929,26 +1929,50 @@ QUnit.test("Cursor should switch style when it was moved to columns separator if
     assert.equal(columnsSeparator.css("cursor"), "col-resize", "cursor style");
 });
 
+const exportToExcelIconClass = ".dx-icon-exportxlsx";
+const iconGenericSize = 18;
+
 // T757579
-QUnit.test("Export icons must be the same size", function(assert) {
-    // arrange
+QUnit.test("Export icons must be the same size (T757579)", function(assert) {
+
     $("#dataGrid").dxDataGrid({
-        dataSource: [],
-        "export": {
+        export: {
             enabled: true,
-            fileName: "Test",
             allowExportSelectedData: true
         }
     });
 
-    // act
     $(".dx-datagrid-export-button").trigger("dxclick");
-    var exportAllButton = $(".dx-icon-exportxlsx");
-    var exportSelectedButton = $(".dx-icon-exportselected");
 
-    // assert
-    assert.equal(exportAllButton.width(), exportSelectedButton.width(), "same width");
-    assert.equal(exportAllButton.height(), exportSelectedButton.height(), "same height");
+    var $exportAllIcon = $(exportToExcelIconClass);
+    var $exportSelected = $(".dx-icon-exportselected");
+
+    assert.equal($exportAllIcon.width(), iconGenericSize, "exportAllIcon.width");
+    assert.equal($exportAllIcon.height(), iconGenericSize, "exportAllIcon.height");
+
+    assert.equal($exportSelected.width(), iconGenericSize, "exportSelected.width");
+    assert.equal($exportSelected.height(), iconGenericSize, "exportSelected.height");
+});
+
+QUnit.test("Export icons must be the same size (T757579)_", function(assert) {
+
+    $("#dataGrid").dxDataGrid({
+        export: {
+            enabled: true,
+            allowExportSelectedData: true
+        }
+    });
+
+    $(".dx-datagrid-export-button").trigger("dxclick");
+
+    var $exportAllIcon = $(exportToExcelIconClass);
+    var $exportSelected = $(".dx-icon-exportselected");
+
+    assert.equal($exportAllIcon.width(), iconGenericSize, "exportAllIcon.width");
+    assert.equal($exportAllIcon.height(), iconGenericSize, "exportAllIcon.height");
+
+    assert.equal($exportSelected.width(), iconGenericSize, "exportSelected.width");
+    assert.equal($exportSelected.height(), iconGenericSize, "exportSelected.height");
 });
 
 // T571282
