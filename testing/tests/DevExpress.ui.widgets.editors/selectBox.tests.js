@@ -4981,38 +4981,66 @@ if(devices.real().deviceType === "desktop") {
             QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, () => {
                 helper.createWidget({ opened: true });
 
-                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, label: "No data to display", role: "listbox" }, "list");
-                let inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", "aria-expanded": "true", "aria-haspopup": "listbox", "aria-activedescendant": helper.widget._list.getFocusedItemId(), tabindex: '0', controls: helper.widget._listId };
+                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, "aria-label": "No data to display", role: "listbox" }, "list");
+
+                let inputAttributes = {
+                    role: "combobox",
+                    autocomplete: "off",
+                    "aria-autocomplete": "list",
+                    type: "text",
+                    spellcheck: "false",
+                    "aria-expanded": "true",
+                    "aria-haspopup": "listbox",
+                    tabindex: '0',
+                };
+
+                inputAttributes["aria-activedescendant"] = helper.widget._list.getFocusedItemId();
+                inputAttributes["aria-controls"] = helper.widget._listId;
+
                 if(!searchEnabled) {
                     inputAttributes.readonly = "";
                 }
                 helper.checkAttributes(helper.widget._input(), inputAttributes, "input");
-                helper.checkAttributes(helper.$widget, { owns: helper.widget._popupContentId }, "widget");
+                helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._popupContentId }, "widget");
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, "popupContent");
 
                 helper.widget.option("searchEnabled", !searchEnabled);
-                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, label: "No data to display", role: "listbox" }, "list");
+                helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, "aria-label": "No data to display", role: "listbox" }, "list");
 
-                inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", "aria-expanded": "true", "aria-haspopup": "listbox", "aria-activedescendant": helper.widget._list.getFocusedItemId(), tabindex: '0', controls: helper.widget._listId };
+                inputAttributes["aria-activedescendant"] = helper.widget._list.getFocusedItemId();
+                inputAttributes["aria-controls"] = helper.widget._listId;
+
+                delete inputAttributes.readonly;
+
                 if(searchEnabled) {
                     inputAttributes.readonly = "";
                 }
                 helper.checkAttributes(helper.widget._input(), inputAttributes, "input");
-                helper.checkAttributes(helper.$widget, { owns: helper.widget._popupContentId }, "widget");
+                helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._popupContentId }, "widget");
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, "popupContent");
             });
 
             QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, () => {
                 helper.createWidget({ opened: false });
 
-                let inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", "aria-expanded": "false", "aria-haspopup": "listbox", tabindex: '0' };
+                let inputAttributes = {
+                    role: "combobox",
+                    autocomplete: "off",
+                    "aria-autocomplete": "list",
+                    type: "text",
+                    spellcheck: "false",
+                    "aria-expanded": "false",
+                    "aria-haspopup": "listbox",
+                    tabindex: '0'
+                };
                 if(!searchEnabled) {
                     inputAttributes.readonly = "";
                 }
                 helper.checkAttributes(helper.$widget, { }, "widget");
                 helper.checkAttributes(helper.widget._input(), inputAttributes, "input");
 
-                inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", "aria-expanded": "false", "aria-haspopup": "listbox", tabindex: '0' };
+                delete inputAttributes.readonly;
+
                 if(searchEnabled) {
                     inputAttributes.readonly = "";
                 }
