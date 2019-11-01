@@ -5,7 +5,6 @@ import inkRipple from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import themes from './themes';
 import ValidationEngine from './validation_engine';
-import ValidationMixin from './validation/validation_mixin';
 import Widget from './widget/ui.widget';
 import { addNamespace } from '../events/utils';
 import { extend } from '../core/utils/extend';
@@ -56,9 +55,17 @@ class Button extends Widget {
 
     _executeClickAction(event) {
         this._clickAction({
-            validationGroup: ValidationEngine.getGroupConfig(this._findGroup()),
+            validationGroup: this._validationGroupConfig,
             event
         });
+    }
+
+    _findGroup() {
+        const $element = this.$element();
+
+        return this.option('validationGroup') ||
+            ValidationEngine.findGroup($element, this._modelByElement($element));
+
     }
 
     _getAnonymousTemplateName() {
@@ -180,7 +187,7 @@ class Button extends Widget {
     _getSubmitAction() {
         return this._createAction(({ event: e }) => {
             if(this._needValidate) {
-                const validationGroup = ValidationEngine.getGroupConfig(this._findGroup());
+                const validationGroup = this._validationGroupConfig;
 
                 if(validationGroup) {
                     const { status, complete } = validationGroup.validate();
@@ -382,7 +389,7 @@ class Button extends Widget {
         let { icon, text } = this.option();
 
         if(getImageSourceType(icon) === 'image') {
-            icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, "$1") : 'Base64';
+            icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
         }
 
         let ariaLabel = text || icon || '';
@@ -423,6 +430,10 @@ class Button extends Widget {
         this.option('useSubmitBehavior') && this._renderSubmitInput();
     }
 
+    get _validationGroupConfig() {
+        return ValidationEngine.getGroupConfig(this._findGroup());
+    }
+
     _waitForValidationCompleting(complete) {
         complete.then(result => {
             this._validationStatus = result.status;
@@ -433,8 +444,6 @@ class Button extends Widget {
         });
     }
 }
-
-Button.include(ValidationMixin);
 
 registerComponent('dxButton', Button);
 
