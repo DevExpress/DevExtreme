@@ -13,11 +13,21 @@ const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
 
 QUnit.testStart(() => {
-    const markup = '' +
-        '<div id="container">' +
-            '<div id="dropDownButton"></div>' +
-            '<div id="dropDownButton2"></div>' +
-        '</div>';
+    const markup =
+        `<style>
+            .custom-color-picker {
+                width: 82px;
+                padding: 5px;
+            }
+            .color {
+                cursor: pointer;
+                font-size: 18px;
+            }
+        </style>
+        <div id="container">
+            <div id="dropDownButton"></div>
+            <div id="dropDownButton2"></div>
+        </div>`;
     $("#qunit-fixture").html(markup);
 });
 
@@ -247,6 +257,30 @@ QUnit.module("popup integration", {
         assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), "width are equal after option change");
         assert.equal($popupContent.outerWidth(), 810, "width are equal after option change");
 
+    });
+
+    QUnit.test("popup width shoud change if content is truncated", (assert) => {
+        const $dropDownButton = $("#dropDownButton").dxDropDownButton({
+            items: [null, null, null, null, null, null, null, null, null, null, null, null],
+            icon: "square",
+            opened: true,
+            dropDownContentTemplate: function(data, $container) {
+                var $colorPicker = $("<div>")
+                    .addClass("custom-color-picker")
+                    .appendTo($container);
+
+                data.forEach(function(color) {
+                    var $button = $("<i>")
+                        .addClass("color dx-icon dx-icon-square");
+
+                    $colorPicker.append($button);
+                });
+            }
+        });
+
+        const instance = $dropDownButton.dxDropDownButton("instance");
+        const $popupContent = $(getPopup(instance).content());
+        assert.equal($popupContent.outerWidth(), 82, "width is right");
     });
 
     QUnit.test("popup should have correct options after rendering", (assert) => {
