@@ -511,17 +511,130 @@ QUnit.test("scroll args are correct", function(assert) {
     checkLastScrollEvent();
 });
 
-QUnit.test("scroll arguments", function(assert) {
-    var $scrollable = $("#scrollable").dxScrollable({
-        useNative: true,
-        onScroll: function(e) {
-            assert.equal(e.reachedLeft, undefined, "reached left is not defined");
-            assert.equal(e.reachedRight, undefined, "reached right is not defined");
-            assert.equal(e.reachedTop, true, "reached top is true");
-            assert.equal(e.reachedBottom, false, "reached bottom is false");
+
+QUnit.module("Scroll arguments", moduleConfig, () => {
+    class ScrollableTestHelper {
+        constructor(direction) {
+            this.onScrollHandler = sinon.spy();
+            this._direction = direction;
+            this.$element = $("#scrollable");
+            this.element = this._getScrollable();
+            this.$container = this._getScrollableContainer();
         }
+
+        _getScrollable() {
+            return this.$element.dxScrollable({
+                useNative: true,
+                direction: this._direction,
+                onScroll: this.onScrollHandler
+            }).dxScrollable("instance");
+        }
+
+        getMaxScrollOffset() {
+            const containerElement = this.$container.get(0);
+
+            return {
+                vertical: containerElement.scrollHeight - containerElement.clientHeight,
+                horizontal: containerElement.scrollWidth - containerElement.clientWidth
+            };
+        }
+
+        _getScrollableContainer() {
+            return this.$element.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+        }
+
+        checkScrollEvent(options) {
+            const scrollArguments = this.onScrollHandler.firstCall.args[0];
+
+            QUnit.assert.equal(scrollArguments.reachedTop, options.reachedTop, `reachedTop`);
+            QUnit.assert.equal(scrollArguments.reachedBottom, options.reachedBottom, `reachedBottom`);
+            QUnit.assert.equal(scrollArguments.reachedLeft, options.reachedLeft, `reachedLeft`);
+            QUnit.assert.equal(scrollArguments.reachedRight, options.reachedRight, `reachedRight`);
+
+        }
+    }
+
+    QUnit.test(`Direction: 'vertical', scrollPosition: { top: 0 } -> { top: 1} -> { top: center } -> { top: max-1 } -> { top: max }`, () => {
+        const helper = new ScrollableTestHelper("vertical");
+        const maxOffset = helper.getMaxScrollOffset();
+
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: true, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ top: 1 });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ top: 25 });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ top: maxOffset.vertical - 1 });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ top: maxOffset.vertical });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: undefined, reachedRight: undefined });
     });
 
-    var $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollable);
-    $container.trigger("scroll");
+    QUnit.test(`Direction: 'horizontal', scrollPosition: { left: 0 } -> { left: 1} -> { left: center } -> { left: max-1 } -> { left: max }`, () => {
+        const helper = new ScrollableTestHelper("horizontal");
+        const maxOffset = helper.getMaxScrollOffset();
+
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: true, reachedRight: false });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ left: 1 });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ left: 25 });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ left: maxOffset.horizontal - 1 });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ left: maxOffset.horizontal });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: true });
+    });
+
+    QUnit.test(`Direction: 'both', scrollPosition: { top: 0, left: 0 } -> { top:1, left: 1} -> { top: center, left: center } -> { top: max-1, left: max-1 } -> { top: max, left: max }`, () => {
+        const helper = new ScrollableTestHelper("both");
+        const maxOffset = helper.getMaxScrollOffset();
+
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: true, reachedBottom: false, reachedLeft: true, reachedRight: false });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ top: 1, left: 1 });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ top: 25, left: 25 });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ top: maxOffset.vertical - 1, left: maxOffset.horizontal - 1 });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false });
+
+        helper.onScrollHandler.reset();
+        helper.element.scrollTo({ top: maxOffset.vertical, left: maxOffset.horizontal });
+        helper.$container.trigger("scroll");
+        helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: false, reachedRight: true });
+    });
 });
