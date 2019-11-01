@@ -266,6 +266,7 @@ const ButtonGroup = Widget.inherit({
             tabIndex: this.option("tabIndex"),
             noDataText: "",
             selectionRequired: false,
+            height: this.option("height"),
             onItemRendered: e => {
                 const width = this.option("width");
                 isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
