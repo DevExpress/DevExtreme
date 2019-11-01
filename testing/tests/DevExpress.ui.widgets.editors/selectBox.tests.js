@@ -4982,7 +4982,7 @@ if(devices.real().deviceType === "desktop") {
                 helper.createWidget({ opened: true });
 
                 helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, label: "No data to display", role: "listbox" }, "list");
-                let inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", expanded: "true", haspopup: "listbox", activedescendant: helper.widget._list.getFocusedItemId(), tabindex: '0', controls: helper.widget._listId };
+                let inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", "aria-expanded": "true", "aria-haspopup": "listbox", "aria-activedescendant": helper.widget._list.getFocusedItemId(), tabindex: '0', controls: helper.widget._listId };
                 if(!searchEnabled) {
                     inputAttributes.readonly = "";
                 }
@@ -4993,7 +4993,7 @@ if(devices.real().deviceType === "desktop") {
                 helper.widget.option("searchEnabled", !searchEnabled);
                 helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, label: "No data to display", role: "listbox" }, "list");
 
-                inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", expanded: "true", haspopup: "listbox", activedescendant: helper.widget._list.getFocusedItemId(), tabindex: '0', controls: helper.widget._listId };
+                inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", "aria-expanded": "true", "aria-haspopup": "listbox", "aria-activedescendant": helper.widget._list.getFocusedItemId(), tabindex: '0', controls: helper.widget._listId };
                 if(searchEnabled) {
                     inputAttributes.readonly = "";
                 }
@@ -5005,14 +5005,14 @@ if(devices.real().deviceType === "desktop") {
             QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, () => {
                 helper.createWidget({ opened: false });
 
-                let inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", expanded: "false", haspopup: "listbox", tabindex: '0' };
+                let inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", "aria-expanded": "false", "aria-haspopup": "listbox", tabindex: '0' };
                 if(!searchEnabled) {
                     inputAttributes.readonly = "";
                 }
                 helper.checkAttributes(helper.$widget, { }, "widget");
                 helper.checkAttributes(helper.widget._input(), inputAttributes, "input");
 
-                inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", expanded: "false", haspopup: "listbox", tabindex: '0' };
+                inputAttributes = { role: "combobox", autocomplete: "off", "aria-autocomplete": "list", type: "text", spellcheck: "false", "aria-expanded": "false", "aria-haspopup": "listbox", tabindex: '0' };
                 if(searchEnabled) {
                     inputAttributes.readonly = "";
                 }

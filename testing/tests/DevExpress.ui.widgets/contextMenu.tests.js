@@ -1607,7 +1607,7 @@ QUnit.module("Aria accessibility", {
         helper.checkItemsAttributes([], { });
 
         helper.widget.show();
-        helper.checkAttributes(helper.$widget, { owns: helper.widget._overlayContentId }, "widget");
+        helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._overlayContentId }, "widget");
         helper.checkAttributes(helper.widget._overlay.$content(), { id: helper.widget._overlayContentId, role: "menu", tabindex: "0" }, "overlayContent");
         helper.checkItemsAttributes([], { });
 
@@ -1622,7 +1622,7 @@ QUnit.module("Aria accessibility", {
         helper.checkItemsAttributes([], { });
 
         helper.widget.show();
-        helper.checkAttributes(helper.$widget, { owns: helper.widget._overlayContentId }, "widget");
+        helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._overlayContentId }, "widget");
         helper.checkAttributes(helper.widget._overlay.$content(), { id: helper.widget._overlayContentId, role: "menu", tabindex: "0" }, "overlayContent");
         helper.checkItemsAttributes([], { role: "menuitem", tabindex: "-1" });
 
@@ -1638,12 +1638,12 @@ QUnit.module("Aria accessibility", {
 
         helper.widget.show();
         helper.widget.option("focusedElement", helper.getItems().eq(0));
-        helper.checkAttributes(helper.$widget, { owns: helper.widget._overlayContentId }, "widget");
-        helper.checkAttributes(helper.widget._overlay.$content(), { id: helper.widget._overlayContentId, activedescendant: helper.focusedItemId, role: "menu", tabindex: "0" }, "overlayContent");
+        helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._overlayContentId }, "widget");
+        helper.checkAttributes(helper.widget._overlay.$content(), { id: helper.widget._overlayContentId, "aria-activedescendant": helper.focusedItemId, role: "menu", tabindex: "0" }, "overlayContent");
         helper.checkItemsAttributes([], { focusedItemIndex: 0, role: "menuitem", tabindex: "-1" });
 
         helper.widget.option("focusedElement", null);
-        helper.checkAttributes(helper.$widget, { owns: helper.widget._overlayContentId }, "widget");
+        helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._overlayContentId }, "widget");
         helper.checkAttributes(helper.widget._overlay.$content(), { id: helper.widget._overlayContentId, role: "menu", tabindex: "0" }, "overlayContent");
         helper.checkItemsAttributes([], { role: "menuitem", tabindex: "-1" });
     });
@@ -1659,16 +1659,16 @@ QUnit.module("Aria accessibility", {
         helper.widget.show();
 
         keyboardMock(helper.widget.itemsContainer()).keyDown("down");
-        helper.checkAttributes(helper.$widget, { owns: helper.widget._overlayContentId }, "widget");
-        helper.checkAttributes(helper.widget._overlay.$content(), { id: helper.widget._overlayContentId, activedescendant: helper.focusedItemId, role: "menu", tabindex: "0" }, "overlayContent");
-        helper.checkAttributes(helper.getItems().eq(0), { id: helper.focusedItemId, role: "menuitem", tabindex: "-1", haspopup: "true" }, "Items[0]");
+        helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._overlayContentId }, "widget");
+        helper.checkAttributes(helper.widget._overlay.$content(), { id: helper.widget._overlayContentId, "aria-activedescendant": helper.focusedItemId, role: "menu", tabindex: "0" }, "overlayContent");
+        helper.checkAttributes(helper.getItems().eq(0), { id: helper.focusedItemId, role: "menuitem", tabindex: "-1", "aria-haspopup": "true" }, "Items[0]");
         helper.checkAttributes(helper.getItems().eq(1), { role: "menuitem", tabindex: "-1" }, "Items[1]");
 
         keyboardMock(helper.widget.itemsContainer()).keyDown("right");
-        helper.checkAttributes(helper.$widget, { owns: helper.widget._overlayContentId }, "widget");
-        helper.checkAttributes(helper.widget._overlay.$content(), { id: helper.widget._overlayContentId, activedescendant: helper.focusedItemId, role: "menu", tabindex: "0" }, "overlayContent");
+        helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._overlayContentId }, "widget");
+        helper.checkAttributes(helper.widget._overlay.$content(), { id: helper.widget._overlayContentId, "aria-activedescendant": helper.focusedItemId, role: "menu", tabindex: "0" }, "overlayContent");
 
-        helper.checkAttributes(helper.getItems().eq(0), { role: "menuitem", tabindex: "-1", haspopup: "true" }, "Items[0]");
+        helper.checkAttributes(helper.getItems().eq(0), { role: "menuitem", tabindex: "-1", "aria-haspopup": "true" }, "Items[0]");
         helper.checkAttributes(helper.getItems().eq(1), { id: helper.focusedItemId, role: "menuitem", tabindex: "-1" }, "Items[0].items[0]");
         helper.checkAttributes(helper.getItems().eq(2), { role: "menuitem", tabindex: "-1" }, "Items[0],items[1]");
         helper.checkAttributes(helper.getItems().eq(3), { role: "menuitem", tabindex: "-1" }, "Items[1]");

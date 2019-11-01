@@ -1970,7 +1970,7 @@ QUnit.module(`Aria accessibility`, {
         const $focusedItem = helper.$widget.find(`.${ITEM_CLASS}`).eq(1);
         helper.widget.option("focusedElement", $focusedItem);
 
-        helper.checkAttributes(helper.$widget, { activedescendant: helper.widget.getFocusedItemId(), tabindex: "0" });
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" });
         helper.checkItemsAttributes([], { focusedItemIndex: 1 });
 
         helper.widget.option("focusedElement", null);
@@ -1982,11 +1982,11 @@ QUnit.module(`Aria accessibility`, {
         helper.createWidget({ });
 
         helper.$widget.focusin();
-        helper.checkAttributes(helper.$widget, { activedescendant: helper.widget.getFocusedItemId(), tabindex: "0" });
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" });
         helper.checkItemsAttributes([], { focusedItemIndex: 0 });
 
         helper.$widget.focusout();
-        helper.checkAttributes(helper.$widget, { activedescendant: helper.widget.getFocusedItemId(), tabindex: "0" });
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" });
         helper.checkItemsAttributes([], { focusedItemIndex: 0 });
     });
 
@@ -1994,7 +1994,7 @@ QUnit.module(`Aria accessibility`, {
         helper.createWidget({ selectedIndex: 1, selectionMode: "single" });
 
         helper.checkAttributes(helper.$widget, { tabindex: "0" });
-        helper.checkItemsAttributes([1], { attributes: ["selected"] });
+        helper.checkItemsAttributes([1], { attributes: ["aria-selected"] });
     });
 
     test("Refresh aria-activedescendant when focused item changed", assert => {
@@ -2036,7 +2036,7 @@ QUnit.module(`Aria accessibility`, {
 
         helper.widget.option("focusedElement", $items.eq(0));
         helper.checkAttributes(helper.$widget, { activedescendant: helper.widget.getFocusedItemId(), tabindex: "0" });
-        helper.checkItemsAttributes([1], { attributes: ["selected"], focusedItemIndex: 0 });
+        helper.checkItemsAttributes([1], { attributes: ["aria-selected"], focusedItemIndex: 0 });
         assert.strictEqual(focusedItemChangedCallCount, 1, "onFocusedItemChanged.callCount");
 
         focusedItemChangedCallCount = 0;
@@ -2046,7 +2046,7 @@ QUnit.module(`Aria accessibility`, {
 
         helper.widget.option("focusedElement", $items.eq(1));
         helper.checkAttributes(helper.$widget, { activedescendant: helper.widget.getFocusedItemId(), tabindex: "0" });
-        helper.checkItemsAttributes([1], { attributes: ["selected"], focusedItemIndex: 1 });
+        helper.checkItemsAttributes([1], { attributes: ["aria-selected"], focusedItemIndex: 1 });
         assert.strictEqual(focusedItemChangedCallCount, 1, "onFocusedItemChanged.callCount");
     });
 });

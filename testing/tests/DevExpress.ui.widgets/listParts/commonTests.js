@@ -2915,12 +2915,12 @@ if(devices.real().deviceType === "desktop") {
                     helper.$widget.focusin();
                 }
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
-                helper.checkItemsAttributes([2], { attributes: ["selected"], focusedItemIndex: 2, role: "option" });
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", "aria-activedescendant": helper.focusedItemId, tabindex: "0" });
+                helper.checkItemsAttributes([2], { attributes: ["aria-selected"], focusedItemIndex: 2, role: "option" });
 
                 helper.$widget.focusout();
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
-                helper.checkItemsAttributes([2], { attributes: ["selected"], focusedItemIndex: 2, role: "option" });
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", "aria-activedescendant": helper.focusedItemId, tabindex: "0" });
+                helper.checkItemsAttributes([2], { attributes: ["aria-selected"], focusedItemIndex: 2, role: "option" });
             });
 
 
@@ -2938,27 +2938,27 @@ if(devices.real().deviceType === "desktop") {
                 eventsEngine.trigger($item_2, "dxpointerdown");
                 this.clock.tick();
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
-                helper.checkItemsAttributes([2], { attributes: ["selected"], focusedItemIndex: 2, role: "option" });
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", "aria-activedescendant": helper.focusedItemId, tabindex: "0" });
+                helper.checkItemsAttributes([2], { attributes: ["aria-selected"], focusedItemIndex: 2, role: "option" });
 
                 helper.widget.option("focusedElement", null);
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
-                helper.checkItemsAttributes([2], { attributes: ["selected"], role: "option" });
+                helper.checkItemsAttributes([2], { attributes: ["aria-selected"], role: "option" });
             });
 
             QUnit.test(`Selected: ["Item_1", "Item_3"] -> select "Item_2" by click`, () => {
                 helper.createWidget({ selectedItemKeys: ["Item_1", "Item_3"], keyExpr: "text", selectionMode: "multiple" });
 
                 helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", tabindex: "0" });
-                helper.checkItemsAttributes([0, 2], { attributes: ["selected"], role: "option" });
+                helper.checkItemsAttributes([0, 2], { attributes: ["aria-selected"], role: "option" });
 
                 const $item_1 = $(helper.getItems().eq(1));
                 eventsEngine.trigger($item_1, "dxclick");
                 eventsEngine.trigger($item_1, "dxpointerdown");
                 this.clock.tick();
 
-                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", activedescendant: helper.focusedItemId, tabindex: "0" });
-                helper.checkItemsAttributes([0, 1, 2], { attributes: ["selected"], focusedItemIndex: 1, role: "option" });
+                helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: "listbox", "aria-activedescendant": helper.focusedItemId, tabindex: "0" });
+                helper.checkItemsAttributes([0, 1, 2], { attributes: ["aria-selected"], focusedItemIndex: 1, role: "option" });
             });
         });
     });

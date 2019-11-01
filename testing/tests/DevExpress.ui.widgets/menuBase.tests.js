@@ -915,13 +915,13 @@ QUnit.module("Aria accessibility", {
         });
 
         helper.checkAttributes(helper.$widget, { tabindex: "0" }, "widget");
-        helper.checkAttributes(helper.getItems().eq(0), { role: "menuitem", tabindex: "-1", haspopup: "true" }, "Items[0]");
+        helper.checkAttributes(helper.getItems().eq(0), { role: "menuitem", tabindex: "-1", "aria-haspopup": "true" }, "Items[0]");
         helper.checkAttributes(helper.getItems().eq(1), { role: "menuitem", tabindex: "-1" }, "Items[1]");
 
         helper.widget.option("focusedElement", helper.getItems().eq(0));
 
-        helper.checkAttributes(helper.$widget, { activedescendant: helper.focusedItemId, tabindex: "0" }, "widget");
-        helper.checkAttributes(helper.getItems().eq(0), { id: helper.focusedItemId, role: "menuitem", tabindex: "-1", haspopup: "true" }, "Items[0]");
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.focusedItemId, tabindex: "0" }, "widget");
+        helper.checkAttributes(helper.getItems().eq(0), { id: helper.focusedItemId, role: "menuitem", tabindex: "-1", "aria-haspopup": "true" }, "Items[0]");
         helper.checkAttributes(helper.getItems().eq(1), { role: "menuitem", tabindex: "-1" }, "Items[1]");
     });
 });

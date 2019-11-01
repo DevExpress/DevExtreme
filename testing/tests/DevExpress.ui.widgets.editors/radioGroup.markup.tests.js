@@ -294,7 +294,7 @@ QUnit.module(`Aria accessibility`, {
         helper.createWidget({ items: [1, 2, 3], value: 1 });
 
         helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
-        helper.checkItemsAttributes([0], { attributes: ["selected", "checked"], role: "radio" });
+        helper.checkItemsAttributes([0], { attributes: ["aria-selected", "aria-checked"], role: "radio" });
     });
 
     QUnit.test(`Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement`, () => {
@@ -302,10 +302,10 @@ QUnit.module(`Aria accessibility`, {
 
         helper.widget.option("focusedElement", helper.getItems().eq(0));
         helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
-        helper.checkItemsAttributes([0], { attributes: ["selected", "checked"], role: "radio" });
+        helper.checkItemsAttributes([0], { attributes: ["aria-selected", "aria-checked"], role: "radio" });
 
         helper.widget.option("focusedElement", null);
         helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
-        helper.checkItemsAttributes([0], { attributes: ["selected", "checked"], role: "radio" });
+        helper.checkItemsAttributes([0], { attributes: ["aria-selected", "aria-checked"], role: "radio" });
     });
 });

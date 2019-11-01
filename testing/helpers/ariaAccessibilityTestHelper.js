@@ -39,12 +39,9 @@ class ariaAccessibilityTestHelper {
         const skipAttributes = ["class", "style"];
         const attributeNames = element.getAttributeNames().filter(name => name !== skipAttributes[0] && name !== skipAttributes[1]);
 
-        const sliceAriaPrefixIfNeed = (name) => name === "aria-autocomplete" || name.indexOf("aria-") === -1 ? name : name.slice(5);
-
         assert.equal(attributeNames.length === Object.keys(expectedAttributes).length, true, `${prefix || ''}.attributes.count`);
         attributeNames.forEach((attributeName) => {
-            const attrName = sliceAriaPrefixIfNeed(attributeName);
-            assert.strictEqual(element.getAttribute(attributeName), attrName in expectedAttributes ? expectedAttributes[attrName] : null, `${prefix || ''}.${attributeName}`);
+            assert.strictEqual(element.getAttribute(attributeName), attributeName in expectedAttributes ? expectedAttributes[attributeName] : null, `${prefix || ''}.${attributeName}`);
         });
     }
 
@@ -73,7 +70,7 @@ class ariaAccessibilityTestHelper {
 
         this.checkAttributes($checkBox, {
             role: "checkbox",
-            checked: $checkBox.hasClass("dx-checkbox-indeterminate") ? "mixed" : defaultValue
+            "aria-checked": $checkBox.hasClass("dx-checkbox-indeterminate") ? "mixed" : defaultValue
         }, `checkbox[${index}]`);
     }
 
@@ -85,13 +82,13 @@ class ariaAccessibilityTestHelper {
         let nodeAttributes = {
             role: "treeitem",
             "data-item-id": node.id.toString(),
-            level: $item.parents(".dx-treeview-node").length.toString(),
-            expanded: node.internalFields.expanded.toString(),
-            label: $item.text()
+            "aria-level": $item.parents(".dx-treeview-node").length.toString(),
+            "aria-expanded": node.internalFields.expanded.toString(),
+            "aria-label": $item.text()
         };
 
         if(isDefined(node.internalFields.selected)) {
-            nodeAttributes.selected = node.internalFields.selected.toString();
+            nodeAttributes["aria-selected"] = node.internalFields.selected.toString();
         }
 
         if(isDefined(focusedNodeIndex) && index === focusedNodeIndex) {

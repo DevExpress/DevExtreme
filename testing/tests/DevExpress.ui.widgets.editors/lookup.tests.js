@@ -3014,18 +3014,18 @@ if(devices.real().deviceType === "desktop") {
                 const $list = $(`.${LIST_CLASS}`);
                 const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-                helper.checkAttributes($list, { id: helper.widget._listId, label: "No data to display", role: "listbox", tabindex: "0" }, "list");
-                helper.checkAttributes($field, { role: "combobox", expanded: "true", activedescendant: helper.widget._list.getFocusedItemId(), tabindex: '0', controls: helper.widget._listId }, "field");
-                helper.checkAttributes(helper.$widget, { owns: helper.widget._popupContentId }, "widget");
+                helper.checkAttributes($list, { id: helper.widget._listId, "aria-label": "No data to display", role: "listbox", tabindex: "0" }, "list");
+                helper.checkAttributes($field, { role: "combobox", "aria-expanded": "true", "aria-activedescendant": helper.widget._list.getFocusedItemId(), tabindex: '0', "aria-controls": helper.widget._listId }, "field");
+                helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._popupContentId }, "widget");
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, "popupContent");
                 if($input.length) {
                     helper.checkAttributes($input, { autocomplete: "off", type: "text", spellcheck: "false", tabindex: "0", role: "textbox" }, "input");
                 }
 
                 helper.widget.option("searchEnabled", !searchEnabled);
-                helper.checkAttributes($list, { id: helper.widget._listId, label: "No data to display", role: "listbox", tabindex: "0" }, "list");
-                helper.checkAttributes($field, { role: "combobox", expanded: "true", activedescendant: helper.widget._list.getFocusedItemId(), tabindex: '0', controls: helper.widget._listId }, "field");
-                helper.checkAttributes(helper.$widget, { owns: helper.widget._popupContentId }, "widget");
+                helper.checkAttributes($list, { id: helper.widget._listId, "aria-label": "No data to display", role: "listbox", tabindex: "0" }, "list");
+                helper.checkAttributes($field, { role: "combobox", "aria-expanded": "true", "aria-activedescendant": helper.widget._list.getFocusedItemId(), tabindex: '0', "aria-controls": helper.widget._listId }, "field");
+                helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._popupContentId }, "widget");
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, "popupContent");
                 if($input.length) {
                     helper.checkAttributes($input, { autocomplete: "off", type: "text", spellcheck: "false", role: "textbox" }, "input");
@@ -3038,11 +3038,11 @@ if(devices.real().deviceType === "desktop") {
                 const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
 
                 helper.checkAttributes(helper.$widget, {}, "widget");
-                helper.checkAttributes($field, { role: "combobox", expanded: "false", tabindex: '0' }, "field");
+                helper.checkAttributes($field, { role: "combobox", "aria-expanded": "false", tabindex: '0' }, "field");
 
                 helper.widget.option("searchEnabled", !searchEnabled);
                 helper.checkAttributes(helper.$widget, {}, "widget");
-                helper.checkAttributes($field, { role: "combobox", expanded: "false", tabindex: '0' }, "field");
+                helper.checkAttributes($field, { role: "combobox", "aria-expanded": "false", tabindex: '0' }, "field");
             });
 
             QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
