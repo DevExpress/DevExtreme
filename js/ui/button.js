@@ -326,7 +326,7 @@ class Button extends Widget {
         ['dx-button-mode-contained', 'dx-button-mode-text', 'dx-button-mode-outlined']
             .forEach($element.removeClass.bind($element));
 
-        if(!['contained', 'text', 'outlined'].includes(stylingMode)) {
+        if(['contained', 'text', 'outlined'].indexOf(stylingMode) === -1) {
             const defaultOptionValue = this._getDefaultOptions()['stylingMode'];
 
             stylingModeClass = `dx-button-mode-${defaultOptionValue}`;
