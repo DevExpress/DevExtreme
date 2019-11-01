@@ -14,17 +14,7 @@ const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
 
 QUnit.testStart(() => {
     const markup =
-        `<style>
-            .custom-color-picker {
-                width: 82px;
-                padding: 5px;
-            }
-            .color {
-                cursor: pointer;
-                font-size: 18px;
-            }
-        </style>
-        <div id="container">
+        `<div id="container">
             <div id="dropDownButton"></div>
             <div id="dropDownButton2"></div>
         </div>`;
@@ -234,7 +224,7 @@ QUnit.module("popup integration", {
         assert.ok($popupContent.hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
     });
 
-    QUnit.test("popup width shoud be equal to dropDownButton width", (assert) => {
+    QUnit.test("popup width should be equal to dropDownButton width", (assert) => {
         const $dropDownButton = $("#dropDownButton").dxDropDownButton({
             opened: true,
             items: ["1", "2", "3"],
@@ -278,9 +268,15 @@ QUnit.module("popup integration", {
             }
         });
 
+        const colorPickerStyle = $(".custom-color-picker").get(0).style;
+        colorPickerStyle.width = "82px";
+        colorPickerStyle.padding = "5px";
+
+        $(".color").get(0).style.fontSize = "18px";
+
         const instance = $dropDownButton.dxDropDownButton("instance");
         const $popupContent = $(getPopup(instance).content());
-        assert.equal($popupContent.outerWidth(), 82, "width is right");
+        assert.equal(`${$popupContent.outerWidth()}px`, colorPickerStyle.width, "width is right");
     });
 
     QUnit.test("popup should have correct options after rendering", (assert) => {
