@@ -27,14 +27,6 @@ class Button extends Widget {
         this._feedbackHideTimeout = 100;
     }
 
-    get _validationGroupConfig() {
-        const $element = this.$element();
-        const group = this.option('validationGroup') ||
-            ValidationEngine.findGroup($element, this._modelByElement($element));
-
-        return ValidationEngine.getGroupConfig(group);
-    }
-
     _clean() {
         delete this._inkRipple;
         delete this._$content;
@@ -66,6 +58,14 @@ class Button extends Widget {
             validationGroup: this._validationGroupConfig,
             event
         });
+    }
+
+    _findGroup() {
+        const $element = this.$element();
+
+        return this.option('validationGroup') ||
+            ValidationEngine.findGroup($element, this._modelByElement($element));
+
     }
 
     _getAnonymousTemplateName() {
@@ -389,7 +389,7 @@ class Button extends Widget {
         let { icon, text } = this.option();
 
         if(getImageSourceType(icon) === 'image') {
-            icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, "$1") : 'Base64';
+            icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
         }
 
         let ariaLabel = text || icon || '';
@@ -428,6 +428,10 @@ class Button extends Widget {
         }
 
         this.option('useSubmitBehavior') && this._renderSubmitInput();
+    }
+
+    get _validationGroupConfig() {
+        return ValidationEngine.getGroupConfig(this._findGroup());
     }
 
     _waitForValidationCompleting(complete) {
