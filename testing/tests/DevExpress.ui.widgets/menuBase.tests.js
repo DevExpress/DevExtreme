@@ -1,11 +1,12 @@
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    MenuBase = require("ui/context_menu/ui.menu_base"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import devices from "core/devices";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
+import MenuBase from "ui/context_menu/ui.menu_base";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
-require("common.css!");
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -888,33 +889,36 @@ QUnit.test('Raise onItemClick on root item click', function(assert) {
     this.clock.restore();
 });
 
+var helper;
+QUnit.module("Aria accessibility", {
+    beforeEach: () => {
+        helper = new ariaAccessibilityTestHelper({
+            createWidget: ($element, options) => new TestComponent($element, options)
+        });
+    },
+    afterEach: () => {
+        helper.$widget.remove();
+    }
+}, () => {
+    QUnit.test(`Items: [1]`, () => {
+        helper.createWidget({ items: [1] });
+        helper.checkAttributes(helper.$widget, { tabindex: "0" }, "widget");
+        helper.checkItemsAttributes([], { role: "menuitem", tabindex: "-1" });
+    });
 
-QUnit.module("aria accessibility");
+    QUnit.test(`Items: [{items[{}, {}], {}] -> set focusedElement: items[0]`, () => {
+        helper.createWidget({
+            items: [{ text: "Item1_1", items: [{ text: "Item2_1" }, { text: "Item2_2" }] }, { text: "item1_2" }]
+        });
 
-QUnit.test("aria role for items", function(assert) {
-    var menuBase = createMenu({ items: [1] }),
-        $item = menuBase.element.find("." + DX_MENU_ITEM_CLASS);
+        helper.checkAttributes(helper.$widget, { tabindex: "0" }, "widget");
+        helper.checkAttributes(helper.getItems().eq(0), { role: "menuitem", tabindex: "-1", "aria-haspopup": "true" }, "Items[0]");
+        helper.checkAttributes(helper.getItems().eq(1), { role: "menuitem", tabindex: "-1" }, "Items[1]");
 
-    assert.equal($item.attr("role"), "menuitem");
-});
+        helper.widget.option("focusedElement", helper.getItems().eq(0));
 
-QUnit.test("menu item should not have aria-selected attribute", function(assert) {
-    var menuBase = createMenu({ items: [1] }),
-        $item = menuBase.element.find("." + DX_MENU_ITEM_CLASS);
-
-    assert.equal($item.attr("aria-selected"), undefined, "aria-selected is not defined");
-});
-
-QUnit.test("aria-haspopup attribute for items having child", function(assert) {
-    var menuBase = createMenu({
-            items: [
-                { text: "1", items: [{ text: "11" }] },
-                { text: "2" }
-            ]
-        }),
-        $itemFirst = menuBase.element.find("." + DX_MENU_ITEM_CLASS).first(),
-        $itemLast = menuBase.element.find("." + DX_MENU_ITEM_CLASS).last();
-
-    assert.equal($itemFirst.attr("aria-haspopup"), "true", "aria-haspopup is true for item having child");
-    assert.equal($itemLast.attr("aria-haspopup"), undefined, "aria-haspopup is not defined for item not having child");
+        helper.checkAttributes(helper.$widget, { "aria-activedescendant": helper.focusedItemId, tabindex: "0" }, "widget");
+        helper.checkAttributes(helper.getItems().eq(0), { id: helper.focusedItemId, role: "menuitem", tabindex: "-1", "aria-haspopup": "true" }, "Items[0]");
+        helper.checkAttributes(helper.getItems().eq(1), { role: "menuitem", tabindex: "-1" }, "Items[1]");
+    });
 });

@@ -1,8 +1,10 @@
 import $ from "jquery";
 import fx from "animation/fx";
 
-import "ui/menu/ui.menu";
+import Menu from "ui/menu/ui.menu";
 import "ui/menu/ui.submenu";
+
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 import "common.css!";
 
@@ -126,11 +128,36 @@ QUnit.test("Create items with template", (assert) => {
     assert.equal($($item).text(), "test", "template rendered");
 });
 
+var helper;
+QUnit.module("Aria accessibility", {
+    beforeEach: () => {
+        helper = new ariaAccessibilityTestHelper({
+            createWidget: ($element, options) => new Menu($element, options)
+        });
+    },
+    afterEach: () => {
+        helper.$widget.remove();
+    }
+}, () => {
+    QUnit.test(`Items: []`, () => {
+        helper.createWidget({ items: [] });
+        helper.checkAttributes(helper.$widget, { role: "menubar", tabindex: "0" }, "widget");
+        helper.checkItemsAttributes([], { role: "menuitem", tabindex: "-1" });
+    });
 
-QUnit.module("aria accessibility");
+    QUnit.test(`Items: [{items[{}, {}], {}] -> set focusedElement: items[0]`, () => {
+        helper.createWidget({
+            items: [{ text: "Item1_1", items: [{ text: "Item2_1" }, { text: "Item2_2" }] }, { text: "item1_2" }]
+        });
 
-QUnit.test("Aria role", (assert) => {
-    let menu = createMenu();
+        helper.checkAttributes(helper.$widget, { role: "menubar", tabindex: "0" }, "widget");
+        helper.checkAttributes(helper.getItems().eq(0), { role: "menuitem", tabindex: "-1", "aria-haspopup": "true" }, "Items[0]");
+        helper.checkAttributes(helper.getItems().eq(1), { role: "menuitem", tabindex: "-1" }, "Items[1]");
 
-    assert.equal(menu.element.attr("role"), "menubar");
+        helper.widget.option("focusedElement", helper.getItems().eq(0));
+
+        helper.checkAttributes(helper.$widget, { role: "menubar", "aria-activedescendant": helper.focusedItemId, tabindex: "0" }, "widget");
+        helper.checkAttributes(helper.getItems().eq(0), { id: helper.focusedItemId, role: "menuitem", tabindex: "-1", "aria-haspopup": "true" }, "Items[0]");
+        helper.checkAttributes(helper.getItems().eq(1), { role: "menuitem", tabindex: "-1" }, "Items[1]");
+    });
 });
