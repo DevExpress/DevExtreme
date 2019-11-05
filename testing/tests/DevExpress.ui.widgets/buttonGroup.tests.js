@@ -96,7 +96,8 @@ QUnit.module("option changed", {
         this.buttonGroup.option("height", 700);
         assert.equal($buttonGroup.height(), 700, "button group height is right");
 
-        this.buttonGroup.option("height", null);
+        this.buttonGroup.option("height", "");
+        assert.notEqual($buttonGroup.height(), 700, "button group height changed to default");
         assert.notOk(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_HEIGHT), "first button group item has not height");
         assert.notOk(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_HEIGHT), "second button group item has not height");
     });
