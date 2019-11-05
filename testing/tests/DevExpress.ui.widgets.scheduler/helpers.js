@@ -69,6 +69,12 @@ export class SchedulerTestWrapper {
             getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
 
+            find: (text) => {
+                return this.appointments
+                    .getAppointments()
+                    .filter((index, element) => $(element).find(".dx-scheduler-appointment-title").text() === text);
+            },
+
             click: (index = 0) => {
                 this.clock = sinon.useFakeTimers();
                 this.appointments.getAppointment(index).trigger("dxclick");
