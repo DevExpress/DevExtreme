@@ -93,7 +93,6 @@ QUnit.module("option changed", {
         assert.ok(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_HEIGHT), "second button group item has height");
     });
 
-
     QUnit.test("change the width option when item has template", function(assert) {
         const buttonGroup = this.createButtonGroup({
             items: [{ text: "button 1" }, { text: "button 2" }],
