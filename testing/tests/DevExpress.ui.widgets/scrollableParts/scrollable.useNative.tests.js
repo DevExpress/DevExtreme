@@ -517,17 +517,15 @@ QUnit.module("Scroll arguments", moduleConfig, () => {
         constructor(direction) {
             this.onScrollHandler = sinon.spy();
             this._direction = direction;
-            this.$element = $("#scrollable");
-            this.element = this._getScrollable();
-            this.$container = this._getScrollableContainer();
-        }
+            this.$scrollable = $("#scrollable");
 
-        _getScrollable() {
-            return this.$element.dxScrollable({
+            this.$scrollable.dxScrollable({
                 useNative: true,
                 direction: this._direction,
                 onScroll: this.onScrollHandler
-            }).dxScrollable("instance");
+            });
+
+            this.$container = this._getScrollableContainer();
         }
 
         getMaxScrollOffset() {
@@ -540,7 +538,7 @@ QUnit.module("Scroll arguments", moduleConfig, () => {
         }
 
         _getScrollableContainer() {
-            return this.$element.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+            return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
         }
 
         checkScrollEvent(options) {
