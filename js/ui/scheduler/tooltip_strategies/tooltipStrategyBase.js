@@ -187,8 +187,10 @@ export class TooltipStrategyBase {
         const editing = this.scheduler.option("editing"),
             isAllDay = this.scheduler.fire("getField", "allDay", data),
             text = this.scheduler.fire("getField", "text", data),
-            startDate = this.scheduler.fire("getField", "startDate", currentData),
-            endDate = this.scheduler.fire("getField", "endDate", currentData);
+            startDateTimeZone = this.scheduler.fire("getField", "startDateTimeZone", data),
+            endDateTimeZone = this.scheduler.fire("getField", "endDateTimeZone", data),
+            startDate = this.scheduler.fire("convertDateByTimezone", this.scheduler.fire("getField", "startDate", currentData), startDateTimeZone),
+            endDate = this.scheduler.fire("convertDateByTimezone", this.scheduler.fire("getField", "endDate", currentData), endDateTimeZone);
 
         const $itemElement = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM);
         $itemElement.append(this._createItemListMarker(color));
