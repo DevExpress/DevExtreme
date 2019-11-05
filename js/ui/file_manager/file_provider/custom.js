@@ -13,7 +13,7 @@ import { FileProvider } from "./file_provider";
 * @namespace DevExpress.fileProvider
 * @export default
 */
-export default class CustomFileProvider extends FileProvider {
+class CustomFileProvider extends FileProvider {
 
     constructor(options) {
         options = ensureDefined(options, { });
@@ -152,3 +152,5 @@ export default class CustomFileProvider extends FileProvider {
     }
 
 }
+
+module.exports = CustomFileProvider;
