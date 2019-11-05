@@ -82,15 +82,23 @@ QUnit.module("option changed", {
         assert.ok(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has width");
     });
 
-    QUnit.test("change the height option", function(assert) {
-        this.buttonGroup.option("height", 500);
+    QUnit.test("buttonGroup height option", function(assert) {
+        const $buttonGroup = this.createButtonGroup({
+            height: 500
+        }).$element();
 
-        const buttonsSelector = `.${BUTTON_CLASS}`;
-        let buttons = $(buttonsSelector);
+        let buttons = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
-        assert.equal(this.$buttonGroup.height(), 500, "button group height is right");
+        assert.equal($buttonGroup.height(), 500, "button group height is right");
         assert.ok(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_HEIGHT), "first button group item has height");
         assert.ok(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_HEIGHT), "second button group item has height");
+
+        this.buttonGroup.option("height", 700);
+        assert.equal($buttonGroup.height(), 700, "button group height is right");
+
+        this.buttonGroup.option("height", null);
+        assert.notOk(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_HEIGHT), "first button group item has not height");
+        assert.notOk(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_HEIGHT), "second button group item has not height");
     });
 
     QUnit.test("change the width option when item has template", function(assert) {
