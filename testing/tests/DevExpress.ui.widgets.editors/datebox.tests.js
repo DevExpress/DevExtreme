@@ -194,6 +194,20 @@ QUnit.module("datebox tests", moduleConfig, () => {
         }
     });
 
+    QUnit.test("dateBox with readOnly option enabled should not raise exception", assert => {
+        try {
+            $("#dateBox").dxDateBox({
+                type: "date",
+                readOnly: true,
+                showClearButton: true
+            });
+
+            assert.ok(true);
+        } catch(e) {
+            assert.ok(false, "exception raised: " + e.message);
+        }
+    });
+
     QUnit.test("T204179 - dxDateBox should not render dropDownButton only for generic device when pickerType is 'native'", assert => {
         const $dateBox = $("#dateBox").dxDateBox({
             pickerType: "native"
