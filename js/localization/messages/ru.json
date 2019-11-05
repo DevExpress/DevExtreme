@@ -280,8 +280,8 @@
 		"dxFileManager-commandDetails": "Режим списка",
 		"dxFileManager-commandClear": "Очистить выделение",
 
-		"dxFileManager-dialogFolderChooserTitle": "Выберите папку назначения",
-		"dxFileManager-dialogFolderChooserButtonText": "Выбрать",
+		"dxFileManager-dialogDirectoryChooserTitle": "Выберите папку назначения",
+		"dxFileManager-dialogDirectoryChooserButtonText": "Выбрать",
 		"dxFileManager-dialogRenameItemTitle": "Переименовать",
 		"dxFileManager-dialogRenameItemButtonText": "Сохранить",
 		"dxFileManager-dialogCreateFolderTitle": "Новая папка",

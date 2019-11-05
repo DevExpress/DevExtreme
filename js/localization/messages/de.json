@@ -281,8 +281,8 @@
         "dxFileManager-commandDetails": "TODO",
         "dxFileManager-commandClear": "TODO",
 
-        "dxFileManager-dialogFolderChooserTitle": "TODO",
-        "dxFileManager-dialogFolderChooserButtonText": "TODO",
+        "dxFileManager-dialogDirectoryChooserTitle": "TODO",
+        "dxFileManager-dialogDirectoryChooserButtonText": "TODO",
         "dxFileManager-dialogRenameItemTitle": "TODO",
         "dxFileManager-dialogRenameItemButtonText": "TODO",
         "dxFileManager-dialogCreateFolderTitle": "TODO",

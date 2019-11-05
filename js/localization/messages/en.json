@@ -313,8 +313,8 @@
 		"dxFileManager-commandDetails": "Details View",
 		"dxFileManager-commandClear": "Clear selection",
 
-		"dxFileManager-dialogFolderChooserTitle": "Select Destination Folder",
-		"dxFileManager-dialogFolderChooserButtonText": "Select",
+		"dxFileManager-dialogDirectoryChooserTitle": "Select Destination Folder",
+		"dxFileManager-dialogDirectoryChooserButtonText": "Select",
 		"dxFileManager-dialogRenameItemTitle": "Rename",
 		"dxFileManager-dialogRenameItemButtonText": "Save",
 		"dxFileManager-dialogCreateFolderTitle": "New folder",
