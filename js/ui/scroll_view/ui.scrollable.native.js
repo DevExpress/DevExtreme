@@ -141,7 +141,6 @@ var NativeStrategy = Class.inherit({
             reachedTop: this._isDirection(VERTICAL) ? location.top >= 0 : undefined,
             reachedBottom: this._isDirection(VERTICAL) ? this._$container.scrollTop() >= containerElement.scrollHeight - containerElement.clientHeight : undefined
         };
-
     },
 
     handleScroll: function(e) {
