@@ -103,7 +103,7 @@ QUnit.module("markup", {
         const buttonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
         assert.strictEqual(buttonGroupWrapper.eq(0).height(), 300, "height is right");
 
-        $("#container").get(0).style.height = "900px";
+        $("#container").css("height", "900px");
         dropDownButton.option("height", "50%");
 
         const newButtonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);

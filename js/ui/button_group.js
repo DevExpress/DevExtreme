@@ -300,7 +300,6 @@ const ButtonGroup = Widget.inherit({
             .toggleClass(dimensionClassName, !!value);
     },
 
-
     _optionChanged(args) {
         switch(args.name) {
             case "stylingMode":
