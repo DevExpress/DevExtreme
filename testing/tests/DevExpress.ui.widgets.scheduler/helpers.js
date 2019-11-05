@@ -69,6 +69,12 @@ export class SchedulerTestWrapper {
             getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
 
+            find: (text) => {
+                return this.appointments
+                    .getAppointments()
+                    .filter((index, element) => $(element).find(".dx-scheduler-appointment-title").text() === text);
+            },
+
             click: (index = 0) => {
                 this.clock = sinon.useFakeTimers();
                 this.appointments.getAppointment(index).trigger("dxclick");
@@ -137,8 +143,16 @@ export class SchedulerTestWrapper {
             getDateTableScrollable: () => $(".dx-scheduler-date-table-scrollable"),
             getDateTable: () => $(".dx-scheduler-date-table"),
             getDateTableHeight: () => this.workSpace.getDateTable().height(),
+
+            getRows: (index = 0) => $(".dx-scheduler-date-table-row").eq(index),
             getCells: () => $(".dx-scheduler-date-table-cell"),
-            getCell: (index) => this.workSpace.getCells().eq(index),
+            getCell: (rowIndex, cellIndex) => {
+                if(cellIndex !== undefined) {
+                    return $(".dx-scheduler-date-table-row").eq(rowIndex).find(".dx-scheduler-date-table-cell").eq(cellIndex);
+                }
+                return this.workSpace.getCells().eq(rowIndex);
+            },
+
             getAllDayCells: () => $(".dx-scheduler-all-day-table-cell"),
             getAllDayCell: (index) => this.workSpace.getAllDayCells().eq(index),
             getCellWidth: () => this.workSpace.getCells().eq(0).outerWidth(),
