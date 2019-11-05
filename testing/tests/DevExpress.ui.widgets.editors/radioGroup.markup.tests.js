@@ -1,6 +1,7 @@
 import $ from "jquery";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
-import "ui/radio_group";
+import RadioGroup from "ui/radio_group";
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 QUnit.testStart(() => {
     const markup =
@@ -269,22 +270,42 @@ QUnit.module("widget sizing render", moduleConfig, () => {
     });
 });
 
-QUnit.module("aria accessibility", () => {
-    QUnit.test("aria role", (assert) => {
-        const $element = $("#radioGroup").dxRadioGroup({ focusStateEnabled: true });
-        assert.equal($element.attr("role"), "radiogroup", "aria role is correct");
-        assert.ok($element.attr("aria-activedescendant"), "aria-activedescendant should be on element with role");
+var helper;
+QUnit.module(`Aria accessibility`, {
+    beforeEach: () => {
+        helper = new ariaAccessibilityTestHelper({
+            createWidget: ($element, options) => new RadioGroup($element,
+                $.extend({
+                    focusStateEnabled: true
+                }, options))
+        });
+    },
+    afterEach: () => {
+        helper.$widget.remove();
+    }
+}, () => {
+    QUnit.test(`Items: []`, () => {
+        helper.createWidget({ });
+
+        helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
     });
 
-    QUnit.test("radio role should be included in radiogroup", (assert) => {
-        assert.expect(6);
+    QUnit.test(`Items: [1, 2, 3], Item.selected: true`, () => {
+        helper.createWidget({ items: [1, 2, 3], value: 1 });
 
-        const items = [1, 2, 3],
-            $element = $("#radioGroup").dxRadioGroup({ items: items, value: items[0] });
+        helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
+        helper.checkItemsAttributes([0], { attributes: ["aria-selected", "aria-checked"], role: "radio" });
+    });
 
-        $element.find("." + RADIO_BUTTON_CLASS).each(function(i, radioButton) {
-            assert.equal($(radioButton).attr("role"), "radio", " role for button " + i + " is correct");
-            assert.equal($(radioButton).attr("aria-checked"), "" + (i === 0), i + "checked state for button " + i + " is correct");
-        });
+    QUnit.test(`Items: [1, 2, 3], Item.selected: true, set focusedElement -> clean focusedElement`, () => {
+        helper.createWidget({ items: [1, 2, 3], value: 1 });
+
+        helper.widget.option("focusedElement", helper.getItems().eq(0));
+        helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
+        helper.checkItemsAttributes([0], { attributes: ["aria-selected", "aria-checked"], role: "radio" });
+
+        helper.widget.option("focusedElement", null);
+        helper.checkAttributes(helper.$widget, { role: "radiogroup", tabindex: "0" }, "widget");
+        helper.checkItemsAttributes([0], { attributes: ["aria-selected", "aria-checked"], role: "radio" });
     });
 });
