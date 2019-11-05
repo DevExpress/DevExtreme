@@ -1,6 +1,6 @@
 import $ from "jquery";
 import Tabs from "ui/tabs";
-
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 QUnit.testStart(() => {
     const markup =
@@ -106,15 +106,42 @@ QUnit.module("Widget sizing render", () => {
     });
 });
 
-QUnit.module("Aria accessibility", () => {
-    QUnit.test("aria role", (assert) => {
-        const $element = $("#tabs").dxTabs({
-                items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }]
-            }),
-            $item = $element.find(".dx-tab:first");
+var helper;
+QUnit.module("Aria accessibility", {
+    beforeEach: () => {
+        this.items = [{ text: "Item_1" }, { text: "Item_2" }, { text: "Item_3" }];
+        helper = new ariaAccessibilityTestHelper({
+            createWidget: ($element, options) => new Tabs($element, options)
+        });
+    },
+    afterEach: () => {
+        helper.$widget.remove();
+    }
+}, () => {
+    QUnit.test(`3 items`, () => {
+        helper.createWidget({ items: this.items });
 
-        assert.equal($element.attr("role"), "tablist", "role of the tab list is correct");
-        assert.equal($item.attr("role"), "tab", "role of the tab item is correct");
+        helper.checkAttributes(helper.$widget, { role: "tablist", tabindex: "0" }, "widget");
+        helper.checkItemsAttributes([], { attributes: ["aria-selected"], role: "tab" });
+    });
+
+    QUnit.test(`3 items, selectedIndex: 1`, () => {
+        helper.createWidget({ items: this.items, selectedIndex: 1 });
+
+        helper.checkAttributes(helper.$widget, { role: "tablist", tabindex: "0" }, "widget");
+        helper.checkItemsAttributes([1], { attributes: ["aria-selected"], role: "tab" });
+    });
+
+    QUnit.test(`3 items, selectedIndex: 1, set focusedElement: items[1] -> clean focusedElement`, () => {
+        helper.createWidget({ items: this.items, selectedIndex: 1 });
+
+        helper.widget.option("focusedElement", helper.getItems().eq(1));
+        helper.checkAttributes(helper.$widget, { role: "tablist", "aria-activedescendant": helper.widget.getFocusedItemId(), tabindex: "0" }, "widget");
+        helper.checkItemsAttributes([1], { focusedItemIndex: 1, attributes: ["aria-selected"], role: "tab" });
+
+        helper.widget.option("focusedElement", null);
+        helper.checkAttributes(helper.$widget, { role: "tablist", tabindex: "0" }, "widget");
+        helper.checkItemsAttributes([1], { attributes: ["aria-selected"], role: "tab" });
     });
 });
 

@@ -20,6 +20,8 @@ import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
+
 import "common.css!";
 import "generic_light.css!";
 
@@ -2981,47 +2983,69 @@ QUnit.test("popup title collapse if empty title option (B232073)", function(asse
     assert.ok($popupTitle.height() > 0);
 });
 
-
-QUnit.module("aria accessibility", () => {
-    const checkAsserts = (expectedValues) => {
-        let { role, isActiveDescendant, isOwns, tabIndex, $target } = expectedValues;
-
-        QUnit.assert.strictEqual($target.attr("role"), role, "role");
-        QUnit.assert.strictEqual(!!$target.attr("aria-activedescendant"), isActiveDescendant, "activedescendant");
-        QUnit.assert.strictEqual(!!$target.attr("aria-owns"), isOwns, "owns");
-        QUnit.assert.strictEqual($target.attr("tabIndex"), tabIndex, "tabIndex");
-    };
-
-    if(devices.real().deviceType === "desktop") {
-        [true, false].forEach((searchEnabled) => {
-            QUnit.test(`aria role for list, searchEnabled: ${searchEnabled}`, () => {
-                let $element = $("#widget").dxLookup({
-                    opened: true,
-                    searchEnabled: searchEnabled
+var helper;
+if(devices.real().deviceType === "desktop") {
+    [true, false].forEach((searchEnabled) => {
+        QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
+            beforeEach: () => {
+                helper = new ariaAccessibilityTestHelper({
+                    createWidget: ($element, options) => new Lookup($element,
+                        $.extend({
+                            searchEnabled: searchEnabled
+                        }, options))
                 });
-                const $field = $element.find(`.${LOOKUP_FIELD_CLASS}`);
+            },
+            afterEach: () => {
+                helper.$widget.remove();
+            }
+        }, () => {
+            QUnit.test(`opened: true, searchEnabled: ${searchEnabled}`, () => {
+                helper.createWidget({ opened: true });
+
+                const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
+                const $list = $(`.${LIST_CLASS}`);
+                const $input = helper.widget._popup.$content().find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                helper.checkAttributes($list, { id: helper.widget._listId, "aria-label": "No data to display", role: "listbox", tabindex: "0" }, "list");
+                helper.checkAttributes($field, { role: "combobox", "aria-expanded": "true", "aria-activedescendant": helper.widget._list.getFocusedItemId(), tabindex: '0', "aria-controls": helper.widget._listId }, "field");
+                helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._popupContentId }, "widget");
+                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, "popupContent");
+                if($input.length) {
+                    helper.checkAttributes($input, { autocomplete: "off", type: "text", spellcheck: "false", tabindex: "0", role: "textbox" }, "input");
+                }
+
+                helper.widget.option("searchEnabled", !searchEnabled);
+                helper.checkAttributes($list, { id: helper.widget._listId, "aria-label": "No data to display", role: "listbox", tabindex: "0" }, "list");
+                helper.checkAttributes($field, { role: "combobox", "aria-expanded": "true", "aria-activedescendant": helper.widget._list.getFocusedItemId(), tabindex: '0', "aria-controls": helper.widget._listId }, "field");
+                helper.checkAttributes(helper.$widget, { "aria-owns": helper.widget._popupContentId }, "widget");
+                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, "popupContent");
+                if($input.length) {
+                    helper.checkAttributes($input, { autocomplete: "off", type: "text", spellcheck: "false", role: "textbox" }, "input");
+                }
+            });
+
+            QUnit.test(`Opened: false, searchEnabled: ${searchEnabled}`, () => {
+                helper.createWidget({ opened: false });
+
+                const $field = helper.$widget.find(`.${LOOKUP_FIELD_CLASS}`);
+
+                helper.checkAttributes(helper.$widget, {}, "widget");
+                helper.checkAttributes($field, { role: "combobox", "aria-expanded": "false", tabindex: '0' }, "field");
+
+                helper.widget.option("searchEnabled", !searchEnabled);
+                helper.checkAttributes(helper.$widget, {}, "widget");
+                helper.checkAttributes($field, { role: "combobox", "aria-expanded": "false", tabindex: '0' }, "field");
+            });
+
+            QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
+                helper.createWidget({ opened: true });
 
                 let list = $(`.${LIST_CLASS}`).dxList("instance");
-                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
-                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
-                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
-
-                $element.dxLookup("instance").option("searchEnabled", !searchEnabled);
-                checkAsserts({ $target: list.$element(), role: "listbox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
-                checkAsserts({ $target: $field, role: "combobox", isActiveDescendant: true, isOwns: false, tabIndex: '0' });
-                checkAsserts({ $target: $element, role: undefined, isActiveDescendant: false, isOwns: true });
+                assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
             });
         });
-    }
-
-    QUnit.test("aria-target for lookup's list should point to the list's focusTarget", function(assert) {
-        $("#widget").dxLookup({ opened: true });
-
-        let list = $(`.${LIST_CLASS}`).dxList("instance");
-        assert.deepEqual(list._getAriaTarget(), list.$element(), "aria target for nested list is correct");
     });
-});
-
+}
 
 QUnit.module("default options", {
     beforeEach: function() {
