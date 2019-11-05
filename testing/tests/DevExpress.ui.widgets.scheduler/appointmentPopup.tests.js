@@ -39,8 +39,8 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
         }
     ];
 
-    const createScheduler = () => {
-        return createWrapper({
+    const createScheduler = (options = {}) => {
+        const defaultOption = {
             dataSource: defaultData,
             views: ["month"],
             currentView: "month",
@@ -49,8 +49,48 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
             startDayHour: 9,
             height: 600,
             width: 600
-        });
+        };
+
+        return createWrapper($.extend(defaultOption, options));
     };
+
+    QUnit.test("onAppointmentFormOpening event should handle e.cancel value", assert => {
+        const data = [{
+            text: "Website Re-Design Plan",
+            startDate: new Date(2017, 4, 22, 9, 30),
+            endDate: new Date(2017, 4, 22, 11, 30)
+        }];
+
+        const scheduler = createScheduler({ dataSource: data });
+
+        const testCases = [
+            {
+                expected: true,
+                handler: undefined,
+                text: "appointment popup should visible in default setting case"
+            }, {
+                expected: false,
+                handler: e => e.cancel = true,
+                text: "appointment popup should prevent visible in 'e.cancel = true' case"
+            }, {
+                expected: true,
+                handler: e => e.cancel = false,
+                text: "appointment popup should visible in 'e.cancel = false' case"
+            }
+        ];
+
+        testCases.forEach(({ handler, expected, text }) => {
+            scheduler.option("onAppointmentFormOpening", handler);
+
+            scheduler.appointments.dblclick();
+            assert.equal(scheduler.appointmentPopup.isVisible(), expected, text + " if call from UI");
+            scheduler.appointmentPopup.hide();
+
+            scheduler.instance.showAppointmentPopup(data[0]);
+            assert.equal(scheduler.appointmentPopup.isVisible(), expected, text + " if call showAppointmentPopup method");
+            scheduler.appointmentPopup.hide();
+        });
+    });
 
     QUnit.test("Appointment popup should work properly", assert => {
         const NEW_EXPECTED_SUBJECT = "NEW SUBJECT";
