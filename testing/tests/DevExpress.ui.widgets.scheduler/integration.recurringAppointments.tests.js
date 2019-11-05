@@ -1325,3 +1325,150 @@ QUnit.test("Recurring appointment with interval > 1 rendered correctly (T823073)
     assert.roughEqual(position.left, 855, 0.5, "Appointment's left is correct");
     assert.roughEqual(position.top, 190, 0.5, "Appointment's top is correct");
 });
+
+QUnit.test("Appointment has correct occurrences dates with interval > 1", function(assert) {
+    var data = [
+        {
+            text: "Appointment with interval",
+            startDate: new Date(2019, 9, 18, 7, 0),
+            endDate: new Date(2019, 9, 18, 9, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA;INTERVAL=2"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2019, 9, 20),
+        startDayHour: 6,
+        height: 600
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 9, "Appointment occurrences are rendered");
+    let firstPosition = this.scheduler.appointments.getAppointment(0).position(),
+        eighthPosition = this.scheduler.appointments.getAppointment(7).position();
+
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left is correct");
+    assert.roughEqual(firstPosition.top, 190, 0.5, "Appointment's top is correct");
+});
+
+QUnit.test("Appointment has correct occurrences dates with interval > 1, custom firstDayOfWeek", function(assert) {
+    var data = [
+        {
+            text: "Appointment with interval",
+            startDate: new Date(2019, 9, 18, 7, 0),
+            endDate: new Date(2019, 9, 18, 9, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA;INTERVAL=2"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2019, 9, 20),
+        firstDayOfWeek: 1,
+        startDayHour: 6,
+        height: 600
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 10, "Appointment is rendered");
+    let firstPosition = this.scheduler.appointments.getAppointment(0).position(),
+        eighthPosition = this.scheduler.appointments.getAppointment(7).position();
+
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left is correct");
+    assert.roughEqual(firstPosition.top, 190, 0.5, "Appointment's top is correct");
+});
+
+QUnit.test("Appointment has correct occurrences dates with interval > 1, custom WKST", function(assert) {
+    var data = [
+        {
+            text: "Appointment with interval",
+            startDate: new Date(2019, 9, 18, 7, 0),
+            endDate: new Date(2019, 9, 18, 9, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA;WKST=WE;INTERVAL=2"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2019, 9, 20),
+        firstDayOfWeek: 1,
+        startDayHour: 6,
+        height: 600
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 12, "Appointment is rendered");
+    let firstPosition = this.scheduler.appointments.getAppointment(0).position(),
+        eighthPosition = this.scheduler.appointments.getAppointment(7).position();
+
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left is correct");
+    assert.roughEqual(firstPosition.top, 190, 0.5, "Appointment's top is correct");
+});
+
+QUnit.test("Appointment has correct occurrences dates with interval > 1, custom WKST", function(assert) {
+    var data = [
+        {
+            text: "Appointment with interval",
+            startDate: new Date(2019, 9, 18, 7, 0),
+            endDate: new Date(2019, 9, 18, 9, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA;WKST=WE;INTERVAL=2"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2019, 9, 20),
+        startDayHour: 6,
+        height: 600
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 12, "Appointment occurrences are rendered");
+    let firstPosition = this.scheduler.appointments.getAppointment(0).position(),
+        fourthPosition = this.scheduler.appointments.getAppointment(3).position(),
+        eighthPosition = this.scheduler.appointments.getAppointment(7).position();
+
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left are correct");
+    assert.roughEqual(fourthPosition.top - firstPosition.top, eighthPosition.top - fourthPosition.top, 0.5, "Appointment's top are correct");
+});
+
+QUnit.test("Appointment has correct occurrences dates with interval > 1, custom firstDayOfWeek & WKST", function(assert) {
+    var data = [
+        {
+            text: "Appointment with interval",
+            startDate: new Date(2019, 9, 18, 7, 0),
+            endDate: new Date(2019, 9, 18, 9, 0),
+            recurrenceException: "",
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA;WKST=WE;INTERVAL=2"
+        }
+    ];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2019, 9, 20),
+        startDayHour: 6,
+        firstDayOfWeek: 1,
+        height: 600
+    });
+
+    assert.equal(this.scheduler.appointments.getAppointmentCount(), 12, "Appointment occurrences are rendered");
+    let firstPosition = this.scheduler.appointments.getAppointment(0).position(),
+        fourthPosition = this.scheduler.appointments.getAppointment(3).position(),
+        seventhPosition = this.scheduler.appointments.getAppointment(6).position(),
+        eighthPosition = this.scheduler.appointments.getAppointment(7).position();
+
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left are correct");
+    assert.roughEqual(fourthPosition.top - firstPosition.top, eighthPosition.top - fourthPosition.top, 0.5, "Appointment's top are correct");
+    assert.roughEqual(seventhPosition.top, eighthPosition.top, 0.5, "Appointment's occurrences after WKST are positioned correct on top");
+});
