@@ -9,7 +9,6 @@ import dateUtils from "../../core/utils/date";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
 import { Deferred, when } from "../../core/utils/deferred";
-import fx from "../../animation/fx";
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -67,13 +66,7 @@ export default class AppointmentPopup {
             this.scheduler._actions["onAppointmentFormOpening"](arg);
             this.scheduler._processActionResult(arg, canceled => {
                 if(canceled) {
-                    const savedFxValue = fx.off; // TODO: temporary workaround until popup implemented e.cancel in onShowing event
-                    fx.off = true;
-
-                    // this.hide();
-                    e.component.option("visible", false);
-
-                    fx.off = savedFxValue;
+                    e.cancel = true;
                 } else {
                     this.updatePopupFullScreenMode();
                 }
