@@ -52,11 +52,10 @@ var dateSetterMap = {
         }
     },
     "byday": function(date, byDay, appointmentWeekStart, frequency, firstDayOfWeek) {
-        var dayOfWeek = byDay,
-            appointmentDayOfWeek = date.getDay(),
+        var appointmentDayOfWeek = date.getDay(),
             weekStart = days[appointmentWeekStart];
 
-        byDay += ((dayOfWeek >= weekStart) === weekStart > appointmentDayOfWeek) ? 7 : 0;
+        byDay += ((byDay >= weekStart) === weekStart > appointmentDayOfWeek) ? 7 : 0;
 
         date.setDate(date.getDate() - appointmentDayOfWeek + byDay);
     },
