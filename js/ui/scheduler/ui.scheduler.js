@@ -18,6 +18,7 @@ import dataCoreUtils from "../../core/utils/data";
 import registerComponent from "../../core/component_registrator";
 import messageLocalization from "../../localization/message";
 import dateSerialization from "../../core/utils/date_serialization";
+import dateLocalization from "../../localization/date";
 import Widget from "../widget/ui.widget";
 import subscribes from "./ui.scheduler.subscribes";
 
@@ -3025,7 +3026,11 @@ const Scheduler = Widget.inherit({
         } else {
             this._workSpace.focus();
         }
-    }
+    },
+
+    getFirstDayOfWeek: function() {
+        return typeUtils.isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
+    },
 
     /**
         * @name dxSchedulerMethods.registerKeyHandler

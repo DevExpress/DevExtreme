@@ -837,10 +837,6 @@ const subscribes = {
         const dragBehavior = this.getWorkSpace().dragBehavior;
 
         dragBehavior && dragBehavior.moveBack();
-    },
-
-    getFirstDayOfWeek: function() {
-        return typeUtils.isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
     }
 };
 module.exports = subscribes;
