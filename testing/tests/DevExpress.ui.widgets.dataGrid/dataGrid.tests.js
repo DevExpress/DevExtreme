@@ -798,6 +798,46 @@ QUnit.test("Fixed and main table should have same scroll top if showScrollbar is
     assert.strictEqual(scrollable.scrollTop(), $(scrollable.element()).children(".dx-datagrid-content-fixed").scrollTop(), "scroll top are same for main and fixed table");
 });
 
+QUnit.test("Cells in fixed columns should have 'dx-col-fixed' class if FF (T823783)", function(assert) {
+    // arrange
+    var rowsViewWrapper = dataGridWrapper.rowsView,
+        filterRowWrapper = dataGridWrapper.filterRow;
+
+    $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [
+                { id: 1, value: "value 1" }
+            ]
+        },
+        columnFixing: {
+            enabled: true
+        },
+        filterRow: {
+            visible: true
+        },
+        columns: ["id", {
+            dataField: "value",
+            fixed: true
+        }]
+    });
+
+    // assert
+    if(browser.mozilla) {
+        assert.ok(rowsViewWrapper.getDataCellElement(0, 0).hasClass("dx-col-fixed"), "dx-col-fixed");
+        assert.ok(rowsViewWrapper.getFixedDataCellElement(0, 0).hasClass("dx-col-fixed"), "dx-col-fixed");
+        assert.ok(filterRowWrapper.getEditorCell(0).hasClass("dx-col-fixed"), "dx-col-fixed");
+    } else {
+        assert.notOk(rowsViewWrapper.getDataCellElement(0, 0).hasClass("dx-col-fixed"), "not dx-col-fixed");
+        assert.notOk(rowsViewWrapper.getFixedDataCellElement(0, 0).hasClass("dx-col-fixed"), "not dx-col-fixed");
+        assert.notOk(filterRowWrapper.getEditorCell(0).hasClass("dx-col-fixed"), "not dx-col-fixed");
+    }
+
+    assert.notOk(rowsViewWrapper.getDataCellElement(0, 1).hasClass("dx-col-fixed"), "not dx-col-fixed");
+    assert.notOk(rowsViewWrapper.getFixedDataCellElement(0, 1).hasClass("dx-col-fixed"), "not dx-col-fixed");
+    assert.notOk(filterRowWrapper.getEditorCell(1).hasClass("dx-col-fixed"), "not dx-col-fixed");
+});
+
 QUnit.test("noDataText option", function(assert) {
     // act
     var noDataText = "Custom no data",
