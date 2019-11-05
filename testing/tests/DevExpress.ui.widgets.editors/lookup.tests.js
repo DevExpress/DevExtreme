@@ -3,6 +3,7 @@ import fx from "animation/fx";
 import devices from "core/devices";
 import dataUtils from "core/element_data";
 import config from "core/config";
+import browser from "core/utils/browser";
 import { isRenderer } from "core/utils/type";
 
 import ArrayStore from "data/array_store";
@@ -2249,6 +2250,46 @@ QUnit.test("popup height should be stretch when data items are loaded asynchrono
     assert.ok($(".dx-overlay-content").outerHeight() > defaultHeight, "popup height is changed when data is loaded");
 });
 
+QUnit.test("popover height should be recalculated after async datasource load(T655040)", (assert) => {
+    if(browser.mozilla && parseFloat(browser.version) < 71) {
+        assert.expect(0);
+        return;
+    }
+
+    this.clock = sinon.useFakeTimers();
+    const items = ["item 1", "item 2", "item 3", "item 4"];
+    const instance = $("#lookup").dxLookup({
+        dataSource: new CustomStore({
+            load: function() {
+                var deferred = $.Deferred();
+
+                setTimeout(function() {
+                    deferred.resolve(items);
+                }, 500);
+
+                return deferred.promise();
+            },
+            byKey: function(key) {
+                var deferred = new $.Deferred();
+                setTimeout(function() {
+                    deferred.resolve(items[0]);
+                }, 500);
+                return deferred.promise();
+            }
+        }),
+        width: 300,
+        searchEnabled: false,
+        usePopover: true
+    }).dxLookup("instance");
+
+
+    instance.open();
+
+    this.clock.tick(1000);
+
+    assert.ok($(instance.content()).height() >= $(instance.content()).find(".dx-scrollable-content").height());
+    this.clock.restore();
+});
 
 QUnit.module("list options", {
     beforeEach: function() {
