@@ -610,7 +610,7 @@ class Diagram extends Widget {
     }
     _updateCustomShapes(customShapes, prevCustomShapes) {
         if(Array.isArray(prevCustomShapes)) {
-            this._diagramInstance.removeCustomShapes(customShapes.map(
+            this._diagramInstance.removeCustomShapes(prevCustomShapes.map(
                 function(s) {
                     return s.type;
                 }
