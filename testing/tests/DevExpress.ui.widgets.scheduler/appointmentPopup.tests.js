@@ -41,7 +41,7 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
 
     const createScheduler = (options = {}) => {
         const defaultOption = {
-            dataSource: defaultData, // TODO
+            dataSource: defaultData,
             views: ["month"],
             currentView: "month",
             currentDate: new Date(2017, 4, 25),
@@ -54,35 +54,42 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
         return createWrapper($.extend(defaultOption, options));
     };
 
-    QUnit.test("e.cancel", assert => {
-        var data = [{
+    QUnit.test("onAppointmentFormOpening event should handle e.cancel value", assert => {
+        const data = [{
             text: "Website Re-Design Plan",
             startDate: new Date(2017, 4, 22, 9, 30),
             endDate: new Date(2017, 4, 22, 11, 30)
-        }, {
-            text: "Book Flights to San Fran for Sales Trip",
-            startDate: new Date(2017, 4, 22, 12, 0),
-            endDate: new Date(2017, 4, 22, 13, 0),
-            allDay: true
         }];
 
         const scheduler = createScheduler({ dataSource: data });
 
-        scheduler.option("onAppointmentFormOpening", e => e.cancel = true);
+        const testCases = [
+            {
+                expected: true,
+                handler: undefined,
+                text: "appointment popup should visible in default setting case"
+            }, {
+                expected: false,
+                handler: e => e.cancel = true,
+                text: "appointment popup should prevent visible in 'e.cancel = true' case"
+            }, {
+                expected: true,
+                handler: e => e.cancel = false,
+                text: "appointment popup should visible in 'e.cancel = false' case"
+            }
+        ];
 
-        scheduler.drawControl(); // TODO
+        testCases.forEach(({ handler, expected, text }) => {
+            scheduler.option("onAppointmentFormOpening", handler);
 
-        scheduler.appointments.click();
-        scheduler.tooltip.clickOnItem();
+            scheduler.appointments.dblclick();
+            assert.equal(scheduler.appointmentPopup.isVisible(), expected, text + " if call from UI");
+            scheduler.appointmentPopup.hide();
 
-        assert.notOk(scheduler.appointmentPopup.isVisible(), "");
-
-        scheduler.option("onAppointmentFormOpening", e => e.cancel = false);
-
-        scheduler.appointments.click(1);
-        scheduler.tooltip.clickOnItem(0);
-
-        assert.ok(scheduler.appointmentPopup.isVisible(), "");
+            scheduler.instance.showAppointmentPopup(data[0]);
+            assert.equal(scheduler.appointmentPopup.isVisible(), expected, text + " if call showAppointmentPopup method");
+            scheduler.appointmentPopup.hide();
+        });
     });
 
     QUnit.test("Appointment popup should work properly", assert => {
