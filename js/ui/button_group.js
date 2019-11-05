@@ -293,6 +293,14 @@ const ButtonGroup = Widget.inherit({
         this._setOptionSilent("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
     },
 
+    _addDimensionSizeToItem(dimension, value) {
+        const dimensionClassName = dimension === "width" ? BUTTON_GROUP_ITEM_HAS_WIDTH : BUTTON_GROUP_ITEM_HAS_HEIGHT;
+        this.$element()
+            .find(`.${BUTTON_GROUP_ITEM_CLASS}`)
+            .toggleClass(dimensionClassName, !!value);
+    },
+
+
     _optionChanged(args) {
         switch(args.name) {
             case "stylingMode":
@@ -316,16 +324,9 @@ const ButtonGroup = Widget.inherit({
             case "onSelectionChanged":
                 break;
             case "width":
-                this.callBase(args);
-                this.$element()
-                    .find(`.${BUTTON_GROUP_ITEM_CLASS}`)
-                    .toggleClass(BUTTON_GROUP_ITEM_HAS_WIDTH, !!args.value);
-                break;
             case "height":
                 this.callBase(args);
-                this.$element()
-                    .find(`.${BUTTON_GROUP_ITEM_CLASS}`)
-                    .toggleClass(BUTTON_GROUP_ITEM_HAS_HEIGHT, !!args.value);
+                this._addDimensionSizeToItem(args.name, args.value);
                 break;
             default:
                 this.callBase(args);
