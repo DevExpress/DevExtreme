@@ -13,6 +13,7 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
     BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-last-item",
     BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width",
+    BUTTON_GROUP_ITEM_HAS_HEIGHT = BUTTON_GROUP_ITEM_CLASS + "-has-height",
     SHAPE_STANDARD_CLASS = "dx-shape-standard";
 
 const ButtonCollection = CollectionWidget.inherit({
@@ -266,10 +267,11 @@ const ButtonGroup = Widget.inherit({
             tabIndex: this.option("tabIndex"),
             noDataText: "",
             selectionRequired: false,
-            height: this.option("height"),
             onItemRendered: e => {
                 const width = this.option("width");
+                const height = this.option("height");
                 isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
+                isDefined(height) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_HEIGHT);
             },
             onSelectionChanged: e => {
                 this._syncSelectionOptions();
@@ -318,6 +320,12 @@ const ButtonGroup = Widget.inherit({
                 this.$element()
                     .find(`.${BUTTON_GROUP_ITEM_CLASS}`)
                     .toggleClass(BUTTON_GROUP_ITEM_HAS_WIDTH, !!args.value);
+                break;
+            case "height":
+                this.callBase(args);
+                this.$element()
+                    .find(`.${BUTTON_GROUP_ITEM_CLASS}`)
+                    .toggleClass(BUTTON_GROUP_ITEM_HAS_HEIGHT, !!args.value);
                 break;
             default:
                 this.callBase(args);
