@@ -257,8 +257,8 @@
         "dxHtmlEditor-heading": "Überschrift",
         "dxHtmlEditor-normalText": "Normaler Text",
 
-        "dxFileManager-newFolderName": "Ohne Titel",
-        "dxFileManager-rootFolderName": "Dateien",
+        "dxFileManager-newDirectoryName": "Ohne Titel",
+        "dxFileManager-rootDirectoryName": "Dateien",
         "dxFileManager-errorNoAccess": "Zugriff verweigert. Die Operation kann nicht durchgeführt werden.",
         "dxFileManager-errorDirectoryExistsFormat": "Ordner {0} existiert bereits.",
         "dxFileManager-errorFileExistsFormat": "Datei {0} existiert bereits.",
@@ -285,8 +285,8 @@
         "dxFileManager-dialogDirectoryChooserButtonText": "TODO",
         "dxFileManager-dialogRenameItemTitle": "TODO",
         "dxFileManager-dialogRenameItemButtonText": "TODO",
-        "dxFileManager-dialogCreateFolderTitle": "TODO",
-        "dxFileManager-dialogCreateFolderButtonText": "TODO",
+        "dxFileManager-dialogCreateDirectoryTitle": "TODO",
+        "dxFileManager-dialogCreateDirectoryButtonText": "TODO",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "TODO",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "TODO",

@@ -256,8 +256,8 @@
         "dxHtmlEditor-heading": "Encabezamiento",
         "dxHtmlEditor-normalText": "Texto normal",
 
-        "dxFileManager-newFolderName": "Sin título",
-        "dxFileManager-rootFolderName": "Archivos",
+        "dxFileManager-newDirectoryName": "Sin título",
+        "dxFileManager-rootDirectoryName": "Archivos",
         "dxFileManager-errorNoAccess": "Acceso denegado. La operación no se puede completar.",
         "dxFileManager-errorDirectoryExistsFormat": "Carpeta {0} ya existe.",
         "dxFileManager-errorFileExistsFormat": "Archivo {0} ya existe.",
@@ -284,8 +284,8 @@
         "dxFileManager-dialogDirectoryChooserButtonText": "TODO",
         "dxFileManager-dialogRenameItemTitle": "TODO",
         "dxFileManager-dialogRenameItemButtonText": "TODO",
-        "dxFileManager-dialogCreateFolderTitle": "TODO",
-        "dxFileManager-dialogCreateFolderButtonText": "TODO",
+        "dxFileManager-dialogCreateDirectoryTitle": "TODO",
+        "dxFileManager-dialogCreateDirectoryButtonText": "TODO",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "TODO",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "TODO",

@@ -257,8 +257,8 @@
         "dxHtmlEditor-heading": "見出し",
         "dxHtmlEditor-normalText": "標準テキスト",
 
-        "dxFileManager-newFolderName": "無題のフォルダ",
-        "dxFileManager-rootFolderName": "ファイル",
+        "dxFileManager-newDirectoryName": "無題のフォルダ",
+        "dxFileManager-rootDirectoryName": "ファイル",
         "dxFileManager-errorNoAccess": "アクセスが拒否されました。操作を完了できません。",
         "dxFileManager-errorDirectoryExistsFormat": "ディレクトリ {0} は既に存在します。",
         "dxFileManager-errorFileExistsFormat": "ファイル {0} は既に存在します。",
@@ -285,8 +285,8 @@
         "dxFileManager-dialogDirectoryChooserButtonText": "TODO",
         "dxFileManager-dialogRenameItemTitle": "TODO",
         "dxFileManager-dialogRenameItemButtonText": "TODO",
-        "dxFileManager-dialogCreateFolderTitle": "TODO",
-        "dxFileManager-dialogCreateFolderButtonText": "TODO",
+        "dxFileManager-dialogCreateDirectoryTitle": "TODO",
+        "dxFileManager-dialogCreateDirectoryButtonText": "TODO",
 
         "dxFileManager-editingCreateSingleItemProcessingMessage": "TODO",
         "dxFileManager-editingCreateSingleItemSuccessMessage": "TODO",

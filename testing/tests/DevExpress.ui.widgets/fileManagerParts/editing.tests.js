@@ -132,13 +132,13 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         assert.ok($row.hasClass(Consts.SELECTION_CLASS), "file selected");
 
-        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New folder')`);
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New directory')`);
         $commandButton.trigger("dxclick");
         this.clock.tick(400);
 
         const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
         assert.ok($input.has(":focus"), "dialog's input element should be focused");
-        assert.equal("Untitled folder", $input.val(), "input has default value");
+        assert.equal("Untitled directory", $input.val(), "input has default value");
 
         $input.val("Test 4");
         $input.trigger("change");
@@ -158,13 +158,13 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         assert.ok($row.hasClass(Consts.SELECTION_CLASS), "file selected");
 
-        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New folder')`);
+        const $commandButton = this.$element.find(`.${Consts.TOOLBAR_CLASS} .${Consts.BUTTON_CLASS}:contains('New directory')`);
         $commandButton.trigger("dxclick");
         this.clock.tick(400);
 
         const $input = $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`);
         assert.ok($input.has(":focus"), "dialog's input element should be focused");
-        assert.equal("Untitled folder", $input.val(), "input has default value");
+        assert.equal("Untitled directory", $input.val(), "input has default value");
 
         $input.val("Test 4");
         $input.trigger("change");
@@ -192,7 +192,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "Folder 2", "sub folder selected");
         assert.ok(togglesCount >= 2, "specfied toggles shown");
 
-        this.wrapper.getToolbarButton("New folder").trigger("dxclick");
+        this.wrapper.getToolbarButton("New directory").trigger("dxclick");
         this.clock.tick(400);
 
         $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`).val("test 111").trigger("change");
@@ -209,7 +209,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal(this.wrapper.getFocusedItemText(), "test 111", "new folder selected");
         assert.equal(this.wrapper.getFolderToggles().length, togglesCount, "toggle count is not changed");
 
-        this.wrapper.getToolbarButton("New folder").trigger("dxclick");
+        this.wrapper.getToolbarButton("New directory").trigger("dxclick");
         this.clock.tick(400);
 
         $(`.${Consts.DIALOG_CLASS} .${Consts.TEXT_EDITOR_INPUT_CLASS}`).val("test 222").trigger("change");

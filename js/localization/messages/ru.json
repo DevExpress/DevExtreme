@@ -256,8 +256,8 @@
         "dxHtmlEditor-heading": "Заголовок",
         "dxHtmlEditor-normalText": "Обычный текст",
 
-        "dxFileManager-newFolderName": "Без названия",
-        "dxFileManager-rootFolderName": "Файлы",
+        "dxFileManager-newDirectoryName": "Без названия",
+        "dxFileManager-rootDirectoryName": "Файлы",
         "dxFileManager-errorNoAccess": "Доступ запрещён. Операция не может быть завершена.",
         "dxFileManager-errorDirectoryExistsFormat": "Каталог {0} уже существует.",
         "dxFileManager-errorFileExistsFormat": "Файл {0} уже существует.",
@@ -284,8 +284,8 @@
 		"dxFileManager-dialogDirectoryChooserButtonText": "Выбрать",
 		"dxFileManager-dialogRenameItemTitle": "Переименовать",
 		"dxFileManager-dialogRenameItemButtonText": "Сохранить",
-		"dxFileManager-dialogCreateFolderTitle": "Новая папка",
-		"dxFileManager-dialogCreateFolderButtonText": "Создать",
+		"dxFileManager-dialogCreateDirectoryTitle": "Новая папка",
+		"dxFileManager-dialogCreateDirectoryButtonText": "Создать",
 
 		"dxFileManager-editingCreateSingleItemProcessingMessage": "Создаётся папка в {0}",
 		"dxFileManager-editingCreateSingleItemSuccessMessage": "Создана папка в {0}",

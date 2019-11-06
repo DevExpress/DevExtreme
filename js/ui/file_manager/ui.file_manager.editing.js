@@ -35,8 +35,8 @@ class FileManagerEditingControl extends Widget {
             messageLocalization.format("dxFileManager-dialogRenameItemTitle"),
             messageLocalization.format("dxFileManager-dialogRenameItemButtonText"));
         this._createFolderDialog = this._createEnterNameDialog(
-            messageLocalization.format("dxFileManager-dialogCreateFolderTitle"),
-            messageLocalization.format("dxFileManager-dialogCreateFolderButtonText"));
+            messageLocalization.format("dxFileManager-dialogCreateDirectoryTitle"),
+            messageLocalization.format("dxFileManager-dialogCreateDirectoryButtonText"));
 
         const $chooseFolderDialog = $("<div>").appendTo(this.$element());
         this._chooseFolderDialog = this._createComponent($chooseFolderDialog, FileManagerFolderChooserDialog, {
@@ -268,7 +268,7 @@ class FileManagerEditingControl extends Widget {
 
     _tryCreate(parentDirectories) {
         const parentDirectoryInfo = parentDirectories && parentDirectories[0] || this._getCurrentDirectory();
-        const newDirName = messageLocalization.format("dxFileManager-newFolderName");
+        const newDirName = messageLocalization.format("dxFileManager-newDirectoryName");
         return this._showDialog(this._createFolderDialog, newDirName)
             .then(({ name }) => this._controller.createDirectory(parentDirectoryInfo, name));
     }
