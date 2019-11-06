@@ -12,8 +12,10 @@ import "common.css!";
 QUnit.testStart(() => {
     const markup =
         '<div id="qunit-fixture" class="qunit-fixture-visible">\
-            <div id="dropDownBox"></div>\
-            <div id="dropDownBoxAnonymous"><div id="inner">Test</div></div>\
+            <div id="container">\
+                <div id="dropDownBox"></div>\
+                <div id="dropDownBoxAnonymous"><div id="inner">Test</div></div>\
+            </div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
