@@ -2324,7 +2324,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
         allowUpdating: function(options, eventName) {
             let startEditAction = this.option("editing.startEditAction") || DEFAULT_START_EDIT_ACTION,
-                needCallback = arguments.length > 1 ? startEditAction === eventName : true;
+                needCallback = arguments.length > 1 ? startEditAction === eventName || eventName === "down" : true;
 
             return needCallback && this._allowEditAction("allowUpdating", options);
         },
@@ -2870,14 +2870,23 @@ module.exports = {
                         row = that._dataController.items()[e.rowIndex],
                         allowUpdating = editingController.allowUpdating({ row: row }, eventName) || row && row.isNewRow,
                         column = that._columnsController.getVisibleColumns()[columnIndex],
-                        allowEditing = column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex)),
+                        allowEditing = allowUpdating && column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex)),
                         startEditAction = that.option("editing.startEditAction") || "click";
+
+                    if(eventName === "down") {
+                        return column && column.showEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
+                    }
 
                     if(eventName === "click" && startEditAction === "dblClick" && !editingController.isEditCell(e.rowIndex, columnIndex)) {
                         editingController.closeEditCell();
                     }
 
-                    return eventName === startEditAction && allowUpdating && allowEditing && editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
+                    return eventName === startEditAction && allowEditing && editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
+                },
+                _rowPointerDown: function(e) {
+                    this._pointerDownTimeout = setTimeout(() => {
+                        this._editCellByClick(e, "down");
+                    });
                 },
                 _rowClick: function(e) {
                     e.event[TARGET_COMPONENT_NAME] = this.component;
@@ -2998,6 +3007,10 @@ module.exports = {
                             this._editingController.updateFieldValue(cellOptions, value, text, true);
                         }
                     }
+                },
+                dispose: function() {
+                    this.callBase.apply(this, arguments);
+                    clearTimeout(this._pointerDownTimeout);
                 }
             },
 
