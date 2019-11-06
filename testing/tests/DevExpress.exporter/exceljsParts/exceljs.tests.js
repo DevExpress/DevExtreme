@@ -74,7 +74,7 @@ QUnit.module("API", moduleConfig, () => {
         [true, false].forEach((excelFilterEnabled) => {
             let testCaption = topLeftCellOption + `, excelFilterEnabled: ${excelFilterEnabled}`;
             const getOptions = (dataGrid, expectedCustomizeCellArgs, options) => {
-                let { keepColumnWidths = true, selectedRowsOnly = false } = options || {};
+                let { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
 
                 const result = {
                     component: dataGrid,
@@ -134,6 +134,35 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAutoFilter(excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
                     helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
                     done();
+                });
+            });
+
+            QUnit.test("Header - 2 dataGrid X 1 column, autoFilter" + testCaption, (assert) => {
+                const done = assert.async();
+
+                const dataGrid = $("#dataGrid").dxDataGrid({ columns: [{ caption: "f1" }] }).dxDataGrid("instance");
+                const expectedCells = [[ { excelCell: { value: "f1" }, gridCell: { rowType: "header", value: "f1", column: dataGrid.columnOption(0) } } ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 1 }, { row: 1, column: 1 }, topLeft);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, topLeft);
+
+                    this.customizeCellCallCount = 0;
+                    const newTopLeft = { row: topLeft.row + 3, column: topLeft.column + 3 };
+                    helper._extendExpectedCells(expectedCells, newTopLeft);
+                    exportDataGrid(getOptions(dataGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellsRange) => {
+                        helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 1, column: 1 }, newTopLeft);
+                        helper.checkValues(expectedCells);
+                        helper.checkMergeCells(expectedCells, newTopLeft);
+                        helper.checkAutoFilter(excelFilterEnabled, topLeft, topLeft, { x: 0, y: topLeft.row });
+                        helper.checkCellsRange(cellsRange, { row: 1, column: 1 }, newTopLeft);
+                        done();
+                    });
                 });
             });
 
@@ -854,6 +883,47 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkOutlineLevel([0, 0], topLeft.row);
                     helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
                     done();
+                });
+            });
+
+            QUnit.test("Data - 2 dataGrid X 2 column & 2 rows" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: "1", f2: "2" }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "F1" }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: "F2" }, gridCell: { rowType: "header", column: dataGrid.columnOption(1) } }
+                ], [
+                    { excelCell: { value: ds[0].f1 }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2 }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 2, column: 2 }, { row: 2, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0, 0], topLeft.row);
+                    helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, topLeft);
+
+                    this.customizeCellCallCount = 0;
+                    const newTopLeft = { row: topLeft.row + 3, column: topLeft.column + 3 };
+                    helper._extendExpectedCells(expectedCells, newTopLeft);
+                    exportDataGrid(getOptions(dataGrid, expectedCells, { topLeftCell: newTopLeft })).then((cellsRange) => {
+                        helper.checkRowAndColumnCount({ row: 4, column: 4 }, { row: 2, column: 2 }, newTopLeft);
+                        helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column + 1 }, { x: 0, y: topLeft.row });
+                        helper.checkValues(expectedCells);
+                        helper.checkMergeCells(expectedCells, newTopLeft);
+                        helper.checkOutlineLevel([0, 0], newTopLeft.row);
+                        helper.checkCellsRange(cellsRange, { row: 2, column: 2 }, newTopLeft);
+                        done();
+                    });
                 });
             });
 
