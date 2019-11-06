@@ -11,6 +11,7 @@ const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
 const DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS = "dx-dropdownbutton-popup-wrapper";
 const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
+const BUTTON_GROUP_WRAPPER = "dx-buttongroup-wrapper";
 
 QUnit.testStart(() => {
     const markup = '' +
@@ -90,6 +91,22 @@ QUnit.module("markup", {
 
         dropDownButton.option("width", 135);
         assert.strictEqual(getButtonGroup(dropDownButton).option("width"), 135, "width was successfully changed");
+    });
+
+    QUnit.test("height option should change buttonGroup wrapper height", (assert) => {
+        const dropDownButton = $("#dropDownButton").dxDropDownButton({
+            height: "300px"
+        }).dxDropDownButton("instance");
+
+        const buttonGroup = getButtonGroup(dropDownButton);
+        const buttonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
+        assert.strictEqual(buttonGroupWrapper.eq(0).height(), 300, "height is right");
+
+        $("#container").css("height", "900px");
+        dropDownButton.option("height", "50%");
+
+        const newButtonGroupWrapper = buttonGroup.$element().find(`.${BUTTON_GROUP_WRAPPER}`);
+        assert.strictEqual(newButtonGroupWrapper.eq(0).height(), 450, "height after option change in runtime is right");
     });
 
     QUnit.test("stylingMode option should be transfered to buttonGroup", (assert) => {
