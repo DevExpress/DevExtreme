@@ -87,7 +87,7 @@ QUnit.module("option changed", {
             height: 500
         }).$element();
 
-        let buttons = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
+        let buttons = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
         assert.equal($buttonGroup.height(), 500, "button group height is right");
         assert.equal(buttons.eq(0).height(), 500, "button group item height is right");
