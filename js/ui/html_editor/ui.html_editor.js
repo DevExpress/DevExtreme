@@ -682,7 +682,9 @@ const HtmlEditor = Editor.inherit({
     register: function(components) {
         this._getRegistrator().registerModules(components);
 
-        this.repaint();
+        if(this._quillInstance) {
+            this.repaint();
+        }
     },
 
     /**
