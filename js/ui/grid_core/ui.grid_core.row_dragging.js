@@ -48,7 +48,7 @@ var RowDraggingExtender = {
             that._sortable = that._createComponent($content, Sortable, extend({
                 component: that.component,
                 contentTemplate: null,
-                filter: "> table > tbody > .dx-data-row",
+                filter: "> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)",
                 dragTemplate: that._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
                 dropFeedbackMode: "indicate"
@@ -56,6 +56,9 @@ var RowDraggingExtender = {
                 onDragStart: function(e) {
                     const row = e.component.getVisibleRows()[e.fromIndex];
                     e.itemData = row && row.data;
+
+                    const isDataRow = row && row.rowType === "data";
+                    e.cancel = !isDataRow;
 
                     const onDragStart = rowDragging.onDragStart;
                     onDragStart && onDragStart(e);
