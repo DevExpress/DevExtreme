@@ -156,8 +156,9 @@ module.exports = {
                         }
                         return dataItem;
                     },
-                    _processItems: function(items, changeType) {
+                    _processItems: function(items, change) {
                         var that = this,
+                            changeType = change.changeType,
                             expandIndex,
                             result = [];
 

@@ -16,7 +16,7 @@ import $ from "jquery";
 import eventUtils from "events/utils";
 import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
 import ArrayStore from "data/array_store";
-import { DataGridWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
 
 var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation"),
     dataGridWrapper = new DataGridWrapper("#container");

@@ -42,8 +42,10 @@ import commonUtils from "core/utils/common";
 import config from "core/config";
 import errors from "ui/widget/ui.errors";
 import devices from "core/devices";
+import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
 
 const device = devices.real();
+const dataGridWrapper = new DataGridWrapper("#container");
 
 function getInputElements($container) {
     return $container.find("input:not([type='hidden'])");
@@ -12720,6 +12722,184 @@ QUnit.test("cancelEditData after scrolling if scrolling mode is editing", functi
     // assert
     assert.equal(testElement.find("input").length, 0, "no inputs");
     assert.equal(testElement.find(".dx-edit-row").length, 0, "edit row is closed");
+});
+
+QUnit.test("Add new row items on 'append' if virtual scrolling (T812340)", function(assert) {
+    // arrange
+    this.options = $.extend(this.options, {
+        dataSource: generateDataSource(50, 2),
+        keyExpr: "column1",
+        editing: {
+            mode: "batch"
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.height(200);
+    this.rowsView.resize();
+
+    this.clock.tick();
+
+    // act
+    this.pageIndex(5);
+    this.addRow();
+    this.addRow();
+    this.pageIndex(4);
+    this.pageIndex(3);
+    this.pageIndex(2);
+    this.pageIndex(3);
+    this.pageIndex(4);
+    this.pageIndex(5);
+    // arrange, assert
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const newRows = this.dataController.items().filter(item => item.isNewRow);
+    assert.equal(newRows.length, 2, "Two new rows");
+    assert.equal(this.dataController.items()[11].key, "Item161", "Next row");
+    assert.ok(rowsViewWrapper.isNewRow(9), "Row 9 is new in view");
+    assert.ok(rowsViewWrapper.isNewRow(10), "Row 10 is new in view");
+});
+
+QUnit.test("Add new row items on 'prepend' if virtual scrolling (T812340)", function(assert) {
+    // arrange
+    this.options = $.extend(this.options, {
+        dataSource: generateDataSource(50, 2),
+        keyExpr: "column1",
+        editing: {
+            mode: "batch"
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.height(200);
+    this.rowsView.resize();
+
+    this.clock.tick();
+
+    // act
+    this.pageIndex(5);
+    this.addRow();
+    this.addRow();
+    this.pageIndex(6);
+    this.pageIndex(7);
+    this.pageIndex(8);
+    this.pageIndex(7);
+    this.pageIndex(6);
+    this.pageIndex(5);
+    // arrange, assert
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const newRows = this.dataController.items().filter(item => item.isNewRow);
+    assert.equal(newRows.length, 2, "Two new rows");
+    assert.equal(this.dataController.items()[2].key, "Item161", "Next row");
+    assert.ok(rowsViewWrapper.isNewRow(0), "Row 0 is new in view");
+    assert.ok(rowsViewWrapper.isNewRow(1), "Row 1 is new in view");
+});
+
+QUnit.test("Add new row items on 'append' if virtual scrolling and rowRenderingMode is virtual (T812340)", function(assert) {
+    // arrange
+    this.options = $.extend(this.options, {
+        dataSource: generateDataSource(50, 2),
+        keyExpr: "column1",
+        editing: {
+            mode: "batch"
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        }
+    });
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.height(200);
+    this.rowsView.resize();
+
+    this.clock.tick();
+
+    // act
+    this.pageIndex(5);
+    this.addRow();
+    this.addRow();
+    this.pageIndex(4);
+    this.pageIndex(3);
+    this.pageIndex(2);
+    this.pageIndex(3);
+    this.pageIndex(4);
+    this.pageIndex(5);
+    // arrange, assert
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const newRows = this.dataController.items().filter(item => item.isNewRow);
+    assert.equal(newRows.length, 2, "Two new rows");
+    assert.equal(this.dataController.items()[11].key, "Item161", "Next row");
+    assert.ok(rowsViewWrapper.isNewRow(9), "Row 9 is new in view");
+    assert.ok(rowsViewWrapper.isNewRow(10), "Row 10 is new in view");
+});
+
+QUnit.test("Add new row items on 'prepend' if virtual scrolling and rowRenderingMode is virtual (T812340)", function(assert) {
+    // arrange
+    this.options = $.extend(this.options, {
+        dataSource: generateDataSource(50, 2),
+        keyExpr: "column1",
+        editing: {
+            mode: "batch"
+        },
+        paging: {
+            pageSize: 3
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+    });
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.height(200);
+    this.rowsView.resize();
+
+    this.clock.tick();
+
+    // act
+    this.pageIndex(5);
+    this.addRow();
+    this.addRow();
+    this.pageIndex(6);
+    this.pageIndex(7);
+    this.pageIndex(8);
+    this.pageIndex(7);
+    this.pageIndex(6);
+    this.pageIndex(5);
+    // arrange, assert
+    const rowsViewWrapper = dataGridWrapper.rowsView;
+    const newRows = this.dataController.items().filter(item => item.isNewRow);
+    assert.equal(newRows.length, 2, "Two new rows");
+    assert.equal(this.dataController.items()[2].key, "Item161", "Next row");
+    assert.ok(rowsViewWrapper.isNewRow(0), "Row 0 is new in view");
+    assert.ok(rowsViewWrapper.isNewRow(1), "Row 1 is new in view");
 });
 
 QUnit.test("DataGrid should show error message on adding row if dataSource is not specified (T711831)", function(assert) {
