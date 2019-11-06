@@ -132,7 +132,10 @@ var helper;
 QUnit.module("Aria accessibility", {
     beforeEach: () => {
         helper = new ariaAccessibilityTestHelper({
-            createWidget: ($element, options) => new Menu($element, options)
+            createWidget: ($element, options) => new Menu($element,
+                $.extend({
+                    focusStateEnabled: true
+                }, options))
         });
     },
     afterEach: () => {
