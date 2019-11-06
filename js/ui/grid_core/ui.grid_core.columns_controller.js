@@ -1748,7 +1748,10 @@ module.exports = {
                                 isEditingForm = args.fullName && args.fullName.indexOf("editing.form") === 0;
 
                             if(!isEditingPopup && !isEditingForm) {
-                                this.reinit();
+                                this._ignoreColumnOptionNames = ["width"];
+                                this._columnsUserState = this.getUserState();
+                                this.init();
+                                this._ignoreColumnOptionNames = null;
                             }
                             break;
                         }
