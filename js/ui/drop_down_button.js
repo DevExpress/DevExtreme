@@ -676,8 +676,10 @@ let DropDownButton = Widget.inherit({
                 this._renderAdditionalIcon();
                 break;
             case "showArrowIcon":
-                this._buttonGroup.repaint();
-                this._popup && this._popup.repaint();
+                if(!value) {
+                    this._buttonGroup.$element().find(`.${DX_ICON_RIGHT_CLASS}`).remove();
+                }
+                this._renderAdditionalIcon();
                 break;
             case "width":
             case "height":
