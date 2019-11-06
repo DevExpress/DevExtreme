@@ -893,7 +893,10 @@ var helper;
 QUnit.module("Aria accessibility", {
     beforeEach: () => {
         helper = new ariaAccessibilityTestHelper({
-            createWidget: ($element, options) => new TestComponent($element, options)
+            createWidget: ($element, options) => new TestComponent($element,
+                $.extend({
+                    focusStateEnabled: true,
+                }, options))
         });
     },
     afterEach: () => {
