@@ -13,6 +13,7 @@ var helper;
             helper = new ariaAccessibilityTestHelper({
                 createWidget: ($element, options) => new TreeView($element,
                     $.extend({
+                        focusStateEnabled: true,
                         animationEnabled: false,
                         showCheckBoxesMode: "normal",
                         searchEnabled: searchEnabled
