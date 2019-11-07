@@ -3,12 +3,14 @@ import dataUtils from "../../core/element_data";
 import Callbacks from "../../core/utils/callbacks";
 import commonUtils from "../../core/utils/common";
 import windowUtils from "../../core/utils/window";
+import { addNamespace, normalizeKeyName } from "../../events/utils";
 import { getDefaultAlignment } from "../../core/utils/position";
 import { extend } from "../../core/utils/extend";
 import Guid from "../../core/guid";
 import Widget from "../widget/ui.widget";
 import Overlay from "../overlay";
 import ValidationEngine from "../validation_engine";
+import EventsEngine from "../../events/core/events_engine";
 
 const READONLY_STATE_CLASS = "dx-state-readonly";
 const INVALID_CLASS = "dx-invalid";
@@ -21,6 +23,7 @@ const VALIDATION_TARGET = "dx-validation-target";
 const VALIDATION_MESSAGE_MIN_WIDTH = 100;
 const VALIDATION_STATUS_VALID = "valid";
 const VALIDATION_STATUS_INVALID = "invalid";
+const READONLY_NAMESPACE = "editorReadOnly";
 
 const getValidationErrorMessage = function(validationErrors) {
     let validationErrorMessage = "";
@@ -337,8 +340,26 @@ const Editor = Widget.inherit({
     },
 
     _toggleReadOnlyState: function() {
-        this.$element().toggleClass(READONLY_STATE_CLASS, !!this.option("readOnly"));
-        this.setAria("readonly", this.option("readOnly") || undefined);
+        const readOnly = this.option("readOnly");
+
+        this._toggleBackspaceHandler(readOnly);
+        this.$element().toggleClass(READONLY_STATE_CLASS, !!readOnly);
+        this.setAria("readonly", readOnly || undefined);
+    },
+
+    _toggleBackspaceHandler: function(isReadOnly) {
+        const $eventTarget = this._keyboardEventBindingTarget();
+        const eventName = addNamespace("keydown", READONLY_NAMESPACE);
+
+        EventsEngine.off($eventTarget, eventName);
+
+        if(isReadOnly) {
+            EventsEngine.on($eventTarget, eventName, (e) => {
+                if(normalizeKeyName(e) === "backspace") {
+                    e.preventDefault();
+                }
+            });
+        }
     },
 
     _dispose: function() {
