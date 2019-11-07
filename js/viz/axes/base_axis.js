@@ -1629,8 +1629,8 @@ Axis.prototype = {
 
         if(that.isArgumentAxis && margins.checkInterval) {
             rangeInterval = that._calculateRangeInterval(dataRange.interval);
-            if(isFinite(rangeInterval)) {
-                const pxInterval = translator.getInterval(rangeInterval);
+            const pxInterval = translator.getInterval(rangeInterval);
+            if(isFinite(pxInterval)) {
                 interval = Math.ceil(pxInterval / (2 * getConvertIntervalCoefficient(pxInterval)));
             } else {
                 rangeInterval = 0;
