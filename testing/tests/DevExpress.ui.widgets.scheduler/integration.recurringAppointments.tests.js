@@ -1329,8 +1329,8 @@ QUnit.test("Recurring appointment with interval > 1 rendered correctly (T823073)
     assert.equal(appointments.length, 1, "Appointment is rendered");
 
     var position = $(appointments[0]).position();
-    assert.roughEqual(position.left, 855, 0.5, "Appointment's left is correct");
-    assert.roughEqual(position.top, 190, 0.5, "Appointment's top is correct");
+    assert.roughEqual(position.left, 855, 1.1, "Appointment's left is correct");
+    assert.roughEqual(position.top, 190, 1.1, "Appointment's top is correct");
 });
 
 QUnit.test("Appointment has correct occurrences dates with interval > 1", function(assert) {
@@ -1359,8 +1359,8 @@ QUnit.test("Appointment has correct occurrences dates with interval > 1", functi
     var firstPosition = $(appointments[0]).position(),
         eighthPosition = $(appointments[7]).position();
 
-    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left is correct");
-    assert.roughEqual(firstPosition.top, 190, 0.5, "Appointment's top is correct");
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 1.1, "Appointment's left is correct");
+    assert.roughEqual(firstPosition.top, 190, 1.1, "Appointment's top is correct");
 });
 
 QUnit.test("Appointment has correct occurrences dates with interval > 1, custom firstDayOfWeek", function(assert) {
@@ -1390,8 +1390,8 @@ QUnit.test("Appointment has correct occurrences dates with interval > 1, custom 
     var firstPosition = $(appointments[0]).position(),
         eighthPosition = $(appointments[7]).position();
 
-    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left is correct");
-    assert.roughEqual(firstPosition.top, 190, 0.5, "Appointment's top is correct");
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 1.1, "Appointment's left is correct");
+    assert.roughEqual(firstPosition.top, 190, 1.1, "Appointment's top is correct");
 });
 
 QUnit.test("Appointment has correct occurrences dates with interval > 1, custom WKST", function(assert) {
@@ -1421,8 +1421,8 @@ QUnit.test("Appointment has correct occurrences dates with interval > 1, custom 
     var firstPosition = $(appointments[0]).position(),
         eighthPosition = $(appointments[7]).position();
 
-    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left is correct");
-    assert.roughEqual(firstPosition.top, 190, 0.5, "Appointment's top is correct");
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 1.1, "Appointment's left is correct");
+    assert.roughEqual(firstPosition.top, 190, 1.1, "Appointment's top is correct");
 });
 
 QUnit.test("Appointment has correct occurrences dates with interval > 1, custom WKST", function(assert) {
@@ -1452,8 +1452,8 @@ QUnit.test("Appointment has correct occurrences dates with interval > 1, custom 
         fourthPosition = $(appointments[3]).position(),
         eighthPosition = $(appointments[7]).position();
 
-    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left are correct");
-    assert.roughEqual(fourthPosition.top - firstPosition.top, eighthPosition.top - fourthPosition.top, 0.5, "Appointment's top are correct");
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 1.1, "Appointment's left are correct");
+    assert.roughEqual(fourthPosition.top - firstPosition.top, eighthPosition.top - fourthPosition.top, 1.1, "Appointment's top are correct");
 });
 
 QUnit.test("Appointment has correct occurrences dates with interval > 1, custom firstDayOfWeek & WKST", function(assert) {
@@ -1485,7 +1485,7 @@ QUnit.test("Appointment has correct occurrences dates with interval > 1, custom 
         seventhPosition = $(appointments[6]).position(),
         eighthPosition = $(appointments[7]).position();
 
-    assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, "Appointment's left are correct");
-    assert.roughEqual(fourthPosition.top - firstPosition.top, eighthPosition.top - fourthPosition.top, 0.5, "Appointment's top are correct");
-    assert.roughEqual(seventhPosition.top, eighthPosition.top, 0.5, "Appointment's occurrences after WKST are positioned correct on top");
+    assert.roughEqual(firstPosition.left, eighthPosition.left, 1.1, "Appointment's left are correct");
+    assert.roughEqual(fourthPosition.top - firstPosition.top, eighthPosition.top - fourthPosition.top, 1.1, "Appointment's top are correct");
+    assert.roughEqual(seventhPosition.top, eighthPosition.top, 1.1, "Appointment's occurrences after WKST are positioned correct on top");
 });
