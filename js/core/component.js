@@ -168,6 +168,7 @@ var Component = Class.inherit({
 
             this._optionManager = new OptionManager(
                 this._options,
+                this._getDefaultOptions(),
                 this._defaultOptionsRules(),
                 this._getOptionsByReference(),
                 this._deprecatedOptions);

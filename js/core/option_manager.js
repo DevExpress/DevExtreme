@@ -13,9 +13,9 @@ const getParentName = fullName => fullName.substr(0, fullName.lastIndexOf('.'));
 const normalizeOptions = (options, value) => typeof options !== 'string' ? options : { [options]: value };
 
 export class OptionManager {
-    constructor(options, optionRules, optionsByReference, deprecatedOptions) {
+    constructor(options, defaultOptions, optionRules, optionsByReference, deprecatedOptions) {
         this._options = options;
-        this._defaultOptions = clone(options);
+        this._defaultOptions = defaultOptions;
         this._optionsByReference = optionsByReference;
         this._deprecatedOptions = deprecatedOptions;
         this._changingCallbacks = createCallBack({ syncStrategy: true });
@@ -230,7 +230,7 @@ export class OptionManager {
     }
 
     _getOptionByRules(rules) {
-        rules = Array.isArray(rules) ? this._optionRules.concat(rules) : clone(this._optionRules);
+        rules = Array.isArray(rules) ? this._optionRules.concat(rules) : this._optionRules;
 
         return OptionManager.convertRulesToOptions(rules);
     }
