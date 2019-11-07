@@ -34,10 +34,26 @@ class ariaAccessibilityTestHelper {
         }
     }
 
+    _getAttributeNames(element) {
+        let result = [];
+
+        if(isDefined(Element.prototype.getAttributeNames)) {
+            result = element.getAttributeNames();
+        } else {
+            // IE11 support
+            const attributes = element.attributes;
+            const length = attributes.length;
+            for(var i = 0; i < length; i++) {
+                result.push(attributes[i].name);
+            }
+        }
+        return result;
+    }
+
     checkAttributes($target, expectedAttributes, prefix) {
         const element = $target.get(0);
-        const skipAttributes = ["class", "style"];
-        const attributeNames = element.getAttributeNames().filter(name => name !== skipAttributes[0] && name !== skipAttributes[1]);
+        const skipAttributes = ["class", "style", "onclick"];
+        const attributeNames = this._getAttributeNames(element).filter(name => skipAttributes.indexOf(name) === -1).map(name => name.toLowerCase());
 
         assert.equal(attributeNames.length === Object.keys(expectedAttributes).length, true, `${prefix || ''}.attributes.count`);
         attributeNames.forEach((attributeName) => {

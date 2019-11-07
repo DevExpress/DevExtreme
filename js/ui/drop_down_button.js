@@ -684,6 +684,7 @@ let DropDownButton = Widget.inherit({
                 this._popup && this._popup.repaint();
                 break;
             case "width":
+            case "height":
                 this.callBase(args);
                 this._popup && this._popup.repaint();
                 break;

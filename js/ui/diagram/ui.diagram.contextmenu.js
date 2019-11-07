@@ -28,6 +28,7 @@ class DiagramContextMenu extends Widget {
 
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
             items: this._getItems(this._commands),
+            focusStateEnabled: false,
 
             onItemClick: ({ itemData }) => this._onItemClick(itemData),
             onShowing: (e) => {
@@ -65,6 +66,7 @@ class DiagramContextMenu extends Widget {
     }
     _show(x, y, isTouch) {
         this.clickPosition = { x, y };
+        this._contextMenuInstance.option("visible", false);
         this._contextMenuInstance.option("position", { offset: x + " " + y });
         this._contextMenuInstance.option("visible", true);
     }

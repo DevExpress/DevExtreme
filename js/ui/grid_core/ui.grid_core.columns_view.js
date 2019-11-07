@@ -3,6 +3,7 @@ import domAdapter from "../../core/dom_adapter";
 import { getWindow } from "../../core/utils/window";
 import eventsEngine from "../../events/core/events_engine";
 import dataUtils from "../../core/element_data";
+import pointerEvents from "../../events/pointer";
 import clickEvent from "../../events/click";
 import dblclickEvent from "../../events/double_click";
 import browser from "../../core/utils/browser";
@@ -42,7 +43,7 @@ var appendElementTemplate = {
     }
 };
 
-var subscribeToEvent = function(that, $table, event) {
+var subscribeToRowEvents = function(that, $table) {
     var touchTarget,
         touchCurrentTarget,
         timeoutId;
@@ -64,22 +65,24 @@ var subscribeToEvent = function(that, $table, event) {
         }
     });
 
-    eventsEngine.on($table, event.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
-        var dxEvent = e.event;
+    eventsEngine.on($table, [clickEvent.name, dblclickEvent.name, pointerEvents.down].join(" "), ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
+        var event = e.event;
 
         if(touchTarget) {
-            dxEvent.target = touchTarget;
-            dxEvent.currentTarget = touchCurrentTarget;
+            event.target = touchTarget;
+            event.currentTarget = touchCurrentTarget;
         }
 
-        if(!$(dxEvent.target).closest("a").length) {
-            e.rowIndex = that.getRowIndex(dxEvent.currentTarget);
+        if(!$(event.target).closest("a").length) {
+            e.rowIndex = that.getRowIndex(event.currentTarget);
 
             if(e.rowIndex >= 0) {
-                e.rowElement = getPublicElement($(dxEvent.currentTarget));
+                e.rowElement = getPublicElement($(event.currentTarget));
                 e.columns = that.getColumns();
 
-                if(event.name === "dxclick") {
+                if(event.type === pointerEvents.down) {
+                    that._rowPointerDown(e);
+                } else if(event.type === clickEvent.name) {
                     that._rowClick(e);
                 } else {
                     that._rowDblClick(e);
@@ -87,14 +90,6 @@ var subscribeToEvent = function(that, $table, event) {
             }
         }
     }));
-};
-
-var subscribeToRowClick = function(that, $table) {
-    subscribeToEvent(that, $table, clickEvent);
-};
-
-var subscribeToRowDblClick = function(that, $table) {
-    subscribeToEvent(that, $table, dblclickEvent);
 };
 
 var getWidthStyle = function(width) {
@@ -320,13 +315,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             options && that.executeAction("onCellDblClick", options);
         });
 
-        subscribeToRowClick(that, $table);
-        subscribeToRowDblClick(that, $table);
+        subscribeToRowEvents(that, $table);
 
         return $table;
     },
 
     _isNativeClick: noop,
+
+    _rowPointerDown: noop,
 
     _rowClick: noop,
 

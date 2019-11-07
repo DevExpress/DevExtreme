@@ -84,11 +84,11 @@ QUnit.module("Appointment popup form", moduleConfig, () => {
 
             scheduler.appointments.dblclick();
             assert.equal(scheduler.appointmentPopup.isVisible(), expected, text + " if call from UI");
-            scheduler.appointmentPopup.hide();
+            scheduler.instance.getAppointmentPopup().option('visible', false);
 
             scheduler.instance.showAppointmentPopup(data[0]);
             assert.equal(scheduler.appointmentPopup.isVisible(), expected, text + " if call showAppointmentPopup method");
-            scheduler.appointmentPopup.hide();
+            scheduler.instance.getAppointmentPopup().option('visible', false);
         });
     });
 

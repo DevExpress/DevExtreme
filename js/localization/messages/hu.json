@@ -289,8 +289,8 @@
     "dxHtmlEditor-heading": "Fejléc",
     "dxHtmlEditor-normalText": "Normál szöveg",
 
-    "dxFileManager-newFolderName": "Névtelen könyvtár",
-    "dxFileManager-rootFolderName": "Fájlok",
+    "dxFileManager-newDirectoryName": "Névtelen könyvtár",
+    "dxFileManager-rootDirectoryName": "Fájlok",
     "dxFileManager-errorNoAccess": "Hozzáférés megtagadva. A műveletet nem lehet befejezni.",
     "dxFileManager-errorDirectoryExistsFormat": "'{0}' nevű könyvtár már létezik.",
     "dxFileManager-errorFileExistsFormat": "'{0}' nevű fájl már létezik.",
