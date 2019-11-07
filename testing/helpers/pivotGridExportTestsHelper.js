@@ -9,7 +9,7 @@ import exportTestsHelper from "./exportTestsHelper.js";
 
 const pivotGridExportTestsHelper = Object.create(exportTestsHelper);
 
-pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined } = {}) {
+pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, data = undefined } = {}) {
     const that = this;
     const done = assert.async();
 
@@ -31,6 +31,9 @@ pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles =
         }
         if(sharedStrings !== undefined) {
             assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
+        }
+        if(data !== undefined) {
+            assert.deepEqual(e.data, data, "onFileSaving event data");
         }
 
         done();
