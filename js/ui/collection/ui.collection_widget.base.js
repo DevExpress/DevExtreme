@@ -3,7 +3,7 @@ import eventsEngine from "../../events/core/events_engine";
 import commonUtils from "../../core/utils/common";
 import { getPublicElement, getElementOptions } from "../../core/utils/dom";
 import domAdapter from "../../core/dom_adapter";
-import { isPlainObject, isFunction } from "../../core/utils/type";
+import { isPlainObject, isFunction, isDefined } from "../../core/utils/type";
 import { when } from "../../core/utils/deferred";
 import { extend } from "../../core/utils/extend";
 import { inArray } from "../../core/utils/array";
