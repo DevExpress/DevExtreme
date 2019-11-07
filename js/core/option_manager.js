@@ -230,9 +230,7 @@ export class OptionManager {
     }
 
     _getOptionByRules(rules) {
-        if(Array.isArray(rules)) {
-            rules = this._optionsRules.concat(rules);
-        }
+        rules = Array.isArray(rules) ? this._optionRules.concat(rules) : clone(this._optionRules);
 
         return OptionManager.convertRulesToOptions(rules);
     }
@@ -257,7 +255,7 @@ export class OptionManager {
         const isGetter = arguments.length < 2 && type(options) !== 'object';
 
         if(isGetter) {
-            this._getValue(this._options, this._normalizeName(options));
+            return this._getValue(this._options, this._normalizeName(options));
         } else {
             this._setValue(options, value);
         }
