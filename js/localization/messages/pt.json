@@ -256,8 +256,8 @@
         "dxHtmlEditor-heading": "Cabeçalho",
         "dxHtmlEditor-normalText": "Texto normal",
 
-        "dxFileManager-newFolderName": "TODO",
-        "dxFileManager-rootFolderName": "TODO",
+        "dxFileManager-newDirectoryName": "TODO",
+        "dxFileManager-rootDirectoryName": "TODO",
         "dxFileManager-errorNoAccess": "TODO",
         "dxFileManager-errorDirectoryExistsFormat": "TODO",
         "dxFileManager-errorFileExistsFormat": "TODO",
