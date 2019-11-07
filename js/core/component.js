@@ -1,19 +1,18 @@
 var Config = require("./config"),
     extend = require("./utils/extend").extend,
-    optionManager = require("./option_manager").OptionManager,
+    OptionManager = require("./option_manager").OptionManager,
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
-    objectUtils = require("./utils/object"),
     deferredUtils = require("../core/utils/deferred"),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
     Callbacks = require("./utils/callbacks"),
     EventsMixin = require("./events_mixin"),
     publicComponentUtils = require("./utils/public_component"),
-    devices = require("./devices"),
+
     isFunction = typeUtils.isFunction,
     noop = commonUtils.noop;
 
@@ -62,14 +61,6 @@ class PostponedOperations {
         this._postponedOperations = {};
     }
 }
-
-const normalizeOptions = (options, value) => {
-    if(typeof options !== "string") return options;
-
-    const result = {};
-    result[options] = value;
-    return result;
-};
 
 var Component = Class.inherit({
 
@@ -129,58 +120,16 @@ var Component = Class.inherit({
         return [];
     },
 
-    _getOptionByRules: function(customRules) {
-        var rules = this._defaultOptionsRules();
-
-        if(Array.isArray(customRules)) {
-            rules = rules.concat(customRules);
-        }
-
-        return this._convertRulesToOptions(rules);
-    },
-
-    _setOptionsByDevice: function(customRules) {
-        var rulesOptions = this._getOptionByRules(customRules);
-
-        this._setOptionByStealth(rulesOptions);
+    _setOptionsByDevice: function(rules) {
+        this._optionManager.setOptionsByDevice(rules);
     },
 
     _convertRulesToOptions: function(rules) {
-        var options = {};
-        var currentDevice = devices.current();
-        var deviceMatch = function(device, filter) {
-            var filterArray = [];
-
-            Array.prototype.push.call(filterArray, filter);
-
-            return (filterArray.length === 1 && typeUtils.isEmptyObject(filterArray[0]))
-                || commonUtils.findBestMatches(device, filterArray).length > 0;
-        };
-
-        for(var i = 0; i < rules.length; i++) {
-            var rule = rules[i],
-                deviceFilter = rule.device || { },
-                match;
-
-            if(isFunction(deviceFilter)) {
-                match = deviceFilter(currentDevice);
-            } else {
-                match = deviceMatch(currentDevice, deviceFilter);
-            }
-
-            if(match) {
-                extend(options, rule.options);
-            }
-        }
-        return options;
+        return OptionManager.convertRulesToOptions(rules);
     },
 
     _isInitialOptionValue: function(name) {
-        var optionValue = this.option(name),
-            initialOptionValue = this.initialOption(name),
-            isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
-
-        return isInitialOption;
+        return this._optionManager.isInitialOptionValue(name);
     },
 
     _setOptionsByReference: function() {
@@ -216,8 +165,10 @@ var Component = Class.inherit({
             this._setOptionsByReference();
             this._setDeprecatedOptions();
             this._options = this._getDefaultOptions();
-            this._optionManager = new optionManager(
+
+            this._optionManager = new OptionManager(
                 this._options,
+                this._defaultOptionsRules(),
                 this._getOptionsByReference(),
                 this._deprecatedOptions);
 
@@ -226,20 +177,14 @@ var Component = Class.inherit({
                     this._optionChanging(name, previousValue, value);
                 }
             });
-
-            this._optionManager.onDeprecated((option, info) => {
-                this._logDeprecatedWarning(option, info);
-            });
-
-            this._optionManager.onChanged((name, value, previousValue) => {
-                this._notifyOptionChanged(name, value, previousValue);
-            });
+            this._optionManager.onDeprecated((option, info) => this._logDeprecatedWarning(option, info));
+            this._optionManager.onChanged((name, value, previousValue) => this._notifyOptionChanged(name, value, previousValue));
 
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
             }
-            this._setOptionsByDevice(options.defaultOptionsRules);
 
+            this._setOptionsByDevice(options.defaultOptionsRules);
             this._initOptions(options);
         } finally {
             this.endUpdate();
@@ -359,23 +304,8 @@ var Component = Class.inherit({
         }
     },
 
-    initialOption: function(optionName) {
-        if(!this._initialOptions) {
-            this._initialOptions = this._getDefaultOptions();
-            const rulesOptions = this._getOptionByRules(this._getOptionByStealth("defaultOptionsRules"));
-            this._optionManager.setValueByReference(this._initialOptions, rulesOptions);
-        }
-
-        optionName = optionName.replace(/\[/g, ".").replace(/\]/g, "");
-        const fullPath = optionName.split(".");
-        let value;
-        fullPath.forEach((path) => {
-            value = value ? value[path] : this._initialOptions[path];
-        });
-
-        value = typeUtils.isObject(value) ? objectUtils.clone(value) : value;
-
-        return value;
+    initialOption: function(name) {
+        return this._optionManager.initialOption(name);
     },
 
     _defaultActionConfig: function() {
@@ -471,7 +401,7 @@ var Component = Class.inherit({
     },
 
     _setOptionByStealth: function(options, value) {
-        this._optionManager.setValueSilently(normalizeOptions(options, value));
+        this._optionManager.setValueSilently(options, value);
     },
 
     _getEventName: function(actionName) {
@@ -484,8 +414,7 @@ var Component = Class.inherit({
     },
 
     isOptionDeprecated: function(name) {
-        var deprecatedOptions = this._getDeprecatedOptions();
-        return Object.prototype.hasOwnProperty.call(deprecatedOptions, name);
+        return this._optionManager.isOptionDeprecated(name);
     },
 
     _setOptionSilent: function(name, value) {
@@ -528,15 +457,15 @@ var Component = Class.inherit({
      */
     option: function(options, value) {
         if(arguments.length < 2 && typeUtils.type(options) !== "object") {
-            return this._optionManager.getValue(options);
-        }
+            return this._optionManager.option(options);
+        } else {
+            this.beginUpdate();
 
-        this.beginUpdate();
-
-        try {
-            this._optionManager.setValue(normalizeOptions(options, value));
-        } finally {
-            this.endUpdate();
+            try {
+                this._optionManager.option(options, value);
+            } finally {
+                this.endUpdate();
+            }
         }
     },
 
@@ -546,12 +475,8 @@ var Component = Class.inherit({
      * @param1 optionName:string
      */
     resetOption: function(name) {
-        if(!name) {
-            return;
-        }
-        let defaultValue = this.initialOption(name);
         this.beginUpdate();
-        this._optionManager.setValue(normalizeOptions(name, defaultValue), false);
+        this._optionManager.resetOption(name);
         this.endUpdate();
     }
 }).include(EventsMixin);
