@@ -395,8 +395,8 @@ QUnit.test("Cache original value", function(assert) {
 
     // act
     new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 0);
-    this.data.values[0][0][0] = "new GT1";
-    this.data.values[0][0][1] = "new GT2";
+    this.data.values[0][0].calculatedCell[0] = "new GT1";
+    this.data.values[0][0].calculatedCell[1] = "new GT2";
     // assert
     assert.strictEqual(new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 0).value(), "GT1");
     assert.strictEqual(new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 0).value(true), "new GT1");
@@ -548,7 +548,7 @@ QUnit.test("Add percent format for percent display type", function(assert) {
 
 QUnit.test("Second calculation leads to same results", function(assert) {
     var summaryExpr = function(e) {
-        return e.value(true) + 1;
+        return (e.value(true) === undefined ? e.value() : e.value(true)) + 1;
     };
 
     this.descriptions.values[0].calculateSummaryValue = summaryExpr;
@@ -711,7 +711,7 @@ QUnit.test("RunningTotal with expression", function(assert) {
 
 QUnit.test("RunningTotal with expression. Second calculation leads to same results", function(assert) {
     var summaryExpr = function(e) {
-        return e.value(true) + 1;
+        return (e.value(true) === undefined ? e.value() : e.value(true)) + 1;
     };
 
     this.descriptions.values[0].calculateSummaryValue = summaryExpr;

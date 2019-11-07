@@ -92,7 +92,7 @@ var COLUMN = "column",
         var direction = field.runningTotal === COLUMN ? ROW : COLUMN;
         return function(e) {
             var prevCell = field.allowCrossGroupCalculation ? getPrevCellCrossGroup(e, direction) : e.prev(direction, false),
-                value = e.value(true),
+                value = e.value(true) === undefined ? e.value() : e.value(true),
                 prevValue = prevCell && prevCell.value(true);
 
             if(isDefined(prevValue) && isDefined(value)) {
@@ -157,6 +157,7 @@ var SummaryCell = function(columnPath, rowPath, data, descriptions, fieldIndex, 
 
     if(cell) {
         cell.originalCell = cell.originalCell || cell.slice();
+        cell.calculatedCell = cell.calculatedCell || [];
         this._cell = cell;
     }
 
@@ -476,7 +477,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
         }
 
         if(cell && cell.originalCell) {
-            return needCalculatedValue ? cell[fieldIndex] : cell.originalCell[fieldIndex];
+            return needCalculatedValue ? cell.calculatedCell[fieldIndex] : cell.originalCell[fieldIndex];
         }
 
         return NULL;
@@ -557,7 +558,7 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
                 if(expression) {
                     expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
                     cell = expressionArg.cell();
-                    value = cell[i] = expression(expressionArg);
+                    value = cell[i] = cell.calculatedCell[i] = expression(expressionArg);
                     isEmptyCell = value === null || value === undefined;
                 }
                 if(columnItem.isEmpty[i] === undefined) {
@@ -606,7 +607,7 @@ exports.applyRunningTotal = function(descriptions, data) {
                 if(expression) {
                     expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
                     cell = expressionArg.cell();
-                    cell[i] = expression(expressionArg);
+                    cell[i] = cell.calculatedCell[i] = expression(expressionArg);
                 }
             }
         }, false);
