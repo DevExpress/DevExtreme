@@ -49,6 +49,12 @@ const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
         this.callBase.apply(this, arguments);
+        this.validationRequest = Callbacks();
+        var $element = this.$element();
+        if($element) {
+            dataUtils.data($element[0], VALIDATION_TARGET, this);
+        }
+
     },
 
     _initOptions: function(options) {
@@ -58,15 +64,9 @@ const Editor = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this.validationRequest = Callbacks();
         this._initInnerOptionCache("validationTooltipOptions");
-
         var $element = this.$element();
         $element.addClass(DX_INVALID_BADGE_CLASS);
-
-        if($element) {
-            dataUtils.data($element[0], VALIDATION_TARGET, this);
-        }
     },
 
     _getDefaultOptions: function() {
