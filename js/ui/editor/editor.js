@@ -10,20 +10,17 @@ import Widget from "../widget/ui.widget";
 import Overlay from "../overlay";
 import ValidationEngine from "../validation_engine";
 
-const READONLY_STATE_CLASS = "dx-state-readonly",
-    INVALID_CLASS = "dx-invalid",
-    INVALID_MESSAGE = "dx-invalid-message",
-    INVALID_MESSAGE_CONTENT = "dx-invalid-message-content",
-    INVALID_MESSAGE_AUTO = "dx-invalid-message-auto",
-    INVALID_MESSAGE_ALWAYS = "dx-invalid-message-always",
-    DX_INVALID_BADGE_CLASS = "dx-show-invalid-badge",
-
-    VALIDATION_TARGET = "dx-validation-target",
-
-    VALIDATION_MESSAGE_MIN_WIDTH = 100,
-
-    VALIDATION_STATUS_VALID = "valid",
-    VALIDATION_STATUS_INVALID = "invalid";
+const READONLY_STATE_CLASS = "dx-state-readonly";
+const INVALID_CLASS = "dx-invalid";
+const INVALID_MESSAGE = "dx-invalid-message";
+const INVALID_MESSAGE_CONTENT = "dx-invalid-message-content";
+const INVALID_MESSAGE_AUTO = "dx-invalid-message-auto";
+const INVALID_MESSAGE_ALWAYS = "dx-invalid-message-always";
+const DX_INVALID_BADGE_CLASS = "dx-show-invalid-badge";
+const VALIDATION_TARGET = "dx-validation-target";
+const VALIDATION_MESSAGE_MIN_WIDTH = 100;
+const VALIDATION_STATUS_VALID = "valid";
+const VALIDATION_STATUS_INVALID = "invalid";
 
 const getValidationErrorMessage = function(validationErrors) {
     let validationErrorMessage = "";
@@ -48,7 +45,13 @@ const getValidationErrorMessage = function(validationErrors) {
 const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
+        this.validationRequest = Callbacks();
         this.callBase.apply(this, arguments);
+        const $element = this.$element();
+        if($element) {
+            dataUtils.data($element[0], VALIDATION_TARGET, this);
+        }
+
     },
 
     _initOptions: function(options) {
@@ -58,15 +61,9 @@ const Editor = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this.validationRequest = Callbacks();
         this._initInnerOptionCache("validationTooltipOptions");
-
-        var $element = this.$element();
+        const $element = this.$element();
         $element.addClass(DX_INVALID_BADGE_CLASS);
-
-        if($element) {
-            dataUtils.data($element[0], VALIDATION_TARGET, this);
-        }
     },
 
     _getDefaultOptions: function() {
@@ -239,9 +236,9 @@ const Editor = Widget.inherit({
     },
 
     _renderValidationState: function() {
-        const isValid = this.option("isValid") && this.option("validationStatus") !== VALIDATION_STATUS_INVALID,
-            validationMessageMode = this.option("validationMessageMode"),
-            $element = this.$element();
+        const isValid = this.option("isValid") && this.option("validationStatus") !== VALIDATION_STATUS_INVALID;
+        const validationMessageMode = this.option("validationMessageMode");
+        const $element = this.$element();
         let validationErrors = this.option("validationErrors");
         if(!validationErrors && this.option("validationError")) {
             validationErrors = [this.option("validationError")];
@@ -266,7 +263,7 @@ const Editor = Widget.inherit({
                 .html(validationErrorMessage)
                 .appendTo($element);
 
-            var validationTarget = this._getValidationMessageTarget();
+            const validationTarget = this._getValidationMessageTarget();
 
             this._validationMessage = this._createComponent(this._$validationMessage, Overlay, extend({
                 integrationOptions: {},
@@ -289,7 +286,7 @@ const Editor = Widget.inherit({
                 .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === "auto")
                 .toggleClass(INVALID_MESSAGE_ALWAYS, validationMessageMode === "always");
 
-            var messageId = "dx-" + new Guid();
+            const messageId = "dx-" + new Guid();
 
             this._validationMessage.$content()
                 .addClass(INVALID_MESSAGE_CONTENT)
@@ -312,7 +309,7 @@ const Editor = Widget.inherit({
             return;
         }
 
-        var validationMessageMaxWidth = Math.max(VALIDATION_MESSAGE_MIN_WIDTH, this._getValidationMessageTarget().outerWidth());
+        const validationMessageMaxWidth = Math.max(VALIDATION_MESSAGE_MIN_WIDTH, this._getValidationMessageTarget().outerWidth());
         this._validationMessage.option("maxWidth", validationMessageMaxWidth);
     },
 
@@ -321,11 +318,11 @@ const Editor = Widget.inherit({
     },
 
     _getValidationMessagePosition: function(positionRequest) {
-        var rtlEnabled = this.option("rtlEnabled"),
-            messagePositionSide = getDefaultAlignment(rtlEnabled),
-            messageOriginalOffset = this.option("validationMessageOffset"),
-            messageOffset = { h: messageOriginalOffset.h, v: messageOriginalOffset.v },
-            verticalPositions = positionRequest === "below" ? [" top", " bottom"] : [" bottom", " top"];
+        const rtlEnabled = this.option("rtlEnabled");
+        const messagePositionSide = getDefaultAlignment(rtlEnabled);
+        const messageOriginalOffset = this.option("validationMessageOffset");
+        const messageOffset = { h: messageOriginalOffset.h, v: messageOriginalOffset.v };
+        const verticalPositions = positionRequest === "below" ? [" top", " bottom"] : [" bottom", " top"];
 
         if(rtlEnabled) messageOffset.h = -messageOffset.h;
         if(positionRequest !== "below") messageOffset.v = -messageOffset.v;
@@ -345,7 +342,7 @@ const Editor = Widget.inherit({
     },
 
     _dispose: function() {
-        var element = this.$element()[0];
+        const element = this.$element()[0];
 
         dataUtils.data(element, VALIDATION_TARGET, null);
         clearTimeout(this.showValidationMessageTimeout);
@@ -353,7 +350,7 @@ const Editor = Widget.inherit({
     },
 
     _setSubmitElementName: function(name) {
-        var $submitElement = this._getSubmitElement();
+        const $submitElement = this._getSubmitElement();
 
         if(!$submitElement) {
             return;
@@ -424,7 +421,7 @@ const Editor = Widget.inherit({
     * @publicName reset()
     */
     reset: function() {
-        var defaultOptions = this._getDefaultOptions();
+        const defaultOptions = this._getDefaultOptions();
         this.option("value", defaultOptions.value);
     }
 });
