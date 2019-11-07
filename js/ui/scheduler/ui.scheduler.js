@@ -18,6 +18,7 @@ import config from "../../core/config";
 import registerComponent from "../../core/component_registrator";
 import messageLocalization from "../../localization/message";
 import dateSerialization from "../../core/utils/date_serialization";
+import dateLocalization from "../../localization/date";
 import Widget from "../widget/ui.widget";
 import subscribes from "./ui.scheduler.subscribes";
 import FunctionTemplate from "../widget/function_template";
@@ -3198,6 +3199,10 @@ const Scheduler = Widget.inherit({
         } else {
             this._workSpace.focus();
         }
+    },
+
+    getFirstDayOfWeek: function() {
+        return typeUtils.isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
     }
 
     /**
