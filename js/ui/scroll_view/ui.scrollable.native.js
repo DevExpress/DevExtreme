@@ -129,6 +129,8 @@ var NativeStrategy = Class.inherit({
     _createActionArgs: function() {
         const location = this.location();
         const containerElement = this._$container.get(0);
+        const horizontalScrollbarHeight = containerElement.offsetHeight - containerElement.clientHeight;
+        const verticalScrollbarWidth = containerElement.offsetWidth - containerElement.clientWidth;
 
         return {
             event: this._eventForUserAction,
@@ -137,9 +139,9 @@ var NativeStrategy = Class.inherit({
                 left: -location.left
             },
             reachedLeft: this._isDirection(HORIZONTAL) ? location.left >= 0 : undefined,
-            reachedRight: this._isDirection(HORIZONTAL) ? this._$container.scrollLeft() >= containerElement.scrollWidth - containerElement.clientWidth : undefined,
+            reachedRight: this._isDirection(HORIZONTAL) ? location.left <= this._containerSize.width - this._componentContentSize.width - verticalScrollbarWidth : undefined,
             reachedTop: this._isDirection(VERTICAL) ? location.top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? this._$container.scrollTop() >= containerElement.scrollHeight - containerElement.clientHeight : undefined
+            reachedBottom: this._isDirection(VERTICAL) ? location.top <= this._containerSize.height - this._componentContentSize.height - horizontalScrollbarHeight : undefined
         };
     },
 
