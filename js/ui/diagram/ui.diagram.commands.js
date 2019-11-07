@@ -60,6 +60,39 @@ const DiagramCommands = {
                     text: messageLocalization.format("dxDiagram-commandRedo"),
                     icon: "redo",
                 },
+                cut: {
+                    command: DiagramCommand.Cut,
+                    hint: messageLocalization.format("dxDiagram-commandCut"),
+                    text: messageLocalization.format("dxDiagram-commandCut"),
+                    icon: "cut",
+                },
+                copy: {
+                    command: DiagramCommand.Copy,
+                    hint: messageLocalization.format("dxDiagram-commandCopy"),
+                    text: messageLocalization.format("dxDiagram-commandCopy"),
+                    icon: "copy"
+                },
+                paste: {
+                    command: DiagramCommand.PasteInPosition,
+                    hint: messageLocalization.format("dxDiagram-commandPaste"),
+                    text: messageLocalization.format("dxDiagram-commandPaste"),
+                    icon: "paste",
+                    getParameter: (diagramContextMenu) => {
+                        return diagramContextMenu.clickPosition;
+                    }
+                },
+                selectAll: {
+                    command: DiagramCommand.SelectAll,
+                    hint: messageLocalization.format("dxDiagram-commandSelectAll"),
+                    text: messageLocalization.format("dxDiagram-commandSelectAll"),
+                    icon: "selectall"
+                },
+                delete: {
+                    command: DiagramCommand.Delete,
+                    hint: messageLocalization.format("dxDiagram-commandDelete"),
+                    text: messageLocalization.format("dxDiagram-commandDelete"),
+                    icon: "remove"
+                },
                 fontName: {
                     command: DiagramCommand.FontName,
                     hint: messageLocalization.format("dxDiagram-commandFontName"),
@@ -132,6 +165,30 @@ const DiagramCommands = {
                     hint: messageLocalization.format("dxDiagram-commandAlignRight"),
                     text: messageLocalization.format("dxDiagram-commandAlignRight"),
                     icon: "alignright"
+                },
+                lock: {
+                    command: DiagramCommand.Lock,
+                    hint: messageLocalization.format("dxDiagram-commandLock"),
+                    text: messageLocalization.format("dxDiagram-commandLock"),
+                    icon: "dx-diagram-i-button-lock dx-diagram-i"
+                },
+                unlock: {
+                    command: DiagramCommand.Unlock,
+                    hint: messageLocalization.format("dxDiagram-commandUnlock"),
+                    text: messageLocalization.format("dxDiagram-commandUnlock"),
+                    icon: "dx-diagram-i-button-unlock dx-diagram-i"
+                },
+                bringToFront: {
+                    command: DiagramCommand.BringToFront,
+                    hint: messageLocalization.format("dxDiagram-commandBringToFront"),
+                    text: messageLocalization.format("dxDiagram-commandBringToFront"),
+                    icon: "dx-diagram-i-button-bring-to-front dx-diagram-i"
+                },
+                sendToBack: {
+                    command: DiagramCommand.SendToBack,
+                    hint: messageLocalization.format("dxDiagram-commandSendToBack"),
+                    text: messageLocalization.format("dxDiagram-commandSendToBack"),
+                    icon: "dx-diagram-i-button-send-to-back dx-diagram-i"
                 },
                 connectorLineType: {
                     command: DiagramCommand.ConnectorLineOption,
