@@ -110,6 +110,17 @@ QUnit.module("markup", {
         assert.strictEqual(newButtonGroupWrapper.eq(0).height(), 450, "height after option change in runtime is right");
     });
 
+    QUnit.test("splitButton height should be equal to main button height when height depends on content", (assert) => {
+        const $dropDownButton = $("#dropDownButton").dxDropDownButton({
+            splitButton: true,
+            icon: "icon.png"
+        });
+        $dropDownButton.find("img.dx-icon").css("height", "50px");
+
+        const dropDownButtonHeight = $dropDownButton.find(".dx-dropdownbutton-toggle").height();
+        assert.strictEqual(dropDownButtonHeight, 50, "height is right");
+    });
+
     QUnit.test("stylingMode option should be transfered to buttonGroup", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             text: "Item 1",
