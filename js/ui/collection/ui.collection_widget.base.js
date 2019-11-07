@@ -299,11 +299,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _prepareDefaultItemTemplate: function(data, $container) {
-        if(data.text) {
+        if(isDefined(data.text)) {
             $container.text(data.text);
         }
 
-        if(data.html) {
+        if(isDefined(data.html)) {
             $container.html(data.html);
         }
     },
