@@ -129,7 +129,7 @@ exports.VirtualScrollController = Class.inherit((function() {
 
         var realViewportSize = that._viewportSize;
 
-        if(isVirtualMode(that) && that.option("legacyRendering") === false && that.option("scrolling.removeInvisiblePages")) {
+        if(isVirtualMode(that) && !that.option("legacyRendering") && that.option("scrolling.removeInvisiblePages")) {
             realViewportSize = 0;
 
             var viewportSize = that._viewportSize * that._viewportItemSize;
@@ -665,6 +665,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
 
         reset: function(isRefresh) {
+            this._loadingPageIndexes = {};
             this._cache = [];
             if(!isRefresh) {
                 this._itemSizes = {};

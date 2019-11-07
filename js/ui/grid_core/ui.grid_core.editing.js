@@ -203,6 +203,7 @@ var EditingController = modules.ViewController.inherit((function() {
             that._dataController = that.getController("data");
             that._rowsView = that.getView("rowsView");
             that._editForm = null;
+            that._updateEditFormDeferred = null;
 
             if(!that._dataChangedHandler) {
                 that._dataChangedHandler = that._handleDataChanged.bind(that);
@@ -1788,8 +1789,11 @@ var EditingController = modules.ViewController.inherit((function() {
             if(editMode === EDIT_MODE_POPUP) {
                 if(that.option("repaintChangesOnly")) {
                     row.update && row.update(row);
-                } else {
-                    editForm && editForm.repaint();
+                } else if(editForm) {
+                    that._updateEditFormDeferred = new Deferred().done(() => editForm.repaint());
+                    if(!that._updateLockCount) {
+                        that._updateEditFormDeferred.resolve();
+                    }
                 }
             } else {
                 that._dataController.updateItems({
@@ -1801,6 +1805,10 @@ var EditingController = modules.ViewController.inherit((function() {
             if(isCustomSetCellValue && that._editForm) {
                 that._editForm.validate();
             }
+        },
+
+        _endUpdateCore: function() {
+            this._updateEditFormDeferred && this._updateEditFormDeferred.resolve();
         },
 
         _updateEditRow: function(row, forceUpdateRow, isCustomSetCellValue) {
@@ -2191,7 +2199,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
         allowUpdating: function(options, eventName) {
             let startEditAction = this.option("editing.startEditAction") || DEFAULT_START_EDIT_ACTION,
-                needCallback = arguments.length > 1 ? startEditAction === eventName : true;
+                needCallback = arguments.length > 1 ? startEditAction === eventName || eventName === "down" : true;
 
             return needCallback && this._allowEditAction("allowUpdating", options);
         },
@@ -2736,14 +2744,23 @@ module.exports = {
                         row = that._dataController.items()[e.rowIndex],
                         allowUpdating = editingController.allowUpdating({ row: row }, eventName) || row && row.isNewRow,
                         column = that._columnsController.getVisibleColumns()[columnIndex],
-                        allowEditing = column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex)),
+                        allowEditing = allowUpdating && column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex)),
                         startEditAction = that.option("editing.startEditAction") || "click";
+
+                    if(eventName === "down") {
+                        return column && column.showEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
+                    }
 
                     if(eventName === "click" && startEditAction === "dblClick" && !editingController.isEditCell(e.rowIndex, columnIndex)) {
                         editingController.closeEditCell();
                     }
 
-                    return eventName === startEditAction && allowUpdating && allowEditing && editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
+                    return eventName === startEditAction && allowEditing && editingController.editCell(e.rowIndex, columnIndex) || editingController.isEditRow(e.rowIndex);
+                },
+                _rowPointerDown: function(e) {
+                    this._pointerDownTimeout = setTimeout(() => {
+                        this._editCellByClick(e, "down");
+                    });
                 },
                 _rowClick: function(e) {
                     e.event[TARGET_COMPONENT_NAME] = this.component;
@@ -2864,6 +2881,10 @@ module.exports = {
                             this._editingController.updateFieldValue(cellOptions, value, text, true);
                         }
                     }
+                },
+                dispose: function() {
+                    this.callBase.apply(this, arguments);
+                    clearTimeout(this._pointerDownTimeout);
                 }
             },
 

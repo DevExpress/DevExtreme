@@ -40,6 +40,8 @@ var DateBoxStrategy = Class.inherit({
 
     supportedKeys: noop,
 
+    customizeButtons: noop,
+
     attachKeyboardEvents: function(keyboardProcessor) {
         this._widgetKeyboardProcessor = keyboardProcessor.attachChildProcessor();
     },

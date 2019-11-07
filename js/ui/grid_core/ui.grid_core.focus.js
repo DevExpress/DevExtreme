@@ -9,7 +9,7 @@ import { getIndexByKey } from "./ui.grid_core.utils";
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
     FOCUSED_ROW_SELECTOR = ".dx-row" + "." + ROW_FOCUSED_CLASS,
-    DATA_GRID_TABLE_SELECTOR = ".dx-datagrid-table",
+    TABLE_POSTFIX_CLASS = "table",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled";
 
 exports.FocusController = core.ViewController.inherit((function() {
@@ -320,7 +320,7 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
         _clearPreviousFocusedRow: function($tableElement, focusedRowIndex) {
             const isNotMasterDetailFocusedRow = (_, focusedRow) => {
-                const $focusedRowTable = $(focusedRow).closest(DATA_GRID_TABLE_SELECTOR);
+                const $focusedRowTable = $(focusedRow).closest(`.${this.addWidgetPrefix(TABLE_POSTFIX_CLASS)}`);
                 return $tableElement.is($focusedRowTable);
             };
 

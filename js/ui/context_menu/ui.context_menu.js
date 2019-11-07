@@ -351,14 +351,10 @@ class ContextMenu extends MenuBase {
     }
 
     _refreshActiveDescendant() {
-        if(!this._overlay) {
-            return;
+        if(isDefined(this._overlay)) {
+            const $target = this._overlay.$content();
+            super._refreshActiveDescendant($target);
         }
-
-        const id = this.getFocusedItemId();
-
-        this.setAria("activedescendant", "", this._overlay.$content());
-        this.setAria("activedescendant", id, this._overlay.$content());
     }
 
     _hideSubmenuHandler() {
@@ -916,12 +912,22 @@ class ContextMenu extends MenuBase {
             promise = this._overlay.show();
             event && event.stopPropagation();
 
-            const id = `dx-${new Guid()}`;
-            this._overlay.$content().attr({ "id": id, role: "menu" });
-            this.setAria("owns", id);
+            this._setAriaAttributes();
         }
 
         return promise;
+    }
+
+    _setAriaAttributes() {
+        this._overlayContentId = `dx-${new Guid()}`;
+
+        this.setAria("owns", this._overlayContentId);
+        this.setAria({ "id": this._overlayContentId, "role": "menu" }, this._overlay.$content());
+    }
+
+    _cleanAriaAttributes() {
+        this._overlay && this.setAria("id", null, this._overlay.$content());
+        this.setAria("owns", undefined);
     }
 
     _getTarget() {
@@ -978,12 +984,11 @@ class ContextMenu extends MenuBase {
         let promise;
 
         if(this._overlay) {
-            this._overlay.$content().removeAttr("id");
             promise = this._overlay.hide();
             this._setOptionSilent("visible", false);
         }
 
-        this.setAria("owns", undefined);
+        this._cleanAriaAttributes();
         this.option("focusedElement", null);
 
         return promise || new Deferred().reject().promise();

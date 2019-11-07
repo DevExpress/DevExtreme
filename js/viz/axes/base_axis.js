@@ -188,6 +188,10 @@ function validateAxisOptions(options) {
     options.position = position;
     options.hoverMode = options.hoverMode ? options.hoverMode.toLowerCase() : "none";
     labelOptions.minSpacing = isDefined(labelOptions.minSpacing) ? labelOptions.minSpacing : DEFAULT_AXIS_LABEL_SPACING;
+
+    options.type && (options.type = options.type.toLowerCase());
+    options.argumentType && (options.argumentType = options.argumentType.toLowerCase());
+    options.valueType && (options.valueType = options.valueType.toLowerCase());
 }
 
 function getOptimalAngle(boxes, labelOpt) {
@@ -882,6 +886,7 @@ Axis.prototype = {
         var that = this,
             labelOpt = options.label;
 
+        validateAxisOptions(options);
         that._options = options;
 
         options.tick = options.tick || {};
@@ -896,8 +901,6 @@ Axis.prototype = {
             argumentType: options.argumentType,
             valueType: options.valueType
         };
-
-        validateAxisOptions(options);
         that._setTickOffset();
 
         that._isHorizontal = options.isHorizontal;

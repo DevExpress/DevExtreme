@@ -63,8 +63,10 @@ function exportDataGrid(options) {
             cellsRange.to.column += columns.length > 0 ? columns.length - 1 : 0;
 
             if(excelFilterEnabled === true) {
-                if(dataRowsCount > 0) worksheet.autoFilter = cellsRange;
-                worksheet.views = [{ state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 }];
+                if(!isDefined(worksheet.autoFilter) && dataRowsCount > 0) {
+                    worksheet.autoFilter = cellsRange;
+                    worksheet.views = [{ state: 'frozen', ySplit: cellsRange.from.row + dataProvider.getFrozenArea().y - 1 }];
+                }
             }
 
             resolve(cellsRange);

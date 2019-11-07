@@ -894,7 +894,7 @@ const Form = Widget.inherit({
 
             for(var i = 0; i < items.length; i++) {
                 var item = items[i];
-                var guid = this._itemsRunTimeInfo.add(item);
+                var guid = this._itemsRunTimeInfo.add({ item, itemIndex: i });
 
                 if(isObject(item)) {
                     var itemCopy = extend({}, item);
@@ -1026,6 +1026,10 @@ const Form = Widget.inherit({
             });
 
         that._createComponent($tabPanel, TabPanel, tabPanelOptions);
+        const tabPanel = this._createComponent($tabPanel, TabPanel, tabPanelOptions);
+        if(item.tabs) {
+            item.tabs.forEach(tab => this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(tab.guid, { widgetInstance: tabPanel }));
+        }
     },
 
     _itemGroupTemplate: function(item, e, $container) {

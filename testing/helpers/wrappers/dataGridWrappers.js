@@ -1,6 +1,6 @@
 import { WrapperBase } from './wrapperBase.js';
 
-const FOCUS_OVERLAY_CLASS = "dx-datagrid-focus-overlay";
+const FOCUS_OVERLAY_POSTFIX_CLASS = "focus-overlay";
 const COMMAND_ADAPTIVE_CLASS = "dx-command-adaptive";
 const COMMAND_ADAPTIVE_HIDDEN_CLASS = "dx-command-adaptive-hidden";
 const FILTER_BUILDER_CLASS = "dx-filterbuilder";
@@ -10,16 +10,20 @@ const FILTER_BUILDER_TEXT_PART_CLASS = "dx-filterbuilder-text-part";
 const HEADER_FILTER_MENU_CLASS = "dx-header-filter-menu";
 const LIST_ITEM_CLASS = "dx-list-item";
 const BUTTON_CLASS = "dx-button";
+const FOCUSED_ROW_CLASS = "dx-row-focused";
+const DATA_GRID_PREFIX = "dx-datagrid";
+const TREELIST_PREFIX = "dx-treelist";
 
-export class DataGridWrapper {
-    constructor(containerSelector) {
-        this.pager = new PagerWrapper(containerSelector);
-        this.filterPanel = new FilterPanelWrapper(containerSelector);
-        this.headerPanel = new HeaderPanelWrapper(containerSelector);
-        this.headers = new HeadersWrapper(containerSelector);
-        this.filterRow = new FilterRowWrapper(containerSelector);
-        this.rowsView = new RowsViewWrapper(containerSelector);
-        this.filterBuilder = new FilterBuilderWrapper("BODY");
+class GridWrapper {
+    constructor(containerSelector, widgetPrefix) {
+        this.pager = new PagerWrapper(containerSelector, widgetPrefix);
+        this.filterPanel = new FilterPanelWrapper(containerSelector, widgetPrefix);
+        this.headerPanel = new HeaderPanelWrapper(containerSelector, widgetPrefix);
+        this.headers = new HeadersWrapper(containerSelector, widgetPrefix);
+        this.filterRow = new FilterRowWrapper(containerSelector, widgetPrefix);
+        this.rowsView = new RowsViewWrapper(containerSelector, widgetPrefix);
+        this.filterBuilder = new FilterBuilderWrapper("BODY", widgetPrefix);
+        this.columns = new ColumnWrapper(containerSelector, widgetPrefix);
     }
 
     findFocusOverlay() {
@@ -27,19 +31,43 @@ export class DataGridWrapper {
     }
 }
 
-export class ColumnWrapper extends WrapperBase {
+export class DataGridWrapper extends GridWrapper {
+    constructor(containerSelector) {
+        super(containerSelector, DATA_GRID_PREFIX);
+    }
+}
+
+export class TreeListWrapper extends GridWrapper {
+    constructor(containerSelector) {
+        super(containerSelector, TREELIST_PREFIX);
+    }
+}
+
+class GridElement extends WrapperBase {
+    constructor(containerSelector, widgetPrefix = "dx-datagrid") {
+        super(containerSelector);
+        this.widgetPrefix = widgetPrefix;
+    }
+}
+
+export class ColumnWrapper extends GridElement {
     getCommandButtons() {
         return this.getContainer().find("td[class*='dx-command'] .dx-link");
     }
 }
 
-export class RowsViewWrapper extends WrapperBase {
+export class RowsViewWrapper extends GridElement {
+    constructor(containerSelector, widgetPrefix) {
+        super(containerSelector);
+        this.widgetPrefix = widgetPrefix;
+    }
+
     getElement() {
-        return this.getContainer().find(".dx-datagrid-rowsview");
+        return this.getContainer().find(`.${this.widgetPrefix}-rowsview`);
     }
 
     getVirtualRowElement() {
-        return this.getContainer().find(".dx-virtual-row");
+        return this.getContainer().find(":not(.dx-datagrid-table-fixed) .dx-virtual-row");
     }
 
     getVirtualCell(columnIndex) {
@@ -47,11 +75,27 @@ export class RowsViewWrapper extends WrapperBase {
     }
 
     getRowElement(rowIndex) {
-        return this.getElement().find(".dx-row").eq(rowIndex);
+        return this.getElement().find(":not(.dx-datagrid-table-fixed) .dx-row").eq(rowIndex);
+    }
+
+    getFixedDataRowElement(rowIndex) {
+        return this.getElement().find(".dx-datagrid-table-fixed .dx-data-row").eq(rowIndex);
     }
 
     getDataRowElement(rowIndex) {
-        return this.getElement().find(".dx-data-row").eq(rowIndex);
+        return this.getElement().find(":not(.dx-datagrid-table-fixed) .dx-data-row").eq(rowIndex);
+    }
+
+    getDataCellElement(rowIndex, columnIndex) {
+        return this.getDataRowElement(rowIndex).find("td").eq(columnIndex);
+    }
+
+    getFixedDataCellElement(rowIndex, columnIndex) {
+        return this.getFixedDataRowElement(rowIndex).find("td").eq(columnIndex);
+    }
+
+    getDataRowElementCount() {
+        return this.getElement().find(":not(.dx-datagrid-table-fixed) .dx-data-row").length;
     }
 
     getRowAdaptiveElement(rowIndex) {
@@ -79,6 +123,10 @@ export class RowsViewWrapper extends WrapperBase {
         return this._isInnerElementVisible($row, precision);
     }
 
+    isRowFocused(rowIndex) {
+        return this.getDataRowElement(rowIndex).hasClass(FOCUSED_ROW_CLASS);
+    }
+
     _isInnerElementVisible($element, precision = 0) {
         const rowsViewRect = this.getElement()[0].getBoundingClientRect();
         const elementRect = $element[0].getBoundingClientRect();
@@ -89,7 +137,7 @@ export class RowsViewWrapper extends WrapperBase {
     }
 
     findFocusOverlay() {
-        return this.getElement().find(`.${FOCUS_OVERLAY_CLASS}`);
+        return this.getElement().find(`.${this.widgetPrefix}-${FOCUS_OVERLAY_POSTFIX_CLASS}`);
     }
 
     isFocusOverlayVisible() {
@@ -98,7 +146,7 @@ export class RowsViewWrapper extends WrapperBase {
     }
 
     getFocusedRow() {
-        return this.getElement().find(".dx-row-focused");
+        return this.getElement().find(`.${FOCUSED_ROW_CLASS}`);
     }
 
     hasFocusedRow() {
@@ -106,15 +154,15 @@ export class RowsViewWrapper extends WrapperBase {
     }
 }
 
-export class PagerWrapper extends WrapperBase {
-    constructor(containerSelector) {
-        super(containerSelector);
-        this.PAGE_SIZES_SELECTOR = ".dx-datagrid-pager .dx-page-sizes";
-        this.PAGES_SELECTOR = ".dx-datagrid-pager .dx-pages";
+export class PagerWrapper extends GridElement {
+    constructor(containerSelector, widgetPrefix) {
+        super(containerSelector, widgetPrefix);
+        this.PAGE_SIZES_SELECTOR = `.${this.widgetPrefix}-pager .dx-page-sizes`;
+        this.PAGES_SELECTOR = `.${this.widgetPrefix}-pager .dx-pages`;
     }
 
     getElement() {
-        return this.getContainer().find(".dx-datagrid-pager");
+        return this.getContainer().find(`.${this.widgetPrefix}-pager`);
     }
 
     getPagerPageSizeElements() {
@@ -149,9 +197,9 @@ export class PagerWrapper extends WrapperBase {
     }
 }
 
-export class FilterPanelWrapper extends WrapperBase {
+export class FilterPanelWrapper extends GridElement {
     getElement() {
-        return this.getContainer().find(".dx-datagrid-filter-panel");
+        return this.getContainer().find(`.${this.widgetPrefix}-filter-panel`);
     }
 
     getIconFilter() {
@@ -159,35 +207,39 @@ export class FilterPanelWrapper extends WrapperBase {
     }
 
     getPanelText() {
-        return this.getElement().find(".dx-datagrid-filter-panel-text");
+        return this.getElement().find(`.${this.widgetPrefix}-filter-panel-text`);
     }
 
     getClearFilterButton() {
-        return this.getElement().find(".dx-datagrid-filter-panel-clear-filter");
+        return this.getElement().find(`.${this.widgetPrefix}-filter-panel-clear-filter`);
     }
 }
 
-export class FilterRowWrapper extends WrapperBase {
+export class FilterRowWrapper extends GridElement {
     getElement() {
-        return this.getContainer().find(".dx-datagrid-filter-row");
+        return this.getContainer().find(`.${this.widgetPrefix}-filter-row`).eq(0);
     }
 
     getTextEditorInput(index) {
         return this.getElement().find(".dx-texteditor-input").eq(index);
     }
 
+    getEditorCell(index) {
+        return this.getElement().find(".dx-editor-cell").eq(index);
+    }
+
     getMenuElement(index) {
-        return this.getElement().find(".dx-editor-cell").eq(index).find(".dx-menu");
+        return this.getEditorCell(index).find(".dx-menu");
     }
 }
 
-export class HeaderPanelWrapper extends WrapperBase {
+export class HeaderPanelWrapper extends GridElement {
     getElement() {
-        return this.getContainer().find(".dx-datagrid-header-panel");
+        return this.getContainer().find(`.${this.widgetPrefix}-header-panel`);
     }
 
     getGroupPanelElement() {
-        return this.getElement().find(".dx-datagrid-group-panel");
+        return this.getElement().find(`.${this.widgetPrefix}-group-panel`);
     }
 
     getGroupPanelItem(index) {
@@ -195,9 +247,9 @@ export class HeaderPanelWrapper extends WrapperBase {
     }
 }
 
-export class HeadersWrapper extends WrapperBase {
+export class HeadersWrapper extends GridElement {
     getElement() {
-        return this.getContainer().find(".dx-datagrid-headers");
+        return this.getContainer().find(`.${this.widgetPrefix}-headers`);
     }
 
     getHeaderItem(rowIndex, columnIndex) {
@@ -205,7 +257,7 @@ export class HeadersWrapper extends WrapperBase {
     }
 
     getHeaderItemTextContent(rowIndex, columnIndex) {
-        return this.getHeaderItem(rowIndex, columnIndex).find(".dx-datagrid-text-content").eq(0).text();
+        return this.getHeaderItem(rowIndex, columnIndex).find(`.${this.widgetPrefix}-text-content`).eq(0).text();
     }
 
     getHeaderFilterItem(rowIndex, columnIndex) {
@@ -213,7 +265,7 @@ export class HeadersWrapper extends WrapperBase {
     }
 }
 
-export class FilterBuilderWrapper extends WrapperBase {
+export class FilterBuilderWrapper extends GridElement {
     constructor(containerSelector) {
         super(containerSelector);
         this.headerFilterMenu = new HeaderFilterMenu(containerSelector);
@@ -232,7 +284,7 @@ export class FilterBuilderWrapper extends WrapperBase {
     }
 }
 
-export class HeaderFilterMenu extends WrapperBase {
+export class HeaderFilterMenu extends GridElement {
     getElement() {
         return this.getContainer().find(`.${HEADER_FILTER_MENU_CLASS}`);
     }

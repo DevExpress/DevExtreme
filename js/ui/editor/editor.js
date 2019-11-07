@@ -8,7 +8,9 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     Widget = require("../widget/ui.widget"),
     ValidationMixin = require("../validation/validation_mixin"),
-    Overlay = require("../overlay");
+    Overlay = require("../overlay"),
+    EventsEngine = require("../../events/core/events_engine"),
+    eventUtils = require("../../events/utils");
 
 var READONLY_STATE_CLASS = "dx-state-readonly",
     INVALID_CLASS = "dx-invalid",
@@ -19,7 +21,9 @@ var READONLY_STATE_CLASS = "dx-state-readonly",
 
     VALIDATION_TARGET = "dx-validation-target",
 
-    VALIDATION_MESSAGE_MIN_WIDTH = 100;
+    VALIDATION_MESSAGE_MIN_WIDTH = 100,
+
+    READONLY_NAMESPACE = "editorReadOnly";
 
 /**
 * @name Editor
@@ -300,8 +304,26 @@ var Editor = Widget.inherit({
     },
 
     _toggleReadOnlyState: function() {
-        this.$element().toggleClass(READONLY_STATE_CLASS, !!this.option("readOnly"));
-        this.setAria("readonly", this.option("readOnly") || undefined);
+        const readOnly = this.option("readOnly");
+
+        this._toggleBackspaceHandler(readOnly);
+        this.$element().toggleClass(READONLY_STATE_CLASS, !!readOnly);
+        this.setAria("readonly", readOnly || undefined);
+    },
+
+    _toggleBackspaceHandler: function(isReadOnly) {
+        var $eventTarget = this._keyboardEventBindingTarget();
+        var eventName = eventUtils.addNamespace("keydown", READONLY_NAMESPACE);
+
+        EventsEngine.off($eventTarget, eventName);
+
+        if(isReadOnly) {
+            EventsEngine.on($eventTarget, eventName, (e) => {
+                if(eventUtils.normalizeKeyName(e) === "backspace") {
+                    e.preventDefault();
+                }
+            });
+        }
     },
 
     _dispose: function() {

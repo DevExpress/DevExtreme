@@ -741,9 +741,10 @@ module.exports = {
                             }
                             result.push(column);
 
-                            if(column.isBand) {
+                            if(column.columns) {
                                 result = result.concat(createColumnsFromOptions(that, column.columns, column));
                                 delete column.columns;
+                                column.hasColumns = true;
                             }
                         }
                     });
@@ -787,17 +788,24 @@ module.exports = {
 
             var getColumnByIndexes = function(that, columnIndexes) {
                 var result,
+                    columns,
+                    bandColumnsCache = that.getBandColumnsCache(),
                     callbackFilter = function(column) {
                         var ownerBand = result ? result.index : undefined;
                         return column.ownerBand === ownerBand;
-                    },
+                    };
+
+                if(bandColumnsCache.isPlain) {
+                    result = that._columns[columnIndexes[0]];
+                } else {
                     columns = that._columns.filter(callbackFilter);
 
-                for(var i = 0; i < columnIndexes.length; i++) {
-                    result = columns[columnIndexes[i]];
+                    for(var i = 0; i < columnIndexes.length; i++) {
+                        result = columns[columnIndexes[i]];
 
-                    if(result) {
-                        columns = that._columns.filter(callbackFilter);
+                        if(result) {
+                            columns = that._columns.filter(callbackFilter);
+                        }
                     }
                 }
 
@@ -806,17 +814,27 @@ module.exports = {
 
             var getColumnFullPath = function(that, column) {
                 var result = [],
+                    columns,
                     bandColumnsCache = that.getBandColumnsCache(),
                     callbackFilter = function(item) {
                         return item.ownerBand === column.ownerBand;
-                    },
+                    };
+
+                if(bandColumnsCache.isPlain) {
+                    const columnIndex = that._columns.indexOf(column);
+
+                    if(columnIndex >= 0) {
+                        result = [`columns[${columnIndex}]`];
+                    }
+                } else {
                     columns = that._columns.filter(callbackFilter);
 
-                while(columns.length && columns.indexOf(column) !== -1) {
-                    result.unshift("columns[" + columns.indexOf(column) + "]");
+                    while(columns.length && columns.indexOf(column) !== -1) {
+                        result.unshift(`columns[${columns.indexOf(column)}]`);
 
-                    column = bandColumnsCache.columnParentByIndex[column.index];
-                    columns = column ? that._columns.filter(callbackFilter) : [];
+                        column = bandColumnsCache.columnParentByIndex[column.index];
+                        columns = column ? that._columns.filter(callbackFilter) : [];
+                    }
                 }
 
                 return result.join(".");
@@ -1167,6 +1185,8 @@ module.exports = {
                 updateColumnIndexes(that);
                 updateColumnGroupIndexes(that, column);
                 updateColumnSortIndexes(that, column);
+
+                resetBandColumnsCache(that);
                 updateColumnVisibleIndexes(that, column);
             };
 
@@ -1250,7 +1270,7 @@ module.exports = {
                     prevValue = options.prevValue,
                     fullOptionName = options.fullOptionName;
 
-                if(!IGNORE_COLUMN_OPTION_NAMES[optionName]) {
+                if(!IGNORE_COLUMN_OPTION_NAMES[optionName] && !that._skipProcessingColumnsChange) {
                     that._skipProcessingColumnsChange = true;
                     that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
                     that._skipProcessingColumnsChange = false;
@@ -1478,6 +1498,16 @@ module.exports = {
 
             var isColumnFixed = (that, column) => isDefined(column.fixed) || !column.type ? column.fixed : that._isColumnFixing();
 
+            var convertOwnerBandToColumnReference = (columns) => {
+                columns.forEach((column) => {
+                    if(isDefined(column.ownerBand)) {
+                        column.ownerBand = columns[column.ownerBand];
+                    }
+                });
+            };
+
+            var resetBandColumnsCache = (that) => that._bandColumnsCache = undefined;
+
             return {
                 _getExpandColumnOptions: function() {
                     return {
@@ -1575,6 +1605,8 @@ module.exports = {
                 },
 
                 optionChanged: function(args) {
+                    let needUpdateRequireResize;
+
                     switch(args.name) {
                         case "adaptColumnWidthByRatio":
                             args.handled = true;
@@ -1585,7 +1617,9 @@ module.exports = {
                             }
                             break;
                         case "columns":
+                            needUpdateRequireResize = this._skipProcessingColumnsChange;
                             args.handled = true;
+
                             if(!this._skipProcessingColumnsChange) {
                                 if(args.name === args.fullName) {
                                     this._columnsUserState = null;
@@ -1593,8 +1627,11 @@ module.exports = {
                                     this.init();
                                 } else {
                                     this._columnOptionChanged(args);
+                                    needUpdateRequireResize = true;
                                 }
-                            } else {
+                            }
+
+                            if(needUpdateRequireResize) {
                                 this._updateRequireResize(args);
                             }
                             break;
@@ -1614,11 +1651,12 @@ module.exports = {
                         case "columnMinWidth":
                         case "columnWidth": {
                             args.handled = true;
-                            let isEditingPopup = args.fullName && args.fullName.indexOf("editing.popup") === 0,
+                            let ignoreColumnOptionNames = args.fullName === "columnWidth" && ["width"],
+                                isEditingPopup = args.fullName && args.fullName.indexOf("editing.popup") === 0,
                                 isEditingForm = args.fullName && args.fullName.indexOf("editing.form") === 0;
 
                             if(!isEditingPopup && !isEditingForm) {
-                                this.reinit();
+                                this.reinit(ignoreColumnOptionNames);
                             }
                             break;
                         }
@@ -1641,7 +1679,9 @@ module.exports = {
                         } else {
                             columnOptionValue = args.value;
                         }
+                        this._skipProcessingColumnsChange = true;
                         this.columnOption(column.index, columnOptionValue);
+                        this._skipProcessingColumnsChange = false;
                     }
                 },
 
@@ -1692,12 +1732,16 @@ module.exports = {
                     that._visibleColumns = undefined;
                     that._fixedColumns = undefined;
                     that._rowCount = undefined;
-                    that._bandColumnsCache = undefined;
+                    resetBandColumnsCache(that);
                 },
-                reinit: function() {
+                reinit: function(ignoreColumnOptionNames) {
                     this._columnsUserState = this.getUserState();
-                    this._ignoreColumnOptionNames = null;
+                    this._ignoreColumnOptionNames = ignoreColumnOptionNames || null;
                     this.init();
+
+                    if(ignoreColumnOptionNames) {
+                        this._ignoreColumnOptionNames = null;
+                    }
                 },
                 isInitialized: function() {
                     return !!this._columns.length || !!this.option("columns");
@@ -1924,11 +1968,16 @@ module.exports = {
                     if(!this._bandColumnsCache) {
                         var columns = this._columns,
                             columnChildrenByIndex = {},
-                            columnParentByIndex = {};
+                            columnParentByIndex = {},
+                            isPlain = true;
 
                         columns.forEach(function(column) {
                             var parentIndex = column.ownerBand,
                                 parent = columns[parentIndex];
+
+                            if(column.hasColumns) {
+                                isPlain = false;
+                            }
 
                             if(column.colspan) {
                                 column.colspan = undefined;
@@ -1949,6 +1998,7 @@ module.exports = {
                         });
 
                         this._bandColumnsCache = {
+                            isPlain: isPlain,
                             columnChildrenByIndex: columnChildrenByIndex,
                             columnParentByIndex: columnParentByIndex
                         };
@@ -2742,6 +2792,7 @@ module.exports = {
                         column = that.columnOption(id);
 
                     if(column && column.index >= 0) {
+                        convertOwnerBandToColumnReference(that._columns);
                         that._columns.splice(column.index, 1);
 
                         if(column.isBand) {
@@ -2793,8 +2844,10 @@ module.exports = {
                         if(!commonColumnSettings.allowGrouping) ignoreColumnOptionNames.push("groupIndex");
                         if(!commonColumnSettings.allowFixing) ignoreColumnOptionNames.push("fixed", "fixedPosition");
                         if(!commonColumnSettings.allowResizing) ignoreColumnOptionNames.push("width", "visibleWidth");
-                        if(!that.option("filterRow.visible")) ignoreColumnOptionNames.push("filterValue", "selectedFilterOperation");
-                        if(!that.option("headerFilter.visible")) ignoreColumnOptionNames.push("filterValues", "filterType");
+
+                        const isFilterPanelHidden = !that.option("filterPanel.visible");
+                        if(!that.option("filterRow.visible") && isFilterPanelHidden) ignoreColumnOptionNames.push("filterValue", "selectedFilterOperation");
+                        if(!that.option("headerFilter.visible") && isFilterPanelHidden) ignoreColumnOptionNames.push("filterValues", "filterType");
                     }
 
                     that._columnsUserState = state;

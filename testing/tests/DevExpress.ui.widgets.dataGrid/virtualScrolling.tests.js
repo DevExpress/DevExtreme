@@ -395,13 +395,13 @@ QUnit.test("setViewport position. Scroll to second loaded page. cache disabled",
     }]);
 });
 
-QUnit.test("setViewport position. Scroll to second loaded page. cache disabled. Preload page count is 3", function(assert) {
+// T818578
+QUnit.test("setViewport position. Scroll to third page visible. cache disabled. Preload page count is 3", function(assert) {
     mockComponent.option.withArgs("scrolling.removeInvisiblePages").returns(true);
 
-    this.scrollController.viewportSize(60);
+    this.scrollController.viewportSize(40);
 
-    this.scrollController.setViewportPosition(this.contentSize / 3);
-
+    this.scrollController.setViewportPosition(1);
 
     assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 4 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + 400);
     assert.strictEqual(this.scrollController.beginPageIndex(), 0);
