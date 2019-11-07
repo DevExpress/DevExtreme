@@ -641,59 +641,60 @@ QUnit.test("scrollTo should not reset unused position", function(assert) {
     assert.equal(scrollable.scrollTop(), 40, "top position set");
 });
 
-QUnit.module("Scroll arguments", moduleConfig, () => {
-    class ScrollableTestHelper {
-        constructor(options) {
-            const { useNative, direction, rtlEnabled, pushBackValue } = options;
-            this.onScrollHandler = sinon.spy();
-            this._useNative = useNative;
-            this._direction = direction;
-            this._rtlEnabled = rtlEnabled;
-            this._pushBackValue = pushBackValue;
-            this.$scrollable = $("#scrollable");
-            this.scrollable = this._getScrollable();
-            this.$container = this._getScrollableContainer();
-        }
 
-        _getScrollable() {
-            return this.$scrollable.dxScrollable({
-                useNative: this._useNative,
-                direction: this._direction,
-                rtlEnabled: this._rtlEnabled,
-                pushBackValue: this._pushBackValue,
-                showScrollbar: "always",
-                onScroll: this.onScrollHandler
-            }).dxScrollable("instance");
-        }
-
-        getMaxScrollOffset() {
-            const containerElement = this.$container.get(0);
-            const maxVerticalOffset = containerElement.scrollHeight - containerElement.clientHeight;
-            const maxHorizontalOffset = containerElement.scrollWidth - containerElement.clientWidth;
-
-            return {
-                vertical: this._useNative ? maxVerticalOffset - 2 * this._pushBackValue : maxVerticalOffset,
-                horizontal: maxHorizontalOffset
-            };
-        }
-
-        _getScrollableContainer() {
-            return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
-        }
-
-        checkScrollEvent(options) {
-            const scrollArguments = this.onScrollHandler.lastCall.args[0];
-
-            QUnit.assert.equal(scrollArguments.reachedTop, options.reachedTop, `reachedTop`);
-            QUnit.assert.equal(scrollArguments.reachedBottom, options.reachedBottom, `reachedBottom`);
-            QUnit.assert.equal(scrollArguments.reachedLeft, options.reachedLeft, `reachedLeft`);
-            QUnit.assert.equal(scrollArguments.reachedRight, options.reachedRight, `reachedRight`);
-        }
+class ScrollableTestHelper {
+    constructor(options) {
+        const { useNative, direction, rtlEnabled, pushBackValue } = options;
+        this.onScrollHandler = sinon.spy();
+        this._useNative = useNative;
+        this._direction = direction;
+        this._rtlEnabled = rtlEnabled;
+        this._pushBackValue = pushBackValue;
+        this.$scrollable = $("#scrollable");
+        this.scrollable = this._getScrollable();
+        this.$container = this._getScrollableContainer();
     }
 
-    [0, 10].forEach((pushBackValue) => {
-        [true, false].forEach((useNative) => {
-            QUnit.test(`Direction: 'vertical', native: ${useNative}, pushBackValue: ${pushBackValue}, rtl: false, scrollPosition: { top: 0 } -> { top: 1 } -> { top: center } -> { top: max-1 } -> { top: max }`, () => {
+    _getScrollable() {
+        return this.$scrollable.dxScrollable({
+            useNative: this._useNative,
+            direction: this._direction,
+            rtlEnabled: this._rtlEnabled,
+            pushBackValue: this._pushBackValue,
+            showScrollbar: "always",
+            onScroll: this.onScrollHandler
+        }).dxScrollable("instance");
+    }
+
+    getMaxScrollOffset() {
+        const containerElement = this.$container.get(0);
+        const maxVerticalOffset = containerElement.scrollHeight - containerElement.clientHeight;
+        const maxHorizontalOffset = containerElement.scrollWidth - containerElement.clientWidth;
+
+        return {
+            vertical: this._useNative ? maxVerticalOffset - 2 * this._pushBackValue : maxVerticalOffset,
+            horizontal: maxHorizontalOffset
+        };
+    }
+
+    _getScrollableContainer() {
+        return this.$scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`);
+    }
+
+    checkScrollEvent(options) {
+        const scrollArguments = this.onScrollHandler.lastCall.args[0];
+
+        QUnit.assert.equal(scrollArguments.reachedTop, options.reachedTop, `reachedTop`);
+        QUnit.assert.equal(scrollArguments.reachedBottom, options.reachedBottom, `reachedBottom`);
+        QUnit.assert.equal(scrollArguments.reachedLeft, options.reachedLeft, `reachedLeft`);
+        QUnit.assert.equal(scrollArguments.reachedRight, options.reachedRight, `reachedRight`);
+    }
+}
+
+[0, 10].forEach((pushBackValue) => {
+    [true, false].forEach((useNative) => {
+        QUnit.module(`Scroll arguments, native: ${useNative}, pushBackValue: ${pushBackValue}`, moduleConfig, () => {
+            QUnit.test(`Direction: 'vertical', rtl: false, scrollPosition: { top: 0 } -> { top: 1 } -> { top: center } -> { top: max-1 } -> { top: max }`, () => {
                 const helper = new ScrollableTestHelper({ direction: "vertical", useNative: useNative, rtlEnabled: false, pushBackValue: pushBackValue });
                 const maxOffset = helper.getMaxScrollOffset();
 
