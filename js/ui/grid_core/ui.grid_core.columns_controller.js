@@ -1651,14 +1651,12 @@ module.exports = {
                         case "columnMinWidth":
                         case "columnWidth": {
                             args.handled = true;
-                            let isEditingPopup = args.fullName && args.fullName.indexOf("editing.popup") === 0,
+                            let ignoreColumnOptionNames = args.fullName === "columnWidth" && ["width"],
+                                isEditingPopup = args.fullName && args.fullName.indexOf("editing.popup") === 0,
                                 isEditingForm = args.fullName && args.fullName.indexOf("editing.form") === 0;
 
                             if(!isEditingPopup && !isEditingForm) {
-                                this._ignoreColumnOptionNames = ["width"];
-                                this._columnsUserState = this.getUserState();
-                                this.init();
-                                this._ignoreColumnOptionNames = null;
+                                this.reinit(ignoreColumnOptionNames);
                             }
                             break;
                         }
@@ -1736,10 +1734,14 @@ module.exports = {
                     that._rowCount = undefined;
                     resetBandColumnsCache(that);
                 },
-                reinit: function() {
+                reinit: function(ignoreColumnOptionNames) {
                     this._columnsUserState = this.getUserState();
-                    this._ignoreColumnOptionNames = null;
+                    this._ignoreColumnOptionNames = ignoreColumnOptionNames || null;
                     this.init();
+
+                    if(ignoreColumnOptionNames) {
+                        this._ignoreColumnOptionNames = null;
+                    }
                 },
                 isInitialized: function() {
                     return !!this._columns.length || !!this.option("columns");
