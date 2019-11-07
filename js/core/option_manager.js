@@ -15,9 +15,9 @@ const normalizeOptions = (options, value) => typeof options !== 'string' ? optio
 export class OptionManager {
     constructor(options, defaultOptions, optionsByReference, deprecatedOptions) {
         this._options = options;
-        this._defaultOptions = defaultOptions;
+        this._default = defaultOptions;
         this._optionsByReference = optionsByReference;
-        this._deprecatedOptions = deprecatedOptions;
+        this._deprecated = deprecatedOptions;
 
         this._changingCallbacks = createCallBack({ syncStrategy: true });
         this._changedCallbacks = createCallBack({ syncStrategy: true });
@@ -80,14 +80,14 @@ export class OptionManager {
         }
 
         if(!this._cachedDeprecateNames.length) {
-            for(const optionName in this._deprecatedOptions) {
+            for(const optionName in this._deprecated) {
                 this._cachedDeprecateNames.push(optionName);
             }
         }
 
         for(let cachedName of this._cachedDeprecateNames) {
             if(cachedName === name) {
-                const deprecate = this._deprecatedOptions[name];
+                const deprecate = this._deprecated[name];
 
                 if(deprecate) {
                     this._notifyDeprecated(name);
@@ -102,7 +102,7 @@ export class OptionManager {
     }
 
     _notifyDeprecated(option) {
-        const info = this._deprecatedOptions[option];
+        const info = this._deprecated[option];
 
         if(info) {
             this._deprecatedCallbacks.fire(option, info);
@@ -140,14 +140,10 @@ export class OptionManager {
         let fieldObject = null;
 
         do {
-            if(fieldName) {
-                fieldName = '.' + fieldName;
-            }
-
+            fieldName = fieldName ? `.${fieldName}` : '';
             fieldName = getFieldName(fullName) + fieldName;
             fullName = getParentName(fullName);
             fieldObject = fullName ? this._get(options, fullName, false) : options;
-
         } while(!fieldObject);
 
         fieldObject[fieldName] = value;
@@ -158,22 +154,14 @@ export class OptionManager {
 
         if(!equals(previousValue, value)) {
             const path = name.split(/[.[]/);
-            const unwrapObservables = path.length > 1 && !!this._optionsByReference[path[0]];
 
             this._changingCallbacks.fire(name, previousValue, value);
-
-            if(!this.cachedSetters[name]) {
-                this.cachedSetters[name] = compileSetter(name);
-            }
-
-            merge = isDefined(merge) ? merge : !this._optionsByReference[name];
-
+            this.cachedSetters[name] = this.cachedSetters[name] || compileSetter(name);
             this.cachedSetters[name](this._options, value, {
                 functionsAsIs: true,
-                merge,
-                unwrapObservables
+                merge: isDefined(merge) ? merge : !this._optionsByReference[name],
+                unwrapObservables: path.length > 1 && !!this._optionsByReference[path[0]]
             });
-
             this._changedCallbacks.fire(name, value, previousValue);
         }
     }
@@ -203,6 +191,12 @@ export class OptionManager {
         this._rules = rules.concat(this._rules);
     }
 
+    applyRules(rules) {
+        const options = this._getByRules(rules);
+
+        this.silent(options);
+    }
+
     dispose() {
         this._changingCallbacks.empty();
         this._changedCallbacks.empty();
@@ -210,7 +204,7 @@ export class OptionManager {
     }
 
     isDeprecated(name) {
-        return Object.prototype.hasOwnProperty.call(this._deprecatedOptions, name);
+        return Object.prototype.hasOwnProperty.call(this._deprecated, name);
     }
 
     isInitial(name) {
@@ -225,7 +219,7 @@ export class OptionManager {
         if(!this._rulesAppliedOptions) {
             const rulesOptions = this._getByRules(this._options.defaultOptionsRules);
 
-            this._rulesAppliedOptions = this._defaultOptions;
+            this._rulesAppliedOptions = this._default;
             this._setByReference(this._rulesAppliedOptions, rulesOptions);
         }
 
@@ -267,17 +261,11 @@ export class OptionManager {
         }
     }
 
-    setByRules(rules) {
-        const options = this._getByRules(rules);
-
-        this.silent(options);
-    }
-
     silent(options, value) {
         const isGetter = arguments.length < 2 && type(options) !== 'object';
 
         if(isGetter) {
-            return this._get(this._options, this._normalizeName(options), true);
+            return this._get(this._options, options, true);
         } else {
             this._set(options, value, undefined, true);
         }

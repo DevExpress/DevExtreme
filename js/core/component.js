@@ -121,7 +121,7 @@ var Component = Class.inherit({
     },
 
     _setOptionsByDevice: function(rules) {
-        this._optionManager.setByRules(rules);
+        this._optionManager.applyRules(rules);
     },
 
     _convertRulesToOptions: function(rules) {
