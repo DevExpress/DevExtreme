@@ -18,6 +18,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     messageLocalization = require("../../localization/message"),
     dateSerialization = require("../../core/utils/date_serialization"),
+    dateLocalization = require("../../localization/date"),
     Widget = require("../widget/ui.widget"),
     subscribes = require("./ui.scheduler.subscribes"),
     FunctionTemplate = require("../widget/function_template"),
@@ -3134,6 +3135,10 @@ var Scheduler = Widget.inherit({
         } else {
             this._workSpace.focus();
         }
+    },
+
+    getFirstDayOfWeek: function() {
+        return typeUtils.isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
     }
 
     /**
