@@ -121,7 +121,7 @@ var Component = Class.inherit({
     },
 
     _setOptionsByDevice: function(rules) {
-        this._optionManager.setOptionsByDevice(rules);
+        this._optionManager.setByRules(rules);
     },
 
     _convertRulesToOptions: function(rules) {
@@ -129,7 +129,7 @@ var Component = Class.inherit({
     },
 
     _isInitialOptionValue: function(name) {
-        return this._optionManager.isInitialOptionValue(name);
+        return this._optionManager.isInitial(name);
     },
 
     _setOptionsByReference: function() {
@@ -169,7 +169,6 @@ var Component = Class.inherit({
             this._optionManager = new OptionManager(
                 this._options,
                 this._getDefaultOptions(),
-                this._defaultOptionsRules(),
                 this._getOptionsByReference(),
                 this._deprecatedOptions);
 
@@ -184,7 +183,7 @@ var Component = Class.inherit({
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
             }
-
+            this._optionManager.addRules(this._defaultOptionsRules());
             this._setOptionsByDevice(options.defaultOptionsRules);
             this._initOptions(options);
         } finally {
@@ -306,7 +305,7 @@ var Component = Class.inherit({
     },
 
     initialOption: function(name) {
-        return this._optionManager.initialOption(name);
+        return this._optionManager.initial(name);
     },
 
     _defaultActionConfig: function() {
@@ -398,11 +397,11 @@ var Component = Class.inherit({
     },
 
     _getOptionByStealth: function(name) {
-        return this._optionManager.getValueSilently(name);
+        return this._optionManager.silent(name);
     },
 
     _setOptionByStealth: function(options, value) {
-        this._optionManager.setValueSilently(options, value);
+        this._optionManager.silent(options, value);
     },
 
     _getEventName: function(actionName) {
@@ -415,7 +414,7 @@ var Component = Class.inherit({
     },
 
     isOptionDeprecated: function(name) {
-        return this._optionManager.isOptionDeprecated(name);
+        return this._optionManager.isDeprecated(name);
     },
 
     _setOptionSilent: function(name, value) {
@@ -477,7 +476,7 @@ var Component = Class.inherit({
      */
     resetOption: function(name) {
         this.beginUpdate();
-        this._optionManager.resetOption(name);
+        this._optionManager.reset(name);
         this.endUpdate();
     }
 }).include(EventsMixin);
