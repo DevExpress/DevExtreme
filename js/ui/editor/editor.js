@@ -48,8 +48,8 @@ const getValidationErrorMessage = function(validationErrors) {
 const Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
-        this.callBase.apply(this, arguments);
         this.validationRequest = Callbacks();
+        this.callBase.apply(this, arguments);
         var $element = this.$element();
         if($element) {
             dataUtils.data($element[0], VALIDATION_TARGET, this);
