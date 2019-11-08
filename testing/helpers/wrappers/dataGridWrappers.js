@@ -12,8 +12,11 @@ const LIST_ITEM_CLASS = "dx-list-item";
 const BUTTON_CLASS = "dx-button";
 const FOCUSED_ROW_CLASS = "dx-row-focused";
 const DATA_GRID_PREFIX = "dx-datagrid";
+const DATA_ROW_CLASS = "dx-data-row";
 const TREELIST_PREFIX = "dx-treelist";
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const NEW_ROW_CLASS = "dx-row-inserted";
+const FIXED_TABLE_CLASS = "dx-datagrid-table-fixed";
 
 class GridWrapper {
     constructor(containerSelector, widgetPrefix) {
@@ -32,7 +35,7 @@ class GridWrapper {
     }
 }
 
-export class DataGridWrapper extends GridWrapper {
+export default class DataGridWrapper extends GridWrapper {
     constructor(containerSelector) {
         super(containerSelector, DATA_GRID_PREFIX);
     }
@@ -68,7 +71,7 @@ export class RowsViewWrapper extends GridElement {
     }
 
     getVirtualRowElement() {
-        return this.getContainer().find(".dx-virtual-row");
+        return this.getContainer().find(`:not(.${FIXED_TABLE_CLASS}) .dx-virtual-row`);
     }
 
     getVirtualCell(columnIndex) {
@@ -76,15 +79,27 @@ export class RowsViewWrapper extends GridElement {
     }
 
     getRowElement(rowIndex) {
-        return this.getElement().find(".dx-row").eq(rowIndex);
+        return this.getElement().find(`:not(.${FIXED_TABLE_CLASS}) .dx-row`).eq(rowIndex);
+    }
+
+    getFixedDataRowElement(rowIndex) {
+        return this.getElement().find(`.${FIXED_TABLE_CLASS} .${DATA_ROW_CLASS}`).eq(rowIndex);
     }
 
     getDataRowElement(rowIndex) {
-        return this.getElement().find(".dx-data-row").eq(rowIndex);
+        return this.getElement().find(`:not(.${FIXED_TABLE_CLASS}) .${DATA_ROW_CLASS}`).eq(rowIndex);
+    }
+
+    getDataCellElement(rowIndex, columnIndex) {
+        return this.getDataRowElement(rowIndex).find("td").eq(columnIndex);
+    }
+
+    getFixedDataCellElement(rowIndex, columnIndex) {
+        return this.getFixedDataRowElement(rowIndex).find("td").eq(columnIndex);
     }
 
     getDataRowElementCount() {
-        return this.getElement().find(".dx-data-row").length;
+        return this.getElement().find(`:not(.${FIXED_TABLE_CLASS}) .${DATA_ROW_CLASS}`).length;
     }
 
     getRowAdaptiveElement(rowIndex) {
@@ -114,6 +129,10 @@ export class RowsViewWrapper extends GridElement {
 
     isFocusedRow(rowIndex) {
         return this.getDataRowElement(rowIndex).hasClass(FOCUSED_ROW_CLASS);
+    }
+
+    isNewRow(rowIndex) {
+        return this.getDataRowElement(rowIndex).hasClass(NEW_ROW_CLASS);
     }
 
     _isInnerElementVisible($element, precision = 0) {
@@ -206,7 +225,7 @@ export class FilterPanelWrapper extends GridElement {
 
 export class FilterRowWrapper extends GridElement {
     getElement() {
-        return this.getContainer().find(`.${this.widgetPrefix}-filter-row`);
+        return this.getContainer().find(`.${this.widgetPrefix}-filter-row`).eq(0);
     }
 
     getTextEditor(index) {
@@ -217,8 +236,12 @@ export class FilterRowWrapper extends GridElement {
         return this.getElement().find(`.${TEXTEDITOR_INPUT_CLASS}`).eq(index);
     }
 
+    getEditorCell(index) {
+        return this.getElement().find(".dx-editor-cell").eq(index);
+    }
+
     getMenuElement(index) {
-        return this.getElement().find(".dx-editor-cell").eq(index).find(".dx-menu");
+        return this.getEditorCell(index).find(".dx-menu");
     }
 }
 

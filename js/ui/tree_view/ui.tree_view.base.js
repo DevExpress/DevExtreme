@@ -872,7 +872,6 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._renderItem(i, nodes[i], $nodeContainer);
         }
         this._renderedItemsCount += nodes.length;
-        this._renderFocusTarget();
     },
 
     _renderItem: function(nodeIndex, node, $nodeContainer) {
@@ -891,6 +890,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._renderChildren($node, node);
         }
     },
+
+    _setAriaSelected: function() {},
 
     _renderChildren: function($node, node) {
         if(!this._hasChildren(node)) {

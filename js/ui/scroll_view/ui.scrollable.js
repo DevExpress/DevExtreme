@@ -1,35 +1,34 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    support = require("../../core/utils/support"),
-    browser = require("../../core/utils/browser"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    windowUtils = require("../../core/utils/window"),
-    navigator = windowUtils.getNavigator(),
-    domAdapter = require("../../core/dom_adapter"),
-    devices = require("../../core/devices"),
-    registerComponent = require("../../core/component_registrator"),
-    DOMComponent = require("../../core/dom_component"),
-    selectors = require("../widget/selectors"),
-    eventUtils = require("../../events/utils"),
-    scrollEvents = require("./ui.events.emitter.gesture.scroll"),
-    simulatedStrategy = require("./ui.scrollable.simulated"),
-    NativeStrategy = require("./ui.scrollable.native"),
-    when = require("../../core/utils/deferred").when;
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import support from "../../core/utils/support";
+import browser from "../../core/utils/browser";
+import commonUtils from "../../core/utils/common";
+import typeUtils from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { getPublicElement } from "../../core/utils/dom";
+import windowUtils from "../../core/utils/window";
+import domAdapter from "../../core/dom_adapter";
+import devices from "../../core/devices";
+import registerComponent from "../../core/component_registrator";
+import DOMComponent from "../../core/dom_component";
+import selectors from "../widget/selectors";
+import eventUtils from "../../events/utils";
+import scrollEvents from "./ui.events.emitter.gesture.scroll";
+import simulatedStrategy from "./ui.scrollable.simulated";
+import NativeStrategy from "./ui.scrollable.native";
+import { when } from "../../core/utils/deferred";
 
-var SCROLLABLE = "dxScrollable",
-    SCROLLABLE_STRATEGY = "dxScrollableStrategy",
-    SCROLLABLE_CLASS = "dx-scrollable",
-    SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled",
-    SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container",
-    SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper",
-    SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content",
-    SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS = "dx-scrollable-customizable-scrollbars",
-    VERTICAL = "vertical",
-    HORIZONTAL = "horizontal",
-    BOTH = "both";
+const SCROLLABLE = "dxScrollable";
+const SCROLLABLE_STRATEGY = "dxScrollableStrategy";
+const SCROLLABLE_CLASS = "dx-scrollable";
+const SCROLLABLE_DISABLED_CLASS = "dx-scrollable-disabled";
+const SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container";
+const SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper";
+const SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content";
+const SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS = "dx-scrollable-customizable-scrollbars";
+const VERTICAL = "vertical";
+const HORIZONTAL = "horizontal";
+const BOTH = "both";
 
 var deviceDependentOptions = function() {
     return [{
@@ -262,7 +261,7 @@ var Scrollable = DOMComponent.inherit({
     _attachNativeScrollbarsCustomizationCss: function() {
         // NOTE: Customize native scrollbars for dashboard team
 
-        if(devices.real().deviceType === "desktop" && !(navigator.platform.indexOf('Mac') > -1 && browser['webkit'])) {
+        if(devices.real().deviceType === "desktop" && !(windowUtils.getNavigator().platform.indexOf('Mac') > -1 && browser['webkit'])) {
             this.$element().addClass(SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS);
         }
     },
@@ -286,15 +285,13 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _updateRtlPosition: function() {
-        var that = this,
-            rtl = that.option("rtlEnabled");
-
         this._updateBounds();
-        if(rtl && this.option("direction") !== VERTICAL) {
-            commonUtils.deferUpdate(function() {
-                var left = that.scrollWidth() - that.clientWidth();
-                commonUtils.deferRender(function() {
-                    that.scrollTo({ left: left });
+        if(this.option("rtlEnabled") && this.option("direction") !== VERTICAL) {
+            commonUtils.deferUpdate(() => {
+                const containerElement = this._container().get(0);
+                const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
+                commonUtils.deferRender(() => {
+                    this.scrollTo({ left: maxLeftOffset });
                 });
             });
         }

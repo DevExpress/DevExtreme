@@ -72,7 +72,7 @@ import pointerMock from "../../helpers/pointerMock.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 import themes from "ui/themes";
 import pointerEvents from "events/pointer";
-import { DataGridWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
 
 var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
@@ -732,6 +732,46 @@ QUnit.test("Fixed and main table should have same scroll top if showScrollbar is
     // assert
     assert.ok(scrollable.scrollTop() > 0, "content is scrolled");
     assert.strictEqual(scrollable.scrollTop(), $(scrollable.element()).children(".dx-datagrid-content-fixed").scrollTop(), "scroll top are same for main and fixed table");
+});
+
+QUnit.test("Cells in fixed columns should have 'dx-col-fixed' class if FF (T823783)", function(assert) {
+    // arrange
+    var rowsViewWrapper = dataGridWrapper.rowsView,
+        filterRowWrapper = dataGridWrapper.filterRow;
+
+    $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: {
+            store: [
+                { id: 1, value: "value 1" }
+            ]
+        },
+        columnFixing: {
+            enabled: true
+        },
+        filterRow: {
+            visible: true
+        },
+        columns: ["id", {
+            dataField: "value",
+            fixed: true
+        }]
+    });
+
+    // assert
+    if(browser.mozilla) {
+        assert.ok(rowsViewWrapper.getDataCellElement(0, 0).hasClass("dx-col-fixed"), "dx-col-fixed");
+        assert.ok(rowsViewWrapper.getFixedDataCellElement(0, 0).hasClass("dx-col-fixed"), "dx-col-fixed");
+        assert.ok(filterRowWrapper.getEditorCell(0).hasClass("dx-col-fixed"), "dx-col-fixed");
+    } else {
+        assert.notOk(rowsViewWrapper.getDataCellElement(0, 0).hasClass("dx-col-fixed"), "not dx-col-fixed");
+        assert.notOk(rowsViewWrapper.getFixedDataCellElement(0, 0).hasClass("dx-col-fixed"), "not dx-col-fixed");
+        assert.notOk(filterRowWrapper.getEditorCell(0).hasClass("dx-col-fixed"), "not dx-col-fixed");
+    }
+
+    assert.notOk(rowsViewWrapper.getDataCellElement(0, 1).hasClass("dx-col-fixed"), "not dx-col-fixed");
+    assert.notOk(rowsViewWrapper.getFixedDataCellElement(0, 1).hasClass("dx-col-fixed"), "not dx-col-fixed");
+    assert.notOk(filterRowWrapper.getEditorCell(1).hasClass("dx-col-fixed"), "not dx-col-fixed");
 });
 
 QUnit.test("noDataText option", function(assert) {
@@ -11787,6 +11827,40 @@ QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour",
     assert.equal(dataGrid.cellValue(0, 0), "test", "cell value is changed");
 });
 
+// T816039
+QUnit.testInActiveWindow("Focus should be correct after change value and click to another row if showEditorAlways is true", function(assert) {
+    // arrange
+    var dataSource = [{ id: 1, name: "name 1" }, { id: 2, name: "name 2" }];
+    var dataGrid = createDataGrid({
+        dataSource: dataSource,
+        keyExpr: "id",
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: [{ dataField: "name", showEditorAlways: true }]
+    });
+
+    this.clock.tick();
+    dataGrid.editCell(0, 0);
+    this.clock.tick();
+    $(":focus").on("focusout", function(e) {
+        // emulate browser behaviour
+        $(e.target).trigger("change");
+    });
+
+    // act
+    $(":focus").val("test");
+    var $secondRowEditor = $(dataGrid.getRowElement(1)).find(".dx-texteditor-input");
+    $secondRowEditor.trigger("dxpointerdown");
+    $secondRowEditor.trigger("focus");
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataSource[0].name, "test", "data is changed");
+    assert.equal($(dataGrid.getRowElement(1)).find(":focus").length, 1, "focus in second row");
+});
+
 // T819067
 QUnit.testInActiveWindow("Datebox editor's enter key handler should be replaced by noop", function(assert) {
     if(devices.real().deviceType !== "desktop") {
@@ -15852,6 +15926,25 @@ QUnit.test("Band columns should be displayed correctly after adding columns and 
     assert.strictEqual(visibleColumns[0].dataField, "field1", "dataField of the first column in the second row");
     assert.strictEqual(visibleColumns[1].dataField, "field2", "dataField of the second column in the second row");
     assert.strictEqual(visibleColumns[2].dataField, "field3", "dataField of the third column in the second row");
+});
+
+// T829029
+QUnit.test("Change columnWidth via option method", function(assert) {
+    // arrange
+    const dataGrid = createDataGrid({
+        dataSource: [{ field1: 1, field2: 2, field3: 3 }],
+        columnWidth: 50,
+        loadingTimeout: undefined
+    });
+
+    // act
+    dataGrid.option("columnWidth", 200);
+
+    // assert
+    const columns = dataGrid.getVisibleColumns();
+    assert.strictEqual(columns[0].width, 200, "width of the first column");
+    assert.strictEqual(columns[1].width, 200, "width of the second column");
+    assert.strictEqual(columns[2].width, 200, "width of the third column");
 });
 
 QUnit.module("templates", baseModuleConfig);

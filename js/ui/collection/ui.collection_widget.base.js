@@ -3,7 +3,7 @@ import eventsEngine from "../../events/core/events_engine";
 import commonUtils from "../../core/utils/common";
 import { getPublicElement, getElementOptions } from "../../core/utils/dom";
 import domAdapter from "../../core/dom_adapter";
-import { isPlainObject, isFunction } from "../../core/utils/type";
+import { isPlainObject, isFunction, isDefined } from "../../core/utils/type";
 import { when } from "../../core/utils/deferred";
 import { extend } from "../../core/utils/extend";
 import { inArray } from "../../core/utils/array";
@@ -299,11 +299,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _prepareDefaultItemTemplate: function(data, $container) {
-        if(data.text) {
+        if(isDefined(data.text)) {
             $container.text(data.text);
         }
 
-        if(data.html) {
+        if(isDefined(data.html)) {
             $container.html(data.html);
         }
     },
@@ -377,10 +377,9 @@ var CollectionWidget = Widget.inherit({
     _focusOutHandler: function() {
         this.callBase.apply(this, arguments);
 
-        var $target = $(this.option("focusedElement"));
-        if($target.length) {
-            this._toggleFocusClass(false, $target);
-        }
+        const $target = $(this.option("focusedElement"));
+
+        this._updateFocusedItemState($target, false);
     },
 
     _getActiveItem: function(last) {
@@ -400,12 +399,6 @@ var CollectionWidget = Widget.inherit({
         }
 
         return activeElements.eq(index);
-    },
-
-    _renderFocusTarget: function() {
-        this.callBase.apply(this, arguments);
-
-        this._refreshActiveDescendant();
     },
 
     _moveFocus: function(location) {
@@ -483,17 +476,26 @@ var CollectionWidget = Widget.inherit({
         this.selectItem($target);
     },
 
-    _removeFocusedItem: function(target) {
-        var $target = $(target);
+    _updateFocusedItemState: function(target, isFocused, needCleanItemId) {
+        const $target = $(target);
+
         if($target.length) {
-            this._toggleFocusClass(false, $target);
-            $target.removeAttr("id");
+            this._refreshActiveDescendant();
+            this._refreshItemId($target, needCleanItemId);
+            this._toggleFocusClass(isFocused, $target);
         }
     },
 
-    _refreshActiveDescendant: function() {
-        this.setAria("activedescendant", "");
-        this.setAria("activedescendant", this.getFocusedItemId());
+    _refreshActiveDescendant: function($target) {
+        this.setAria("activedescendant", isDefined(this.option("focusedElement")) ? this.getFocusedItemId() : null, $target);
+    },
+
+    _refreshItemId: function($target, needCleanItemId) {
+        if(!needCleanItemId && this.option("focusedElement")) {
+            this.setAria("id", this.getFocusedItemId(), $target);
+        } else {
+            this.setAria("id", null, $target);
+        }
     },
 
     _setFocusedItem: function($target) {
@@ -501,11 +503,8 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        $target.attr("id", this.getFocusedItemId());
-        this._toggleFocusClass(true, $target);
+        this._updateFocusedItemState($target, true);
         this.onFocusedItemChanged(this.getFocusedItemId());
-
-        this._refreshActiveDescendant();
 
         if(this.option("selectOnFocus")) {
             this._selectFocusedItem($target);
@@ -604,7 +603,7 @@ var CollectionWidget = Widget.inherit({
             case "focusOnSelectedItem":
                 break;
             case "focusedElement":
-                this._removeFocusedItem(args.previousValue);
+                this._updateFocusedItemState(args.previousValue, false, true);
                 this._setFocusedItem($(args.value));
                 break;
             case "displayExpr":
@@ -658,7 +657,6 @@ var CollectionWidget = Widget.inherit({
 
             this._forgetNextPageLoading();
             this._refreshContent();
-            this._renderFocusTarget();
         } else {
             this.option("items", newItems.slice());
         }
