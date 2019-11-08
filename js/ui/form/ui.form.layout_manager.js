@@ -396,7 +396,6 @@ const LayoutManager = Widget.inherit({
                 if(that.option("onLayoutChanged")) {
                     that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
-                that._fireContentReadyAction();
             },
             itemTemplate: function(e, itemData, itemElement) {
                 if(!e.location) {

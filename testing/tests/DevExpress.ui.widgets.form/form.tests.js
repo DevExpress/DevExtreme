@@ -1333,6 +1333,49 @@ QUnit.test("Align labels when layout is changed when small window size by defaul
     assert.equal($("." + internals.HIDDEN_LABEL_CLASS).length, 0, "hidden labels count");
 });
 
+QUnit.test("Labels are not aligned when labelLocation is top", function(assert) {
+    $("#form").dxForm({
+        labelLocation: "top",
+        formData: {
+            dataField: "Data field",
+            bigDataField: "Big Data field"
+        },
+    }).dxForm("instance");
+
+    const $labelTexts = $(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width());
+});
+
+QUnit.test("Labels are not aligned when labelLocation is top with the groups", function(assert) {
+    $("#form").dxForm({
+        labelLocation: "top",
+        formData: {
+            isActive: true,
+            ShipName: "Test",
+            Name: "John",
+            LastName: "Smith"
+        },
+        items: [
+            {
+                itemType: "group",
+                items: ["isActive", "ShipName"]
+            },
+            {
+                itemType: "group",
+                items: ["Name", "LastName"]
+            }
+        ]
+    }).dxForm("instance");
+
+    const $groups = $(`.${internals.FORM_GROUP_CLASS}`);
+    let $labelTexts = $groups.eq(0).find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+
+    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), "group 1");
+
+    $labelTexts = $groups.eq(1).find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), "group 2");
+});
+
 QUnit.test("required mark aligned", (assert) => {
     let $testContainer = $("#form").dxForm({
         requiredMark: "!",
@@ -2001,6 +2044,18 @@ QUnit.test("'itemOption' should get a group item by the name option", function(a
         name: "simpleItem",
         dataField: "LastName"
     }], "has correct items");
+});
+
+QUnit.test("The exception is not thrown when option of an unknown item is changed", function(assert) {
+    const form = $("#form").dxForm({
+        formData: {
+            name: "Name"
+        }
+    }).dxForm("instance");
+
+    form.itemOption("lastName", "cssClass", "custom-class");
+
+    assert.equal(form.$element().find(".custom-class").length, 0, "custom css class is not found");
 });
 
 [false, true].forEach(useItemOption => {
