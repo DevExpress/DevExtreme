@@ -137,9 +137,9 @@ var NativeStrategy = Class.inherit({
                 left: -location.left
             },
             reachedLeft: this._isDirection(HORIZONTAL) ? location.left >= 0 : undefined,
-            reachedRight: this._isDirection(HORIZONTAL) ? this._$container.scrollLeft() >= containerElement.scrollWidth - containerElement.clientWidth : undefined,
+            reachedRight: this._isDirection(HORIZONTAL) ? Math.abs(location.left) >= containerElement.scrollWidth - containerElement.clientWidth : undefined,
             reachedTop: this._isDirection(VERTICAL) ? location.top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? this._$container.scrollTop() >= containerElement.scrollHeight - containerElement.clientHeight : undefined
+            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(location.top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * this.option("pushBackValue") : undefined
         };
     },
 
