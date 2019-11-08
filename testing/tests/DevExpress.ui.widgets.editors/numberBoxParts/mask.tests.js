@@ -417,6 +417,21 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.instance.option("value"), 678, "value option is right");
     });
 
+    QUnit.test("value option should have right value after inserting when format is enabled and decimalSeparator is ',' (T829935)", (assert) => {
+        const oldDecimalSeparator = config().decimalSeparator;
+        config({ decimalSeparator: "," });
+
+        this.instance.option("format", "000.00");
+
+        try {
+            this.keyboard.caret({ start: 0, end: 6 }).type("12345678").change();
+            assert.equal(this.input.val(), "678,00", "input value is right");
+            assert.equal(this.instance.option("value"), 678, "value option is right");
+        } finally {
+            config({ decimalSeparator: oldDecimalSeparator });
+        }
+    });
+
     QUnit.test("extra decimal points should be ignored", (assert) => {
         this.instance.option("format", "#0.00");
 

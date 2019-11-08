@@ -294,8 +294,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
             isCustomParser = typeUtils.isFunction(formatOption.parser),
             parser = isCustomParser ? formatOption.parser : number.parse;
 
-        var formatPointIndex = format.indexOf(".");
-        var textPointIndex = text.indexOf(".");
+        var formatPointIndex = format.indexOf('.');
+        var textPointIndex = text.indexOf(number.getDecimalSeparator());
+
         var formatIntegerPartLength = formatPointIndex !== -1 ? formatPointIndex : format.length;
         var textIntegerPartLength = textPointIndex !== -1 ? textPointIndex : text.length;
 
