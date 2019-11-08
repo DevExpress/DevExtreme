@@ -294,6 +294,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
             isCustomParser = typeUtils.isFunction(formatOption.parser),
             parser = isCustomParser ? formatOption.parser : number.parse;
 
+        var formatPointIndex = format.indexOf('.');
+        var textPointIndex = text.indexOf('.');
+        if(text.length > format.length && format.indexOf("#") === -1) {
+            var isPointPositionEqual = formatPointIndex !== textPointIndex;
+            text = text.substr(+isPointPositionEqual, format.length);
+        }
         return parser(text, format);
     },
 
