@@ -3186,7 +3186,7 @@ declare module DevExpress.ui {
         /** @name dxDiagram.exportTo(format, callback) */
         exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
         /** @name dxDiagram.import(data, updateExistingItemsOnly) */
-        import(data: string, updateExistingItemsOnly: boolean): void;
+        import(data: string, updateExistingItemsOnly?: boolean): void;
     }
     /** @name dxDraggable.Options */
     export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
