@@ -722,7 +722,7 @@ class ScrollableTestHelper {
                 helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: undefined, reachedRight: undefined });
             });
 
-            QUnit.test(`Direction: 'horizontal', native: ${useNative}, pushBackValue: ${pushBackValue}, rtl: false, scrollPosition: { left: 0 } -> { left: 1 } -> { left: center } -> { left: max-1 } -> { left: max }`, () => {
+            QUnit.test(`Direction: 'horizontal', rtl: false, scrollPosition: { left: 0 } -> { left: 1 } -> { left: center } -> { left: max-1 } -> { left: max }`, () => {
                 const helper = new ScrollableTestHelper({ direction: "horizontal", useNative: useNative, rtlEnabled: false, pushBackValue: pushBackValue });
                 const maxOffset = helper.getMaxScrollOffset();
 
@@ -750,7 +750,7 @@ class ScrollableTestHelper {
                 helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: true });
             });
 
-            QUnit.test(`Direction: 'both', native: ${useNative}, pushBackValue: ${pushBackValue}, rtl: false, scrollPosition: { top: 0, left: 0 } -> { top:1, left: 1 } -> { top: center, left: center } -> { top: max-1, left: max-1 } -> { top: max, left: max }`, () => {
+            QUnit.test(`Direction: 'both', rtl: false, scrollPosition: { top: 0, left: 0 } -> { top:1, left: 1 } -> { top: center, left: center } -> { top: max-1, left: max-1 } -> { top: max, left: max }`, () => {
                 const helper = new ScrollableTestHelper({ direction: "both", useNative: useNative, rtlEnabled: false, pushBackValue: pushBackValue });
                 const maxOffset = helper.getMaxScrollOffset();
 
@@ -778,7 +778,7 @@ class ScrollableTestHelper {
                 helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: false, reachedRight: true });
             });
 
-            QUnit.test(`Direction: 'vertical', native: ${useNative}, pushBackValue: ${pushBackValue}, rtl: true, scrollPosition: { top: 0 } -> { top: 1 } -> { top: center } -> { top: max-1 } -> { top: max }`, () => {
+            QUnit.test(`Direction: 'vertical', rtl: true, scrollPosition: { top: 0 } -> { top: 1 } -> { top: center } -> { top: max-1 } -> { top: max }`, () => {
                 const helper = new ScrollableTestHelper({ direction: "vertical", useNative: useNative, rtlEnabled: true, pushBackValue: pushBackValue });
                 const maxOffset = helper.getMaxScrollOffset();
 
@@ -806,7 +806,7 @@ class ScrollableTestHelper {
                 helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: undefined, reachedRight: undefined });
             });
 
-            QUnit.test(`Direction: 'horizontal', native: ${useNative}, pushBackValue: ${pushBackValue}, rtl: true, scrollPosition: { left: max } -> { left: max-1 } -> { left: center } -> { left: 1 } -> { left: 0 }`, () => {
+            QUnit.test(`Direction: 'horizontal', rtl: true, scrollPosition: { left: max } -> { left: max-1 } -> { left: center } -> { left: 1 } -> { left: 0 }`, () => {
                 const helper = new ScrollableTestHelper({ direction: "horizontal", useNative: useNative, rtlEnabled: true, pushBackValue: pushBackValue });
                 const maxOffset = helper.getMaxScrollOffset();
 
@@ -834,7 +834,7 @@ class ScrollableTestHelper {
                 helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: true, reachedRight: false });
             });
 
-            QUnit.test(`Direction: 'both', native: ${useNative}, pushBackValue: ${pushBackValue}, rtl: true, scrollPosition: { top: 0, left: max } -> { top:1, left: max-1 } -> { top: center, left: center } -> { top: max-1, left: 1 } -> { top: max, left: 0 }`, () => {
+            QUnit.test(`Direction: 'both', rtl: true, scrollPosition: { top: 0, left: max } -> { top:1, left: max-1 } -> { top: center, left: center } -> { top: max-1, left: 1 } -> { top: max, left: 0 }`, () => {
                 const helper = new ScrollableTestHelper({ direction: "both", useNative: useNative, rtlEnabled: true, pushBackValue: pushBackValue });
                 const maxOffset = helper.getMaxScrollOffset();
 
