@@ -1,4 +1,6 @@
-import { isDefined } from "../../core/utils/type";
+import { isDefined, isObject } from "../../core/utils/type";
+import excelFormatConverter from "../excel_format_converter";
+import { extend } from "../../core/utils/extend";
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
@@ -86,8 +88,15 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
         excelCell.value = cellData.value;
 
         if(isDefined(excelCell.value)) {
-            const { bold, alignment, wrapText } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
+            const { bold, alignment, wrapText, format, dataType } = styles[dataProvider.getStyleId(rowIndex, cellIndex)];
 
+            // format
+            let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
+            // console.log('gridCell :', gridCell);
+            // console.log('format :', format);
+            // console.log('format :', dataType);
+            // console.log('numberFormat :', numberFormat);
+            _setNumberFormat(excelCell, numberFormat);
             _setFont(excelCell, bold);
             _setAlignment(excelCell, wrapText, alignment);
         }
@@ -107,6 +116,38 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
             }
         }
     }
+}
+
+function _setNumberFormat(excelCell, numberFormat) {
+    excelCell.numFmt = numberFormat;
+}
+
+function _tryConvertToExcelNumberFormat(format, dataType) {
+    var currency,
+        newFormat = _formatObjectConverter(format, dataType);
+
+    format = newFormat.format;
+    currency = newFormat.currency;
+    dataType = newFormat.dataType;
+
+    return excelFormatConverter.convertFormat(format, newFormat.precision, dataType, currency);
+}
+
+function _formatObjectConverter(format, dataType) {
+    var result = {
+        format: format,
+        precision: format && format.precision,
+        dataType: dataType
+    };
+
+    if(isObject(format)) {
+        return extend(result, format, {
+            format: format.formatter || format.type,
+            currency: format.currency
+        });
+    }
+
+    return result;
 }
 
 function _setFont(excelCell, bold) {
