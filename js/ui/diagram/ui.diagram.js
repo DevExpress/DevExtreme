@@ -879,7 +879,7 @@ class Diagram extends Widget {
     * @name dxDiagramMethods.import
     * @publicName import(data, updateExistingItemsOnly)
     * @param1 data:string
-    * @param2 updateExistingItemsOnly:boolean
+    * @param2 updateExistingItemsOnly?:boolean
     */
     import(data, updateExistingItemsOnly) {
         this._setDiagramData(data, updateExistingItemsOnly);
