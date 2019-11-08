@@ -811,7 +811,7 @@ module.exports = {
                         that._visibleItems = [];
 
                         var isItemCountable = function(item) {
-                            return item.rowType === "data" || item.rowType === "group" && that._dataSource.isGroupItemCountable(item.data);
+                            return item.rowType === "data" && !item.isNewRow || item.rowType === "group" && that._dataSource.isGroupItemCountable(item.data);
                         };
 
                         that._rowsScrollController = new virtualScrollingCore.VirtualScrollController(that.component, {
@@ -956,8 +956,9 @@ module.exports = {
 
                         if(removeCount) {
                             var fromEnd = changeType === "prepend";
+
                             removeCount = correctCount(that._items, removeCount, fromEnd, function(item, isNextAfterLast) {
-                                return item.rowType === "data" || (item.rowType === "group" && (that._dataSource.isGroupItemCountable(item.data) || isNextAfterLast));
+                                return item.rowType === "data" && !item.isNewRow || (item.rowType === "group" && (that._dataSource.isGroupItemCountable(item.data) || isNextAfterLast));
                             });
 
                             change.removeCount = removeCount;
