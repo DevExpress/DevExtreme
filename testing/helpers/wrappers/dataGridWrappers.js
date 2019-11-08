@@ -14,6 +14,7 @@ const FOCUSED_ROW_CLASS = "dx-row-focused";
 const DATA_GRID_PREFIX = "dx-datagrid";
 const DATA_ROW_CLASS = "dx-data-row";
 const TREELIST_PREFIX = "dx-treelist";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const NEW_ROW_CLASS = "dx-row-inserted";
 const FIXED_TABLE_CLASS = "dx-datagrid-table-fixed";
 
@@ -110,7 +111,7 @@ export class RowsViewWrapper extends GridElement {
     }
 
     getEditorInputElement(rowIndex, columnIndex) {
-        return this.getDataRowElement(rowIndex).find("td").eq(columnIndex).find(".dx-texteditor-input");
+        return this.getDataRowElement(rowIndex).find("td").eq(columnIndex).find(`.${TEXTEDITOR_INPUT_CLASS}`);
     }
 
     hasEditorInputElement(rowIndex, columnIndex) {
@@ -126,7 +127,7 @@ export class RowsViewWrapper extends GridElement {
         return this._isInnerElementVisible($row, precision);
     }
 
-    isRowFocused(rowIndex) {
+    isFocusedRow(rowIndex) {
         return this.getDataRowElement(rowIndex).hasClass(FOCUSED_ROW_CLASS);
     }
 
@@ -227,8 +228,12 @@ export class FilterRowWrapper extends GridElement {
         return this.getContainer().find(`.${this.widgetPrefix}-filter-row`).eq(0);
     }
 
+    getTextEditor(index) {
+        return this.getElement().find(".dx-texteditor").eq(index);
+    }
+
     getTextEditorInput(index) {
-        return this.getElement().find(".dx-texteditor-input").eq(index);
+        return this.getElement().find(`.${TEXTEDITOR_INPUT_CLASS}`).eq(index);
     }
 
     getEditorCell(index) {
