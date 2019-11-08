@@ -23,7 +23,7 @@ import typeUtils from "core/utils/type";
 import config from "core/config";
 import renderer from "core/renderer";
 import themes from "ui/themes";
-import { DataGridWrapper } from "../../helpers/wrappers/dataGridWrappers.js";
+import DataGridWrapper from "../../helpers/wrappers/dataGridWrappers.js";
 
 var device = devices.real();
 
