@@ -335,13 +335,6 @@ var EditingController = modules.ViewController.inherit((function() {
             if(args.changeType === "prepend") {
                 each(that._editData, function(_, editData) {
                     editData.rowIndex += args.items.length;
-
-                    if(editData.type === DATA_EDIT_DATA_INSERT_TYPE) {
-                        editData.key.rowIndex += args.items.length;
-                        editData.key.dataRowIndex += args.items.filter(function(item) {
-                            return item.rowType === "data";
-                        }).length;
-                    }
                 });
             }
 
@@ -668,22 +661,36 @@ var EditingController = modules.ViewController.inherit((function() {
             return item;
         },
 
-        processItems: function(items, changeType) {
-            var that = this,
-                i,
+        processItems: function(items, change) {
+            var changeType = change.changeType,
+                dataController = this._dataController,
                 key,
                 item,
-                editData;
+                editData,
+                dataRowIndex = -1,
+                rowIndexOffset;
 
-            that.update(changeType);
+            this.update(changeType);
 
-            editData = that._editData;
-            for(i = 0; i < editData.length; i++) {
+            editData = this._editData;
+            for(let i = 0; i < editData.length; i++) {
                 key = editData[i].key;
-                item = that._generateNewItem(key);
 
-                if(editData[i].type === DATA_EDIT_DATA_INSERT_TYPE && that._needInsertItem(editData[i], changeType, items, item)) {
-                    items.splice(key.dataRowIndex, 0, item);
+                if(key) {
+                    rowIndexOffset = dataController.getRowIndexOffset();
+                    dataRowIndex = key.dataRowIndex - rowIndexOffset + dataController.getRowIndexDelta();
+
+                    if(changeType === "append") {
+                        dataRowIndex -= dataController.items(true).length;
+                        if(change.removeCount) {
+                            dataRowIndex += change.removeCount;
+                        }
+                    }
+
+                    item = this._generateNewItem(key);
+                    if(dataRowIndex >= 0 && editData[i].type === DATA_EDIT_DATA_INSERT_TYPE && this._needInsertItem(editData[i], changeType, items, item)) {
+                        items.splice(key.dataRowIndex ? dataRowIndex : 0, 0, item);
+                    }
                 }
             }
 
@@ -778,8 +785,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 insertKey.rowIndex++;
             }
 
-            insertKey.dataRowIndex = dataController.getRowIndexDelta() + rows.filter(function(row, index) {
-                return index < insertKey.rowIndex && (row.rowType === "data" || row.rowType === "group");
+            insertKey.dataRowIndex = dataController.getRowIndexOffset() + rows.filter(function(row, index) {
+                return index < insertKey.rowIndex && (row.rowType === "data" || row.rowType === "group" || row.isNewRow);
             }).length;
 
             if(editMode !== EDIT_MODE_BATCH) {
@@ -2670,9 +2677,9 @@ module.exports = {
                     this._updateEditRow(change.items);
                     this.callBase(change);
                 },
-                _processItems: function(items, changeType) {
-                    items = this._editingController.processItems(items, changeType);
-                    return this.callBase(items, changeType);
+                _processItems: function(items, change) {
+                    items = this._editingController.processItems(items, change);
+                    return this.callBase(items, change);
                 },
                 _processDataItem: function(dataItem, options) {
                     this._editingController.processDataItem(dataItem, options, this.generateDataValues);
