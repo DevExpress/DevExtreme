@@ -401,12 +401,20 @@ QUnit.module("format: fixed point format", moduleConfig, () => {
         assert.equal(this.input.val(), "1.00", "required digits was added on first input");
     });
 
-    QUnit.test("value option should have right value when format is enabled (T829935)", (assert) => {
+    QUnit.test("value option should have right value after typing when format is enabled (T829935)", (assert) => {
         this.instance.option("format", "000.00");
 
         this.keyboard.type("1234").change();
         assert.equal(this.input.val(), "234.00", "input value is right");
         assert.equal(this.instance.option("value"), 234, "value option is right");
+    });
+
+    QUnit.test("value option should have right value after inserting when format is enabled (T829935)", (assert) => {
+        this.instance.option("format", "000.00");
+
+        this.keyboard.caret({ start: 0, end: 6 }).type("12345678").change();
+        assert.equal(this.input.val(), "678.00", "input value is right");
+        assert.equal(this.instance.option("value"), 678, "value option is right");
     });
 
     QUnit.test("extra decimal points should be ignored", (assert) => {
