@@ -112,9 +112,7 @@ var NativeStrategy = Class.inherit({
         this._disablePushBack = false;
     },
     handleCancel: noop,
-    handleStop: function() {
-        this._pushBackFromBoundary();
-    },
+    handleStop: noop,
 
     _eachScrollbar: function(callback) {
         callback = callback.bind(this);
