@@ -63,19 +63,12 @@ class PostponedOperations {
 }
 
 var Component = Class.inherit({
-
     _setDeprecatedOptions: function() {
         this._deprecatedOptions = {};
     },
 
     _getDeprecatedOptions: function() {
         return this._deprecatedOptions;
-    },
-
-    _getOptionAliasesByName: function(optionName) {
-        return Object.keys(this._deprecatedOptions).filter(aliasName => {
-            return optionName === this._deprecatedOptions[aliasName].alias;
-        });
     },
 
     _getDefaultOptions: function() {
@@ -145,45 +138,47 @@ var Component = Class.inherit({
     * @param1 options:ComponentOptions|undefined
     * @hidden
     */
-    ctor: function(options) {
+    ctor: function(options = {}) {
         this.NAME = publicComponentUtils.name(this.constructor);
 
-        options = options || {};
         if(options.eventsStrategy) {
             this.setEventsStrategy(options.eventsStrategy);
         }
-        this._options = {};
+
         this._updateLockCount = 0;
 
         this._optionChangedCallbacks = options._optionChangedCallbacks || Callbacks();
         this._disposingCallbacks = options._disposingCallbacks || Callbacks();
         this.postponedOperations = new PostponedOperations();
+        this._initOptionManager(options);
+    },
 
+    _initOptionManager(options) {
         this.beginUpdate();
 
         try {
             this._setOptionsByReference();
             this._setDeprecatedOptions();
             this._options = this._getDefaultOptions();
-
             this._optionManager = new OptionManager(
                 this._options,
                 this._getDefaultOptions(),
                 this._getOptionsByReference(),
-                this._deprecatedOptions);
+                this._getDeprecatedOptions()
+            );
 
-            this._optionManager.onChanging((name, previousValue, value) => {
-                if(this._initialized) {
-                    this._optionChanging(name, previousValue, value);
-                }
-            });
-            this._optionManager.onDeprecated((option, info) => this._logDeprecatedWarning(option, info));
-            this._optionManager.onChanged((name, value, previousValue) => this._notifyOptionChanged(name, value, previousValue));
+            this._optionManager.onChanging(
+                (name, previousValue, value) => this._initialized && this._optionChanging(name, previousValue, value));
+            this._optionManager.onDeprecated(
+                (option, info) => this._logDeprecatedWarning(option, info));
+            this._optionManager.onChanged(
+                (name, value, previousValue) => this._notifyOptionChanged(name, value, previousValue));
+            this._optionManager.addRules(this._defaultOptionsRules());
 
             if(options && options.onInitializing) {
                 options.onInitializing.apply(this, [options]);
             }
-            this._optionManager.addRules(this._defaultOptionsRules());
+
             this._setOptionsByDevice(options.defaultOptionsRules);
             this._initOptions(options);
         } finally {
@@ -284,7 +279,7 @@ var Component = Class.inherit({
         var that = this;
 
         if(this._initialized) {
-            var optionNames = [option].concat(that._getOptionAliasesByName(option));
+            var optionNames = [option].concat(this._optionManager.getAliasesByName(option));
             for(var i = 0; i < optionNames.length; i++) {
                 var name = optionNames[i],
                     args = {

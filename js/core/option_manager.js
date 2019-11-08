@@ -27,7 +27,6 @@ export class OptionManager {
         this.cachedGetters = {};
         this.cachedSetters = {};
 
-        this._rulesAppliedOptions = null;
         this._rules = [];
     }
 
@@ -37,7 +36,9 @@ export class OptionManager {
 
         rules.forEach(({ device, options }) => {
             const deviceFilter = device || {};
-            const match = isFunction(deviceFilter) ? deviceFilter(currentDevice) : deviceMatch(currentDevice, deviceFilter);
+            const match = isFunction(deviceFilter) ?
+                deviceFilter(currentDevice) :
+                deviceMatch(currentDevice, deviceFilter);
 
             if(match) {
                 extend(opts, options);
@@ -47,11 +48,38 @@ export class OptionManager {
         return opts;
     }
 
+    get _deprecateNames() {
+        if(!this._cachedDeprecateNames.length) {
+            for(const optionName in this._deprecated) {
+                this._cachedDeprecateNames.push(optionName);
+            }
+        }
+
+        return this._cachedDeprecateNames;
+    }
+
+    get _initial() {
+        if(!this._initialOptions) {
+            const rulesOptions = this._getByRules(this.silent('defaultOptionsRules'));
+
+            this._initialOptions = this._default;
+            this._setByReference(this._initialOptions, rulesOptions);
+        }
+
+        return this._initialOptions;
+    }
+
+    set _initial(value) {
+        this._initialOptions = value;
+    }
+
     _clearField(options, name) {
         delete options[name];
 
         const previousFieldName = getParentName(name);
-        const fieldObject = previousFieldName ? this._get(options, previousFieldName, false) : options;
+        const fieldObject = previousFieldName ?
+            this._get(options, previousFieldName, false) :
+            options;
 
         if(fieldObject) {
             delete fieldObject[getFieldName(name)];
@@ -75,26 +103,17 @@ export class OptionManager {
     }
 
     _normalizeName(name) {
-        if(!name) {
-            return;
-        }
+        if(name) {
+            for(let deprecateName of this._deprecateNames) {
+                if(deprecateName === name) {
+                    const deprecate = this._deprecated[name];
 
-        if(!this._cachedDeprecateNames.length) {
-            for(const optionName in this._deprecated) {
-                this._cachedDeprecateNames.push(optionName);
-            }
-        }
+                    if(deprecate) {
+                        this._notifyDeprecated(name);
 
-        for(let cachedName of this._cachedDeprecateNames) {
-            if(cachedName === name) {
-                const deprecate = this._deprecated[name];
-
-                if(deprecate) {
-                    this._notifyDeprecated(name);
-                    name = deprecate.alias || name;
+                        return deprecate.alias || name;
+                    }
                 }
-
-                break;
             }
         }
 
@@ -115,12 +134,12 @@ export class OptionManager {
         if(silent) {
             this._setByReference(this._options, options);
         } else {
-            for(const optionName in options) {
-                this._prepareRelevantNames(options, optionName, options[optionName]);
+            for(const name in options) {
+                this._prepareRelevantNames(options, name, options[name]);
             }
 
-            for(const optionName in options) {
-                this._setPreparedValue(optionName, options[optionName], merge);
+            for(const name in options) {
+                this._setPreparedValue(name, options[name], merge);
             }
         }
     }
@@ -203,6 +222,12 @@ export class OptionManager {
         this._deprecatedCallbacks.empty();
     }
 
+    getAliasesByName(name) {
+        return Object.keys(this._deprecated).filter(
+            aliasName => name === this._deprecated[aliasName].alias
+        );
+    }
+
     isDeprecated(name) {
         return Object.prototype.hasOwnProperty.call(this._deprecated, name);
     }
@@ -212,20 +237,15 @@ export class OptionManager {
         const initialValue = this.initial(name);
         const areFunctions = isFunction(value) && isFunction(initialValue);
 
-        return areFunctions ? value.toString() === initialValue.toString() : equalByValue(value, initialValue);
+        return areFunctions ?
+            value.toString() === initialValue.toString() :
+            equalByValue(value, initialValue);
     }
 
     initial(name) {
-        if(!this._rulesAppliedOptions) {
-            const rulesOptions = this._getByRules(this._options.defaultOptionsRules);
-
-            this._rulesAppliedOptions = this._default;
-            this._setByReference(this._rulesAppliedOptions, rulesOptions);
-        }
-
         const fullPath = name.replace(/\[([^\]])\]/g, '.$1').split('.');
         const value = fullPath.reduce(
-            (value, field) => value ? value[field] : this._rulesAppliedOptions[field], null
+            (value, field) => value ? value[field] : this._initial[field], null
         );
 
         return isObject(value) ? clone(value) : value;
