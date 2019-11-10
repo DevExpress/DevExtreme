@@ -360,7 +360,7 @@
 		"dxFileManager-editingUploadMultipleItemsSuccessMessage": "Uploaded {0} items to {1}",
 		"dxFileManager-editingUploadSingleItemErrorMessage": "Item wasn't uploaded",
 		"dxFileManager-editingUploadMultipleItemsErrorMessage": "{0} items weren't uploaded",
-		"dxFileManager-editingUploadCanceledMessage": "Cancelled",		
+		"dxFileManager-editingUploadCanceledMessage": "Canceled",		
 
 		"dxFileManager-listDetailsColumnCaptionName": "Name",
 		"dxFileManager-listDetailsColumnCaptionDateModified": "Date Modified",
@@ -371,7 +371,7 @@
 
 		"dxFileManager-notificationProgressPanelTitle": "Progress",
 		"dxFileManager-notificationProgressPanelEmptyListText": "No operations",
-		"dxFileManager-notificationProgressPanelOperationCanceled": "Cancelled",
+		"dxFileManager-notificationProgressPanelOperationCanceled": "Canceled",
 
         "dxDiagram-categoryGeneral": "General",
         "dxDiagram-categoryFlowchart": "Flowchart",
