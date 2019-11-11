@@ -382,7 +382,8 @@ var baseFixedColumns = {
         var columns,
             visibleColumns = this._columnsController.getVisibleColumns(),
             hasVisibleWidth = widths && widths.length && isDefined(visibleColumns[0].visibleWidth),
-            useVisibleColumns = false;
+            useVisibleColumns = false,
+            rowsView = this.component.getView("rowsView");
 
         this.callBase.apply(this, arguments);
 
@@ -399,7 +400,8 @@ var baseFixedColumns = {
             }
             this.callBase(widths, this._fixedTableElement, columns, true);
         }
-        if(hasVisibleWidth) {
+
+        if(hasVisibleWidth || rowsView._needSynchronizeRows()) {
             this.synchronizeRows();
         }
     },
@@ -862,6 +864,14 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _afterRowPrepared: function(e) {
         if(this._isFixedTableRendering) return;
         this.callBase(e);
+    },
+
+    _needSynchronizeRows: function() {
+        if(this._fixedTableElement) {
+            const fixedTableHeight = Math.round(this._fixedTableElement.height());
+            const tableHeight = Math.round(this._tableElement.height());
+            return fixedTableHeight !== tableHeight;
+        }
     },
 
     dispose: function() {
