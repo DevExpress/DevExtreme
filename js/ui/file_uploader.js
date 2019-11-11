@@ -1165,6 +1165,14 @@ class FileUploader extends Editor {
     _clean() {
         this._$fileInput.detach();
         delete this._$filesContainer;
+
+        if(this._files) {
+            this._files.forEach(file => {
+                file.$file = null;
+                file.$statusMessage = null;
+            });
+        }
+
         super._clean();
     }
 
