@@ -373,7 +373,7 @@ var DropDownList = DropDownEditor.inherit({
         var customContainer = this.option("dropDownOptions.container");
         var $container = customContainer && $(customContainer);
 
-        if($container && !typeUtils.isWindow($container.get(0))) {
+        if($container && $container.length && !typeUtils.isWindow($container.get(0))) {
             var $containerWithParents = [].slice.call($container.parents());
             $containerWithParents.unshift($container.get(0));
 
