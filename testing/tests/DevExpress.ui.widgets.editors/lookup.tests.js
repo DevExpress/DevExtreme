@@ -2253,7 +2253,7 @@ QUnit.test("popup height should be stretch when data items are loaded asynchrono
 });
 
 QUnit.test("popover height should be recalculated after async datasource load(T655040)", (assert) => {
-    if(browser.mozilla && parseFloat(browser.version) < 71) {
+    if(browser.mozilla && parseFloat(browser.version) < 71 || devices.real().deviceType !== "desktop") {
         assert.expect(0);
         return;
     }
