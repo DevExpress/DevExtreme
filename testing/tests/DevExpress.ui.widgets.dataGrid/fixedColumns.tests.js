@@ -3219,3 +3219,18 @@ QUnit.test("The vertical position of the fixed table should be correct after scr
     $fixedTableElement = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     assert.strictEqual(translator.getTranslate($fixedTableElement).y, 0, "scroll top");
 });
+
+QUnit.test("Test rowsView._needSynchronizeRows method (T830739)", function(assert) {
+    // arrange
+    const $testElement = $("#container");
+
+    this.setupDataGrid();
+    this.rowsView.render($testElement);
+
+    // assert
+    assert.notOk(this.rowsView._needSynchronizeRows());
+
+    // act, assert
+    this.rowsView._fixedTableElement.height = () => 50;
+    assert.ok(this.rowsView._needSynchronizeRows());
+});
