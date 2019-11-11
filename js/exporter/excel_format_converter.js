@@ -1,39 +1,40 @@
-var typeUtils = require("../core/utils/type"),
-    stringUtils = require("../core/utils/string"),
-    numberFormatter = require("../localization/number"),
-    dateLocalization = require("../localization/date"),
-    getDateLDMLFormat = require("../localization/ldml/date.format").getFormat,
-    getLanguageID = require("../localization/language_codes").getLanguageId,
-    UNSUPPORTED_FORMAT_MAPPING = {
-        quarter: "shortDate",
-        quarterAndYear: "shortDate",
-        minute: "longTime",
-        millisecond: "longTime"
-    },
-    ARABIC_ZERO_CODE = 1632,
-    DEFINED_NUMBER_FORMTATS = {
-        thousands: "#,##0{0},&quot;K&quot;",
-        millions: "#,##0{0},,&quot;M&quot;",
-        billions: "#,##0{0},,,&quot;B&quot;",
-        trillions: "#,##0{0},,,,&quot;T&quot;",
-        percent: "0{0}%",
-        decimal: "#{0}",
-        "fixedpoint": "#,##0{0}",
-        exponential: "0{0}E+00",
-        currency: " "
-    };
+import typeUtils from "../core/utils/type";
+import stringUtils from "../core/utils/string";
+import numberFormatter from "../localization/number";
+import dateLocalization from "../localization/date";
+import { getFormat } from "../localization/ldml/date.format";
+import { getLanguageId } from "../localization/language_codes";
 
-var PERIOD_REGEXP = /a+/g,
-    DAY_REGEXP = /E/g,
-    DO_REGEXP = /dE+/g,
-    STANDALONE_MONTH_REGEXP = /L/g,
-    HOUR_REGEXP = /h/g,
-    SLASH_REGEXP = /\//g,
-    SQUARE_OPEN_BRACKET_REGEXP = /\[/g,
-    SQUARE_CLOSE_BRACKET_REGEXP = /]/g,
-    ANY_REGEXP = /./g;
+// const UNSUPPORTED_FORMAT_MAPPING = { 
+//     quarter: "shortDate",
+//     quarterAndYear: "shortDate",
+//     minute: "longTime",
+//     millisecond: "longTime"
+// };
+const ARABIC_ZERO_CODE = 1632;
+const DEFINED_NUMBER_FORMTATS = {
+    thousands: "#,##0{0},&quot;K&quot;",
+    millions: "#,##0{0},,&quot;M&quot;",
+    billions: "#,##0{0},,,&quot;B&quot;",
+    trillions: "#,##0{0},,,,&quot;T&quot;",
+    percent: "0{0}%",
+    decimal: "#{0}",
+    "fixedpoint": "#,##0{0}",
+    exponential: "0{0}E+00",
+    currency: " "
+};
 
-require("../localization/currency");
+const PERIOD_REGEXP = /a+/g;
+const DAY_REGEXP = /E/g;
+const DO_REGEXP = /dE+/g;
+const STANDALONE_MONTH_REGEXP = /L/g;
+const HOUR_REGEXP = /h/g;
+const SLASH_REGEXP = /\//g;
+const SQUARE_OPEN_BRACKET_REGEXP = /\[/g;
+const SQUARE_CLOSE_BRACKET_REGEXP = /]/g;
+const ANY_REGEXP = /./g;
+
+import "../localization/currency";
 
 var excelFormatConverter = module.exports = {
     _applyPrecision: function(format, precision) {
@@ -86,11 +87,11 @@ var excelFormatConverter = module.exports = {
     },
 
     _convertDateFormat: function(format) {
-        format = UNSUPPORTED_FORMAT_MAPPING[format && format.type || format] || format;
+        // format = UNSUPPORTED_FORMAT_MAPPING[format && format.type || format] || format;
 
         var that = this,
             formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || "").toString(),
-            result = getDateLDMLFormat(function(value) {
+            result = getFormat(function(value) {
                 return dateLocalization.format(value, format);
             });
 
@@ -103,7 +104,7 @@ var excelFormatConverter = module.exports = {
     },
 
     _getLanguageInfo: function(defaultPattern) {
-        var languageID = getLanguageID(),
+        var languageID = getLanguageId(),
             languageIDStr = languageID ? languageID.toString(16) : "",
             languageInfo = "";
 

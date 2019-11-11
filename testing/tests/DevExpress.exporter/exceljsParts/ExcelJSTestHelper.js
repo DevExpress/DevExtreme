@@ -158,12 +158,12 @@ class ExcelJSTestHelper {
 
     checkCellFormat(cellsArray) {
         this._iterateCells(cellsArray, (cellArgs) => {
-            const { excelCell } = cellArgs;
-            const { row, column } = excelCell.address;
+            const { address, dataType, type, numberFormat } = cellArgs.excelCell;
+            const { row, column } = address;
 
-            assert.deepEqual(typeof this.worksheet.getCell(row, column).value, excelCell.dataType, `typeof this.worksheet.getCell(${row}, ${column}).value`);
-            assert.deepEqual(this.worksheet.getCell(row, column).type, excelCell.type, `this.worksheet.getCell(${row}, ${column}).type`);
-            assert.deepEqual(this.worksheet.getCell(row, column).numFmt, excelCell.numberFormat, `this.worksheet.getCell(${row}, ${column}).numFmt`);
+            assert.deepEqual(typeof this.worksheet.getCell(row, column).value, dataType, `typeof this.worksheet.getCell(${row}, ${column}).value`);
+            assert.deepEqual(this.worksheet.getCell(row, column).type, type, `this.worksheet.getCell(${row}, ${column}).type`);
+            assert.deepEqual(this.worksheet.getCell(row, column).numFmt, numberFormat, `this.worksheet.getCell(${row}, ${column}).numFmt`);
         });
     }
 }

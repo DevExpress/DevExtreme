@@ -1719,69 +1719,165 @@ QUnit.module("API", moduleConfig, () => {
             QUnit.test("Data - columns.dataType: date" + testCaption, (assert) => {
                 const done = assert.async();
                 const date = new Date(2019, 3, 12);
-                const ds = [{ f1: date }];
+                const ds = [{ f1: undefined, f2: null, f3: date, f4: date }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
-                    columns: [{
-                        dataField: "f1",
-                        dataType: "date"
-                    }],
+                    columns: [
+                        { dataField: "f1", dataType: "date" },
+                        { dataField: "f2", dataType: "date" },
+                        { dataField: "f3", dataType: "date" },
+                        { dataField: "f4", dataType: "date" }
+                    ],
                     dataSource: ds,
+                    showColumnHeaders: false,
                     loadingTimeout: undefined
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
-                ], [
-                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } }
+                    { excelCell: { value: "", type: ExcelJS.ValueType.String, dataType: "string", numberFormat: "[$-9]M\\/d\\/yyyy", alignment: alignLeftNoWrap }, gridCell: { value: ds[0].f1, rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
-                    helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 4 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 3 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).type`);
-                    helper.checkOutlineLevel([0, 0], topLeft.row);
-                    helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                    helper.checkOutlineLevel([0], topLeft.row);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 4 }, topLeft);
                     done();
                 });
             });
 
-            QUnit.test("Data - columns.dataType: dateTime" + testCaption, (assert) => {
+            QUnit.test("Data - columns.dataType: date, col_1.format: () => {}, col_2.format: { type: date, formatter: () => {}}" + testCaption, (assert) => {
                 const done = assert.async();
-                const dateTime = new Date(2019, 3, 12, 12, 15);
-                const ds = [{ f1: dateTime }];
+                const date = new Date(2019, 3, 12);
+                const ds = [{ f1: date }];
                 const dataGrid = $("#dataGrid").dxDataGrid({
-                    columns: [{
-                        dataField: "f1",
-                        dataType: "datetime"
-                    }],
+                    columns: [
+                        { dataField: "f1", dataType: "date",
+                            format: (date) => date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+                        },
+                        { dataField: "f1", dataType: "date",
+                            format: {
+                                type: 'date',
+                                formatter: (date) => date.getDate() + "+" + (date.getMonth() + 1) + "+" + date.getFullYear(),
+                            }
+                        }
+                    ],
                     dataSource: ds,
+                    showColumnHeaders: false,
                     loadingTimeout: undefined
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: "F1", alignment: alignCenterWrap, font: { bold: true } }, gridCell: { rowType: "header", column: dataGrid.columnOption(0) } }
-                ], [
-                    { excelCell: { value: ds[0].f1, alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } }
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]d-M-yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]d+M+yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
 
                 exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
-                    helper.checkRowAndColumnCount({ row: 2, column: 1 }, { row: 2, column: 1 }, topLeft);
-                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row + 1, column: topLeft.column }, { x: 0, y: topLeft.row });
+                    helper.checkRowAndColumnCount({ row: 1, column: 2 }, { row: 1, column: 2 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 1 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
                     helper.checkFont(expectedCells);
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    assert.equal(this.worksheet.getCell(topLeft.row + 1, topLeft.column).type, ExcelJS.ValueType.Date, `this.worksheet.getCell(${topLeft.row + 1}, ${topLeft.column}).value`);
-                    helper.checkOutlineLevel([0, 0], topLeft.row);
-                    helper.checkCellsRange(cellsRange, { row: 2, column: 1 }, topLeft);
+                    helper.checkOutlineLevel([0], topLeft.row);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 2 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - columns.dataType: date, columns.format: [millisecond, second, minute, hour, day, month, year, quarter, monthAndDay, monthAndYear, quarterAndYear, shortDate, shortTime, longDateLongTime, shotDateShortTime]" + testCaption, (assert) => {
+                const done = assert.async();
+                const dateFormats = ["millisecond", "second", "minute", "hour", "day", "month", "year", "quarter", "monthAndDay", "monthAndYear", "quarterAndYear", "shortDate", "shortTime", "longDateLongTime", "shotDateShortTime"];
+                const ds = [{ f1: new Date(2019, 9, 9, 9, 9, 9, 9) }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: dateFormats.map(format => { return { dataField: "f1", dataType: "datetime", format: format }; }),
+                    dataSource: ds,
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]SSS", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]ss", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]mm", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]HH", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]d", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]MMMM", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(5) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(6) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]\\QM", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(7) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]MMMM d", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(8) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]MMMM yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(9) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]\\QM yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(10) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(11) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]H:mm AM/PM", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(12) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]dddd, MMMM d, yyyy, H:mm:ss AM/PM", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(13) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]ssAM/PMSS\\o\\r\\t\\T\\im\\e", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(14) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 15 }, { row: 1, column: 15 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 14 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0], topLeft.row);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 15 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - columns.dataType: datetime" + testCaption, (assert) => {
+                const done = assert.async();
+                const dateTime = new Date(2019, 3, 12, 12, 15);
+                const ds = [{ f1: undefined, f2: null, f3: dateTime, f4: dateTime }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", dataType: "datetime" },
+                        { dataField: "f2", dataType: "datetime" },
+                        { dataField: "f3", dataType: "datetime" },
+                        { dataField: "f4", dataType: "datetime" }
+                    ],
+                    dataSource: ds,
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "", type: ExcelJS.ValueType.String, dataType: "string", numberFormat: "[$-9]M\\/d\\/yyyy, H:mm AM/PM", alignment: alignLeftNoWrap }, gridCell: { value: ds[0].f1, rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy, H:mm AM/PM", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy, H:mm AM/PM", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 3 }, { row: 1, column: 4 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 3 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0], topLeft.row);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 4 }, topLeft);
                     done();
                 });
             });
@@ -1887,7 +1983,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellFormat(expectedCells); // type, exceljstype, numFmt
+                    helper.checkCellFormat(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
                     done();
                 });
@@ -1925,7 +2021,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellFormat(expectedCells); // type, exceljstype, numFmt
+                    helper.checkCellFormat(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
                     done();
                 });
@@ -1963,7 +2059,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellFormat(expectedCells); // type, exceljstype, numFmt
+                    helper.checkCellFormat(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
                     done();
                 });
@@ -2001,7 +2097,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellFormat(expectedCells); // type, exceljstype, numFmt
+                    helper.checkCellFormat(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
                     done();
                 });
@@ -2040,7 +2136,7 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellFormat(expectedCells); // type, exceljstype, numFmt
+                    helper.checkCellFormat(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
                     done();
                 });
@@ -2064,11 +2160,11 @@ QUnit.module("API", moduleConfig, () => {
                 }).dxDataGrid("instance");
 
                 const expectedCells = [[
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "0.000E+00", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "0E+00", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "0.0E+00", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "0.0E+00", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
-                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "0.000000E+00", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.000,\"K\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0,\"K\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0,\"K\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.0,\"K\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.000000,\"K\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
                 ]];
 
                 helper._extendExpectedCells(expectedCells, topLeft);
@@ -2078,8 +2174,202 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellFormat(expectedCells); // type, exceljstype, numFmt
+                    helper.checkCellFormat(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - columns.dataType: number, columns.format.type: 'millions'" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: 1 }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    columns: [
+                        { dataField: "f1", dataType: "number", format: { type: "millions", precision: 3 } },
+                        { dataField: "f1", dataType: "number", format: { type: "millions", precision: 0 } },
+                        { dataField: "f1", dataType: "number", format: { type: "millions" } },
+                        { dataField: "f1", dataType: "number", format: { type: "millions", precision: 1 } },
+                        { dataField: "f1", dataType: "number", format: { type: "millions", precision: 6 } },
+                    ],
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.000,,\"M\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0,,\"M\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0,,\"M\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.0,,\"M\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.000000,,\"M\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - columns.dataType: number, columns.format.type: 'billions'" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: 1 }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    columns: [
+                        { dataField: "f1", dataType: "number", format: { type: "billions", precision: 3 } },
+                        { dataField: "f1", dataType: "number", format: { type: "billions", precision: 0 } },
+                        { dataField: "f1", dataType: "number", format: { type: "billions" } },
+                        { dataField: "f1", dataType: "number", format: { type: "billions", precision: 1 } },
+                        { dataField: "f1", dataType: "number", format: { type: "billions", precision: 6 } },
+                    ],
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.000,,,\"B\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0,,,\"B\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0,,,\"B\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.0,,,\"B\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.000000,,,\"B\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - columns.dataType: number, columns.format.type: 'trillions'" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: 1 }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    columns: [
+                        { dataField: "f1", dataType: "number", format: { type: "trillions", precision: 3 } },
+                        { dataField: "f1", dataType: "number", format: { type: "trillions", precision: 0 } },
+                        { dataField: "f1", dataType: "number", format: { type: "trillions" } },
+                        { dataField: "f1", dataType: "number", format: { type: "trillions", precision: 1 } },
+                        { dataField: "f1", dataType: "number", format: { type: "trillions", precision: 6 } },
+                    ],
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.000,,,,\"T\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0,,,,\"T\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0,,,,\"T\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.0,,,,\"T\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "#,##0.000000,,,,\"T\"", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 5 }, topLeft);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - columns.dataType: number, columns.format.type: 'currency'" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: undefined, f2: null, f3: 0, f4: 1, f5: 2, f6: 2 }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    columns: [
+                        { dataField: "f1", dataType: "number", format: { type: "currency" } },
+                        { dataField: "f2", dataType: "number", format: { type: "currency" } },
+                        { dataField: "f3", dataType: "number", format: { type: "currency" } },
+                        { dataField: "f4", dataType: "number", format: { type: "currency" } },
+                        { dataField: "f5", dataType: "number", format: { type: "currency" } },
+                        { dataField: "f6", dataType: "number", format: { type: "currency" } }
+                    ],
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: "", type: ExcelJS.ValueType.String, dataType: "string", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { value: undefined, rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Null, dataType: "object" }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f4, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f5, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } },
+                    { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(5) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 5 }, { row: 1, column: 6 }, topLeft);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - columns.dataType: number, columns.format.type: 'currency' with presicion" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: 1 }];
+
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    dataSource: ds,
+                    columns: [
+                        { dataField: "f1", dataType: "number", format: { type: "currency", precision: 2 } },
+                        { dataField: "f1", dataType: "number", format: { type: "currency", precision: 4 } },
+                        { dataField: "f1", dataType: "number", format: { type: "currency", precision: 0 } },
+                        { dataField: "f1", dataType: "number", format: { type: "currency" } },
+                        { dataField: "f1", dataType: "number", format: { type: "currency", precision: 1 } },
+                        { dataField: "f1", dataType: "number", format: { type: "currency", precision: 5 } },
+                    ],
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0.00_);\\($#,##0.00\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0.0000_);\\($#,##0.0000\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0_);\\($#,##0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0.0_);\\($#,##0.0\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } },
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.Number, dataType: "number", numberFormat: "$#,##0.00000_);\\($#,##0.00000\\)", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(5) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 6 }, topLeft);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
                     done();
                 });
             });
@@ -2117,8 +2407,64 @@ QUnit.module("API", moduleConfig, () => {
                     helper.checkAlignment(expectedCells);
                     helper.checkValues(expectedCells);
                     helper.checkMergeCells(expectedCells, topLeft);
-                    helper.checkCellFormat(expectedCells); // type, exceljstype, numFmt
+                    helper.checkCellFormat(expectedCells);
                     helper.checkCellsRange(cellsRange, { row: 1, column: 5 }, topLeft);
+                    done();
+                });
+            });
+
+            QUnit.test("Data - columns.dataType: [string, number, date, boolean, lookup, datetime]" + testCaption, (assert) => {
+                const done = assert.async();
+                const ds = [{ f1: 'str1', f2: 1, f3: new Date(2019, 3, 12), f4: true, f5: 1, f6: new Date(2019, 3, 12, 16, 10) }];
+                const dataGrid = $("#dataGrid").dxDataGrid({
+                    columns: [
+                        { dataField: "f1", dataType: "string" },
+                        { dataField: "f2", dataType: "number" },
+                        { dataField: "f3", dataType: "date" },
+                        { dataField: "f4", dataType: "boolean" },
+                        {
+                            dataField: "f5", dataType: "object",
+                            lookup: {
+                                dataSource: {
+                                    store: {
+                                        type: 'array',
+                                        data: [ { id: 1, name: 'name1' }, { id: 2, name: 'name2' }]
+                                    },
+                                    key: 'id'
+                                },
+                                valueExpr: 'id',
+                                displayExpr: 'name'
+                            }
+                        },
+                        { dataField: "f6", dataType: "datetime" }
+                    ],
+                    dataSource: ds,
+                    showColumnHeaders: false,
+                    loadingTimeout: undefined
+                }).dxDataGrid("instance");
+
+                const expectedCells = [[
+                    { excelCell: { value: ds[0].f1, type: ExcelJS.ValueType.String, dataType: "string", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: ds[0].f2, type: ExcelJS.ValueType.Number, dataType: "number", alignment: alignRightNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: ds[0].f3, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(2) } },
+                    { excelCell: { value: String(ds[0].f4), type: ExcelJS.ValueType.String, dataType: "string", alignment: alignCenterNoWrap }, gridCell: { value: ds[0].f4, rowType: "data", data: ds[0], column: dataGrid.columnOption(3) } },
+                    { excelCell: { value: "name1", type: ExcelJS.ValueType.String, dataType: "string", alignment: alignLeftNoWrap }, gridCell: { value: ds[0].f5, rowType: "data", data: ds[0], column: dataGrid.columnOption(4) } },
+                    { excelCell: { value: ds[0].f6, type: ExcelJS.ValueType.Date, dataType: "object", numberFormat: "[$-9]M\\/d\\/yyyy, H:mm AM/PM", alignment: alignLeftNoWrap }, gridCell: { rowType: "data", data: ds[0], column: dataGrid.columnOption(5) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+
+                exportDataGrid(getOptions(dataGrid, expectedCells)).then((cellsRange) => {
+                    helper.checkRowAndColumnCount({ row: 1, column: 6 }, { row: 1, column: 6 }, topLeft);
+                    helper.checkAutoFilter(excelFilterEnabled, topLeft, { row: topLeft.row, column: topLeft.column + 5 }, { x: 0, y: topLeft.row === 1 ? 0 : 1 });
+                    helper.checkFont(expectedCells);
+                    helper.checkAlignment(expectedCells);
+                    helper.checkValues(expectedCells);
+                    helper.checkMergeCells(expectedCells, topLeft);
+                    helper.checkOutlineLevel([0], topLeft.row);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellFormat(expectedCells);
+                    helper.checkCellsRange(cellsRange, { row: 1, column: 6 }, topLeft);
                     done();
                 });
             });

@@ -92,6 +92,9 @@ function _exportRow(rowIndex, cellCount, row, startColumnIndex, dataProvider, cu
 
             // format
             let numberFormat = _tryConvertToExcelNumberFormat(format, dataType);
+            if(isDefined(numberFormat)) {
+                numberFormat = numberFormat.replace(/&quot;/g, '"');
+            }
             // console.log('gridCell :', gridCell);
             // console.log('format :', format);
             // console.log('format :', dataType);
