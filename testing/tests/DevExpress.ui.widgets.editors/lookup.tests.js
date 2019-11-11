@@ -2258,39 +2258,47 @@ QUnit.test("popover height should be recalculated after async datasource load(T6
         return;
     }
 
-    this.clock = sinon.useFakeTimers();
-    const items = ["item 1", "item 2", "item 3", "item 4"];
-    const instance = $("#lookup").dxLookup({
-        dataSource: new CustomStore({
-            load: function() {
-                var deferred = $.Deferred();
+    const $rootLookup = $("<div>").appendTo("body");
 
-                setTimeout(function() {
-                    deferred.resolve(items);
-                }, 500);
+    try {
+        this.clock = sinon.useFakeTimers();
+        const items = ["item 1", "item 2", "item 3", "item 4"];
+        const instance = $rootLookup.dxLookup({
+            dataSource: new CustomStore({
+                load: function() {
+                    var deferred = $.Deferred();
 
-                return deferred.promise();
+                    setTimeout(function() {
+                        deferred.resolve(items);
+                    }, 500);
+
+                    return deferred.promise();
+                },
+                byKey: function(key) {
+                    var deferred = new $.Deferred();
+                    setTimeout(function() {
+                        deferred.resolve(items[0]);
+                    }, 500);
+                    return deferred.promise();
+                }
+            }),
+            width: 300,
+            searchEnabled: false,
+            dropDownOptions: {
+                container: $("body")
             },
-            byKey: function(key) {
-                var deferred = new $.Deferred();
-                setTimeout(function() {
-                    deferred.resolve(items[0]);
-                }, 500);
-                return deferred.promise();
-            }
-        }),
-        width: 300,
-        searchEnabled: false,
-        usePopover: true
-    }).dxLookup("instance");
+            target: $("body"),
+            position: "center",
+            usePopover: true,
+            opened: true
+        }).dxLookup("instance");
 
-
-    instance.open();
-
-    this.clock.tick(1000);
-
-    assert.ok($(instance.content()).height() >= $(instance.content()).find(".dx-scrollable-content").height());
-    this.clock.restore();
+        this.clock.tick(1000);
+        assert.ok($(instance.content()).height() >= $(instance.content()).find(".dx-scrollable-content").height(), $(instance.content()).height() + " >= " + $(instance.content()).find(".dx-scrollable-content").height());
+    } finally {
+        $rootLookup.remove();
+        this.clock.restore();
+    }
 });
 
 QUnit.module("list options", {
