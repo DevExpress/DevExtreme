@@ -2258,13 +2258,12 @@ QUnit.test("popover height should be recalculated after async datasource load(T6
         return;
     }
 
-    const $rootLookup = $("<div>").attr("id", "root-lookup").appendTo("body");
-    let instance;
+    const $rootLookup = $("<div>").appendTo("body");
 
     try {
         this.clock = sinon.useFakeTimers();
         const items = ["item 1", "item 2", "item 3", "item 4"];
-        instance = $rootLookup.dxLookup({
+        const instance = $rootLookup.dxLookup({
             dataSource: new CustomStore({
                 load: function() {
                     var deferred = $.Deferred();
@@ -2297,7 +2296,6 @@ QUnit.test("popover height should be recalculated after async datasource load(T6
         this.clock.tick(1000);
         assert.ok($(instance.content()).height() >= $(instance.content()).find(".dx-scrollable-content").height(), $(instance.content()).height() + " >= " + $(instance.content()).find(".dx-scrollable-content").height());
     } finally {
-        instance.dispose();
         $rootLookup.remove();
         this.clock.restore();
     }
