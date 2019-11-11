@@ -3378,10 +3378,6 @@ declare module DevExpress.ui {
         field(): DevExpress.core.dxElement;
         /** @name dxDropDownEditor.open() */
         open(): void;
-        /** @name dxDropDownEditor.reset() */
-        reset(): void;
-        /** @name Component.resetOption(optionName) */
-        resetOption(optionName: string): void;
     }
     /** @name dxDropDownList.Options */
     export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
@@ -4971,10 +4967,6 @@ declare module DevExpress.ui {
     export class dxRangeSlider extends dxSliderBase {
         constructor(element: Element, options?: dxRangeSliderOptions)
         constructor(element: JQuery, options?: dxRangeSliderOptions)
-        /** @name dxRangeSlider.reset() */
-        reset(): void;
-        /** @name Component.resetOption(optionName) */
-        resetOption(optionName: string): void;
     }
     /** @name dxRecurrenceEditor.Options */
     export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
