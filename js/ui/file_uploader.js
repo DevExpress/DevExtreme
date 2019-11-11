@@ -1145,6 +1145,14 @@ var FileUploader = Editor.inherit({
     _clean: function() {
         this._$fileInput.detach();
         delete this._$filesContainer;
+
+        if(this._files) {
+            this._files.forEach(file => {
+                file.$file = null;
+                file.$statusMessage = null;
+            });
+        }
+
         this.callBase.apply(this, arguments);
     },
 
