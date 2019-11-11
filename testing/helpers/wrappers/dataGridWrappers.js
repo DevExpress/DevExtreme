@@ -16,7 +16,7 @@ const DATA_ROW_CLASS = "dx-data-row";
 const TREELIST_PREFIX = "dx-treelist";
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const NEW_ROW_CLASS = "dx-row-inserted";
-const FIXED_TABLE_CLASS = "dx-datagrid-table-fixed";
+const FIXED_CONTENT_CLASS = "dx-datagrid-content-fixed";
 
 class GridWrapper {
     constructor(containerSelector, widgetPrefix) {
@@ -71,7 +71,7 @@ export class RowsViewWrapper extends GridElement {
     }
 
     getVirtualRowElement() {
-        return this.getContainer().find(`:not(.${FIXED_TABLE_CLASS}) .dx-virtual-row`);
+        return this.getContainer().find(`:not(.${FIXED_CONTENT_CLASS}) .dx-virtual-row`);
     }
 
     getVirtualCell(columnIndex) {
@@ -79,15 +79,15 @@ export class RowsViewWrapper extends GridElement {
     }
 
     getRowElement(rowIndex) {
-        return this.getElement().find(`:not(.${FIXED_TABLE_CLASS}) .dx-row`).eq(rowIndex);
+        return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .dx-row`).eq(rowIndex);
     }
 
     getFixedDataRowElement(rowIndex) {
-        return this.getElement().find(`.${FIXED_TABLE_CLASS} .${DATA_ROW_CLASS}`).eq(rowIndex);
+        return this.getElement().find(`.${FIXED_CONTENT_CLASS} .${DATA_ROW_CLASS}`).eq(rowIndex);
     }
 
     getDataRowElement(rowIndex) {
-        return this.getElement().find(`:not(.${FIXED_TABLE_CLASS}) .${DATA_ROW_CLASS}`).eq(rowIndex);
+        return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .${DATA_ROW_CLASS}`).eq(rowIndex);
     }
 
     getDataCellElement(rowIndex, columnIndex) {
@@ -99,7 +99,7 @@ export class RowsViewWrapper extends GridElement {
     }
 
     getDataRowElementCount() {
-        return this.getElement().find(`:not(.${FIXED_TABLE_CLASS}) .${DATA_ROW_CLASS}`).length;
+        return this.getElement().find(`:not(.${FIXED_CONTENT_CLASS}) .${DATA_ROW_CLASS}`).length;
     }
 
     getRowAdaptiveElement(rowIndex) {
