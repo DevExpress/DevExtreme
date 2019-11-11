@@ -377,7 +377,7 @@ const TextEditorBase = Editor.inherit({
 
         if(ALLOWED_STYLE_CLASSES.indexOf(stylingModeClass) === -1) {
             const defaultOptionValue = this._getDefaultOptions()[optionName];
-            const platformOptionValue = this.initialOption(optionName);
+            const platformOptionValue = this._convertRulesToOptions(this._defaultOptionsRules())[optionName];
             stylingModeClass = TEXTEDITOR_STYLING_MODE_PREFIX + (platformOptionValue || defaultOptionValue);
         }
 

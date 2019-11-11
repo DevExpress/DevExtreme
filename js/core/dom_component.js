@@ -13,7 +13,6 @@ import { inArray } from "./utils/array";
 import publicComponentUtils from "./utils/public_component";
 import dataUtils from "./element_data";
 import Component from "./component";
-import OptionManager from "../core/option_manager";
 
 const { abstract } = Component;
 
@@ -118,7 +117,7 @@ var DOMComponent = Component.inherit({
 
     _isInitialOptionValue: function(name) {
         var isCustomOption = this.constructor._classCustomRules
-            && Object.prototype.hasOwnProperty.call(OptionManager.convertRulesToOptions(this.constructor._classCustomRules), name);
+            && Object.prototype.hasOwnProperty.call(this._convertRulesToOptions(this.constructor._classCustomRules), name);
 
         return !isCustomOption && this.callBase(name);
     },
