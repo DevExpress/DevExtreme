@@ -1198,6 +1198,26 @@ QUnit.module("popup", moduleConfig, () => {
 
         assert.strictEqual(popup.option("autoResizeEnabled"), false, "autoResizeEnabled should have false value");
     });
+
+    QUnit.test("no exception when 'container' is empty jQuery set (T831152)", assert => {
+        let exception = null;
+
+        try {
+
+            $("#dropDownList").dxDropDownList({
+                items: ["1", "2", "3"],
+                opened: true,
+                dropDownOptions: {
+                    container: $()
+                }
+            });
+
+        } catch(e) {
+            exception = e;
+        } finally {
+            assert.strictEqual(exception, null);
+        }
+    });
 });
 
 QUnit.module("dataSource integration", moduleConfig, () => {
