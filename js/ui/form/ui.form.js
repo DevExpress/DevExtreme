@@ -26,7 +26,7 @@ import {
     createItemPathByIndex,
     getFullOptionName,
     getOptionNameFromFullName,
-    getTabPathFromFullPath,
+    tryGetTabPath,
     getTextWithoutSpaces,
     isExpectedItem,
     isFullPathContainsTabs
@@ -1319,7 +1319,7 @@ const Form = Widget.inherit({
         const contentReadyHandler = e => {
             e.component.off("contentReady", contentReadyHandler);
             if(isFullPathContainsTabs(path)) {
-                const tabPath = getTabPathFromFullPath(path);
+                const tabPath = tryGetTabPath(path);
                 const tabLayoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(tabPath);
                 this._alignLabelsInColumn({
                     items: tabLayoutManager.option("items"),

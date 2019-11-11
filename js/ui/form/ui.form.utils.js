@@ -21,7 +21,7 @@ const getOptionNameFromFullName = fullName => {
     return parts[parts.length - 1].replace(/\[\d+]/, "");
 };
 
-const getTabPathFromFullPath = fullPath => {
+const tryGetTabPath = fullPath => {
     const pathParts = fullPath.split(".");
     const resultPathParts = [...pathParts];
 
@@ -42,5 +42,5 @@ exports.getTextWithoutSpaces = getTextWithoutSpaces;
 exports.isExpectedItem = isExpectedItem;
 exports.createItemPathByIndex = createItemPathByIndex;
 exports.concatPaths = concatPaths;
-exports.getTabPathFromFullPath = getTabPathFromFullPath;
+exports.tryGetTabPath = tryGetTabPath;
 exports.isFullPathContainsTabs = isFullPathContainsTabs;
