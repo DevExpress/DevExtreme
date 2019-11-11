@@ -4,8 +4,9 @@ import numberFormatter from "../localization/number";
 import dateLocalization from "../localization/date";
 import { getFormat } from "../localization/ldml/date.format";
 import { getLanguageId } from "../localization/language_codes";
+import "../localization/currency";
 
-// const UNSUPPORTED_FORMAT_MAPPING = { 
+// const UNSUPPORTED_FORMAT_MAPPING = {
 //     quarter: "shortDate",
 //     quarterAndYear: "shortDate",
 //     minute: "longTime",
@@ -34,8 +35,6 @@ const SQUARE_OPEN_BRACKET_REGEXP = /\[/g;
 const SQUARE_CLOSE_BRACKET_REGEXP = /]/g;
 const ANY_REGEXP = /./g;
 
-import "../localization/currency";
-
 var excelFormatConverter = module.exports = {
     _applyPrecision: function(format, precision) {
         var result,
@@ -50,10 +49,6 @@ var excelFormatConverter = module.exports = {
             return result;
         }
         return "";
-    },
-
-    _getCurrencyFormat: function(currency) {
-        return numberFormatter.getOpenXmlCurrencyFormat(currency);
     },
 
     _hasArabicDigits: function(text) {
@@ -121,8 +116,14 @@ var excelFormatConverter = module.exports = {
     },
 
     _convertNumberFormat: function(format, precision, currency) {
-        var result,
-            excelFormat = format === "currency" ? this._getCurrencyFormat(currency) : DEFINED_NUMBER_FORMTATS[format.toLowerCase()];
+        let result,
+            excelFormat;
+
+        if(format === "currency") {
+            excelFormat = numberFormatter.getOpenXmlCurrencyFormat(currency);
+        } else {
+            excelFormat = DEFINED_NUMBER_FORMTATS[format.toLowerCase()];
+        }
 
         if(excelFormat) {
             result = stringUtils.format(excelFormat, this._applyPrecision(format, precision));

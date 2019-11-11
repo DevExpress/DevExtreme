@@ -20,19 +20,19 @@ QUnit.test("Date time format converting", function(assert) {
         year: "[$-9]yyyy",
         monthAndDay: "[$-9]MMMM d",
         monthAndYear: "[$-9]MMMM yyyy",
-        quarterAndYear: "[$-9]M\\/d\\/yyyy",
+        quarterAndYear: "[$-9]\\QM yyyy",
         shortDate: "[$-9]M\\/d\\/yyyy",
         shortTime: "[$-9]H:mm AM/PM",
         shortDateShortTime: "[$-9]M\\/d\\/yyyy, H:mm AM/PM",
         longDateLongTime: "[$-9]dddd, MMMM d, yyyy, H:mm:ss AM/PM",
         dayOfWeek: "[$-9]dddd",
         hour: "[$-9]HH",
-        minute: "[$-9]H:mm:ss AM/PM",
+        minute: "[$-9]mm",
         second: "[$-9]ss",
-        millisecond: "[$-9]H:mm:ss AM/PM",
+        millisecond: "[$-9]SSS",
         day: "[$-9]d",
         month: "[$-9]MMMM",
-        quarter: "[$-9]M\\/d\\/yyyy"
+        quarter: "[$-9]\\QM"
     };
 
     // assert, act
