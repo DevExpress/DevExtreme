@@ -1,20 +1,15 @@
-var Config = require("./config"),
-    extend = require("./utils/extend").extend,
-    OptionManager = require("./option_manager").OptionManager,
-    Class = require("./class"),
-    Action = require("./action"),
-    errors = require("./errors"),
-    commonUtils = require("./utils/common"),
-    typeUtils = require("./utils/type"),
-    deferredUtils = require("../core/utils/deferred"),
-    Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when,
-    Callbacks = require("./utils/callbacks"),
-    EventsMixin = require("./events_mixin"),
-    publicComponentUtils = require("./utils/public_component"),
-
-    isFunction = typeUtils.isFunction,
-    noop = commonUtils.noop;
+import Action from './action';
+import Callbacks from './utils/callbacks';
+import Config from './config';
+import Class from './class';
+import errors from './errors';
+import EventsMixin from './events_mixin';
+import OptionManager from './option_manager';
+import publicComponentUtils from './utils/public_component';
+import { Deferred, when } from '../core/utils/deferred';
+import { extend } from './utils/extend';
+import { isFunction, isDefined, isPlainObject, type } from './utils/type';
+import { noop } from './utils/common';
 
 /**
 * @name Component
@@ -35,10 +30,9 @@ class PostponedOperations {
         if(key in this._postponedOperations) {
             postponedPromise && this._postponedOperations[key].promises.push(postponedPromise);
         } else {
-            var completePromise = new Deferred();
             this._postponedOperations[key] = {
-                fn: fn,
-                completePromise: completePromise,
+                fn,
+                completePromise: new Deferred(),
                 promises: postponedPromise ? [postponedPromise] : []
             };
         }
@@ -47,31 +41,37 @@ class PostponedOperations {
     }
 
     callPostponedOperations() {
-        for(var key in this._postponedOperations) {
-            var operation = this._postponedOperations[key];
+        for(let key in this._postponedOperations) {
+            const operation = this._postponedOperations[key];
 
-            if(typeUtils.isDefined(operation)) {
-                if(operation.promises && operation.promises.length) {
-                    when(...operation.promises).done(operation.fn).then(operation.completePromise.resolve);
+            if(isDefined(operation)) {
+                const { promises, fn, completePromise } = operation;
+
+                if(promises && promises.length) {
+                    when(...operation.promises).done(fn).then(completePromise.resolve);
                 } else {
-                    operation.fn().done(operation.completePromise.resolve);
+                    operation.fn().done(completePromise.resolve);
                 }
             }
         }
+
         this._postponedOperations = {};
     }
 }
 
-var Component = Class.inherit({
-    _setDeprecatedOptions: function() {
+const getEventName = actionName => actionName.charAt(2).toLowerCase() + actionName.substr(3);
+const actionOptions = { excludeValidators: ['disabled', 'readOnly'] };
+
+const Component = Class.inherit({
+    _setDeprecatedOptions() {
         this._deprecatedOptions = {};
     },
 
-    _getDeprecatedOptions: function() {
+    _getDeprecatedOptions() {
         return this._deprecatedOptions;
     },
 
-    _getDefaultOptions: function() {
+    _getDefaultOptions() {
         return {
             /**
             * @name ComponentOptions.onInitialized
@@ -109,27 +109,23 @@ var Component = Class.inherit({
         };
     },
 
-    _defaultOptionsRules: function() {
+    _defaultOptionsRules() {
         return [];
     },
 
-    _setOptionsByDevice: function(rules) {
+    _setOptionsByDevice(rules) {
         this._optionManager.applyRules(rules);
     },
 
-    _convertRulesToOptions: function(rules) {
-        return OptionManager.convertRulesToOptions(rules);
-    },
-
-    _isInitialOptionValue: function(name) {
+    _isInitialOptionValue(name) {
         return this._optionManager.isInitial(name);
     },
 
-    _setOptionsByReference: function() {
+    _setOptionsByReference() {
         this._optionsByReference = {};
     },
 
-    _getOptionsByReference: function() {
+    _getOptionsByReference() {
         return this._optionsByReference;
     },
     /**
@@ -138,7 +134,7 @@ var Component = Class.inherit({
     * @param1 options:ComponentOptions|undefined
     * @hidden
     */
-    ctor: function(options = {}) {
+    ctor(options = {}) {
         this.NAME = publicComponentUtils.name(this.constructor);
 
         if(options.eventsStrategy) {
@@ -186,45 +182,42 @@ var Component = Class.inherit({
         }
     },
 
-    _initOptions: function(options) {
+    _initOptions(options) {
         this.option(options);
     },
 
-    _init: function() {
+    _init() {
         this._createOptionChangedAction();
-
-        this.on("disposing", function(args) {
-            this._disposingCallbacks.fireWith(this, [args]);
-        }.bind(this));
+        this.on('disposing', args => this._disposingCallbacks.fireWith(this, [args]));
     },
 
-    _logDeprecatedWarning(option, info) {
-        var message = info.message || ("Use the '" + info.alias + "' option instead");
-        errors.log("W0001", this.NAME, option, info.since, message);
+    _logDeprecatedWarning(option, { message, alias, since }) {
+        message = message || `Use the '${alias}' option instead`;
+        errors.log('W0001', this.NAME, option, since, message);
     },
 
-    _createOptionChangedAction: function() {
-        this._optionChangedAction = this._createActionByOption("onOptionChanged", { excludeValidators: ["disabled", "readOnly"] });
+    _createOptionChangedAction() {
+        this._optionChangedAction = this._createActionByOption('onOptionChanged', actionOptions);
     },
 
-    _createDisposingAction: function() {
-        this._disposingAction = this._createActionByOption("onDisposing", { excludeValidators: ["disabled", "readOnly"] });
+    _createDisposingAction() {
+        this._disposingAction = this._createActionByOption('onDisposing', actionOptions);
     },
 
-    _optionChanged: function(args) {
-        switch(args.name) {
-            case "onDisposing":
-            case "onInitialized":
+    _optionChanged({ name }) {
+        switch(name) {
+            case 'onDisposing':
+            case 'onInitialized':
                 break;
-            case "onOptionChanged":
+            case 'onOptionChanged':
                 this._createOptionChangedAction();
                 break;
-            case "defaultOptionsRules":
+            case 'defaultOptionsRules':
                 break;
         }
     },
 
-    _dispose: function() {
+    _dispose() {
         this._optionChangedCallbacks.empty();
         this._createDisposingAction();
         this._disposingAction();
@@ -238,7 +231,7 @@ var Component = Class.inherit({
      * @publicName instance()
      * @return this
      */
-    instance: function() {
+    instance() {
         return this;
     },
 
@@ -246,7 +239,7 @@ var Component = Class.inherit({
      * @name componentmethods.beginupdate
      * @publicName beginUpdate()
      */
-    beginUpdate: function() {
+    beginUpdate() {
         this._updateLockCount++;
     },
 
@@ -254,10 +247,12 @@ var Component = Class.inherit({
      * @name componentmethods.endupdate
      * @publicName endUpdate()
      */
-    endUpdate: function() {
+    endUpdate() {
         this._updateLockCount = Math.max(this._updateLockCount - 1, 0);
+
         if(!this._updateLockCount) {
             this.postponedOperations.callPostponedOperations();
+
             if(!this._initializing && !this._initialized) {
                 this._initializing = true;
                 try {
@@ -265,7 +260,7 @@ var Component = Class.inherit({
                 } finally {
                     this._initializing = false;
                     this._updateLockCount++;
-                    this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
+                    this._createActionByOption('onInitialized', actionOptions)();
                     this._updateLockCount--;
                     this._initialized = true;
                 }
@@ -275,157 +270,139 @@ var Component = Class.inherit({
 
     _optionChanging: noop,
 
-    _notifyOptionChanged: function(option, value, previousValue) {
-        var that = this;
-
+    _notifyOptionChanged(option, value, previousValue) {
         if(this._initialized) {
-            var optionNames = [option].concat(this._optionManager.getAliasesByName(option));
-            for(var i = 0; i < optionNames.length; i++) {
-                var name = optionNames[i],
-                    args = {
-                        name: name.split(/[.[]/)[0],
-                        fullName: name,
-                        value: value,
-                        previousValue: previousValue
-                    };
+            const optionNames = [option].concat(this._optionManager.getAliasesByName(option));
 
-                that._optionChangedCallbacks.fireWith(that, [extend(that._defaultActionArgs(), args)]);
-                that._optionChangedAction(extend({}, args));
+            for(let optionName of optionNames) {
+                const defaultActionArgs = this._defaultActionArgs();
+                const args = {
+                    name: optionName.split(/[.[]/)[0],
+                    fullName: optionName,
+                    value,
+                    previousValue
+                };
 
-                if(!that._disposed && this._cancelOptionChange !== args.name) {
-                    that._optionChanged(args);
+                this._optionChangedCallbacks.fireWith(this, [extend(defaultActionArgs, args)]);
+                this._optionChangedAction(extend({}, args));
+
+                if(!this._disposed && this._cancelOptionChange !== args.name) {
+                    this._optionChanged(args);
                 }
             }
         }
     },
 
-    initialOption: function(name) {
+    initialOption(name) {
         return this._optionManager.initial(name);
     },
 
-    _defaultActionConfig: function() {
-        return {
-            context: this,
-            component: this
+    _defaultActionConfig() {
+        return { context: this, component: this };
+    },
+
+    _defaultActionArgs() {
+        return { component: this };
+    },
+
+    _createAction(actionSource, config) {
+        let action = null;
+
+        return (e = {}) => {
+            const defaultActionConfig = this._defaultActionConfig();
+            const defaultActionArgs = this._defaultActionArgs();
+
+            e = !isPlainObject(e) ? { actionValue: e } : e;
+            action = action || new Action(actionSource, extend(config, defaultActionConfig));
+
+            return action.execute(extend(e, defaultActionArgs));
         };
     },
 
-    _defaultActionArgs: function() {
-        return {
-            component: this
-        };
-    },
+    _createActionByOption(optionName, config) {
+        const result = (...args) => {
+            let action = null;
+            let eventName = '';
+            let actionFunc = null;
 
-    _createAction: function(actionSource, config) {
-        var that = this,
-            action;
-
-        return function(e) {
-            if(!arguments.length) {
-                e = {};
-            }
-
-            if(!typeUtils.isPlainObject(e)) {
-                e = { actionValue: e };
-            }
-
-            action = action || new Action(actionSource, extend(config, that._defaultActionConfig()));
-
-            return action.execute.call(action, extend(e, that._defaultActionArgs()));
-        };
-    },
-
-    _createActionByOption: function(optionName, config) {
-        var that = this,
-            action,
-            eventName,
-            actionFunc;
-
-        var result = function() {
             if(!eventName) {
                 config = config || {};
 
-                if(typeof optionName !== "string") {
-                    throw errors.Error("E0008");
+                if(typeof optionName !== 'string') {
+                    throw errors.Error('E0008');
                 }
 
-                if(optionName.indexOf("on") === 0) {
-                    eventName = that._getEventName(optionName);
+                if(optionName.indexOf('on') === 0) {
+                    eventName = getEventName(optionName);
                 }
                 ///#DEBUG
-                if(optionName.indexOf("on") !== 0) {
-                    throw Error("The '" + optionName + "' option name should start with 'on' prefix");
+                if(optionName.indexOf('on') !== 0) {
+                    throw Error(`The '${optionName}' option name should start with 'on' prefix`);
                 }
                 ///#ENDDEBUG
 
-                actionFunc = that.option(optionName);
-            }
-
-            if(!action && !actionFunc && !config.beforeExecute && !config.afterExecute && !that.hasEvent(eventName)) {
-                return;
+                actionFunc = this.option(optionName);
             }
 
             if(!action) {
-                var beforeExecute = config.beforeExecute;
-                config.beforeExecute = function(args) {
-                    beforeExecute && beforeExecute.apply(that, arguments);
-                    that.fireEvent(eventName, args.args);
+                if(!actionFunc && !config.beforeExecute && !config.afterExecute && !this.hasEvent(eventName)) {
+                    return;
+                }
+
+                const { beforeExecute } = config;
+
+                config.beforeExecute = (...args) => {
+                    beforeExecute && beforeExecute.apply(this, args);
+                    this.fireEvent(eventName, args.args);
                 };
-                action = that._createAction(actionFunc, config);
+                action = this._createAction(actionFunc, config);
             }
 
             if(Config().wrapActionsBeforeExecute) {
-                var beforeActionExecute = that.option("beforeActionExecute") || noop;
-                var wrappedAction = beforeActionExecute(that, action, config) || action;
-                return wrappedAction.apply(that, arguments);
+                const beforeActionExecute = this.option('beforeActionExecute');
+                const wrappedAction = beforeActionExecute && beforeActionExecute(this, action, config) || action;
+
+                return wrappedAction.apply(this, args);
             }
 
-            return action.apply(that, arguments);
+            return action.apply(this, args);
         };
 
         if(!Config().wrapActionsBeforeExecute) {
-            var onActionCreated = that.option("onActionCreated") || noop;
-            result = onActionCreated(that, result, config) || result;
+            const onActionCreated = this.option('onActionCreated');
+
+            return onActionCreated && onActionCreated(this, result, config) || result;
         }
 
         return result;
     },
 
-    _getOptionByStealth: function(name) {
+    _getOptionByStealth(name) {
         return this._optionManager.silent(name);
     },
 
-    _setOptionByStealth: function(options, value) {
+    _setOptionByStealth(options, value) {
         this._optionManager.silent(options, value);
     },
 
-    _getEventName: function(actionName) {
-        return actionName.charAt(2).toLowerCase() + actionName.substr(3);
+    hasActionSubscription(name) {
+        return !!this.option(name) || this.hasEvent(getEventName(name));
     },
 
-    hasActionSubscription: function(actionName) {
-        return !!this.option(actionName) ||
-            this.hasEvent(this._getEventName(actionName));
-    },
-
-    isOptionDeprecated: function(name) {
+    isOptionDeprecated(name) {
         return this._optionManager.isDeprecated(name);
     },
 
-    _setOptionSilent: function(name, value) {
+    _setOptionSilent(name, value) {
         this._cancelOptionChange = name;
         this.option(name, value);
         this._cancelOptionChange = false;
     },
 
-    _getOptionValue: function(name, context) {
-        var value = this.option(name);
+    _getOptionValue(name, context) {
+        const value = this.option(name);
 
-        if(isFunction(value)) {
-            return value.bind(context)();
-        }
-
-        return value;
+        return isFunction(value) ? value.bind(context)() : value;
     },
 
     /**
@@ -450,8 +427,8 @@ var Component = Class.inherit({
      * @publicName option(options)
      * @param1 options:object
      */
-    option: function(options, value) {
-        if(arguments.length < 2 && typeUtils.type(options) !== "object") {
+    option(options, value) {
+        if(arguments.length < 2 && type(options) !== 'object') {
             return this._optionManager.option(options);
         } else {
             this.beginUpdate();
@@ -469,7 +446,7 @@ var Component = Class.inherit({
      * @publicName resetOption(optionName)
      * @param1 optionName:string
      */
-    resetOption: function(name) {
+    resetOption(name) {
         this.beginUpdate();
         this._optionManager.reset(name);
         this.endUpdate();
