@@ -346,8 +346,8 @@
 		"dxFileManager-editingMoveMultipleItemsErrorMessage": "{0} items weren't moved",
 		"dxFileManager-editingMoveCommonErrorMessage": "Some items weren't moved",
 
-		"dxFileManager-editingCopySingleItemProcessingMessage": "Coping an item to {0}",
-		"dxFileManager-editingCopyMultipleItemsProcessingMessage": "Coping {0} items to {1}",
+		"dxFileManager-editingCopySingleItemProcessingMessage": "Copying an item to {0}",
+		"dxFileManager-editingCopyMultipleItemsProcessingMessage": "Copying {0} items to {1}",
 		"dxFileManager-editingCopySingleItemSuccessMessage": "Copied an item to {0}",
 		"dxFileManager-editingCopyMultipleItemsSuccessMessage": "Copied {0} items to {1}",
 		"dxFileManager-editingCopySingleItemErrorMessage": "Item wasn't copied",
