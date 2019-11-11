@@ -401,7 +401,7 @@
         "dxDiagram-commandConnectorLineOrthogonal": "Orthogonal",
         "dxDiagram-commandConnectorLineStart": "Début de la ligne de connexion",
         "dxDiagram-commandConnectorLineEnd": "Fin de la ligne de connexion",
-        "dxDiagram-commandConnectorLineNone": "Ligne",
+        "dxDiagram-commandConnectorLineNone": "Aucun",
         "dxDiagram-commandConnectorLineArrow": "Flèche",
         "dxDiagram-commandAutoLayout": "Mise en page automatique",
         "dxDiagram-commandAutoLayoutTree": "Arbre",
