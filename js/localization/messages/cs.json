@@ -79,6 +79,7 @@
         "dxForm-requiredMessage": "{0} je vyžadováno",
 
         "dxNumberBox-invalidValueMessage": "Hodnota musí být číslo",
+        "dxNumberBox-noDataText": "Žádná data",
 
         "dxDataGrid-columnChooserTitle": "Výběr sloupců",
         "dxDataGrid-columnChooserEmptyText": "Přesuňte sloupec zde pro skytí",

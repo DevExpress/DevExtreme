@@ -2,6 +2,7 @@ var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     mathUtils = require("../../core/utils/math"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -240,13 +241,20 @@ var NumberBoxBase = TextEditor.inherit({
 
     _renderValue: function() {
         var inputValue = this._input().val();
+        var value = this.option("value");
 
-        if(!inputValue.length || Number(inputValue) !== this.option("value")) {
+        if(!inputValue.length || Number(inputValue) !== value) {
             this._forceValueRender();
             this._toggleEmptinessEventHandler();
         }
 
-        this.setAria("valuenow", commonUtils.ensureDefined(this.option("value"), ""));
+        var valueText = typeUtils.isDefined(value) ? null : messageLocalization.format("dxNumberBox-noDataText");
+
+        this.setAria({
+            "valuenow": commonUtils.ensureDefined(value, ""),
+            "valuetext": valueText
+        });
+
         this.option("text", this._input().val());
         this._updateButtons();
 

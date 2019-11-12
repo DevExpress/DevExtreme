@@ -79,6 +79,7 @@
         "dxForm-requiredMessage": "{0} on valinnainen",
 
         "dxNumberBox-invalidValueMessage": "Arvon on oltava numero",
+        "dxNumberBox-noDataText": "Ei dataa",
 
         "dxDataGrid-columnChooserTitle": "Sarakkeenvalitsin",
         "dxDataGrid-columnChooserEmptyText": "Vedä sarake täällä piilottaa sen",
