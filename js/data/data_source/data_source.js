@@ -216,7 +216,7 @@ var DataSource = Class.inherit({
     ctor: function(options) {
         var that = this;
         options = normalizeDataSourceOptions(options);
-        this._eventsStrategy = EventsStrategy.setEventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this);
 
         /**
         * @name DataSourceOptions.store.type

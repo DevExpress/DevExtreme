@@ -25,7 +25,7 @@ var Store = Class.inherit({
     ctor: function(options) {
         var that = this;
         options = options || {};
-        this._eventsStrategy = EventsStrategy.setEventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this);
 
         each(
             [

@@ -176,7 +176,7 @@ var Devices = Class.inherit({
         this._realDevice = this._getDevice();
         this._currentDevice = undefined;
         this._currentOrientation = undefined;
-        this._eventsStrategy = EventsStrategy.setEventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this);
 
         this.changed = Callbacks();
         if(windowUtils.hasWindow()) {

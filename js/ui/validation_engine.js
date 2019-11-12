@@ -554,7 +554,7 @@ const GroupConfig = Class.inherit({
         this._pendingValidators = [];
         this._onValidatorStatusChanged = this._onValidatorStatusChanged.bind(this);
         this._resetValidationInfo();
-        this._eventsStrategy = EventsStrategy.setEventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this);
     },
 
     validate() {

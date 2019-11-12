@@ -635,7 +635,7 @@ module.exports = Class.inherit((function() {
     return {
         ctor: function(options) {
             options = options || {};
-            this._eventsStrategy = EventsStrategy.setEventsStrategy(this);
+            this._eventsStrategy = new EventsStrategy(this);
 
             var that = this,
                 store = createStore(options, function(progress) {

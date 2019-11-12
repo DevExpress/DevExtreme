@@ -19,7 +19,7 @@ const koDxValidator = Class.inherit({
         this.validationError = ko.observable();
         this.validationErrors = ko.observable();
         this.validationStatus = ko.observable(VALIDATION_STATUS_VALID);
-        this._eventsStrategy = EventsStrategy.setEventsStrategy(this);
+        this._eventsStrategy = new EventsStrategy(this);
 
         this.validationRules = map(validationRules, (rule, index) => {
             return extend({}, rule, {
