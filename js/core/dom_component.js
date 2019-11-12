@@ -182,8 +182,8 @@ var DOMComponent = Component.inherit({
 
         if(this._isCssUpdateRequired(element, height, width)) {
             $element.css({
-                width: commonUtils.ensureDefined(width, ""),
-                height: commonUtils.ensureDefined(height, "")
+                width: width === null ? "" : width,
+                height: height === null ? "" : height
             });
         }
     },
