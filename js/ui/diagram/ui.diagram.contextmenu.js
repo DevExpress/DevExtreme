@@ -8,8 +8,8 @@ import { getDiagram } from "./diagram_importer";
 
 const DIAGRAM_TOUCHBAR_CLASS = "dx-diagram-touchbar";
 const DIAGRAM_TOUCHBAR_TARGET_CLASS = "dx-diagram-touchbar-target";
-const DIAGRAM_TOUCHBAR_MINWIDTH = 260;
-const DIAGRAM_TOUCHBAR_OFFSET = 32;
+const DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH = 800;
+const DIAGRAM_TOUCHBAR_Y_OFFSET = 32;
 
 class DiagramContextMenu extends Widget {
     _init() {
@@ -92,12 +92,12 @@ class DiagramContextMenu extends Widget {
             if(!selection) {
                 selection = { x, y, width: 0, height: 0 };
             }
-            var widthCorrection = selection.width > DIAGRAM_TOUCHBAR_MINWIDTH ? 0 : (DIAGRAM_TOUCHBAR_MINWIDTH - selection.width) / 2;
+            var widthCorrection = selection.width > DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH ? 0 : (DIAGRAM_TOUCHBAR_MIN_UNWRAPPED_WIDTH - selection.width) / 2;
             this._$contextMenuTargetElement.css({
                 left: selection.x - widthCorrection,
-                top: selection.y - DIAGRAM_TOUCHBAR_OFFSET,
+                top: selection.y - DIAGRAM_TOUCHBAR_Y_OFFSET,
                 width: selection.width + 2 * widthCorrection,
-                height: selection.height + 2 * DIAGRAM_TOUCHBAR_OFFSET,
+                height: selection.height + 2 * DIAGRAM_TOUCHBAR_Y_OFFSET,
             });
             this._contextMenuInstance.show();
         } else {

@@ -7,16 +7,13 @@
 </style>
 <path id="_x31_" class="st0" d="M7.5,5c0.1,0,0.3,0.1,0.4,0.1l0,0l6.8,5.3c0.3,0.2,0.3,0.5,0.1,0.8c-0.1,0.1-0.2,0.2-0.3,0.2
 	l-1.9,0.3l1.3,2.6c0.2,0.3,0,0.6-0.3,0.7l-2.1,0.9C11.4,16,11.3,16,11.2,16c-0.2,0-0.4-0.1-0.5-0.3l-1.3-2.6l-1.5,1.1
-	c-0.1,0.1-0.2,0.1-0.4,0.1c-0.3,0-0.6-0.2-0.6-0.5V5.6C6.9,5.3,7.2,5,7.5,5z"/>
+	c-0.1,0.1-0.2,0.1-0.4,0.1c-0.3,0-0.6-0.2-0.6-0.5V5.6C6.9,5.3,7.2,5,7.5,5z" fill="currentColor" />
 <g id="_x33_" class="st1">
-	<polygon id="_x31__1_" class="st0" points="11,5 13,7 15,7 15,5 	"/>
-	
-		<rect id="_x32__1_" x="10.6" y="1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 2.1005 9.0711)" class="st0" width="2.8" height="2"/>
-	<rect id="_x33__1_" x="7" class="st0" width="2" height="4"/>
-	
-		<rect id="_x34_" x="2.6" y="9" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -5.8995 5.7574)" class="st0" width="2.8" height="2"/>
-	
-		<rect id="_x35_" x="3" y="0.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -0.2426 3.4142)" class="st0" width="2" height="2.8"/>
-	<rect id="_x36_" x="1" y="5" class="st0" width="4" height="2"/>
+	<polygon id="_x31__1_" class="st0" points="11,5 13,7 15,7 15,5 	" fill="currentColor" />
+	<rect id="_x32__1_" x="10.6" y="1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 2.1005 9.0711)" class="st0" width="2.8" height="2" fill="currentColor" />
+	<rect id="_x33__1_" x="7" class="st0" width="2" height="4" fill="currentColor" />
+	<rect id="_x34_" x="2.6" y="9" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -5.8995 5.7574)" class="st0" width="2.8" height="2" fill="currentColor" />
+	<rect id="_x35_" x="3" y="0.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -0.2426 3.4142)" class="st0" width="2" height="2.8" fill="currentColor" />
+	<rect id="_x36_" x="1" y="5" class="st0" width="4" height="2" fill="currentColor" />
 </g>
 </svg>
