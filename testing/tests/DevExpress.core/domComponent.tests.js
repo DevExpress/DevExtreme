@@ -1081,4 +1081,18 @@ QUnit.module("default", {
         assert.strictEqual(AnotherComponent.getInstance($element), undefined);
         assert.strictEqual(AnotherComponent.getInstance($element.get(0)), undefined);
     });
+
+    QUnit.test("reset dimensions", (assert) => {
+        const $element = $("#component").TestComponent({ width: 200, height: 100 });
+        const element = $element.get(0);
+        const instance = $element.TestComponent("instance");
+
+        instance.resetOption("height");
+        instance.resetOption("width");
+
+        assert.strictEqual(instance.option("height"), undefined);
+        assert.strictEqual(instance.option("width"), undefined);
+        assert.equal(element.style.width, "", "width is correct");
+        assert.equal(element.style.height, "", "height is correct");
+    });
 });

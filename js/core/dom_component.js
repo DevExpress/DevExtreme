@@ -443,6 +443,14 @@ var DOMComponent = Component.inherit({
         element.textContent = "";
         this._removeAttributes(element);
         this._removeClasses(element);
+    },
+
+    resetOption(optionName) {
+        this.callBase(optionName);
+
+        if(optionName === "width" || optionName === "height") {
+            this.$element().css(optionName, "");
+        }
     }
 
 });
