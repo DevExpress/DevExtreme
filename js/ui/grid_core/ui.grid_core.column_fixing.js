@@ -868,15 +868,6 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this.callBase(e);
     },
 
-    _needSynchronizeRows: function() {
-        if(this._fixedTableElement) {
-            const fixedTableHeight = Math.round(this._fixedTableElement.get(0).clientHeight);
-            const tableHeight = Math.round(this._tableElement.get(0).clientHeight);
-
-            return fixedTableHeight !== tableHeight;
-        }
-    },
-
     dispose: function() {
         this.callBase.apply(this, arguments);
         clearTimeout(this._fixedScrollTimeout);
