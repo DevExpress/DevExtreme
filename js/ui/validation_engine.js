@@ -2,10 +2,10 @@ import Class from "../core/class";
 import { extend } from "../core/utils/extend";
 import { inArray } from "../core/utils/array";
 import { each } from "../core/utils/iterator";
-import EventsMixin from "../core/events_mixin";
+import { EventsStrategy } from "../core/events_strategy";
 import errors from "../core/errors";
 import { grep } from "../core/utils/common";
-import typeUtils from "../core/utils/type";
+import typeUtils, { isPlainObject } from "../core/utils/type";
 import numberLocalization from "../localization/number";
 import messageLocalization from "../localization/message";
 import Promise from "../core/polyfills/promise";
@@ -554,6 +554,7 @@ const GroupConfig = Class.inherit({
         this._pendingValidators = [];
         this._onValidatorStatusChanged = this._onValidatorStatusChanged.bind(this);
         this._resetValidationInfo();
+        this._eventsStrategy = EventsStrategy.setEventsStrategy(this);
     },
 
     validate() {
@@ -713,7 +714,7 @@ const GroupConfig = Class.inherit({
     },
 
     _raiseValidatedEvent(result) {
-        this.fireEvent("validated", [result]);
+        this._eventsStrategy.fireEvent("validated", [result]);
     },
 
     _resetValidationInfo() {
@@ -751,8 +752,48 @@ const GroupConfig = Class.inherit({
         });
         this._pendingValidators = [];
         this._resetValidationInfo();
-    }
-}).include(EventsMixin);
+    },
+
+    /**
+     * @name GroupConfigMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name GroupConfigMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
+    on: function(eventName, eventHandler) {
+        if(isPlainObject(eventName)) {
+            each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
+        } else {
+            this._eventsStrategy.on(eventName, eventHandler);
+        }
+        return this;
+    },
+
+    /**
+     * @name GroupConfigMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name GroupConfigMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    off: function(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
+    },
+});
 
 /**
  * @name validationEngine

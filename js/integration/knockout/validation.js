@@ -1,11 +1,12 @@
 import { each, map } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
 import Class from "../../core/class";
-import EventsMixin from "../../core/events_mixin";
+import { EventsStrategy } from "../../core/events_strategy";
 import ValidationEngine from "../../ui/validation_engine";
 import { Deferred } from "../../core/utils/deferred";
 import Guid from "../../core/guid";
 import ko from "knockout";
+import { isPlainObject } from "../../core/utils/type";
 
 const VALIDATION_STATUS_VALID = "valid",
     VALIDATION_STATUS_PENDING = "pending";
@@ -18,6 +19,7 @@ const koDxValidator = Class.inherit({
         this.validationError = ko.observable();
         this.validationErrors = ko.observable();
         this.validationStatus = ko.observable(VALIDATION_STATUS_VALID);
+        this._eventsStrategy = EventsStrategy.setEventsStrategy(this);
 
         this.validationRules = map(validationRules, (rule, index) => {
             return extend({}, rule, {
@@ -87,18 +89,59 @@ const koDxValidator = Class.inherit({
                 this._validationInfo.deferred = new Deferred();
                 this._validationInfo.result.complete = this._validationInfo.deferred.promise();
             }
-            this.fireEvent("validating", [this._validationInfo.result]);
+            this._eventsStrategy.fireEvent("validating", [this._validationInfo.result]);
             return;
         }
         if(result.status !== VALIDATION_STATUS_PENDING) {
-            this.fireEvent("validated", [result]);
+            this._eventsStrategy.fireEvent("validated", [result]);
             if(this._validationInfo.deferred) {
                 this._validationInfo.deferred.resolve(result);
                 this._validationInfo.deferred = null;
             }
         }
+    },
+
+    /**
+     * @name koDxValidatorMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name koDxValidatorMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
+    on: function(eventName, eventHandler) {
+        if(isPlainObject(eventName)) {
+            each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
+        } else {
+            this._eventsStrategy.on(eventName, eventHandler);
+        }
+
+        return this;
+    },
+
+    /**
+     * @name koDxValidatorMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name koDxValidatorMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    off: function(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
     }
-}).include(EventsMixin);
+});
 
 
 ko.extenders.dxValidator = function(target, option) {

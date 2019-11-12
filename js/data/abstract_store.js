@@ -1,6 +1,6 @@
 var Class = require("../core/class"),
     abstract = Class.abstract,
-    EventsMixin = require("../core/events_mixin"),
+    EventsStrategy = require("../core/events_strategy").EventsStrategy,
     each = require("../core/utils/iterator").each,
     errorsModule = require("./errors"),
     dataUtils = require("./utils"),
@@ -9,13 +9,13 @@ var Class = require("../core/class"),
     queryByOptions = storeHelper.queryByOptions,
     Deferred = require("../core/utils/deferred").Deferred,
     noop = require("../core/utils/common").noop,
+    isPlainObject = require("../core/utils/type").isPlainObject,
 
     storeImpl = {};
 
 /**
 * @name Store
 * @type object
-* @inherits EventsMixin
 * @hidden
 * @module data/abstract_store
 * @export default
@@ -25,6 +25,7 @@ var Store = Class.inherit({
     ctor: function(options) {
         var that = this;
         options = options || {};
+        this._eventsStrategy = EventsStrategy.setEventsStrategy(this);
 
         each(
             [
@@ -186,10 +187,10 @@ var Store = Class.inherit({
 
         options = options || {};
 
-        this.fireEvent("loading", [options]);
+        this._eventsStrategy.fireEvent("loading", [options]);
 
         return this._withLock(this._loadImpl(options)).done(function(result) {
-            that.fireEvent("loaded", [result, options]);
+            that._eventsStrategy.fireEvent("loaded", [result, options]);
         });
     },
 
@@ -256,12 +257,12 @@ var Store = Class.inherit({
     insert: function(values) {
         var that = this;
 
-        that.fireEvent("modifying");
-        that.fireEvent("inserting", [values]);
+        that._eventsStrategy.fireEvent("modifying");
+        that._eventsStrategy.fireEvent("inserting", [values]);
 
         return that._addFailHandlers(that._insertImpl(values).done(function(callbackValues, callbackKey) {
-            that.fireEvent("inserted", [callbackValues, callbackKey]);
-            that.fireEvent("modified");
+            that._eventsStrategy.fireEvent("inserted", [callbackValues, callbackKey]);
+            that._eventsStrategy.fireEvent("modified");
         }));
     },
 
@@ -277,12 +278,12 @@ var Store = Class.inherit({
     update: function(key, values) {
         var that = this;
 
-        that.fireEvent("modifying");
-        that.fireEvent("updating", [key, values]);
+        that._eventsStrategy.fireEvent("modifying");
+        that._eventsStrategy.fireEvent("updating", [key, values]);
 
         return that._addFailHandlers(that._updateImpl(key, values).done(function() {
-            that.fireEvent("updated", [key, values]);
-            that.fireEvent("modified");
+            that._eventsStrategy.fireEvent("updated", [key, values]);
+            that._eventsStrategy.fireEvent("modified");
         }));
     },
 
@@ -295,7 +296,7 @@ var Store = Class.inherit({
     */
     push: function(changes) {
         this._pushImpl(changes);
-        this.fireEvent("push", [changes]);
+        this._eventsStrategy.fireEvent("push", [changes]);
     },
 
     _pushImpl: noop,
@@ -309,12 +310,12 @@ var Store = Class.inherit({
     remove: function(key) {
         var that = this;
 
-        that.fireEvent("modifying");
-        that.fireEvent("removing", [key]);
+        that._eventsStrategy.fireEvent("modifying");
+        that._eventsStrategy.fireEvent("removing", [key]);
 
         return that._addFailHandlers(that._removeImpl(key).done(function(callbackKey) {
-            that.fireEvent("removed", [callbackKey]);
-            that.fireEvent("modified");
+            that._eventsStrategy.fireEvent("removed", [callbackKey]);
+            that._eventsStrategy.fireEvent("modified");
         }));
     },
 
@@ -322,8 +323,48 @@ var Store = Class.inherit({
 
     _addFailHandlers: function(deferred) {
         return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
+    },
+
+    /**
+     * @name StoreMethods.on
+     * @publicName on(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    /**
+     * @name StoreMethods.on
+     * @publicName on(events)
+     * @param1 events:object
+     * @return this
+     */
+    on: function(eventName, eventHandler) {
+        if(isPlainObject(eventName)) {
+            each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
+        } else {
+            this._eventsStrategy.on(eventName, eventHandler);
+        }
+        return this;
+    },
+
+    /**
+     * @name StoreMethods.off
+     * @publicName off(eventName)
+     * @param1 eventName:string
+     * @return this
+     */
+    /**
+     * @name StoreMethods.off
+     * @publicName off(eventName, eventHandler)
+     * @param1 eventName:string
+     * @param2 eventHandler:function
+     * @return this
+     */
+    off: function(eventName, eventHandler) {
+        this._eventsStrategy.off(eventName, eventHandler);
+        return this;
     }
-}).include(EventsMixin);
+});
 
 Store.create = function(alias, options) {
     if(!(alias in storeImpl)) {
