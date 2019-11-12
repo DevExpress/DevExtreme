@@ -61,7 +61,7 @@ const TODAY_CELL_CLASS = "dx-calendar-today";
 const GESTURE_COVER_CLASS = "dx-gesture-cover";
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdowneditor-button";
 
-const CALENDAR_APPLY_BUTTON_SELECTOR = CALENDAR_APPLY_BUTTON_SELECTOR;
+const CALENDAR_APPLY_BUTTON_SELECTOR = ".dx-popup-done.dx-button";
 
 const widgetName = "dxDateBox";
 
@@ -3009,11 +3009,10 @@ QUnit.module("datebox with time component", {
     });
 
     QUnit.test("Submit value should be changed when apply button clicked and an invalid (by validator) value is selected", assert => {
-        const dateBox = $("#dateBox").dxDateBox({
+        const $dateBox = $("#dateBox").dxDateBox({
             type: "datetime",
             pickerType: "calendar",
             opened: true,
-            min: new Date("2015/1/25 13:00:00"),
             value: new Date("2015/1/25 13:00:00")
         }).dxValidator({
             validationRules: [{
@@ -3024,6 +3023,8 @@ QUnit.module("datebox with time component", {
                 }
             }]
         });
+
+        const dateBox = $dateBox.dxDateBox("instance");
         const $submitElement = $("#dateBox").find("input[type=hidden]");
         const $hourDownButton = $(dateBox.content()).find(".dx-numberbox-spin-down").first();
 
