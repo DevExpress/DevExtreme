@@ -2,7 +2,7 @@ import $ from "jquery";
 const { test } = QUnit;
 import "common.css!";
 import "ui/diagram";
-import { DiagramCommand } from "devexpress-diagram";
+import { DiagramCommand, Browser } from "devexpress-diagram";
 
 QUnit.testStart(() => {
     const markup = '<style>.dxdi-control { width: 100%; height: 100%; overflow: auto; box-sizing: border-box; position: relative; }</style><div id="diagram"></div>';
@@ -227,7 +227,11 @@ QUnit.module("Diagram Toolbar", {
         this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
-        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        if(Browser.TouchUI) {
+            contextMenu.show();
+        } else {
+            $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        }
         $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick"); // Select All
         const button = findToolbarItem(this.$element, "auto layout").dxButton("instance");
         assert.notOk(button.option("disabled"));
@@ -301,7 +305,11 @@ QUnit.module("Context Menu", {
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
         assert.notOk(contextMenu.option("visible"));
         assert.ok(contextMenu.option("items")[0].text.indexOf("Copy") > -1);
-        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        if(Browser.TouchUI) {
+            contextMenu.show();
+        } else {
+            $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        }
         assert.ok(contextMenu.option("visible"));
         assert.ok(contextMenu.option("items")[0].text.indexOf("Select All") > -1);
     });
@@ -309,7 +317,11 @@ QUnit.module("Context Menu", {
         this.instance.option("contextMenu.commands", ["selectAll"]);
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(SIMPLE_DIAGRAM);
         const contextMenu = this.$element.find(CONTEXT_MENU_SELECTOR).dxContextMenu("instance");
-        $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        if(Browser.TouchUI) {
+            contextMenu.show();
+        } else {
+            $(this.$element.find(MAIN_ELEMENT_SELECTOR).eq(0)).trigger("dxcontextmenu");
+        }
         assert.ok(this.instance._diagramInstance.selection.isEmpty());
         $(contextMenu.itemsContainer().find(DX_MENU_ITEM_SELECTOR).eq(0)).trigger("dxclick");
         assert.notOk(this.instance._diagramInstance.selection.isEmpty());
