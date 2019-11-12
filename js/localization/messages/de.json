@@ -68,6 +68,7 @@
         "dxForm-optionalMark": "optional",
         "dxForm-requiredMessage": "{0} ist ein Pflichtfeld",
         "dxNumberBox-invalidValueMessage": "Der Wert muss eine Zahl sein",
+        "dxNumberBox-noDataText": "Keine Daten",
         "dxDataGrid-columnChooserTitle": "Spaltenauswahl",
         "dxDataGrid-columnChooserEmptyText": "Ziehen Sie Spalten hierhin, um sie zu verstecken",
         "dxDataGrid-groupContinuesMessage": "Weiter auf der nächsten Seite",
