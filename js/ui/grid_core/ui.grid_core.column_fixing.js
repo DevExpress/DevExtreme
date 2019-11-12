@@ -378,12 +378,14 @@ var baseFixedColumns = {
         this.synchronizeRows();
     },
 
-    setColumnWidths: function(widths) {
+    setColumnWidths: function(options) {
         var columns,
             visibleColumns = this._columnsController.getVisibleColumns(),
-            hasVisibleWidth = widths && widths.length && isDefined(visibleColumns[0].visibleWidth),
-            useVisibleColumns = false,
-            rowsView = this.component.getView("rowsView");
+            widths = options.widths,
+            isWidthsSynchronized = widths && widths.length && isDefined(visibleColumns[0].visibleWidth),
+            optionNames = options.optionNames,
+            isColumnWidthChanged = optionNames && optionNames.width,
+            useVisibleColumns = false;
 
         this.callBase.apply(this, arguments);
 
@@ -392,16 +394,16 @@ var baseFixedColumns = {
                 useVisibleColumns = widths && widths.length && !this.isScrollbarVisible(true);
             } else {
                 let hasAutoWidth = widths && widths.some(function(width) { return width === "auto"; });
-                useVisibleColumns = hasAutoWidth && (!hasVisibleWidth || !this.isScrollbarVisible(true));
+                useVisibleColumns = hasAutoWidth && (!isWidthsSynchronized || !this.isScrollbarVisible(true));
             }
 
             if(useVisibleColumns) {
                 columns = visibleColumns;
             }
-            this.callBase(widths, this._fixedTableElement, columns, true);
+            this.callBase(extend({}, options, { $tableElement: this._fixedTableElement, columns, fixed: true }));
         }
 
-        if(hasVisibleWidth || rowsView._needSynchronizeRows()) {
+        if(isWidthsSynchronized || isColumnWidthChanged && this.option("wordWrapEnabled")) {
             this.synchronizeRows();
         }
     },
@@ -864,14 +866,6 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _afterRowPrepared: function(e) {
         if(this._isFixedTableRendering) return;
         this.callBase(e);
-    },
-
-    _needSynchronizeRows: function() {
-        if(this._fixedTableElement) {
-            const fixedTableHeight = Math.round(this._fixedTableElement.height());
-            const tableHeight = Math.round(this._tableElement.height());
-            return fixedTableHeight !== tableHeight;
-        }
     },
 
     dispose: function() {
