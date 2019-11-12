@@ -25,6 +25,7 @@
     "type": "git",
     "url": "https://github.com/DevExpress/DevExtreme.git"
   },
+  "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "devexpress-diagram": "0.1.41",
