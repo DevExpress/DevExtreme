@@ -66,6 +66,7 @@
         "dxForm-optionalMark": "isteğe bağlı",
         "dxForm-requiredMessage": "{0} gerekli",
         "dxNumberBox-invalidValueMessage": "Değer bir sayı olmalı",
+        "dxNumberBox-noDataText": "Veri yok",
         "dxDataGrid-columnChooserTitle": "Sütun Seçici",
         "dxDataGrid-columnChooserEmptyText": "Sütunu gizlemek için buraya sürükleyin",
         "dxDataGrid-groupContinuesMessage": "Bir sonraki sayfada devam ediyor",

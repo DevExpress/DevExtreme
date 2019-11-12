@@ -66,6 +66,7 @@
         "dxForm-optionalMark": "необязательный",
         "dxForm-requiredMessage": " Поле {0} должно быть заполнено",
         "dxNumberBox-invalidValueMessage": "Значение должно быть числом",
+        "dxNumberBox-noDataText": "Нет данных",
         "dxDataGrid-columnChooserTitle": "Выбор столбцов",
         "dxDataGrid-columnChooserEmptyText": "Перетащите столбец сюда, чтобы скрыть его",
         "dxDataGrid-groupContinuesMessage": "Продолжение на следующей странице",

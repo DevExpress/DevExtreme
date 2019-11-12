@@ -77,6 +77,7 @@
         "dxForm-requiredMessage": "{0} è richiesto",
 
         "dxNumberBox-invalidValueMessage": "Il valore deve essere numerico",
+        "dxNumberBox-noDataText": "Nessun dato",
 
         "dxDataGrid-columnChooserTitle": "Selezione colonne",
         "dxDataGrid-columnChooserEmptyText": "Trascina qui una colonna per nasconderla",
