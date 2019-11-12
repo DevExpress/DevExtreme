@@ -222,6 +222,28 @@ QUnit.testStart(function() {
             assert.strictEqual($("#form").find(".class2").length, 1, "$(#form).find(class2).length");
         });
 
+        QUnit.test("SimpleItem(undefined -> class1) when item is hidden via api", assert => {
+            const form = createForm([
+                {
+                    itemType: "simple",
+                    editorType: "dxTextBox",
+                    name: "item1"
+                }]
+            );
+
+            if(useItemOption) {
+                form.itemOption("item1", "visible", false);
+                form.itemOption("item1", "cssClass", "class1");
+            } else {
+                form.option("items[0].visible", false);
+                form.option("items[0].cssClass", "class1");
+            }
+
+            assert.strictEqual(form.itemOption("item1").cssClass, "class1", "form.itemOption(item1).cssClass");
+            assert.strictEqual(form.option("items[0].cssClass"), "class1", "form.option(items[0].cssClass)");
+            assert.strictEqual($("#form").find(".class2").length, 0, "$(#form).find(class2).length");
+        });
+
         QUnit.testInActiveWindow("ButtonItem(class1 -> class2)", assert => {
             if(devices.real().deviceType !== "desktop") {
                 assert.ok(true, "desktop specific test");

@@ -492,6 +492,21 @@ QUnit.test("Validate the form without validation rules for an any simple items",
     assert.equal(errorStub.getCalls().length, 0, "errors are not written to the console");
 });
 
+QUnit.test("Change validation rules when simple item is hidden via api", (assert) => {
+    const form = $("#form").dxForm({
+        items: [{
+            itemType: "simple",
+            editorType: "dxTextBox",
+            name: "item1"
+        }]
+    }).dxForm("instance");
+
+    form.itemOption("item1", "visible", false);
+    form.itemOption("item1", "validationRules", [{ type: "required" }]);
+
+    assert.deepEqual(form.itemOption("item1").validationRules, [{ type: "required" }], "validation rules");
+});
+
 QUnit.testInActiveWindow("Change RangeRule.max", assert => {
     const runChangeRuleRageMaxTest = (options) => {
         [true, false].forEach(useItemOption => {
