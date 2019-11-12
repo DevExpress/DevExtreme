@@ -463,7 +463,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._selectAllValueChangedAction({ value: value });
     },
 
-    _selectedItemKeysChange: function(keys) {
+    _selectedItemKeysOptionChange: function(keys) {
         this.unselectAll();
         each(keys, (index, key) => {
             if(key) {
@@ -556,7 +556,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 this._createSelectAllValueChangedAction();
                 break;
             case "selectedItemKeys":
-                this._selectedItemKeysChange(args.value);
+                this._selectedItemKeysOptionChange(args.value);
                 break;
             case "selectNodesRecursive":
                 this._dataAdapter.setOption("recursiveSelection", args.value);
