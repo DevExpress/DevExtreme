@@ -448,7 +448,7 @@ var DOMComponent = Component.inherit({
     resetOption(optionName) {
         this.callBase(optionName);
 
-        if(optionName === "width" || optionName === "height") {
+        if((optionName === "width" || optionName === "height") && !isDefined(this.initialOption(optionName))) {
             this.$element().css(optionName, "");
         }
     }
