@@ -4,6 +4,12 @@ import Widget from "../widget/ui.widget";
 import ContextMenu from "../context_menu";
 import DiagramCommands from "./ui.diagram.commands";
 import DiagramBar from "./diagram_bar";
+import { getDiagram } from "./diagram_importer";
+
+const DIAGRAM_TOUCHBAR_CLASS = "dx-diagram-touchbar";
+const DIAGRAM_TOUCHBAR_TARGET_CLASS = "dx-diagram-touchbar-target";
+const DIAGRAM_TOUCHBAR_MINWIDTH = 240;
+const DIAGRAM_TOUCHBAR_OFFSET = 32;
 
 class DiagramContextMenu extends Widget {
     _init() {
@@ -23,12 +29,24 @@ class DiagramContextMenu extends Widget {
         this._commandToIndexMap = {};
         this._commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
 
+        this._$contextMenuTargetElement = $("<div>")
+            .addClass(DIAGRAM_TOUCHBAR_TARGET_CLASS)
+            .appendTo(this.$element());
+
         const $contextMenu = $("<div>")
             .appendTo(this.$element());
 
+        const { Browser } = getDiagram();
         this._contextMenuInstance = this._createComponent($contextMenu, ContextMenu, {
+            cssClass: Browser.TouchUI ? DIAGRAM_TOUCHBAR_CLASS : "",
             items: this._getItems(this._commands),
             focusStateEnabled: false,
+            position: (Browser.TouchUI ? {
+                my: { x: "center", y: "bottom" },
+                at: { x: "center", y: "top" },
+                of: this._$contextMenuTargetElement
+            } : {}),
+
 
             onItemClick: ({ itemData }) => this._onItemClick(itemData),
             onShowing: (e) => {
@@ -56,6 +74,7 @@ class DiagramContextMenu extends Widget {
                 items.push({
                     command: command.command,
                     text: command.text,
+                    icon: command.icon,
                     getParameter: command.getParameter,
                     beginGroup: beginGroup
                 });
@@ -64,14 +83,32 @@ class DiagramContextMenu extends Widget {
         });
         return items;
     }
-    _show(x, y, isTouch) {
+    _show(x, y, selection) {
         this.clickPosition = { x, y };
-        this._contextMenuInstance.option("visible", false);
-        this._contextMenuInstance.option("position", { offset: x + " " + y });
-        this._contextMenuInstance.option("visible", true);
+        const { Browser } = getDiagram();
+        if(Browser.TouchUI) {
+            this._contextMenuInstance.hide();
+            this._$contextMenuTargetElement.show();
+            if(!selection) {
+                selection = { x, y, width: 0, height: 0 };
+            }
+            var widthCorrection = selection.width > DIAGRAM_TOUCHBAR_MINWIDTH ? 0 : (DIAGRAM_TOUCHBAR_MINWIDTH - selection.width) / 2;
+            this._$contextMenuTargetElement.css({
+                left: selection.x - widthCorrection,
+                top: selection.y - DIAGRAM_TOUCHBAR_OFFSET,
+                width: selection.width + 2 * widthCorrection,
+                height: selection.height + 2 * DIAGRAM_TOUCHBAR_OFFSET,
+            });
+            this._contextMenuInstance.show();
+        } else {
+            this._contextMenuInstance.hide();
+            this._contextMenuInstance.option("position", { offset: x + " " + y });
+            this._contextMenuInstance.show();
+        }
     }
     _hide() {
-        this._contextMenuInstance.option("visible", false);
+        this._$contextMenuTargetElement.hide();
+        this._contextMenuInstance.hide();
     }
     _onItemClick(itemData) {
         var processed = false;
