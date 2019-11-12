@@ -136,6 +136,11 @@ QUnit.test("Center element has correct margin with RTL", function(assert) {
 QUnit.test("buttons has text style in Material", function(assert) {
     var origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
+
+    ToolbarBase.prototype._waitParentAnimationFinished = () => {
+        return new Promise(resolve => { resolve(); });
+    };
+
     var element = this.element.dxToolbar({
             items: [{
                 location: 'before',
@@ -1210,6 +1215,10 @@ QUnit.test("menu should be hidden if all overflow items were hidden", function(a
 QUnit.testInActiveWindow("items should not be rearranged if width is not changed", function(assert) {
     var $input = $("<input>").width(300);
 
+    ToolbarBase.prototype._waitParentAnimationFinished = () => {
+        return new Promise(resolve => { resolve(); });
+    };
+
     var $element = $("#widget").dxToolbar({
             items: [
                 { location: "before", template: function() { return $("<div>").width(300); } },
@@ -1541,7 +1550,7 @@ QUnit.test("Toolbar calls _dimensionChanged function in Material theme to recalc
         height: 50
     });
 
-    this.clock.tick();
+    this.clock.tick(15);
 
     themes.isMaterial = origIsMaterial;
 });
