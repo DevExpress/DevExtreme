@@ -79,6 +79,7 @@
     "dxForm-requiredMessage": "{0} kötelező",
 
     "dxNumberBox-invalidValueMessage": "Az érték szám kell legyen",
+    "dxNumberBox-noDataText": "Nincs adat",
 
     "dxDataGrid-columnChooserTitle": "Oszlopválasztó",
     "dxDataGrid-columnChooserEmptyText": "Húzza ide az oszlopot az elrejtéshez",

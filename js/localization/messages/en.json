@@ -79,6 +79,7 @@
         "dxForm-requiredMessage": "{0} is required",
 
         "dxNumberBox-invalidValueMessage": "Value must be a number",
+        "dxNumberBox-noDataText": "No data",
 
         "dxDataGrid-columnChooserTitle": "Column Chooser",
         "dxDataGrid-columnChooserEmptyText": "Drag a column here to hide it",
