@@ -212,6 +212,13 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
         });
 
         accessors.getters["display"] = !this._displayGetter ? (itemData) => itemData.text : this._displayGetter;
+        let selectedItemKeysOption = this.option('selectedKeys');
+        if(selectedItemKeysOption) {
+            accessors.getters["selected"] = (item, defValue) => {
+                return selectedItemKeysOption.includes(accessors.getters["key"](item));
+            };
+        }
+
 
         return accessors;
     },

@@ -459,6 +459,15 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._selectAllValueChangedAction({ value: value });
     },
 
+    _selectedKeysChange: function(keys) {
+        this.unselectAll();
+        each(keys, (index, key) => {
+            if(key) {
+                this._updateItemSelection(true, key);
+            }
+        });
+    },
+
     _checkBoxModeChange: function(value, previousValue) {
         if(previousValue === "none" || value === "none") {
             this.repaint();
@@ -541,6 +550,9 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
                 break;
             case "onSelectAllValueChanged":
                 this._createSelectAllValueChangedAction();
+                break;
+            case "selectedKeys":
+                this._selectedKeysChange(args.value);
                 break;
             case "selectNodesRecursive":
                 this._dataAdapter.setOption("recursiveSelection", args.value);
@@ -1396,6 +1408,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
         this._updateItemsUI();
+
+        this._setOptionSilent("selectedKeys", this.getSelectedNodesKeys());
 
         const initiator = dxEvent || this._findItemElementByItem(node.internalFields.item),
             handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
