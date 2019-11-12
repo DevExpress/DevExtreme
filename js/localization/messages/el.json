@@ -79,6 +79,7 @@
         "dxForm-requiredMessage": "Το πεδίο {0} είναι απαιτούμενο",
 
         "dxNumberBox-invalidValueMessage": "Η τιμή πρέπει να είναι αριθμητική",
+        "dxNumberBox-noDataText": "Δεν υπάρχουν δεδομένα",
 
         "dxDataGrid-columnChooserTitle": "Επιλογέας στήλης",
         "dxDataGrid-columnChooserEmptyText": "Σύρετε μια στήλη εδώ για να την κρύψετε",

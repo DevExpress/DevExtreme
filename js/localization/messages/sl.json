@@ -77,6 +77,7 @@
         "dxForm-requiredMessage": "Podatek {0} je obvezen",
 
         "dxNumberBox-invalidValueMessage": "Vrednost mora biti število",
+        "dxNumberBox-noDataText": "Ni podatkov",
 
         "dxDataGrid-columnChooserTitle": "Izbirnik stolpcev",
         "dxDataGrid-columnChooserEmptyText": "Povlecite stolpec sem, da ga skrijete",
