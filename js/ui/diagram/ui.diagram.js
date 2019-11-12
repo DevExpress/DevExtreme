@@ -271,6 +271,7 @@ class Diagram extends Widget {
     _showDialog(dialogParameters) {
         if(this._dialogInstance) {
             this._dialogInstance.option("onGetContent", dialogParameters.onGetContent);
+            this._dialogInstance.option("onHidden", function() { this._diagramInstance.captureFocus(); }.bind(this));
             this._dialogInstance.option("command", this._diagramInstance.commandManager.getCommand(dialogParameters.command));
             this._dialogInstance.option("title", dialogParameters.title);
             this._dialogInstance._show();
