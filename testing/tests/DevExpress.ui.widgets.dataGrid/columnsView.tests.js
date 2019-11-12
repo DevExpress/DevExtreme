@@ -105,7 +105,7 @@ QUnit.test('Set column widths', function(assert) {
         newWidths = [250, 100, 50, 50, 150];
 
     // act
-    that.columnsView.setColumnWidths(newWidths);
+    that.columnsView.setColumnWidths({ widths: newWidths });
 
     // assert
     assert.deepEqual(that.columnsView.getColumnWidths(), newWidths);
