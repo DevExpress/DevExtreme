@@ -99,12 +99,12 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
         initDefaultOptions: initDefaultOptions
     });
 
-    this.setColumnWidths = function(widths) {
+    this.setColumnWidths = function({ widths }) {
         var i;
         for(i = 0; i < columns.length; i++) {
             columns[i].visibleWidth = widths[i];
         }
-        this.dataGrid.rowsView.setColumnWidths(widths);
+        this.dataGrid.rowsView.setColumnWidths({ widths });
     };
 
     if(this.dataGrid) {
@@ -363,7 +363,7 @@ QUnit.test('Resized event not raised for grouped column', function(assert) {
         testElement = $('#container');
 
     rowsView.render(testElement);
-    this.setColumnWidths([100, 100, 100]);
+    this.setColumnWidths({ widths: [100, 100, 100] });
     // act
     rowsView.resize();
 
@@ -387,7 +387,7 @@ QUnit.test('Resized event on resize after second render', function(assert) {
         testElement = $('#container');
 
     rowsView.render(testElement);
-    this.setColumnWidths([100, 100, 100]);
+    this.setColumnWidths({ widths: [100, 100, 100] });
     rowsView.resize();
 
     // act
@@ -411,7 +411,7 @@ QUnit.test('Resized event on second resize not raised', function(assert) {
         testElement = $('#container');
 
     rowsView.render(testElement);
-    rowsView.setColumnWidths();
+    rowsView.setColumnWidths({});
     rowsView.resize();
     resizedColumns = [];
     // act
@@ -432,10 +432,10 @@ QUnit.test('Resized event on second resize when container resized and columns wi
         testElement = $('#container');
 
     rowsView.render(testElement);
-    this.setColumnWidths([100, 100, 100]);
+    this.setColumnWidths({ widths: [100, 100, 100] });
     rowsView.resize();
     resizedColumns = [];
-    this.setColumnWidths([100, 50, 50]);
+    this.setColumnWidths({ widths: [100, 50, 50] });
     // act
     rowsView.resize();
     getCells(testElement);
@@ -2112,7 +2112,7 @@ QUnit.test('Render additional row for free space after resize', function(assert)
     $testElement.height(300);
 
     rowsView.render($testElement);
-    this.setColumnWidths([100]);
+    this.setColumnWidths({ widths: [100] });
     // act
     rowsView.resize();
 
@@ -3859,7 +3859,7 @@ QUnit.test("Width of column in master detail are not changed when it is changed 
 
     // act
     rowsView.render(testElement);
-    rowsView.setColumnWidths([100, 100]);
+    rowsView.setColumnWidths({ widths: [100, 100] });
     $colgroup = $(rowsView.element().find("colgroup"));
     $cols1 = $colgroup.eq(0).children();
     $cols2 = $colgroup.eq(1).children();
@@ -6553,7 +6553,7 @@ QUnit.test("Set column widths for virtual table", function(assert) {
     rowsView.resize();
 
     // act
-    rowsView.setColumnWidths([10, 20, 30]);
+    rowsView.setColumnWidths({ widths: [10, 20, 30] });
 
     // assert
     $colElements = $testElement.find('table:not(.dx-datagrid-table-content)').find("col");

@@ -2168,7 +2168,8 @@ function getEvent(options) {
         var resizeController = this.createColumnsResizerViewController(),
             posX,
             testPosX,
-            $container = $("#container").width('300px');
+            $container = $("#container").width('300px'),
+            columnWidths;
 
         // act
         this.renderViews($container);
@@ -2179,7 +2180,8 @@ function getEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { x: -9850, columnIndex: 1, index: 2 };
         resizeController._resizingInfo = { startPosX: -9847, currentColumnIndex: 0 };
-        resizeController._columnHeadersView.setColumnWidths([this.options.columns[0].width + 7, this.options.columns[1].width - 7]);
+        columnWidths = [this.options.columns[0].width + 7, this.options.columns[1].width - 7];
+        resizeController._columnHeadersView.setColumnWidths({ widths: columnWidths });
         resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',

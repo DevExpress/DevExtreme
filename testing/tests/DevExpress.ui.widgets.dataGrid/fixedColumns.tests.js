@@ -230,7 +230,7 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when no scroll"
     that.columnHeadersView.render($testElement);
 
     // act
-    that.columnHeadersView.setColumnWidths([50, 50, 50, 50, "auto"]);
+    that.columnHeadersView.setColumnWidths({ widths: [50, 50, 50, 50, "auto"] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-headers").children().length, 2, "count content");
@@ -269,7 +269,7 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when has scroll
     that.columnHeadersView.render($testElement);
 
     // act
-    that.columnHeadersView.setColumnWidths([100, 100, 100, 100, 100]);
+    that.columnHeadersView.setColumnWidths({ widths: [100, 100, 100, 100, 100] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-headers").children().length, 2, "count content");
@@ -308,8 +308,8 @@ QUnit.test("ColumnHeadersView - set column width for fixed table when has scroll
     that.columnHeadersView.render($testElement);
 
     // act
-    that.columnHeadersView.setColumnWidths([50, 50, 50, "auto", 50]);
-    that.columnHeadersView.setColumnWidths([50, 150, 50, 50, 50]);
+    that.columnHeadersView.setColumnWidths({ widths: [50, 50, 50, "auto", 50] });
+    that.columnHeadersView.setColumnWidths({ widths: [50, 150, 50, 50, 50] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-headers").children().length, 2, "count content");
@@ -349,7 +349,7 @@ QUnit.test("RowsView - set column width for fixed table when no scroll", functio
     that.rowsView.render($testElement);
 
     // act
-    that.rowsView.setColumnWidths([50, 50, 50, 50, "auto"]);
+    that.rowsView.setColumnWidths({ widths: [50, 50, 50, 50, "auto"] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
@@ -388,7 +388,7 @@ QUnit.test("RowsView - set column width for fixed table when has scroll", functi
     that.rowsView.render($testElement);
 
     // act
-    that.rowsView.setColumnWidths([100, 100, 100, 100, 100]);
+    that.rowsView.setColumnWidths({ widths: [100, 100, 100, 100, 100] });
 
     // assert
     assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
@@ -3122,7 +3122,7 @@ QUnit.test("Fixed column widths should be correct when the group cell position i
     this.rowsView.render($testElement);
 
     // act
-    this.rowsView.setColumnWidths([100, 30, 150, 100]);
+    this.rowsView.setColumnWidths({ widths: [100, 30, 150, 100] });
     this.rowsView.resize();
 
     // assert
@@ -3218,19 +3218,4 @@ QUnit.test("The vertical position of the fixed table should be correct after scr
     // assert
     $fixedTableElement = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     assert.strictEqual(translator.getTranslate($fixedTableElement).y, 0, "scroll top");
-});
-
-QUnit.test("Test rowsView._needSynchronizeRows method (T830739)", function(assert) {
-    // arrange
-    const $testElement = $("#container");
-
-    this.setupDataGrid();
-    this.rowsView.render($testElement);
-
-    // assert
-    assert.notOk(this.rowsView._needSynchronizeRows());
-
-    // act, assert
-    this.rowsView._fixedTableElement.height = () => 50;
-    assert.ok(this.rowsView._needSynchronizeRows());
 });
