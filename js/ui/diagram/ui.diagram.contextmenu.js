@@ -29,12 +29,9 @@ class DiagramContextMenu extends Widget {
         this._commandToIndexMap = {};
         this._commands.forEach((item, index) => this._commandToIndexMap[item.command] = index);
 
-        this._$contextMenuTargetElement = $("." + DIAGRAM_TOUCHBAR_TARGET_CLASS);
-        if(this._$contextMenuTargetElement.length === 0) {
-            this._$contextMenuTargetElement = $("<div>")
-                .addClass(DIAGRAM_TOUCHBAR_TARGET_CLASS)
-                .appendTo("body");
-        }
+        this._$contextMenuTargetElement = $("<div>")
+            .addClass(DIAGRAM_TOUCHBAR_TARGET_CLASS)
+            .appendTo(this.$element());
 
         const $contextMenu = $("<div>")
             .appendTo(this.$element());
