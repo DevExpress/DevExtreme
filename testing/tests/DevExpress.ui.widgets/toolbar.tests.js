@@ -137,9 +137,7 @@ QUnit.test("buttons has text style in Material", function(assert) {
     var origIsMaterial = themes.isMaterial;
     themes.isMaterial = function() { return true; };
 
-    ToolbarBase.prototype._waitParentAnimationFinished = () => {
-        return new Promise(resolve => { resolve(); });
-    };
+    ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
 
     var element = this.element.dxToolbar({
             items: [{
@@ -1215,9 +1213,7 @@ QUnit.test("menu should be hidden if all overflow items were hidden", function(a
 QUnit.testInActiveWindow("items should not be rearranged if width is not changed", function(assert) {
     var $input = $("<input>").width(300);
 
-    ToolbarBase.prototype._waitParentAnimationFinished = () => {
-        return new Promise(resolve => { resolve(); });
-    };
+    ToolbarBase.prototype._waitParentAnimationFinished = () => Promise.resolve();
 
     var $element = $("#widget").dxToolbar({
             items: [
@@ -1531,9 +1527,7 @@ QUnit.test("Toolbar calls _dimensionChanged function in Material theme to recalc
 
     var done = assert.async();
 
-    ToolbarBase.prototype._checkWebFontForLabelsLoaded = () => {
-        return new Promise(resolve => { resolve(); });
-    };
+    ToolbarBase.prototype._checkWebFontForLabelsLoaded = () => Promise.resolve();
 
     ToolbarBase.prototype._dimensionChanged = () => {
         assert.expect(0);
