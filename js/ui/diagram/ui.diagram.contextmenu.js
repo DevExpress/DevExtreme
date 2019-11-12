@@ -8,7 +8,7 @@ import { getDiagram } from "./diagram_importer";
 
 const DIAGRAM_TOUCHBAR_CLASS = "dx-diagram-touchbar";
 const DIAGRAM_TOUCHBAR_TARGET_CLASS = "dx-diagram-touchbar-target";
-const DIAGRAM_TOUCHBAR_MINWIDTH = 240;
+const DIAGRAM_TOUCHBAR_MINWIDTH = 260;
 const DIAGRAM_TOUCHBAR_OFFSET = 32;
 
 class DiagramContextMenu extends Widget {
