@@ -1396,7 +1396,7 @@ const Form = Widget.inherit({
                     var path = fieldPath.slice();
 
                     item = that._getItemByFieldPath(path, fieldName, item);
-                } else if(itemType === "group" && !(item.caption || item.name) || itemType === "tabbed") {
+                } else if(itemType === "group" && !(item.caption || item.name) || itemType === "tabbed" && !item.name) {
                     var subItemsField = that._getSubItemField(itemType);
 
                     item.items = that._generateItemsFromData(item.items);
