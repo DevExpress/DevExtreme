@@ -721,8 +721,8 @@ class Diagram extends Widget {
             this._onToggleFullScreen(false);
         }
     }
-    _onShowContextMenu(x, y, isTouch) {
-        this._contextMenu._show(x, y, isTouch);
+    _onShowContextMenu(x, y, selection) {
+        this._contextMenu._show(x, y, selection);
     }
     _onHideContextMenu() {
         this._contextMenu._hide();

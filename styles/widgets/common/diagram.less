@@ -135,3 +135,45 @@
     width: 64px;
     height: 64px;
 }
+
+.dx-diagram-touchbar {
+    .dx-menu-items-container {
+        display: block;
+        height: 100%;
+    }
+
+    .dx-menu-items-container::after {
+        display: block;
+        content: "";
+        clear: both;
+    }
+
+    .dx-menu-items-container > li {
+        display: block;
+        float: left;
+    }
+
+    .dx-menu-separator {
+        width: 1px;
+        height: 29px;
+        margin: 0 2px;
+    }
+
+    .dx-menu-item .dx-menu-item-content {
+        padding: 5px 5px 6px;
+    }
+
+    .dx-menu-item .dx-menu-item-content .dx-icon {
+        margin: 0;
+    }
+
+    .dx-menu-item .dx-menu-item-content .dx-menu-item-text {
+        display: none;
+    }
+}
+
+.dx-diagram-touchbar-target {
+    position: absolute;
+    background-color: transparent;
+    pointer-events: none;
+}
