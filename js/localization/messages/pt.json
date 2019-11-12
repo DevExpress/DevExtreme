@@ -66,6 +66,7 @@
         "dxForm-optionalMark": "opcional",
         "dxForm-requiredMessage": "{0} é de preenchimento obrigatório",
         "dxNumberBox-invalidValueMessage": "Valor deve ser um número",
+        "dxNumberBox-noDataText": "Sem dados",
         "dxDataGrid-columnChooserTitle": "Seletor de Colunas",
         "dxDataGrid-columnChooserEmptyText": "Arraste uma coluna para até aqui para escondê-la",
         "dxDataGrid-groupContinuesMessage": "Continua na página seguinte",
