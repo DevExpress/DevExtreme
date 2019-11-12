@@ -862,11 +862,6 @@ var DropDownEditor = TextBox.inherit({
     },
 
     /**
-    * @name dxDropDownEditorMethods.reset
-    * @publicName reset()
-    */
-
-    /**
     * @name dxDropDownEditorMethods.field
     * @publicName field()
     * @return dxElement
