@@ -340,11 +340,6 @@ var RangeSlider = Slider.inherit({
         this.option("value", [start, end]);
     },
 
-    /**
-     * @name dxRangeSliderMethods.reset
-     * @publicName reset()
-     */
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
