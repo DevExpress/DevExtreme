@@ -1739,6 +1739,30 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     /**
+     * @name dxTreeViewMethods.setSelectItems
+     * @publicName selectItems(itemElemens)
+     * @param1 itemElement:Node
+     */
+    /**
+     * @name dxTreeViewMethods.setSelectItems
+     * @publicName selectItems(itemDatas)
+     * @param1 itemData:Object
+     */
+    /**
+     * @name dxTreeViewMethods.setSelectItems
+     * @publicName selectItems(keys)
+     * @param1 key:any
+     */
+    setSelectItems: function(items) {
+        this.unselectAll();
+        each(items, (index, item) => {
+            if(item) {
+                this._updateItemSelection(true, item);
+            }
+        });
+    },
+
+    /**
     * @name dxTreeViewMethods.unselectItem
     * @publicName unselectItem(itemElement)
     * @param1 itemElement:Node
@@ -1850,6 +1874,65 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     getSelectedNodesKeys: function() {
         return this._dataAdapter.getSelectedNodesKeys();
+    },
+
+    /**
+     * @name dxTreeViewMethods.getSelectedNodes
+     * @publicName getSelectedNodes()
+     * @return Array<dxTreeViewNode>
+     */
+    /**
+     * @name dxTreeViewNode
+     * @type object
+     */
+    /**
+     * @name dxTreeViewNode.children
+     * @type Array<dxTreeViewNode>
+     */
+
+    /**
+     * @name dxTreeViewNode.disabled
+     * @type boolean
+     */
+
+    /**
+     * @name dxTreeViewNode.expanded
+     * @type boolean
+     */
+
+    /**
+     * @name dxTreeViewNode.itemData
+     * @type object
+     */
+
+    /**
+     * @name dxTreeViewNode.key
+     * @type any
+     */
+
+    /**
+     * @name dxTreeViewNode.parent
+     * @type dxTreeViewNode
+     */
+
+    /**
+     * @name dxTreeViewNode.selected
+     * @type boolean
+     */
+
+    /**
+     * @name dxTreeViewNode.text
+     * @type string
+     */
+    getSelectedNodes: function() {
+        let nodes = [];
+        each(this.getSelectedNodesKeys(), (index, key) => {
+            const node = this._dataAdapter.getNodeByKey(key);
+            if(node) {
+                nodes.push(this._dataAdapter.getPublicNode(node));
+            }
+        });
+        return nodes;
     },
 
     /**
