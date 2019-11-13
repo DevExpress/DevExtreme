@@ -230,7 +230,7 @@ QUnit.test("Force using proxy", function(assert) {
     sinon.stub(eventsEngine, "trigger");
     try {
         // act
-        fileSaver.saveAs("test", "EXCEl", undefined, "http://localhost/", undefined, true);
+        fileSaver.saveAs("test", "EXCEl", undefined, "http://localhost/", true);
 
         // assert
         assert.deepEqual(eventsEngine.trigger.lastCall.args[1], "submit");
@@ -244,7 +244,7 @@ QUnit.test("Using proxyUrl is now deprecated", function(assert) {
     sinon.stub(errors, "log");
     try {
         // act
-        fileSaver.saveAs("test", "EXCEl", undefined, "http://localhost/", undefined, true);
+        fileSaver.saveAs("test", "EXCEl", undefined, "http://localhost/", true);
 
         // assert
         assert.equal(errors.log.callCount, 1);
