@@ -51,13 +51,13 @@ exports.fileSaver = {
         // var URL = _global.URL || _global.webkitURL
         // var a = document.createElement('a')
         // name = name || blob.name || 'download'
-    
+
         // a.download = name
         // a.rel = 'noopener' // tabnabbing
-    
+
         // // TODO: detect chrome extensions & packaged apps
         // // a.target = '_blank'
-    
+
         // if (typeof blob === 'string') {
         //   // Support regular links
         //   a.href = blob
@@ -82,7 +82,7 @@ exports.fileSaver = {
         exportLinkElement.target = "_blank"; // cors policy
 
         return exportLinkElement;
-        
+
 
         // eventsEngine.on($(exportLinkElement), "click", function() {
         //     $(exportLinkElement).remove();
@@ -91,13 +91,12 @@ exports.fileSaver = {
 
         // domAdapter.getBody().appendChild(exportLinkElement);
 
-        //$(exportLinkElement).css({ "display": "none" }).text("load").attr(attributes)[0]; // .click();
+        // $(exportLinkElement).css({ "display": "none" }).text("load").attr(attributes)[0]; // .click();
 
 
+        // return exportLinkElement;
 
-       // return exportLinkElement;
 
-        
     },
 
     _formDownloader: function(proxyUrl, fileName, contentType, data) {
