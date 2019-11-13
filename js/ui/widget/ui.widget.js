@@ -671,7 +671,7 @@ var Widget = DOMComponentWithTemplate.inherit({
                 this._renderHint();
                 break;
             case "activeStateEnabled":
-                this._attachFeedbackEvents(this._eventBindingTarget(), this._activeStateUnit, args.value);
+                this._attachFeedbackEvents();
                 break;
             case "hoverStateEnabled":
                 this._attachHoverEvents();
