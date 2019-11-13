@@ -729,7 +729,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 return typeUtils.isDefined(width) ? width : "auto";
             });
 
-            this.setColumnWidths(widths);
+            this.setColumnWidths({ widths, optionNames });
             return;
         }
 
@@ -900,7 +900,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return columnIndex;
     },
 
-    setColumnWidths: function(widths, $tableElement, columns, fixed) {
+    setColumnWidths: function({ widths, $tableElement, columns, fixed }) {
         var $cols,
             i,
             width,
