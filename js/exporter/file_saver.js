@@ -92,7 +92,7 @@ exports.fileSaver = {
     _click: function(link) {
         try {
             // eslint-disable-next-line no-undef
-            link.dispatchEvent(new MouseEvent('click'));
+            link.dispatchEvent(new MouseEvent('click', { cancelable: true }));
         } catch(e) {
             var event = domAdapter.getDocument().createEvent('MouseEvents');
             event.initMouseEvent('click', true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
@@ -123,9 +123,7 @@ exports.fileSaver = {
                     that._objectUrlRevoked = true;
                 }, this._revokeObjectURLTimeout);
 
-                setTimeout(() => {
-                    this._click(downloadLink);
-                }, 0);
+                this._click(downloadLink);
             }
         }
     },
@@ -148,9 +146,7 @@ exports.fileSaver = {
                 if(!typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) errors.log("E1034");
 
                 var downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
-                setTimeout(() => {
-                    this._click(downloadLink);
-                }, 0);
+                this._click(downloadLink);
             }
         }
     }

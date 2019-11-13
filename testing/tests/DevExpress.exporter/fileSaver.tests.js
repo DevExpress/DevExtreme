@@ -59,13 +59,23 @@ QUnit.test("saveAs - check revokeObjectURL", function(assert) {
 
     assert.timeout(1000);
     var done = assert.async();
-    assert.expect(4);
+    assert.expect(5);
     assert.equal(fileSaver._revokeObjectURLTimeout, 30000, "default fileSaver._revokeObjectURLTimeout");
 
     var oldRevokeObjectURLTimeout = fileSaver._revokeObjectURLTimeout;
+    var oldFileSaverClick = fileSaver._click;
     try {
         fileSaver._revokeObjectURLTimeout = 100;
         fileSaver._objectUrlRevoked = false;
+
+        fileSaver._click = function(link) {
+            link.addEventListener("click", function(e) {
+                assert.ok(true, "file should be download");
+                e.preventDefault();
+            });
+
+            oldFileSaverClick(link);
+        };
 
         fileSaver.saveAs("test", "EXCEL", new Blob([], { type: "test/plain" }));
 
@@ -84,6 +94,7 @@ QUnit.test("saveAs - check revokeObjectURL", function(assert) {
             150);
     } finally {
         fileSaver._revokeObjectURLTimeout = oldRevokeObjectURLTimeout;
+        fileSaver._click = oldFileSaverClick;
     }
 });
 
