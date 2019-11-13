@@ -210,18 +210,19 @@ class Button extends Widget {
 
     _initMarkup() {
         this.$element().addClass('dx-button');
+
         this._renderType();
         this._renderStylingMode();
-
-        this.option('useInkRipple') && this._renderInkRipple();
+        this._renderInkRipple();
         this._renderClick();
 
-        this.setAria('role', 'button');
         this._updateAriaLabel();
 
         super._initMarkup();
 
         this._updateContent();
+        this._renderSubmitInput();
+        this.setAria('role', 'button');
     }
 
     _initTemplates() {
@@ -245,11 +246,11 @@ class Button extends Widget {
     }
 
     _optionChanged(args) {
-        const { name, previousValue } = args;
+        const { name } = args;
 
         switch(name) {
             case 'onClick':
-                this._renderClick();
+                this._updateClick();
                 break;
             case 'icon':
             case 'text':
@@ -257,9 +258,8 @@ class Button extends Widget {
                 this._updateAriaLabel();
                 break;
             case 'type':
-                this._refreshType(previousValue);
+                this._updateType();
                 this._updateContent();
-                this._updateAriaLabel();
                 break;
             case '_templateData':
                 break;
@@ -268,10 +268,12 @@ class Button extends Widget {
                 this._updateContent();
                 break;
             case 'stylingMode':
-                this._renderStylingMode();
+                this._updateStylingMode();
+                break;
+            case 'useSubmitBehavior':
+                this._updateSubmitInput();
                 break;
             case 'useInkRipple':
-            case 'useSubmitBehavior':
                 this._invalidate();
                 break;
             default:
@@ -279,87 +281,62 @@ class Button extends Widget {
         }
     }
 
-    _refreshType(prevType) {
-        const type = this.option('type');
-        const $element = this.$element();
-
-        prevType && $element
-            .removeClass(`dx-button-${prevType}`)
-            .addClass(`dx-button-${type}`);
-
-        if(!$element.hasClass('dx-button-has-icon') && type === 'back') {
-            this._updateContent();
-        }
-    }
-
     _renderClick() {
-        const actionConfig = { excludeValidators: ['readOnly'] };
-
-        if(this.option('useSubmitBehavior')) {
-            actionConfig.afterExecute = ({ component }) =>
-                setTimeout(() => component._$submitInput.get(0).click());
-        }
-
-        this._clickAction = this._createActionByOption('onClick', actionConfig);
-
         const $element = this.$element();
         const eventName = addNamespace(clickEventName, this.NAME);
 
-        eventsEngine.off($element, eventName);
         eventsEngine.on($element, eventName, this._executeClickAction.bind(this));
+        this._updateClick();
     }
 
     _renderInkRipple() {
-        const { text, icon, type } = this.option();
-        const isOnlyIconButton = !text && icon || type === 'back';
-        const config = {};
+        const { text, icon, type, useInkRipple } = this.option();
 
-        if(isOnlyIconButton) {
-            extend(config, {
+        if(useInkRipple) {
+            const isOnlyIconButton = !text && icon || type === 'back';
+
+            this._inkRipple = inkRipple.render(isOnlyIconButton ? {
                 waveSizeCoefficient: 1,
                 useHoldAnimation: false,
                 isCentered: true
-            });
+            } : {});
         }
-
-        this._inkRipple = inkRipple.render(config);
     }
 
     _renderStylingMode() {
         const $element = this.$element();
-        const stylingMode = this.option('stylingMode');
-        let stylingModeClass = `dx-button-mode-${stylingMode}`;
-
-        ['dx-button-mode-contained', 'dx-button-mode-text', 'dx-button-mode-outlined']
-            .forEach($element.removeClass.bind($element));
+        let { stylingMode } = this.option();
 
         if(['contained', 'text', 'outlined'].indexOf(stylingMode) === -1) {
-            const defaultOptionValue = this._getDefaultOptions()['stylingMode'];
-
-            stylingModeClass = `dx-button-mode-${defaultOptionValue}`;
+            stylingMode = this._getDefaultOptions().stylingMode;
         }
 
-        $element.addClass(stylingModeClass);
+        $element.addClass(`dx-button-mode-${stylingMode}`);
     }
 
     _renderSubmitInput() {
-        const submitAction = this._getSubmitAction();
+        const { useSubmitBehavior } = this.option();
 
-        this._needValidate = true;
-        this._validationStatus = 'valid';
-        this._$submitInput = $('<input>')
-            .attr('type', 'submit')
-            .attr('tabindex', -1)
-            .addClass('dx-button-submit-input')
-            .appendTo(this._$content);
+        if(useSubmitBehavior) {
+            const submitAction = this._getSubmitAction();
 
-        eventsEngine.on(this._$submitInput, 'click', e => submitAction({ event: e }));
+            this._needValidate = true;
+            this._validationStatus = 'valid';
+            this._$submitInput = $('<input>')
+                .attr('type', 'submit')
+                .attr('tabindex', -1)
+                .addClass('dx-button-submit-input')
+                .appendTo(this._$content);
+
+            eventsEngine.on(this._$submitInput, 'click', e => submitAction({ event: e }));
+        }
     }
 
     _renderType() {
-        const type = this.option('type');
+        const { type } = this.option();
+        const $element = this.$element();
 
-        type && this.$element().addClass(`dx-button-${type}`);
+        type && $element.addClass(`dx-button-${type}`);
     }
 
     _setDisabled(value) {
@@ -386,22 +363,32 @@ class Button extends Widget {
     }
 
     _updateAriaLabel() {
+        const ariaTarget = this._getAriaTarget();
         let { icon, text } = this.option();
 
-        if(getImageSourceType(icon) === 'image') {
-            icon = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
+
+        if(!text && getImageSourceType(icon) === 'image') {
+            text = icon.indexOf('base64') === -1 ? icon.replace(/.+\/([^.]+)\..+$/, '$1') : 'Base64';
         }
 
-        let ariaLabel = text || icon || '';
+        ariaTarget.attr('aria-label', text.trim() || null);
+    }
 
-        ariaLabel = ariaLabel.toString().trim();
+    _updateClick() {
+        this._clickAction = this._createActionByOption('onClick', {
+            excludeValidators: ['readOnly'],
+            afterExecute: ({ _$submitInput }) => {
+                const { useSubmitBehavior } = this.option();
 
-        this.setAria('label', ariaLabel.length ? ariaLabel : null);
+                useSubmitBehavior && setTimeout(() => _$submitInput.get(0).click());
+            }
+        });
     }
 
     _updateContent() {
         const $element = this.$element();
         const data = this._getContentData();
+        const { template, iconPosition } = this.option();
         const { icon, text } = data;
 
         this._$content ? this._$content.empty() : this._$content = $('<div>')
@@ -410,24 +397,49 @@ class Button extends Widget {
 
         $element
             .toggleClass('dx-button-has-icon', !!icon)
-            .toggleClass('dx-button-icon-right', !!icon && this.option('iconPosition') !== 'left')
+            .toggleClass('dx-button-icon-right', !!icon && iconPosition !== 'left')
             .toggleClass('dx-button-has-text', !!text);
 
-        const transclude = this._getAnonymousTemplateName() === this.option('template');
-        const template = this._getTemplateByOption('template');
-        const $result = $(template.render({
+        const $template = $(this._getTemplateByOption('template').render({
             model: data,
             container: getPublicElement(this._$content),
-            transclude
+            transclude: this._getAnonymousTemplateName() === template
         }));
 
-        if($result.hasClass('dx-template-wrapper')) {
-            this._$content.replaceWith($result);
-            this._$content = $result;
+        if($template.hasClass('dx-template-wrapper')) {
+            this._$content.replaceWith($template);
+            this._$content = $template;
             this._$content.addClass('dx-button-content');
         }
+    }
 
-        this.option('useSubmitBehavior') && this._renderSubmitInput();
+    _updateSubmitInput() {
+        const { useSubmitBehavior } = this.option();
+
+        if(!useSubmitBehavior && this._$submitInput) {
+            this._$submitInput.remove();
+            this._$submitInput = null;
+        } else {
+            this._renderSubmitInput();
+        }
+    }
+
+    _updateStylingMode() {
+        const $element = this.$element();
+
+        ['contained', 'text', 'outlined'].map(mode => `dx-button-mode-${mode}`)
+            .forEach($element.removeClass.bind($element));
+
+        this._renderStylingMode();
+    }
+
+    _updateType() {
+        const $element = this.$element();
+
+        ['back', 'danger', 'default', 'normal', 'success'].map(type => `dx-button-${type}`)
+            .forEach($element.removeClass.bind($element));
+
+        this._renderType();
     }
 
     get _validationGroupConfig() {
