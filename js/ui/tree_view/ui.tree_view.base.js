@@ -1126,7 +1126,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $node = this._getNodeElement(node);
 
         this._loadNestedItems(node).done(items => {
-            const actualNodeData = this._getActualNode(node);
+            const actualNodeData = this._getActualNode(node); // <- TODO An error again
             this._renderSublevel($node, actualNodeData, this._dataAdapter.getNodesByItems(items));
 
             if(!items || !items.length) {

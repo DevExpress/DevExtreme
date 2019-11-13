@@ -439,6 +439,29 @@ export const createTestFileSystem = () => {
                     isDirectory: true,
                     items: [
                         {
+                            name: "Folder 1.1.1",
+                            isDirectory: true,
+                            items: [
+                                {
+                                    name: "Folder 1.1.1.1",
+                                    isDirectory: true,
+                                    items: [
+                                        {
+                                            name: "Folder 1.1.1.1.1",
+                                            isDirectory: true,
+                                            items: [
+                                                {
+                                                    name: "Special deep file.txt",
+                                                    isDirectory: false,
+                                                    size: 600
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
                             name: "File 1-1.txt",
                             isDirectory: false
                         },
