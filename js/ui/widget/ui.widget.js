@@ -593,15 +593,15 @@ var Widget = DOMComponentWithTemplate.inherit({
     // NOTE: Static method
     _attachFeedbackEventsCore($el, active, inactive, opts) {
         const { selector, showTimeout, hideTimeout } = opts;
-        const feedbackAction = new Action(({ event }) => active($(event.currentTarget), event));
-        const feedbackActionDisabled = new Action(({ event }) => inactive($(event.currentTarget), event),
+        const feedbackAction = new Action(({ event, element }) => active(element, event));
+        const feedbackActionDisabled = new Action(({ event, element }) => inactive(element, event),
             { excludeValidators: ['disabled', 'readOnly'] });
 
         eventsEngine.on($el, EVENT_NAME.active, selector, { timeout: showTimeout },
-            event => feedbackAction.execute({ event })
+            event => feedbackAction.execute({ event, element: $(event.currentTarget) })
         );
         eventsEngine.on($el, EVENT_NAME.inactive, selector, { timeout: hideTimeout },
-            event => feedbackActionDisabled.execute({ event })
+            event => feedbackActionDisabled.execute({ event, element: $(event.currentTarget) })
         );
     },
 
