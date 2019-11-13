@@ -109,7 +109,7 @@ QUnit.test("Dragging row", function(assert) {
     $placeholderElement = $("body").children(".dx-sortable-placeholder");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
 
@@ -395,7 +395,7 @@ QUnit.test("Dragging row when allowDropInsideItem is true", function(assert) {
     $placeholderElement = $("body").children(".dx-sortable-placeholder.dx-sortable-placeholder-inside");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
     assert.strictEqual($placeholderElement.length, 1, "placeholder");
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
 
@@ -437,7 +437,7 @@ QUnit.test("Dragging row when the lookup column is specified with a remote sourc
 
     // assert
     $draggableElement = $("body").children(".dx-sortable-dragging");
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
     clock.restore();
 });
@@ -463,7 +463,7 @@ QUnit.test("Dragging row when there are fixed columns", function(assert) {
         $table = $draggableElement.find(".dx-datagrid-rowsview").children(":not(.dx-datagrid-content-fixed)").find("table"),
         $fixTable = $draggableElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
 
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($table.find(".dx-data-row").length, 1, "row count in main table");
     assert.strictEqual($table.find(".dx-data-row").children(".dx-pointer-events-none").length, 0, "main table hasn't transparent column");
     assert.strictEqual($fixTable.find(".dx-data-row").length, 1, "row count in fixed table");
@@ -512,7 +512,7 @@ QUnit.test("Dragging row by the handle", function(assert) {
     $draggableElement = $("body").children(".dx-sortable-dragging");
     assert.strictEqual($("body").children(".dx-sortable-placeholder").length, 1, "placeholder");
     assert.strictEqual($draggableElement.length, 1, "there is dragging element");
-    assert.ok($draggableElement.children().hasClass("dx-datagrid"), "dragging element is datagrid");
+    assert.ok($draggableElement.children().children().hasClass("dx-datagrid"), "dragging element is datagrid");
     assert.strictEqual($draggableElement.find(".dx-data-row").length, 1, "row count in dragging element");
 });
 
