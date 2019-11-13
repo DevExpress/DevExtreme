@@ -17,6 +17,8 @@ function run_ts {
     cp $target $target.current
 
     npm i
+    npm ls devextreme-internal-tools
+
     npm run update-ts
 
     if ! diff $target.current $target -U 5 > $target.diff; then
