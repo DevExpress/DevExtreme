@@ -3673,7 +3673,7 @@ declare module DevExpress.ui {
         /** @name dxFilterBuilderField.format */
         format?: format;
         /** @name dxFilterBuilderField.lookup */
-        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string | number | boolean) };
+        lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string | number | boolean) };
         /** @name dxFilterBuilderField.name */
         name?: string;
         /** @name dxFilterBuilderField.trueText */
