@@ -743,7 +743,7 @@ var DateBox = DropDownEditor.inherit({
 
     _applyButtonHandler: function(e) {
         var value = this._strategy.getValue();
-        if(this._validateValue(value)) {
+        if(this._applyInternalValidation(value)) {
             this.dateValue(value, e.event);
         }
         this.callBase();
