@@ -5,6 +5,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import { DataSource } from "data/data_source/data_source";
 import { deferUpdate } from "core/utils/common";
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+import errors from "ui/widget/ui.errors";
 
 import "ui/radio_group";
 
@@ -203,6 +204,30 @@ module("hidden input", () => {
 });
 
 module("value", moduleConfig, () => {
+
+    test("should not throw an error when the value is 'null'", assert => {
+        const errorLogStub = sinon.stub(errors, "log");
+
+        createRadioGroup({
+            items: ["1", "2", "3"]
+        });
+
+        assert.notOk(errorLogStub.called, "error was not thrown");
+        errorLogStub.restore();
+    });
+
+    test("should not throw an error when the reset method is called (T823478)", assert => {
+        const errorLogStub = sinon.stub(errors, "log");
+
+        createRadioGroup({
+            items: ["1", "2", "3"],
+            value: "2"
+        }).dxRadioGroup("reset");
+
+        assert.ok(errorLogStub.notCalled, "error was not thrown");
+        errorLogStub.restore();
+    });
+
     test("should have correct initialized selection", assert => {
         let radioGroupInstance = null;
         const isItemChecked = index => radioGroupInstance.itemElements().eq(index).hasClass(RADIO_BUTTON_CHECKED_CLASS);

@@ -22,6 +22,7 @@ module.exports = Class.inherit({
 
     _getDefaultOptions: function() {
         return {
+            allowNullValueSelection: false,
             deferred: false,
             equalByReference: false,
             mode: "multiple",
