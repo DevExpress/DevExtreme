@@ -4782,6 +4782,8 @@ declare module DevExpress.ui {
         grandTotal(): dxPivotGridSummaryCell;
         /** @name dxPivotGridSummaryCell.grandTotal(direction) */
         grandTotal(direction: string): dxPivotGridSummaryCell;
+        /** @name dxPivotGridSummaryCell.isCalculated() */
+        isCalculated(): boolean;
         /** @name dxPivotGridSummaryCell.next(direction) */
         next(direction: string): dxPivotGridSummaryCell;
         /** @name dxPivotGridSummaryCell.next(direction, allowCrossGroup) */

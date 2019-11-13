@@ -395,8 +395,8 @@ QUnit.test("Cache original value", function(assert) {
 
     // act
     new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 0);
-    this.data.values[0][0].calculatedCell[0] = "new GT1";
-    this.data.values[0][0].calculatedCell[1] = "new GT2";
+    this.data.values[0][0][0] = "new GT1";
+    this.data.values[0][0][1] = "new GT2";
     // assert
     assert.strictEqual(new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 0).value(), "GT1");
     assert.strictEqual(new this.Cell([this.grandTotalColumn], [this.grandTotalRow], this.data, this.descriptions, 0).value(true), "new GT1");
@@ -548,7 +548,7 @@ QUnit.test("Add percent format for percent display type", function(assert) {
 
 QUnit.test("Second calculation leads to same results", function(assert) {
     var summaryExpr = function(e) {
-        return (e.value(true) === undefined ? e.value() : e.value(true)) + 1;
+        return e.value(true) + 1;
     };
 
     this.descriptions.values[0].calculateSummaryValue = summaryExpr;
@@ -563,6 +563,30 @@ QUnit.test("Second calculation leads to same results", function(assert) {
     // assert
     assert.deepEqual(value, "T61");
     assert.deepEqual(this.data.values[0][6][0], value);
+});
+
+QUnit.test("Check if value is calculated", function(assert) {
+    let cell;
+    let valueInCallback;
+    var summaryExpr = function(e) {
+        cell = e;
+        valueInCallback = e.isCalculated();
+        return e.value(true) + 1;
+    };
+
+    this.descriptions.values[0].calculateSummaryValue = summaryExpr;
+
+    applyDisplaySummaryMode(this.descriptions, this.data);
+
+    assert.strictEqual(valueInCallback, false);
+    assert.strictEqual(cell.isCalculated(), true);
+});
+
+QUnit.test("Cell is calculated after runningTotal calculation", function(assert) {
+    this.descriptions.values[0].runningTotal = true;
+    applyRunningTotal(this.descriptions, this.data);
+
+    assert.deepEqual(this.data.values[0][6].calculatedFlags, [true]);
 });
 
 QUnit.test("Calculate cell value with empty data", function(assert) {
@@ -711,7 +735,7 @@ QUnit.test("RunningTotal with expression", function(assert) {
 
 QUnit.test("RunningTotal with expression. Second calculation leads to same results", function(assert) {
     var summaryExpr = function(e) {
-        return (e.value(true) === undefined ? e.value() : e.value(true)) + 1;
+        return e.value(true) + 1;
     };
 
     this.descriptions.values[0].calculateSummaryValue = summaryExpr;
