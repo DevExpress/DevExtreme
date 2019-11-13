@@ -4,6 +4,7 @@ import browser from "core/utils/browser";
 import { fileSaver } from "exporter";
 import errors from "ui/widget/ui.errors";
 import typeUtils from "core/utils/type";
+import domAdapter from "core/dom_adapter";
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 QUnit.module("saveAs");
@@ -30,10 +31,17 @@ QUnit.test("exportLinkElement generate", function(assert) {
         testExportLink.id = "link";
 
         helper.checkAttributes($(testExportLink), { id: "link", target: "_blank", download: "test.xlsx", href: href }, "downloadLink");
-        assert.equal(document.getElementById("link"), null, "not attached to a document");
+        assert.equal(domAdapter.getDocument().getElementById("link"), null, "download link not attached to a document");
 
+        var clickHandler = sinon.spy();
+        testExportLink.addEventListener("click", function(e) {
+            clickHandler(e);
+            e.preventDefault();
+        });
 
+        fileSaver._click(testExportLink);
 
+        assert.equal(clickHandler.callCount, 1, "'click' event dispatched");
         URL.revokeObjectURL(href);
     }
 });

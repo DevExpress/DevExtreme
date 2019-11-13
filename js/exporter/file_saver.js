@@ -89,6 +89,17 @@ exports.fileSaver = {
         });
     },
 
+    _click: function(link) {
+        try {
+            // eslint-disable-next-line no-undef
+            link.dispatchEvent(new MouseEvent('click'));
+        } catch(e) {
+            var event = domAdapter.getDocument().createEvent('MouseEvents');
+            event.initMouseEvent('click', true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+            link.dispatchEvent(event);
+        }
+    },
+
     _saveBlobAs: function(fileName, format, data) {
         var that = this;
 
@@ -109,11 +120,11 @@ exports.fileSaver = {
 
                 setTimeout(() => {
                     URL.revokeObjectURL(objectURL);
-                    that._objectUrlRevoked = true; // Look like hack for tests
+                    that._objectUrlRevoked = true;
                 }, this._revokeObjectURLTimeout);
 
                 setTimeout(() => {
-                    eventsEngine.trigger($(downloadLink), "dxclick");
+                    this._click(downloadLink);
                 }, 0);
             }
         }
@@ -138,7 +149,7 @@ exports.fileSaver = {
 
                 var downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
                 setTimeout(() => {
-                    eventsEngine.trigger($(downloadLink), "dxclick");
+                    this._click(downloadLink);
                 }, 0);
             }
         }
