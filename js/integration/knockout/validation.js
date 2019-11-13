@@ -101,19 +101,6 @@ const koDxValidator = Class.inherit({
         }
     },
 
-    /**
-     * @name koDxValidatorMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name koDxValidatorMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
     on: function(eventName, eventHandler) {
         if(isPlainObject(eventName)) {
             each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
@@ -124,19 +111,6 @@ const koDxValidator = Class.inherit({
         return this;
     },
 
-    /**
-     * @name koDxValidatorMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
-    /**
-     * @name koDxValidatorMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
     off: function(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;

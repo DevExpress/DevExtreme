@@ -598,13 +598,13 @@ declare module DevExpress {
         endUpdate(): void;
         /** @name Component.instance() */
         instance(): this;
-        /** @name EventsMixin.off(eventName) */
+        /** @name Component.off(eventName) */
         off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
+        /** @name Component.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
+        /** @name Component.on(eventName, eventHandler) */
         on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
+        /** @name Component.on(events) */
         on(events: any): this;
         /** @name Component.option() */
         option(): any;
@@ -679,13 +679,13 @@ declare module DevExpress {
         current(): Device;
         /** @name DevicesObject.current(deviceName) */
         current(deviceName: string | Device): void;
-        /** @name EventsMixin.off(eventName) */
+        /** @name DevicesObject.off(eventName) */
         off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
+        /** @name DevicesObject.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
+        /** @name DevicesObject.on(eventName, eventHandler) */
         on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
+        /** @name DevicesObject.on(events) */
         on(events: any): this;
         /** @name DevicesObject.orientation() */
         orientation(): string;
@@ -928,17 +928,6 @@ declare module DevExpress {
     }
 }
 declare module DevExpress.core {
-    /** @name EventsMixin */
-    export class EventsMixin {
-        /** @name EventsMixin.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
-        on(events: any): this;
-    }
     /** @name dxElement */
     export type dxElement = Element & JQuery;
     /** @name dxTemplate.Options */
@@ -1069,13 +1058,13 @@ declare module DevExpress.data {
         load(): Promise<any> & JQueryPromise<any>;
         /** @name DataSource.loadOptions() */
         loadOptions(): any;
-        /** @name EventsMixin.off(eventName) */
+        /** @name DataSource.off(eventName) */
         off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
+        /** @name DataSource.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
+        /** @name DataSource.on(eventName, eventHandler) */
         on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
+        /** @name DataSource.on(events) */
         on(events: any): this;
         /** @name DataSource.pageIndex() */
         pageIndex(): number;
@@ -1392,13 +1381,13 @@ declare module DevExpress.data {
         isLoading(): boolean;
         /** @name PivotGridDataSource.load() */
         load(): Promise<any> & JQueryPromise<any>;
-        /** @name EventsMixin.off(eventName) */
+        /** @name PivotGridDataSource.off(eventName) */
         off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
+        /** @name PivotGridDataSource.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
+        /** @name PivotGridDataSource.on(eventName, eventHandler) */
         on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
+        /** @name PivotGridDataSource.on(events) */
         on(events: any): this;
         /** @name PivotGridDataSource.reload() */
         reload(): Promise<any> & JQueryPromise<any>;
@@ -1498,13 +1487,13 @@ declare module DevExpress.data {
         load(): Promise<any> & JQueryPromise<any>;
         /** @name Store.load(options) */
         load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
-        /** @name EventsMixin.off(eventName) */
+        /** @name Store.off(eventName) */
         off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
+        /** @name Store.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
+        /** @name Store.on(eventName, eventHandler) */
         on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
+        /** @name Store.on(events) */
         on(events: any): this;
         /** @name Store.push(changes) */
         push(changes: Array<any>): void;

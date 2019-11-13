@@ -754,19 +754,6 @@ const GroupConfig = Class.inherit({
         this._resetValidationInfo();
     },
 
-    /**
-     * @name GroupConfigMethods.on
-     * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
-    /**
-     * @name GroupConfigMethods.on
-     * @publicName on(events)
-     * @param1 events:object
-     * @return this
-     */
     on: function(eventName, eventHandler) {
         if(isPlainObject(eventName)) {
             each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
@@ -776,19 +763,6 @@ const GroupConfig = Class.inherit({
         return this;
     },
 
-    /**
-     * @name GroupConfigMethods.off
-     * @publicName off(eventName)
-     * @param1 eventName:string
-     * @return this
-     */
-    /**
-     * @name GroupConfigMethods.off
-     * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
-     * @param2 eventHandler:function
-     * @return this
-     */
     off: function(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;
