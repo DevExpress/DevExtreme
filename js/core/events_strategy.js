@@ -19,7 +19,7 @@ export class EventsStrategy {
     }
 
     hasEvent(eventName) {
-        var callbacks = this._events[eventName];
+        const callbacks = this._events[eventName];
         if(callbacks) {
             return callbacks.has();
         }
@@ -27,7 +27,7 @@ export class EventsStrategy {
     }
 
     fireEvent(eventName, eventArgs) {
-        var callbacks = this._events[eventName];
+        const callbacks = this._events[eventName];
         if(callbacks) {
             callbacks.fireWith(this._owner, eventArgs);
         }
@@ -35,19 +35,19 @@ export class EventsStrategy {
     }
 
     on(eventName, eventHandler) {
-        var callbacks = this._events[eventName],
-            addFn;
+        let callbacks = this._events[eventName];
 
         if(!callbacks) {
             callbacks = Callbacks();
             this._events[eventName] = callbacks;
         }
-        addFn = callbacks.originalAdd || callbacks.add;
+
+        const addFn = callbacks.originalAdd || callbacks.add;
         addFn.call(callbacks, eventHandler);
     }
 
     off(eventName, eventHandler) {
-        var callbacks = this._events[eventName];
+        const callbacks = this._events[eventName];
         if(callbacks) {
             if(isFunction(eventHandler)) {
                 callbacks.remove(eventHandler);
