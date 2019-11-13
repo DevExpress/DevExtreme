@@ -764,7 +764,7 @@ module.exports = {
                     return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && newItem.rowType !== "groupFooter") {
+                    if(oldItem.rowType === newItem.rowType && ["group", "groupFooter", "detail"].every(x => x !== newItem.rowType)) {
                         var columnIndices = [];
 
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
