@@ -158,7 +158,7 @@ module("Drag and drop appointments", moduleConfig, () => {
 
         const getFakeAppointmentPosition = scheduler => {
             const fakeAppointment = scheduler.appointments.compact.getFakeAppointment();
-            const position = getAbsolutePosition(fakeAppointment);
+            const position = getAbsolutePosition(fakeAppointment.parent());
 
             return {
                 left: position.left + fakeAppointment.width() / 2,
