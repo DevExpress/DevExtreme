@@ -18,7 +18,10 @@ var $ = require("../core/renderer"),
     noop = require("../core/utils/common").noop,
     viewPortUtils = require("../core/utils/view_port"),
     commonUtils = require("../core/utils/common"),
-    EmptyTemplate = require("../core/templates/empty_template").EmptyTemplate;
+    EmptyTemplate = require("../core/templates/empty_template").EmptyTemplate,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    fromPromise = deferredUtils.fromPromise;
 
 var DRAGGABLE = "dxDraggable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE),
@@ -864,32 +867,35 @@ var Draggable = DOMComponentWithTemplate.inherit({
         try {
             this._getAction("onDragEnd")(dragEndEventArgs);
         } finally {
-            if(!dragEndEventArgs.cancel) {
-                if(targetDraggable !== this) {
-                    targetDraggable._getAction("onDrop")(dropEventArgs);
-                }
+            when(fromPromise(dragEndEventArgs.cancel))
+                .done((cancel) => {
+                    if(!cancel) {
+                        if(targetDraggable !== this) {
+                            targetDraggable._getAction("onDrop")(dropEventArgs);
+                        }
 
-                if(!dropEventArgs.cancel) {
-                    targetDraggable.dragEnd(dragEndEventArgs);
-                    needRevertPosition = false;
-                }
-            }
+                        if(!dropEventArgs.cancel) {
+                            targetDraggable.dragEnd(dragEndEventArgs);
+                            needRevertPosition = false;
+                        }
+                    }
+                }).always(() => {
+                    if(needRevertPosition) {
+                        this._revertItemToInitialPosition();
+                    }
 
-            if(needRevertPosition) {
-                this._revertItemToInitialPosition();
-            }
+                    this.reset();
+                    targetDraggable.reset();
+                    this._stopAnimator();
+                    this.horizontalScrollHelper.reset();
+                    this.verticalScrollHelper.reset();
 
-            this.reset();
-            targetDraggable.reset();
-            this._stopAnimator();
-            this.horizontalScrollHelper.reset();
-            this.verticalScrollHelper.reset();
+                    this._resetDragElement();
+                    this._resetSourceElement();
 
-            this._resetDragElement();
-            this._resetSourceElement();
-
-            this._resetTargetDraggable();
-            this._resetSourceDraggable();
+                    this._resetTargetDraggable();
+                    this._resetSourceDraggable();
+                });
         }
     },
 
