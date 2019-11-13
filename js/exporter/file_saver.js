@@ -38,43 +38,7 @@ exports.fileSaver = {
         return "data:" + MIME_TYPES[format] + ";base64," + data;
     },
 
-    /* _cordovaDownloader: function(fileName, href, callback) {
-        var transfer = new FileTransfer(),
-            fileAlert = function(res) {
-                navigator.notification.alert(res.nativeURL, null, DX.localization.message.format("dxFileSaver-fileExported"));
-            };
-
-        transfer.download(href, window.cordova.file.externalRootDirectory + fileName, fileAlert, fileAlert);
-    }, */
-
     _linkDownloader: function(fileName, href) {
-        // var URL = _global.URL || _global.webkitURL
-        // var a = document.createElement('a')
-        // name = name || blob.name || 'download'
-
-        // a.download = name
-        // a.rel = 'noopener' // tabnabbing
-
-        // // TODO: detect chrome extensions & packaged apps
-        // // a.target = '_blank'
-
-        // if (typeof blob === 'string') {
-        //   // Support regular links
-        //   a.href = blob
-        //   if (a.origin !== location.origin) {
-        //     corsEnabled(a.href)
-        //       ? download(blob, name, opts)
-        //       : click(a, a.target = '_blank')
-        //   } else {
-        //     click(a)
-        //   }
-        // } else {
-        //   // Support blobs
-        //   a.href = URL.createObjectURL(blob)
-        //   setTimeout(function () { URL.revokeObjectURL(a.href) }, 4E4) // 40s
-        //   setTimeout(function () { click(a) }, 0)
-        // }
-
         var exportLinkElement = domAdapter.createElement('a');
         exportLinkElement.download = fileName;
         exportLinkElement.href = href;
@@ -82,21 +46,6 @@ exports.fileSaver = {
         exportLinkElement.target = "_blank"; // cors policy
 
         return exportLinkElement;
-
-
-        // eventsEngine.on($(exportLinkElement), "click", function() {
-        //     $(exportLinkElement).remove();
-        //     clickHandler && clickHandler.apply(this, arguments);
-        // });
-
-        // domAdapter.getBody().appendChild(exportLinkElement);
-
-        // $(exportLinkElement).css({ "display": "none" }).text("load").attr(attributes)[0]; // .click();
-
-
-        // return exportLinkElement;
-
-
     },
 
     _formDownloader: function(proxyUrl, fileName, contentType, data) {
@@ -164,7 +113,7 @@ exports.fileSaver = {
                 }, this._revokeObjectURLTimeout);
 
                 setTimeout(() => {
-                    eventsEngine.trigger($(downloadLink), "click");
+                    eventsEngine.trigger($(downloadLink), "dxclick");
                 }, 0);
             }
         }
@@ -173,9 +122,6 @@ exports.fileSaver = {
     saveAs: function(fileName, format, data, proxyURL, forceProxy) {
         fileName += "." + FILE_EXTESIONS[format];
 
-        /* if(commonUtils.isDefined(window.cordova)) {
-            return this._cordovaDownloader(fileName, this._getDataUri(format, data), linkClick);
-        } */
         if(typeUtils.isDefined(proxyURL)) {
             errors.log("W0001", "Export", "proxyURL", "19.2", "This option is no longer required");
         }
@@ -192,7 +138,7 @@ exports.fileSaver = {
 
                 var downloadLink = this._linkDownloader(fileName, this._getDataUri(format, data));
                 setTimeout(() => {
-                    eventsEngine.trigger($(downloadLink), "click");
+                    eventsEngine.trigger($(downloadLink), "dxclick");
                 }, 0);
             }
         }

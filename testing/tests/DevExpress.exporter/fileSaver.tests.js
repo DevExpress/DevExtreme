@@ -1,9 +1,10 @@
-var $ = require("jquery"),
-    eventsEngine = require("events/core/events_engine"),
-    browser = require("core/utils/browser"),
-    fileSaver = require("exporter").fileSaver,
-    errors = require("ui/widget/ui.errors"),
-    typeUtils = require("core/utils/type");
+import $ from "jquery";
+import eventsEngine from "events/core/events_engine";
+import browser from "core/utils/browser";
+import { fileSaver } from "exporter";
+import errors from "ui/widget/ui.errors";
+import typeUtils from "core/utils/type";
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 QUnit.module("saveAs");
 
@@ -18,33 +19,22 @@ QUnit.test("exportLinkElement generate", function(assert) {
         return;
     }
 
-    var clock = sinon.useFakeTimers(),
-        oldRevokeObjectURLTimeout = fileSaver._revokeObjectURLTimeout;
+    var URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
 
-    try {
-        fileSaver._revokeObjectURLTimeout = 0;
-        // act
-        var clickHandler = function(e) {
-                $(e.target).attr('rel', 'clicked');
-                e.preventDefault();
-            },
-            testExportLink = fileSaver._saveBlobAs("test.xlsx", "EXCEL", new Blob([], { type: "test/plain" }), clickHandler);
+    if(URL) {
+        var helper = new ariaAccessibilityTestHelper(() => {});
 
-        clock.tick();
+        var href = URL.createObjectURL(new Blob([], { type: "test/plain" }));
 
-        // assert
-        assert.ok(testExportLink);
-        assert.ok(String($(testExportLink).attr("href")).indexOf("blob:") !== -1, "ExportLink href corrected");
-        assert.equal($(testExportLink).attr("download"), "test.xlsx", "ExportLink download attribute corrected");
-        assert.equal($(testExportLink).css("display"), "none", "ExportLink is styled display none");
-        assert.equal($(testExportLink).attr("rel"), "clicked", "ExportLink is clicked");
+        var testExportLink = fileSaver._linkDownloader("test.xlsx", href);
+        testExportLink.id = "link";
 
-        // T596771
-        assert.notOk($(testExportLink).parent().length, "link is removed");
-        assert.ok(fileSaver._objectUrlRevoked, "objectURL is revoked");
-    } finally {
-        fileSaver._revokeObjectURLTimeout = oldRevokeObjectURLTimeout;
-        clock.restore();
+        helper.checkAttributes($(testExportLink), { id: "link", target: "_blank", download: "test.xlsx", href: href }, "downloadLink");
+        assert.equal(document.getElementById("link"), null, "not attached to a document");
+
+
+
+        URL.revokeObjectURL(href);
     }
 });
 
@@ -69,12 +59,7 @@ QUnit.test("saveAs - check revokeObjectURL", function(assert) {
         fileSaver._revokeObjectURLTimeout = 100;
         fileSaver._objectUrlRevoked = false;
 
-        fileSaver.saveAs(
-            "test.xlsx", "EXCEL", new Blob([], { type: "test/plain" }), null,
-            function(e) {
-                $(e.target).attr('rel', 'clicked');
-                e.preventDefault();
-            });
+        fileSaver.saveAs("test", "EXCEL", new Blob([], { type: "test/plain" }));
 
         assert.ok(!fileSaver._objectUrlRevoked, "objectURL is not revoked immediately");
         setTimeout(
