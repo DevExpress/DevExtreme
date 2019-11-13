@@ -1837,7 +1837,7 @@ QUnit.module("infinite list scenario", moduleSetup, () => {
         });
 
         element.dxList("instance")._dataSource.load = () => {
-            element.dxList("instance")._dataSource.fireEvent("loadError");
+            element.dxList("instance")._dataSource._eventsStrategy.fireEvent("loadError");
             return $.Deferred().reject().promise();
         };
 
@@ -1955,7 +1955,7 @@ QUnit.module("scrollView interaction", moduleSetup, () => {
             }
         };
         dataSource.load = () => {
-            dataSource.fireEvent("changed");
+            dataSource._eventsStrategy.fireEvent("changed");
             nextPageCalled = true;
             return $.when(false);
         };

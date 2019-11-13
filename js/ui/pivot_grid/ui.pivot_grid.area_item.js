@@ -224,7 +224,7 @@ exports.AreaItem = Class.inherit({
             rowElements = tableElement.find("tr"),
             areaName = that._getAreaName(),
             onCellPrepared = that.option("onCellPrepared"),
-            hasEvent = that.component.hasEvent("cellPrepared"),
+            hasEvent = that.component._eventsStrategy.hasEvent("cellPrepared"),
             rowElement,
             $cellElement,
             onCellPreparedArgs,

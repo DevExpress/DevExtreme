@@ -77,6 +77,7 @@ module.exports = gridCore.Controller.inherit((function() {
             that._currentTotalCount = 0;
             that._cachedPagesData = createEmptyPagesData();
             that._lastOperationTypes = {};
+            that._eventsStrategy = dataSource._eventsStrategy;
 
 
             that.changed = Callbacks();
@@ -605,7 +606,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 }, that.option("loadingTimeout"));
 
                 return d.fail(function() {
-                    that.fireEvent("loadError", arguments);
+                    that._eventsStrategy.fireEvent("loadError", arguments);
                 }).promise();
             } else {
                 return dataSource.load();

@@ -63,7 +63,7 @@ function normalizeDataSourceOptions(options, normalizationOptions) {
     function createCustomStoreFromLoadFunc() {
         var storeConfig = {};
 
-        typeUtils.each(["useDefaultSearch", "key", "load", "loadMode", "cacheRawData", "byKey", "lookup", "totalCount", "insert", "update", "remove"], function() {
+        iteratorUtils.each(["useDefaultSearch", "key", "load", "loadMode", "cacheRawData", "byKey", "lookup", "totalCount", "insert", "update", "remove"], function() {
             storeConfig[this] = options[this];
             delete options[this];
         });
