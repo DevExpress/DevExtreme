@@ -569,7 +569,7 @@ var Widget = DOMComponentWithTemplate.inherit({
         const { activeStateEnabled } = this.option();
         const eventBindingTarget = this._eventBindingTarget();
 
-        this._detachFeedbackEvents(this._feedbackShowTimeout, this._feedbackHideTimeout);
+        this._detachFeedbackEvents(eventBindingTarget, this._feedbackShowTimeout, this._feedbackHideTimeout);
 
         if(activeStateEnabled) {
             this._attachFeedbackEventsCore(
