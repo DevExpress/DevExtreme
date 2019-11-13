@@ -4,7 +4,7 @@ import Class from "core/class";
 import DefaultAdapter from "ui/validation/default_adapter";
 import ValidationEngine from "ui/validation_engine";
 import { Deferred } from "core/utils/deferred";
-import { isDeferred } from "core/utils/type";
+import { isPromise } from "core/utils/type";
 import Promise from "core/polyfills/promise";
 
 import "ui/validator";
@@ -643,7 +643,7 @@ QUnit.test("Validator should not be re-validated on pending with the same value"
 
     assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
     assert.strictEqual(result1.id, result2.id, "The result id's should be the same");
-    assert.ok(isDeferred(result1.complete), "result1.complete is a Deferred object");
+    assert.ok(isPromise(result1.complete), "result1.complete is a Promise object");
     assert.strictEqual(result1.complete, result2.complete, "result1.complete === result2.complete");
     result1.complete.then(function(res) {
         assert.strictEqual(result1.id, res.id, "result1.id === res.id");
@@ -681,8 +681,7 @@ QUnit.test("Validator should resolve result.complete with the last value", funct
 
     assert.strictEqual(result1.status, "pending", "result1.status === 'pending'");
     assert.notOk(result1 === result2, "Results should be different");
-    assert.ok(isDeferred(result1.complete), "result1.complete is a Deferred object");
-    assert.ok(isDeferred(result2.complete), "result2.complete is a Deferred object");
+    assert.ok(result1.complete === result2.complete, "result1.complete === result2.complete");
     Promise.all([result1.complete, result2.complete]).then(function(values) {
         assert.ok(values.length === 2, "Results should be resolved twice");
         assert.notOk(values[0].id === result1.id, "The first result should not equal resolved result");
