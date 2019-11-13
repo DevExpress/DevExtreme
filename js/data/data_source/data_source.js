@@ -1105,12 +1105,8 @@ var DataSource = Class.inherit({
      * @param1 events:object
      * @return this
      */
-    on: function(eventName, eventHandler) {
-        if(typeUtils.isPlainObject(eventName)) {
-            iteratorUtils.each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
-        } else {
-            this._eventsStrategy.on(eventName, eventHandler);
-        }
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
         return this;
     },
 
@@ -1127,7 +1123,7 @@ var DataSource = Class.inherit({
      * @param2 eventHandler:function
      * @return this
      */
-    off: function(eventName, eventHandler) {
+    off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;
     },

@@ -1,6 +1,6 @@
 import Callbacks from "./utils/callbacks";
 import { each } from "./utils/iterator";
-import { isFunction } from "./utils/type";
+import { isFunction, isPlainObject } from "./utils/type";
 
 export class EventsStrategy {
     constructor(owner) {
@@ -9,10 +9,7 @@ export class EventsStrategy {
     }
     static setEventsStrategy(owner, strategy) {
         if(strategy) {
-            if(typeof strategy === "function") {
-                return strategy(owner);
-            }
-            return strategy;
+            return isFunction(strategy) ? strategy(owner) : strategy;
         } else {
             return new EventsStrategy(owner);
         }
@@ -20,10 +17,7 @@ export class EventsStrategy {
 
     hasEvent(eventName) {
         const callbacks = this._events[eventName];
-        if(callbacks) {
-            return callbacks.has();
-        }
-        return false;
+        return callbacks ? callbacks.has() : false;
     }
 
     fireEvent(eventName, eventArgs) {
@@ -35,15 +29,21 @@ export class EventsStrategy {
     }
 
     on(eventName, eventHandler) {
-        let callbacks = this._events[eventName];
+        if(isPlainObject(eventName)) {
+            each(eventName, (e, h) => {
+                this.on(e, h);
+            });
+        } else {
+            let callbacks = this._events[eventName];
 
-        if(!callbacks) {
-            callbacks = Callbacks();
-            this._events[eventName] = callbacks;
+            if(!callbacks) {
+                callbacks = Callbacks();
+                this._events[eventName] = callbacks;
+            }
+
+            const addFn = callbacks.originalAdd || callbacks.add;
+            addFn.call(callbacks, eventHandler);
         }
-
-        const addFn = callbacks.originalAdd || callbacks.add;
-        addFn.call(callbacks, eventHandler);
     }
 
     off(eventName, eventHandler) {
@@ -58,8 +58,8 @@ export class EventsStrategy {
     }
 
     dispose() {
-        each(this._events, function() {
-            this.empty();
+        each(this._events, (eventName, event) => {
+            event.empty();
         });
     }
 }

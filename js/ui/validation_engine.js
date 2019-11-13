@@ -5,7 +5,7 @@ import { each } from "../core/utils/iterator";
 import { EventsStrategy } from "../core/events_strategy";
 import errors from "../core/errors";
 import { grep } from "../core/utils/common";
-import typeUtils, { isPlainObject } from "../core/utils/type";
+import typeUtils from "../core/utils/type";
 import numberLocalization from "../localization/number";
 import messageLocalization from "../localization/message";
 import Promise from "../core/polyfills/promise";
@@ -754,16 +754,12 @@ const GroupConfig = Class.inherit({
         this._resetValidationInfo();
     },
 
-    on: function(eventName, eventHandler) {
-        if(isPlainObject(eventName)) {
-            each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
-        } else {
-            this._eventsStrategy.on(eventName, eventHandler);
-        }
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
         return this;
     },
 
-    off: function(eventName, eventHandler) {
+    off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;
     },

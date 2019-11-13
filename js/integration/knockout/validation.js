@@ -6,7 +6,6 @@ import ValidationEngine from "../../ui/validation_engine";
 import { Deferred } from "../../core/utils/deferred";
 import Guid from "../../core/guid";
 import ko from "knockout";
-import { isPlainObject } from "../../core/utils/type";
 
 const VALIDATION_STATUS_VALID = "valid",
     VALIDATION_STATUS_PENDING = "pending";
@@ -101,17 +100,12 @@ const koDxValidator = Class.inherit({
         }
     },
 
-    on: function(eventName, eventHandler) {
-        if(isPlainObject(eventName)) {
-            each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
-        } else {
-            this._eventsStrategy.on(eventName, eventHandler);
-        }
-
+    on(eventName, eventHandler) {
+        this._eventsStrategy.on(eventName, eventHandler);
         return this;
     },
 
-    off: function(eventName, eventHandler) {
+    off(eventName, eventHandler) {
         this._eventsStrategy.off(eventName, eventHandler);
         return this;
     }

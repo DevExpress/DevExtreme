@@ -1736,13 +1736,8 @@ module.exports = Class.inherit((function() {
          * @param1 events:object
          * @return this
          */
-        on: function(eventName, eventHandler) {
-            if(isPlainObject(eventName)) {
-                each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
-            } else {
-                this._eventsStrategy.on(eventName, eventHandler);
-            }
-
+        on(eventName, eventHandler) {
+            this._eventsStrategy.on(eventName, eventHandler);
             return this;
         },
 
@@ -1759,7 +1754,7 @@ module.exports = Class.inherit((function() {
          * @param2 eventHandler:function
          * @return this
          */
-        off: function(eventName, eventHandler) {
+        off(eventName, eventHandler) {
             this._eventsStrategy.off(eventName, eventHandler);
             return this;
         },
