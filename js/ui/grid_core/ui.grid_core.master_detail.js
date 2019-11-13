@@ -308,6 +308,10 @@ module.exports = {
                             visibleColumns = this._columnsController.getVisibleColumns();
 
                         if(row.rowType && this._isDetailRow(row)) {
+                            if(options.columnIndices) {
+                                return;
+                            }
+
                             $detailCell = this._renderCell($row, {
                                 value: null,
                                 row: row,
